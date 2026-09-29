@@ -1,0 +1,37 @@
+schema_version: 1
+entity:
+  id: ironbound
+  type: location
+  name: "Ironbound"
+  display_name: "Ironbound"
+  parent: west
+  aliases: ["The Fortress on the Edge"]
+  summary: >-
+    Ironbound is a major fortified frontier city east of Calderan, on West's side of the
+    West–Center border.
+  content: >-
+    Ironbound's defensive and administrative role makes it more than a settlement near the
+    frontier. Its massive fortress-gate character and heavy stone-and-iron fortifications
+    block armed incursions and desert raids, bearing physical evidence of repeated violent
+    border clashes. It is a major military filtering point with important customs and
+    border-control functions, high political tension, and frequent contact with the
+    consequences of skirmishes. Official enforcement and unofficial corruption coexist.
+    Authorities may ignore, facilitate, or inadequately investigate slave caravans
+    originating in raids and cross-border violence. Not every guard is corrupt, and not all
+    slave traffic through Ironbound is legal. It belongs to West rather than being an
+    independent nation or autonomous city-state.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "fortified frontier city"
+      description: "Massive fortress-gate character, heavy stone-and-iron defenses, and visible damage from repeated clashes."
+    - name: "military and customs filtering point"
+      description: "Defensive and administrative border control on West's side of the frontier; official enforcement coexists with unofficial corruption."
+  connections: []
+chunks: []
+

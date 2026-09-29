@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: calderan_south
+  type: location
+  name: South District
+  display_name: Calderan South District
+  parent: calderan
+  aliases:
+    - Calderan South District
+  summary: South District is one of Calderan's five broad urban regions. The South District has a
+    predominantly garrison, security and transit character, with City Guard and barracks activity.
+  tags:
+    - geography
+    - district
+  search_context: South District of Calderan, urban district.
+  content: The South District has a predominantly garrison, security and transit character, with City
+    Guard and barracks activity. Travelers, inns, taverns, stables, caravans, warehouses and
+    transport services are prominent. Newcomers and the transient population form a high proportion
+    of its people. These are predominant tendencies, not exclusive zoning. Crossing substantial
+    parts of a district is meaningful travel; no exact roads or navigation routes are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

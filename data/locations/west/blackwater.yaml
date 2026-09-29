@@ -1,0 +1,45 @@
+schema_version: 1
+entity:
+  id: blackwater
+  type: location
+  name: "Blackwater"
+  display_name: "Blackwater"
+  parent: west
+  aliases: ["The Unchained Haven"]
+  summary: >-
+    Blackwater, The Unchained Haven, is a criminal maritime enclave on West's southwestern
+    coast, outside effective normal direct West control.
+  content: >-
+    Its dark coastal/cliff environment supports a persistent maritime criminal culture.
+    Conventional state governance is weak or absent, but power exists in fragmented,
+    unstable competition among smuggling interests, pirate captains, and criminal cartels.
+    Black-market commerce includes fencing stolen goods, illegal slave traffic, transfer or
+    sale of unregistered or stolen captives, and people kidnapped from neighboring nations.
+    Geographic containment in West does not imply effective direct political control.
+    Calderan dislikes and distrusts Blackwater but pragmatically tolerates some of its
+    existence for dirty economic value, absorption of crime, indirect maritime
+    defense/interdiction, and keeping worse external threats at distance. Tolerance is not
+    lawful endorsement or a formal treaty. Blackwater's persistent maritime/commercial
+    rivalry with Sandspear involves Sorrow Sea and Chained Bay routes, smuggling,
+    piracy/corsair activity, protection rackets, captured cargo, slave traffic, and wartime
+    spoils. Their ships sometimes fight bloody naval engagements; this is not formal
+    West–Center naval war, and no winner is predetermined.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "de facto autonomy"
+      description: "Outside effective normal direct West control, despite geographic containment within West."
+    - name: "fragmented criminal governance"
+      description: "Competing smuggling interests, pirate captains, and criminal cartels exercise unstable power; no formal council is established."
+    - name: "illegal maritime trade"
+      description: "Black-market trade, stolen goods, kidnapping, and illegal/unregistered slave traffic."
+    - name: "maritime rival"
+      description: "Sandspear"
+  connections: []
+chunks: []
+

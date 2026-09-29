@@ -1,0 +1,40 @@
+schema_version: 1
+entity:
+  id: east
+  type: location
+  name: "East"
+  display_name: "East (nation)"
+  parent: continent
+  aliases: []
+  summary: >-
+    East is the cold, snowy eastern nation with capital Vaelrost and an armed-neutral stance
+    toward the West–Center conflict.
+  content: >-
+    East directly borders Center and shares no direct land border with West. Snow and severe
+    winter conditions characterize the region broadly, without requiring uniform conditions.
+    Vaelrost is the capital; Frostspire and Skardgard are other major mapped settlements,
+    not an exhaustive census. East maintains strong neutrality toward West–Center conflict
+    and seeks to prevent its violence from entering East. Frontier forces may repel armed
+    groups or incursions from either side. Frostspire helps enforce this policy. Armed
+    neutrality does not establish pacifism, friendship, or an alliance with either nation.
+    East's internal government, ruler, culture, religion, and broader foreign policy remain
+    undefined.
+  tags: [geography]
+  search_context: "East nation on the known continent, distinct from Calderan's East District."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "national capital"
+      description: "Vaelrost"
+    - name: "land border with Center"
+      description: "East directly borders Center."
+    - name: "armed neutrality"
+      description: "Frontier forces enforce neutrality toward the West–Center conflict, repelling incursions regardless of origin when necessary."
+    - name: "cold regional climate"
+      description: "Broadly cold and snowy with severe winters; not uniform everywhere."
+  connections: []
+chunks: []
+

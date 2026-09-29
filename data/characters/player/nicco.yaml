@@ -1,0 +1,37 @@
+schema_version: 1
+entity:
+  id: nicco
+  type: character
+  name: Nicco
+  display_name: Nicco
+  parent: null
+  aliases: []
+  summary: >-
+    Nicco is the player character: a 35-year-old human man, newly transported
+    into this world, lawful owner of Heartstone Tower, and a Light mage.
+  tags: [player]
+  search_context: Nicco player character, human man, Heartstone owner, Light mage, newly arrived from another world.
+  content: >-
+    Nicco is a 35-year-old human man. He was transported into this world from
+    another world approximately one day before the campaign begins, and he has
+    essentially no prior lived knowledge of this world unless explicitly
+    established later. On arrival he became the lawful owner/holder of
+    Heartstone Tower. He is tall and overweight, with a few visible white hairs
+    and very mild, early balding; no further appearance details are established.
+    His magical affinity/school is Light. His currently known Light subschools
+    are healing and sacrifice, understood only within the existing magic
+    framework; no mechanics for sacrifice are established. Being a Light mage
+    gives him no automatic knowledge of spells, institutions, lore, or magical
+    theory. Nicco is the player character: his dialogue, thoughts, intentions,
+    and deliberate actions are supplied only by the player.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: private
+  role: player
+  location: heartstone_square
+  traits: [tall, overweight, a few visible white hairs, very mild early balding]
+  relationships: []
+chunks: []

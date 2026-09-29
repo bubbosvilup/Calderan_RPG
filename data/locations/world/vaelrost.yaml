@@ -1,0 +1,28 @@
+schema_version: 1
+entity:
+  id: vaelrost
+  type: location
+  name: "Vaelrost"
+  display_name: "Vaelrost"
+  parent: east
+  aliases: []
+  summary: >-
+    Vaelrost is East's political capital and a major urban center deep in the cold,
+    snow-dominated eastern nation.
+  content: >-
+    Vaelrost lies farther east/northeast relative to Frostspire. Its internal government and
+    culture remain deliberately underdefined. No ruler, dynasty, magical ice walls, or
+    supernatural architecture is established.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "capital of East"
+      description: "East's national political capital."
+  connections: []
+chunks: []
+

@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: "light_and_shadow"
+  type: "world_lore"
+  name: "Light and Shadow"
+  display_name: "Light and Shadow"
+  parent: null
+  aliases: []
+  summary: >-
+    Light and Shadow are exceptionally rare magical classifications, not moral alignments.
+  tags: ["magic"]
+  search_context: ""
+  content: >-
+    Light is not inherently good; Shadow is not inherently evil. Both are nearly legendary in
+    ordinary experience, known more through stories, records, rumor, and rare cases than
+    everyday observation. They may have unusual interactions or opposition with one another;
+    no full combat matrix is established. Clearly identifiable public use may attract major
+    attention: surprise, fear, distrust, rumor, withdrawal, institutional interest, reports to
+    authorities, or investigation by Church/Inquisition-related actors. Responses depend on
+    context; no spell automatically summons the Inquisition. No Light hero, Shadow villain, or
+    required conflict is established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: "magic"
+  related_entities: ["magic_overview","inquisition"]
+chunks: []
+

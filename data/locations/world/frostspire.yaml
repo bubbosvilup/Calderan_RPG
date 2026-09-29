@@ -1,0 +1,38 @@
+schema_version: 1
+entity:
+  id: frostspire
+  type: location
+  name: "Frostspire"
+  display_name: "Frostspire"
+  parent: east
+  aliases: []
+  summary: >-
+    Frostspire is an iron-and-coal mining center and military frontier garrison in
+    western/northwestern East near the Dragon's Teeth Mountains.
+  content: >-
+    Near the Center–East frontier zone, Frostspire stands on a rocky spur, dominated by a
+    tall fortified keep surrounded by snowy peaks. Its dual role combines major mining with
+    military frontier duty. Patrols actively prevent West–Center violence from spreading
+    into East, helping enforce strong regional armed neutrality. Frontier forces may repel
+    incursions or armed groups regardless of which side they originate from. This
+    establishes neither an alliance nor friendship with West or Center, and does not define
+    East's entire foreign policy.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "rocky spur and fortified keep"
+      description: "A tall fortified keep dominates the settlement on a rocky spur amid snowy peaks."
+    - name: "iron and coal mining"
+      description: "Major mining activity extracts iron and coal."
+    - name: "military frontier garrison"
+      description: "Patrols prevent West–Center violence from entering East."
+    - name: "armed neutrality"
+      description: "Frostspire enforces East's neutral stance toward the West–Center conflict, repelling incursions from either side when necessary."
+  connections: []
+chunks: []
+

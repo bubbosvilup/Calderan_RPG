@@ -1,0 +1,1706 @@
+{
+  "online_paid": false,
+  "source_report": "docs/evaluations/phase-1m-stage-b-20260928T2044.json",
+  "purpose": "Recorded Phase 1M Stage B narration and DeepSeek proposals replayed through the Phase 1M.1 TurnEvidence grammar; not a new provider sample",
+  "records": [
+    {
+      "key": "r3#1",
+      "alias": "kimi",
+      "case_id": "r3",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r11#1",
+      "alias": "kimi",
+      "case_id": "r11",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r25#1",
+      "alias": "kimi",
+      "case_id": "r25",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r35#1",
+      "alias": "kimi",
+      "case_id": "r35",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r39#1",
+      "alias": "kimi",
+      "case_id": "r39",
+      "before": [
+        "true_positive"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [
+          {
+            "kind": "runtime_delta",
+            "delta": {
+              "time_advance_minutes": 60
+            }
+          }
+        ],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r43#1",
+      "alias": "kimi",
+      "case_id": "r43",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r47#1",
+      "alias": "kimi",
+      "case_id": "r47",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r53#1",
+      "alias": "kimi",
+      "case_id": "r53",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r115#1",
+      "alias": "kimi",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_recipient_refused",
+        "controller_correct_authorizer_rejected:rejected_recipient_refused",
+        "controller_correct_authorizer_rejected:rejected_recipient_refused"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [
+          {
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "source_sentence": "She makes no move to accept or refuse, waiting for Nicco's answer"
+          }
+        ],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r115#2",
+      "alias": "kimi",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive",
+        "true_positive",
+        "true_positive"
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r115#3",
+      "alias": "kimi",
+      "case_id": "r115",
+      "before": [
+        "controller_omitted_evidence_absent",
+        "controller_omitted_evidence_absent",
+        "controller_omitted_evidence_absent"
+      ],
+      "after": [
+        "controller_omitted_evidence_absent",
+        "controller_omitted_evidence_absent",
+        "controller_omitted_evidence_absent"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [
+          {
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "source_sentence": "She remains seated, making no move to accept any of the three items, her scarred wrists resting on her knees"
+          }
+        ],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r169#1",
+      "alias": "kimi",
+      "case_id": "r169",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r173#1",
+      "alias": "kimi",
+      "case_id": "r173",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r509#1",
+      "alias": "kimi",
+      "case_id": "r509",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#1",
+      "alias": "kimi",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "was_told_fact",
+            "command_indexes": [
+              0
+            ],
+            "collective": false,
+            "source_sentence": "Nicco tells Brenna that the eastern bridge is closed"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "knowledge_tell#2",
+      "alias": "kimi",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "was_told_fact",
+            "command_indexes": [
+              0
+            ],
+            "collective": false,
+            "source_sentence": "Nicco speaks to Brenna, telling her that the eastern bridge is closed"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "knowledge_tell#3",
+      "alias": "kimi",
+      "case_id": "knowledge_tell",
+      "before": [
+        "true_positive"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "was_told_fact",
+            "command_indexes": [
+              0
+            ],
+            "collective": false,
+            "source_sentence": "Nicco tells Brenna that the eastern bridge is closed"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r3#1",
+      "alias": "minimax",
+      "case_id": "r3",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r11#1",
+      "alias": "minimax",
+      "case_id": "r11",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r25#1",
+      "alias": "minimax",
+      "case_id": "r25",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r35#1",
+      "alias": "minimax",
+      "case_id": "r35",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r39#1",
+      "alias": "minimax",
+      "case_id": "r39",
+      "before": [
+        "true_positive"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [
+          {
+            "kind": "runtime_delta",
+            "delta": {
+              "time_advance_minutes": 60
+            }
+          }
+        ],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r43#1",
+      "alias": "minimax",
+      "case_id": "r43",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r47#1",
+      "alias": "minimax",
+      "case_id": "r47",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r53#1",
+      "alias": "minimax",
+      "case_id": "r53",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r115#1",
+      "alias": "minimax",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_insufficient_confirmation",
+        "controller_correct_authorizer_rejected:rejected_insufficient_confirmation",
+        "controller_correct_authorizer_rejected:rejected_insufficient_confirmation"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r115#2",
+      "alias": "minimax",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive",
+        "true_positive",
+        "true_positive"
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "accepts the stack of pink clothing"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r115#3",
+      "alias": "minimax",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive",
+        "true_positive",
+        "true_positive"
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "Brenna hesitates, glancing down at her worn boots, before carefully taking the three items from Nicco's hands"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r169#1",
+      "alias": "minimax",
+      "case_id": "r169",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r173#1",
+      "alias": "minimax",
+      "case_id": "r173",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r509#1",
+      "alias": "minimax",
+      "case_id": "r509",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#1",
+      "alias": "minimax",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_fact_not_communicated"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#2",
+      "alias": "minimax",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_fact_not_communicated"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#3",
+      "alias": "minimax",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_fact_not_communicated"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r3#1",
+      "alias": "qwen",
+      "case_id": "r3",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r11#1",
+      "alias": "qwen",
+      "case_id": "r11",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r25#1",
+      "alias": "qwen",
+      "case_id": "r25",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r35#1",
+      "alias": "qwen",
+      "case_id": "r35",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r39#1",
+      "alias": "qwen",
+      "case_id": "r39",
+      "before": [
+        "true_positive"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [
+          {
+            "kind": "runtime_delta",
+            "delta": {
+              "time_advance_minutes": 60
+            }
+          }
+        ],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r43#1",
+      "alias": "qwen",
+      "case_id": "r43",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r47#1",
+      "alias": "qwen",
+      "case_id": "r47",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r53#1",
+      "alias": "qwen",
+      "case_id": "r53",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r115#1",
+      "alias": "qwen",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive",
+        "true_positive",
+        "true_positive"
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "she extended one hand to take the stack, accepting the cotton shirt, the fluffy shirt, and the shorts into her grasp"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r115#2",
+      "alias": "qwen",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_recipient_refused",
+        "controller_correct_authorizer_rejected:rejected_recipient_refused",
+        "controller_correct_authorizer_rejected:rejected_recipient_refused"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [
+          {
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "source_sentence": "She remained seated, alert but still marked by her recovering condition, and did not reach out to take them"
+          }
+        ],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r115#3",
+      "alias": "qwen",
+      "case_id": "r115",
+      "before": [
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected",
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive",
+        "true_positive",
+        "true_positive"
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "she extended her hands to take all three garments"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    },
+    {
+      "key": "r169#1",
+      "alias": "qwen",
+      "case_id": "r169",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r173#1",
+      "alias": "qwen",
+      "case_id": "r173",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "r509#1",
+      "alias": "qwen",
+      "case_id": "r509",
+      "before": [],
+      "after": [],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#1",
+      "alias": "qwen",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_fact_not_communicated"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#2",
+      "alias": "qwen",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "controller_correct_authorizer_rejected:rejected_fact_not_communicated"
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 1
+    },
+    {
+      "key": "knowledge_tell#3",
+      "alias": "qwen",
+      "case_id": "knowledge_tell",
+      "before": [
+        "controller_correct_authorizer_rejected"
+      ],
+      "after": [
+        "true_positive"
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "was_told_fact",
+            "command_indexes": [
+              0
+            ],
+            "collective": false,
+            "source_sentence": "Nicco spoke the words clearly to Brenna, stating that the eastern bridge was closed"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "revision": 2
+    }
+  ]
+}

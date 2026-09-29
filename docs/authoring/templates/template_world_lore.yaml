@@ -1,0 +1,24 @@
+# Authoring template only. Keep outside data/ until placeholders and references are replaced.
+schema_version: 1
+entity:
+  id: template_world_lore
+  type: world_lore
+  name: Unfilled world_lore template
+  display_name: Unfilled world_lore template
+  parent: null
+  aliases: []
+  summary: Unfilled world_lore authoring template; not Caldrevan canon.
+  tags: []
+  search_context: ""
+  content: Unfilled compact introduction; replace with supplied facts before authoring canon.
+  # Example for ordinary observable facts; choose policy deliberately.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  # Choose fundamentals/history/cultures/races/magic/religion as appropriate.
+  category: fundamentals
+  related_entities: []
+# Add coherent passages only when supplied detail or visibility warrants them.
+chunks: []

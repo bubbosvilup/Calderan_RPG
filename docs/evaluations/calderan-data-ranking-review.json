@@ -1,0 +1,4818 @@
+{
+  "reviewer": "agent-authored; unchanged labels, no ranking thresholds weakened",
+  "changes": [
+    {
+      "suite": "lexical",
+      "query": "mages guild",
+      "before": [
+        "learned_arts_guild",
+        "magic_overview",
+        "nicco",
+        "artisans_guild",
+        "merchants_guild"
+      ],
+      "after": [
+        "learned_arts_guild",
+        "magic_overview",
+        "artisans_guild",
+        "merchants_guild",
+        "nicco"
+      ],
+      "reason": "Corpus document-frequency changes reorder lower-ranked guilds/Nicco; original target remains first."
+    },
+    {
+      "suite": "lexical",
+      "query": "church investigators",
+      "before": [
+        "church",
+        "inquisition",
+        "calderan",
+        "city_guard",
+        "light_and_shadow"
+      ],
+      "after": [
+        "church",
+        "calderan_north",
+        "inquisition",
+        "calderan",
+        "calderan_center"
+      ],
+      "reason": "New North District explicitly mentions Church and Inquisition; the pre-existing investigator lexical gap matches church rather than investigator, so North competes at rank 2 and Inquisition moves 2 to 3. This accounts for the MRR decrease; not a path effect."
+    },
+    {
+      "suite": "lexical",
+      "query": "merchant political institution",
+      "before": [
+        "merchants_guild",
+        "church",
+        "davenport",
+        "main_city_structure",
+        "west_governance"
+      ],
+      "after": [
+        "merchants_guild",
+        "church",
+        "davenport",
+        "west_governance",
+        "calderan"
+      ],
+      "reason": "Detailed institutional prose moved out of the overview into Center; West governance and the city move up in the tail. Merchants Guild stays first."
+    },
+    {
+      "suite": "lexical",
+      "query": "who has mana",
+      "before": [
+        "mana",
+        "main_city_structure",
+        "chained_bay",
+        "church",
+        "davenport"
+      ],
+      "after": [
+        "mana",
+        "calderan_east",
+        "calderan_south",
+        "main_city_structure",
+        "chained_bay"
+      ],
+      "reason": "Generic has matches the new East/South prose; mana remains first. Existing stopword behavior is unchanged."
+    },
+    {
+      "suite": "lexical",
+      "query": "beastfolk slavery west",
+      "before": [
+        "west_slavery",
+        "beastfolk",
+        "calderan_slave_market",
+        "west",
+        "main_city_structure"
+      ],
+      "after": [
+        "west_slavery",
+        "beastfolk",
+        "calderan_slave_market",
+        "west",
+        "slave_market_back_alleys"
+      ],
+      "reason": "New fringe is a legitimately matching slavery/West location and replaces the overview in the tail; both labeled answers remain."
+    },
+    {
+      "suite": "lexical",
+      "query": "legal slave port",
+      "before": [
+        "davenport",
+        "calderan_slave_market",
+        "calderan",
+        "west_slavery",
+        "ironbound"
+      ],
+      "after": [
+        "davenport",
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "west_slavery"
+      ],
+      "reason": "New fringe contains legal slave-market context, though it is explicitly unofficial. Davenport stays first. This is a broad lexical tail match, not a claim that the fringe is legal."
+    },
+    {
+      "suite": "lexical",
+      "query": "slave market border",
+      "before": [
+        "khar_dune",
+        "west",
+        "calderan_slave_market",
+        "west_slavery",
+        "calderan"
+      ],
+      "after": [
+        "khar_dune",
+        "west",
+        "west_slavery",
+        "calderan_slave_market",
+        "slave_market_back_alleys"
+      ],
+      "reason": "New fringe and corpus frequency shifts reorder broad slave-market matches; the existing top-1 miss remains. No border/route canon changed."
+    },
+    {
+      "suite": "lexical",
+      "query": "illegal slaves pirates",
+      "before": [
+        "blackwater",
+        "west_slavery",
+        "calderan_slave_market",
+        "calderan",
+        "davenport"
+      ],
+      "after": [
+        "blackwater",
+        "slave_market_back_alleys",
+        "west_slavery",
+        "calderan_slave_market",
+        "calderan"
+      ],
+      "reason": "New criminal fringe matches illegal/slave vocabulary in the tail; Blackwater stays first; no pirate operators were added."
+    },
+    {
+      "suite": "lexical",
+      "query": "slave trade West",
+      "before": [
+        "calderan_slave_market",
+        "davenport",
+        "blackwater",
+        "khar_dune",
+        "main_city_structure"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "blackwater",
+        "davenport",
+        "calderan_west",
+        "khar_dune"
+      ],
+      "reason": "West district now owns the detailed district subject; adding it and reducing overview detail changes lower ranks. Existing expected-top1 miss remains."
+    },
+    {
+      "suite": "lexical",
+      "query": "courtyard medicine plants",
+      "before": [
+        "heartstone_cy",
+        "heartstone_lr",
+        "heartstone",
+        "heartstone_f1",
+        "main_city_structure"
+      ],
+      "after": [
+        "heartstone_cy",
+        "heartstone_lr",
+        "calderan_north",
+        "heartstone",
+        "heartstone_f1"
+      ],
+      "reason": "North now owns healing/medicine detail formerly in overview. Courtyard remains first; related tail changes are expected."
+    },
+    {
+      "suite": "lexical",
+      "query": "where do pirates operate?",
+      "before": [
+        "blackwater",
+        "inquisition"
+      ],
+      "after": [
+        "blackwater",
+        "calderan_west",
+        "inquisition"
+      ],
+      "reason": "The generic operate token matches legitimate businesses in West. Blackwater stays first; pre-existing diagnostic relevance mismatch persists; no pirate district was invented."
+    },
+    {
+      "suite": "lexical",
+      "query": "mages guild headquarters",
+      "before": [
+        "main_city_structure",
+        "learned_arts_guild",
+        "magic_overview",
+        "nicco",
+        "artisans_guild"
+      ],
+      "after": [
+        "calderan_center",
+        "learned_arts_guild",
+        "magic_overview",
+        "artisans_guild",
+        "merchants_guild"
+      ],
+      "reason": "Headquarters detail intentionally moved from main_city_structure to calderan_center; the new location replaces the overview in this diagnostic query."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Where is the slave market?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Where are the slave markets?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Where is the slave-market?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "When do the slave auctions happen?",
+      "before": [
+        "calderan_slave_market",
+        "davenport",
+        "calderan",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "davenport",
+        "slave_market_back_alleys",
+        "calderan",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Where is the slave auction?",
+      "before": [
+        "calderan_slave_market",
+        "davenport",
+        "calderan",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "davenport",
+        "slave_market_back_alleys",
+        "calderan",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Where is the slave pen?",
+      "before": [
+        "calderan_slave_market",
+        "main_city_structure",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Where are the slave pens?",
+      "before": [
+        "calderan_slave_market",
+        "main_city_structure",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "What's the exact route to the slave market from here?",
+      "before": [
+        "calderan_slave_market",
+        "blackwater",
+        "main_city_structure",
+        "west_slavery",
+        "calderan"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan_west",
+        "blackwater",
+        "west_slavery"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "How do I get to the slave market?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"",
+      "before": [
+        "calderan_slave_market",
+        "main_city_structure",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "What is Calderan like?",
+      "before": [
+        "calderan",
+        "skardgard",
+        "calderan_slave_market",
+        "main_city_structure",
+        "city_guard"
+      ],
+      "after": [
+        "calderan",
+        "skardgard",
+        "calderan_center",
+        "calderan_east",
+        "calderan_north"
+      ],
+      "reason": "New district entities compete with the city overview. Natural overview aliases restore the districts query to overview + city within top-3 without changing the expected labels."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "What are the districts of Calderan?",
+      "before": [
+        "calderan",
+        "calderan_slave_market",
+        "main_city_structure",
+        "west",
+        "center"
+      ],
+      "after": [
+        "main_city_structure",
+        "calderan",
+        "calderan_slave_market",
+        "calderan_center",
+        "calderan_east"
+      ],
+      "reason": "New district entities compete with the city overview. Natural overview aliases restore the districts query to overview + city within top-3 without changing the expected labels."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Who are the Inquisition?",
+      "before": [
+        "inquisition",
+        "church",
+        "light_and_shadow"
+      ],
+      "after": [
+        "inquisition",
+        "calderan_north",
+        "church",
+        "light_and_shadow"
+      ],
+      "reason": "New North District explicitly houses Inquisition presence and enters the tail; Inquisition remains policy first."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "What does the Inquisition do?",
+      "before": [
+        "inquisition",
+        "church",
+        "light_and_shadow",
+        "blackwater",
+        "dragons_teeth_mountains"
+      ],
+      "after": [
+        "inquisition",
+        "calderan_north",
+        "church",
+        "light_and_shadow",
+        "blackwater"
+      ],
+      "reason": "New North District explicitly houses Inquisition presence and enters the tail; Inquisition remains policy first."
+    },
+    {
+      "suite": "phase_1r_policy",
+      "query": "Do slave caravans pass through Ironbound?",
+      "before": [
+        "ironbound",
+        "west_slavery",
+        "davenport",
+        "khar_dune",
+        "west"
+      ],
+      "after": [
+        "ironbound",
+        "west_slavery",
+        "davenport",
+        "khar_dune",
+        "calderan_slave_market"
+      ],
+      "reason": "Corpus-size/document-frequency changes reorder the tail of a slave-caravan query; Ironbound remains policy first."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Where is the slave market?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Where are the slave markets?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Where is the slave-market?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "When do the slave auctions happen?",
+      "before": [
+        "davenport",
+        "calderan_slave_market",
+        "calderan",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "davenport",
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Where is the slave auction?",
+      "before": [
+        "davenport",
+        "calderan_slave_market",
+        "calderan",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "davenport",
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Where is the slave pen?",
+      "before": [
+        "calderan_slave_market",
+        "main_city_structure",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Where are the slave pens?",
+      "before": [
+        "calderan_slave_market",
+        "main_city_structure",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "What's the exact route to the slave market from here?",
+      "before": [
+        "blackwater",
+        "main_city_structure",
+        "west_slavery",
+        "calderan_slave_market",
+        "calderan"
+      ],
+      "after": [
+        "slave_market_back_alleys",
+        "calderan_west",
+        "calderan_slave_market",
+        "blackwater",
+        "west_slavery"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "How do I get to the slave market?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "davenport",
+        "khar_dune",
+        "blackwater"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "calderan",
+        "davenport",
+        "khar_dune"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"",
+      "before": [
+        "calderan_slave_market",
+        "heartstone_square",
+        "main_city_structure",
+        "heartstone_lr",
+        "calderan"
+      ],
+      "after": [
+        "calderan_slave_market",
+        "heartstone_square",
+        "calderan_west",
+        "slave_market_back_alleys",
+        "heartstone_lr"
+      ],
+      "reason": "Official market remains policy top-1. Newly authored criminal fringe and West district compete in the tail; removed overview detail no longer supplies slave-pen terms."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "What is Calderan like?",
+      "before": [
+        "skardgard",
+        "calderan",
+        "calderan_slave_market",
+        "main_city_structure",
+        "city_guard"
+      ],
+      "after": [
+        "skardgard",
+        "calderan",
+        "calderan_center",
+        "calderan_east",
+        "calderan_north"
+      ],
+      "reason": "New district entities compete with the city overview. Natural overview aliases restore the districts query to overview + city within top-3 without changing the expected labels."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "What are the districts of Calderan?",
+      "before": [
+        "calderan_slave_market",
+        "calderan",
+        "main_city_structure",
+        "west",
+        "center"
+      ],
+      "after": [
+        "calderan_center",
+        "calderan_east",
+        "calderan_north",
+        "calderan_slave_market",
+        "calderan_south"
+      ],
+      "reason": "New district entities compete with the city overview. Natural overview aliases restore the districts query to overview + city within top-3 without changing the expected labels."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Who are the Inquisition?",
+      "before": [
+        "inquisition",
+        "church",
+        "light_and_shadow"
+      ],
+      "after": [
+        "inquisition",
+        "calderan_north",
+        "church",
+        "light_and_shadow"
+      ],
+      "reason": "New North District explicitly houses Inquisition presence and enters the tail; Inquisition remains policy first."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "What does the Inquisition do?",
+      "before": [
+        "inquisition",
+        "church",
+        "light_and_shadow",
+        "blackwater",
+        "dragons_teeth_mountains"
+      ],
+      "after": [
+        "inquisition",
+        "calderan_north",
+        "church",
+        "light_and_shadow",
+        "blackwater"
+      ],
+      "reason": "New North District explicitly houses Inquisition presence and enters the tail; Inquisition remains policy first."
+    },
+    {
+      "suite": "phase_1r_engine_only",
+      "query": "Do slave caravans pass through Ironbound?",
+      "before": [
+        "ironbound",
+        "west_slavery",
+        "davenport",
+        "khar_dune",
+        "west"
+      ],
+      "after": [
+        "ironbound",
+        "west_slavery",
+        "davenport",
+        "khar_dune",
+        "calderan_slave_market"
+      ],
+      "reason": "Corpus-size/document-frequency changes reorder the tail of a slave-caravan query; Ironbound remains policy first."
+    }
+  ],
+  "exact_queries": [
+    {
+      "query": "Calderan",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "calderan"
+          },
+          "score": 324.5214924560835,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 20.311660351604466
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_slave_market"
+          },
+          "score": 24.521492456083454,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 20.311660351604466
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "main_city_structure"
+          },
+          "score": 21.61982669156853,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "name",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 17.409994587089543
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "city_guard"
+          },
+          "score": 12.914829398023759,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 8.704997293544771
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "city_magistracy"
+          },
+          "score": 12.914829398023759,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 8.704997293544771
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 12.914829398023759,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 8.704997293544771
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 12.914829398023759,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 8.704997293544771
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "center"
+          },
+          "score": 11.463996515766297,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "search_context",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 7.254164411287309
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "east"
+          },
+          "score": 11.463996515766297,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "search_context",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 7.254164411287309
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "blackwater"
+          },
+          "score": 7.111497868993912,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 2.9016657645149238
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continental_structure"
+          },
+          "score": 7.111497868993912,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 2.9016657645149238
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 7.111497868993912,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 2.9016657645149238
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone"
+          },
+          "score": 7.111497868993912,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "parent",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 2.9016657645149238
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_square"
+          },
+          "score": 7.111497868993912,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "parent",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 2.9016657645149238
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 7.111497868993912,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 15,
+              "inverse_frequency": 1.4508328822574619,
+              "contribution": 2.9016657645149238
+            }
+          ],
+          "coverage_bonus": 4.209832104478989,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "calderan"
+          },
+          "score": 320.92315196380093,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_center"
+          },
+          "score": 20.92315196380095,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_east"
+          },
+          "score": 20.92315196380095,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_north"
+          },
+          "score": 20.92315196380095,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_slave_market"
+          },
+          "score": 20.92315196380095,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_south"
+          },
+          "score": 20.92315196380095,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_west"
+          },
+          "score": 20.92315196380095,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "id",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 17.71932922663786
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "main_city_structure"
+          },
+          "score": 18.3918192171384,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "name",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 15.187996479975311
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "city_guard"
+          },
+          "score": 10.797820977150744,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 7.5939982399876556
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "city_magistracy"
+          },
+          "score": 10.797820977150744,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 7.5939982399876556
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 10.797820977150744,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 7.5939982399876556
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "pellan"
+          },
+          "score": 10.797820977150744,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 7.5939982399876556
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "slave_market_back_alleys"
+          },
+          "score": 10.797820977150744,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 7.5939982399876556
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 10.797820977150744,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "summary",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 7.5939982399876556
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "center"
+          },
+          "score": 9.532154603819468,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "search_context",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 6.328331866656379
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "east"
+          },
+          "score": 9.532154603819468,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "search_context",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 6.328331866656379
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "blackwater"
+          },
+          "score": 5.735155483825641,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 2.5313327466625517
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continental_structure"
+          },
+          "score": 5.735155483825641,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 2.5313327466625517
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 5.735155483825641,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 2.5313327466625517
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone"
+          },
+          "score": 5.735155483825641,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 2.5313327466625517
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_square"
+          },
+          "score": 5.735155483825641,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 2.5313327466625517
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 5.735155483825641,
+          "matched_tokens": [
+            "calderan"
+          ],
+          "contributions": [
+            {
+              "token": "calderan",
+              "field": "content",
+              "document_frequency": 22,
+              "inverse_frequency": 1.2656663733312759,
+              "contribution": 2.5313327466625517
+            }
+          ],
+          "coverage_bonus": 3.203822737163089,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": false,
+      "explanation": "New exact city/district names add legitimate matching entities; calderan remains first."
+    },
+    {
+      "query": "West District",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "calderan_slave_market"
+          },
+          "score": 55.175938551503,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "alias",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 23.563316713856572
+            },
+            {
+              "token": "west",
+              "field": "alias",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 13.022271220031627
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 43.60104900509194,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "search_context",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 9.818048630773571
+            },
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 15.192649756703565
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan"
+          },
+          "score": 42.98074257354027,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "feature_name",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 15.708877809237714
+            },
+            {
+              "token": "west",
+              "field": "feature_name",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 8.681514146687752
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "center"
+          },
+          "score": 37.089913395076124,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "search_context",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 9.818048630773571
+            },
+            {
+              "token": "west",
+              "field": "feature_name",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 8.681514146687752
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "main_city_structure"
+          },
+          "score": 36.883144584558906,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "summary",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 11.781658356928286
+            },
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "east"
+          },
+          "score": 34.91953485840419,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "search_context",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 9.818048630773571
+            },
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "zul_rath"
+          },
+          "score": 24.68794860659617,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 3.9272194523094286
+            },
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 2.170378536671938
+            }
+          ],
+          "coverage_bonus": 18.590350617614803,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_governance"
+          },
+          "score": 17.547921252926677,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 15.192649756703565
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 17.547921252926677,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 15.192649756703565
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_square"
+          },
+          "score": 11.638745765608213,
+          "matched_tokens": [
+            "district"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 3.9272194523094286
+            }
+          ],
+          "coverage_bonus": 7.711526313298784,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "artisans_guild"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "beastfolk"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "blackwater"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "chained_bay"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "church"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continent"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continental_structure"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "humans"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "learned_arts_guild"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "merchants_guild"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "sorrow_sea"
+          },
+          "score": 8.866407106238924,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 6.511135610015813
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "frostspire"
+          },
+          "score": 4.525650032895049,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 2.170378536671938
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "khar_dune"
+          },
+          "score": 4.525650032895049,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 2.170378536671938
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "sandspear"
+          },
+          "score": 4.525650032895049,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 25,
+              "inverse_frequency": 1.085189268335969,
+              "contribution": 2.170378536671938
+            }
+          ],
+          "coverage_bonus": 2.355271496223111,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "calderan_west"
+          },
+          "score": 286.41085211199874,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "name",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            },
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 15.054975971053796
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 240,
+          "exact_field": "name"
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_slave_market"
+          },
+          "score": 44.26014125899107,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "alias",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            },
+            {
+              "token": "west",
+              "field": "alias",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 12.90426511804611
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "main_city_structure"
+          },
+          "score": 37.80800869996801,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "alias",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            },
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 35.882310334564835,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "search_context",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 7.520386983881371
+            },
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 15.054975971053796
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan"
+          },
+          "score": 33.942409965870596,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "feature_name",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 12.032619174210193
+            },
+            {
+              "token": "west",
+              "field": "feature_name",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 8.60284341203074
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "center"
+          },
+          "score": 29.43017777554178,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "search_context",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 7.520386983881371
+            },
+            {
+              "token": "west",
+              "field": "feature_name",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 8.60284341203074
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "east"
+          },
+          "score": 27.279466922534095,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "search_context",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 7.520386983881371
+            },
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_center"
+          },
+          "score": 22.573426392301876,
+          "matched_tokens": [
+            "district"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "name",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            }
+          ],
+          "coverage_bonus": 4.524497630986588,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_east"
+          },
+          "score": 22.573426392301876,
+          "matched_tokens": [
+            "district"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "name",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            }
+          ],
+          "coverage_bonus": 4.524497630986588,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_north"
+          },
+          "score": 22.573426392301876,
+          "matched_tokens": [
+            "district"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "name",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            }
+          ],
+          "coverage_bonus": 4.524497630986588,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_south"
+          },
+          "score": 22.573426392301876,
+          "matched_tokens": [
+            "district"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "name",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 18.04892876131529
+            }
+          ],
+          "coverage_bonus": 4.524497630986588,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone"
+          },
+          "score": 18.4658130261899,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "content",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 3.0081547935525483
+            },
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_square"
+          },
+          "score": 18.4658130261899,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "content",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 3.0081547935525483
+            },
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "slave_market_back_alleys"
+          },
+          "score": 18.4658130261899,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "parent",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 3.0081547935525483
+            },
+            {
+              "token": "west",
+              "field": "parent",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "zul_rath"
+          },
+          "score": 18.4658130261899,
+          "matched_tokens": [
+            "district",
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "content",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 3.0081547935525483
+            },
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 13.306947379629667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_governance"
+          },
+          "score": 17.367754557676317,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 15.054975971053796
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 17.367754557676317,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "id",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 15.054975971053796
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "pellan"
+          },
+          "score": 13.548962011644232,
+          "matched_tokens": [
+            "district"
+          ],
+          "contributions": [
+            {
+              "token": "district",
+              "field": "summary",
+              "document_frequency": 16,
+              "inverse_frequency": 1.5040773967762742,
+              "contribution": 9.024464380657644
+            }
+          ],
+          "coverage_bonus": 4.524497630986588,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "artisans_guild"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "beastfolk"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "blackwater"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "chained_bay"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "church"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continent"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continental_structure"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "humans"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "learned_arts_guild"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "merchants_guild"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "sorrow_sea"
+          },
+          "score": 8.764911145645577,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "summary",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 6.452132559023055
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "frostspire"
+          },
+          "score": 4.463489439630207,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "khar_dune"
+          },
+          "score": 4.463489439630207,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "sandspear"
+          },
+          "score": 4.463489439630207,
+          "matched_tokens": [
+            "west"
+          ],
+          "contributions": [
+            {
+              "token": "west",
+              "field": "content",
+              "document_frequency": 29,
+              "inverse_frequency": 1.0753554265038425,
+              "contribution": 2.150710853007685
+            }
+          ],
+          "coverage_bonus": 2.3127785866225223,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": false,
+      "explanation": "The newly independent West District correctly becomes first; district metadata no longer repeats unrelated nation names."
+    },
+    {
+      "query": "Heartstone",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "heartstone"
+          },
+          "score": 337.76033583404535,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_cy"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_f1"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_lr"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_square"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_u1"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "nicco"
+          },
+          "score": 21.12480350060664,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "summary",
+              "document_frequency": 7,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 12.476649250079014
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "heartstone"
+          },
+          "score": 337.76033583404535,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_cy"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_f1"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_lr"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_square"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_u1"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "nicco"
+          },
+          "score": 21.12480350060664,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "summary",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 12.476649250079014
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_west"
+          },
+          "score": 12.807037333887294,
+          "matched_tokens": [
+            "heartstone"
+          ],
+          "contributions": [
+            {
+              "token": "heartstone",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 4.1588830833596715
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": false,
+      "explanation": "Top-five identity ordering retained; scores change only from corpus frequency and the new West parent/content."
+    },
+    {
+      "query": "slave market",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "calderan_slave_market"
+          },
+          "score": 72.70088166174233,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "id",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 24.849332912763433
+            },
+            {
+              "token": "slave",
+              "field": "id",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 23.75029005193222
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan"
+          },
+          "score": 51.872471819729896,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "feature_name",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 14.19961880729339
+            },
+            {
+              "token": "slave",
+              "field": "feature_name",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 13.571594315389842
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 51.872471819729896,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "feature_name",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 14.19961880729339
+            },
+            {
+              "token": "slave",
+              "field": "feature_name",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 13.571594315389842
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "khar_dune"
+          },
+          "score": 51.872471819729896,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "feature_name",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 14.19961880729339
+            },
+            {
+              "token": "slave",
+              "field": "feature_name",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 13.571594315389842
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "blackwater"
+          },
+          "score": 31.044061977717476,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 3.5499047018233476
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "main_city_structure"
+          },
+          "score": 31.044061977717476,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 3.5499047018233476
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 31.044061977717476,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 3.5499047018233476
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 31.044061977717476,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 3.5499047018233476
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 24.101258697046667,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "center"
+          },
+          "score": 9.850816397837104,
+          "matched_tokens": [
+            "market"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 3.5499047018233476
+            }
+          ],
+          "coverage_bonus": 6.300911696013755,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "merchants_guild"
+          },
+          "score": 9.850816397837104,
+          "matched_tokens": [
+            "market"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 10,
+              "inverse_frequency": 1.7749523509116738,
+              "contribution": 3.5499047018233476
+            }
+          ],
+          "coverage_bonus": 6.300911696013755,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continental_structure"
+          },
+          "score": 9.148778962020018,
+          "matched_tokens": [
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 5.755880383172558,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 9.148778962020018,
+          "matched_tokens": [
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 5.755880383172558,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "sandspear"
+          },
+          "score": 9.148778962020018,
+          "matched_tokens": [
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 11,
+              "inverse_frequency": 1.6964492894237302,
+              "contribution": 3.3928985788474604
+            }
+          ],
+          "coverage_bonus": 5.755880383172558,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "calderan_slave_market"
+          },
+          "score": 72.63955612169524,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "id",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 24.28441477543349
+            },
+            {
+              "token": "slave",
+              "field": "id",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 24.28441477543349
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "slave_market_back_alleys"
+          },
+          "score": 72.63955612169524,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "id",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 24.28441477543349
+            },
+            {
+              "token": "slave",
+              "field": "id",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 24.28441477543349
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan"
+          },
+          "score": 51.82434345703796,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "feature_name",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 13.876808443104851
+            },
+            {
+              "token": "slave",
+              "field": "feature_name",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 13.876808443104851
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 51.82434345703796,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "feature_name",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 13.876808443104851
+            },
+            {
+              "token": "slave",
+              "field": "feature_name",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 13.876808443104851
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "khar_dune"
+          },
+          "score": 51.82434345703796,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "feature_name",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 13.876808443104851
+            },
+            {
+              "token": "slave",
+              "field": "feature_name",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 13.876808443104851
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "blackwater"
+          },
+          "score": 31.009130792380684,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_west"
+          },
+          "score": 31.009130792380684,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 31.009130792380684,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 31.009130792380684,
+          "matched_tokens": [
+            "market",
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            },
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 24.07072657082826,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_east"
+          },
+          "score": 16.425287975035705,
+          "matched_tokens": [
+            "market"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "summary",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 10.407606332328639
+            }
+          ],
+          "coverage_bonus": 6.017681642707065,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "center"
+          },
+          "score": 9.486883753483278,
+          "matched_tokens": [
+            "market"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 6.017681642707065,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "continental_structure"
+          },
+          "score": 9.486883753483278,
+          "matched_tokens": [
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 6.017681642707065,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 9.486883753483278,
+          "matched_tokens": [
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 6.017681642707065,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "merchants_guild"
+          },
+          "score": 9.486883753483278,
+          "matched_tokens": [
+            "market"
+          ],
+          "contributions": [
+            {
+              "token": "market",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 6.017681642707065,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "sandspear"
+          },
+          "score": 9.486883753483278,
+          "matched_tokens": [
+            "slave"
+          ],
+          "contributions": [
+            {
+              "token": "slave",
+              "field": "content",
+              "document_frequency": 12,
+              "inverse_frequency": 1.7346010553881064,
+              "contribution": 3.4692021107762128
+            }
+          ],
+          "coverage_bonus": 6.017681642707065,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": false,
+      "explanation": "The distinct fringe is an additional relevant location; official market remains first."
+    },
+    {
+      "query": "Light magic",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "light_and_shadow"
+          },
+          "score": 85.39186855918403,
+          "matched_tokens": [
+            "light",
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "id",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 36.17596573405124
+            },
+            {
+              "token": "magic",
+              "field": "tags",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 7.854438904618857
+            }
+          ],
+          "coverage_bonus": 41.361463920513934,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "nicco"
+          },
+          "score": 60.79266868741675,
+          "matched_tokens": [
+            "light",
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "summary",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 15.503985314593386
+            },
+            {
+              "token": "magic",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 3.9272194523094286
+            }
+          ],
+          "coverage_bonus": 41.361463920513934,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "inquisition"
+          },
+          "score": 50.456678477687824,
+          "matched_tokens": [
+            "light",
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 5.167995104864462
+            },
+            {
+              "token": "magic",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 3.9272194523094286
+            }
+          ],
+          "coverage_bonus": 41.361463920513934,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "elemental_magic"
+          },
+          "score": 35.202062479464786,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 27.490536166166
+            }
+          ],
+          "coverage_bonus": 7.711526313298784,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "magic_overview"
+          },
+          "score": 35.202062479464786,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 27.490536166166
+            }
+          ],
+          "coverage_bonus": 7.711526313298784,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "magic_subschools"
+          },
+          "score": 35.202062479464786,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 27.490536166166
+            }
+          ],
+          "coverage_bonus": 7.711526313298784,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "learned_arts_guild"
+          },
+          "score": 19.49318467022707,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "summary",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 11.781658356928286
+            }
+          ],
+          "coverage_bonus": 7.711526313298784,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "mana"
+          },
+          "score": 19.49318467022707,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "summary",
+              "document_frequency": 8,
+              "inverse_frequency": 1.9636097261547143,
+              "contribution": 11.781658356928286
+            }
+          ],
+          "coverage_bonus": 7.711526313298784,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_lr"
+          },
+          "score": 18.522081806815986,
+          "matched_tokens": [
+            "light"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "feature_description",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 5.167995104864462
+            }
+          ],
+          "coverage_bonus": 13.354086701951523,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "light_and_shadow"
+          },
+          "score": 92.07062335656282,
+          "matched_tokens": [
+            "light",
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "id",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 37.91270281543094
+            },
+            {
+              "token": "magic",
+              "field": "tags",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 8.317766166719343
+            }
+          ],
+          "coverage_bonus": 45.84015437441254,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "nicco"
+          },
+          "score": 66.24733866438547,
+          "matched_tokens": [
+            "light",
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "summary",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 16.24830120661326
+            },
+            {
+              "token": "magic",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 4.1588830833596715
+            }
+          ],
+          "coverage_bonus": 45.84015437441254,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "inquisition"
+          },
+          "score": 55.41513785997663,
+          "matched_tokens": [
+            "light",
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            },
+            {
+              "token": "magic",
+              "field": "content",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 4.1588830833596715
+            }
+          ],
+          "coverage_bonus": 45.84015437441254,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "elemental_magic"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "magic_overview"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "magic_subschools"
+          },
+          "score": 37.76033583404532,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "id",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 29.1121815835177
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "learned_arts_guild"
+          },
+          "score": 21.12480350060664,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "summary",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 12.476649250079014
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "mana"
+          },
+          "score": 21.12480350060664,
+          "matched_tokens": [
+            "magic"
+          ],
+          "contributions": [
+            {
+              "token": "magic",
+              "field": "summary",
+              "document_frequency": 8,
+              "inverse_frequency": 2.0794415416798357,
+              "contribution": 12.476649250079014
+            }
+          ],
+          "coverage_bonus": 8.648154250527623,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "heartstone_lr"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "light"
+          ],
+          "contributions": [
+            {
+              "token": "light",
+              "field": "feature_description",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": true,
+      "explanation": "Ranking retained; corpus-size changes alter IDF scores only."
+    },
+    {
+      "query": "Inquisition",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "inquisition"
+          },
+          "score": 356.211852168645,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "id",
+              "document_frequency": 3,
+              "inverse_frequency": 2.8526314299133175,
+              "contribution": 39.93684001878645
+            }
+          ],
+          "coverage_bonus": 16.275012149858597,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "church"
+          },
+          "score": 21.980275009685233,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "content",
+              "document_frequency": 3,
+              "inverse_frequency": 2.8526314299133175,
+              "contribution": 5.705262859826635
+            }
+          ],
+          "coverage_bonus": 16.275012149858597,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "light_and_shadow"
+          },
+          "score": 21.980275009685233,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "content",
+              "document_frequency": 3,
+              "inverse_frequency": 2.8526314299133175,
+              "contribution": 5.705262859826635
+            }
+          ],
+          "coverage_bonus": 16.275012149858597,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "inquisition"
+          },
+          "score": 352.5797745988104,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "id",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 37.91270281543094
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "calderan_north"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "church"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "light_and_shadow"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "inquisition"
+          ],
+          "contributions": [
+            {
+              "token": "inquisition",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": false,
+      "explanation": "North is a new matching location; institution remains first."
+    },
+    {
+      "query": "Ironbound",
+      "before": [
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 349.5300524360028,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "id",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 36.17596573405124
+            }
+          ],
+          "coverage_bonus": 13.354086701951523,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 18.522081806815986,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 5.167995104864462
+            }
+          ],
+          "coverage_bonus": 13.354086701951523,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 18.522081806815986,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 5.167995104864462
+            }
+          ],
+          "coverage_bonus": 13.354086701951523,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 18.522081806815986,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.583997552432231,
+              "contribution": 5.167995104864462
+            }
+          ],
+          "coverage_bonus": 13.354086701951523,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "after": [
+        {
+          "reference": {
+            "entity_id": "ironbound"
+          },
+          "score": 352.5797745988104,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "id",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 37.91270281543094
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 300,
+          "exact_field": "id"
+        },
+        {
+          "reference": {
+            "entity_id": "davenport"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        },
+        {
+          "reference": {
+            "entity_id": "west_slavery"
+          },
+          "score": 20.083172185583862,
+          "matched_tokens": [
+            "ironbound"
+          ],
+          "contributions": [
+            {
+              "token": "ironbound",
+              "field": "content",
+              "document_frequency": 4,
+              "inverse_frequency": 2.70805020110221,
+              "contribution": 5.41610040220442
+            }
+          ],
+          "coverage_bonus": 14.667071783379441,
+          "exact_bonus": 0,
+          "exact_field": null
+        }
+      ],
+      "same_ranking": true,
+      "explanation": "Ranking retained; corpus-size changes alter IDF scores only."
+    }
+  ]
+}

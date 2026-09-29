@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: "beastfolk"
+  type: "world_lore"
+  name: "Beastfolk"
+  display_name: "Beastfolk"
+  parent: null
+  aliases: []
+  summary: >-
+    Beastfolk are a broad umbrella of animal-associated lineages; prejudice against them is
+    common in human-dominated West.
+  tags: ["races"]
+  search_context: ""
+  content: >-
+    Possible lineages include feline, canine, vulpine, lupine, and other familiar variants;
+    this list is non-exhaustive. Human-dominated society in West commonly treats Beastfolk as
+    socially inferior. This is West social prejudice, not biological truth. Beastfolk there
+    are disproportionately found among enslaved populations, agricultural labor, hard manual
+    work, combat-related exploitation, and vulnerable social classes. Not every Beastfolk is
+    enslaved. This social pattern is not universal across the world; Center, East, and future
+    continents may have different relationships with Beastfolk, presently undefined.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "races"
+  related_entities: ["west_slavery"]
+chunks: []
+

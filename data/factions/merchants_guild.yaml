@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: "merchants_guild"
+  type: "faction"
+  name: "Merchants Guild"
+  display_name: "Merchants Guild"
+  parent: null
+  aliases: []
+  summary: >-
+    A national guild representing major organized commercial interests in West.
+  tags: ["politics"]
+  search_context: ""
+  content: >-
+    The Merchants Guild broadly represents trade, merchants, large commercial networks, market
+    influence, and commercial interests. It may maintain local city branches with local
+    representatives. Local representatives from major cities collectively determine or select
+    a national representative; selection procedures remain undefined. Branches are parts of
+    this national institution, not independent unrelated guilds. No monopolies or detailed law
+    are established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  members: []
+  territory: []
+  relations: []
+chunks: []
+

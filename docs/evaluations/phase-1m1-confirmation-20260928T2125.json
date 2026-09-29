@@ -1,0 +1,2854 @@
+{
+  "note": "Phase 1M.1 held-out confirmation: fresh Kimi narration with the FINAL grammar (no grammar changes after this run). r115 x5, knowledge x5.",
+  "source_run": ".build/evaluations/phase-1m-stage-b-2026-09-28T2125",
+  "manifest": {
+    "phase": "1M",
+    "stage": "b",
+    "created_at": "2026-09-28T21:25:15.487Z",
+    "online_paid": true,
+    "models": [
+      {
+        "alias": "kimi",
+        "model": "moonshotai/kimi-k2.5"
+      }
+    ],
+    "case_ids": [
+      "r115",
+      "knowledge_tell"
+    ],
+    "cases": [
+      {
+        "id": "r115",
+        "source_row": 115,
+        "repeats": 5,
+        "context_mode": "state_only",
+        "failure_modes": [],
+        "prompt_fingerprint": "per-turn (coordinator-built; see records)"
+      },
+      {
+        "id": "knowledge_tell",
+        "source_row": null,
+        "repeats": 5,
+        "context_mode": "state_only",
+        "failure_modes": [
+          "explicit_communication"
+        ],
+        "prompt_fingerprint": "per-turn (coordinator-built; see records)"
+      }
+    ],
+    "narrator_system_sha": "04394bf8513383f5",
+    "request_policy": {
+      "max_output_tokens": 384,
+      "sampling": "provider defaults; no temperature, top_p or penalties sent (same as production)",
+      "reasoning": {
+        "enabled": false
+      },
+      "timeout_ms": 60000,
+      "streaming": true
+    },
+    "output_budget_tokens": 384,
+    "controller_model": "deepseek/deepseek-v4-flash-0731:nitro",
+    "corpus_source_sha256": "245d5a69c70c8838e0234017a8789443ca67b5c0f09b8ba459ad6ef8d7dc14fb",
+    "historical_window_policy": "Phase 1L.1 method: three preceding exchanges, marked HISTORICAL CONVERSATION CONTEXT, NOT authoritative canon; evaluation-only narrator input, never controller evidence",
+    "corpus_status": "historical pairs are evaluation evidence, not canonical prose or authoritative state history"
+  },
+  "summary": {
+    "kimi": {
+      "model": "moonshotai/kimi-k2.5",
+      "attempts": 10,
+      "keys": 10,
+      "keys_with_success": 10,
+      "responses_with_text": 10,
+      "outcomes_all_attempts": {
+        "success": 10
+      },
+      "deterministic_finding_counts_at_run_time": {
+        "prompt_vocabulary_echo": 1,
+        "npc_knowledge_leak_candidate": 5
+      },
+      "latency_ms": {
+        "ttft": {
+          "n": 10,
+          "p25": 773.6,
+          "median": 797.3,
+          "p75": 1068.7
+        },
+        "narrator_total": {
+          "n": 10,
+          "p25": 2437.5,
+          "median": 2578.4,
+          "p75": 2974.1
+        },
+        "controller_tail": {
+          "n": 10,
+          "p25": 812.5,
+          "median": 1026.8,
+          "p75": 1118.8
+        },
+        "turn": {
+          "n": 10,
+          "p25": 3360.7,
+          "median": 3562.8,
+          "p75": 4218.8
+        }
+      },
+      "narrator_tokens": {
+        "prompt": 13555,
+        "completion": 952
+      },
+      "provider_reported_cost_usd": {
+        "narrator": 0.004724,
+        "controller": 0.003658
+      },
+      "upstream_providers": [
+        "Novita"
+      ],
+      "tp": 8,
+      "fp_durable": 0,
+      "fn": 12,
+      "expected_diagnoses": {
+        "controller_correct_authorizer_rejected": 6,
+        "true_positive": 8,
+        "controller_omitted_evidence_absent": 6
+      },
+      "controller_incorrect_proposals": 0
+    }
+  },
+  "records": [
+    {
+      "key": "r115#1",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "r115",
+      "rep": 1,
+      "attempt": 1,
+      "source_row": 115,
+      "recorded_at": "2026-09-28T21:25:20.581Z",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "prompt_fingerprint": "4c7aa59f24fb3de9",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco holds out the two pink shirts and the pink shorts toward Brenna. The tall woman looks at the offered clothes, her grey eyes considering the pile. She wears her own worn leather boots and sits alert despite her recovering condition, old wrist scars visible as she reaches to accept or decline.\n\nBrenna takes the items from Nicco's hands, gathering the cotton shirt, the thick fluffy shirt, and the shorts together. She holds them now, carried but not yet worn, her expression giving no indication whether she intends to change into them or simply keep them for the moment.",
+      "controller_proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": false,
+          "reason": "rejected_insufficient_confirmation"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": false,
+          "reason": "rejected_insufficient_confirmation"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": false,
+          "reason": "rejected_insufficient_confirmation"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_correct_authorizer_rejected",
+          "authorizer_reason": "rejected_insufficient_confirmation"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_correct_authorizer_rejected",
+          "authorizer_reason": "rejected_insufficient_confirmation"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_correct_authorizer_rejected",
+          "authorizer_reason": "rejected_insufficient_confirmation"
+        }
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "false_negative": 3,
+      "controller_incorrect_proposals": [],
+      "findings": [],
+      "latency": {
+        "ttft_ms": 1896.8461,
+        "narrator_total_ms": 3964.6018,
+        "controller_tail_ms": 1115.8832000000002,
+        "turn_ms": 5083.596399999999
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1304,
+          "completion_tokens": 118,
+          "total_tokens": 1422,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00047158
+        },
+        "controller": {
+          "prompt_tokens": 2369,
+          "completion_tokens": 114,
+          "total_tokens": 2483,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000865672
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "r115#2",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "r115",
+      "rep": 2,
+      "attempt": 1,
+      "source_row": 115,
+      "recorded_at": "2026-09-28T21:25:24.261Z",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "prompt_fingerprint": "4c7aa59f24fb3de9",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco holds out the pink cotton shirt, the thick fluffy pink shirt, and the pink shorts toward Brenna.\n\nBrenna looks at the offered clothes, her grey eyes considering each piece. \"I don't need charity,\" she says, though her voice lacks its usual edge. She pauses, glancing down at her own worn boots. \"But I'll carry them. For now.\" She accepts the shirts and shorts from Nicco's hands, folding them over her arm without standing from her seat.",
+      "controller_proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm without standing from her seat"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_collective_acceptance"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_collective_acceptance"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_collective_acceptance"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "true_positive"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "true_positive"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "true_positive"
+        }
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "false_negative": 0,
+      "controller_incorrect_proposals": [],
+      "findings": [],
+      "latency": {
+        "ttft_ms": 772.9172999999992,
+        "narrator_total_ms": 2552.7142999999996,
+        "controller_tail_ms": 1119.0541000000003,
+        "turn_ms": 3673.420899999999
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1304,
+          "completion_tokens": 102,
+          "total_tokens": 1406,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00042598
+        },
+        "controller": {
+          "prompt_tokens": 2355,
+          "completion_tokens": 114,
+          "total_tokens": 2469,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000314232
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "r115#3",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "r115",
+      "rep": 3,
+      "attempt": 1,
+      "source_row": 115,
+      "recorded_at": "2026-09-28T21:25:27.613Z",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "prompt_fingerprint": "4c7aa59f24fb3de9",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco holds out the garments—two pink shirts, one thin cotton and one thick and fluffy, plus a pair of pink shorts sized for a narrow waist. \"These are for you,\" he says.\n\nBrenna looks at the pile of pink clothing in his hands, then up at him with grey eyes that give nothing away. \"I don't wear pink,\" she says. She makes no move to take any of it.",
+      "controller_proposal": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [
+          {
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "source_sentence": "She makes no move to take any of it"
+          }
+        ],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "authorization": [],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_omitted_evidence_absent"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_omitted_evidence_absent"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_omitted_evidence_absent"
+        }
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "false_negative": 3,
+      "controller_incorrect_proposals": [],
+      "findings": [],
+      "latency": {
+        "ttft_ms": 720.7186000000002,
+        "narrator_total_ms": 2406.1273999999994,
+        "controller_tail_ms": 937.6864999999998,
+        "turn_ms": 3344.6283999999996
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1304,
+          "completion_tokens": 87,
+          "total_tokens": 1391,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00038323
+        },
+        "controller": {
+          "prompt_tokens": 2341,
+          "completion_tokens": 6,
+          "total_tokens": 2347,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000165512
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "r115#4",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "r115",
+      "rep": 4,
+      "attempt": 1,
+      "source_row": 115,
+      "recorded_at": "2026-09-28T21:25:31.661Z",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "prompt_fingerprint": "4c7aa59f24fb3de9",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco holds out the bundle of pink garments—the cotton shirt, the thick fluffy shirt, and the shorts—toward Brenna.\n\nBrenna's grey eyes take in the offered clothes. She accepts them, gathering the shirts and shorts into her hands. \"Pink,\" she says, her voice carrying mild observation rather than complaint. She makes no move to put anything on, simply holding the garments in her lap as she remains seated by the small table.",
+      "controller_proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "accepted_transfer",
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "collective": true,
+            "source_sentence": "She accepts them, gathering the shirts and shorts into her hands"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_collective_acceptance"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_collective_acceptance"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_collective_acceptance"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "true_positive"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "true_positive"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "true_positive"
+        }
+      ],
+      "true_positive": 3,
+      "false_positive_durable": [],
+      "false_negative": 0,
+      "controller_incorrect_proposals": [],
+      "findings": [],
+      "latency": {
+        "ttft_ms": 1068.938,
+        "narrator_total_ms": 2736.239600000001,
+        "controller_tail_ms": 1303.1306000000004,
+        "turn_ms": 4041.2548000000006
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1304,
+          "completion_tokens": 93,
+          "total_tokens": 1397,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00076513
+        },
+        "controller": {
+          "prompt_tokens": 2347,
+          "completion_tokens": 114,
+          "total_tokens": 2461,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000310712
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "r115#5",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "r115",
+      "rep": 5,
+      "attempt": 1,
+      "source_row": 115,
+      "recorded_at": "2026-09-28T21:25:34.895Z",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "prompt_fingerprint": "4c7aa59f24fb3de9",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco holds out the pink cotton shirt, the thick fluffy pink shirt, and the pink shorts toward Brenna.\n\nBrenna looks at the offered garments, her grey eyes considering the pile of pink clothing. \"I appreciate the thought,\" she says, \"but I'm not going to carry your clothes for you.\" She makes no move to accept any of the three items, keeping her scarred hands resting on her lap.",
+      "controller_proposal": [],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [
+          {
+            "command_indexes": [
+              0,
+              1,
+              2
+            ],
+            "source_sentence": "she says,   She makes no move to accept any of the three items, keeping her scarred hands resting on her lap"
+          }
+        ],
+        "resolved_references": [
+          {
+            "phrase": "her",
+            "ids": [
+              "brenna"
+            ],
+            "basis": "unique_present_recipient"
+          },
+          {
+            "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+            "ids": [
+              "pink_cotton",
+              "pink_fluffy",
+              "pink_shorts"
+            ],
+            "basis": "bounded_item_description"
+          }
+        ],
+        "ambiguous_reference": false
+      },
+      "authorization": [],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_omitted_evidence_absent"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_omitted_evidence_absent"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "diagnosis": "controller_omitted_evidence_absent"
+        }
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "false_negative": 3,
+      "controller_incorrect_proposals": [],
+      "findings": [],
+      "latency": {
+        "ttft_ms": 810.1311000000005,
+        "narrator_total_ms": 2531.4239,
+        "controller_tail_ms": 694.422599999998,
+        "turn_ms": 3226.864599999999
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1304,
+          "completion_tokens": 86,
+          "total_tokens": 1390,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00038038
+        },
+        "controller": {
+          "prompt_tokens": 2340,
+          "completion_tokens": 6,
+          "total_tokens": 2346,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000165072
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_hall"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "knowledge_tell#1",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "knowledge_tell",
+      "rep": 1,
+      "attempt": 1,
+      "source_row": null,
+      "recorded_at": "2026-09-28T21:25:38.311Z",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "expected": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "prompt_fingerprint": "ea8d03bc8da72778",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco turns to Brenna, who sits alert despite the illness still clinging to her tall frame. \"The eastern bridge is closed,\" he says.\n\nBrenna's grey eyes flick toward him, noting the information. She says nothing for a moment, processing, then gives a slight nod. \"Good to know.\"\n\nGerome stands motionless nearby, stone form giving no indication of having heard. Maren remains present in the room as well, though whether she caught the exchange is unestablished.",
+      "controller_proposal": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "authorized": false,
+          "reason": "rejected_fact_not_communicated"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "diagnosis": "controller_correct_authorizer_rejected",
+          "authorizer_reason": "rejected_fact_not_communicated"
+        }
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "false_negative": 1,
+      "controller_incorrect_proposals": [],
+      "findings": [
+        {
+          "category": "prompt_vocabulary_echo",
+          "excerpt": "is unestablished"
+        },
+        {
+          "category": "npc_knowledge_leak_candidate",
+          "excerpt": "Brenna: Nicco turns to Brenna, who sits alert despite the illness still clinging to her tall frame. \"The eastern bridge is closed,\" he says."
+        }
+      ],
+      "latency": {
+        "ttft_ms": 784.5,
+        "narrator_total_ms": 2604.0589999999975,
+        "controller_tail_ms": 803.5999000000011,
+        "turn_ms": 3408.967199999999
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1407,
+          "completion_tokens": 103,
+          "total_tokens": 1510,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00048754
+        },
+        "controller": {
+          "prompt_tokens": 2544,
+          "completion_tokens": 61,
+          "total_tokens": 2605,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000872712
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "knowledge_tell#2",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "knowledge_tell",
+      "rep": 2,
+      "attempt": 1,
+      "source_row": null,
+      "recorded_at": "2026-09-28T21:25:41.768Z",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "expected": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "prompt_fingerprint": "ea8d03bc8da72778",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes lift to meet his, her expression thoughtful. \"Closed,\" she repeats, absorbing the information. \"That complicates things. I was hoping to cross there by week's end.\" She shifts slightly in her seat, the old scars on her wrists catching the light from the arched window. \"Do you know why, or for how long?\"",
+      "controller_proposal": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "was_told_fact",
+            "command_indexes": [
+              0
+            ],
+            "collective": false,
+            "source_sentence": "Nicco tells Brenna that the eastern bridge is closed"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_explicit_information_transfer"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "diagnosis": "true_positive"
+        }
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "false_negative": 0,
+      "controller_incorrect_proposals": [],
+      "findings": [
+        {
+          "category": "npc_knowledge_leak_candidate",
+          "excerpt": "Brenna: Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "latency": {
+        "ttft_ms": 753.5142999999989,
+        "narrator_total_ms": 2333.259399999999,
+        "controller_tail_ms": 1117.9497999999985,
+        "turn_ms": 3452.177200000002
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1407,
+          "completion_tokens": 87,
+          "total_tokens": 1494,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00044194
+        },
+        "controller": {
+          "prompt_tokens": 2529,
+          "completion_tokens": 61,
+          "total_tokens": 2590,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000320832
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "knowledge_tell#3",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "knowledge_tell",
+      "rep": 3,
+      "attempt": 1,
+      "source_row": null,
+      "recorded_at": "2026-09-28T21:25:46.081Z",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "expected": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "prompt_fingerprint": "ea8d03bc8da72778",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco turns to Brenna and speaks plainly. \"The eastern bridge is closed.\"\n\nBrenna's grey eyes flicker with recognition. \"I heard as much from the merchants three days past,\" she says. \"They were routing everything through the northern ford, though that won't hold once the rains come.\"\n\nGerome stands motionless in the corner, his stone form casting no shadow in the dim observation room. Maren glances toward the arched window, where afternoon light slants across the narrow bed.",
+      "controller_proposal": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "authorized": false,
+          "reason": "rejected_fact_not_communicated"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "diagnosis": "controller_correct_authorizer_rejected",
+          "authorizer_reason": "rejected_fact_not_communicated"
+        }
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "false_negative": 1,
+      "controller_incorrect_proposals": [],
+      "findings": [
+        {
+          "category": "npc_knowledge_leak_candidate",
+          "excerpt": "Brenna: Nicco turns to Brenna and speaks plainly. \"The eastern bridge is closed.\""
+        }
+      ],
+      "latency": {
+        "ttft_ms": 1067.8944999999985,
+        "narrator_total_ms": 3053.335899999998,
+        "controller_tail_ms": 1252.7206000000006,
+        "turn_ms": 4306.877
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1407,
+          "completion_tokens": 104,
+          "total_tokens": 1511,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00049039
+        },
+        "controller": {
+          "prompt_tokens": 2547,
+          "completion_tokens": 61,
+          "total_tokens": 2608,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000219696
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "knowledge_tell#4",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "knowledge_tell",
+      "rep": 4,
+      "attempt": 1,
+      "source_row": null,
+      "recorded_at": "2026-09-28T21:25:50.363Z",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "expected": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "prompt_fingerprint": "ea8d03bc8da72778",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco turns to Brenna, who sits alert despite her recovering condition, and tells her that the eastern bridge is closed.\n\nBrenna's grey eyes focus on him. \"Closed? That's unfortunate. I had hoped to travel that way once I'm well enough.\" She shifts slightly, the old scars on her wrists visible as she moves. \"Do you know why, or for how long?\"\n\nGerome stands motionless nearby, his stone form giving no indication of having heard. Maren, the young woman staying in the tower, watches the exchange from where she stands in the test room.",
+      "controller_proposal": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "authorized": false,
+          "reason": "rejected_fact_not_communicated"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "diagnosis": "controller_correct_authorizer_rejected",
+          "authorizer_reason": "rejected_fact_not_communicated"
+        }
+      ],
+      "true_positive": 0,
+      "false_positive_durable": [],
+      "false_negative": 1,
+      "controller_incorrect_proposals": [],
+      "findings": [
+        {
+          "category": "npc_knowledge_leak_candidate",
+          "excerpt": "Brenna: Nicco turns to Brenna, who sits alert despite her recovering condition, and tells her that the eastern bridge is closed."
+        }
+      ],
+      "latency": {
+        "ttft_ms": 1241.307499999999,
+        "narrator_total_ms": 3445.2282000000014,
+        "controller_tail_ms": 831.7724000000017,
+        "turn_ms": 4278.003100000002
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1407,
+          "completion_tokens": 121,
+          "total_tokens": 1528,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00053884
+        },
+        "controller": {
+          "prompt_tokens": 2566,
+          "completion_tokens": 61,
+          "total_tokens": 2627,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000228056
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "key": "knowledge_tell#5",
+      "stage": "b",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "case_id": "knowledge_tell",
+      "rep": 5,
+      "attempt": 1,
+      "source_row": null,
+      "recorded_at": "2026-09-28T21:25:52.948Z",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "expected": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "prompt_fingerprint": "ea8d03bc8da72778",
+      "outcome": "success",
+      "narrator_outcome": "success",
+      "provider_error_code": null,
+      "upstream_provider": "Novita",
+      "finish_reason": "stop",
+      "narration": "Nicco speaks to Brenna, telling her that the eastern bridge is closed. Brenna's grey eyes lift to meet his, her expression thoughtful. \"I hadn't heard that,\" she says. \"Do you know why, or for how long?\"",
+      "controller_proposal": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "turn_evidence": {
+        "player_intents": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "runtime_intents": [],
+        "narrator_confirmations": [
+          {
+            "kind": "was_told_fact",
+            "command_indexes": [
+              0
+            ],
+            "collective": false,
+            "source_sentence": "Nicco speaks to Brenna, telling her that the eastern bridge is closed"
+          }
+        ],
+        "narrator_refusals": [],
+        "resolved_references": [],
+        "ambiguous_reference": false
+      },
+      "authorization": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "authorized": true,
+          "reason": "authorized_explicit_information_transfer"
+        }
+      ],
+      "per_expected": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "diagnosis": "true_positive"
+        }
+      ],
+      "true_positive": 1,
+      "false_positive_durable": [],
+      "false_negative": 0,
+      "controller_incorrect_proposals": [],
+      "findings": [
+        {
+          "category": "npc_knowledge_leak_candidate",
+          "excerpt": "Brenna: Nicco speaks to Brenna, telling her that the eastern bridge is closed. Brenna's grey eyes lift to meet his, her expression thoughtful. \"I hadn't heard that,\" sh"
+        }
+      ],
+      "latency": {
+        "ttft_ms": 775.7030999999988,
+        "narrator_total_ms": 1772.8227000000043,
+        "controller_tail_ms": 806.0097999999998,
+        "turn_ms": 2579.8519000000015
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 1407,
+          "completion_tokens": 51,
+          "total_tokens": 1458,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.00033934
+        },
+        "controller": {
+          "prompt_tokens": 2491,
+          "completion_tokens": 61,
+          "total_tokens": 2552,
+          "reasoning_tokens": 0,
+          "provider_reported_cost_usd": 0.000195056
+        }
+      },
+      "final_state": {
+        "base_revision": 1,
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    }
+  ]
+}

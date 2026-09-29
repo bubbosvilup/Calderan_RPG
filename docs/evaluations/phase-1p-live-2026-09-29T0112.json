@@ -1,0 +1,1059 @@
+{
+  "phase": "1P",
+  "models": {
+    "narrator": "moonshotai/kimi-k2.5",
+    "controller": "deepseek/deepseek-v4-flash-0731:nitro"
+  },
+  "narrator_system_sha": "128e2b8b65ec66e0",
+  "created_at": "2026-09-29T01:11:42.805Z",
+  "note": "PAID live run; production onlineCoordinator (lexical retrieval, hybrid evidence) on the canonical opening; findings are candidates, classifications in PHASE_1P_REVIEW.md",
+  "sequences": [
+    {
+      "id": "smoke",
+      "turns": [
+        {
+          "input": "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "A passer-by pauses, looking Nicco up and down—tall, soft, a stranger's face asking strange questions. \"The slave market? West District.\" He points vaguely in one direction, nothing more specific. \"Big pens, public sale. You can't miss the crowd if it's open.\" Nothing in his manner suggests he knows who owns Heartstone Tower, or recognizes anything else about Nicco.",
+          "scene_participants": {
+            "plan": {
+              "turn": 1,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 1,
+                  "departed": false
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": "scene_npc_1",
+              "addressed": [],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 1,
+                "departed": false
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"heartstone_square\" (content in RETRIEVED CANON) | R3 retrieved canon \"main_city_structure\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE R1 (local:calderan); DO NOT USE F1, F2, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[]",
+          "retrieved_canon": "{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"heartstone_square\",\"type\":\"location\",\"name\":\"Square outside Heartstone\",\"display_name\":\"Outside Heartstone\",\"summary\":\"The public square/open public area immediately outside Heartstone Tower's main entrance, in the city.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_square\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"main_city_structure\",\"type\":\"world_lore\",\"name\":\"Calderan City Structure\",\"display_name\":\"Calderan City Structure\",\"summary\":\"Calderan, West's capital and main campaign city, has five conceptual districts: West, East, North, South, and Center.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"main_city_structure\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"heartstone_square\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"main_city_structure\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}",
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "calderan_slave_market",
+              "heartstone_square",
+              "main_city_structure"
+            ],
+            "elapsed_ms": 4.631399999999985,
+            "outcome": "found"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"heartstone_square\" (content in RETRIEVED CANON) | R3 retrieved canon \"main_city_structure\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE R1 (local:calderan); DO NOT USE F1, F2, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"heartstone_square\",\"type\":\"location\",\"name\":\"Square outside Heartstone\",\"display_name\":\"Outside Heartstone\",\"summary\":\"The public square/open public area immediately outside Heartstone Tower's main entrance, in the city.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_square\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"main_city_structure\",\"type\":\"world_lore\",\"name\":\"Calderan City Structure\",\"display_name\":\"Calderan City Structure\",\"summary\":\"Calderan, West's capital and main campaign city, has five conceptual districts: West, East, North, South, and Center.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"main_city_structure\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"heartstone_square\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"main_city_structure\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[]\n\n[PLAYER ACTION ? Nicco]\n*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [
+            {
+              "category": "player_internal_state_candidate",
+              "excerpt": "\" Nothing in his manner suggests he knows who owns Heartstone Tower, or recognizes anything else about Nicco"
+            }
+          ],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 2,
+            "knowledge_access": 1048,
+            "retrieval": 2888,
+            "controller_evidence": 3602
+          },
+          "latency": {
+            "narrator_ttft_ms": 1526.8076999999998,
+            "narrator_total_ms": 1714.9837000000002,
+            "controller_total_ms": 871.5328,
+            "controller_tail_ms": 878.6976999999999,
+            "retrieval_ms": 4.631399999999985,
+            "coordinator_total_ms": 2606.4093000000003
+          },
+          "narrator_usage": {
+            "prompt_tokens": 2379,
+            "completion_tokens": 83,
+            "total_tokens": 2462,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.001541603
+          },
+          "controller_usage": {
+            "prompt_tokens": 1257,
+            "completion_tokens": 6,
+            "total_tokens": 1263,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.00007752
+          }
+        },
+        {
+          "input": "*ignores the answer* \"Tell me what you know about me being a Light mage.\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "The passer-by blinks, mouth half-open as if the question arrived in the wrong order. \"A Light mage?\" He glances past Nicco toward Heartstone's heavy wooden doors, then back to Nicco's face with the uncertain look of a man rechecking whether he's being mocked. \"I don't know anything about you being a mage, sir. That's not—I don't know you.\" He takes a small step to the side, shoulders angling toward the open square. \"You want the temple, maybe? The Light temple's in the old ward, but that's not my business.\"\n\nHe does not move to leave entirely, but his weight shifts onto the balls of his feet, ready. \"West District for the pens. That's what I know.\"",
+          "scene_participants": {
+            "plan": {
+              "turn": 2,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 2,
+                  "departed": false
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": null,
+              "addressed": [
+                "scene_npc_1"
+              ],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 2,
+                "departed": false
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"heartstone_u1\" (content in RETRIEVED CANON) | R2 retrieved canon \"light_and_shadow\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2, R1, R2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? West District.\\\"\",\"Passer-by: \\\"Big pens, public sale. You can't miss the crowd if it's open.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]",
+          "retrieved_canon": "{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_u1\",\"type\":\"location\",\"name\":\"Heartstone Underground Level\",\"display_name\":\"Heartstone U1\",\"summary\":\"Heartstone U1 is one large stone underground space, broader than LR and the tower floors above. It is partly used for ordinary household storage; much remains comparatively unused and its full extent is not completely understood.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_u1\",\"schema_version\":1},\"content\":\"U1 is accessed directly from LR through the large visible hatch and separate descending access, not through the upper-floor spiral staircase. Its floor, walls, and ceiling are entirely stone. The ceiling is lower than those of the upper floors, but the broad space is not inherently claustrophobic. Exact dimensions and geometry are unspecified. Only part of U1 is actively used, chiefly for storage; large portions remain comparatively unused. Storage shelves and furnishings serve ordinary household needs without fixed inventories or an assumption that every shelf is full. Its full extent is not completely understood or explored. A separate old door in the underground masonry opens onto additional stairs descending farther below U1. Those lower stairs remain unexplored, and what lies beyond is unknown.\",\"tags\":[\"household\",\"storage\",\"architecture\",\"mystery\"],\"features\":[{\"name\":\"stone floor, walls, and ceiling\",\"description\":\"One broad underground space is entirely constructed in stone, with a lower ceiling than the upper floors; exact dimensions and geometry are unspecified.\"},{\"name\":\"LR hatch access\",\"description\":\"Separate descending access connects U1 to the large visible hatch in LR; the upper-floor spiral staircase does not reach U1.\"},{\"name\":\"stone support pillars\",\"description\":\"Stone pillars support the underground construction.\"},{\"name\":\"arched masonry recesses and openings\",\"description\":\"Arched recesses/openings are present in the masonry; their further geometry is unspecified.\"},{\"name\":\"circular floor drain and grate\",\"description\":\"A large circular floor drain/grate lies near the central area.\"},{\"name\":\"wall storage shelves\",\"description\":\"Wall shelves/storage areas are intended for food, preserved goods, ordinary household supplies, common materials, and consumables such as candles; contents and quantities are unspecified.\"},{\"name\":\"barrels, crates, and storage furnishings\",\"description\":\"Ordinary barrels, crates, and storage furnishings support the partly used storage area; no fixed contents or quantities are specified.\"},{\"name\":\"old door and lower descending stairs\",\"description\":\"One separate old door in the underground masonry opens onto additional stairs descending farther below U1. Their destination and what lies beyond remain unknown and undefined.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_u1\",\"type\":\"location\",\"name\":\"Heartstone Underground Level\",\"display_name\":\"Heartstone U1\",\"summary\":\"Heartstone U1 is one large stone underground space, broader than LR and the tower floors above. It is partly used for ordinary household storage; much remains comparatively unused and its full extent is not completely understood.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_u1\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"light_and_shadow\",\"type\":\"world_lore\",\"name\":\"Light and Shadow\",\"display_name\":\"Light and Shadow\",\"summary\":\"Light and Shadow are exceptionally rare magical classifications, not moral alignments.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"light_and_shadow\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"heartstone_u1\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"light_and_shadow\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}",
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "heartstone_u1",
+              "light_and_shadow"
+            ],
+            "elapsed_ms": 1.358299999999872,
+            "outcome": "found"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"heartstone_u1\" (content in RETRIEVED CANON) | R2 retrieved canon \"light_and_shadow\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2, R1, R2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_u1\",\"type\":\"location\",\"name\":\"Heartstone Underground Level\",\"display_name\":\"Heartstone U1\",\"summary\":\"Heartstone U1 is one large stone underground space, broader than LR and the tower floors above. It is partly used for ordinary household storage; much remains comparatively unused and its full extent is not completely understood.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_u1\",\"schema_version\":1},\"content\":\"U1 is accessed directly from LR through the large visible hatch and separate descending access, not through the upper-floor spiral staircase. Its floor, walls, and ceiling are entirely stone. The ceiling is lower than those of the upper floors, but the broad space is not inherently claustrophobic. Exact dimensions and geometry are unspecified. Only part of U1 is actively used, chiefly for storage; large portions remain comparatively unused. Storage shelves and furnishings serve ordinary household needs without fixed inventories or an assumption that every shelf is full. Its full extent is not completely understood or explored. A separate old door in the underground masonry opens onto additional stairs descending farther below U1. Those lower stairs remain unexplored, and what lies beyond is unknown.\",\"tags\":[\"household\",\"storage\",\"architecture\",\"mystery\"],\"features\":[{\"name\":\"stone floor, walls, and ceiling\",\"description\":\"One broad underground space is entirely constructed in stone, with a lower ceiling than the upper floors; exact dimensions and geometry are unspecified.\"},{\"name\":\"LR hatch access\",\"description\":\"Separate descending access connects U1 to the large visible hatch in LR; the upper-floor spiral staircase does not reach U1.\"},{\"name\":\"stone support pillars\",\"description\":\"Stone pillars support the underground construction.\"},{\"name\":\"arched masonry recesses and openings\",\"description\":\"Arched recesses/openings are present in the masonry; their further geometry is unspecified.\"},{\"name\":\"circular floor drain and grate\",\"description\":\"A large circular floor drain/grate lies near the central area.\"},{\"name\":\"wall storage shelves\",\"description\":\"Wall shelves/storage areas are intended for food, preserved goods, ordinary household supplies, common materials, and consumables such as candles; contents and quantities are unspecified.\"},{\"name\":\"barrels, crates, and storage furnishings\",\"description\":\"Ordinary barrels, crates, and storage furnishings support the partly used storage area; no fixed contents or quantities are specified.\"},{\"name\":\"old door and lower descending stairs\",\"description\":\"One separate old door in the underground masonry opens onto additional stairs descending farther below U1. Their destination and what lies beyond remain unknown and undefined.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_u1\",\"type\":\"location\",\"name\":\"Heartstone Underground Level\",\"display_name\":\"Heartstone U1\",\"summary\":\"Heartstone U1 is one large stone underground space, broader than LR and the tower floors above. It is partly used for ordinary household storage; much remains comparatively unused and its full extent is not completely understood.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_u1\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"light_and_shadow\",\"type\":\"world_lore\",\"name\":\"Light and Shadow\",\"display_name\":\"Light and Shadow\",\"summary\":\"Light and Shadow are exceptionally rare magical classifications, not moral alignments.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"light_and_shadow\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"heartstone_u1\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"light_and_shadow\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? West District.\\\"\",\"Passer-by: \\\"Big pens, public sale. You can't miss the crowd if it's open.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]\n\n[PLAYER ACTION ? Nicco]\n*ignores the answer* \"Tell me what you know about me being a Light mage.\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 490,
+            "knowledge_access": 931,
+            "retrieval": 4144,
+            "controller_evidence": 3898
+          },
+          "latency": {
+            "narrator_ttft_ms": 1417.2234000000003,
+            "narrator_total_ms": 7436.867199999999,
+            "controller_total_ms": 594.728799999999,
+            "controller_tail_ms": 596.9074,
+            "retrieval_ms": 1.358299999999872,
+            "coordinator_total_ms": 8042.297500000001
+          },
+          "narrator_usage": {
+            "prompt_tokens": 2566,
+            "completion_tokens": 153,
+            "total_tokens": 2719,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.00149895
+          },
+          "controller_usage": {
+            "prompt_tokens": 1340,
+            "completion_tokens": 6,
+            "total_tokens": 1346,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.0000825
+          }
+        }
+      ]
+    },
+    {
+      "id": "continuity_5",
+      "turns": [
+        {
+          "input": "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "The passer-by—a middle-aged woman with flour dust on her apron—pauses and looks him up and down. \"The slave market? That's in the West District.\" She gestures vaguely westward. \"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\" She does not seem to recognize him, nor show any particular curiosity about why he asks.",
+          "scene_participants": {
+            "plan": {
+              "turn": 1,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 1,
+                  "departed": false
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": "scene_npc_1",
+              "addressed": [],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 1,
+                "departed": false,
+                "descriptor": "middle-aged woman"
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"heartstone_square\" (content in RETRIEVED CANON) | R3 retrieved canon \"main_city_structure\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE R1 (local:calderan); DO NOT USE F1, F2, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[]",
+          "retrieved_canon": "{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"heartstone_square\",\"type\":\"location\",\"name\":\"Square outside Heartstone\",\"display_name\":\"Outside Heartstone\",\"summary\":\"The public square/open public area immediately outside Heartstone Tower's main entrance, in the city.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_square\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"main_city_structure\",\"type\":\"world_lore\",\"name\":\"Calderan City Structure\",\"display_name\":\"Calderan City Structure\",\"summary\":\"Calderan, West's capital and main campaign city, has five conceptual districts: West, East, North, South, and Center.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"main_city_structure\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"heartstone_square\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"main_city_structure\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}",
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "calderan_slave_market",
+              "heartstone_square",
+              "main_city_structure"
+            ],
+            "elapsed_ms": 2.308600000000297,
+            "outcome": "found"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"heartstone_square\" (content in RETRIEVED CANON) | R3 retrieved canon \"main_city_structure\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE R1 (local:calderan); DO NOT USE F1, F2, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"heartstone_square\",\"type\":\"location\",\"name\":\"Square outside Heartstone\",\"display_name\":\"Outside Heartstone\",\"summary\":\"The public square/open public area immediately outside Heartstone Tower's main entrance, in the city.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_square\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"main_city_structure\",\"type\":\"world_lore\",\"name\":\"Calderan City Structure\",\"display_name\":\"Calderan City Structure\",\"summary\":\"Calderan, West's capital and main campaign city, has five conceptual districts: West, East, North, South, and Center.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"main_city_structure\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"heartstone_square\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"main_city_structure\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[]\n\n[PLAYER ACTION ? Nicco]\n*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 2,
+            "knowledge_access": 1048,
+            "retrieval": 2888,
+            "controller_evidence": 3594
+          },
+          "latency": {
+            "narrator_ttft_ms": 1418.7327999999998,
+            "narrator_total_ms": 1613.5318000000007,
+            "controller_total_ms": 511.0061000000005,
+            "controller_tail_ms": 512.2242000000006,
+            "retrieval_ms": 2.308600000000297,
+            "coordinator_total_ms": 2130.949999999999
+          },
+          "narrator_usage": {
+            "prompt_tokens": 2379,
+            "completion_tokens": 80,
+            "total_tokens": 2459,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.000766764
+          },
+          "controller_usage": {
+            "prompt_tokens": 1255,
+            "completion_tokens": 6,
+            "total_tokens": 1261,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.0000703344
+          }
+        },
+        {
+          "input": "\"Have you lived in Calderan long?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "The middle-aged woman considers him with the mild wariness of a city dweller accosted by strangers. \"Born and raised,\" she says. \"Thirty-two years now, so I know enough to answer when someone asks a direction.\"\n\nShe glances toward Heartstone's main entrance, then back at Nicco. \"If you're headed to the pens, the West District's where you want. Straightforward enough from here, though I don't know your starting point well enough to tell you turns.\" She pauses. \"Anything else, or shall I be on my way?\"",
+          "scene_participants": {
+            "plan": {
+              "turn": 2,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 2,
+                  "departed": false,
+                  "descriptor": "middle-aged woman"
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": null,
+              "addressed": [
+                "scene_npc_1"
+              ],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 2,
+                "departed": false,
+                "descriptor": "middle-aged woman"
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"heartstone_lr\" (content in RETRIEVED CANON) | R2 retrieved canon \"main_city_structure\" (content in RETRIEVED CANON) | R3 retrieved canon \"west_slavery\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2, R1, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]",
+          "retrieved_canon": "{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_lr\",\"type\":\"location\",\"name\":\"Heartstone Living Floor\",\"display_name\":\"Heartstone LR\",\"summary\":\"Heartstone LR is the tower's ground-level living floor: one large, rounded, roughly circular open-plan domestic space. Its kitchen and hearth seating area share the same floor without separate internal rooms.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_lr\",\"schema_version\":1},\"content\":\"Heartstone LR is a broad open domestic space bounded by old stone tower walls. Its aged wooden floor is visibly old but remains solid and serviceable. A massive wooden main entrance provides normal access from the city/outside side. A second normal door, roughly opposite, leads directly to the secluded courtyard on the kitchen/table side. A large stone hearth stands along one side of the room, with a small hearthside alcove immediately beside it. Behind and to the left of its seating area, a large table stands near the kitchen, which occupies part of the same open space. The visible hatch near the kitchen side provides separate descending access to U1. The continuous spiral staircase is reached through a normal doorway/opening along LR's perimeter, away from the center, and rises toward F1 and onward through the upper floors to F6. Broad wall shelving occupies part of the perimeter near this stair side. Normal illumination comes from daylight through exactly three windows, candles, and the hearth when lit.\",\"tags\":[\"household\",\"domestic\",\"architecture\"],\"features\":[{\"name\":\"massive main entrance door\",\"description\":\"A massive, old, heavy wooden door provides normal access from the city/outside side, opposite the courtyard side. A small entrance zone/entry recess lies immediately inside, within LR.\"},{\"name\":\"courtyard door\",\"description\":\"A second normal door on the kitchen/table side lies roughly opposite the main entrance and leads directly to the courtyard; this is the only currently established normal direct access between LR and CY.\"},{\"name\":\"aged wooden floor and stone walls\",\"description\":\"A visibly old but solid and serviceable wooden floor and old stone tower walls enclose the broad, roughly circular open-plan space.\"},{\"name\":\"large stone hearth\",\"description\":\"A dominant large stone hearth/fireplace stands along one side of the roughly circular room and provides important warmth and light when burning.\"},{\"name\":\"hearthside alcove\",\"description\":\"A small physical alcove/recess lies immediately to one side of the hearth, within LR.\"},{\"name\":\"hearth seating area with large sofa\",\"description\":\"A large rug, large sofa, and at least one armchair stand in front of the hearth. The sofa occupies a broadly central position relative to the hearth.\"},{\"name\":\"large table\",\"description\":\"A large household table stands behind and to the left of the hearth/seating area, away from the main entrance near the kitchen side. It serves meals, communal eating, and convivial/shared household use; current food, tableware, and occupants are unspecified.\"},{\"name\":\"open kitchen area\",\"description\":\"The kitchen occupies a broad curved perimeter section around or near the large table, within the same open-plan floor; it is not a separate room.\"},{\"name\":\"visible U1 hatch\",\"description\":\"A large, obvious hatch/trapdoor near the lower/outer part of the kitchen/table side leads down to U1 by separate descending access. It is neither hidden nor concealed and is separate from the upper-floor spiral staircase; lower/outer is relative layout, not a compass direction.\"},{\"name\":\"continuous spiral staircase\",\"description\":\"A normal doorway/opening along LR's perimeter, away from the center, leads into the single continuous lateral/peripheral spiral staircase. It rises near the outer tower interior toward F1 and onward to F6, not through a central tower core; U1 is accessed separately.\"},{\"name\":\"entrance shoe rack\",\"description\":\"A large shoe rack near the main entrance is intended for leaving footwear when entering.\"},{\"name\":\"entrance equipment rack and bench\",\"description\":\"A long horizontal rack/bench/storage surface near the main entrance can hold tools, weapons, carried equipment, and miscellaneous items; current contents are unspecified.\"},{\"name\":\"wall shelving\",\"description\":\"A broad section of wall shelving occupies part of the perimeter near the stair-access side. It provides space for household objects, small possessions, and ordinary miscellaneous storage; no permanent contents are specified.\"},{\"name\":\"three round-arched windows\",\"description\":\"Exactly three modest, vertically oriented windows have rectangular lower bodies and rounded arched tops: one near the kitchen, one near the main entrance, and one roughly left of the hearth.\"},{\"name\":\"ordinary illumination\",\"description\":\"Daylight enters through the three windows; candles and the hearth when lit provide other normal illumination.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_lr\",\"type\":\"location\",\"name\":\"Heartstone Living Floor\",\"display_name\":\"Heartstone LR\",\"summary\":\"Heartstone LR is the tower's ground-level living floor: one large, rounded, roughly circular open-plan domestic space. Its kitchen and hearth seating area share the same floor without separate internal rooms.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_lr\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"main_city_structure\",\"type\":\"world_lore\",\"name\":\"Calderan City Structure\",\"display_name\":\"Calderan City Structure\",\"summary\":\"Calderan, West's capital and main campaign city, has five conceptual districts: West, East, North, South, and Center.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"main_city_structure\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"west_slavery\",\"type\":\"world_lore\",\"name\":\"Slavery in West\",\"display_name\":\"Slavery in West\",\"summary\":\"Slavery is nationally legal throughout West, with cities able to regulate its operation and administration.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"west_slavery\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"heartstone_lr\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"main_city_structure\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"west_slavery\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}",
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "heartstone_lr",
+              "main_city_structure",
+              "west_slavery"
+            ],
+            "elapsed_ms": 1.335399999999936,
+            "outcome": "found"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"heartstone_lr\" (content in RETRIEVED CANON) | R2 retrieved canon \"main_city_structure\" (content in RETRIEVED CANON) | R3 retrieved canon \"west_slavery\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2, R1, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_lr\",\"type\":\"location\",\"name\":\"Heartstone Living Floor\",\"display_name\":\"Heartstone LR\",\"summary\":\"Heartstone LR is the tower's ground-level living floor: one large, rounded, roughly circular open-plan domestic space. Its kitchen and hearth seating area share the same floor without separate internal rooms.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_lr\",\"schema_version\":1},\"content\":\"Heartstone LR is a broad open domestic space bounded by old stone tower walls. Its aged wooden floor is visibly old but remains solid and serviceable. A massive wooden main entrance provides normal access from the city/outside side. A second normal door, roughly opposite, leads directly to the secluded courtyard on the kitchen/table side. A large stone hearth stands along one side of the room, with a small hearthside alcove immediately beside it. Behind and to the left of its seating area, a large table stands near the kitchen, which occupies part of the same open space. The visible hatch near the kitchen side provides separate descending access to U1. The continuous spiral staircase is reached through a normal doorway/opening along LR's perimeter, away from the center, and rises toward F1 and onward through the upper floors to F6. Broad wall shelving occupies part of the perimeter near this stair side. Normal illumination comes from daylight through exactly three windows, candles, and the hearth when lit.\",\"tags\":[\"household\",\"domestic\",\"architecture\"],\"features\":[{\"name\":\"massive main entrance door\",\"description\":\"A massive, old, heavy wooden door provides normal access from the city/outside side, opposite the courtyard side. A small entrance zone/entry recess lies immediately inside, within LR.\"},{\"name\":\"courtyard door\",\"description\":\"A second normal door on the kitchen/table side lies roughly opposite the main entrance and leads directly to the courtyard; this is the only currently established normal direct access between LR and CY.\"},{\"name\":\"aged wooden floor and stone walls\",\"description\":\"A visibly old but solid and serviceable wooden floor and old stone tower walls enclose the broad, roughly circular open-plan space.\"},{\"name\":\"large stone hearth\",\"description\":\"A dominant large stone hearth/fireplace stands along one side of the roughly circular room and provides important warmth and light when burning.\"},{\"name\":\"hearthside alcove\",\"description\":\"A small physical alcove/recess lies immediately to one side of the hearth, within LR.\"},{\"name\":\"hearth seating area with large sofa\",\"description\":\"A large rug, large sofa, and at least one armchair stand in front of the hearth. The sofa occupies a broadly central position relative to the hearth.\"},{\"name\":\"large table\",\"description\":\"A large household table stands behind and to the left of the hearth/seating area, away from the main entrance near the kitchen side. It serves meals, communal eating, and convivial/shared household use; current food, tableware, and occupants are unspecified.\"},{\"name\":\"open kitchen area\",\"description\":\"The kitchen occupies a broad curved perimeter section around or near the large table, within the same open-plan floor; it is not a separate room.\"},{\"name\":\"visible U1 hatch\",\"description\":\"A large, obvious hatch/trapdoor near the lower/outer part of the kitchen/table side leads down to U1 by separate descending access. It is neither hidden nor concealed and is separate from the upper-floor spiral staircase; lower/outer is relative layout, not a compass direction.\"},{\"name\":\"continuous spiral staircase\",\"description\":\"A normal doorway/opening along LR's perimeter, away from the center, leads into the single continuous lateral/peripheral spiral staircase. It rises near the outer tower interior toward F1 and onward to F6, not through a central tower core; U1 is accessed separately.\"},{\"name\":\"entrance shoe rack\",\"description\":\"A large shoe rack near the main entrance is intended for leaving footwear when entering.\"},{\"name\":\"entrance equipment rack and bench\",\"description\":\"A long horizontal rack/bench/storage surface near the main entrance can hold tools, weapons, carried equipment, and miscellaneous items; current contents are unspecified.\"},{\"name\":\"wall shelving\",\"description\":\"A broad section of wall shelving occupies part of the perimeter near the stair-access side. It provides space for household objects, small possessions, and ordinary miscellaneous storage; no permanent contents are specified.\"},{\"name\":\"three round-arched windows\",\"description\":\"Exactly three modest, vertically oriented windows have rectangular lower bodies and rounded arched tops: one near the kitchen, one near the main entrance, and one roughly left of the hearth.\"},{\"name\":\"ordinary illumination\",\"description\":\"Daylight enters through the three windows; candles and the hearth when lit provide other normal illumination.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"heartstone_lr\",\"type\":\"location\",\"name\":\"Heartstone Living Floor\",\"display_name\":\"Heartstone LR\",\"summary\":\"Heartstone LR is the tower's ground-level living floor: one large, rounded, roughly circular open-plan domestic space. Its kitchen and hearth seating area share the same floor without separate internal rooms.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"heartstone_lr\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"main_city_structure\",\"type\":\"world_lore\",\"name\":\"Calderan City Structure\",\"display_name\":\"Calderan City Structure\",\"summary\":\"Calderan, West's capital and main campaign city, has five conceptual districts: West, East, North, South, and Center.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"main_city_structure\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"west_slavery\",\"type\":\"world_lore\",\"name\":\"Slavery in West\",\"display_name\":\"Slavery in West\",\"summary\":\"Slavery is nationally legal throughout West, with cities able to regulate its operation and administration.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"west_slavery\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"heartstone_lr\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"main_city_structure\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"west_slavery\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]\n\n[PLAYER ACTION ? Nicco]\n\"Have you lived in Calderan long?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 482,
+            "knowledge_access": 1007,
+            "retrieval": 6824,
+            "controller_evidence": 3708
+          },
+          "latency": {
+            "narrator_ttft_ms": 1140.8395,
+            "narrator_total_ms": 1453.2635999999984,
+            "controller_total_ms": 756.6592999999993,
+            "controller_tail_ms": 758.6776000000009,
+            "retrieval_ms": 1.335399999999936,
+            "coordinator_total_ms": 2220.925000000001
+          },
+          "narrator_usage": {
+            "prompt_tokens": 3198,
+            "completion_tokens": 118,
+            "total_tokens": 3316,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.002093686
+          },
+          "controller_usage": {
+            "prompt_tokens": 1284,
+            "completion_tokens": 6,
+            "total_tokens": 1290,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.00007914
+          }
+        },
+        {
+          "input": "*nods* \"Is the market busy this time of day?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "The woman regards Nicco with the patient tolerance of someone accustomed to fielding questions from strangers. \"Afternoon's when it picks up,\" she says. \"Auctions start around the third hour after midday, but you'll see plenty of browsing before then. Traders, buyers, the usual crowd.\" She pauses, glancing toward the tower entrance behind him with the brief curiosity of a local noting something new, then back to Nicco. \"If you've business there, I'd not waste too much time chatting.\"",
+          "scene_participants": {
+            "plan": {
+              "turn": 3,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 3,
+                  "departed": false,
+                  "descriptor": "middle-aged woman"
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": null,
+              "addressed": [
+                "scene_npc_1"
+              ],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 3,
+                "departed": false,
+                "descriptor": "middle-aged woman"
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Have you lived in Calderan long?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Born and raised,\\\"\",\"Woman: \\\"Thirty-two years now, so I know enough to answer when someone asks a direction.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]",
+          "retrieved_canon": "{\"records\":[],\"unknown\":false}",
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.23990000000048894,
+            "outcome": "not_needed"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Have you lived in Calderan long?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Born and raised,\\\"\",\"Woman: \\\"Thirty-two years now, so I know enough to answer when someone asks a direction.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]\n\n[PLAYER ACTION ? Nicco]\n*nods* \"Is the market busy this time of day?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 1083,
+            "knowledge_access": 780,
+            "retrieval": 30,
+            "controller_evidence": 3702
+          },
+          "latency": {
+            "narrator_ttft_ms": 1382.4829000000009,
+            "narrator_total_ms": 1760.9175999999989,
+            "controller_total_ms": 503.2288000000008,
+            "controller_tail_ms": 503.8860999999997,
+            "retrieval_ms": 0.23990000000048894,
+            "coordinator_total_ms": 2268.0395000000008
+          },
+          "narrator_usage": {
+            "prompt_tokens": 1681,
+            "completion_tokens": 104,
+            "total_tokens": 1785,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.000867996
+          },
+          "controller_usage": {
+            "prompt_tokens": 1274,
+            "completion_tokens": 6,
+            "total_tokens": 1280,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.00007854
+          }
+        },
+        {
+          "input": "\"Do you know who lives in this tower?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "The middle-aged woman glances up at Heartstone's massive wooden entrance behind Nicco, then back at him with a slight furrow in her brow. \"Lives there? Tower's been empty long as I can recall. Some say it's haunted, some say cursed, but mostly folk just walk past and mind their own business.\" She shrugs, adjusting her shawl against the afternoon breeze. \"Why d'you ask? You looking to buy it, break it down for stone?\"\n\nShe eyes him with the practical assessment of someone who has spent thirty-two years watching strangers come through Calderan with schemes that rarely pan out. \"Only ones I've seen go in regular are the odd scavenger or foolhardy youth daring each other past the threshold. None stay the night, far as I know.\"",
+          "scene_participants": {
+            "plan": {
+              "turn": 4,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 4,
+                  "departed": false,
+                  "descriptor": "middle-aged woman"
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": null,
+              "addressed": [
+                "scene_npc_1"
+              ],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 4,
+                "departed": false,
+                "descriptor": "middle-aged woman"
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Have you lived in Calderan long?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Born and raised,\\\"\",\"Woman: \\\"Thirty-two years now, so I know enough to answer when someone asks a direction.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"*nods* \\\"Is the market busy this time of day?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Afternoon's when it picks up,\\\"\",\"Woman: \\\"Auctions start around the third hour after midday, but you'll see plenty of browsing before then. Traders, buyers, the usual crowd.\\\"\",\"Woman: \\\"If you've business there, I'd not waste too much time chatting.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]",
+          "retrieved_canon": "{\"records\":[],\"unknown\":false}",
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.04219999999986612,
+            "outcome": "not_needed"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Have you lived in Calderan long?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Born and raised,\\\"\",\"Woman: \\\"Thirty-two years now, so I know enough to answer when someone asks a direction.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"*nods* \\\"Is the market busy this time of day?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Afternoon's when it picks up,\\\"\",\"Woman: \\\"Auctions start around the third hour after midday, but you'll see plenty of browsing before then. Traders, buyers, the usual crowd.\\\"\",\"Woman: \\\"If you've business there, I'd not waste too much time chatting.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]\n\n[PLAYER ACTION ? Nicco]\n\"Do you know who lives in this tower?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [
+            {
+              "category": "invented_route_candidate",
+              "excerpt": "Only ones I've seen go in regular are the odd scavenger or foolhardy youth daring each other past the threshold"
+            }
+          ],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 1674,
+            "knowledge_access": 780,
+            "retrieval": 30,
+            "controller_evidence": 3939
+          },
+          "latency": {
+            "narrator_ttft_ms": 1398.028699999999,
+            "narrator_total_ms": 2375.155999999999,
+            "controller_total_ms": 580.8365000000013,
+            "controller_tail_ms": 581.6962000000021,
+            "retrieval_ms": 0.04219999999986612,
+            "coordinator_total_ms": 2957.8613000000005
+          },
+          "narrator_usage": {
+            "prompt_tokens": 1780,
+            "completion_tokens": 165,
+            "total_tokens": 1945,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.000999457
+          },
+          "controller_usage": {
+            "prompt_tokens": 1332,
+            "completion_tokens": 6,
+            "total_tokens": 1338,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.00008202
+          }
+        },
+        {
+          "input": "\"Thank you for your help.\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "Nicco speaks his thanks. The middle-aged woman gives a brief nod, already turning to resume her path. \"Thirty-two years and still nobody knows what to do with that old pile,\" she mutters, more to herself than him, and walks on toward whatever afternoon business awaits her.\n\nThe square remains open around him, Heartstone's heavy wooden entrance standing shut at his back. Ordinary citizens move at the edges of sight, none approaching, none departing with any obvious haste. The afternoon light holds steady; somewhere westward, if her directions hold, the market would be gathering its afternoon crowd.",
+          "scene_participants": {
+            "plan": {
+              "turn": 5,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 5,
+                  "departed": false,
+                  "descriptor": "middle-aged woman"
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": null,
+              "addressed": [
+                "scene_npc_1"
+              ],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 5,
+                "departed": false,
+                "descriptor": "middle-aged woman"
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Have you lived in Calderan long?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Born and raised,\\\"\",\"Woman: \\\"Thirty-two years now, so I know enough to answer when someone asks a direction.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"*nods* \\\"Is the market busy this time of day?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Afternoon's when it picks up,\\\"\",\"Woman: \\\"Auctions start around the third hour after midday, but you'll see plenty of browsing before then. Traders, buyers, the usual crowd.\\\"\",\"Woman: \\\"If you've business there, I'd not waste too much time chatting.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Do you know who lives in this tower?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Lives there? Tower's been empty long as I can recall. Some say it's haunted, some say cursed, but mostly folk just walk past and mind their own business.\\\"\",\"Woman: \\\"Why d'you ask? You looking to buy it, break it down for stone?\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]",
+          "retrieved_canon": "{\"records\":[],\"unknown\":false}",
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.03359999999884167,
+            "outcome": "not_needed"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan. Established: middle-aged woman.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nP1 Passer-by (temporary, ordinary local): CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[{\"player\":\"*stops an ordinary passer-by* \\\"Excuse me, where is the slave pen?\\\"\",\"npc_dialogue\":[\"Passer-by: \\\"The slave market? That's in the West District.\\\"\",\"Passer-by: \\\"Public pens, you can't miss it if you head that way. Legal trade, inspected and everything.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Have you lived in Calderan long?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Born and raised,\\\"\",\"Woman: \\\"Thirty-two years now, so I know enough to answer when someone asks a direction.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"*nods* \\\"Is the market busy this time of day?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Afternoon's when it picks up,\\\"\",\"Woman: \\\"Auctions start around the third hour after midday, but you'll see plenty of browsing before then. Traders, buyers, the usual crowd.\\\"\",\"Woman: \\\"If you've business there, I'd not waste too much time chatting.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"},{\"player\":\"\\\"Do you know who lives in this tower?\\\"\",\"npc_dialogue\":[\"Woman: \\\"Lives there? Tower's been empty long as I can recall. Some say it's haunted, some say cursed, but mostly folk just walk past and mind their own business.\\\"\",\"Woman: \\\"Why d'you ask? You looking to buy it, break it down for stone?\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]\n\n[PLAYER ACTION ? Nicco]\n\"Thank you for your help.\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 2504,
+            "knowledge_access": 780,
+            "retrieval": 30,
+            "controller_evidence": 3799
+          },
+          "latency": {
+            "narrator_ttft_ms": 1369.7595000000001,
+            "narrator_total_ms": 2359.0339999999997,
+            "controller_total_ms": 487.7143999999971,
+            "controller_tail_ms": 488.5537000000004,
+            "retrieval_ms": 0.03359999999884167,
+            "coordinator_total_ms": 2848.5963999999985
+          },
+          "narrator_usage": {
+            "prompt_tokens": 1875,
+            "completion_tokens": 123,
+            "total_tokens": 1998,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.000869003
+          },
+          "controller_usage": {
+            "prompt_tokens": 1281,
+            "completion_tokens": 6,
+            "total_tokens": 1287,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.0000771936
+          }
+        }
+      ]
+    },
+    {
+      "id": "local_foreign_contrast",
+      "turns": [
+        {
+          "input": "*approaches a foreign traveler* \"Excuse me, do you know where the slave market is?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "Nicco approaches the traveler—a person with weathered clothes and dust on the boots suggesting a long road behind them. The traveler turns at the address, surveying Nicco with mild curiosity.\n\n\"I don't, no,\" the traveler says. \"Just arrived myself. You might ask someone who actually lives here.\" There's no hostility in it, only the flat pragmatism of someone still orienting themselves. The traveler doesn't seem to recognize Nicco or show any particular interest in his purpose, already beginning to turn attention back toward the street beyond the square.",
+          "scene_participants": {
+            "plan": {
+              "turn": 1,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "traveler",
+                  "display_name": "Traveler",
+                  "standing": "foreign",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 1,
+                  "departed": false
+                }
+              ],
+              "focus": "scene_npc_1",
+              "created": "scene_npc_1",
+              "addressed": [],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "traveler",
+                "display_name": "Traveler",
+                "standing": "foreign",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 1,
+                "departed": false
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Traveler (current conversation partner). Temporary; not local.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"learned_arts_guild\" (content in RETRIEVED CANON) | R3 retrieved canon \"davenport\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Traveler (temporary, not local): CAN USE none; DO NOT USE F1, F2, R1, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[]",
+          "retrieved_canon": "{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"learned_arts_guild\",\"type\":\"faction\",\"name\":\"Learned Arts Guild\",\"display_name\":\"Learned Arts Guild\",\"summary\":\"A national guild encompassing learned and professional disciplines in West, including magic.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"learned_arts_guild\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"davenport\",\"type\":\"location\",\"name\":\"Davenport\",\"display_name\":\"Davenport\",\"summary\":\"Davenport, The Port of Chains, is West's principal economic and maritime city, a major port farther south near Chained Bay.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"davenport\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"learned_arts_guild\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"davenport\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}",
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "calderan_slave_market",
+              "learned_arts_guild",
+              "davenport"
+            ],
+            "elapsed_ms": 1.5084999999999127,
+            "outcome": "found"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Traveler (current conversation partner). Temporary; not local.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"learned_arts_guild\" (content in RETRIEVED CANON) | R3 retrieved canon \"davenport\" (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Traveler (temporary, not local): CAN USE none; DO NOT USE F1, F2, R1, R2, R3\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"learned_arts_guild\",\"type\":\"faction\",\"name\":\"Learned Arts Guild\",\"display_name\":\"Learned Arts Guild\",\"summary\":\"A national guild encompassing learned and professional disciplines in West, including magic.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"learned_arts_guild\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"davenport\",\"type\":\"location\",\"name\":\"Davenport\",\"display_name\":\"Davenport\",\"summary\":\"Davenport, The Port of Chains, is West's principal economic and maritime city, a major port farther south near Chained Bay.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"davenport\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"learned_arts_guild\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"davenport\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]}],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[]\n\n[PLAYER ACTION ? Nicco]\n*approaches a foreign traveler* \"Excuse me, do you know where the slave market is?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 2,
+            "knowledge_access": 1022,
+            "retrieval": 2820,
+            "controller_evidence": 3811
+          },
+          "latency": {
+            "narrator_ttft_ms": 1092.8616000000002,
+            "narrator_total_ms": 1424.1306000000004,
+            "controller_total_ms": 565.9477000000006,
+            "controller_tail_ms": 567.5254000000023,
+            "retrieval_ms": 1.5084999999999127,
+            "coordinator_total_ms": 1994.6225000000013
+          },
+          "narrator_usage": {
+            "prompt_tokens": 2369,
+            "completion_tokens": 110,
+            "total_tokens": 2479,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.001274634
+          },
+          "controller_usage": {
+            "prompt_tokens": 1290,
+            "completion_tokens": 6,
+            "total_tokens": 1296,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.0000777336
+          }
+        },
+        {
+          "input": "*turns to an ordinary passer-by* \"Excuse me, where is the slave market?\"",
+          "runtime_location": "heartstone_square",
+          "outcome": "success",
+          "narration": "The passer-by, a middle-aged woman in practical woolens carrying a cloth market bag, pauses and gives Nicco a once-over. \"The slave market? West District,\" she says, hitching her bag higher on her shoulder. \"Public and legal, if that's what you're after. Pens and sale floor, can't miss it once you're in that part of town.\" She doesn't elaborate further, nor does she move to lead him; she simply waits, patient or wary, for whatever follows.",
+          "scene_participants": {
+            "plan": {
+              "turn": 2,
+              "participants": [
+                {
+                  "id": "scene_npc_1",
+                  "ref": "P1",
+                  "role": "traveler",
+                  "display_name": "Traveler",
+                  "standing": "foreign",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 1,
+                  "last_addressed_turn": 1,
+                  "departed": false
+                },
+                {
+                  "id": "scene_npc_2",
+                  "ref": "P2",
+                  "role": "passer_by",
+                  "display_name": "Passer-by",
+                  "standing": "ordinary_local",
+                  "location_id": "heartstone_square",
+                  "locality": [
+                    "heartstone_square",
+                    "calderan",
+                    "west",
+                    "continent"
+                  ],
+                  "created_turn": 2,
+                  "last_addressed_turn": 2,
+                  "departed": false
+                }
+              ],
+              "focus": "scene_npc_2",
+              "created": "scene_npc_2",
+              "addressed": [],
+              "expired": []
+            },
+            "after": [
+              {
+                "id": "scene_npc_1",
+                "ref": "P1",
+                "role": "traveler",
+                "display_name": "Traveler",
+                "standing": "foreign",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 1,
+                "last_addressed_turn": 1,
+                "departed": false
+              },
+              {
+                "id": "scene_npc_2",
+                "ref": "P2",
+                "role": "passer_by",
+                "display_name": "Passer-by",
+                "standing": "ordinary_local",
+                "location_id": "heartstone_square",
+                "locality": [
+                  "heartstone_square",
+                  "calderan",
+                  "west",
+                  "continent"
+                ],
+                "created_turn": 2,
+                "last_addressed_turn": 2,
+                "departed": false,
+                "descriptor": "middle-aged woman"
+              }
+            ]
+          },
+          "scene_participants_block": "Temporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Traveler. Temporary; not local.\nP2 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.",
+          "player_profile_block": "Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).",
+          "knowledge_access": "Facts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"davenport\" (content in RETRIEVED CANON) | R3 retrieved canon \"calderan\" [public] (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Traveler (temporary, not local): CAN USE R3 (public); DO NOT USE F1, F2, R1, R2\nP2 Passer-by (temporary, ordinary local): CAN USE R1 (local:calderan), R3 (public); DO NOT USE F1, F2, R2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+          "recent_conversation": "[{\"player\":\"*approaches a foreign traveler* \\\"Excuse me, do you know where the slave market is?\\\"\",\"npc_dialogue\":[\"Traveler: \\\"I don't, no,\\\"\",\"Traveler: \\\"Just arrived myself. You might ask someone who actually lives here.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]",
+          "retrieved_canon": "{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"davenport\",\"type\":\"location\",\"name\":\"Davenport\",\"display_name\":\"Davenport\",\"summary\":\"Davenport, The Port of Chains, is West's principal economic and maritime city, a major port farther south near Chained Bay.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"davenport\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"calderan\",\"type\":\"location\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"davenport\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"calderan\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"public\"}],\"unknown\":false}",
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "calderan_slave_market",
+              "davenport",
+              "calderan"
+            ],
+            "elapsed_ms": 0.5852000000013504,
+            "outcome": "found"
+          },
+          "narrator_prompt": "[STATE PRECEDENCE]\nCurrent structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.\nCurrent equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.\nCharacters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.\n\n[CURRENT AUTHORITATIVE SCENE]\nLocation: Outside Heartstone. This public open area lies immediately outside Heartstone Tower. It is a public city space where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main entrance opens directly onto it. No specific landmarks, establishments, street names, district placement, or navigation routes are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\nP1 - Traveler. Temporary; not local.\nP2 - Passer-by (current conversation partner). Temporary; ordinary local of Calderan.\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []\n\n[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | R1 retrieved canon \"calderan_slave_market\" [local:calderan] (content in RETRIEVED CANON) | R2 retrieved canon \"davenport\" (content in RETRIEVED CANON) | R3 retrieved canon \"calderan\" [public] (content in RETRIEVED CANON)\nNarration and Nicco (player): F1, F2, R1, R2, R3. Nicco's speech and decisions still belong to the player.\nP1 Traveler (temporary, not local): CAN USE R3 (public); DO NOT USE F1, F2, R1, R2\nP2 Passer-by (temporary, ordinary local): CAN USE R1 (local:calderan), R3 (public); DO NOT USE F1, F2, R2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\n\n[HARD CHARACTER CONSTRAINTS]\nNo additional hard constraints established.\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n{\"records\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1},\"content\":\"Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved people are held in its pens and displayed there for inspection and sale under West's legal slave trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct someone to it. No layout, size, owners, operators, or history are established.\",\"tags\":[\"geography\",\"slavery\"],\"features\":[{\"name\":\"slave pens\",\"description\":\"Pens where enslaved people are held before display and sale.\"},{\"name\":\"public sale area\",\"description\":\"A public area where enslaved people are displayed for inspection and sold.\"}]}],\"candidates\":[{\"kind\":\"entity\",\"entity_id\":\"calderan_slave_market\",\"type\":\"location\",\"name\":\"Calderan Slave Market\",\"display_name\":\"Calderan Slave Market\",\"summary\":\"Calderan Slave Market is the capital's public, legal slave market and holding pens in Calderan's West District.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan_slave_market\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"davenport\",\"type\":\"location\",\"name\":\"Davenport\",\"display_name\":\"Davenport\",\"summary\":\"Davenport, The Port of Chains, is West's principal economic and maritime city, a major port farther south near Chained Bay.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"davenport\",\"schema_version\":1}},{\"kind\":\"entity\",\"entity_id\":\"calderan\",\"type\":\"location\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false,\"provenance\":{\"source_kind\":\"authored_canon\",\"dataset_id\":\"sha256:dbb82e8b2f03c338995f3a444413e1f5321b755e2aa735883bccdb1756623e45\",\"entity_id\":\"calderan\",\"schema_version\":1}}],\"awareness\":[{\"id\":\"calderan_slave_market\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"local:calderan\"},{\"id\":\"davenport\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[]},{\"id\":\"calderan\",\"narrator_access\":true,\"player_access\":true,\"known_by_present_npcs\":[],\"awareness\":\"public\"}],\"unknown\":false}\n\n[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n[{\"player\":\"*approaches a foreign traveler* \\\"Excuse me, do you know where the slave market is?\\\"\",\"npc_dialogue\":[\"Traveler: \\\"I don't, no,\\\"\",\"Traveler: \\\"Just arrived myself. You might ask someone who actually lives here.\\\"\"],\"narrator_description\":\"omitted; current structured state is authoritative\"}]\n\n[PLAYER ACTION ? Nicco]\n*turns to an ordinary passer-by* \"Excuse me, where is the slave market?\"\nNo explicit durable action is established.\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.",
+          "controller_proposal": [],
+          "authorization": [],
+          "authorized_commands": [],
+          "revision": {
+            "before": 1,
+            "after": 1
+          },
+          "state_changed": false,
+          "findings": [],
+          "context_characters": {
+            "system": 2242,
+            "primary_context": 3118,
+            "recent_conversation": 701,
+            "knowledge_access": 1130,
+            "retrieval": 2781,
+            "controller_evidence": 3684
+          },
+          "latency": {
+            "narrator_ttft_ms": 1347.7540000000008,
+            "narrator_total_ms": 1634.9979999999996,
+            "controller_total_ms": 497.89320000000225,
+            "controller_tail_ms": 498.8824999999997,
+            "retrieval_ms": 0.5852000000013504,
+            "coordinator_total_ms": 2136.065599999998
+          },
+          "narrator_usage": {
+            "prompt_tokens": 2491,
+            "completion_tokens": 101,
+            "total_tokens": 2592,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.001309613
+          },
+          "controller_usage": {
+            "prompt_tokens": 1279,
+            "completion_tokens": 6,
+            "total_tokens": 1285,
+            "reasoning_tokens": 0,
+            "provider_reported_cost_usd": 0.0000770736
+          }
+        }
+      ]
+    }
+  ]
+}

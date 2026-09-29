@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: "magic_subschools"
+  type: "world_lore"
+  name: "Magical Subschools"
+  display_name: "Magical Subschools"
+  parent: null
+  aliases: []
+  summary: >-
+    Primary magical traditions can contain specialized subschools, styles, and branches.
+  tags: ["magic"]
+  search_context: ""
+  content: >-
+    Water-associated Ice or Tidal styles, Air-associated Wind, and Fire-associated Ash or
+    Cinder are illustrative possibilities, not an exhaustive canonical taxonomy. New
+    subschools may emerge during play. A mage need not belong to exactly one subschool.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"specialized"}
+  category: "magic"
+  related_entities: ["elemental_magic"]
+chunks: []
+

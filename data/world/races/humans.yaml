@@ -1,0 +1,20 @@
+schema_version: 1
+entity:
+  id: "humans"
+  type: "world_lore"
+  name: "Humans"
+  display_name: "Humans"
+  parent: null
+  aliases: []
+  summary: >-
+    Humans are the predominant population in West.
+  tags: ["races"]
+  search_context: ""
+  content: >-
+    Human social institutions dominate much of West's political structure. No universal human
+    racial abilities or statistics are established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "races"
+  related_entities: ["west_governance"]
+chunks: []
+

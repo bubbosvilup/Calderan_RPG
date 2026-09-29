@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: "mixed_ancestry"
+  type: "world_lore"
+  name: "Mixed Ancestry"
+  display_name: "Mixed Ancestry"
+  parent: null
+  aliases: []
+  summary: >-
+    Mixed ancestry exists between established peoples.
+  tags: ["races"]
+  search_context: ""
+  content: >-
+    Examples include Half-Elves, Human/Beastfolk ancestry, and other plausible combinations
+    between established peoples. No detailed genetic rules, inheritance percentages, or
+    mandatory trait outcomes are defined. Specific characters' ancestry is established
+    individually.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "races"
+  related_entities: ["races_overview"]
+chunks: []
+

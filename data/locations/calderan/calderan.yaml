@@ -1,0 +1,44 @@
+schema_version: 1
+entity:
+  id: calderan
+  type: location
+  name: Calderan
+  display_name: Calderan
+  parent: west
+  aliases: []
+  summary: Calderan is West's inland capital, main political center, and main campaign city.
+  content: "Calderan lies in the northern/central-western interior of West. The established
+    five-district model applies here: West, East, North, South, and Center are predominant
+    social/economic themes, not exclusive zoning. Existing civic arrangements include the Duke and
+    local council, national guild branches, Church representation, City Guard, and magistracy. The
+    Duke remains central to local civic authority; the relationship between the capital's civic
+    administration and the Crown is not elaborated further. Calderan and Davenport together hold
+    principal institutional/legal control over West's slave market. The full legal constitution of
+    that monopoly remains undefined. Calderan regards Blackwater as a politically awkward necessary
+    evil: disliked and distrusted but pragmatically tolerated for dirty economic value, absorption
+    of crime, indirect maritime defense/interdiction, and keeping worse external threats at
+    distance. This is not blanket lawful endorsement or an established treaty. Calderan is West's
+    largest city, a very large, dense walled metropolis. Its five districts are broad urban regions
+    rather than small neighborhoods. Crossing substantial parts of the city is meaningful travel.
+    District themes are predominant tendencies, not exclusive zoning. Center is enclosed by an older
+    inner wall."
+  tags:
+    - geography
+  search_context: Calderan capital and main campaign city of West.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: public
+  features:
+    - name: capital of West
+      description: West's principal national political center.
+    - name: five-district civic structure
+      description: West, East, North, South, and Center Districts retain their established non-exclusive
+        themes and civic institutions.
+    - name: legal slave-market control
+      description: Calderan and Davenport share principal institutional monopoly/control over West's legal
+        slave market.
+  connections: []
+chunks: []

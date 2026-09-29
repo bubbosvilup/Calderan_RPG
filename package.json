@@ -1,0 +1,41 @@
+{
+  "name": "caldrevan-rpg",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "CaldrevanRPG deterministic narrative engine foundation",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "inspect:save": "npm run build --silent && node .build/src/dev/inspect-save.js",
+    "inspect:embedding": "npm run build --silent && node .build/src/dev/inspect-embedding.js",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit false --outDir .build",
+    "test": "npm run build && node --test .build/tests/*.test.js",
+    "inspect:context": "npm run build --silent && node .build/src/dev/inspect-context.js",
+    "inspect:search": "npm run build --silent && node .build/src/dev/inspect-search.js",
+    "eval:retrieval": "npm run build --silent && node .build/tests/retrieval-eval/evaluate.js",
+    "inspect:narrator": "npm run build --silent && node .build/src/dev/inspect-llm.js narrator",
+    "inspect:controller": "npm run build --silent && node .build/src/dev/inspect-llm.js controller",
+    "bench:llm": "npm run build --silent && node .build/src/dev/inspect-llm.js bench",
+    "play": "npm run build --silent && node .build/src/dev/play.js",
+    "test:playthrough": "npm run build --silent && node --test .build/tests/playthrough.test.js",
+    "extract:playthrough": "npm run build --silent && node .build/src/dev/extract-playthrough.js",
+    "eval:playthrough": "npm run build --silent && node .build/src/dev/eval-hardening.js",
+    "inspect:turn": "npm run build --silent && node .build/src/dev/eval-hardening.js --smoke",
+    "review:playthrough": "npm run build --silent && node .build/src/dev/review-playthrough.js",
+    "eval:narrators": "npm run build --silent && node .build/src/dev/eval-narrators.js",
+    "eval:authority": "npm run build --silent && node .build/src/dev/eval-authority.js",
+    "eval:shadow-evidence": "npm run build --silent && node .build/src/dev/shadow-evidence.js",
+    "eval:evidence": "npm run build --silent && node .build/src/dev/eval-evidence.js",
+    "eval:participants": "npm run build --silent && node .build/src/dev/eval-participants.js"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "typescript": "^5.9.3"
+  }
+}

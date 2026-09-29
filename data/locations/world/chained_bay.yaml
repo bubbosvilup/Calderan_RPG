@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: chained_bay
+  type: location
+  name: "Chained Bay"
+  display_name: "Chained Bay"
+  parent: null
+  aliases: []
+  summary: >-
+    Chained Bay is a large southwestern bay or inlet, especially associated with West's
+    maritime region.
+  content: >-
+    Davenport lies farther south in West near Chained Bay. Khar-Dune lies relatively near
+    the bay region in western/southwestern Center. Blackwater and Sandspear compete around
+    its maritime routes. These are broad spatial and commercial relationships, not an
+    authored navigation graph. The bay's name has no established supernatural meaning.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features: []
+  connections: []
+chunks: []
+

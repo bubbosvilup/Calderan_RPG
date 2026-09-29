@@ -1,0 +1,25 @@
+# Authoring template only. Keep outside data/ until placeholders and references are replaced.
+schema_version: 1
+entity:
+  id: template_location
+  type: location
+  name: Unfilled location template
+  display_name: Unfilled location template
+  parent: null
+  aliases: []
+  summary: Unfilled location authoring template; not Caldrevan canon.
+  tags: []
+  search_context: ""
+  content: Unfilled compact introduction; replace with supplied facts before authoring canon.
+  # Example for ordinary observable facts; choose policy deliberately.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  # Ordinary furniture/architecture belongs here, not in child entity files.
+  features: []
+  # Add only direct routes to existing location IDs; parent is not traversal.
+  connections: []
+# Add coherent passages only when supplied detail or visibility warrants them.
+chunks: []

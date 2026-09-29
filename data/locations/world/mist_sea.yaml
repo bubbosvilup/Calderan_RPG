@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: mist_sea
+  type: location
+  name: "Mist Sea"
+  display_name: "Mist Sea"
+  parent: null
+  aliases: []
+  summary: >-
+    Mist Sea lies broadly north of the known continent.
+  content: >-
+    Mist Sea is the named northern surrounding sea. Its broad position is established; no
+    exact maritime boundaries or supernatural properties are established.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features: []
+  connections: []
+chunks: []
+

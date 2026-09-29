@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: "dwarves"
+  type: "world_lore"
+  name: "Dwarves"
+  display_name: "Dwarves"
+  parent: null
+  aliases: []
+  summary: >-
+    Dwarves are a familiar established people with strong cultural associations with skilled
+    material work.
+  tags: ["races"]
+  search_context: ""
+  content: >-
+    Craftsmanship, construction, technical trades, and skilled material work are cultural
+    patterns, not biological absolutes. Not every dwarf is an artisan. No racial stat bonuses
+    or dwarf nation are established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "races"
+  related_entities: []
+chunks: []
+

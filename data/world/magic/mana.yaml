@@ -1,0 +1,34 @@
+schema_version: 1
+entity:
+  id: "mana"
+  type: "world_lore"
+  name: "Mana"
+  display_name: "Mana"
+  parent: null
+  aliases: []
+  summary: >-
+    Mana underlies magical exertion; every living person possesses it, but only a small
+    minority can consciously use it for magic.
+  tags: ["magic"]
+  search_context: ""
+  content: >-
+    Possessing mana does not imply magical ability. Why some people can use it remains
+    undefined: no genetic, divine, training, bloodline, racial, or aptitude-test explanation
+    is established. Mana can be spent and recovered; storage or manipulation through other
+    means may be established later. Nicco's intended maximum is 100; actual current mana is
+    engine-authoritative and stays between zero and maximum. The player establishes attempted
+    or known abilities; no fixed spellbook is established. Approximate expenditure anchors are
+    5 for minor/simple non-healing magic, such as harmless sparks for amusement; 25 for
+    superficial healing; 50 for serious or complex healing, including deeper injury or
+    infection; and 75 for major whole-body/systemic healing involving internal and external
+    damage. These are consistency anchors, not fixed spell prices. The narrator may propose
+    reasonable costs; runtime validates numbers. The only currently defined universal recovery
+    is 25 per crossed world-day boundary, capped at maximum. A day is 1440 world minutes.
+    Sleep or rest alone grants nothing. Other recovery must arise from established gameplay
+    through explicit validated deltas; being low on mana does not justify free restoration. No
+    specific recovery item, ritual, place, or technique is established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "magic"
+  related_entities: ["magic_overview"]
+chunks: []
+

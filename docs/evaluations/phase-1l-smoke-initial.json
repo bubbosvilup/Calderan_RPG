@@ -1,0 +1,971 @@
+{
+  "online_paid": true,
+  "models": {
+    "narrator": "minimax/minimax-m2-her",
+    "controller": "deepseek/deepseek-v4-flash-0731:nitro"
+  },
+  "started_at": "2026-09-28T19:06:43.859Z",
+  "cases": 5,
+  "corpus": "synthetic smoke",
+  "label_review": "agent_authored_pending_human_review",
+  "completed_at": "2026-09-28T19:06:58.557Z",
+  "summary": {
+    "evaluated": 5,
+    "finalized": 5,
+    "failed_turns": 0,
+    "true_positive_commands": 1,
+    "false_positive_commands": 0,
+    "false_negative_commands": 2,
+    "precision": 1,
+    "recall": 0.3333333333333333,
+    "player_agency_failures": "pending_manual_review",
+    "median_ttft_ms": 779.4907999999996,
+    "median_narrator_ms": 1778.5181000000002,
+    "median_controller_tail_ms": 810.2550000000001,
+    "median_turn_ms": 2712.986900000001,
+    "measured_successful_request_tokens": {
+      "prompt": 19295,
+      "completion": 824
+    }
+  },
+  "records": [
+    {
+      "id": "dialogue",
+      "input": "Hello, Brenna. How are you feeling?",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "Beginning character 'Brenna' turn 1 with intent ''. \\nWorld time 2025-07-14T23:20:00+00:00 -> 2025-07-14T23:20:00+00:00 in world location 'test_room'. Intent is ''. Concerned characters '[brenna, gerome, maren]'. Dawn. The conversation with Brenna is underway.  \\n\\nIn the observation room, Brenna sits upright on a steel cot, grey eyes watching you. Her scarred wrists rest on her knees. The room’s sterile silence echoes faintly as she speaks. \\n\\n- Brenna (plainly): The reports are incomplete. You are alive. That is all that matters.\\n \\n\\n*She shifts slightly, gaze steady, as if waiting for more.* *Her stillness contrasts with the tension in the room.* *The faint hum of machinery is the only sound.*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.2225999999999999,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1323,
+              "completion_tokens": 196,
+              "total_tokens": 1519
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:43.877Z",
+              "headers_ms": 1117.2468,
+              "time_to_first_token_ms": 1118.2077,
+              "completed_at": "2026-09-28T19:06:47.037Z",
+              "elapsed_total_ms": 3159.8313000000003
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2500,
+              "completion_tokens": 6,
+              "total_tokens": 2506
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:47.039Z",
+              "headers_ms": 927.8677000000002,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:06:48.003Z",
+              "elapsed_total_ms": 964.2256000000002
+            }
+          },
+          "context_characters": {
+            "system": 1659,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4245
+          },
+          "latency": {
+            "narrator_ttft_ms": 1118.2077,
+            "narrator_total_ms": 3159.8313000000003,
+            "controller_total_ms": 964.2256000000002,
+            "controller_tail_ms": 965.2354999999998,
+            "retrieval_ms": 0.2225999999999999,
+            "coordinator_total_ms": 4130.264099999999
+          }
+        }
+      },
+      "narration": "Beginning character 'Brenna' turn 1 with intent ''. \\nWorld time 2025-07-14T23:20:00+00:00 -> 2025-07-14T23:20:00+00:00 in world location 'test_room'. Intent is ''. Concerned characters '[brenna, gerome, maren]'. Dawn. The conversation with Brenna is underway.  \\n\\nIn the observation room, Brenna sits upright on a steel cot, grey eyes watching you. Her scarred wrists rest on her knees. The room’s sterile silence echoes faintly as she speaks. \\n\\n- Brenna (plainly): The reports are incomplete. You are alive. That is all that matters.\\n \\n\\n*She shifts slightly, gaze steady, as if waiting for more.* *Her stillness contrasts with the tension in the room.* *The faint hum of machinery is the only sound.*",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "handover",
+      "input": "I give boots to Brenna.",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "boots",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 1,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "((Brenna’s grey eyes watch you calmly as you offer the boots. Her scarred wrists flex slightly as she considers the gesture.)) Nicco. *her tone softens* Perhaps we could agree to a trade? *she glances at the supplies you carry*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [
+            {
+              "kind": "transfer_item",
+              "item_id": "boots",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            }
+          ],
+          "authorized_commands": [],
+          "authorization": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "boots",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_insufficient_evidence"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.07600000000002183,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1350,
+              "completion_tokens": 54,
+              "total_tokens": 1404
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:48.009Z",
+              "headers_ms": 779.3167999999996,
+              "time_to_first_token_ms": 779.4907999999996,
+              "completed_at": "2026-09-28T19:06:49.428Z",
+              "elapsed_total_ms": 1419.5092999999997
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2397,
+              "completion_tokens": 39,
+              "total_tokens": 2436
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:49.429Z",
+              "headers_ms": 675.5513000000001,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:06:50.237Z",
+              "elapsed_total_ms": 807.9520000000002
+            }
+          },
+          "context_characters": {
+            "system": 1659,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3868
+          },
+          "latency": {
+            "narrator_ttft_ms": 779.4907999999996,
+            "narrator_total_ms": 1419.5092999999997,
+            "controller_total_ms": 807.9520000000002,
+            "controller_tail_ms": 810.2550000000001,
+            "retrieval_ms": 0.07600000000002183,
+            "coordinator_total_ms": 2231.3695
+          }
+        }
+      },
+      "narration": "((Brenna’s grey eyes watch you calmly as you offer the boots. Her scarred wrists flex slightly as she considers the gesture.)) Nicco. *her tone softens* Perhaps we could agree to a trade? *she glances at the supplies you carry*",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "knowledge",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "expected": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 1,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "```json\n{\n  \"broadcast\": {\n    \"kind\": \"single\",\n    \"target\": \"brenna\"\n  },\n  \"transmission\": {\n    \"kind\": \"told\",\n    \"character_id\": \"nicco\",\n    \"dialogue\": [\n      \"The eastern bridge is closed.\"\n    ],\n    \"content\": \"```json\\n{\\n  \\\"id\\\": \\\"campaign_fact_bridge_closed\\\",\\n  \\\"summary\\\": \\\"The eastern bridge is closed.\\\",\\n  \\\"implications\\\": []\\n}\\n```\"\n  },\n  \"description\": \"Nicco informs Brenna that the eastern bridge is closed.\"\n}\n```",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [
+            {
+              "kind": "set_knowledge",
+              "knowledge": {
+                "character_id": "brenna",
+                "fact_id": "campaign_fact_bridge_closed",
+                "status": "knows",
+                "provenance": {
+                  "source_character_id": "nicco",
+                  "acquisition_kind": "told"
+                }
+              }
+            }
+          ],
+          "authorized_commands": [],
+          "authorization": [
+            {
+              "command": {
+                "kind": "set_knowledge",
+                "knowledge": {
+                  "character_id": "brenna",
+                  "fact_id": "campaign_fact_bridge_closed",
+                  "status": "knows",
+                  "provenance": {
+                    "source_character_id": "nicco",
+                    "acquisition_kind": "told"
+                  }
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_insufficient_evidence"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.02109999999993306,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1371,
+              "completion_tokens": 137,
+              "total_tokens": 1508
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:50.243Z",
+              "headers_ms": 745.2767000000003,
+              "time_to_first_token_ms": 746.1374999999998,
+              "completed_at": "2026-09-28T19:06:52.022Z",
+              "elapsed_total_ms": 1778.5181000000002
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2551,
+              "completion_tokens": 61,
+              "total_tokens": 2612
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:52.023Z",
+              "headers_ms": 876.4174000000003,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:06:52.954Z",
+              "elapsed_total_ms": 931.6528999999991
+            }
+          },
+          "context_characters": {
+            "system": 1659,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4184
+          },
+          "latency": {
+            "narrator_ttft_ms": 746.1374999999998,
+            "narrator_total_ms": 1778.5181000000002,
+            "controller_total_ms": 931.6528999999991,
+            "controller_tail_ms": 932.9488000000001,
+            "retrieval_ms": 0.02109999999993306,
+            "coordinator_total_ms": 2712.986900000001
+          }
+        }
+      },
+      "narration": "```json\n{\n  \"broadcast\": {\n    \"kind\": \"single\",\n    \"target\": \"brenna\"\n  },\n  \"transmission\": {\n    \"kind\": \"told\",\n    \"character_id\": \"nicco\",\n    \"dialogue\": [\n      \"The eastern bridge is closed.\"\n    ],\n    \"content\": \"```json\\n{\\n  \\\"id\\\": \\\"campaign_fact_bridge_closed\\\",\\n  \\\"summary\\\": \\\"The eastern bridge is closed.\\\",\\n  \\\"implications\\\": []\\n}\\n```\"\n  },\n  \"description\": \"Nicco informs Brenna that the eastern bridge is closed.\"\n}\n```",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lore",
+      "input": "What do I know about Ironbound?",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "Since no canonical facts exist about Ironbound in your current world, its details remain unknown. You may discover lore through future events or NPC dialogue. Current established facts: The eastern bridge is closed.",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "ironbound"
+            ],
+            "elapsed_ms": 1.8827000000001135,
+            "outcome": "found"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1546,
+              "completion_tokens": 39,
+              "total_tokens": 1585
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:52.961Z",
+              "headers_ms": 861.1476999999995,
+              "time_to_first_token_ms": 861.3068000000003,
+              "completed_at": "2026-09-28T19:06:54.276Z",
+              "elapsed_total_ms": 1314.2758999999987
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2335,
+              "completion_tokens": 6,
+              "total_tokens": 2341
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:54.276Z",
+              "headers_ms": 624.9303999999993,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:06:54.925Z",
+              "elapsed_total_ms": 648.6034999999993
+            }
+          },
+          "context_characters": {
+            "system": 1659,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 853,
+            "controller_evidence": 3748
+          },
+          "latency": {
+            "narrator_ttft_ms": 861.3068000000003,
+            "narrator_total_ms": 1314.2758999999987,
+            "controller_total_ms": 648.6034999999993,
+            "controller_tail_ms": 649.3847000000005,
+            "retrieval_ms": 1.8827000000001135,
+            "coordinator_total_ms": 1967.0398999999998
+          }
+        }
+      },
+      "narration": "Since no canonical facts exist about Ironbound in your current world, its details remain unknown. You may discover lore through future events or NPC dialogue. Current established facts: The eastern bridge is closed.",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "explicit_time",
+      "input": "/wait 1",
+      "expected": [
+        {
+          "kind": "runtime_delta",
+          "delta": {
+            "time_advance_minutes": 1
+          }
+        }
+      ],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 1,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*An orb* The lights are a little dim and warmish but you've got the box balanced on a cart at the elbow. *nicco from a distance* that is so not how it works. Gerome and Maren are standing to either side of me. Brenna is staring down at a diagram. I feel her, or maybe the diagram, glaring back at me. The air's so dry my nose is stuffed. I've got to keep leaning over to wipe it with the back of my hand and then my sleeve. It's disgusting. The whole room smells faintly of sweat and burning hair. *Fingers brushing against Nicco's* I don't care. It's okay. We can do this. *A large, stone hand reaches out, fingers pointing down at the map. Gerome stares intently at the floor, not saying a word* Brenna: \"It's the only way, Nicco.\" *She sighs and her shoulders droop.* \"If we can't do this, then what's the point? We have to succeed. We have to.\" *Maren is frowning at the floor. She looks tired. Maren: \"I don't know if we should do this.\" *Her voice is barely a whisper.* \"What if we fail?\" *A deep breath escapes me. I'm shaking slightly.* We won't fail. *Nicco's hand squeezes mine* I'm sure.",
+          "base_revision": 1,
+          "final_revision": 2,
+          "controller_proposal": [],
+          "authorized_commands": [
+            {
+              "kind": "runtime_delta",
+              "delta": {
+                "time_advance_minutes": 1
+              }
+            }
+          ],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.14879999999902793,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1332,
+              "completion_tokens": 280,
+              "total_tokens": 1612
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:54.930Z",
+              "headers_ms": 752.6198999999997,
+              "time_to_first_token_ms": 752.8068999999996,
+              "completed_at": "2026-09-28T19:06:57.801Z",
+              "elapsed_total_ms": 2871.1888
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2590,
+              "completion_tokens": 6,
+              "total_tokens": 2596
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:06:57.802Z",
+              "headers_ms": 737.4304000000011,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:06:58.554Z",
+              "elapsed_total_ms": 752.8201000000008
+            }
+          },
+          "context_characters": {
+            "system": 1659,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4607
+          },
+          "latency": {
+            "narrator_ttft_ms": 752.8068999999996,
+            "narrator_total_ms": 2871.1888,
+            "controller_total_ms": 752.8201000000008,
+            "controller_tail_ms": 753.6670999999988,
+            "retrieval_ms": 0.14879999999902793,
+            "coordinator_total_ms": 3626.883100000001
+          }
+        }
+      },
+      "narration": "*An orb* The lights are a little dim and warmish but you've got the box balanced on a cart at the elbow. *nicco from a distance* that is so not how it works. Gerome and Maren are standing to either side of me. Brenna is staring down at a diagram. I feel her, or maybe the diagram, glaring back at me. The air's so dry my nose is stuffed. I've got to keep leaning over to wipe it with the back of my hand and then my sleeve. It's disgusting. The whole room smells faintly of sweat and burning hair. *Fingers brushing against Nicco's* I don't care. It's okay. We can do this. *A large, stone hand reaches out, fingers pointing down at the map. Gerome stares intently at the floor, not saying a word* Brenna: \"It's the only way, Nicco.\" *She sighs and her shoulders droop.* \"If we can't do this, then what's the point? We have to succeed. We have to.\" *Maren is frowning at the floor. She looks tired. Maren: \"I don't know if we should do this.\" *Her voice is barely a whisper.* \"What if we fail?\" *A deep breath escapes me. I'm shaking slightly.* We won't fail. *Nicco's hand squeezes mine* I'm sure.",
+      "final_state": {
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 101
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    }
+  ]
+}

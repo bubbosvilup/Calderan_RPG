@@ -1,0 +1,25 @@
+# Authoring template only. Keep outside data/ until placeholders and references are replaced.
+schema_version: 1
+entity:
+  id: template_item
+  type: item
+  name: Unfilled item template
+  display_name: Unfilled item template
+  parent: null
+  aliases: []
+  summary: Unfilled item authoring template; not Caldrevan canon.
+  tags: []
+  search_context: ""
+  content: Unfilled compact introduction; replace with supplied facts before authoring canon.
+  # Example for ordinary observable facts; choose policy deliberately.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  # Exactly ONE placement: owner OR location OR container. Omit the other keys.
+  location: template_location
+  # Baseline state only, never invented current inventory or campaign changes.
+  state: {}
+# Add coherent passages only when supplied detail or visibility warrants them.
+chunks: []

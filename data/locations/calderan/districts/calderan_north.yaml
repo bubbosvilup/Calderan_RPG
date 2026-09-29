@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: calderan_north
+  type: location
+  name: North District
+  display_name: Calderan North District
+  parent: calderan
+  aliases:
+    - Calderan North District
+  summary: North District is one of Calderan's five broad urban regions. The North District emphasizes
+    religion, the Church, physicians, healing, herbalism, charitable care and traditional medicine.
+  tags:
+    - geography
+    - district
+  search_context: North District of Calderan, urban district.
+  content: The North District emphasizes religion, the Church, physicians, healing, herbalism,
+    charitable care and traditional medicine. Sincere treatment, competent physicians and herbal
+    practitioners, ineffective treatment, superstition and charlatans can coexist. Religion is not
+    universally fraudulent and temple healing is not universally magical. The Mage Registry and
+    Inquisition have a presence here. These are predominant tendencies, not exclusive zoning.
+    Crossing substantial parts of a district is meaningful travel; no exact roads or navigation
+    routes are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

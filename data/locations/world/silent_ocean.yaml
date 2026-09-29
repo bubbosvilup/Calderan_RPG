@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: silent_ocean
+  type: location
+  name: "The Silent Ocean"
+  display_name: "The Silent Ocean"
+  parent: null
+  aliases: []
+  summary: >-
+    The Silent Ocean lies broadly east of the known continent.
+  content: >-
+    The Silent Ocean is the named eastern surrounding ocean. The name establishes no
+    supernatural property or explanation; exact maritime boundaries remain undefined.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features: []
+  connections: []
+chunks: []
+

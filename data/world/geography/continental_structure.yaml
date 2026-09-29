@@ -1,0 +1,34 @@
+schema_version: 1
+entity:
+  id: "continental_structure"
+  type: "world_lore"
+  name: "Continental Structure"
+  display_name: "Continental Structure"
+  parent: null
+  aliases: []
+  summary: >-
+    One enormous known continent contains the major geopolitical regions/nations West, Center,
+    and East.
+  tags: ["fundamentals"]
+  search_context: ""
+  content: >-
+    The known continent is conceptually Eurasia-scale, with no exact dimensions, area, or
+    travel times. West, Center, and East occupy its western, central, and eastern portions.
+    West borders Center; Center borders East; West and East share no direct land border.
+    West is broadly mild, temperate, and greener; Center arid and desert-dominated; East cold
+    and snowy with severe winters. These are regional tendencies. Their capitals are
+    Calderan, Zul-Rath, and Vaelrost respectively. Mist Sea lies north, Sorrow Sea west,
+    The Silent Ocean east, and Chained Bay around the southwest. The Dragon's Teeth Mountains
+    span the northern interior near the Center–East transition and Frostspire. West–Center
+    tension is not perpetual declared total war: border skirmishes, raids, territorial
+    incidents, feuds, localized clashes, and unofficial frontier violence can produce
+    captives, displaced civilians, raided villages, prisoners, and slave trafficking.
+    Not every enslaved person is a Center captive. Center's internal government remains
+    undefined. East enforces armed neutrality against spillover from that conflict,
+    notably through Frostspire. East's internal government, religion, peoples, internal
+    factions, and foreign policy beyond this stance remain undefined. No other continent
+    is established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "fundamentals"
+  related_entities: ["continent","west","center","east","mist_sea","sorrow_sea","silent_ocean","chained_bay","dragons_teeth_mountains","west_governance","west_slavery","main_city_structure"]
+chunks: []

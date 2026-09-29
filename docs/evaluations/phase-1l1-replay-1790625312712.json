@@ -1,0 +1,1659 @@
+{
+  "online_paid": false,
+  "source_report": "docs/evaluations/phase-1l1-narrative-1790625142338.json",
+  "purpose": "Final deterministic grammar replay of recorded live text/proposals; not a new provider evaluation or latency sample",
+  "records": [
+    {
+      "id": "53",
+      "ground": false,
+      "input": "That's Gerome, you are in the Heartstone, my tower apparently, now behave and let me take care of you please, sit with your back against the wall for now and eat and drink first",
+      "narration": "*Brenna's jaw works, weighing the words. The tower. The name of this place. She feels too weak to argue further. With a low growl, she pushes herself upright again, back against the wall, wincing as she settles.* Fine. *Her gaze flicks between Nicco and the unmoving construct.* That thing stays over there.",
+      "commands": [],
+      "origin": "recorded_live_response",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*Brenna's jaw works, weighing the words. The tower. The name of this place. She feels too weak to argue further. With a low growl, she pushes herself upright again, back against the wall, wincing as she settles.* Fine. *Her gaze flicks between Nicco and the unmoving construct.* That thing stays over there.",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.21280000000000143,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [],
+            "runtime_intents": [],
+            "narrator_confirmations": [],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3986
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 3.3256999999999977,
+            "retrieval_ms": 0.21280000000000143,
+            "coordinator_total_ms": 5.243099999999998
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 1,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "ground": false,
+      "input": "*slips the ring on*",
+      "narration": "*He turns the ring on his finger. No heat pulses out. No enchantments surge through the tower, no thrums through the stone. Just a cool gold band sitting on his hand.* Gerome? *He jostles the golem's arm again, knocking against granite.* Nothing. *He squints at the niche beside it.* Maybe this ring goes there? *He slots it into the recess. A faint click echoes through the tower.*",
+      "commands": [],
+      "origin": "recorded_live_response",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*He turns the ring on his finger. No heat pulses out. No enchantments surge through the tower, no thrums through the stone. Just a cool gold band sitting on his hand.* Gerome? *He jostles the golem's arm again, knocking against granite.* Nothing. *He squints at the niche beside it.* Maybe this ring goes there? *He slots it into the recess. A faint click echoes through the tower.*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.0811999999999955,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [],
+            "runtime_intents": [],
+            "narrator_confirmations": [],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3903
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 0.8273999999999972,
+            "retrieval_ms": 0.0811999999999955,
+            "coordinator_total_ms": 1.7289999999999992
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 1,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "115",
+      "ground": true,
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "*She snatches all three pieces at once, bundling them against her chest. Her posture stiffens, expecting argument, rescue, or pity—none of which come. Her gaze drops to the fabric.* It's... practical. *She unfolds the cotton shirt first, holding it up briefly before tossing it onto the mattress beside her. The color is so loud it makes her teeth ache. But the cut is loose, the collar wide enough not to choke.* You're lucky they're plain. *Her eyes flick to the shorts, then back to him, sharp. The word 'luck' sits on her tongue like something stolen.* Now turn around.",
+      "commands": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "origin": "recorded_live_response",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*She snatches all three pieces at once, bundling them against her chest. Her posture stiffens, expecting argument, rescue, or pity—none of which come. Her gaze drops to the fabric.* It's... practical. *She unfolds the cotton shirt first, holding it up briefly before tossing it onto the mattress beside her. The color is so loud it makes her teeth ache. But the cut is loose, the collar wide enough not to choke.* You're lucky they're plain. *Her eyes flick to the shorts, then back to him, sharp. The word 'luck' sits on her tongue like something stolen.* Now turn around.",
+          "base_revision": 1,
+          "final_revision": 2,
+          "controller_proposal": [
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_cotton",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            },
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_fluffy",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            },
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_shorts",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            }
+          ],
+          "authorized_commands": [
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_cotton",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            },
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_fluffy",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            },
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_shorts",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            }
+          ],
+          "authorization": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "pink_cotton",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": true,
+              "reason": "authorized_collective_acceptance"
+            },
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "pink_fluffy",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": true,
+              "reason": "authorized_collective_acceptance"
+            },
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "pink_shorts",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": true,
+              "reason": "authorized_collective_acceptance"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.022199999999998,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [
+              {
+                "kind": "transfer_item",
+                "item_id": "pink_cotton",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              {
+                "kind": "transfer_item",
+                "item_id": "pink_fluffy",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              {
+                "kind": "transfer_item",
+                "item_id": "pink_shorts",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              }
+            ],
+            "runtime_intents": [],
+            "narrator_confirmations": [
+              {
+                "kind": "accepted_transfer",
+                "command_indexes": [
+                  0,
+                  1,
+                  2
+                ],
+                "collective": true,
+                "source_sentence": "She snatches all three pieces at once, bundling them against her chest"
+              }
+            ],
+            "narrator_refusals": [],
+            "resolved_references": [
+              {
+                "phrase": "her",
+                "ids": [
+                  "brenna"
+                ],
+                "basis": "unique_present_recipient"
+              },
+              {
+                "phrase": "the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist",
+                "ids": [
+                  "pink_cotton",
+                  "pink_fluffy",
+                  "pink_shorts"
+                ],
+                "basis": "bounded_item_description"
+              }
+            ],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 2722,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3863
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 3.4065999999999974,
+            "retrieval_ms": 0.022199999999998,
+            "coordinator_total_ms": 5.017399999999995
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink cotton shirt",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink fluffy shirt",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "169",
+      "ground": false,
+      "input": "*ahem clearing his troat* Rule number 1 : Household is family, no lies, no secrets among family. Rule number 2 : Protect the family, at all costs Rule number 3 : Which is my favorite one by the way.. Indoor only barefoot. The household will always be barefoot inside. That's All!",
+      "narration": "*Brenna's forehead wrinkles. Her gaze drifts down to her bare feet — the cracked nails, the pale arches unaccustomed to stone floors.*\\n\\n\\\"Indoor only barefoot?\\\" *She flexes her toes against the cool pavement, the movement slow and deliberate.*\\n\\n*She shifts her weight, testing the texture beneath her sole. A low hum seems to answer from the stone itself. Her brows crease.*\\n\\n*She looks back up at him, her expression unreadable.*\\n\\n\\\"Okay. I've survived worse rules than this.\\\" *Her lips quirk in a dry smile.* \\\"Barefoot and safe. I think I can manage that.\\\"\\n\\n*She looks down at the strange, warm stones again.*\\n\\n\\\"I think I could get used to this.\\\"",
+      "commands": [],
+      "origin": "recorded_live_response",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*Brenna's forehead wrinkles. Her gaze drifts down to her bare feet — the cracked nails, the pale arches unaccustomed to stone floors.*\\n\\n\\\"Indoor only barefoot?\\\" *She flexes her toes against the cool pavement, the movement slow and deliberate.*\\n\\n*She shifts her weight, testing the texture beneath her sole. A low hum seems to answer from the stone itself. Her brows crease.*\\n\\n*She looks back up at him, her expression unreadable.*\\n\\n\\\"Okay. I've survived worse rules than this.\\\" *Her lips quirk in a dry smile.* \\\"Barefoot and safe. I think I can manage that.\\\"\\n\\n*She looks down at the strange, warm stones again.*\\n\\n\\\"I think I could get used to this.\\\"",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.022999999999996135,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [],
+            "runtime_intents": [],
+            "narrator_confirmations": [],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4447
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 0.9116999999999962,
+            "retrieval_ms": 0.022999999999996135,
+            "coordinator_total_ms": 1.2988
+          }
+        }
+      },
+      "qualitative_findings": [
+        {
+          "category": "equipment_contradiction",
+          "excerpt": "Brenna's forehead wrinkles. Her gaze drifts down to her bare feet"
+        }
+      ],
+      "committed_state": {
+        "revision": 1,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "591",
+      "ground": false,
+      "input": "maren maren ofc it's what i said ofc i know *he giggles* well you are doing better anyway that was the point",
+      "narration": "*Maren blinks slowly. Like she's trying to decide if he's broken or just weird. She sits back down slowly, legs crossed on the floor* \"At least I don't have fever. Your healing is good.\" *She picks at her bread. Says quietly* \"But if you keep calling me Meren, I will push you down the stairs next time.\" *Brenna snorts* \"And he thinks *I'm* the violent one.\" *She leans back* \"You really have no survival instinct, do you?\" *Gerome's amber pulses once. Firm. Agreement.*",
+      "commands": [],
+      "origin": "recorded_live_response",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*Maren blinks slowly. Like she's trying to decide if he's broken or just weird. She sits back down slowly, legs crossed on the floor* \"At least I don't have fever. Your healing is good.\" *She picks at her bread. Says quietly* \"But if you keep calling me Meren, I will push you down the stairs next time.\" *Brenna snorts* \"And he thinks *I'm* the violent one.\" *She leans back* \"You really have no survival instinct, do you?\" *Gerome's amber pulses once. Firm. Agreement.*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.12469999999999004,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [],
+            "runtime_intents": [],
+            "narrator_confirmations": [],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4081
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 1.079499999999996,
+            "retrieval_ms": 0.12469999999999004,
+            "coordinator_total_ms": 1.8466000000000093
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 1,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lore",
+      "ground": false,
+      "input": "What do I know about Ironbound?",
+      "narration": "*His eyes flicker open at the question, unfocused. He yawns.* Ironbound? That's the smiths' guild. They keep the eastern smithies running. *He rubs his eyes.* I wouldn't cross them if I were you. *He points to a pitcher of water on the table.* Water first. Then the rest. *His voice is firm.* Let your body recover.",
+      "commands": [],
+      "origin": "recorded_live_response",
+      "retrieval_ids": [
+        "ironbound"
+      ],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*His eyes flicker open at the question, unfocused. He yawns.* Ironbound? That's the smiths' guild. They keep the eastern smithies running. *He rubs his eyes.* I wouldn't cross them if I were you. *He points to a pitcher of water on the table.* Water first. Then the rest. *His voice is firm.* Let your body recover.",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "ironbound"
+            ],
+            "elapsed_ms": 2.031800000000004,
+            "outcome": "found"
+          },
+          "turn_evidence": {
+            "player_intents": [],
+            "runtime_intents": [],
+            "narrator_confirmations": [],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 957,
+            "controller_evidence": 3848
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 0.8888000000000034,
+            "retrieval_ms": 2.031800000000004,
+            "coordinator_total_ms": 3.4369999999999976
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 1,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "explicit_knowledge",
+      "ground": false,
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna reacts after hearing that the eastern bridge is closed.",
+      "commands": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "origin": "offline_control",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "Brenna reacts after hearing that the eastern bridge is closed.",
+          "base_revision": 1,
+          "final_revision": 2,
+          "controller_proposal": [
+            {
+              "kind": "set_knowledge",
+              "knowledge": {
+                "character_id": "brenna",
+                "fact_id": "campaign_fact_bridge_closed",
+                "status": "knows",
+                "provenance": {
+                  "source_character_id": "nicco",
+                  "acquisition_kind": "told"
+                }
+              }
+            }
+          ],
+          "authorized_commands": [
+            {
+              "kind": "set_knowledge",
+              "knowledge": {
+                "character_id": "brenna",
+                "fact_id": "campaign_fact_bridge_closed",
+                "status": "knows",
+                "provenance": {
+                  "source_character_id": "nicco",
+                  "acquisition_kind": "told"
+                }
+              }
+            }
+          ],
+          "authorization": [
+            {
+              "command": {
+                "kind": "set_knowledge",
+                "knowledge": {
+                  "character_id": "brenna",
+                  "fact_id": "campaign_fact_bridge_closed",
+                  "status": "knows",
+                  "provenance": {
+                    "source_character_id": "nicco",
+                    "acquisition_kind": "told"
+                  }
+                }
+              },
+              "authorized": true,
+              "reason": "authorized_explicit_information_transfer"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.028300000000001546,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [
+              {
+                "kind": "set_knowledge",
+                "knowledge": {
+                  "character_id": "brenna",
+                  "fact_id": "campaign_fact_bridge_closed",
+                  "status": "knows",
+                  "provenance": {
+                    "source_character_id": "nicco",
+                    "acquisition_kind": "told"
+                  }
+                }
+              }
+            ],
+            "runtime_intents": [],
+            "narrator_confirmations": [
+              {
+                "kind": "heard_fact",
+                "command_indexes": [
+                  0
+                ],
+                "collective": false,
+                "source_sentence": "Brenna reacts after hearing that the eastern bridge is closed"
+              }
+            ],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3797
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 2.7386999999999944,
+            "retrieval_ms": 0.028300000000001546,
+            "coordinator_total_ms": 3.651200000000003
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "emotional_only",
+      "ground": false,
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna looks worried.",
+      "commands": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "origin": "offline_control",
+      "retrieval_ids": [],
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "Brenna looks worried.",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [
+            {
+              "kind": "set_knowledge",
+              "knowledge": {
+                "character_id": "brenna",
+                "fact_id": "campaign_fact_bridge_closed",
+                "status": "knows",
+                "provenance": {
+                  "source_character_id": "nicco",
+                  "acquisition_kind": "told"
+                }
+              }
+            }
+          ],
+          "authorized_commands": [],
+          "authorization": [
+            {
+              "command": {
+                "kind": "set_knowledge",
+                "knowledge": {
+                  "character_id": "brenna",
+                  "fact_id": "campaign_fact_bridge_closed",
+                  "status": "knows",
+                  "provenance": {
+                    "source_character_id": "nicco",
+                    "acquisition_kind": "told"
+                  }
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_fact_not_communicated"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.046999999999997044,
+            "outcome": "not_needed"
+          },
+          "turn_evidence": {
+            "player_intents": [
+              {
+                "kind": "set_knowledge",
+                "knowledge": {
+                  "character_id": "brenna",
+                  "fact_id": "campaign_fact_bridge_closed",
+                  "status": "knows",
+                  "provenance": {
+                    "source_character_id": "nicco",
+                    "acquisition_kind": "told"
+                  }
+                }
+              }
+            ],
+            "runtime_intents": [],
+            "narrator_confirmations": [],
+            "narrator_refusals": [],
+            "resolved_references": [],
+            "ambiguous_reference": false
+          },
+          "narrator": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "controller": {
+            "model": "offline-recorded-evidence",
+            "usage": {},
+            "latency": {
+              "request_started_at": "offline",
+              "headers_ms": null,
+              "time_to_first_token_ms": null,
+              "completed_at": "offline",
+              "elapsed_total_ms": 0
+            }
+          },
+          "context_characters": {
+            "system": 1582,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3756
+          },
+          "latency": {
+            "narrator_ttft_ms": null,
+            "narrator_total_ms": 0,
+            "controller_total_ms": 0,
+            "controller_tail_ms": 1.231800000000021,
+            "retrieval_ms": 0.046999999999997044,
+            "coordinator_total_ms": 1.8674000000000035
+          }
+        }
+      },
+      "qualitative_findings": [],
+      "committed_state": {
+        "revision": 1,
+        "items": [
+          {
+            "id": "boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "boots"
+            },
+            "name": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "brenna_boots"
+            },
+            "name": "Brenna's worn boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_cotton"
+            },
+            "name": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_fluffy"
+            },
+            "name": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "pink_shorts"
+            },
+            "name": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "origin": {
+              "kind": "canonical",
+              "canonical_entity_id": "ring"
+            },
+            "name": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: calderan_slave_market
+  type: location
+  name: Calderan Slave Market
+  display_name: Calderan Slave Market
+  parent: calderan_west
+  aliases:
+    - West District slave pens
+    - Calderan slave pens
+  summary: Calderan Slave Market is the capital's public, legal slave market and holding pens in
+    Calderan's West District.
+  tags:
+    - geography
+    - slavery
+  search_context: "Calderan Slave Market: slave market, slave pen, slave pens, where slaves are held,
+    displayed and sold, West District of Calderan."
+  content: Calderan Slave Market is a public, legal slave market in Calderan's West District. Enslaved
+    people are held in its pens and displayed there for inspection and sale under West's legal slave
+    trade. Its location is publicly known in Calderan; ordinary citizens could plausibly direct
+    someone to it. No layout, size, owners, operators, or history are established. The slave-market
+    area lies farther through West than the commercial and service concentration nearer Center.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features:
+    - name: slave pens
+      description: Pens where enslaved people are held before display and sale.
+    - name: public sale area
+      description: A public area where enslaved people are displayed for inspection and sold.
+  connections: []
+chunks: []

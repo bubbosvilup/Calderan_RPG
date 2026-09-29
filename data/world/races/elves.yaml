@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: "elves"
+  type: "world_lore"
+  name: "Elves"
+  display_name: "Elves"
+  parent: null
+  aliases: []
+  summary: >-
+    Elves are less common than humans or dwarves, noticeable but not mythical.
+  tags: ["races"]
+  search_context: ""
+  content: >-
+    Elves are somewhat socially and culturally apart. Enslaved elves may exist but are
+    relatively uncommon. Exact lifespan, biological bonuses, a nation or fixed homeland,
+    universal personality, and a complete culture remain undefined.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "races"
+  related_entities: []
+chunks: []
+

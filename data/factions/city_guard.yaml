@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: "city_guard"
+  type: "faction"
+  name: "City Guard"
+  display_name: "City Guard"
+  parent: null
+  aliases: []
+  summary: >-
+    Calderan's City Guard is a local civic/security faction.
+  tags: ["politics"]
+  search_context: ""
+  content: >-
+    Its responsibilities broadly include local order, patrols, ordinary law enforcement, and
+    urban security. It is distinct from the national guilds and Church, and is not the
+    national military. Full ranks, named members, and specific installations remain undefined.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  members: []
+  territory: [calderan]
+  relations: []
+chunks: []

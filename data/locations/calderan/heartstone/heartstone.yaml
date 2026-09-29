@@ -1,0 +1,48 @@
+schema_version: 1
+entity:
+  id: heartstone
+  type: location
+  name: Heartstone
+  display_name: Heartstone
+  parent: calderan_west
+  aliases: []
+  summary: Heartstone is an old, tall private residential tower of predominantly stone construction.
+    It is vertically organized, structurally solid, and associated with a secluded walled courtyard.
+  tags:
+    - household
+    - architecture
+    - domestic
+  search_context: Heartstone residential stone tower, upper floors, underground level, living floor,
+    secluded courtyard.
+  content: Heartstone is a private residence. Its old stone tower construction is partly accented by
+    projecting wooden architectural sections and narrow arched tower windows. The structure remains
+    solid despite its age. The known organization consists of U1 underground, LR at ground level, F1
+    through F6 rising above LR, and CY, the secluded courtyard. F6 is the highest currently known
+    floor. U1 has a broader underground footprint than the tower floors above. A single continuous
+    spiral staircase rises from LR through F1, F2, F3, F4, F5, and F6. This staircase begins at LR's
+    perimeter and rises along or near the outer portion of the tower interior, reaching each upper
+    floor from the side. It is lateral/peripheral, not a central tower core, leaving each upper
+    floor's central usable area comparatively open. U1 is reached separately through a large visible
+    hatch in LR and descending access, not through the upper-floor spiral staircase. Heartstone lies
+    in the north-western part of Calderan's West District.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: stone tower construction
+      description: Old, predominantly stone construction forming a tall, vertically organized private
+        residence; structurally solid.
+    - name: projecting wooden sections
+      description: Projecting wooden architectural sections accent parts of the stone exterior.
+    - name: narrow arched tower windows
+      description: Narrow arched windows characterize the tower exterior; the total exterior window count
+        is unspecified.
+    - name: continuous spiral staircase
+      description: A single continuous lateral/peripheral spiral staircase begins at LR's perimeter and
+        rises near the outer tower interior through F1, F2, F3, F4, F5, and F6. It reaches each
+        floor from the side, leaving central usable areas comparatively open; it is not a central
+        core and does not provide access to U1.
+  connections: []
+chunks: []

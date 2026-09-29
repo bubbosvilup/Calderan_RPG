@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: "west_slavery"
+  type: "world_lore"
+  name: "Slavery in West"
+  display_name: "Slavery in West"
+  parent: null
+  aliases: []
+  summary: >-
+    Slavery is nationally legal throughout West, with cities able to regulate its operation
+    and administration.
+  tags: ["fundamentals"]
+  search_context: ""
+  content: >-
+    National legality and local regulation are the established framework; detailed laws remain
+    undefined. The institution is particularly relevant to West's treatment of Beastfolk, but
+    enslaved people can have other backgrounds. Not every Beastfolk is enslaved, and not every
+    enslaved person is a Center war captive.
+    Calderan and Davenport hold principal institutional monopoly/control over West's legal
+    slave market. Frontier raids and captives may feed Ironbound and/or Khar-Dune networks,
+    pass through legal or falsified processing, reach Calderan/Davenport markets, and move
+    toward West destinations, plantations, or colonies. This is a broad possible flow, not
+    a universal route or a simulation graph. Ironbound combines official border enforcement
+    with unofficial corruption; its slave traffic is not all legal. Khar-Dune intermediaries
+    may falsify provenance. Blackwater is especially associated with illegal/unregistered
+    trafficking, kidnapping, smuggling, and stolen captives; Sandspear may participate through
+    corsair/criminal networks. Legal processing does not establish a lawful origin for every
+    captive. Plantations and colonies exist within West's broader economic system, but their
+    locations, sizes, ownership, crops, and political status remain undefined.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "fundamentals"
+  related_entities: ["beastfolk","continental_structure","calderan","davenport","ironbound","khar_dune","blackwater","sandspear"]
+chunks: []

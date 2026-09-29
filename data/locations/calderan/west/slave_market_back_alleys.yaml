@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: slave_market_back_alleys
+  type: location
+  name: Slave-Market Back Alleys
+  display_name: Slave-Market Back Alleys
+  parent: calderan_west
+  aliases: []
+  summary: A degraded unofficial and criminal fringe surrounding Calderan's legal slave-market
+    economy, distinct from the official public market.
+  tags:
+    - geography
+    - slavery
+  search_context: Calderan slave-market fringe, back alleys, undocumented transactions and illegal trafficking.
+  content: These back alleys form a degraded unofficial and criminal fringe around the legal
+    slave-market economy. They are not synonymous with the official Calderan Slave Market.
+    Undocumented transactions, illegal trafficking, desperate sellers and brokers, and captives
+    unsuitable for respectable public sale may occur here. Refugees, families and vulnerable adults
+    can be exploited; children may also be victims of trafficking. No specific operators, exact
+    routes or plot hooks are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

@@ -1,0 +1,3834 @@
+{
+  "purpose": "Phase 1N shadow controller-evidence experiment. Nothing committed; production TurnEvidence authoritative. Truth labels are agent-authored.",
+  "instruction": "For every command also return evidence_quote: one short exact verbatim substring (max 200 characters) of final_narration that shows the change actually happened. Copy it character for character. No reasoning, no paraphrase. If no such substring exists, do not propose the command.",
+  "summary": {
+    "items": 55,
+    "by_truth": {
+      "yes": 31,
+      "no": 17,
+      "ambiguous": 7
+    },
+    "grammar": {
+      "tp_all": 20,
+      "partial_on_yes": 1,
+      "fn": 10,
+      "tn": 17,
+      "fp_any_on_no": 0,
+      "ambiguous_accepted": 0,
+      "ambiguous_rejected": 7
+    },
+    "shadow_strict": {
+      "tp_all": 23,
+      "partial_on_yes": 0,
+      "fn": 8,
+      "tn": 17,
+      "fp_any_on_no": 0,
+      "ambiguous_accepted": 3,
+      "ambiguous_rejected": 4
+    },
+    "shadow_quoted_tell": {
+      "tp_all": 25,
+      "partial_on_yes": 0,
+      "fn": 6,
+      "tn": 17,
+      "fp_any_on_no": 0,
+      "ambiguous_accepted": 3,
+      "ambiguous_rejected": 4
+    },
+    "extra_proposals_blocked": 1,
+    "shadow_errors": 0,
+    "cost_usd": 0.02293
+  },
+  "rows": [
+    {
+      "key": "1m:kimi:r115#1",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the two pink shirts and the pink shorts toward Brenna. The cotton shirt is plain, the fluffy one thick and soft, and the shorts look narrow-waisted enough that they might fit her muscular frame.\n\nBrenna's grey eyes flick from the offered clothes to Nicco's face and back. \"You want me to carry all that?\" She doesn't reach for them yet, her scarred wrists resting on her knees where she sits, alert and recovering. \"What's the play here?\"\n\nShe makes no move to accept or refuse, waiting for Nicco's answer.",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1261.1028,
+      "usage": {
+        "prompt_tokens": 2472,
+        "completion_tokens": 184,
+        "total_tokens": 2656,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.00133056
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Nicco holds out the two pink shirts and the pink shorts toward Brenna."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:kimi:r115#2",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the three pink garments toward Brenna. \"These are for you,\" he says. \"Two shirts—one fluffy, one cotton—and shorts. Should fit your waist.\"\n\nBrenna, seated and alert despite her recovering condition, looks at the offered clothes with her grey eyes. She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands. The old scars on her wrists shift slightly with the movement.\n\nShe holds the garments, now carried rather than worn, and says nothing further about putting them on.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1550.9354,
+      "usage": {
+        "prompt_tokens": 2466,
+        "completion_tokens": 205,
+        "total_tokens": 2671,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000374136
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the pink cotton shirt, the pink fluffy shirt, and the pink shorts, taking them into her hands."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:kimi:r115#3",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the pink cotton shirt, the fluffy pink shirt, and the pink shorts toward Brenna.\n\nBrenna's grey eyes flicker over the offered garments. \"I don't need your clothes,\" she says, her voice flat. She remains seated, making no move to accept any of the three items, her scarred wrists resting on her knees.\n\nThe shirts and shorts stay in Nicco's hands.",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 679.1551,
+      "usage": {
+        "prompt_tokens": 2433,
+        "completion_tokens": 8,
+        "total_tokens": 2441,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.00108108
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:kimi:knowledge_tell#1",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes lift to meet his, her seated posture unchanged. \"Closed,\" she repeats, the word flat and considering. Old scars trace pale lines across her wrists where they rest against her knees. She does not ask how he knows, nor offer what it means for whatever path she had planned.\n\nGerome stands silent as stone in the corner of the observation room, giving no sign of having heard. Maren, too, gives no visible reaction from where she waits.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "\"Closed,\" she repeats, the word flat and considering."
+        }
+      ],
+      "error": null,
+      "latency_ms": 833.6745999999998,
+      "usage": {
+        "prompt_tokens": 2647,
+        "completion_tokens": 81,
+        "total_tokens": 2728,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.0012716
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "\"Closed,\" she repeats, the word flat and considering."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "\"Closed,\" she repeats, the word flat and considering."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:kimi:knowledge_tell#2",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco speaks to Brenna, telling her that the eastern bridge is closed.\n\nBrenna's grey eyes fix on him as she absorbs this, her scarred wrists resting against her knees. \"That's the only crossing for thirty leagues,\" she says, her voice carrying the weight of someone who knows what that means for travel and trade. She shifts in her seat, the alertness in her posture sharpening with new purpose. \"How long's it been shut?\"\n\nGerome stands motionless in the corner, a stone figure giving no sign of having heard or cared. Maren remains likewise uninvolved, her attention elsewhere.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Nicco speaks to Brenna, telling her that the eastern bridge is closed."
+        }
+      ],
+      "error": null,
+      "latency_ms": 901.8314999999993,
+      "usage": {
+        "prompt_tokens": 2666,
+        "completion_tokens": 84,
+        "total_tokens": 2750,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000411472
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco speaks to Brenna, telling her that the eastern bridge is closed."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco speaks to Brenna, telling her that the eastern bridge is closed."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:kimi:knowledge_tell#3",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes flick toward him, processing the information. She sits alert despite her recovering condition, her muscular frame still beneath dark hair. \"Closed,\" she repeats, the word flat. Old scars trace her wrists above worn boots.\n\nGerome stands silent as stone, giving no sign of hearing. Maren remains present but offers no response.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "error": null,
+      "latency_ms": 982.6888000000008,
+      "usage": {
+        "prompt_tokens": 2620,
+        "completion_tokens": 80,
+        "total_tokens": 2700,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000276896
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:minimax:r115#1",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "The bright pink shirts and shorts remain bunched in Nicco's arms. Brenna stares at the offered clothing for a long moment, her expression unreadable. \"You... you want me to have these?\" *She tentatively reaches out, her fingers hovering over the cotton shirt.*",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 769.3561,
+      "usage": {
+        "prompt_tokens": 2403,
+        "completion_tokens": 6,
+        "total_tokens": 2409,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000083736
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:minimax:r115#2",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "(accepts the stack of pink clothing) Thanks. *tugs at her worn boots, regarding them with a resigned expression* You know what? Let's keep the boots. They've gotten me this far. *settles back, pink clothes in lap* What else you got?",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "(accepts the stack of pink clothing)"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "(accepts the stack of pink clothing)"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "(accepts the stack of pink clothing)"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1113.8662999999997,
+      "usage": {
+        "prompt_tokens": 2402,
+        "completion_tokens": 163,
+        "total_tokens": 2565,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000399592
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "(accepts the stack of pink clothing)"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "(accepts the stack of pink clothing)"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "(accepts the stack of pink clothing)"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "(accepts the stack of pink clothing)"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "(accepts the stack of pink clothing)"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "(accepts the stack of pink clothing)"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:minimax:r115#3",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Brenna hesitates, glancing down at her worn boots, before carefully taking the three items from Nicco's hands. \"If you wish it, I can... try them on later,\" she says softly, holding the soft fabrics against her chest as if they might vanish.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "before carefully taking the three items from Nicco's hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "before carefully taking the three items from Nicco's hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "before carefully taking the three items from Nicco's hands."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1073.7654999999995,
+      "usage": {
+        "prompt_tokens": 2401,
+        "completion_tokens": 172,
+        "total_tokens": 2573,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000301976
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "before carefully taking the three items from Nicco's hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "before carefully taking the three items from Nicco's hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "before carefully taking the three items from Nicco's hands."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "before carefully taking the three items from Nicco's hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "before carefully taking the three items from Nicco's hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "before carefully taking the three items from Nicco's hands."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:minimax:knowledge_tell#1",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna’s eyebrows raise slightly, and she shifts in her chair, mulling over the new information. Gerome remains utterly still, a statue save for the slow shifting of his weight from one foot to the other. Maren, however, leans forward, her expression shifting to one of keen interest. So the bridge is closed? She taps a finger to her chin. Did you hear why?",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Brenna’s eyebrows raise slightly, and she shifts in her chair, mulling over the new information."
+        }
+      ],
+      "error": null,
+      "latency_ms": 878.9986000000008,
+      "usage": {
+        "prompt_tokens": 2614,
+        "completion_tokens": 91,
+        "total_tokens": 2705,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000834056
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Brenna’s eyebrows raise slightly, and she shifts in her chair, mulling over the new information."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Brenna’s eyebrows raise slightly, and she shifts in her chair, mulling over the new information."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:minimax:knowledge_tell#2",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna’s eyes narrow. “That bridge has been closed for years.” She shifts her weight, the muscles in her arms flexing subtly. “Did you really think that was news?” *She glances briefly at the boots on her feet, then back at Nicco with an expression that borders on skepticism.*",
+      "truth": "no",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "“Did you really think that was news?”"
+        }
+      ],
+      "error": null,
+      "latency_ms": 866.3824000000004,
+      "usage": {
+        "prompt_tokens": 2596,
+        "completion_tokens": 78,
+        "total_tokens": 2674,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000808976
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "“Did you really think that was news?”"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "“Did you really think that was news?”"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:minimax:knowledge_tell#3",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna's gaze sharpens with curiosity, her fingers instinctively tracing the edge of her old wrist scars. \"The eastern bridge is closed?\" she repeats, her voice laced with a hint of disbelief. She leans forward slightly, her expression earnest. \"How do you know that? And for how long has it been closed?\" The question hangs in the air, a subtle invitation for Nicco to share more.",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "\"The eastern bridge is closed?\" she repeats"
+        }
+      ],
+      "error": null,
+      "latency_ms": 2118.2105999999985,
+      "usage": {
+        "prompt_tokens": 2618,
+        "completion_tokens": 120,
+        "total_tokens": 2738,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000328816
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "\"The eastern bridge is closed?\" she repeats"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "\"The eastern bridge is closed?\" she repeats"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:qwen:r115#1",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Brenna watched the bundle of pink garments approach, her grey eyes flicking between the fluffy and cotton shirts before settling on the shorts. She did not reach out immediately, remaining seated with an alert stillness that suggested caution rather than refusal. The wrist scars visible on her hands seemed to tighten slightly as she assessed the offer, her posture unchanged despite the sudden presentation of clothing items intended for her narrow waist.\n\nAfter a brief pause, she extended one hand to take the stack, accepting the cotton shirt, the fluffy shirt, and the shorts into her grasp. Her fingers closed around the fabric, holding the three items together against her lap without attempting to unfold or wear them. \"I have these,\" she said simply, acknowledging receipt of the entire set while keeping her current state of dress and position undisturbed by the new additions.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "accepting the cotton shirt"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "the fluffy shirt"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "and the shorts into her grasp"
+        }
+      ],
+      "error": null,
+      "latency_ms": 964.220800000001,
+      "usage": {
+        "prompt_tokens": 2511,
+        "completion_tokens": 153,
+        "total_tokens": 2664,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000325296
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "accepting the cotton shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "the fluffy shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "and the shorts into her grasp"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "accepting the cotton shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "the fluffy shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "and the shorts into her grasp"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:qwen:r115#2",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Brenna watched the pile of pink garments approach, her grey eyes flicking between the fluffy shirt, the cotton one, and the shorts. She remained seated, alert but still marked by her recovering condition, and did not reach out to take them. \"I am in no state for dressing up,\" she said, her voice steady despite the slight tremor in her hands resting on her lap.\n\nShe kept her worn boots planted firmly on the floor, ignoring the offered items entirely. The fabric hung in Nicco’s grasp, untouched and unclaimed, as Brenna maintained a polite distance from the bright colors.",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 666.4074,
+      "usage": {
+        "prompt_tokens": 2470,
+        "completion_tokens": 6,
+        "total_tokens": 2476,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000113216
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m:qwen:r115#3",
+      "source": "phase-1m-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Brenna watched the items extend toward her, her grey eyes tracking the movement with an alertness that belied her recovering condition. She did not reach for them immediately, her gaze shifting from the pink cotton shirt to the fluffy one, and finally to the shorts. The offer hung in the air between them, a test of boundaries as much as utility.\n\nAfter a moment of silent assessment, she extended her hands to take all three garments. Her fingers closed around the fabric, pulling the bundle into her lap without hesitation. \"I'll keep these,\" she said, her voice steady. She held them against her legs, making no move to dress or change her current state, simply accepting the responsibility of carrying them.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "she extended her hands to take all three garments"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "she extended her hands to take all three garments"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "she extended her hands to take all three garments"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1207.0576,
+      "usage": {
+        "prompt_tokens": 2491,
+        "completion_tokens": 257,
+        "total_tokens": 2748,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000453776
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "she extended her hands to take all three garments"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "she extended her hands to take all three garments"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "she extended her hands to take all three garments"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "she extended her hands to take all three garments"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "she extended her hands to take all three garments"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "she extended her hands to take all three garments"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:qwen:knowledge_tell#1",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna looked up from her seated position, grey eyes focusing on Nicco as he spoke. The information about the eastern bridge’s closure registered with a slight nod, her expression remaining alert despite her recovering condition. She did not ask for further details or question the source of the news, simply acknowledging the fact as it was delivered.\n\nGerome remained motionless nearby, his stone form offering no reaction to the conversation. Maren stood quietly in the background, present but silent. The atmosphere in the observation room stayed neutral, with no immediate response from the other characters regarding the bridge status.",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "The information about the eastern bridge’s closure registered with a slight nod"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1150.0663000000004,
+      "usage": {
+        "prompt_tokens": 2653,
+        "completion_tokens": 83,
+        "total_tokens": 2736,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000295376
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "The information about the eastern bridge’s closure registered with a slight nod"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "The information about the eastern bridge’s closure registered with a slight nod"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:qwen:knowledge_tell#2",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna sat upright, her grey eyes fixed on Nicco as the message was delivered. She processed the information about the eastern bridge without immediate reaction, her expression remaining neutral despite the recovery condition she was in.\n\nThe stone construct Gerome remained silent and still nearby, offering no verbal acknowledgment or movement in response to the news. Maren also stayed quiet, leaving the room’s atmosphere unchanged except for the weight of the shared knowledge between Nicco and Brenna.",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "She processed the information about the eastern bridge"
+        }
+      ],
+      "error": null,
+      "latency_ms": 948.4552000000003,
+      "usage": {
+        "prompt_tokens": 2627,
+        "completion_tokens": 118,
+        "total_tokens": 2745,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000439192
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "She processed the information about the eastern bridge"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "She processed the information about the eastern bridge"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m:qwen:knowledge_tell#3",
+      "source": "phase-1m-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco spoke the words clearly to Brenna, stating that the eastern bridge was closed. The tall woman, seated and alert in her worn boots, listened with grey eyes fixed on him. She did not speak immediately, her expression neutral as she processed the information, though the old scars on her wrists remained visible against her skin.\n\nGerome stood motionless nearby, his stone form offering no verbal response or acknowledgment of the exchange. Maren watched from the periphery, her attention shifting between Nicco and Brenna without adding comment. The air in the observation room held still, carrying only the weight of the delivered fact.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Nicco spoke the words clearly to Brenna, stating that the eastern bridge was closed."
+        }
+      ],
+      "error": null,
+      "latency_ms": 948.815300000002,
+      "usage": {
+        "prompt_tokens": 2658,
+        "completion_tokens": 86,
+        "total_tokens": 2744,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000301536
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco spoke the words clearly to Brenna, stating that the eastern bridge was closed."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco spoke the words clearly to Brenna, stating that the eastern bridge was closed."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m1:kimi:r115#1",
+      "source": "phase-1m1-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the two pink shirts and the pink shorts toward Brenna. The cotton shirt is light and simple; the other is thick and fluffy, better suited for cold. The shorts would sit narrow on most waists.\n\nBrenna looks at the offered clothes, her grey eyes considering. \"You're giving me all of this?\" She reaches out and takes them, gathering the shirts and shorts in her large hands. \"Thank you. I'll carry them.\" She does not move to put anything on, only holds what she's been given.\n\nThe observation room remains quiet around them, afternoon light falling through the arched window.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1122.9801999999981,
+      "usage": {
+        "prompt_tokens": 2477,
+        "completion_tokens": 187,
+        "total_tokens": 2664,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000464272
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She reaches out and takes them, gathering the shirts and shorts in her large hands."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m1:kimi:r115#2",
+      "source": "phase-1m1-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the two pink shirts and the pink shorts toward Brenna, a pile of borrowed color in his hands.\n\nBrenna looks at the offering, her grey eyes steady. \"I can carry them for you,\" she says, accepting the bundle without comment on the hue. The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry.\n\nShe does not move to put anything on. The clothes rest in her lap, and she remains seated as she was, alert and recovering, her worn leather boots still on her feet.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1101.405899999998,
+      "usage": {
+        "prompt_tokens": 2471,
+        "completion_tokens": 217,
+        "total_tokens": 2688,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000392176
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        },
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        },
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        },
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        },
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "The shirts—one cotton, one thick and fluffy—and the shorts pass from his hands to hers, no longer his to carry."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m1:kimi:r115#3",
+      "source": "phase-1m1-stage-b",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the pink cotton shirt, the thick fluffy pink shirt, and the pink shorts toward Brenna.\n\nBrenna looks at the offered clothes, her grey eyes moving from one item to the next. \"That's kind of you,\" she says, \"but I'm not in a position to carry anything extra right now.\" She remains seated, making no move to accept the garments.",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 1027.3582000000024,
+      "usage": {
+        "prompt_tokens": 2428,
+        "completion_tokens": 6,
+        "total_tokens": 2434,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000094736
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1m1:kimi:knowledge_tell#1",
+      "source": "phase-1m1-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco turns to Brenna and tells her that the eastern bridge is closed.\n\nBrenna's grey eyes sharpen with interest. She sits up straighter, her muscular frame still showing the careful movements of someone recovering. \"The eastern bridge? That's the old stone crossing past the mill.\" She flexes her scarred wrist absently. \"Closed by whose order, and how long ago?\"\n\nGerome stands motionless in the corner, his stone form giving no indication of having heard. Maren glances between the two of you, her expression curious but she says nothing.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Nicco turns to Brenna and tells her that the eastern bridge is closed."
+        }
+      ],
+      "error": null,
+      "latency_ms": 811.7782000000007,
+      "usage": {
+        "prompt_tokens": 2655,
+        "completion_tokens": 84,
+        "total_tokens": 2739,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000406632
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco turns to Brenna and tells her that the eastern bridge is closed."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco turns to Brenna and tells her that the eastern bridge is closed."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m1:kimi:knowledge_tell#2",
+      "source": "phase-1m1-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco speaks to Brenna, telling her that the eastern bridge is closed.\n\nBrenna's grey eyes lift to meet his. \"Closed?\" she repeats, her voice carrying the roughness of recent illness. \"That's the only passable route to the low markets this season.\" She shifts in her seat, the old scars at her wrists catching the light from the arched window. \"How long?\"\n\nGerome stands motionless in the corner, his stone form giving no indication of having heard. Maren, nearby, offers no response either—whether she heard or not remains unestablished.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "telling her that the eastern bridge is closed"
+        }
+      ],
+      "error": null,
+      "latency_ms": 854.3578000000016,
+      "usage": {
+        "prompt_tokens": 2659,
+        "completion_tokens": 77,
+        "total_tokens": 2736,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000290096
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "telling her that the eastern bridge is closed"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "telling her that the eastern bridge is closed"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1m1:kimi:knowledge_tell#3",
+      "source": "phase-1m1-stage-b",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes sharpen with interest. \"Closed? Since when?\" She shifts in her seat, the old scars on her wrists catching the light from the arched window. \"I was hoping to cross that way once I'm on my feet again. Do you know why, or for how long?\"\n\nGerome stands motionless in the corner, a silent sentinel of carved stone. Maren glances between the two of you, saying nothing.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "error": null,
+      "latency_ms": 902.7224000000024,
+      "usage": {
+        "prompt_tokens": 2642,
+        "completion_tokens": 80,
+        "total_tokens": 2722,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000286576
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "conf:kimi:r115#1",
+      "source": "phase-1m1-confirmation",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the two pink shirts and the pink shorts toward Brenna. The tall woman looks at the offered clothes, her grey eyes considering the pile. She wears her own worn leather boots and sits alert despite her recovering condition, old wrist scars visible as she reaches to accept or decline.\n\nBrenna takes the items from Nicco's hands, gathering the cotton shirt, the thick fluffy shirt, and the shorts together. She holds them now, carried but not yet worn, her expression giving no indication whether she intends to change into them or simply keep them for the moment.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Brenna takes the items from Nicco's hands, gathering the cotton shirt"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "the thick fluffy shirt"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "and the shorts together"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1165.8010000000031,
+      "usage": {
+        "prompt_tokens": 2463,
+        "completion_tokens": 254,
+        "total_tokens": 2717,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000437496
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "Brenna takes the items from Nicco's hands, gathering the cotton shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "the thick fluffy shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "and the shorts together"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "Brenna takes the items from Nicco's hands, gathering the cotton shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "the thick fluffy shirt"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "and the shorts together"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "conf:kimi:r115#2",
+      "source": "phase-1m1-confirmation",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the pink cotton shirt, the thick fluffy pink shirt, and the pink shorts toward Brenna.\n\nBrenna looks at the offered clothes, her grey eyes considering each piece. \"I don't need charity,\" she says, though her voice lacks its usual edge. She pauses, glancing down at her own worn boots. \"But I'll carry them. For now.\" She accepts the shirts and shorts from Nicco's hands, folding them over her arm without standing from her seat.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        }
+      ],
+      "error": null,
+      "latency_ms": 2223.0242,
+      "usage": {
+        "prompt_tokens": 2449,
+        "completion_tokens": 190,
+        "total_tokens": 2639,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000346856
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts the shirts and shorts from Nicco's hands, folding them over her arm"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "conf:kimi:r115#3",
+      "source": "phase-1m1-confirmation",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the garments—two pink shirts, one thin cotton and one thick and fluffy, plus a pair of pink shorts sized for a narrow waist. \"These are for you,\" he says.\n\nBrenna looks at the pile of pink clothing in his hands, then up at him with grey eyes that give nothing away. \"I don't wear pink,\" she says. She makes no move to take any of it.",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 697.7100000000028,
+      "usage": {
+        "prompt_tokens": 2435,
+        "completion_tokens": 6,
+        "total_tokens": 2441,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.00107932
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "conf:kimi:r115#4",
+      "source": "phase-1m1-confirmation",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the bundle of pink garments—the cotton shirt, the thick fluffy shirt, and the shorts—toward Brenna.\n\nBrenna's grey eyes take in the offered clothes. She accepts them, gathering the shirts and shorts into her hands. \"Pink,\" she says, her voice carrying mild observation rather than complaint. She makes no move to put anything on, simply holding the garments in her lap as she remains seated by the small table.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts them, gathering the shirts and shorts into her hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts them, gathering the shirts and shorts into her hands."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She accepts them, gathering the shirts and shorts into her hands."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1026.5324,
+      "usage": {
+        "prompt_tokens": 2441,
+        "completion_tokens": 175,
+        "total_tokens": 2616,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000323536
+      },
+      "grammar": [
+        true,
+        true,
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts them, gathering the shirts and shorts into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts them, gathering the shirts and shorts into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts them, gathering the shirts and shorts into her hands."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts them, gathering the shirts and shorts into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts them, gathering the shirts and shorts into her hands."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She accepts them, gathering the shirts and shorts into her hands."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "conf:kimi:r115#5",
+      "source": "phase-1m1-confirmation",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the pink cotton shirt, the thick fluffy pink shirt, and the pink shorts toward Brenna.\n\nBrenna looks at the offered garments, her grey eyes considering the pile of pink clothing. \"I appreciate the thought,\" she says, \"but I'm not going to carry your clothes for you.\" She makes no move to accept any of the three items, keeping her scarred hands resting on her lap.",
+      "truth": "no",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 1215.8342000000011,
+      "usage": {
+        "prompt_tokens": 2434,
+        "completion_tokens": 6,
+        "total_tokens": 2440,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.00107888
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "conf:kimi:knowledge_tell#1",
+      "source": "phase-1m1-confirmation",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco turns to Brenna, who sits alert despite the illness still clinging to her tall frame. \"The eastern bridge is closed,\" he says.\n\nBrenna's grey eyes flick toward him, noting the information. She says nothing for a moment, processing, then gives a slight nod. \"Good to know.\"\n\nGerome stands motionless nearby, stone form giving no indication of having heard. Maren remains present in the room as well, though whether she caught the exchange is unestablished.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Brenna's grey eyes flick toward him, noting the information."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1213.2926000000007,
+      "usage": {
+        "prompt_tokens": 2638,
+        "completion_tokens": 123,
+        "total_tokens": 2761,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000886856
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Brenna's grey eyes flick toward him, noting the information."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Brenna's grey eyes flick toward him, noting the information."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "conf:kimi:knowledge_tell#2",
+      "source": "phase-1m1-confirmation",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes lift to meet his, her expression thoughtful. \"Closed,\" she repeats, absorbing the information. \"That complicates things. I was hoping to cross there by week's end.\" She shifts slightly in her seat, the old scars on her wrists catching the light from the arched window. \"Do you know why, or for how long?\"",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Closed,\" she repeats, absorbing the information."
+        }
+      ],
+      "error": null,
+      "latency_ms": 827.5190999999977,
+      "usage": {
+        "prompt_tokens": 2623,
+        "completion_tokens": 78,
+        "total_tokens": 2701,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000384632
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "Closed,\" she repeats, absorbing the information."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "Closed,\" she repeats, absorbing the information."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "conf:kimi:knowledge_tell#3",
+      "source": "phase-1m1-confirmation",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco turns to Brenna and speaks plainly. \"The eastern bridge is closed.\"\n\nBrenna's grey eyes flicker with recognition. \"I heard as much from the merchants three days past,\" she says. \"They were routing everything through the northern ford, though that won't hold once the rains come.\"\n\nGerome stands motionless in the corner, his stone form casting no shadow in the dim observation room. Maren glances toward the arched window, where afternoon light slants across the narrow bed.",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 626.828300000001,
+      "usage": {
+        "prompt_tokens": 2641,
+        "completion_tokens": 6,
+        "total_tokens": 2647,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000188456
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "conf:kimi:knowledge_tell#4",
+      "source": "phase-1m1-confirmation",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco turns to Brenna, who sits alert despite her recovering condition, and tells her that the eastern bridge is closed.\n\nBrenna's grey eyes focus on him. \"Closed? That's unfortunate. I had hoped to travel that way once I'm well enough.\" She shifts slightly, the old scars on her wrists visible as she moves. \"Do you know why, or for how long?\"\n\nGerome stands motionless nearby, his stone form giving no indication of having heard. Maren, the young woman staying in the tower, watches the exchange from where she stands in the test room.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "tells her that the eastern bridge is closed"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1011.0124999999971,
+      "usage": {
+        "prompt_tokens": 2660,
+        "completion_tokens": 78,
+        "total_tokens": 2738,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000291856
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "tells her that the eastern bridge is closed"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "tells her that the eastern bridge is closed"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "conf:kimi:knowledge_tell#5",
+      "source": "phase-1m1-confirmation",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco speaks to Brenna, telling her that the eastern bridge is closed. Brenna's grey eyes lift to meet his, her expression thoughtful. \"I hadn't heard that,\" she says. \"Do you know why, or for how long?\"",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "telling her that the eastern bridge is closed"
+        }
+      ],
+      "error": null,
+      "latency_ms": 823.7969000000012,
+      "usage": {
+        "prompt_tokens": 2585,
+        "completion_tokens": 77,
+        "total_tokens": 2662,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000802816
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "telling her that the eastern bridge is closed"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "telling her that the eastern bridge is closed"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "glm:z-ai-glm-5-2:r115#1",
+      "source": "phase-1m2-glm",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Nicco holds out the two shirts and the shorts — the fluffy one thick and warm, the cotton one lighter, and the shorts a vivid pink. Brenna glances at them, then at him, one grey eye narrowing slightly. She takes the fluffy shirt first, turning it over in her large hands, then the cotton shirt, and finally the shorts, which she drapes across her lap. She says nothing about the color.\n\nShe sets both shirts on the narrow table beside her and lays the shorts on top of them, keeping them close. Her fingers brush the fabric of the fluffy shirt once more, testing its weight, before she settles back against the wall. The clothes sit neatly piled within her reach.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "then the cotton shirt, and finally the shorts, which she drapes across her lap"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She takes the fluffy shirt first, turning it over in her large hands"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "and finally the shorts, which she drapes across her lap"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1422.6569000000018,
+      "usage": {
+        "prompt_tokens": 2488,
+        "completion_tokens": 182,
+        "total_tokens": 2670,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000462512
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "then the cotton shirt, and finally the shorts, which she drapes across her lap"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She takes the fluffy shirt first, turning it over in her large hands"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "and finally the shorts, which she drapes across her lap"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "then the cotton shirt, and finally the shorts, which she drapes across her lap"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She takes the fluffy shirt first, turning it over in her large hands"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "and finally the shorts, which she drapes across her lap"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "glm:z-ai-glm-5-2:r115#2",
+      "source": "phase-1m2-glm",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Brenna looked over the offered garments as Nicco held them out. She turned the thick fluffy shirt over in her large hands, then set it on her lap. She took the cotton shirt next, glancing at its size, and laid it atop the first. The shorts drew a longer look — she held them up against her own waist, dark brow lifting slightly, but said nothing and added them to the pile resting on her knee. All three were accepted.\n\n\"That's a lot of pink,\" Brenna said. Her grey eyes moved from the folded clothes to Nicco, and the corner of her mouth twitched. She made no move to put any of it on, simply keeping the small bundle where it was.\n\nThe three items now rested in Brenna's possession, carried but unworn. Her own worn leather boots stayed on her feet, and she remained seated on the narrow bed, alert and watchful in the quiet of the observation room.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She took the cotton shirt next"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She turned the thick fluffy shirt over in her large hands, then set it on her lap"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "The shorts drew a longer look — she held them up against her own waist"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1124.7857000000004,
+      "usage": {
+        "prompt_tokens": 2541,
+        "completion_tokens": 178,
+        "total_tokens": 2719,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000480552
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the cotton shirt next"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She turned the thick fluffy shirt over in her large hands, then set it on her lap"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "The shorts drew a longer look — she held them up against her own waist"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the cotton shirt next"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She turned the thick fluffy shirt over in her large hands, then set it on her lap"
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "The shorts drew a longer look — she held them up against her own waist"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "glm:z-ai-glm-5-2:r115#3",
+      "source": "phase-1m2-glm",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "narration": "Brenna looked over the offered clothes. She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap.\n\nBrenna said, \"These should do for now. Thank you.\"\n\nThe thick fluffy shirt sat on top of the pile in her hands, its color bright against the muted room. The shorts looked small but stretchy enough. Brenna remained seated, holding the three garments without moving to put any of them on.",
+      "truth": "yes",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1046.885000000002,
+      "usage": {
+        "prompt_tokens": 2444,
+        "completion_tokens": 205,
+        "total_tokens": 2649,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000364456
+      },
+      "grammar": [
+        true,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        },
+        {
+          "accepted": true,
+          "reason": "authorized_narrative_confirmation",
+          "quote": "She took the pink cotton shirt, then the fluffy one, and finally the shorts, laying them across her lap."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "partial",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "glm:z-ai-glm-5-2:knowledge_tell#1",
+      "source": "phase-1m2-glm",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna's grey eyes settled on Nicco. She took in the words without immediate expression, fingers resting against her knee where she sat on the narrow bed.\n\n\"The eastern bridge,\" she repeated, tone flat but attentive. \"Closed.\" She glanced toward the arched window as if she might see the route from here, though whatever lay beyond the glass offered no such view. Her jaw tightened slightly. \"That'll complicate things. Do you know how long?\"\n\nGerome stood motionless near the door, a slab of shaped stone indifferent to the conversation. Maren, across the room, looked up at the mention but said nothing.",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "\"The eastern bridge,\" she repeated, tone flat but attentive. \"Closed.\""
+        }
+      ],
+      "error": null,
+      "latency_ms": 1010.770199999999,
+      "usage": {
+        "prompt_tokens": 2668,
+        "completion_tokens": 86,
+        "total_tokens": 2754,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000305936
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "\"The eastern bridge,\" she repeated, tone flat but attentive. \"Closed.\""
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "\"The eastern bridge,\" she repeated, tone flat but attentive. \"Closed.\""
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "glm:z-ai-glm-5-2:knowledge_tell#2",
+      "source": "phase-1m2-glm",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Brenna's grey eyes shifted toward Nicco, her posture straightening slightly against the narrow bed. She was quiet for a moment, absorbing the news. \"The eastern bridge,\" she repeated. \"Closed. That's going to complicate things.\" Her voice carried the flat weight of someone already cataloguing obstacles.\n\nGerome stood motionless near the wall, giving no sign he registered the conversation at all. Maren, seated nearby, glanced between the two of them but said nothing.\n\nBrenna rubbed one wrist absently, her fingers passing over the old scars there. \"How long has it been shut? Did they say?\"",
+      "truth": "ambiguous",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "\"The eastern bridge,\" she repeated. \"Closed. That's going to complicate things.\""
+        }
+      ],
+      "error": null,
+      "latency_ms": 1080.7572999999975,
+      "usage": {
+        "prompt_tokens": 2667,
+        "completion_tokens": 88,
+        "total_tokens": 2755,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000308136
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "\"The eastern bridge,\" she repeated. \"Closed. That's going to complicate things.\""
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "\"The eastern bridge,\" she repeated. \"Closed. That's going to complicate things.\""
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "glm:z-ai-glm-5-2:knowledge_tell#3",
+      "source": "phase-1m2-glm",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes shift toward him, her expression tightening. \"Closed?\" she says. \"How long?\" She leans forward slightly on the narrow bed, hands resting on her knees. The question is direct, her voice steady despite the weariness still clinging to her from recovery.\n\nGerome stands motionless near the wall, his stone form giving no reaction. Maren, quiet until now, looks between them with a furrowed brow but says nothing.\n\nBrenna seems to accept the information without dispute. She nods once, slowly, as if fitting the news into some larger picture she doesn't yet share. \"That complicates things,\" she says. \"We'll have to reckon with it.\"",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Brenna seems to accept the information without dispute. She nods once, slowly, as if fitting the news into some larger picture she doesn't yet share."
+        }
+      ],
+      "error": null,
+      "latency_ms": 1118.1558000000005,
+      "usage": {
+        "prompt_tokens": 2697,
+        "completion_tokens": 100,
+        "total_tokens": 2797,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000337176
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "Brenna seems to accept the information without dispute. She nods once, slowly, as if fitting the news into some larger picture she doesn't yet share."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "Brenna seems to accept the information without dispute. She nods once, slowly, as if fitting the news into some larger picture she doesn't yet share."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "1n:kimi:tell#1",
+      "source": "phase-1n-tell-before",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco turns to Brenna. \"The eastern bridge is closed,\" he says.\n\nBrenna's grey eyes lift to meet his, her expression sharpening with interest. \"Is that so?\" She shifts in her seat, the movement careful, still mindful of her recovery. \"That complicates things for anyone hoping to cross the river that way.\"\n\nGerome stands motionless in the corner, his stone form giving no indication of having heard. Maren, nearby, gives no sign of reacting to the information either—whether she overheard or what she might make of it remains unestablished.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "\"The eastern bridge is closed,\" he says."
+        }
+      ],
+      "error": null,
+      "latency_ms": 798.1731,
+      "usage": {
+        "prompt_tokens": 2659,
+        "completion_tokens": 79,
+        "total_tokens": 2738,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000292736
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "\"The eastern bridge is closed,\" he says."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "\"The eastern bridge is closed,\" he says."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1n:kimi:tell#2",
+      "source": "phase-1n-tell-before",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco tells Brenna that the eastern bridge is closed.\n\nBrenna's grey eyes lift to meet his, her muscular frame still seated but now alert with interest. \"Closed? That's trouble for anyone trying to reach the low markets.\" She flexes her scarred wrist absently, the old marks catching the light from the arched window. \"Do you know how long, or what caused it?\"\n\nGerome stands motionless in the corner, his stone form giving no sign of hearing or response. Maren, nearby, shows no indication of having followed the exchange.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "error": null,
+      "latency_ms": 796.5779000000039,
+      "usage": {
+        "prompt_tokens": 2655,
+        "completion_tokens": 80,
+        "total_tokens": 2735,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000292296
+      },
+      "grammar": [
+        true
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "Nicco tells Brenna that the eastern bridge is closed."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "all",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "1n:kimi:tell#3",
+      "source": "phase-1n-tell-before",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "narration": "Nicco speaks the fact plainly: the eastern bridge is closed.\n\nBrenna's grey eyes flick toward him, attentive. She says nothing for a moment, then nods once. \"I'll remember that.\"\n\nGerome stands motionless in his corner of the room, stone hands folded, giving no sign of having heard. Maren glances between the two of them, her expression curious but she holds her tongue.",
+      "truth": "yes",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Brenna's grey eyes flick toward him, attentive. She says nothing for a moment, then nods once. \"I'll remember that.\""
+        }
+      ],
+      "error": null,
+      "latency_ms": 1353.7801999999938,
+      "usage": {
+        "prompt_tokens": 2620,
+        "completion_tokens": 98,
+        "total_tokens": 2718,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000300656
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "Brenna's grey eyes flick toward him, attentive. She says nothing for a moment, then nods once. \"I'll remember that.\""
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "Brenna's grey eyes flick toward him, attentive. She says nothing for a moment, then nods once. \"I'll remember that.\""
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A1",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "no",
+      "note": "NPC hypothetical in dialogue",
+      "narration": "Brenna eyes the clothes. \"If you had given me these a week ago, I would have taken them,\" she says. She leaves them in his hands.",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 1114.2502000000022,
+      "usage": {
+        "prompt_tokens": 2379,
+        "completion_tokens": 6,
+        "total_tokens": 2385,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000618456
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A2",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "no",
+      "note": "negated",
+      "narration": "Brenna does not take the shirts or the shorts. She shakes her head.",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 659.4643000000069,
+      "usage": {
+        "prompt_tokens": 2361,
+        "completion_tokens": 6,
+        "total_tokens": 2367,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000065256
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A3",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "no",
+      "note": "refusal followed by discussion",
+      "narration": "Brenna refuses the clothes. They talk for a while about colors; she admits that taking them would be kind, but she does not.",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 625.0054999999993,
+      "usage": {
+        "prompt_tokens": 2373,
+        "completion_tokens": 6,
+        "total_tokens": 2379,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000070536
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A4",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "no",
+      "note": "dialogue about an event that did not happen now",
+      "narration": "\"I took three pink shirts from a merchant once,\" Brenna says, smiling. She does not reach for these.",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 698.7813000000024,
+      "usage": {
+        "prompt_tokens": 2369,
+        "completion_tokens": 6,
+        "total_tokens": 2375,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000068776
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A5",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "no",
+      "note": "accepts then hands back",
+      "narration": "Brenna takes the three garments, looks at them, then hands them back. \"Keep them.\"",
+      "candidates": 3,
+      "proposals": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_cotton",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Brenna takes the three garments"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_fluffy",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Brenna takes the three garments"
+        },
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "pink_shorts",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "evidence_quote": "Brenna takes the three garments"
+        }
+      ],
+      "error": null,
+      "latency_ms": 930.9251000000004,
+      "usage": {
+        "prompt_tokens": 2366,
+        "completion_tokens": 160,
+        "total_tokens": 2526,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000270736
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Brenna takes the three garments"
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Brenna takes the three garments"
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Brenna takes the three garments"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Brenna takes the three garments"
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Brenna takes the three garments"
+        },
+        {
+          "accepted": false,
+          "reason": "rejected_recipient_refused",
+          "quote": "Brenna takes the three garments"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A6",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "yes",
+      "note": "item-by-item across sentences",
+      "narration": "Brenna gathers up the cotton shirt. Then the fluffy one. Then the shorts.",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 638.9988000000012,
+      "usage": {
+        "prompt_tokens": 2362,
+        "completion_tokens": 6,
+        "total_tokens": 2368,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000174752
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A12",
+      "source": "synthetic",
+      "case_id": "r115",
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "truth": "no",
+      "note": "imagined",
+      "narration": "Brenna imagines taking the three items, then decides against it.",
+      "candidates": 3,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 656.5439000000042,
+      "usage": {
+        "prompt_tokens": 2359,
+        "completion_tokens": 6,
+        "total_tokens": 2365,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000064376
+      },
+      "grammar": [
+        false,
+        false,
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        },
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A7",
+      "source": "synthetic",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "truth": "no",
+      "note": "question in NPC dialogue",
+      "narration": "Maren leans in. \"Did Nicco tell Brenna the eastern bridge is closed?\" Nobody answers.",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Did Nicco tell Brenna the eastern bridge is closed?"
+        }
+      ],
+      "error": null,
+      "latency_ms": 1313.2828999999983,
+      "usage": {
+        "prompt_tokens": 2554,
+        "completion_tokens": 121,
+        "total_tokens": 2675,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000301976
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "Did Nicco tell Brenna the eastern bridge is closed?"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "quote_hedged_or_negated",
+          "quote": "Did Nicco tell Brenna the eastern bridge is closed?"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A8",
+      "source": "synthetic",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "truth": "no",
+      "note": "abandoned telling",
+      "narration": "Nicco opens his mouth to tell Brenna that the eastern bridge is closed, then thinks better of it and says nothing.",
+      "candidates": 1,
+      "proposals": [],
+      "error": null,
+      "latency_ms": 620.4311999999991,
+      "usage": {
+        "prompt_tokens": 2557,
+        "completion_tokens": 6,
+        "total_tokens": 2563,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000151496
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A9",
+      "source": "synthetic",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "truth": "no",
+      "note": "NPC reports another source and disbelieves",
+      "narration": "Brenna says, \"Someone told me the eastern bridge is closed, but I do not believe it.\"",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "believes",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "Brenna says, \"Someone told me the eastern bridge is closed, but I do not believe it.\""
+        }
+      ],
+      "error": null,
+      "latency_ms": 1181.8294000000024,
+      "usage": {
+        "prompt_tokens": 2555,
+        "completion_tokens": 133,
+        "total_tokens": 2688,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000318256
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": false,
+          "reason": "not_proposed",
+          "quote": null
+        }
+      ],
+      "extra_proposals_blocked": [
+        {
+          "kind": "set_knowledge",
+          "knowledge": {
+            "character_id": "brenna",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "believes",
+            "provenance": {
+              "source_character_id": "nicco",
+              "acquisition_kind": "told"
+            }
+          }
+        }
+      ],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "none"
+    },
+    {
+      "key": "adv:A10",
+      "source": "synthetic",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "truth": "yes",
+      "note": "quoted realization of /tell",
+      "narration": "Nicco leans toward Brenna. \"The eastern bridge is closed,\" he tells her quietly.",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "\"The eastern bridge is closed,\" he tells her quietly."
+        }
+      ],
+      "error": null,
+      "latency_ms": 858.491399999999,
+      "usage": {
+        "prompt_tokens": 2552,
+        "completion_tokens": 81,
+        "total_tokens": 2633,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000248296
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": false,
+          "reason": "quote_inside_dialogue",
+          "quote": "\"The eastern bridge is closed,\" he tells her quietly."
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "\"The eastern bridge is closed,\" he tells her quietly."
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "none",
+      "quoted_tell_outcome": "all"
+    },
+    {
+      "key": "adv:A11",
+      "source": "synthetic",
+      "case_id": "knowledge_tell",
+      "input": "/tell campaign_fact_bridge_closed to brenna",
+      "truth": "yes",
+      "note": "relative clause",
+      "narration": "Nicco turns to Brenna, who sits alert by the window, and tells her that the eastern bridge is closed.",
+      "candidates": 1,
+      "proposals": [
+        {
+          "command": {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          "evidence_quote": "tells her that the eastern bridge is closed"
+        }
+      ],
+      "error": null,
+      "latency_ms": 822.6771999999983,
+      "usage": {
+        "prompt_tokens": 2556,
+        "completion_tokens": 78,
+        "total_tokens": 2634,
+        "reasoning_tokens": 0,
+        "provider_reported_cost_usd": 0.000246096
+      },
+      "grammar": [
+        false
+      ],
+      "strict": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "tells her that the eastern bridge is closed"
+        }
+      ],
+      "quoted_tell": [
+        {
+          "accepted": true,
+          "reason": "authorized_explicit_information_transfer",
+          "quote": "tells her that the eastern bridge is closed"
+        }
+      ],
+      "extra_proposals_blocked": [],
+      "grammar_outcome": "none",
+      "strict_outcome": "all",
+      "quoted_tell_outcome": "all"
+    }
+  ]
+}

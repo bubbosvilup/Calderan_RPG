@@ -1,0 +1,40 @@
+schema_version: 1
+entity:
+  id: center
+  type: location
+  name: "Center"
+  display_name: "Center (nation)"
+  parent: continent
+  aliases: []
+  summary: >-
+    Center is the central, broadly arid and desert-dominated nation; Zul-Rath is its
+    capital.
+  content: >-
+    Center directly borders West and East. Its major mapped settlements are Zul-Rath,
+    Khar-Dune, and Sandspear, without excluding other settlements. The Dragon's Teeth
+    Mountains complicate passage across northern portions of the Center–East transition.
+    West–Center violence is concentrated around their frontier, rather than permanent
+    formally declared total war. Zul-Rath may employ or tolerate Sandspear corsairs when
+    useful. Khar-Dune's underground markets and Sandspear's maritime groups do not establish
+    Center's complete government. Its ruler, political system, religion, and internal
+    institutions remain otherwise undefined; West's monarchy and guild structure are not
+    assigned to it.
+  tags: [geography]
+  search_context: "Center nation on the known continent, distinct from Calderan's Center District."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "national capital"
+      description: "Zul-Rath"
+    - name: "land border with West"
+      description: "Center directly borders West."
+    - name: "land border with East"
+      description: "Center directly borders East."
+    - name: "arid regional climate"
+      description: "Broadly arid and desert-dominated; not a uniform climate rule."
+  connections: []
+chunks: []
+

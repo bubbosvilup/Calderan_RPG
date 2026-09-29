@@ -1,0 +1,30 @@
+schema_version: 1
+entity:
+  id: calderan_east
+  type: location
+  name: East District
+  display_name: Calderan East District
+  parent: calderan
+  aliases:
+    - Calderan East District
+  summary: "East District is one of Calderan's five broad urban regions. The East District has
+    Calderan's strongest concentration of everyday commerce and crafts: markets, shops, workshops,
+    artisans, merchants and small manufacturing."
+  tags:
+    - geography
+    - district
+  search_context: East District of Calderan, urban district.
+  content: "The East District has Calderan's strongest concentration of everyday commerce and crafts:
+    markets, shops, workshops, artisans, merchants and small manufacturing. Ordinary residences are
+    mixed among these activities. It is not exclusively wealthy. These are predominant tendencies,
+    not exclusive zoning. Crossing substantial parts of a district is meaningful travel; no exact
+    roads or navigation routes are established."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

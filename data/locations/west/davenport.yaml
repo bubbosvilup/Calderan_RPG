@@ -1,0 +1,41 @@
+schema_version: 1
+entity:
+  id: davenport
+  type: location
+  name: "Davenport"
+  display_name: "Davenport"
+  parent: west
+  aliases: ["The Port of Chains"]
+  summary: >-
+    Davenport, The Port of Chains, is West's principal economic and maritime city, a major
+    port farther south near Chained Bay.
+  content: >-
+    Davenport has an elaborate, wealthy urban presentation, substantial stone docks, and
+    major warehouse infrastructure. It is fundamental to West's maritime economy, with
+    prosperity deeply tied to legal/institutional slave trade. Calderan and Davenport
+    together hold principal institutional monopoly/control over West's legal slave market;
+    detailed law remains undefined. Traffic arrives through frontier markets, Ironbound,
+    Khar-Dune-related networks, and other legally processed sources. Large storage
+    facilities in its warehouse system form part of the logistics chain before auctions or
+    onward transport. Merchant vessels may carry enslaved people toward inland plantations,
+    colonies, or other destinations in West's economic sphere. Plantations and colonies
+    exist somewhere in that broader system, but their locations, sizes, ownership, crops,
+    and political status remain undefined.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: public
+  features:
+    - name: "principal economic and maritime port"
+      description: "West's major maritime commercial center, with an elaborate and wealthy urban presentation."
+    - name: "stone docks and warehouses"
+      description: "Substantial stone docks and major warehouses, including large facilities in slave-trade logistics before auctions or onward transport."
+    - name: "legal slave-market control"
+      description: "Davenport and Calderan share principal institutional monopoly/control over West's legal slave market."
+  connections: []
+chunks: []
+

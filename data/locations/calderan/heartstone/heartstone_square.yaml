@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: heartstone_square
+  type: location
+  name: Square outside Heartstone
+  display_name: Outside Heartstone
+  parent: calderan_west
+  aliases:
+    - square outside Heartstone
+    - public square outside Heartstone
+  summary: The public square/open public area immediately outside Heartstone Tower's main entrance, in
+    the city.
+  tags:
+    - public
+    - city
+  search_context: Public square or open area immediately outside Heartstone Tower's main entrance.
+  content: This public open area lies immediately outside Heartstone Tower. It is a public city space
+    where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main
+    entrance opens directly onto it. No specific landmarks, establishments, street names or
+    navigation routes are established. It lies in Calderan's West District, immediately outside the
+    tower rather than inside its structure.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features:
+    - name: Heartstone main entrance
+      description: Heartstone's massive, old, heavy wooden main entrance faces this area and opens
+        directly into LR.
+  connections:
+    - target: heartstone_lr
+      description: Heartstone's massive main entrance door leads directly into LR.
+chunks: []

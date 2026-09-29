@@ -1,0 +1,38 @@
+schema_version: 1
+entity:
+  id: west
+  type: location
+  name: "West"
+  display_name: "West (nation)"
+  parent: continent
+  aliases: []
+  summary: >-
+    West is the western nation, broadly mild, temperate, and greener; Calderan is its
+    capital.
+  content: >-
+    West directly borders Center but shares no direct land border with East. Climate is a
+    broad tendency, not uniform everywhere. Its major mapped settlements are Calderan,
+    Ironbound, Davenport, and Blackwater; they are not its only possible settlements. West's
+    established monarchy, Dukes, local councils, national guilds, Church, and nationally
+    legal slavery with local regulation remain in force. Frontier tension with Center
+    involves skirmishes, raids, territorial incidents, feuds, localized clashes, and
+    unofficial violence, not permanent formally declared total war. Blackwater is
+    geographically within West but outside effective normal direct control. Calderan and
+    Davenport hold the principal institutional control over West's legal slave market.
+  tags: [geography]
+  search_context: "West nation on the known continent, distinct from Calderan's West District."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "national capital"
+      description: "Calderan"
+    - name: "land border with Center"
+      description: "West directly borders Center."
+    - name: "temperate regional climate"
+      description: "Broadly mild, temperate, and greener; local variation remains possible."
+  connections: []
+chunks: []
+

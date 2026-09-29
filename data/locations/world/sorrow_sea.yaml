@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: sorrow_sea
+  type: location
+  name: "Sorrow Sea"
+  display_name: "Sorrow Sea"
+  parent: null
+  aliases: []
+  summary: >-
+    Sorrow Sea lies broadly west of the known continent.
+  content: >-
+    Sorrow Sea is the named western surrounding sea. Blackwater and Sandspear contest
+    maritime routes associated with it. No exact routes, maritime boundaries, or
+    supernatural properties are established.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features: []
+  connections: []
+chunks: []
+

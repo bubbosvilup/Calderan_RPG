@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: skardgard
+  type: location
+  name: "Skardgard"
+  display_name: "Skardgard"
+  parent: east
+  aliases: []
+  summary: >-
+    Skardgard is East's principal coastal city, farther southeast, with strong natural
+    defenses and a maritime economy.
+  content: >-
+    Difficult fjord-like coastal geography, dark stone fortifications, persistent ice
+    conditions, and isolation make Skardgard extremely difficult to assault by sea, not
+    literally impossible to conquer. Its economic and population associations include
+    whalers, shipbuilders, experienced sailors, high-seas fishing, maritime trade, and
+    extraction or trade of rare resources from ice-bound regions. The rare resources are not
+    individually specified. Exact fleet numbers and naval strength remain undefined.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "principal coastal city"
+      description: "East's major coastal urban center."
+    - name: "fjord-like coast and dark stone fortifications"
+      description: "Persistent ice, difficult coastal geography, and strong natural defenses make foreign naval assaults extremely difficult."
+    - name: "whaling, shipbuilding, and high-seas fishing"
+      description: "Experienced sailors support these activities and maritime trade, including rare resources from ice-bound regions."
+  connections: []
+chunks: []
+

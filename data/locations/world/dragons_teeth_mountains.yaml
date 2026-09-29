@@ -1,0 +1,30 @@
+schema_version: 1
+entity:
+  id: dragons_teeth_mountains
+  type: location
+  name: "The Dragon's Teeth Mountains"
+  display_name: "The Dragon's Teeth Mountains"
+  parent: continent
+  aliases: []
+  summary: >-
+    A major northern interior mountain chain spans the transition between Center and East,
+    forming a geographic barrier near Frostspire.
+  content: >-
+    The range extends broadly across the northern continental interior rather than forming
+    one isolated peak. It separates or complicates passage between portions of Center and
+    East and lies near Frostspire. Exact elevations, length, peaks, passes, mountain
+    settlements, and the origin of its name remain unspecified. Its name does not establish
+    dragons or a dragon history.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "northern geographic barrier"
+      description: "The extended mountain chain complicates passage across portions of the Center–East transition."
+  connections: []
+chunks: []
+

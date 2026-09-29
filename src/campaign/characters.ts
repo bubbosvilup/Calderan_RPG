@@ -1,0 +1,52 @@
+import type { CampaignCommand, CharacterCurrentState } from "./types.js";
+import type { PreparationContext } from "./preparation.js";
+import { characterForUpdate } from "./preparation.js";
+import { fail } from "./validation.js";
+import { prepareRuntimeDelta, type RuntimeDomainSnapshot } from "../world/runtime-domain.js";
+
+function requireEmptyLocationForCanonical(current: CharacterCurrentState): void {
+  if (current.current_location !== undefined) fail("current_location", "canonical locations are authoritative in runtime; use move_character");
+}
+export function prepareCharacterCommand(context: PreparationContext, command: CampaignCommand): boolean {
+  const { draft, refs } = context;
+  switch (command.kind) {
+    case "register_character": {
+      const c = command.character; refs.registration(c.id, c.origin, "character");
+      if (c.origin.kind === "canonical") requireEmptyLocationForCanonical(c.current);
+      if (c.current.current_location !== undefined) refs.location(c.current.current_location);
+      if (c.current.empty_slots) c.current.empty_slots.sort();
+      draft.characters.push(c); return true;
+    }
+    case "set_profile": {
+      const c = characterForUpdate(context, command.character_id);
+      c.profile = command.profile; return true;
+    }
+    case "set_condition": {
+      const c = characterForUpdate(context, command.character_id);
+      c.current.conditions = command.conditions;
+      if (command.presentation === undefined) delete c.current.presentation; else c.current.presentation = command.presentation;
+      if (command.status !== undefined) c.current.status = command.status;
+      return true;
+    }
+    case "move_character": {
+      const origin = refs.character(command.character_id); refs.location(command.location_id);
+      if (origin.kind === "created") characterForUpdate(context, command.character_id).current.current_location = command.location_id;
+      else {
+        const entity = refs.world.getEntity(origin.canonical_entity_id)!;
+        if (entity.type !== "character") fail("character_id", "invalid canonical character");
+        const delta = entity.role === "player" ? { player_location: command.location_id } : { character_movements: [{ character_id: entity.id, current_location: command.location_id }] };
+        draft.runtime = structuredClone(prepareRuntimeDelta(draft.runtime, delta, refs.world, draft.revision).snapshot) as RuntimeDomainSnapshot;
+      }
+      return true;
+    }
+    case "set_slot_knowledge": {
+      const c = characterForUpdate(context, command.character_id);
+      if (draft.items.some(i => i.position.kind === "equipped" && i.position.character_id === c.id && i.position.slot === command.slot)) fail("slot", "occupied slot cannot be marked empty or unknown; move its item first");
+      const slots = new Set(c.current.empty_slots ?? []);
+      if (command.state === "empty") slots.add(command.slot); else slots.delete(command.slot);
+      if (slots.size) c.current.empty_slots = [...slots].sort(); else delete c.current.empty_slots;
+      return true;
+    }
+    default: return false;
+  }
+}

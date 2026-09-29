@@ -1,0 +1,28 @@
+schema_version: 1
+entity:
+  id: "learned_arts_guild"
+  type: "faction"
+  name: "Learned Arts Guild"
+  display_name: "Learned Arts Guild"
+  parent: null
+  aliases: []
+  summary: >-
+    A national guild encompassing learned and professional disciplines in West, including
+    magic.
+  tags: ["politics"]
+  search_context: ""
+  content: >-
+    The Learned Arts Guild encompasses scholars, scribes, archivists, educated specialists,
+    some physicians or apothecaries where appropriate, magical scholarship, and practicing
+    mages. Literacy does not imply membership. Magic belongs within this broader learned
+    sphere; there is no separate Mages Guild. Rare and powerful practicing mages often have
+    considerable influence, but do not automatically rule the guild. Local branches may have
+    representatives who collectively determine or select a national representative; selection
+    methods remain undefined. Civic magistracy may overlap professionally or socially but is
+    not a subordinate guild branch.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:west"}
+  members: []
+  territory: []
+  relations: []
+chunks: []
+

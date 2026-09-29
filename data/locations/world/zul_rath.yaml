@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: zul_rath
+  type: location
+  name: "Zul-Rath"
+  display_name: "Zul-Rath"
+  parent: center
+  aliases: []
+  summary: >-
+    Zul-Rath is Center's capital and major political center in the arid nation's
+    northern/central interior.
+  content: >-
+    Zul-Rath participates indirectly in Center's wider economic and military system. It may
+    employ or tolerate forces such as Sandspear's corsairs when useful, including disruption
+    of shipping and West trade without formal national war. Khar-Dune intermediaries may
+    route captives toward labor sites, works, or pits associated with Zul-Rath or Center.
+    Its ruler, dynasty, government system, districts, religion, exact architecture, detailed
+    economy, and demographics remain undefined.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "capital of Center"
+      description: "Center's major national political center."
+  connections: []
+chunks: []
+

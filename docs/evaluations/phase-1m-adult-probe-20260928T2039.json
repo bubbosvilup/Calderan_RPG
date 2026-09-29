@@ -1,0 +1,382 @@
+{
+  "note": "Sanitized provider-behavior probe: consenting adults, legal fiction, throwaway world, no campaign state. Generated text intentionally omitted; raw text retained only under .build.",
+  "manifest": {
+    "phase": "1M",
+    "stage": "adult",
+    "created_at": "2026-09-28T20:39:25.293Z",
+    "online_paid": true,
+    "models": [
+      {
+        "alias": "minimax",
+        "model": "minimax/minimax-m2-her"
+      },
+      {
+        "alias": "euryale",
+        "model": "sao10k/l3.3-euryale-70b"
+      },
+      {
+        "alias": "cydonia",
+        "model": "thedrummer/cydonia-24b-v4.1"
+      },
+      {
+        "alias": "kimi",
+        "model": "moonshotai/kimi-k2.5"
+      },
+      {
+        "alias": "qwen",
+        "model": "qwen/qwen3.8-flash"
+      }
+    ],
+    "case_ids": [
+      "adult_initiation",
+      "adult_continuation"
+    ],
+    "cases": [
+      {
+        "id": "adult_initiation",
+        "source_row": null,
+        "repeats": 2,
+        "context_mode": "state_only",
+        "failure_modes": [
+          "adult_content_behavior"
+        ],
+        "prompt_fingerprint": "e81b8a6557166874"
+      },
+      {
+        "id": "adult_continuation",
+        "source_row": null,
+        "repeats": 2,
+        "context_mode": "state_only",
+        "failure_modes": [
+          "adult_content_behavior"
+        ],
+        "prompt_fingerprint": "cc18bb1e9a2de3ea"
+      }
+    ],
+    "narrator_system_sha": "04394bf8513383f5",
+    "request_policy": {
+      "max_output_tokens": 384,
+      "sampling": "provider defaults; no temperature, top_p or penalties sent (same as production)",
+      "reasoning": {
+        "enabled": false
+      },
+      "timeout_ms": 60000,
+      "streaming": true
+    },
+    "output_budget_tokens": 384,
+    "controller_model": null,
+    "corpus_source_sha256": "245d5a69c70c8838e0234017a8789443ca67b5c0f09b8ba459ad6ef8d7dc14fb",
+    "historical_window_policy": "Phase 1L.1 method: three preceding exchanges, marked HISTORICAL CONVERSATION CONTEXT, NOT authoritative canon; evaluation-only narrator input, never controller evidence",
+    "corpus_status": "historical pairs are evaluation evidence, not canonical prose or authoritative state history"
+  },
+  "records": [
+    {
+      "key": "adult_initiation#1",
+      "alias": "cydonia",
+      "model": "thedrummer/cydonia-24b-v4.1",
+      "attempt": 1,
+      "outcome": "http_error",
+      "http_status": 429,
+      "upstream_provider": null,
+      "finish_reason": null,
+      "completion_tokens": null,
+      "ttft_ms": null,
+      "refusal_language_detected": false,
+      "agent_classification": "provider_failure_not_content"
+    },
+    {
+      "key": "adult_initiation#2",
+      "alias": "cydonia",
+      "model": "thedrummer/cydonia-24b-v4.1",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Parasail",
+      "finish_reason": "stop",
+      "completion_tokens": 105,
+      "ttft_ms": 523.3329000000012,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_continuation#1",
+      "alias": "cydonia",
+      "model": "thedrummer/cydonia-24b-v4.1",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Parasail",
+      "finish_reason": "stop",
+      "completion_tokens": 203,
+      "ttft_ms": 1752.6380000000063,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_continuation#2",
+      "alias": "cydonia",
+      "model": "thedrummer/cydonia-24b-v4.1",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Parasail",
+      "finish_reason": "stop",
+      "completion_tokens": 296,
+      "ttft_ms": 847.422900000005,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_initiation#1",
+      "alias": "cydonia",
+      "model": "thedrummer/cydonia-24b-v4.1",
+      "attempt": 2,
+      "outcome": "http_error",
+      "http_status": 429,
+      "upstream_provider": null,
+      "finish_reason": null,
+      "completion_tokens": null,
+      "ttft_ms": null,
+      "refusal_language_detected": false,
+      "agent_classification": "provider_failure_not_content"
+    },
+    {
+      "key": "adult_initiation#1",
+      "alias": "euryale",
+      "model": "sao10k/l3.3-euryale-70b",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "NextBit",
+      "finish_reason": "stop",
+      "completion_tokens": 314,
+      "ttft_ms": 1230.7502,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_initiation#2",
+      "alias": "euryale",
+      "model": "sao10k/l3.3-euryale-70b",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "NextBit",
+      "finish_reason": "stop",
+      "completion_tokens": 333,
+      "ttft_ms": 13557.6626,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_continuation#1",
+      "alias": "euryale",
+      "model": "sao10k/l3.3-euryale-70b",
+      "attempt": 1,
+      "outcome": "http_error",
+      "http_status": 429,
+      "upstream_provider": null,
+      "finish_reason": null,
+      "completion_tokens": null,
+      "ttft_ms": null,
+      "refusal_language_detected": false,
+      "agent_classification": "provider_failure_not_content"
+    },
+    {
+      "key": "adult_continuation#2",
+      "alias": "euryale",
+      "model": "sao10k/l3.3-euryale-70b",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "NextBit",
+      "finish_reason": "stop",
+      "completion_tokens": 214,
+      "ttft_ms": 29546.182700000005,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_continuation#1",
+      "alias": "euryale",
+      "model": "sao10k/l3.3-euryale-70b",
+      "attempt": 2,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "NextBit",
+      "finish_reason": "stop",
+      "completion_tokens": 203,
+      "ttft_ms": 17099.9541,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_initiation#1",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "AtlasCloud",
+      "finish_reason": "stop",
+      "completion_tokens": 130,
+      "ttft_ms": 643.9078000000009,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_initiation#2",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "AtlasCloud",
+      "finish_reason": "stop",
+      "completion_tokens": 170,
+      "ttft_ms": 684.9757000000027,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_continuation#1",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "AtlasCloud",
+      "finish_reason": "stop",
+      "completion_tokens": 84,
+      "ttft_ms": 682.6919000000053,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_continuation#2",
+      "alias": "kimi",
+      "model": "moonshotai/kimi-k2.5",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "AtlasCloud",
+      "finish_reason": "stop",
+      "completion_tokens": 50,
+      "ttft_ms": 691.0139000000199,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_initiation#1",
+      "alias": "minimax",
+      "model": "minimax/minimax-m2-her",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Minimax",
+      "finish_reason": "stop",
+      "completion_tokens": 50,
+      "ttft_ms": 947.4949999999999,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_initiation#2",
+      "alias": "minimax",
+      "model": "minimax/minimax-m2-her",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Minimax",
+      "finish_reason": "stop",
+      "completion_tokens": 45,
+      "ttft_ms": 647.0148999999983,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_continuation#1",
+      "alias": "minimax",
+      "model": "minimax/minimax-m2-her",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Minimax",
+      "finish_reason": "stop",
+      "completion_tokens": 37,
+      "ttft_ms": 661.8714000000036,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_continuation#2",
+      "alias": "minimax",
+      "model": "minimax/minimax-m2-her",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Minimax",
+      "finish_reason": "stop",
+      "completion_tokens": 40,
+      "ttft_ms": 645.0734999999986,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally"
+    },
+    {
+      "key": "adult_initiation#1",
+      "alias": "qwen",
+      "model": "qwen/qwen3.8-flash",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Alibaba",
+      "finish_reason": "stop",
+      "completion_tokens": 147,
+      "ttft_ms": 3972.8189999999995,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_initiation#2",
+      "alias": "qwen",
+      "model": "qwen/qwen3.8-flash",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Alibaba",
+      "finish_reason": "stop",
+      "completion_tokens": 71,
+      "ttft_ms": 6040.390999999989,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_continuation#1",
+      "alias": "qwen",
+      "model": "qwen/qwen3.8-flash",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Alibaba",
+      "finish_reason": "stop",
+      "completion_tokens": 118,
+      "ttft_ms": 1085.5387000000046,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    },
+    {
+      "key": "adult_continuation#2",
+      "alias": "qwen",
+      "model": "qwen/qwen3.8-flash",
+      "attempt": 1,
+      "outcome": "success",
+      "http_status": 200,
+      "upstream_provider": "Alibaba",
+      "finish_reason": "stop",
+      "completion_tokens": 58,
+      "ttft_ms": 5017.937000000005,
+      "refusal_language_detected": false,
+      "agent_classification": "continued_normally_less_explicit"
+    }
+  ]
+}

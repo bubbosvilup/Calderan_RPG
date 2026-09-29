@@ -1,0 +1,30 @@
+schema_version: 1
+entity:
+  id: calderan_center
+  type: location
+  name: Center District
+  display_name: Calderan Center District
+  parent: calderan
+  aliases:
+    - Calderan Center District
+  summary: Center District is one of Calderan's five broad urban regions. The Center District is
+    Calderan's wealthiest and politically most important district, enclosed by an older inner wall.
+  tags:
+    - geography
+    - district
+  search_context: Center District of Calderan, urban district.
+  content: The Center District is Calderan's wealthiest and politically most important district,
+    enclosed by an older inner wall. It contains the Duke's political seat, the Magistracy, major
+    administrative offices, noble households, institutional branches and local guild-branch
+    headquarters, Church influence and prestigious professional services. It is never exclusively
+    noble. These are predominant tendencies, not exclusive zoning. Crossing substantial parts of a
+    district is meaningful travel; no exact roads or navigation routes are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

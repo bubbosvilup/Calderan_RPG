@@ -1,0 +1,30 @@
+# Authoring template only. Keep outside data/ until placeholders and references are replaced.
+schema_version: 1
+entity:
+  id: template_event
+  type: event
+  name: Unfilled event template
+  display_name: Unfilled event template
+  parent: null
+  aliases: []
+  summary: Unfilled event authoring template; not Caldrevan canon.
+  tags: []
+  search_context: ""
+  content: Unfilled compact introduction; replace with supplied facts before authoring canon.
+  # Example for ordinary observable facts; choose policy deliberately.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  location: null
+  # NPC retrieval anchors; each anchor must also be a participant.
+  characters: []
+  # Nicco may appear here; generally omit him from characters.
+  participants: []
+  # Use { world_minute: <safe integer> } when the historical time is supplied.
+  time: null
+  # Editorial example only; choose based on supplied canon.
+  importance: minor
+# Add coherent passages only when supplied detail or visibility warrants them.
+chunks: []

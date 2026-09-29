@@ -1,0 +1,36 @@
+schema_version: 1
+entity:
+  id: khar_dune
+  type: location
+  name: "Khar-Dune"
+  display_name: "Khar-Dune"
+  parent: center
+  aliases: []
+  summary: >-
+    Khar-Dune is a fortified desert settlement in western/southwestern Center with major
+    underground slave and contraband markets.
+  content: >-
+    Khar-Dune lies relatively near the West frontier and Chained Bay region. It developed
+    around a watering point for mercenary caravans, surrounded by thick lime/mud-brick
+    walls, and grew in importance as unofficial West–Center conflict intensified. Desert
+    raiders bring prisoners captured across the border. Intermediaries may obscure or
+    falsify origin, clean provenance or records, and sell captives onward toward West
+    merchants or labor sites, works, and pits associated with Zul-Rath/Center. Its
+    underground markets include slaves, contraband, and illicit cross-border trade. Not
+    every resident is criminal. No named gangs or complete criminal hierarchy are
+    established.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "fortified caravan watering point"
+      description: "Originally developed around water for mercenary caravans and enclosed by thick lime/mud-brick walls."
+    - name: "underground slave and contraband markets"
+      description: "Major illicit cross-border trade with intermediaries who may falsify captives' provenance before onward sale."
+  connections: []
+chunks: []
+

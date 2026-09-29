@@ -1,0 +1,24 @@
+# Authoring template only. Keep outside data/ until placeholders and references are replaced.
+schema_version: 1
+entity:
+  id: template_faction
+  type: faction
+  name: Unfilled faction template
+  display_name: Unfilled faction template
+  parent: null
+  aliases: []
+  summary: Unfilled faction authoring template; not Caldrevan canon.
+  tags: []
+  search_context: ""
+  content: Unfilled compact introduction; replace with supplied facts before authoring canon.
+  # Example for ordinary observable facts; choose policy deliberately.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  members: []
+  territory: []
+  relations: []
+# Add coherent passages only when supplied detail or visibility warrants them.
+chunks: []

@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: "races_overview"
+  type: "world_lore"
+  name: "Major Peoples"
+  display_name: "Major Peoples"
+  parent: null
+  aliases: []
+  summary: >-
+    The currently established major sapient peoples are Humans, Elves, Dwarves, Beastfolk, and
+    people of mixed ancestry.
+  tags: ["races"]
+  search_context: ""
+  content: >-
+    These categories do not exhaust all peoples that could ever exist. Future peoples may be
+    established when needed; no additional peoples are currently authored.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "races"
+  related_entities: ["humans","elves","dwarves","beastfolk","mixed_ancestry"]
+chunks: []
+

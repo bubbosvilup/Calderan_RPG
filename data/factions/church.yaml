@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: "church"
+  type: "faction"
+  name: "Church"
+  display_name: "Church"
+  parent: null
+  aliases: []
+  summary: >-
+    The Church is a powerful national institution in West, distinct from the three national
+    guilds.
+  tags: ["politics"]
+  search_context: ""
+  content: >-
+    The Church has local presence, national representation, political influence, and
+    representation in major civic and national deliberations. It is not a guild, although it
+    has comparable political weight. Its theology, gods, exact ecclesiastical hierarchy,
+    supreme religious office, denominations, particular temples, and doctrine remain
+    undefined. The Inquisition is an organ of the Church.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  members: []
+  territory: []
+  relations: []
+chunks: []
+

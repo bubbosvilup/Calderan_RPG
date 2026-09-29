@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: "elemental_magic"
+  type: "world_lore"
+  name: "Elemental Magic"
+  display_name: "Elemental Magic"
+  parent: null
+  aliases: []
+  summary: >-
+    Fire, Water, Earth, and Air are the four common foundational magical elements and
+    principal known elemental traditions.
+  tags: ["magic"]
+  search_context: ""
+  content: >-
+    Elemental interactions can involve affinities, natural advantages, disadvantages,
+    opposition, and situational strengths. Their relationships are contextual rather than a
+    universal deterministic cycle or combat chart.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "magic"
+  related_entities: ["magic_overview","magic_subschools"]
+chunks: []
+

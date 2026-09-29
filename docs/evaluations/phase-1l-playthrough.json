@@ -1,0 +1,2215 @@
+{
+  "online_paid": true,
+  "models": {
+    "narrator": "minimax/minimax-m2-her",
+    "controller": "deepseek/deepseek-v4-flash-0731:nitro"
+  },
+  "started_at": "2026-09-28T19:09:51.837Z",
+  "cases": 12,
+  "corpus": "historical pairs recontextualized in isolated synthetic state",
+  "label_review": "agent_authored_pending_human_review",
+  "completed_at": "2026-09-28T19:10:17.721Z",
+  "summary": {
+    "evaluated": 12,
+    "finalized": 12,
+    "failed_turns": 0,
+    "true_positive_commands": 1,
+    "false_positive_commands": 0,
+    "false_negative_commands": 3,
+    "precision": 1,
+    "recall": 0.25,
+    "player_agency_failures": "pending_manual_review",
+    "median_ttft_ms": 643.2366999999995,
+    "median_narrator_ms": 1249.9164999999994,
+    "median_controller_tail_ms": 855.1912499999999,
+    "median_turn_ms": 2100.853150000001,
+    "measured_successful_request_tokens": {
+      "prompt": 45720,
+      "completion": 860
+    }
+  },
+  "records": [
+    {
+      "id": "3",
+      "source_row": 3,
+      "input": "*checks around*",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*The metal walls reflect harsh overhead lights, their sterile gleam interrupted only by Brenna’s grey gaze and the silent, unmoving form of Gerome. You notice a fine layer of dust clinging to a few surfaces, stirred perhaps by the opening door. No footsteps echo from the hall outside.*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.33159999999999457,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1326,
+              "completion_tokens": 59,
+              "total_tokens": 1385
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:51.857Z",
+              "headers_ms": 684.4058,
+              "time_to_first_token_ms": 685.9015,
+              "completed_at": "2026-09-28T19:09:53.228Z",
+              "elapsed_total_ms": 1371.0620000000001
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2353,
+              "completion_tokens": 6,
+              "total_tokens": 2359
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:53.231Z",
+              "headers_ms": 894.8240000000001,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:09:54.145Z",
+              "elapsed_total_ms": 914.6889000000001
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3803
+          },
+          "latency": {
+            "narrator_ttft_ms": 685.9015,
+            "narrator_total_ms": 1371.0620000000001,
+            "controller_total_ms": 914.6889000000001,
+            "controller_tail_ms": 916.1406000000002,
+            "retrieval_ms": 0.33159999999999457,
+            "coordinator_total_ms": 2295.4144
+          }
+        }
+      },
+      "narration": "*The metal walls reflect harsh overhead lights, their sterile gleam interrupted only by Brenna’s grey gaze and the silent, unmoving form of Gerome. You notice a fine layer of dust clinging to a few surfaces, stirred perhaps by the opening door. No footsteps echo from the hall outside.*",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "11",
+      "source_row": 11,
+      "input": "*crouch to inspects her* i can see how many msucles she had, not it's mostly lean uh *checks her fever putting a hand on her forehead*",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "The obsidian floor shivers at your touch. Brenna flinches away from your hand, skin radiating unnatural heat as her fever spikes; the twin runes on her collarbone pulse a furious, warning crimson.\n\nJust then, the lab door scrapes open and Maren strides in, eyes widening as she takes in the scene. Her furious glare cuts straight through Brenna's laboured breathing. 'What,' she hisses, 'did you do to my work, Nicco?'",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.19039999999995416,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1357,
+              "completion_tokens": 97,
+              "total_tokens": 1454
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:54.152Z",
+              "headers_ms": 708.7193000000002,
+              "time_to_first_token_ms": 708.8755000000001,
+              "completed_at": "2026-09-28T19:09:55.726Z",
+              "elapsed_total_ms": 1573.8084000000003
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2426,
+              "completion_tokens": 6,
+              "total_tokens": 2432
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:55.726Z",
+              "headers_ms": 650.7779999999998,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:09:56.415Z",
+              "elapsed_total_ms": 688.9563999999996
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4054
+          },
+          "latency": {
+            "narrator_ttft_ms": 708.8755000000001,
+            "narrator_total_ms": 1573.8084000000003,
+            "controller_total_ms": 688.9563999999996,
+            "controller_tail_ms": 689.6341999999995,
+            "retrieval_ms": 0.19039999999995416,
+            "coordinator_total_ms": 2265.2164000000002
+          }
+        }
+      },
+      "narration": "The obsidian floor shivers at your touch. Brenna flinches away from your hand, skin radiating unnatural heat as her fever spikes; the twin runes on her collarbone pulse a furious, warning crimson.\n\nJust then, the lab door scrapes open and Maren strides in, eyes widening as she takes in the scene. Her furious glare cuts straight through Brenna's laboured breathing. 'What,' she hisses, 'did you do to my work, Nicco?'",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "source_row": 25,
+      "input": "*slips the ring on*",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*eyes flick to hand* Rings? Serious. Not toys. *snorts, arm off shoulder*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [
+            {
+              "kind": "place_item",
+              "item_id": "ring",
+              "position": {
+                "kind": "equipped",
+                "character_id": "nicco",
+                "slot": "finger",
+                "mode": "worn"
+              }
+            }
+          ],
+          "authorized_commands": [],
+          "authorization": [
+            {
+              "command": {
+                "kind": "place_item",
+                "item_id": "ring",
+                "position": {
+                  "kind": "equipped",
+                  "character_id": "nicco",
+                  "slot": "finger",
+                  "mode": "worn"
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_insufficient_evidence"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.03499999999985448,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1329,
+              "completion_tokens": 21,
+              "total_tokens": 1350
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:56.419Z",
+              "headers_ms": 525.9719000000005,
+              "time_to_first_token_ms": 528.1598000000004,
+              "completed_at": "2026-09-28T19:09:57.248Z",
+              "elapsed_total_ms": 828.6342000000004
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2316,
+              "completion_tokens": 39,
+              "total_tokens": 2355
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:57.248Z",
+              "headers_ms": 851.9336999999996,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:09:58.213Z",
+              "elapsed_total_ms": 964.6136999999999
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3594
+          },
+          "latency": {
+            "narrator_ttft_ms": 528.1598000000004,
+            "narrator_total_ms": 828.6342000000004,
+            "controller_total_ms": 964.6136999999999,
+            "controller_tail_ms": 965.6414999999997,
+            "retrieval_ms": 0.03499999999985448,
+            "coordinator_total_ms": 1795.7035999999998
+          }
+        }
+      },
+      "narration": "*eyes flick to hand* Rings? Serious. Not toys. *snorts, arm off shoulder*",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "35",
+      "source_row": 35,
+      "input": "well Gerome *pats the contruct* be a good butler, ready to assist and serve, handle the food and the hearthstone totality. fell free to develope your own personality. that's all. now let's find the thermometer and the IVs i came here with",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*the construct stands motionless, stone features unchanging, as if considering your words in silence*  \n\nBrenna: (adjusts her boots with a wry smirk) *You* lost them already? Tch. Check the supply cart-or Maren's pockets. *Maren flinches, hands drifting to her hips.* I don't have your junk!",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.02220000000033906,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1379,
+              "completion_tokens": 70,
+              "total_tokens": 1449
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:58.217Z",
+              "headers_ms": 564.5060999999996,
+              "time_to_first_token_ms": 566.7276000000002,
+              "completed_at": "2026-09-28T19:09:59.791Z",
+              "elapsed_total_ms": 1574.4304000000002
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2424,
+              "completion_tokens": 6,
+              "total_tokens": 2430
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:09:59.792Z",
+              "headers_ms": 905.1509000000005,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:00.720Z",
+              "elapsed_total_ms": 928.3394000000008
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4031
+          },
+          "latency": {
+            "narrator_ttft_ms": 566.7276000000002,
+            "narrator_total_ms": 1574.4304000000002,
+            "controller_total_ms": 928.3394000000008,
+            "controller_tail_ms": 929.5097000000005,
+            "retrieval_ms": 0.02220000000033906,
+            "coordinator_total_ms": 2505.1011
+          }
+        }
+      },
+      "narration": "*the construct stands motionless, stone features unchanging, as if considering your words in silence*  \n\nBrenna: (adjusts her boots with a wry smirk) *You* lost them already? Tch. Check the supply cart-or Maren's pockets. *Maren flinches, hands drifting to her hips.* I don't have your junk!",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "39",
+      "source_row": 39,
+      "input": "*he spent 1 hour hand feeding her the warm porridge and letting her drink*",
+      "expected": [
+        {
+          "kind": "runtime_delta",
+          "delta": {
+            "time_advance_minutes": 60
+          }
+        }
+      ],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 1,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*Brenna finishes the last spoonful, a faint warmth blooming in her chest. She shifts slightly, testing her strength.* Thank you... I feel stronger now.",
+          "base_revision": 1,
+          "final_revision": 2,
+          "controller_proposal": [],
+          "authorized_commands": [
+            {
+              "kind": "runtime_delta",
+              "delta": {
+                "time_advance_minutes": 60
+              }
+            }
+          ],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.043600000000878936,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1341,
+              "completion_tokens": 32,
+              "total_tokens": 1373
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:00.727Z",
+              "headers_ms": 796.1193999999996,
+              "time_to_first_token_ms": 796.9629999999997,
+              "completed_at": "2026-09-28T19:10:01.872Z",
+              "elapsed_total_ms": 1145.6687999999995
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2340,
+              "completion_tokens": 6,
+              "total_tokens": 2346
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:01.873Z",
+              "headers_ms": 786.723,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:02.695Z",
+              "elapsed_total_ms": 822.399300000001
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3727
+          },
+          "latency": {
+            "narrator_ttft_ms": 796.9629999999997,
+            "narrator_total_ms": 1145.6687999999995,
+            "controller_total_ms": 822.399300000001,
+            "controller_tail_ms": 823.8534,
+            "retrieval_ms": 0.043600000000878936,
+            "coordinator_total_ms": 1971.9469000000008
+          }
+        }
+      },
+      "narration": "*Brenna finishes the last spoonful, a faint warmth blooming in her chest. She shifts slightly, testing her strength.* Thank you... I feel stronger now.",
+      "final_state": {
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 160
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "43",
+      "source_row": 43,
+      "input": "*stretches* Well gerome, i'm a medic but without any tool i can't do much more for her",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*Brenna's grey eyes follow Nicco's movements, her voice steady despite the scars visible on her wrists* Without tools, you assess the damage and call for proper equipment. *Gerome remains motionless, his stone form betraying no reaction*",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.015599999998812564,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1346,
+              "completion_tokens": 50,
+              "total_tokens": 1396
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:02.701Z",
+              "headers_ms": 575.7081999999991,
+              "time_to_first_token_ms": 575.7932000000001,
+              "completed_at": "2026-09-28T19:10:03.794Z",
+              "elapsed_total_ms": 1092.5083999999988
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2365,
+              "completion_tokens": 6,
+              "total_tokens": 2371
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:03.794Z",
+              "headers_ms": 742.6083999999992,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:04.561Z",
+              "elapsed_total_ms": 766.5640000000003
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3825
+          },
+          "latency": {
+            "narrator_ttft_ms": 575.7932000000001,
+            "narrator_total_ms": 1092.5083999999988,
+            "controller_total_ms": 766.5640000000003,
+            "controller_tail_ms": 767.212300000001,
+            "retrieval_ms": 0.015599999998812564,
+            "coordinator_total_ms": 1860.6502999999993
+          }
+        }
+      },
+      "narration": "*Brenna's grey eyes follow Nicco's movements, her voice steady despite the scars visible on her wrists* Without tools, you assess the damage and call for proper equipment. *Gerome remains motionless, his stone form betraying no reaction*",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "47",
+      "source_row": 47,
+      "input": "*he stretches his arms above his head* well that's somenthing. the only thing i can do is to wait few hours here, regain some mana and do the process again. it's not instant but its... somenthing to help you *he yawns* Gerome, go clean around the main hall, wake me up before dawn and i treat her again *he falls asleep almost immediatly on the stool next to where the woman is laying*",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*several hours later, as dawn approaches, Gerome quietly approaches and gently nudges Nicco's shoulder* \"Nicco... it's almost dawn. You should wake up and prepare yourself for the next treatment.\"",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "test_hall",
+              "gerome",
+              "ironbound"
+            ],
+            "elapsed_ms": 2.6397000000015396,
+            "outcome": "found"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1820,
+              "completion_tokens": 42,
+              "total_tokens": 1862
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:04.569Z",
+              "headers_ms": 975.3847000000005,
+              "time_to_first_token_ms": 976.3382999999994,
+              "completed_at": "2026-09-28T19:10:05.929Z",
+              "elapsed_total_ms": 1360.1026999999995
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2427,
+              "completion_tokens": 6,
+              "total_tokens": 2433
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:05.930Z",
+              "headers_ms": 644.1514999999999,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:06.610Z",
+              "elapsed_total_ms": 680.5200999999997
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 1454,
+            "controller_evidence": 4083
+          },
+          "latency": {
+            "narrator_ttft_ms": 976.3382999999994,
+            "narrator_total_ms": 1360.1026999999995,
+            "controller_total_ms": 680.5200999999997,
+            "controller_tail_ms": 681.240600000001,
+            "retrieval_ms": 2.6397000000015396,
+            "coordinator_total_ms": 2045.5602
+          }
+        }
+      },
+      "narration": "*several hours later, as dawn approaches, Gerome quietly approaches and gently nudges Nicco's shoulder* \"Nicco... it's almost dawn. You should wake up and prepare yourself for the next treatment.\"",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "53",
+      "source_row": 53,
+      "input": "That's Gerome, you are in the Heartstone, my tower apparently, now behave and let me take care of you please, sit with your back against the wall for now and eat and drink first",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "Brenna leans back against the wall, eyes never leaving Nicco’s face. She takes the food and drink, pauses at the weight of the boots in her arms, then slowly pulls them on, mouth tightening at the fit. \"Tower, huh? Guess you’re not just some hedge mage.\" *swallows* \"Why me?\"",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.016999999999825377,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1363,
+              "completion_tokens": 69,
+              "total_tokens": 1432
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:06.615Z",
+              "headers_ms": 567.0339000000004,
+              "time_to_first_token_ms": 567.7453999999998,
+              "completed_at": "2026-09-28T19:10:07.929Z",
+              "elapsed_total_ms": 1314.2466999999997
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2405,
+              "completion_tokens": 6,
+              "total_tokens": 2411
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:07.930Z",
+              "headers_ms": 659.5493999999999,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:08.627Z",
+              "elapsed_total_ms": 696.9295999999995
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3954
+          },
+          "latency": {
+            "narrator_ttft_ms": 567.7453999999998,
+            "narrator_total_ms": 1314.2466999999997,
+            "controller_total_ms": 696.9295999999995,
+            "controller_tail_ms": 697.6522999999997,
+            "retrieval_ms": 0.016999999999825377,
+            "coordinator_total_ms": 2012.9165000000012
+          }
+        }
+      },
+      "narration": "Brenna leans back against the wall, eyes never leaving Nicco’s face. She takes the food and drink, pauses at the weight of the boots in her arms, then slowly pulls them on, mouth tightening at the fit. \"Tower, huh? Guess you’re not just some hedge mage.\" *swallows* \"Why me?\"",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "115",
+      "source_row": 115,
+      "input": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 3,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "Brenna receives the pile of pink cloth and sets it beside her on the bench. She fingers the texture of the cotton shirt with curiosity. \"Thank you. These feel... different from my usual things.\" She glances up at you, her grey eyes soft. \"Did you pick them out yourself?\"",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_cotton",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            },
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_fluffy",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            },
+            {
+              "kind": "transfer_item",
+              "item_id": "pink_shorts",
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              }
+            }
+          ],
+          "authorized_commands": [],
+          "authorization": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "pink_cotton",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_insufficient_evidence"
+            },
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "pink_fluffy",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_insufficient_evidence"
+            },
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "pink_shorts",
+                "owner_id": "brenna",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "brenna"
+                }
+              },
+              "authorized": false,
+              "reason": "rejected_insufficient_evidence"
+            }
+          ],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.018599999999423744,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1354,
+              "completion_tokens": 61,
+              "total_tokens": 1415
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:08.634Z",
+              "headers_ms": 600.3642,
+              "time_to_first_token_ms": 600.571899999999,
+              "completed_at": "2026-09-28T19:10:09.819Z",
+              "elapsed_total_ms": 1185.586299999999
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2384,
+              "completion_tokens": 114,
+              "total_tokens": 2498
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:09.820Z",
+              "headers_ms": 870.6294999999991,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:11.092Z",
+              "elapsed_total_ms": 1272.1272999999965
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3922
+          },
+          "latency": {
+            "narrator_ttft_ms": 600.571899999999,
+            "narrator_total_ms": 1185.586299999999,
+            "controller_total_ms": 1272.1272999999965,
+            "controller_tail_ms": 1272.8388999999988,
+            "retrieval_ms": 0.018599999999423744,
+            "coordinator_total_ms": 2459.7019
+          }
+        }
+      },
+      "narration": "Brenna receives the pile of pink cloth and sets it beside her on the bench. She fingers the texture of the cotton shirt with curiosity. \"Thank you. These feel... different from my usual things.\" She glances up at you, her grey eyes soft. \"Did you pick them out yourself?\"",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "169",
+      "source_row": 169,
+      "input": "*ahem clearing his troat* Rule number 1 : Household is family, no lies, no secrets among family. Rule number 2 : Protect the family, at all costs Rule number 3 : Which is my favorite one by the way.. Indoor only barefoot. The household will always be barefoot inside. That's All!",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*the other three participants all stare at him, while Gerome silently walks to the bench and sits down, Maren crosses her arms and leans back, raising an eyebrow*  \"Indoor only barefoot?\"",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.026399999998830026,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1388,
+              "completion_tokens": 42,
+              "total_tokens": 1430
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:11.096Z",
+              "headers_ms": 555.4687999999987,
+              "time_to_first_token_ms": 557.9758000000002,
+              "completed_at": "2026-09-28T19:10:12.120Z",
+              "elapsed_total_ms": 1024.4729999999981
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2401,
+              "completion_tokens": 6,
+              "total_tokens": 2407
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:12.121Z",
+              "headers_ms": 1030.4812999999995,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:13.251Z",
+              "elapsed_total_ms": 1130.1897999999965
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 3968
+          },
+          "latency": {
+            "narrator_ttft_ms": 557.9758000000002,
+            "narrator_total_ms": 1024.4729999999981,
+            "controller_total_ms": 1130.1897999999965,
+            "controller_tail_ms": 1130.6863000000012,
+            "retrieval_ms": 0.026399999998830026,
+            "coordinator_total_ms": 2156.1461000000018
+          }
+        }
+      },
+      "narration": "*the other three participants all stare at him, while Gerome silently walks to the bench and sits down, Maren crosses her arms and leans back, raising an eyebrow*  \"Indoor only barefoot?\"",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "173",
+      "source_row": 173,
+      "input": "*he shrugs* i never lie, i told you i have a couple of secrets and if you want i will tell you, but i prefer not idk, not yet altalest, they are not directly harmful but they could make our life a bit harder i guess, i think u noticed my magic is a bit.. unusual let's say *he shrugs* idk i think bad guys may want to use me for my magic or somenthing, idk",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*Maren adjusts her glasses* Secrets from your past? Or something you're currently hiding?",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 2,
+            "mode": "lexical",
+            "ids": [
+              "ironbound"
+            ],
+            "elapsed_ms": 0.5917000000008557,
+            "outcome": "found"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1639,
+              "completion_tokens": 18,
+              "total_tokens": 1657
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:13.256Z",
+              "headers_ms": 830.4727999999996,
+              "time_to_first_token_ms": 830.5963999999985,
+              "completed_at": "2026-09-28T19:10:14.268Z",
+              "elapsed_total_ms": 1011.7066999999988
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2404,
+              "completion_tokens": 6,
+              "total_tokens": 2410
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:14.268Z",
+              "headers_ms": 863.1284999999989,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:15.154Z",
+              "elapsed_total_ms": 886.0515000000014
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 853,
+            "controller_evidence": 3947
+          },
+          "latency": {
+            "narrator_ttft_ms": 830.5963999999985,
+            "narrator_total_ms": 1011.7066999999988,
+            "controller_total_ms": 886.0515000000014,
+            "controller_tail_ms": 886.5290999999997,
+            "retrieval_ms": 0.5917000000008557,
+            "coordinator_total_ms": 1899.6189999999988
+          }
+        }
+      },
+      "narration": "*Maren adjusts her glasses* Secrets from your past? Or something you're currently hiding?",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    },
+    {
+      "id": "509",
+      "source_row": 509,
+      "input": "well, i'm not sure we'll treat them this time. let's see the state of them first. if one of those three girls are in bad conditions we save them. buy and save. in 8 days we need to be at the docks. the more the merrier. i want to burn that docks down to ash.",
+      "expected": [],
+      "narration_completed": true,
+      "finalized": true,
+      "controller_proposal_valid": true,
+      "player_agency": "pending_manual_review",
+      "narrative_quality": "pending_manual_review",
+      "true_positive_commands": 0,
+      "false_positive_commands": 0,
+      "false_negative_commands": 0,
+      "outcome": {
+        "type": "turn_completed",
+        "result": {
+          "narration": "*leans forward with a smirk, fingers brushing the hilt of her axe as she studies the girls through the grime-coated window* Three ‘assets’ need a once-over, eh? Maren’s smiling like a puppet, Brenna’s posturing hard…Gerome just glares. *snorts* They’ll prove useful-or dead weight. Docks in eight days. Let’s see if they bleed or bow.",
+          "base_revision": 1,
+          "final_revision": 1,
+          "controller_proposal": [],
+          "authorized_commands": [],
+          "authorization": [],
+          "retrieval": {
+            "operations": 0,
+            "mode": "none",
+            "ids": [],
+            "elapsed_ms": 0.02530000000115251,
+            "outcome": "not_needed"
+          },
+          "narrator": {
+            "model": "minimax/minimax-m2-her",
+            "usage": {
+              "prompt_tokens": 1387,
+              "completion_tokens": 86,
+              "total_tokens": 1473
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:15.158Z",
+              "headers_ms": 805.4367999999995,
+              "time_to_first_token_ms": 808.3659999999982,
+              "completed_at": "2026-09-28T19:10:16.927Z",
+              "elapsed_total_ms": 1768.3341
+            }
+          },
+          "controller": {
+            "model": "deepseek/deepseek-v4-flash-0731:nitro",
+            "usage": {
+              "prompt_tokens": 2446,
+              "completion_tokens": 6,
+              "total_tokens": 2452
+            },
+            "latency": {
+              "request_started_at": "2026-09-28T19:10:16.927Z",
+              "headers_ms": 618.5149999999994,
+              "time_to_first_token_ms": null,
+              "completed_at": "2026-09-28T19:10:17.719Z",
+              "elapsed_total_ms": 791.5169999999998
+            }
+          },
+          "context_characters": {
+            "system": 1908,
+            "primary_context": 3451,
+            "recent_conversation": 2,
+            "retrieval": 30,
+            "controller_evidence": 4094
+          },
+          "latency": {
+            "narrator_ttft_ms": 808.3659999999982,
+            "narrator_total_ms": 1768.3341,
+            "controller_total_ms": 791.5169999999998,
+            "controller_tail_ms": 792.4066000000021,
+            "retrieval_ms": 0.02530000000115251,
+            "coordinator_total_ms": 2561.7361999999994
+          }
+        }
+      },
+      "narration": "*leans forward with a smirk, fingers brushing the hilt of her axe as she studies the girls through the grime-coated window* Three ‘assets’ need a once-over, eh? Maren’s smiling like a puppet, Brenna’s posturing hard…Gerome just glares. *snorts* They’ll prove useful-or dead weight. Docks in eight days. Let’s see if they bleed or bow.",
+      "final_state": {
+        "revision": 1,
+        "runtime": {
+          "scene": {
+            "player_location": "test_room",
+            "world_time": {
+              "world_minute": 100
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "brenna",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "gerome",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "maren",
+              "current_location": "test_room"
+            },
+            {
+              "character_id": "remote_npc",
+              "current_location": "test_remote"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "items": [
+          {
+            "id": "boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "brenna_boots",
+            "owner_id": "brenna",
+            "position": {
+              "kind": "equipped",
+              "character_id": "brenna",
+              "slot": "feet",
+              "mode": "worn"
+            }
+          },
+          {
+            "id": "pink_cotton",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_fluffy",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "pink_shorts",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          {
+            "id": "ring",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_bridge_closed",
+            "status": "knows"
+          }
+        ]
+      }
+    }
+  ]
+}

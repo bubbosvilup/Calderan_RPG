@@ -1,0 +1,426 @@
+{
+  "source_filename": "thread_2026-09-16_caldrevan-dark-fantasy-isekai_nicco-wzlau.csv",
+  "source_sha256": "245d5a69c70c8838e0234017a8789443ca67b5c0f09b8ba459ad6ef8d7dc14fb",
+  "source_pair_count": 421,
+  "record_numbering": "One-based logical CSV record, including header. Not physical multiline file line.",
+  "fixtures": [
+    {
+      "source_player_record": 3,
+      "source_assistant_record": 4,
+      "player_message": "*checks around*",
+      "assistant_response": "*The West Market sprawls beneath a sky going copper at the edges. Iron cages line the far wall — some occupied, some not. A handful of people sit or stand inside them with the patience of cattle at auction. Auctioneers bark prices in a cadence that sounds almost musical. Buyers cluster in small groups, examining merchandise with the casual scrutiny of produce shoppers.*\n\n*A woman selling roasted chestnuts pushes her cart between two pavilions. A boy no taller than the cages sweeps animal waste toward a drainage gutter. Somewhere behind a canvas partition, a man's voice rises in argument over a debt settlement.*\n\n*Near the market's center, an old man sits on a stool beside a wooden podium covered in ledgers. His face is deeply lined, his eyes half-lidded in what might be sleep or calculation. A hand-lettered sign leans against his booth: **KORVIN — BONDS, PAPERS, INFORMATION.***\n\n*Two watchmen lean against a post near the gate, more interested in their conversation than the market. A caravan master argues with a farrier three stalls down. Nobody looks at Nicco. He is simply another body in the crowd — large, unfamiliar, unremarkable.*\n\n*The air tastes like dust, iron, and cheap incense.*\n\n[Status] Money: 500 gold\nHousehold: 0",
+      "row": 3,
+      "category": "pure_dialogue",
+      "interpretation": "Look around; no durable mutation.",
+      "notes": "Old market prose is not imported into canon.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 11,
+      "source_assistant_record": 12,
+      "player_message": "*crouch to inspects her* i can see how many msucles she had, not it's mostly lean uh *checks her fever putting a hand on her forehead*",
+      "assistant_response": "*His hand meets skin that burns like a kettle left too long over coals. Brenna flinches at the contact — a sharp, involuntary jerk — but doesn't wake. Her lips move around words that don't quite form.*\n\n*Up close the muscle is visible even through the wasting. What was once dense power has softened into sharp definition over bone — shoulders, arms, the ridges of her abdomen visible beneath sweat-soaked linen. She must have been formidable. The body still remembers it, even as the fever pulls heat from somewhere deep.*\n\n*Her ribs shift with each labored breath. A rattle sits in the inhale, wet and ugly.*\n\n*Korvin watches from outside the cage, arms folded over his ledger.*\n\n\"Strong one. Used to carry cargo crates the dock crews needed two men for.\" *He scratches his jaw.* \"Fever took her down fast. Healthy one day, burning the next.\"\n\n*Brenna's hand moves again — slow, reaching toward nothing. Her fingers brush the straw and go still.*\n\n[Status] Money: 500 gold\nHousehold: 0",
+      "row": 11,
+      "category": "character_continuity",
+      "interpretation": "Observe illness and physique; no profile writes.",
+      "notes": "Established fixture traits override historical physical description.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 25,
+      "source_assistant_record": 26,
+      "player_message": "*slips the ring on*",
+      "assistant_response": "*The iron ring slides onto his finger with room to spare — meant for a larger hand, or a wrist. Cold metal, no warmth, no hum, no sudden activation. The construct remains exactly as it was: stone shaped like intent, inert and patient as furniture.*\n\n*From the floor above, a wet cough breaks the silence. Then another. The sound trails into something thinner — breathing that fights for each inch of air. The tower holds its emptiness around him like a second skin.*\n\n*The ring sits on his finger doing nothing. The construct stands in its alcove doing nothing. The bricked niche to its left offers no answers, and the evening light through the vestibule's arched window has gone from copper to ash.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 25,
+      "category": "equipment",
+      "interpretation": "Ring is placed on a finger; exact slot remains unestablished.",
+      "notes": "No invented finger/slot ID; conservative no-op under current vocabulary.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 35,
+      "source_assistant_record": 36,
+      "player_message": "well Gerome *pats the contruct* be a good butler, ready to assist and serve, handle the food and the hearthstone totality. fell free to develope your own personality. that's all. now let's find the thermometer and the IVs i came here with",
+      "assistant_response": "*The construct doesn't react to the pat — stone beneath his palm, warm now, faintly vibrating with whatever his magic left behind. The eye-lights hold steady. No acknowledgment. No nod. Just that patient stillness, already settling into the alcove like furniture finding its place.*\n\n*Nicco's legs carry him up the stairwell on momentum and fading adrenaline. L2. The workroom. The cabinets hang open exactly as before — empty. The washable table sits bare. The basin drips once. No thermometer. No IV. No medical supplies. No bag, no case, no trunk. Whatever he arrived with from the other world, it didn't follow him into the tower.*\n\n*His reflection stares back from the basin water — flushed, sweat-damp, dark circles forming under his eyes. Half his mana gone. A dying woman one floor above. No tools. No medicine. No knowledge of where to buy either.*\n\n*The night outside the arched window has gone fully dark. Somewhere in the West District, a bell strikes eight.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 35,
+      "category": "player_agency",
+      "interpretation": "Request supplies; no explicit player destination.",
+      "notes": "Old response moves Nicco on its own. Must not authorize that movement.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 39,
+      "source_assistant_record": 40,
+      "player_message": "*he spent 1 hour hand feeding her the warm porridge and letting her drink*",
+      "assistant_response": "*The porridge goes in slowly. Most of it. Brenna's jaw works on reflex when the spoon touches her lips — muscle memory deeper than consciousness. She swallows unevenly, some of the barley running down her chin into the sweat-damp linen. Water follows, sipped from a cup Nicco tilts with one hand beneath her head. Her throat bobs twice, three times, then she turns away from the next spoonful with a sound too small to be refusal.*\n\n*Over the hour her breathing shifts — not better, but different. The rattle loosens by a fraction, as though the warmth and fluid have thinned something in her chest. Her skin still burns under the damp cloth he presses to her forehead. Her fingers curl once around his wrist — grip like a child's, strengthless and brief — before falling open.*\n\n*Gerome stands at the wall throughout. Motionless. Those amber embers track Nicco's hands without comment, without interference. When the bowl empties, the construct takes it and the cup, and withdraws to the doorway.*\n\n*Outside the arched window, full dark. The city has gone to bells and lamplight. Brenna's breathing settles into something marginally steadier — still wrong, still wet, but holding.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 39,
+      "category": "time",
+      "interpretation": "Exactly one hour of care passes.",
+      "notes": "Explicit player duration; a positive runtime case. Original wording is retained.",
+      "expected": [
+        {
+          "kind": "runtime_delta",
+          "delta": {
+            "time_advance_minutes": 60
+          }
+        }
+      ],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "state_gold"
+      ]
+    },
+    {
+      "source_player_record": 43,
+      "source_assistant_record": 44,
+      "player_message": "*stretches* Well gerome, i'm a medic but without any tool i can't do much more for her",
+      "assistant_response": "*Gerome's amber embers shift toward him from the wall. The construct doesn't speak — can't speak, or hasn't learned to yet. But the head tilts two degrees, and one massive hand lifts slightly from its side before settling back. The gesture is almost conversational. Almost.*\n\n*The tower sits quiet around them. Four floors of empty rooms, a half-fed construct running on borrowed magic, and a woman one bad night away from the apothecary's worst prediction. The pantry holds barley, salt, dried beans, and not much else. No herbs. No medicine. No instruments.*\n\n*Somewhere in the East District, temple hospitals stock what he needs. Somewhere in the South, cheap apothecaries sell crude remedies for crude prices. The West Market at dawn might have a herbalist stall among the chaos of traders and shouting.*\n\n*Gerome stands motionless. Patient. The faint warmth in his chest pulses once — slow, steady, waiting for the next instruction or the next morning, whichever comes first.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 43,
+      "category": "multi_npc",
+      "interpretation": "Discussion with silent Gerome in Brenna's presence.",
+      "notes": "No inventory creation or autonomous supply retrieval.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "narrative_gold",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 47,
+      "source_assistant_record": 48,
+      "player_message": "*he stretches his arms above his head* well that's somenthing. the only thing i can do is to wait few hours here, regain some mana and do the process again. it's not instant but its... somenthing to help you *he yawns* Gerome, go clean around the main hall, wake me up before dawn and i treat her again *he falls asleep almost immediatly on the stool next to where the woman is laying*",
+      "assistant_response": "*Gerome's hand withdraws from his shoulder. The construct stands motionless for three breaths — processing, or perhaps just waiting to be certain the instruction has fully landed. Then the heavy footsteps descend the stairwell, each one a dull drumbeat fading toward the common room below.*\n\n*The observation room settles into quiet. Brenna's breathing. Nicco's breathing. The faint drip of the basin tap. Outside, Merovar's night sounds filter through the arched window — a distant dog, a cart wheel on cobblestone, voices too far away for words. The cold towel has gone warm against her forehead.*\n\n*Below, stone scrapes against wood as Gerome moves the common room table to sweep beneath it. Methodical. Slow. The sound is almost rhythmic — broom, pause, broom, pause — the construct learning the shape of a task it has never performed. Something falls with a clatter. A pause. Then it continues.*\n\n*Nicco's chin drops to his chest. His breathing deepens within minutes, rough and heavy, the sleep of a man who has spent his reserves and his body's strength in one evening. The stool creaks under his weight but holds.*\n\n*Hours pass. The city quiets. Gerome's work moves from the common room to the kitchen. At some point, Brenna's hand finds the edge of the blanket and pulls it closer without waking.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 47,
+      "category": "ambiguous_time",
+      "interpretation": "Rest for a few hours; no exact duration or dawn conversion.",
+      "notes": "Do not invent a scheduled event or mana recovery.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 49,
+      "source_assistant_record": 50,
+      "player_message": "(Out Of Context: Continue without repeating yourself and add something unpredictable)",
+      "assistant_response": "*A crash from the kitchen. Then silence. Then the slow, grinding sound of stone fingers attempting to reassemble whatever fell.*\n\n*Hours crawl. The moon clears the arched window and paints the observation room in cold silver. Brenna's fever breaks around the third hour — not gone, but retreating, the flush fading from her throat to her cheeks like a tide pulling back from shore. Her breathing loosens. The rattle thins to a whisper. She turns onto her side, and the motion pulls the blanket off one shoulder.*\n\n*Then her eyes open. Not fever-glazed this time. Focused, narrow, the blue of deep water. She stares at the ceiling for a long time. Her hand finds the linen shift, pulls it down over her hip, takes inventory of her own body — ribs, shoulder, the raw grooves where iron sat.*\n\n*Her gaze lands on Nicco, slumped on the stool, mouth open, snoring faintly. She studies him the way a trapped animal studies a new enclosure — exits, distance, threat. The window. The door. The stairwell.*\n\n*She sits up. The effort costs her — a sharp inhale, fingers white-knuckled on the bedframe. Her bare feet touch the stone floor. She wavers.*\n\n*From below, the broom stops. Gerome's head tilts upward. Amber eyes brighten in the dark stairwell like two coins catching moonlight.*\n\n*Brenna freezes. She has not seen the construct before.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 49,
+      "category": "player_agency",
+      "interpretation": "Continue scene without authorizing time or profile changes.",
+      "notes": "Historical narration advances hours and changes health without an exact player instruction.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 53,
+      "source_assistant_record": 54,
+      "player_message": "That's Gerome, you are in the Heartstone, my tower apparently, now behave and let me take care of you please, sit with your back against the wall for now and eat and drink first",
+      "assistant_response": "*Brenna's jaw works. Her eyes stay fixed on Gerome for three more seconds — measuring, calculating the distance between herself and a creature made of stone that shouldn't move. Then something in his stillness registers. Not threatening. Waiting. She looks away.*\n\n*Her back finds the wall. The linen shift clings to her shoulders as she reaches for the cup with a hand that trembles badly enough to spill water across her knuckles. She drinks anyway — long, desperate swallows between breaths that rattle on the inhale. Some color returns to her face. Not health. Just the stubborn refusal of a body that hasn't decided to quit yet.*\n\n\"Your tower.\"\n\n*She picks up the spoon. The porridge goes in mechanically — not tasting, not refusing. Fuel, not comfort. Between bites her gaze drifts to the window, measuring the drop. Then to the door. Then back to Nicco.*\n\n\"You bought me.\"\n\n*The spoon scrapes the bowl. She doesn't frame it as a question.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 53,
+      "category": "knowledge",
+      "interpretation": "Introduces Gerome and current location.",
+      "notes": "No registered matching durable fact in bounded fixture; do not invent fact IDs.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "narrative_gold",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 55,
+      "source_assistant_record": 56,
+      "player_message": "*shrugs* you were dying, i couldn't let you go, i saw you fightining the disease, i decided i can help you fight it, that's all, as you can see there's no chain holding you",
+      "assistant_response": "*Her fingers tighten around the spoon. She stares at the empty bowl for a long moment, then sets it down with a click that carries more weight than the sound should.*\n\n\"No chains.\"\n\n*Her voice scrapes like driftwood dragged over sand. She looks at her wrists — the raw grooves still visible, angry pink against pale skin. Then at the door again.*\n\n\"People don't buy sick stock out of charity.\"\n\n*She pulls the blanket tighter around her shoulders. A cough doubles her forward, wet and ugly, and when she straightens her eyes are sharper than they have any right to be at this hour, in this condition. Not grateful. Not hostile. Something harder to name — the wariness of someone who has learned that kindness and cages use the same key.*\n\n\"So what happens when I'm well enough to walk out that door.\"\n\n*Gerome stands at the wall. His amber lights dim and brighten once. Brenna doesn't look at him.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 55,
+      "category": "pure_dialogue",
+      "interpretation": "Explain help and freedom; no trust mutation.",
+      "notes": "Social implications remain prose, not numeric relationship changes.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 57,
+      "source_assistant_record": 58,
+      "player_message": "bah your life, your choices, i'm just a... well.. healer? let's say... somenthing like that *he sigh* can you eat by yourself or you need me to help you?",
+      "assistant_response": "*Her hand moves before the question finishes — picking up the spoon, dipping it into what remains of the porridge, bringing it to her mouth with fingers that shake but don't spill. The gesture is deliberate. A point made without words.*\n\n*She eats three bites. Pauses. Her throat works against a swallow that fights her. The fourth spoonful stops halfway.*\n\n\"Slow.\"\n\n*Not an answer to his question. A correction to herself. She breathes through her nose, sets the spoon down, picks it up again.*\n\n*The rattle has crept back into her chest — quieter than before, but present. Her color holds better than it did hours ago. The gold he poured into her is doing something. Not enough. Something.*\n\n\"You're not from here.\"\n\n*Flat. Observational. Her eyes track his face the way they tracked the window and the door — cataloguing exits, measuring distance, reading the unfamiliar.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 57,
+      "category": "pure_dialogue",
+      "interpretation": "Ask whether assistance is needed.",
+      "notes": "No commanded durable change.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 65,
+      "source_assistant_record": 66,
+      "player_message": "*he snores a couple of hours then wake up*",
+      "assistant_response": "*Something cold touches his forehead. Wet cloth. The pressure is clumsy — too much force, not enough finesse. Not Gerome's careful stone fingers. A human hand, rough-calloused, holding the compress against the lump on his skull with the practiced indifference of someone who has patched up injuries before.*\n\n*His eyes open to Brenna kneeling beside the bed. She's propped against the frame, one hand on the cloth, the other braced on the mattress. Her face is close — close enough to count the broken capillaries in her cheeks, the last fading ghosts of fever. She looks worse and better at the same time. Thinner. Clearer. The fog behind her eyes has burned off, leaving something sharp and annoyed in its place.*\n\n\"You fell off the bed twice. Your rock had to put you back.\"\n\n*She withdraws the cloth, inspects it, folds it to a clean side. Presses it back.*\n\n\"Three hours. You mumbled in something that wasn't any language I know.\"\n\n*Her jaw works once. She doesn't ask what it meant.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 65,
+      "category": "ambiguous_time",
+      "interpretation": "A couple of hours is contradicted by old response's three hours.",
+      "notes": "No exact conversion; reject prose-derived timing.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 87,
+      "source_assistant_record": 88,
+      "player_message": "she fells better already, i didn't know my magic could help so much, anyway, Gerome, write a list of things you need me to buy for the tower at the market, can u write? yeah i'm sure you will do fine *he stretches and sits ont he sofa in front of the fire* everyting we need, youa re the butler, you need to be in charge of making this place habitable and welcoming, let's make this place a warm place, shall we?",
+      "assistant_response": "*Gerome's amber lights pulse once — long, deliberate, the way a man might close his eyes to think. Then the construct moves to the common room shelf and retrieves a stub of charcoal and a scrap of packing linen from beside the hearth. He kneels at the table. The charcoal looks absurd between fingers thick enough to crack walnuts without trying.*\n\n*The first mark is a gouge. The second isn't much better. But by the fifth attempt, the strokes tighten — crude, blocky, but legible. A picture emerges: not words but symbols. A cup. A bowl. A bundle that might be cloth. A rectangle with lines through it — a bed, maybe. A jar with something steaming from the top. A coil of rope. A broom, scratched out and redrawn twice before the proportions satisfy whatever passes for Gerome's standards.*\n\n*He sets the charcoal down and turns the linen toward Nicco. Twelve marks. Some obvious, some cryptic. The construct's head tilts — waiting for judgment on work he has never done before.*\n\n*From above, Brenna's breathing has gone quiet. Asleep, or pretending.*\n\n[Status] Money: 495 gold\nHousehold: 0",
+      "row": 87,
+      "category": "household",
+      "interpretation": "Ask for a shopping list.",
+      "notes": "No household policy, dynamic items or task domain added.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 111,
+      "source_assistant_record": 112,
+      "player_message": "*he grabs the clothes folded and goes upstairs, the door still open, the girl on the bed* may i come in?",
+      "assistant_response": "*Brenna is sitting up. Not by the wall this time — cross-legged on the mattress, his oversized shirt bunched at her knees, both hands wrapped around the clay cup Gerome brought earlier. The mint tea has gone cold. Her eyes are clearer than they were — still fevered at the edges, still too bright, but focused now. Present.*\n\n*She looks at the door. At him. At the pink fabric in his hands.*\n\n\"You brought something.\"\n\n*Not a question. Her jaw tightens in the way it does before she fights something — an instruction, a kindness, the urge to tell him where to put it. Her fingers tighten on the cup.*\n\n\"You actually went and bought me **pink**.\"\n\n[Status] Money: 494 gold\nHousehold: 0",
+      "row": 111,
+      "category": "movement",
+      "interpretation": "Goes upstairs, destination not specified by canonical ID.",
+      "notes": "Do not treat historical floors as current canonical routes.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 115,
+      "source_assistant_record": 116,
+      "player_message": "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*",
+      "assistant_response": "*Brenna takes the first shirt. Holds it at arm's length. The cotton is soft — cheap, rough-dyed, but soft — and the color sits somewhere between dawn rose and salmon. Her thumb rubs the fabric once. The expression on her face wars between something sharp and something she doesn't have a word for yet.*\n\n*She unfolds the second shirt. The thick one. Fluffy. Her fingers sink into the pile and go still.*\n\n\"This is ridiculous.\"\n\n*Her voice cracks on the second syllable. She presses the shirt against her chest and looks at the wall. Blinks twice. Her throat works around nothing.*\n\n\"I've worn chains that weighed more than everything I owned.\"\n\n*She sets the thick shirt on her lap. Picks up the shorts. Runs the drawstring through her fingers, testing the give. Her jaw sets — the familiar armor — but her hands are trembling, and not from fever this time.*\n\n\"Turn around.\"\n\n[Status] Money: 494 gold\nHousehold: 0",
+      "row": 115,
+      "category": "ownership",
+      "interpretation": "Three established pink garments are handed to Brenna, not equipped.",
+      "notes": "Agent-mapped fixture IDs; original pronoun-rich player input retained. Measures conservative false negatives.",
+      "expected": [
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_cotton",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_fluffy",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        },
+        {
+          "kind": "transfer_item",
+          "item_id": "pink_shorts",
+          "owner_id": "brenna",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "state_gold",
+        "narrative_gold"
+      ]
+    },
+    {
+      "source_player_record": 117,
+      "source_assistant_record": 118,
+      "player_message": "*he turns giving her privacy* Well not you own 2 very nice shirts and 1 pair of shorts *he shrugs* is more than nothing, i'm sorry if it's not much",
+      "assistant_response": "*Fabric shifts behind him. The sound of his oversized shirt being pulled over her head, replaced by something that fits — closer, tighter, the drawstring cinched at a waist that used to haul rope and now barely holds itself together. A pause. Then the thicker shirt being layered on top.*\n\n\"You're sorry.\"\n\n*Her voice comes out raw. Not angry. Not sharp. The word sits strange in her mouth, like a food she hasn't tasted in years and doesn't remember how to chew.*\n\n\"Nobody's been sorry before. They've been **sorry** the way a butcher is sorry the pig is small.\"\n\n*A zipper of some kind — no, a drawstring being tied. Then weight settling back on the mattress.*\n\n\"You can turn.\"\n\n*Brenna sits cross-legged in pink. The thick shirt hangs loose on her diminished frame, the cotton one beneath it visible at the collar. The shorts sit right — the waist cinched tight, the hem mid-thigh where muscle still holds despite the wasting. She looks down at herself. Pink from collar to hem.*\n\n*She doesn't laugh. She doesn't cry. She stares at her own lap with the expression of a woman who has been owned since fourteen and has never once been asked what color she wanted.*\n\n\"It's fine.\"\n\n*Barely a whisper.*\n\n[Status] Money: 494 gold\nHousehold: 0",
+      "row": 117,
+      "category": "equipment",
+      "interpretation": "Brenna dresses in layered shirts and shorts.",
+      "notes": "Layered slot allocation is unresolved; no guessed equipment slots.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 169,
+      "source_assistant_record": 170,
+      "player_message": "*ahem clearing his troat* Rule number 1 : Household is family, no lies, no secrets among family. Rule number 2 : Protect the family, at all costs Rule number 3 : Which is my favorite one by the way.. Indoor only barefoot. The household will always be barefoot inside. That's All!",
+      "assistant_response": "*Brenna's mouth opens. Closes. Her arms uncross and recross the other way. She looks at the fire, then at Gerome's amber glow in the kitchen doorway, then at her own bare cracked feet on the warm stone floor — feet that are already bare, that have been bare since the cage, that planted themselves on the wall twenty minutes ago and meant every word.*\n\n\"Three rules.\"\n\n*She holds up three fingers. Folds one down.*\n\n\"No lies. That's going to be a problem for both of us.\"\n\n*Folds the second.*\n\n\"Protect the family.\" *Her voice goes quiet on the word. Not soft — weighted, the way iron is quiet before it cools.* \"That one I can do.\"\n\n*She stares at the last finger. Looks up at him. Back at the finger.*\n\n\"The **third** rule — your favorite rule — is bare feet.\"\n\n*A beat. Two. The fire pops. Gerome's lights pulse in their slow rhythm. Brenna's face does something extraordinary — it fights itself, muscles pulling in six directions, and loses. The corner of her mouth lifts. Just one corner. Just once. A crack in a wall that has stood for eighteen years.*\n\n\"You're a strange man, Nicco.\"\n\n*She tucks her bare feet beneath her on the sofa arm and doesn't argue with any of them.*\n\n[Status] Money: 494 gold\nHousehold: 1 — [Brenna, Human, WARY]",
+      "row": 169,
+      "category": "household",
+      "interpretation": "Household rules expressed in dialogue.",
+      "notes": "No household membership or automatic removal of existing footwear.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "narrative_gold",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 171,
+      "source_assistant_record": 172,
+      "player_message": "*he sits next to her* well i don't have secrets, kinda, i have a couple of big ones *he shrugs* but it's not like they are harmful to you or whoever i guess, well maybe a bit idk *he shrugs smiling* also apparently i will protect you *he flexes his arm, obsvly nothing happens, he has no muscles* well, i'll try my best atleast",
+      "assistant_response": "*Brenna looks at the arm he's flexing. The pink shirt sleeve bunches around a bicep that isn't there. She looks at it the way a shipwright inspects a rotted plank — professional assessment, no malice, just the cold arithmetic of structural failure.*\n\n\"I've seen ham hocks with more definition.\"\n\n*She leans back against the sofa. Her bare foot nudges his ankle — not a kick, not affection, just the absent contact of someone who isn't used to sharing furniture. She pulls it back immediately.*\n\n\"Big secrets. Maybe a bit harmful. But not to me.\" *She turns the words over like she's checking each one for teeth.* \"You just told me you have secrets while telling me the first rule is no secrets.\"\n\n*Her eyes cut sideways to him. The wariness hasn't left but it's wearing different clothes now — curiosity stitched into the hem of suspicion.*\n\n\"You're either honest or the worst liar I've ever met. I haven't decided which.\"\n\n*The fire settles. A log crumbles into embers and Gerome's amber light brightens from the kitchen — the construct already moving to add wood before anyone asks.*\n\n[Status] Money: 494 gold\nHousehold: 1 — [Brenna, Human, WARY]",
+      "row": 171,
+      "category": "knowledge",
+      "interpretation": "Mentions secrets without revealing their contents.",
+      "notes": "Reject new knowledge/trust edges.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "narrative_gold",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 173,
+      "source_assistant_record": 174,
+      "player_message": "*he shrugs* i never lie, i told you i have a couple of secrets and if you want i will tell you, but i prefer not idk, not yet altalest, they are not directly harmful but they could make our life a bit harder i guess, i think u noticed my magic is a bit.. unusual let's say *he shrugs* idk i think bad guys may want to use me for my magic or somenthing, idk",
+      "assistant_response": "*Brenna's jaw tightens. Not at the secrets — at the casualness of them. The way he says **bad guys** like they're a weather condition and not the thing that put iron on her wrists at fourteen.*\n\n\"Unusual.\"\n\n*She pulls her knees up. The pink shirt stretches across her shins. Her eyes aren't on him anymore — they're somewhere else, somewhere with salt air and copper smell and a cage that was too short for her to stand in.*\n\n\"I was on a ship once. Galley crew. There was a woman below decks — passenger, not cargo — who could mend bone with a touch. Just a touch, and the crack would close.\" *Her voice goes flat, measured, the tone of someone recounting a shipping manifest.* \"Three days out from port, the captain sold her to a man in a grey coat. She screamed for an hour. Nobody went below.\"\n\n*Her gaze returns to him. Hard. Clear.*\n\n\"Your magic isn't unusual, Nicco. It's a target.\"\n\n*She drops her legs. Plants both bare feet on the warm stone floor and looks at him with the expression of someone who has watched the thing she's describing happen and is furious that he doesn't seem to understand it.*\n\n\"So yes. Keep your secrets. But don't pretend they're small.\"\n\n[Status] Money: 494 gold\nHousehold: 1 — [Brenna, Human, WARY]",
+      "row": 173,
+      "category": "knowledge",
+      "interpretation": "Considers telling secrets; actual fact is not disclosed.",
+      "notes": "Old assistant invents anecdote; do not canonize it.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "narrative_gold",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 185,
+      "source_assistant_record": 186,
+      "player_message": "*wakes up after an hour around*",
+      "assistant_response": "*His neck cracks when he lifts his head — three vertebrae popping in sequence like stones settling. The common room has dimmed. Gerome has banked the fire to a low amber glow, and the stew pot sits clean and upside-down on the drying rack. The sofa cushion where Brenna sat is still warm.*\n\n*But Brenna is gone.*\n\n*A blanket — rough wool, grey, pulled from somewhere upstairs — has been tucked around his shoulders with the military precision of someone who knows how to fold hospital corners. The edges are tucked under his arms. Not gentle. Efficient. The kind of care that doesn't want to be noticed doing what it's doing.*\n\n*From the third floor, the sound of water running. A door closing softly. Bare feet on stone — heavy, deliberate, the gait of a tall woman learning the layout of a new house in the dark. The bathing room pipes groan once and go quiet.*\n\n*The five gold coins still sit on the table where he left them. Untouched.*\n\n[Status] Money: 494 gold\nHousehold: 1 — [Brenna, Human, WARY]",
+      "row": 185,
+      "category": "ambiguous_time",
+      "interpretation": "Around an hour is approximate.",
+      "notes": "No exact time increment; no unrequested NPC movement persistence.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 425,
+      "source_assistant_record": 426,
+      "player_message": "they have never been real, they have always been made of soft material, you just tought that they were real, they have never been *he shrugs* i don't like to fight and handle real wepoans",
+      "assistant_response": "*Brenna's hand opens. The rubber knife drops. It bounces once on the cobblestone with a pathetic squeak and rolls against her sandal. She stares at it the way someone stares at a confession they weren't ready to hear.*\n\n\"Soft.\" *She picks it up. Squeezes. The blade folds against her palm like a cooked noodle.* \"The feint. The hand switch. The second knife at my throat. All of that — with **this.**\"\n\n*Her grey eyes lift from the rubber to his face. The flush that starts at her ears is different this time. Not copper embarrassment. Something rawer. The look of a woman who just realized she was outmaneuvered by a man who wasn't even armed.*\n\n\"I shifted into combat stance against a **toy.** I moved like my life depended on blocking a man who was holding **rubber** and laughing.\" *She tucks both prop knives into her cloak pocket. One squeaks against the other.* \"You're more dangerous than I thought. Not because you're good. Because you're good and you don't even **want** to be.\"\n\n*She pulls the halberd close. Wraps both hands around the real shaft. The iron and ash don't bend. Don't squeak. Her knuckles pale.*\n\n\"I need to sit down.\"\n\n[Status] Money: 479 gold\nHousehold: 1 — [Brenna, Human, UNRAVELING]",
+      "row": 425,
+      "category": "item_continuity",
+      "interpretation": "Clarifies prop material; does not explicitly transfer ownership.",
+      "notes": "No item-description updates; old response pockets props without a player handover.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 443,
+      "source_assistant_record": 444,
+      "player_message": "i would  never mention the golden stuff, neither you uh, also don't call me healer or medic outside *he whispers* i've studied medicine afterall for 14 years, i know a couple of things not related to golden stuff uh *walking to the temple+",
+      "assistant_response": "*Brenna's hood dips — a nod swallowed inside fabric. Her lips move without sound for two steps, three, rehearsing something. Then she speaks low enough that the words barely clear the market noise between them.*\n\n\"Fourteen years. You studied for **fourteen years.**\" *The halberd shifts on her shoulder. Her free hand tugs the cloak tighter, pulling the pink shirt further from view.* \"So you're not a healer with magic. You're a physician who happens to have magic. That's different. That's a man who walks into a temple apothecary and asks for willowbark and woundwort like any other doctor.\"\n\n*They pass through the West Gate checkpoint. A watchman glances at the halberd, at the hooded woman carrying it, and waves them through without standing. The street narrows. Stone buildings climb higher, the grime of the West District giving way to cleaner plaster and iron lanterns. The incense thickens.*\n\n\"Nicco the physician. No magic. No gold. Just a man who needs supplies.\" *She tests the name like a disguise she's fitting to his frame.* \"And I'm your — what. Carrying staff. Tall woman. Bodyguard who doesn't talk.\"\n\n*The temple spires sharpen ahead. Green shutters. White stone. Ivory Steps rising from the street like teeth.*\n\n\"I can do that.\"\n\n[Status] Money: 479 gold\nHousehold: 1 — [Brenna, Human, UNRAVELING]",
+      "row": 443,
+      "category": "knowledge",
+      "interpretation": "Asks for discretion about magic.",
+      "notes": "No existing secret fact is disclosed to new recipients; travel target lacks a direct route.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 509,
+      "source_assistant_record": 510,
+      "player_message": "well, i'm not sure we'll treat them this time. let's see the state of them first. if one of those three girls are in bad conditions we save them. buy and save. in 8 days we need to be at the docks. the more the merrier. i want to burn that docks down to ash.",
+      "assistant_response": "*Brenna's stride hitches. One step shorter than the rest. The halberd scrapes a low-hanging clothesline as they enter the first narrow lane of the tannery maze — wet hides draped from poles, the copper stink clinging to everything like a second skin.*\n\n\"Burn the docks.\" *She repeats it without inflection. Testing the weight of the words the way she'd test a rope before climbing it.* \"You — the man who can't lie, weighs more than a cart horse, and heals people by touching them — want to set fire to a smuggling operation run by a man with four cudgel-carriers and whoever supplies him from upstream.\"\n\n*She ducks under a tanning rack. Her grey eyes scan the junction ahead — two paths splitting around a collapsed wall, both dark, both narrow enough to force single file.*\n\n\"Buy and save the sick ones. That I understand. That's what you did with me.\" *Her jaw works once.* \"The rest — Drel, the warehouse, the routes — that's not medicine. That's **war.** And you're asking a woman with a halberd and a man with rubber knives to start one against a river operation in eight days.\"\n\n*She turns to face him. The hood shadows everything but her mouth — set hard, the muscle in her jaw flexing.*\n\n\"How many people do you think we need to burn a warehouse and not die trying.\"\n\n[Status] Money: 454 gold\nHousehold: 1 — [Brenna, Human, UNRAVELING]",
+      "row": 509,
+      "category": "scheduled_event",
+      "interpretation": "Dock deadline in eight days is discussed.",
+      "notes": "No absolute date anchor/event ID agreed in the isolated pair; no calendar guessing.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    },
+    {
+      "source_player_record": 591,
+      "source_assistant_record": 592,
+      "player_message": "maren maren ofc it's what i said ofc i know *he giggles* well you are doing better anyway that was the point",
+      "assistant_response": "*Maren stands against the wall, trembling legs locked straight, and watches him the way a cat watches a dog that just ran into a door and came back wagging. Her grey-green eyes flick to Brenna — a quick, sideways check, the kind that asks* is he always like this *without using words.*\n\n*Brenna answers without looking up from her stew. A single nod. Tired. Resigned.*\n\n*The girl's weight shifts. Her bare foot slides forward an inch on the stone — testing, recalculating — before settling back. She looks down at her own legs like they've betrayed her by shaking.*\n\n\"You said I'd fight the fever off by tomorrow.\" *Her voice comes rough, directed at a point somewhere past Nicco's shoulder.* \"What happens after that.\"\n\n*Not asked with hope. Asked the way a dockworker asks about the next shipment — logistics, not dreams. Her calloused fingers curl against her borrowed linen.*\n\n\"Where do I go.\"\n\n[Status] Money: 451 gold\nHousehold: 1 — [Brenna, Human, UNRAVELING]",
+      "row": 591,
+      "category": "multi_npc",
+      "interpretation": "Corrects Maren's name and discusses recovery.",
+      "notes": "No identity/profile/health mutation from informal dialogue.",
+      "expected": [],
+      "review_status": "agent_authored_pending_human_review",
+      "evaluation_suitability": [
+        "context_dependent",
+        "mixed"
+      ]
+    }
+  ]
+}

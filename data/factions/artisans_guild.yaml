@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: "artisans_guild"
+  type: "faction"
+  name: "Artisans Guild"
+  display_name: "Artisans Guild"
+  parent: null
+  aliases: []
+  summary: >-
+    A national guild representing skilled crafts and productive trades in West.
+  tags: ["politics"]
+  search_context: ""
+  content: >-
+    The Artisans Guild encompasses many artisan professions rather than a separate major
+    national faction for each craft. It may maintain local city branches with local
+    representatives, who collectively determine or select a national representative. Selection
+    methods remain undefined. Branches are parts of this national institution. Specialized
+    local associations may emerge later; none are authored now.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  members: []
+  territory: []
+  relations: []
+chunks: []
+

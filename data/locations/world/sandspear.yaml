@@ -1,0 +1,41 @@
+schema_version: 1
+entity:
+  id: sandspear
+  type: location
+  name: "Sandspear"
+  display_name: "Sandspear"
+  parent: center
+  aliases: []
+  summary: >-
+    Sandspear is a southern Center desert/coastal stronghold centered on a massive solitary
+    black-basalt tower, with corsair and mercenary-mariner activity.
+  content: >-
+    The defining tower rises from the desert near the coast in far southern Center.
+    Sandspear is violent and lightly regulated, dominated by navigator guilds/groups and
+    warlords without a fixed detailed government. Its economy spans piracy, corsair warfare,
+    mercenary service, and maritime disruption. Zul-Rath may employ or tolerate its forces
+    to harass shipping and disrupt West trade without formal national war; not every corsair
+    is a direct government soldier. Sandspear persistently rivals Blackwater over Chained
+    Bay, Sorrow Sea, and nearby trading lanes. Competition includes smuggling,
+    piracy/corsair action, extortion/protection, captured cargo, slave trafficking, and
+    wartime spoils, sometimes producing bloody naval engagements. This rivalry does not
+    establish formal West–Center naval war or a predetermined winner.
+  tags: [geography]
+  search_context: ""
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "solitary black-basalt tower"
+      description: "A massive solitary black-basalt tower rises from the desert and defines the settlement."
+    - name: "corsair and mercenary-mariner stronghold"
+      description: "Violent, lightly regulated maritime activity spans piracy, corsair warfare, mercenary service, and shipping disruption."
+    - name: "navigator groups and warlords"
+      description: "Dominant social actors without a fully defined or rigid city government."
+    - name: "maritime rival"
+      description: "Blackwater"
+  connections: []
+chunks: []
+

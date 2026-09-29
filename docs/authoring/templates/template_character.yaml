@@ -1,0 +1,39 @@
+# Authoring template only. Keep outside data/ until placeholders and references are replaced.
+schema_version: 1
+entity:
+  id: template_character
+  type: character
+  name: Unfilled character template
+  display_name: Unfilled character template
+  parent: null
+  aliases: []
+  summary: Unfilled character authoring template; not Caldrevan canon.
+  tags: []
+  search_context: ""
+  content: Unfilled compact introduction; replace with supplied facts before authoring canon.
+  # Example for ordinary observable facts; choose policy deliberately.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  role: npc
+  # Association/default only, never live runtime location. Null means unestablished.
+  base_location: template_location
+  work_location: null
+  home_location: null
+  species: null
+  sex: null # male | female | intersex | null
+  age_band: null
+  appearance: null # stable recognizable physical baseline, at most 800 characters
+  occupation: null # public occupational role; role above is engine classification
+  # Narrator portrayal only. Purpose is NOT a campaign goal; morality is behavioral.
+  purpose: null # at most 800 characters
+  morality: null # at most 800 characters; boundaries/tradeoffs, not alignment labels
+  affiliations: [] # existing faction/concept IDs; no inferred membership from folders
+  # Optional private_notes: at most 1600 characters, never search/player knowledge.
+  # summary above is the public_summary; traits below are stable personality tendencies.
+  traits: []
+  relationships: []
+# Add coherent passages only when supplied detail or visibility warrants them.
+chunks: []

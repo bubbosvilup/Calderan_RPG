@@ -1,0 +1,42 @@
+schema_version: 1
+entity:
+  id: main_city_structure
+  type: world_lore
+  name: Calderan City Structure
+  display_name: Calderan City Structure
+  parent: null
+  aliases:
+    - Calderan district overview
+    - Districts of Calderan
+  summary: "Calderan, West's largest city and political capital, has five broad urban districts: West,
+    East, North, South, and Center."
+  tags:
+    - fundamentals
+  search_context: Calderan city districts, distinct from the nations West, Center, and East.
+  content: "Calderan is a very large, dense walled metropolis. Its five broad urban districts are
+    major regions, not small neighborhoods. District themes describe predominant tendencies, not
+    exclusive zoning: labor and harder living conditions in West; everyday commerce and crafts in
+    East; religion and healing in North; security and transit in South; wealth and political
+    administration in Center. Center is enclosed by an older inner wall. Shops may exist in West,
+    taverns in Center, and temples outside North. Crossing substantial parts of a district or the
+    city is meaningful travel. Detailed district canon belongs to the five district locations. Exact
+    roads and navigation routes are not established."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  category: fundamentals
+  related_entities:
+    - calderan
+    - continental_structure
+    - west_governance
+    - city_guard
+    - city_magistracy
+    - calderan_west
+    - calderan_east
+    - calderan_north
+    - calderan_south
+    - calderan_center
+chunks: []

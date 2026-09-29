@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: "west_governance"
+  type: "world_lore"
+  name: "West Governance"
+  display_name: "West Governance"
+  parent: null
+  aliases: []
+  summary: >-
+    West is a monarchy: the Royal Family stands above Dukes governing major cities and their
+    surrounding territories.
+  tags: ["fundamentals"]
+  search_context: ""
+  content: >-
+    Each Duke is the primary local authority beneath the Crown, supported by a local council.
+    The council may include local nobles, representatives of the three national guilds, and
+    ecclesiastical representation; membership counts, voting, quorum, and exact constitutional
+    powers remain undefined. Local nobles exist without a standardized tier taxonomy. The four
+    major institutional power blocs are the Merchants Guild, Artisans Guild, Learned Arts
+    Guild, and Church. The first three are national guilds; the Church is not a guild but has
+    comparable political weight. Guilds may maintain city branches and local representatives,
+    who collectively determine or select a national representative; selection methods and
+    terms remain undefined. For major kingdom-wide matters the Crown may summon or consult
+    Dukes, national representatives of the three guilds, and national Church representation.
+    No permanent exact council or constitution is fixed. King, Queen, Princes, and Princesses
+    are ordinary royal concepts, not named NPCs; succession law remains undefined.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "fundamentals"
+  related_entities: ["merchants_guild","artisans_guild","learned_arts_guild","church","city_magistracy"]
+chunks: []
+

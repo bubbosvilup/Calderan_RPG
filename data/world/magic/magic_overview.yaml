@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: "magic_overview"
+  type: "world_lore"
+  name: "Magic"
+  display_name: "Magic"
+  parent: null
+  aliases: []
+  summary: >-
+    Magic is publicly known and real, but genuine practitioners are uncommon.
+  tags: ["magic"]
+  search_context: ""
+  content: >-
+    Magic is not an everyday ability. Ordinary elemental magic is neither impossible nor
+    legendary, although genuine magic users remain rare. In a very large city, practicing
+    mages might number in the low dozens or even roughly two hands' worth; this is a rough
+    rarity guideline, not a demographic equation. Some respect magic, some fear it, and many
+    unfamiliar with it distrust it. Mages often gain influence, social leverage, institutional
+    importance, or positions associated with knowledge and power. This does not make every
+    mage wealthy, noble, politically powerful, or a guild leader.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+  category: "magic"
+  related_entities: ["mana","elemental_magic","light_and_shadow","magic_subschools","learned_arts_guild"]
+chunks: []
+

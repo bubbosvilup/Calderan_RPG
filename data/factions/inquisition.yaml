@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: "inquisition"
+  type: "faction"
+  name: "Inquisition"
+  display_name: "Inquisition"
+  parent: "church"
+  aliases: []
+  summary: >-
+    The Inquisition is a powerful, feared national organ of the Church.
+  tags: ["politics"]
+  search_context: ""
+  content: >-
+    The Inquisition is institutionally intimidating and can operate through local presence
+    when necessary. It may take interest in exceptional magic, Light/Shadow users, matters
+    considered dangerous or religiously significant, and other issues later defined by
+    doctrine. Its authority, secrecy, reputation, and power make it feared. Legal powers
+    remain undefined; it is not established as omnipotent, unopposed, or purely evil. Interest
+    and intervention depend on circumstances, not an automatic response to every rare spell.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  members: []
+  territory: []
+  relations: []
+chunks: []
+

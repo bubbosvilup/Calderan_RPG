@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: calderan_west
+  type: location
+  name: West District
+  display_name: Calderan West District
+  parent: calderan
+  aliases:
+    - Calderan West District
+  summary: West District is one of Calderan's five broad urban regions. The generally poorer, harder
+    and more crowded West District combines manual and heavy labor, cheap housing, workshops,
+    warehouses and rough establishments.
+  tags:
+    - geography
+    - district
+  search_context: West District of Calderan, urban district.
+  content: The generally poorer, harder and more crowded West District combines manual and heavy
+    labor, cheap housing, workshops, warehouses and rough establishments. Crime, debt and vulnerable
+    populations are more visible here, alongside the established legal slave trade. Ordinary
+    families, respectable trades and successful businesses also live and operate here. Heartstone
+    lies in north-western West. A substantial commercial and service concentration lies nearer
+    Center; the slave-market area lies farther through West. These are predominant tendencies, not
+    exclusive zoning. Crossing substantial parts of a district is meaningful travel; no exact roads
+    or navigation routes are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []
