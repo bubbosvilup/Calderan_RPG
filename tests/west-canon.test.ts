@@ -30,7 +30,7 @@ test("West POIs have valid structural ancestry, public local envelopes, and no i
  assert.equal(world.getEntity("grey_brook")!.type,"world_lore");
  const square=world.getEntity("heartstone_square")!;
  if(square.type==="location")assert.deepEqual(square.connections.map(c=>c.target),["heartstone_lr"]);
- assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
+ assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),["arwen_woodsigner", "azael_melakor", "bartolomhew", "blackthorn", "boran_dravendark", "bram_kessel", "brother_aven", "brunna_keld", "captain_doran_hale", "cassian_valerius", "corvinus_morvath", "dren", "dunrig_iron_hands", "elspeth_vael", "garran_holt", "gaston", "gideon_melakor", "hadrik_voss", "halden_cross", "helbrecht", "iseult_morvath", "jessa_rook", "kaelen_dravendark", "korvin", "livia_marr", "lysandra_vell", "maelor_morvath", "marta_pell", "matthias_eld", "mira_thorne", "mistress_elara", "niles_vanner", "odelia_crane", "oren_quarn", "orla_fen", "pellan", "rufus_tern", "seren_vael", "severan_krauss", "sister_mereth", "sister_veyra", "sun_emperor", "sybilla_melakor", "tavian_merrow", "uther_calderan", "vaelen_vael", "vorn_dravendark"]);
  for(const id of ["undertakers_door","quiet_yard"])assert.equal(world.getEntity(id),undefined);
 });
 

@@ -1,0 +1,145 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T3",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Blackthorn, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "97e1788b7261a069",
+      "draft": " Blackthorn stands a head shorter than Nicco, her round frame dressed in an aubergine suit tailored sharp enough to suggest she pays well for presentation. She studies him with nearly black eyes, patient but edged with the impatience of someone who dislikes having her time wasted. Her two bodyguards flank her a half-step back, large enough to loom without crowding the square's moderate foot traffic.\n\n\"You're the one who took Heartstone,\" she says, not quite a question. Her gaze flicks to the tower's massive wooden entrance behind him, then back. \"I wondered if you'd come out eventually.\"",
+      "issues": [
+        {
+          "kind": "absent_participant",
+          "character": "Blackthorn",
+          "sentence": "Her two bodyguards flank her a half-step back, large enough to loom without crowding the square's moderate foot traffic.",
+          "correction": "Blackthorn's two large bodyguards are NOT present in this scene (a habit, not presence). Remove them entirely; nobody else acts, restrains or intervenes except the people listed as present."
+        }
+      ],
+      "revision_requested": true,
+      "revision": " Blackthorn stands a head shorter than Nicco, her round frame dressed in an aubergine suit tailored sharp enough to suggest she pays well for presentation. She studies him with nearly black eyes, patient but edged with the impatience of someone who dislikes having her time wasted.\n\n\"You're the one who took Heartstone,\" she says, not quite a question. Her gaze flicks to the tower's massive wooden entrance behind him, then back. \"I wondered if you'd come out eventually.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": " Blackthorn stands a head shorter than Nicco, her round frame dressed in an aubergine suit tailored sharp enough to suggest she pays well for presentation. She studies him with nearly black eyes, patient but edged with the impatience of someone who dislikes having her time wasted.\n\n\"You're the one who took Heartstone,\" she says, not quite a question. Her gaze flicks to the tower's massive wooden entrance behind him, then back. \"I wondered if you'd come out eventually.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3197,
+              "completion_tokens": 128,
+              "total_tokens": 3325,
+              "cost": 0.0023022,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0023022,
+                "upstream_inference_prompt_cost": 0.0019182,
+                "upstream_inference_completions_cost": 0.000384
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3551,
+              "completion_tokens": 102,
+              "total_tokens": 3653,
+              "cost": 0.0024366,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0024366,
+                "upstream_inference_prompt_cost": 0.0021306,
+                "upstream_inference_completions_cost": 0.000306
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3197,
+            "completion_tokens": 128,
+            "total_tokens": 3325
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:05.568Z",
+            "headers_ms": 829.9581999999973,
+            "time_to_first_token_ms": 1077.4159999999974,
+            "completed_at": "2026-09-30T11:55:07.540Z",
+            "elapsed_total_ms": 1971.304799999998
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4487.869699999999,
+        "narrator_ttft_ms": 1077.4159999999974,
+        "narrator_total_ms": 1971.304799999998,
+        "controller_ms": 862.8286999999982,
+        "turn_ms": 4488.254400000002
+      }
+    }
+  ]
+}

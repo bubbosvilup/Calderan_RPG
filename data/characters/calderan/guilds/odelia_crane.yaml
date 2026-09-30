@@ -1,0 +1,60 @@
+schema_version: 1
+entity:
+  id: odelia_crane
+  type: character
+  name: Odelia Crane
+  display_name: Magister Odelia Crane
+  parent: null
+  aliases:
+    - Magister Odelia Crane
+    - Magister Crane
+  summary: Magister Odelia Crane is a scholar and alchemist and the senior Learned Arts Guild
+    representative on the Ducal Council of Calderan.
+  tags:
+    - guild
+    - scholarship
+  search_context: Odelia Crane, Magister Crane, Learned Arts Guild representative, Ducal Council, The
+    Collegium, scholar, alchemist
+  content: Magister Odelia Crane holds the Learned Arts Guild's seat on the Ducal Council of Calderan
+    and works at The Collegium. A scholar and alchemist rather than a mage, she is composed, precise
+    and intellectually proud. She sees the Church and Learned Arts compromise as unpleasant but
+    necessary, and meets any supernatural claim first with "What exactly did you observe?"
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 50–55
+  appearance: Tall and narrow, with auburn hair now heavily greying, usually worn in a severe bun,
+    blue-grey eyes and thin rectangular spectacles. Wears dark scholarly clothing with understated
+    guild insignia.
+  occupation: Learned Arts Guild representative on the Ducal Council; scholar and alchemist
+  base_location: the_collegium
+  work_location: the_collegium
+  home_location: null
+  traits:
+    - composed
+    - precise
+    - intellectually proud
+    - politically cautious
+    - defensive of professional expertise
+    - dislikes superstition presented as evidence
+    - meets supernatural claims with "What exactly did you observe?"
+  purpose: Preserve legitimate scholarship, medicine, alchemy and regulated magical study without
+    allowing the Church to absorb the Guild.
+  morality: Moderately humane but elitist about competence. She dislikes Church officials defining
+    technical matters they do not understand as much as Guild scholars pretending regulation does
+    not exist, which makes her neither anti-Church nor pro-Inquisition. Her blind spot is dismissing
+    ordinary people's fears too quickly when they are technically uninformed.
+  affiliations:
+    - learned_arts_guild
+    - ducal_council_of_calderan
+  relationships: []
+  private_notes: She has professional knowledge of mage registration and regulated magic, but none of
+    the Church's restricted Light doctrine, the Mutilating Ritual's method or other
+    inner-Inquisition secrets. She is not a mage.
+chunks: []

@@ -1,0 +1,108 @@
+{
+  "model": "xiaomi/mimo-v2.5-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T1",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Captain Doran Hale who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8d6cacdaba1d0850",
+      "draft": "The late afternoon light fell across the cobblestones of Heartstone Square, catching the dust motes stirred by the sparse foot traffic. Captain Doran Hale stood with the practiced stillness of a man long accustomed to watching and waiting, his posture straight, the hilt of his longsword near his scarred hand. His blue eyes held an evaluating calm as they fixed upon the tall, overweight man who had emerged from the old tower's entrance.\n\n\"I don't know who you are,\" the Captain said, his voice a low, steady baritone that carried easily without raising. \"And I don't know where you come from. That's what I'm here to find out. This tower has been quiet for longer than my patrol has walked this square. Now, suddenly, someone walks out its main door.\" He took a slow step forward, not aggressive, but closing the space with a guard's deliberate economy. \"So, you tell me. Who are you, and why are you in Heartstone Tower?\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The late afternoon light fell across the cobblestones of Heartstone Square, catching the dust motes stirred by the sparse foot traffic. Captain Doran Hale stood with the practiced stillness of a man long accustomed to watching and waiting, his posture straight, the hilt of his longsword near his scarred hand. His blue eyes held an evaluating calm as they fixed upon the tall, overweight man who had emerged from the old tower's entrance.\n\n\"I don't know who you are,\" the Captain said, his voice a low, steady baritone that carried easily without raising. \"And I don't know where you come from. That's what I'm here to find out. This tower has been quiet for longer than my patrol has walked this square. Now, suddenly, someone walks out its main door.\" He took a slow step forward, not aggressive, but closing the space with a guard's deliberate economy. \"So, you tell me. Who are you, and why are you in Heartstone Tower?\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3185,
+              "completion_tokens": 204,
+              "total_tokens": 3389,
+              "cost": 0.0006794478,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2048,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0006794478,
+                "upstream_inference_prompt_cost": 0.0005019678,
+                "upstream_inference_completions_cost": 0.00017748
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.5-pro",
+          "usage": {
+            "prompt_tokens": 3185,
+            "completion_tokens": 204,
+            "total_tokens": 3389
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:02:22.799Z",
+            "headers_ms": 837.7933000000194,
+            "time_to_first_token_ms": 837.8824000000022,
+            "completed_at": "2026-09-30T12:02:34.208Z",
+            "elapsed_total_ms": 11409.279899999965
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 12281.718700000027,
+        "narrator_ttft_ms": 837.8824000000022,
+        "narrator_total_ms": 11409.279899999965,
+        "controller_ms": 863.2300999999861,
+        "turn_ms": 12281.979900000035
+      }
+    }
+  ]
+}

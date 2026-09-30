@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: null_dust
+  type: concept
+  name: "Null Dust"
+  display_name: "Null Dust"
+  parent: null
+  aliases: []
+  summary: >-
+    Null Dust is an expensive alchemical anti-magic substance, controlled primarily by the
+    Inquisition, that temporarily disrupts arcane flow around a target.
+  tags: ["magic","alchemy"]
+  search_context: "Null Dust, anti-magic dust, suppress magic, Inquisition alchemy, disrupt mana"
+  content: >-
+    Null Dust is an alchemical anti-magic substance controlled primarily by the Inquisition. It
+    is expensive, produced only in small quantities and tightly controlled. Its effect is
+    temporary and short-range or localized: it disrupts arcane flow around a target. Its exact
+    duration, radius, composition and production are not established. The City Guard does not
+    normally possess it.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":["helbrecht","severan_krauss"],"awareness":"specialized"}
+  related_entities: ["inquisition","mage_registration"]
+chunks: []

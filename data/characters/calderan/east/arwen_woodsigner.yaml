@@ -1,0 +1,55 @@
+schema_version: 1
+entity:
+  id: arwen_woodsigner
+  type: character
+  name: Arwen Woodsigner
+  display_name: Arwen Woodsigner
+  parent: null
+  aliases: []
+  summary: Arwen Woodsigner is a Wood Elf bowyer, woodworker and experienced hunter of the small
+    Calderan Woodsigner branch, working at The Bent Bough in the East District.
+  tags:
+    - east_npc
+    - crafts
+    - elf
+  search_context: Arwen Woodsigner, Wood Elf bowyer, bows, arrows, woodworker, hunter, The Bent Bough, Woodsigner
+  content: Arwen Woodsigner makes hunting, war and custom bows, arrows and specialist wooden equipment
+    at The Bent Bough, personally crafting some of its premium bows, and is an experienced hunter.
+    Calm, independent and observant, she is composed and self-assured with adults and generally
+    neutral toward political factions and other peoples, while strongly loyal to elves and her own
+    people. Around children she is unexpectedly soft and somewhat awkward.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Wood Elf
+  sex: female
+  age_band: Old by human standards but relatively young for a Wood Elf; exact age not established
+  appearance: Medium height, slim, graceful and athletic rather than muscular, with long brown hair
+    and light hazel-brown eyes. Wears practical artisan and hunter clothing.
+  occupation: Bowyer, woodworker and hunter at The Bent Bough
+  base_location: the_bent_bough
+  work_location: the_bent_bough
+  home_location: null
+  traits:
+    - calm
+    - independent
+    - observant
+    - generally neutral toward political factions and other peoples
+    - strongly loyal to elves and her own people
+    - unusual sympathy toward Beastfolk
+    - composed with adults, unexpectedly soft and awkward around children
+  purpose: Preserve Woodsigner craft and maintain a dignified place for the small clan branch inside
+    Calderan.
+  morality: Generally decent, not idealistic.
+  affiliations:
+    - woodsigner
+  relationships: []
+  private_notes: She has a very strong soft spot for children and enjoys being around them, but is
+    somewhat awkward approaching human children, worrying that because elves are uncommon they may
+    find her strange or intimidating. She holds the Woodsigner tradition about the origin of
+    Beastfolk as inherited clan belief; it is not established world truth.
+chunks: []

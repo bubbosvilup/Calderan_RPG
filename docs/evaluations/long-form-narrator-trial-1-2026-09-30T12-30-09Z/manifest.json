@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-09-30T12:30:43.747Z",
+  "source_before": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "controller": "deepseek/deepseek-v4-flash-0731:nitro",
+  "narrator_output_tokens": 384,
+  "configs": [
+    {
+      "id": "glm-5.2",
+      "model": "z-ai/glm-5.2",
+      "tag": "z-ai/fp8",
+      "provider_name": "Z.AI",
+      "reasoning": {
+        "enabled": false
+      }
+    },
+    {
+      "id": "gemini-3.8-flash-vertex",
+      "model": "google/gemini-3.8-flash",
+      "tag": "google-vertex/global",
+      "provider_name": "Google",
+      "reasoning": {
+        "effort": "minimal"
+      }
+    }
+  ],
+  "runs": [
+    {
+      "config": "glm-5.2",
+      "turns": 18,
+      "successful": 18,
+      "upstream_observed": [
+        "Z.AI"
+      ],
+      "provider_drift": false
+    },
+    {
+      "config": "gemini-3.8-flash-vertex",
+      "turns": 18,
+      "successful": 18,
+      "upstream_observed": [
+        "Google"
+      ],
+      "provider_drift": false
+    }
+  ],
+  "finished_at": "2026-09-30T12:33:06.526Z",
+  "source_after": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "source_unchanged": true
+}

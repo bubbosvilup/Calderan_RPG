@@ -8,6 +8,7 @@ import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { authorizeCommands } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
+import { narratedDepartures } from "./scene-departure.js";
 
 /**
  * Phase 1O evidence-backed authorization. A controller evidence quote is necessary for the evidence path and never sufficient:
@@ -182,6 +183,12 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     return { verified: true, check: "physical_condition_narrated" };
   }
 
+  if (command.kind === "leave_scene") {
+    // The quote must lie within a sentence the deterministic departure grammar reads as this character's completed exit.
+    const departed = narratedDepartures(narration.slice(sStart, sEnd), context).some(d => d.character_id === command.character_id) || narratedDepartures(narration, context).some(d => d.character_id === command.character_id && d.source_sentence.replace(/s+/g, " ").includes(q));
+    return departed ? { verified: true, check: "departure_narrated" } : { verified: false, check: "no_completed_departure" };
+  }
+
   if (command.kind === "transfer_item") {
     const recipient = command.owner_id;
     if (!recipient) return { verified: false, check: "no_recipient" };
@@ -239,7 +246,7 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
     const base = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
     if (g.authorized) return { ...base, authorized: true, reason: g.reason, source: ev.verified ? "both" : "grammar" };
     // Repair 1: conditions have no grammar path. Validity was already checked by authorizeCommands; verified evidence completes it.
-    if (command.kind === "set_condition") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
+    if (command.kind === "set_condition" || command.kind === "leave_scene") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
     if (mode === "hybrid" && ev.verified && MISSING_CONFIRMATION.has(g.reason)) {
       const index = evidence.player_intents.findIndex(c => isDeepStrictEqual(c, command));
       const kind = command.kind === "set_knowledge" ? "was_told_fact" as const : "accepted_transfer" as const;

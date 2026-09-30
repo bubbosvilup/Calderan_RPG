@@ -1,0 +1,131 @@
+{
+  "turn": 13,
+  "input": "*When the man shoves him in the chest, Nicco keeps his feet and moves so the counter is between them.* Jessa, is there anyone we can call for this?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "ef979f2aec2bac14",
+  "draft": "The shove caught Nicco square in the chest but he braced against the counter edge and stayed upright, putting the length of the bar between himself and the dockworker. Dell Harrow swayed where he stood, breathing hard through his nose, knuckles whitening on the bar rail.\n\n\"That's enough, Harrow.\" Jessa Rook's voice cut across the common room without rising. She hadn't moved from behind the counter, but the notebook was out of her belt and open. \"You've spilled his drink, you've put hands on a guest, and you're done for the night. Settle your tab and walk out. Come back when you can stand without leaning on someone.\"\n\nDell's mouth worked. He looked at Nicco across the counter, then at Jessa, then at the spill running off the bar edge onto the floor. His shoulders dropped an inch. He fumbled a few coins onto the wet wood — more than the ale, less than a night's worth — and turned for the door without collecting the change. The door banged shut behind him.\n\nJessa wiped the counter with a rag already in her hand. \"That answers your question. I don't need the Guard for a man who's leaving.\" She glanced at Nicco, the rag still moving. \"Your ale's on the house tonight. Sit back down.\"",
+  "issues": [
+    {
+      "kind": "uncommitted_constraint",
+      "sentence": "The shove caught Nicco square in the chest but he braced against the counter edge and stayed upright, putting the length of the bar between himself and the dockworker.",
+      "correction": "Nicco is not restrained, held, removed, detained or banned: none of that is recorded. Characters may threaten, order or demand it in words, or start toward it, but do not narrate it as accomplished."
+    }
+  ],
+  "revision_requested": true,
+  "revision": "Nicco kept his footing after the shove and moved so the counter sat between him and the dockworker. Dell Harrow swayed where he stood, breathing hard through his nose, knuckles whitening on the bar rail.\n\n\"That's enough, Harrow.\" Jessa Rook's voice cut across the common room without rising. She hadn't moved from behind the counter, but the notebook was out of her belt and open. \"You've spilled his drink, you've put hands on a guest, and you're done for the night. Settle your tab and walk out. Come back when you can stand without leaning on someone.\"\n\nDell's mouth worked. He looked at Nicco across the counter, then at Jessa, then at the spill running off the bar edge onto the floor. His shoulders dropped an inch. He fumbled a few coins onto the wet wood — more than the ale, less than a night's worth — and turned for the door without collecting the change. The door banged shut behind him.\n\nJessa wiped the counter with a rag already in her hand. \"That answers your question. I don't need the Guard for a man who's leaving.\" She glanced at Nicco, the rag still moving. \"Your ale's on the house tonight. Sit back down.\"",
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "revision",
+  "delivered": "Nicco kept his footing after the shove and moved so the counter sat between him and the dockworker. Dell Harrow swayed where he stood, breathing hard through his nose, knuckles whitening on the bar rail.\n\n\"That's enough, Harrow.\" Jessa Rook's voice cut across the common room without rising. She hadn't moved from behind the counter, but the notebook was out of her belt and open. \"You've spilled his drink, you've put hands on a guest, and you're done for the night. Settle your tab and walk out. Come back when you can stand without leaning on someone.\"\n\nDell's mouth worked. He looked at Nicco across the counter, then at Jessa, then at the spill running off the bar edge onto the floor. His shoulders dropped an inch. He fumbled a few coins onto the wet wood — more than the ale, less than a night's worth — and turned for the door without collecting the change. The door banged shut behind him.\n\nJessa wiped the counter with a rag already in her hand. \"That answers your question. I don't need the Guard for a man who's leaving.\" She glanced at Nicco, the rag still moving. \"Your ale's on the house tonight. Sit back down.\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 3,
+    "revision_after": 3,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [
+      "campaign_character_eval_dell_harrow"
+    ],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 2,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3531,
+          "completion_tokens": 276,
+          "total_tokens": 3807,
+          "cost": 0.0025098,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3200,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0025098,
+            "upstream_inference_prompt_cost": 0.0012954,
+            "upstream_inference_completions_cost": 0.0012144
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      },
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4041,
+          "completion_tokens": 263,
+          "total_tokens": 4304,
+          "cost": 0.00287476,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3456,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00287476,
+            "upstream_inference_prompt_cost": 0.00171756,
+            "upstream_inference_completions_cost": 0.0011572
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3531,
+        "completion_tokens": 276,
+        "total_tokens": 3807
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:32:11.743Z",
+        "headers_ms": 7127.400199999989,
+        "time_to_first_token_ms": 7135.440199999997,
+        "completed_at": "2026-09-30T12:32:18.922Z",
+        "elapsed_total_ms": 7178.162899999996
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 7135.440199999997,
+    "narrator_total_ms": 7178.162899999996,
+    "controller_ms": 1199.8350999999966,
+    "turn_ms": 12938.21650000001
+  }
+}

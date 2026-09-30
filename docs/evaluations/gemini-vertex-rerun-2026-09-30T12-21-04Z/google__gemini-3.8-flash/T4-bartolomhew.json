@@ -1,0 +1,165 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-vertex/global",
+    "provider_name": "Google",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T4",
+  "npc": "bartolomhew",
+  "location": "calderan_slave_market",
+  "turns": [
+    {
+      "input": "*He punches Bartolomhew directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "ad19ddcbbdf1a95e",
+      "draft": "The blow catches Bartolomhew squarely across the cheek and nose. His head snaps back with a wet crack, his paternal smile vanishing into a sharp gasp of shock and pain. He stumbles back several paces on the churned dirt, nearly losing his footing before catching his balance, one hand coming up to press against a split, rapidly bleeding upper lip. His eyes widen in startled outrage, his chest heaving as he recovers his breath.\n\nA few nearby handlers and buyers glance over amid the ambient noise of the market square. Korvin instantly shifts his stance, his small eyes darting from Nicco’s fist to Bartolomhew with hard, suspicious wariness. \"The hell are you playing at?\" Korvin growls, his voice low and rasping.\n\nMistress Elara snaps her fan shut, her expression tightening into cold disapproval as she takes a measured step away from the scuffle. Lowering his bloodied fingers, Bartolomhew straightens his posture, though his voice wavers with sudden, strained fury. \"You strike a licensed trader in the open market? Guards! Seize this man!\"",
+      "issues": [
+        {
+          "kind": "uncommitted_condition",
+          "character": "Bartolomhew",
+          "sentence": "Lowering his bloodied fingers, Bartolomhew straightens his posture, though his voice wavers with sudden, strained fury.",
+          "correction": "No lasting minor injury was recorded for Bartolomhew. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "The blow strikes Bartolomhew across the cheek, snapping his head to the side and cutting off his words in a sharp gasp of pain and astonishment. He recoils, stumbling back a step on the churned earth to steady himself, one hand rising defensively to touch the reddening skin of his face. His paternal smile is entirely gone, replaced by wide, startled outrage.\n\nNearby handlers and buyers pause amid the noise of the market square, heads turning toward the sudden commotion. Korvin shifts his stance, his small, perceptive eyes darting between Nicco and the recoiling trader with immediate suspicion. \"The hell are you playing at?\" Korvin mutters, his voice low and gravelly.\n\nMistress Elara snaps her decorative fan shut, stepping back with an expression of sharp, icy disapproval. Bartolomhew straightens, his breath quick with sudden indignation as he glares at Nicco. \"You dare strike a licensed trader in the open square?\" he calls out, his voice sharp and carrying over the crowd. \"Guards! Restrain this man!\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "The blow strikes Bartolomhew across the cheek, snapping his head to the side and cutting off his words in a sharp gasp of pain and astonishment. He recoils, stumbling back a step on the churned earth to steady himself, one hand rising defensively to touch the reddening skin of his face. His paternal smile is entirely gone, replaced by wide, startled outrage.\n\nNearby handlers and buyers pause amid the noise of the market square, heads turning toward the sudden commotion. Korvin shifts his stance, his small, perceptive eyes darting between Nicco and the recoiling trader with immediate suspicion. \"The hell are you playing at?\" Korvin mutters, his voice low and gravelly.\n\nMistress Elara snaps her decorative fan shut, stepping back with an expression of sharp, icy disapproval. Bartolomhew straightens, his breath quick with sudden indignation as he glares at Nicco. \"You dare strike a licensed trader in the open square?\" he calls out, his voice sharp and carrying over the crowd. \"Guards! Restrain this man!\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "bartolomhew",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "sentence_hedged_negated_or_hypothetical"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "calderan_slave_market"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-vertex/global",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Google",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 4595,
+              "completion_tokens": 227,
+              "total_tokens": 4822,
+              "cost": 0.0042975,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0042975,
+                "upstream_inference_prompt_cost": 0.00344625,
+                "upstream_inference_completions_cost": 0.00085125
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Google",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 5038,
+              "completion_tokens": 217,
+              "total_tokens": 5255,
+              "cost": 0.00459225,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00459225,
+                "upstream_inference_prompt_cost": 0.0037785,
+                "upstream_inference_completions_cost": 0.00081375
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 4595,
+            "completion_tokens": 227,
+            "total_tokens": 4822
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:21:05.255Z",
+            "headers_ms": 1339.6536,
+            "time_to_first_token_ms": 1340.4053,
+            "completed_at": "2026-09-30T12:21:09.357Z",
+            "elapsed_total_ms": 4101.7469
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 8536.623300000001,
+        "narrator_ttft_ms": 1340.4053,
+        "narrator_total_ms": 4101.7469,
+        "controller_ms": 1067.9103000000005,
+        "turn_ms": 8537.507
+      }
+    }
+  ]
+}

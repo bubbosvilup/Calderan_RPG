@@ -1,0 +1,108 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-vertex/global",
+    "provider_name": "Google",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T1",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Captain Doran Hale who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8d6cacdaba1d0850",
+      "draft": "The broad, scarred captain stood firmly in his heavy officer's armor, his blue eyes measuring Nicco against the backdrop of the square's low houses and the massive wooden doors of the tower behind them. Ambient foot traffic skirted past at an unhurried distance, giving the guard officer a wide berth. \n\nHale regarded him with a flat, disciplined composure, showing neither amusement nor hostility. \"I don't make a habit of guessing a stranger's life story,\" Hale said, his voice level and steady. \"I see a man standing outside Heartstone in the middle of West District. Beyond that, I don't know who you are, nor where you've traveled from. If there is something about your presence here that concerns the City Guard, you can tell me yourself.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The broad, scarred captain stood firmly in his heavy officer's armor, his blue eyes measuring Nicco against the backdrop of the square's low houses and the massive wooden doors of the tower behind them. Ambient foot traffic skirted past at an unhurried distance, giving the guard officer a wide berth. \n\nHale regarded him with a flat, disciplined composure, showing neither amusement nor hostility. \"I don't make a habit of guessing a stranger's life story,\" Hale said, his voice level and steady. \"I see a man standing outside Heartstone in the middle of West District. Beyond that, I don't know who you are, nor where you've traveled from. If there is something about your presence here that concerns the City Guard, you can tell me yourself.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-vertex/global",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3227,
+              "completion_tokens": 164,
+              "total_tokens": 3391,
+              "cost": 0.00303525,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00303525,
+                "upstream_inference_prompt_cost": 0.00242025,
+                "upstream_inference_completions_cost": 0.000615
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3227,
+            "completion_tokens": 164,
+            "total_tokens": 3391
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:21:10.218Z",
+            "headers_ms": 1486.9393,
+            "time_to_first_token_ms": 1487.0546000000004,
+            "completed_at": "2026-09-30T12:21:13.402Z",
+            "elapsed_total_ms": 3183.546700000001
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4932.744900000001,
+        "narrator_ttft_ms": 1487.0546000000004,
+        "narrator_total_ms": 3183.546700000001,
+        "controller_ms": 1733.490099999999,
+        "turn_ms": 4932.9803
+      }
+    }
+  ]
+}

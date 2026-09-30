@@ -1,0 +1,49 @@
+schema_version: 1
+entity:
+  id: iseult_morvath
+  type: character
+  name: Iseult Morvath
+  display_name: Iseult Morvath
+  parent: null
+  aliases: []
+  summary: Iseult Morvath is the younger sister of Corvinus Morvath and House Morvath's banking and
+    credit specialist.
+  tags:
+    - nobility
+  search_context: Iseult Morvath, House Morvath, banking, credit
+  content: "Iseult Morvath is the younger sister of Corvinus Morvath and House Morvath's banking and
+    credit specialist. Precise and dry, often sarcastic, she thinks in obligations: who owes what to
+    whom. Presented with a grand plan, one of her first questions is often \"How much?\", not for
+    lack of imagination but because eventually someone pays."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 57–60
+  appearance: Relatively petite and elegant, with shoulder-length iron-grey hair and extremely dark eyes.
+  occupation: Banking and credit specialist of House Morvath
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - precise
+    - dry and sarcastic
+    - financially brilliant
+    - practical
+    - "thinks in obligations: who owes what to whom"
+    - asks "How much?" early, because eventually someone pays
+  purpose: Ensure House Morvath remains the creditor rather than the debtor.
+  morality: Strongly pragmatic; she considers destroying a productive debtor for no reason financially
+    stupid.
+  affiliations:
+    - house_morvath
+  relationships:
+    - target: corvinus_morvath
+      kind: sibling
+      description: Elder brother and patriarch of House Morvath.
+chunks: []

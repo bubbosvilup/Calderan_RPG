@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: calderan_civil_registry
+  type: location
+  name: "Calderan Civil Registry"
+  display_name: "Calderan Civil Registry"
+  parent: calderan_center
+  aliases: ["Civil Registry"]
+  summary: >-
+    The Calderan Civil Registry is the city's civil-records office in the administrative core of
+    the Center District, near the Ducal Citadel.
+  tags: ["civic","records"]
+  search_context: "Calderan Civil Registry, civil records, registration, clerks, Pellan"
+  content: >-
+    The Calderan Civil Registry keeps the city's civil records and stands in the administrative
+    core near the Ducal Citadel. Pellan works here as a clerk. Its record categories, procedures
+    and staffing are not otherwise established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

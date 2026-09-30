@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: the_collegium
+  type: location
+  name: "The Collegium"
+  display_name: "The Collegium"
+  parent: calderan_north
+  aliases: []
+  summary: >-
+    The Collegium is the headquarters of the Learned Arts Guild in Calderan's North District and
+    houses the mandatory Mage Registry.
+  tags: ["scholarship","magic","guild"]
+  search_context: "The Collegium, Learned Arts Guild headquarters, Mage Registry, scholarship, certification, alchemy oversight, arcane administration"
+  content: >-
+    The Collegium is the Learned Arts Guild's headquarters, handling administration,
+    scholarship, professional certification, oversight of alchemy and regulated arcane
+    administration. It houses the Mage Registry, where every demonstrated mage must be recorded.
+    Its architecture is scholarly and institutional rather than devotional, in deliberate
+    contrast to the Church's buildings, but it is neither friendly nor modern. The Spire Academy
+    stands nearby as a separate institution.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features:
+    - name: "Mage Registry"
+      description: >-
+        The mandatory register of mages, housed inside The Collegium.
+  connections: []
+chunks: []

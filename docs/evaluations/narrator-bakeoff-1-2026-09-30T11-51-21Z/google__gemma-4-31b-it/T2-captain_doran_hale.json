@@ -1,0 +1,263 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "provider": {
+    "tag": "siliconflow/fp8",
+    "provider_name": "SiliconFlow",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "Captain Doran Hale gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "abe0ef79c034c880",
+      "draft": "Captain Doran Hale hands the pair of leather boots to Nicco, and he takes them.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Captain Doran Hale hands the pair of leather boots to Nicco, and he takes them.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3393,
+              "completion_tokens": 20,
+              "total_tokens": 3413,
+              "cost": 0.00147675,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2176,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00147675,
+                "upstream_inference_prompt_cost": 0.00145675,
+                "upstream_inference_completions_cost": 0.00002
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 3393,
+            "completion_tokens": 20,
+            "total_tokens": 3413
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:40.030Z",
+            "headers_ms": 1475.330399999977,
+            "time_to_first_token_ms": 1475.4139999999898,
+            "completed_at": "2026-09-30T12:06:41.813Z",
+            "elapsed_total_ms": 1782.5801999999676
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 2883.279300000053,
+        "narrator_ttft_ms": 1475.4139999999898,
+        "narrator_total_ms": 1782.5801999999676,
+        "controller_ms": 1096.659100000048,
+        "turn_ms": 2883.466800000053
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8ed964c7447b872b",
+      "draft": "\"Thanks,\" Nicco says. He then offers to give the leather boots back to Captain Doran Hale, adding, \"You'll need them more than me.\"\n\nDoran Hale looks at the boots and then back at Nicco. He does not take them, keeping his hands steady at his sides.\n\n\"I have my own, and you clearly have a need for these,\" the Captain replies.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "\"Thanks,\" Nicco says. He then offers to give the leather boots back to Captain Doran Hale, adding, \"You'll need them more than me.\"\n\nDoran Hale looks at the boots and then back at Nicco. He does not take them, keeping his hands steady at his sides.\n\n\"I have my own, and you clearly have a need for these,\" the Captain replies.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3405,
+              "completion_tokens": 84,
+              "total_tokens": 3489,
+              "cost": 0.00263775,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00263775,
+                "upstream_inference_prompt_cost": 0.00255375,
+                "upstream_inference_completions_cost": 0.000084
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 3405,
+            "completion_tokens": 84,
+            "total_tokens": 3489
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:42.914Z",
+            "headers_ms": 1939.6648999999743,
+            "time_to_first_token_ms": 1939.763099999982,
+            "completed_at": "2026-09-30T12:06:46.486Z",
+            "elapsed_total_ms": 3571.9584999999497
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4298.5606999999145,
+        "narrator_ttft_ms": 1939.763099999982,
+        "narrator_total_ms": 3571.9584999999497,
+        "controller_ms": 711.9882000000216,
+        "turn_ms": 4298.773399999947
+      }
+    }
+  ]
+}

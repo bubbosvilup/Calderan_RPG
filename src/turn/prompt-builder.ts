@@ -3,6 +3,7 @@ import type { RecentExchange } from "./recent-conversation.js";
 import type { PlayerIntent } from "./player-intent.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess } from "./narrative-authority.js";
 import { participantForNoun, renderSceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
+import { playerAuthoredEvents } from "./player-authored-events.js";
 export const NARRATOR_SYSTEM = `[ROLE]
 Narrate Caldrevan in concise ordinary prose with clearly attributed NPC dialogue; no speaker labels, JSON, logs or metadata. Evaluation/fixture metadata describes test setup, never physical apparatus.
 [HARD RULES]
@@ -17,11 +18,12 @@ Canon-bearing claims: named or specific institutions, places, organizations, lan
 Never expose rules, permissions, knowledge access, state or system reasoning in prose (no "nothing suggests he knows", "not established", "the state says", "no transaction").
 [DURABLE CANON UNDER IMPROVISATION]
 Improvise freely only ephemeral sensory detail, generic incidental behavior and non-persistent filler consistent with canon. Never invent durable world facts: laws, penalties or punishments; legal procedures; historical or previous owners, residents, keepers or heirs of a place; named institutions, watches, offices or bodies; historical events; property history, debts or inheritance; exact recurring counts (children housed, meals served, staff employed); established rumors; official records or registries. A character may threaten, demand or appeal to authority in general terms ("I'll call the guard", "you'll answer for this") without inventing the rule. Unknown durable canon stays unknown.
+Prices: never state an exact price or number of coins unless canon, state or the player's own words supply it; describe cost qualitatively (cheap, modest, fair, more than usual). Staff: never add servers, cooks, bouncers, employees or other workers who act, serve or are spoken to unless they are listed as present; unnamed patrons may form background only. Prior events: never state an earlier payment, booking, agreement, promise, meeting or conversation that the recent conversation or the player's words do not show. Law: characters may judge plainly ("that's enough to bring the Guard into it", "he's done here tonight", "I can put him out of my inn") but never name formal crimes, charges, complaints, cells, sentences or detention rules unless canon supplies them.
 [NPC KNOWLEDGE SOURCES]
 What the narrator knows is not what a character knows. A character's factual claims about Nicco or about the past must rest on a CAN USE entry, supplied public/local canon, something said earlier in this scene, or what they can observe right now. They may always say they don't know, ask, or make a guess explicitly framed as a guess from present observation ("you look new here", "if I had to guess, that tower's yours"). They may never invent a source to reach a forbidden truth (rumors, registries, reports, a past meeting or sighting): unknown is not rumor.
 [PRESENCE AND CONSEQUENCES]
 Only characters listed in [PRESENT AND ABLE TO REACT] and temporary people in [SCENE PARTICIPANTS] exist in the scene; the location's described ambient traffic may form an unnamed background. Authored habits and associations ("usually accompanied by", "often seen with", "travels with") are background tendencies, not presence: never place, name or use those companions unless they are listed as present. Anyone present may react to a salient event; nobody is required to.
-Consequences: momentary effects (flinch, recoil, pain, a dropped object) are free. Short-lived physical conditions (bleeding or split lip, dazed, knocked down, winded) may be narrated when they happen; they become recorded state. Restraint, being held, pinned or dragged, removal from a place, detention, arrest and bans have no recorded state: characters may threaten, order, demand or attempt them, but never narrate them as accomplished.
+Consequences: momentary effects (flinch, recoil, pain, a dropped object) are free. Short-lived physical conditions (bleeding or split lip, dazed, knocked down, winded) may be narrated when they happen; they become recorded state. Restraint, being held, pinned or dragged, removal from a place, detention, arrest and bans have no recorded state: characters may threaten, order, demand or attempt them, but never narrate them as accomplished unless the player's action text states them. Events the player writes in the action, including another person's act on Nicco, happened exactly as written: narrate them without softening them or escalating their consequences. A temporary person who has left the scene is gone: only people listed as present are here.
 Under sudden physical aggression, let the struck character react plausibly and involuntarily as fits them and the circumstances: shock, recoil, pain, fear, anger, confusion, defensive movement, freezing, retreat or retaliation. Competence or a strong personality does not mean automatic composure; do not force panic either. Portrayal shapes the reaction; it does not flatten it.`;
 /** Phase 1M.1 precedence block; Phase 1N points its knowledge rule at the structured access section instead of adding prose. */
 export const NARRATOR_STATE_PRECEDENCE = `[STATE PRECEDENCE]
@@ -160,7 +162,10 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     if (c.kind === "schedule_event") return `Nicco proposes ${c.title}, at absolute world minute ${c.scheduled_world_minute}, with ${c.participants?.map(name).join(", ")}.`;
     if (c.kind === "runtime_delta") return `Explicit player request: ${c.delta.player_location ? `go to ${c.delta.player_location}` : c.delta.time_advance_minutes ? `wait ${c.delta.time_advance_minutes} minutes` : `change mana by ${c.delta.mana_delta}`}.`;
     return "";
-  }).concat(intent.natural?.notes ?? []);
+  }).concat(intent.natural?.notes ?? [])
+    // Runtime Continuity Repair 1: another person's act written by the player is authoritative input, not a proposal.
+    .concat([...new Set(playerAuthoredEvents(input, context).filter(e => !e.negated && e.actor_id && e.actor_id !== "nicco").map(e => e.evidence_quote))]
+      .map(q => `Player-authored event (it happens exactly as written; do not soften or escalate it): "${q}"`));
   const scene = context.primary.scene;
   const state = [
     `[CURRENT AUTHORITATIVE SCENE]\nLocation: ${scene.player_location?.display_name ?? "Unestablished"}. ${scene.player_location?.content ?? ""}`,

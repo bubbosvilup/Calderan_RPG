@@ -1,0 +1,98 @@
+{
+  "turn": 7,
+  "input": "*He pushes the empty bowl aside and wipes his mouth.* If you ever have a sick plant, you know where to find a man who can't stop talking about roots. *He smiles.*",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "30ff5575be0c2981",
+  "prompt_characters": 18468,
+  "draft": "Jessa Rook glanced at the bowl as she collected it, the corner of her mouth lifting just slightly. \"I'll keep that in mind.\" She set the bowl behind the counter and pulled her cloth across the wood where it had sat. \"Most of my plants are the sort that don't need much help. A few herbs in a box on the windowsill. They survive or they don't.\"\n\nShe tucked the cloth away and rested her hands on the counter. The common room had thinned a little since he'd sat down — a pair of workers settling their tab near the door, a merchant with a ledger still open at a corner table. The light from the lamps caught the pale scar across her eyebrow as she turned back.\n\n\"Anything else tonight, or are you just warming the stool?\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa Rook glanced at the bowl as she collected it, the corner of her mouth lifting just slightly. \"I'll keep that in mind.\" She set the bowl behind the counter and pulled her cloth across the wood where it had sat. \"Most of my plants are the sort that don't need much help. A few herbs in a box on the windowsill. They survive or they don't.\"\n\nShe tucked the cloth away and rested her hands on the counter. The common room had thinned a little since he'd sat down — a pair of workers settling their tab near the door, a merchant with a ledger still open at a corner table. The light from the lamps caught the pale scar across her eyebrow as she turned back.\n\n\"Anything else tonight, or are you just warming the stool?\"",
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 2,
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created": [],
+    "conditions": []
+  },
+  "recent_conversation": {
+    "turns_retained": 7,
+    "prompt_turns": 7,
+    "serialized_characters": 6798,
+    "context_recent_characters": 5857
+  },
+  "narrator": {
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3828,
+          "completion_tokens": 162,
+          "total_tokens": 3990,
+          "cost": 0.00198624,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3584,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00198624,
+            "upstream_inference_prompt_cost": 0.00127344,
+            "upstream_inference_completions_cost": 0.0007128
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3828,
+        "completion_tokens": 162,
+        "total_tokens": 3990
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T13:20:55.043Z",
+        "headers_ms": 4468.3894999999975,
+        "time_to_first_token_ms": 4470.3338,
+        "completed_at": "2026-09-30T13:20:59.544Z",
+        "elapsed_total_ms": 4501.521399999998
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 4470.3338,
+    "narrator_total_ms": 4501.521399999998,
+    "controller_ms": 806.4579000000012,
+    "turn_ms": 5313.650800000003
+  }
+}

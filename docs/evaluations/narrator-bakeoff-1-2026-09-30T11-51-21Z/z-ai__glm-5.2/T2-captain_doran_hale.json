@@ -1,0 +1,263 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "Captain Doran Hale gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "abe0ef79c034c880",
+      "draft": "Captain Doran Hale hands the pair of leather boots to Nicco, and he takes them.\n\nThe square carries on around them — a woman with a cloth bundle crossing toward one of the low residential doorways, two men in workaday clothes talking quietly near a corner. The massive wooden entrance of Heartstone stands a few paces behind Nicco, its age visible in the dark grain and iron-banded seams.\n\nHale watches the handoff with the flat attention of a man logging a detail he'll remember. He says nothing more for the moment, his scarred face settling into the kind of stillness that belongs to someone accustomed to waiting out other people's next moves.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Captain Doran Hale hands the pair of leather boots to Nicco, and he takes them.\n\nThe square carries on around them — a woman with a cloth bundle crossing toward one of the low residential doorways, two men in workaday clothes talking quietly near a corner. The massive wooden entrance of Heartstone stands a few paces behind Nicco, its age visible in the dark grain and iron-banded seams.\n\nHale watches the handoff with the flat attention of a man logging a detail he'll remember. He says nothing more for the moment, his scarred face settling into the kind of stillness that belongs to someone accustomed to waiting out other people's next moves.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3312,
+              "completion_tokens": 136,
+              "total_tokens": 3448,
+              "cost": 0.0023168,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2560,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0023168,
+                "upstream_inference_prompt_cost": 0.0017184,
+                "upstream_inference_completions_cost": 0.0005984
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3312,
+            "completion_tokens": 136,
+            "total_tokens": 3448
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:56:39.674Z",
+            "headers_ms": 5451.5408000000025,
+            "time_to_first_token_ms": 5454.386299999998,
+            "completed_at": "2026-09-30T11:56:45.150Z",
+            "elapsed_total_ms": 5476.141700000007
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6647.570999999996,
+        "narrator_ttft_ms": 5454.386299999998,
+        "narrator_total_ms": 5476.141700000007,
+        "controller_ms": 1167.448700000008,
+        "turn_ms": 6647.792799999996
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8ed964c7447b872b",
+      "draft": "Nicco held the boots out toward him.\n\nHale looked at the offered pair, then at Nicco's face. The square moved around them — a woman with a basket, two men talking near the corner of the low buildings, the ordinary daytime quiet of a place that wasn't quite busy enough to feel crowded.\n\n\"I appreciate the thought,\" Hale said. He didn't take them. \"But these were meant for you. I've got my own gear.\" His tone was flat and unhurried, the kind of flat that wasn't trying to be rude but wasn't going to be talked out of a position either. \"Keep them. You're standing on stone in whatever you came in. You'll want something on your feet sooner than I will.\"\n\nHe waited a beat, watching to see whether Nicco would press the matter, but his posture made it fairly clear the answer wasn't going to change. The boots stayed in Nicco's hands.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco held the boots out toward him.\n\nHale looked at the offered pair, then at Nicco's face. The square moved around them — a woman with a basket, two men talking near the corner of the low buildings, the ordinary daytime quiet of a place that wasn't quite busy enough to feel crowded.\n\n\"I appreciate the thought,\" Hale said. He didn't take them. \"But these were meant for you. I've got my own gear.\" His tone was flat and unhurried, the kind of flat that wasn't trying to be rude but wasn't going to be talked out of a position either. \"Keep them. You're standing on stone in whatever you came in. You'll want something on your feet sooner than I will.\"\n\nHe waited a beat, watching to see whether Nicco would press the matter, but his posture made it fairly clear the answer wasn't going to change. The boots stayed in Nicco's hands.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3320,
+              "completion_tokens": 193,
+              "total_tokens": 3513,
+              "cost": 0.0025788,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2560,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0025788,
+                "upstream_inference_prompt_cost": 0.0017296,
+                "upstream_inference_completions_cost": 0.0008492
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3320,
+            "completion_tokens": 193,
+            "total_tokens": 3513
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:56:46.321Z",
+            "headers_ms": 5538.995200000005,
+            "time_to_first_token_ms": 5547.5046,
+            "completed_at": "2026-09-30T11:56:52.061Z",
+            "elapsed_total_ms": 5786.383100000006
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6699.892500000002,
+        "narrator_ttft_ms": 5547.5046,
+        "narrator_total_ms": 5786.383100000006,
+        "controller_ms": 907.8255999999965,
+        "turn_ms": 6700.126800000013
+      }
+    }
+  ]
+}

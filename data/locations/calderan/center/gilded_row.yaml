@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: gilded_row
+  type: location
+  name: "Gilded Row"
+  display_name: "Gilded Row"
+  parent: calderan_center
+  aliases: []
+  summary: >-
+    Gilded Row is the principal prestige retail street of Calderan's Center District.
+  tags: ["street","luxury","commerce"]
+  search_context: "Gilded Row, luxury shops, couture, jewelry, bespoke armor, prestige weapons, art, furnishings"
+  content: >-
+    Gilded Row is Center's principal prestige retail street. It holds or attracts couture,
+    high-end jewelry, luxury textiles, bespoke armor, prestige weapons, imported curiosities,
+    art and expensive furnishings. Much of its prestige craft is manufactured in East and
+    displayed, sold and consumed in Center; some firms keep a workshop in East and a showroom
+    here. No individual shops are established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

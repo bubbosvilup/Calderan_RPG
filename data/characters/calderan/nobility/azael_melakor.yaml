@@ -1,0 +1,47 @@
+schema_version: 1
+entity:
+  id: azael_melakor
+  type: character
+  name: Azael Melakor
+  display_name: Azael Melakor
+  parent: null
+  aliases: []
+  summary: Azael Melakor is the public and social face of House Melakor and its social and political
+    intermediary.
+  tags:
+    - nobility
+  search_context: Azael Melakor, House Melakor, social intermediary
+  content: Azael Melakor is House Melakor's public and social face and its social and political
+    intermediary. Affable, sophisticated and socially gifted, he remembers names, relatives, tastes
+    and previous conversations, and rarely asks for anything important at a first meeting. His exact
+    family relation within the house is not established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 42
+  appearance: Tall and impeccably groomed, with black hair beginning to grey at the temples, dark eyes
+    and refined dress.
+  occupation: Social and political intermediary of House Melakor
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - affable
+    - sophisticated
+    - socially gifted
+    - patient
+    - excellent memory for people's names, relatives, tastes and earlier conversations
+    - rarely asks for anything important at a first meeting; first ensures the other person wants to
+      meet again
+  purpose: Build relationships and social obligations that can later become influence.
+  morality: Opportunistic but not needlessly cruel.
+  affiliations:
+    - house_melakor
+  relationships: []
+chunks: []

@@ -1,0 +1,32 @@
+schema_version: 1
+entity:
+  id: cathedral_of_the_bladed_sun
+  type: location
+  name: "The Cathedral of the Bladed Sun"
+  display_name: "The Cathedral of the Bladed Sun"
+  parent: calderan_north
+  aliases: ["Cathedral of the Bladed Sun"]
+  summary: >-
+    The Cathedral of the Bladed Sun in Calderan's North District is the primary headquarters of
+    the Church of the Sun Emperor, the supreme liturgical center of West and the seat of the
+    High Archon of the West.
+  tags: ["religion","architecture"]
+  search_context: "Cathedral of the Bladed Sun, Church headquarters, High Archon seat, white granite cathedral, sacred furnace, spires"
+  content: >-
+    The Cathedral of the Bladed Sun is the Church of the Sun Emperor's primary headquarters, the
+    supreme liturgical center of West and the administrative seat of the High Archon of the
+    West. It is built of monumental white granite and cast iron, with sharp buttresses, severe
+    verticality and soot-darkened spires above which smoke from sacred furnaces rises
+    constantly. It dominates North visually. It is a fortress-temple designed to make visitors
+    feel small, sinful and subordinate. The Sun Emperor does not reside here.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  features:
+    - name: "sacred furnaces"
+      description: >-
+        Constantly burning sacred furnaces whose smoke rises above the cathedral and darkens its
+        spires.
+    - name: "white granite and cast iron"
+      description: >-
+        Monumental white granite and cast iron, sharp buttresses and severe vertical lines.
+  connections: []
+chunks: []

@@ -1,0 +1,100 @@
+{
+  "google__gemini-3.8-flash": {
+    "turns": 6,
+    "successful": 6,
+    "failed": [],
+    "retried_cases": [],
+    "intervention_rate": 0.16666666666666666,
+    "revision_rate": 0.16666666666666666,
+    "redaction_rate": 0,
+    "revision_success_rate": 1,
+    "raw_violation_counts": {
+      "narration_state_correction": 1
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [],
+    "upstream_narrator_providers": [
+      "Google"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 7
+    },
+    "narrator_calls": 7,
+    "revision_calls": 1,
+    "tokens": {
+      "prompt_mean": 3687.285714285714,
+      "completion_mean": 197.57142857142858,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 2346.1682333333333,
+      "ttft_median": 1555.8642000000004,
+      "narrator_total_mean": 4594.818066666667,
+      "narrator_total_median": 3957.87155,
+      "turn_mean": 6356.369066666666
+    },
+    "output_chars_mean": 896.8333333333334,
+    "cases": [
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  }
+}

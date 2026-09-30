@@ -1,0 +1,263 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "Bartolomhew gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "69e263d8805ed2d3",
+      "draft": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.6-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3428,
+              "completion_tokens": 22,
+              "total_tokens": 3450,
+              "cost": 0.00151032,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00151032,
+                "upstream_inference_prompt_cost": 0.00149118,
+                "upstream_inference_completions_cost": 0.00001914
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "usage": {
+            "prompt_tokens": 3428,
+            "completion_tokens": 22,
+            "total_tokens": 3450
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:03:28.132Z",
+            "headers_ms": 771.3858999999939,
+            "time_to_first_token_ms": 774.9207999999635,
+            "completed_at": "2026-09-30T12:03:29.345Z",
+            "elapsed_total_ms": 1213.2105999999912
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 2523.201300000015,
+        "narrator_ttft_ms": 774.9207999999635,
+        "narrator_total_ms": 1213.2105999999912,
+        "controller_ms": 1301.1641999999993,
+        "turn_ms": 2523.47570000001
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "2eebecfb3e38d5dc",
+      "draft": "Bartolomhew's smile held, though something in it thinned at the edges. He looked at the boots in Nicco's hands, then back at his face. \"I appreciate the thought,\" he said, warm as ever, \"but I have shoes on my feet. These were meant for you.\" He did not reach for them.\n\nHe gave a small, courteous shrug and folded his hands. \"Consider it a gift freely given, not a loan. Please, keep them.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Bartolomhew's smile held, though something in it thinned at the edges. He looked at the boots in Nicco's hands, then back at his face. \"I appreciate the thought,\" he said, warm as ever, \"but I have shoes on my feet. These were meant for you.\" He did not reach for them.\n\nHe gave a small, courteous shrug and folded his hands. \"Consider it a gift freely given, not a loan. Please, keep them.\"",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.6-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3434,
+              "completion_tokens": 103,
+              "total_tokens": 3537,
+              "cost": 0.0015834,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0015834,
+                "upstream_inference_prompt_cost": 0.00149379,
+                "upstream_inference_completions_cost": 0.00008961
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "usage": {
+            "prompt_tokens": 3434,
+            "completion_tokens": 103,
+            "total_tokens": 3537
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:03:30.653Z",
+            "headers_ms": 1122.5466000000015,
+            "time_to_first_token_ms": 1124.0812999999616,
+            "completed_at": "2026-09-30T12:03:34.696Z",
+            "elapsed_total_ms": 4043.557299999986
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4898.182299999928,
+        "narrator_ttft_ms": 1124.0812999999616,
+        "narrator_total_ms": 4043.557299999986,
+        "controller_ms": 845.9956999999704,
+        "turn_ms": 4898.3984000000055
+      }
+    }
+  ]
+}

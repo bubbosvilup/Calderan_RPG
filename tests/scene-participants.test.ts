@@ -156,7 +156,10 @@ test("player retrieval de-duplication: Nicco's own entity is dropped only when t
   const withProfile = await retrieveForTurn(LIGHT_MAGE, context, world, search);
   const ids = withProfile.diagnostics.ids as readonly string[]; assert.ok(!ids.includes("nicco")); assert.ok(ids.includes("light_and_shadow"));
   const withoutProfile = await retrieveForTurn(LIGHT_MAGE, { ...context, player_profile: null }, world, search);
-  assert.equal(withoutProfile.diagnostics.ids[0], "nicco");
+  // Without the profile Nicco's own record is retrieved; the de-duplication is the only difference between the two results.
+  const without = withoutProfile.diagnostics.ids as readonly string[];
+  assert.ok(without.includes("nicco"));
+  assert.deepEqual(without.filter(id => id !== "nicco"), ids.slice(0, without.length - 1));
 });
 test("awareness schema: public/specialized/private/local:<location> only; local targets must be locations", async () => {
   const { WorldStore } = await import("../src/world/world-store.js");

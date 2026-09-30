@@ -1,0 +1,97 @@
+{
+  "turn": 18,
+  "input": "*He looks around the quieter room.* Thank you for dinner, and for everything. I'll probably come back tomorrow. And the plant offer stands, I mean it.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "20c704d5e011a58c",
+  "draft": "Jessa wiped the counter with the same cloth she'd used on the spill, her movements unhurried. She studied Nicco's face for a moment, then gave a small nod. \"Come back tomorrow, you'll get the same fair meal and a bed that doesn't ask questions. That's all I ever promised anyone.\" She tucked the cloth behind the counter's edge. \"The plant — you mentioned it before the trouble. I don't need to know why you're offering. If you bring it, I'll find a window for it. If you don't, I won't ask.\"\n\nAcross the room, Dell Harrow sat with his back to the counter, hunched over a fresh cup someone had placed in front of him. He hadn't spoken since the captain dealt with things, and he kept his shoulders drawn in. The common room had settled back into its ordinary hum — a couple of merchants talking quietly near the hearth, the scrape of a chair being pushed back, the creak of the inn's old frame in the evening wind.\n\nCaptain Hale stood near the door finishing a low word with one of the merchants who'd watched the whole affair. He glanced once toward the counter, caught Jessa's eye, and received a brief almost-imperceptible nod that seemed to satisfy him. He turned back to his conversation without approaching the counter again.",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa wiped the counter with the same cloth she'd used on the spill, her movements unhurried. She studied Nicco's face for a moment, then gave a small nod. \"Come back tomorrow, you'll get the same fair meal and a bed that doesn't ask questions. That's all I ever promised anyone.\" She tucked the cloth behind the counter's edge. \"The plant — you mentioned it before the trouble. I don't need to know why you're offering. If you bring it, I'll find a window for it. If you don't, I won't ask.\"\n\nAcross the room, Dell Harrow sat with his back to the counter, hunched over a fresh cup someone had placed in front of him. He hadn't spoken since the captain dealt with things, and he kept his shoulders drawn in. The common room had settled back into its ordinary hum — a couple of merchants talking quietly near the hearth, the scrape of a chair being pushed back, the creak of the inn's old frame in the evening wind.\n\nCaptain Hale stood near the door finishing a low word with one of the merchants who'd watched the whole affair. He glanced once toward the counter, caught Jessa's eye, and received a brief almost-imperceptible nod that seemed to satisfy him. He turned back to his conversation without approaching the counter again.",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 4,
+    "revision_after": 4,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "captain_doran_hale",
+      "jessa_rook"
+    ],
+    "created_present": [
+      "campaign_character_eval_dell_harrow"
+    ],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4099,
+          "completion_tokens": 278,
+          "total_tokens": 4377,
+          "cost": 0.00287604,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3584,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00287604,
+            "upstream_inference_prompt_cost": 0.00165284,
+            "upstream_inference_completions_cost": 0.0012232
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 4099,
+        "completion_tokens": 278,
+        "total_tokens": 4377
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:32:58.421Z",
+        "headers_ms": 7282.133999999991,
+        "time_to_first_token_ms": 7285.555300000007,
+        "completed_at": "2026-09-30T12:33:05.751Z",
+        "elapsed_total_ms": 7330.030599999998
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 7285.555300000007,
+    "narrator_total_ms": 7330.030599999998,
+    "controller_ms": 773.1554999999935,
+    "turn_ms": 8106.069400000008
+  }
+}

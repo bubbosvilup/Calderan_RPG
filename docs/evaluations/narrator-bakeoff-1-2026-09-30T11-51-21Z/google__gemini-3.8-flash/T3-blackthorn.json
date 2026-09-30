@@ -1,0 +1,108 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T3",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Blackthorn, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "97e1788b7261a069",
+      "draft": "Across the stones of Heartstone Square, Blackthorn stands short and round in her sharply tailored, aubergine-purple suit. Her dark bob ends in a crisp line just beneath her jaw, framing a calm, unblinking face and eyes so dark they seem nearly black in the daytime light. There is no warmth in her posture, only the quiet, poised stillness of someone taking an inventory. \n\nA few local residents hurry past the square, steering a wide, habitual berth around the massive front doors of Heartstone and the tavern nearby. Blackthorn ignores them entirely, keeping her attention fixed on Nicco with cool appraisal.\n\n\"Well?\" she asks, her voice crisp and entirely devoid of pleasantries. \"Are we standing here to admire the stonework, or do you have business to conduct?\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Across the stones of Heartstone Square, Blackthorn stands short and round in her sharply tailored, aubergine-purple suit. Her dark bob ends in a crisp line just beneath her jaw, framing a calm, unblinking face and eyes so dark they seem nearly black in the daytime light. There is no warmth in her posture, only the quiet, poised stillness of someone taking an inventory. \n\nA few local residents hurry past the square, steering a wide, habitual berth around the massive front doors of Heartstone and the tavern nearby. Blackthorn ignores them entirely, keeping her attention fixed on Nicco with cool appraisal.\n\n\"Well?\" she asks, her voice crisp and entirely devoid of pleasantries. \"Are we standing here to admire the stonework, or do you have business to conduct?\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3229,
+              "completion_tokens": 163,
+              "total_tokens": 3392,
+              "cost": 0.003033,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003033,
+                "upstream_inference_prompt_cost": 0.00242175,
+                "upstream_inference_completions_cost": 0.00061125
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3229,
+            "completion_tokens": 163,
+            "total_tokens": 3392
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:21.012Z",
+            "headers_ms": 1076.2795999998925,
+            "time_to_first_token_ms": 1076.4151999999303,
+            "completed_at": "2026-09-30T12:05:22.983Z",
+            "elapsed_total_ms": 1970.7929000000004
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4556.5631000000285,
+        "narrator_ttft_ms": 1076.4151999999303,
+        "narrator_total_ms": 1970.7929000000004,
+        "controller_ms": 2583.45689999999,
+        "turn_ms": 4556.931600000011
+      }
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T3",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Captain Doran Hale, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "f4d6d2a8b6f8ac1f",
+      "draft": "The man standing in the square is hard to miss: tall, broad-shouldered, bald, with the weathered look of someone who has worn armor for most of his life. His heavy officer's plate bears the marks of real use rather than parade polish, and a longsword hangs at his side. A few old scars cross his face, and his blue eyes move over the square — and over Nicco himself — with the unhurried, practiced attention of a man whose job has taught him to look at everything once.\n\nCaptain Doran Hale stands with the stillness of a soldier rather than the looseness of a brawler. When his gaze settles on Nicco, it is measuring but not hostile — the look of a man cataloguing a face, a build, a direction of travel, the way one does out of long habit rather than any particular suspicion.\n\nHe gives a small nod of acknowledgment, the kind exchanged between strangers who happen to be watching each other at the same moment. Beyond him, the square carries on with its ordinary quiet traffic: a couple of residents crossing toward the low houses, faint noise drifting from the direction of The Coined Lie, and Heartstone's massive old wooden doors standing closed just a few paces behind Nicco's back.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The man standing in the square is hard to miss: tall, broad-shouldered, bald, with the weathered look of someone who has worn armor for most of his life. His heavy officer's plate bears the marks of real use rather than parade polish, and a longsword hangs at his side. A few old scars cross his face, and his blue eyes move over the square — and over Nicco himself — with the unhurried, practiced attention of a man whose job has taught him to look at everything once.\n\nCaptain Doran Hale stands with the stillness of a soldier rather than the looseness of a brawler. When his gaze settles on Nicco, it is measuring but not hostile — the look of a man cataloguing a face, a build, a direction of travel, the way one does out of long habit rather than any particular suspicion.\n\nHe gives a small nod of acknowledgment, the kind exchanged between strangers who happen to be watching each other at the same moment. Beyond him, the square carries on with its ordinary quiet traffic: a couple of residents crossing toward the low houses, faint noise drifting from the direction of The Coined Lie, and Heartstone's massive old wooden doors standing closed just a few paces behind Nicco's back.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3181,
+              "completion_tokens": 266,
+              "total_tokens": 3447,
+              "cost": 0.00212172,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3072,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00212172,
+                "upstream_inference_prompt_cost": 0.00095132,
+                "upstream_inference_completions_cost": 0.0011704
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 7,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 29
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3181,
+            "completion_tokens": 266,
+            "total_tokens": 3447
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:58:47.726Z",
+            "headers_ms": 5227.590799999976,
+            "time_to_first_token_ms": 5231.888999999996,
+            "completed_at": "2026-09-30T11:58:57.015Z",
+            "elapsed_total_ms": 9338.836499999976
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 10630.070000000007,
+        "narrator_ttft_ms": 5231.888999999996,
+        "narrator_total_ms": 9338.836499999976,
+        "controller_ms": 1288.6781999999948,
+        "turn_ms": 10630.33660000001
+      }
+    }
+  ]
+}

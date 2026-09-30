@@ -1,0 +1,263 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T2",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "Jessa Rook gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "a928a58b01aba463",
+      "draft": "Out in the moderate daylight of Heartstone Square, Jessa Rook unhurriedly shifts the pair of leather boots she carries. Her practical sleeves are rolled past her forearms as she extends them toward Nicco. \n\nJessa Rook hands the pair of leather boots to Nicco, and he takes them. \n\n\"There you are,\" she says, her tone calm and level against the background murmur of the occasional passerby.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Out in the moderate daylight of Heartstone Square, Jessa Rook unhurriedly shifts the pair of leather boots she carries. Her practical sleeves are rolled past her forearms as she extends them toward Nicco. \n\nJessa Rook hands the pair of leather boots to Nicco, and he takes them. \n\n\"There you are,\" she says, her tone calm and level against the background murmur of the occasional passerby.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3418,
+              "completion_tokens": 88,
+              "total_tokens": 3506,
+              "cost": 0.0028935,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0028935,
+                "upstream_inference_prompt_cost": 0.0025635,
+                "upstream_inference_completions_cost": 0.00033
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3418,
+            "completion_tokens": 88,
+            "total_tokens": 3506
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:30.772Z",
+            "headers_ms": 3213.7777000000933,
+            "time_to_first_token_ms": 3214.4707000000635,
+            "completed_at": "2026-09-30T12:05:34.173Z",
+            "elapsed_total_ms": 3400.49450000003
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4316.710599999991,
+        "narrator_ttft_ms": 3214.4707000000635,
+        "narrator_total_ms": 3400.49450000003,
+        "controller_ms": 904.4059000000125,
+        "turn_ms": 4316.9667999999365
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "3e42c4fb394f1653",
+      "draft": "Jessa looked down at the leather boots held out toward her, her grey-streaked brow furrowing slightly. She made no move to extend her hands to take them back, leaving them firmly in Nicco's grasp.\n\n\"Keep them,\" she said, her voice measured and quiet amidst the thin daytime traffic of the square. \"Footwear that holds together isn't something to pass off lightly in the West District, and I have no immediate lack of my own. If they fit, wear them. If they don't, find someone who has use for them, but don't hand them back to me.\"\n\nShe rested one hand near the notebook tucked into her belt, her gaze briefly assessing the heavy timber of the massive doorway nearby before settling back on him.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Jessa looked down at the leather boots held out toward her, her grey-streaked brow furrowing slightly. She made no move to extend her hands to take them back, leaving them firmly in Nicco's grasp.\n\n\"Keep them,\" she said, her voice measured and quiet amidst the thin daytime traffic of the square. \"Footwear that holds together isn't something to pass off lightly in the West District, and I have no immediate lack of my own. If they fit, wear them. If they don't, find someone who has use for them, but don't hand them back to me.\"\n\nShe rested one hand near the notebook tucked into her belt, her gaze briefly assessing the heavy timber of the massive doorway nearby before settling back on him.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3434,
+              "completion_tokens": 159,
+              "total_tokens": 3593,
+              "cost": 0.00317175,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00317175,
+                "upstream_inference_prompt_cost": 0.0025755,
+                "upstream_inference_completions_cost": 0.00059625
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3434,
+            "completion_tokens": 159,
+            "total_tokens": 3593
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:35.092Z",
+            "headers_ms": 2218.0409999999683,
+            "time_to_first_token_ms": 2219.5548999999883,
+            "completed_at": "2026-09-30T12:05:38.381Z",
+            "elapsed_total_ms": 3289.2915000000503
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4192.237800000003,
+        "narrator_ttft_ms": 2219.5548999999883,
+        "narrator_total_ms": 3289.2915000000503,
+        "controller_ms": 893.8201000000117,
+        "turn_ms": 4192.473099999945
+      }
+    }
+  ]
+}

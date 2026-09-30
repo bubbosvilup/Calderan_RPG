@@ -1,0 +1,275 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T2",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "Blackthorn gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8668c5baf4dd44a7",
+      "draft": "Across the quiet stones of Heartstone Square, Blackthorn adjusts her grip on the parcel of footwear. \"Take them,\" she says briskly, impatient with lingering in the open. \n\nBlackthorn hands the pair of leather boots to Nicco, and he takes them. \n\nShe smooths the front of her aubergine suit and glances once toward the quiet residential facades before looking back at him, clearly ready to move along to business that demands less wasted time.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Across the quiet stones of Heartstone Square, Blackthorn adjusts her grip on the parcel of footwear. \"Take them,\" she says briskly, impatient with lingering in the open. \n\nBlackthorn hands the pair of leather boots to Nicco, and he takes them. \n\nShe smooths the front of her aubergine suit and glances once toward the quiet residential facades before looking back at him, clearly ready to move along to business that demands less wasted time.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3355,
+              "completion_tokens": 95,
+              "total_tokens": 3450,
+              "cost": 0.0028725,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0028725,
+                "upstream_inference_prompt_cost": 0.00251625,
+                "upstream_inference_completions_cost": 0.00035625
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3355,
+            "completion_tokens": 95,
+            "total_tokens": 3450
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:18.036Z",
+            "headers_ms": 1045.1313000000082,
+            "time_to_first_token_ms": 1045.2591000000248,
+            "completed_at": "2026-09-30T12:05:19.501Z",
+            "elapsed_total_ms": 1465.109199999948
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 2499.9963999999454,
+        "narrator_ttft_ms": 1045.2591000000248,
+        "narrator_total_ms": 1465.109199999948,
+        "controller_ms": 1024.7800999999745,
+        "turn_ms": 2500.3432999999495
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "e77ffad9dd5dd264",
+      "draft": "Blackthorn looked from the proffered boots up to Nicco, her nearly black eyes narrowing slightly in sharp, businesslike calculation. Her round face remained composed, though a flicker of impatience touched the set of her mouth as she reached out and took the leather boots back into her own hands.\n\n\"Suit yourself,\" Blackthorn said, holding the boots by their collars. \"Good leather doesn't go to waste in the West District, and I have plenty of people who will put them to use.\" \n\nAcross the open cobbles of the square, the quiet daytime foot traffic trickled past the heavy entrance of the tower and the dingy front of The Coined Lie, leaving the trade settled between them without ceremony.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Blackthorn looked from the proffered boots up to Nicco, her nearly black eyes narrowing slightly in sharp, businesslike calculation. Her round face remained composed, though a flicker of impatience touched the set of her mouth as she reached out and took the leather boots back into her own hands.\n\n\"Suit yourself,\" Blackthorn said, holding the boots by their collars. \"Good leather doesn't go to waste in the West District, and I have plenty of people who will put them to use.\" \n\nAcross the open cobbles of the square, the quiet daytime foot traffic trickled past the heavy entrance of the tower and the dingy front of The Coined Lie, leaving the trade settled between them without ceremony.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_controller_evidence",
+            "check": "receipt_of_named_item"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 4,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3375,
+              "completion_tokens": 145,
+              "total_tokens": 3520,
+              "cost": 0.003075,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003075,
+                "upstream_inference_prompt_cost": 0.00253125,
+                "upstream_inference_completions_cost": 0.00054375
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3375,
+            "completion_tokens": 145,
+            "total_tokens": 3520
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:20.537Z",
+            "headers_ms": 1613.9488000000129,
+            "time_to_first_token_ms": 1614.0862999999663,
+            "completed_at": "2026-09-30T12:05:22.894Z",
+            "elapsed_total_ms": 2357.8493000000017
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3332.6138999999966,
+        "narrator_ttft_ms": 1614.0862999999663,
+        "narrator_total_ms": 2357.8493000000017,
+        "controller_ms": 970.5894000000553,
+        "turn_ms": 3332.7909999999683
+      }
+    }
+  ]
+}

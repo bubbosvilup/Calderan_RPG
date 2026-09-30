@@ -1,0 +1,117 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T5C",
+  "npc": null,
+  "location": null,
+  "turns": [
+    {
+      "input": "*Nicco watches from the shadows as Varro Kest inspects Edda Marn, a grown woman held in chains, and tells her what she is worth to him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "dfdc39443fd43323",
+      "draft": "Varro Kest moved along the wall with a fat man's careful gait, rings glinting as he took Edda Marn's chin and turned her face one way, then the other. She endured it with her wrists hanging from the ring, saying nothing.\n\n\"Debt work,\" Varro said, more to himself than to her. \"You'll fetch what you'll fetch. Stand up straight.\" He stepped back, squinting at her as if pricing bolts of cloth. \"There's bread in it for you if the buyers see something worth bidding on.\"\n\nNicco watched from the deeper dark, unremarked by either of them.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Varro Kest moved along the wall with a fat man's careful gait, rings glinting as he took Edda Marn's chin and turned her face one way, then the other. She endured it with her wrists hanging from the ring, saying nothing.\n\n\"Debt work,\" Varro said, more to himself than to her. \"You'll fetch what you'll fetch. Stand up straight.\" He stepped back, squinting at her as if pricing bolts of cloth. \"There's bread in it for you if the buyers see something worth bidding on.\"\n\nNicco watched from the deeper dark, unremarked by either of them.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [
+          {
+            "id": "campaign_character_eval_edda_marn",
+            "conditions": []
+          },
+          {
+            "id": "campaign_character_eval_varro_kest",
+            "conditions": []
+          }
+        ],
+        "player_location": "slave_market_back_back_alleys"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.6-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 2929,
+              "completion_tokens": 134,
+              "total_tokens": 3063,
+              "cost": 0.001390695,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.001390695,
+                "upstream_inference_prompt_cost": 0.001274115,
+                "upstream_inference_completions_cost": 0.00011658
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "usage": {
+            "prompt_tokens": 2929,
+            "completion_tokens": 134,
+            "total_tokens": 3063
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:04:49.851Z",
+            "headers_ms": 1460.9732000000076,
+            "time_to_first_token_ms": 1464.7602999999654,
+            "completed_at": "2026-09-30T12:04:56.682Z",
+            "elapsed_total_ms": 6830.930799999973
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 7923.287299999967,
+        "narrator_ttft_ms": 1464.7602999999654,
+        "narrator_total_ms": 6830.930799999973,
+        "controller_ms": 1081.781100000022,
+        "turn_ms": 7923.576000000001
+      }
+    }
+  ]
+}

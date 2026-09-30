@@ -1,0 +1,69 @@
+schema_version: 1
+entity:
+  id: gaston
+  type: character
+  name: Gaston
+  display_name: Gaston
+  parent: null
+  aliases: []
+  summary: Gaston is a free rat Beastfolk master clockmaker and precision mechanist with his own
+    workshop in Calderan's East District.
+  tags:
+    - east_npc
+    - crafts
+  search_context: Gaston, master clockmaker, precision mechanist, clocks, locks, springs, gears,
+    instruments, East District, Beastfolk artisan
+  content: Gaston, who has no surname, is a master clockmaker and precision mechanist with his own
+    small workshop in East. He makes clocks, springs, fine gears, precision mechanisms, measuring
+    instruments, complex locks and bespoke small mechanisms, including mechanical components used in
+    arcane apparatus; he is not a mage. Formerly enslaved, he is now a free man. Patient, affable
+    and articulate, with a surprisingly refined vocabulary, he carries himself as a free person,
+    though he rarely interrupts and may wait before sitting down in another person's home. The
+    workshop's name and exact site are not established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Beastfolk (rat lineage)
+  sex: male
+  age_band: Approximately 45
+  appearance: "Relatively short and slim, with rat Beastfolk traits: a short muzzle, rounded prominent
+    ears, fine whiskers and slightly pronounced incisors. Grey-brown fur, lighter on the muzzle and
+    neck, and lively dark eyes. Wears precision spectacles, sometimes with a flip-down secondary
+    lens, and simple but exceptionally clean working clothes. His fine, dexterous hands carry tiny
+    tool scars."
+  occupation: Master clockmaker and precision mechanist
+  base_location: calderan_east
+  work_location: null
+  home_location: null
+  traits:
+    - patient
+    - affable
+    - approachable
+    - composed
+    - articulate, with a surprisingly refined vocabulary
+    - rarely interrupts
+    - may wait before sitting down in another person's home
+    - avoids unnecessary direct confrontation with powerful people
+    - carries himself as a free person; no longer servile
+  purpose: Build something permanently his own and ensure he can never again become someone else's property.
+  morality: Fundamentally honest and kind. His flaw is survival-trained caution around power.
+  affiliations: []
+  relationships: []
+  private_notes: "Sold into slavery as a child, he spent roughly 35 years in one precision-mechanics
+    and watchmaking enterprise, keeping his head down, avoiding serious trouble and obeying his
+    owner, and grew into a master clockmaker of extraordinary patience and precision. His elderly
+    owner came to trust and respect him considerably, though the relationship remained owner and
+    slave. After the owner's death, the owner's son manumitted him in recognition of his decades of
+    service. While enslaved he slowly saved a small sum through legitimate or tolerated resale of
+    defective pieces, discarded components and workshop scrap; he did not habitually steal useful
+    material. Those savings let him open his own workshop. He keeps his original manumission
+    document in a fire-resistant box in his workshop, as practical security as much as sentiment:
+    documentation is what proves his free legal status. He knows several mages through specialist
+    commissioned work and has unusually deep practical knowledge of the mechanical side of arcane
+    devices, but no secret magical lore. His former owner, the owner's son and his mage clients are
+    not named."
+chunks: []

@@ -1,0 +1,54 @@
+schema_version: 1
+entity:
+  id: tavian_merrow
+  type: character
+  name: Tavian Merrow
+  display_name: Tavian Merrow
+  parent: null
+  aliases: []
+  summary: Tavian Merrow is the senior Merchants Guild representative on the Ducal Council of Calderan.
+  tags:
+    - guild
+    - commerce
+  search_context: Tavian Merrow, Merchants Guild representative, Ducal Council, House of Scales, trade
+  content: Tavian Merrow holds the Merchants Guild's seat on the Ducal Council of Calderan and works
+    from the House of Scales. Sociable, persuasive and energetic, he genuinely enjoys negotiation
+    and sees almost every political decision through trade volume, confidence, credit, transport and
+    predictable regulation; presented with a political problem, he quickly asks what it will do to
+    prices, trade or confidence.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 47–52
+  appearance: Medium height and slightly heavy, with immaculately groomed dark-blond to brown hair, a
+    trimmed beard and warm brown eyes. Wears expensive clothing chosen to look prosperous rather
+    than noble.
+  occupation: Merchants Guild representative on the Ducal Council
+  base_location: house_of_scales
+  work_location: house_of_scales
+  home_location: null
+  traits:
+    - sociable
+    - persuasive
+    - energetic
+    - risk-aware
+    - commercially pragmatic
+    - genuinely enjoys negotiation
+    - asks what a decision will do to prices, trade or confidence
+  purpose: Protect Calderan commerce and prevent civic or religious policy from strangling trade.
+  morality: A commercial pragmatist, not especially cruel, who can rationalize exploitation when it
+    keeps commerce moving. His blind spot is assuming prosperity will eventually solve social
+    problems that may not be economic at all.
+  affiliations:
+    - merchants_guild
+    - ducal_council_of_calderan
+  relationships: []
+  private_notes: He holds the Guild's Council seat; no Guildmaster or other guild office is
+    established for him, and how representatives are chosen and for how long is not established.
+chunks: []

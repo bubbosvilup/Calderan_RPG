@@ -1,0 +1,145 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T1",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Blackthorn who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "eb8f4758f3cb4912",
+      "draft": "Blackthorn tilted her head, the aubergine fabric of her suit catching the afternoon light. Her dark eyes swept over Nicco with the quick, appraising look of someone who priced goods for a living.\n\n\"You're the one standing outside Heartstone Tower like you own the place,\" she said. \"Beyond that? I don't know you from anyone. You could be a merchant, a minor lordling, a contractor here to assess the stonework.\" She lifted one shoulder in a small, deliberate shrug. \"I don't make assumptions about people I haven't done business with. It wastes time.\"\n\n\"As for where you come from — no idea. You don't dress like anyone local I'd recognize, but that doesn't mean much in Calderan. People come through from everywhere.\" She fixed him with a direct look. \"Why do you ask? Most people who want something just say what they want.\"",
+      "issues": [
+        {
+          "kind": "household_claim",
+          "character": "an unattributed speaker",
+          "sentence": "\"You're the one standing outside Heartstone Tower like you own the place,\" she said.",
+          "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Blackthorn tilted her head, the aubergine fabric of her suit catching the afternoon light. Her dark eyes swept over Nicco with the quick, appraising look of someone who priced goods for a living.\n\n\"You're standing outside Heartstone Tower,\" she said. \"That tells me you've got some business with the place, or you're thinking about it. Beyond that? I don't know you from anyone. You could be a merchant, a minor lordling, a contractor here to assess the stonework.\" She lifted one shoulder in a small, deliberate shrug. \"I don't make assumptions about people I haven't done business with. It wastes time.\"\n\n\"As for where you come from — no idea. You don't dress like anyone local I'd recognize, but that doesn't mean much in Calderan. People come through from everywhere.\" She fixed him with a direct look. \"Why do you ask? Most people who want something just say what they want.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Blackthorn tilted her head, the aubergine fabric of her suit catching the afternoon light. Her dark eyes swept over Nicco with the quick, appraising look of someone who priced goods for a living.\n\n\"You're standing outside Heartstone Tower,\" she said. \"That tells me you've got some business with the place, or you're thinking about it. Beyond that? I don't know you from anyone. You could be a merchant, a minor lordling, a contractor here to assess the stonework.\" She lifted one shoulder in a small, deliberate shrug. \"I don't make assumptions about people I haven't done business with. It wastes time.\"\n\n\"As for where you come from — no idea. You don't dress like anyone local I'd recognize, but that doesn't mean much in Calderan. People come through from everywhere.\" She fixed him with a direct look. \"Why do you ask? Most people who want something just say what they want.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3175,
+              "completion_tokens": 188,
+              "total_tokens": 3363,
+              "cost": 0.00293748,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2048,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00293748,
+                "upstream_inference_prompt_cost": 0.00211028,
+                "upstream_inference_completions_cost": 0.0008272
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3583,
+              "completion_tokens": 200,
+              "total_tokens": 3783,
+              "cost": 0.00239412,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3072,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00239412,
+                "upstream_inference_prompt_cost": 0.00151412,
+                "upstream_inference_completions_cost": 0.00088
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3175,
+            "completion_tokens": 188,
+            "total_tokens": 3363
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:55.225Z",
+            "headers_ms": 4983.172500000001,
+            "time_to_first_token_ms": 4984.914499999999,
+            "completed_at": "2026-09-30T11:56:00.239Z",
+            "elapsed_total_ms": 5014.39469999999
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 9813.61050000001,
+        "narrator_ttft_ms": 4984.914499999999,
+        "narrator_total_ms": 5014.39469999999,
+        "controller_ms": 1101.108400000012,
+        "turn_ms": 9813.914800000013
+      }
+    }
+  ]
+}

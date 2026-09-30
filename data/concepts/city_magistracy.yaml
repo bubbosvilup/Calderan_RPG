@@ -17,8 +17,9 @@ entity:
     without any specific rivalry or plot being established. This apparatus may overlap
     socially or professionally with the Learned Arts Guild, but is not a formal subordinate
     branch, and not every magistrate is a guild member. It is not a Bureaucrats Guild or a
-    single unified autonomous faction. No specific officials or historical playthrough
-    characters are established.
+    single unified autonomous faction. Its senior civic judicial figure is the Chief
+    Magistrate of Calderan, Oren Quarn, associated with the High Courts of Calderan; no other
+    specific officials or historical playthrough characters are established.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   related_entities: ["calderan","main_city_structure","learned_arts_guild"]
 chunks: []

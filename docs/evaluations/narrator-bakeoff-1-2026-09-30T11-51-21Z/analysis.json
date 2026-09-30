@@ -1,0 +1,1733 @@
+{
+  "google__gemini-3.8-flash": {
+    "turns": 23,
+    "successful": 22,
+    "failed": [
+      {
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcome": "narrator_failed",
+        "provider_code": "authentication_error"
+      }
+    ],
+    "retried_cases": [],
+    "intervention_rate": 0.2727272727272727,
+    "revision_rate": 0.2727272727272727,
+    "redaction_rate": 0,
+    "revision_success_rate": 1,
+    "raw_violation_counts": {
+      "narration_state_correction": 6
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "blackthorn"
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "Google AI Studio"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 28,
+      "none": 1
+    },
+    "narrator_calls": 29,
+    "revision_calls": 6,
+    "tokens": {
+      "prompt_mean": 3382.75,
+      "completion_mean": 165.32142857142858,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 1652.86371363637,
+      "ttft_median": 1214.3637499999604,
+      "narrator_total_mean": 2596.2192954545553,
+      "narrator_total_median": 2378.0872500000405,
+      "turn_mean": 4468.924309090886
+    },
+    "output_chars_mean": 746.3636363636364,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "narrator_failed"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  },
+  "google__gemma-4-31b-it": {
+    "turns": 23,
+    "successful": 23,
+    "failed": [],
+    "retried_cases": [],
+    "intervention_rate": 0.17391304347826086,
+    "revision_rate": 0.17391304347826086,
+    "redaction_rate": 0,
+    "revision_success_rate": 1,
+    "raw_violation_counts": {
+      "absent_participant": 2,
+      "narration_state_correction": 4
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "SiliconFlow"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 27
+    },
+    "narrator_calls": 27,
+    "revision_calls": 4,
+    "tokens": {
+      "prompt_mean": 3463.037037037037,
+      "completion_mean": 93.11111111111111,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 1831.917782608683,
+      "ttft_median": 1867.7697000000626,
+      "narrator_total_mean": 3312.7866565217414,
+      "narrator_total_median": 3376.6441999999806,
+      "turn_mean": 5102.322739130427
+    },
+    "output_chars_mean": 393.3478260869565,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  },
+  "moonshotai__kimi-k2.5": {
+    "turns": 21,
+    "successful": 21,
+    "failed": [],
+    "retried_cases": [],
+    "intervention_rate": 0.2857142857142857,
+    "revision_rate": 0.2857142857142857,
+    "redaction_rate": 0.047619047619047616,
+    "revision_success_rate": 0.8333333333333334,
+    "raw_violation_counts": {
+      "invented_history": 2,
+      "player_agency": 1,
+      "absent_participant": 2,
+      "narration_state_correction": 1
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": false,
+        "return_run": false,
+        "return_final_owner": null
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": false,
+        "return_run": false,
+        "return_final_owner": null
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "Amazon Bedrock"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 27
+    },
+    "narrator_calls": 27,
+    "revision_calls": 6,
+    "tokens": {
+      "prompt_mean": 3394.6296296296296,
+      "completion_mean": 155.40740740740742,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 1337.666552380953,
+      "ttft_median": 1092.711800000001,
+      "narrator_total_mean": 3098.0634428571425,
+      "narrator_total_median": 2436.147100000002,
+      "turn_mean": 4851.987328571428
+    },
+    "output_chars_mean": 747.047619047619,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "gift_not_committed"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "gift_not_committed"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  },
+  "xiaomi__mimo-v2.5-pro": {
+    "turns": 23,
+    "successful": 23,
+    "failed": [],
+    "retried_cases": [
+      "T1-jessa_rook.json",
+      "T4-blackthorn.json"
+    ],
+    "intervention_rate": 0.391304347826087,
+    "revision_rate": 0.391304347826087,
+    "redaction_rate": 0,
+    "revision_success_rate": 1,
+    "raw_violation_counts": {
+      "absent_participant": 4,
+      "unauthorized_player_knowledge": 1,
+      "invented_history": 1,
+      "narration_state_correction": 3
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "Xiaomi"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 32
+    },
+    "narrator_calls": 32,
+    "revision_calls": 9,
+    "tokens": {
+      "prompt_mean": 3465.46875,
+      "completion_mean": 162.96875,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 2250.170826086967,
+      "ttft_median": 1378.5783999999985,
+      "narrator_total_mean": 10708.567317391307,
+      "narrator_total_median": 7197.390100000019,
+      "turn_mean": 16016.137691304346
+    },
+    "output_chars_mean": 729.4782608695652,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": true
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": true
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  },
+  "xiaomi__mimo-v2.6-pro": {
+    "turns": 23,
+    "successful": 23,
+    "failed": [],
+    "retried_cases": [],
+    "intervention_rate": 0.17391304347826086,
+    "revision_rate": 0.17391304347826086,
+    "redaction_rate": 0,
+    "revision_success_rate": 1,
+    "raw_violation_counts": {
+      "unauthorized_player_knowledge": 1,
+      "absent_participant": 2,
+      "narration_state_correction": 5
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "Xiaomi"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 27
+    },
+    "narrator_calls": 27,
+    "revision_calls": 4,
+    "tokens": {
+      "prompt_mean": 3432.5185185185187,
+      "completion_mean": 128.96296296296296,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 1761.0141652173884,
+      "ttft_median": 1338.6403999999166,
+      "narrator_total_mean": 6166.175221739134,
+      "narrator_total_median": 5423.447700000019,
+      "turn_mean": 8254.768760869569
+    },
+    "output_chars_mean": 522.695652173913,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  },
+  "z-ai__glm-5.2": {
+    "turns": 23,
+    "successful": 23,
+    "failed": [],
+    "retried_cases": [],
+    "intervention_rate": 0.17391304347826086,
+    "revision_rate": 0.17391304347826086,
+    "redaction_rate": 0,
+    "revision_success_rate": 1,
+    "raw_violation_counts": {
+      "unauthorized_player_knowledge": 2,
+      "absent_participant": 1,
+      "narration_state_correction": 3
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "Z.AI"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 27
+    },
+    "narrator_calls": 27,
+    "revision_calls": 4,
+    "tokens": {
+      "prompt_mean": 3425.8888888888887,
+      "completion_mean": 197.1851851851852,
+      "reasoning_mean": 0
+    },
+    "latency_ms": {
+      "ttft_mean": 5611.592417391303,
+      "ttft_median": 5483.28349999999,
+      "narrator_total_mean": 5653.770934782608,
+      "narrator_total_median": 5532.0755999999965,
+      "turn_mean": 7300.9087434782605
+    },
+    "output_chars_mean": 882,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  },
+  "z-ai__glm-5.3": {
+    "turns": 23,
+    "successful": 23,
+    "failed": [],
+    "retried_cases": [],
+    "intervention_rate": 0.21739130434782608,
+    "revision_rate": 0.21739130434782608,
+    "redaction_rate": 0.043478260869565216,
+    "revision_success_rate": 0.8,
+    "raw_violation_counts": {
+      "absent_participant": 3,
+      "narration_state_correction": 2
+    },
+    "controller": {
+      "timeout": 0,
+      "structured_invalid": 0,
+      "normalized": 0,
+      "omission": 0,
+      "other_failure": 0
+    },
+    "t2": [
+      {
+        "npc": "bartolomhew",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "blackthorn",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "captain_doran_hale",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      },
+      {
+        "npc": "jessa_rook",
+        "gift_committed": true,
+        "return_run": true,
+        "return_final_owner": "nicco"
+      }
+    ],
+    "upstream_narrator_providers": [
+      "Z.AI"
+    ],
+    "narrator_finish_reasons": {
+      "stop": 28
+    },
+    "narrator_calls": 28,
+    "revision_calls": 5,
+    "tokens": {
+      "prompt_mean": 3434.3214285714284,
+      "completion_mean": 208.42857142857142,
+      "reasoning_mean": 23.464285714285715
+    },
+    "latency_ms": {
+      "ttft_mean": 5657.842256521738,
+      "ttft_median": 3533.840499999991,
+      "narrator_total_mean": 8324.5019,
+      "narrator_total_median": 7193.961899999995,
+      "turn_mean": 10626.03710434783
+    },
+    "output_chars_mean": 789.3478260869565,
+    "cases": [
+      {
+        "file": "T1-bartolomhew.json",
+        "test": "T1",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-blackthorn.json",
+        "test": "T1",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-captain_doran_hale.json",
+        "test": "T1",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T1-jessa_rook.json",
+        "test": "T1",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-bartolomhew.json",
+        "test": "T2",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-blackthorn.json",
+        "test": "T2",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-captain_doran_hale.json",
+        "test": "T2",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T2-jessa_rook.json",
+        "test": "T2",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success",
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-bartolomhew.json",
+        "test": "T3",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-blackthorn.json",
+        "test": "T3",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-captain_doran_hale.json",
+        "test": "T3",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T3-jessa_rook.json",
+        "test": "T3",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-bartolomhew.json",
+        "test": "T4",
+        "npc": "bartolomhew",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-blackthorn.json",
+        "test": "T4",
+        "npc": "blackthorn",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-captain_doran_hale.json",
+        "test": "T4",
+        "npc": "captain_doran_hale",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T4-jessa_rook.json",
+        "test": "T4",
+        "npc": "jessa_rook",
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5A.json",
+        "test": "T5A",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5B.json",
+        "test": "T5B",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      },
+      {
+        "file": "T5C.json",
+        "test": "T5C",
+        "npc": null,
+        "outcomes": [
+          "success"
+        ],
+        "retried": false
+      }
+    ]
+  }
+}

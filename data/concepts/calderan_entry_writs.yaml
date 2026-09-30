@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: calderan_entry_writs
+  type: concept
+  name: "Calderan Entry Writs"
+  display_name: "Calderan Entry Writs"
+  parent: null
+  aliases: ["entry writ","visitor writ","merchant writ","caravan writ","sponsored guest writ"]
+  summary: >-
+    Entry to Calderan is controlled by writs issued by the civil and ducal administration and
+    checked by City Guard and customs officers at the gates; there is no general entrance tax.
+  tags: ["law","travel"]
+  search_context: "entry writ, visitor writ, merchant writ, caravan writ, sponsored guest writ, gate papers, customs, Imperial Gate inspection"
+  content: >-
+    Calderan is not open-access. There is no general entrance tax, but entry is strictly
+    controlled. Accepted broad categories are recognized or documented residents, sponsored
+    guests, documented merchants and caravans, and visitors with an accepted purpose. Papers
+    take the form of an entry writ, visitor writ, merchant or caravan writ, or sponsored guest
+    writ. Writs are issued by Calderan's civil and ducal administration and checked by City
+    Guard and customs officers at the gate. The Merchants Guild may certify commercial identity
+    and cargo but cannot grant entry by itself. The Imperial Gate is the most formalized and
+    tightly controlled; the other cardinal gates follow the same general framework but handle
+    more local or specialized traffic, where corruption and smuggling are more plausible.
+    Durations, fees for papers and penalties are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:west"}
+  related_entities: ["calderan","imperial_gate","city_guard","merchants_guild"]
+chunks: []

@@ -1,0 +1,108 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T1",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Jessa Rook who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "c492eaebd4bb0800",
+      "draft": "Across the moderate daytime foot traffic of Heartstone Square, Jessa Rook paused and turned her steady gaze toward Nicco. Her hands settled loosely at her sides, her sleeves rolled neat and practical above her forearms, her expression showing neither surprise nor hesitation.\n\n\"I don't know who you are,\" she said, her voice measured and quiet enough not to draw the notice of passers-by. \"Never laid eyes on you until now. As for where you come from—could be anywhere beyond the city gates or three streets over. You don't look like someone who spends their life hauling carts, but that hardly tells me a name or a road.\"\n\nShe tilted her head slightly, waiting to see if he had a practical reason for asking or simply intended to stand outside the heavy doors of the tower. \"If you're asking because you need lodging or a direction, that's business. Otherwise, you're just another stranger standing in the square.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Across the moderate daytime foot traffic of Heartstone Square, Jessa Rook paused and turned her steady gaze toward Nicco. Her hands settled loosely at her sides, her sleeves rolled neat and practical above her forearms, her expression showing neither surprise nor hesitation.\n\n\"I don't know who you are,\" she said, her voice measured and quiet enough not to draw the notice of passers-by. \"Never laid eyes on you until now. As for where you come from—could be anywhere beyond the city gates or three streets over. You don't look like someone who spends their life hauling carts, but that hardly tells me a name or a road.\"\n\nShe tilted her head slightly, waiting to see if he had a practical reason for asking or simply intended to stand outside the heavy doors of the tower. \"If you're asking because you need lodging or a direction, that's business. Otherwise, you're just another stranger standing in the square.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3279,
+              "completion_tokens": 197,
+              "total_tokens": 3476,
+              "cost": 0.003198,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003198,
+                "upstream_inference_prompt_cost": 0.00245925,
+                "upstream_inference_completions_cost": 0.00073875
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3279,
+            "completion_tokens": 197,
+            "total_tokens": 3476
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:25.601Z",
+            "headers_ms": 1507.421900000074,
+            "time_to_first_token_ms": 1507.5254000000423,
+            "completed_at": "2026-09-30T12:05:28.407Z",
+            "elapsed_total_ms": 2805.5028000000166
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 5152.0953000000445,
+        "narrator_ttft_ms": 1507.5254000000423,
+        "narrator_total_ms": 2805.5028000000166,
+        "controller_ms": 2338.2717999999877,
+        "turn_ms": 5152.309000000008
+      }
+    }
+  ]
+}

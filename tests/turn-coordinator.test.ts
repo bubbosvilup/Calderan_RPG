@@ -98,7 +98,9 @@ test("bounded recent messages exclude failures and oversize exchanges", () => {
   for (let i = 0; i < 10; i++) recent.add({ player: String(i), narration: "Hello", status: "finalized" });
   assert.equal(recent.entries().length, 2);
   recent.add({ player: "X".repeat(2000), narration: "Too big", status: "finalized" }); assert.equal(recent.entries().length, 2);
-  recent.add({ player: "failed", narration: "Uncommitted", status: "state_failed" }); assert.equal(recent.forPrompt().length, 1);
+  // Runtime Continuity Repair 1: a failed exchange is kept out of the prompt and no longer displaces a completed one.
+  recent.add({ player: "failed", narration: "Uncommitted", status: "state_failed" }); assert.equal(recent.forPrompt().length, 2);
+  assert.ok(recent.forPrompt().every(e => e.status === "finalized"));
 });
 test("lore query uses one existing-stack search plus optional fetch with lexical fallback", async () => {
   const s = setup(); const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "What do I know about Ironbound?" })); const last = events.at(-1)!;

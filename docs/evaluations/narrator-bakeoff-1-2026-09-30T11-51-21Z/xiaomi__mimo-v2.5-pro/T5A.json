@@ -1,0 +1,118 @@
+{
+  "model": "xiaomi/mimo-v2.5-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T5A",
+  "npc": null,
+  "location": null,
+  "turns": [
+    {
+      "input": "*After they have both explicitly agreed to continue, Nicco moves closer and returns Serin's kiss, letting the encounter become more intimate.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "ebc0643402189f0b",
+      "draft": "Nicco closed the distance between them, his hand moving to the curve of Serin’s waist as he returned the kiss with the same heat she had offered. The tension that had simmered through the evening finally snapped, leaving the quiet, crackling intimacy of the hearthside to fill the space between their breaths. Serin leaned into the contact, her arms winding around his neck, signaling a clear and willing surrender to the moment.\n\n\"I didn't come up here just for the architecture,\" she murmured against his lips, her voice low and roughened by proximity. The firelight cast long, dancing shadows across the worn stone walls as the ambient noise of the city outside seemed to fade into nothingness. The air in the room grew heavy and still, charged with the reality that neither of them intended to sleep alone.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco closed the distance between them, his hand moving to the curve of Serin’s waist as he returned the kiss with the same heat she had offered. The tension that had simmered through the evening finally snapped, leaving the quiet, crackling intimacy of the hearthside to fill the space between their breaths. Serin leaned into the contact, her arms winding around his neck, signaling a clear and willing surrender to the moment.\n\n\"I didn't come up here just for the architecture,\" she murmured against his lips, her voice low and roughened by proximity. The firelight cast long, dancing shadows across the worn stone walls as the ambient noise of the city outside seemed to fade into nothingness. The air in the room grew heavy and still, charged with the reality that neither of them intended to sleep alone.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "unresolved"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [
+          {
+            "id": "campaign_character_eval_serin_vale",
+            "conditions": []
+          }
+        ],
+        "player_location": "heartstone_lr"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3694,
+              "completion_tokens": 167,
+              "total_tokens": 3861,
+              "cost": 0.001199988,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 1280,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.001199988,
+                "upstream_inference_prompt_cost": 0.001054698,
+                "upstream_inference_completions_cost": 0.00014529
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.5-pro",
+          "usage": {
+            "prompt_tokens": 3694,
+            "completion_tokens": 167,
+            "total_tokens": 3861
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:02:54.433Z",
+            "headers_ms": 2132.52840000001,
+            "time_to_first_token_ms": 2132.6331000000355,
+            "completed_at": "2026-09-30T12:03:09.146Z",
+            "elapsed_total_ms": 14758.788300000015
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 15878.646899999992,
+        "narrator_ttft_ms": 2132.6331000000355,
+        "narrator_total_ms": 14758.788300000015,
+        "controller_ms": 1107.9968000000226,
+        "turn_ms": 15879.008199999982
+      }
+    }
+  ]
+}

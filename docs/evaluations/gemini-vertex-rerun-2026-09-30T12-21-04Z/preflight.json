@@ -1,0 +1,24 @@
+{
+  "created_at": "2026-09-30T12:21:04.584Z",
+  "rule": "fixed by the rerun brief: Google Vertex, allow_fallbacks false, reasoning effort minimal (same as bakeoff); standard global endpoint (not flex/priority), mirroring the bakeoff standard AI Studio tier",
+  "probe": {
+    "http": 200,
+    "provider": "Google",
+    "finish": "stop",
+    "reasoning_tokens": 311
+  },
+  "results": [
+    {
+      "model": "google/gemini-3.8-flash",
+      "status": "OK",
+      "chosen": {
+        "tag": "google-vertex/global",
+        "provider_name": "Google",
+        "quantization": "unknown",
+        "reasoning": {
+          "effort": "minimal"
+        }
+      }
+    }
+  ]
+}

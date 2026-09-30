@@ -1,0 +1,66 @@
+schema_version: 1
+entity:
+  id: vaelen_vael
+  type: character
+  name: Vaelen Vael
+  display_name: Vaelen Vael
+  parent: null
+  aliases: []
+  summary: Vaelen Vael is the patriarch of House Vael and Chancellor of the Ducal Seal of Calderan.
+  tags:
+    - nobility
+  search_context: Vaelen Vael, House Vael patriarch, Chancellor of the Ducal Seal, ducal seals, decrees
+  content: Vaelen Vael heads House Vael, Calderan's bureaucratic founding house, and holds its
+    standing seat on the Ducal Council. As Chancellor of the Ducal Seal he oversees or strongly
+    influences the formal validation of ducal acts, seals, decrees, official appointments and
+    high-level correspondence, working in the central administration at the Ducal Citadel; he is not
+    omnipotent. His position rests on his noble family, competence, reliability and his personal
+    friendship with Duke Uther Calderan. Polite, somewhat monotonous and occasionally
+    over-explanatory, he genuinely likes correct procedure, ordered documents and records kept where
+    they belong. He is married to Elspeth Vael; Seren Vael is their daughter.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 62–66
+  appearance: Tall, very thin and slightly stooped, with raven-black hair now heavily greying,
+    carefully groomed. Wears round spectacles; fine hands shaped by a lifetime of documents.
+  occupation: Patriarch of House Vael; Chancellor of the Ducal Seal
+  base_location: ducal_citadel
+  work_location: ducal_citadel
+  home_location: null
+  traits:
+    - fundamentally bureaucratic
+    - methodical
+    - slightly pedantic
+    - gentle
+    - decent
+    - loyal
+    - not especially ambitious
+    - polite, somewhat monotonous voice; occasionally over-explanatory
+    - genuinely enjoys correct procedure, ordered documents and properly executed administration
+  purpose: Keep the ducal administration functioning correctly and serve Duke Uther Calderan faithfully.
+  morality: Generally decent by the standards of his world and institutionally conformist; he rarely
+    questions the system itself.
+  affiliations:
+    - house_vael
+    - ducal_council_of_calderan
+  relationships:
+    - target: elspeth_vael
+      kind: spouse
+      description: His wife.
+    - target: seren_vael
+      kind: child
+      description: His daughter; he has always treated her warmly.
+    - target: uther_calderan
+      kind: friend
+      description: Personal friend of the Duke, whom he serves as Chancellor of the Ducal Seal.
+    - target: corvinus_morvath
+      kind: friend
+      description: Long-standing friend.
+chunks: []

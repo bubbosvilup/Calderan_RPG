@@ -1,0 +1,41 @@
+{
+  "started_at": "2026-09-30T12:21:05.036Z",
+  "source_before": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "controller": "deepseek/deepseek-v4-flash-0731:nitro",
+  "narrator_output_tokens": 384,
+  "request_policy": "production coordinator and prompts; narrator body rewritten only to pin provider (allow_fallbacks false) and set the preflight reasoning setting; no sampling parameters sent (provider defaults, as in production); controller unpinned production configuration",
+  "models": [
+    {
+      "model": "google/gemini-3.8-flash",
+      "provider": {
+        "tag": "google-vertex/global",
+        "provider_name": "Google",
+        "quantization": "unknown",
+        "reasoning": {
+          "effort": "minimal"
+        }
+      }
+    }
+  ],
+  "cases": [
+    {
+      "model": "google/gemini-3.8-flash",
+      "pinned": "google-vertex/global",
+      "upstream_providers_observed": [
+        "Google"
+      ],
+      "provider_drift": false,
+      "files": [
+        "google__gemini-3.8-flash/T3-blackthorn.json",
+        "google__gemini-3.8-flash/T4-bartolomhew.json",
+        "google__gemini-3.8-flash/T1-captain_doran_hale.json",
+        "google__gemini-3.8-flash/T5A.json",
+        "google__gemini-3.8-flash/T5C.json",
+        "google__gemini-3.8-flash/T5B.json"
+      ]
+    }
+  ],
+  "finished_at": "2026-09-30T12:21:25.556Z",
+  "source_after": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "source_unchanged": true
+}

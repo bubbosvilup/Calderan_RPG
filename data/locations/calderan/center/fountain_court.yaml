@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: fountain_court
+  type: location
+  name: "Fountain Court"
+  display_name: "Fountain Court"
+  parent: calderan_center
+  aliases: []
+  summary: >-
+    Fountain Court is a small, prestigious civic and social square in Calderan's Center District
+    around an elegant fountain.
+  tags: ["square","civic","social"]
+  search_context: "Fountain Court, elegant fountain, refined restaurants, nobles, officials, messengers"
+  content: >-
+    Fountain Court is a small, prestigious square around an elegant fountain, with refined
+    restaurants. Officials, nobles, messengers and wealthy visitors pass through it, and it
+    suits formal encounters. It is not a large marketplace, a noisy fair or a street-vendor
+    zone. Its restaurants are not individually established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features:
+    - name: "elegant fountain"
+      description: >-
+        An elegant fountain at the center of the square.
+  connections: []
+chunks: []

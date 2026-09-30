@@ -1,0 +1,117 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T5C",
+  "npc": null,
+  "location": null,
+  "turns": [
+    {
+      "input": "*Nicco watches from the shadows as Varro Kest inspects Edda Marn, a grown woman held in chains, and tells her what she is worth to him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "dfdc39443fd43323",
+      "draft": " Varro Kest circles the chained woman with the unhurried patience of a man who owns the space he occupies, his coat catching what little light filters down from above. He seizes her jaw between thumb and two fingers, turning her face toward the dimness as if judging livestock. \"Twenty silver, maybe, once you're cleaned. Less if those hands stay soft.\" His breath smells of onion and something fermented. \"Your debtor sold you cheap. Don't flatter yourself thinking you're rare goods.\"\n\nEdda Marn's wrists pull against the ring in the wall, chains clinking. She doesn't speak. Her eyes stay on the middle distance, fixed somewhere past his shoulder where the alley curves into deeper shadow.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Varro Kest circles the chained woman with the unhurried patience of a man who owns the space he occupies, his coat catching what little light filters down from above. He seizes her jaw between thumb and two fingers, turning her face toward the dimness as if judging livestock. \"Twenty silver, maybe, once you're cleaned. Less if those hands stay soft.\" His breath smells of onion and something fermented. \"Your debtor sold you cheap. Don't flatter yourself thinking you're rare goods.\"\n\nEdda Marn's wrists pull against the ring in the wall, chains clinking. She doesn't speak. Her eyes stay on the middle distance, fixed somewhere past his shoulder where the alley curves into deeper shadow.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [
+          {
+            "id": "campaign_character_eval_edda_marn",
+            "conditions": []
+          },
+          {
+            "id": "campaign_character_eval_varro_kest",
+            "conditions": []
+          }
+        ],
+        "player_location": "slave_market_back_back_alleys"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 2935,
+              "completion_tokens": 144,
+              "total_tokens": 3079,
+              "cost": 0.002193,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.002193,
+                "upstream_inference_prompt_cost": 0.001761,
+                "upstream_inference_completions_cost": 0.000432
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2935,
+            "completion_tokens": 144,
+            "total_tokens": 3079
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:32.859Z",
+            "headers_ms": 2589.5939,
+            "time_to_first_token_ms": 2593.137800000004,
+            "completed_at": "2026-09-30T11:55:37.094Z",
+            "elapsed_total_ms": 4234.704600000005
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6188.298600000002,
+        "narrator_ttft_ms": 2593.137800000004,
+        "narrator_total_ms": 4234.704600000005,
+        "controller_ms": 1943.5388999999996,
+        "turn_ms": 6188.706100000003
+      }
+    }
+  ]
+}

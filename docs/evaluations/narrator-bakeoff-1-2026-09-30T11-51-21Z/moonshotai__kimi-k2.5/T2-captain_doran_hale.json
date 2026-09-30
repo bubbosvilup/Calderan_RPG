@@ -1,0 +1,299 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "Captain Doran Hale gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "abe0ef79c034c880",
+      "draft": " Captain Doran Hale holds out the leather boots, and Nicco takes them.\n\nThe captain studies him with steady blue eyes, the scarred face giving nothing away. \"Those'll hold up better than what you're wearing if you mean to walk the rougher streets.\" He glances toward the tower entrance behind Nicco, then back. \"Heartstone's been empty a long while. You're either brave or foolish to take it on.\" He doesn't wait for an answer, settling into a soldier's patient stance. \"If it's the first, West District could use men who aren't afraid of hard work and worse neighbors. If it's the second—\" a brief, humorless tightening of his mouth, \"—you'll learn or you won't. Either way, don't expect the guard to chase off every rat that slips your door.\"",
+      "issues": [
+        {
+          "kind": "unsourced_history",
+          "sentence": "\"Heartstone's been empty a long while. You're either brave or foolish to take it on.\" He doesn't wait for an answer, settling into a soldier's patient stance.",
+          "correction": "The history of Heartstone (previous owners, residents, how long it stood empty, debts) is not established. Remove it; nobody states it."
+        }
+      ],
+      "revision_requested": true,
+      "revision": " Captain Doran Hale holds out the leather boots, and Nicco takes them.\n\nThe captain studies him with steady blue eyes, the scarred face giving nothing away. \"Those'll hold up better than what you're wearing if you mean to walk the rougher streets.\" He glances toward the tower entrance behind Nicco, then back, settling into a soldier's patient stance. \"West District could use men who aren't afraid of hard work and worse neighbors. Don't expect the guard to chase off every rat that slips your door.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": " Captain Doran Hale holds out the leather boots, and Nicco takes them.\n\nThe captain studies him with steady blue eyes, the scarred face giving nothing away. \"Those'll hold up better than what you're wearing if you mean to walk the rougher streets.\" He glances toward the tower entrance behind Nicco, then back, settling into a soldier's patient stance. \"West District could use men who aren't afraid of hard work and worse neighbors. Don't expect the guard to chase off every rat that slips your door.\"",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_controller_evidence",
+            "check": "receipt_by_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3331,
+              "completion_tokens": 166,
+              "total_tokens": 3497,
+              "cost": 0.0024966,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0024966,
+                "upstream_inference_prompt_cost": 0.0019986,
+                "upstream_inference_completions_cost": 0.000498
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3737,
+              "completion_tokens": 106,
+              "total_tokens": 3843,
+              "cost": 0.0025602,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0025602,
+                "upstream_inference_prompt_cost": 0.0022422,
+                "upstream_inference_completions_cost": 0.000318
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3331,
+            "completion_tokens": 166,
+            "total_tokens": 3497
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:20.063Z",
+            "headers_ms": 734.6322999999975,
+            "time_to_first_token_ms": 984.286799999998,
+            "completed_at": "2026-09-30T11:55:22.497Z",
+            "elapsed_total_ms": 2433.596099999999
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 5918.111699999998,
+        "narrator_ttft_ms": 984.286799999998,
+        "narrator_total_ms": 2433.596099999999,
+        "controller_ms": 2045.4280999999974,
+        "turn_ms": 5918.3279
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8ed964c7447b872b",
+      "draft": " Nicco thanks the captain and holds the boots out. \"You'll need them more than me.\"\n\nCaptain Doran Hale looks at the offered boots, then at Nicco's own worn footwear—whatever the man is wearing, it clearly isn't military issue. His jaw sets with the particular stubbornness of someone who has had this argument many times before, usually in reverse.\n\n\"I don't, actually.\" Doran doesn't reach for them. \"Guard requisitions every piece of kit I wear, from boots to buckles. Yours look like they've walked through worse than a parade ground. Keep them.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Nicco thanks the captain and holds the boots out. \"You'll need them more than me.\"\n\nCaptain Doran Hale looks at the offered boots, then at Nicco's own worn footwear—whatever the man is wearing, it clearly isn't military issue. His jaw sets with the particular stubbornness of someone who has had this argument many times before, usually in reverse.\n\n\"I don't, actually.\" Doran doesn't reach for them. \"Guard requisitions every piece of kit I wear, from boots to buckles. Yours look like they've walked through worse than a parade ground. Keep them.\"",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3336,
+              "completion_tokens": 119,
+              "total_tokens": 3455,
+              "cost": 0.0023586,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0023586,
+                "upstream_inference_prompt_cost": 0.0020016,
+                "upstream_inference_completions_cost": 0.000357
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3336,
+            "completion_tokens": 119,
+            "total_tokens": 3455
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:25.981Z",
+            "headers_ms": 900.7955000000002,
+            "time_to_first_token_ms": 1142.1984999999986,
+            "completed_at": "2026-09-30T11:55:27.948Z",
+            "elapsed_total_ms": 1967.0835999999981
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 2656.5256999999983,
+        "narrator_ttft_ms": 1142.1984999999986,
+        "narrator_total_ms": 1967.0835999999981,
+        "controller_ms": 682.4349000000002,
+        "turn_ms": 2657.193299999999
+      }
+    }
+  ]
+}

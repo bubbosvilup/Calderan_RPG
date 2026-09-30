@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T3",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Bartolomhew, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "bf055572261c3b8b",
+      "draft": "The man standing in the square has the look of someone who once wore a collar for reasons other than fashion — the shaved crown of his head, visible through thinned blond hair gone mostly to white, carries the unmistakable shape of a clerical tonsure. He's tall, lean-faced, pleasant in a way that sits comfortably on him, and dressed with an elegance that doesn't quite abandon its clerical cues. He smiles easily, the kind of warm, paternal expression that suggests nothing but goodwill.\n\nNicco can observe all of this from where he stands. What lies behind that smile — the careful professional warmth, the calm courtesy — isn't something written on a face. Bartolomhew hasn't spoken yet, hasn't introduced himself, hasn't given any indication of purpose. He's simply a man present in Heartstone Square, among the moderate daytime foot traffic passing between the low residential buildings and the few nearby shops. The massive wooden entrance of Heartstone Tower stands somewhere behind Nicco.\n\nWhatever Bartolomhew notices or makes of the tall, heavy man looking his way, he hasn't yet shown it.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The man standing in the square has the look of someone who once wore a collar for reasons other than fashion — the shaved crown of his head, visible through thinned blond hair gone mostly to white, carries the unmistakable shape of a clerical tonsure. He's tall, lean-faced, pleasant in a way that sits comfortably on him, and dressed with an elegance that doesn't quite abandon its clerical cues. He smiles easily, the kind of warm, paternal expression that suggests nothing but goodwill.\n\nNicco can observe all of this from where he stands. What lies behind that smile — the careful professional warmth, the calm courtesy — isn't something written on a face. Bartolomhew hasn't spoken yet, hasn't introduced himself, hasn't given any indication of purpose. He's simply a man present in Heartstone Square, among the moderate daytime foot traffic passing between the low residential buildings and the few nearby shops. The massive wooden entrance of Heartstone Tower stands somewhere behind Nicco.\n\nWhatever Bartolomhew notices or makes of the tall, heavy man looking his way, he hasn't yet shown it.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3272,
+              "completion_tokens": 228,
+              "total_tokens": 3500,
+              "cost": 0.00208192,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3072,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00208192,
+                "upstream_inference_prompt_cost": 0.00107872,
+                "upstream_inference_completions_cost": 0.0010032
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3272,
+            "completion_tokens": 228,
+            "total_tokens": 3500
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:47.352Z",
+            "headers_ms": 6959.831400000003,
+            "time_to_first_token_ms": 6962.307800000002,
+            "completed_at": "2026-09-30T11:55:54.305Z",
+            "elapsed_total_ms": 7000.577700000002
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 7892.778199999993,
+        "narrator_ttft_ms": 6962.307800000002,
+        "narrator_total_ms": 7000.577700000002,
+        "controller_ms": 888.2791999999899,
+        "turn_ms": 7893.166699999994
+      }
+    }
+  ]
+}

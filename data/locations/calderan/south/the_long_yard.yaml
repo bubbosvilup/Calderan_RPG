@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: the_long_yard
+  type: location
+  name: "The Long Yard"
+  display_name: "The Long Yard"
+  parent: calderan_south
+  aliases: []
+  summary: >-
+    The Long Yard is the primary caravan staging and loading yard in Calderan's South District.
+  tags: ["transport","caravans"]
+  search_context: "The Long Yard, caravan yard, staging, loading, wagons, draft animals, cargo inspection"
+  content: >-
+    The Long Yard is South's primary large caravan staging and loading yard. Caravans arrive,
+    are inspected and are temporarily held here; cargo is loaded and unloaded, animals are
+    changed, and goods are transferred toward West's warehouses or East's commerce. It is not a
+    bulk warehouse complex.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

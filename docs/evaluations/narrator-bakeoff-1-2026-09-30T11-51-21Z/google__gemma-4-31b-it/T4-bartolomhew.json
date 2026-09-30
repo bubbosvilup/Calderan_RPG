@@ -1,0 +1,167 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "provider": {
+    "tag": "siliconflow/fp8",
+    "provider_name": "SiliconFlow",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T4",
+  "npc": "bartolomhew",
+  "location": "calderan_slave_market",
+  "turns": [
+    {
+      "input": "*He punches Bartolomhew directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "ad19ddcbbdf1a95e",
+      "draft": "Nicco's fist connects solidly with Bartolomhew's face. The blow snaps the slaver's head to the side with a sharp crack, sending him stumbling backward. He hits the dirt of the market square, his paternal smile replaced by a look of utter shock as he sprawls across the gravel.\n\nBartolomhew remains on the ground, dazed and clutching his jaw. A trickle of blood leaks from his lip, staining the clerical cues of his elegant clothing. He stares up at Nicco, blinking rapidly to clear his vision, his professional composure shattered by the sudden violence.\n\nNearby, Korvin stops mid-stride, his small, perceptive eyes widening as he looks from the fallen man to Nicco. Mistress Elara snaps her decorative fan shut with a loud click, her expression shifting from theatrical boredom to sharp, predatory interest.",
+      "issues": [
+        {
+          "kind": "uncommitted_condition",
+          "character": "Bartolomhew",
+          "sentence": "Bartolomhew remains on the ground, dazed and clutching his jaw.",
+          "correction": "No lasting dazed was recorded for Bartolomhew. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Nicco's fist connects solidly with Bartolomhew's face. The blow snaps the slaver's head to the side, forcing him to recoil sharply from the impact. He staggers back a few steps, his paternal smile vanishing as he flinches and brings a hand up to cradle his jaw.\n\nBartolomhew stands trembling slightly, a look of utter shock crossing his features. He blinks rapidly, his professional composure momentarily shattered by the sudden violence as he stares up at Nicco in silence.\n\nNearby, Korvin stops mid-stride, his small, perceptive eyes widening as he looks between the two men. Mistress Elara snaps her decorative fan shut with a loud click, her expression shifting from theatrical boredom to sharp, predatory interest.",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Nicco's fist connects solidly with Bartolomhew's face. The blow snaps the slaver's head to the side, forcing him to recoil sharply from the impact. He staggers back a few steps, his paternal smile vanishing as he flinches and brings a hand up to cradle his jaw.\n\nBartolomhew stands trembling slightly, a look of utter shock crossing his features. He blinks rapidly, his professional composure momentarily shattered by the sudden violence as he stares up at Nicco in silence.\n\nNearby, Korvin stops mid-stride, his small, perceptive eyes widening as he looks between the two men. Mistress Elara snaps her decorative fan shut with a loud click, her expression shifting from theatrical boredom to sharp, predatory interest.",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "bartolomhew",
+            "conditions": [
+              "minor_injury",
+              "dazed",
+              "knocked_down"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_subject_not_character"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "calderan_slave_market"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 4614,
+              "completion_tokens": 175,
+              "total_tokens": 4789,
+              "cost": 0.0036355,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0036355,
+                "upstream_inference_prompt_cost": 0.0034605,
+                "upstream_inference_completions_cost": 0.000175
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 5003,
+              "completion_tokens": 155,
+              "total_tokens": 5158,
+              "cost": 0.00390725,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00390725,
+                "upstream_inference_prompt_cost": 0.00375225,
+                "upstream_inference_completions_cost": 0.000155
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 4614,
+            "completion_tokens": 175,
+            "total_tokens": 4789
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:06.486Z",
+            "headers_ms": 2200.07640000002,
+            "time_to_first_token_ms": 2200.229799999972,
+            "completed_at": "2026-09-30T12:06:11.660Z",
+            "elapsed_total_ms": 5210.468100000056
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 12181.105299999937,
+        "narrator_ttft_ms": 2200.229799999972,
+        "narrator_total_ms": 5210.468100000056,
+        "controller_ms": 1603.9135999999708,
+        "turn_ms": 12181.383199999924
+      }
+    }
+  ]
+}

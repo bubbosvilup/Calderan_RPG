@@ -1,0 +1,165 @@
+{
+  "model": "xiaomi/mimo-v2.5-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T4",
+  "npc": "bartolomhew",
+  "location": "calderan_slave_market",
+  "turns": [
+    {
+      "input": "*He punches Bartolomhew directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "ad19ddcbbdf1a95e",
+      "draft": "Bartolomhew's paternal smile froze, then shattered into raw shock as Nicco's fist connected with his jaw. The tall man staggered back, a hand flying to his face, his elegant clothing askew. A thin line of crimson appeared at the corner of his lip. He blinked, disoriented, his warm demeanor completely gone.\n\nKorvin's small, mobile eyes widened, then narrowed with suspicion. He took a half-step back, his large hands clenching into fists at his sides. Mistress Elara let out a sharp, theatrical gasp, her fan snapping shut. She didn't retreat, but her green-hazel eyes fixed on Nicco with a new, calculating intensity.\n\n\"You,\" Bartolomhew finally managed, his voice thick and distorted. He spat blood onto the packed earth. \"You've just made a terrible mistake.\"",
+      "issues": [
+        {
+          "kind": "uncommitted_condition",
+          "character": "Bartolomhew",
+          "sentence": "He spat blood onto the packed earth.",
+          "correction": "No lasting minor injury was recorded for Bartolomhew. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Bartolomhew's paternal smile vanished as Nicco's fist slammed into his face. The tall man's head snapped back, a sharp grunt of pain escaping him. He stumbled, catching his balance, one hand rising to his reddening cheek. The shock in his eyes was absolute.\n\nKorvin's small eyes widened, then narrowed with suspicion. He took a half-step back, his large hands clenching into fists at his sides. Mistress Elara let out a sharp, theatrical gasp, her fan snapping shut. She didn't retreat, but her green-hazel eyes fixed on Nicco with a new, calculating intensity.\n\n\"You,\" Bartolomhew finally managed, his voice thick with fury and humiliation. He lowered his hand, his jaw working. \"You've just made a terrible mistake.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Bartolomhew's paternal smile vanished as Nicco's fist slammed into his face. The tall man's head snapped back, a sharp grunt of pain escaping him. He stumbled, catching his balance, one hand rising to his reddening cheek. The shock in his eyes was absolute.\n\nKorvin's small eyes widened, then narrowed with suspicion. He took a half-step back, his large hands clenching into fists at his sides. Mistress Elara let out a sharp, theatrical gasp, her fan snapping shut. She didn't retreat, but her green-hazel eyes fixed on Nicco with a new, calculating intensity.\n\n\"You,\" Bartolomhew finally managed, his voice thick with fury and humiliation. He lowered his hand, his jaw working. \"You've just made a terrible mistake.\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "bartolomhew",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_subject_not_character"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "calderan_slave_market"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 4608,
+              "completion_tokens": 177,
+              "total_tokens": 4785,
+              "cost": 0.001606278,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 1280,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.001606278,
+                "upstream_inference_prompt_cost": 0.001452288,
+                "upstream_inference_completions_cost": 0.00015399
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 4993,
+              "completion_tokens": 167,
+              "total_tokens": 5160,
+              "cost": 0.0002741346,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 4736,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0002741346,
+                "upstream_inference_prompt_cost": 0.0001288446,
+                "upstream_inference_completions_cost": 0.00014529
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.5-pro",
+          "usage": {
+            "prompt_tokens": 4608,
+            "completion_tokens": 177,
+            "total_tokens": 4785
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:59:25.260Z",
+            "headers_ms": 1287.0691000000224,
+            "time_to_first_token_ms": 1287.124300000025,
+            "completed_at": "2026-09-30T11:59:29.098Z",
+            "elapsed_total_ms": 3837.7727000000305
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 7574.869600000035,
+        "narrator_ttft_ms": 1287.124300000025,
+        "narrator_total_ms": 3837.7727000000305,
+        "controller_ms": 874.9475000000093,
+        "turn_ms": 7575.154800000018
+      }
+    }
+  ]
+}

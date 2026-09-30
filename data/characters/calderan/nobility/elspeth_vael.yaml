@@ -1,0 +1,59 @@
+schema_version: 1
+entity:
+  id: elspeth_vael
+  type: character
+  name: Elspeth Vael
+  display_name: Elspeth Vael
+  parent: null
+  aliases: []
+  summary: Elspeth Vael is a senior political and bureaucratic operator of House Vael, wife of Vaelen
+    Vael and mother of Seren Vael.
+  tags:
+    - nobility
+  search_context: Elspeth Vael, House Vael, wife of Vaelen Vael, mother of Seren Vael
+  content: Elspeth Vael works in Calderan's bureaucratic and political sphere for House Vael, and her
+    daughter Seren works beneath her. Where Vaelen understands rules, Elspeth understands the people
+    who apply them. Difficult to surprise, she rapidly notices who in a room wants what from whom.
+    She is married to Vaelen Vael. No formal office title is established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 54–58
+  appearance: Medium height, elegant and slender, with dark brown naturally wavy to curly hair
+    beginning to grey, usually arranged neatly, and green-hazel eyes. Consistently well dressed
+    without excessive display. Her daughter Seren inherits her hair and eyes.
+  occupation: Senior political and bureaucratic operator of House Vael
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - pragmatic
+    - socially intelligent
+    - perceptive
+    - street-smart
+    - difficult to surprise
+    - politically practical
+    - rapidly notices who in a room wants what from whom
+  purpose: Protect and improve House Vael's position and prepare Seren to survive inside Calderan's
+    bureaucracy and politics.
+  morality: Pragmatically grey and not sadistic. Comfortable leveraging favors, recognizing ambition,
+    using information and exploiting moments of weakness, without being a compulsive manipulator;
+    more willing than Vaelen to use people and leverage. She genuinely loves Vaelen and genuinely
+    cares for Seren.
+  affiliations:
+    - house_vael
+  relationships:
+    - target: vaelen_vael
+      kind: spouse
+      description: Her husband, whom she genuinely loves.
+    - target: seren_vael
+      kind: child
+      description: Her daughter, who works beneath her and studies her craft; their relationship is caring
+        but more hierarchical than Seren's with her father.
+chunks: []

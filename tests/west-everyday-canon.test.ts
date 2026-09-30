@@ -29,10 +29,16 @@ const retrieval={service,search:new HybridSearch(service)};
 const opening=buildTurnContext(world,createOpeningCampaign(world,"everyday_audit").exportSnapshot());
 const npc=(id:string)=>{const e=world.getEntity(id);assert.ok(e?.type==="character");return e;};
 
+/** Four-District + Institutional Authoring Pass 1 records (added after this pass). */
+const FOUR_DISTRICT_NPCS=["azael_melakor","boran_dravendark","corvinus_morvath","elspeth_vael","gideon_melakor","iseult_morvath","kaelen_dravendark","maelor_morvath","seren_vael","sun_emperor","sybilla_melakor","uther_calderan","vaelen_vael","vorn_dravendark"];
+/** NPC Authoring Pass 2 records (added after this pass). */
+const NPC_PASS_2_NPCS=["arwen_woodsigner","cassian_valerius","dunrig_iron_hands","gaston","helbrecht"];
+/** NPC Authoring Pass 3 records (added after this pass). */
+const NPC_PASS_3_NPCS=["brunna_keld","garran_holt","halden_cross","lysandra_vell","marta_pell","matthias_eld","odelia_crane","oren_quarn","rufus_tern","severan_krauss","sister_veyra","tavian_merrow"];
 test("Exactly seven everyday owners use existing locations with no family, faction or relationship inventions",()=>{
  const prior=["bartolomhew","blackthorn","brother_aven","captain_doran_hale","dren","korvin","mistress_elara","pellan","sister_mereth"];
- assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),[...prior,...anchors.map(a=>a[0])].sort());
- assert.equal(world.getEntitiesByType("location").length,50);
+ assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),[...prior,...anchors.map(a=>a[0]),...FOUR_DISTRICT_NPCS,...NPC_PASS_2_NPCS,...NPC_PASS_3_NPCS].sort());
+ assert.equal(world.getEntitiesByType("location").length,74); // 50 + 23 Four-District anchors + The Bent Bough (NPC Pass 2)
  for(const [id,name,location] of anchors){
   const e=npc(id);assert.equal(e.name,name);assert.equal(e.base_location,location);assert.equal(e.work_location,location);assert.equal(e.home_location,null);
   assert.equal(e.species,id==="hadrik_voss"?"Dwarf":"Human");

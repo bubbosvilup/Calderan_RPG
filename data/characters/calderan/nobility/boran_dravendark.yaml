@@ -1,0 +1,51 @@
+schema_version: 1
+entity:
+  id: boran_dravendark
+  type: character
+  name: Boran Dravendark
+  display_name: Boran Dravendark
+  parent: null
+  aliases: []
+  summary: Boran Dravendark is a member of House Dravendark and the younger brother of its patriarch,
+    Vorn Dravendark.
+  tags:
+    - nobility
+    - military
+  search_context: Boran Dravendark, House Dravendark
+  content: Boran Dravendark is the younger brother of Vorn Dravendark. Outside formal duty he is
+    surprisingly convivial, drinking, laughing and telling old stories; when work or military
+    matters begin he turns sharply professional at once. He frequently addresses people by surname.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 64–66
+  appearance: Shorter than Vorn, broad and robust, with short white hair, a grey beard, a nose broken
+    at least once and large hands.
+  occupation: null
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - direct
+    - rough
+    - operational
+    - surprisingly convivial outside formal duty
+    - drinks, laughs and tells old stories off duty
+    - becomes sharply professional the moment work begins
+    - frequently addresses people by surname
+  purpose: Keep House Dravendark connected to actual military competence rather than becoming salon
+    aristocracy.
+  morality: Hard but straightforward; he protects his people and expects them to do their duty.
+  affiliations:
+    - house_dravendark
+  relationships:
+    - target: vorn_dravendark
+      kind: sibling
+      description: Elder brother and patriarch of House Dravendark.
+chunks: []

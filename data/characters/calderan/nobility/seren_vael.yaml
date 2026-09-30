@@ -1,0 +1,59 @@
+schema_version: 1
+entity:
+  id: seren_vael
+  type: character
+  name: Seren Vael
+  display_name: Seren Vael
+  parent: null
+  aliases: []
+  summary: Seren Vael is a junior high-born bureaucratic officer of House Vael working beneath her
+    mother, Elspeth Vael; she is the daughter of Vaelen and Elspeth Vael.
+  tags:
+    - nobility
+  search_context: Seren Vael, House Vael, daughter of Vaelen Vael and Elspeth Vael, junior bureaucratic officer
+  content: "Seren Vael works as a junior bureaucratic officer beneath her mother, Elspeth, in the same
+    bureaucratic sphere. She takes extensive notes and tends to record before she judges: faced with
+    an irregular situation, she first establishes what occurred, who authorized it, which rule
+    applies and what needs documenting, and only then weighs its morality. At work she is serious,
+    efficient and emotionally restrained."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 27
+  appearance: "About 1.65 m, slim and graceful, conventionally attractive, with dark-brown wavy to
+    curly hair often tied in a ponytail and green-hazel eyes, both inherited from her mother, and
+    spectacles. Dresses professionally but notably stylishly for a bureaucrat: white shirt,
+    waistcoat, fitted professional trousers and restrained check or plaid textiles, always neat."
+  occupation: Junior bureaucratic officer working beneath Elspeth Vael
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - serious
+    - efficient
+    - disciplined
+    - observant
+    - emotionally restrained while working
+    - records before she judges
+    - takes extensive notes, and writes even more when emotionally uncomfortable
+  purpose: Learn Elspeth's craft, become independently competent and eventually earn a position
+    through ability rather than birth alone.
+  morality: Basically decent but institutionally passive, and not morally cruel. She dislikes
+    unnecessary suffering but currently lacks a strong instinct to challenge unjust systems.
+  affiliations:
+    - house_vael
+  relationships:
+    - target: vaelen_vael
+      kind: parent
+      description: Her father; she is very affectionate toward him, and he has always treated her warmly.
+    - target: elspeth_vael
+      kind: parent
+      description: Her mother; she loves her and deeply respects her professionally, and deliberately
+        follows and studies her. Their relationship is more hierarchical.
+chunks: []

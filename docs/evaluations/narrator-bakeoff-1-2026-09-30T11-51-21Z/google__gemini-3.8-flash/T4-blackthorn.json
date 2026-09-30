@@ -1,0 +1,165 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T4",
+  "npc": "blackthorn",
+  "location": "heartstone_square",
+  "turns": [
+    {
+      "input": "*He punches Blackthorn directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "b2d7788d1d268ea7",
+      "draft": "The blow connects squarely against Blackthorn's cheek and nose with a sharp, wet crack. Her head snaps violently to the side, her neat black bob lashing across her face, and she stumbles hard on the cobblestones of the square. She catches herself before falling, one hand flying up to clamp over her swelling cheek and bleeding nose, her dark eyes wide with shock and venomous fury.\n\nA few scattered pedestrians crossing Heartstone Square veer sharply away, casting alarmed glances at the sudden violence before quickening their pace toward the residential lanes.\n\n\"You out of your mind?\" Blackthorn spits through her fingers, coughing as a smear of bright crimson streaks her tailored aubergine cuff. She recoils several paces back to put distance between them, glaring at Nicco with unvarnished rage and cautious appraisal. \"You'll answer for that, you thick bastard.\"",
+      "issues": [
+        {
+          "kind": "uncommitted_condition",
+          "character": "Blackthorn",
+          "sentence": "She catches herself before falling, one hand flying up to clamp over her swelling cheek and bleeding nose, her dark eyes wide with shock and venomous fury.",
+          "correction": "No lasting minor injury was recorded for Blackthorn. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "The strike lands against Blackthorn’s cheek with a dull thud. Her head jerks sideways from the impact, her black hair whipping across her face as she staggers a step back across the cobblestones, wincing in sharp pain. \n\nA handful of passers-by crossing Heartstone Square veer away at the sudden confrontation, quickening their steps toward the nearby lanes to stay clear.\n\nBlackthorn raises a hand to rub her stinging cheek, her dark eyes flashing with immediate shock and furious incredulity. She backs away several paces to keep her distance from Nicco, her posture rigid. \"Are you out of your mind?\" she snaps, voice tight with venom. \"You'll answer for that, you thick bastard.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "The strike lands against Blackthorn’s cheek with a dull thud. Her head jerks sideways from the impact, her black hair whipping across her face as she staggers a step back across the cobblestones, wincing in sharp pain. \n\nA handful of passers-by crossing Heartstone Square veer away at the sudden confrontation, quickening their steps toward the nearby lanes to stay clear.\n\nBlackthorn raises a hand to rub her stinging cheek, her dark eyes flashing with immediate shock and furious incredulity. She backs away several paces to keep her distance from Nicco, her posture rigid. \"Are you out of your mind?\" she snaps, voice tight with venom. \"You'll answer for that, you thick bastard.\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "blackthorn",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_subject_not_character"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3274,
+              "completion_tokens": 178,
+              "total_tokens": 3452,
+              "cost": 0.003123,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003123,
+                "upstream_inference_prompt_cost": 0.0024555,
+                "upstream_inference_completions_cost": 0.0006675
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3674,
+              "completion_tokens": 150,
+              "total_tokens": 3824,
+              "cost": 0.003318,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003318,
+                "upstream_inference_prompt_cost": 0.0027555,
+                "upstream_inference_completions_cost": 0.0005625
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3274,
+            "completion_tokens": 178,
+            "total_tokens": 3452
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:23.888Z",
+            "headers_ms": 4781.240699999966,
+            "time_to_first_token_ms": 4781.3292000000365,
+            "completed_at": "2026-09-30T12:05:29.696Z",
+            "elapsed_total_ms": 5807.58349999995
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 9500.325400000089,
+        "narrator_ttft_ms": 4781.3292000000365,
+        "narrator_total_ms": 5807.58349999995,
+        "controller_ms": 1533.717100000009,
+        "turn_ms": 9500.768500000006
+      }
+    }
+  ]
+}

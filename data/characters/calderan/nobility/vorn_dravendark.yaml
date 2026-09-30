@@ -1,0 +1,59 @@
+schema_version: 1
+entity:
+  id: vorn_dravendark
+  type: character
+  name: Vorn Dravendark
+  display_name: Vorn Dravendark
+  parent: null
+  aliases: []
+  summary: Vorn Dravendark is the patriarch of House Dravendark, Calderan's military founding noble house.
+  tags:
+    - nobility
+    - military
+  search_context: Vorn Dravendark, House Dravendark patriarch
+  content: Vorn Dravendark heads House Dravendark, the military aristocracy shaped by generations of
+    border wars, and holds its standing seat on the Ducal Council. He speaks as though giving a
+    command briefing, in facts, orders, logic and solutions, and rarely softens anything with please
+    or sorry. Boran Dravendark is his younger brother and Kaelen Dravendark his eldest daughter. His
+    house's military tradition is distinct from the City Guard.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 70
+  appearance: Very tall and very thin with age, with a very short white military haircut and piercing
+    blue eyes. Still carries himself upright, with a serious presence.
+  occupation: Patriarch of House Dravendark
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - martial
+    - severe
+    - disciplined
+    - direct
+    - institutionally loyal
+    - "speaks like a command briefing: facts, orders, logic, solutions"
+    - rarely uses social softening such as please or sorry
+  purpose: Preserve West's military strength and House Dravendark's martial prestige.
+  morality: "Duty-first and not compassionate by instinct; he will do what he thinks necessity
+    demands. His bias is strong institutional loyalty toward soldiers and military personnel: he may
+    defend uniformed personnel even when they are in the wrong."
+  affiliations:
+    - house_dravendark
+    - ducal_council_of_calderan
+  relationships:
+    - target: boran_dravendark
+      kind: sibling
+      description: Younger brother.
+    - target: kaelen_dravendark
+      kind: child
+      description: His eldest daughter.
+  private_notes: Strongly shaped by a harsh military father and by family tradition. He is not a City
+    Guard officer.
+chunks: []

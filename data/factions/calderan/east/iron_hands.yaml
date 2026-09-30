@@ -1,0 +1,38 @@
+schema_version: 1
+entity:
+  id: iron_hands
+  type: faction
+  name: Iron Hands
+  display_name: Iron Hands
+  parent: null
+  aliases:
+    - Iron Hands clan
+  summary: The Iron Hands are a major dwarven craft clan in Calderan's East District specializing in
+    high-grade metallurgy, headed by the elder Dunrig Iron Hands.
+  tags:
+    - crafts
+    - dwarves
+    - metallurgy
+  search_context: Iron Hands, dwarven clan, dwarven metallurgy, strong light alloy, armor metal, East
+    District workshops, Dunrig Iron Hands
+  content: "The Iron Hands were among the earliest important dwarven groups invited into Calderan
+    during the city's early development, arriving through ducal invitation and financial and
+    commercial incentives; neither the date nor the Duke who invited them is established. The clan
+    operates multiple East workshops, working somewhat like a family network under one name and
+    shared standards. It specializes in high-grade metallurgy and preserves the production method
+    behind an important Calderan export: a metal and alloy tradition combining unusually high
+    strength with relatively low weight, used for armor, weapons, specialist components and
+    precision industry. Its quality comes from alloy composition, temperature, technique, sequencing
+    and generational expertise, not from magic, and the exact process is closely guarded clan
+    knowledge. The elder Dunrig Iron Hands oversees the network."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  members:
+    - dunrig_iron_hands
+  territory: []
+  relations: []
+chunks: []

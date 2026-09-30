@@ -1,0 +1,223 @@
+{
+  "model": "xiaomi/mimo-v2.5-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T4",
+  "npc": "blackthorn",
+  "location": "heartstone_square",
+  "turns": [
+    {
+      "input": "*He punches Blackthorn directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 2,
+      "prompt_hash": "b2d7788d1d268ea7",
+      "draft": "Nicco's fist connected with Blackthorn's face before she could react, the blow landing squarely on her cheekbone with a dull, meaty impact. Her head snapped to the side, and she stumbled back, a sharp intake of breath hissing through her teeth as she caught herself against the rough stone of a nearby wall. A dark, immediate bruise began to bloom across her pale skin.\n\nFor a moment, the square seemed to hold its breath. The ambient foot traffic faltered, a few heads turning in startled curiosity. Blackthorn pressed a hand to her cheek, her dark eyes fixing on Nicco with a look that was less frightened and more... intensely calculating. There was no scream, no cry for help, only a sharp, assessing silence.\n\n\"You'll want to have a very good reason for that,\" she said, her voice low and tight, edged with a cold fury that was more unsettling than any shout. Her other hand, the one not cradling her face, remained conspicuously still at her side, though her two large bodyguards, who had been standing a few paces behind, now took a single, synchronized step forward, their expressions hardening.",
+      "issues": [
+        {
+          "kind": "absent_participant",
+          "character": "Blackthorn",
+          "sentence": "Her other hand, the one not cradling her face, remained conspicuously still at her side, though her two large bodyguards, who had been standing a few paces behind, now took a single, synchronized step forward, their expressions hardening.",
+          "correction": "Blackthorn's two large bodyguards are NOT present in this scene (a habit, not presence). Remove them entirely; nobody else acts, restrains or intervenes except the people listed as present."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Nicco's fist connected with Blackthorn's face before she could react, the blow landing squarely on her cheekbone with a dull, meaty impact. Her head snapped to the side, and she stumbled back a step, a sharp intake of breath hissing through her teeth. A dark, immediate bruise began to bloom across her pale skin.\n\nFor a moment, the square seemed to hold its breath. The ambient foot traffic faltered, a few heads turning in startled curiosity. Blackthorn pressed a hand to her cheek, her dark eyes fixing on Nicco with a look that was less frightened and more... intensely calculating. There was no scream, no cry for help, only a sharp, assessing silence.\n\n\"You'll want to have a very good reason for that,\" she said, her voice low and tight, edged with a cold fury that was more unsettling than any shout.",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Nicco's fist connected with Blackthorn's face before she could react, the blow landing squarely on her cheekbone with a dull, meaty impact. Her head snapped to the side, and she stumbled back a step, a sharp intake of breath hissing through her teeth. A dark, immediate bruise began to bloom across her pale skin.\n\nFor a moment, the square seemed to hold its breath. The ambient foot traffic faltered, a few heads turning in startled curiosity. Blackthorn pressed a hand to her cheek, her dark eyes fixing on Nicco with a look that was less frightened and more... intensely calculating. There was no scream, no cry for help, only a sharp, assessing silence.\n\n\"You'll want to have a very good reason for that,\" she said, her voice low and tight, edged with a cold fury that was more unsettling than any shout.",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "blackthorn",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "sentence_hedged_negated_or_hypothetical"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3242,
+              "completion_tokens": 241,
+              "total_tokens": 3483,
+              "cost": 0.00023946,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3200,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00023946,
+                "upstream_inference_prompt_cost": 0.00002979,
+                "upstream_inference_completions_cost": 0.00020967
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3737,
+              "completion_tokens": 179,
+              "total_tokens": 3916,
+              "cost": 0.0002904066,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3456,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0002904066,
+                "upstream_inference_prompt_cost": 0.0001346766,
+                "upstream_inference_completions_cost": 0.00015573
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.5-pro",
+          "usage": {
+            "prompt_tokens": 3242,
+            "completion_tokens": 241,
+            "total_tokens": 3483
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:00:43.791Z",
+            "headers_ms": 5361.543400000024,
+            "time_to_first_token_ms": 14751.525399999984,
+            "completed_at": "2026-09-30T12:01:08.394Z",
+            "elapsed_total_ms": 24603.117700000003
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 76309.0379,
+        "narrator_ttft_ms": 14751.525399999984,
+        "narrator_total_ms": 24603.117700000003,
+        "controller_ms": 984.806900000025,
+        "turn_ms": 76309.25890000002
+      }
+    }
+  ],
+  "first_attempt": [
+    {
+      "input": "*He punches Blackthorn directly in the face.*",
+      "outcome": "narrator_failed",
+      "provider_code": "timeout",
+      "attempt": 1,
+      "prompt_hash": "b2d7788d1d268ea7",
+      "draft": null,
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": null,
+      "delivered": "",
+      "natural_actions": null,
+      "controller": {
+        "proposal": null,
+        "authorization": null,
+        "upstream_provider": null,
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": null,
+            "http_status": 200,
+            "usage": null,
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": null
+      },
+      "latency": {
+        "first_delivery_ms": null,
+        "narrator_ttft_ms": null,
+        "narrator_total_ms": null,
+        "controller_ms": null,
+        "turn_ms": 60003.56949999998
+      }
+    }
+  ]
+}

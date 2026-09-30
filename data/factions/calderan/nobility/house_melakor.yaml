@@ -1,0 +1,36 @@
+schema_version: 1
+entity:
+  id: house_melakor
+  type: faction
+  name: House Melakor
+  display_name: House Melakor
+  parent: null
+  aliases: []
+  summary: >-
+    House Melakor is a cunning, politically sophisticated founding noble house of Calderan whose
+    power rests on alliances, patronage, information and political debt; its matriarch is
+    Sybilla Melakor.
+  tags: ["politics", "nobility"]
+  search_context: "House Melakor, Melakor family, Sybilla Melakor, Azael Melakor, Gideon Melakor, patronage, alliances, marriage politics"
+  content: >-
+    House Melakor is one of Calderan's four most powerful founding noble houses and holds a
+    hereditary, historic seat on the Ducal Council. It is cunning, cold, calculating,
+    politically sophisticated and network-driven. Its primary power lies in alliances,
+    patronage, marriage strategy, information, favors, political debt and indirect influence. It
+    is not a criminal house. Its matriarch is Sybilla Melakor; Azael Melakor and Gideon Melakor
+    are known members whose exact family relations are not established. House Melakor is not a
+    guild and holds no guild seat, though it may influence guilds.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  members: ["sybilla_melakor","azael_melakor","gideon_melakor"]
+  territory: []
+  relations:
+    - target: house_vael
+      kind: rival
+      description: "Cold competition over administration, information and influence."
+    - target: house_morvath
+      kind: wary_cooperation
+      description: "Financial and political cooperation with strong mutual distrust."
+    - target: house_dravendark
+      kind: cultural_friction
+      description: "Melakor regard Dravendark as blunt; Dravendark regard Melakor as manipulative."
+chunks: []

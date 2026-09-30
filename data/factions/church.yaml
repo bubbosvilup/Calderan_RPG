@@ -2,24 +2,76 @@ schema_version: 1
 entity:
   id: "church"
   type: "faction"
-  name: "Church"
-  display_name: "Church"
+  name: "Church of the Sun Emperor"
+  display_name: "Church of the Sun Emperor"
   parent: null
-  aliases: []
+  aliases: ["the Church", "Church"]
   summary: >-
-    The Church is a powerful national institution in West, distinct from the three national
-    guilds.
-  tags: ["politics"]
-  search_context: ""
+    The Church of the Sun Emperor is West's authoritarian, hierarchical state church, a
+    spiritual-political institution separate from the three national guilds, with comparable or
+    greater influence. Its symbol is the Bladed Sun.
+  tags: ["politics", "religion"]
+  search_context: "Church, Church of the Sun Emperor, Bladed Sun, High Archon of the West, Vicars, Auditors, Zealot Priests, Flagellants, Cathedral of the Bladed Sun, clergy, tithes"
   content: >-
-    The Church has local presence, national representation, political influence, and
-    representation in major civic and national deliberations. It is not a guild, although it
-    has comparable political weight. Its theology, gods, exact ecclesiastical hierarchy,
-    supreme religious office, denominations, particular temples, and doctrine remain
-    undefined. The Inquisition is an organ of the Church.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
-  members: []
+    The Church of the Sun Emperor teaches that the Sun Emperor is West's divine and immortal
+    sovereign and the bearer of purifying divine Light. It is not a guild and not one of the three
+    civic guilds (Merchants, Artisans, Learned Arts); it is a separate spiritual-political institution with
+    comparable or greater influence. Its character is authoritarian, bureaucratic and theocratic:
+    ritualized obedience, institutional paranoia, purification doctrine, social control, sacrifice,
+    duty and hierarchy. There is no rival pantheon; shrines, chapels and parish temples all belong to
+    this Church. Its official symbol is the Bladed Sun, a stylized steel sun whose rays resemble
+    blades, associated with Light, authority, purification, war, discipline and threat. Its national
+    hierarchy runs from the High Archon of the West through Vicars, Auditors and Zealot Priests to
+    Flagellants. The High Archon's seat and the Church's primary headquarters are the Cathedral of
+    the Bladed Sun in Calderan's North District; the Church also keeps a liaison office near the
+    Ducal Citadel. The High Archon holds spiritual authority and sits on the Ducal Council but does
+    not replace the Duke in temporal matters. The Church runs hospitals such as Saint Caldus House,
+    the Pyres of the Fallen and charity such as the Sun Soup Kitchens. It gives theological
+    justification to slavery. The Inquisition is an organ of the Church. Not every priest is
+    sadistic or corrupt; individual clergy may be sincere and compassionate.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  members: ["brother_aven", "cassian_valerius", "helbrecht", "severan_krauss", "sister_veyra"]
   territory: []
-  relations: []
-chunks: []
-
+  relations:
+    - target: "learned_arts_guild"
+      kind: "formal_cooperation"
+      description: "Formal cooperation for stability, including the Mage Registry compromise, over distrust, political rivalry, surveillance and ideological conflict."
+    - target: "inquisition"
+      kind: "organ"
+      description: "The Inquisition is an organ of the Church, subordinate to the High Archon's broader spiritual authority but with substantial operational autonomy."
+chunks:
+  - id: "church.hierarchy"
+    entity_id: "church"
+    section: "hierarchy"
+    summary: "The national ranks of the Church of the Sun Emperor, from High Archon to Flagellants."
+    search_context: "High Archon of the West, Vicar, Auditor, Zealot Priest, Flagellant, clergy ranks, ecclesiastical hierarchy"
+    content: >-
+      High Archon of the West: the supreme ecclesiastical authority of West, seated in Calderan
+      because it is the capital and institutional center. Speaks for Church authority and sits on
+      the Ducal Council; does not command civic administration and does not replace the Duke in
+      temporal matters, just as the Duke does not control Church doctrine. Vicars: senior Church
+      leaders overseeing major temples, domains or institutional sectors. Auditors: senior
+      administrative officials handling properties, tithes, hospitals, records, inspections and
+      institutional discipline. Zealot Priests: ordinary local clergy who preach, hear confession,
+      conduct funerals, do community religious work, collect tithes and report locally. Flagellants:
+      novices and low-ranking religious servants performing menial religious duties, penance and
+      ritual service. The current High Archon of the West is Cassian Valerius.
+    tags: ["hierarchy"]
+  - id: "church.local_sites_and_charity"
+    entity_id: "church"
+    section: "local_sites_and_charity"
+    summary: "Church shrines, chapels and parish temples, and Church charity including the Sun Soup Kitchens."
+    search_context: "Shrines of Atonement, saints, martyr chapels, parish temple, tithes, confession, Sun Soup Kitchens, charity, registration of the poor"
+    content: >-
+      Minor religious sites all belong to the Church: Shrines of Atonement, chapels of saints,
+      memorial chapels, martyr cults and local parish temples. Saints and martyrs exist; no
+      particular saint is defined here. Local sites collect tithes, hear confession, register
+      people, give local charity, refer the sick, coordinate funerals and report suspicious
+      behavior. Church charity is materially real and is also propaganda, social control,
+      registration, surveillance and a source of legitimacy. The Sun Soup Kitchens feed poor
+      people, record indigents, identify illness, distribute doctrine and route people into Church
+      institutions. Helping the poor is not forbidden, and individual clergy may genuinely care.
+      Clergy endanger themselves when they hide people from records, conceal suspects, falsify
+      reports, divert resources without authorization, protect targets from the Church or
+      Inquisition, or put compassion above explicit orders.
+    tags: ["charity", "surveillance"]

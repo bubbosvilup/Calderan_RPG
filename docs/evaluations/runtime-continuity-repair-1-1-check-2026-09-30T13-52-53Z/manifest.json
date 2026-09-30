@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-09-30T13:52:53.328Z",
+  "source_before": "67e7cfac5559b235546ca90f1d644df9583299c87333cd3e6c004f978e37b2dc",
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "max_output_tokens": 512,
+    "disable_reasoning": true
+  },
+  "reproduced_from": "docs/evaluations/runtime-continuity-validation-1-2026-09-30T13-20-13Z (state and delivered history after T14)",
+  "turns": [
+    {
+      "turn": 15,
+      "outcome": "success",
+      "attempt": 1
+    },
+    {
+      "turn": 16,
+      "outcome": "success",
+      "attempt": 1
+    }
+  ],
+  "seeded_history": {
+    "turns": 12,
+    "serialized_characters": 14563
+  },
+  "finished_at": "2026-09-30T13:53:11.937Z",
+  "source_after": "67e7cfac5559b235546ca90f1d644df9583299c87333cd3e6c004f978e37b2dc",
+  "source_unchanged": true
+}

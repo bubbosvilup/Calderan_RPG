@@ -1,0 +1,99 @@
+{
+  "turn": 4,
+  "input": "*He nods and goes back to his bowl.* No harm in asking. Do you get many travelers in here, or is it mostly locals?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "603ff5361762dcf0",
+  "draft": "Jessa wiped a patch of the counter with a cloth, her movements steady and unhurried. \n\n\"Both,\" she said, glancing toward the handful of patrons seated near the back. \"A fair share of merchants, couriers, and people passing through the district on business, alongside the regulars who work the warehouses and shops nearby. As long as they settle their tab and keep the peace under my roof, it makes little difference to me where they slept the night before.\"\n\nShe folded the rag and tucked it by the basin, her tone calm and matter-of-fact. \"If you're looking for quiet rest or an ordinary meal, you'll find it here. If you're looking for excitement, you'd best look elsewhere in the city.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa wiped a patch of the counter with a cloth, her movements steady and unhurried. \n\n\"Both,\" she said, glancing toward the handful of patrons seated near the back. \"A fair share of merchants, couriers, and people passing through the district on business, alongside the regulars who work the warehouses and shops nearby. As long as they settle their tab and keep the peace under my roof, it makes little difference to me where they slept the night before.\"\n\nShe folded the rag and tucked it by the basin, her tone calm and matter-of-fact. \"If you're looking for quiet rest or an ordinary meal, you'll find it here. If you're looking for excitement, you'd best look elsewhere in the city.\"",
+  "natural_actions": [
+    {
+      "kind": "movement",
+      "status": "unresolved"
+    }
+  ],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "google/gemini-3.8-flash",
+    "pinned": "google-vertex/global",
+    "reasoning": {
+      "effort": "minimal"
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Google",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3407,
+          "completion_tokens": 158,
+          "total_tokens": 3565,
+          "cost": 0.00314775,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00314775,
+            "upstream_inference_prompt_cost": 0.00255525,
+            "upstream_inference_completions_cost": 0.0005925
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "google/gemini-3.8-flash",
+      "usage": {
+        "prompt_tokens": 3407,
+        "completion_tokens": 158,
+        "total_tokens": 3565
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:30:57.376Z",
+        "headers_ms": 2127.442500000001,
+        "time_to_first_token_ms": 2127.6698000000015,
+        "completed_at": "2026-09-30T12:31:01.079Z",
+        "elapsed_total_ms": 3702.751000000002
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 2127.6698000000015,
+    "narrator_total_ms": 3702.751000000002,
+    "controller_ms": 1199.7056999999986,
+    "turn_ms": 4908.525900000001
+  }
+}

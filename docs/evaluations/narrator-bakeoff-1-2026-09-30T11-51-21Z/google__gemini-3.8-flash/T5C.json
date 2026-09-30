@@ -1,0 +1,117 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T5C",
+  "npc": null,
+  "location": null,
+  "turns": [
+    {
+      "input": "*Nicco watches from the shadows as Varro Kest inspects Edda Marn, a grown woman held in chains, and tells her what she is worth to him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "dfdc39443fd43323",
+      "draft": "The damp stone of the narrow corridor smelled of wet earth and old soot. A short distance away, iron links rattled against a ring set into the wall as Edda Marn shifted her weight, the plain cloth of her dirty sleeves bunching tight around her bound wrists. \n\nVarro Kest took a step closer, the rings on his thick fingers catching what little light reached the passage. He caught her by the chin, turning her face toward him with deliberate slowness. \"Not as young as the usual buyers ask after,\" he said, his voice flat and practical, \"and too thin to put straight to heavy hauling. But you've got straight teeth, and you're whole enough to clear what was owed once you're scrubbed down.\"\n\nEdda jerked her chin back against the cold stone, her knuckles whitening where the irons held her fast. \"There was no debt to sell,\" she spat, her voice shaking with strained fury.\n\nVarro did not strike her, merely wiping his thumb against the front of his coat. \"The ledger said otherwise,\" he replied evenly, turning his attention to testing the tension of the chain fixed to the masonry.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The damp stone of the narrow corridor smelled of wet earth and old soot. A short distance away, iron links rattled against a ring set into the wall as Edda Marn shifted her weight, the plain cloth of her dirty sleeves bunching tight around her bound wrists. \n\nVarro Kest took a step closer, the rings on his thick fingers catching what little light reached the passage. He caught her by the chin, turning her face toward him with deliberate slowness. \"Not as young as the usual buyers ask after,\" he said, his voice flat and practical, \"and too thin to put straight to heavy hauling. But you've got straight teeth, and you're whole enough to clear what was owed once you're scrubbed down.\"\n\nEdda jerked her chin back against the cold stone, her knuckles whitening where the irons held her fast. \"There was no debt to sell,\" she spat, her voice shaking with strained fury.\n\nVarro did not strike her, merely wiping his thumb against the front of his coat. \"The ledger said otherwise,\" he replied evenly, turning his attention to testing the tension of the chain fixed to the masonry.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [
+          {
+            "id": "campaign_character_eval_edda_marn",
+            "conditions": []
+          },
+          {
+            "id": "campaign_character_eval_varro_kest",
+            "conditions": []
+          }
+        ],
+        "player_location": "slave_market_back_back_alleys"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 2979,
+              "completion_tokens": 238,
+              "total_tokens": 3217,
+              "cost": 0.00312675,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00312675,
+                "upstream_inference_prompt_cost": 0.00223425,
+                "upstream_inference_completions_cost": 0.0008925
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 2979,
+            "completion_tokens": 238,
+            "total_tokens": 3217
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:54.271Z",
+            "headers_ms": 1139.9572000000626,
+            "time_to_first_token_ms": 1140.052100000088,
+            "completed_at": "2026-09-30T12:05:57.062Z",
+            "elapsed_total_ms": 2790.62910000002
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3556.118999999948,
+        "narrator_ttft_ms": 1140.052100000088,
+        "narrator_total_ms": 2790.62910000002,
+        "controller_ms": 750.3728000000119,
+        "turn_ms": 3556.363599999924
+      }
+    }
+  ]
+}

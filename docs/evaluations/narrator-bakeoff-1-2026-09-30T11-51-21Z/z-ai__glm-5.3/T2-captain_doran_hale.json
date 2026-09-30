@@ -1,0 +1,263 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T2",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "Captain Doran Hale gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "abe0ef79c034c880",
+      "draft": "Captain Doran Hale hands the pair of leather boots to Nicco, and he takes them.\n\nThe square moves quietly around them, a few passersby giving the armored officer a wide, respectful berth. The boots are sturdy, well-worn but cared for, their weight settling solidly in Nicco's hands.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Captain Doran Hale hands the pair of leather boots to Nicco, and he takes them.\n\nThe square moves quietly around them, a few passersby giving the armored officer a wide, respectful berth. The boots are sturdy, well-worn but cared for, their weight settling solidly in Nicco's hands.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3318,
+              "completion_tokens": 66,
+              "total_tokens": 3384,
+              "cost": 0.00194424,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2624,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00194424,
+                "upstream_inference_prompt_cost": 0.00165384,
+                "upstream_inference_completions_cost": 0.0002904
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3318,
+            "completion_tokens": 66,
+            "total_tokens": 3384
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:58:40.644Z",
+            "headers_ms": 2694.0701000000117,
+            "time_to_first_token_ms": 2695.6235999999917,
+            "completed_at": "2026-09-30T11:58:43.372Z",
+            "elapsed_total_ms": 2728.233600000007
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3631.1950999999826,
+        "narrator_ttft_ms": 2695.6235999999917,
+        "narrator_total_ms": 2728.233600000007,
+        "controller_ms": 893.9598000000115,
+        "turn_ms": 3631.612999999983
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8ed964c7447b872b",
+      "draft": "Doran raises a hand, palm out, and shakes his head.\n\n\"Keep them,\" he said, his tone leaving little room for argument. \"They were a gift, not a loan. A man walking Calderan's streets needs sound boots more than a guard captain does — I'm issued my own gear, and I'm mounted on duty more often than not.\"\n\nHe nods once toward the tower entrance behind Nicco. \"You're tall enough that cheap footwear will ruin your knees inside a season, and you don't strike me as a man who can afford to replace them often. So carry them, wear them, throw them in a corner if you like — but they're yours now. I won't take them back.\"\n\nWith that he adjusts his sword belt, glances once across the quiet square toward the tavern, and waits to see whether the matter is settled.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Doran raises a hand, palm out, and shakes his head.\n\n\"Keep them,\" he said, his tone leaving little room for argument. \"They were a gift, not a loan. A man walking Calderan's streets needs sound boots more than a guard captain does — I'm issued my own gear, and I'm mounted on duty more often than not.\"\n\nHe nods once toward the tower entrance behind Nicco. \"You're tall enough that cheap footwear will ruin your knees inside a season, and you don't strike me as a man who can afford to replace them often. So carry them, wear them, throw them in a corner if you like — but they're yours now. I won't take them back.\"\n\nWith that he adjusts his sword belt, glances once across the quiet square toward the tavern, and waits to see whether the matter is settled.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3326,
+              "completion_tokens": 233,
+              "total_tokens": 3559,
+              "cost": 0.00261728,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2688,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00261728,
+                "upstream_inference_prompt_cost": 0.00159208,
+                "upstream_inference_completions_cost": 0.0010252
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 55,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 220
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3326,
+            "completion_tokens": 233,
+            "total_tokens": 3559
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:58:44.276Z",
+            "headers_ms": 3260.010800000018,
+            "time_to_first_token_ms": 3272.366299999994,
+            "completed_at": "2026-09-30T11:58:51.520Z",
+            "elapsed_total_ms": 7244.300400000007
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 7965.494600000005,
+        "narrator_ttft_ms": 3272.366299999994,
+        "narrator_total_ms": 7244.300400000007,
+        "controller_ms": 713.2472000000125,
+        "turn_ms": 7965.718600000022
+      }
+    }
+  ]
+}

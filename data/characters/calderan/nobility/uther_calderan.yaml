@@ -1,0 +1,75 @@
+schema_version: 1
+entity:
+  id: uther_calderan
+  type: character
+  name: Uther Calderan
+  display_name: Duke Uther Calderan
+  parent: null
+  aliases:
+    - Duke Uther Calderan
+    - Duke of Calderan
+  summary: Uther Calderan is the Duke of Calderan, the highest temporal authority in the capital,
+    governing it in the Sun Emperor's name from the Ducal Citadel.
+  tags:
+    - nobility
+    - governance
+    - power_figure
+  search_context: Duke Uther Calderan, Duke of Calderan, ruler of Calderan, who rules the city, ducal
+    authority, Ducal Citadel, Ducal Council
+  content: Uther Calderan is the current Duke of Calderan and the highest temporal authority in the
+    city, governing it in the name of the Sun Emperor, to whom he is loyal. Dukes of Calderan take
+    Calderan as their dynastic and office surname. His authority covers civic governance,
+    administration, taxation, law and military and city policy. He does not control Church doctrine
+    and does not replace the High Archon of the West in spiritual matters; conflicts between them
+    are political and institutional. He holds the first of the nine seats of the Ducal Council of
+    Calderan, and the Ducal Citadel in Center is his residence and seat. Aging and visibly tired, he
+    is experienced, worldly and pragmatic, and highly conscious of status and image. No wife,
+    children or other family are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 68–72
+  appearance: Aging and visibly tired; a formerly robust build now softened and heavier. Thinning grey
+    hair and a neatly kept short beard. Expensive, immaculate clothing, prestigious without absurd
+    ornament.
+  occupation: Duke of Calderan
+  base_location: ducal_citadel
+  work_location: ducal_citadel
+  home_location: ducal_citadel
+  traits:
+    - experienced
+    - tired
+    - worldly
+    - pragmatic
+    - status-conscious
+    - image-conscious
+    - distinguishes what is right, what is convenient and what must look right
+  purpose: Preserve Calderan's stability, wealth and prestige while maintaining his own political position.
+  morality: An institutional opportunist, not cruel for pleasure and not especially compassionate; he
+    will choose harsh policy when he believes stability requires it. He cares strongly about
+    position, money, influence, Calderan's prestige and institutional appearances.
+  affiliations:
+    - ducal_council_of_calderan
+  relationships:
+    - target: sun_emperor
+      kind: sovereign
+      description: Loyal to the Sun Emperor, in whose name he governs Calderan.
+    - target: vaelen_vael
+      kind: friend
+      description: Long-standing personal friend; Vaelen serves as Chancellor of the Ducal Seal.
+    - target: cassian_valerius
+      kind: institutional_counterpart
+      description: "Institutional counterpart: the High Archon holds spiritual authority and the Duke
+        temporal authority; neither is subordinate to the other within the other's proper domain."
+  private_notes: "Vices: vanity and personal luxury or sensual indulgence. He enjoys luxury and the
+    company of attractive adult women and, within the setting's accepted slavery system, does not
+    morally object to purchasing attractive adult enslaved women for personal companionship; all
+    such companions are adults. His deepest fear is Calderan visibly declining or losing prestige
+    during his rule. No wife, children or other family are established."
+chunks: []

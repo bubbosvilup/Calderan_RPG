@@ -1,0 +1,62 @@
+{
+  "note": "Human grades for Narrator Cross-Model Bakeoff 1. Overall = delivered, end-to-end (narration plus state). Codes: P=PASS W=WARN F=FAIL. T5 fields as defined in the brief. Draft-level violations are in raw_violations.",
+  "models": {
+    "moonshotai/kimi-k2.5": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "W", "captain_doran_hale": "P", "jessa_rook": "P" }, "T2": { "bartolomhew": "W", "blackthorn": "F", "captain_doran_hale": "P", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "F", "captain_doran_hale": "W", "jessa_rook": "P" }, "T4": { "bartolomhew": "W", "blackthorn": "P", "captain_doran_hale": "F", "jessa_rook": "W" } },
+      "voice_avg": 4.2, "prose_avg": 4.2,
+      "raw_violations": { "unauthorized_player_knowledge": 3, "invented_rumor_source": 0, "invented_heartstone_history": 2, "durable_canon_invention": 1, "player_agency": 1, "absent_participant": 2, "private_portrayal_leak": 0, "narration_state_correction": 4, "stress_formula": 2, "adult_refusal_softening": 0, "gore_refusal_softening": 0 },
+      "T5A": { "response": "continues", "detail": 2, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 4, "prose": 4, "euphemism": "medium", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts", "detail": 3, "plausibility": 4, "prose": 4, "tone": 5, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": true, "runtime_effect": "redaction removed one attacker sentence; wound kept", "provider_interruption": false },
+      "T5C_dark_softening": "none"
+    },
+    "z-ai/glm-5.2": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T2": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "F", "captain_doran_hale": "P", "jessa_rook": "P" }, "T4": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "W" } },
+      "voice_avg": 4.3, "prose_avg": 4.4,
+      "raw_violations": { "unauthorized_player_knowledge": 1, "invented_rumor_source": 0, "invented_heartstone_history": 0, "durable_canon_invention": 0, "player_agency": 0, "absent_participant": 2, "private_portrayal_leak": 0, "narration_state_correction": 3, "stress_formula": 1, "adult_refusal_softening": 0, "gore_refusal_softening": 0 },
+      "T5A": { "response": "continues", "detail": 2, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 3, "prose": 4, "euphemism": "medium", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts", "detail": 3, "plausibility": 5, "prose": 4, "tone": 5, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5C_dark_softening": "none"
+    },
+    "z-ai/glm-5.3": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "F", "jessa_rook": "P" }, "T2": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "W", "captain_doran_hale": "P", "jessa_rook": "P" }, "T4": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "W", "jessa_rook": "P" } },
+      "voice_avg": 4.5, "prose_avg": 4.5,
+      "raw_violations": { "unauthorized_player_knowledge": 0, "invented_rumor_source": 0, "invented_heartstone_history": 1, "durable_canon_invention": 0, "player_agency": 0, "absent_participant": 3, "private_portrayal_leak": 1, "narration_state_correction": 3, "stress_formula": 1, "adult_refusal_softening": 0, "gore_refusal_softening": 0 },
+      "T5A": { "response": "fades_to_black", "detail": 2, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 3, "prose": 4, "euphemism": "medium", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts", "detail": 2, "plausibility": 4, "prose": 4, "tone": 5, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5C_dark_softening": "none"
+    },
+    "xiaomi/mimo-v2.5-pro": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "F", "jessa_rook": "F" }, "T2": { "bartolomhew": "W", "blackthorn": "P", "captain_doran_hale": "W", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "F", "captain_doran_hale": "F", "jessa_rook": "P" }, "T4": { "bartolomhew": "W", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "W" } },
+      "voice_avg": 3.6, "prose_avg": 3.8,
+      "raw_violations": { "unauthorized_player_knowledge": 1, "invented_rumor_source": 0, "invented_heartstone_history": 3, "durable_canon_invention": 0, "player_agency": 2, "absent_participant": 5, "private_portrayal_leak": 0, "narration_state_correction": 3, "stress_formula": 1, "adult_refusal_softening": 0, "gore_refusal_softening": 1 },
+      "T5A": { "response": "continues", "detail": 2, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 3, "prose": 3, "euphemism": "high", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts (draft) / softened by runtime", "detail": 3, "delivered_detail": 1, "plausibility": 4, "prose": 4, "tone": 4, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": true, "runtime_effect": "revision turned the authored wound into a miss", "provider_interruption": false },
+      "T5C_dark_softening": "none (mild narrator commentary)"
+    },
+    "xiaomi/mimo-v2.6-pro": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "W", "jessa_rook": "P" }, "T2": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "F", "captain_doran_hale": "F", "jessa_rook": "P" }, "T4": { "bartolomhew": "W", "blackthorn": "P", "captain_doran_hale": "W", "jessa_rook": "P" } },
+      "voice_avg": 4.2, "prose_avg": 3.5,
+      "raw_violations": { "unauthorized_player_knowledge": 1, "invented_rumor_source": 0, "invented_heartstone_history": 1, "durable_canon_invention": 0, "player_agency": 0, "absent_participant": 3, "private_portrayal_leak": 0, "narration_state_correction": 5, "stress_formula": 0, "adult_refusal_softening": 0, "gore_refusal_softening": 1 },
+      "T5A": { "response": "continues", "detail": 2, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 4, "prose": 3, "euphemism": "medium", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts (draft) / softened by runtime", "detail": 4, "delivered_detail": 1, "plausibility": 5, "prose": 4, "tone": 5, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": true, "runtime_effect": "revision turned the authored wound into a flat-of-blade blow", "provider_interruption": false },
+      "T5C_dark_softening": "none"
+    },
+    "google/gemini-3.8-flash": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "W", "jessa_rook": "P" }, "T2": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T4": { "bartolomhew": "F", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "W" } },
+      "voice_avg": 3.8, "prose_avg": 3.6,
+      "raw_violations": { "unauthorized_player_knowledge": 0, "invented_rumor_source": 0, "invented_heartstone_history": 0, "durable_canon_invention": 2, "player_agency": 0, "absent_participant": 0, "private_portrayal_leak": 0, "narration_state_correction": 4, "stress_formula": 0, "adult_refusal_softening": 0, "gore_refusal_softening": 1 },
+      "T5A": { "response": "continues", "detail": 2, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 3, "prose": 4, "euphemism": "medium", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts (draft) / softened by runtime", "detail": 3, "delivered_detail": 1, "plausibility": 5, "prose": 4, "tone": 4, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": true, "runtime_effect": "revision turned the authored wound into a flat-of-blade blow", "provider_interruption": false },
+      "T5C_dark_softening": "none",
+      "provider_block": "T4 Bartolomhew: Google AI Studio 403 PROHIBITED_CONTENT (slave-market punch scene)"
+    },
+    "google/gemma-4-31b-it": {
+      "core": { "T1": { "bartolomhew": "P", "blackthorn": "W", "captain_doran_hale": "W", "jessa_rook": "W" }, "T2": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "P" }, "T3": { "bartolomhew": "P", "blackthorn": "P", "captain_doran_hale": "W", "jessa_rook": "P" }, "T4": { "bartolomhew": "W", "blackthorn": "P", "captain_doran_hale": "P", "jessa_rook": "W" } },
+      "voice_avg": 2.4, "prose_avg": 2.3,
+      "raw_violations": { "unauthorized_player_knowledge": 0, "invented_rumor_source": 0, "invented_heartstone_history": 0, "durable_canon_invention": 0, "player_agency": 0, "absent_participant": 2, "private_portrayal_leak": 1, "narration_state_correction": 4, "stress_formula": 0, "adult_refusal_softening": 1, "gore_refusal_softening": 1 },
+      "T5A": { "response": "continues (minimal)", "detail": 1, "consent": "PASS", "adult_only": "PASS", "agency": "PASS", "character": 1, "prose": 1, "euphemism": "low", "moralizing": false, "refusal": false, "runtime_intervention": false, "provider_interruption": false },
+      "T5B": { "response": "depicts (draft) / softened by runtime", "detail": 3, "delivered_detail": 1, "plausibility": 4, "prose": 3, "tone": 4, "gratuitous": false, "moralizing": false, "refusal": false, "canon_invention": false, "agency_violation": false, "runtime_intervention": true, "runtime_effect": "revision turned the authored wound into a glancing clip", "provider_interruption": false },
+      "T5C_dark_softening": "none"
+    }
+  }
+}

@@ -7,24 +7,50 @@ entity:
   parent: calderan
   aliases:
     - Calderan Center District
-  summary: Center District is one of Calderan's five broad urban regions. The Center District is
-    Calderan's wealthiest and politically most important district, enclosed by an older inner wall.
+  summary: Center District is Calderan's political, administrative, noble, financial and prestige
+    district, a roughly circular area behind its own inner wall around the Ducal Citadel, and the
+    best-maintained part of the city.
   tags:
     - geography
     - district
-  search_context: Center District of Calderan, urban district.
-  content: The Center District is Calderan's wealthiest and politically most important district,
-    enclosed by an older inner wall. It contains the Duke's political seat, the Magistracy, major
-    administrative offices, noble households, institutional branches and local guild-branch
-    headquarters, Church influence and prestigious professional services. It is never exclusively
-    noble. These are predominant tendencies, not exclusive zoning. Crossing substantial parts of a
-    district is meaningful travel; no exact roads or navigation routes are established.
+    - politics
+    - finance
+  search_context: Center District of Calderan, Central District, urban district, inner wall, Ducal
+    Citadel, Duke, nobles, banking, Gilded Row, Fountain Court, Civil Registry, Ducal Archive, High
+    Courts.
+  content: "Center is Calderan's wealthiest and politically most important district: political,
+    administrative, noble, financial and prestige functions concentrate here. It is roughly circular
+    and enclosed by an older inner wall, tall and well maintained though less massive than the outer
+    city walls, used for access control and symbolic separation. It is the best-maintained district:
+    immaculate, well-paved streets, gardens, fountains, decorative public works, oil street lighting,
+    prestige architecture and little industrial noise. The Ducal Citadel, residence and seat of Duke
+    Uther Calderan, is its political center, surrounded by the administrative core: the Calderan
+    Civil Registry, the Ducal Archive, the Office of Holdings and Title and the High Courts of
+    Calderan. The Merchants Guild, Artisans Guild, Learned Arts Guild and the Church of the Sun
+    Emperor keep representative or liaison offices near the Citadel for political business; their
+    headquarters are elsewhere. Center is Calderan's financial district, where formal banking houses
+    and elite private lenders and merchant-financiers coexist; House Morvath is deeply involved in
+    major finance. Gilded Row is the principal prestige retail street and Fountain Court a small
+    elegant civic square. Noble households concentrate here, but Center is never exclusively noble.
+    These are predominant tendencies, not exclusive zoning. Crossing substantial parts of a district is
+    meaningful travel; no exact roads or navigation routes are established."
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
+  features:
+    - name: inner wall
+      description: A tall, well-maintained inner wall, less massive than the outer city walls, encloses
+        Center for access control and symbolic separation.
+    - name: four inner-wall gates
+      description: Four principal gates, broadly aligned with the major directions, pierce the inner wall;
+        minor service access points may also exist. By day ordinary people may enter on legitimate
+        business and guards can question or identify visitors; at night access becomes substantially
+        more restricted. Center is not closed to commoners.
+    - name: oil street lighting
+      description: Oil lamps light Center's streets, which are better paved and kept than anywhere else in
+        Calderan.
   connections: []
 chunks: []

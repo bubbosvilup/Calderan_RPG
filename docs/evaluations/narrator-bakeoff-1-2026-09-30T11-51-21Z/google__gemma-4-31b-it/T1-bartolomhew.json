@@ -1,0 +1,108 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "provider": {
+    "tag": "siliconflow/fp8",
+    "provider_name": "SiliconFlow",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T1",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Bartolomhew who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "4a74812adf9ced3d",
+      "draft": "Bartolomhew maintains a paternal easy smile, his pleasant face remaining composed. He looks Nicco over with a calm, professional courtesy, his gaze sweeping over the other man's height and build.\n\n\"I haven't the faintest idea, my friend,\" Bartolomhew answers in a warm voice. \"You simply appeared before me. If I had to guess by your look, I might say you are a traveler from some distant province, though you don't carry the dust of the road.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Bartolomhew maintains a paternal easy smile, his pleasant face remaining composed. He looks Nicco over with a calm, professional courtesy, his gaze sweeping over the other man's height and build.\n\n\"I haven't the faintest idea, my friend,\" Bartolomhew answers in a warm voice. \"You simply appeared before me. If I had to guess by your look, I might say you are a traveler from some distant province, though you don't carry the dust of the road.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3302,
+              "completion_tokens": 104,
+              "total_tokens": 3406,
+              "cost": 0.0025805,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0025805,
+                "upstream_inference_prompt_cost": 0.0024765,
+                "upstream_inference_completions_cost": 0.000104
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 3302,
+            "completion_tokens": 104,
+            "total_tokens": 3406
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:58.608Z",
+            "headers_ms": 2243.1613999999827,
+            "time_to_first_token_ms": 2243.2661999999546,
+            "completed_at": "2026-09-30T12:06:02.410Z",
+            "elapsed_total_ms": 3802.777599999914
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4735.383700000006,
+        "narrator_ttft_ms": 2243.2661999999546,
+        "narrator_total_ms": 3802.777599999914,
+        "controller_ms": 921.1514999999199,
+        "turn_ms": 4735.705100000021
+      }
+    }
+  ]
+}

@@ -17,6 +17,8 @@ export const CONTROLLER_SCHEMA = object({ commands: { type: "array", maxItems: 8
     provenance: object({ source_character_id: string, acquisition_kind: choice("told") }) }) }),
   // Repair 1: class-B physical conditions only (full resulting list); status/presentation are not proposable.
   object({ kind: choice("set_condition"), character_id: string, conditions: { type: "array", items: string, maxItems: 8 } }),
+  // Runtime Continuity Repair 1: a present temporary (created) character narrated as actually leaving the scene.
+  object({ kind: choice("leave_scene"), character_id: string }),
 ] } } });
 function matches(value: unknown, schema: Schema): boolean {
   if (schema.anyOf) return schema.anyOf.some(s => matches(value, s));

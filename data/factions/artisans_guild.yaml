@@ -7,18 +7,23 @@ entity:
   parent: null
   aliases: []
   summary: >-
-    A national guild representing skilled crafts and productive trades in West.
-  tags: ["politics"]
-  search_context: ""
+    A national guild representing skilled crafts and productive trades in West, headquartered at
+    the House of Making in Calderan's East District.
+  tags: ["politics", "crafts"]
+  search_context: "Artisans Guild, House of Making, Masterworks, craft certification, masters, workshops"
   content: >-
-    The Artisans Guild encompasses many artisan professions rather than a separate major
-    national faction for each craft. It may maintain local city branches with local
-    representatives, who collectively determine or select a national representative. Selection
-    methods remain undefined. Branches are parts of this national institution. Specialized
-    local associations may emerge later; none are authored now.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
-  members: []
+    The Artisans Guild encompasses many artisan professions rather than a separate major national
+    faction for each craft; it covers far more than smiths. It may maintain local city branches with
+    local representatives, who collectively determine or select a national representative.
+    Selection methods remain undefined. Branches are parts of this national institution.
+    Specialized local associations may emerge later; none are authored now. Its headquarters is the
+    House of Making in Calderan's East District, which handles guild administration, certification,
+    masters, workshop politics and records, and gives access to rare tools and high-value specialist
+    workspaces, the Masterworks. It keeps a representative office near the Ducal Citadel in Center,
+    and an Artisans Guild representative holds one of the nine seats of the Ducal Council of
+    Calderan; the current representative is Brunna Keld. Noble houses may influence the Guild without being part of it.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  members: ["brunna_keld"]
   territory: []
   relations: []
 chunks: []
-

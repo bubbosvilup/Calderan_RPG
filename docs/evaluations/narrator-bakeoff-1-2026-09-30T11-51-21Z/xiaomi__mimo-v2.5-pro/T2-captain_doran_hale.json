@@ -1,0 +1,280 @@
+{
+  "model": "xiaomi/mimo-v2.5-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "Captain Doran Hale gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "abe0ef79c034c880",
+      "draft": "Captain Doran Hale looks at the worn boots in his hands for a moment, then steps forward and holds them out to Nicco. \"You look like you could use a decent pair,\" he says, his tone plain and matter-of-fact.\n\nNicco takes the boots, the leather still holding the faint warmth of the captain's grip. He nods his thanks, the simple gift feeling more substantial than just a pair of footwear in this unfamiliar square.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Captain Doran Hale looks at the worn boots in his hands for a moment, then steps forward and holds them out to Nicco. \"You look like you could use a decent pair,\" he says, his tone plain and matter-of-fact.\n\nNicco takes the boots, the leather still holding the faint warmth of the captain's grip. He nods his thanks, the simple gift feeling more substantial than just a pair of footwear in this unfamiliar square.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "receipt_by_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3327,
+              "completion_tokens": 91,
+              "total_tokens": 3418,
+              "cost": 0.000422031,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2560,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.000422031,
+                "upstream_inference_prompt_cost": 0.000342861,
+                "upstream_inference_completions_cost": 0.00007917
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.5-pro",
+          "usage": {
+            "prompt_tokens": 3327,
+            "completion_tokens": 91,
+            "total_tokens": 3418
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:02:29.027Z",
+            "headers_ms": 1408.1610000000219,
+            "time_to_first_token_ms": 1408.2600000000093,
+            "completed_at": "2026-09-30T12:02:36.534Z",
+            "elapsed_total_ms": 7506.158100000001
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 8436.53640000004,
+        "narrator_ttft_ms": 1408.2600000000093,
+        "narrator_total_ms": 7506.158100000001,
+        "controller_ms": 920.6731000000145,
+        "turn_ms": 8436.7831
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "bb8b4f7f1b675972",
+      "draft": "Nicco held out the leather boots, the item still warm from the brief contact. \"You'll need them more than me,\" he told the guard captain.\n\nDoran Hale looked down at the offering with a faint frown, his expression shifting from surprise to skepticism. The officer crossed his arms, his armor clinking softly with the movement, and made no move to take the boots back. \"Keep them,\" Hale said, his tone leaving no room for argument. \"I have a budget for gear. You look like you've been walking a long road, and I’d rather not see a citizen lose their toes to the cold.\" He gestured toward the boots in Nicco's hands. \"Don't be proud about it; just take the help.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco held out the leather boots, the item still warm from the brief contact. \"You'll need them more than me,\" he told the guard captain.\n\nDoran Hale looked down at the offering with a faint frown, his expression shifting from surprise to skepticism. The officer crossed his arms, his armor clinking softly with the movement, and made no move to take the boots back. \"Keep them,\" Hale said, his tone leaving no room for argument. \"I have a budget for gear. You look like you've been walking a long road, and I’d rather not see a citizen lose their toes to the cold.\" He gestured toward the boots in Nicco's hands. \"Don't be proud about it; just take the help.\"",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "captain_doran_hale",
+            "position": {
+              "kind": "carried",
+              "character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "no_receipt_act_in_quote"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.5-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3351,
+              "completion_tokens": 153,
+              "total_tokens": 3504,
+              "cost": 0.0004311918,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2688,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0004311918,
+                "upstream_inference_prompt_cost": 0.0002980818,
+                "upstream_inference_completions_cost": 0.00013311
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.5-pro",
+          "usage": {
+            "prompt_tokens": 3351,
+            "completion_tokens": 153,
+            "total_tokens": 3504
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:02:37.464Z",
+            "headers_ms": 1569.4155000000028,
+            "time_to_first_token_ms": 1569.527300000016,
+            "completed_at": "2026-09-30T12:02:52.956Z",
+            "elapsed_total_ms": 15492.727399999974
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 16927.458799999964,
+        "narrator_ttft_ms": 1569.527300000016,
+        "narrator_total_ms": 15492.727399999974,
+        "controller_ms": 1428.297900000005,
+        "turn_ms": 16927.777199999953
+      }
+    }
+  ]
+}

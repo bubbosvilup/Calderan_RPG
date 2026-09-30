@@ -1,0 +1,46 @@
+schema_version: 1
+entity:
+  id: gideon_melakor
+  type: character
+  name: Gideon Melakor
+  display_name: Gideon Melakor
+  parent: null
+  aliases: []
+  summary: Gideon Melakor is House Melakor's information and contract strategist.
+  tags:
+    - nobility
+  search_context: Gideon Melakor, House Melakor, contracts, information
+  content: Gideon Melakor is House Melakor's information and contract strategist. Introverted and
+    unimpressed by status, he often stays silent for a long time before referring to a small detail
+    someone mentioned much earlier. His exact family relation within the house is not established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 36–40
+  appearance: Relatively slight and pale, with very dark brown hair and restrained, expensive clothing.
+  occupation: Information and contract strategist of House Melakor
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - introverted
+    - analytical
+    - patient
+    - observant
+    - unimpressed by status
+    - often silent for a long time, then references a small detail mentioned much earlier
+  purpose: Ensure House Melakor is rarely surprised because it knows enough before acting.
+  morality: Coldly pragmatic.
+  affiliations:
+    - house_melakor
+  relationships: []
+  private_notes: "He studies contracts, information networks, obligations, inconsistencies and
+    vulnerabilities. He is not an omniscient spymaster: his knowledge comes from careful study and
+    has real limits."
+chunks: []

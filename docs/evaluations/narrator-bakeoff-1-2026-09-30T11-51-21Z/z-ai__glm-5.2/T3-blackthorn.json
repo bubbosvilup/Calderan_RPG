@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T3",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Blackthorn, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "97e1788b7261a069",
+      "draft": "Blackthorn stands in the square's moderate foot traffic as though the flow parts around her by habit. She's short and round, the aubergine-purple suit tailored well enough to flatter what isn't flattered, her black bob cut crisp and even. Her eyes are very dark — not warm, not cold, just dark — and they move over Nicco with the quick, appraising sweep of someone who counts things for a living. She doesn't fidget. She doesn't smile. There's a stillness to her that reads less as calm than as a refusal to waste motion.\n\nTwo large men flank her at a close, practiced distance. They aren't introduced, don't speak, and don't look at Nicco so much as at the space he occupies — measuring it the way a person checks a doorway's width before moving furniture through. The square itself carries on around them: a few pedestrians passing, the low residential buildings catching the daylight, and somewhere nearby the sign of The Coined Lie marking the disreputable end of the street's offerings. Heartstone's massive wooden entrance looms behind Nicco, old and heavy.\n\nBlackthorn's gaze settles. She gives away little — no tell of recognition, no curiosity that softens into warmth, no hostility that hardens into threat. She looks like a woman who has places to be and is deciding, right now, whether this particular stop is worth the minutes it's costing her.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Blackthorn stands in the square's moderate foot traffic as though the flow parts around her by habit. She's short and round, the aubergine-purple suit tailored well enough to flatter what isn't flattered, her black bob cut crisp and even. Her eyes are very dark — not warm, not cold, just dark — and they move over Nicco with the quick, appraising sweep of someone who counts things for a living. She doesn't fidget. She doesn't smile. There's a stillness to her that reads less as calm than as a refusal to waste motion.\n\nTwo large men flank her at a close, practiced distance. They aren't introduced, don't speak, and don't look at Nicco so much as at the space he occupies — measuring it the way a person checks a doorway's width before moving furniture through. The square itself carries on around them: a few pedestrians passing, the low residential buildings catching the daylight, and somewhere nearby the sign of The Coined Lie marking the disreputable end of the street's offerings. Heartstone's massive wooden entrance looms behind Nicco, old and heavy.\n\nBlackthorn's gaze settles. She gives away little — no tell of recognition, no curiosity that softens into warmth, no hostility that hardens into threat. She looks like a woman who has places to be and is deciding, right now, whether this particular stop is worth the minutes it's costing her.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3180,
+              "completion_tokens": 298,
+              "total_tokens": 3478,
+              "cost": 0.00226112,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3072,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00226112,
+                "upstream_inference_prompt_cost": 0.00094992,
+                "upstream_inference_completions_cost": 0.0013112
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3180,
+            "completion_tokens": 298,
+            "total_tokens": 3478
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:56:05.077Z",
+            "headers_ms": 8242.632499999992,
+            "time_to_first_token_ms": 8244.357599999988,
+            "completed_at": "2026-09-30T11:56:13.339Z",
+            "elapsed_total_ms": 8262.289899999989
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 8976.710000000006,
+        "narrator_ttft_ms": 8244.357599999988,
+        "narrator_total_ms": 8262.289899999989,
+        "controller_ms": 710.5065000000031,
+        "turn_ms": 8976.968300000008
+      }
+    }
+  ]
+}

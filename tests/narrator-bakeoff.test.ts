@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
-import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL, MINIMAX_NARRATOR_MODEL } from "../src/llm/openrouter/minimax-narrator.js";
+import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL, MINIMAX_NARRATOR_MODEL, KIMI_NARRATOR_MODEL, GEMINI_NARRATOR_MODEL, NARRATOR_PROVIDER_ROUTING } from "../src/llm/openrouter/minimax-narrator.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/deepseek-controller.js";
 import { NARRATOR_SYSTEM, NARRATOR_STATE_PRECEDENCE } from "../src/turn/prompt-builder.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
@@ -48,14 +48,16 @@ test("narrator model override leaves controller model, policy, evidence and comm
   assert.deepEqual(a.snapshot, b.snapshot);
   assert.equal(a.snapshot.items.find(i => i.id === "boots")!.owner_id, "brenna");
 });
-test("production default narrator is Kimi with reasoning explicitly disabled; controller request unchanged", async () => {
+test("production default narrator is GLM 5.2 pinned to Z.AI without fallbacks, reasoning disabled; controller request unchanged", async () => {
   const saved = process.env.OPENROUTER_NARRATOR_MODEL;
   delete process.env.OPENROUTER_NARRATOR_MODEL;
   try {
     const run = await fullLoop(undefined);
-    assert.equal(DEFAULT_NARRATOR_MODEL, "moonshotai/kimi-k2.5");
-    assert.equal(run.narratorBodies[0]!.model, "moonshotai/kimi-k2.5");
+    assert.equal(DEFAULT_NARRATOR_MODEL, "z-ai/glm-5.2");
+    assert.equal(run.narratorBodies[0]!.model, "z-ai/glm-5.2");
+    assert.deepEqual(run.narratorBodies[0]!.provider, { order: ["z-ai/fp8"], allow_fallbacks: false });
     assert.equal(run.narratorBodies[0]!.max_tokens, NARRATOR_OUTPUT_TOKENS);
+    assert.equal(run.narratorBodies[0]!.max_tokens, 512); // Runtime Continuity Repair 1.1 production cap
     assert.deepEqual(run.narratorBodies[0]!.reasoning, { enabled: false });
     assert.equal(run.narratorBodies[0]!.stream, true);
     assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
@@ -76,7 +78,24 @@ test("OPENROUTER_NARRATOR_MODEL still overrides the default; controller and reas
     const run = await fullLoop(undefined);
     assert.equal(run.narratorBodies[0]!.model, "minimax/minimax-m2-her");
     assert.deepEqual(run.narratorBodies[0]!.reasoning, { enabled: false });
+    assert.equal("provider" in run.narratorBodies[0]!, false);
     assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
+  } finally { if (saved === undefined) delete process.env.OPENROUTER_NARRATOR_MODEL; else process.env.OPENROUTER_NARRATOR_MODEL = saved; }
+});
+test("Runtime Continuity Repair 1: Kimi stays available unpinned; Gemini is a Vertex-pinned manual alternative, never a fallback", async () => {
+  const saved = process.env.OPENROUTER_NARRATOR_MODEL;
+  try {
+    for (const [model, provider] of [[KIMI_NARRATOR_MODEL, undefined], [GEMINI_NARRATOR_MODEL, { order: ["google-vertex/global"], allow_fallbacks: false }]] as const) {
+      process.env.OPENROUTER_NARRATOR_MODEL = model;
+      const run = await fullLoop(undefined);
+      assert.equal(run.narratorBodies[0]!.model, model);
+      assert.deepEqual(run.narratorBodies[0]!.provider, provider);
+      assert.equal(run.narratorBodies[0]!.max_tokens, NARRATOR_OUTPUT_TOKENS);
+      assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
+    }
+    // The production pin names exactly one provider and forbids fallbacks.
+    assert.deepEqual(NARRATOR_PROVIDER_ROUTING[DEFAULT_NARRATOR_MODEL], { order: ["z-ai/fp8"], allow_fallbacks: false });
+    assert.equal(NARRATOR_OUTPUT_TOKENS, 512); // Runtime Continuity Repair 1.1 (was 384)
   } finally { if (saved === undefined) delete process.env.OPENROUTER_NARRATOR_MODEL; else process.env.OPENROUTER_NARRATOR_MODEL = saved; }
 });
 test("Stage A request is byte-identical to the coordinator's narrator request for every case", async () => {

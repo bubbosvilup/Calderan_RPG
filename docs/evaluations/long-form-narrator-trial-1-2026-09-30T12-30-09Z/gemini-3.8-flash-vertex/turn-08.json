@@ -1,0 +1,96 @@
+{
+  "turn": 8,
+  "input": "*At the next table, a man in a salt-stained coat bangs his mug down and shouts across the room for another drink.*",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "e58cad740101cdf7",
+  "draft": "The wood of the adjoining table groaned beneath the force of the strike. Dell Harrow slouched heavily against the bench, thick arms braced against the edge as his empty mug clattered against a plate. \n\n\"Another!\" Dell called out toward the counter, his voice rough and carrying easily over the ambient murmur of the room. \"Don't make me sit here dry, woman!\"\n\nBehind the counter, Jessa Rook did not look up immediately from the cloth in her hands. She finished wiping down the timber surface with steady, measured strokes before lifting her gaze. Her expression remained flat, her dark eyes settling on the salt-stained coat and the heavy hands resting on the table.\n\n\"Your coin's good when you show it, Dell,\" Jessa said, her tone level and unhurried as she set the rag aside. \"Keep the timber whole, or you can find your next round out in the street.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "The wood of the adjoining table groaned beneath the force of the strike. Dell Harrow slouched heavily against the bench, thick arms braced against the edge as his empty mug clattered against a plate. \n\n\"Another!\" Dell called out toward the counter, his voice rough and carrying easily over the ambient murmur of the room. \"Don't make me sit here dry, woman!\"\n\nBehind the counter, Jessa Rook did not look up immediately from the cloth in her hands. She finished wiping down the timber surface with steady, measured strokes before lifting her gaze. Her expression remained flat, her dark eyes settling on the salt-stained coat and the heavy hands resting on the table.\n\n\"Your coin's good when you show it, Dell,\" Jessa said, her tone level and unhurried as she set the rag aside. \"Keep the timber whole, or you can find your next round out in the street.\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 3,
+    "revision_after": 3,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [
+      "campaign_character_eval_dell_harrow"
+    ],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "google/gemini-3.8-flash",
+    "pinned": "google-vertex/global",
+    "reasoning": {
+      "effort": "minimal"
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Google",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3554,
+          "completion_tokens": 188,
+          "total_tokens": 3742,
+          "cost": 0.0033705,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0033705,
+            "upstream_inference_prompt_cost": 0.0026655,
+            "upstream_inference_completions_cost": 0.000705
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "google/gemini-3.8-flash",
+      "usage": {
+        "prompt_tokens": 3554,
+        "completion_tokens": 188,
+        "total_tokens": 3742
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:31:16.064Z",
+        "headers_ms": 1944.4300000000003,
+        "time_to_first_token_ms": 1944.5380000000005,
+        "completed_at": "2026-09-30T12:31:20.473Z",
+        "elapsed_total_ms": 4409.035600000003
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 1944.5380000000005,
+    "narrator_total_ms": 4409.035600000003,
+    "controller_ms": 1519.9206999999951,
+    "turn_ms": 5937.320599999999
+  }
+}

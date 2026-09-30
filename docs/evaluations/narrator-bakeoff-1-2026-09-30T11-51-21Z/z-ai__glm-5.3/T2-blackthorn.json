@@ -1,0 +1,300 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T2",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "Blackthorn gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "8668c5baf4dd44a7",
+      "draft": "Blackthorn holds out the pair of leather boots. \"Take them,\" she says, handing them over with a brisk nod.\n\nNicco takes them, the leather stiff and heavier than it looks in his hands. They are carried now, not worn, and the weight of them hangs at his side as the square's ordinary foot traffic drifts past Heartstone's great entrance behind him.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Blackthorn holds out the pair of leather boots. \"Take them,\" she says, handing them over with a brisk nod.\n\nNicco takes them, the leather stiff and heavier than it looks in his hands. They are carried now, not worn, and the weight of them hangs at his side as the square's ordinary foot traffic drifts past Heartstone's great entrance behind him.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3313,
+              "completion_tokens": 89,
+              "total_tokens": 3402,
+              "cost": 0.00203844,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2624,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00203844,
+                "upstream_inference_prompt_cost": 0.00164684,
+                "upstream_inference_completions_cost": 0.0003916
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 9,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 35
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3313,
+            "completion_tokens": 89,
+            "total_tokens": 3402
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:57:43.815Z",
+            "headers_ms": 10052.846900000004,
+            "time_to_first_token_ms": 12056.777000000002,
+            "completed_at": "2026-09-30T11:57:56.015Z",
+            "elapsed_total_ms": 12250.613199999993
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 13430.403100000025,
+        "narrator_ttft_ms": 12056.777000000002,
+        "narrator_total_ms": 12250.613199999993,
+        "controller_ms": 1173.9354000000167,
+        "turn_ms": 13430.72590000002
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "b31f89ceeaa1b5c4",
+      "draft": "\"They're a gift,\" Blackthorn said, not reaching for them. \"I don't wear men's boots, and they were bought for you. Keep them or throw them in the river, that's your business, but I'm not taking them back.\"\n\nShe shifted her weight, faintly impatient, one of her two bodyguards glancing at the offered boots and then away. \"Is that all? I do have other appointments today.\"",
+      "issues": [
+        {
+          "kind": "absent_participant",
+          "character": "Blackthorn",
+          "sentence": "She shifted her weight, faintly impatient, one of her two bodyguards glancing at the offered boots and then away.",
+          "correction": "Blackthorn's two large bodyguards are NOT present in this scene (a habit, not presence). Remove them entirely; nobody else acts, restrains or intervenes except the people listed as present."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "\"They're a gift,\" Blackthorn said, not reaching for them. \"I don't wear men's boots, and they were bought for you. Keep them or throw them in the river, that's your business, but I'm not taking them back.\"\n\nShe shifted her weight, faintly impatient. \"Is that all? I do have other appointments today.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "\"They're a gift,\" Blackthorn said, not reaching for them. \"I don't wear men's boots, and they were bought for you. Keep them or throw them in the river, that's your business, but I'm not taking them back.\"\n\nShe shifted her weight, faintly impatient. \"Is that all? I do have other appointments today.\"",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3334,
+              "completion_tokens": 110,
+              "total_tokens": 3444,
+              "cost": 0.00208728,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2688,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00208728,
+                "upstream_inference_prompt_cost": 0.00160328,
+                "upstream_inference_completions_cost": 0.000484
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 18,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 80
+          },
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3665,
+              "completion_tokens": 76,
+              "total_tokens": 3741,
+              "cost": 0.00167148,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3328,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00167148,
+                "upstream_inference_prompt_cost": 0.00133708,
+                "upstream_inference_completions_cost": 0.0003344
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3334,
+            "completion_tokens": 110,
+            "total_tokens": 3444
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:57:57.196Z",
+            "headers_ms": 2899.1073000000033,
+            "time_to_first_token_ms": 2910.1445999999996,
+            "completed_at": "2026-09-30T11:58:00.838Z",
+            "elapsed_total_ms": 3642.7353000000003
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6336.1000999999815,
+        "narrator_ttft_ms": 2910.1445999999996,
+        "narrator_total_ms": 3642.7353000000003,
+        "controller_ms": 718.7048999999824,
+        "turn_ms": 6336.43299999999
+      }
+    }
+  ]
+}

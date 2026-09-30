@@ -33,7 +33,8 @@ test("narrator preserves system prompt/order, explicit bound, endpoint/auth and 
     assert.equal(url, "https://openrouter.ai/api/v1/chat/completions");
     assert.equal(new Headers(init.headers).get("Authorization"), `Bearer ${fakeKey}`);
     const payload = JSON.parse(String(init.body));
-    assert.equal(payload.model, "moonshotai/kimi-k2.5"); assert.equal(payload.max_tokens, 512); assert.deepEqual(payload.reasoning, { enabled: false });
+    assert.equal(payload.model, "z-ai/glm-5.2"); assert.equal(payload.max_tokens, 512); assert.deepEqual(payload.reasoning, { enabled: false });
+    assert.deepEqual(payload.provider, { order: ["z-ai/fp8"], allow_fallbacks: false });
     assert.deepEqual(payload.messages, [{ role: "system", content: request.system_prompt }, ...request.messages]);
     assert.equal(payload.tools, undefined); assert.equal(payload.response_format, undefined);
   });

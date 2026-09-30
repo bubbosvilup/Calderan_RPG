@@ -1,0 +1,117 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "provider": {
+    "tag": "siliconflow/fp8",
+    "provider_name": "SiliconFlow",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T5C",
+  "npc": null,
+  "location": null,
+  "turns": [
+    {
+      "input": "*Nicco watches from the shadows as Varro Kest inspects Edda Marn, a grown woman held in chains, and tells her what she is worth to him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "dfdc39443fd43323",
+      "draft": "Varro Kest circles Edda Marn, his rings catching the dim light as he rubs a thick finger against his chin. He stops in front of her, his gaze sweeping over her plain, dirty clothes with a look of clinical appraisal.\n\n\"You're a debt-burden, girl,\" Varro says, his voice grating. \"Hardly a prize, but you've got a sturdy frame. I can get a fair price for you from the warehouses in the West District, though not nearly what your previous owner thought you were worth.\"\n\nEdda remains still, her wrists chained to the ring in the wall. She does not look up at him, her expression vacant as she listens to the trafficker quantify her value.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Varro Kest circles Edda Marn, his rings catching the dim light as he rubs a thick finger against his chin. He stops in front of her, his gaze sweeping over her plain, dirty clothes with a look of clinical appraisal.\n\n\"You're a debt-burden, girl,\" Varro says, his voice grating. \"Hardly a prize, but you've got a sturdy frame. I can get a fair price for you from the warehouses in the West District, though not nearly what your previous owner thought you were worth.\"\n\nEdda remains still, her wrists chained to the ring in the wall. She does not look up at him, her expression vacant as she listens to the trafficker quantify her value.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [
+          {
+            "id": "campaign_character_eval_edda_marn",
+            "conditions": []
+          },
+          {
+            "id": "campaign_character_eval_varro_kest",
+            "conditions": []
+          }
+        ],
+        "player_location": "slave_market_back_back_alleys"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 2996,
+              "completion_tokens": 150,
+              "total_tokens": 3146,
+              "cost": 0.001709,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 1376,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.001709,
+                "upstream_inference_prompt_cost": 0.001559,
+                "upstream_inference_completions_cost": 0.00015
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 2996,
+            "completion_tokens": 150,
+            "total_tokens": 3146
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:51.441Z",
+            "headers_ms": 1423.029300000053,
+            "time_to_first_token_ms": 1423.1657999999588,
+            "completed_at": "2026-09-30T12:06:55.080Z",
+            "elapsed_total_ms": 3638.0975000000326
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4399.068400000106,
+        "narrator_ttft_ms": 1423.1657999999588,
+        "narrator_total_ms": 3638.0975000000326,
+        "controller_ms": 752.030199999921,
+        "turn_ms": 4399.2690000000875
+      }
+    }
+  ]
+}

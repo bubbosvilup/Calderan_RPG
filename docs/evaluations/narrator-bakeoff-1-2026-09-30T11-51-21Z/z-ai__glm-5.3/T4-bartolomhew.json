@@ -1,0 +1,167 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T4",
+  "npc": "bartolomhew",
+  "location": "calderan_slave_market",
+  "turns": [
+    {
+      "input": "*He punches Bartolomhew directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "ad19ddcbbdf1a95e",
+      "draft": "The punch catches Bartolomhew square in the face, snapping his head back and putting him down on one knee in the churned dirt, hand pressed to his nose. Blood wells between his fingers. He stays there a moment, breathing carefully through his mouth, then looks up at Nicco with watering eyes and the same mild, unhurried calm, as though he'd merely stumbled.\n\n\"Well,\" he says thickly, dabbing at his nose. \"That was rash.\"\n\nThe market around them does not stop, but it narrows. A pair of handlers pause with their line of captives; a clerk clutching a satchel of papers takes several quick steps backward. Somewhere near the pens a guard's head turns toward the commotion, though he has not yet moved.\n\nKorvin, a few paces off, folds his big damaged arms and lets out a short grunt, watching without any apparent intention of intervening. \"You want to do that somewhere quieter,\" he says flatly, to no one in particular.\n\nMistress Elara opens her fan with a snap, hiding whatever her mouth is doing behind it, her green-hazel eyes moving between Nicco and the kneeling slaver with frank, calculating interest. Bartolomhew rises slowly, wiping his nose again, blood smear on his lip. \"There are guards in this square, friend,\" he says gently. \"And you have just struck a licensed trader before witnesses. Whatever grievance you carry, I'd think carefully about your next step.\"",
+      "issues": [
+        {
+          "kind": "uncommitted_condition",
+          "character": "Bartolomhew",
+          "sentence": "Bartolomhew rises slowly, wiping his nose again, blood smear on his lip.",
+          "correction": "No lasting minor injury was recorded for Bartolomhew. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "The punch catches Bartolomhew square in the face, snapping his head back and driving him a stumbling step away, one hand flying up to his nose. He doubles slightly, breath hissing, eyes watering — then steadies himself, straightening slowly with his fingers still pressed over the bridge of his nose. It clearly hurt; it does not seem to have broken anything.\n\n\"Well,\" he says thickly, lowering his hand and flexing his jaw with a wince. \"That was rash.\"\n\nThe market around them does not stop, but it narrows. A pair of handlers pause with their line of captives; a clerk clutching a satchel of papers takes several quick steps backward. Somewhere near the pens a guard's head turns toward the commotion, though he has not yet moved.\n\nKorvin, a few paces off, folds his big damaged arms and lets out a short grunt, watching without any apparent intention of intervening. \"You want to do that somewhere quieter,\" he says flatly, to no one in particular.\n\nMistress Elara opens her fan with a snap, hiding whatever her mouth is doing behind it, her green-hazel eyes moving between Nicco and the recovering slaver with frank, calculating interest. Bartolomhew rolls his neck once, wincing again, and regards Nicco with the same mild, unhurried calm, as though the blow were an unfortunate clerical error. \"There are guards in this square, friend,\" he says gently. \"And you have just struck a licensed trader before witnesses. Whatever grievance you carry, I'd think carefully about your next step.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "The punch catches Bartolomhew square in the face, snapping his head back and driving him a stumbling step away, one hand flying up to his nose. He doubles slightly, breath hissing, eyes watering — then steadies himself, straightening slowly with his fingers still pressed over the bridge of his nose. It clearly hurt; it does not seem to have broken anything.\n\n\"Well,\" he says thickly, lowering his hand and flexing his jaw with a wince. \"That was rash.\"\n\nThe market around them does not stop, but it narrows. A pair of handlers pause with their line of captives; a clerk clutching a satchel of papers takes several quick steps backward. Somewhere near the pens a guard's head turns toward the commotion, though he has not yet moved.\n\nKorvin, a few paces off, folds his big damaged arms and lets out a short grunt, watching without any apparent intention of intervening. \"You want to do that somewhere quieter,\" he says flatly, to no one in particular.\n\nMistress Elara opens her fan with a snap, hiding whatever her mouth is doing behind it, her green-hazel eyes moving between Nicco and the recovering slaver with frank, calculating interest. Bartolomhew rolls his neck once, wincing again, and regards Nicco with the same mild, unhurried calm, as though the blow were an unfortunate clerical error. \"There are guards in this square, friend,\" he says gently. \"And you have just struck a licensed trader before witnesses. Whatever grievance you carry, I'd think carefully about your next step.\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "bartolomhew",
+            "conditions": [
+              "minor_injury",
+              "dazed",
+              "knocked_down"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_term_missing"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "calderan_slave_market"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 4598,
+              "completion_tokens": 339,
+              "total_tokens": 4937,
+              "cost": 0.0079288,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0079288,
+                "upstream_inference_prompt_cost": 0.0064372,
+                "upstream_inference_completions_cost": 0.0014916
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 25,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 103
+          },
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 5124,
+              "completion_tokens": 373,
+              "total_tokens": 5497,
+              "cost": 0.00363464,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 4544,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00363464,
+                "upstream_inference_prompt_cost": 0.00199344,
+                "upstream_inference_completions_cost": 0.0016412
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 34,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 125
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 4598,
+            "completion_tokens": 339,
+            "total_tokens": 4937
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:57:20.996Z",
+            "headers_ms": 2659.6742000000086,
+            "time_to_first_token_ms": 2677.034000000014,
+            "completed_at": "2026-09-30T11:57:27.838Z",
+            "elapsed_total_ms": 6842.143300000025
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 13248.108399999997,
+        "narrator_ttft_ms": 2677.034000000014,
+        "narrator_total_ms": 6842.143300000025,
+        "controller_ms": 1322.2967999999819,
+        "turn_ms": 13248.385299999994
+      }
+    }
+  ]
+}

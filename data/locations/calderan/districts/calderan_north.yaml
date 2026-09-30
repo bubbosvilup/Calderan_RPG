@@ -7,25 +7,75 @@ entity:
   parent: calderan
   aliases:
     - Calderan North District
-  summary: North District is one of Calderan's five broad urban regions. The North District emphasizes
-    religion, the Church, physicians, healing, herbalism, charitable care and traditional medicine.
+  summary: North District is Calderan's religious, medical, scholarly and regulated-magic district and
+    its second-wealthiest after Center, built of pale worked stone and white granite around the
+    Cathedral of the Bladed Sun, cloisters, gardens and major Church and Learned Arts institutions.
   tags:
     - geography
     - district
-  search_context: North District of Calderan, urban district.
-  content: The North District emphasizes religion, the Church, physicians, healing, herbalism,
-    charitable care and traditional medicine. Sincere treatment, competent physicians and herbal
-    practitioners, ineffective treatment, superstition and charlatans can coexist. Religion is not
-    universally fraudulent and temple healing is not universally magical. The Mage Registry and
-    Inquisition have a presence here. These are predominant tendencies, not exclusive zoning.
-    Crossing substantial parts of a district is meaningful travel; no exact roads or navigation
-    routes are established.
+    - religion
+    - medicine
+  search_context: North District of Calderan, urban district, Church of the Sun Emperor, Cathedral of
+    the Bladed Sun, Saint Caldus House, The Collegium, Mage Registry, Spire Academy, Bastion of
+    Vigilance, Pyres of the Fallen, physicians, apothecaries.
+  content: "North concentrates religion, medicine, scholarship and regulated magic. It is Calderan's
+    second-wealthiest district after Center, but it is not primarily a noble residential district.
+    Pale washed stone and white granite, monumental religious architecture, cloisters, fountains,
+    formal gardens, parks and clean public spaces set it apart; it has more green space and better
+    maintenance than the other outer districts. The Cathedral of the Bladed Sun dominates it visually.
+    The Church of the Sun Emperor, the City Guard and the Inquisition are all strongly present, and
+    visible street crime is low. The atmosphere is superficially calm and orderly over underlying
+    institutional control. Major institutions here include Saint Caldus House, the Church's main
+    hospital; the Pyres of the Fallen, the principal cremation complex; The Collegium, headquarters of
+    the Learned Arts Guild and home of the Mage Registry; the nearby Spire Academy; and the Bastion of
+    Vigilance, the Inquisition's headquarters. Physicians, apothecaries, alchemists and herbalists are
+    concentrated here under close supervision. Sincere treatment, competent practitioners, ineffective
+    treatment, superstition and charlatans can coexist. Religion is not universally fraudulent and
+    temple healing is not universally magical. Charity draws many poor and displaced people toward North's
+    temples and Church kitchens. These are predominant tendencies, not exclusive zoning. Crossing
+    substantial parts of a district is meaningful travel; no exact roads or navigation routes are
+    established."
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
+  features:
+    - name: white granite and pale stone
+      description: Pale washed worked stone and white granite dominate North's monumental and
+        institutional architecture.
+    - name: cloisters, gardens and parks
+      description: Cloisters, fountains, formal gardens and parks give North more well-kept green and
+        public space than the other outer districts.
   connections: []
-chunks: []
+chunks:
+  - id: calderan_north.medical_regulation
+    entity_id: calderan_north
+    section: medical_regulation
+    summary: Licensing of private clinics, supervision of apothecaries and alchemists, and regulated
+      medicinal warehousing in North District.
+    search_context: North clinic licensing, unlicensed healer, apothecary records, alchemist
+      supervision, controlled substances, medicinal warehouses, Church Auditors, Inquisition review.
+    content: "Independent lay medicine is legal elsewhere in Calderan, but a practitioner may not simply
+      open an unsanctioned clinic in North. Private clinics there require authorization shared between
+      religious and inquisitorial oversight and Learned Arts Guild professional competence. An
+      unlicensed North clinic is treated as suspicious and may be investigated, or destroyed if it is
+      considered a center of illicit magic or heresy; not every unlicensed healer is automatically
+      guilty. Apothecaries and alchemists operate primarily under Learned Arts professional structures
+      and are heavily supervised in North. Their sales and controlled-substance records may be sealed,
+      inspected and reviewed annually by Church Auditors and the Inquisition; no catalog of controlled
+      substances is established. North's major medicinal and alchemical stores are mixed-property
+      institutions held by guild-affiliated private interests, nobles or large commercial holders, not
+      by the state. Medicinal and alchemical supply is nevertheless heavily regulated, taxed and
+      watched, and is sometimes escorted or protected by Church-linked authorities."
+    tags:
+      - medicine
+      - regulation
+      - alchemy
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []
+      awareness: local:calderan

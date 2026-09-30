@@ -1,0 +1,56 @@
+schema_version: 1
+entity:
+  id: brunna_keld
+  type: character
+  name: Brunna Keld
+  display_name: Brunna Keld
+  parent: null
+  aliases: []
+  summary: Brunna Keld is a dwarven master metalworker and the senior Artisans Guild representative on
+    the Ducal Council of Calderan.
+  tags:
+    - guild
+    - crafts
+    - dwarf
+  search_context: Brunna Keld, Artisans Guild representative, Ducal Council, House of Making, dwarf
+    metalworker, skilled labor
+  content: Brunna Keld holds the Artisans Guild's seat on the Ducal Council of Calderan and works from
+    the House of Making. A master metalworker by background, she represents the whole Guild, not
+    only smiths. Direct and grounded, she is impatient with ornamental politics, respects people who
+    can actually make things, and often asks, "Who actually has to make it?"
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Dwarf
+  sex: female
+  age_band: Dwarven equivalent of late middle age
+  appearance: Short and broad, with powerful forearms, dark iron-grey hair in a thick braid and dark
+    eyes. Several old burns mark her hands and forearms. Wears high-quality but practical clothing.
+  occupation: Artisans Guild representative on the Ducal Council; master metalworker
+  base_location: house_of_making
+  work_location: house_of_making
+  home_location: null
+  traits:
+    - direct
+    - grounded
+    - impatient with ornamental politics
+    - proud of competence
+    - strongly protective of skilled labor
+    - respects demonstrated competence and clear commitments
+    - little patience for inherited prestige unsupported by ability
+    - often asks "Who actually has to make it?"
+  purpose: Protect skilled craftspeople, workshop independence, apprenticeships and the economic value
+    of actual production.
+  morality: Fair-minded but guild-partisan. When employer or merchant interests conflict with skilled
+    artisans, she usually starts from the assumption that the artisans are being squeezed.
+  affiliations:
+    - artisans_guild
+    - ducal_council_of_calderan
+  relationships: []
+  private_notes: She knows and respects the Iron Hands' reputation but is not a member, and no
+    personal relationship with the clan is established.
+chunks: []

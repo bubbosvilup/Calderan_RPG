@@ -1,0 +1,104 @@
+{
+  "turn": 12,
+  "input": "*Nicco pulls his arm free and steps back from the stool, keeping his hands open.* Let go. I don't want a fight in here.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "4aea5e76da4cdfe6",
+  "prompt_characters": 20946,
+  "draft": "Nicco's arm came free as the bigger man's grip loosened — less from cooperation than from the sheer mechanics of pulling away from someone already swaying on his feet. Dell's momentum carried him a half-step forward, and he caught himself on the counter's edge with one thick hand, breathing hard through his nose.\n\nJessa was already there. She hadn't shouted, hadn't run, but she'd come around the counter end with a cloth in one hand and put herself between Dell and the spilled drink without quite touching him. \"Sit down, Dell. Now.\" Her voice was the same low, unhurried tone she'd used all evening, but it carried a weight the pleasant version hadn't. \"You know how this ends if you don't.\"\n\nDell straightened up slowly, jaw working like he was chewing on something he couldn't quite spit out. He looked at Nicco, then at Jessa, and then at the overturned cup dripping onto the floor. His mouth opened and closed once. Then he dropped back into his chair, heavy and deliberate, and said nothing. Jessa set the cloth on the spill and glanced at Nicco — a quick, assessing look that took in his open hands, his footing, whether he was about to press the point. She didn't ask. She reached under the counter for a fresh cup.",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Nicco's arm came free as the bigger man's grip loosened — less from cooperation than from the sheer mechanics of pulling away from someone already swaying on his feet. Dell's momentum carried him a half-step forward, and he caught himself on the counter's edge with one thick hand, breathing hard through his nose.\n\nJessa was already there. She hadn't shouted, hadn't run, but she'd come around the counter end with a cloth in one hand and put herself between Dell and the spilled drink without quite touching him. \"Sit down, Dell. Now.\" Her voice was the same low, unhurried tone she'd used all evening, but it carried a weight the pleasant version hadn't. \"You know how this ends if you don't.\"\n\nDell straightened up slowly, jaw working like he was chewing on something he couldn't quite spit out. He looked at Nicco, then at Jessa, and then at the overturned cup dripping onto the floor. His mouth opened and closed once. Then he dropped back into his chair, heavy and deliberate, and said nothing. Jessa set the cloth on the spill and glanced at Nicco — a quick, assessing look that took in his open hands, his footing, whether he was about to press the point. She didn't ask. She reached under the counter for a fresh cup.",
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 3,
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created": [
+      {
+        "id": "campaign_character_eval_dell_harrow",
+        "location": "gatherers_inn",
+        "conditions": []
+      }
+    ],
+    "conditions": []
+  },
+  "recent_conversation": {
+    "turns_retained": 12,
+    "prompt_turns": 12,
+    "serialized_characters": 13090,
+    "context_recent_characters": 11686
+  },
+  "narrator": {
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4416,
+          "completion_tokens": 275,
+          "total_tokens": 4691,
+          "cost": 0.00257704,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4224,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00257704,
+            "upstream_inference_prompt_cost": 0.00136704,
+            "upstream_inference_completions_cost": 0.00121
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 4416,
+        "completion_tokens": 275,
+        "total_tokens": 4691
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T13:21:30.085Z",
+        "headers_ms": 9035.881900000008,
+        "time_to_first_token_ms": 9039.372300000003,
+        "completed_at": "2026-09-30T13:21:39.180Z",
+        "elapsed_total_ms": 9094.943600000013
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 9039.372300000003,
+    "narrator_total_ms": 9094.943600000013,
+    "controller_ms": 877.3255999999965,
+    "turn_ms": 9980.358399999997
+  }
+}

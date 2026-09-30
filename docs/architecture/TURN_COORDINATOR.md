@@ -54,7 +54,7 @@ Knowledge stays as individual edges with status and provenance. This initial pla
 
 Production canon currently lacks authored player/NPC records. The canonical CLI mode therefore works for location/time/mana/lore while omitting unestablished character profiles. The populated synthetic fixture supports character/item/knowledge development without writing production canon.
 
-Limits: player input 4,000 characters; projected state 32,000 serialized characters, 24 relevant characters, 48 items, 32 facts, 96 knowledge edges, 16 scheduled events; recent conversation 4 turns / 8,000 characters; secondary retrieval evidence 10,000 characters; generated narration 24,000 characters. Existing provider and NarrativeContext bounds also apply. Oversized primary/retrieved content fails rather than silently disappearing. Oversized individual recent exchanges are explicitly omitted from the ephemeral buffer; older exchanges are evicted by its configured bounds. Canonical awareness IDs are capped at 24 per character.
+Limits: player input 4,000 characters; projected state 32,000 serialized characters, 24 relevant characters, 48 items, 32 facts, 96 knowledge edges, 16 scheduled events; recent conversation 12 completed turns / 16,000 serialized characters (Runtime Continuity Repair 1; previously 4 / 8,000); secondary retrieval evidence 10,000 characters; generated narration 24,000 characters. Existing provider and NarrativeContext bounds also apply. Oversized primary/retrieved content fails rather than silently disappearing. Oversized individual recent exchanges are explicitly omitted from the ephemeral buffer; older exchanges are evicted by its configured bounds. Canonical awareness IDs are capped at 24 per character.
 
 Only completed narration can enter the buffer. Successfully finalized exchanges are replayable; a completed narration whose state processing fails is recorded as `state_failed` and omitted from future prompts. Partial streams are not stored. Buffers are per CampaignState object, remain in memory and start empty after a load/new campaign.
 
@@ -218,3 +218,13 @@ Audit checks (`src/turn/narration-audit.ts`), all bounded and structured:
 - **Consequences.** Class-B physical conditions narrated without a committed condition, and class-C/D constraints (restraint, removal, detention, bans) narrated as accomplished on Nicco. See [PHYSICAL_INTERACTION.md](PHYSICAL_INTERACTION.md).
 
 The audit is a safety net behind the prompt contract, not semantic policing. Known gaps are listed in [the Repair 1 report](../evaluations/CALDERAN_LIVE_NPC_REGRESSION_REPAIR_1.md).
+
+## Runtime Continuity Repair 1
+
+See [the repair report](../evaluations/RUNTIME_CONTINUITY_REPAIR_1.md).
+
+- **Recent conversation.** 12 completed exchanges under a 16,000-character serialized budget. Oldest complete exchanges are evicted first, and exchanges are never cut or reordered. Only player input and delivered narration are stored: a failed turn stores only what was shown and never displaces a completed exchange.
+- **Temporary participant departure.** `leave_scene { character_id }` is a controller command. It applies only to a present **created** character and follows the usual path: proposal, narration evidence (`src/turn/scene-departure.ts`), authorization, then prepare. Committing it clears the character's location: the record stays, and re-entry needs `move_character`. The audit flags an exit narrated without a committed `leave_scene` (`uncommitted_departure`), and flags a created character acting in the scene after it has left (`absent_participant`).
+- **Player-authored events.** `src/turn/player-authored-events.ts` covers grab, shove, strike, injury, spill and departure acts stated in the current input's action text. They take precedence in the audit: a restated authored grab or shove is never an uncommitted constraint, and an authored injury term is never an uncommitted condition. They never authorize escalation: a broken bone, unconsciousness, death, severing or pinning is still flagged. Objects falling or spilling are not a person's condition.
+- **Grounding guards.** `src/turn/grounding-audit.ts` flags three things: exact prices not supplied by canon, state, retrieval or the player (`invented_price`); earlier payments, agreements or conversations with no support in the delivered history (`fabricated_prior_event`); and strong legal or procedural assertions (`invented_procedure`). Staff acting in the scene who are not in scene state are flagged through the existing presence check (`absent_participant`).
+

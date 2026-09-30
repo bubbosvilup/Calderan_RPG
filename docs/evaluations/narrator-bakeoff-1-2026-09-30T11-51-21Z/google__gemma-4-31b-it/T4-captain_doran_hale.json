@@ -1,0 +1,128 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "provider": {
+    "tag": "siliconflow/fp8",
+    "provider_name": "SiliconFlow",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T4",
+  "npc": "captain_doran_hale",
+  "location": "west_guard_post",
+  "turns": [
+    {
+      "input": "*He punches Captain Doran Hale directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "18c58cdfef97ac74",
+      "draft": "Nicco's fist connects with Captain Doran Hale's face. The impact snaps the Captain's head to the side, his head jerking from the force of the blow. \n\nDoran recoils, stumbling back a step as he brings a hand up to his jaw. He freezes for a moment, eyes narrowing and flashing with sudden, sharp anger. He straightens his posture, his broad shoulders squaring as he glares at Nicco.\n\n\"You've a great deal of nerve,\" Doran says, his voice low and dangerous. \"I suggest you start explaining yourself before I decide exactly how to handle this.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco's fist connects with Captain Doran Hale's face. The impact snaps the Captain's head to the side, his head jerking from the force of the blow. \n\nDoran recoils, stumbling back a step as he brings a hand up to his jaw. He freezes for a moment, eyes narrowing and flashing with sudden, sharp anger. He straightens his posture, his broad shoulders squaring as he glares at Nicco.\n\n\"You've a great deal of nerve,\" Doran says, his voice low and dangerous. \"I suggest you start explaining yourself before I decide exactly how to handle this.\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "captain_doran_hale",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_term_missing"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "west_guard_post"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3238,
+              "completion_tokens": 131,
+              "total_tokens": 3369,
+              "cost": 0.0018715,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 1376,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0018715,
+                "upstream_inference_prompt_cost": 0.0017405,
+                "upstream_inference_completions_cost": 0.000131
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 3238,
+            "completion_tokens": 131,
+            "total_tokens": 3369
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:44.640Z",
+            "headers_ms": 1643.5014000000665,
+            "time_to_first_token_ms": 1643.56110000005,
+            "completed_at": "2026-09-30T12:06:48.292Z",
+            "elapsed_total_ms": 3652.112700000056
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4708.56959999993,
+        "narrator_ttft_ms": 1643.56110000005,
+        "narrator_total_ms": 3652.112700000056,
+        "controller_ms": 1048.7371000000276,
+        "turn_ms": 4708.830799999996
+      }
+    }
+  ]
+}

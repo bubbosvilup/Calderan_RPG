@@ -1,0 +1,99 @@
+{
+  "turn": 4,
+  "input": "*He nods and goes back to his bowl.* No harm in asking. Do you get many travelers in here, or is it mostly locals?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "603ff5361762dcf0",
+  "draft": "Jessa wiped a spot on the counter that didn't particularly need wiping. \"Both, this time of evening. Merchants coming through on business, workers finishing late, a few who just want a warm seat and someone else's cooking.\" She glanced toward the common room — a handful of occupied tables, low conversation, the ordinary traffic of a weeknight. \"Quiet crowd tonight. Weekends pull more bodies, more noise. I like weeknights better.\"\n\nShe tucked the cloth back under the counter's edge. \"Clockmaker, though — no. Can't think of one offhand. Might be something like that down near the market district, but I wouldn't want to send you somewhere I'm not sure of. You could ask around there tomorrow and probably find better luck than asking me.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa wiped a spot on the counter that didn't particularly need wiping. \"Both, this time of evening. Merchants coming through on business, workers finishing late, a few who just want a warm seat and someone else's cooking.\" She glanced toward the common room — a handful of occupied tables, low conversation, the ordinary traffic of a weeknight. \"Quiet crowd tonight. Weekends pull more bodies, more noise. I like weeknights better.\"\n\nShe tucked the cloth back under the counter's edge. \"Clockmaker, though — no. Can't think of one offhand. Might be something like that down near the market district, but I wouldn't want to send you somewhere I'm not sure of. You could ask around there tomorrow and probably find better luck than asking me.\"",
+  "natural_actions": [
+    {
+      "kind": "movement",
+      "status": "unresolved"
+    }
+  ],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3359,
+          "completion_tokens": 161,
+          "total_tokens": 3520,
+          "cost": 0.00190892,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3072,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00190892,
+            "upstream_inference_prompt_cost": 0.00120052,
+            "upstream_inference_completions_cost": 0.0007084
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3359,
+        "completion_tokens": 161,
+        "total_tokens": 3520
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:31:04.153Z",
+        "headers_ms": 5593.497199999998,
+        "time_to_first_token_ms": 5595.759699999999,
+        "completed_at": "2026-09-30T12:31:09.765Z",
+        "elapsed_total_ms": 5612.198799999998
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 5595.759699999999,
+    "narrator_total_ms": 5612.198799999998,
+    "controller_ms": 781.6087000000007,
+    "turn_ms": 6398.9908
+  }
+}

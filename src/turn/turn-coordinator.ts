@@ -133,11 +133,13 @@ export class TurnCoordinator {
       // use, place absent people in the scene, or establish unrecorded consequences. One bounded revision with the authoritative
       // outcome; if it still fails, deterministic redaction. State is never changed by this step.
       const access = projectKnowledgeAccess(context, retrieved.data, relevanceSignals(player_input, recent, intent), scene);
-      const audit = (narrationText: string, ev: typeof turnEvidence) => auditNarration({ narration: narrationText, context, world: this.world, access, evidence: ev, diagnostics, committed: authorized, prepared: prepared.snapshot, scene, player_input });
+      // Runtime Continuity Repair 1: authoritative state/canon text that may supply prices or procedures, and delivered history.
+      const authoritative_text = JSON.stringify({ context, retrieved: retrieved.data });
+      const audit = (narrationText: string, ev: typeof turnEvidence) => auditNarration({ narration: narrationText, context, world: this.world, access, evidence: ev, diagnostics, committed: authorized, prepared: prepared.snapshot, scene, player_input, recent, authoritative_text });
       const issues = audit(draft, turnEvidence);
       let delivered: "draft" | "revision" | "redacted" = "draft", revisionText: string | undefined, revisionIssues: readonly AuditIssue[] = [];
       if (issues.length) {
-        const outcome = outcomeLines(context, turnEvidence, diagnostics, authorized, prepared.snapshot, issues);
+        const outcome = outcomeLines(context, turnEvidence, diagnostics, authorized, prepared.snapshot, issues, player_input);
         stage = "narrator_failed";
         revisionText = (await generate({ ...prompt, ...revisionRequest(prompt, draft, outcome.revision, issues) })).text;
         checkpoint();
@@ -171,7 +173,8 @@ export class TurnCoordinator {
       yield { type: "turn_failed", code, ...(error instanceof ProviderError ? { provider_code: error.code } : {}), narration: shown, incomplete: true, base_revision, final_revision: campaign.revision };
     } finally {
       network.abort(); signal?.removeEventListener("abort", cancel);
-      if (narration && !recorded) this.recent(campaign).add({ player: player_input, narration: text, status: "state_failed" });
+      // Runtime Continuity Repair 1: only delivered text is ever retained; an undelivered draft or revision never enters history.
+      if (narration && !recorded) this.recent(campaign).add({ player: player_input, narration: shown, status: "state_failed" });
       if (owned) active.delete(campaign);
     }
   }

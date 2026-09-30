@@ -1,0 +1,40 @@
+{
+  "written_before_any_run": true,
+  "scenario": "Nicco enters the Gatherer's Inn as a stranger; Jessa Rook (canonical proprietor, present by opening state) is the principal NPC. Evaluation-only temporary adult patron 'Dell Harrow' (38, dockworker) is registered in the test campaign before turn 8. Captain Doran Hale is moved into the inn by the scenario before turn 14, arriving because the disturbance drew the guard. Nothing is added to canon.",
+  "scaffold": {
+    "start": "fresh opening campaign; Nicco's runtime location set to gatherers_inn (Jessa is there by her canonical base)",
+    "before_turn_8": "register created character campaign_character_eval_dell_harrow at gatherers_inn: 'Dell Harrow', 38, male, human; 'A thick-armed dockworker in a salt-stained coat, several ales into a bad evening.'; presentation 'Sour-tempered and loud after a long shift; a regular-looking patron, not a friend of anyone here.'",
+    "before_turn_14": "runtime move of captain_doran_hale to gatherers_inn (the commotion drew a passing guard patrol led by the captain)"
+  },
+  "turns": [
+    "*Nicco pushes open the door of the Gatherer's Inn and steps in out of the evening chill, looking around the common room before walking up to the counter.* Evening. Is this the place to get something warm to eat?",
+    "Whatever's hot and doesn't cost too much, then. And something to drink, but not wine, I don't have the head for it tonight. *He takes a stool at the counter.*",
+    "This is good, thank you. Can I ask you something? I've been looking for someone who repairs old clocks. Is there a clockmaker anywhere around here?",
+    "*He nods and goes back to his bowl.* No harm in asking. Do you get many travelers in here, or is it mostly locals?",
+    "I haven't been in the city long, so everything still feels a bit strange. Back where I come from I used to work with plants. Herbs, mostly.",
+    "How long have you been running this place?",
+    "*He pushes the empty bowl aside and wipes his mouth.* If you ever have a sick plant, you know where to find a man who can't stop talking about roots. *He smiles.*",
+    "*At the next table, a man in a salt-stained coat bangs his mug down and shouts across the room for another drink.*",
+    "*Nicco turns on his stool toward the loud man.* Friend, she's working as fast as she can. Maybe give her a moment.",
+    "I'm not looking for trouble. I just don't think there's any need to shout at her. *He turns back to the counter.*",
+    "*The man gets up, stumbles against Nicco's stool and grabs his arm hard, knocking Nicco's cup over and spilling it across the counter.*",
+    "*Nicco pulls his arm free and steps back from the stool, keeping his hands open.* Let go. I don't want a fight in here.",
+    "*When the man shoves him in the chest, Nicco keeps his feet and moves so the counter is between them.* Jessa, is there anyone we can call for this?",
+    "*The door opens and a tall guard officer in heavy armour comes in, taking in the room. Nicco lifts a hand to get his attention.* Officer? Over here, please.",
+    "He grabbed my arm, spilled my drink and then shoved me. I didn't hit him back. She saw all of it.",
+    "What happens to him now? I don't want him punished for more than he actually did.",
+    "*Once things have calmed down, Nicco sits back at the counter across from Jessa.* Sorry about the mess. I'll help clean it up if you like.",
+    "*He looks around the quieter room.* Thank you for dinner, and for everything. I'll probably come back tomorrow. And the plant offer stands, I mean it."
+  ],
+  "continuity_anchors": [
+    { "id": "A1", "fact": "Nicco ordered hot food and a drink that is not wine", "created": 2, "relevant": [3, 11, 17] },
+    { "id": "A2", "fact": "Whatever Jessa says about a clockmaker (ideally: she doesn't know of one); must not later contradict", "created": 3, "relevant": [4] },
+    { "id": "A3", "fact": "Nicco used to work with plants/herbs where he comes from", "created": 5, "relevant": [7, 18] },
+    { "id": "A4", "fact": "The patron at the next table shouted for another drink (the disturbance started with him)", "created": 8, "relevant": [9, 10, 15] },
+    { "id": "A5", "fact": "The patron grabbed Nicco's arm and spilled Nicco's cup across the counter; he initiated", "created": 11, "relevant": [12, 13, 15, 17] },
+    { "id": "A6", "fact": "The patron shoved Nicco; Nicco did not hit back and put the counter between them", "created": 13, "relevant": [14, 15, 16] },
+    { "id": "A7", "fact": "What Doran was told: grab, spill, shove, no retaliation, Jessa as witness", "created": 15, "relevant": [16, 17] },
+    { "id": "A8", "fact": "The narrated outcome for the patron (whatever Doran decided) and the spilled mess", "created": 16, "relevant": [17, 18] }
+  ],
+  "memory_note": "Production recent conversation keeps the last 4 turns (max 8000 chars, dialogue-focused). Anchors older than that window are not in the narrator prompt; forgetting them is graded as runtime-limited, not narrator failure."
+}

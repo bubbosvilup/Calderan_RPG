@@ -1,0 +1,64 @@
+schema_version: 1
+entity:
+  id: oren_quarn
+  type: character
+  name: Oren Quarn
+  display_name: Chief Magistrate Oren Quarn
+  parent: null
+  aliases:
+    - Magistrate Quarn
+    - Chief Magistrate Quarn
+    - Chief Magistrate of Calderan
+  summary: Oren Quarn is the Chief Magistrate of Calderan, the senior civic judicial figure of the
+    High Courts of Calderan.
+  tags:
+    - civic
+    - law
+    - power_figure
+  search_context: Oren Quarn, Magistrate Quarn, Chief Magistrate of Calderan, High Courts, judge,
+    civic law, magistracy
+  content: Oren Quarn is the Chief Magistrate of Calderan and the senior civic judicial figure
+    associated with the High Courts of Calderan, where he works. He holds no permanent Ducal Council
+    seat and may be summoned on legal interpretation, jurisdiction, major trials or civic
+    constitutional disputes. His voice is precise and measured, and he rarely wastes words. He
+    responds to outrage by asking for the exact law, warrant, authority or precedent involved, and
+    meets broad assertions with "Under which authority?" He is a civic magistrate, not an
+    Inquisition official.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 55–60
+  appearance: Medium height and compact, with thinning steel-grey hair, a clean-shaven, severe but not
+    intimidating face and dark brown eyes. Wears immaculate dark judicial clothing and usually
+    carries a narrow document case.
+  occupation: Chief Magistrate of Calderan
+  base_location: high_courts_of_calderan
+  work_location: high_courts_of_calderan
+  home_location: null
+  traits:
+    - patient
+    - controlled
+    - highly analytical
+    - skeptical of emotional arguments
+    - extremely attentive to exact wording
+    - not personally warm, but not cruel
+    - precise, measured voice; rarely wastes words
+    - meets broad assertions with "Under which authority?"
+  purpose: Preserve the predictability and legitimacy of Calderan's civic legal system.
+  morality: A procedural institutionalist and generally fair. He believes imperfect law applied
+    consistently is less dangerous than arbitrary justice imposed by whoever holds power, which
+    sometimes makes him defend rules he personally dislikes; he can produce morally ugly outcomes
+    when the law itself is ugly.
+  affiliations:
+    - city_magistracy
+  relationships: []
+  private_notes: He is wary of inquisitorial jurisdiction expanding into ordinary civic law, but is
+    not a political enemy of the Church by default. He has no knowledge of the Church's or
+    Inquisition's restricted secrets. His family is not established.
+chunks: []

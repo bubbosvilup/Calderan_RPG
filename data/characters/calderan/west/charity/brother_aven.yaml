@@ -11,9 +11,9 @@ entity:
   tags:
     - west_npc
   search_context: Brother Aven Open Hand Chapel minister, charity, nonmagical healer, confessor.
-  content: Brother Aven serves Open Hand Chapel as a low-ranking clergyman and local minister. His
-    work includes confession, poor relief, nonmagical healing, funeral services and occasional
-    mediation. He seeks practical help and dignity for people in West. This is the existing Open
+  content: Brother Aven serves Open Hand Chapel as a low-ranking clergyman and local minister, a
+    Zealot Priest of the Church of the Sun Emperor. His work includes confession, poor relief,
+    nonmagical healing, funeral services and occasional mediation. He seeks practical help and dignity for people in West. This is the existing Open
     Hand Chapel, not an additional institution. No exact home or confidential testimony is
     established.
   knowledge:
@@ -28,7 +28,8 @@ entity:
   age_band: Late forties
   appearance: Thin and slightly stooped, with short greying hair, a short poorly maintained beard and
     a tired face. Worn patched clerical clothing suits practical charity and healing work.
-  occupation: Open Hand Chapel minister, confessor, nonmagical healer and charity worker
+  occupation: Zealot Priest of the Church of the Sun Emperor; Open Hand Chapel minister, confessor,
+    nonmagical healer and charity worker
   base_location: open_hand_chapel
   work_location: open_hand_chapel
   home_location: null
@@ -41,7 +42,9 @@ entity:
     - practical
   purpose: Maintain one place in West where people receive practical help and retain some human dignity.
   morality: Compassionate and experienced rather than naive; protects dignity through practical help
-    and does not turn confidential religious knowledge into public gossip.
+    and does not turn confidential religious knowledge into public gossip. A sincere believer, not
+    secretly faithless or rebellious; he reads duty toward the weak more compassionately than the
+    institution often does, which is his moral tension within the Church.
   affiliations:
     - church
   relationships:

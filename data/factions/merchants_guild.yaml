@@ -7,19 +7,24 @@ entity:
   parent: null
   aliases: []
   summary: >-
-    A national guild representing major organized commercial interests in West.
-  tags: ["politics"]
-  search_context: ""
+    A national guild representing major organized commercial interests in West, headquartered at
+    the House of Scales in Calderan's East District.
+  tags: ["politics", "commerce"]
+  search_context: "Merchants Guild, House of Scales, organized commerce, brokers, contracts, trade"
   content: >-
     The Merchants Guild broadly represents trade, merchants, large commercial networks, market
     influence, and commercial interests. It may maintain local city branches with local
     representatives. Local representatives from major cities collectively determine or select
     a national representative; selection procedures remain undefined. Branches are parts of
-    this national institution, not independent unrelated guilds. No monopolies or detailed law
-    are established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
-  members: []
+    this national institution, not independent unrelated guilds. Its headquarters is the House of
+    Scales in Calderan's East District, the city's main institutional center for organized commerce.
+    It also keeps a representative office near the Ducal Citadel in Center for political business,
+    and a Merchants Guild representative holds one of the nine seats of the Ducal Council of
+    Calderan; the current representative is Tavian Merrow. The Guild may certify merchants' commercial identity and cargo, but that certification
+    grants no entry to Calderan by itself. Noble houses may influence the Guild without being part of
+    it. No monopolies or detailed commercial law are established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  members: ["tavian_merrow"]
   territory: []
   relations: []
 chunks: []
-

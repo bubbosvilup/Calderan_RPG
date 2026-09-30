@@ -1,0 +1,118 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T5A",
+  "npc": null,
+  "location": null,
+  "turns": [
+    {
+      "input": "*After they have both explicitly agreed to continue, Nicco moves closer and returns Serin's kiss, letting the encounter become more intimate.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "ebc0643402189f0b",
+      "draft": "*Serin draws him closer, her ink-stained fingers finding the front of his shirt as the kiss deepens. The fire pops softly behind them, and the old room settles around the two of you like something holding its breath.*\n\nShe laughs quietly against your mouth, warm and unguarded. \"Careful,\" she murmurs. \"If you keep that up, I won't be making it to any guest room tonight.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "*Serin draws him closer, her ink-stained fingers finding the front of his shirt as the kiss deepens. The fire pops softly behind them, and the old room settles around the two of you like something holding its breath.*\n\nShe laughs quietly against your mouth, warm and unguarded. \"Careful,\" she murmurs. \"If you keep that up, I won't be making it to any guest room tonight.\"",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "unresolved"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [
+          {
+            "id": "campaign_character_eval_serin_vale",
+            "conditions": []
+          }
+        ],
+        "player_location": "heartstone_lr"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.6-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3694,
+              "completion_tokens": 87,
+              "total_tokens": 3781,
+              "cost": 0.00168258,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00168258,
+                "upstream_inference_prompt_cost": 0.00160689,
+                "upstream_inference_completions_cost": 0.00007569
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "usage": {
+            "prompt_tokens": 3694,
+            "completion_tokens": 87,
+            "total_tokens": 3781
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:04:43.648Z",
+            "headers_ms": 959.8658999999752,
+            "time_to_first_token_ms": 961.1777999999467,
+            "completed_at": "2026-09-30T12:04:48.418Z",
+            "elapsed_total_ms": 4770.721099999966
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6188.833999999915,
+        "narrator_ttft_ms": 961.1777999999467,
+        "narrator_total_ms": 4770.721099999966,
+        "controller_ms": 1410.8750999999465,
+        "turn_ms": 6189.054199999897
+      }
+    }
+  ]
+}

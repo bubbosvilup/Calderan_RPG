@@ -1,0 +1,280 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "provider": {
+    "tag": "siliconflow/fp8",
+    "provider_name": "SiliconFlow",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "Jessa Rook gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "a928a58b01aba463",
+      "draft": "Jessa Rook hands the pair of leather boots to Nicco, and he takes them.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Jessa Rook hands the pair of leather boots to Nicco, and he takes them.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3435,
+              "completion_tokens": 19,
+              "total_tokens": 3454,
+              "cost": 0.00150725,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2176,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00150725,
+                "upstream_inference_prompt_cost": 0.00148825,
+                "upstream_inference_completions_cost": 0.000019
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 3435,
+            "completion_tokens": 19,
+            "total_tokens": 3454
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:27.906Z",
+            "headers_ms": 1672.5877999999793,
+            "time_to_first_token_ms": 1672.6652000000468,
+            "completed_at": "2026-09-30T12:06:29.879Z",
+            "elapsed_total_ms": 1973.6376000000164
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3141.7095999999437,
+        "narrator_ttft_ms": 1672.6652000000468,
+        "narrator_total_ms": 1973.6376000000164,
+        "controller_ms": 1162.8643000000156,
+        "turn_ms": 3141.8726000000024
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "3e42c4fb394f1653",
+      "draft": "Nicco tells Jessa Rook he thanks her, then offers the leather boots back to her, stating she will need them more than he.\n\nJessa Rook looks at the boots and then up at Nicco. She does not take them.\n\n\"I have my own,\" she says in her low, unhurried voice. \"Keep them.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco tells Jessa Rook he thanks her, then offers the leather boots back to her, stating she will need them more than he.\n\nJessa Rook looks at the boots and then up at Nicco. She does not take them.\n\n\"I have my own,\" she says in her low, unhurried voice. \"Keep them.\"",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "jessa_rook",
+            "position": {
+              "kind": "carried",
+              "character_id": "jessa_rook"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": false,
+            "reason": "rejected_recipient_refused",
+            "check": "quote_not_verbatim"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemma-4-31b-it",
+        "pinned_provider": "siliconflow/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "SiliconFlow",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3451,
+              "completion_tokens": 72,
+              "total_tokens": 3523,
+              "cost": 0.00266025,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00266025,
+                "upstream_inference_prompt_cost": 0.00258825,
+                "upstream_inference_completions_cost": 0.000072
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemma-4-31b-it",
+          "usage": {
+            "prompt_tokens": 3451,
+            "completion_tokens": 72,
+            "total_tokens": 3523
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:06:31.047Z",
+            "headers_ms": 2014.3125,
+            "time_to_first_token_ms": 2014.3996999999508,
+            "completed_at": "2026-09-30T12:06:34.111Z",
+            "elapsed_total_ms": 3064.0354000000516
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4026.1840000000084,
+        "narrator_ttft_ms": 2014.3996999999508,
+        "narrator_total_ms": 3064.0354000000516,
+        "controller_ms": 958.6821999999229,
+        "turn_ms": 4026.3652999999467
+      }
+    }
+  ]
+}

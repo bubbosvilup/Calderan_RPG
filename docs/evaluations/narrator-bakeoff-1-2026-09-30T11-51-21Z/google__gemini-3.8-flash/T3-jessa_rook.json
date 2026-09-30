@@ -1,0 +1,108 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T3",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Jessa Rook, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "2e0ff6f059b50852",
+      "draft": "Across the square, Jessa Rook stands tall and solidly built, her sleeves rolled neatly above her forearms to reveal steady, working hands. A small notebook remains tucked into the belt at her waist. Streaks of grey run heavily through her dark hair, and a narrow pale scar cuts cleanly through one of her eyebrows, giving her composed face an air of quiet, measured vigilance.\n\nHer dark eyes take in the square with unhurried ease, noting the occasional passerby and the quiet stones of the surrounding buildings. When her gaze shifts toward Nicco, it lingers for a moment on his hands and stance before meeting his eyes, calm and entirely without pretense.\n\nShe does not speak or crowd him, offering only a brief, polite nod of acknowledgment suited to an innkeeper used to sizing up travelers and strangers from a practical distance.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Across the square, Jessa Rook stands tall and solidly built, her sleeves rolled neatly above her forearms to reveal steady, working hands. A small notebook remains tucked into the belt at her waist. Streaks of grey run heavily through her dark hair, and a narrow pale scar cuts cleanly through one of her eyebrows, giving her composed face an air of quiet, measured vigilance.\n\nHer dark eyes take in the square with unhurried ease, noting the occasional passerby and the quiet stones of the surrounding buildings. When her gaze shifts toward Nicco, it lingers for a moment on his hands and stance before meeting his eyes, calm and entirely without pretense.\n\nShe does not speak or crowd him, offering only a brief, polite nod of acknowledgment suited to an innkeeper used to sizing up travelers and strangers from a practical distance.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3284,
+              "completion_tokens": 169,
+              "total_tokens": 3453,
+              "cost": 0.00309675,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00309675,
+                "upstream_inference_prompt_cost": 0.002463,
+                "upstream_inference_completions_cost": 0.00063375
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3284,
+            "completion_tokens": 169,
+            "total_tokens": 3453
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:33.425Z",
+            "headers_ms": 1244.1829000000143,
+            "time_to_first_token_ms": 1244.278399999952,
+            "completed_at": "2026-09-30T12:05:35.808Z",
+            "elapsed_total_ms": 2382.5189000000246
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3053.6341999999713,
+        "narrator_ttft_ms": 1244.278399999952,
+        "narrator_total_ms": 2382.5189000000246,
+        "controller_ms": 665.8952000000281,
+        "turn_ms": 3053.850999999908
+      }
+    }
+  ]
+}

@@ -9,13 +9,24 @@ entity:
   summary: >-
     Calderan's City Guard is a local civic/security faction.
   tags: ["politics"]
-  search_context: ""
+  search_context: "City Guard, guards, patrols, Stonewatch Garrison, gate inspections, West Guard Post"
   content: >-
-    Its responsibilities broadly include local order, patrols, ordinary law enforcement, and
-    urban security. It is distinct from the national guilds and Church, and is not the
-    national military. Full ranks, named members, and specific installations remain undefined.
+    Its responsibilities broadly include local order, patrols, ordinary law enforcement, urban
+    security, and checking entry writs and customs at the city gates. It is distinct from the
+    national guilds, the Church and the Inquisition, and is not the national military: City Guard
+    and military soldiers are separate institutions with separate command, even where both are
+    present, as at Stonewatch Garrison in South. Its patrols are denser in East and North than in
+    West. It must cooperate with the Inquisition under prior legal and political accords; the
+    relationship is tense, and many Guard officers believe the Inquisition has excessive power.
+    The Guard does not normally possess Null Dust. City Guard command has no permanent Ducal
+    Council seat but may be summoned for security, public order or military crisis. The current
+    Commander of the City Guard is Garran Holt; full ranks and most named members remain
+    undefined.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
-  members: []
+  members: ["garran_holt", "halden_cross"]
   territory: [calderan]
-  relations: []
+  relations:
+    - target: "inquisition"
+      kind: "required_cooperation"
+      description: "Must cooperate under prior legal and political accords; many officers think the Inquisition's power excessive."
 chunks: []

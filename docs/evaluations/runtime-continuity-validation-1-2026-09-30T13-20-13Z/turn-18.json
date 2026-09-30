@@ -1,0 +1,163 @@
+{
+  "turn": 18,
+  "input": "*He looks around the quieter room.* Thank you for dinner, and for everything. I'll probably come back tomorrow. And the plant offer stands, I mean it.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "c50ee71438d3062a",
+  "prompt_characters": 23419,
+  "draft": "The common room had settled back into its earlier quiet. A few of the other patrons had returned to their drinks and conversations, the brief disruption already fading into the background hum of the evening. The spill across the counter had been wiped down. Dell Harrow sat where Jessa had steered him, slumped over a half-finished mug, no longer shouting but muttering something low and surly to no one in particular.\n\nJessa Rook wiped her hands on a cloth and set it aside. \"Dinner's paid for,\" she said. \"You kept your head. That's worth something.\" She tucked a loose strand of grey-streaked hair behind her ear and regarded him with that unhurried gaze. \"Come back whenever you like. The food's the same every night, so you know what you're getting.\"\n\nAt the far side of the room, Captain Doran Hale stood near the door speaking quietly with one of the patrons who had flagged him on his way out. He glanced once more across the common room, satisfied that nothing further required his attention, and stepped through into the street. The door closed behind him with a solid click.",
+  "issues": [
+    {
+      "kind": "fabricated_prior_event",
+      "sentence": "\"Dinner's paid for,\" she said.",
+      "correction": "Nothing establishes an earlier payment or booking (\"\"Dinner's paid for,\" she said.\"). Nobody may state a previous payment, booking, agreement, promise or conversation that the player's words and the recent conversation do not show. Remove it."
+    }
+  ],
+  "revision_requested": true,
+  "revision": "The common room had settled back into its earlier quiet. A few of the other patrons had returned to their drinks and conversations, the brief disruption already fading into the background hum of the evening. The spill across the counter had been wiped down. Dell Harrow sat where Jessa had steered him, slumped over a half-finished mug, no longer shouting but muttering something low and surly to no one in particular.\n\nJessa Rook wiped her hands on a cloth and set it aside. \"You kept your head,\" she said. \"That's worth something.\" She tucked a loose strand of grey-streaked hair behind her ear and regarded him with that unhurried gaze. \"Come back whenever you like. The food's the same every night, so you know what you're getting.\"\n\nAt the far side of the room, Captain Doran Hale stood near the door speaking quietly with one of the patrons who had flagged him on his way out. He glanced once more across the common room, satisfied that nothing further required his attention, and stepped through into the street. The door closed behind him with a solid click.",
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "revision",
+  "delivered": "The common room had settled back into its earlier quiet. A few of the other patrons had returned to their drinks and conversations, the brief disruption already fading into the background hum of the evening. The spill across the counter had been wiped down. Dell Harrow sat where Jessa had steered him, slumped over a half-finished mug, no longer shouting but muttering something low and surly to no one in particular.\n\nJessa Rook wiped her hands on a cloth and set it aside. \"You kept your head,\" she said. \"That's worth something.\" She tucked a loose strand of grey-streaked hair behind her ear and regarded him with that unhurried gaze. \"Come back whenever you like. The food's the same every night, so you know what you're getting.\"\n\nAt the far side of the room, Captain Doran Hale stood near the door speaking quietly with one of the patrons who had flagged him on his way out. He glanced once more across the common room, satisfied that nothing further required his attention, and stepped through into the street. The door closed behind him with a solid click.",
+  "controller": {
+    "proposal": [
+      {
+        "kind": "leave_scene",
+        "character_id": "captain_doran_hale"
+      }
+    ],
+    "authorization": [
+      {
+        "kind": "leave_scene",
+        "command": {
+          "kind": "leave_scene",
+          "character_id": "captain_doran_hale"
+        },
+        "authorized": false,
+        "reason": "rejected_reference_invalid",
+        "check": "no_completed_departure",
+        "quote": "stepped through into the street"
+      }
+    ],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 4,
+    "present_npcs": [
+      "captain_doran_hale",
+      "jessa_rook"
+    ],
+    "created": [
+      {
+        "id": "campaign_character_eval_dell_harrow",
+        "location": "gatherers_inn",
+        "conditions": []
+      }
+    ],
+    "conditions": []
+  },
+  "recent_conversation": {
+    "turns_retained": 12,
+    "prompt_turns": 12,
+    "serialized_characters": 15120,
+    "context_recent_characters": 14782
+  },
+  "narrator": {
+    "calls": 2,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4919,
+          "completion_tokens": 235,
+          "total_tokens": 5154,
+          "cost": 0.003543,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3840,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.003543,
+            "upstream_inference_prompt_cost": 0.002509,
+            "upstream_inference_completions_cost": 0.001034
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      },
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 5366,
+          "completion_tokens": 229,
+          "total_tokens": 5595,
+          "cost": 0.00297504,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4864,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00297504,
+            "upstream_inference_prompt_cost": 0.00196744,
+            "upstream_inference_completions_cost": 0.0010076
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 4919,
+        "completion_tokens": 235,
+        "total_tokens": 5154
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T13:22:26.421Z",
+        "headers_ms": 6821.045299999998,
+        "time_to_first_token_ms": 6822.125500000024,
+        "completed_at": "2026-09-30T13:22:33.276Z",
+        "elapsed_total_ms": 6855.392000000022
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 6822.125500000024,
+    "narrator_total_ms": 6855.392000000022,
+    "controller_ms": 1950.5640999999887,
+    "turn_ms": 13547.942700000014
+  }
+}

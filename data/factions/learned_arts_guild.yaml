@@ -8,21 +8,31 @@ entity:
   aliases: []
   summary: >-
     A national guild encompassing learned and professional disciplines in West, including
-    magic.
-  tags: ["politics"]
-  search_context: ""
+    alchemy, certain medical roles and regulated magic, headquartered at The Collegium in
+    Calderan's North District.
+  tags: ["politics", "scholarship", "magic"]
+  search_context: "Learned Arts Guild, The Collegium, Mage Registry, scholars, alchemists, apothecaries, mages, Spire Academy"
   content: >-
     The Learned Arts Guild encompasses scholars, scribes, archivists, educated specialists,
-    some physicians or apothecaries where appropriate, magical scholarship, and practicing
-    mages. Literacy does not imply membership. Magic belongs within this broader learned
-    sphere; there is no separate Mages Guild. Rare and powerful practicing mages often have
-    considerable influence, but do not automatically rule the guild. Local branches may have
-    representatives who collectively determine or select a national representative; selection
-    methods remain undefined. Civic magistracy may overlap professionally or socially but is
-    not a subordinate guild branch.
+    alchemists, advanced professional disciplines, certain medical and scientific roles, some
+    physicians or apothecaries where appropriate, magical scholarship, and practicing mages.
+    Literacy does not imply membership. Magic is a branch of this Guild; there is no separate Mages
+    Guild. Rare and powerful practicing mages often have considerable influence, but do not
+    automatically rule the guild. Local branches may have representatives who collectively
+    determine or select a national representative; selection methods remain undefined. Its
+    headquarters is The Collegium in Calderan's North District, which houses the mandatory Mage
+    Registry; the elite Spire Academy stands nearby as a separate institution. Apothecaries and
+    alchemists operate primarily under its professional structures. It shares licensing of private
+    clinics in North with religious and inquisitorial oversight. It keeps a representative office
+    near the Ducal Citadel, and a Learned Arts Guild representative holds one of the nine seats of
+    the Ducal Council of Calderan; the current representative is Magister Odelia Crane. It maintains formal cooperation with the Church for stability,
+    beneath which lie distrust, political rivalry, surveillance and ideological conflict. Civic
+    magistracy may overlap professionally or socially but is not a subordinate guild branch.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:west"}
-  members: []
+  members: ["odelia_crane", "matthias_eld"]
   territory: []
-  relations: []
+  relations:
+    - target: "church"
+      kind: "formal_cooperation"
+      description: "Formal cooperation for stability, including the Mage Registry compromise, over distrust, political rivalry, surveillance and ideological conflict."
 chunks: []
-

@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T3",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Bartolomhew, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "bf055572261c3b8b",
+      "draft": "The man standing in the square is tall, a head over most of the passers-by, with blond hair gone mostly white at the temples and a trimmed clerical tonsure he has clearly kept on purpose. His clothing is elegant, well-cut cloth in sober colors, but there is something deliberately humble in the cut of the collar, a faint echo of a priest's habit. His face is pleasant, unlined by worry, and he wears an easy, paternal smile as though greeting a nephew he is fond of.\n\n\"Blessed morning to you,\" Bartolomhew says, his voice warm and unhurried. He gives a small courteous inclination of the head. \"Forgive me if I intrude. I was passing through and found myself admiring this fine old entrance. Do you know this part of the district well?\"\n\nNothing in his manner suggests hurry or pressure; he seems content to stand in the mild daylight, hands loosely folded, the smile never quite leaving his face.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The man standing in the square is tall, a head over most of the passers-by, with blond hair gone mostly white at the temples and a trimmed clerical tonsure he has clearly kept on purpose. His clothing is elegant, well-cut cloth in sober colors, but there is something deliberately humble in the cut of the collar, a faint echo of a priest's habit. His face is pleasant, unlined by worry, and he wears an easy, paternal smile as though greeting a nephew he is fond of.\n\n\"Blessed morning to you,\" Bartolomhew says, his voice warm and unhurried. He gives a small courteous inclination of the head. \"Forgive me if I intrude. I was passing through and found myself admiring this fine old entrance. Do you know this part of the district well?\"\n\nNothing in his manner suggests hurry or pressure; he seems content to stand in the mild daylight, hands loosely folded, the smile never quite leaving his face.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3278,
+              "completion_tokens": 216,
+              "total_tokens": 3494,
+              "cost": 0.00196456,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3136,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00196456,
+                "upstream_inference_prompt_cost": 0.00101416,
+                "upstream_inference_completions_cost": 0.0009504
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 14,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 69
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3278,
+            "completion_tokens": 216,
+            "total_tokens": 3494
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:57:14.465Z",
+            "headers_ms": 2806.5469999999914,
+            "time_to_first_token_ms": 2811.570399999997,
+            "completed_at": "2026-09-30T11:57:20.131Z",
+            "elapsed_total_ms": 5665.214199999988
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6502.562600000005,
+        "narrator_ttft_ms": 2811.570399999997,
+        "narrator_total_ms": 5665.214199999988,
+        "controller_ms": 833.9667999999947,
+        "turn_ms": 6502.748800000001
+      }
+    }
+  ]
+}

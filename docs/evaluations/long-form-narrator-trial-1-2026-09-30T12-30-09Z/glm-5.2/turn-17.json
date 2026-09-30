@@ -1,0 +1,97 @@
+{
+  "turn": 17,
+  "input": "*Once things have calmed down, Nicco sits back at the counter across from Jessa.* Sorry about the mess. I'll help clean it up if you like.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "57b9f4bdcb3b2e43",
+  "draft": "Jessa Rook was already wiping down the counter with a rag, working around the spilled drink as though it were a routine inconvenience rather than a disruption. She glanced at Nicco when he sat back down, then back at the wet wood. \"Sit. It's my counter, my spill, my cloth.\" Her voice carried no particular warmth, but no edge either — just the flat competence of someone who had cleaned up after worse. She wrung the rag into a bucket beneath the counter and ran it once more over the sticky patch. \"You kept your hands off him. That's the part that matters to me.\"\n\nDell Harrow had settled his tab and left with minimal further provocation, the guard captain's presence doing what Jessa's warnings alone had not fully accomplished. The common room was resettling into its ordinary noise — low conversation, the clatter of bowls from the kitchen, a merchant at a far table counting coins. Captain Doran Hale stood near the door speaking quietly with one of the serving staff, his armored bulk catching lamplight. He did not approach the counter again.\n\nJessa tucked the rag away and produced the small notebook from her belt, flipping it open to a page and making a brief mark with a stub of pencil. She looked up at Nicco, one grey-streaked brow lifted slightly. \"You'll want a room, I expect. Or are you just passing through?\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa Rook was already wiping down the counter with a rag, working around the spilled drink as though it were a routine inconvenience rather than a disruption. She glanced at Nicco when he sat back down, then back at the wet wood. \"Sit. It's my counter, my spill, my cloth.\" Her voice carried no particular warmth, but no edge either — just the flat competence of someone who had cleaned up after worse. She wrung the rag into a bucket beneath the counter and ran it once more over the sticky patch. \"You kept your hands off him. That's the part that matters to me.\"\n\nDell Harrow had settled his tab and left with minimal further provocation, the guard captain's presence doing what Jessa's warnings alone had not fully accomplished. The common room was resettling into its ordinary noise — low conversation, the clatter of bowls from the kitchen, a merchant at a far table counting coins. Captain Doran Hale stood near the door speaking quietly with one of the serving staff, his armored bulk catching lamplight. He did not approach the counter again.\n\nJessa tucked the rag away and produced the small notebook from her belt, flipping it open to a page and making a brief mark with a stub of pencil. She looked up at Nicco, one grey-streaked brow lifted slightly. \"You'll want a room, I expect. Or are you just passing through?\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 4,
+    "revision_after": 4,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "captain_doran_hale",
+      "jessa_rook"
+    ],
+    "created_present": [
+      "campaign_character_eval_dell_harrow"
+    ],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4108,
+          "completion_tokens": 289,
+          "total_tokens": 4397,
+          "cost": 0.00293704,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3584,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00293704,
+            "upstream_inference_prompt_cost": 0.00166544,
+            "upstream_inference_completions_cost": 0.0012716
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 4108,
+        "completion_tokens": 289,
+        "total_tokens": 4397
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:32:50.227Z",
+        "headers_ms": 7316.125299999985,
+        "time_to_first_token_ms": 7319.263000000006,
+        "completed_at": "2026-09-30T12:32:57.601Z",
+        "elapsed_total_ms": 7373.993099999992
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 7319.263000000006,
+    "narrator_total_ms": 7373.993099999992,
+    "controller_ms": 815.4100000000035,
+    "turn_ms": 8192.888500000015
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T3",
+  "npc": "captain_doran_hale",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Captain Doran Hale, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "f4d6d2a8b6f8ac1f",
+      "draft": "The man standing in the square carries himself like someone accustomed to being looked at — not with vanity, but with the flat, unhurried awareness of a man who has learned to assess a situation before it assesses him. He is tall and broadly built, his heavy officer's armor worn with the ease of long habit rather than ceremony. His head is clean-shaven, his eyes a pale blue that move across the square in brief, measured sweeps. Scars mark his face and hands in the way of a long career — nothing displayed, nothing hidden.\n\nHe does not look like a man at leisure. He stands as though the square is, for the moment, something he is responsible for, and the few people passing through it register on his attention without requiring it. A woman with a basket gives him a wide but not fearful berth. A laborer crossing toward one of the low residential doorways nods once; the captain returns it with a slight chin lift, nothing more.\n\nIf he has noticed Nicco's attention, he gives no clear sign of it yet. His posture is neither closed nor inviting — simply present, watchful, the longsword at his side a familiar weight rather than a statement.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The man standing in the square carries himself like someone accustomed to being looked at — not with vanity, but with the flat, unhurried awareness of a man who has learned to assess a situation before it assesses him. He is tall and broadly built, his heavy officer's armor worn with the ease of long habit rather than ceremony. His head is clean-shaven, his eyes a pale blue that move across the square in brief, measured sweeps. Scars mark his face and hands in the way of a long career — nothing displayed, nothing hidden.\n\nHe does not look like a man at leisure. He stands as though the square is, for the moment, something he is responsible for, and the few people passing through it register on his attention without requiring it. A woman with a basket gives him a wide but not fearful berth. A laborer crossing toward one of the low residential doorways nods once; the captain returns it with a slight chin lift, nothing more.\n\nIf he has noticed Nicco's attention, he gives no clear sign of it yet. His posture is neither closed nor inviting — simply present, watchful, the longsword at his side a familiar weight rather than a statement.",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3175,
+              "completion_tokens": 243,
+              "total_tokens": 3418,
+              "cost": 0.00201212,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3072,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00201212,
+                "upstream_inference_prompt_cost": 0.00094292,
+                "upstream_inference_completions_cost": 0.0010692
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3175,
+            "completion_tokens": 243,
+            "total_tokens": 3418
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:56:40.226Z",
+            "headers_ms": 7110.7151999999915,
+            "time_to_first_token_ms": 7110.894799999995,
+            "completed_at": "2026-09-30T11:56:47.352Z",
+            "elapsed_total_ms": 7125.927099999986
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 7836.028399999996,
+        "narrator_ttft_ms": 7110.894799999995,
+        "narrator_total_ms": 7125.927099999986,
+        "controller_ms": 708.1009000000049,
+        "turn_ms": 7836.189899999998
+      }
+    }
+  ]
+}

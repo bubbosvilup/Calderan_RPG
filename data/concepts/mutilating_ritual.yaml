@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: mutilating_ritual
+  type: concept
+  name: "The Mutilating Ritual"
+  display_name: "The Mutilating Ritual"
+  parent: null
+  aliases: []
+  summary: >-
+    Restricted: the Mutilating Ritual is the Inquisition's permanent anti-magic procedure.
+  tags: ["magic","inquisition","secret"]
+  search_context: "Restricted inquisitorial procedure"
+  content: >-
+    The Mutilating Ritual is a permanent anti-magic procedure used by the Inquisition: a surgical
+    and ritual intervention that burns or severs the target's connection to the magical weave and
+    their mana. Its detailed method is known only within the Inquisition and is not established.
+    Publicly, people know only that the Inquisition can break a mage; the ritual's name and nature
+    are not public knowledge.
+  knowledge: {"visibility":{"narrator":true,"player":false},"known_by":["helbrecht"],"awareness":"private"}
+  related_entities: ["inquisition","null_dust"]
+chunks: []

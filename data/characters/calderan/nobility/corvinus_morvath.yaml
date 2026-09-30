@@ -1,0 +1,57 @@
+schema_version: 1
+entity:
+  id: corvinus_morvath
+  type: character
+  name: Corvinus Morvath
+  display_name: Corvinus Morvath
+  parent: null
+  aliases: []
+  summary: Corvinus Morvath is the patriarch of House Morvath, which dominates mining concessions,
+    metal supply and major finance in Calderan.
+  tags:
+    - nobility
+  search_context: Corvinus Morvath, House Morvath patriarch, mining, finance
+  content: Corvinus Morvath heads House Morvath and holds its standing seat on the Ducal Council. His
+    house dominates mining concessions, metal supply, military metal contracts and large-scale
+    lending. Calm and patient, he thinks in dependencies, costs, supply, sustainability and
+    long-term consequences, and often reframes emotional arguments as structural or economic
+    consequences. Iseult Morvath is his younger sister; Maelor Morvath is the house's heir. He is a
+    long-standing friend of Vaelen Vael.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 63–67
+  appearance: Medium height, with a soft, heavier but not obese build, neatly kept iron-grey hair, a
+    short beard and attentive dark eyes.
+  occupation: Patriarch of House Morvath
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - calm
+    - patient
+    - numerate
+    - systems-oriented
+    - less aggressive than his economic power might imply
+    - reframes emotional arguments into structural or economic consequences
+  purpose: Keep the Morvath economic network stable and profitable.
+  morality: Pragmatic but not gratuitously predatory; he prefers sustainable profit over ruining
+    productive partners for short-term gain. His weakness is reducing deeply human problems to
+    questions of cost and benefit.
+  affiliations:
+    - house_morvath
+    - ducal_council_of_calderan
+  relationships:
+    - target: iseult_morvath
+      kind: sibling
+      description: Younger sister.
+    - target: vaelen_vael
+      kind: friend
+      description: Long-standing friend.
+chunks: []

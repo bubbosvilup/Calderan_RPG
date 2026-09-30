@@ -1,0 +1,34 @@
+schema_version: 1
+entity:
+  id: saint_caldus_house
+  type: location
+  name: "Saint Caldus House"
+  display_name: "Saint Caldus House"
+  parent: calderan_north
+  aliases: []
+  summary: >-
+    Saint Caldus House is the Church of the Sun Emperor's main hospital in Calderan's North
+    District: a large, crowded and severe medical and religious complex that includes the
+    privileged Gold Cloister.
+  tags: ["medicine","religion"]
+  search_context: "Saint Caldus House, Church hospital, cleric-surgeons, amputations, Gold Cloister, noble patients, medicine"
+  content: >-
+    Saint Caldus House is North's main Church medical complex: large, crowded and severe, both
+    medical and religious, and partly penitential in religious matters, though not a criminal
+    prison. Its staff can include cleric-surgeons, religious medical orders, attendants and
+    monks and nuns of mercy. Medicine is pre-modern and often brutal: amputations,
+    cauterization, wound treatment, splinting, herbal remedies, alchemy, prayer and ritual
+    discipline. Light magic is not a routine part of its care. The Gold Cloister serves
+    privileged patients. The name establishes no saint biography.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features:
+    - name: "The Gold Cloister"
+      description: >-
+        A privileged wing for nobles, rich merchants and other high-status patients, with better
+        staff, cleaner conditions, rare alchemical anesthetics, more careful surgery and private
+        care. It is still pre-modern medicine.
+    - name: "common wards"
+      description: >-
+        Large, crowded and severe wards for ordinary patients.
+  connections: []
+chunks: []

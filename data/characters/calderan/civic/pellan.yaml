@@ -14,7 +14,9 @@ entity:
   search_context: Pellan civil-record clerk, Calderan Civil Registry and Archive, Central District
     bureaucracy, records.
   content: Pellan is a human man, an adult approximately in middle age, and a minor but experienced
-    civil-record clerk at Calderan's Civil Registry and Archive in the Central District.
+    civil-record clerk at Calderan's Civil Registry and Archive in the Central District. He works at
+    the Calderan Civil Registry, beside the Ducal Archive, in the administrative core near the Ducal
+    Citadel.
   knowledge:
     visibility:
       narrator: true
@@ -29,7 +31,7 @@ entity:
     ink-stained fingers, and rumpled, modest, somewhat shabby clothing.
   occupation: Clerk of Calderan's Civil Registry and Archive
   base_location: calderan_center
-  work_location: null
+  work_location: calderan_civil_registry
   home_location: null
   traits:
     - anxious

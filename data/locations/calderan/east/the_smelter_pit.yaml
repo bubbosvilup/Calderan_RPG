@@ -1,0 +1,23 @@
+schema_version: 1
+entity:
+  id: the_smelter_pit
+  type: location
+  name: "The Smelter Pit"
+  display_name: "The Smelter Pit"
+  parent: calderan_east
+  aliases: []
+  summary: >-
+    The Smelter Pit is a slightly lower-lying industrial sector of Calderan's East District
+    dominated by foundries, smelters and heavy metalworking, and the main source of East's
+    smoke.
+  tags: ["industry","metalwork"]
+  search_context: "Smelter Pit, East District foundries, smelters, furnaces, heavy metalworking, smoke, industrial sector"
+  content: >-
+    The Smelter Pit lies slightly lower than the surrounding East District and is dominated by
+    foundries, smelters, heavy metalworking and industrial transport, with furnace smoke, hammer
+    noise and heat. Much of East's visible smoke and haze originates here. It is industrial and
+    hard-working, not a slum. Beastfolk slave labor is common in its heavy work.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

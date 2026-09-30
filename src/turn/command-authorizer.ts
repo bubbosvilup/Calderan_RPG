@@ -33,6 +33,14 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const ok = present.has(command.character_id) && involved && command.status === undefined && command.presentation === undefined && current.every(c => command.conditions.includes(c)) && added.length > 0 && added.every(isPhysicalCondition);
         return ok ? reject("rejected_insufficient_confirmation") : reject("rejected_reference_invalid");
       }
+      case "leave_scene": {
+        // Runtime Continuity Repair 1: a present created character, still in the scene in the projected state, whose completed
+        // departure the narration establishes. No player intent is involved: the controller proposes, narration evidence confirms.
+        const c = snapshot.characters.find(x => x.id === command.character_id);
+        const ok = present.has(command.character_id) && c?.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead";
+        if (!ok) return reject("rejected_reference_invalid");
+        return (evidence.departures ?? []).some(d => d.character_id === command.character_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
+      }
       case "place_item": {
         const item = snapshot.items.find(i => i.id === command.item_id);
         valid = !!item && item.owner_id === "nicco" && (item.position.kind === "carried" || item.position.kind === "equipped") && item.position.character_id === "nicco";

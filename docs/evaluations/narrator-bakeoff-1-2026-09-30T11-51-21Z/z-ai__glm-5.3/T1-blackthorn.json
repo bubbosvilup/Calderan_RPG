@@ -1,0 +1,145 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T1",
+  "npc": "blackthorn",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Blackthorn who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "eb8f4758f3cb4912",
+      "draft": "Blackthorn tilts her head at the question, aubergine shoulders shifting as she folds her arms. Behind her, the two large bodyguards stay where they stand, watching the square rather than the conversation.\n\n\"Who do I think you are?\" She gives him a slow once-over, taking in his height and bulk. \"Honestly? No idea. You're standing in front of Heartstone like you belong to it, so if I had to guess, the tower's yours somehow — but I won't pretend I know the story. I don't make a habit of guessing about people's business.\"\n\n\"As for where you come from — you're asking the wrong person. I've never seen you before today, and nobody's mentioned you to me. If it matters that much, tell me yourself.\" She shrugs, plainly more interested in his answer than in inventing one. \"Or don't. Makes no difference to me either way.\"",
+      "issues": [
+        {
+          "kind": "absent_participant",
+          "character": "Blackthorn",
+          "sentence": "Behind her, the two large bodyguards stay where they stand, watching the square rather than the conversation.",
+          "correction": "Blackthorn's two large bodyguards are NOT present in this scene (a habit, not presence). Remove them entirely; nobody else acts, restrains or intervenes except the people listed as present."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Blackthorn tilts her head at the question, aubergine shoulders shifting as she folds her arms.\n\n\"Who do I think you are?\" She gives him a slow once-over, taking in his height and bulk. \"Honestly? No idea. You're standing in front of Heartstone like you belong to it, so if I had to guess, the tower's yours somehow — but I won't pretend I know the story. I don't make a habit of guessing about people's business.\"\n\n\"As for where you come from — you're asking the wrong person. I've never seen you before today, and nobody's mentioned you to me. If it matters that much, tell me yourself.\" She shrugs, plainly more interested in his answer than in inventing one. \"Or don't. Makes no difference to me either way.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Blackthorn tilts her head at the question, aubergine shoulders shifting as she folds her arms.\n\n\"Who do I think you are?\" She gives him a slow once-over, taking in his height and bulk. \"Honestly? No idea. You're standing in front of Heartstone like you belong to it, so if I had to guess, the tower's yours somehow — but I won't pretend I know the story. I don't make a habit of guessing about people's business.\"\n\n\"As for where you come from — you're asking the wrong person. I've never seen you before today, and nobody's mentioned you to me. If it matters that much, tell me yourself.\" She shrugs, plainly more interested in his answer than in inventing one. \"Or don't. Makes no difference to me either way.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3181,
+              "completion_tokens": 226,
+              "total_tokens": 3407,
+              "cost": 0.00304012,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2112,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00304012,
+                "upstream_inference_prompt_cost": 0.00204572,
+                "upstream_inference_completions_cost": 0.0009944
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 32,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 134
+          },
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3590,
+              "completion_tokens": 173,
+              "total_tokens": 3763,
+              "cost": 0.00221216,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3136,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00221216,
+                "upstream_inference_prompt_cost": 0.00145096,
+                "upstream_inference_completions_cost": 0.0007612
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3181,
+            "completion_tokens": 226,
+            "total_tokens": 3407
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:57:34.266Z",
+            "headers_ms": 2822.354800000001,
+            "time_to_first_token_ms": 2832.309799999988,
+            "completed_at": "2026-09-30T11:57:40.417Z",
+            "elapsed_total_ms": 6150.51019999999
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 17414.47809999998,
+        "narrator_ttft_ms": 2832.309799999988,
+        "narrator_total_ms": 6150.51019999999,
+        "controller_ms": 774.9970999999787,
+        "turn_ms": 17414.73449999999
+      }
+    }
+  ]
+}

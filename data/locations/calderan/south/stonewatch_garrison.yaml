@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: stonewatch_garrison
+  type: location
+  name: "Stonewatch Garrison"
+  display_name: "Stonewatch Garrison"
+  parent: calderan_south
+  aliases: []
+  summary: >-
+    Stonewatch Garrison is the primary military and City Guard complex in Calderan's South
+    District, with barracks, training grounds and military stables.
+  tags: ["military","security"]
+  search_context: "Stonewatch Garrison, barracks, soldiers, City Guard facilities, training grounds, military stables, South District"
+  content: >-
+    Stonewatch Garrison is South's primary military and Guard complex, with major barracks,
+    training grounds, military facilities, military stables and City Guard facilities. It hosts
+    both soldiers and City Guard, but military command and City Guard command remain
+    organizationally separate. No national army hierarchy or named commanders are established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

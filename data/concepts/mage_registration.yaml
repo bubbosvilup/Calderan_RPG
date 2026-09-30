@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: mage_registration
+  type: concept
+  name: "Mage Registration"
+  display_name: "Mage Registration"
+  parent: null
+  aliases: ["Mage Registry"]
+  summary: >-
+    Registration of mages in West is mandatory: anyone who demonstrates genuine mana
+    manipulation must be recorded in the Mage Registry at The Collegium in Calderan's North
+    District.
+  tags: ["magic","law"]
+  search_context: "Mage Registry, mandatory registration, registered mage, unregistered mage, sanctioned mage, Collegium, Inquisition referral"
+  content: >-
+    Magic is not outlawed. Ordinary elemental magic is tolerated and regulated, though socially
+    suspicious, and hardline Church thought treats it as a controlled spiritual hazard: a
+    sanctioned mage can be seen as the carrier of a dangerous condition kept under control.
+    Anyone who demonstrates genuine mana manipulation or mage ability must be registered in the
+    Mage Registry, housed in The Collegium, headquarters of the Learned Arts Guild. Mandatory
+    registration is part of the historical and political compromise that lets the Learned Arts
+    Guild and the Church coexist. An unregistered mage is subject to arrest and referral to the
+    Inquisition, and is interrogated, examined and risk-assessed; this is not a matter of a
+    fine. Its senior day-to-day registrar is Matthias Eld. Registration procedures, records, exemptions and the Registry's staffing structure are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:west"}
+  related_entities: ["learned_arts_guild","the_collegium","inquisition","church","magic_overview"]
+chunks: []

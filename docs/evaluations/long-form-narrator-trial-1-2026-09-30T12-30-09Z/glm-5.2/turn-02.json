@@ -1,0 +1,94 @@
+{
+  "turn": 2,
+  "input": "Whatever's hot and doesn't cost too much, then. And something to drink, but not wine, I don't have the head for it tonight. *He takes a stool at the counter.*",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "8eb83ca2c4b65d19",
+  "draft": "The common room holds a handful of other guests — a pair of merchants nursing mugs near the hearth, a man in a laborer's coat eating with his head down — but the noise is low, conversational, comfortable. Warmth from the fire carries the smell of something savory. Jessa Rook watches Nicco settle onto the stool, her gaze dropping briefly to his hands and the counter in front of him before returning to his face.\n\n\"Stew's been on since midday. Barley, root vegetables, a bit of salt pork. Three coppers for the bowl, bread included.\" She pulls a clay mug from under the counter without waiting for his answer to that part. \"Ale, cider, or small beer. The cider's local — not sweet, not sour. Two coppers.\" She sets the mug down and rests one hand on the counter. \"Four and five, either way.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "The common room holds a handful of other guests — a pair of merchants nursing mugs near the hearth, a man in a laborer's coat eating with his head down — but the noise is low, conversational, comfortable. Warmth from the fire carries the smell of something savory. Jessa Rook watches Nicco settle onto the stool, her gaze dropping briefly to his hands and the counter in front of him before returning to his face.\n\n\"Stew's been on since midday. Barley, root vegetables, a bit of salt pork. Three coppers for the bowl, bread included.\" She pulls a clay mug from under the counter without waiting for his answer to that part. \"Ale, cider, or small beer. The cider's local — not sweet, not sour. Two coppers.\" She sets the mug down and rests one hand on the counter. \"Four and five, either way.\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3253,
+          "completion_tokens": 186,
+          "total_tokens": 3439,
+          "cost": 0.00201644,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2944,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00201644,
+            "upstream_inference_prompt_cost": 0.00119804,
+            "upstream_inference_completions_cost": 0.0008184
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3253,
+        "completion_tokens": 186,
+        "total_tokens": 3439
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:30:50.587Z",
+        "headers_ms": 5192.0098,
+        "time_to_first_token_ms": 5192.2369,
+        "completed_at": "2026-09-30T12:30:55.806Z",
+        "elapsed_total_ms": 5218.6975
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 5192.2369,
+    "narrator_total_ms": 5218.6975,
+    "controller_ms": 917.2366000000002,
+    "turn_ms": 6143.4712
+  }
+}

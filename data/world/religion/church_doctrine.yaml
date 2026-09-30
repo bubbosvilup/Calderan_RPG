@@ -1,0 +1,61 @@
+schema_version: 1
+entity:
+  id: church_doctrine
+  type: world_lore
+  name: "Doctrine of the Church of the Sun Emperor"
+  display_name: "Doctrine of the Church of the Sun Emperor"
+  parent: null
+  aliases: ["Church doctrine","Sun Emperor doctrine"]
+  summary: >-
+    Public doctrine of the Church of the Sun Emperor: the Sun Emperor as divine, immortal
+    sovereign and bearer of purifying Light, and the virtues of obedience, duty, labor,
+    sacrifice, endurance and social order.
+  tags: ["religion","doctrine"]
+  search_context: "Church doctrine, Sun Emperor, divine Light, purification, Shadow, obedience, duty, sacrifice, suffering, afterlife, cremation, slavery doctrine"
+  content: >-
+    The Church of the Sun Emperor teaches that the Sun Emperor is West's divine sovereign,
+    founder and protector, immortal, the source or bearer of purifying divine Light, and the
+    protector of humanity and order against corruption and Shadow. Its core virtues are
+    obedience, duty, labor, sacrifice, endurance and social order. Suffering is not worshipped
+    for its own sake; suffering endured in service, discipline or purification may have
+    spiritual value, while needless suffering that destroys a useful servant of the social and
+    divine order is waste. The body is an instrument entrusted to each person by divine order,
+    and healing restores it to work, duty, military service, family function and social role;
+    Church medicine is framed as restoration to proper function rather than as compassion for
+    the individual, although individual clergy may be genuinely compassionate. These are
+    doctrinal beliefs, not proven cosmology.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: religion
+  related_entities: ["church","sun_emperor","light_and_shadow","west_slavery"]
+chunks:
+  - id: church_doctrine.afterlife_and_funerary
+    entity_id: church_doctrine
+    section: afterlife_and_funerary
+    summary: "Church teaching on death and the afterlife, and the mandatory cremation of the dead."
+    search_context: "afterlife, death, righteous, heretics, burial ban, cremation, Rite of Final Flame, ashes, corpses, Shadow corruption"
+    content: >-
+      The Church teaches that the righteous are forged and refined in divine Light and continue
+      serving as guardians in eternity, while heretics and contaminated souls are consumed, burned
+      away, denied meaningful continuation and cast into darkness or oblivion; this is belief, not
+      demonstrated fact. Because unpurified corpses are believed to remain vulnerable to
+      corruption and Shadow, burying intact bodies underground without authorized cremation is
+      illegal. The general flow is death, Church custody or a recognized funerary process, the
+      Rite of Final Flame, cremation, and handling of the ashes according to status. The Pyres of
+      the Fallen in North are the principal cremation complex. Exact funerary law and penalties
+      are not established.
+    tags: ["death","funerary"]
+    knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  - id: church_doctrine.slavery
+    entity_id: church_doctrine
+    section: slavery
+    summary: "The Church provides theological justification for slavery; the metaphysical status of enslaved souls is unresolved."
+    search_context: "Church and slavery, ordained hierarchy, divine standing, servitude, slaves, souls"
+    content: >-
+      The Church does not merely tolerate slavery; it provides theological justification for it.
+      It speaks of an ordained hierarchy, differing divine standing, reduced social and spiritual
+      status, and service as an imposed function within the divine order. Whether enslaved people
+      have souls, and in what sense, is not defined; the Church does not teach that all slaves
+      literally lack souls, and free people may become enslaved through mechanisms not yet
+      authored. Detailed slavery theology and law remain undefined.
+    tags: ["slavery"]
+    knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}

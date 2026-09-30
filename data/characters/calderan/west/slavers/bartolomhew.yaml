@@ -49,8 +49,11 @@ entity:
   morality: Treats people as merchandise without meaningful emotional concern for their suffering. He
     need not hate them or enjoy hurting them. Adults, children, families, Beastfolk, workers, sick
     or violent captives and illegally sourced captives receive the same calm inventory-oriented
-    consideration. Convey detached commodification without graphic description; do not infer murders
-    or a serial-killer history.
+    consideration. His detachment rests partly on absorbed Church doctrine, which holds that hierarchy
+    is divinely ordered, the enslaved hold reduced social and spiritual standing, and a person can be reduced to
+    a function within that order. He stays warm and paternal toward free people and is no fanatic.
+    Convey detached commodification without graphic description; do not infer murders or a
+    serial-killer history.
   affiliations: []
   relationships:
     - target: korvin

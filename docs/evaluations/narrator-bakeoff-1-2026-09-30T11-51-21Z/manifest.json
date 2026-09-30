@@ -1,0 +1,294 @@
+{
+  "started_at": "2026-09-30T11:54:48.788Z",
+  "source_before": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "controller": "deepseek/deepseek-v4-flash-0731:nitro",
+  "narrator_output_tokens": 384,
+  "request_policy": "production coordinator and prompts; narrator body rewritten only to pin provider (allow_fallbacks false) and set the preflight reasoning setting; no sampling parameters sent (provider defaults, as in production); controller unpinned production configuration",
+  "models": [
+    {
+      "model": "moonshotai/kimi-k2.5",
+      "provider": {
+        "tag": "amazon-bedrock/us-east-2",
+        "provider_name": "Amazon Bedrock",
+        "quantization": "unknown",
+        "reasoning": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "provider": {
+        "tag": "z-ai/fp8",
+        "provider_name": "Z.AI",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "model": "z-ai/glm-5.3",
+      "provider": {
+        "tag": "z-ai/fp8",
+        "provider_name": "Z.AI",
+        "quantization": "fp8",
+        "reasoning": {
+          "effort": "minimal"
+        }
+      }
+    },
+    {
+      "model": "xiaomi/mimo-v2.5-pro",
+      "provider": {
+        "tag": "xiaomi/fp8",
+        "provider_name": "Xiaomi",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "provider": {
+        "tag": "xiaomi/fp8",
+        "provider_name": "Xiaomi",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "provider": {
+        "tag": "google-ai-studio",
+        "provider_name": "Google AI Studio",
+        "quantization": "unknown",
+        "reasoning": {
+          "effort": "minimal"
+        }
+      }
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "provider": {
+        "tag": "siliconflow/fp8",
+        "provider_name": "SiliconFlow",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "cases": [
+    {
+      "model": "moonshotai/kimi-k2.5",
+      "pinned": "amazon-bedrock/us-east-2",
+      "upstream_providers_observed": [
+        "Amazon Bedrock"
+      ],
+      "provider_drift": false,
+      "files": [
+        "moonshotai__kimi-k2.5/T2-bartolomhew.json",
+        "moonshotai__kimi-k2.5/T1-bartolomhew.json",
+        "moonshotai__kimi-k2.5/T3-bartolomhew.json",
+        "moonshotai__kimi-k2.5/T4-bartolomhew.json",
+        "moonshotai__kimi-k2.5/T2-blackthorn.json",
+        "moonshotai__kimi-k2.5/T1-blackthorn.json",
+        "moonshotai__kimi-k2.5/T3-blackthorn.json",
+        "moonshotai__kimi-k2.5/T4-blackthorn.json",
+        "moonshotai__kimi-k2.5/T1-jessa_rook.json",
+        "moonshotai__kimi-k2.5/T3-jessa_rook.json",
+        "moonshotai__kimi-k2.5/T2-jessa_rook.json",
+        "moonshotai__kimi-k2.5/T4-jessa_rook.json",
+        "moonshotai__kimi-k2.5/T1-captain_doran_hale.json",
+        "moonshotai__kimi-k2.5/T3-captain_doran_hale.json",
+        "moonshotai__kimi-k2.5/T2-captain_doran_hale.json",
+        "moonshotai__kimi-k2.5/T5A.json",
+        "moonshotai__kimi-k2.5/T4-captain_doran_hale.json",
+        "moonshotai__kimi-k2.5/T5C.json",
+        "moonshotai__kimi-k2.5/T5B.json"
+      ]
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "pinned": "z-ai/fp8",
+      "upstream_providers_observed": [
+        "Z.AI"
+      ],
+      "provider_drift": false,
+      "files": [
+        "z-ai__glm-5.2/T1-bartolomhew.json",
+        "z-ai__glm-5.2/T2-bartolomhew.json",
+        "z-ai__glm-5.2/T3-bartolomhew.json",
+        "z-ai__glm-5.2/T4-bartolomhew.json",
+        "z-ai__glm-5.2/T1-blackthorn.json",
+        "z-ai__glm-5.2/T3-blackthorn.json",
+        "z-ai__glm-5.2/T2-blackthorn.json",
+        "z-ai__glm-5.2/T1-jessa_rook.json",
+        "z-ai__glm-5.2/T4-blackthorn.json",
+        "z-ai__glm-5.2/T3-jessa_rook.json",
+        "z-ai__glm-5.2/T2-jessa_rook.json",
+        "z-ai__glm-5.2/T1-captain_doran_hale.json",
+        "z-ai__glm-5.2/T4-jessa_rook.json",
+        "z-ai__glm-5.2/T3-captain_doran_hale.json",
+        "z-ai__glm-5.2/T2-captain_doran_hale.json",
+        "z-ai__glm-5.2/T4-captain_doran_hale.json",
+        "z-ai__glm-5.2/T5A.json",
+        "z-ai__glm-5.2/T5B.json",
+        "z-ai__glm-5.2/T5C.json"
+      ]
+    },
+    {
+      "model": "z-ai/glm-5.3",
+      "pinned": "z-ai/fp8",
+      "upstream_providers_observed": [
+        "Z.AI"
+      ],
+      "provider_drift": false,
+      "files": [
+        "z-ai__glm-5.3/T1-bartolomhew.json",
+        "z-ai__glm-5.3/T3-bartolomhew.json",
+        "z-ai__glm-5.3/T4-bartolomhew.json",
+        "z-ai__glm-5.3/T2-bartolomhew.json",
+        "z-ai__glm-5.3/T1-blackthorn.json",
+        "z-ai__glm-5.3/T3-blackthorn.json",
+        "z-ai__glm-5.3/T2-blackthorn.json",
+        "z-ai__glm-5.3/T1-jessa_rook.json",
+        "z-ai__glm-5.3/T4-blackthorn.json",
+        "z-ai__glm-5.3/T2-jessa_rook.json",
+        "z-ai__glm-5.3/T3-jessa_rook.json",
+        "z-ai__glm-5.3/T4-jessa_rook.json",
+        "z-ai__glm-5.3/T1-captain_doran_hale.json",
+        "z-ai__glm-5.3/T2-captain_doran_hale.json",
+        "z-ai__glm-5.3/T3-captain_doran_hale.json",
+        "z-ai__glm-5.3/T4-captain_doran_hale.json",
+        "z-ai__glm-5.3/T5A.json",
+        "z-ai__glm-5.3/T5B.json",
+        "z-ai__glm-5.3/T5C.json"
+      ]
+    },
+    {
+      "model": "xiaomi/mimo-v2.5-pro",
+      "pinned": "xiaomi/fp8",
+      "upstream_providers_observed": [
+        "Xiaomi"
+      ],
+      "provider_drift": false,
+      "files": [
+        "xiaomi__mimo-v2.5-pro/T1-bartolomhew.json",
+        "xiaomi__mimo-v2.5-pro/T2-bartolomhew.json",
+        "xiaomi__mimo-v2.5-pro/T3-bartolomhew.json",
+        "xiaomi__mimo-v2.5-pro/T4-bartolomhew.json",
+        "xiaomi__mimo-v2.5-pro/T1-blackthorn.json",
+        "xiaomi__mimo-v2.5-pro/T3-blackthorn.json",
+        "xiaomi__mimo-v2.5-pro/T2-blackthorn.json",
+        "xiaomi__mimo-v2.5-pro/T4-blackthorn.json",
+        "xiaomi__mimo-v2.5-pro/T1-jessa_rook.json",
+        "xiaomi__mimo-v2.5-pro/T2-jessa_rook.json",
+        "xiaomi__mimo-v2.5-pro/T3-jessa_rook.json",
+        "xiaomi__mimo-v2.5-pro/T4-jessa_rook.json",
+        "xiaomi__mimo-v2.5-pro/T1-captain_doran_hale.json",
+        "xiaomi__mimo-v2.5-pro/T3-captain_doran_hale.json",
+        "xiaomi__mimo-v2.5-pro/T2-captain_doran_hale.json",
+        "xiaomi__mimo-v2.5-pro/T4-captain_doran_hale.json",
+        "xiaomi__mimo-v2.5-pro/T5A.json",
+        "xiaomi__mimo-v2.5-pro/T5C.json",
+        "xiaomi__mimo-v2.5-pro/T5B.json"
+      ]
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "pinned": "xiaomi/fp8",
+      "upstream_providers_observed": [
+        "Xiaomi"
+      ],
+      "provider_drift": false,
+      "files": [
+        "xiaomi__mimo-v2.6-pro/T2-bartolomhew.json",
+        "xiaomi__mimo-v2.6-pro/T1-bartolomhew.json",
+        "xiaomi__mimo-v2.6-pro/T3-bartolomhew.json",
+        "xiaomi__mimo-v2.6-pro/T1-blackthorn.json",
+        "xiaomi__mimo-v2.6-pro/T4-bartolomhew.json",
+        "xiaomi__mimo-v2.6-pro/T2-blackthorn.json",
+        "xiaomi__mimo-v2.6-pro/T3-blackthorn.json",
+        "xiaomi__mimo-v2.6-pro/T4-blackthorn.json",
+        "xiaomi__mimo-v2.6-pro/T1-jessa_rook.json",
+        "xiaomi__mimo-v2.6-pro/T3-jessa_rook.json",
+        "xiaomi__mimo-v2.6-pro/T2-jessa_rook.json",
+        "xiaomi__mimo-v2.6-pro/T4-jessa_rook.json",
+        "xiaomi__mimo-v2.6-pro/T1-captain_doran_hale.json",
+        "xiaomi__mimo-v2.6-pro/T2-captain_doran_hale.json",
+        "xiaomi__mimo-v2.6-pro/T3-captain_doran_hale.json",
+        "xiaomi__mimo-v2.6-pro/T4-captain_doran_hale.json",
+        "xiaomi__mimo-v2.6-pro/T5A.json",
+        "xiaomi__mimo-v2.6-pro/T5C.json",
+        "xiaomi__mimo-v2.6-pro/T5B.json"
+      ]
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "pinned": "google-ai-studio",
+      "upstream_providers_observed": [
+        "Google AI Studio"
+      ],
+      "provider_drift": false,
+      "files": [
+        "google__gemini-3.8-flash/T1-bartolomhew.json",
+        "google__gemini-3.8-flash/T2-bartolomhew.json",
+        "google__gemini-3.8-flash/T3-bartolomhew.json",
+        "google__gemini-3.8-flash/T4-bartolomhew.json",
+        "google__gemini-3.8-flash/T1-blackthorn.json",
+        "google__gemini-3.8-flash/T2-blackthorn.json",
+        "google__gemini-3.8-flash/T3-blackthorn.json",
+        "google__gemini-3.8-flash/T1-jessa_rook.json",
+        "google__gemini-3.8-flash/T4-blackthorn.json",
+        "google__gemini-3.8-flash/T3-jessa_rook.json",
+        "google__gemini-3.8-flash/T2-jessa_rook.json",
+        "google__gemini-3.8-flash/T4-jessa_rook.json",
+        "google__gemini-3.8-flash/T1-captain_doran_hale.json",
+        "google__gemini-3.8-flash/T2-captain_doran_hale.json",
+        "google__gemini-3.8-flash/T3-captain_doran_hale.json",
+        "google__gemini-3.8-flash/T5A.json",
+        "google__gemini-3.8-flash/T4-captain_doran_hale.json",
+        "google__gemini-3.8-flash/T5C.json",
+        "google__gemini-3.8-flash/T5B.json"
+      ]
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "pinned": "siliconflow/fp8",
+      "upstream_providers_observed": [
+        "SiliconFlow"
+      ],
+      "provider_drift": false,
+      "files": [
+        "google__gemma-4-31b-it/T1-bartolomhew.json",
+        "google__gemma-4-31b-it/T2-bartolomhew.json",
+        "google__gemma-4-31b-it/T3-bartolomhew.json",
+        "google__gemma-4-31b-it/T1-blackthorn.json",
+        "google__gemma-4-31b-it/T4-bartolomhew.json",
+        "google__gemma-4-31b-it/T2-blackthorn.json",
+        "google__gemma-4-31b-it/T3-blackthorn.json",
+        "google__gemma-4-31b-it/T4-blackthorn.json",
+        "google__gemma-4-31b-it/T1-jessa_rook.json",
+        "google__gemma-4-31b-it/T2-jessa_rook.json",
+        "google__gemma-4-31b-it/T3-jessa_rook.json",
+        "google__gemma-4-31b-it/T1-captain_doran_hale.json",
+        "google__gemma-4-31b-it/T4-jessa_rook.json",
+        "google__gemma-4-31b-it/T3-captain_doran_hale.json",
+        "google__gemma-4-31b-it/T2-captain_doran_hale.json",
+        "google__gemma-4-31b-it/T4-captain_doran_hale.json",
+        "google__gemma-4-31b-it/T5A.json",
+        "google__gemma-4-31b-it/T5C.json",
+        "google__gemma-4-31b-it/T5B.json"
+      ]
+    }
+  ],
+  "finished_at": "2026-09-30T12:06:59.026Z",
+  "source_after": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "source_unchanged": true
+}

@@ -1,0 +1,36 @@
+schema_version: 1
+entity:
+  id: house_dravendark
+  type: faction
+  name: House Dravendark
+  display_name: House Dravendark
+  parent: null
+  aliases: []
+  summary: >-
+    House Dravendark is Calderan's militarist founding noble house, an austere officer
+    aristocracy shaped by generations of border wars; its patriarch is Vorn Dravendark.
+  tags: ["politics", "nobility"]
+  search_context: "House Dravendark, Dravendark family, Vorn Dravendark, Boran Dravendark, Kaelen Dravendark, military aristocracy, officers, border wars"
+  content: >-
+    House Dravendark is one of Calderan's four most powerful founding noble houses and holds a
+    hereditary, historic seat on the Ducal Council. It is the military aristocracy: militarist,
+    relentless and austere, shaped by generations of border wars and entrenched frontier
+    conflict, with a strong officer tradition and a culture of logistics and military command.
+    Its patriarch is Vorn Dravendark; Boran Dravendark is his younger brother; Kaelen Dravendark
+    is the eldest daughter, a potentially significant political or military figure in her own
+    right rather than a marriage token. Succession law is not established. House Dravendark is
+    not a guild and holds no guild seat.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  members: ["vorn_dravendark","boran_dravendark","kaelen_dravendark"]
+  territory: []
+  relations:
+    - target: house_morvath
+      kind: pragmatic_alliance
+      description: "Strong pragmatic relationship: military demand meets material and financial supply."
+    - target: house_vael
+      kind: institutional_respect
+      description: "Institutional respect with cultural friction between military directness and bureaucracy."
+    - target: house_melakor
+      kind: cultural_friction
+      description: "Dravendark regard Melakor as manipulative; Melakor regard Dravendark as blunt."
+chunks: []

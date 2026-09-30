@@ -17,7 +17,7 @@ const expectedFeatures: Record<string, string[]> = {
   east: ["national capital", "land border with Center", "armed neutrality", "cold regional climate"],
   mist_sea: [], sorrow_sea: [], silent_ocean: [], chained_bay: [],
   dragons_teeth_mountains: ["northern geographic barrier"],
-  calderan: ["capital of West", "five-district civic structure", "legal slave-market control"],
+  calderan: ["capital of West", "four cardinal gates", "five-district civic structure", "legal slave-market control"],
   ironbound: ["fortified frontier city", "military and customs filtering point"],
   davenport: ["principal economic and maritime port", "stone docks and warehouses", "legal slave-market control"],
   blackwater: ["de facto autonomy", "fragmented criminal governance", "illegal maritime trade", "maritime rival"],
@@ -124,9 +124,9 @@ test("geography uses only location schema fields and adds no traversal edges or 
     // Structural guard only: this does not prove arbitrary prose contains no invented facts.
     assert(!Object.values(entity).some(value => typeof value === "number"));
   }
-  assert.deepEqual(world.getEntitiesByType("faction").map(e => e.id).sort(), ["artisans_guild", "carrion_dogs", "church", "city_guard", "inquisition", "learned_arts_guild", "merchants_guild"]);
+  assert.deepEqual(world.getEntitiesByType("faction").map(e => e.id).sort(), ["artisans_guild", "carrion_dogs", "church", "city_guard", "house_dravendark", "house_melakor", "house_morvath", "house_vael", "inquisition", "iron_hands", "learned_arts_guild", "merchants_guild", "woodsigner"]);
   // The only character record is the canonical player (baseline opening), not a geography actor.
-  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
+  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["arwen_woodsigner", "azael_melakor", "bartolomhew", "blackthorn", "boran_dravendark", "bram_kessel", "brother_aven", "brunna_keld", "captain_doran_hale", "cassian_valerius", "corvinus_morvath", "dren", "dunrig_iron_hands", "elspeth_vael", "garran_holt", "gaston", "gideon_melakor", "hadrik_voss", "halden_cross", "helbrecht", "iseult_morvath", "jessa_rook", "kaelen_dravendark", "korvin", "livia_marr", "lysandra_vell", "maelor_morvath", "marta_pell", "matthias_eld", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "odelia_crane", "oren_quarn", "orla_fen", "pellan", "rufus_tern", "seren_vael", "severan_krauss", "sister_mereth", "sister_veyra", "sun_emperor", "sybilla_melakor", "tavian_merrow", "uther_calderan", "vaelen_vael", "vorn_dravendark"]);
   assert.deepEqual(world.getEntitiesByType("event"), []);
   assert.deepEqual(world.getEntitiesByType("item"), []);
 });

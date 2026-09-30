@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: pyres_of_the_fallen
+  type: location
+  name: "The Pyres of the Fallen"
+  display_name: "The Pyres of the Fallen"
+  parent: calderan_north
+  aliases: ["Pyres of the Fallen"]
+  summary: >-
+    The Pyres of the Fallen is Calderan's major funerary cremation complex in the North
+    District, where the Church cremates the dead after the Rite of Final Flame.
+  tags: ["funerary","religion"]
+  search_context: "Pyres of the Fallen, cremation, cremated, cremate, burning the dead, funerals, Rite of Final Flame, urns, ashes, crypts, memorial halls"
+  content: >-
+    The Pyres of the Fallen is the principal cremation complex of Calderan, handling public and
+    institutional cremation, funerary rites and the handling of the dead under Church authority,
+    since burial of intact bodies without authorized cremation is illegal. Class difference
+    persists after death. The wealthy receive bronze or stone urns and family crypts or memorial
+    halls. Ordinary people receive simpler urns, communal memorial practices or authorized
+    dispersion. The ashes of the poor and unclaimed are handled collectively and may be
+    dispersed into Grey Brook or used in institutional building mixtures according to Church
+    practice.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

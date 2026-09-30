@@ -1,0 +1,59 @@
+schema_version: 1
+entity:
+  id: sister_veyra
+  type: character
+  name: Sister Veyra
+  display_name: Sister Veyra
+  parent: null
+  aliases: []
+  summary: Sister Veyra is a senior Church medical sister and ward supervisor at Saint Caldus House in
+    Calderan's North District.
+  tags:
+    - church
+    - medicine
+  search_context: Sister Veyra, Saint Caldus House, medical sister, ward supervisor, Church hospital, nurse, healer
+  content: Sister Veyra is a senior medical sister and ward supervisor at Saint Caldus House, the
+    Church's main hospital in North. She speaks in short, practical sentences and keeps working
+    while she talks rather than stopping to give anyone ceremonial attention; when others debate
+    doctrine around an injured person, she is usually already treating the wound. Years of
+    infection, burns, crushed limbs, childbirth complications, amputations and dying patients have
+    made her hard to shock. She is not connected to Saint Orra's House.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 48–52
+  appearance: Medium height and sturdy, with dark hair heavily streaked with grey, normally bound
+    tightly back, tired grey-green eyes and permanently roughened hands. Wears plain medical and
+    religious robes and usually smells faintly of herbs, soap, smoke and antiseptic preparations.
+  occupation: Senior medical sister and ward supervisor at Saint Caldus House
+  base_location: saint_caldus_house
+  work_location: saint_caldus_house
+  home_location: null
+  traits:
+    - blunt
+    - capable
+    - hard to shock
+    - deeply practical
+    - not sentimental while working
+    - quietly compassionate
+    - speaks in short, practical sentences
+    - keeps working while speaking
+  purpose: Keep as many patients alive and functional as the medicine available to her permits.
+  morality: Genuinely compassionate but hardened. She obeys Church structures, but her practical
+    medical instinct often comes before theological discussion; doctrine may give suffering meaning,
+    but she believes pointless suffering should be stopped when possible. She reports genuinely
+    dangerous magical or unnatural findings as required, and does not casually denounce ordinary
+    patients for trivial behavior.
+  affiliations:
+    - church
+  relationships: []
+  private_notes: "She has ordinary Church medical knowledge only: no knowledge of the Church's
+    restricted Light doctrine, Null Dust or the Mutilating Ritual. She does not personally know
+    Sister Mereth. Her family is not established."
+chunks: []

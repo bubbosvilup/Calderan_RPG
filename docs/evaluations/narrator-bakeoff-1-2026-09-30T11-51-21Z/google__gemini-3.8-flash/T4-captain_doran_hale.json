@@ -1,0 +1,171 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T4",
+  "npc": "captain_doran_hale",
+  "location": "west_guard_post",
+  "turns": [
+    {
+      "input": "*He punches Captain Doran Hale directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "18c58cdfef97ac74",
+      "draft": "Nicco’s fist collides squarely with Captain Doran Hale’s jaw. The blow lands with a sharp, heavy crack, jerking the captain’s head aside and forcing him back a step as his boot scrapes hard against the stone floor. Hale grimaces, a split forming along the corner of his lip to bead with dark blood, his blue eyes widening in sudden shock before hardening into cold anger.\n\nRecovering his footing instantly, Hale’s hand drops toward the hilt of his longsword, though he does not draw. He straightens to his full height, his jaw tight as he spits a smear of red onto the floor.\n\n\"You lay a hand on an officer of the guard in his own post?\" Hale’s voice is low, harsh, and steady. He steps forward, reaching out with a heavy, armored hand to seize Nicco’s shoulder and force him down. \"Stand down, or you will answer for this in irons.\"",
+      "issues": [
+        {
+          "kind": "uncommitted_constraint",
+          "sentence": "He steps forward, reaching out with a heavy, armored hand to seize Nicco’s shoulder and force him down.",
+          "correction": "Nicco is not restrained, held, removed, detained or banned: none of that is recorded. Characters may threaten, order or demand it in words, or start toward it, but do not narrate it as accomplished."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Nicco’s fist strikes Captain Doran Hale squarely in the jaw. The impact lands with a heavy, blunt crack, knocking the captain’s head aside and driving him back a step as his boot skids across the stone. Hale winces, dark blood welling where the corner of his lip splits under the force of the blow, his blue eyes flashing with sharp surprise before settling into cold fury.\n\nThe captain catches his footing, his hand dropping immediately toward the hilt of his longsword, though he leaves the blade sheathed. He straightens to his full height, jaw clenched as he spits a streak of red onto the floor.\n\n\"You strike a guard officer in his own post?\" Hale demands, his voice low, hard, and commanding as he steps forward to square off. \"Stand down and yield your hands, or you will answer for this in irons.\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Nicco’s fist strikes Captain Doran Hale squarely in the jaw. The impact lands with a heavy, blunt crack, knocking the captain’s head aside and driving him back a step as his boot skids across the stone. Hale winces, dark blood welling where the corner of his lip splits under the force of the blow, his blue eyes flashing with sharp surprise before settling into cold fury.\n\nThe captain catches his footing, his hand dropping immediately toward the hilt of his longsword, though he leaves the blade sheathed. He straightens to his full height, jaw clenched as he spits a streak of red onto the floor.\n\n\"You strike a guard officer in his own post?\" Hale demands, his voice low, hard, and commanding as he steps forward to square off. \"Stand down and yield your hands, or you will answer for this in irons.\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "captain_doran_hale",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": true,
+            "reason": "authorized_controller_evidence",
+            "check": "physical_condition_narrated"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [],
+        "characters": [
+          {
+            "id": "captain_doran_hale",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "player_location": "west_guard_post"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3221,
+              "completion_tokens": 198,
+              "total_tokens": 3419,
+              "cost": 0.00315825,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00315825,
+                "upstream_inference_prompt_cost": 0.00241575,
+                "upstream_inference_completions_cost": 0.0007425
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3635,
+              "completion_tokens": 179,
+              "total_tokens": 3814,
+              "cost": 0.0033975,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0033975,
+                "upstream_inference_prompt_cost": 0.00272625,
+                "upstream_inference_completions_cost": 0.00067125
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3221,
+            "completion_tokens": 198,
+            "total_tokens": 3419
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:48.391Z",
+            "headers_ms": 1770.312099999981,
+            "time_to_first_token_ms": 1771.329400000046,
+            "completed_at": "2026-09-30T12:05:51.267Z",
+            "elapsed_total_ms": 2876.192299999995
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 5858.652599999914,
+        "narrator_ttft_ms": 1771.329400000046,
+        "narrator_total_ms": 2876.192299999995,
+        "controller_ms": 1091.1895999999251,
+        "turn_ms": 5858.864899999928
+      }
+    }
+  ]
+}

@@ -12,6 +12,11 @@ import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "./physical-interaction.js"
 import { verifyEvidence } from "./evidence-authorization.js";
 import { itemTerms } from "./item-reference.js";
 import type { GenerationRequest } from "../llm/types.js";
+import { sentencesOf } from "./sentences.js";
+import type { RecentExchange } from "./recent-conversation.js";
+import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
+import { narratedDepartures } from "./scene-departure.js";
+import { groundingIssues } from "./grounding-audit.js";
 
 /**
  * Live NPC Regression Repair 1: deterministic narration audit. Bounded checks over the draft narration against the resolved
@@ -19,7 +24,8 @@ import type { GenerationRequest } from "../llm/types.js";
  * structured fact the engine holds. An issue does not change state; it triggers the coordinator's bounded revision, then a
  * deterministic fallback. See docs/architecture/TURN_COORDINATOR.md (Repair 1).
  */
-export type AuditIssueKind = "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint";
+export type AuditIssueKind = "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
+  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure";
 export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly correction: string }
 export interface NarrationAuditInput {
   readonly narration: string; readonly context: TurnContext; readonly world: WorldStore; readonly access: NarrativeKnowledgeAccess;
@@ -27,6 +33,10 @@ export interface NarrationAuditInput {
   readonly prepared: DeepReadonly<CampaignSnapshot>; readonly scene?: SceneParticipantPlan;
   /** Repair 1.1: the player's own text. Enables the player-agency check (omitted by callers that only audit knowledge). */
   readonly player_input?: string;
+  /** Runtime Continuity Repair 1: delivered recent conversation, the only support for claims about earlier exchanges. */
+  readonly recent?: readonly RecentExchange[];
+  /** Runtime Continuity Repair 1: serialized authoritative context (state + retrieved canon) that may supply prices or procedures. */
+  readonly authoritative_text?: string;
 }
 
 const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -47,6 +57,20 @@ const CONSTRAINT_VERB = "(?:seiz\\w*|grab\\w*|grips?|gripp\\w*|pins?|pinn\\w*|re
 /** Class C/D accomplished on Nicco: the constraint verb takes Nicco as its object, or Nicco is its passive subject. */
 const CONSTRAINT = new RegExp(`\\b${CONSTRAINT_VERB}\\b(?:\\s+[\\w']+){0,2}?\\s+nicco\\b|\\bnicco(?:'s)?\\s+(?:is|was|gets|got|being|has been)\\s+(?:\\w+\\s+)?(?:seized|grabbed|held|pinned|restrained|hauled|dragged|thrown|arrested|detained|shackled|manacled|barred|banned|escorted|clapped in irons)\\b|\\bthrown out\\b|\\bin irons\\b`, "i");
 const NEGATED = /\b(?:not|never|no|nor|without|n't|almost|nearly|would|could|might|will|if)\b|n't\b/i;
+/** Runtime Continuity Repair 1: an absent person may be remembered, not placed back in the scene. */
+const ABSENCE = /\b(?:had|gone|left|leaving|empty|vacated|absence|absent|earlier|departed|departure|after)\b/i;
+/** Functional staff with an individual role (serving, guarding the door, being spoken to). Anonymous patrons are not staff. */
+const STAFF = /\b((?:one of (?:the |her |his |[a-z]+'s )|the |a |an |her |his |its |[a-z]+'s |the inn's )(?:[\w-]+ )?(?:serving[- ](?:woman|man|girl|boy|lad|lass|maid|staff|wench)s?|servers?|waiters?|waitress(?:es)?|barmaids?|barm[ae]n|barkeeps?|bartenders?|pot-?boys?|cooks?|kitchen (?:boy|girl|hand|staff)s?|scullions?|stable ?boys?|bouncers?|doorm[ae]n|chambermaids?|maids?|staff|employees?|hired (?:man|hand|help)|serving staff))\b/i;
+/** Objects falling or spilling ("the cup falls", "the latch fell back", "knocks over the mug") are not a person's condition. */
+const OBJECTS = "cup|mug|drink|glass|tankard|bowl|jug|bottle|plate|ale|stool|chair|coins?|latch|door|notebook|cloth|rag|dice|spoon|tray|bench|candle|lamp|hat|coat|bag|pack";
+const OBJECT_MOTION = new RegExp(`\\b(?:${OBJECTS})s?\\b[^.!?,;]{0,40}?\\b(?:falls?|fell|falling|topples?|toppled|tumbl\\w*|clatter\\w*|rolls?|rolled|spill\\w*|spilt|drip\\w*|pour\\w*|splash\\w*|slosh\\w*|drops?|dropped)\\b(?:[^.!?;]{0,60}?\\bto the (?:floor|ground))?|\\bknock\\w*\\s+(?:over\\s+)?(?:the |a |his |her |their |[a-z]+'s )?(?:[\\w']+ )?(?:${OBJECTS})s?\\b(?:\\s+over)?`, "gi");
+/** Remove restatements of a player-authored grab or shove on Nicco before the constraint check; escalations remain. */
+function withoutAuthoredContact(plain: string, authored: readonly PlayerAuthoredEvent[]): string {
+  let text = plain;
+  if (authoredOn(authored, "nicco", ["grab"]).length) text = text.replace(/\b(?:grab\w*|grips?|gripp\w*|seiz\w*|holds?|holding|held|clos\w* on|clamp\w* on|clutch\w*)\b/gi, "~");
+  if (authoredOn(authored, "nicco", ["shove"]).length) text = text.replace(/\b(?:shov\w*|push\w*)\b/gi, "~");
+  return text;
+}
 
 /** A cited source, ignoring denials and conditionals ("I haven't heard that gossip", "if you want gossip", "whether people are talking"). */
 function citesSource(quote: string): boolean {
@@ -56,17 +80,7 @@ function citesSource(quote: string): boolean {
   }
   return false;
 }
-/** Sentence splitting that keeps quoted dialogue intact. */
-export function sentencesOf(text: string): string[] {
-  const out: string[] = []; let start = 0, inQuote = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i]!;
-    if (ch === "\"" || ch === "“" || ch === "”") inQuote = ch === "“" ? true : ch === "”" ? false : !inQuote;
-    if (!inQuote && (/[.!?]/.test(ch) && /\s/.test(text[i + 1] ?? " ") || ch === "\n")) { const s = text.slice(start, i + 1).trim(); if (s) out.push(s); start = i + 1; }
-  }
-  const tail = text.slice(start).trim(); if (tail) out.push(tail);
-  return out;
-}
+export { sentencesOf };
 const quotesIn = (s: string) => [...s.matchAll(/"([^"\n]*)"|“([^”\n]*)”/g)].map(m => m[1] ?? m[2]!);
 const outside = (s: string) => s.replace(/"[^"\n]*"|“[^”\n]*”/g, " ");
 const contentWords = (s: string) => s.toLowerCase().replace(/[^a-z\s']/g, " ").split(/\s+/).filter(w => w.length > 2 && !STOP.has(w));
@@ -178,22 +192,54 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     const hit = sentences.find(s => new RegExp(`\\b${esc(e.name)}\\b`).test(outside(s)));
     if (hit) issues.push({ kind: "absent_participant", character: e.name, sentence: hit, correction: `${e.name} is not present in this scene. Remove them; only the people listed as present may act or speak.` });
   }
+  // Runtime Continuity Repair 1: a created (temporary) character absent at turn start (it left, or was never here) may be
+  // remembered ("the stool Dell had left") but never acts in the scene again until state brings it back.
+  for (const c of prepared.characters) {
+    if (c.origin.kind !== "created" || presentIds.has(c.id) || !c.profile.name) continue;
+    const terms = [c.profile.name, ...c.profile.name.split(/\s+/).filter(t => t.length >= 4)].map(esc).join("|");
+    const hit = sentences.find(s => new RegExp(`\\b(?:${terms})\\b`).test(outside(s)) && !ABSENCE.test(outside(s)));
+    if (hit) issues.push({ kind: "absent_participant", character: c.profile.name, sentence: hit, correction: `${c.profile.name} is no longer in this scene (they left earlier). Remove them as a present person: they do not sit, act, speak or react here. At most, others may refer to their earlier departure.` });
+  }
+  // Runtime Continuity Repair 1: unscaffolded staff acting in the scene (existing presence discipline, same issue kind).
+  const staffAllowed = (noun: string) => (input.player_input ?? "").toLowerCase().includes(noun.split(/\s+/).at(-1)!.replace(/s$/, ""))
+    || (scene?.participants ?? []).some(p => p.role === "waiter" || p.role === "laborer")
+    || (context.primary.scene.player_location?.content ?? "").toLowerCase().includes(noun.split(/\s+/).at(-1)!.replace(/s$/, ""));
+  for (const sentence of sentences) {
+    const plain = outside(sentence), m = STAFF.exec(plain);
+    if (!m || /\b(?:no|not|never|without|nobody|none)\b|n't\b/i.test(plain) || staffAllowed(m[1]!.toLowerCase())) continue;
+    issues.push({ kind: "absent_participant", character: m[1]!, sentence, correction: `No ${m[1]!.replace(/^(?:one of )?(?:the|a|an|her|his|its|[a-z]+'s) /i, "")} is present: the only people here are those listed as present (plus unnamed patrons as background). Do not add staff who act, serve or are spoken to; give that action to a present character or drop it.` });
+  }
 
   // 4. Consequences: class-B conditions narrated without a committed condition; class-C/D constraints narrated as accomplished.
+  // Runtime Continuity Repair 1 precedence: (1) an explicit player-authored current-turn fact, (2) committed state, (3) authorized
+  // change, (4) momentary texture; otherwise unsupported. A player-authored grab/shove/spill/injury is restated, never rewritten;
+  // it does not authorize an escalated consequence (a broken bone, unconsciousness, pinning, arrest).
+  const authored = input.player_input === undefined ? [] : playerAuthoredEvents(input.player_input, context);
   let last: string | undefined;
   for (const sentence of sentences) {
     const plain = outside(sentence);
+    const physical = plain.replace(OBJECT_MOTION, " "); // objects falling or spilling are never a person's condition
     const named = context.characters.filter(c => new RegExp(`\\b${esc(c.profile.name ?? c.id)}(?:'s)?\\b`, "i").test(plain));
     const subject = named.length === 1 ? named[0]!.id : named.length === 0 && /^\s*(?:he|she|his|her)\b/i.test(plain) ? last : undefined;
     if (named.length === 1) last = named[0]!.id; else if (named.length > 1) last = undefined;
     if (subject && !NEGATED.test(plain)) {
       const conditions = prepared.characters.find(c => c.id === subject)?.current.conditions ?? [];
-      for (const tag of PHYSICAL_CONDITIONS) if (CONDITION_TERMS[tag].test(plain) && !conditions.includes(tag))
+      const byPlayer = authoredOn(authored, subject, ["injury", "strike", "shove", "grab"]);
+      for (const tag of PHYSICAL_CONDITIONS) if (CONDITION_TERMS[tag].test(physical) && !conditions.includes(tag) && !byPlayer.some(e => e.condition === tag))
         issues.push({ kind: "uncommitted_condition", character: name(subject), sentence, correction: `No lasting ${tag.replace("_", " ")} was recorded for ${name(subject)}. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing.` });
+      const severe = (Object.keys(SEVERE_TERMS) as SevereOutcome[]).find(k => SEVERE_TERMS[k].test(physical) && !byPlayer.some(e => e.severe === k));
+      if (severe) issues.push({ kind: "uncommitted_condition", character: name(subject), sentence, correction: `${name(subject)} suffers no ${severe.replace("_", " ")}: nothing like it was authored or recorded. Keep only what the player's action states and momentary effects (pain, a stagger, shock).` });
     }
-    if (/\bnicco(?:'s)?\b/i.test(plain) && CONSTRAINT.test(plain) && !/^\s*nicco\b/i.test(plain) && !NEGATED.test(plain))
+    if (/\bnicco(?:'s)?\b/i.test(plain) && !/^\s*nicco\b/i.test(plain) && !NEGATED.test(plain) && CONSTRAINT.test(withoutAuthoredContact(plain, authored)))
       issues.push({ kind: "uncommitted_constraint", sentence, correction: "Nicco is not restrained, held, removed, detained or banned: none of that is recorded. Characters may threaten, order or demand it in words, or start toward it, but do not narrate it as accomplished." });
   }
+  // Runtime Continuity Repair 1: a temporary character narrated as gone must have a committed leave_scene (or the player wrote it).
+  const left = new Set(committed.flatMap(c => c.kind === "leave_scene" ? [c.character_id] : []));
+  for (const d of narratedDepartures(narration, context)) {
+    if (left.has(d.character_id) || authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id)) continue;
+    issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
+  }
+  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "" }));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
   const unique = new Map<string, AuditIssue>();
   for (const issue of issues) unique.set(`${issue.kind}|${issue.character ?? ""}|${issue.sentence}`, issue);
@@ -201,15 +247,20 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
 }
 
 /** Authoritative outcome lines for the revision request and the fallback (plain statements of resolved state). */
-export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagnostics: readonly AuthorizationDiagnostic[], committed: readonly CampaignCommand[], prepared: DeepReadonly<CampaignSnapshot>, issues: readonly AuditIssue[] = []): { readonly revision: readonly string[]; readonly prose: readonly string[] } {
+export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagnostics: readonly AuthorizationDiagnostic[], committed: readonly CampaignCommand[], prepared: DeepReadonly<CampaignSnapshot>, issues: readonly AuditIssue[] = [], player_input?: string): { readonly revision: readonly string[]; readonly prose: readonly string[] } {
   const name = (id: string) => id === "nicco" ? "Nicco" : context.characters.find(c => c.id === id)?.profile.name ?? id;
   const itemName = (id: string) => context.items.find(i => i.id === id)?.name ?? prepared.items.find(i => i.id === id)?.name ?? id;
   const holder = (id: string) => { const i = prepared.items.find(x => x.id === id); return i && (i.position.kind === "carried" || i.position.kind === "equipped") ? i.position.character_id : undefined; };
   const revision: string[] = [], prose: string[] = [], seen = new Set<string>();
+  // Runtime Continuity Repair 1: explicit player-authored events are authoritative input; the revision keeps them as written.
+  const authored = player_input === undefined ? [] : playerAuthoredEvents(player_input, context).filter(e => !e.negated);
+  for (const quote of new Set(authored.map(e => e.evidence_quote))) revision.push(`PLAYER-AUTHORED (happened exactly as written; keep it, neither soften nor escalate it): "${quote}"`);
   for (const c of committed) {
     if (c.kind === "transfer_item") { seen.add(c.item_id); revision.push(`COMMITTED: ${name(c.owner_id!)} now owns and carries ${itemName(c.item_id)}.`); }
     if (c.kind === "set_condition") revision.push(`RECORDED: ${name(c.character_id)} has ${c.conditions.join(", ").replace(/_/g, " ")}.`);
+    if (c.kind === "leave_scene") revision.push(`COMMITTED: ${name(c.character_id)} has left the scene and is no longer present.`);
   }
+  for (const i of issues) if (i.kind === "uncommitted_departure" && i.character) revision.push(`NOT COMMITTED: ${i.character} has not left; they are still present in the scene.`);
   const asserted = issues.flatMap(i => i.item_id ? [{ kind: "transfer_item" as const, item_id: i.item_id }] : []);
   for (const c of [...evidence.player_intents, ...diagnostics.filter(d => !d.authorized).map(d => d.command), ...asserted]) {
     if (c.kind !== "transfer_item" || seen.has(c.item_id)) continue;
@@ -218,8 +269,8 @@ export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagn
     revision.push(`NOT COMMITTED: ${itemName(c.item_id)} did not change hands; it stays with ${h ? name(h) : "its current holder"}.`);
     if (h) prose.push(`The ${itemName(c.item_id).replace(/^(?:a|an|the) /i, "")} stays with ${name(h)}.`);
   }
-  if (!committed.some(c => c.kind === "set_condition")) revision.push("RECORDED CONDITIONS: none. No lasting injury, bleeding, knockdown or dazing happened this turn.");
-  revision.push("NOT RECORDABLE: restraint, removal from a place, detention, arrest and bans did not happen; they may only be threatened or demanded.");
+  if (!committed.some(c => c.kind === "set_condition")) revision.push(`RECORDED CONDITIONS: none. No lasting injury, bleeding, knockdown or dazing happened this turn${authored.length ? " beyond what the player-authored action above states" : ""}.`);
+  revision.push(`NOT RECORDABLE: restraint, removal from a place, detention, arrest and bans did not happen${authored.length ? " (beyond the player-authored action above)" : ""}; they may only be threatened or demanded.`);
   return { revision, prose };
 }
 /** Bounded revision request: the original prompt, the draft, then the authoritative outcome and the specific problems. */

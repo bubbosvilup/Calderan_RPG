@@ -1,0 +1,52 @@
+schema_version: 1
+entity:
+  id: sun_emperor
+  type: character
+  name: "The Sun Emperor"
+  display_name: "The Sun Emperor"
+  parent: null
+  aliases: ["Sun Emperor"]
+  summary: >-
+    The Sun Emperor is the reigning sovereign of West, functionally immortal and, in the
+    doctrine of the Church of the Sun Emperor, a divine sovereign bearing purifying divine
+    Light. He does not reside in Calderan.
+  tags: ["sovereign","religion"]
+  search_context: "The Sun Emperor, sovereign of West, divine sovereign, immortal emperor, the Crown, divine Light"
+  content: >-
+    The Sun Emperor is the literal current monarch of West and the supreme source of its
+    legitimacy. He is functionally immortal. Church doctrine proclaims him a divine sovereign,
+    founder and protector, immortal, the source or bearer of purifying divine Light and
+    protector of humanity and order against corruption and Shadow. His residence is not
+    established; he does not live in Calderan, where Duke Uther Calderan governs in his name.
+    His age, appearance, personal name and history are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  role: npc
+  species: null
+  sex: male
+  age_band: null
+  appearance: null
+  occupation: "Sovereign of West"
+  base_location: null
+  work_location: null
+  home_location: null
+  traits: []
+  purpose: null
+  morality: null
+  affiliations: ["church"]
+  relationships: []
+chunks:
+  - id: sun_emperor.light_secret
+    entity_id: sun_emperor
+    section: light_secret
+    summary: Restricted state and theological secret about the source of the Sun Emperor's divinity and the suppression of Light users.
+    search_context: Restricted state secret
+    content: >-
+      A major state and theological secret known only within the inner Church and the Inquisition:
+      the Sun Emperor is a real Light mage, and his functional immortality derives from Light magic.
+      The Church publicly frames his Light as divine miracle, never as mortal magic. Independent Light
+      users therefore threaten both the Church's theological monopoly and the political legitimacy
+      built on it, so the inner Church and the Inquisition capture, silence, torture, mutilate or kill
+      them. Ordinary clergy, nobles, scholars, Guard and citizens do not know this. How his immortality
+      works, and any specific case or victim, is not established.
+    tags: ["secret", "light"]
+    knowledge: {"visibility":{"narrator":true,"player":false},"known_by":["cassian_valerius","helbrecht"],"awareness":"private"}

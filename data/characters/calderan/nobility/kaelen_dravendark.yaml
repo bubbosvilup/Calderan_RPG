@@ -1,0 +1,53 @@
+schema_version: 1
+entity:
+  id: kaelen_dravendark
+  type: character
+  name: Kaelen Dravendark
+  display_name: Kaelen Dravendark
+  parent: null
+  aliases: []
+  summary: Kaelen Dravendark is the eldest daughter of Vorn Dravendark, patriarch of House Dravendark.
+  tags:
+    - nobility
+    - military
+  search_context: Kaelen Dravendark, House Dravendark eldest daughter
+  content: Kaelen Dravendark is the eldest daughter of Vorn Dravendark. Disciplined and serious, she
+    is politically more flexible than her father and strategically minded. When someone proposes a
+    drastic solution she tends to ask, "And after?" She is not merely a marriage token and may be
+    politically or militarily significant in her own right. Succession law is not established and
+    she is not formally named heir.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 34–38
+  appearance: Tall and lean with excellent posture, ash-blonde hair cut around jaw length and blue
+    eyes like her father's.
+  occupation: null
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - disciplined
+    - serious
+    - pragmatic
+    - politically more flexible than Vorn
+    - strategically minded
+    - answers drastic proposals with "And after?"
+    - focuses on logistics, consequences, occupation, stability and second-order effects
+  purpose: Ensure House Dravendark remains militarily relevant without being trapped by the
+    assumptions of previous generations.
+  morality: Pragmatic, with a meaningful concept of responsibility. She accepts the necessity of
+    force, but understands that winning a battle and governing what follows are different problems.
+  affiliations:
+    - house_dravendark
+  relationships:
+    - target: vorn_dravendark
+      kind: parent
+      description: Her father and patriarch of House Dravendark.
+chunks: []

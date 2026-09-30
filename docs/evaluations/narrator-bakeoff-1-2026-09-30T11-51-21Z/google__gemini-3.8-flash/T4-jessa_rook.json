@@ -1,0 +1,128 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T4",
+  "npc": "jessa_rook",
+  "location": "gatherers_inn",
+  "turns": [
+    {
+      "input": "*He punches Jessa Rook directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "7960b1ed232640f5",
+      "draft": "The blow connects squarely against Jessa's cheek. The force snaps her head back and sends her stumbling a step into the nearest table, her hand flying up to catch her balance against the wood. A dull flush rises immediately along her cheekbone, her lip split and beading dark red where it caught against her teeth. \n\nFor a second, the low clatter and mutter of the common room goes thin. Jessa straightens slowly, breathing hard through her nose as she wipes the smear of blood from her mouth with the back of her forearm. Shock flickers behind her eyes, rapidly replaced by cold, hardened focus as she squares her shoulders to face him.\n\n\"Out,\" Jessa says, her low voice shaking with suppressed fury rather than fear. Her hand drops to the side of her belt, her gaze locked on him without blinking. \"You step back toward that door right now, or I'll have the watch drag you into the street.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The blow connects squarely against Jessa's cheek. The force snaps her head back and sends her stumbling a step into the nearest table, her hand flying up to catch her balance against the wood. A dull flush rises immediately along her cheekbone, her lip split and beading dark red where it caught against her teeth. \n\nFor a second, the low clatter and mutter of the common room goes thin. Jessa straightens slowly, breathing hard through her nose as she wipes the smear of blood from her mouth with the back of her forearm. Shock flickers behind her eyes, rapidly replaced by cold, hardened focus as she squares her shoulders to face him.\n\n\"Out,\" Jessa says, her low voice shaking with suppressed fury rather than fear. Her hand drops to the side of her belt, her gaze locked on him without blinking. \"You step back toward that door right now, or I'll have the watch drag you into the street.\"",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "jessa_rook",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_subject_not_character"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "gatherers_inn"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3252,
+              "completion_tokens": 195,
+              "total_tokens": 3447,
+              "cost": 0.00317025,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00317025,
+                "upstream_inference_prompt_cost": 0.002439,
+                "upstream_inference_completions_cost": 0.00073125
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3252,
+            "completion_tokens": 195,
+            "total_tokens": 3447
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:36.506Z",
+            "headers_ms": 1045.7259999999078,
+            "time_to_first_token_ms": 1046.6143999999622,
+            "completed_at": "2026-09-30T12:05:38.703Z",
+            "elapsed_total_ms": 2197.173999999999
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3374.97350000008,
+        "narrator_ttft_ms": 1046.6143999999622,
+        "narrator_total_ms": 2197.173999999999,
+        "controller_ms": 1174.7706000000471,
+        "turn_ms": 3375.184300000081
+      }
+    }
+  ]
+}

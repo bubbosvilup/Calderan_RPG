@@ -6,20 +6,29 @@ import { readFile } from "node:fs/promises";
 import { document, location } from "./fixtures.js";
 
 const newIds = ["magic_overview","mana","elemental_magic","light_and_shadow","magic_subschools","races_overview","humans","elves","dwarves","beastfolk","mixed_ancestry","continental_structure","west_governance","west_slavery","main_city_structure","merchants_guild","artisans_guild","learned_arts_guild","church","inquisition","city_guard","city_magistracy"];
-const factionIds = ["artisans_guild", "carrion_dogs", "church", "city_guard", "inquisition", "learned_arts_guild", "merchants_guild"];
+/** Four-District + Institutional Authoring Pass 1 lore/concept/faction records. */
+const fourDistrictIds = ["house_vael","house_melakor","house_dravendark","house_morvath","ducal_council_of_calderan","church_doctrine","mage_registration","null_dust","mutilating_ritual","calderan_entry_writs","iron_hands","woodsigner"];
+const factionIds = ["artisans_guild", "carrion_dogs", "church", "city_guard", "house_dravendark", "house_melakor", "house_morvath", "house_vael", "inquisition", "iron_hands", "learned_arts_guild", "merchants_guild", "woodsigner"];
 
 test("Phase 1E's 22 records and West's two lore additions have explicit policies and valid references", async () => {
   const world = await loadWorld("data");
   const records = ["world_lore", "concept", "faction"].flatMap(type => world.getEntitiesByType(type as "world_lore" | "concept" | "faction"));
-  assert.deepEqual(records.map(e => e.id).sort(), [...newIds, "grey_brook", "calderan_west_daily_life", "carrion_dogs"].sort());
-  assert.equal(world.getEntitiesByType("world_lore").length, 17);
-  assert.equal(world.getEntitiesByType("concept").length, 1);
+  assert.deepEqual(records.map(e => e.id).sort(), [...newIds, "grey_brook", "calderan_west_daily_life", "carrion_dogs", ...fourDistrictIds].sort());
+  assert.equal(world.getEntitiesByType("world_lore").length, 18);
+  assert.equal(world.getEntitiesByType("concept").length, 6);
   const aliases = new Set<string>();
   for (const entity of records) {
     assert.match(entity.id, /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/);
     // Phase 1P ordinary-awareness annotations are the only additions (deliberately minimal migration).
-    const awareness = ({ magic_subschools: "specialized", light_and_shadow: "public", inquisition: "public", learned_arts_guild: "local:west", main_city_structure: "local:calderan", grey_brook: "local:calderan", calderan_west_daily_life: "local:calderan", carrion_dogs: "specialized" } as Record<string, string>)[entity.id];
-    assert.deepEqual(entity.knowledge, { visibility: { narrator: true, player: true }, known_by: [], ...(awareness ? { awareness } : {}) });
+    const awareness = ({ magic_subschools: "specialized", light_and_shadow: "public", inquisition: "public", learned_arts_guild: "local:west", main_city_structure: "local:calderan", grey_brook: "local:calderan", calderan_west_daily_life: "local:calderan", carrion_dogs: "specialized",
+      // Four-District pass: explicit awareness on revised institutions and the new records.
+      west_governance: "public", church: "public", merchants_guild: "public", artisans_guild: "public", church_doctrine: "public",
+      house_vael: "local:calderan", house_melakor: "local:calderan", house_dravendark: "local:calderan", house_morvath: "local:calderan", ducal_council_of_calderan: "local:calderan",
+      mage_registration: "local:west", calderan_entry_writs: "local:west", null_dust: "specialized", iron_hands: "local:calderan", woodsigner: "local:calderan" } as Record<string, string>)[entity.id];
+    // The Mutilating Ritual is restricted canon: public knowledge is only that the Inquisition can break a mage.
+    if (entity.id === "mutilating_ritual") { assert.deepEqual(entity.knowledge, { visibility: { narrator: true, player: false }, known_by: ["helbrecht"], awareness: "private" }); continue; }
+    // NPC Pass 2: the High Inquisitor is the authored known_by anchor for Null Dust.
+    assert.deepEqual(entity.knowledge, { visibility: { narrator: true, player: true }, known_by: entity.id === "null_dust" ? ["helbrecht", "severan_krauss"] : [], ...(awareness ? { awareness } : {}) });
     assert(entity.summary.length <= 600);
     assert(entity.content.length <= 2000);
     for (const alias of entity.aliases) {
@@ -29,7 +38,7 @@ test("Phase 1E's 22 records and West's two lore additions have explicit policies
     if ("related_entities" in entity) for (const id of entity.related_entities) assert(world.hasEntity(id));
   }
   assert.deepEqual(world.getEntitiesByType("faction").map(e => e.id).sort(), factionIds);
-  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
+  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["arwen_woodsigner", "azael_melakor", "bartolomhew", "blackthorn", "boran_dravendark", "bram_kessel", "brother_aven", "brunna_keld", "captain_doran_hale", "cassian_valerius", "corvinus_morvath", "dren", "dunrig_iron_hands", "elspeth_vael", "garran_holt", "gaston", "gideon_melakor", "hadrik_voss", "halden_cross", "helbrecht", "iseult_morvath", "jessa_rook", "kaelen_dravendark", "korvin", "livia_marr", "lysandra_vell", "maelor_morvath", "marta_pell", "matthias_eld", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "odelia_crane", "oren_quarn", "orla_fen", "pellan", "rufus_tern", "seren_vael", "severan_krauss", "sister_mereth", "sister_veyra", "sun_emperor", "sybilla_melakor", "tavian_merrow", "uther_calderan", "vaelen_vael", "vorn_dravendark"]);
   assert.deepEqual(world.getEntitiesByType("event"), []);
   assert.deepEqual(world.getEntitiesByType("item"), []);
 });

@@ -24,8 +24,14 @@ const opening=buildTurnContext(world,createOpeningCampaign(world,"npc_audit").ex
 const npc=(id:string)=>{const e=world.getEntity(id);assert.ok(e?.type==="character");return e;};
 const sources=()=>world.listEntities().map(e=>({source:`nested/${e.id}.yaml`,document:{schema_version:1,entity:structuredClone(e) as unknown as Record<string,unknown>,chunks:structuredClone(world.listChunks().filter(c=>c.entity_id===e.id))}}));
 
+/** Four-District + Institutional Authoring Pass 1 records (added after this pass). */
+const FOUR_DISTRICT_NPCS=["azael_melakor","boran_dravendark","corvinus_morvath","elspeth_vael","gideon_melakor","iseult_morvath","kaelen_dravendark","maelor_morvath","seren_vael","sun_emperor","sybilla_melakor","uther_calderan","vaelen_vael","vorn_dravendark"];
+/** NPC Authoring Pass 2 records (added after this pass). */
+const NPC_PASS_2_NPCS=["arwen_woodsigner","cassian_valerius","dunrig_iron_hands","gaston","helbrecht"];
+/** NPC Authoring Pass 3 records (added after this pass). */
+const NPC_PASS_3_NPCS=["brunna_keld","garran_holt","halden_cross","lysandra_vell","marta_pell","matthias_eld","odelia_crane","oren_quarn","rufus_tern","severan_krauss","sister_veyra","tavian_merrow"];
 test("Pass 2A adds exactly eight NPCs and one organization with valid identity and association contracts",()=>{
- assert.deepEqual(world.getEntitiesByType("character").filter(e=>e.role==="npc").map(e=>e.id),[...ids,"pellan","bram_kessel","hadrik_voss","mira_thorne","livia_marr","jessa_rook","orla_fen","niles_vanner"].sort());
+ assert.deepEqual(world.getEntitiesByType("character").filter(e=>e.role==="npc").map(e=>e.id),[...ids,"pellan","bram_kessel","hadrik_voss","mira_thorne","livia_marr","jessa_rook","orla_fen","niles_vanner",...FOUR_DISTRICT_NPCS,...NPC_PASS_2_NPCS,...NPC_PASS_3_NPCS].sort());
  assert.equal(world.getEntity("carrion_dogs")?.type,"faction");
  for(const id of ids){const e=npc(id);assert.equal(e.home_location,null);assert.equal(e.parent,null);assert.equal(e.species,"Human");assert.ok(e.purpose&&e.morality&&e.traits.length);}
  assert.deepEqual(world.charactersWorkingAt("calderan_slave_market").map(c=>c.id),["bartolomhew","korvin","mistress_elara"]);
@@ -35,7 +41,8 @@ test("Pass 2A adds exactly eight NPCs and one organization with valid identity a
  assert.equal(npc("blackthorn").work_location,"gws");
  assert.equal(npc("blackthorn").base_location,null);
  assert.ok(!JSON.stringify(ids.map(npc)).match(/Merovar|Dorian/));
- for(const id of ["elspeth_vael","seren_vael","magistrate_quarn","sister_veyra","inquisitor_kaelen","lord_malakor_vane"])assert.equal(world.getEntity(id),undefined);
+ // Reserved or retired names. NPC Pass 3 authored Quarn (oren_quarn), Veyra (sister_veyra) and Severan (severan_krauss); "Inquisitor Kaelen" stays retired.
+ for(const id of ["magistrate_quarn","inquisitor_severan","inquisitor_kaelen","lord_malakor_vane"])assert.equal(world.getEntity(id),undefined);
  const snapshot=createOpeningCampaign(world,"no_goals").exportSnapshot();
  assert.deepEqual(snapshot.goals,[]);assert.deepEqual(snapshot.relationships,[]);assert.deepEqual(snapshot.scheduled_events,[]);
  assert.deepEqual(opening.primary.scene.present_characters,[]);

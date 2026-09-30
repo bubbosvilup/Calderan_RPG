@@ -1,0 +1,263 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "provider": {
+    "tag": "xiaomi/fp8",
+    "provider_name": "Xiaomi",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "Jessa Rook gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "a928a58b01aba463",
+      "draft": "Jessa Rook hands the pair of leather boots to Nicco, and he takes them.\n\n\"You'll want them,\" she says evenly, brushing her hands together once. \"The floors in there are old stone and the dust comes up black.\" She glances at the boots in his arms, then at the entrance. \"If they don't suit, say so sooner than later. I'm not carrying spares.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Jessa Rook hands the pair of leather boots to Nicco, and he takes them.\n\n\"You'll want them,\" she says evenly, brushing her hands together once. \"The floors in there are old stone and the dust comes up black.\" She glances at the boots in his arms, then at the entrance. \"If they don't suit, say so sooner than later. I'm not carrying spares.\"",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.6-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3383,
+              "completion_tokens": 85,
+              "total_tokens": 3468,
+              "cost": 0.001545555,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.001545555,
+                "upstream_inference_prompt_cost": 0.001471605,
+                "upstream_inference_completions_cost": 0.00007395
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "usage": {
+            "prompt_tokens": 3383,
+            "completion_tokens": 85,
+            "total_tokens": 3468
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:04:16.273Z",
+            "headers_ms": 2908.8095000000903,
+            "time_to_first_token_ms": 2908.9173000000883,
+            "completed_at": "2026-09-30T12:04:21.697Z",
+            "elapsed_total_ms": 5423.447700000019
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6688.2972999999765,
+        "narrator_ttft_ms": 2908.9173000000883,
+        "narrator_total_ms": 5423.447700000019,
+        "controller_ms": 1259.1819999999134,
+        "turn_ms": 6688.580100000021
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "3e42c4fb394f1653",
+      "draft": "Jessa Rook looks at the boots, then at him, her expression unreadable for a moment. She doesn't reach for them. \"They were for you,\" she says, low and even. \"You were the one walking in bare feet. I don't need boots, and I don't take back a gift once it's given.\"\n\nShe steps back half a pace, hands staying where they were. \"Keep them, or sell them if they don't suit. Either way they're yours to do with as you like.\" Her tone is mild but leaves little room for argument.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Jessa Rook looks at the boots, then at him, her expression unreadable for a moment. She doesn't reach for them. \"They were for you,\" she says, low and even. \"You were the one walking in bare feet. I don't need boots, and I don't take back a gift once it's given.\"\n\nShe steps back half a pace, hands staying where they were. \"Keep them, or sell them if they don't suit. Either way they're yours to do with as you like.\" Her tone is mild but leaves little room for argument.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "xiaomi/mimo-v2.6-pro",
+        "pinned_provider": "xiaomi/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Xiaomi",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3393,
+              "completion_tokens": 120,
+              "total_tokens": 3513,
+              "cost": 0.001580355,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.001580355,
+                "upstream_inference_prompt_cost": 0.001475955,
+                "upstream_inference_completions_cost": 0.0001044
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "usage": {
+            "prompt_tokens": 3393,
+            "completion_tokens": 120,
+            "total_tokens": 3513
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:04:22.962Z",
+            "headers_ms": 1055.3349999999627,
+            "time_to_first_token_ms": 1055.4255999999586,
+            "completed_at": "2026-09-30T12:04:27.766Z",
+            "elapsed_total_ms": 4803.666100000031
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 5638.283999999985,
+        "narrator_ttft_ms": 1055.4255999999586,
+        "narrator_total_ms": 4803.666100000031,
+        "controller_ms": 827.1252000000095,
+        "turn_ms": 5638.489399999962
+      }
+    }
+  ]
+}

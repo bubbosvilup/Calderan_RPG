@@ -1,0 +1,46 @@
+schema_version: 1
+entity:
+  id: maelor_morvath
+  type: character
+  name: Maelor Morvath
+  display_name: Maelor Morvath
+  parent: null
+  aliases: []
+  summary: Maelor Morvath is the recognized heir of House Morvath.
+  tags:
+    - nobility
+  search_context: Maelor Morvath, House Morvath heir, metallurgy, industry, precision mechanics
+  content: Maelor Morvath is the recognized heir of House Morvath; this establishes no broader noble
+    succession law, and his exact relation to Corvinus Morvath is not established. Intelligent and
+    curious, he is especially interested in metallurgy, East industry, precision mechanics and the
+    interface between arcane and mechanical work. Shown a new device, his instinctive question is
+    "Can we make it?"
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 31–34
+  appearance: Tall and elegant, with dark-brown hair and grey eyes; more fashion-conscious than Corvinus.
+  occupation: Heir of House Morvath
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - intelligent
+    - ambitious
+    - curious
+    - technologically interested
+    - asks "Can we make it?" when shown a new device
+  purpose: Turn Morvath wealth from extraction and material supply into more advanced industrial and
+    technological power.
+  morality: Ambitious but not especially cruel. His weakness is sometimes overestimating how much
+    technology and capital can solve.
+  affiliations:
+    - house_morvath
+  relationships: []
+chunks: []

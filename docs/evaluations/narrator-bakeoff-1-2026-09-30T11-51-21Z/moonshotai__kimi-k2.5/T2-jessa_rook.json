@@ -1,0 +1,299 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "Jessa Rook gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "a928a58b01aba463",
+      "draft": " Jessa Rook digs into the worn leather satchel at her hip and pulls out a pair of leather boots, offering them with a frank, assessing look. \"On your feet, then—ground's been wet since morning, and you're not dressed for standing about.\"\n\nShe hands the boots to Nicco, and he takes them.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Jessa Rook digs into the worn leather satchel at her hip and pulls out a pair of leather boots, offering them with a frank, assessing look. \"On your feet, then—ground's been wet since morning, and you're not dressed for standing about.\"\n\nShe hands the boots to Nicco, and he takes them.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "check": "handover_to_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3394,
+              "completion_tokens": 68,
+              "total_tokens": 3462,
+              "cost": 0.0022404,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0022404,
+                "upstream_inference_prompt_cost": 0.0020364,
+                "upstream_inference_completions_cost": 0.000204
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3394,
+            "completion_tokens": 68,
+            "total_tokens": 3462
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:11.082Z",
+            "headers_ms": 1546.1357000000025,
+            "time_to_first_token_ms": 1550.720400000002,
+            "completed_at": "2026-09-30T11:55:13.140Z",
+            "elapsed_total_ms": 2057.6612999999998
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3518.4604,
+        "narrator_ttft_ms": 1550.720400000002,
+        "narrator_total_ms": 2057.6612999999998,
+        "controller_ms": 1453.3580999999976,
+        "turn_ms": 3518.7584000000024
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "90819a6b3da02b6f",
+      "draft": " Nicco's hands stay empty. The boots remain his.\n\nJessa Rook tilts her head fractionally, the scar across her eyebrow catching the flat daylight. She does not reach for the offered boots. \"Keep them,\" she says, her low voice unhurried. \"I've others.\" Her gaze drops briefly to his feet, then lifts to the street behind him, noting something in the sparse foot traffic before returning to him without further explanation.\n\nShe waits, composed, for whatever comes next.",
+      "issues": [
+        {
+          "kind": "player_agency",
+          "sentence": "Nicco's hands stay empty.",
+          "correction": "Nicco's choices belong to the player, who did not have him stay. Remove that; show only the NPC's side and leave Nicco's response open."
+        }
+      ],
+      "revision_requested": true,
+      "revision": " \"Keep them,\" Jessa Rook says, her low voice unhurried. She does not reach for the offered boots. \"I've others.\" Her gaze drops briefly to his feet, then lifts to the street behind him, noting something in the sparse foot traffic before returning to him without further explanation.\n\nShe waits, composed, for whatever comes next.",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": " \"Keep them,\" Jessa Rook says, her low voice unhurried. She does not reach for the offered boots. \"I've others.\" Her gaze drops briefly to his feet, then lifts to the street behind him, noting something in the sparse foot traffic before returning to him without further explanation.\n\nShe waits, composed, for whatever comes next.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "jessa_rook"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3430,
+              "completion_tokens": 103,
+              "total_tokens": 3533,
+              "cost": 0.002367,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.002367,
+                "upstream_inference_prompt_cost": 0.002058,
+                "upstream_inference_completions_cost": 0.000309
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3753,
+              "completion_tokens": 72,
+              "total_tokens": 3825,
+              "cost": 0.0024678,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0024678,
+                "upstream_inference_prompt_cost": 0.0022518,
+                "upstream_inference_completions_cost": 0.000216
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3430,
+            "completion_tokens": 103,
+            "total_tokens": 3533
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:14.601Z",
+            "headers_ms": 653.7080999999998,
+            "time_to_first_token_ms": 653.8991000000024,
+            "completed_at": "2026-09-30T11:55:15.964Z",
+            "elapsed_total_ms": 1363.0469000000012
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3288.1185000000005,
+        "narrator_ttft_ms": 653.8991000000024,
+        "narrator_total_ms": 1363.0469000000012,
+        "controller_ms": 794.6647999999986,
+        "turn_ms": 3288.4802999999993
+      }
+    }
+  ]
+}

@@ -260,11 +260,13 @@ test("lexical remains synchronous and hybrid falls back when semantic is absent 
 test("synthetic indexing of production canon preserves identity strengths and bounded outputs, not semantic quality evidence", async () => {
   const r = new RetrievalService(await loadWorld("data")), p = new FixtureEmbeddingProvider();
   const index = await SemanticIndex.build(r.indexSource(), p, "narrator"), hybrid = new HybridSearch(r, [index]);
-  assert.equal(index.documentCount, 107); assert.deepEqual(p.batches.map(b => b.length), [32, 32, 32, 11]);
+  assert.equal(index.documentCount, 184); assert.deepEqual(p.batches.map(b => b.length), [32, 32, 32, 32, 32, 24]);
   for (const [query, expected] of [["Blackwater", "blackwater"], ["The Unchained Haven", "blackwater"], ["Davenport", "davenport"], ["The Port of Chains", "davenport"], ["Ironbound", "ironbound"], ["The Fortress on the Edge", "ironbound"], ["Sandspear", "sandspear"], ["Frostspire", "frostspire"]]) {
     assert.equal((await hybrid.search({ query }, "narrator")).candidates[0]!.entity_id, expected);
   }
-  for (const [query, expected] of [["iron coal mining", "frostspire"], ["border fortress", "ironbound"]]) assert((await hybrid.search({ query }, "narrator")).candidates.some(c => c.entity_id === expected));
+  // Concept queries carry only lexical signal here: the fixture gives every document the same vector, so its "semantic" order is
+  // file order and fusion depends on how many records sort before the target (Four-District pass). Assert the real signal, top-1.
+  for (const [query, expected] of [["iron coal mining", "frostspire"], ["border fortress", "ironbound"]]) assert.equal((await hybrid.search({ query }, "narrator", "lexical")).candidates[0]!.entity_id, expected);
   for (const mode of ["lexical", "semantic", "hybrid"] as const) {
     const result = await hybrid.search({ query: "magic" }, "narrator", mode);
     assert(result.candidates.length <= 5); assert.equal(result.next_offset, null);
@@ -276,7 +278,7 @@ test("synthetic indexing of production canon preserves identity strengths and bo
     }
   }
   const lexicalReport = evaluate(new LexicalSearch(r));
-  assert.equal(lexicalReport.top1.passed, 31); assert.equal(lexicalReport.cases, 44);
+  assert.equal(lexicalReport.top1.passed, 32); assert.equal(lexicalReport.cases, 44); // NPC Pass 2: "mages guild" top-1 restored to learned_arts_guild
 });
 
 test("semantic and hybrid determinism survives source ordering and leaves YAML/runtime/NarrativeContext unchanged", async () => {

@@ -64,6 +64,8 @@ export type CampaignCommand =
   | { kind: "set_profile"; character_id: string; profile: CharacterProfile }
   | { kind: "set_condition"; character_id: string; conditions: string[]; presentation?: string; status?: NonNullable<CharacterCurrentState["status"]> }
   | { kind: "move_character"; character_id: string; location_id: string }
+  /** Runtime Continuity Repair 1: a present created (runtime) character leaves the current scene; the record is kept. */
+  | { kind: "leave_scene"; character_id: string }
   | { kind: "set_slot_knowledge"; character_id: string; slot: string; state: "empty" | "unknown" }
   | { kind: "register_item"; item: CampaignItem }
   | { kind: "place_item"; item_id: string; position: ItemPosition }

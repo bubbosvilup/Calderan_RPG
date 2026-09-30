@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: high_courts_of_calderan
+  type: location
+  name: "The High Courts of Calderan"
+  display_name: "The High Courts of Calderan"
+  parent: calderan_center
+  aliases: ["High Courts of Calderan","High Courts"]
+  summary: >-
+    The High Courts of Calderan are the city's high courts, in the administrative core of the
+    Center District near the Ducal Citadel.
+  tags: ["civic","law"]
+  search_context: "High Courts of Calderan, courts, judges, legal proceedings"
+  content: >-
+    The High Courts of Calderan stand in the administrative core near the Ducal Citadel. Chief
+    Magistrate Oren Quarn, the senior civic judicial figure of Calderan, works here. The courts'
+    jurisdiction, procedures, other judges and place in any national judicial hierarchy are not
+    established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

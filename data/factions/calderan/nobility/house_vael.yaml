@@ -1,0 +1,39 @@
+schema_version: 1
+entity:
+  id: house_vael
+  type: faction
+  name: House Vael
+  display_name: House Vael
+  parent: null
+  aliases: []
+  summary: >-
+    House Vael is Calderan's bureaucratic and administrative founding noble house, one of the
+    four houses holding hereditary seats on the Ducal Council, led by Vaelen Vael, Chancellor of
+    the Ducal Seal.
+  tags: ["politics", "nobility"]
+  search_context: "House Vael, Vael family, Vaelen Vael, Chancellor of the Ducal Seal, Seren Vael, Elspeth Vael, bureaucracy, magistracy"
+  content: >-
+    House Vael is one of Calderan's four most powerful founding noble houses and holds a
+    hereditary, historic seat on the Ducal Council. Its power is administrative: high-ranking
+    bureaucrats, magistracy and civic officials, influence over registry, archive and notarial
+    work, administrative networks and procedural expertise. It is not inherently evil; it is
+    opportunistic, deeply adapted to power, and benefits from bureaucracy and access. Its
+    patriarch, Vaelen Vael, is Chancellor of the Ducal Seal, overseeing or strongly influencing
+    the formal validation of ducal acts, seals, decrees, official appointments and high-level
+    correspondence; he is not omnipotent. Seren Vael and Elspeth Vael belong to the house; their
+    exact relation to Vaelen is not established. House Vael is not a guild and holds no guild
+    seat, though it may influence guilds.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  members: ["vaelen_vael","seren_vael","elspeth_vael"]
+  territory: []
+  relations:
+    - target: house_melakor
+      kind: rival
+      description: "Cold competition over administration, information and influence."
+    - target: house_dravendark
+      kind: institutional_respect
+      description: "Institutional respect with cultural friction between bureaucracy and military directness."
+    - target: house_morvath
+      kind: functional_cooperation
+      description: "Functional cooperation with recurring disputes over taxation, concessions, records and property."
+chunks: []

@@ -49,6 +49,10 @@ entity:
   affiliations:
     - city_guard
   relationships:
+    - target: garran_holt
+      kind: superior
+      description: His institutional superior, the Commander of the City Guard; Doran is somewhat more idealistic than
+        Holt.
     - target: korvin
       kind: civic_contact
       description: Established contact with a licensed West seller; personal terms unestablished.

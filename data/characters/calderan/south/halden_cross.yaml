@@ -1,0 +1,50 @@
+schema_version: 1
+entity:
+  id: halden_cross
+  type: character
+  name: Halden Cross
+  display_name: Sergeant Halden Cross
+  parent: null
+  aliases:
+    - Sergeant Halden Cross
+    - Sergeant Cross
+  summary: Halden Cross is an experienced City Guard sergeant assigned to inspections at the Imperial Gate.
+  tags:
+    - south_npc
+    - guard
+  search_context: Halden Cross, Sergeant Cross, Imperial Gate inspection, City Guard sergeant, entry writs, customs
+  content: Halden Cross is an experienced City Guard sergeant assigned to inspections at the Imperial
+    Gate. He has seen thousands of travelers, forged stories, merchants, desperate migrants,
+    smugglers and nobles' servants, and is good at recognizing when a story does not fit the
+    paperwork. He tends to ask one apparently casual question and compare the reply against the
+    documents already in front of him. He is notably difficult to bribe.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 40–45
+  appearance: Medium height and sturdy, with short sandy hair, a sun-weathered face, light brown eyes
+    and a permanently suspicious squint. Wears a practical Guard uniform.
+  occupation: City Guard sergeant, Imperial Gate inspections
+  base_location: imperial_gate
+  work_location: imperial_gate
+  home_location: null
+  traits:
+    - dry
+    - observant
+    - skeptical
+    - not naturally hostile
+    - recognizes when a story does not fit the paperwork
+    - asks one apparently casual question and compares the answer against the documents
+  purpose: Keep dangerous or undocumented arrivals out without unnecessarily stopping legitimate traffic.
+  morality: "Pragmatic and basically fair. He is notably difficult to bribe, but not robotic: he may
+    exercise discretion when paperwork is imperfect but a person's story is credible and harmless."
+  affiliations:
+    - city_guard
+  relationships: []
+chunks: []

@@ -1,0 +1,94 @@
+{
+  "turn": 6,
+  "input": "How long have you been running this place?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "2de2c9d0846cee58",
+  "draft": "Jessa Rook wiped down a stretch of the counter, her movements steady and measured. Her dark, grey-streaked hair stayed tucked back as she glanced briefly toward the common room before returning her attention to him.\n\n\"A good stretch,\" she replied, her voice unhurried and low. \"Long enough to know what quiet looks like and how much work it takes to keep it that way.\" \n\nShe slipped her cloth aside, settling both hands onto the clean wood in front of her. \"It serves the travelers and the working folk well enough. If you're staying the night or just passing an hour, it stays peaceful so long as nobody brings trouble through the door.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa Rook wiped down a stretch of the counter, her movements steady and measured. Her dark, grey-streaked hair stayed tucked back as she glanced briefly toward the common room before returning her attention to him.\n\n\"A good stretch,\" she replied, her voice unhurried and low. \"Long enough to know what quiet looks like and how much work it takes to keep it that way.\" \n\nShe slipped her cloth aside, settling both hands onto the clean wood in front of her. \"It serves the travelers and the working folk well enough. If you're staying the night or just passing an hour, it stays peaceful so long as nobody brings trouble through the door.\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "google/gemini-3.8-flash",
+    "pinned": "google-vertex/global",
+    "reasoning": {
+      "effort": "minimal"
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Google",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 5224,
+          "completion_tokens": 139,
+          "total_tokens": 5363,
+          "cost": 0.00443925,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00443925,
+            "upstream_inference_prompt_cost": 0.003918,
+            "upstream_inference_completions_cost": 0.00052125
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "google/gemini-3.8-flash",
+      "usage": {
+        "prompt_tokens": 5224,
+        "completion_tokens": 139,
+        "total_tokens": 5363
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:31:06.750Z",
+        "headers_ms": 1698.0542999999998,
+        "time_to_first_token_ms": 1698.1620999999977,
+        "completed_at": "2026-09-30T12:31:10.270Z",
+        "elapsed_total_ms": 3520.096899999997
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 1698.1620999999977,
+    "narrator_total_ms": 3520.096899999997,
+    "controller_ms": 1127.3379999999997,
+    "turn_ms": 4655.179799999998
+  }
+}

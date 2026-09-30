@@ -1,0 +1,51 @@
+schema_version: 1
+entity:
+  id: marta_pell
+  type: character
+  name: Marta Pell
+  display_name: Marta Pell
+  parent: null
+  aliases: []
+  summary: Marta Pell is the proprietor and innkeeper of The Wayfarer's Rest in Calderan's South District.
+  tags:
+    - south_npc
+    - hospitality
+  search_context: Marta Pell, innkeeper, proprietor of The Wayfarer's Rest, South District inn
+  content: Marta Pell runs The Wayfarer's Rest, a respectable mid-range inn that is neither a luxury
+    establishment nor a criminal den. Warm without being naive and loud when she needs to be, she is
+    an excellent judge of travelers and knows couriers, caravan staff, guards, mercenaries,
+    transport workers and regular travelers. She remembers what regular customers drink and whether
+    they pay their bills, and can point a guest toward legitimate services and, discreetly, toward
+    adult paid companionship; she runs no brothel.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 46–50
+  appearance: Average height with a broad, strong build, dark auburn hair usually tied back, brown
+    eyes and an expressive face. Wears practical clean clothing and often carries keys or a folded
+    cloth over one shoulder.
+  occupation: Proprietor and innkeeper of The Wayfarer's Rest
+  base_location: wayfarers_rest
+  work_location: wayfarers_rest
+  home_location: null
+  traits:
+    - warm without being naive
+    - loud when necessary
+    - excellent judge of travelers
+    - discreet
+    - financially practical
+    - remembers what regular customers drink and whether they pay their bills
+  purpose: Keep The Wayfarer's Rest safe, busy and profitable.
+  morality: Decent but business-minded. Her hard boundary is violence against staff or vulnerable
+    guests, which gets someone expelled immediately and possibly handed to the Guard.
+  affiliations: []
+  relationships: []
+  private_notes: Her family, named regular clients and any named caravans or mercenary companies she
+    deals with are not established.
+chunks: []

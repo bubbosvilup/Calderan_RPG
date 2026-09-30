@@ -1,0 +1,99 @@
+{
+  "turn": 1,
+  "input": "*Nicco pushes open the door of the Gatherer's Inn and steps in out of the evening chill, looking around the common room before walking up to the counter.* Evening. Is this the place to get something warm to eat?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "4574289d5a498fea",
+  "draft": "The Gatherer's Inn holds the low, steady murmur of ordinary travelers and local workers winding down their day. Behind the counter stands Jessa Rook, her dark hair streaked with grey and sleeves turned up above her forearms. Her gaze drops briefly toward his hands and empty grip before lifting to meet his face.\n\n\"It is,\" she says in an unhurried, even tone. \"We have warm food and hot broth ready, if you're looking for a meal, and drink if you want it.\"\n\nShe rests one hand flat against the polished surface of the wood. \"Take a seat wherever there's room, or stay right here. What are you looking to have?\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "The Gatherer's Inn holds the low, steady murmur of ordinary travelers and local workers winding down their day. Behind the counter stands Jessa Rook, her dark hair streaked with grey and sleeves turned up above her forearms. Her gaze drops briefly toward his hands and empty grip before lifting to meet his face.\n\n\"It is,\" she says in an unhurried, even tone. \"We have warm food and hot broth ready, if you're looking for a meal, and drink if you want it.\"\n\nShe rests one hand flat against the polished surface of the wood. \"Take a seat wherever there's room, or stay right here. What are you looking to have?\"",
+  "natural_actions": [
+    {
+      "kind": "movement",
+      "status": "unresolved"
+    }
+  ],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "google/gemini-3.8-flash",
+    "pinned": "google-vertex/global",
+    "reasoning": {
+      "effort": "minimal"
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Google",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3230,
+          "completion_tokens": 142,
+          "total_tokens": 3372,
+          "cost": 0.002955,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.002955,
+            "upstream_inference_prompt_cost": 0.0024225,
+            "upstream_inference_completions_cost": 0.0005325
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "google/gemini-3.8-flash",
+      "usage": {
+        "prompt_tokens": 3230,
+        "completion_tokens": 142,
+        "total_tokens": 3372
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:30:43.889Z",
+        "headers_ms": 2047.618,
+        "time_to_first_token_ms": 2048.6181,
+        "completed_at": "2026-09-30T12:30:47.940Z",
+        "elapsed_total_ms": 4051.5457000000006
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 2048.6181,
+    "narrator_total_ms": 4051.5457000000006,
+    "controller_ms": 1375.6733999999997,
+    "turn_ms": 5482.3564
+  }
+}

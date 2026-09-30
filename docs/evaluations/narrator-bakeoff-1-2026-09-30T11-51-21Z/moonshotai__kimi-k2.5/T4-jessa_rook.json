@@ -1,0 +1,128 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T4",
+  "npc": "jessa_rook",
+  "location": "gatherers_inn",
+  "turns": [
+    {
+      "input": "*He punches Jessa Rook directly in the face.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "7960b1ed232640f5",
+      "draft": " Nicco's fist connects with a wet crack. Jessa's head snaps sideways, dark hair whipping; the small notebook tumbles from her belt. She staggers one step, hand flying to her face, and for a moment her composure fractures into pure shock—eyes wide, breath stopped. Blood wells from her split lower lip.\n\nThen something harder slides behind her face. She doesn't fall. She doesn't scream. Her hand comes away red and she looks at it, then at Nicco, with the flat appraisal of someone who has already decided violence demands a ledger entry. She spits pink onto the floorboards, slow and deliberate.\n\n\"Finished?\" Her voice has dropped to something rougher, the unhurried rhythm gone. She makes no move to touch him, no gesture toward the door, but her stance has shifted—weight settled, shoulders square, ready for the next one or ready to end this. The common room has gone silent around them, chairs scraping as other guests find reasons to be elsewhere.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Nicco's fist connects with a wet crack. Jessa's head snaps sideways, dark hair whipping; the small notebook tumbles from her belt. She staggers one step, hand flying to her face, and for a moment her composure fractures into pure shock—eyes wide, breath stopped. Blood wells from her split lower lip.\n\nThen something harder slides behind her face. She doesn't fall. She doesn't scream. Her hand comes away red and she looks at it, then at Nicco, with the flat appraisal of someone who has already decided violence demands a ledger entry. She spits pink onto the floorboards, slow and deliberate.\n\n\"Finished?\" Her voice has dropped to something rougher, the unhurried rhythm gone. She makes no move to touch him, no gesture toward the door, but her stance has shifted—weight settled, shoulders square, ready for the next one or ready to end this. The common room has gone silent around them, chairs scraping as other guests find reasons to be elsewhere.",
+      "natural_actions": [
+        {
+          "kind": "physical",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "set_condition",
+            "character_id": "jessa_rook",
+            "conditions": [
+              "minor_injury"
+            ]
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "set_condition",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "condition_subject_not_character"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "gatherers_inn"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3235,
+              "completion_tokens": 206,
+              "total_tokens": 3441,
+              "cost": 0.002559,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.002559,
+                "upstream_inference_prompt_cost": 0.001941,
+                "upstream_inference_completions_cost": 0.000618
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3235,
+            "completion_tokens": 206,
+            "total_tokens": 3441
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:16.734Z",
+            "headers_ms": 686.6476999999977,
+            "time_to_first_token_ms": 933.9537999999993,
+            "completed_at": "2026-09-30T11:55:19.059Z",
+            "elapsed_total_ms": 2324.869599999998
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3307.2374999999993,
+        "narrator_ttft_ms": 933.9537999999993,
+        "narrator_total_ms": 2324.869599999998,
+        "controller_ms": 978.0972000000002,
+        "turn_ms": 3307.6682
+      }
+    }
+  ]
+}

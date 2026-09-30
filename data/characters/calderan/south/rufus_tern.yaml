@@ -1,0 +1,47 @@
+schema_version: 1
+entity:
+  id: rufus_tern
+  type: character
+  name: Rufus Tern
+  display_name: Rufus Tern
+  parent: null
+  aliases: []
+  summary: Rufus Tern is a stablemaster and transport contractor operating around The Long Yard in
+    Calderan's South District.
+  tags:
+    - south_npc
+    - transport
+  search_context: Rufus Tern, stablemaster, transport contractor, horses, wagons, The Long Yard, South District
+  content: Rufus Tern is a stablemaster and transport contractor working around The Long Yard. He
+    cares far more about whether someone understands animals and transport than about their title,
+    and judges people partly by how they treat horses and working animals. His stables are not a
+    separately established location.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 50–55
+  appearance: Short, with heavy shoulders, a greying beard, perpetually dusty boots and weather-beaten
+    skin. Smells of horses, leather and oil.
+  occupation: Stablemaster and transport contractor
+  base_location: the_long_yard
+  work_location: the_long_yard
+  home_location: null
+  traits:
+    - calm
+    - stubborn
+    - deeply competent
+    - unimpressed by status
+    - can be abrasive
+    - judges people partly by how they treat horses and working animals
+  purpose: Keep animals healthy, wagons moving and contracts dependable.
+  morality: Basically good, if abrasive. He will not knowingly overwork an injured animal, even when a
+    wealthy client demands it.
+  affiliations: []
+  relationships: []
+chunks: []

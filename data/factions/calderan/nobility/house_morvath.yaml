@@ -1,0 +1,37 @@
+schema_version: 1
+entity:
+  id: house_morvath
+  type: faction
+  name: House Morvath
+  display_name: House Morvath
+  parent: null
+  aliases: []
+  summary: >-
+    House Morvath is one of Calderan's most economically powerful founding noble houses,
+    dominating mining concessions, metal supply and major finance; its patriarch is Corvinus
+    Morvath.
+  tags: ["politics", "nobility"]
+  search_context: "House Morvath, Morvath family, Corvinus Morvath, Iseult Morvath, Maelor Morvath, mining, lending, banking, metal contracts"
+  content: >-
+    House Morvath is one of Calderan's four most powerful founding noble houses and holds a
+    hereditary, historic seat on the Ducal Council. It controls or dominates mining concessions,
+    major mineral and metal supply, city finance and large-scale lending, military metal
+    contracts and the supply of arcane metals and materials, and it is deeply involved in the
+    banking of Center. Its patriarch is Corvinus Morvath; Iseult Morvath is his younger sister;
+    Maelor Morvath is the heir. Exact mine locations, interest rates and banking law are not
+    established. House Morvath is not a guild and holds no guild seat, though it may influence
+    guilds.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  members: ["corvinus_morvath","iseult_morvath","maelor_morvath"]
+  territory: []
+  relations:
+    - target: house_dravendark
+      kind: pragmatic_alliance
+      description: "Strong pragmatic relationship: material and financial supply meets military demand."
+    - target: house_melakor
+      kind: wary_cooperation
+      description: "Financial and political cooperation with strong mutual distrust."
+    - target: house_vael
+      kind: functional_cooperation
+      description: "Functional cooperation with recurring disputes over taxation, concessions, records and property."
+chunks: []

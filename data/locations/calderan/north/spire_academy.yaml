@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: spire_academy
+  type: location
+  name: "The Spire Academy"
+  display_name: "The Spire Academy"
+  parent: calderan_north
+  aliases: ["Spire Academy"]
+  summary: >-
+    The Spire Academy is an elite academy of roughly 120 students in Calderan's North District,
+    near but separate from The Collegium.
+  tags: ["scholarship","education","magic"]
+  search_context: "Spire Academy, elite academy, noble students, young mages, law, philosophy, military architecture, arcane studies"
+  content: >-
+    The Spire Academy is an elite academy, not a mass magic school, with approximately 120
+    students. It stands near The Collegium but is a separate institution. Its students include
+    rare genuine young mages, noble children, rich merchant children and elite non-magical
+    students. Subjects may include law, logistics, philosophy, architecture, military
+    architecture, advanced scholarship and regulated arcane studies. Most students are not
+    expected to become true mages; true mana manipulation remains rare, although mana is broadly
+    present in living beings.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

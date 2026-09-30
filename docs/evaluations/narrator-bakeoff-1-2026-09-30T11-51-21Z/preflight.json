@@ -1,0 +1,365 @@
+{
+  "created_at": "2026-09-30T11:52:22.483Z",
+  "rule": "first-party provider if listed; else highest-uptime bf16/fp8; else highest-uptime unknown precision; status 0 and max_completion_tokens >= 384; production request shape (max_tokens 384, reasoning disabled) pinned with allow_fallbacks false; lowest reasoning effort only if disabling is rejected",
+  "results": [
+    {
+      "model": "moonshotai/kimi-k2.5",
+      "status": "OK",
+      "chosen": {
+        "tag": "amazon-bedrock/us-east-2",
+        "provider_name": "Amazon Bedrock",
+        "quantization": "unknown",
+        "reasoning": {
+          "enabled": false
+        }
+      },
+      "attempts": [
+        {
+          "tag": "amazon-bedrock/us-east-2",
+          "provider_name": "Amazon Bedrock",
+          "quantization": "unknown",
+          "uptime_30m": 100,
+          "reasoning": {
+            "enabled": false
+          },
+          "http": 200,
+          "provider": "Amazon Bedrock",
+          "finish": "stop",
+          "text_chars": 91,
+          "usage": {
+            "prompt": 33,
+            "completion": 21,
+            "reasoning": 0
+          },
+          "error": null,
+          "ms": 870
+        }
+      ],
+      "endpoints_available": [
+        "siliconflow/int4",
+        "atlas-cloud/int4",
+        "venice",
+        "novita",
+        "amazon-bedrock/us-east-2"
+      ]
+    },
+    {
+      "model": "z-ai/glm-5.2",
+      "status": "OK",
+      "chosen": {
+        "tag": "z-ai/fp8",
+        "provider_name": "Z.AI",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      },
+      "attempts": [
+        {
+          "tag": "z-ai/fp8",
+          "provider_name": "Z.AI",
+          "quantization": "fp8",
+          "uptime_30m": 99.36908517350159,
+          "reasoning": {
+            "enabled": false
+          },
+          "http": 200,
+          "provider": "Z.AI",
+          "finish": "stop",
+          "text_chars": 107,
+          "usage": {
+            "prompt": 26,
+            "completion": 22,
+            "reasoning": 0
+          },
+          "error": null,
+          "ms": 1682
+        }
+      ],
+      "endpoints_available": [
+        "relace",
+        "wafer",
+        "decart/mxfp4",
+        "deepinfra/fp4",
+        "streamlake/fp8",
+        "novita/fp8",
+        "digitalocean",
+        "siliconflow/fp8",
+        "inceptron/fp4",
+        "coreweave/fp4",
+        "atlas-cloud/fp8",
+        "alibaba/fp8",
+        "cloudflare",
+        "phala/fp8",
+        "baidu/fast",
+        "mistral/zdr",
+        "reka",
+        "baseten/fp8",
+        "together",
+        "baidu/fp8",
+        "fireworks",
+        "baseten/fp8",
+        "venice/fp8",
+        "gmicloud/fp8",
+        "parasail/fp4",
+        "friendli",
+        "z-ai/fp8",
+        "mistral/eu",
+        "baseten/fast",
+        "baseten/fast",
+        "decart/fast",
+        "alibaba/fast"
+      ]
+    },
+    {
+      "model": "z-ai/glm-5.3",
+      "status": "OK",
+      "chosen": {
+        "tag": "z-ai/fp8",
+        "provider_name": "Z.AI",
+        "quantization": "fp8",
+        "reasoning": {
+          "effort": "minimal"
+        }
+      },
+      "attempts": [
+        {
+          "tag": "z-ai/fp8",
+          "provider_name": "Z.AI",
+          "quantization": "fp8",
+          "uptime_30m": 99.71525823132814,
+          "reasoning": {
+            "effort": "minimal"
+          },
+          "http": 200,
+          "provider": "Z.AI",
+          "finish": "stop",
+          "text_chars": 150,
+          "usage": {
+            "prompt": 32,
+            "completion": 35,
+            "reasoning": 0
+          },
+          "error": null,
+          "ms": 1673,
+          "disable_error": "Reasoning is mandatory for this endpoint and cannot be disabled."
+        }
+      ],
+      "endpoints_available": [
+        "relace",
+        "morph/fp8",
+        "inference-net",
+        "sail-research/us",
+        "sail-research/fp8",
+        "baidu/fp8",
+        "wafer/us",
+        "wafer",
+        "reka",
+        "phala",
+        "deepinfra/fp4",
+        "inceptron/fp4",
+        "atlas-cloud/fp8",
+        "siliconflow/fp8",
+        "novita/fp8",
+        "makora/fp4",
+        "digitalocean",
+        "gmicloud/fp8",
+        "akashml/fp8",
+        "alibaba",
+        "decart/fp4",
+        "friendli",
+        "mistral/zdr",
+        "baseten/fp4",
+        "mistral/nvfp4",
+        "crusoe/fp4",
+        "primeintellect",
+        "venice",
+        "together",
+        "parasail/fp8",
+        "modal",
+        "baseten/fp4",
+        "fireworks",
+        "cloudflare",
+        "z-ai/fp8",
+        "mistral/nvfp4",
+        "baseten/fast",
+        "baseten/fast",
+        "alibaba/fast"
+      ]
+    },
+    {
+      "model": "xiaomi/mimo-v2.5-pro",
+      "status": "OK",
+      "chosen": {
+        "tag": "xiaomi/fp8",
+        "provider_name": "Xiaomi",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      },
+      "attempts": [
+        {
+          "tag": "xiaomi/fp8",
+          "provider_name": "Xiaomi",
+          "quantization": "fp8",
+          "uptime_30m": 98.80478087649402,
+          "reasoning": {
+            "enabled": false
+          },
+          "http": 200,
+          "provider": "Xiaomi",
+          "finish": "stop",
+          "text_chars": 151,
+          "usage": {
+            "prompt": 32,
+            "completion": 32,
+            "reasoning": 0
+          },
+          "error": null,
+          "ms": 2182
+        }
+      ],
+      "endpoints_available": [
+        "gmicloud/bf16",
+        "atlas-cloud/fp8",
+        "xiaomi/fp8",
+        "digitalocean",
+        "novita",
+        "streamlake"
+      ]
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "status": "OK",
+      "chosen": {
+        "tag": "xiaomi/fp8",
+        "provider_name": "Xiaomi",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      },
+      "attempts": [
+        {
+          "tag": "xiaomi/fp8",
+          "provider_name": "Xiaomi",
+          "quantization": "fp8",
+          "uptime_30m": 99.77302023202377,
+          "reasoning": {
+            "enabled": false
+          },
+          "http": 200,
+          "provider": "Xiaomi",
+          "finish": "stop",
+          "text_chars": 133,
+          "usage": {
+            "prompt": 32,
+            "completion": 31,
+            "reasoning": 0
+          },
+          "error": null,
+          "ms": 4500
+        }
+      ],
+      "endpoints_available": [
+        "deepinfra/fp8",
+        "gmicloud/bf16",
+        "xiaomi/fp8"
+      ]
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "status": "OK",
+      "chosen": {
+        "tag": "google-ai-studio",
+        "provider_name": "Google AI Studio",
+        "quantization": "unknown",
+        "reasoning": {
+          "effort": "minimal"
+        }
+      },
+      "attempts": [
+        {
+          "tag": "google-ai-studio",
+          "provider_name": "Google AI Studio",
+          "quantization": "unknown",
+          "uptime_30m": 99.39527523454278,
+          "reasoning": {
+            "effort": "minimal"
+          },
+          "http": 200,
+          "provider": "Google AI Studio",
+          "finish": "stop",
+          "text_chars": 97,
+          "usage": {
+            "prompt": 21,
+            "completion": 281,
+            "reasoning": 262
+          },
+          "error": null,
+          "ms": 2097,
+          "disable_error": "Reasoning is mandatory for this endpoint and cannot be disabled."
+        }
+      ],
+      "endpoints_available": [
+        "google-ai-studio/flex",
+        "google-vertex/global/flex",
+        "google-ai-studio",
+        "google-vertex/global",
+        "google-ai-studio/priority",
+        "google-vertex/global/priority"
+      ]
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "status": "OK",
+      "chosen": {
+        "tag": "siliconflow/fp8",
+        "provider_name": "SiliconFlow",
+        "quantization": "fp8",
+        "reasoning": {
+          "enabled": false
+        }
+      },
+      "attempts": [
+        {
+          "tag": "siliconflow/fp8",
+          "provider_name": "SiliconFlow",
+          "quantization": "fp8",
+          "uptime_30m": 99.96233521657251,
+          "reasoning": {
+            "enabled": false
+          },
+          "http": 200,
+          "provider": "SiliconFlow",
+          "finish": "stop",
+          "text_chars": 110,
+          "usage": {
+            "prompt": 38,
+            "completion": 23,
+            "reasoning": 0
+          },
+          "error": null,
+          "ms": 1452
+        }
+      ],
+      "endpoints_available": [
+        "dekallm",
+        "deepinfra/turbo",
+        "coreweave/fp4",
+        "venice/fp4",
+        "chutes/fp4",
+        "deepinfra/fp8",
+        "crusoe/bf16",
+        "friendli",
+        "novita/bf16",
+        "parasail/fp8",
+        "io-net",
+        "sambanova",
+        "modelrun/fp4",
+        "siliconflow/fp8"
+      ]
+    }
+  ]
+}

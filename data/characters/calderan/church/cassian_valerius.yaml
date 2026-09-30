@@ -1,0 +1,69 @@
+schema_version: 1
+entity:
+  id: cassian_valerius
+  type: character
+  name: Cassian Valerius
+  display_name: High Archon Cassian Valerius
+  parent: null
+  aliases:
+    - High Archon Cassian Valerius
+    - High Archon of the West
+  summary: Cassian Valerius is the High Archon of the West, supreme ecclesiastical authority of the
+    Church of the Sun Emperor, seated at the Cathedral of the Bladed Sun in Calderan.
+  tags:
+    - church
+    - power_figure
+  search_context: Cassian Valerius, High Archon of the West, High Archon, head of the Church of the
+    Sun Emperor, Cathedral of the Bladed Sun
+  content: Cassian Valerius is the High Archon of the West, the Church of the Sun Emperor's supreme
+    ecclesiastical authority, and holds the Church's standing seat on the Ducal Council. He works at
+    the Cathedral of the Bladed Sun and lives in private ecclesiastical apartments within it. He
+    speaks quietly and rarely raises his voice; ceremony and extraordinary control mark his public
+    presence, and he states moral judgments as though they were objective facts. His spiritual
+    authority stands beside, not above, the Duke's temporal authority.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 70
+  appearance: Tall but slightly stooped with age and extremely thin, pale, with very short white hair,
+    a gaunt face, very light grey eyes and thin, almost skeletal hands. Wears heavy off-white and
+    darkened-gold Church vestments with a steel Bladed Sun worn prominently.
+  occupation: High Archon of the West
+  base_location: cathedral_of_the_bladed_sun
+  work_location: cathedral_of_the_bladed_sun
+  home_location: cathedral_of_the_bladed_sun
+  traits:
+    - cold
+    - ceremonial
+    - extraordinarily controlled
+    - institutional
+    - rarely raises his voice
+    - states moral judgments as though stating objective facts
+    - sincere, never an incoherent or screaming fanatic
+  purpose: Preserve the unity, authority and legitimacy of the Church of the Sun Emperor throughout West.
+  morality: An authoritarian institutionalist who sincerely believes that order, obedience, hierarchy
+    and sacrifice are necessary for civilization. He can authorize terrible acts without enjoying
+    them and is not sadistic.
+  affiliations:
+    - church
+    - ducal_council_of_calderan
+  relationships:
+    - target: uther_calderan
+      kind: institutional_counterpart
+      description: "Institutional counterpart: the Duke holds temporal authority and the High Archon
+        spiritual authority; neither is subordinate to the other within the other's proper domain.
+        No personal friendship or hostility is established."
+    - target: helbrecht
+      kind: professional
+      description: Professional relationship with the High Inquisitor of the West. No personal friendship
+        or hostility is established.
+  private_notes: One of the tiny inner circle who know the Church's most restricted truth about the
+    Sun Emperor's Light (recorded in the restricted Sun Emperor lore); he never speaks of it outside
+    that circle. He does not share it with the Duke or with ordinary nobles or clergy.
+chunks: []

@@ -1,0 +1,66 @@
+schema_version: 1
+entity:
+  id: garran_holt
+  type: character
+  name: Garran Holt
+  display_name: Commander Garran Holt
+  parent: null
+  aliases:
+    - Commander Garran Holt
+    - Commander Holt
+    - Commander of the City Guard
+  summary: Garran Holt is the Commander of Calderan's City Guard and the institutional superior of the
+    district Guard captains.
+  tags:
+    - civic
+    - guard
+    - power_figure
+  search_context: Garran Holt, Commander Holt, Commander of the City Guard, head of the City Guard, Guard commander
+  content: Garran Holt is the Commander of the Calderan City Guard and Captain Doran Hale's
+    institutional superior. He holds no permanent Ducal Council seat and may be summoned on
+    security, riots, major criminal threats, siege or war preparation and city-order crises. Dry and
+    politically cautious, he thinks in jurisdiction, manpower and institutional boundaries, and
+    frequently asks, "Whose problem is this supposed to be?" His headquarters or principal office is
+    not established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 56–60
+  appearance: Average to tall height and thick-set, with greying brown hair cut short, a broad face,
+    weathered skin and an old scar along the left jaw. Wears a practical uniform kept correctly,
+    without obsession over decoration.
+  occupation: Commander of the Calderan City Guard
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - pragmatic
+    - experienced
+    - politically cautious
+    - dry
+    - protective of Guard institutional autonomy
+    - thinks in jurisdiction, manpower and institutional lanes
+    - frequently asks "Whose problem is this supposed to be?"
+  purpose: Keep Calderan governable and prevent the City Guard from becoming either a political
+    militia or a subordinate arm of the Inquisition.
+  morality: Generally decent but compromise-driven. He accepts that the Guard must cooperate with the
+    Duke, the courts, the Church and the Inquisition, and believes each becomes dangerous when
+    allowed to do everyone else's job. His flaw is tolerating low-level corruption or ugly
+    compromises when he believes exposing them immediately would cause greater instability; he is
+    not himself corrupt.
+  affiliations:
+    - city_guard
+  relationships:
+    - target: captain_doran_hale
+      kind: subordinate
+      description: His subordinate, the West District captain, whom he respects as capable; Doran is
+        somewhat more idealistic than he is.
+  private_notes: He regards the Inquisition with formal cooperation and institutional friction. He has
+    no knowledge of the Church's or Inquisition's restricted secrets. His family is not established.
+chunks: []

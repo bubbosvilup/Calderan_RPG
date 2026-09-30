@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: ducal_archive
+  type: location
+  name: "The Ducal Archive"
+  display_name: "The Ducal Archive"
+  parent: calderan_center
+  aliases: ["Ducal Archive"]
+  summary: >-
+    The Ducal Archive is Calderan's official archive in the administrative core of the Center
+    District, near the Ducal Citadel.
+  tags: ["civic","records"]
+  search_context: "Ducal Archive, archives, official records, ducal documents"
+  content: >-
+    The Ducal Archive holds official records of the ducal administration and stands in the
+    administrative core near the Ducal Citadel. Its holdings, access rules and staff are not
+    established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

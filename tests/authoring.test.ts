@@ -23,7 +23,7 @@ test("five Heartstone locations retain classification and explicit parent refere
   const world = await loadWorld("data");
   assert.deepEqual(world.getEntitiesByType("location").map(e => e.id).filter(id => id.startsWith("heartstone")).sort(), [...ids, outside].sort());
   assert.equal(world.getEntity(outside)!.parent, "calderan_west");
-  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
+  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["arwen_woodsigner", "azael_melakor", "bartolomhew", "blackthorn", "boran_dravendark", "bram_kessel", "brother_aven", "brunna_keld", "captain_doran_hale", "cassian_valerius", "corvinus_morvath", "dren", "dunrig_iron_hands", "elspeth_vael", "garran_holt", "gaston", "gideon_melakor", "hadrik_voss", "halden_cross", "helbrecht", "iseult_morvath", "jessa_rook", "kaelen_dravendark", "korvin", "livia_marr", "lysandra_vell", "maelor_morvath", "marta_pell", "matthias_eld", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "odelia_crane", "oren_quarn", "orla_fen", "pellan", "rufus_tern", "seren_vael", "severan_krauss", "sister_mereth", "sister_veyra", "sun_emperor", "sybilla_melakor", "tavian_merrow", "uther_calderan", "vaelen_vael", "vorn_dravendark"]);
   for (const type of ["event", "item"] as const) assert.deepEqual(world.getEntitiesByType(type), []);
   for (const id of ids) {
     const entity = world.getEntity(id)!;
@@ -44,7 +44,7 @@ test("five Heartstone locations retain classification and explicit parent refere
 test("resolved topology has only LR-CY, LR-U1, LR-F1 and LR-square (main entrance) in both directions", async () => {
   const world = await loadWorld("data");
   const edges = world.getEntitiesByType("location").flatMap(e => e.connections.map(c => `${e.id}->${c.target}`)).sort();
-  assert.deepEqual(edges, ["heartstone_cy->heartstone_lr", "heartstone_f1->heartstone_lr", "heartstone_lr->heartstone_cy", "heartstone_lr->heartstone_f1", "heartstone_lr->heartstone_square", "heartstone_lr->heartstone_u1", "heartstone_square->heartstone_lr", "heartstone_u1->heartstone_lr"]);
+  assert.deepEqual(edges, ["heartstone_cy->heartstone_lr", "heartstone_f1->heartstone_lr", "heartstone_lr->heartstone_cy", "heartstone_lr->heartstone_f1", "heartstone_lr->heartstone_square", "heartstone_lr->heartstone_u1", "heartstone_square->heartstone_lr", "heartstone_u1->heartstone_lr", "the_crucible->the_merchants_mile", "the_merchants_mile->the_crucible"]);
   const tower = world.getEntity("heartstone")!;
   assert.match(tower.content, /F1, F2, F3, F4, F5, and F6/);
   assert.match(tower.content, /F6 is the highest currently known floor/);

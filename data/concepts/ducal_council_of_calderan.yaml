@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: ducal_council_of_calderan
+  type: concept
+  name: "Ducal Council of Calderan"
+  display_name: "Ducal Council of Calderan"
+  parent: null
+  aliases: ["Ducal Council"]
+  summary: >-
+    The Ducal Council of Calderan is the capital's stable nine-seat council, uniting the Duke,
+    the High Archon of the West, the three guild representatives and the heads of the four
+    founding noble houses.
+  tags: ["politics","governance"]
+  search_context: "Ducal Council, Calderan council, nine seats, Duke, High Archon, guild representatives, founding houses, Vael, Melakor, Dravendark, Morvath"
+  content: >-
+    The Ducal Council of Calderan has nine standing seats: (1) the Duke of Calderan; (2) the
+    High Archon of the West; (3) a Merchants Guild representative; (4) an Artisans Guild
+    representative; (5) a Learned Arts Guild representative; and the heads of the four founding
+    noble houses, (6) House Vael, (7) House Melakor, (8) House Dravendark and (9) House Morvath,
+    who hold hereditary, historic seats. The houses are not the guilds; guild representatives
+    sit separately even where houses influence guilds. Duke and High Archon are not co-rulers of
+    identical domains: the Duke holds temporal authority (civic governance, administration,
+    taxation, law, military and city policy) and the High Archon spiritual authority (doctrine,
+    religious law and Church institutional matters); conflicts between them are political, not
+    resolved by a single chain of command. The High Inquisitor, City Guard command, Magistracy
+    leadership and other officials have no permanent seats but may be summoned: the High
+    Inquisitor for heresy, major arcane threats or Church security, Guard command for security,
+    public order or military crisis, magistracy officials on legal and civic procedure. The
+    tension between Church and Learned Arts is especially visible here. The current High Archon is
+    Cassian Valerius, and the current guild representatives are Tavian Merrow (Merchants Guild),
+    Brunna Keld (Artisans Guild) and Magister Odelia Crane (Learned Arts Guild). The Council's
+    functions are held at the Ducal Citadel. Voting, quorum and procedures are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  related_entities: ["calderan","uther_calderan","church","merchants_guild","artisans_guild","learned_arts_guild","house_vael","house_melakor","house_dravendark","house_morvath","ducal_citadel","west_governance"]
+chunks: []

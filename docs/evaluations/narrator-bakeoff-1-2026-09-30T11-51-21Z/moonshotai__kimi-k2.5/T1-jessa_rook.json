@@ -1,0 +1,108 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T1",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Jessa Rook who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "c492eaebd4bb0800",
+      "draft": " Jessa Rook's eyes settle on Nicco with the same assessing weight she gives any unfamiliar face in her square—taking in his height, his build, the few white hairs catching the daylight. She does not answer immediately. Her hands rest easy at her sides, the small notebook in her belt untouched.\n\n\"Don't know who you are,\" she says finally, her low voice unhurried. \"Don't know where you're from. You standing here asking suggests you think I might, which means either you're mistaken or you've got reason to think I've been watching you.\" A slight tilt of her head. \"I haven't been. First I'm seeing of you is now.\"\n\nShe glances toward the massive wooden entrance of Heartstone behind him, then back to his face. \"If you want someone to name you, you'd need someone who's seen you before. I haven't. If you want West District gossip, The Coined Lie pours cheap ale and cheaper talk—though which kind of talk you'd get, I couldn't say.\" Her scarred eyebrow doesn't rise; her tone stays level, professional, offering nothing and promising less. \"Is there something else you're needing?\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Jessa Rook's eyes settle on Nicco with the same assessing weight she gives any unfamiliar face in her square—taking in his height, his build, the few white hairs catching the daylight. She does not answer immediately. Her hands rest easy at her sides, the small notebook in her belt untouched.\n\n\"Don't know who you are,\" she says finally, her low voice unhurried. \"Don't know where you're from. You standing here asking suggests you think I might, which means either you're mistaken or you've got reason to think I've been watching you.\" A slight tilt of her head. \"I haven't been. First I'm seeing of you is now.\"\n\nShe glances toward the massive wooden entrance of Heartstone behind him, then back to his face. \"If you want someone to name you, you'd need someone who's seen you before. I haven't. If you want West District gossip, The Coined Lie pours cheap ale and cheaper talk—though which kind of talk you'd get, I couldn't say.\" Her scarred eyebrow doesn't rise; her tone stays level, professional, offering nothing and promising less. \"Is there something else you're needing?\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3255,
+              "completion_tokens": 234,
+              "total_tokens": 3489,
+              "cost": 0.002655,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.002655,
+                "upstream_inference_prompt_cost": 0.001953,
+                "upstream_inference_completions_cost": 0.000702
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3255,
+            "completion_tokens": 234,
+            "total_tokens": 3489
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:10.090Z",
+            "headers_ms": 844.1553000000022,
+            "time_to_first_token_ms": 1092.711800000001,
+            "completed_at": "2026-09-30T11:55:12.780Z",
+            "elapsed_total_ms": 2690.5169000000024
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 3694.979299999999,
+        "narrator_ttft_ms": 1092.711800000001,
+        "narrator_total_ms": 2690.5169000000024,
+        "controller_ms": 994.1144000000022,
+        "turn_ms": 3695.376
+      }
+    }
+  ]
+}

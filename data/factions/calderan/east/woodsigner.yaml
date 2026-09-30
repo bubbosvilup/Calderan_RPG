@@ -1,0 +1,55 @@
+schema_version: 1
+entity:
+  id: woodsigner
+  type: faction
+  name: Woodsigner
+  display_name: Woodsigner
+  parent: null
+  aliases:
+    - Woodsigners
+    - Woodsigner clan
+  summary: The Woodsigners of Calderan are a small branch of a much larger Wood Elf clan, known for
+    fine woodcraft and highly regarded bows.
+  tags:
+    - crafts
+    - elves
+    - woodcraft
+  search_context: Woodsigner, Woodsigners, Wood Elf clan, elven bows, woodcraft, bowyers, Arwen
+    Woodsigner, The Bent Bough
+  content: The Calderan Woodsigners are a small branch of a much larger Wood Elf clan whose wider
+    history is not established. The branch came to Calderan through ducal invitation to contribute
+    specialist woodcraft; neither the date nor the inviting Duke is established. Its members are
+    relatively few and long-lived. Internally it is comparatively egalitarian, without a rigid
+    clan-chief structure. Its specialties are bows, fine woodcraft, weapon stocks, precision wooden
+    components, decorative carving and specialist wooden goods, and Woodsigner bows have an
+    excellent reputation. Arwen Woodsigner works at The Bent Bough in East.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  members:
+    - arwen_woodsigner
+  territory: []
+  relations: []
+chunks:
+  - id: woodsigner.beastfolk_origin_tradition
+    entity_id: woodsigner
+    section: beastfolk_origin_tradition
+    summary: "Restricted: a private Woodsigner cultural tradition about the origin of Beastfolk."
+    search_context: Restricted Woodsigner clan tradition
+    content: A private cultural tradition preserved by the Woodsigners holds that Beastfolk ultimately
+      descend from, or were transformed or mutated from, ancient Elves or Wood Elves. This is an
+      inherited clan belief and knowledge claim, not established world truth; it is not public
+      knowledge, and nothing in canon confirms or refutes it.
+    tags:
+      - tradition
+      - beastfolk
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - arwen_woodsigner
+      awareness: private

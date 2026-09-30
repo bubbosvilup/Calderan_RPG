@@ -1,0 +1,121 @@
+{
+  "turn": 13,
+  "input": "*When the man shoves him in the chest, Nicco keeps his feet and moves so the counter is between them.* Jessa, is there anyone we can call for this?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "78f54cfb929daa05",
+  "prompt_characters": 21289,
+  "draft": "Dell's palm catches Nicco square in the chest — a hard, graceless push, more spite than technique. Nicco keeps his footing and circles wide, putting the stretch of counter between himself and the dockworker. Dell sways where he stands, breathing heavy, fist still half-closed at his side. He doesn't come around the counter immediately. He stares at Nicco like he's trying to work out whether the effort is worth it.\n\nJessa is already moving. She doesn't rush — she steps out from behind the counter with the notebook still tucked in her belt and puts herself at an angle where Dell would have to go through her to reach Nicco. Her voice stays low and even. \"Dell. You're done for tonight. Settle what you owe and sleep it off, or walk out that door and sleep it off somewhere else.\"\n\n\"You're throwing me out?\" Dell's face darkens. \"After all the nights I've spent coin in this—\"\n\n\"I'm telling you to go to bed,\" Jessa says. \"One of those beds can be yours if you're quiet about it. The door's the other option. There's no third one where you shove my guests and stay standing here drinking.\"\n\nDell's jaw works. He looks at Nicco across the counter, then back at Jessa. The fight seeps out of him slowly, replaced by the sullen heaviness of a man who knows he's lost the room. He mutters something under his breath and turns toward the door, fumbling with his coat. Jessa watches him go, then glances at Nicco and the spilled drink pooling on the counter. \"He'll be back tomorrow sober and embarrassed,\" she says. \"He usually is. You all right?\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Dell's palm catches Nicco square in the chest — a hard, graceless push, more spite than technique. Nicco keeps his footing and circles wide, putting the stretch of counter between himself and the dockworker. Dell sways where he stands, breathing heavy, fist still half-closed at his side. He doesn't come around the counter immediately. He stares at Nicco like he's trying to work out whether the effort is worth it.\n\nJessa is already moving. She doesn't rush — she steps out from behind the counter with the notebook still tucked in her belt and puts herself at an angle where Dell would have to go through her to reach Nicco. Her voice stays low and even. \"Dell. You're done for tonight. Settle what you owe and sleep it off, or walk out that door and sleep it off somewhere else.\"\n\n\"You're throwing me out?\" Dell's face darkens. \"After all the nights I've spent coin in this—\"\n\n\"I'm telling you to go to bed,\" Jessa says. \"One of those beds can be yours if you're quiet about it. The door's the other option. There's no third one where you shove my guests and stay standing here drinking.\"\n\nDell's jaw works. He looks at Nicco across the counter, then back at Jessa. The fight seeps out of him slowly, replaced by the sullen heaviness of a man who knows he's lost the room. He mutters something under his breath and turns toward the door, fumbling with his coat. Jessa watches him go, then glances at Nicco and the spilled drink pooling on the counter. \"He'll be back tomorrow sober and embarrassed,\" she says. \"He usually is. You all right?\"",
+  "controller": {
+    "proposal": [
+      {
+        "kind": "leave_scene",
+        "character_id": "campaign_character_eval_dell_harrow"
+      }
+    ],
+    "authorization": [
+      {
+        "kind": "leave_scene",
+        "command": {
+          "kind": "leave_scene",
+          "character_id": "campaign_character_eval_dell_harrow"
+        },
+        "authorized": false,
+        "reason": "rejected_insufficient_confirmation",
+        "check": "no_completed_departure",
+        "quote": "He mutters something under his breath and turns toward the door, fumbling with his coat."
+      }
+    ],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 3,
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created": [
+      {
+        "id": "campaign_character_eval_dell_harrow",
+        "location": "gatherers_inn",
+        "conditions": []
+      }
+    ],
+    "conditions": []
+  },
+  "recent_conversation": {
+    "turns_retained": 12,
+    "prompt_turns": 12,
+    "serialized_characters": 13787,
+    "context_recent_characters": 13090
+  },
+  "narrator": {
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4494,
+          "completion_tokens": 362,
+          "total_tokens": 4856,
+          "cost": 0.00306904,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4224,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00306904,
+            "upstream_inference_prompt_cost": 0.00147624,
+            "upstream_inference_completions_cost": 0.0015928
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 4494,
+        "completion_tokens": 362,
+        "total_tokens": 4856
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T13:21:40.067Z",
+        "headers_ms": 10056.532100000011,
+        "time_to_first_token_ms": 10577.831600000005,
+        "completed_at": "2026-09-30T13:21:50.682Z",
+        "elapsed_total_ms": 10615.229800000001
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 10577.831600000005,
+    "narrator_total_ms": 10615.229800000001,
+    "controller_ms": 1015.1766999999963,
+    "turn_ms": 11638.744699999996
+  }
+}

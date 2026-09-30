@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.3",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T3",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He looks at Jessa Rook, trying to understand what kind of person he has in front of him.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "2e0ff6f059b50852",
+      "draft": "The woman across the square stands out from the trickle of passers-by more by stillness than anything else. She is tall and solidly built, sleeves rolled above her forearms, dark hair heavily streaked with grey and a pale scar cutting through one eyebrow. A small notebook is tucked into her belt. Her eyes move over the square in unhurried passes — hands, luggage, faces — before settling, briefly, on the tall stranger standing near Heartstone's great wooden entrance.\n\nShe does not hurry over, but she does not look away either. When she catches his gaze she gives a small nod, the kind one gives an unfamiliar face one intends to remember rather than welcome.\n\n\"You're standing at the door staring at it,\" she says, her voice low and even, unhurried. \"Lock trouble, or first time through?\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "The woman across the square stands out from the trickle of passers-by more by stillness than anything else. She is tall and solidly built, sleeves rolled above her forearms, dark hair heavily streaked with grey and a pale scar cutting through one eyebrow. A small notebook is tucked into her belt. Her eyes move over the square in unhurried passes — hands, luggage, faces — before settling, briefly, on the tall stranger standing near Heartstone's great wooden entrance.\n\nShe does not hurry over, but she does not look away either. When she catches his gaze she gives a small nod, the kind one gives an unfamiliar face one intends to remember rather than welcome.\n\n\"You're standing at the door staring at it,\" she says, her voice low and even, unhurried. \"Lock trouble, or first time through?\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.3",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3245,
+              "completion_tokens": 185,
+              "total_tokens": 3430,
+              "cost": 0.00178196,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 3136,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00178196,
+                "upstream_inference_prompt_cost": 0.00096796,
+                "upstream_inference_completions_cost": 0.000814
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 13,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 55
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.3",
+          "usage": {
+            "prompt_tokens": 3245,
+            "completion_tokens": 185,
+            "total_tokens": 3430
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:58:20.565Z",
+            "headers_ms": 7362.118299999973,
+            "time_to_first_token_ms": 7368.042599999986,
+            "completed_at": "2026-09-30T11:58:30.558Z",
+            "elapsed_total_ms": 9992.989699999976
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 10681.052400000015,
+        "narrator_ttft_ms": 7368.042599999986,
+        "narrator_total_ms": 9992.989699999976,
+        "controller_ms": 673.8421000000089,
+        "turn_ms": 10681.38440000001
+      }
+    }
+  ]
+}

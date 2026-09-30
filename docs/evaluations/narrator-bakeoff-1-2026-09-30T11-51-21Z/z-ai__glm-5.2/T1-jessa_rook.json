@@ -1,0 +1,108 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T1",
+  "npc": "jessa_rook",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Jessa Rook who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "c492eaebd4bb0800",
+      "draft": "Nicco put the question to her plainly.\n\nJessa Rook looked at him the way she might look at a door that hadn't latched properly — not suspicious, just measuring whether it needed attention. Her gaze tracked across him without hurry: his hands, his clothes, the absence of anything carried, his face last. A few people crossed the square behind him, paying them no mind.\n\n\"Couldn't say,\" she said. Her voice was low and unhurried, with no particular inflection on any word. \"You're standing in front of Heartstone's door and you're not carrying so much as a pack, so I'd guess you're not a traveler. Beyond that —\" She tilted her head slightly, the pale scar across her eyebrow catching the light. \"You'd have to tell me. I don't know your face, and I don't make a habit of filling in what I don't know.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco put the question to her plainly.\n\nJessa Rook looked at him the way she might look at a door that hadn't latched properly — not suspicious, just measuring whether it needed attention. Her gaze tracked across him without hurry: his hands, his clothes, the absence of anything carried, his face last. A few people crossed the square behind him, paying them no mind.\n\n\"Couldn't say,\" she said. Her voice was low and unhurried, with no particular inflection on any word. \"You're standing in front of Heartstone's door and you're not carrying so much as a pack, so I'd guess you're not a traveler. Beyond that —\" She tilted her head slightly, the pale scar across her eyebrow catching the light. \"You'd have to tell me. I don't know your face, and I don't make a habit of filling in what I don't know.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3234,
+              "completion_tokens": 188,
+              "total_tokens": 3422,
+              "cost": 0.00302008,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2048,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00302008,
+                "upstream_inference_prompt_cost": 0.00219288,
+                "upstream_inference_completions_cost": 0.0008272
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3234,
+            "completion_tokens": 188,
+            "total_tokens": 3422
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:56:16.179Z",
+            "headers_ms": 5673.647099999987,
+            "time_to_first_token_ms": 5675.090099999987,
+            "completed_at": "2026-09-30T11:56:21.884Z",
+            "elapsed_total_ms": 5705.213099999994
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6553.6296,
+        "narrator_ttft_ms": 5675.090099999987,
+        "narrator_total_ms": 5705.213099999994,
+        "controller_ms": 836.0527000000002,
+        "turn_ms": 6553.967599999989
+      }
+    }
+  ]
+}

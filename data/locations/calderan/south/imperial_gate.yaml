@@ -1,0 +1,32 @@
+schema_version: 1
+entity:
+  id: imperial_gate
+  type: location
+  name: "The Imperial Gate"
+  display_name: "The Imperial Gate"
+  parent: calderan_south
+  aliases: ["Imperial Gate"]
+  summary: >-
+    The Imperial Gate is Calderan's main southern gate and its largest, best-defended and most
+    heavily inspected land entrance, opening onto the Imperial Road.
+  tags: ["gate","security"]
+  search_context: "Imperial Gate, southern gate, main gate of Calderan, entry writ inspection, customs, Imperial Road"
+  content: >-
+    The Imperial Gate is the southern of Calderan's four cardinal main gates and the most
+    important land entrance to the city. It opens onto the Imperial Road, the principal national
+    road. It is the best defended and most heavily inspected gate: City Guard and customs
+    officers check entry writs here, and its procedures are the most formalized of any gate.
+    There is no general entrance tax. Sergeant Halden Cross is an experienced Guard sergeant assigned to inspections here.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  features:
+    - name: "Imperial Road"
+      description: >-
+        The Imperial Road, the principal major road of West leading to Calderan, arrives at the
+        Imperial Gate. Its full course, other destinations and the wider road network are not
+        established.
+    - name: "gate inspection"
+      description: >-
+        City Guard and customs officers inspect travelers, papers and cargo; entry requires an
+        accepted writ.
+  connections: []
+chunks: []

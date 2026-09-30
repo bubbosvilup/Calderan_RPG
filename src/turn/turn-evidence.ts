@@ -5,6 +5,7 @@ import type { PlayerIntent } from "./player-intent.js";
 import { normalizeReference, type ResolvedReference } from "./reference-resolution.js";
 import type { PhysicalInteraction } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
+import { narratedDepartures, type DepartureEvidence } from "./scene-departure.js";
 
 export type ConfirmationKind = "accepted_transfer" | "equipped_item" | "heard_fact" | "was_told_fact" | "agreed_event";
 export interface NarratorConfirmation { readonly kind: ConfirmationKind; readonly command_indexes: readonly number[]; readonly collective: boolean; readonly source_sentence: string }
@@ -18,6 +19,8 @@ export interface TurnEvidence {
   readonly ambiguous_reference: boolean;
   /** Repair 1: player-initiated physical acts this turn; the only basis for authorizing class-B conditions. */
   readonly physical_interactions?: readonly PhysicalInteraction[];
+  /** Runtime Continuity Repair 1: completed departures of present created characters narrated this turn. */
+  readonly departures?: readonly DepartureEvidence[];
 }
 const uncertain = /\b(not|never|no longer|maybe|perhaps|might|could|would|almost|pretend\w*|imagin\w*|consider\w*|unchanged|instead|inscription|quoted|hypothetical|if|unless)\b/i;
 // Actual refusal: explicit refusal words, handing the offer back, or a negated acceptance verb.
@@ -241,5 +244,9 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     });
     for (const c of confirmations) for (const i of c.command_indexes) confirmed.add(i);
   }
-  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}) }) as TurnEvidence;
+  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context) }) as TurnEvidence;
+}
+function departuresOf(narration: string, context: TurnContext): { departures?: DepartureEvidence[] } {
+  const found = narratedDepartures(narration, context);
+  return found.length ? { departures: structuredClone([...found]) } : {};
 }

@@ -1,0 +1,21 @@
+schema_version: 1
+entity:
+  id: calderan_south_prison
+  type: location
+  name: "Calderan South Prison"
+  display_name: "Calderan South Prison"
+  parent: calderan_south
+  aliases: ["The South Gaol","South Gaol"]
+  summary: >-
+    Calderan South Prison, commonly called the South Gaol, is the main city prison, in
+    Calderan's South District.
+  tags: ["prison","law"]
+  search_context: "Calderan South Prison, South Gaol, city prison, detainees, jail"
+  content: >-
+    Calderan South Prison, informally the South Gaol, is the main city prison. It holds
+    detainees, people under ordinary civic or criminal imprisonment and people awaiting further
+    legal process. Sentence lengths, prison law and internal conditions are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features: []
+  connections: []
+chunks: []

@@ -1,0 +1,73 @@
+schema_version: 1
+entity:
+  id: helbrecht
+  type: character
+  name: Helbrecht
+  display_name: High Inquisitor Helbrecht
+  parent: null
+  aliases:
+    - High Inquisitor Helbrecht
+    - High Inquisitor of the West
+  summary: Helbrecht is the High Inquisitor of the West, national head of the Inquisition, based at
+    the Bastion of Vigilance in Calderan.
+  tags:
+    - inquisition
+    - power_figure
+  search_context: Helbrecht, High Inquisitor of the West, High Inquisitor, head of the Inquisition,
+    Bastion of Vigilance
+  content: "Helbrecht is the High Inquisitor of the West and the Inquisition's national head, working
+    from the Bastion of Vigilance. Within the Inquisition he is regarded as an exemplary inquisitor:
+    an excellent operational investigator, far less interested in fine bureaucracy and paperwork.
+    His deep voice is concise and he does not repeat orders unnecessarily; when suspicious, he often
+    watches someone silently for several seconds before speaking. He has no permanent Ducal Council
+    seat and attends when summoned on heresy, major arcane threats or Church security."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 58–62
+  appearance: Very tall and broad-shouldered, completely bald, with brown eyes and hard features;
+    still physically imposing. Wears practical heavy inquisitorial equipment rather than ornamental
+    luxury.
+  occupation: High Inquisitor of the West
+  base_location: bastion_of_vigilance
+  work_location: bastion_of_vigilance
+  home_location: null
+  traits:
+    - gruff
+    - disciplined
+    - severe
+    - direct
+    - deeply committed to Inquisition rules
+    - excellent operational inquisitor
+    - mediocre and unenthusiastic with fine bureaucracy and administrative paperwork
+    - deep, concise voice; does not repeat orders unnecessarily
+    - when suspicious, watches someone silently for several seconds before speaking
+  purpose: Protect West's religious order against heresy, dangerous arcane activity and threats to the
+    Church.
+  morality: "Rigidly consequentialist within inquisitorial doctrine: he can authorize or personally
+    perform brutal acts he considers necessary, without sadism. He does not knowingly fabricate
+    evidence merely to secure a conviction; if the Inquisition's own standards show someone
+    innocent, he releases them, even someone he personally dislikes."
+  affiliations:
+    - inquisition
+    - church
+  relationships:
+    - target: cassian_valerius
+      kind: professional
+      description: Professional relationship with the High Archon of the West. No personal friendship or
+        hostility is established.
+    - target: severan_krauss
+      kind: subordinate
+      description: A senior field Inquisitor under his command, valued because he handles the paperwork
+        and analytic work Helbrecht dislikes. No personal friendship is established.
+  private_notes: Has private access to Null Dust, the Mutilating Ritual and the Church's restricted
+    truth about the Sun Emperor's Light. Understands field investigation, heresy and magical threats
+    far better than fine theology or civic paperwork. Considers the City Guard useful but frequently
+    too procedural and lenient; no hostility toward any individual Guard officer is established.
+chunks: []

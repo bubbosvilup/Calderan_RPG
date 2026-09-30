@@ -1,0 +1,55 @@
+schema_version: 1
+entity:
+  id: dunrig_iron_hands
+  type: character
+  name: Dunrig Iron Hands
+  display_name: Dunrig Iron Hands
+  parent: null
+  aliases: []
+  summary: Dunrig Iron Hands is the elder at the head of the Iron Hands, a major dwarven metallurgy
+    clan in Calderan's East District, overseeing its workshop network.
+  tags:
+    - east_npc
+    - crafts
+    - dwarf
+  search_context: Dunrig Iron Hands, Iron Hands elder, dwarven clan head, metallurgy, East District
+  content: Dunrig Iron Hands is the senior elder and head figure of the Iron Hands workshop network.
+    He no longer performs routine forge work; he oversees master artisans, standards, apprentices,
+    quality and the use of the Iron Hands name and techniques. He speaks slowly, in a deep, slightly
+    rough voice, concisely and decisively, without needless rudeness or posturing.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Dwarf
+  sex: male
+  age_band: Over 100 years old
+  appearance: Short but still broad-shouldered in old age, with an enormous full white beard, white
+    hair and small, highly intelligent eyes. His hands are marked by decades of forge work.
+  occupation: Elder and head of the Iron Hands workshop network
+  base_location: calderan_east
+  work_location: null
+  home_location: null
+  traits:
+    - decisive
+    - practical
+    - concise
+    - resolute
+    - not needlessly rude
+    - confident enough not to posture
+    - deep, slow, slightly rough voice
+    - slow to forget disrespect, even while professionally civil
+  purpose: Preserve the clan's reputation and techniques and leave the Iron Hands stronger than he
+    inherited them.
+  morality: Benevolent but strongly clan-oriented. He often helps people in difficulty, but tends to
+    prioritize dwarves when choices are otherwise equal.
+  affiliations:
+    - iron_hands
+  relationships: []
+  private_notes: Carries a long-standing resentment of the condescension he has often seen humans show
+    toward dwarves; he does not hate humans. His century-long memory makes him slow to forget
+    disrespect. He knows the Iron Hands' guarded production method; its details are not established.
+chunks: []

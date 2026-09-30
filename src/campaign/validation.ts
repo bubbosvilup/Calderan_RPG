@@ -87,6 +87,7 @@ command("register_character", { character: characterRecord });
 command("set_profile", { character_id: id, profile });
 command("set_condition", { character_id: id, conditions: distinct(text), presentation: optional(text), status: optional(choice("active", "inactive", "dead")) });
 command("move_character", { character_id: id, location_id: id });
+command("leave_scene", { character_id: id });
 command("set_slot_knowledge", { character_id: id, slot: id, state: choice("empty", "unknown") });
 command("register_item", { item: itemRecord });
 command("place_item", { item_id: id, position });

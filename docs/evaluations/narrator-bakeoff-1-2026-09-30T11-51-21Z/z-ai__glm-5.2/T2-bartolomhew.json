@@ -1,0 +1,263 @@
+{
+  "model": "z-ai/glm-5.2",
+  "provider": {
+    "tag": "z-ai/fp8",
+    "provider_name": "Z.AI",
+    "quantization": "fp8",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "Bartolomhew gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "69e263d8805ed2d3",
+      "draft": "Bartolomhew holds out the pair of leather boots with the same easy, paternal courtesy, and Nicco takes them.\n\nThey feel sturdy in hand — plain, well-made, nothing ornate. Bartolomhew's pleasant expression doesn't shift, his warm voice carrying the calm of a man who finishes small transactions as smoothly as he starts them. The square moves on around them at its moderate pace, a few passersby threading past without particular interest, the low residential roofs catching the daylight behind them. The heavy wooden face of Heartstone's entrance stands close at hand.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Bartolomhew holds out the pair of leather boots with the same easy, paternal courtesy, and Nicco takes them.\n\nThey feel sturdy in hand — plain, well-made, nothing ornate. Bartolomhew's pleasant expression doesn't shift, his warm voice carrying the calm of a man who finishes small transactions as smoothly as he starts them. The square moves on around them at its moderate pace, a few passersby threading past without particular interest, the low residential roofs catching the daylight behind them. The heavy wooden face of Heartstone's entrance stands close at hand.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": true,
+            "reason": "authorized_controller_evidence",
+            "check": "receipt_by_nicco"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3413,
+              "completion_tokens": 120,
+              "total_tokens": 3533,
+              "cost": 0.0053062,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0053062,
+                "upstream_inference_prompt_cost": 0.0047782,
+                "upstream_inference_completions_cost": 0.000528
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3413,
+            "completion_tokens": 120,
+            "total_tokens": 3533
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:41.295Z",
+            "headers_ms": 3993.6447000000044,
+            "time_to_first_token_ms": 3996.1451000000015,
+            "completed_at": "2026-09-30T11:55:45.315Z",
+            "elapsed_total_ms": 4019.376200000006
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 5435.295900000005,
+        "narrator_ttft_ms": 3996.1451000000015,
+        "narrator_total_ms": 4019.376200000006,
+        "controller_ms": 1389.6483999999982,
+        "turn_ms": 5435.615300000005
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "2eebecfb3e38d5dc",
+      "draft": "Nicco held the boots out toward Bartolomhew.\n\nBartolomhew glanced down at the offered pair, then back up at Nicco. The pleasant smile didn't waver. He raised a hand, palm out, and gave a small shake of his head. \"Keep them. I have my own, and a man new to the city walks a great deal more than he expects.\" His voice carried the same warm, unhurried courtesy. \"Besides, they were a gift. It would be poor manners to take a gift back.\"\n\nHe let his hand drop to his side and waited, still smiling, as if the matter were entirely settled.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": "Nicco held the boots out toward Bartolomhew.\n\nBartolomhew glanced down at the offered pair, then back up at Nicco. The pleasant smile didn't waver. He raised a hand, palm out, and gave a small shake of his head. \"Keep them. I have my own, and a man new to the city walks a great deal more than he expects.\" His voice carried the same warm, unhurried courtesy. \"Besides, they were a gift. It would be poor manners to take a gift back.\"\n\nHe let his hand drop to his side and waited, still smiling, as if the matter were entirely settled.",
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 3,
+        "revision_after": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "z-ai/glm-5.2",
+        "pinned_provider": "z-ai/fp8",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Z.AI",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3419,
+              "completion_tokens": 136,
+              "total_tokens": 3555,
+              "cost": 0.00232068,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 2688,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00232068,
+                "upstream_inference_prompt_cost": 0.00172228,
+                "upstream_inference_completions_cost": 0.0005984
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "usage": {
+            "prompt_tokens": 3419,
+            "completion_tokens": 136,
+            "total_tokens": 3555
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:55:46.714Z",
+            "headers_ms": 3877.5106000000014,
+            "time_to_first_token_ms": 3877.9160000000047,
+            "completed_at": "2026-09-30T11:55:50.558Z",
+            "elapsed_total_ms": 3891.010000000002
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 4615.386599999998,
+        "narrator_ttft_ms": 3877.9160000000047,
+        "narrator_total_ms": 3891.010000000002,
+        "controller_ms": 716.2259999999951,
+        "turn_ms": 4615.700799999999
+      }
+    }
+  ]
+}

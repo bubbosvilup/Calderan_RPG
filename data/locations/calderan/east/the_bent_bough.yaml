@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: the_bent_bough
+  type: location
+  name: The Bent Bough
+  display_name: The Bent Bough
+  parent: calderan_east
+  aliases:
+    - Bent Bough
+  summary: The Bent Bough is Arwen Woodsigner's bow and woodcraft shop in Calderan's East District.
+  tags:
+    - shop
+    - crafts
+  search_context: The Bent Bough, bow shop, bowyer, hunting bows, war bows, arrows, Woodsigner bows,
+    Arwen Woodsigner
+  content: The Bent Bough sells hunting bows, war bows, custom bows, arrows and specialist wooden
+    equipment. Arwen Woodsigner of the Calderan Woodsigner branch works here and personally makes
+    some of its premium bows. Its exact street, layout and other staff are not established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

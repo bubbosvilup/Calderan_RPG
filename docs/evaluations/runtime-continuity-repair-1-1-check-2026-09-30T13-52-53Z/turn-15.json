@@ -1,0 +1,79 @@
+{
+  "turn": 15,
+  "input": "He grabbed my arm, spilled my drink and then shoved me. I didn't hit him back. She saw all of it.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "draft": "Doran Hale crosses the common room with the unhurried certainty of a man who has walked into this kind of situation many times. He stops at the counter, glancing from Nicco to Dell Harrow and then to Jessa, his gaze settling on the spilled drink still dripping off the counter's edge.\n\n\"That what happened?\" he says to Jessa, not raising his voice.\n\nJessa nods once. \"He grabbed the man's arm, knocked the cup over, and shoved him when he pulled free. This one kept his hands down.\" She says it the way she'd read a line from her notebook — flat, precise, no editorializing.\n\nDell Harrow's jaw works, and he takes a half-step back from the counter, swaying slightly. \"I bumped his stool. That's all. He started in on me first.\"\n\nDoran looks at him for a long moment. \"You bumped his stool, grabbed his arm, spilled his drink, and shoved him. That's what she says. That's what I see.\" He gestures toward the door with his chin. \"You're done here tonight, Dell. Walk out, sleep it off. Come back when you can stand without leaning on someone else's furniture.\"\n\nDell's face darkens, but whatever retort he gathers dies when Doran doesn't look away. He pulls his coat tighter, mutters something under his breath, and makes for the door without quite stumbling. The common room settles back into its earlier quiet — a few patrons returning to their drinks, the sound of the street filtering in before the door swings shut behind him.\n\nDoran turns back to the counter. \"You're all right?\" he says to Nicco, the question brief and practical rather than warm.",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "delivered_source": "draft",
+  "delivered": "Doran Hale crosses the common room with the unhurried certainty of a man who has walked into this kind of situation many times. He stops at the counter, glancing from Nicco to Dell Harrow and then to Jessa, his gaze settling on the spilled drink still dripping off the counter's edge.\n\n\"That what happened?\" he says to Jessa, not raising his voice.\n\nJessa nods once. \"He grabbed the man's arm, knocked the cup over, and shoved him when he pulled free. This one kept his hands down.\" She says it the way she'd read a line from her notebook — flat, precise, no editorializing.\n\nDell Harrow's jaw works, and he takes a half-step back from the counter, swaying slightly. \"I bumped his stool. That's all. He started in on me first.\"\n\nDoran looks at him for a long moment. \"You bumped his stool, grabbed his arm, spilled his drink, and shoved him. That's what she says. That's what I see.\" He gestures toward the door with his chin. \"You're done here tonight, Dell. Walk out, sleep it off. Come back when you can stand without leaning on someone else's furniture.\"\n\nDell's face darkens, but whatever retort he gathers dies when Doran doesn't look away. He pulls his coat tighter, mutters something under his breath, and makes for the door without quite stumbling. The common room settles back into its earlier quiet — a few patrons returning to their drinks, the sound of the street filtering in before the door swings shut behind him.\n\nDoran turns back to the counter. \"You're all right?\" he says to Nicco, the question brief and practical rather than warm.",
+  "narrator": [
+    {
+      "upstream_provider": "Z.AI",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4951,
+        "completion_tokens": 358,
+        "total_tokens": 5309,
+        "cost": 0.0085066,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0085066,
+          "upstream_inference_prompt_cost": 0.0069314,
+          "upstream_inference_completions_cost": 0.0015752
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "provider_routing": {
+        "order": [
+          "z-ai/fp8"
+        ],
+        "allow_fallbacks": false
+      }
+    }
+  ],
+  "controller": {
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 4,
+    "present_npcs": [
+      "captain_doran_hale",
+      "jessa_rook"
+    ],
+    "created": [
+      {
+        "id": "campaign_character_eval_dell_harrow",
+        "location": "gatherers_inn",
+        "conditions": []
+      }
+    ]
+  },
+  "recent_conversation": {
+    "prompt_turns": 12,
+    "serialized_characters": 15255
+  },
+  "latency": {
+    "narrator_ttft_ms": 8136.3005,
+    "narrator_total_ms": 8163.784199999999,
+    "controller_ms": 1439.866399999999,
+    "turn_ms": 9675.0388
+  }
+}

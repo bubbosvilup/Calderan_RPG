@@ -1,0 +1,94 @@
+{
+  "turn": 5,
+  "input": "I haven't been in the city long, so everything still feels a bit strange. Back where I come from I used to work with plants. Herbs, mostly.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "e97d3af660170084",
+  "draft": "Jessa collected the empty bowl and set it aside, wiping the counter with a cloth that had seen plenty of use. \"Plenty of both,\" she said. \"Merchants passing through to the warehouses, workers from the shops, a few who just need somewhere to sleep for a night. Locals come in for the food when they don't feel like cooking.\" She folded the cloth once and laid it across the edge of the counter. \"What kind of plants?\"\n\nA couple at a nearby table had finished their meal and were gathering their things. Jessa glanced their way without comment, then back to Nicco. Her gaze tracked his hands — empty, steady, no tools, no coin pouch visible on the counter — before settling on his face with the unhurried attention of someone who had learned to read guests before they opened their mouths.\n\n\"City's strange to everyone at first,\" she said. \"West District especially. It's big and it doesn't explain itself.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa collected the empty bowl and set it aside, wiping the counter with a cloth that had seen plenty of use. \"Plenty of both,\" she said. \"Merchants passing through to the warehouses, workers from the shops, a few who just need somewhere to sleep for a night. Locals come in for the food when they don't feel like cooking.\" She folded the cloth once and laid it across the edge of the counter. \"What kind of plants?\"\n\nA couple at a nearby table had finished their meal and were gathering their things. Jessa glanced their way without comment, then back to Nicco. Her gaze tracked his hands — empty, steady, no tools, no coin pouch visible on the counter — before settling on his face with the unhurried attention of someone who had learned to read guests before they opened their mouths.\n\n\"City's strange to everyone at first,\" she said. \"West District especially. It's big and it doesn't explain itself.\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3415,
+          "completion_tokens": 198,
+          "total_tokens": 3613,
+          "cost": 0.0020042,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3200,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0020042,
+            "upstream_inference_prompt_cost": 0.001133,
+            "upstream_inference_completions_cost": 0.0008712
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3415,
+        "completion_tokens": 198,
+        "total_tokens": 3613
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:31:10.551Z",
+        "headers_ms": 5966.225300000002,
+        "time_to_first_token_ms": 5969.400900000004,
+        "completed_at": "2026-09-30T12:31:16.536Z",
+        "elapsed_total_ms": 5985.4362
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 5969.400900000004,
+    "narrator_total_ms": 5985.4362,
+    "controller_ms": 753.3949999999968,
+    "turn_ms": 6741.752799999995
+  }
+}

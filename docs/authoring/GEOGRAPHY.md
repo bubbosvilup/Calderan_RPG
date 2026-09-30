@@ -167,3 +167,17 @@ Containment: continent ? west ? calderan ? calderan_west ? heartstone ? existing
 The old main_city_structure ID survives in world/geography/calderan_city_structure.yaml as an overview. District details live in their locations. Continental structure also lives under geography; governance/slavery lore under governance. The legacy world_lore category `fundamentals` is retained as explicit schema metadata for compatibility; folder geography/governance supplies no semantics.
 
 NPC locations remain in the one character record, never a duplicated geography index. Pellan is based in Center; his exact workplace and home are unestablished IDs. Parent is containment; connections alone describe travel. Editorial directories and filenames have no navigation meaning.
+
+## Four-District + Institutional Authoring Pass 1 (2026-09-30)
+
+East, North, South and Center now carry detailed district canon and 23 anchor locations, all children of their district (parent is containment only):
+
+- **East:** `the_crucible`, `the_merchants_mile`, `the_smelter_pit`, `house_of_scales`, `house_of_making`.
+- **North:** `cathedral_of_the_bladed_sun`, `saint_caldus_house`, `pyres_of_the_fallen`, `the_collegium`, `spire_academy`, `bastion_of_vigilance`.
+- **South:** `imperial_gate`, `stonewatch_garrison`, `calderan_south_prison`, `the_long_yard`, `wayfarers_rest`.
+- **Center:** `ducal_citadel`, `calderan_civil_registry`, `ducal_archive`, `office_of_holdings_and_title`, `high_courts_of_calderan`, `gilded_row`, `fountain_court`.
+
+The only new travel edges are The Merchants' Mile ↔ The Crucible, because the brief states that the street feeds directly into the market. Proximity statements ("near the Citadel", "near The Collegium") are prose, not connections.
+
+The following are features, not entities: the Masterworks (House of Making), the Gold Cloister (Saint Caldus House), the Mage Registry (The Collegium), the Crucible's specialist streets, Center's four inner-wall gates, Calderan's four cardinal gates, and the Imperial Road. The road is a feature of the Imperial Gate so that the national geography inventory under `west` stays unchanged, with no road network authored. The other three city gates are not authored as locations.
+

@@ -1,0 +1,96 @@
+{
+  "turn": 12,
+  "input": "*Nicco pulls his arm free and steps back from the stool, keeping his hands open.* Let go. I don't want a fight in here.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "a19a2a5442d90d60",
+  "draft": "Dell’s grip slips away as Nicco wrenches his arm clear. The thick-armed worker sways on his heels, catching himself against the edge of the stool, his face flushed with drink and sudden temper. His salt-stained coat hangs crooked, and he glares at Nicco with heavy, reddened eyes.\n\n\"Don't tell me where to fight, soft-hands,\" Dell mutters, balling one hand into a blunt fist, though his footing remains clumsy. \n\nFrom behind the counter, Jessa Rook sets down a wiping cloth with deliberate calm. Her pale-scarred brow knits slightly, her gaze flicking first to Dell’s raised fist, then down to the dark puddle of ale spreading across the wooden surface, and finally to Nicco.\n\n\"That's enough of that, Dell,\" Jessa says, her voice steady and pitched just loud enough to cut through the taproom’s murmur. \"You've spilled a drink and made plenty of noise. Step back from the counter and sit yourself down, or finish your business outside.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Dell’s grip slips away as Nicco wrenches his arm clear. The thick-armed worker sways on his heels, catching himself against the edge of the stool, his face flushed with drink and sudden temper. His salt-stained coat hangs crooked, and he glares at Nicco with heavy, reddened eyes.\n\n\"Don't tell me where to fight, soft-hands,\" Dell mutters, balling one hand into a blunt fist, though his footing remains clumsy. \n\nFrom behind the counter, Jessa Rook sets down a wiping cloth with deliberate calm. Her pale-scarred brow knits slightly, her gaze flicking first to Dell’s raised fist, then down to the dark puddle of ale spreading across the wooden surface, and finally to Nicco.\n\n\"That's enough of that, Dell,\" Jessa says, her voice steady and pitched just loud enough to cut through the taproom’s murmur. \"You've spilled a drink and made plenty of noise. Step back from the counter and sit yourself down, or finish your business outside.\"",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 3,
+    "revision_after": 3,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [
+      "campaign_character_eval_dell_harrow"
+    ],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "google/gemini-3.8-flash",
+    "pinned": "google-vertex/global",
+    "reasoning": {
+      "effort": "minimal"
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Google",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3570,
+          "completion_tokens": 222,
+          "total_tokens": 3792,
+          "cost": 0.00351,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00351,
+            "upstream_inference_prompt_cost": 0.0026775,
+            "upstream_inference_completions_cost": 0.0008325
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "google/gemini-3.8-flash",
+      "usage": {
+        "prompt_tokens": 3570,
+        "completion_tokens": 222,
+        "total_tokens": 3792
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:31:36.290Z",
+        "headers_ms": 1993.4164999999994,
+        "time_to_first_token_ms": 1997.2536000000036,
+        "completed_at": "2026-09-30T12:31:40.903Z",
+        "elapsed_total_ms": 4612.615100000003
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 1997.2536000000036,
+    "narrator_total_ms": 4612.615100000003,
+    "controller_ms": 1726.9279999999999,
+    "turn_ms": 6342.933400000002
+  }
+}

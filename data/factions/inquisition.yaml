@@ -7,19 +7,50 @@ entity:
   parent: "church"
   aliases: []
   summary: >-
-    The Inquisition is a powerful, feared national organ of the Church.
-  tags: ["politics"]
-  search_context: ""
+    The Inquisition is the powerful, feared enforcement and investigative organ of the Church of
+    the Sun Emperor, headquartered at the Bastion of Vigilance in Calderan's North District.
+  tags: ["politics", "religion"]
+  search_context: "Inquisition, High Inquisitor of the West, Inquisitors, Inquisition Militia, archivists, Bastion of Vigilance, heresy, unregistered mages"
   content: >-
-    The Inquisition is institutionally intimidating and can operate through local presence
-    when necessary. It may take interest in exceptional magic, Light/Shadow users, matters
-    considered dangerous or religiously significant, and other issues later defined by
-    doctrine. Its authority, secrecy, reputation, and power make it feared. Legal powers
-    remain undefined; it is not established as omnipotent, unopposed, or purely evil. Interest
-    and intervention depend on circumstances, not an automatic response to every rare spell.
+    The Inquisition is institutionally intimidating and has extremely broad authority within its
+    mandate: heresy, Shadow magic, unregistered mages, exceptional or dangerous magic, Light or
+    Shadow users, and matters of Church security. Its national head, the High Inquisitor of the West, is based in Calderan;
+    the Inquisition is a Church institution with substantial operational autonomy, subordinate to
+    the High Archon's broader spiritual authority. Inquisitors are senior operational agents who
+    may lead teams of the Inquisition Militia, its armed branch for temple security, patrols, raids
+    and enforcement. Inquisition Clerics and Archivists handle intelligence, heresy records, mage
+    surveillance, reports, archives and investigations. Its headquarters and national
+    administrative center is the Bastion of Vigilance in North. The City Guard must cooperate with
+    it under prior legal and political accords; the relationship is tense. The High Inquisitor has
+    no permanent Ducal Council seat but may be summoned for heresy, major arcane threats or Church
+    security. Unregistered mages are arrested, referred to it, and interrogated, examined and
+    risk-assessed. It controls Null Dust, and it is publicly said that the Inquisition can break a
+    mage. Its secrecy, reputation and power make it feared; it is not omnipotent or unopposed, and
+    intervention depends on circumstances rather than following automatically from every rare
+    spell. The current High Inquisitor of the West is Helbrecht; no individual Inquisitors are named.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
-  members: []
+  members: ["helbrecht", "severan_krauss"]
   territory: []
-  relations: []
-chunks: []
-
+  relations:
+    - target: "church"
+      kind: "parent_institution"
+      description: "An organ of the Church under the High Archon's spiritual authority, with substantial operational autonomy."
+    - target: "city_guard"
+      kind: "required_cooperation"
+      description: "The City Guard must cooperate under prior legal and political accords; relations are tense."
+chunks:
+  - id: "inquisition.jurisdiction"
+    entity_id: "inquisition"
+    section: "jurisdiction"
+    summary: "Who the Inquisition may arrest, and its relationship with the City Guard."
+    search_context: "Inquisition arrest powers, warrant, seal of the High Archon, nobles, commoners, wealthy merchants, City Guard accords"
+    content: >-
+      Within inquisitorial jurisdiction the Inquisition may arrest commoners and ordinary free
+      citizens directly. Arresting a noble normally requires a formal warrant bearing the seal of the
+      High Archon, except in obvious immediate danger or an active catastrophic threat. Wealthy
+      merchants have no formal noble immunity but strong political protection in practice. The City
+      Guard must cooperate under prior legal and political accords; many Guard officers believe the
+      Inquisition has excessive power. Detailed arrest timelines, trial procedures and sentences are
+      not established.
+    tags: ["law", "authority"]
+    knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}

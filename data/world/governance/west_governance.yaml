@@ -7,25 +7,29 @@ entity:
   parent: null
   aliases: []
   summary: >-
-    West is a monarchy: the Royal Family stands above Dukes governing major cities and their
-    surrounding territories.
+    West is a realm ruled by the Sun Emperor, its divine and functionally immortal sovereign, with
+    Dukes governing major cities and their surrounding territories in his name.
   tags: ["fundamentals"]
-  search_context: ""
+  search_context: "Sun Emperor, sovereign of West, Crown, Dukes, ducal councils, guilds, Church"
   content: >-
-    Each Duke is the primary local authority beneath the Crown, supported by a local council.
-    The council may include local nobles, representatives of the three national guilds, and
-    ecclesiastical representation; membership counts, voting, quorum, and exact constitutional
-    powers remain undefined. Local nobles exist without a standardized tier taxonomy. The four
-    major institutional power blocs are the Merchants Guild, Artisans Guild, Learned Arts
-    Guild, and Church. The first three are national guilds; the Church is not a guild but has
-    comparable political weight. Guilds may maintain city branches and local representatives,
-    who collectively determine or select a national representative; selection methods and
-    terms remain undefined. For major kingdom-wide matters the Crown may summon or consult
-    Dukes, national representatives of the three guilds, and national Church representation.
-    No permanent exact council or constitution is fixed. King, Queen, Princes, and Princesses
-    are ordinary royal concepts, not named NPCs; succession law remains undefined.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
+    The Sun Emperor is the reigning sovereign of West and the supreme source of legitimacy. Church
+    doctrine holds him to be a divine and immortal sovereign; he is functionally immortal. He does
+    not reside in Calderan, and his residence is undefined. "The Crown" refers to his sovereign
+    authority; no royal family, succession law or named heir is established. Each Duke is the
+    primary temporal authority of a major city and its territory beneath the Sun Emperor, supported
+    by a local council; Calderan's council has a fixed nine-seat form, while other cities' councils
+    remain undefined. Such councils may include local nobles, representatives of the three national
+    guilds, and ecclesiastical representation. Local nobles exist without a standardized tier
+    taxonomy. The four major institutional power blocs are the Merchants Guild, Artisans Guild,
+    Learned Arts Guild, and the Church of the Sun Emperor. The first three are national guilds; the
+    Church is not a guild but has comparable or greater political weight. Temporal and spiritual
+    authority are separate: Dukes govern civic matters, while the Church's High Archon of the West
+    holds spiritual authority, and neither simply outranks the other. Guilds may maintain city
+    branches and local representatives, who collectively determine or select a national
+    representative; selection methods and terms remain undefined. For major realm-wide matters
+    Dukes, guild national representatives and national Church representation may be summoned or
+    consulted in the sovereign's name. No constitution is fixed.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   category: "fundamentals"
-  related_entities: ["merchants_guild","artisans_guild","learned_arts_guild","church","city_magistracy"]
+  related_entities: ["merchants_guild","artisans_guild","learned_arts_guild","church","city_magistracy","sun_emperor","ducal_council_of_calderan"]
 chunks: []
-

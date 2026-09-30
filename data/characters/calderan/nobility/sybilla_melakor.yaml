@@ -1,0 +1,52 @@
+schema_version: 1
+entity:
+  id: sybilla_melakor
+  type: character
+  name: Sybilla Melakor
+  display_name: Sybilla Melakor
+  parent: null
+  aliases: []
+  summary: Sybilla Melakor is the matriarch of House Melakor, a cunning founding noble house of Calderan.
+  tags:
+    - nobility
+  search_context: Sybilla Melakor, House Melakor matriarch
+  content: Sybilla Melakor heads House Melakor and holds its standing seat on the Ducal Council. Her
+    house works through alliances, patronage, marriage strategy, information, favors and political
+    debt. She recognizes the prevailing political direction early and positions House Melakor
+    accordingly, often sensing a shift in the council's atmosphere before other members admit one
+    exists.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 66–69
+  appearance: "Mature without immediately reading as frail or elderly: elegant, with impeccable
+    posture, carefully maintained dark-grey hair and strong facial features. Her clothing is always
+    politically and socially appropriate to the occasion."
+  occupation: Matriarch of House Melakor
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - assertive
+    - adaptable
+    - opportunistic
+    - strong-willed
+    - politically acute
+    - a deliberate political weather vane who reads the prevailing direction early
+    - often senses a shift in political atmosphere before others admit it exists
+  purpose: Keep House Melakor indispensable.
+  morality: Pragmatic. She avoids pointless cruelty but will sacrifice principles or people for
+    sufficient political value. Her overriding conviction is that House Melakor must remain relevant
+    and powerful whichever faction has momentum; she is neither foolish nor without convictions.
+  affiliations:
+    - house_melakor
+    - ducal_council_of_calderan
+  relationships: []
+  private_notes: Her deepest fear is irreversibly backing the losing side.
+chunks: []

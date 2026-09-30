@@ -1,0 +1,98 @@
+{
+  "turn": 3,
+  "input": "This is good, thank you. Can I ask you something? I've been looking for someone who repairs old clocks. Is there a clockmaker anywhere around here?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "d95a73d1a8121bfe",
+  "prompt_characters": 17143,
+  "draft": "Jessa set a bowl of stew on the counter and a clay mug of something dark beside it. Steam rose from the bowl.\n\nNicco ate. The stew was simple and hot.\n\nJessa was collecting a few dishes from the counter when he asked. She paused, wiping her hands on a cloth.\n\n\"A clockmaker,\" she repeated, turning the word over like she was checking it against what she actually knew. She shook her head. \"Can't say I know one in West. Don't get much call for that sort of trade around here.\" She folded the cloth and set it down. \"You might try the craft streets north of the market district, where the fine shops are. That's where I'd look, if I needed something like that. But I couldn't name a particular shop for you.\" She picked up the cloth again, already half-turned toward the next task. \"Sorry I can't be more help than that.\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa set a bowl of stew on the counter and a clay mug of something dark beside it. Steam rose from the bowl.\n\nNicco ate. The stew was simple and hot.\n\nJessa was collecting a few dishes from the counter when he asked. She paused, wiping her hands on a cloth.\n\n\"A clockmaker,\" she repeated, turning the word over like she was checking it against what she actually knew. She shook her head. \"Can't say I know one in West. Don't get much call for that sort of trade around here.\" She folded the cloth and set it down. \"You might try the craft streets north of the market district, where the fine shops are. That's where I'd look, if I needed something like that. But I couldn't name a particular shop for you.\" She picked up the cloth again, already half-turned toward the next task. \"Sorry I can't be more help than that.\"",
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 2,
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created": [],
+    "conditions": []
+  },
+  "recent_conversation": {
+    "turns_retained": 3,
+    "prompt_turns": 3,
+    "serialized_characters": 3121,
+    "context_recent_characters": 2090
+  },
+  "narrator": {
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3533,
+          "completion_tokens": 190,
+          "total_tokens": 3723,
+          "cost": 0.00198828,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3328,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00198828,
+            "upstream_inference_prompt_cost": 0.00115228,
+            "upstream_inference_completions_cost": 0.000836
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3533,
+        "completion_tokens": 190,
+        "total_tokens": 3723
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T13:20:27.406Z",
+        "headers_ms": 5906.853300000001,
+        "time_to_first_token_ms": 5909.7741000000005,
+        "completed_at": "2026-09-30T13:20:33.345Z",
+        "elapsed_total_ms": 5939.127699999999
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 5909.7741000000005,
+    "narrator_total_ms": 5939.127699999999,
+    "controller_ms": 782.5185999999994,
+    "turn_ms": 6742.4365
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "turn": 2,
+  "input": "Whatever's hot and doesn't cost too much, then. And something to drink, but not wine, I don't have the head for it tonight. *He takes a stool at the counter.*",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "8eb83ca2c4b65d19",
+  "prompt_characters": 16878,
+  "draft": "Jessa Rook glanced at his hands — empty, no blood, no tools, no coin visible — then at his face. She gave a short nod and reached for a cloth to wipe a section of counter in front of the stool he'd taken.\n\n\"I've got a barley broth on, with bread. That's the cheap option tonight. There's a mutton pie too, costs a bit more.\" She didn't wait long for him to puzzle over it. \"Broth and bread, then. Ale or small beer to drink?\" She'd already turned toward the kitchen before the question fully finished, as though the answer was a formality.\n\nThe common room behind him held a handful of other patrons — a pair at a corner table speaking low over something spread between them, a man alone near the window with a cup. Quiet conversation, the clink of a spoon against ceramic. Nothing that demanded attention.",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa Rook glanced at his hands — empty, no blood, no tools, no coin visible — then at his face. She gave a short nod and reached for a cloth to wipe a section of counter in front of the stool he'd taken.\n\n\"I've got a barley broth on, with bread. That's the cheap option tonight. There's a mutton pie too, costs a bit more.\" She didn't wait long for him to puzzle over it. \"Broth and bread, then. Ale or small beer to drink?\" She'd already turned toward the kitchen before the question fully finished, as though the answer was a formality.\n\nThe common room behind him held a handful of other patrons — a pair at a corner table speaking low over something spread between them, a man alone near the window with a cup. Quiet conversation, the clink of a spoon against ceramic. Nothing that demanded attention.",
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_after": 2,
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created": [],
+    "conditions": []
+  },
+  "recent_conversation": {
+    "turns_retained": 2,
+    "prompt_turns": 2,
+    "serialized_characters": 2090,
+    "context_recent_characters": 1068
+  },
+  "narrator": {
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3478,
+          "completion_tokens": 184,
+          "total_tokens": 3662,
+          "cost": 0.0020308,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3200,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0020308,
+            "upstream_inference_prompt_cost": 0.0012212,
+            "upstream_inference_completions_cost": 0.0008096
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null,
+        "provider_routing": {
+          "order": [
+            "z-ai/fp8"
+          ],
+          "allow_fallbacks": false
+        }
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3478,
+        "completion_tokens": 184,
+        "total_tokens": 3662
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T13:20:20.803Z",
+        "headers_ms": 5786.8378999999995,
+        "time_to_first_token_ms": 5787.100299999999,
+        "completed_at": "2026-09-30T13:20:26.614Z",
+        "elapsed_total_ms": 5810.534699999999
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 5787.100299999999,
+    "narrator_total_ms": 5810.534699999999,
+    "controller_ms": 767.357,
+    "turn_ms": 6601.6305999999995
+  }
+}

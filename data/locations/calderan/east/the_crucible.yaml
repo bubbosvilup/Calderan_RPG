@@ -1,0 +1,36 @@
+schema_version: 1
+entity:
+  id: the_crucible
+  type: location
+  name: "The Crucible"
+  display_name: "The Crucible"
+  parent: calderan_east
+  aliases: []
+  summary: >-
+    The Crucible is the largest market in the entire nation of West: one enormous central market
+    square in Calderan's East District with adjacent specialized commercial streets.
+  tags: ["market","commerce"]
+  search_context: "The Crucible, largest market in West, biggest market in Calderan, great market, East District market square, auctions, farmers market, Clothier Street, Anvil Alley, Glasswork Row, textiles, weapons, jewelry"
+  content: >-
+    The Crucible is the largest market in West, not merely in Calderan. Its enormous central
+    square holds general goods, large-scale stalls, auction lots and high-volume trade, from
+    common goods to rare and expensive ones. Mornings have a strong food and farmer-market
+    component; daytime brings broad general commerce. Specialized commercial streets adjoin the
+    square. Textile commerce is especially important: everyday clothing, luxury cloth and
+    fashion production, including high-end goods later sold in Center. Weapons, armor, jewelry
+    and prestige craft are also available. The Merchants' Mile feeds directly into it.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  features:
+    - name: "central market square"
+      description: >-
+        An enormous central square of general goods, large-scale stalls, auction lots and
+        high-volume trade; a strong food and farmer market in the mornings.
+    - name: "specialist streets"
+      description: >-
+        Adjacent specialized commercial streets, such as Clothier Street for cloth and clothing,
+        Anvil Alley for metalwork and Glasswork Row for glass. They are not separately authored
+        locations.
+  connections:
+    - target: the_merchants_mile
+      description: "The Merchants' Mile runs directly into The Crucible."
+chunks: []

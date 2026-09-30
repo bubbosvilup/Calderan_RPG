@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: house_of_making
+  type: location
+  name: "The House of Making"
+  display_name: "The House of Making"
+  parent: calderan_east
+  aliases: ["House of Making"]
+  summary: >-
+    The House of Making is the headquarters of the Artisans Guild in Calderan's East District,
+    housing guild administration, certification and the elite shared workshops called the
+    Masterworks.
+  tags: ["guild","crafts"]
+  search_context: "House of Making, Artisans Guild headquarters, Masterworks, precision forge, mechanical workshop, certification, masters"
+  content: >-
+    The House of Making is the Artisans Guild's headquarters. It houses guild administration,
+    certification, the guild's masters, workshop politics and records, and gives access to rare
+    tools and high-value specialist workspaces. Within it are elite shared specialist facilities
+    known collectively as the Masterworks. The guild it serves covers many crafts, not only
+    smithing.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+  features:
+    - name: "The Masterworks"
+      description: >-
+        Elite shared specialist facilities within the House of Making, which may include a precision
+        forge, a mechanical workshop, rare-material workspaces, specialist tool rooms and other
+        advanced craft facilities.
+  connections: []
+chunks: []

@@ -1,0 +1,147 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T2",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "Bartolomhew gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "69e263d8805ed2d3",
+      "draft": " Bartolomhew reaches into a satchel at his hip and withdraws a worn pair of leather boots, extending them toward Nicco with his characteristic paternal smile. \"For your patience,\" he says warmly. \"A small courtesy from the market.\"\n\nHe waits, pleasant and unhurried, boots offered in his raised hands.",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Bartolomhew reaches into a satchel at his hip and withdraws a worn pair of leather boots, extending them toward Nicco with his characteristic paternal smile. \"For your patience,\" he says warmly. \"A small courtesy from the market.\"\n\nHe waits, pleasant and unhurried, boots offered in his raised hands.",
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "controller": {
+        "proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "kind": "transfer_item",
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "check": "no_handover_or_receipt"
+          }
+        ],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bartolomhew",
+            "position": {
+              "kind": "carried",
+              "character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3408,
+              "completion_tokens": 68,
+              "total_tokens": 3476,
+              "cost": 0.0022488,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0022488,
+                "upstream_inference_prompt_cost": 0.0020448,
+                "upstream_inference_completions_cost": 0.000204
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3408,
+            "completion_tokens": 68,
+            "total_tokens": 3476
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:54:49.015Z",
+            "headers_ms": 1488.1698000000001,
+            "time_to_first_token_ms": 1489.0424,
+            "completed_at": "2026-09-30T11:54:54.594Z",
+            "elapsed_total_ms": 5579.5284
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 6875.993200000001,
+        "narrator_ttft_ms": 1489.0424,
+        "narrator_total_ms": 5579.5284,
+        "controller_ms": 1197.5730000000003,
+        "turn_ms": 6876.742700000001
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "skipped": "gift_not_committed"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+schema_version: 1
+entity:
+  id: lysandra_vell
+  type: character
+  name: Lysandra Vell
+  display_name: Professor Lysandra Vell
+  parent: null
+  aliases:
+    - Professor Lysandra Vell
+    - Professor Vell
+  summary: Lysandra Vell is a senior instructor at the Spire Academy in Calderan's North District,
+    teaching law, logistics, political philosophy and institutional history.
+  tags:
+    - north_npc
+    - scholarship
+    - education
+  search_context: Lysandra Vell, Professor Vell, Spire Academy instructor, law, logistics, political
+    philosophy, institutional history, teacher
+  content: Professor Lysandra Vell is a senior instructor at the Spire Academy, teaching law,
+    logistics, political philosophy and institutional history. Sharp and intellectually demanding,
+    with a dry humor, she genuinely enjoys teaching capable students and is less tolerant of
+    laziness than of ignorance. She answers weak questions with another, harder question.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 43–47
+  appearance: Tall and slender, with shoulder-length black hair and dark green eyes. Wears plain but
+    high-quality academic clothing and often carries several books or notebooks.
+  occupation: Senior instructor at the Spire Academy
+  base_location: spire_academy
+  work_location: spire_academy
+  home_location: null
+  traits:
+    - sharp
+    - intellectually demanding
+    - dry humor
+    - genuinely enjoys teaching capable students
+    - less tolerant of laziness than of ignorance
+    - answers weak questions with another, harder question
+  purpose: Produce students capable of understanding how institutions actually function, not merely
+    repeating inherited doctrine.
+  morality: Moderately liberal by Calderan elite standards but still a product of her world. She may
+    privately criticize institutional stupidity while remaining inside the system; she is not a
+    revolutionary.
+  affiliations: []
+  relationships: []
+  private_notes: She has an educated understanding of magic and of Church and Guild tensions, but no
+    knowledge of the Church's restricted Light doctrine. The Academy's curriculum beyond its broad
+    established fields is not established.
+chunks: []

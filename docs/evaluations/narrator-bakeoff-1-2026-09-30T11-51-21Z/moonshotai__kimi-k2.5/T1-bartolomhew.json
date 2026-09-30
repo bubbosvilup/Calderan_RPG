@@ -1,0 +1,108 @@
+{
+  "model": "moonshotai/kimi-k2.5",
+  "provider": {
+    "tag": "amazon-bedrock/us-east-2",
+    "provider_name": "Amazon Bedrock",
+    "quantization": "unknown",
+    "reasoning": {
+      "enabled": false
+    }
+  },
+  "test": "T1",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Bartolomhew who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "4a74812adf9ced3d",
+      "draft": " Bartolomhew's paternal smile doesn't waver as his blue eyes—pale against the white threading through his blond hair—take in Nicco's appearance. The retained clerical tonsure frames his face like a lingering claim to some former station, though his elegant clothing speaks more of commerce than ministry now.\n\n\"I don't believe I know you at all, friend,\" he says, voice warm and unhurried. \"You look new here to my eye.\" He gestures vaguely toward the tower behind Nicco. \"Perhaps you're connected to that old pile? I can't say I've ever seen who holds it.\" No accusation enters his tone; merely assessment, the same patient inventory he might apply to any unfamiliar goods. \"As for where you're from—well, your accent doesn't place you in any district I know, and that's all I'd venture.\"",
+      "issues": [],
+      "revision_requested": false,
+      "revision": null,
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "draft",
+      "delivered": " Bartolomhew's paternal smile doesn't waver as his blue eyes—pale against the white threading through his blond hair—take in Nicco's appearance. The retained clerical tonsure frames his face like a lingering claim to some former station, though his elegant clothing speaks more of commerce than ministry now.\n\n\"I don't believe I know you at all, friend,\" he says, voice warm and unhurried. \"You look new here to my eye.\" He gestures vaguely toward the tower behind Nicco. \"Perhaps you're connected to that old pile? I can't say I've ever seen who holds it.\" No accusation enters his tone; merely assessment, the same patient inventory he might apply to any unfamiliar goods. \"As for where you're from—well, your accent doesn't place you in any district I know, and that's all I'd venture.\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "moonshotai/kimi-k2.5",
+        "pinned_provider": "amazon-bedrock/us-east-2",
+        "reasoning_setting": {
+          "enabled": false
+        },
+        "calls": 1,
+        "revision_calls": 0,
+        "wires": [
+          {
+            "upstream_provider": "Amazon Bedrock",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3271,
+              "completion_tokens": 172,
+              "total_tokens": 3443,
+              "cost": 0.0024786,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0024786,
+                "upstream_inference_prompt_cost": 0.0019626,
+                "upstream_inference_completions_cost": 0.000516
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3271,
+            "completion_tokens": 172,
+            "total_tokens": 3443
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T11:54:48.992Z",
+            "headers_ms": 5019.385,
+            "time_to_first_token_ms": 5023.1437,
+            "completed_at": "2026-09-30T11:54:56.089Z",
+            "elapsed_total_ms": 7096.7783
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 7974.413100000001,
+        "narrator_ttft_ms": 5023.1437,
+        "narrator_total_ms": 7096.7783,
+        "controller_ms": 829.3607000000002,
+        "turn_ms": 7975.1431
+      }
+    }
+  ]
+}

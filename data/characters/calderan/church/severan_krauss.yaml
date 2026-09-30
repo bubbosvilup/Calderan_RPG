@@ -1,0 +1,66 @@
+schema_version: 1
+entity:
+  id: severan_krauss
+  type: character
+  name: Severan Krauss
+  display_name: Inquisitor Severan
+  parent: null
+  aliases:
+    - Inquisitor Severan
+    - Inquisitor Severan Krauss
+  summary: Severan Krauss is a senior field Inquisitor serving under High Inquisitor Helbrecht at the
+    Bastion of Vigilance.
+  tags:
+    - inquisition
+  search_context: Severan Krauss, Inquisitor Severan, senior Inquisitor, investigator, interrogation,
+    Bastion of Vigilance
+  content: Severan Krauss is a senior field Inquisitor at the Bastion of Vigilance, serving under High
+    Inquisitor Helbrecht. He is excellent with records, timelines and contradictions and handles
+    much of the documentation, reconstruction and analytic work of investigations. His voice is
+    soft, formal and almost courteous; he rarely raises it, and the more certain he becomes that
+    someone is lying, the calmer he sounds. He prefers to let people talk until they contradict
+    themselves, then repeats their earlier statement back to them almost word for word.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 44–48
+  appearance: Slightly above average height, lean and pale, with dark hair beginning to grey, a narrow
+    face and grey eyes. Wears meticulously maintained inquisitorial clothing and is rarely visibly
+    armed beyond what his office requires.
+  occupation: Senior field Inquisitor
+  base_location: bastion_of_vigilance
+  work_location: bastion_of_vigilance
+  home_location: null
+  traits:
+    - quiet
+    - methodical
+    - patient
+    - intellectually curious
+    - unnervingly polite
+    - excellent with records, timelines and contradictions
+    - soft, formal, almost courteous voice
+    - repeats a person's earlier statement back almost word for word when he finds a contradiction
+    - grows calmer the more certain he is that someone is lying
+  purpose: Identify genuine heresy and magical danger through evidence rather than noise.
+  morality: A severe institutional inquisitor, not sadistic, who can authorize brutal interrogation
+    when doctrine permits it. He dislikes sloppy accusations because false positives waste
+    Inquisition time and damage its authority. His blind spot is that he cares far more whether a
+    procedure identifies the correct target than whether the procedure itself is humane.
+  affiliations:
+    - inquisition
+    - church
+  relationships:
+    - target: helbrecht
+      kind: superior
+      description: His superior, the High Inquisitor, whom he respects professionally as an exemplary
+        operational Inquisitor. No personal friendship is established.
+  private_notes: As a senior Inquisitor he knows operational facts about Null Dust. He does not know
+    the Mutilating Ritual's detailed method or the Church's restricted Light doctrine. His family
+    and life before the Inquisition are not established.
+chunks: []

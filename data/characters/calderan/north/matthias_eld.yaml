@@ -1,0 +1,54 @@
+schema_version: 1
+entity:
+  id: matthias_eld
+  type: character
+  name: Matthias Eld
+  display_name: Registrar Matthias Eld
+  parent: null
+  aliases:
+    - Registrar Matthias Eld
+    - Registrar Eld
+  summary: Matthias Eld is the senior day-to-day registrar of the Mage Registry inside The Collegium
+    in Calderan's North District.
+  tags:
+    - north_npc
+    - scholarship
+    - records
+  search_context: Matthias Eld, Registrar Eld, Mage Registry registrar, mage registration, The Collegium
+  content: "Matthias Eld is the senior day-to-day registrar working in the Mage Registry inside The
+    Collegium. Courteous, nervous and detail-oriented, he works where a clerical mistake can attract
+    the Inquisition, and it has made him cautious: whenever magic is involved, he checks the same
+    document twice. He is not a Council member."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 38–42
+  appearance: Short and neat, with receding light-brown hair, pale blue eyes, ink-stained fingers and
+    perpetually tidy clothing.
+  occupation: Senior registrar of the Mage Registry
+  base_location: the_collegium
+  work_location: the_collegium
+  home_location: null
+  traits:
+    - courteous
+    - nervous
+    - detail-oriented
+    - procedural
+    - uncomfortable around uncontrolled magic
+    - checks the same document twice when magic is involved
+  purpose: Keep mage records accurate enough that neither the Guild nor the Inquisition can blame his
+    office for a dangerous oversight.
+  morality: Basically decent and institutionally timid. He does not enjoy reporting people, but does
+    so when required.
+  affiliations:
+    - learned_arts_guild
+  relationships: []
+  private_notes: He knows registration procedure and ordinary regulated-magic bureaucracy, and nothing
+    of the Church's restricted Light doctrine. The Registry's staffing structure is not established.
+chunks: []

@@ -1,0 +1,97 @@
+{
+  "turn": 18,
+  "input": "*He looks around the quieter room.* Thank you for dinner, and for everything. I'll probably come back tomorrow. And the plant offer stands, I mean it.",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "78be1c1d0c206799",
+  "draft": "Jessa gave a brief, measured nod, wiping down the wood of the counter with an unhurried sweep of her cloth. \n\n\"The night stayed quiet enough, which is what matters,\" she said, her voice steady and low. \"As for the plant, we'll see what tomorrow brings. I don't turn away a decent thought, but there's no debt between us on it. Rest easy if you're turning in.\"\n\nNearby, Dell Harrow sat hunched and brooding over the remains of his sour evening, keeping his complaints muttered and low. Captain Doran Hale stood near the entrance, casting a final disciplined glance across the common room before turning his attention toward the door.",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "Jessa gave a brief, measured nod, wiping down the wood of the counter with an unhurried sweep of her cloth. \n\n\"The night stayed quiet enough, which is what matters,\" she said, her voice steady and low. \"As for the plant, we'll see what tomorrow brings. I don't turn away a decent thought, but there's no debt between us on it. Rest easy if you're turning in.\"\n\nNearby, Dell Harrow sat hunched and brooding over the remains of his sour evening, keeping his complaints muttered and low. Captain Doran Hale stood near the entrance, casting a final disciplined glance across the common room before turning his attention toward the door.",
+  "natural_actions": [],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 4,
+    "revision_after": 4,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "captain_doran_hale",
+      "jessa_rook"
+    ],
+    "created_present": [
+      "campaign_character_eval_dell_harrow"
+    ],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "google/gemini-3.8-flash",
+    "pinned": "google-vertex/global",
+    "reasoning": {
+      "effort": "minimal"
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Google",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 4093,
+          "completion_tokens": 144,
+          "total_tokens": 4237,
+          "cost": 0.00360975,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00360975,
+            "upstream_inference_prompt_cost": 0.00306975,
+            "upstream_inference_completions_cost": 0.00054
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "google/gemini-3.8-flash",
+      "usage": {
+        "prompt_tokens": 4093,
+        "completion_tokens": 144,
+        "total_tokens": 4237
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:32:17.798Z",
+        "headers_ms": 10109.008600000001,
+        "time_to_first_token_ms": 13837.0861,
+        "completed_at": "2026-09-30T12:32:33.249Z",
+        "elapsed_total_ms": 15450.872900000002
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 13837.0861,
+    "narrator_total_ms": 15450.872900000002,
+    "controller_ms": 893.4628999999986,
+    "turn_ms": 16348.431299999997
+  }
+}

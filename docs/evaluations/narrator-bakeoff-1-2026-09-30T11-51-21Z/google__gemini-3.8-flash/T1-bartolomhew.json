@@ -1,0 +1,144 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "provider": {
+    "tag": "google-ai-studio",
+    "provider_name": "Google AI Studio",
+    "quantization": "unknown",
+    "reasoning": {
+      "effort": "minimal"
+    }
+  },
+  "test": "T1",
+  "npc": "bartolomhew",
+  "location": null,
+  "turns": [
+    {
+      "input": "*He asks Bartolomhew who they think he is and where he comes from.*",
+      "outcome": "success",
+      "provider_code": null,
+      "attempt": 1,
+      "prompt_hash": "4a74812adf9ced3d",
+      "draft": "Bartolomhew regarded Nicco with an easy, paternal smile, his hands resting comfortably before his clerical-cut robes. Across the modest paving of Heartstone Square, daytime passers-by moved at an unhurried distance, keeping clear of the heavy timber doors of the tower and the quiet conversation beside it.\n\n\"I confess I could hardly tell you,\" Bartolomhew said, his voice warm and evenly pitched. \"A stranger to my eyes, certainly. If I were forced to make a guess simply from standing across from you, I might think you a gentleman recently arrived in Calderan, perhaps with some modest affairs to settle in the district. But as to who you truly are, or what town or province you hail from, I have not the slightest notion.\"\n\nHe tilted his head slightly, the pleasant curve of his mouth never wavering. \"A man's origin is rarely written plainly on his coat, after all. Should I take an interest, or are you merely testing an old cleric's eye?\"",
+      "issues": [
+        {
+          "kind": "uncommitted_constraint",
+          "sentence": "Bartolomhew regarded Nicco with an easy, paternal smile, his hands resting comfortably before his clerical-cut robes.",
+          "correction": "Nicco is not restrained, held, removed, detained or banned: none of that is recorded. Characters may threaten, order or demand it in words, or start toward it, but do not narrate it as accomplished."
+        }
+      ],
+      "revision_requested": true,
+      "revision": "Bartolomhew offered an easy, paternal smile, standing upright before the heavy entrance to the tower. Across the modest paving of Heartstone Square, daytime passers-by moved at an unhurried distance, leaving plenty of open ground around them.\n\n\"I confess I could hardly tell you,\" Bartolomhew said, his voice warm and evenly pitched. \"A stranger to my eyes, certainly. If I were forced to make a guess simply from standing here looking at you, I might take you for a gentleman recently arrived in Calderan, perhaps with some modest affairs to settle in the district. But as to who you truly are, or what town or province you hail from, I have not the slightest notion.\"\n\nHe tilted his head slightly, his pleasant expression remaining smooth and undisturbed. \"A man's origin is rarely written plainly on his face, after all. Should I take a particular interest, or are you merely testing an old cleric's eye?\"",
+      "revision_issues": [],
+      "redaction": false,
+      "delivered_source": "revision",
+      "delivered": "Bartolomhew offered an easy, paternal smile, standing upright before the heavy entrance to the tower. Across the modest paving of Heartstone Square, daytime passers-by moved at an unhurried distance, leaving plenty of open ground around them.\n\n\"I confess I could hardly tell you,\" Bartolomhew said, his voice warm and evenly pitched. \"A stranger to my eyes, certainly. If I were forced to make a guess simply from standing here looking at you, I might take you for a gentleman recently arrived in Calderan, perhaps with some modest affairs to settle in the district. But as to who you truly are, or what town or province you hail from, I have not the slightest notion.\"\n\nHe tilted his head slightly, his pleasant expression remaining smooth and undisturbed. \"A man's origin is rarely written plainly on his face, after all. Should I take a particular interest, or are you merely testing an old cleric's eye?\"",
+      "natural_actions": [],
+      "controller": {
+        "proposal": [],
+        "authorization": [],
+        "upstream_provider": "Baidu",
+        "debug": []
+      },
+      "state": {
+        "revision_before": 2,
+        "revision_after": 2,
+        "items": [],
+        "characters": [],
+        "player_location": "heartstone_square"
+      },
+      "narrator": {
+        "model": "google/gemini-3.8-flash",
+        "pinned_provider": "google-ai-studio",
+        "reasoning_setting": {
+          "effort": "minimal"
+        },
+        "calls": 2,
+        "revision_calls": 1,
+        "wires": [
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3285,
+              "completion_tokens": 207,
+              "total_tokens": 3492,
+              "cost": 0.00324,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00324,
+                "upstream_inference_prompt_cost": 0.00246375,
+                "upstream_inference_completions_cost": 0.00077625
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          },
+          {
+            "upstream_provider": "Google AI Studio",
+            "finish_reason": "stop",
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 3717,
+              "completion_tokens": 195,
+              "total_tokens": 3912,
+              "cost": 0.003519,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.003519,
+                "upstream_inference_prompt_cost": 0.00278775,
+                "upstream_inference_completions_cost": 0.00073125
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            },
+            "error": null,
+            "reasoning_chars": 0
+          }
+        ],
+        "metadata": {
+          "model": "google/gemini-3.8-flash",
+          "usage": {
+            "prompt_tokens": 3285,
+            "completion_tokens": 207,
+            "total_tokens": 3492
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T12:05:08.654Z",
+            "headers_ms": 1042.939800000051,
+            "time_to_first_token_ms": 1043.5248000000138,
+            "completed_at": "2026-09-30T12:05:11.307Z",
+            "elapsed_total_ms": 2652.724600000074
+          }
+        }
+      },
+      "latency": {
+        "first_delivery_ms": 5059.6849999999395,
+        "narrator_ttft_ms": 1043.5248000000138,
+        "narrator_total_ms": 2652.724600000074,
+        "controller_ms": 859.3787999999477,
+        "turn_ms": 5060.019100000034
+      }
+    }
+  ]
+}

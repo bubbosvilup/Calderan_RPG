@@ -1,0 +1,99 @@
+{
+  "turn": 1,
+  "input": "*Nicco pushes open the door of the Gatherer's Inn and steps in out of the evening chill, looking around the common room before walking up to the counter.* Evening. Is this the place to get something warm to eat?",
+  "attempt": 1,
+  "outcome": "success",
+  "provider_code": null,
+  "prompt_hash": "4574289d5a498fea",
+  "draft": "The common room was half-full and quiet about it — a couple of merchants hunched over bread and bowls near the far wall, a laborer-sized man nursing a cup by the hearth, the ordinary scrape of spoon on ceramic and murmur of low conversation filling the gaps. The room smelled of stew and tallow and the faint dry warmth of a fire tended through the day. A board near the counter listed prices in plain lettering, none of them extravagant.\n\nJessa Rook looked up from behind the counter, her gaze dropping briefly to his hands — empty, no luggage, no tools, no visible coin yet — before settling on his face. She closed the small notebook on the counter with one broad hand.\n\n\"Evening,\" she said, her voice low and unhurried. \"It is. Stew's on, bread's fresh, ale or tea if you want it. Sit where you like and I'll bring it over.\" She tilted her head slightly. \"Or are you looking for a room as well?\"",
+  "issues": [],
+  "revision_requested": false,
+  "revision": null,
+  "revision_issues": [],
+  "redaction": false,
+  "delivered_source": "draft",
+  "delivered": "The common room was half-full and quiet about it — a couple of merchants hunched over bread and bowls near the far wall, a laborer-sized man nursing a cup by the hearth, the ordinary scrape of spoon on ceramic and murmur of low conversation filling the gaps. The room smelled of stew and tallow and the faint dry warmth of a fire tended through the day. A board near the counter listed prices in plain lettering, none of them extravagant.\n\nJessa Rook looked up from behind the counter, her gaze dropping briefly to his hands — empty, no luggage, no tools, no visible coin yet — before settling on his face. She closed the small notebook on the counter with one broad hand.\n\n\"Evening,\" she said, her voice low and unhurried. \"It is. Stew's on, bread's fresh, ale or tea if you want it. Sit where you like and I'll bring it over.\" She tilted her head slightly. \"Or are you looking for a room as well?\"",
+  "natural_actions": [
+    {
+      "kind": "movement",
+      "status": "unresolved"
+    }
+  ],
+  "controller": {
+    "proposal": [],
+    "authorization": [],
+    "upstream_provider": "Baidu",
+    "debug": []
+  },
+  "state": {
+    "revision_before": 2,
+    "revision_after": 2,
+    "player_location": "gatherers_inn",
+    "present_npcs": [
+      "jessa_rook"
+    ],
+    "created_present": [],
+    "conditions": [],
+    "items": []
+  },
+  "narrator": {
+    "model": "z-ai/glm-5.2",
+    "pinned": "z-ai/fp8",
+    "reasoning": {
+      "enabled": false
+    },
+    "calls": 1,
+    "wires": [
+      {
+        "upstream_provider": "Z.AI",
+        "finish_reason": "stop",
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 3190,
+          "completion_tokens": 209,
+          "total_tokens": 3399,
+          "cost": 0.0053856,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0053856,
+            "upstream_inference_prompt_cost": 0.004466,
+            "upstream_inference_completions_cost": 0.0009196
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "error": null
+      }
+    ],
+    "metadata": {
+      "model": "z-ai/glm-5.2",
+      "usage": {
+        "prompt_tokens": 3190,
+        "completion_tokens": 209,
+        "total_tokens": 3399
+      },
+      "latency": {
+        "request_started_at": "2026-09-30T12:30:43.951Z",
+        "headers_ms": 5814.6124,
+        "time_to_first_token_ms": 5816.6843,
+        "completed_at": "2026-09-30T12:30:49.792Z",
+        "elapsed_total_ms": 5841.0844
+      }
+    }
+  },
+  "latency": {
+    "narrator_ttft_ms": 5816.6843,
+    "narrator_total_ms": 5841.0844,
+    "controller_ms": 784.8312000000005,
+    "turn_ms": 6640.3197
+  }
+}
