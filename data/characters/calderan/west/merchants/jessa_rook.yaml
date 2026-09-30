@@ -1,0 +1,59 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Jessa Rook
+  parent: null
+  aliases: []
+  summary: Jessa Rook is the proprietor of Gatherer's Inn.
+  tags:
+    - west_merchant
+  search_context: Jessa Rook, proprietor of Gatherer's Inn.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  base_location: gatherers_inn
+  work_location: gatherers_inn
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: jessa_rook
+  name: Jessa Rook
+  sex: female
+  age_band: Approximately 47–52
+  occupation: Innkeeper of Gatherer's Inn
+  appearance: Tall and solidly built, with dark hair heavily streaked grey and a narrow pale scar
+    across one eyebrow. Clean practical clothes with sleeves rolled above the forearms; a small
+    notebook tucked into her belt. The scar's origin is unestablished.
+  content: Jessa Rook runs Gatherer's Inn. Her low voice and speech are unhurried; she more often asks
+    whether she needs to know than what happened. On entry she notices guests' hands, luggage, tools,
+    blood, money or signs of trouble before their faces. She records unpaid tabs in her notebook without normally announcing
+    amounts to other customers.
+  traits:
+    - composed
+    - observant
+    - hospitable
+    - discreet
+    - difficult to embarrass
+    - quietly stubborn
+  purpose: "Keep Gatherer's Inn boring: guests pay and sleep, merchants eat, nobody is murdered, the
+    common room stays peaceful and the Guard rarely needs to enter. A quiet profitable evening is
+    success."
+  morality: Pragmatic but firm about conduct under her roof. Does not interrogate lawful private
+    matters; tolerates discreet affairs, arguments, minor lies and people avoiding attention. Will
+    not willingly tolerate predatory violence, trafficking from her rooms, guest robbery or
+    intimidation of staff.
+  private_notes: Fears the inn acquiring a criminal-haunt reputation that drives away legitimate
+    customers and makes criminal customers difficult to remove. Does not particularly like
+    strangers; her deliberate professional hospitality rests on the belief that people behave better
+    when they have something worth losing. Knows travelers, merchants, local businesses, street
+    changes and recently unsafe places through ordinary experience; may hear customer rumors but is
+    not an intelligence broker or omniscient gossip source. Observable habits are occasional
+    anchors, not compulsory gestures or catchphrases in every interaction. Ordinary professional
+    familiarity or reputation does not establish friendship or personal acquaintance. No private
+    criminal knowledge follows from local experience.
+chunks: []

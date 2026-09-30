@@ -61,8 +61,8 @@ test("production default narrator is Kimi with reasoning explicitly disabled; co
     assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
     assert.equal((run.controllerBodies[0]!.messages as { content: string }[])[0]!.content, CONTROLLER_POLICY);
     assert.deepEqual(run.controllerBodies[0]!.reasoning, { exclude: true, enabled: false });
-    // Streaming path unchanged: deltas precede the controller and one commit.
-    assert.deepEqual(run.events.map(e => e.type), ["turn_started", "narration_delta", "narration_completed", "controller_started", "state_proposed", "state_committed", "turn_completed"]);
+    // Repair 1 authoritative order: the draft is buffered; audited narration is delivered after authorization and before one commit.
+    assert.deepEqual(run.events.map(e => e.type), ["turn_started", "controller_started", "state_proposed", "narration_delta", "narration_completed", "state_committed", "turn_completed"]);
     const optOut = await fullLoop(undefined, false);
     assert.equal("reasoning" in optOut.narratorBodies[0]!, false);
     const { reasoning: _, ...rest } = run.narratorBodies[0]!;

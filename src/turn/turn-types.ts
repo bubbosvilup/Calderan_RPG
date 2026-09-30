@@ -5,6 +5,7 @@ import type { CampaignCommand } from "../campaign/types.js";
 import type { GenerationMetadata } from "../llm/types.js";
 import type { ProviderErrorCode } from "../llm/errors.js";
 import type { TurnEvidence } from "./turn-evidence.js";
+import type { AuditIssue } from "./narration-audit.js";
 export type TurnFailure = "invalid_input" | "context_invalid" | "context_too_large" | "retrieval_failed" | "invalid_runtime_intent" | "stale_turn" | "turn_in_progress" | "cancelled" | "narrator_failed" | "controller_failed" | "campaign_validation_failed";
 export class TurnError extends Error { constructor(readonly code: TurnFailure) { super(`Turn failed: ${code}`); } }
 export interface TurnRequest { readonly campaign: CampaignState; readonly player_input: string; readonly signal?: AbortSignal }
@@ -21,6 +22,8 @@ export interface TurnResult {
   readonly controller_proposal: readonly CampaignCommand[]; readonly authorized_commands: readonly CampaignCommand[];
   readonly authorization: readonly AuthorizationDiagnostic[]; readonly retrieval: RetrievalDiagnostic;
   readonly turn_evidence: TurnEvidence;
+  /** Repair 1: the draft never reaches the user unaudited. `delivered` says which text was shown. */
+  readonly narration_reconciliation?: { readonly delivered: "draft" | "revision" | "redacted"; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly revision?: string; readonly revision_issues?: readonly AuditIssue[] };
   readonly narrator: GenerationMetadata; readonly controller: GenerationMetadata;
   readonly context_characters: Readonly<Record<string, number>>;
   /** Phase 1P: session-local scene participants for this turn (plan) and after narration (continuity capture). Never persisted. */

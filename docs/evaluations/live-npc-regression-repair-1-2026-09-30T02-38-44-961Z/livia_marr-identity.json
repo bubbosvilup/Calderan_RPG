@@ -1,0 +1,571 @@
+{
+  "npc_id": "livia_marr",
+  "name": "Livia Marr",
+  "test": "identity",
+  "campaign_id": "npc_regression_livia_marr_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Livia Marr who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\"",
+      "result": {
+        "narration": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.1406999999890104,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3198,
+            "completion_tokens": 231,
+            "total_tokens": 3429
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:41:27.491Z",
+            "headers_ms": 1690.3858999999939,
+            "time_to_first_token_ms": 1690.447600000014,
+            "completed_at": "2026-09-30T02:41:31.654Z",
+            "elapsed_total_ms": 4163.165700000012
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3311,
+            "completion_tokens": 258,
+            "total_tokens": 3569
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:41:31.655Z",
+            "headers_ms": 1378.1925000000047,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:41:34.913Z",
+            "elapsed_total_ms": 3257.4170999999915
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6318,
+          "recent_conversation": 2,
+          "knowledge_access": 1269,
+          "retrieval": 30,
+          "controller_evidence": 7498
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1690.447600000014,
+          "narrator_total_ms": 4163.165700000012,
+          "controller_total_ms": 3257.4170999999915,
+          "controller_tail_ms": 3264.3895000000193,
+          "retrieval_ms": 0.1406999999890104,
+          "coordinator_total_ms": 7429.725199999986
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1406999999890104,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3198,
+                "completion_tokens": 231,
+                "total_tokens": 3429
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:41:27.491Z",
+                "headers_ms": 1690.3858999999939,
+                "time_to_first_token_ms": 1690.447600000014,
+                "completed_at": "2026-09-30T02:41:31.654Z",
+                "elapsed_total_ms": 4163.165700000012
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3311,
+                "completion_tokens": 258,
+                "total_tokens": 3569
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:41:31.655Z",
+                "headers_ms": 1378.1925000000047,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:41:34.913Z",
+                "elapsed_total_ms": 3257.4170999999915
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6318,
+              "recent_conversation": 2,
+              "knowledge_access": 1269,
+              "retrieval": 30,
+              "controller_evidence": 7498
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1690.447600000014,
+              "narrator_total_ms": 4163.165700000012,
+              "controller_total_ms": 3257.4170999999915,
+              "controller_tail_ms": 3264.3895000000193,
+              "retrieval_ms": 0.1406999999890104,
+              "coordinator_total_ms": 7429.725199999986
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_livia_marr_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_livia_marr_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nLivia Marr: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "livia_marr"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Livia Marr pauses with a measuring tape half-unspooled around her neck, looking Nicco up and down with the quick, assessive sweep she gives any potential customer. \"Who I think you are?\" She laughs, short and sharp, not unkind. \"A man standing in front of Heartstone in clothes that don't fit him asking strangers strange questions. Beyond that, I'd be guessing.\" She tucks the tape into her belt and studies his face more directly. \"You're not Calderan born, I'd say. The way you hold yourself, the way you asked that—like the answer matters but you don't already know what people here will say. East, maybe? Or further?\"\n\nShe doesn't wait for confirmation, already reaching to adjust her sleeve. \"As for where you come from, you'd know that better than me. Unless you're asking something else—whether people here will care, whether they'll ask, what they'll assume when they see you coming out of that tower.\" A quick, knowing glance toward Heartstone's great wooden door. \"That's a different question, and the answer depends on whether you mean to stay in it.\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3198,
+          "completion_tokens": 231,
+          "total_tokens": 3429,
+          "cost": 0.001787235,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001787235,
+            "upstream_inference_prompt_cost": 0.00101916,
+            "upstream_inference_completions_cost": 0.000768075
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3311,
+          "completion_tokens": 258,
+          "total_tokens": 3569,
+          "cost": 0.000583648,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2946,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000583648,
+            "upstream_inference_prompt_cost": 0.000243088,
+            "upstream_inference_completions_cost": 0.00034056
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 251,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

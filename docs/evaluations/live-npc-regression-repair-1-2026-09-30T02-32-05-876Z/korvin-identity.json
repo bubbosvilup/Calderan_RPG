@@ -1,0 +1,598 @@
+{
+  "npc_id": "korvin",
+  "name": "Korvin",
+  "test": "identity",
+  "campaign_id": "npc_regression_korvin_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Korvin who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+      "result": {
+        "narration": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.9067000000000007,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "revision",
+          "draft": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Walking around Heartstone like you own the keys.\" He tilts his head. \"Means you're either stupid, desperate, or you *do* have the keys. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+          "issues": [
+            {
+              "kind": "household_claim",
+              "character": "Korvin",
+              "sentence": "\"Tall. Soft hands. New clothes, or near enough. Walking around Heartstone like you own the keys.\" He tilts his head.",
+              "correction": "Korvin does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+            }
+          ],
+          "revision": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+          "revision_issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3174,
+            "completion_tokens": 227,
+            "total_tokens": 3401
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:32:06.193Z",
+            "headers_ms": 1516.1618,
+            "time_to_first_token_ms": 1517.7204,
+            "completed_at": "2026-09-30T02:32:09.159Z",
+            "elapsed_total_ms": 2966.6014
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3266,
+            "completion_tokens": 207,
+            "total_tokens": 3473
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:32:09.160Z",
+            "headers_ms": 5123.6294,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:32:16.491Z",
+            "elapsed_total_ms": 7331.3202
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6042,
+          "recent_conversation": 2,
+          "knowledge_access": 1265,
+          "retrieval": 30,
+          "controller_evidence": 7122
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1517.7204,
+          "narrator_total_ms": 2966.6014,
+          "controller_total_ms": 7331.3202,
+          "controller_tail_ms": 8744.6994,
+          "retrieval_ms": 0.9067000000000007,
+          "coordinator_total_ms": 11757.4455
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.9067000000000007,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "revision",
+              "draft": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Walking around Heartstone like you own the keys.\" He tilts his head. \"Means you're either stupid, desperate, or you *do* have the keys. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+              "issues": [
+                {
+                  "kind": "household_claim",
+                  "character": "Korvin",
+                  "sentence": "\"Tall. Soft hands. New clothes, or near enough. Walking around Heartstone like you own the keys.\" He tilts his head.",
+                  "correction": "Korvin does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+                }
+              ],
+              "revision": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+              "revision_issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3174,
+                "completion_tokens": 227,
+                "total_tokens": 3401
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:32:06.193Z",
+                "headers_ms": 1516.1618,
+                "time_to_first_token_ms": 1517.7204,
+                "completed_at": "2026-09-30T02:32:09.159Z",
+                "elapsed_total_ms": 2966.6014
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3266,
+                "completion_tokens": 207,
+                "total_tokens": 3473
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:32:09.160Z",
+                "headers_ms": 5123.6294,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:32:16.491Z",
+                "elapsed_total_ms": 7331.3202
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6042,
+              "recent_conversation": 2,
+              "knowledge_access": 1265,
+              "retrieval": 30,
+              "controller_evidence": 7122
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1517.7204,
+              "narrator_total_ms": 2966.6014,
+              "controller_total_ms": 7331.3202,
+              "controller_tail_ms": 8744.6994,
+              "retrieval_ms": 0.9067000000000007,
+              "coordinator_total_ms": 11757.4455
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nKorvin: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "korvin"
+      ],
+      "reconciliation": {
+        "delivered": "revision",
+        "draft": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Walking around Heartstone like you own the keys.\" He tilts his head. \"Means you're either stupid, desperate, or you *do* have the keys. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+        "issues": [
+          {
+            "kind": "household_claim",
+            "character": "Korvin",
+            "sentence": "\"Tall. Soft hands. New clothes, or near enough. Walking around Heartstone like you own the keys.\" He tilts his head.",
+            "correction": "Korvin does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+          }
+        ],
+        "revision": "Korvin's small eyes study Nicco's face with the flat assessment of a man who weighs strangers for a living. He does not smile. \"Who you are?\" He lets out a short breath through his nose, more dismissal than laugh. \"Tall. Soft hands. New clothes, or near enough. Slow walk, like you're looking the place over.\" He tilts his head. \"Means you're either stupid, desperate, or you think you belong here. West District's full of all three.\"\n\nHe scratches his jaw with a thumb thick with old scars. \"Where from?\" Another shrug. \"Not from here. Accent's wrong. Not Center, not East—I know those. Not West neither, not any part I been.\" The eyes narrow slightly, not hostile, just cataloging. \"Could be you came up from the coast rough, could be you walked out of the tall grass yesterday. You want me to guess, I'll guess you're running from something. Folks who show up clean in a dirty place usually are.\" He waits, letting the silence work however Nicco chooses to answer.",
+        "revision_issues": []
+      },
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3174,
+          "completion_tokens": 227,
+          "total_tokens": 3401,
+          "cost": 0.001430415,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3136,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001430415,
+            "upstream_inference_prompt_cost": 0.00067564,
+            "upstream_inference_completions_cost": 0.000754775
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3266,
+          "completion_tokens": 207,
+          "total_tokens": 3473,
+          "cost": 0.000606944,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2678,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000606944,
+            "upstream_inference_prompt_cost": 0.000333704,
+            "upstream_inference_completions_cost": 0.00027324
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 199,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

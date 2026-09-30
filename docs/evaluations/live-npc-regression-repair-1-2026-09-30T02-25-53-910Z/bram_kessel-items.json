@@ -1,0 +1,1329 @@
+{
+  "npc_id": "bram_kessel",
+  "name": "Bram Kessel",
+  "test": "items",
+  "campaign_id": "npc_regression_bram_kessel_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "bram_kessel",
+        "position": {
+          "kind": "carried",
+          "character_id": "bram_kessel"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Bram Kessel gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear.",
+      "result": {
+        "narration": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.10020000000076834,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3325,
+            "completion_tokens": 123,
+            "total_tokens": 3448
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:38.940Z",
+            "headers_ms": 1196.3013000000064,
+            "time_to_first_token_ms": 1196.3608000000095,
+            "completed_at": "2026-09-30T02:27:40.483Z",
+            "elapsed_total_ms": 1543.3478000000032
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3344,
+            "completion_tokens": 657,
+            "total_tokens": 4001
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:40.484Z",
+            "headers_ms": 2205.556500000006,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:27:46.360Z",
+            "elapsed_total_ms": 5876.020700000008
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6713,
+          "recent_conversation": 2,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7538
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Bram Kessel gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "bram_kessel",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1196.3608000000095,
+          "narrator_total_ms": 1543.3478000000032,
+          "controller_total_ms": 5876.020700000008,
+          "controller_tail_ms": 5877.555400000012,
+          "retrieval_ms": 0.10020000000076834,
+          "coordinator_total_ms": 7422.0628
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.10020000000076834,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3325,
+                "completion_tokens": 123,
+                "total_tokens": 3448
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:38.940Z",
+                "headers_ms": 1196.3013000000064,
+                "time_to_first_token_ms": 1196.3608000000095,
+                "completed_at": "2026-09-30T02:27:40.483Z",
+                "elapsed_total_ms": 1543.3478000000032
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3344,
+                "completion_tokens": 657,
+                "total_tokens": 4001
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:40.484Z",
+                "headers_ms": 2205.556500000006,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:27:46.360Z",
+                "elapsed_total_ms": 5876.020700000008
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6713,
+              "recent_conversation": 2,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7538
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Bram Kessel gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "bram_kessel",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1196.3608000000095,
+              "narrator_total_ms": 1543.3478000000032,
+              "controller_total_ms": 5876.020700000008,
+              "controller_tail_ms": 5877.555400000012,
+              "retrieval_ms": 0.10020000000076834,
+              "coordinator_total_ms": 7422.0628
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bram_kessel_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bram_kessel_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nBram Kessel: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bram_kessel"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Bram Kessel reached down and lifted the pair of worn leather boots from where they'd been sitting beside his feet, holding them out toward Nicco with both hands. \"Found these in the back of my dry storage,\" he said, his booming voice carrying across the modest bustle of Heartstone Square. \"Wrong size for me, wrong size for the wife, and they've sat there collecting flour dust for a season. Take them if they'll fit—you're a tall man, might do.\"\n\nHe stood waiting, boots extended, flour-dusted apron catching the daylight, that familiar piece of charcoal tucked behind his ear.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3325,
+          "completion_tokens": 123,
+          "total_tokens": 3448,
+          "cost": 0.001309651,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2688,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001309651,
+            "upstream_inference_prompt_cost": 0.000900676,
+            "upstream_inference_completions_cost": 0.000408975
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3344,
+          "completion_tokens": 657,
+          "total_tokens": 4001,
+          "cost": 0.001140092,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2909,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001140092,
+            "upstream_inference_prompt_cost": 0.000272852,
+            "upstream_inference_completions_cost": 0.00086724
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 650,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them.",
+      "result": {
+        "narration": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.0625,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3390,
+            "completion_tokens": 120,
+            "total_tokens": 3510
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:46.363Z",
+            "headers_ms": 1111.7911999999924,
+            "time_to_first_token_ms": 1113.7341000000015,
+            "completed_at": "2026-09-30T02:27:48.466Z",
+            "elapsed_total_ms": 2102.160600000003
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3297,
+            "completion_tokens": 341,
+            "total_tokens": 3638
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:48.466Z",
+            "headers_ms": 1867.948299999989,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:27:52.177Z",
+            "elapsed_total_ms": 3711.226999999999
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6713,
+          "recent_conversation": 684,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7411
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "unresolved",
+              "detail": {
+                "itemPhrase": "the boots",
+                "recipientPhrase": "them",
+                "reason": "no_item",
+                "form": "give_back"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1113.7341000000015,
+          "narrator_total_ms": 2102.160600000003,
+          "controller_total_ms": 3711.226999999999,
+          "controller_tail_ms": 3712.822800000009,
+          "retrieval_ms": 0.0625,
+          "coordinator_total_ms": 5815.885600000009
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0625,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3390,
+                "completion_tokens": 120,
+                "total_tokens": 3510
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:46.363Z",
+                "headers_ms": 1111.7911999999924,
+                "time_to_first_token_ms": 1113.7341000000015,
+                "completed_at": "2026-09-30T02:27:48.466Z",
+                "elapsed_total_ms": 2102.160600000003
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3297,
+                "completion_tokens": 341,
+                "total_tokens": 3638
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:48.466Z",
+                "headers_ms": 1867.948299999989,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:27:52.177Z",
+                "elapsed_total_ms": 3711.226999999999
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6713,
+              "recent_conversation": 684,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7411
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "unresolved",
+                  "detail": {
+                    "itemPhrase": "the boots",
+                    "recipientPhrase": "them",
+                    "reason": "no_item",
+                    "form": "give_back"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1113.7341000000015,
+              "narrator_total_ms": 2102.160600000003,
+              "controller_total_ms": 3711.226999999999,
+              "controller_tail_ms": 3712.822800000009,
+              "retrieval_ms": 0.0625,
+              "coordinator_total_ms": 5815.885600000009
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bram_kessel_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bram_kessel_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nBram Kessel: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bram_kessel"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Bram Kessel's eyebrows rise, but he keeps his hands at his sides. \"You're sure? They're decent leather, not cracked, soles still good.\" He eyes Nicco's feet with brief assessment. \"Well. Suit yourself. Back they go to the flour dust, then.\" He tucks the boots under one arm without further argument, already glancing toward the street with the restless energy of a man who has deliveries to coordinate.\n\nThe afternoon light falls flat across Heartstone Square, and the tavern sign of The Coined Lie creaks on its hinge somewhere behind them.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3390,
+          "completion_tokens": 120,
+          "total_tokens": 3510,
+          "cost": 0.001189552,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3136,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001189552,
+            "upstream_inference_prompt_cost": 0.000790552,
+            "upstream_inference_completions_cost": 0.000399
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3297,
+          "completion_tokens": 341,
+          "total_tokens": 3638,
+          "cost": 0.00080076,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2670,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00080076,
+            "upstream_inference_prompt_cost": 0.00035064,
+            "upstream_inference_completions_cost": 0.00045012
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 334,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

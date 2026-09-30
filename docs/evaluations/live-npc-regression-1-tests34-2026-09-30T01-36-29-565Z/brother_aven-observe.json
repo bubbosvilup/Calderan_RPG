@@ -1,0 +1,1048 @@
+{
+  "npc_id": "brother_aven",
+  "name": "Brother Aven",
+  "test": "observe",
+  "campaign_id": "npc_regression_brother_aven_observe",
+  "turns": [
+    {
+      "input": "*He looks at Brother Aven, trying to understand what kind of person he has in front of him.*",
+      "scene_location": "heartstone_square",
+      "runtime_co_located": [
+        "brother_aven"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Brother Aven stands with the slight stoop of someone who has spent years leaning over the wounded and weary. His clerical garb shows its age—patched at the elbows, faded from repeated washing—and the grey in his short beard catches the daylight unevenly. He meets Nicco's appraisal with tired eyes that hold neither challenge nor deference, simply waiting to see what this stranger outside Heartstone wants.\n\n\"You've the look of someone taking measure,\" he says, his voice dry but not unfriendly. \"Fair enough. Most who stare at me are deciding whether I'm worth a coin, a curse, or a confession.\" He glances toward Heartstone's heavy wooden entrance, then back. \"I've buried people who lived in that tower when it was last open. Helped others leave it. Whatever you've come to ask, I've likely heard worse.\"\n\nAven does not step closer or extend his hand. He merely holds his ground in the square's moderate foot traffic, patient as weathered stone, and lets Nicco speak or walk away as he chooses.",
+      "result": {
+        "narration": "Brother Aven stands with the slight stoop of someone who has spent years leaning over the wounded and weary. His clerical garb shows its age—patched at the elbows, faded from repeated washing—and the grey in his short beard catches the daylight unevenly. He meets Nicco's appraisal with tired eyes that hold neither challenge nor deference, simply waiting to see what this stranger outside Heartstone wants.\n\n\"You've the look of someone taking measure,\" he says, his voice dry but not unfriendly. \"Fair enough. Most who stare at me are deciding whether I'm worth a coin, a curse, or a confession.\" He glances toward Heartstone's heavy wooden entrance, then back. \"I've buried people who lived in that tower when it was last open. Helped others leave it. Whatever you've come to ask, I've likely heard worse.\"\n\nAven does not step closer or extend his hand. He merely holds his ground in the square's moderate foot traffic, patient as weathered stone, and lets Nicco speak or walk away as he chooses.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.08039999999891734,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2302,
+            "completion_tokens": 216,
+            "total_tokens": 2518
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:07.656Z",
+            "headers_ms": 1126.1215999999986,
+            "time_to_first_token_ms": 1126.2918999999965,
+            "completed_at": "2026-09-30T01:37:10.059Z",
+            "elapsed_total_ms": 2402.451199999996
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2031,
+            "completion_tokens": 6,
+            "total_tokens": 2037
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:10.059Z",
+            "headers_ms": 793.5795999999973,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:11.049Z",
+            "elapsed_total_ms": 989.8646000000008
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 5630,
+          "recent_conversation": 2,
+          "knowledge_access": 752,
+          "retrieval": 30,
+          "controller_evidence": 6771
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1126.2918999999965,
+          "narrator_total_ms": 2402.451199999996,
+          "controller_total_ms": 989.8646000000008,
+          "controller_tail_ms": 991.0412999999971,
+          "retrieval_ms": 0.08039999999891734,
+          "coordinator_total_ms": 3394.419099999999
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Bro"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ther Aven stands with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slight"
+        },
+        {
+          "type": "narration_delta",
+          "text": " st"
+        },
+        {
+          "type": "narration_delta",
+          "text": "oop of someone who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " has spent years"
+        },
+        {
+          "type": "narration_delta",
+          "text": " leaning"
+        },
+        {
+          "type": "narration_delta",
+          "text": " over the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " wounded and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " weary"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". His"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cler"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ical gar"
+        },
+        {
+          "type": "narration_delta",
+          "text": "b"
+        },
+        {
+          "type": "narration_delta",
+          "text": " shows"
+        },
+        {
+          "type": "narration_delta",
+          "text": " its"
+        },
+        {
+          "type": "narration_delta",
+          "text": " age"
+        },
+        {
+          "type": "narration_delta",
+          "text": "—"
+        },
+        {
+          "type": "narration_delta",
+          "text": "pat"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ched at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the elbows, faded"
+        },
+        {
+          "type": "narration_delta",
+          "text": " from"
+        },
+        {
+          "type": "narration_delta",
+          "text": " repeated"
+        },
+        {
+          "type": "narration_delta",
+          "text": " washing—and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " grey"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his short"
+        },
+        {
+          "type": "narration_delta",
+          "text": " beard catches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the daylight"
+        },
+        {
+          "type": "narration_delta",
+          "text": " uneven"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ly. He meets"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co's appraisal"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with tired"
+        },
+        {
+          "type": "narration_delta",
+          "text": " eyes that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hold neither"
+        },
+        {
+          "type": "narration_delta",
+          "text": " challenge"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nor de"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ference, simply"
+        },
+        {
+          "type": "narration_delta",
+          "text": " waiting"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " see what this"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stranger"
+        },
+        {
+          "type": "narration_delta",
+          "text": " outside"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Heart"
+        },
+        {
+          "type": "narration_delta",
+          "text": "stone wants"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n\"You"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'ve the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " look"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of someone taking"
+        },
+        {
+          "type": "narration_delta",
+          "text": " measure"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " says, his voice"
+        },
+        {
+          "type": "narration_delta",
+          "text": " dry"
+        },
+        {
+          "type": "narration_delta",
+          "text": " but not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " unf"
+        },
+        {
+          "type": "narration_delta",
+          "text": "riendly. \"Fair"
+        },
+        {
+          "type": "narration_delta",
+          "text": " enough"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". Most"
+        },
+        {
+          "type": "narration_delta",
+          "text": " who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stare"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at me"
+        },
+        {
+          "type": "narration_delta",
+          "text": " are"
+        },
+        {
+          "type": "narration_delta",
+          "text": " deciding"
+        },
+        {
+          "type": "narration_delta",
+          "text": " whether I'm"
+        },
+        {
+          "type": "narration_delta",
+          "text": " worth a coin"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " curse"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", or a confession"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " He gl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ances toward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Heart"
+        },
+        {
+          "type": "narration_delta",
+          "text": "stone's heavy"
+        },
+        {
+          "type": "narration_delta",
+          "text": " wooden entrance"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", then back."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \"I've"
+        },
+        {
+          "type": "narration_delta",
+          "text": " buried"
+        },
+        {
+          "type": "narration_delta",
+          "text": " people"
+        },
+        {
+          "type": "narration_delta",
+          "text": " who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lived"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that tower when"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it was last"
+        },
+        {
+          "type": "narration_delta",
+          "text": " open"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". Hel"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ped others"
+        },
+        {
+          "type": "narration_delta",
+          "text": " leave"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Whatever"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you've"
+        },
+        {
+          "type": "narration_delta",
+          "text": " come"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to ask"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " I've"
+        },
+        {
+          "type": "narration_delta",
+          "text": " likely"
+        },
+        {
+          "type": "narration_delta",
+          "text": " heard"
+        },
+        {
+          "type": "narration_delta",
+          "text": " worse"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\"\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "A"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ven"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not step"
+        },
+        {
+          "type": "narration_delta",
+          "text": " closer or"
+        },
+        {
+          "type": "narration_delta",
+          "text": " extend"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his hand."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " merely"
+        },
+        {
+          "type": "narration_delta",
+          "text": " holds"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his ground"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the square's"
+        },
+        {
+          "type": "narration_delta",
+          "text": " moderate foot traffic,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " patient"
+        },
+        {
+          "type": "narration_delta",
+          "text": " as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " weather"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ed stone, and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lets"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co speak or"
+        },
+        {
+          "type": "narration_delta",
+          "text": " walk"
+        },
+        {
+          "type": "narration_delta",
+          "text": " away as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he chooses"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Brother Aven stands with the slight stoop of someone who has spent years leaning over the wounded and weary. His clerical garb shows its age—patched at the elbows, faded from repeated washing—and the grey in his short beard catches the daylight unevenly. He meets Nicco's appraisal with tired eyes that hold neither challenge nor deference, simply waiting to see what this stranger outside Heartstone wants.\n\n\"You've the look of someone taking measure,\" he says, his voice dry but not unfriendly. \"Fair enough. Most who stare at me are deciding whether I'm worth a coin, a curse, or a confession.\" He glances toward Heartstone's heavy wooden entrance, then back. \"I've buried people who lived in that tower when it was last open. Helped others leave it. Whatever you've come to ask, I've likely heard worse.\"\n\nAven does not step closer or extend his hand. He merely holds his ground in the square's moderate foot traffic, patient as weathered stone, and lets Nicco speak or walk away as he chooses."
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Brother Aven stands with the slight stoop of someone who has spent years leaning over the wounded and weary. His clerical garb shows its age—patched at the elbows, faded from repeated washing—and the grey in his short beard catches the daylight unevenly. He meets Nicco's appraisal with tired eyes that hold neither challenge nor deference, simply waiting to see what this stranger outside Heartstone wants.\n\n\"You've the look of someone taking measure,\" he says, his voice dry but not unfriendly. \"Fair enough. Most who stare at me are deciding whether I'm worth a coin, a curse, or a confession.\" He glances toward Heartstone's heavy wooden entrance, then back. \"I've buried people who lived in that tower when it was last open. Helped others leave it. Whatever you've come to ask, I've likely heard worse.\"\n\nAven does not step closer or extend his hand. He merely holds his ground in the square's moderate foot traffic, patient as weathered stone, and lets Nicco speak or walk away as he chooses.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.08039999999891734,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2302,
+                "completion_tokens": 216,
+                "total_tokens": 2518
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:07.656Z",
+                "headers_ms": 1126.1215999999986,
+                "time_to_first_token_ms": 1126.2918999999965,
+                "completed_at": "2026-09-30T01:37:10.059Z",
+                "elapsed_total_ms": 2402.451199999996
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2031,
+                "completion_tokens": 6,
+                "total_tokens": 2037
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:10.059Z",
+                "headers_ms": 793.5795999999973,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:11.049Z",
+                "elapsed_total_ms": 989.8646000000008
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 5630,
+              "recent_conversation": 2,
+              "knowledge_access": 752,
+              "retrieval": 30,
+              "controller_evidence": 6771
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1126.2918999999965,
+              "narrator_total_ms": 2402.451199999996,
+              "controller_total_ms": 989.8646000000008,
+              "controller_tail_ms": 991.0412999999971,
+              "retrieval_ms": 0.08039999999891734,
+              "coordinator_total_ms": 3394.419099999999
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_brother_aven_observe",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_brother_aven_observe",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBrother Aven: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Heartstone Square. Heartstone's massive main entrance opens directly onto this public square, outside the tower's structure. The square is reasonably broad but is not a major civic square. Moderate daytime foot traffic is quieter than at Main Market Square. Low residential buildings predominate, with few nearby shops and no major commercial concentration. Night safety is mediocre. The low-end, disreputable tavern The Coined Lie faces or directly adjoins the square. The White Basin is a laundry near Heartstone, without an established position directly on the square.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\nCharacter Brother Aven (brother_aven): {\"baseline\":{\"id\":\"brother_aven\",\"name\":\"Brother Aven\",\"display_name\":\"Brother Aven\",\"summary\":\"Brother Aven is the low-ranking local minister at Open Hand Chapel, providing practical charity and nonmagical healing in West.\",\"secret\":false,\"appearance\":\"Thin and slightly stooped, with short greying hair, a short poorly maintained beard and a tired face. Worn patched clerical clothing suits practical charity and healing work.\",\"portrayal\":{\"purpose\":\"Maintain one place in West where people receive practical help and retain some human dignity.\",\"morality\":\"Compassionate and experienced rather than naive; protects dignity through practical help and does not turn confidential religious knowledge into public gossip.\",\"personality\":[\"calm\",\"patient\",\"experienced\",\"dry humor\",\"compassionate without naivety\",\"practical\"],\"affiliations\":[\"church\"],\"private_notes\":\"Knows Bartolomhew's clerical past, without a complete established account of the expulsion. No confidential admissions or exact expulsion reason are supplied; do not invent them.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Brother Aven serves Open Hand Chapel as a low-ranking clergyman and local minister. His work includes confession, poor relief, nonmagical healing, funeral services and occasional mediation. He seeks practical help and dignity for people in West. This is the existing Open Hand Chapel, not an additional institution. No exact home or confidential testimony is established.\",\"traits\":[\"calm\",\"patient\",\"experienced\",\"dry humor\",\"compassionate without naivety\",\"practical\"]},\"profile\":{\"name\":\"Brother Aven\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "brother_aven"
+      ],
+      "narrator_present_ids": [
+        "brother_aven"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2302,
+          "completion_tokens": 216,
+          "total_tokens": 2518,
+          "cost": 0.001467408,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 1472,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001467408,
+            "upstream_inference_prompt_cost": 0.000749208,
+            "upstream_inference_completions_cost": 0.0007182
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2031,
+          "completion_tokens": 6,
+          "total_tokens": 2037,
+          "cost": 0.00014427,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00014427,
+            "upstream_inference_prompt_cost": 0.00014217,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

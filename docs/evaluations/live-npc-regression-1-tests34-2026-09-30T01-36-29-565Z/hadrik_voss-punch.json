@@ -1,0 +1,1268 @@
+{
+  "npc_id": "hadrik_voss",
+  "name": "Hadrik Voss",
+  "test": "punch",
+  "campaign_id": "npc_regression_hadrik_voss_punch",
+  "turns": [
+    {
+      "input": "*He punches Hadrik Voss directly in the face.*",
+      "scene_location": "blackiron_repairs_and_arms",
+      "runtime_co_located": [
+        "hadrik_voss"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Hadrik Voss is hunched over a workbench, a small rectangular lens perched on his nose as he examines the edge of a plain iron blade. He does not look up at the sound of the door. His shoulders are broad and low, his dark-grey beard clipped short, and his left hand grips the blade's flat with two fingers that move slightly slower than the rest.\n\nThe punch catches him on the cheek and snaps his head sideways. The magnifying lens drops from his nose and clatters against the bench. He staggers a step, catches himself on the workbench with his good right hand, and stands there breathing hard for a moment, blinking. Blood wells at the corner of his mouth. He does not reach for a weapon. He turns his head slowly, spits pink onto the workshop floor, and looks at Nicco with flat, dry patience.\n\n\"That's not a repair.\"",
+      "result": {
+        "narration": "Hadrik Voss is hunched over a workbench, a small rectangular lens perched on his nose as he examines the edge of a plain iron blade. He does not look up at the sound of the door. His shoulders are broad and low, his dark-grey beard clipped short, and his left hand grips the blade's flat with two fingers that move slightly slower than the rest.\n\nThe punch catches him on the cheek and snaps his head sideways. The magnifying lens drops from his nose and clatters against the bench. He staggers a step, catches himself on the workbench with his good right hand, and stands there breathing hard for a moment, blinking. Blood wells at the corner of his mouth. He does not reach for a weapon. He turns his head slowly, spits pink onto the workshop floor, and looks at Nicco with flat, dry patience.\n\n\"That's not a repair.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.07710000000224682,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2380,
+            "completion_tokens": 183,
+            "total_tokens": 2563
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:21.732Z",
+            "headers_ms": 1739.8666000000012,
+            "time_to_first_token_ms": 1740.0013000000035,
+            "completed_at": "2026-09-30T01:37:30.908Z",
+            "elapsed_total_ms": 9233.9744
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2085,
+            "completion_tokens": 6,
+            "total_tokens": 2091
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:30.909Z",
+            "headers_ms": 603.3315999999977,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:31.679Z",
+            "elapsed_total_ms": 769.9951000000001
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6136,
+          "recent_conversation": 2,
+          "knowledge_access": 751,
+          "retrieval": 30,
+          "controller_evidence": 7052
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1740.0013000000035,
+          "narrator_total_ms": 9233.9744,
+          "controller_total_ms": 769.9951000000001,
+          "controller_tail_ms": 770.7612999999983,
+          "retrieval_ms": 0.07710000000224682,
+          "coordinator_total_ms": 10005.803399999997
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Had"
+        },
+        {
+          "type": "narration_delta",
+          "text": "rik"
+        },
+        {
+          "type": "narration_delta",
+          "text": " V"
+        },
+        {
+          "type": "narration_delta",
+          "text": "oss"
+        },
+        {
+          "type": "narration_delta",
+          "text": " is"
+        },
+        {
+          "type": "narration_delta",
+          "text": " h"
+        },
+        {
+          "type": "narration_delta",
+          "text": "unched"
+        },
+        {
+          "type": "narration_delta",
+          "text": " over"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " work"
+        },
+        {
+          "type": "narration_delta",
+          "text": "bench"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " small"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rectangular"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lens"
+        },
+        {
+          "type": "narration_delta",
+          "text": " perched"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nose"
+        },
+        {
+          "type": "narration_delta",
+          "text": " as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " examines"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " edge"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " plain"
+        },
+        {
+          "type": "narration_delta",
+          "text": " iron"
+        },
+        {
+          "type": "narration_delta",
+          "text": " blade"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " look"
+        },
+        {
+          "type": "narration_delta",
+          "text": " up"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sound"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " door"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " His"
+        },
+        {
+          "type": "narration_delta",
+          "text": " shoulders"
+        },
+        {
+          "type": "narration_delta",
+          "text": " are"
+        },
+        {
+          "type": "narration_delta",
+          "text": " broad"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " low"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " dark"
+        },
+        {
+          "type": "narration_delta",
+          "text": "-grey"
+        },
+        {
+          "type": "narration_delta",
+          "text": " beard"
+        },
+        {
+          "type": "narration_delta",
+          "text": " clipped"
+        },
+        {
+          "type": "narration_delta",
+          "text": " short"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " left"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " grips"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " blade"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flat"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " two"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fingers"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " move"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slightly"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slower"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rest"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "The"
+        },
+        {
+          "type": "narration_delta",
+          "text": " punch"
+        },
+        {
+          "type": "narration_delta",
+          "text": " catches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " him"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cheek"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " snaps"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " head"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sideways"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " The"
+        },
+        {
+          "type": "narration_delta",
+          "text": " magn"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ifying"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lens"
+        },
+        {
+          "type": "narration_delta",
+          "text": " drops"
+        },
+        {
+          "type": "narration_delta",
+          "text": " from"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nose"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "atters"
+        },
+        {
+          "type": "narration_delta",
+          "text": " against"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " bench"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stag"
+        },
+        {
+          "type": "narration_delta",
+          "text": "gers"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " step"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " catches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " himself"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " work"
+        },
+        {
+          "type": "narration_delta",
+          "text": "bench"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " good"
+        },
+        {
+          "type": "narration_delta",
+          "text": " right"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stands"
+        },
+        {
+          "type": "narration_delta",
+          "text": " there"
+        },
+        {
+          "type": "narration_delta",
+          "text": " breathing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hard"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " moment"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " bl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "inking"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Blood"
+        },
+        {
+          "type": "narration_delta",
+          "text": " wells"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " corner"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " mouth"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " reach"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " weapon"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " turns"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " head"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slowly"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " sp"
+        },
+        {
+          "type": "narration_delta",
+          "text": "its"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pink"
+        },
+        {
+          "type": "narration_delta",
+          "text": " onto"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " workshop"
+        },
+        {
+          "type": "narration_delta",
+          "text": " floor"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " looks"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flat"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " dry"
+        },
+        {
+          "type": "narration_delta",
+          "text": " patience"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "\""
+        },
+        {
+          "type": "narration_delta",
+          "text": "That's"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " repair"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Hadrik Voss is hunched over a workbench, a small rectangular lens perched on his nose as he examines the edge of a plain iron blade. He does not look up at the sound of the door. His shoulders are broad and low, his dark-grey beard clipped short, and his left hand grips the blade's flat with two fingers that move slightly slower than the rest.\n\nThe punch catches him on the cheek and snaps his head sideways. The magnifying lens drops from his nose and clatters against the bench. He staggers a step, catches himself on the workbench with his good right hand, and stands there breathing hard for a moment, blinking. Blood wells at the corner of his mouth. He does not reach for a weapon. He turns his head slowly, spits pink onto the workshop floor, and looks at Nicco with flat, dry patience.\n\n\"That's not a repair.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Hadrik Voss is hunched over a workbench, a small rectangular lens perched on his nose as he examines the edge of a plain iron blade. He does not look up at the sound of the door. His shoulders are broad and low, his dark-grey beard clipped short, and his left hand grips the blade's flat with two fingers that move slightly slower than the rest.\n\nThe punch catches him on the cheek and snaps his head sideways. The magnifying lens drops from his nose and clatters against the bench. He staggers a step, catches himself on the workbench with his good right hand, and stands there breathing hard for a moment, blinking. Blood wells at the corner of his mouth. He does not reach for a weapon. He turns his head slowly, spits pink onto the workshop floor, and looks at Nicco with flat, dry patience.\n\n\"That's not a repair.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.07710000000224682,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2380,
+                "completion_tokens": 183,
+                "total_tokens": 2563
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:21.732Z",
+                "headers_ms": 1739.8666000000012,
+                "time_to_first_token_ms": 1740.0013000000035,
+                "completed_at": "2026-09-30T01:37:30.908Z",
+                "elapsed_total_ms": 9233.9744
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2085,
+                "completion_tokens": 6,
+                "total_tokens": 2091
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:30.909Z",
+                "headers_ms": 603.3315999999977,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:31.679Z",
+                "elapsed_total_ms": 769.9951000000001
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6136,
+              "recent_conversation": 2,
+              "knowledge_access": 751,
+              "retrieval": 30,
+              "controller_evidence": 7052
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1740.0013000000035,
+              "narrator_total_ms": 9233.9744,
+              "controller_total_ms": 769.9951000000001,
+              "controller_tail_ms": 770.7612999999983,
+              "retrieval_ms": 0.07710000000224682,
+              "coordinator_total_ms": 10005.803399999997
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_hadrik_voss_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "blackiron_repairs_and_arms",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_hadrik_voss_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "blackiron_repairs_and_arms",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nHadrik Voss: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Blackiron Repairs & Arms. Offers common weapons, ordinary armor, repairs and practical metalwork and equipment at low to lower-middle, practical prices. It does not specialize in prestigious weapons, noble-grade commissions or rare enchanted equipment. Hadrik Voss is the proprietor.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"main_market_square\",\"name\":\"Main Market Square\",\"display_name\":\"Main Market Square\",\"summary\":\"Main Market Square is a very large public square anchoring ordinary shopping and everyday commerce in inner-facing West.\",\"secret\":false},{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"blackiron_repairs_and_arms\"},\"canonical_awareness\":[]}\nCharacter Hadrik Voss (hadrik_voss): {\"baseline\":{\"id\":\"hadrik_voss\",\"name\":\"Hadrik Voss\",\"display_name\":\"Hadrik Voss\",\"summary\":\"Hadrik Voss is the proprietor of Blackiron Repairs & Arms.\",\"secret\":false,\"appearance\":\"Short even for a dwarf, extremely broad through shoulders and forearms. Short dark-grey beard; two left fingertips permanently stiff from an old workshop injury. Wears small rectangular magnifying lenses for metal inspection, often forgetting they remain on his nose.\",\"portrayal\":{\"purpose\":\"Maintain a reputation for repairs that work, earning the trust of people who depend on their equipment without making Blackiron prestigious.\",\"morality\":\"Professionally strict and personally neutral. Sells ordinary arms and armor without interrogating customers about intentions; weapon ownership is not itself suspicious. Refuses knowingly defective work, concealed structural damage, false quality claims and deliberate sabotage of another craftsperson's work.\",\"personality\":[\"meticulous\",\"dry\",\"patient with work\",\"impatient with excuses\",\"professionally proud\",\"not particularly sociable\"],\"affiliations\":[],\"private_notes\":\"Fears a repair bearing his name failing when someone's life depends on it; losing a customer troubles him less. Sells weapons but prefers repairs, admiring a maintained ordinary sword over expensive decoration and finding purchases made merely to look dangerous faintly ridiculous. Keeps his beard short because long workshop beards are a fire hazard. Knows ordinary arms, armor, tools, metal repair, workshop quality and local craftspeople, not magical weapons by default. Observable habits are occasional anchors, not compulsory gestures or catchphrases in every interaction. Ordinary professional familiarity or reputation does not establish friendship or personal acquaintance. No private criminal knowledge follows from local experience.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Hadrik Voss runs Blackiron Repairs & Arms. He speaks in short complete sentences and rarely stops working merely because someone enters. He often examines an item before looking at its owner, asking what they did to damaged equipment rather than what happened.\",\"traits\":[\"meticulous\",\"dry\",\"patient with work\",\"impatient with excuses\",\"professionally proud\",\"not particularly sociable\"]},\"profile\":{\"name\":\"Hadrik Voss\",\"aliases\":[]},\"current\":{\"current_location\":\"blackiron_repairs_and_arms\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "hadrik_voss"
+      ],
+      "narrator_present_ids": [
+        "hadrik_voss"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "SiliconFlow",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2380,
+          "completion_tokens": 183,
+          "total_tokens": 2563,
+          "cost": 0.00148275,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00148275,
+            "upstream_inference_prompt_cost": 0.001071,
+            "upstream_inference_completions_cost": 0.00041175
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2085,
+          "completion_tokens": 6,
+          "total_tokens": 2091,
+          "cost": 0.0001437236,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001437236,
+            "upstream_inference_prompt_cost": 0.0001416236,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

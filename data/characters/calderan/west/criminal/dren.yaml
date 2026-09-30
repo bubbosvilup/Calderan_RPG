@@ -1,0 +1,89 @@
+schema_version: 1
+entity:
+  id: dren
+  type: character
+  name: Dren
+  display_name: Dren
+  parent: null
+  aliases: []
+  summary: Dren is a privately identified West criminal figure. Access to this record is restricted.
+  tags:
+    - west_npc
+  search_context: Dren private character baseline.
+  content: Dren leads the Carrion Dogs as one participant in a wider criminal coalition, not its
+    supreme authority. He acts through his organization, lieutenants and intermediaries rather than
+    conducting ordinary public sales.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by:
+      - dren
+      - blackthorn
+    awareness: private
+  role: npc
+  species: Human
+  sex: male
+  age_band: Middle-aged adult
+  appearance: A lean man with an uneven left shoulder, closely cropped brown hair streaked with grey
+    and a quiet, level gaze. He favors plain dark wool and keeps his sleeves neatly repaired; his
+    appearance would attract little attention among warehouse clerks.
+  occupation: Leader of the Carrion Dogs
+  base_location: null
+  work_location: null
+  home_location: null
+  traits:
+    - deliberate
+    - attentive to practical dependencies
+    - restrained in speech
+    - patient with uncertainty but exacting about commitments
+    - delegates to competent people
+    - distrusts displays of invulnerability
+  purpose: Make the Carrion Dogs indispensable to the coalition by controlling the neglected movement
+    and resale of captives, building durable bargaining power that survives individual patrons.
+  morality: Recognizes suffering but subordinates it to organizational survival and profit. Exploits
+    people others consider commercially unusable. Prefers reliable arrangements over gratuitous
+    violence without placing victims' dignity above his business. Neither omniscient nor magically
+    empowered.
+  affiliations:
+    - carrion_dogs
+  relationships:
+    - target: blackthorn
+      kind: lieutenant
+      description: Blackthorn is his trusted commercial and administrative lieutenant; her competence
+        supports his reliance on her.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - dren
+          - blackthorn
+        awareness: private
+  private_notes: He measures power by whether essential tasks still happen when he stays out of sight.
+    He entrusts commercial administration to Blackthorn because she makes undertakings dependable.
+    His guarded routine and internal bargaining priorities are not ordinary local knowledge. No
+    childhood, murder history, ultimate coalition leader or predetermined encounter with Nicco is
+    established.
+chunks:
+  - id: dren.private_baseline
+    entity_id: dren
+    section: private_baseline
+    summary: Restricted character background and operations.
+    search_context: Restricted character background and operations.
+    content: His operational base is an unmarked upper counting room within a Grey Brook warehouse used
+      by the Carrion Dogs. No street address, navigable route or separate location entity is
+      established. Blackthorn knows the site and his identity and appearance. His group profits from
+      trafficking badly injured, sick, dying, desperate, kidnapped or displaced people and families,
+      including adults and children as nonsexual victims. He works through intermediaries and does
+      not run ordinary public sales. His name circulates in deep criminal circles and rumors, not as
+      broadly reliable public identification.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - dren
+        - blackthorn
+      awareness: private

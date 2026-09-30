@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: chevalier_fountain
+  type: location
+  name: Chevalier Fountain
+  display_name: Chevalier Fountain
+  parent: calderan_west
+  aliases: []
+  summary: A recognizable public monument-fountain approximately midway between Heartstone and Main
+    Market Square.
+  tags:
+    - geography
+  search_context: A recognizable public monument-fountain approximately midway between Heartstone and
+    Main Market Square.
+  content: A wealthy knight commissioned the fountain generations ago. Its weathered mounted figure
+    gave it its common name. The larger history of the knight is not important to modern daily life
+    and remains unelaborated. The small charitable Open Hand Chapel stands nearby. No exact route or
+    magical properties are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

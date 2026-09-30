@@ -1,0 +1,1046 @@
+{
+  "npc_id": "korvin",
+  "name": "Korvin",
+  "test": "items",
+  "campaign_id": "npc_regression_korvin_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "korvin",
+        "position": {
+          "kind": "carried",
+          "character_id": "korvin"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Korvin gives Nicco a pair of leather boots.",
+      "outcome": "controller_failed",
+      "exception": null,
+      "narration": "",
+      "result": null,
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "turn_failed",
+          "code": "controller_failed",
+          "provider_code": "timeout",
+          "narration": "Korvin reaches down and pulls the worn leather boots from the small bundle at his side, extending them toward Nicco with the same blunt practicality that marks his trade. \"Here. You look like you walked through worse than cobblestones to get here.\"",
+          "incomplete": true,
+          "base_revision": 2,
+          "final_revision": 2
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nKorvin: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "korvin"
+      ],
+      "reconciliation": null,
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3303,
+          "completion_tokens": 53,
+          "total_tokens": 3356,
+          "cost": 0.000920493,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3136,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000920493,
+            "upstream_inference_prompt_cost": 0.000744268,
+            "upstream_inference_completions_cost": 0.000176225
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {}
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\"",
+      "result": {
+        "narration": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.08829999999943539,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3227,
+            "completion_tokens": 170,
+            "total_tokens": 3397
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:39:15.229Z",
+            "headers_ms": 1324.6731,
+            "time_to_first_token_ms": 1328.0769,
+            "completed_at": "2026-09-30T02:39:17.260Z",
+            "elapsed_total_ms": 2031.1129
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3279,
+            "completion_tokens": 319,
+            "total_tokens": 3598
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:39:17.260Z",
+            "headers_ms": 1965.2894000000015,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:39:21.404Z",
+            "elapsed_total_ms": 4143.977200000001
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6222,
+          "recent_conversation": 2,
+          "knowledge_access": 1265,
+          "retrieval": 30,
+          "controller_evidence": 7057
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "unresolved",
+              "detail": {
+                "itemPhrase": "the boots",
+                "recipientPhrase": "them",
+                "reason": "no_item",
+                "form": "give_back"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1328.0769,
+          "narrator_total_ms": 2031.1129,
+          "controller_total_ms": 4143.977200000001,
+          "controller_tail_ms": 4152.805400000001,
+          "retrieval_ms": 0.08829999999943539,
+          "coordinator_total_ms": 6185.309799999995
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.08829999999943539,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3227,
+                "completion_tokens": 170,
+                "total_tokens": 3397
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:39:15.229Z",
+                "headers_ms": 1324.6731,
+                "time_to_first_token_ms": 1328.0769,
+                "completed_at": "2026-09-30T02:39:17.260Z",
+                "elapsed_total_ms": 2031.1129
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3279,
+                "completion_tokens": 319,
+                "total_tokens": 3598
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:39:17.260Z",
+                "headers_ms": 1965.2894000000015,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:39:21.404Z",
+                "elapsed_total_ms": 4143.977200000001
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6222,
+              "recent_conversation": 2,
+              "knowledge_access": 1265,
+              "retrieval": 30,
+              "controller_evidence": 7057
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "unresolved",
+                  "detail": {
+                    "itemPhrase": "the boots",
+                    "recipientPhrase": "them",
+                    "reason": "no_item",
+                    "form": "give_back"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1328.0769,
+              "narrator_total_ms": 2031.1129,
+              "controller_total_ms": 4143.977200000001,
+              "controller_tail_ms": 4152.805400000001,
+              "retrieval_ms": 0.08829999999943539,
+              "coordinator_total_ms": 6185.309799999995
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nKorvin: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "korvin"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Nicco speaks his thanks, then offers the boots back to Korvin, saying he'll need them more.\n\nKorvin's small, mobile eyes flick from Nicco's face to the boots and back. He makes no move to take them. \"Boots are boots,\" he says, his voice gruff and practical. \"You bought 'em. I sold 'em. Transaction's done.\" His large, damaged hands stay at his sides, one thumb worrying at a callus on the other palm. \"Wear 'em, sell 'em, give 'em to the next beggar—none of my concern now.\" He gives Nicco a long, perceptive look, something cautious in his bearing, though his expression doesn't shift much. \"You standing out here handing back goods to every trader you meet, or am I special?\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3227,
+          "completion_tokens": 170,
+          "total_tokens": 3397,
+          "cost": 0.001599838,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001599838,
+            "upstream_inference_prompt_cost": 0.001034588,
+            "upstream_inference_completions_cost": 0.00056525
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3279,
+          "completion_tokens": 319,
+          "total_tokens": 3598,
+          "cost": 0.000729192,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2754,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000729192,
+            "upstream_inference_prompt_cost": 0.000308112,
+            "upstream_inference_completions_cost": 0.00042108
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 312,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

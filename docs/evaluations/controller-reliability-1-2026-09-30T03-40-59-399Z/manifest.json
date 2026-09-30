@@ -1,0 +1,39 @@
+{
+  "started_at": "2026-09-30T03:40:59.401Z",
+  "models": {
+    "narrator": "moonshotai/kimi-k2.5",
+    "controller": "deepseek/deepseek-v4-flash-0731:nitro"
+  },
+  "provider": "OpenRouter",
+  "retrieval": "lexical; standard live-evaluation onlineCoordinator(world, false)",
+  "rotation": [
+    "sister_mereth",
+    "mira_thorne"
+  ],
+  "item_id": "campaign_item_regression_leather_boots",
+  "return_input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+  "public_dir": "docs/evaluations/controller-reliability-1-2026-09-30T03-40-59-399Z",
+  "private_dir": ".build/controller-reliability-1-2026-09-30T03-40-59-399Z",
+  "source_before": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "cases": [
+    {
+      "npc_id": "sister_mereth",
+      "test": "items",
+      "file": "sister_mereth-items.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "mira_thorne",
+      "test": "items",
+      "file": "mira_thorne-items.json",
+      "outcomes": [
+        "success"
+      ]
+    }
+  ],
+  "finished_at": "2026-09-30T03:41:07.282Z",
+  "source_after": "21e7eda5c4340585a208d9afaac8cd8caedb30467d8e48770be5254736672619",
+  "source_unchanged": true
+}

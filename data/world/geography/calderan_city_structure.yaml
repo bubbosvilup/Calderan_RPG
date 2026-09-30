@@ -20,7 +20,12 @@ entity:
     administration in Center. Center is enclosed by an older inner wall. Shops may exist in West,
     taverns in Center, and temples outside North. Crossing substantial parts of a district or the
     city is meaningful travel. Detailed district canon belongs to the five district locations. Exact
-    roads and navigation routes are not established."
+    roads and navigation routes are not established. Its population is approximately 100,000:
+    largest in West and second most populous known globally. The roughly oval walled city has four
+    outer districts surrounding Center. Crossing most of it cardinal-to-cardinal takes approximately
+    two hours on foot, possibly somewhat less. Ordinary walking from Heartstone takes approximately
+    30 minutes to Main Market Square, 40 minutes to Calderan Central District and 20 minutes to
+    Calderan Slave Market; these estimates do not establish precise routes."
   knowledge:
     visibility:
       narrator: true

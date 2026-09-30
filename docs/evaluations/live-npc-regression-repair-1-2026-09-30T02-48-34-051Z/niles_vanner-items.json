@@ -1,0 +1,1539 @@
+{
+  "npc_id": "niles_vanner",
+  "name": "Niles Vanner",
+  "test": "items",
+  "campaign_id": "npc_regression_niles_vanner_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "niles_vanner",
+        "position": {
+          "kind": "carried",
+          "character_id": "niles_vanner"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Niles Vanner gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him.",
+      "result": {
+        "narration": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him.",
+        "base_revision": 2,
+        "final_revision": 3,
+        "controller_proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorized_commands": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner",
+              "acquired_at": 0
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            },
+            "grammar": {
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation"
+            },
+            "evidence": {
+              "quote": "Nicco takes the boots from him.",
+              "verified": true,
+              "check": "receipt_by_nicco"
+            },
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "source": "both"
+          }
+        ],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.0746999999973923,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [
+            {
+              "kind": "accepted_transfer",
+              "command_indexes": [
+                0
+              ],
+              "collective": false,
+              "source_sentence": "Nicco takes the boots from him"
+            }
+          ],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3381,
+            "completion_tokens": 65,
+            "total_tokens": 3446
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:52:23.201Z",
+            "headers_ms": 1319.9531000000134,
+            "time_to_first_token_ms": 1321.0948999999964,
+            "completed_at": "2026-09-30T02:52:24.548Z",
+            "elapsed_total_ms": 1346.342399999994
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3278,
+            "completion_tokens": 211,
+            "total_tokens": 3489
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:52:24.548Z",
+            "headers_ms": 1812.3064000000013,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:52:27.498Z",
+            "elapsed_total_ms": 2950.3355999999912
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6751,
+          "recent_conversation": 2,
+          "knowledge_access": 1271,
+          "retrieval": 30,
+          "controller_evidence": 7303
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Niles Vanner gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "niles_vanner",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1321.0948999999964,
+          "narrator_total_ms": 1346.342399999994,
+          "controller_total_ms": 2950.3355999999912,
+          "controller_tail_ms": 2953.008600000001,
+          "retrieval_ms": 0.0746999999973923,
+          "coordinator_total_ms": 4300.2714999999735
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              },
+              "grammar": {
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation"
+              },
+              "evidence": {
+                "quote": "Nicco takes the boots from him.",
+                "verified": true,
+                "check": "receipt_by_nicco"
+              },
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation",
+              "source": "both"
+            }
+          ]
+        },
+        {
+          "type": "narration_delta",
+          "text": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him."
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": true
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him.",
+            "base_revision": 2,
+            "final_revision": 3,
+            "controller_proposal": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              }
+            ],
+            "authorized_commands": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                },
+                "acquisition": {
+                  "acquisition_kind": "gift",
+                  "from_character_id": "niles_vanner",
+                  "acquired_at": 0
+                }
+              }
+            ],
+            "authorization": [
+              {
+                "command": {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                },
+                "grammar": {
+                  "authorized": true,
+                  "reason": "authorized_narrative_confirmation"
+                },
+                "evidence": {
+                  "quote": "Nicco takes the boots from him.",
+                  "verified": true,
+                  "check": "receipt_by_nicco"
+                },
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation",
+                "source": "both"
+              }
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0746999999973923,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [
+                {
+                  "kind": "accepted_transfer",
+                  "command_indexes": [
+                    0
+                  ],
+                  "collective": false,
+                  "source_sentence": "Nicco takes the boots from him"
+                }
+              ],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3381,
+                "completion_tokens": 65,
+                "total_tokens": 3446
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:52:23.201Z",
+                "headers_ms": 1319.9531000000134,
+                "time_to_first_token_ms": 1321.0948999999964,
+                "completed_at": "2026-09-30T02:52:24.548Z",
+                "elapsed_total_ms": 1346.342399999994
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3278,
+                "completion_tokens": 211,
+                "total_tokens": 3489
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:52:24.548Z",
+                "headers_ms": 1812.3064000000013,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:52:27.498Z",
+                "elapsed_total_ms": 2950.3355999999912
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6751,
+              "recent_conversation": 2,
+              "knowledge_access": 1271,
+              "retrieval": 30,
+              "controller_evidence": 7303
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Niles Vanner gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "niles_vanner",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1321.0948999999964,
+              "narrator_total_ms": 1346.342399999994,
+              "controller_total_ms": 2950.3355999999912,
+              "controller_tail_ms": 2953.008600000001,
+              "retrieval_ms": 0.0746999999973923,
+              "coordinator_total_ms": 4300.2714999999735
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_niles_vanner_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "niles_vanner",
+            "position": {
+              "kind": "carried",
+              "character_id": "niles_vanner"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_niles_vanner_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "niles_vanner",
+            "position": {
+              "kind": "carried",
+              "character_id": "niles_vanner"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nNiles Vanner: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "niles_vanner"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Niles Vanner reaches into a reinforced pocket of his waistcoat and withdraws a pair of worn leather boots, holding them out with the flat patience of a man who has completed many such transactions. \"These should serve. Sturdy enough for walking, nothing that draws notice.\" Nicco takes the boots from him.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3381,
+          "completion_tokens": 65,
+          "total_tokens": 3446,
+          "cost": 0.001146593,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2688,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001146593,
+            "upstream_inference_prompt_cost": 0.000930468,
+            "upstream_inference_completions_cost": 0.000216125
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3278,
+          "completion_tokens": 211,
+          "total_tokens": 3489,
+          "cost": 0.000532632,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2884,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000532632,
+            "upstream_inference_prompt_cost": 0.000254112,
+            "upstream_inference_completions_cost": 0.00027852
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 150,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\"",
+      "result": {
+        "narration": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\"",
+        "base_revision": 3,
+        "final_revision": 3,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.1541000000142958,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "niles_vanner",
+              "position": {
+                "kind": "carried",
+                "character_id": "niles_vanner"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3411,
+            "completion_tokens": 110,
+            "total_tokens": 3521
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:52:27.503Z",
+            "headers_ms": 1537.4609999999811,
+            "time_to_first_token_ms": 1539.0835999999836,
+            "completed_at": "2026-09-30T02:52:29.766Z",
+            "elapsed_total_ms": 2262.9668999999994
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3377,
+            "completion_tokens": 155,
+            "total_tokens": 3532
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:52:29.767Z",
+            "headers_ms": 3452.044599999994,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:52:33.610Z",
+            "elapsed_total_ms": 3843.372800000012
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6830,
+          "recent_conversation": 407,
+          "knowledge_access": 1271,
+          "retrieval": 30,
+          "controller_evidence": 7645
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "recipient": "niles_vanner",
+                "form": "give_back",
+                "attempt": true
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "niles_vanner",
+              "position": {
+                "kind": "carried",
+                "character_id": "niles_vanner"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1539.0835999999836,
+          "narrator_total_ms": 2262.9668999999994,
+          "controller_total_ms": 3843.372800000012,
+          "controller_tail_ms": 3846.314299999998,
+          "retrieval_ms": 0.1541000000142958,
+          "coordinator_total_ms": 6110.665100000013
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 3
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\"",
+            "base_revision": 3,
+            "final_revision": 3,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1541000000142958,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "niles_vanner",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "niles_vanner"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3411,
+                "completion_tokens": 110,
+                "total_tokens": 3521
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:52:27.503Z",
+                "headers_ms": 1537.4609999999811,
+                "time_to_first_token_ms": 1539.0835999999836,
+                "completed_at": "2026-09-30T02:52:29.766Z",
+                "elapsed_total_ms": 2262.9668999999994
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3377,
+                "completion_tokens": 155,
+                "total_tokens": 3532
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:52:29.767Z",
+                "headers_ms": 3452.044599999994,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:52:33.610Z",
+                "elapsed_total_ms": 3843.372800000012
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6830,
+              "recent_conversation": 407,
+              "knowledge_access": 1271,
+              "retrieval": 30,
+              "controller_evidence": 7645
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "recipient": "niles_vanner",
+                    "form": "give_back",
+                    "attempt": true
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "niles_vanner",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "niles_vanner"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1539.0835999999836,
+              "narrator_total_ms": 2262.9668999999994,
+              "controller_total_ms": 3843.372800000012,
+              "controller_tail_ms": 3846.314299999998,
+              "retrieval_ms": 0.1541000000142958,
+              "coordinator_total_ms": 6110.665100000013
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_niles_vanner_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_niles_vanner_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "niles_vanner"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nNiles Vanner: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "niles_vanner"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Nicco thanks Niles and offers the boots back, suggesting he might need them more.\n\nNiles studies him with that patient, analytical expression, thumb stilling on the counter balance pan he'd been spinning. \"I appreciate the thought,\" he says, making no move to take them. \"But I've footwear enough, and those won't fetch me anything I don't already have. You keep them. Walking Calderan in whatever you arrived in—\" he glances at Nicco's feet without lingering, \"—that'll cost you more than pride.\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3411,
+          "completion_tokens": 110,
+          "total_tokens": 3521,
+          "cost": 0.001498226,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001498226,
+            "upstream_inference_prompt_cost": 0.001132476,
+            "upstream_inference_completions_cost": 0.00036575
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3377,
+          "completion_tokens": 155,
+          "total_tokens": 3532,
+          "cost": 0.000549652,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2769,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000549652,
+            "upstream_inference_prompt_cost": 0.000345052,
+            "upstream_inference_completions_cost": 0.0002046
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 147,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

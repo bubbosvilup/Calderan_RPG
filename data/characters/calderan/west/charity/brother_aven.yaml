@@ -1,0 +1,90 @@
+schema_version: 1
+entity:
+  id: brother_aven
+  type: character
+  name: Brother Aven
+  display_name: Brother Aven
+  parent: null
+  aliases: []
+  summary: Brother Aven is the low-ranking local minister at Open Hand Chapel, providing practical
+    charity and nonmagical healing in West.
+  tags:
+    - west_npc
+  search_context: Brother Aven Open Hand Chapel minister, charity, nonmagical healer, confessor.
+  content: Brother Aven serves Open Hand Chapel as a low-ranking clergyman and local minister. His
+    work includes confession, poor relief, nonmagical healing, funeral services and occasional
+    mediation. He seeks practical help and dignity for people in West. This is the existing Open
+    Hand Chapel, not an additional institution. No exact home or confidential testimony is
+    established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Late forties
+  appearance: Thin and slightly stooped, with short greying hair, a short poorly maintained beard and
+    a tired face. Worn patched clerical clothing suits practical charity and healing work.
+  occupation: Open Hand Chapel minister, confessor, nonmagical healer and charity worker
+  base_location: open_hand_chapel
+  work_location: open_hand_chapel
+  home_location: null
+  traits:
+    - calm
+    - patient
+    - experienced
+    - dry humor
+    - compassionate without naivety
+    - practical
+  purpose: Maintain one place in West where people receive practical help and retain some human dignity.
+  morality: Compassionate and experienced rather than naive; protects dignity through practical help
+    and does not turn confidential religious knowledge into public gossip.
+  affiliations:
+    - church
+  relationships:
+    - target: captain_doran_hale
+      kind: local_contact
+      description: Established contact with the West District guard captain.
+    - target: bartolomhew
+      kind: clerical_past
+      description: Knows his clerical past; the exact expulsion details remain unresolved.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - brother_aven
+          - bartolomhew
+        awareness: private
+    - target: mistress_elara
+      kind: local_contact
+      description: An established relationship whose precise terms are unestablished.
+    - target: korvin
+      kind: local_contact
+      description: An established relationship whose precise terms are unestablished.
+    - target: sister_mereth
+      kind: charity_contact
+      description: Contact with Saint Orra's House and its administrator in local charitable work.
+  private_notes: Knows Bartolomhew's clerical past, without a complete established account of the
+    expulsion. No confidential admissions or exact expulsion reason are supplied; do not invent
+    them.
+chunks:
+  - id: brother_aven.confidential_knowledge
+    entity_id: brother_aven
+    section: confidential_knowledge
+    summary: Restricted religious knowledge boundary.
+    search_context: Restricted religious knowledge boundary.
+    content: He knows Bartolomhew's clerical past. The exact reason for expulsion remains incomplete. No
+      particular confession, source or confidential testimony is authored; unknown details must not
+      become implied hidden facts.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - brother_aven
+      awareness: private

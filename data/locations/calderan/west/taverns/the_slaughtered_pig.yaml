@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: the_slaughtered_pig
+  type: location
+  name: The Slaughtered Pig
+  display_name: The Slaughtered Pig
+  parent: calderan_west
+  aliases: []
+  summary: A low-end West tavern with rougher clientele.
+  tags:
+    - geography
+  search_context: A low-end West tavern with rougher clientele.
+  content: Laborers, warehouse workers and petty criminals frequent this tavern. Fights are not
+    unusual and questions are generally unwelcome. Its owner and exact position within West are
+    unestablished.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

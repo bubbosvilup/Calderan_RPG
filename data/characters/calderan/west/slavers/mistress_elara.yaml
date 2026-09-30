@@ -1,0 +1,99 @@
+schema_version: 1
+entity:
+  id: mistress_elara
+  type: character
+  name: Mistress Elara
+  display_name: Mistress Elara
+  parent: null
+  aliases:
+    - Elara
+  summary: Mistress Elara is a high-end licensed slaver at Calderan Slave Market and operates an adult
+    pleasure and escort establishment in West.
+  tags:
+    - west_npc
+  search_context: Mistress Elara high-end licensed slaver, prestigious domestic staff, companions,
+    courtesans, Calderan Slave Market.
+  content: Elara specializes in prestigious female slaves, refined domestic staff, companions or
+    courtesans and socially useful talent. Her valuable slaves generally receive better material
+    treatment than Korvin's, but this does not make her benevolent or a rescuer. Her West pleasure
+    and escort establishment serves adults and has no established name or exact location. Not
+    everyone in her network performs sexual work. Her ties to Saint Orra's House may include scouting,
+    sponsorship, training, long-term investment, domestic/social placement or future potential;
+    arrangements involving younger girls remain otherwise unspecified and are not a basis for sexual
+    content involving minors.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Approximately 46–49
+  appearance: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a
+    decorative fan. Her appearance is carefully maintained.
+  occupation: High-end licensed slaver and operator of an adult pleasure/escort establishment
+  base_location: calderan_slave_market
+  work_location: calderan_slave_market
+  home_location: null
+  traits:
+    - charming
+    - flirtatious
+    - theatrical
+    - apparently superficial
+    - observant
+    - socially predatory in gathering information
+    - authoritative toward those she considers socially inferior
+  purpose: "Social ascent: become someone nobles must publicly recognize rather than someone they only
+    seek privately."
+  morality: Commodifies people and cultivates their social usefulness. Better material care for
+    valuable slaves is an investment, not benevolence or rescue. Do not assume every association
+    involves sexual work.
+  affiliations: []
+  relationships:
+    - target: korvin
+      kind: commercial_contact
+      description: Commercial relationship with a fellow licensed seller; no friendship or enmity is inferred.
+    - target: blackthorn
+      kind: commercial_contact
+      description: Commercial contact with Blackthorn and the Carrion Dogs through intermediated criminal
+        business.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - mistress_elara
+          - blackthorn
+        awareness: private
+    - target: sister_mereth
+      kind: institutional_contact
+      description: Contact with Saint Orra's House through its administrator; exact arrangements are
+        unestablished.
+    - target: brother_aven
+      kind: local_contact
+      description: An established local contact; precise personal terms are unestablished.
+  private_notes: She fears aging before achieving the status she seeks. She cultivates private
+    information through her social network and indirect criminal contacts. Her ties to Saint Orra's
+    House remain morally ambiguous, without establishing responsibility for disappearances.
+    Sensitive sources and client secrets are unspecified. She does not personally know Dren by
+    default.
+chunks:
+  - id: mistress_elara.private_network
+    entity_id: mistress_elara
+    section: private_network
+    summary: Restricted social ambition and information network.
+    search_context: Restricted social ambition and information network.
+    content: She fears aging before gaining public recognition from nobles. Her social network supplies
+      private information; indirect criminal contacts include commercial contact with Blackthorn and
+      the Carrion Dogs. No particular secret client, source, transaction or responsibility for
+      shelter disappearances is established.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - mistress_elara
+      awareness: private

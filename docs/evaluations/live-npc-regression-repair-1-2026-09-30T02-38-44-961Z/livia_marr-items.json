@@ -1,0 +1,1553 @@
+{
+  "npc_id": "livia_marr",
+  "name": "Livia Marr",
+  "test": "items",
+  "campaign_id": "npc_regression_livia_marr_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "livia_marr",
+        "position": {
+          "kind": "carried",
+          "character_id": "livia_marr"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Livia Marr gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them.",
+      "result": {
+        "narration": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them.",
+        "base_revision": 2,
+        "final_revision": 3,
+        "controller_proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorized_commands": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr",
+              "acquired_at": 0
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            },
+            "grammar": {
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation"
+            },
+            "evidence": {
+              "quote": "She hands the pair of leather boots to Nicco, and he takes them.",
+              "verified": true,
+              "check": "receipt_by_nicco"
+            },
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "source": "both"
+          }
+        ],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.07929999998304993,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [
+            {
+              "kind": "accepted_transfer",
+              "command_indexes": [
+                0
+              ],
+              "collective": false,
+              "source_sentence": "She hands the pair of leather boots to Nicco, and he takes them"
+            }
+          ],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3333,
+            "completion_tokens": 67,
+            "total_tokens": 3400
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:41:34.946Z",
+            "headers_ms": 2324.284000000014,
+            "time_to_first_token_ms": 2325.3049000000174,
+            "completed_at": "2026-09-30T02:41:37.404Z",
+            "elapsed_total_ms": 2457.765299999999
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3247,
+            "completion_tokens": 302,
+            "total_tokens": 3549
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:41:37.405Z",
+            "headers_ms": 1457.9974999999977,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:41:40.677Z",
+            "elapsed_total_ms": 3272.730499999976
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6506,
+          "recent_conversation": 2,
+          "knowledge_access": 1269,
+          "retrieval": 30,
+          "controller_evidence": 7048
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Livia Marr gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "livia_marr",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 2325.3049000000174,
+          "narrator_total_ms": 2457.765299999999,
+          "controller_total_ms": 3272.730499999976,
+          "controller_tail_ms": 3278.093599999993,
+          "retrieval_ms": 0.07929999998304993,
+          "coordinator_total_ms": 5736.932000000001
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              },
+              "grammar": {
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation"
+              },
+              "evidence": {
+                "quote": "She hands the pair of leather boots to Nicco, and he takes them.",
+                "verified": true,
+                "check": "receipt_by_nicco"
+              },
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation",
+              "source": "both"
+            }
+          ]
+        },
+        {
+          "type": "narration_delta",
+          "text": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them."
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": true
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them.",
+            "base_revision": 2,
+            "final_revision": 3,
+            "controller_proposal": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              }
+            ],
+            "authorized_commands": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                },
+                "acquisition": {
+                  "acquisition_kind": "gift",
+                  "from_character_id": "livia_marr",
+                  "acquired_at": 0
+                }
+              }
+            ],
+            "authorization": [
+              {
+                "command": {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                },
+                "grammar": {
+                  "authorized": true,
+                  "reason": "authorized_narrative_confirmation"
+                },
+                "evidence": {
+                  "quote": "She hands the pair of leather boots to Nicco, and he takes them.",
+                  "verified": true,
+                  "check": "receipt_by_nicco"
+                },
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation",
+                "source": "both"
+              }
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.07929999998304993,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [
+                {
+                  "kind": "accepted_transfer",
+                  "command_indexes": [
+                    0
+                  ],
+                  "collective": false,
+                  "source_sentence": "She hands the pair of leather boots to Nicco, and he takes them"
+                }
+              ],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3333,
+                "completion_tokens": 67,
+                "total_tokens": 3400
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:41:34.946Z",
+                "headers_ms": 2324.284000000014,
+                "time_to_first_token_ms": 2325.3049000000174,
+                "completed_at": "2026-09-30T02:41:37.404Z",
+                "elapsed_total_ms": 2457.765299999999
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3247,
+                "completion_tokens": 302,
+                "total_tokens": 3549
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:41:37.405Z",
+                "headers_ms": 1457.9974999999977,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:41:40.677Z",
+                "elapsed_total_ms": 3272.730499999976
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6506,
+              "recent_conversation": 2,
+              "knowledge_access": 1269,
+              "retrieval": 30,
+              "controller_evidence": 7048
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Livia Marr gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "livia_marr",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 2325.3049000000174,
+              "narrator_total_ms": 2457.765299999999,
+              "controller_total_ms": 3272.730499999976,
+              "controller_tail_ms": 3278.093599999993,
+              "retrieval_ms": 0.07929999998304993,
+              "coordinator_total_ms": 5736.932000000001
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_livia_marr_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "livia_marr",
+            "position": {
+              "kind": "carried",
+              "character_id": "livia_marr"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_livia_marr_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "livia_marr",
+            "position": {
+              "kind": "carried",
+              "character_id": "livia_marr"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nLivia Marr: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "livia_marr"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Livia Marr pulls the leather boots from her satchel, turning them over to check the soles one last time. \"Good stitching, solid leather. You'll want these broken in before any real walking,\" she says, and extends them toward Nicco.\n\nShe hands the pair of leather boots to Nicco, and he takes them.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3333,
+          "completion_tokens": 67,
+          "total_tokens": 3400,
+          "cost": 0.000962331,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3200,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000962331,
+            "upstream_inference_prompt_cost": 0.000739556,
+            "upstream_inference_completions_cost": 0.000222775
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3247,
+          "completion_tokens": 302,
+          "total_tokens": 3549,
+          "cost": 0.000663832,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2824,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000663832,
+            "upstream_inference_prompt_cost": 0.000265192,
+            "upstream_inference_completions_cost": 0.00039864
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 233,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\"",
+      "result": {
+        "narration": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\"",
+        "base_revision": 3,
+        "final_revision": 3,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.1787999999942258,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "livia_marr",
+              "position": {
+                "kind": "carried",
+                "character_id": "livia_marr"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [
+            {
+              "command_indexes": [
+                0
+              ],
+              "source_sentence": "She makes no move to take the boots, folding her arms loosely across her measuring tape"
+            }
+          ],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3365,
+            "completion_tokens": 181,
+            "total_tokens": 3546
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:41:40.686Z",
+            "headers_ms": 1390.5151000000187,
+            "time_to_first_token_ms": 1391.475299999991,
+            "completed_at": "2026-09-30T02:41:43.050Z",
+            "elapsed_total_ms": 2364.326300000015
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3416,
+            "completion_tokens": 171,
+            "total_tokens": 3587
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:41:43.051Z",
+            "headers_ms": 1790.3668999999936,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:41:45.966Z",
+            "elapsed_total_ms": 2915.075499999977
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6587,
+          "recent_conversation": 399,
+          "knowledge_access": 1269,
+          "retrieval": 30,
+          "controller_evidence": 7720
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "recipient": "livia_marr",
+                "form": "give_back",
+                "attempt": true
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "livia_marr",
+              "position": {
+                "kind": "carried",
+                "character_id": "livia_marr"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1391.475299999991,
+          "narrator_total_ms": 2364.326300000015,
+          "controller_total_ms": 2915.075499999977,
+          "controller_tail_ms": 2917.868300000002,
+          "retrieval_ms": 0.1787999999942258,
+          "coordinator_total_ms": 5283.495400000014
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 3
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\"",
+            "base_revision": 3,
+            "final_revision": 3,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1787999999942258,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "livia_marr",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "livia_marr"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [
+                {
+                  "command_indexes": [
+                    0
+                  ],
+                  "source_sentence": "She makes no move to take the boots, folding her arms loosely across her measuring tape"
+                }
+              ],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3365,
+                "completion_tokens": 181,
+                "total_tokens": 3546
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:41:40.686Z",
+                "headers_ms": 1390.5151000000187,
+                "time_to_first_token_ms": 1391.475299999991,
+                "completed_at": "2026-09-30T02:41:43.050Z",
+                "elapsed_total_ms": 2364.326300000015
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3416,
+                "completion_tokens": 171,
+                "total_tokens": 3587
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:41:43.051Z",
+                "headers_ms": 1790.3668999999936,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:41:45.966Z",
+                "elapsed_total_ms": 2915.075499999977
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6587,
+              "recent_conversation": 399,
+              "knowledge_access": 1269,
+              "retrieval": 30,
+              "controller_evidence": 7720
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "recipient": "livia_marr",
+                    "form": "give_back",
+                    "attempt": true
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "livia_marr",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "livia_marr"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1391.475299999991,
+              "narrator_total_ms": 2364.326300000015,
+              "controller_total_ms": 2915.075499999977,
+              "controller_tail_ms": 2917.868300000002,
+              "retrieval_ms": 0.1787999999942258,
+              "coordinator_total_ms": 5283.495400000014
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_livia_marr_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_livia_marr_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "livia_marr"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nLivia Marr: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "livia_marr"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Livia Marr blinks, the pins between her lips clicking softly as she shifts them aside. \"Give them *back*?\" She laughs, quick and bright, though her eyes narrow with something between amusement and assessment. \"I made them to fit *you*, not me. You've got feet like a dockworker and I'm built like a sewing needle.\" She makes no move to take the boots, folding her arms loosely across her measuring tape. \"Keep them. Consider it a welcome gift, or a thank-you for not keeling over on my stoop yesterday.\"\n\nShe glances toward Heartstone's heavy entrance, then back to Nicco with that same swift, evaluating look. \"Unless you're offering because you can't pay your rent and need to trade for bread? In which case, talk to me straight and we'll figure something else out. I'm not in the habit of taking back finished work.\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3365,
+          "completion_tokens": 181,
+          "total_tokens": 3546,
+          "cost": 0.001379077,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3136,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001379077,
+            "upstream_inference_prompt_cost": 0.000777252,
+            "upstream_inference_completions_cost": 0.000601825
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3416,
+          "completion_tokens": 171,
+          "total_tokens": 3587,
+          "cost": 0.00047628,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3040,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00047628,
+            "upstream_inference_prompt_cost": 0.00025056,
+            "upstream_inference_completions_cost": 0.00022572
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 164,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Mira Thorne
+  parent: null
+  aliases: []
+  summary: Mira Thorne is the proprietor of Mudlark's Herbs.
+  tags:
+    - west_merchant
+  search_context: Mira Thorne, proprietor of Mudlark's Herbs.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  base_location: mudlarks_herbs
+  work_location: mudlarks_herbs
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: mira_thorne
+  name: Mira Thorne
+  sex: female
+  age_band: Approximately 38–43
+  occupation: Herbalist and basic apothecary at Mudlark's Herbs
+  appearance: Lean, with short copper-brown hair cut with little concern for symmetry and
+    plant-stained fingertips. Practical layered clothes have many small pockets. Wears no obvious
+    perfume.
+  content: Mira Thorne runs Mudlark's Herbs. Quiet, matter-of-fact and slightly skeptical, she asks
+    concise questions about duration, fever, eating, bleeding and prior remedies before advising
+    customers. She dislikes answers to questions she did not ask and often smells dried ingredients
+    while thinking. Difficult cases are referred to North; her practice is basic rather than
+    specialist or magical.
+  traits:
+    - observant
+    - skeptical
+    - restrained
+    - curious
+    - practical
+    - mildly irritable
+  purpose: Run a reliable neighborhood herbal/apothecary practice without pretending to expertise she
+    lacks; refer difficult cases to North rather than endanger someone to protect her ego.
+  morality: Pragmatically compassionate. Charges for her work and cannot be permanent charity, but may
+    quietly reduce a price or extend informal credit for basic treatment. Refuses fake cures,
+    deliberately dangerous preparations and unidentified ingredients. Judges traditional medicine,
+    religious care and physicians individually, without ideological opposition.
+  private_notes: Fears someone dying because they mistook her for a physician or miracle healer and
+    trusted her beyond her competence; this makes her conservative with serious conditions.
+    Distrusts dramatic medical claims yet becomes intensely curious when evidence supports a remedy
+    she cannot explain. Avoids strong fragrances because they interfere with her work. Knows common
+    medicinal plants, mundane remedies, minor ailments/injuries, suppliers and the limits of her
+    competence; not an expert alchemist or magical healer. Observable habits are occasional anchors,
+    not compulsory gestures or catchphrases in every interaction. Ordinary professional familiarity
+    or reputation does not establish friendship or personal acquaintance. No private criminal
+    knowledge follows from local experience.
+chunks: []

@@ -272,16 +272,16 @@ test("request contracts reject malformed values, unknown keys, accessors, protot
 
 test("real canon resolution and filters return useful bounded results with no search engine", async () => {
   const world = await loadWorld("data"); const service = new RetrievalService(world);
-  assert.equal(world.listEntities().length, 56); assert.equal(world.listChunks().length, 0);
+  assert.equal(world.listEntities().length, 92); assert.equal(world.listChunks().length, 15);
   for (const [reference, id] of [["blackwater", "blackwater"], ["Blackwater", "blackwater"], ["The Unchained Haven", "blackwater"], ["The Port of Chains", "davenport"], ["The Fortress on the Edge", "ironbound"], ["West", "west"], ["Center", "center"]]) assert.equal(found(service.resolveEntityReference(reference, "narrator")), id);
   assert.deepEqual(ids(service.filterEntities({ entity_types: ["location"], parent_ids: ["west"] }, "narrator")), ["blackwater", "calderan", "davenport", "ironbound"]);
   const factionPage = service.filterEntities({ entity_types: ["faction"] }, "narrator");
-  assert.deepEqual(ids(factionPage), ["artisans_guild", "church", "city_guard", "inquisition", "learned_arts_guild"]);
+  assert.deepEqual(ids(factionPage), ["artisans_guild", "carrion_dogs", "church", "city_guard", "inquisition"]);
   assert.equal(factionPage.next_offset, 5);
-  assert.deepEqual(ids(service.filterEntities({ entity_types: ["faction"] }, "narrator", { offset: 5 })), ["merchants_guild"]);
+  assert.deepEqual(ids(service.filterEntities({ entity_types: ["faction"] }, "narrator", { offset: 5 })), ["learned_arts_guild", "merchants_guild"]);
   let offset: number | null = 0; const geography: string[] = [];
   while (offset !== null) { const page: WorldSearchResult = service.filterEntities({ tags_any: ["geography"] }, "narrator", { offset }); geography.push(...ids(page)); offset = page.next_offset; }
-  assert.equal(geography.length, 26); assert.deepEqual(geography, [...geography].sort());
+  assert.equal(geography.length, 45); assert.deepEqual(geography, [...geography].sort());
   for (const entity of world.listEntities()) assert.equal(service.get({ entity_id: entity.id }, "narrator").kind, "found", entity.id);
   assert.equal(service.resolveEntityReference("Where are slaves sold near the border?", "narrator").kind, "not_found");
 });

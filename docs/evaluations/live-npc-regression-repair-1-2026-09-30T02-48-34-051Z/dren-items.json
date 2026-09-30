@@ -1,0 +1,289 @@
+{
+  "npc_id": "dren",
+  "name": "Dren",
+  "test": "items",
+  "redacted": true,
+  "note": "Protected character content retained only in the local private artifact.",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "dren",
+        "position": {
+          "kind": "carried",
+          "character_id": "dren"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Dren gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "delivered": "draft",
+      "issue_kinds": [],
+      "revision_issue_kinds": [],
+      "natural_actions": [
+        {
+          "kind": "inbound_transfer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "authorized_kinds": [
+        "transfer_item"
+      ],
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "dren",
+            "position": {
+              "kind": "carried",
+              "character_id": "dren"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "dren"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "dren"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3356,
+          "completion_tokens": 117,
+          "total_tokens": 3473,
+          "cost": 0.001099473,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3328,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001099473,
+            "upstream_inference_prompt_cost": 0.000710448,
+            "upstream_inference_completions_cost": 0.000389025
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3248,
+          "completion_tokens": 239,
+          "total_tokens": 3487,
+          "cost": 0.00063426,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2695,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00063426,
+            "upstream_inference_prompt_cost": 0.00031878,
+            "upstream_inference_completions_cost": 0.00031548
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 178,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "delivered": "draft",
+      "issue_kinds": [],
+      "revision_issue_kinds": [],
+      "natural_actions": [
+        {
+          "kind": "offer",
+          "status": "outcome_dependent"
+        }
+      ],
+      "authorized_kinds": [],
+      "before_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "dren"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "dren"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "dren"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3369,
+          "completion_tokens": 145,
+          "total_tokens": 3514,
+          "cost": 0.001406209,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2688,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001406209,
+            "upstream_inference_prompt_cost": 0.000924084,
+            "upstream_inference_completions_cost": 0.000482125
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3326,
+          "completion_tokens": 186,
+          "total_tokens": 3512,
+          "cost": 0.000517044,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2893,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000517044,
+            "upstream_inference_prompt_cost": 0.000271524,
+            "upstream_inference_completions_cost": 0.00024552
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 177,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

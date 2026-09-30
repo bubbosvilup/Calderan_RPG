@@ -12,11 +12,13 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const runtime = new RuntimeState(world, structuredClone(snapshot.runtime.scene), snapshot.runtime.mana);
   runtime.applySceneDelta({ character_movements: snapshot.runtime.npc_locations.map(n => ({ ...n })) });
   const projected = buildNarrativeContext(world, runtime);
-  // Stronger player-output policy: omit narrator-only secrets from this first playable slice.
+  // Stronger player-output policy: omit narrator-only secret places. Repair 1 confidential encounter: a protected (narrator-only)
+  // character physically present in runtime IS projected for this turn, marked confidential, so the narrator can portray them.
+  // This grants no retrieval/player visibility and publishes no identity: the flag carries the non-disclosure contract.
   const primary = { runtime_revision: snapshot.revision, scene: { ...projected.scene,
     player_location: projected.scene.player_location?.secret ? null : projected.scene.player_location,
     location_ancestry: projected.scene.location_ancestry.filter(e => !e.secret),
-    present_characters: projected.scene.present_characters.filter(e => !e.secret),
+    present_characters: projected.scene.present_characters.map(e => e.secret ? { ...e, confidential_encounter: true as const } : e),
   } };
   // Current production canon may have no authored player/NPC records yet. Runtime still projects player location/mana.
   const present = [...(world.getEntity("nicco")?.type === "character" ? ["nicco"] : []), ...primary.scene.present_characters.map(c => c.id), ...snapshot.characters.filter(c => c.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead").map(c => c.id)];
@@ -31,7 +33,9 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const knowledge = snapshot.knowledge.filter(k => present.includes(k.character_id) && facts.some(f => f.id === k.fact_id));
   // Authored home locality (canonical characters only): the basis for local:<location> awareness. Presence alone is not residency.
   const home = (id: string) => { const e = world.getEntity(id); return e?.type === "character" && (e.base_location ?? e.location) ? [e.base_location ?? e.location!, ...world.getAncestors((e.base_location ?? e.location)!).map(a => a.id)] : []; };
-  const characters = present.map(id => ({ ...characterView(snapshot, world, id), locality: home(id),
+  // Repair 1: a pronoun from authored sex only (never inferred from a name), used to disambiguate "he"/"she" in evidence.
+  const pronoun = (id: string) => { const e = world.getEntity(id); return e?.type === "character" && e.sex === "male" ? { pronoun: "he" as const } : e?.type === "character" && e.sex === "female" ? { pronoun: "she" as const } : {}; };
+  const characters = present.map(id => ({ ...characterView(snapshot, world, id), locality: home(id), ...pronoun(id),
     canonical_awareness: world.listEntities().filter(e => e.knowledge?.visibility.player && e.knowledge.visibility.narrator && e.knowledge.known_by.includes(id)).map(e => e.id).slice(0, 24),
   }));
   const events = snapshot.scheduled_events.filter(e => e.participants?.includes("nicco") && e.status === "scheduled");
@@ -39,7 +43,11 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const player = world.getEntity("nicco");
   const player_profile = player?.type === "character" && player.role === "player" && player.knowledge?.visibility.narrator ? {
     name: player.name, content: player.content,
-    households: snapshot.households.flatMap(h => h.members.filter(m => m.character_id === "nicco" && m.status !== "former_member").map(m => ({ name: h.name ?? h.id, status: m.status, ...(m.role ? { role: m.role } : {}) }))),
+    // Repair 1: what others can perceive, kept apart from narrator-only biography.
+    observable: player.type === "character" ? [...player.traits] : [],
+    households: snapshot.households.flatMap(h => h.members.filter(m => m.character_id === "nicco" && m.status !== "former_member").map(m => ({ id: h.id, name: h.name ?? h.id, status: m.status, ...(m.role ? { role: m.role } : {}),
+      // Household knowledge policy: only fellow current members may use Nicco's membership; ownership is not public.
+      member_ids: h.members.filter(x => x.status !== "former_member").map(x => x.character_id) }))),
   } : null;
   const result = { primary, characters, items, facts, knowledge, scheduled_events: events, player_profile };
   if (present.length > 24 || items.length > 48 || facts.length > 32 || knowledge.length > 96 || events.length > 16 || JSON.stringify(result).length > 32_000) throw new TurnError("context_too_large");

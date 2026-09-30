@@ -1,0 +1,968 @@
+{
+  "npc_id": "jessa_rook",
+  "name": "Jessa Rook",
+  "test": "punch",
+  "campaign_id": "npc_regression_jessa_rook_punch",
+  "turns": [
+    {
+      "input": "*He punches Jessa Rook directly in the face.*",
+      "scene_location": "gatherers_inn",
+      "runtime_co_located": [
+        "jessa_rook"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco's fist connects with Jessa's jaw. She rocks back, scarred eyebrow raised, then steadies herself against the counter with one hand. Her other hand does not reach for the notebook at her belt.\n\n\"Out.\" Her voice stays low, almost conversational, though a red mark spreads along her cheekbone. \"Door's behind you. Don't stop walking until you're past the sign.\"\n\nShe does not move to block his path, nor does she look toward whatever staff might be in the kitchen beyond. She watches his hands.",
+      "result": {
+        "narration": "Nicco's fist connects with Jessa's jaw. She rocks back, scarred eyebrow raised, then steadies herself against the counter with one hand. Her other hand does not reach for the notebook at her belt.\n\n\"Out.\" Her voice stays low, almost conversational, though a red mark spreads along her cheekbone. \"Door's behind you. Don't stop walking until you're past the sign.\"\n\nShe does not move to block his path, nor does she look toward whatever staff might be in the kitchen beyond. She watches his hands.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.11420000001089647,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2367,
+            "completion_tokens": 108,
+            "total_tokens": 2475
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:40.229Z",
+            "headers_ms": 1552.2321999999986,
+            "time_to_first_token_ms": 1553.0546000000031,
+            "completed_at": "2026-09-30T01:37:46.154Z",
+            "elapsed_total_ms": 5924.673999999999
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 1972,
+            "completion_tokens": 6,
+            "total_tokens": 1978
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:46.154Z",
+            "headers_ms": 514.5825000000041,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:46.714Z",
+            "elapsed_total_ms": 559.8133999999991
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 5899,
+          "recent_conversation": 2,
+          "knowledge_access": 750,
+          "retrieval": 30,
+          "controller_evidence": 6491
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1553.0546000000031,
+          "narrator_total_ms": 5924.673999999999,
+          "controller_total_ms": 559.8133999999991,
+          "controller_tail_ms": 560.5630999999994,
+          "retrieval_ms": 0.11420000001089647,
+          "coordinator_total_ms": 6486.268499999991
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fist"
+        },
+        {
+          "type": "narration_delta",
+          "text": " connects"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Jess"
+        },
+        {
+          "type": "narration_delta",
+          "text": "a's"
+        },
+        {
+          "type": "narration_delta",
+          "text": " jaw"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " She"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rocks"
+        },
+        {
+          "type": "narration_delta",
+          "text": " back"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " scar"
+        },
+        {
+          "type": "narration_delta",
+          "text": "red"
+        },
+        {
+          "type": "narration_delta",
+          "text": " eyeb"
+        },
+        {
+          "type": "narration_delta",
+          "text": "row"
+        },
+        {
+          "type": "narration_delta",
+          "text": " raised"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " then"
+        },
+        {
+          "type": "narration_delta",
+          "text": " ste"
+        },
+        {
+          "type": "narration_delta",
+          "text": "adies"
+        },
+        {
+          "type": "narration_delta",
+          "text": " herself"
+        },
+        {
+          "type": "narration_delta",
+          "text": " against"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " counter"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " one"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " other"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " reach"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " notebook"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " belt"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "\""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Out"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " Her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " voice"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stays"
+        },
+        {
+          "type": "narration_delta",
+          "text": " low"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " almost"
+        },
+        {
+          "type": "narration_delta",
+          "text": " conversational"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " though"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " red"
+        },
+        {
+          "type": "narration_delta",
+          "text": " mark"
+        },
+        {
+          "type": "narration_delta",
+          "text": " spreads"
+        },
+        {
+          "type": "narration_delta",
+          "text": " along"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cheek"
+        },
+        {
+          "type": "narration_delta",
+          "text": "bone"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Door"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " behind"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Don't"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stop"
+        },
+        {
+          "type": "narration_delta",
+          "text": " walking"
+        },
+        {
+          "type": "narration_delta",
+          "text": " until"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " past"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sign"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\"\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "She"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " move"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " block"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " path"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " nor"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " she"
+        },
+        {
+          "type": "narration_delta",
+          "text": " look"
+        },
+        {
+          "type": "narration_delta",
+          "text": " toward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " whatever"
+        },
+        {
+          "type": "narration_delta",
+          "text": " staff"
+        },
+        {
+          "type": "narration_delta",
+          "text": " might"
+        },
+        {
+          "type": "narration_delta",
+          "text": " be"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " kitchen"
+        },
+        {
+          "type": "narration_delta",
+          "text": " beyond"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " She"
+        },
+        {
+          "type": "narration_delta",
+          "text": " watches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hands"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco's fist connects with Jessa's jaw. She rocks back, scarred eyebrow raised, then steadies herself against the counter with one hand. Her other hand does not reach for the notebook at her belt.\n\n\"Out.\" Her voice stays low, almost conversational, though a red mark spreads along her cheekbone. \"Door's behind you. Don't stop walking until you're past the sign.\"\n\nShe does not move to block his path, nor does she look toward whatever staff might be in the kitchen beyond. She watches his hands."
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco's fist connects with Jessa's jaw. She rocks back, scarred eyebrow raised, then steadies herself against the counter with one hand. Her other hand does not reach for the notebook at her belt.\n\n\"Out.\" Her voice stays low, almost conversational, though a red mark spreads along her cheekbone. \"Door's behind you. Don't stop walking until you're past the sign.\"\n\nShe does not move to block his path, nor does she look toward whatever staff might be in the kitchen beyond. She watches his hands.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.11420000001089647,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2367,
+                "completion_tokens": 108,
+                "total_tokens": 2475
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:40.229Z",
+                "headers_ms": 1552.2321999999986,
+                "time_to_first_token_ms": 1553.0546000000031,
+                "completed_at": "2026-09-30T01:37:46.154Z",
+                "elapsed_total_ms": 5924.673999999999
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 1972,
+                "completion_tokens": 6,
+                "total_tokens": 1978
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:46.154Z",
+                "headers_ms": 514.5825000000041,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:46.714Z",
+                "elapsed_total_ms": 559.8133999999991
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 5899,
+              "recent_conversation": 2,
+              "knowledge_access": 750,
+              "retrieval": 30,
+              "controller_evidence": 6491
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1553.0546000000031,
+              "narrator_total_ms": 5924.673999999999,
+              "controller_total_ms": 559.8133999999991,
+              "controller_tail_ms": 560.5630999999994,
+              "retrieval_ms": 0.11420000001089647,
+              "coordinator_total_ms": 6486.268499999991
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_jessa_rook_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "gatherers_inn",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_jessa_rook_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "gatherers_inn",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nJessa Rook: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Gatherer's Inn. Notably safer and more welcoming than The Coined Lie, The Slaughtered Pig and The Dangling Rope, it serves ordinary travelers, workers, merchants and visitors doing business in West. Prices are moderate for West. The exact route is unestablished. Jessa Rook is the proprietor.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"gatherers_inn\"},\"canonical_awareness\":[]}\nCharacter Jessa Rook (jessa_rook): {\"baseline\":{\"id\":\"jessa_rook\",\"name\":\"Jessa Rook\",\"display_name\":\"Jessa Rook\",\"summary\":\"Jessa Rook is the proprietor of Gatherer's Inn.\",\"secret\":false,\"appearance\":\"Tall and solidly built, with dark hair heavily streaked grey and a narrow pale scar across one eyebrow. Clean practical clothes with sleeves rolled above the forearms; a small notebook tucked into her belt. The scar's origin is unestablished.\",\"portrayal\":{\"purpose\":\"Keep Gatherer's Inn boring: guests pay and sleep, merchants eat, nobody is murdered, the common room stays peaceful and the Guard rarely needs to enter. A quiet profitable evening is success.\",\"morality\":\"Pragmatic but firm about conduct under her roof. Does not interrogate lawful private matters; tolerates discreet affairs, arguments, minor lies and people avoiding attention. Will not willingly tolerate predatory violence, trafficking from her rooms, guest robbery or intimidation of staff.\",\"personality\":[\"composed\",\"observant\",\"hospitable\",\"discreet\",\"difficult to embarrass\",\"quietly stubborn\"],\"affiliations\":[],\"private_notes\":\"Fears the inn acquiring a criminal-haunt reputation that drives away legitimate customers and makes criminal customers difficult to remove. Does not particularly like strangers; her deliberate professional hospitality rests on the belief that people behave better when they have something worth losing. Knows travelers, merchants, local businesses, street changes and recently unsafe places through ordinary experience; may hear customer rumors but is not an intelligence broker or omniscient gossip source. Observable habits are occasional anchors, not compulsory gestures or catchphrases in every interaction. Ordinary professional familiarity or reputation does not establish friendship or personal acquaintance. No private criminal knowledge follows from local experience.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Jessa Rook runs Gatherer's Inn. Her low voice and speech are unhurried; she more often asks whether she needs to know than what happened. On entry she notices guests' hands, luggage, tools, blood, money or signs of trouble before their faces. She records unpaid tabs in her notebook without normally announcing amounts to other customers.\",\"traits\":[\"composed\",\"observant\",\"hospitable\",\"discreet\",\"difficult to embarrass\",\"quietly stubborn\"]},\"profile\":{\"name\":\"Jessa Rook\",\"aliases\":[]},\"current\":{\"current_location\":\"gatherers_inn\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "jessa_rook"
+      ],
+      "narrator_present_ids": [
+        "jessa_rook"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "SiliconFlow",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2367,
+          "completion_tokens": 108,
+          "total_tokens": 2475,
+          "cost": 0.00130815,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00130815,
+            "upstream_inference_prompt_cost": 0.00106515,
+            "upstream_inference_completions_cost": 0.000243
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 1972,
+          "completion_tokens": 6,
+          "total_tokens": 1978,
+          "cost": 0.0001358136,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001358136,
+            "upstream_inference_prompt_cost": 0.0001337136,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

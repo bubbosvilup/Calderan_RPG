@@ -6,19 +6,19 @@ import { readFile } from "node:fs/promises";
 import { document, location } from "./fixtures.js";
 
 const newIds = ["magic_overview","mana","elemental_magic","light_and_shadow","magic_subschools","races_overview","humans","elves","dwarves","beastfolk","mixed_ancestry","continental_structure","west_governance","west_slavery","main_city_structure","merchants_guild","artisans_guild","learned_arts_guild","church","inquisition","city_guard","city_magistracy"];
-const factionIds = ["artisans_guild", "church", "city_guard", "inquisition", "learned_arts_guild", "merchants_guild"];
+const factionIds = ["artisans_guild", "carrion_dogs", "church", "city_guard", "inquisition", "learned_arts_guild", "merchants_guild"];
 
-test("Phase 1E canon loads exactly 22 new records with explicit policies and valid references", async () => {
+test("Phase 1E's 22 records and West's two lore additions have explicit policies and valid references", async () => {
   const world = await loadWorld("data");
   const records = ["world_lore", "concept", "faction"].flatMap(type => world.getEntitiesByType(type as "world_lore" | "concept" | "faction"));
-  assert.deepEqual(records.map(e => e.id).sort(), [...newIds].sort());
-  assert.equal(world.getEntitiesByType("world_lore").length, 15);
+  assert.deepEqual(records.map(e => e.id).sort(), [...newIds, "grey_brook", "calderan_west_daily_life", "carrion_dogs"].sort());
+  assert.equal(world.getEntitiesByType("world_lore").length, 17);
   assert.equal(world.getEntitiesByType("concept").length, 1);
   const aliases = new Set<string>();
   for (const entity of records) {
     assert.match(entity.id, /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/);
     // Phase 1P ordinary-awareness annotations are the only additions (deliberately minimal migration).
-    const awareness = ({ magic_subschools: "specialized", light_and_shadow: "public", inquisition: "public", learned_arts_guild: "local:west", main_city_structure: "local:calderan" } as Record<string, string>)[entity.id];
+    const awareness = ({ magic_subschools: "specialized", light_and_shadow: "public", inquisition: "public", learned_arts_guild: "local:west", main_city_structure: "local:calderan", grey_brook: "local:calderan", calderan_west_daily_life: "local:calderan", carrion_dogs: "specialized" } as Record<string, string>)[entity.id];
     assert.deepEqual(entity.knowledge, { visibility: { narrator: true, player: true }, known_by: [], ...(awareness ? { awareness } : {}) });
     assert(entity.summary.length <= 600);
     assert(entity.content.length <= 2000);
@@ -29,7 +29,7 @@ test("Phase 1E canon loads exactly 22 new records with explicit policies and val
     if ("related_entities" in entity) for (const id of entity.related_entities) assert(world.hasEntity(id));
   }
   assert.deepEqual(world.getEntitiesByType("faction").map(e => e.id).sort(), factionIds);
-  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["nicco", "pellan"]);
+  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
   assert.deepEqual(world.getEntitiesByType("event"), []);
   assert.deepEqual(world.getEntitiesByType("item"), []);
 });

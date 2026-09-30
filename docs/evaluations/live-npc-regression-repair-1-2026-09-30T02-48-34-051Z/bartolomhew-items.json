@@ -1,0 +1,1580 @@
+{
+  "npc_id": "bartolomhew",
+  "name": "Bartolomhew",
+  "test": "items",
+  "campaign_id": "npc_regression_bartolomhew_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "bartolomhew",
+        "position": {
+          "kind": "carried",
+          "character_id": "bartolomhew"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Bartolomhew gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\"",
+      "result": {
+        "narration": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\"",
+        "base_revision": 2,
+        "final_revision": 3,
+        "controller_proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorized_commands": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew",
+              "acquired_at": 0
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            },
+            "grammar": {
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation"
+            },
+            "evidence": {
+              "quote": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.",
+              "verified": true,
+              "check": "handover_to_nicco"
+            },
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "source": "both"
+          }
+        ],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.08320000000094296,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [
+            {
+              "kind": "accepted_transfer",
+              "command_indexes": [
+                0
+              ],
+              "collective": false,
+              "source_sentence": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them"
+            }
+          ],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3408,
+            "completion_tokens": 245,
+            "total_tokens": 3653
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:49:31.865Z",
+            "headers_ms": 2347.424100000004,
+            "time_to_first_token_ms": 2347.5362000000023,
+            "completed_at": "2026-09-30T02:49:38.819Z",
+            "elapsed_total_ms": 7037.1348
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3494,
+            "completion_tokens": 284,
+            "total_tokens": 3778
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:49:38.820Z",
+            "headers_ms": 5181.980100000008,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:49:46.243Z",
+            "elapsed_total_ms": 7423.438900000001
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6884,
+          "recent_conversation": 2,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 8184
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Bartolomhew gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "bartolomhew",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 2347.5362000000023,
+          "narrator_total_ms": 7037.1348,
+          "controller_total_ms": 7423.438900000001,
+          "controller_tail_ms": 7426.192699999992,
+          "retrieval_ms": 0.08320000000094296,
+          "coordinator_total_ms": 14464.732800000005
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              },
+              "grammar": {
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation"
+              },
+              "evidence": {
+                "quote": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.",
+                "verified": true,
+                "check": "handover_to_nicco"
+              },
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation",
+              "source": "both"
+            }
+          ]
+        },
+        {
+          "type": "narration_delta",
+          "text": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": true
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\"",
+            "base_revision": 2,
+            "final_revision": 3,
+            "controller_proposal": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              }
+            ],
+            "authorized_commands": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                },
+                "acquisition": {
+                  "acquisition_kind": "gift",
+                  "from_character_id": "bartolomhew",
+                  "acquired_at": 0
+                }
+              }
+            ],
+            "authorization": [
+              {
+                "command": {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                },
+                "grammar": {
+                  "authorized": true,
+                  "reason": "authorized_narrative_confirmation"
+                },
+                "evidence": {
+                  "quote": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.",
+                  "verified": true,
+                  "check": "handover_to_nicco"
+                },
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation",
+                "source": "both"
+              }
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.08320000000094296,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [
+                {
+                  "kind": "accepted_transfer",
+                  "command_indexes": [
+                    0
+                  ],
+                  "collective": false,
+                  "source_sentence": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them"
+                }
+              ],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3408,
+                "completion_tokens": 245,
+                "total_tokens": 3653
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:49:31.865Z",
+                "headers_ms": 2347.424100000004,
+                "time_to_first_token_ms": 2347.5362000000023,
+                "completed_at": "2026-09-30T02:49:38.819Z",
+                "elapsed_total_ms": 7037.1348
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3494,
+                "completion_tokens": 284,
+                "total_tokens": 3778
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:49:38.820Z",
+                "headers_ms": 5181.980100000008,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:49:46.243Z",
+                "elapsed_total_ms": 7423.438900000001
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6884,
+              "recent_conversation": 2,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 8184
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Bartolomhew gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "bartolomhew",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 2347.5362000000023,
+              "narrator_total_ms": 7037.1348,
+              "controller_total_ms": 7423.438900000001,
+              "controller_tail_ms": 7426.192699999992,
+              "retrieval_ms": 0.08320000000094296,
+              "coordinator_total_ms": 14464.732800000005
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bartolomhew_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bartolomhew",
+            "position": {
+              "kind": "carried",
+              "character_id": "bartolomhew"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bartolomhew_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "bartolomhew",
+            "position": {
+              "kind": "carried",
+              "character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nBartolomhew: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bartolomhew"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Bartolomhew hands the pair of leather boots to Nicco, and he takes them.\n\n\"For your travels, or for trade, as you prefer,\" Bartolomhew says, his voice warm and unhurried. His pleasant face holds that easy, paternal smile, the white-blond of his retained tonsure catching the daylight. \"Heartstone's new keeper will want for proper footwear, I think. Or perhaps you'll find a sturdier pair and pass those along. I deal in many commodities, Nicco, but gifts cost nothing to give, and one day a gift may return its worth.\"\n\nHe pauses, his blue eyes mild as they take in the tower behind Nicco, the square's modest traffic flowing around them. \"I don't often come to this quarter. The Coined Lie has its clientele, but respectable trade keeps to the markets. Still, one hears things. A man with property, with resources—he draws interest. Some of it unwelcome.\" The smile doesn't falter. \"Should you ever require labor, or wish to discuss what robust hands might accomplish in that old pile, you know where to find me. The Redemptor's terms are always fair.\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3408,
+          "completion_tokens": 245,
+          "total_tokens": 3653,
+          "cost": 0.001945505,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001945505,
+            "upstream_inference_prompt_cost": 0.00113088,
+            "upstream_inference_completions_cost": 0.000814625
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3494,
+          "completion_tokens": 284,
+          "total_tokens": 3778,
+          "cost": 0.00074628,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2830,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00074628,
+            "upstream_inference_prompt_cost": 0.0003714,
+            "upstream_inference_completions_cost": 0.00037488
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 212,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\"",
+      "result": {
+        "narration": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\"",
+        "base_revision": 3,
+        "final_revision": 3,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.12140000000363216,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "bartolomhew",
+              "position": {
+                "kind": "carried",
+                "character_id": "bartolomhew"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [
+            {
+              "command_indexes": [
+                0
+              ],
+              "source_sentence": "He raises one elegant hand, palm out, a gentle refusal"
+            }
+          ],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "revision",
+          "draft": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver, though something distant flickers behind it. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before Heartstone's own threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\" He does not reach for the offered boots.",
+          "issues": [
+            {
+              "kind": "household_claim",
+              "character": "Bartolomhew",
+              "sentence": "\"I appreciate the thought, truly. But I have boots enough, and you—standing here before Heartstone's own threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy.",
+              "correction": "Bartolomhew does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+            }
+          ],
+          "revision": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\"",
+          "revision_issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3497,
+            "completion_tokens": 126,
+            "total_tokens": 3623
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:49:46.248Z",
+            "headers_ms": 1697.925099999993,
+            "time_to_first_token_ms": 1698.0399000000034,
+            "completed_at": "2026-09-30T02:49:48.525Z",
+            "elapsed_total_ms": 2277.249199999991
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3419,
+            "completion_tokens": 170,
+            "total_tokens": 3589
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:49:48.526Z",
+            "headers_ms": 1651.888300000006,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:49:51.424Z",
+            "elapsed_total_ms": 2897.679400000008
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6964,
+          "recent_conversation": 1165,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7755
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "recipient": "bartolomhew",
+                "form": "give_back",
+                "attempt": true
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "bartolomhew",
+              "position": {
+                "kind": "carried",
+                "character_id": "bartolomhew"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1698.0399000000034,
+          "narrator_total_ms": 2277.249199999991,
+          "controller_total_ms": 2897.679400000008,
+          "controller_tail_ms": 7891.351500000004,
+          "retrieval_ms": 0.12140000000363216,
+          "coordinator_total_ms": 10169.746799999994
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 3
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\"",
+            "base_revision": 3,
+            "final_revision": 3,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.12140000000363216,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "bartolomhew",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "bartolomhew"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [
+                {
+                  "command_indexes": [
+                    0
+                  ],
+                  "source_sentence": "He raises one elegant hand, palm out, a gentle refusal"
+                }
+              ],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "revision",
+              "draft": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver, though something distant flickers behind it. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before Heartstone's own threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\" He does not reach for the offered boots.",
+              "issues": [
+                {
+                  "kind": "household_claim",
+                  "character": "Bartolomhew",
+                  "sentence": "\"I appreciate the thought, truly. But I have boots enough, and you—standing here before Heartstone's own threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy.",
+                  "correction": "Bartolomhew does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+                }
+              ],
+              "revision": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\"",
+              "revision_issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3497,
+                "completion_tokens": 126,
+                "total_tokens": 3623
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:49:46.248Z",
+                "headers_ms": 1697.925099999993,
+                "time_to_first_token_ms": 1698.0399000000034,
+                "completed_at": "2026-09-30T02:49:48.525Z",
+                "elapsed_total_ms": 2277.249199999991
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3419,
+                "completion_tokens": 170,
+                "total_tokens": 3589
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:49:48.526Z",
+                "headers_ms": 1651.888300000006,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:49:51.424Z",
+                "elapsed_total_ms": 2897.679400000008
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6964,
+              "recent_conversation": 1165,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7755
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "recipient": "bartolomhew",
+                    "form": "give_back",
+                    "attempt": true
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "bartolomhew",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "bartolomhew"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1698.0399000000034,
+              "narrator_total_ms": 2277.249199999991,
+              "controller_total_ms": 2897.679400000008,
+              "controller_tail_ms": 7891.351500000004,
+              "retrieval_ms": 0.12140000000363216,
+              "coordinator_total_ms": 10169.746799999994
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bartolomhew_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bartolomhew_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "bartolomhew"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nBartolomhew: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bartolomhew"
+      ],
+      "reconciliation": {
+        "delivered": "revision",
+        "draft": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver, though something distant flickers behind it. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before Heartstone's own threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\" He does not reach for the offered boots.",
+        "issues": [
+          {
+            "kind": "household_claim",
+            "character": "Bartolomhew",
+            "sentence": "\"I appreciate the thought, truly. But I have boots enough, and you—standing here before Heartstone's own threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy.",
+            "correction": "Bartolomhew does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+          }
+        ],
+        "revision": "Nicco thanks Bartolomhew, then extends the boots back toward him. \"You'll need them more than me.\"\n\nBartolomhew's paternal smile doesn't waver. He raises one elegant hand, palm out, a gentle refusal. \"I appreciate the thought, truly. But I have boots enough, and you—standing here before that old threshold—are the one whose feet touch uncertain ground.\" His warm voice carries no urgency, only that calm professional courtesy. \"Keep them. A gift given does not seek return.\"",
+        "revision_issues": []
+      },
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3497,
+          "completion_tokens": 126,
+          "total_tokens": 3623,
+          "cost": 0.001597178,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001597178,
+            "upstream_inference_prompt_cost": 0.001178228,
+            "upstream_inference_completions_cost": 0.00041895
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3419,
+          "completion_tokens": 170,
+          "total_tokens": 3589,
+          "cost": 0.000531488,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2906,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000531488,
+            "upstream_inference_prompt_cost": 0.000307088,
+            "upstream_inference_completions_cost": 0.0002244
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 162,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

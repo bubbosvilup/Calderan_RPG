@@ -1,0 +1,619 @@
+{
+  "npc_id": "pellan",
+  "name": "Pellan",
+  "test": "identity",
+  "campaign_id": "npc_regression_pellan_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Pellan who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes.",
+      "result": {
+        "narration": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 1.8577999999999975,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "redacted",
+          "draft": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"As for where you come from, I haven't the faintest. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes. \"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+          "issues": [
+            {
+              "kind": "invented_source",
+              "character": "an unattributed speaker",
+              "sentence": "\"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+              "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+            }
+          ],
+          "revision": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes. \"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+          "revision_issues": [
+            {
+              "kind": "invented_source",
+              "character": "an unattributed speaker",
+              "sentence": "\"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+              "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+            }
+          ]
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3062,
+            "completion_tokens": 219,
+            "total_tokens": 3281
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:38:45.283Z",
+            "headers_ms": 1636.4994000000002,
+            "time_to_first_token_ms": 1637.4014000000002,
+            "completed_at": "2026-09-30T02:38:48.552Z",
+            "elapsed_total_ms": 3269.012
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3131,
+            "completion_tokens": 308,
+            "total_tokens": 3439
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:38:48.552Z",
+            "headers_ms": 1413.5030000000002,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:38:51.878Z",
+            "elapsed_total_ms": 3326.2674999999995
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 5625,
+          "recent_conversation": 2,
+          "knowledge_access": 1265,
+          "retrieval": 30,
+          "controller_evidence": 6283
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1637.4014000000002,
+          "narrator_total_ms": 3269.012,
+          "controller_total_ms": 3326.2674999999995,
+          "controller_tail_ms": 5965.3135999999995,
+          "retrieval_ms": 1.8577999999999975,
+          "coordinator_total_ms": 9265.088
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 1.8577999999999975,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "redacted",
+              "draft": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"As for where you come from, I haven't the faintest. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes. \"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+              "issues": [
+                {
+                  "kind": "invented_source",
+                  "character": "an unattributed speaker",
+                  "sentence": "\"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+                  "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+                }
+              ],
+              "revision": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes. \"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+              "revision_issues": [
+                {
+                  "kind": "invented_source",
+                  "character": "an unattributed speaker",
+                  "sentence": "\"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+                  "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+                }
+              ]
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3062,
+                "completion_tokens": 219,
+                "total_tokens": 3281
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:38:45.283Z",
+                "headers_ms": 1636.4994000000002,
+                "time_to_first_token_ms": 1637.4014000000002,
+                "completed_at": "2026-09-30T02:38:48.552Z",
+                "elapsed_total_ms": 3269.012
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3131,
+                "completion_tokens": 308,
+                "total_tokens": 3439
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:38:48.552Z",
+                "headers_ms": 1413.5030000000002,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:38:51.878Z",
+                "elapsed_total_ms": 3326.2674999999995
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 5625,
+              "recent_conversation": 2,
+              "knowledge_access": 1265,
+              "retrieval": 30,
+              "controller_evidence": 6283
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1637.4014000000002,
+              "narrator_total_ms": 3269.012,
+              "controller_total_ms": 3326.2674999999995,
+              "controller_tail_ms": 5965.3135999999995,
+              "retrieval_ms": 1.8577999999999975,
+              "coordinator_total_ms": 9265.088
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_pellan_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_pellan_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nPellan: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "pellan"
+      ],
+      "reconciliation": {
+        "delivered": "redacted",
+        "draft": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"As for where you come from, I haven't the faintest. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes. \"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+        "issues": [
+          {
+            "kind": "invented_source",
+            "character": "an unattributed speaker",
+            "sentence": "\"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+            "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+          }
+        ],
+        "revision": "Pellan's thin shoulders hunch further as he tugs at a rumpled coat sleeve, ink-stained fingers curling inward. \"Who you are?\" he repeats, a nervous laugh escaping. \"You've just introduced yourself as Nicco, haven't you? Heartstone's new—\" He stops, swallows. \"I've no notion where you're from. You carry yourself like no Calderan I've seen, but that means nothing. There are a hundred towns west of here I've never visited, and people drift in from stranger places every season.\"\n\nHe adjusts his thick spectacles, not quite meeting Nicco's eyes. \"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+        "revision_issues": [
+          {
+            "kind": "invented_source",
+            "character": "an unattributed speaker",
+            "sentence": "\"I'm a clerk, not a chronicler of origins. The Registry records where people settle, not where they began. If you've papers to file, I can direct you. If you're looking for someone to puzzle out your history, I'm afraid I'm quite the wrong man for—\" A sudden gust from the square catches his rumpled coat, and he flinches, words momentarily lost to the wind and his own startled breath.",
+            "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+          }
+        ]
+      },
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3062,
+          "completion_tokens": 219,
+          "total_tokens": 3281,
+          "cost": 0.001674983,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001674983,
+            "upstream_inference_prompt_cost": 0.000946808,
+            "upstream_inference_completions_cost": 0.000728175
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3131,
+          "completion_tokens": 308,
+          "total_tokens": 3439,
+          "cost": 0.00070064,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2630,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00070064,
+            "upstream_inference_prompt_cost": 0.00029408,
+            "upstream_inference_completions_cost": 0.00040656
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 300,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

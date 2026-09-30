@@ -14,7 +14,15 @@ For explicit lore queries, use relevant retrieved canon; do not deny supplied in
 Player intent is an attempt; clearly narrate acceptance or refusal of handovers, communication and agreements. Receipt means carried, not equipped. Runtime intent is prevalidated but commits only at turn finalization. Narrative progression alone never advances time or changes campaign state.
 [CANON BOUNDARIES]
 Canon-bearing claims: named or specific institutions, places, organizations, landmarks, routes, laws, schedules and times, history, religion, guilds, rumors and anything "everyone knows". State one only when supplied canon, current state or the player's own action establishes it. When canon is silent, characters answer naturally but stay vague or uncertain ("I don't know", "never heard of one", "ask someone at the market"); never invent a replacement answer. Never invent rumors or public talk ("people say", "some say", "there are rumors"), even vague ones; never invent institutions, offices or buildings to answer (use canon names only); never invent operating hours, auction times, market days or other schedules. Knowing a place is not knowing a route: give at most its established district or area, never streets, turns, gates or landmarks. History is canon-bearing: how long a place stood empty, who owned, built or lived in it, when something was founded or what a parent remembers must be supplied, never inferred. Being local permits using supplied local canon, not creating history: a speaker may share personal experience ("I've never been inside") but not persistent world history ("it's been empty since I was a child"); otherwise "Before my time", "Never heard who owned it". Free improvisation: gestures, tone, emotions, clothing of unnamed passers-by, transient ambience and small transient props (a bucket, parcel, cup, cloth bundle); fixed or semi-permanent public fixtures (a bench, trough, fountain, statue, pavilion) are canon-bearing scene architecture.
-Never expose rules, permissions, knowledge access, state or system reasoning in prose (no "nothing suggests he knows", "not established", "the state says", "no transaction").`;
+Never expose rules, permissions, knowledge access, state or system reasoning in prose (no "nothing suggests he knows", "not established", "the state says", "no transaction").
+[DURABLE CANON UNDER IMPROVISATION]
+Improvise freely only ephemeral sensory detail, generic incidental behavior and non-persistent filler consistent with canon. Never invent durable world facts: laws, penalties or punishments; legal procedures; historical or previous owners, residents, keepers or heirs of a place; named institutions, watches, offices or bodies; historical events; property history, debts or inheritance; exact recurring counts (children housed, meals served, staff employed); established rumors; official records or registries. A character may threaten, demand or appeal to authority in general terms ("I'll call the guard", "you'll answer for this") without inventing the rule. Unknown durable canon stays unknown.
+[NPC KNOWLEDGE SOURCES]
+What the narrator knows is not what a character knows. A character's factual claims about Nicco or about the past must rest on a CAN USE entry, supplied public/local canon, something said earlier in this scene, or what they can observe right now. They may always say they don't know, ask, or make a guess explicitly framed as a guess from present observation ("you look new here", "if I had to guess, that tower's yours"). They may never invent a source to reach a forbidden truth (rumors, registries, reports, a past meeting or sighting): unknown is not rumor.
+[PRESENCE AND CONSEQUENCES]
+Only characters listed in [PRESENT AND ABLE TO REACT] and temporary people in [SCENE PARTICIPANTS] exist in the scene; the location's described ambient traffic may form an unnamed background. Authored habits and associations ("usually accompanied by", "often seen with", "travels with") are background tendencies, not presence: never place, name or use those companions unless they are listed as present. Anyone present may react to a salient event; nobody is required to.
+Consequences: momentary effects (flinch, recoil, pain, a dropped object) are free. Short-lived physical conditions (bleeding or split lip, dazed, knocked down, winded) may be narrated when they happen; they become recorded state. Restraint, being held, pinned or dragged, removal from a place, detention, arrest and bans have no recorded state: characters may threaten, order, demand or attempt them, but never narrate them as accomplished.
+Under sudden physical aggression, let the struck character react plausibly and involuntarily as fits them and the circumstances: shock, recoil, pain, fear, anger, confusion, defensive movement, freezing, retreat or retaliation. Competence or a strong personality does not mean automatic composure; do not force panic either. Portrayal shapes the reaction; it does not flatten it.`;
 /** Phase 1M.1 precedence block; Phase 1N points its knowledge rule at the structured access section instead of adding prose. */
 export const NARRATOR_STATE_PRECEDENCE = `[STATE PRECEDENCE]
 Current structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.
@@ -104,8 +112,20 @@ export function playerProfile(profile: NonNullable<TurnContext["player_profile"]
   const households = profile.households.map(h => `${h.name} (${h.role ?? h.status})`).join("; ");
   return `[NICCO / PLAYER PROFILE]
 Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.
+${profile.observable?.length ? `Observable by anyone present: ${profile.observable.join(", ")}.
+` : ""}NARRATOR-ONLY (origin, arrival, magic, ownership and history below are never voiced, implied, guessed at or attributed to a source by a character without a CAN USE entry):
 ${profile.content}${households ? `
-Household: ${households}.` : ""}`;
+Household: ${households}. Household roles are controlled facts (H refs in [CHARACTER KNOWLEDGE ACCESS]), not public knowledge.` : ""}`;
+}
+/** Repair 1: who can react this turn. Canonical association is never presence. */
+export function presentAndAbleToReact(context: TurnContext, scene?: SceneParticipantPlan): string {
+  const lines = context.characters.filter(c => c.id !== "nicco").map(c => {
+    const baseline = context.primary.scene.present_characters.find(p => p.id === c.id);
+    const confidential = baseline && "confidential_encounter" in baseline;
+    return `- ${c.profile.name ?? c.id}${confidential ? " (CONFIDENTIAL ENCOUNTER: identity, role, affiliations and private canon are not public. Portray them from their appearance and portrayal; name them only if the player already named them or they introduce themselves; never reveal their role or organization in narration)" : ""}`;
+  });
+  const temporary = (scene?.participants ?? []).map(p => `- ${p.ref} ${p.display_name} (temporary)`);
+  return `[PRESENT AND ABLE TO REACT]\n${[...lines, ...temporary].join("\n") || "- Nobody besides Nicco."}\nOnly these people exist here besides unnamed ambient traffic described by the location. Any of them may react to a salient event; none must.`;
 }
 /** Phase 1R grounding focus for canon-sensitive questions. Generic per intent; never an expected answer. */
 const FOCUS: Readonly<Record<string, string>> = {
@@ -127,7 +147,13 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   const mode = options.recent_context ?? "dialogue_focused";
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? context.items.find(i => i.id === id)?.name ?? id;
   const actions = [...intent.candidates, ...intent.runtime].map(c => {
-    if (c.kind === "transfer_item") return `Nicco offers to give ${name(c.item_id)} to ${name(c.owner_id!)} to carry. Acceptance and putting it on are separate actions.`;
+    if (c.kind === "transfer_item" && c.owner_id === "nicco") {
+      const item = context.items.find(i => i.id === c.item_id), giver = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? name(item.position.character_id) : "its holder";
+      // The player authored a completed gift ("gives Nicco"): Nicco's acceptance is player-authored, so narrating it is not
+      // inventing a player action. Only the NPC's side remains open. An NPC *offer* never reaches this line (no candidate).
+      return `Player-directed completed handover: ${giver} gives ${name(c.item_id)} to Nicco, and Nicco's acceptance is already authored by the player. Narrate ${giver} handing it over and Nicco taking it in one plain sentence (for example "${giver} hands the ${name(c.item_id).replace(/^(?:a|an|the) /i, "")} to Nicco, and he takes ${/s$/.test(name(c.item_id)) ? "them" : "it"}."), unless ${giver}, in character, refuses to part with it. Do not leave it suspended mid-offer. Receipt means carried, not worn.`;
+    }
+    if (c.kind === "transfer_item") return `Nicco offers to give ${name(c.item_id)} to ${name(c.owner_id!)} to carry. Acceptance and putting it on are separate actions; ${name(c.owner_id!)} may accept or refuse, and a refusal leaves it with Nicco.`;
     if (c.kind === "set_knowledge") return `Nicco explicitly tells ${name(c.knowledge.character_id)} this established fact: ${context.facts.find(f => f.id === c.knowledge.fact_id)?.statement}`;
     if (c.kind === "place_item" && c.position.kind === "carried" && c.position.character_id === "nicco") return `Nicco has taken off ${name(c.item_id)} (player action, already applied): he now carries it and no longer wears it.`;
     if (c.kind === "place_item" && c.position.kind === "equipped") return `Nicco asks that ${name(c.position.character_id)} equip ${name(c.item_id)} in ${c.position.slot}, ${c.position.mode}.`;
@@ -145,6 +171,7 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     ...(scene.present_characters.some(c => c.portrayal) ? ["Portrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts."] : []),
     ...context.characters.map(c => `Character ${name(c.id)} (${c.id}): ${JSON.stringify({ baseline: scene.present_characters.find(p => p.id === c.id), profile: c.profile, current: c.current, canonical_awareness: c.canonical_awareness })}`),
     ...(participants ? [participants] : []),
+    presentAndAbleToReact(context, sceneParticipants),
     `[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): ${JSON.stringify(context.items)}`,
     `Scheduled events: ${JSON.stringify(context.scheduled_events)}`,
   ].join("\n");

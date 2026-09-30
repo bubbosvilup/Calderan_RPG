@@ -2,6 +2,7 @@ import { characterSearchText } from "../world/character-contract.js";
 import { compareIds } from "../world/provenance.js";
 import { matchesAuthorizedOwner } from "./filters.js";
 import { isVisible } from "./policy.js";
+import { searchableRelationships } from "./relationship-policy.js";
 import { tokenize } from "./tokenizer.js";
 import { audience, validateWorldSearchRequest } from "./validation.js";
 import type { CandidateReference, RetrievalAudience, RetrievalEntitySource, RetrievalFilter, RetrievalIndexSource } from "./types.js";
@@ -90,7 +91,7 @@ function build(source: RetrievalIndexSource, who: RetrievalAudience): AudienceIn
   for (const e of source.entities()) {
     if (!isVisible(e.knowledge, who)) continue;
     const parent = e.parent === null ? undefined : entities.get(e.parent);
-    const relationship = e.type === "character" ? e.relationships : e.type === "faction" ? e.relations : [];
+    const relationship = searchableRelationships(e, who);
     add(document({ entity_id: e.id }, {
       id: [e.id], name: [e.name], alias: e.aliases, display_name: [e.display_name],
       summary: [e.summary], search_context: [e.search_context, ...(e.type === "character" ? characterSearchText(e) : [])], content: [e.content], tags: e.tags,

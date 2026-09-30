@@ -1,0 +1,162 @@
+[
+ {
+  "run": "2026-09-30T02-25-53-910Z",
+  "turns": 48,
+  "failed": 1,
+  "timeouts": 1,
+  "gifts_committed": 0,
+  "gift_ids": [],
+  "return_candidates": 0,
+  "returns_committed": 0,
+  "returns_refused_kept": 0,
+  "duplicates": 0,
+  "equipped": 0,
+  "delivered": {
+   "draft": 40,
+   "revision": 6,
+   "redacted": 1
+  },
+  "draft_issues": {
+   "invented_source": 4,
+   "household_claim": 4,
+   "unsourced_history": 1
+  },
+  "identity_draft_flags": 5,
+  "revisions": 7,
+  "narrator_routes": {
+   "SiliconFlow": 1,
+   "Venice": 47
+  },
+  "controller_routes": {
+   "Phala": 46,
+   "Wafer": 1,
+   "not reported": 1
+  }
+ },
+ {
+  "run": "2026-09-30T02-32-05-876Z",
+  "turns": 48,
+  "failed": 1,
+  "timeouts": 1,
+  "gifts_committed": 4,
+  "gift_ids": [
+   "dren",
+   "captain_doran_hale",
+   "mira_thorne",
+   "livia_marr"
+  ],
+  "return_candidates": 4,
+  "returns_committed": 0,
+  "returns_refused_kept": 4,
+  "duplicates": 0,
+  "equipped": 0,
+  "delivered": {
+   "draft": 35,
+   "revision": 11,
+   "redacted": 1
+  },
+  "draft_issues": {
+   "household_claim": 5,
+   "asserts_uncommitted_transfer": 6,
+   "uncommitted_constraint": 1,
+   "unsourced_history": 3,
+   "invented_source": 1
+  },
+  "identity_draft_flags": 5,
+  "revisions": 12,
+  "narrator_routes": {
+   "Venice": 48
+  },
+  "controller_routes": {
+   "Phala": 47,
+   "not reported": 1
+  }
+ },
+ {
+  "run": "2026-09-30T02-38-44-961Z",
+  "turns": 48,
+  "failed": 3,
+  "timeouts": 3,
+  "gifts_committed": 9,
+  "gift_ids": [
+   "pellan",
+   "mistress_elara",
+   "bartolomhew",
+   "dren",
+   "brother_aven",
+   "bram_kessel",
+   "mira_thorne",
+   "livia_marr",
+   "niles_vanner"
+  ],
+  "return_candidates": 9,
+  "returns_committed": 0,
+  "returns_refused_kept": 9,
+  "duplicates": 0,
+  "equipped": 0,
+  "delivered": {
+   "draft": 36,
+   "revision": 8,
+   "redacted": 1
+  },
+  "draft_issues": {
+   "invented_source": 1,
+   "household_claim": 4,
+   "unsourced_history": 3,
+   "asserts_uncommitted_transfer": 1
+  },
+  "identity_draft_flags": 5,
+  "revisions": 9,
+  "narrator_routes": {
+   "Venice": 41,
+   "SiliconFlow": 7
+  },
+  "controller_routes": {
+   "Phala": 47,
+   "not reported": 1
+  }
+ },
+ {
+  "run": "2026-09-30T02-48-34-051Z",
+  "turns": 48,
+  "failed": 1,
+  "timeouts": 1,
+  "gifts_committed": 9,
+  "gift_ids": [
+   "pellan",
+   "bartolomhew",
+   "dren",
+   "captain_doran_hale",
+   "brother_aven",
+   "bram_kessel",
+   "jessa_rook",
+   "orla_fen",
+   "niles_vanner"
+  ],
+  "return_candidates": 9,
+  "returns_committed": 0,
+  "returns_refused_kept": 9,
+  "duplicates": 0,
+  "equipped": 0,
+  "delivered": {
+   "draft": 36,
+   "revision": 10,
+   "redacted": 1
+  },
+  "draft_issues": {
+   "invented_source": 2,
+   "asserts_uncommitted_transfer": 2,
+   "household_claim": 4,
+   "unsourced_history": 5
+  },
+  "identity_draft_flags": 7,
+  "revisions": 11,
+  "narrator_routes": {
+   "Venice": 48
+  },
+  "controller_routes": {
+   "Phala": 47,
+   "not reported": 1
+  }
+ }
+]

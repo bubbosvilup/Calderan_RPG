@@ -1,0 +1,864 @@
+{
+  "npc_id": "captain_doran_hale",
+  "name": "Captain Doran Hale",
+  "test": "punch",
+  "campaign_id": "npc_regression_captain_doran_hale_punch",
+  "turns": [
+    {
+      "input": "*He punches Captain Doran Hale directly in the face.*",
+      "scene_location": "west_guard_post",
+      "runtime_co_located": [
+        "captain_doran_hale"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco's fist connects squarely with Doran Hale's jaw. The captain staggers, armor clanking as he catches himself against a desk; a flicker of shock crosses his features before discipline reasserts itself. Hale's hand drops to his longsword, though he does not draw. \"Strike a guard captain in his own post,\" he says, voice flat, cold. \"That's assault on a lawful officer. You'll lose that hand, and I'd be within rights to take it here.\" He straightens, tasting blood, and gains another finger-width of distance without turning his back. \"Explain yourself. Now. Or I file the report before sunset and you're in irons.\"",
+      "result": {
+        "narration": "Nicco's fist connects squarely with Doran Hale's jaw. The captain staggers, armor clanking as he catches himself against a desk; a flicker of shock crosses his features before discipline reasserts itself. Hale's hand drops to his longsword, though he does not draw. \"Strike a guard captain in his own post,\" he says, voice flat, cold. \"That's assault on a lawful officer. You'll lose that hand, and I'd be within rights to take it here.\" He straightens, tasting blood, and gains another finger-width of distance without turning his back. \"Explain yourself. Now. Or I file the report before sunset and you're in irons.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.35000000000582077,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2312,
+            "completion_tokens": 140,
+            "total_tokens": 2452
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:06.060Z",
+            "headers_ms": 1546.1227,
+            "time_to_first_token_ms": 1548.6618999999992,
+            "completed_at": "2026-09-30T01:37:08.426Z",
+            "elapsed_total_ms": 2366.3628000000026
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 1943,
+            "completion_tokens": 6,
+            "total_tokens": 1949
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:08.427Z",
+            "headers_ms": 526.0397000000012,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:08.996Z",
+            "elapsed_total_ms": 569.5462999999945
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 5630,
+          "recent_conversation": 2,
+          "knowledge_access": 758,
+          "retrieval": 30,
+          "controller_evidence": 6352
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1548.6618999999992,
+          "narrator_total_ms": 2366.3628000000026,
+          "controller_total_ms": 569.5462999999945,
+          "controller_tail_ms": 570.2188999999998,
+          "retrieval_ms": 0.35000000000582077,
+          "coordinator_total_ms": 2938.0318000000043
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co's fist"
+        },
+        {
+          "type": "narration_delta",
+          "text": " connects"
+        },
+        {
+          "type": "narration_delta",
+          "text": " square"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ly with Dor"
+        },
+        {
+          "type": "narration_delta",
+          "text": "an"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Hale's jaw."
+        },
+        {
+          "type": "narration_delta",
+          "text": " The captain stag"
+        },
+        {
+          "type": "narration_delta",
+          "text": "gers"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " armor"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "anking as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he catches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " himself"
+        },
+        {
+          "type": "narration_delta",
+          "text": " against a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " desk;"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flick"
+        },
+        {
+          "type": "narration_delta",
+          "text": "er"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of shock"
+        },
+        {
+          "type": "narration_delta",
+          "text": " crosses"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his features"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before discipline"
+        },
+        {
+          "type": "narration_delta",
+          "text": " re"
+        },
+        {
+          "type": "narration_delta",
+          "text": "asserts itself"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". Hale"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " drops"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to his long"
+        },
+        {
+          "type": "narration_delta",
+          "text": "sword,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " though"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not draw"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \"Strike"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " guard captain"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " own post,\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " he says"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", voice flat"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", cold"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"That's assault"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lawful"
+        },
+        {
+          "type": "narration_delta",
+          "text": " officer. You'll"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lose"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I'd"
+        },
+        {
+          "type": "narration_delta",
+          "text": " be"
+        },
+        {
+          "type": "narration_delta",
+          "text": " within"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rights"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to take"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it here"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\" He straight"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ens, tasting"
+        },
+        {
+          "type": "narration_delta",
+          "text": " blood, and gains"
+        },
+        {
+          "type": "narration_delta",
+          "text": " another"
+        },
+        {
+          "type": "narration_delta",
+          "text": " finger"
+        },
+        {
+          "type": "narration_delta",
+          "text": "-width"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of distance"
+        },
+        {
+          "type": "narration_delta",
+          "text": " without"
+        },
+        {
+          "type": "narration_delta",
+          "text": " turning"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his back"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"Explain"
+        },
+        {
+          "type": "narration_delta",
+          "text": " yourself"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Now"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". Or I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " file"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " report"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sunset"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in irons"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco's fist connects squarely with Doran Hale's jaw. The captain staggers, armor clanking as he catches himself against a desk; a flicker of shock crosses his features before discipline reasserts itself. Hale's hand drops to his longsword, though he does not draw. \"Strike a guard captain in his own post,\" he says, voice flat, cold. \"That's assault on a lawful officer. You'll lose that hand, and I'd be within rights to take it here.\" He straightens, tasting blood, and gains another finger-width of distance without turning his back. \"Explain yourself. Now. Or I file the report before sunset and you're in irons.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco's fist connects squarely with Doran Hale's jaw. The captain staggers, armor clanking as he catches himself against a desk; a flicker of shock crosses his features before discipline reasserts itself. Hale's hand drops to his longsword, though he does not draw. \"Strike a guard captain in his own post,\" he says, voice flat, cold. \"That's assault on a lawful officer. You'll lose that hand, and I'd be within rights to take it here.\" He straightens, tasting blood, and gains another finger-width of distance without turning his back. \"Explain yourself. Now. Or I file the report before sunset and you're in irons.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.35000000000582077,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2312,
+                "completion_tokens": 140,
+                "total_tokens": 2452
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:06.060Z",
+                "headers_ms": 1546.1227,
+                "time_to_first_token_ms": 1548.6618999999992,
+                "completed_at": "2026-09-30T01:37:08.426Z",
+                "elapsed_total_ms": 2366.3628000000026
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 1943,
+                "completion_tokens": 6,
+                "total_tokens": 1949
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:08.427Z",
+                "headers_ms": 526.0397000000012,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:08.996Z",
+                "elapsed_total_ms": 569.5462999999945
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 5630,
+              "recent_conversation": 2,
+              "knowledge_access": 758,
+              "retrieval": 30,
+              "controller_evidence": 6352
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1548.6618999999992,
+              "narrator_total_ms": 2366.3628000000026,
+              "controller_total_ms": 569.5462999999945,
+              "controller_tail_ms": 570.2188999999998,
+              "retrieval_ms": 0.35000000000582077,
+              "coordinator_total_ms": 2938.0318000000043
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_captain_doran_hale_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "west_guard_post",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_captain_doran_hale_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "west_guard_post",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nCaptain Doran Hale: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: West Guard Post. West guards are more often feared than respected. Some are harsh or overly violent; some accept money to ignore offenses. This is not every guard, and ordinary patrols still suppress obvious petty crime and public disorder. Captain Doran Hale commands the West District City Guard from this post, not the whole city force. No other named guards, corruption percentages or patrol schedules are established.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"west_guard_post\"},\"canonical_awareness\":[]}\nCharacter Captain Doran Hale (captain_doran_hale): {\"baseline\":{\"id\":\"captain_doran_hale\",\"name\":\"Captain Doran Hale\",\"display_name\":\"Captain Doran Hale\",\"summary\":\"Captain Doran Hale commands the City Guard for Calderan's West District, based at West Guard Post.\",\"secret\":false,\"appearance\":\"Approximately 186–187 cm tall, broad and strong, still highly trained. Bald, blue-eyed, with veteran scars, practical heavy officer armor and a longsword.\",\"portrayal\":{\"purpose\":\"Improve West District and leave its guard more respectable than he found it, in service to his wider civic loyalty to Calderan.\",\"morality\":\"Believes in law and treats authority as responsibility. Accepts necessary pragmatic compromises but refuses to use legality as a shield for obvious atrocity. Opposes corruption, gratuitous violence and abuse of authority.\",\"personality\":[\"disciplined\",\"serious\",\"moral\",\"experienced\",\"pragmatic rather than naive\",\"intolerant of corruption, gratuitous violence and abuse of authority\"],\"affiliations\":[\"city_guard\"],\"private_notes\":\"West's recurring failures weigh heavily on him. He understands that removing one criminal leader can leave a worse vacuum. He has strong West, guard and criminal knowledge but incomplete deep-network intelligence; Dren is mainly a suspicious name or rumor to him, not a fully identified target.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Doran Hale is Captain of the West District City Guard, not overall commander of Calderan's entire City Guard. His primary operational base and workplace are West Guard Post. Some ordinary citizens respect him; corrupt guards, criminals and those preferring flexible enforcement dislike him. His civic loyalty extends to Calderan, while his operational responsibility is West. No exact residence is established.\",\"traits\":[\"disciplined\",\"serious\",\"moral\",\"experienced\",\"pragmatic rather than naive\",\"intolerant of corruption, gratuitous violence and abuse of authority\"]},\"profile\":{\"name\":\"Captain Doran Hale\",\"aliases\":[\"Doran Hale\",\"West guard captain\"]},\"current\":{\"current_location\":\"west_guard_post\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "captain_doran_hale"
+      ],
+      "narrator_present_ids": [
+        "captain_doran_hale"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2312,
+          "completion_tokens": 140,
+          "total_tokens": 2452,
+          "cost": 0.001695484,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001695484,
+            "upstream_inference_prompt_cost": 0.001229984,
+            "upstream_inference_completions_cost": 0.0004655
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 1943,
+          "completion_tokens": 6,
+          "total_tokens": 1949,
+          "cost": 0.0001337836,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001337836,
+            "upstream_inference_prompt_cost": 0.0001316836,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

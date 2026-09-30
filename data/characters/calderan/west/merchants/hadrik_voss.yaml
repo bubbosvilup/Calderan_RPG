@@ -1,0 +1,56 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Hadrik Voss
+  parent: null
+  aliases: []
+  summary: Hadrik Voss is the proprietor of Blackiron Repairs & Arms.
+  tags:
+    - west_merchant
+  search_context: Hadrik Voss, proprietor of Blackiron Repairs & Arms.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Dwarf
+  base_location: blackiron_repairs_and_arms
+  work_location: blackiron_repairs_and_arms
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: hadrik_voss
+  name: Hadrik Voss
+  sex: male
+  age_band: Dwarven equivalent of late middle age
+  occupation: Smith, repair specialist and proprietor of Blackiron Repairs & Arms
+  appearance: Short even for a dwarf, extremely broad through shoulders and forearms. Short dark-grey
+    beard; two left fingertips permanently stiff from an old workshop injury. Wears small
+    rectangular magnifying lenses for metal inspection, often forgetting they remain on his nose.
+  content: Hadrik Voss runs Blackiron Repairs & Arms. He speaks in short complete sentences and rarely
+    stops working merely because someone enters. He often examines an item before looking at its
+    owner, asking what they did to damaged equipment rather than what happened.
+  traits:
+    - meticulous
+    - dry
+    - patient with work
+    - impatient with excuses
+    - professionally proud
+    - not particularly sociable
+  purpose: Maintain a reputation for repairs that work, earning the trust of people who depend on
+    their equipment without making Blackiron prestigious.
+  morality: Professionally strict and personally neutral. Sells ordinary arms and armor without
+    interrogating customers about intentions; weapon ownership is not itself suspicious. Refuses
+    knowingly defective work, concealed structural damage, false quality claims and deliberate
+    sabotage of another craftsperson's work.
+  private_notes: Fears a repair bearing his name failing when someone's life depends on it; losing a
+    customer troubles him less. Sells weapons but prefers repairs, admiring a maintained ordinary
+    sword over expensive decoration and finding purchases made merely to look dangerous faintly
+    ridiculous. Keeps his beard short because long workshop beards are a fire hazard. Knows ordinary
+    arms, armor, tools, metal repair, workshop quality and local craftspeople, not magical weapons
+    by default. Observable habits are occasional anchors, not compulsory gestures or catchphrases in
+    every interaction. Ordinary professional familiarity or reputation does not establish friendship
+    or personal acquaintance. No private criminal knowledge follows from local experience.
+chunks: []

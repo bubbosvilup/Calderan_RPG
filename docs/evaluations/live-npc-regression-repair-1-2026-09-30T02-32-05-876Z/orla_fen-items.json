@@ -1,0 +1,1235 @@
+{
+  "npc_id": "orla_fen",
+  "name": "Orla Fen",
+  "test": "items",
+  "campaign_id": "npc_regression_orla_fen_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "orla_fen",
+        "position": {
+          "kind": "carried",
+          "character_id": "orla_fen"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Orla Fen gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again.",
+      "result": {
+        "narration": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorized_commands": [],
+        "authorization": [
+          {
+            "command": {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            },
+            "grammar": {
+              "authorized": false,
+              "reason": "rejected_recipient_refused"
+            },
+            "evidence": {
+              "quote": "Orla Fen thrusts the pair of leather boots toward Nicco.",
+              "verified": false,
+              "check": "quote_not_verbatim"
+            },
+            "authorized": false,
+            "reason": "rejected_recipient_refused",
+            "source": "rejected"
+          }
+        ],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.0866999999852851,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [
+            {
+              "kind": "accepted_transfer",
+              "command_indexes": [
+                0
+              ],
+              "collective": false,
+              "source_sentence": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands"
+            }
+          ],
+          "narrator_refusals": [
+            {
+              "command_indexes": [
+                0
+              ],
+              "source_sentence": "She does not explain why she is giving them, nor does she wait for thanks"
+            }
+          ],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "revision",
+          "draft": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands. \"Here. You'll want these if you're going to walk this district proper.\" Her voice carries the same volume she uses to shout over laundry vats, clipped and practical. \"Nothing fancy, but they hold up.\"\n\nShe does not explain why she is giving them, nor does she wait for thanks. Her grey head is already turning, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire.",
+          "issues": [
+            {
+              "kind": "asserts_uncommitted_transfer",
+              "item_id": "campaign_item_regression_leather_boots",
+              "sentence": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands.",
+              "correction": "pair of leather boots did NOT change hands: it stays with Orla Fen. Nicco does not receive it; narrate the moment without the handover completing."
+            }
+          ],
+          "revision": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again.",
+          "revision_issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3321,
+            "completion_tokens": 114,
+            "total_tokens": 3435
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:34:54.715Z",
+            "headers_ms": 1332.7183000000077,
+            "time_to_first_token_ms": 1332.8125,
+            "completed_at": "2026-09-30T02:34:56.595Z",
+            "elapsed_total_ms": 1880.7471000000078
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3298,
+            "completion_tokens": 701,
+            "total_tokens": 3999
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:34:56.596Z",
+            "headers_ms": 1934.2247999999963,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:35:02.594Z",
+            "elapsed_total_ms": 5998.4185
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6644,
+          "recent_conversation": 2,
+          "knowledge_access": 1267,
+          "retrieval": 30,
+          "controller_evidence": 7262
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Orla Fen gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "orla_fen",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1332.8125,
+          "narrator_total_ms": 1880.7471000000078,
+          "controller_total_ms": 5998.4185,
+          "controller_tail_ms": 7520.282399999996,
+          "retrieval_ms": 0.0866999999852851,
+          "coordinator_total_ms": 9402.303500000009
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              },
+              "grammar": {
+                "authorized": false,
+                "reason": "rejected_recipient_refused"
+              },
+              "evidence": {
+                "quote": "Orla Fen thrusts the pair of leather boots toward Nicco.",
+                "verified": false,
+                "check": "quote_not_verbatim"
+              },
+              "authorized": false,
+              "reason": "rejected_recipient_refused",
+              "source": "rejected"
+            }
+          ]
+        },
+        {
+          "type": "narration_delta",
+          "text": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              }
+            ],
+            "authorized_commands": [],
+            "authorization": [
+              {
+                "command": {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                },
+                "grammar": {
+                  "authorized": false,
+                  "reason": "rejected_recipient_refused"
+                },
+                "evidence": {
+                  "quote": "Orla Fen thrusts the pair of leather boots toward Nicco.",
+                  "verified": false,
+                  "check": "quote_not_verbatim"
+                },
+                "authorized": false,
+                "reason": "rejected_recipient_refused",
+                "source": "rejected"
+              }
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0866999999852851,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [
+                {
+                  "kind": "accepted_transfer",
+                  "command_indexes": [
+                    0
+                  ],
+                  "collective": false,
+                  "source_sentence": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands"
+                }
+              ],
+              "narrator_refusals": [
+                {
+                  "command_indexes": [
+                    0
+                  ],
+                  "source_sentence": "She does not explain why she is giving them, nor does she wait for thanks"
+                }
+              ],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "revision",
+              "draft": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands. \"Here. You'll want these if you're going to walk this district proper.\" Her voice carries the same volume she uses to shout over laundry vats, clipped and practical. \"Nothing fancy, but they hold up.\"\n\nShe does not explain why she is giving them, nor does she wait for thanks. Her grey head is already turning, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire.",
+              "issues": [
+                {
+                  "kind": "asserts_uncommitted_transfer",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "sentence": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands.",
+                  "correction": "pair of leather boots did NOT change hands: it stays with Orla Fen. Nicco does not receive it; narrate the moment without the handover completing."
+                }
+              ],
+              "revision": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again.",
+              "revision_issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3321,
+                "completion_tokens": 114,
+                "total_tokens": 3435
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:34:54.715Z",
+                "headers_ms": 1332.7183000000077,
+                "time_to_first_token_ms": 1332.8125,
+                "completed_at": "2026-09-30T02:34:56.595Z",
+                "elapsed_total_ms": 1880.7471000000078
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3298,
+                "completion_tokens": 701,
+                "total_tokens": 3999
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:34:56.596Z",
+                "headers_ms": 1934.2247999999963,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:35:02.594Z",
+                "elapsed_total_ms": 5998.4185
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6644,
+              "recent_conversation": 2,
+              "knowledge_access": 1267,
+              "retrieval": 30,
+              "controller_evidence": 7262
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Orla Fen gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "orla_fen",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1332.8125,
+              "narrator_total_ms": 1880.7471000000078,
+              "controller_total_ms": 5998.4185,
+              "controller_tail_ms": 7520.282399999996,
+              "retrieval_ms": 0.0866999999852851,
+              "coordinator_total_ms": 9402.303500000009
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_orla_fen_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_orla_fen_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nOrla Fen: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "orla_fen"
+      ],
+      "reconciliation": {
+        "delivered": "revision",
+        "draft": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands. \"Here. You'll want these if you're going to walk this district proper.\" Her voice carries the same volume she uses to shout over laundry vats, clipped and practical. \"Nothing fancy, but they hold up.\"\n\nShe does not explain why she is giving them, nor does she wait for thanks. Her grey head is already turning, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire.",
+        "issues": [
+          {
+            "kind": "asserts_uncommitted_transfer",
+            "item_id": "campaign_item_regression_leather_boots",
+            "sentence": "Orla Fen thrusts the pair of leather boots toward Nicco with her reddened, powerful hands.",
+            "correction": "pair of leather boots did NOT change hands: it stays with Orla Fen. Nicco does not receive it; narrate the moment without the handover completing."
+          }
+        ],
+        "revision": "Orla Fen makes no move toward Nicco. The leather boots stay at her side, one hand resting on them as though she has forgotten she held them. Her grey head turns, scanning the square with the distracted assessment of someone who keeps track of many moving pieces—customers, workers, water, fire. The moment stretches. She does not offer them, nor does she speak of them again.",
+        "revision_issues": []
+      },
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3321,
+          "completion_tokens": 114,
+          "total_tokens": 3435,
+          "cost": 0.001463646,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001463646,
+            "upstream_inference_prompt_cost": 0.001084596,
+            "upstream_inference_completions_cost": 0.00037905
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3298,
+          "completion_tokens": 701,
+          "total_tokens": 3999,
+          "cost": 0.001153624,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2968,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001153624,
+            "upstream_inference_prompt_cost": 0.000228304,
+            "upstream_inference_completions_cost": 0.00092532
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 634,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "controller_failed",
+      "exception": null,
+      "narration": "",
+      "result": null,
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "turn_failed",
+          "code": "controller_failed",
+          "provider_code": "timeout",
+          "narration": "Orla Fen looks at the boots in his hands, then up at him with mild exasperation. \"They're yours now. Bought and finished.\" She folds her thick-reddened arms across her apron, spectacles pushed up into her grey hair where they always seem to end up. \"I don't run a fitting service. Wear them, sell them, leave them on the street—none of my concern once they leave the counter.\"\n\nShe studies his face with the same practical assessment she gives fabric, apparently finding nothing there to modify her position. \"If you're standing in Heartstone Square with no boots to your name, that's your situation. Not mine to solve twice.\"",
+          "incomplete": true,
+          "base_revision": 2,
+          "final_revision": 2
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_orla_fen_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_orla_fen_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nOrla Fen: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "orla_fen"
+      ],
+      "reconciliation": null,
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3300,
+          "completion_tokens": 137,
+          "total_tokens": 3437,
+          "cost": 0.001156853,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3264,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001156853,
+            "upstream_inference_prompt_cost": 0.000701328,
+            "upstream_inference_completions_cost": 0.000455525
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {}
+      }
+    }
+  ]
+}

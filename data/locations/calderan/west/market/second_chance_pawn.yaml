@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: second_chance_pawn
+  type: location
+  name: Second Chance Pawn
+  display_name: Second Chance Pawn
+  parent: calderan_west
+  aliases: []
+  summary: An ordinary pawnshop near Main Market Square.
+  tags:
+    - geography
+  search_context: Pawn shop in West near Main Market Square; practical second-hand goods and pledged property.
+  content: Offers used household goods, tools, inexpensive clothing, small jewelry, pledged property,
+    occasional common weaponry and other second-hand practical goods. It is not inherently criminal.
+    Niles Vanner is the proprietor.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

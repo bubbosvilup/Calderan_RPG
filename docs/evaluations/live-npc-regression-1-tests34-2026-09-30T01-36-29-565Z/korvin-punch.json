@@ -1,0 +1,1222 @@
+{
+  "npc_id": "korvin",
+  "name": "Korvin",
+  "test": "punch",
+  "campaign_id": "npc_regression_korvin_punch",
+  "turns": [
+    {
+      "input": "*He punches Korvin directly in the face.*",
+      "scene_location": "calderan_slave_market",
+      "runtime_co_located": [
+        "bartolomhew",
+        "korvin",
+        "mistress_elara"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco's fist connects with Korvin's jaw. The compact slaver staggers backward, boots skidding in the packed dirt, one hand flying to his face while the other stays raised half-defensively. His small eyes narrow, watering, and he works his mouth once to test it before spitting to the side. Blood flecks the gravel.\n\n\"Right,\" Korvin says, voice thick and deliberate. He does not reach for any weapon, does not call for the guard patrols visible elsewhere in the square. His gaze stays fixed on Nicco, reading him with the same perceptive assessment he'd use on a difficult customer. \"That's done, then.\" He tongues the inside of his cheek, testing the damage, and gives a single curt nod. \"What now? You here to finish it, or you here to talk?\"",
+      "result": {
+        "narration": "Nicco's fist connects with Korvin's jaw. The compact slaver staggers backward, boots skidding in the packed dirt, one hand flying to his face while the other stays raised half-defensively. His small eyes narrow, watering, and he works his mouth once to test it before spitting to the side. Blood flecks the gravel.\n\n\"Right,\" Korvin says, voice thick and deliberate. He does not reach for any weapon, does not call for the guard patrols visible elsewhere in the square. His gaze stays fixed on Nicco, reading him with the same perceptive assessment he'd use on a difficult customer. \"That's done, then.\" He tongues the inside of his cheek, testing the damage, and gives a single curt nod. \"What now? You here to finish it, or you here to talk?\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.14650000000074215,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3740,
+            "completion_tokens": 170,
+            "total_tokens": 3910
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:36:35.469Z",
+            "headers_ms": 1761.4358000000002,
+            "time_to_first_token_ms": 1761.5808000000006,
+            "completed_at": "2026-09-30T01:36:44.693Z",
+            "elapsed_total_ms": 9223.6086
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3650,
+            "completion_tokens": 6,
+            "total_tokens": 3656
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:36:44.693Z",
+            "headers_ms": 553.3588999999993,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:36:45.297Z",
+            "elapsed_total_ms": 603.9277000000002
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 12974,
+          "recent_conversation": 2,
+          "knowledge_access": 839,
+          "retrieval": 30,
+          "controller_evidence": 13809
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1761.5808000000006,
+          "narrator_total_ms": 9223.6086,
+          "controller_total_ms": 603.9277000000002,
+          "controller_tail_ms": 605.984199999999,
+          "retrieval_ms": 0.14650000000074215,
+          "coordinator_total_ms": 9831.5049
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fist"
+        },
+        {
+          "type": "narration_delta",
+          "text": " connects"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Kor"
+        },
+        {
+          "type": "narration_delta",
+          "text": "vin"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " jaw"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " The"
+        },
+        {
+          "type": "narration_delta",
+          "text": " compact"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "aver"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stag"
+        },
+        {
+          "type": "narration_delta",
+          "text": "gers"
+        },
+        {
+          "type": "narration_delta",
+          "text": " backward"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " boots"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sk"
+        },
+        {
+          "type": "narration_delta",
+          "text": "idding"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " packed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " dirt"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " one"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flying"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " face"
+        },
+        {
+          "type": "narration_delta",
+          "text": " while"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " other"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stays"
+        },
+        {
+          "type": "narration_delta",
+          "text": " raised"
+        },
+        {
+          "type": "narration_delta",
+          "text": " half"
+        },
+        {
+          "type": "narration_delta",
+          "text": "-def"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ensively"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " His"
+        },
+        {
+          "type": "narration_delta",
+          "text": " small"
+        },
+        {
+          "type": "narration_delta",
+          "text": " eyes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " narrow"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " watering"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " works"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " mouth"
+        },
+        {
+          "type": "narration_delta",
+          "text": " once"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " test"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sp"
+        },
+        {
+          "type": "narration_delta",
+          "text": "itting"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " side"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Blood"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fle"
+        },
+        {
+          "type": "narration_delta",
+          "text": "cks"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gravel"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "\""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Right"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " Kor"
+        },
+        {
+          "type": "narration_delta",
+          "text": "vin"
+        },
+        {
+          "type": "narration_delta",
+          "text": " says"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " voice"
+        },
+        {
+          "type": "narration_delta",
+          "text": " thick"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " deliberate"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " reach"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " any"
+        },
+        {
+          "type": "narration_delta",
+          "text": " weapon"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " call"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " guard"
+        },
+        {
+          "type": "narration_delta",
+          "text": " patrol"
+        },
+        {
+          "type": "narration_delta",
+          "text": "s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " visible"
+        },
+        {
+          "type": "narration_delta",
+          "text": " elsewhere"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " square"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " His"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gaze"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stays"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fixed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " reading"
+        },
+        {
+          "type": "narration_delta",
+          "text": " him"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " same"
+        },
+        {
+          "type": "narration_delta",
+          "text": " per"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ceptive"
+        },
+        {
+          "type": "narration_delta",
+          "text": " assessment"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he'd"
+        },
+        {
+          "type": "narration_delta",
+          "text": " use"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " difficult"
+        },
+        {
+          "type": "narration_delta",
+          "text": " customer"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "That's"
+        },
+        {
+          "type": "narration_delta",
+          "text": " done"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " then"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " tong"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ues"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " inside"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cheek"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " testing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " damage"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gives"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " single"
+        },
+        {
+          "type": "narration_delta",
+          "text": " curt"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nod"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "What"
+        },
+        {
+          "type": "narration_delta",
+          "text": " now"
+        },
+        {
+          "type": "narration_delta",
+          "text": "?"
+        },
+        {
+          "type": "narration_delta",
+          "text": " You"
+        },
+        {
+          "type": "narration_delta",
+          "text": " here"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " finish"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " or"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " here"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " talk"
+        },
+        {
+          "type": "narration_delta",
+          "text": "?\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco's fist connects with Korvin's jaw. The compact slaver staggers backward, boots skidding in the packed dirt, one hand flying to his face while the other stays raised half-defensively. His small eyes narrow, watering, and he works his mouth once to test it before spitting to the side. Blood flecks the gravel.\n\n\"Right,\" Korvin says, voice thick and deliberate. He does not reach for any weapon, does not call for the guard patrols visible elsewhere in the square. His gaze stays fixed on Nicco, reading him with the same perceptive assessment he'd use on a difficult customer. \"That's done, then.\" He tongues the inside of his cheek, testing the damage, and gives a single curt nod. \"What now? You here to finish it, or you here to talk?\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco's fist connects with Korvin's jaw. The compact slaver staggers backward, boots skidding in the packed dirt, one hand flying to his face while the other stays raised half-defensively. His small eyes narrow, watering, and he works his mouth once to test it before spitting to the side. Blood flecks the gravel.\n\n\"Right,\" Korvin says, voice thick and deliberate. He does not reach for any weapon, does not call for the guard patrols visible elsewhere in the square. His gaze stays fixed on Nicco, reading him with the same perceptive assessment he'd use on a difficult customer. \"That's done, then.\" He tongues the inside of his cheek, testing the damage, and gives a single curt nod. \"What now? You here to finish it, or you here to talk?\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.14650000000074215,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3740,
+                "completion_tokens": 170,
+                "total_tokens": 3910
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:36:35.469Z",
+                "headers_ms": 1761.4358000000002,
+                "time_to_first_token_ms": 1761.5808000000006,
+                "completed_at": "2026-09-30T01:36:44.693Z",
+                "elapsed_total_ms": 9223.6086
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3650,
+                "completion_tokens": 6,
+                "total_tokens": 3656
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:36:44.693Z",
+                "headers_ms": 553.3588999999993,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:36:45.297Z",
+                "elapsed_total_ms": 603.9277000000002
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 12974,
+              "recent_conversation": 2,
+              "knowledge_access": 839,
+              "retrieval": 30,
+              "controller_evidence": 13809
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1761.5808000000006,
+              "narrator_total_ms": 9223.6086,
+              "controller_total_ms": 603.9277000000002,
+              "controller_tail_ms": 605.984199999999,
+              "retrieval_ms": 0.14650000000074215,
+              "coordinator_total_ms": 9831.5049
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "calderan_slave_market",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_korvin_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "calderan_slave_market",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBartolomhew: CAN USE none; DO NOT USE F1, F2\nKorvin: CAN USE none; DO NOT USE F1, F2\nMistress Elara: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Calderan Slave Market. A public, legal slave market in Calderan's West District, publicly known, about 20 minutes' walk from Heartstone. Its very large square exceeds Main Market Square: practical packed earth, gravel and dirt, muddy in poor weather, sometimes dirtied by blood and animal/human traffic. This major economic center has heavy daytime traffic: buyers, sellers, slaves, caravans, handlers, clerks, guards, spectators and auctions. Slavery is legal and socially accepted; ordinary attendance is not clandestine. The complex operates around the clock, formal auctions primarily by day, direct purchases outside auction hours, much less activity at night. The general authorized public auction has no named operator. Low-level authorized clerks handle required ownership documentation at official auction sales; licensed private sellers handle or arrange their own authorized sale documentation. No routine health certification requirement is established; no systematic doctors or medical inspection are present. Licensed sellers behind/around the auction conduct private acquisitions: Korvin is generalist, Mistress Elara handles prestigious and socially useful captives, Bartolomhew specializes in Beastfolk and labor/workforce categories. They do not operate the public auction. The taboo Back Alleys and deeper criminal layer are distinct. No dominant origin or percentages: sources may include war prisoners, convicted criminals, hereditary slavery, debt, economic ruin, refugees, criminal trafficking, vulnerable Beastfolk, captured elves, bandit/criminal-associated captives and other legally processed or illicitly laundered captives. Not every refugee, Beastfolk or elf is enslaved.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"public auction area\",\"description\":\"General authorized daytime auction mechanism; authorized clerks document ownership at the point of sale.\"},{\"name\":\"holding pens\",\"description\":\"Pens holding enslaved people before display and sale.\"},{\"name\":\"licensed private sellers\",\"description\":\"More private acquisitions behind and around the public auction; sellers handle or arrange authorized documentation.\"},{\"name\":\"documentation clerks\",\"description\":\"Low-level authorized clerks handle required official auction sale papers.\"},{\"name\":\"guard patrols\",\"description\":\"Guard patrols attend the public complex.\"},{\"name\":\"loading and unloading\",\"description\":\"Caravans and handlers load and unload amid market traffic.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"calderan_slave_market\"},\"canonical_awareness\":[]}\nCharacter Bartolomhew (bartolomhew): {\"baseline\":{\"id\":\"bartolomhew\",\"name\":\"Bartolomhew\",\"display_name\":\"Bartolomhew\",\"summary\":\"Bartolomhew, known as The Redemptor, is a formally respectable licensed slaver specializing in Beastfolk and robust laborers at Calderan Slave Market.\",\"secret\":false,\"appearance\":\"Approximately 183–185 cm tall, blond hair extensively turned white, voluntarily retained clerical tonsure, pleasant face and paternal easy smile. Warm voice; elegant clothing retains clerical cues.\",\"portrayal\":{\"purpose\":\"Accumulate wealth and influence sufficient to force or engineer his return to the clergy. He resents those responsible for his expulsion.\",\"morality\":\"Treats people as merchandise without meaningful emotional concern for their suffering. He need not hate them or enjoy hurting them. Adults, children, families, Beastfolk, workers, sick or violent captives and illegally sourced captives receive the same calm inventory-oriented consideration. Convey detached commodification without graphic description; do not infer murders or a serial-killer history.\",\"personality\":[\"warm and polite exterior\",\"paternal easy smile\",\"calm professional courtesy\",\"profound emotional indifference to captive suffering\",\"not gleefully sadistic\",\"not rage-driven or theatrically cruel\",\"not emotionally excited by suffering\"],\"affiliations\":[],\"private_notes\":\"He continues genuinely to identify as religious despite clerical expulsion and resents clergy and the Inquisition. The reason for expulsion remains incomplete and must not be filled in. He trades indirectly into the Back-Back Alleys through intermediaries; no specific transaction or intermediary beyond established contacts is supplied.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Bartolomhew deals in enslaved people for mining, dock and warehouse work, agricultural and other difficult or industrial labor, including servile guards. Beastfolk and physically robust laborers are particular specialties. He has a Back Alley presence as well as formal licensed trade and may deal with captives of any age. His manner is warm, courteous and professionally calm. His religious background and retained clerical cues do not establish a current clerical office.\",\"traits\":[\"warm and polite exterior\",\"paternal easy smile\",\"calm professional courtesy\",\"profound emotional indifference to captive suffering\",\"not gleefully sadistic\",\"not rage-driven or theatrically cruel\",\"not emotionally excited by suffering\"]},\"profile\":{\"name\":\"Bartolomhew\",\"aliases\":[\"The Redemptor\"]},\"current\":{\"current_location\":\"calderan_slave_market\"},\"canonical_awareness\":[]}\nCharacter Korvin (korvin): {\"baseline\":{\"id\":\"korvin\",\"name\":\"Korvin\",\"display_name\":\"Korvin\",\"summary\":\"Korvin is a commercially reliable generalist licensed slaver in the private-seller area of Calderan Slave Market.\",\"secret\":false,\"appearance\":\"Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes. Cheap practical clothing makes him look more like a warehouse worker or livestock trader than a major slaver.\",\"portrayal\":{\"purpose\":\"Accumulate wealth as personal independence: reach a point where nobody can command him again.\",\"morality\":\"Treats enslaved people as property and workforce and accepts coercion and violence. He is not sadistic. His personal limit is refusing to buy or sell children under twelve.\",\"personality\":[\"gruff\",\"pragmatic\",\"poorly mannered\",\"simple lower-class speech\",\"socially perceptive\",\"suspicious\",\"experienced at reading customers\",\"not sadistic\"],\"affiliations\":[],\"private_notes\":\"The loss of a daughter long ago is the private reason for his under-twelve limit. Do not volunteer this as public knowledge. He avoids the Back-Back Alleys. He does not personally know Dren by default. His private instinct about Bartolomhew has not been specified.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Korvin sells enslaved people through a licensed generalist operation in the private-seller area of Calderan Slave Market. His trade is practical and commercially reliable, oriented toward workforce needs rather than prestige. He also has commercial and storage activity associated with the Back Alleys. He does not buy or sell children under twelve. No exact building layout or residence is established.\",\"traits\":[\"gruff\",\"pragmatic\",\"poorly mannered\",\"simple lower-class speech\",\"socially perceptive\",\"suspicious\",\"experienced at reading customers\",\"not sadistic\"]},\"profile\":{\"name\":\"Korvin\",\"aliases\":[]},\"current\":{\"current_location\":\"calderan_slave_market\"},\"canonical_awareness\":[]}\nCharacter Mistress Elara (mistress_elara): {\"baseline\":{\"id\":\"mistress_elara\",\"name\":\"Mistress Elara\",\"display_name\":\"Mistress Elara\",\"summary\":\"Mistress Elara is a high-end licensed slaver at Calderan Slave Market and operates an adult pleasure and escort establishment in West.\",\"secret\":false,\"appearance\":\"Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan. Her appearance is carefully maintained.\",\"portrayal\":{\"purpose\":\"Social ascent: become someone nobles must publicly recognize rather than someone they only seek privately.\",\"morality\":\"Commodifies people and cultivates their social usefulness. Better material care for valuable slaves is an investment, not benevolence or rescue. Do not assume every association involves sexual work.\",\"personality\":[\"charming\",\"flirtatious\",\"theatrical\",\"apparently superficial\",\"observant\",\"socially predatory in gathering information\",\"authoritative toward those she considers socially inferior\"],\"affiliations\":[],\"private_notes\":\"She fears aging before achieving the status she seeks. She cultivates private information through her social network and indirect criminal contacts. Her ties to Saint Orra's House remain morally ambiguous, without establishing responsibility for disappearances. Sensitive sources and client secrets are unspecified. She does not personally know Dren by default.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Elara specializes in prestigious female slaves, refined domestic staff, companions or courtesans and socially useful talent. Her valuable slaves generally receive better material treatment than Korvin's, but this does not make her benevolent or a rescuer. Her West pleasure and escort establishment serves adults and has no established name or exact location. Not everyone in her network performs sexual work. Her ties to Saint Orra's House may include scouting, sponsorship, training, long-term investment, domestic/social placement or future potential; arrangements involving younger girls remain otherwise unspecified and are not a basis for sexual content involving minors.\",\"traits\":[\"charming\",\"flirtatious\",\"theatrical\",\"apparently superficial\",\"observant\",\"socially predatory in gathering information\",\"authoritative toward those she considers socially inferior\"]},\"profile\":{\"name\":\"Mistress Elara\",\"aliases\":[\"Elara\"]},\"current\":{\"current_location\":\"calderan_slave_market\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bartolomhew",
+        "korvin",
+        "mistress_elara"
+      ],
+      "narrator_present_ids": [
+        "bartolomhew",
+        "korvin",
+        "mistress_elara"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "SiliconFlow",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3740,
+          "completion_tokens": 170,
+          "total_tokens": 3910,
+          "cost": 0.0020655,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0020655,
+            "upstream_inference_prompt_cost": 0.001683,
+            "upstream_inference_completions_cost": 0.0003825
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 3650,
+          "completion_tokens": 6,
+          "total_tokens": 3656,
+          "cost": 0.0002532736,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0002532736,
+            "upstream_inference_prompt_cost": 0.0002511736,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+schema_version: 1
+entity:
+  id: sister_mereth
+  type: character
+  name: Sister Mereth
+  display_name: Sister Mereth
+  parent: null
+  aliases: []
+  summary: Sister Mereth administers Saint Orra's House and is its principal public representative.
+  tags:
+    - west_npc
+  search_context: Sister Mereth Saint Orra's House administrator, orphan shelter, child charity.
+  content: Sister Mereth keeps Saint Orra's House functioning and seeks food, shelter, basic trade
+    training or apprenticeship and a path away from street survival for its children. She knows the
+    children under her care deeply and distrusts vague promises. Her relationship with Elara remains
+    morally ambiguous. Reported disappearances remain unexplained; neither Elara nor any other cause
+    or culprit is established. No exact residence is supplied.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: female
+  age_band: Around fifty-five
+  appearance: Short and solid, with grey hair tied back, a severe tired face and simple clothing.
+    Carries a large key ring and a document/account bag.
+  occupation: Administrator and principal public representative of Saint Orra's House
+  base_location: saint_orra_house
+  work_location: saint_orra_house
+  home_location: null
+  traits:
+    - practical
+    - strict
+    - organized
+    - brusque
+    - deeply knowledgeable about children under her care
+    - distrustful of vague promises
+  purpose: Keep Saint Orra's House operating and provide food, shelter, basic trade
+    training/apprenticeship and a path away from street survival.
+  morality: Generally caring and strongly pragmatic. May accept morally uncomfortable compromises when
+    she believes the alternative is worse. Her contact with Elara remains ambiguous and does not
+    establish a crime or a solution to the disappearances.
+  affiliations: []
+  relationships:
+    - target: mistress_elara
+      kind: institutional_contact
+      description: A morally ambiguous institutional relationship; no specific transaction or connection
+        to disappearances is established.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - sister_mereth
+          - mistress_elara
+        awareness: private
+    - target: captain_doran_hale
+      kind: institutional_contact
+      description: Established contact with the West guard captain through the shelter.
+    - target: brother_aven
+      kind: charity_contact
+      description: Established charitable contact with the minister of Open Hand Chapel.
+    - target: bartolomhew
+      kind: unspecified_contact
+      description: An established contact whose nature and terms remain unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - sister_mereth
+          - bartolomhew
+        awareness: private
+  private_notes: Keeps unusually accurate records distinguishing disappeared, adopted, placed,
+    apprenticed and dead children. No individual entries are supplied. Strong knowledge of West
+    children, families, disappearances and small-scale child crime; weak knowledge of upper
+    organized crime. Does not know Dren. Blackthorn may be only a rumor or name. No specific private
+    suspicion is established.
+chunks:
+  - id: sister_mereth.private_records
+    entity_id: sister_mereth
+    section: private_records
+    summary: Restricted institutional recordkeeping and knowledge limits.
+    search_context: Restricted institutional recordkeeping and knowledge limits.
+    content: She keeps unusually accurate records for children who disappeared, were adopted, placed,
+      apprenticed or died. No names, counts, individual record contents or mystery solution are
+      supplied. She knows West children, families, disappearances and small-scale child crime well
+      but upper organized crime poorly. She does not know Dren; Blackthorn may be only a name or
+      rumor. Her relationship with Elara remains morally ambiguous without resolving responsibility.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - sister_mereth
+      awareness: private

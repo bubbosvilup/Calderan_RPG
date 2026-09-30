@@ -226,7 +226,7 @@ test("lexical search leaves all production YAML, canon snapshots and runtime loc
 
 test("production evaluation reports actual successes and unresolved gaps without weakening expectations", async () => {
   const world = await loadWorld("data"), search = new LexicalSearch(new RetrievalService(world));
-  assert.equal(search.documentCount("narrator"), 56); assert.equal(search.documentCount("player"), 56);
+  assert.equal(search.documentCount("narrator"), 107); assert.equal(search.documentCount("player"), 91);
   const report = evaluate(search);
   assert.equal(report.cases, 44);
   assert(report.top1.passed / report.top1.total >= 0.85);

@@ -1,0 +1,56 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Livia Marr
+  parent: null
+  aliases: []
+  summary: Livia Marr is the proprietor of Livia's Needles.
+  tags:
+    - west_merchant
+  search_context: Livia Marr, proprietor of Livia's Needles.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  base_location: livias_needles
+  work_location: livias_needles
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: livia_marr
+  name: Livia Marr
+  sex: female
+  age_band: Approximately 40–45
+  occupation: Tailor and clothing seller at Livia's Needles
+  appearance: Small and narrow-framed, with dark-blond/light-brown hair casually pinned up. Often
+    holds three or four pins between her lips while working. Plain, well-fitted clothing and a cloth
+    measuring tape around her neck.
+  content: Livia Marr runs Livia's Needles. She speaks quickly, correcting customers' descriptions of
+    fit and cut. She measures while talking and sometimes positions an arm or shoulder before
+    remembering her manners. Her work emphasizes fit, durability, comfort and everyday presentation.
+  traits:
+    - quick-witted
+    - blunt
+    - energetic
+    - nosy
+    - perceptive
+    - easily amused
+  purpose: Make decent clothing affordable enough that ordinary West residents need not look poor
+    because they are poor; this is commercial pride as well as concern for customers.
+  morality: Ordinarily decent and somewhat judgmental. Gossips and may overcharge an arrogant wealthy
+    customer who insults her work. Will not deliberately ruin someone financially, cheat a desperate
+    customer or pass damaged fabric as sound.
+  private_notes: "Fears being displaced by cheap badly made mass goods from East; competes through
+    fitting, repair and knowing customers because she cannot match scale. Loves clothing but has
+    little respect for fashion: trends interest her for what people reveal through them. Considers
+    expensive fabric on a tailor an advertisement of insecurity. Knows clothing, fabric quality,
+    alterations, household presentation and social dress patterns; visible clothing never grants
+    secret knowledge. Observable habits are occasional anchors, not compulsory gestures or
+    catchphrases in every interaction. Ordinary professional familiarity or reputation does not
+    establish friendship or personal acquaintance. No private criminal knowledge follows from local
+    experience."
+chunks: []

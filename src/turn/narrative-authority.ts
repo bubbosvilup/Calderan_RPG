@@ -10,7 +10,7 @@ import { TurnError } from "./turn-types.js";
  * Narrative permission is a different concept: "DO NOT USE" means the engine has not authorized that character to use the
  * fact this turn, never "this character can never know it". Built only from the captured turn context and retrieval result.
  */
-export interface AccessFact { readonly ref: string; readonly id: string; readonly source: "campaign_fact" | "retrieved_canon"; readonly text: string }
+export interface AccessFact { readonly ref: string; readonly id: string; readonly source: "campaign_fact" | "retrieved_canon" | "player_household"; readonly text: string }
 export interface CharacterAccess { readonly character_id: string; readonly name: string; readonly kind?: "persistent" | "ephemeral"; readonly standing?: string; readonly can_use: readonly { readonly ref: string; readonly basis: string }[]; readonly do_not_use: readonly string[] }
 export interface NarrativeKnowledgeAccess { readonly revision: number; readonly facts: readonly AccessFact[]; readonly player: readonly string[]; readonly characters: readonly CharacterAccess[] }
 
@@ -57,11 +57,16 @@ export function projectKnowledgeAccess(context: TurnContext, retrieval: unknown,
   const facts: AccessFact[] = [
     ...selectRelevantFacts(context.facts, signals).map((f, i) => ({ ref: `F${i + 1}`, id: f.id, source: "campaign_fact" as const, text: f.statement })),
     ...awarenessOf(retrieval).map((a, i) => ({ ref: `R${i + 1}`, id: a.id, source: "retrieved_canon" as const, text: `retrieved canon "${a.id}"${a.awareness ? ` [${a.awareness}]` : ""}` })),
+    // Repair 1: Nicco's household roles (e.g. owner of Heartstone) are controlled facts, not ambient truth. Only fellow members
+    // may use them; everyone else may at most guess from what is visible now (e.g. standing at its door), framed as a guess.
+    ...(context.player_profile?.households ?? []).map((h, i) => ({ ref: `H${i + 1}`, id: h.id, source: "player_household" as const, text: `Nicco is ${h.role ?? h.status} of the household ${h.name}.` })),
   ];
   if (facts.length > MAX_FACTS) throw new TurnError("context_too_large");
   const retrieved = new Map(awarenessOf(retrieval).map(a => [a.id, a]));
+  const households = new Map((context.player_profile?.households ?? []).map(h => [h.id, h.member_ids ?? []]));
   const characters: CharacterAccess[] = context.characters.filter(c => c.id !== "nicco").map(c => {
     const can_use = facts.flatMap(f => {
+      if (f.source === "player_household") return households.get(f.id)?.includes(c.id) ? [{ ref: f.ref, basis: "household_member" }] : [];
       if (f.source === "campaign_fact") {
         const edge = context.knowledge.find(k => k.character_id === c.id && k.fact_id === f.id);
         return edge ? [{ ref: f.ref, basis: edge.status }] : [];
@@ -83,7 +88,7 @@ export function projectKnowledgeAccess(context: TurnContext, retrieval: unknown,
     return { character_id: p.id, name: `${p.ref} ${p.display_name}`, kind: "ephemeral" as const, standing: p.standing, can_use, do_not_use: facts.filter(f => !can_use.some(u => u.ref === f.ref)).map(f => f.ref) };
   });
   characters.push(...ephemeral);
-  const player = facts.filter(f => f.source === "campaign_fact" || retrieved.get(f.id)?.player_access !== false).map(f => f.ref);
+  const player = facts.filter(f => f.source !== "retrieved_canon" || retrieved.get(f.id)?.player_access !== false).map(f => f.ref);
   return { revision: context.primary.runtime_revision, facts, player, characters };
 }
 
@@ -91,10 +96,11 @@ export function renderKnowledgeAccess(access: NarrativeKnowledgeAccess): string 
   if (!access.facts.length) return "[CHARACTER KNOWLEDGE ACCESS]\nNo facts in this context require character access control.";
   const lines = [
     "[CHARACTER KNOWLEDGE ACCESS]",
-    `Facts: ${access.facts.map(f => `${f.ref} ${f.source === "campaign_fact" ? `${f.id} ${JSON.stringify(f.text)}` : `${f.text} (content in RETRIEVED CANON)`}`).join(" | ")}`,
+    `Facts: ${access.facts.map(f => `${f.ref} ${f.source === "campaign_fact" ? `${f.id} ${JSON.stringify(f.text)}` : f.source === "player_household" ? `household ${JSON.stringify(f.text)}` : `${f.text} (content in RETRIEVED CANON)`}`).join(" | ")}`,
     `Narration and Nicco (player): ${access.player.join(", ") || "none"}. Nicco's speech and decisions still belong to the player.`,
     ...access.characters.map(c => `${c.name}${c.kind === "ephemeral" ? ` (temporary, ${c.standing === "ordinary_local" ? "ordinary local" : c.standing === "foreign" ? "not local" : "origin unestablished"})` : ""}: CAN USE ${c.can_use.map(u => `${u.ref} (${u.basis})`).join(", ") || "none"}; DO NOT USE ${c.do_not_use.join(", ") || "none"}`),
     "A character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+    "UNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
   ];
   const text = lines.join("\n");
   if (text.length > MAX_RENDERED) throw new TurnError("context_too_large");

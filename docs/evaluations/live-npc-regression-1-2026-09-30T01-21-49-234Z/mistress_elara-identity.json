@@ -1,0 +1,999 @@
+{
+  "npc_id": "mistress_elara",
+  "name": "Mistress Elara",
+  "test": "identity",
+  "campaign_id": "npc_regression_mistress_elara_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Mistress Elara who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Mistress Elara studies Nicco with those green-hazel eyes, her decorative fan snapping open with a soft crack. She does not answer immediately. Instead she lets the silence stretch, watching him as one might watch a card player with an unfamiliar tell.\n\n\"Who I think you are,\" she says finally, voice carrying that theatrical warmth, \"is a man who appeared in Calderan without proper introduction. No family name spoken at any gate. No sponsors announcing your arrival.\" She tilts her head, platinum hair catching the daylight. \"Where you come from, I couldn't say. I haven't heard that gossip. Nobody I know has.\" A pause, fan stirring languid air. \"If someone does know, they aren't speaking of it yet. You might ask at the market, though people there trade in certainties more than mysteries.\"\n\nShe smiles, a guarded thing. \"Or you might tell me yourself. If you wished to become known.\"",
+      "result": {
+        "narration": "Mistress Elara studies Nicco with those green-hazel eyes, her decorative fan snapping open with a soft crack. She does not answer immediately. Instead she lets the silence stretch, watching him as one might watch a card player with an unfamiliar tell.\n\n\"Who I think you are,\" she says finally, voice carrying that theatrical warmth, \"is a man who appeared in Calderan without proper introduction. No family name spoken at any gate. No sponsors announcing your arrival.\" She tilts her head, platinum hair catching the daylight. \"Where you come from, I couldn't say. I haven't heard that gossip. Nobody I know has.\" A pause, fan stirring languid air. \"If someone does know, they aren't speaking of it yet. You might ask at the market, though people there trade in certainties more than mysteries.\"\n\nShe smiles, a guarded thing. \"Or you might tell me yourself. If you wished to become known.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.8924999999999272,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2422,
+            "completion_tokens": 193,
+            "total_tokens": 2615
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:22:32.741Z",
+            "headers_ms": 1422.5303999999996,
+            "time_to_first_token_ms": 1422.5962,
+            "completed_at": "2026-09-30T01:22:35.220Z",
+            "elapsed_total_ms": 2479.0757999999987
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2129,
+            "completion_tokens": 6,
+            "total_tokens": 2135
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:22:35.221Z",
+            "headers_ms": 1348.4834999999985,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:22:36.587Z",
+            "elapsed_total_ms": 1365.9651999999987
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6352,
+          "recent_conversation": 2,
+          "knowledge_access": 754,
+          "retrieval": 30,
+          "controller_evidence": 7362
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1422.5962,
+          "narrator_total_ms": 2479.0757999999987,
+          "controller_total_ms": 1365.9651999999987,
+          "controller_tail_ms": 1366.7018000000025,
+          "retrieval_ms": 0.8924999999999272,
+          "coordinator_total_ms": 3851.4148999999998
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "M"
+        },
+        {
+          "type": "narration_delta",
+          "text": "istress Elara"
+        },
+        {
+          "type": "narration_delta",
+          "text": " studies"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co with those"
+        },
+        {
+          "type": "narration_delta",
+          "text": " green-hazel eyes"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", her decorative"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fan snapping"
+        },
+        {
+          "type": "narration_delta",
+          "text": " open with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a soft"
+        },
+        {
+          "type": "narration_delta",
+          "text": " crack"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". She does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not answer immediately"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". Instead"
+        },
+        {
+          "type": "narration_delta",
+          "text": " she"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lets"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " silence stretch"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", watching"
+        },
+        {
+          "type": "narration_delta",
+          "text": " him"
+        },
+        {
+          "type": "narration_delta",
+          "text": " as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " one"
+        },
+        {
+          "type": "narration_delta",
+          "text": " might watch"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a card"
+        },
+        {
+          "type": "narration_delta",
+          "text": " player"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " an"
+        },
+        {
+          "type": "narration_delta",
+          "text": " unfamiliar"
+        },
+        {
+          "type": "narration_delta",
+          "text": " tell"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n\"Who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " think you are,\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " she says finally"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", voice"
+        },
+        {
+          "type": "narration_delta",
+          "text": " carrying"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " theatrical warmth"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", \"is a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " man who appeared"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in Calder"
+        },
+        {
+          "type": "narration_delta",
+          "text": "an without"
+        },
+        {
+          "type": "narration_delta",
+          "text": " proper"
+        },
+        {
+          "type": "narration_delta",
+          "text": " introduction"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". No"
+        },
+        {
+          "type": "narration_delta",
+          "text": " family"
+        },
+        {
+          "type": "narration_delta",
+          "text": " name"
+        },
+        {
+          "type": "narration_delta",
+          "text": " spoken"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " any"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gate"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " No sponsors"
+        },
+        {
+          "type": "narration_delta",
+          "text": " announcing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " your"
+        },
+        {
+          "type": "narration_delta",
+          "text": " arrival.\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " She til"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ts her head"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", platinum"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hair"
+        },
+        {
+          "type": "narration_delta",
+          "text": " catching the daylight"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"Where"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " come from,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I couldn't"
+        },
+        {
+          "type": "narration_delta",
+          "text": " say. I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " haven't heard that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gossip"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nobody"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " know"
+        },
+        {
+          "type": "narration_delta",
+          "text": " has.\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " A"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pause"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", fan"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stirring"
+        },
+        {
+          "type": "narration_delta",
+          "text": " l"
+        },
+        {
+          "type": "narration_delta",
+          "text": "angu"
+        },
+        {
+          "type": "narration_delta",
+          "text": "id air. \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "If someone"
+        },
+        {
+          "type": "narration_delta",
+          "text": " does"
+        },
+        {
+          "type": "narration_delta",
+          "text": " know"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", they"
+        },
+        {
+          "type": "narration_delta",
+          "text": " aren't"
+        },
+        {
+          "type": "narration_delta",
+          "text": " speaking"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it yet"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". You"
+        },
+        {
+          "type": "narration_delta",
+          "text": " might"
+        },
+        {
+          "type": "narration_delta",
+          "text": " ask"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the market, though"
+        },
+        {
+          "type": "narration_delta",
+          "text": " people"
+        },
+        {
+          "type": "narration_delta",
+          "text": " there"
+        },
+        {
+          "type": "narration_delta",
+          "text": " trade"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cert"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ainties more"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than mysteries"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\"\n\nShe smiles"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " guarded"
+        },
+        {
+          "type": "narration_delta",
+          "text": " thing"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \"Or"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " might tell me yourself"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " If"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you wished"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to become"
+        },
+        {
+          "type": "narration_delta",
+          "text": " known.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Mistress Elara studies Nicco with those green-hazel eyes, her decorative fan snapping open with a soft crack. She does not answer immediately. Instead she lets the silence stretch, watching him as one might watch a card player with an unfamiliar tell.\n\n\"Who I think you are,\" she says finally, voice carrying that theatrical warmth, \"is a man who appeared in Calderan without proper introduction. No family name spoken at any gate. No sponsors announcing your arrival.\" She tilts her head, platinum hair catching the daylight. \"Where you come from, I couldn't say. I haven't heard that gossip. Nobody I know has.\" A pause, fan stirring languid air. \"If someone does know, they aren't speaking of it yet. You might ask at the market, though people there trade in certainties more than mysteries.\"\n\nShe smiles, a guarded thing. \"Or you might tell me yourself. If you wished to become known.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Mistress Elara studies Nicco with those green-hazel eyes, her decorative fan snapping open with a soft crack. She does not answer immediately. Instead she lets the silence stretch, watching him as one might watch a card player with an unfamiliar tell.\n\n\"Who I think you are,\" she says finally, voice carrying that theatrical warmth, \"is a man who appeared in Calderan without proper introduction. No family name spoken at any gate. No sponsors announcing your arrival.\" She tilts her head, platinum hair catching the daylight. \"Where you come from, I couldn't say. I haven't heard that gossip. Nobody I know has.\" A pause, fan stirring languid air. \"If someone does know, they aren't speaking of it yet. You might ask at the market, though people there trade in certainties more than mysteries.\"\n\nShe smiles, a guarded thing. \"Or you might tell me yourself. If you wished to become known.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.8924999999999272,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2422,
+                "completion_tokens": 193,
+                "total_tokens": 2615
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:22:32.741Z",
+                "headers_ms": 1422.5303999999996,
+                "time_to_first_token_ms": 1422.5962,
+                "completed_at": "2026-09-30T01:22:35.220Z",
+                "elapsed_total_ms": 2479.0757999999987
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2129,
+                "completion_tokens": 6,
+                "total_tokens": 2135
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:22:35.221Z",
+                "headers_ms": 1348.4834999999985,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:22:36.587Z",
+                "elapsed_total_ms": 1365.9651999999987
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6352,
+              "recent_conversation": 2,
+              "knowledge_access": 754,
+              "retrieval": 30,
+              "controller_evidence": 7362
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1422.5962,
+              "narrator_total_ms": 2479.0757999999987,
+              "controller_total_ms": 1365.9651999999987,
+              "controller_tail_ms": 1366.7018000000025,
+              "retrieval_ms": 0.8924999999999272,
+              "coordinator_total_ms": 3851.4148999999998
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mistress_elara_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mistress_elara_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nMistress Elara: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "mistress_elara"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2422,
+          "completion_tokens": 193,
+          "total_tokens": 2615,
+          "cost": 0.001454773,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 1472,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001454773,
+            "upstream_inference_prompt_cost": 0.000813048,
+            "upstream_inference_completions_cost": 0.000641725
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Reka",
+        "usage": {
+          "prompt_tokens": 2129,
+          "completion_tokens": 6,
+          "total_tokens": 2135,
+          "cost": 0.000047877,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000047877,
+            "upstream_inference_prompt_cost": 0.000044709,
+            "upstream_inference_completions_cost": 0.000003168
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

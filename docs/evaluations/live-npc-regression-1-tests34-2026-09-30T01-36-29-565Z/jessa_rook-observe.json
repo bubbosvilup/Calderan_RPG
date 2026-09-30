@@ -1,0 +1,868 @@
+{
+  "npc_id": "jessa_rook",
+  "name": "Jessa Rook",
+  "test": "observe",
+  "campaign_id": "npc_regression_jessa_rook_observe",
+  "turns": [
+    {
+      "input": "*He looks at Jessa Rook, trying to understand what kind of person he has in front of him.*",
+      "scene_location": "heartstone_square",
+      "runtime_co_located": [
+        "jessa_rook"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Jessa Rook stands with her sleeves rolled above solid forearms, a small notebook tucked into her belt. Her dark hair, heavily streaked with grey, catches the daylight. She watches you with the same measured attention she might give a new guest crossing her threshold—taking in your stance, your hands, the empty space where a traveler's baggage might be.\n\nHer voice is low and unhurried when she speaks. \"You're the one who came through the tower door yesterday.\" Not a question. She glanced toward the massive wooden entrance behind you, then back. \"Most who stand where you're standing want something. Directions, drink, work, or to be left alone. I'm not in the habit of guessing which.\"",
+      "result": {
+        "narration": "Jessa Rook stands with her sleeves rolled above solid forearms, a small notebook tucked into her belt. Her dark hair, heavily streaked with grey, catches the daylight. She watches you with the same measured attention she might give a new guest crossing her threshold—taking in your stance, your hands, the empty space where a traveler's baggage might be.\n\nHer voice is low and unhurried when she speaks. \"You're the one who came through the tower door yesterday.\" Not a question. She glanced toward the massive wooden entrance behind you, then back. \"Most who stand where you're standing want something. Directions, drink, work, or to be left alone. I'm not in the habit of guessing which.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.2154000000009546,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2451,
+            "completion_tokens": 148,
+            "total_tokens": 2599
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:37.611Z",
+            "headers_ms": 1154.1152999999904,
+            "time_to_first_token_ms": 1154.2209000000003,
+            "completed_at": "2026-09-30T01:37:39.426Z",
+            "elapsed_total_ms": 1815.4841999999917
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2098,
+            "completion_tokens": 6,
+            "total_tokens": 2104
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:39.427Z",
+            "headers_ms": 727.7736000000004,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:40.203Z",
+            "elapsed_total_ms": 776.7111999999906
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6397,
+          "recent_conversation": 2,
+          "knowledge_access": 750,
+          "retrieval": 30,
+          "controller_evidence": 7228
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1154.2209000000003,
+          "narrator_total_ms": 1815.4841999999917,
+          "controller_total_ms": 776.7111999999906,
+          "controller_tail_ms": 777.4471000000049,
+          "retrieval_ms": 0.2154000000009546,
+          "coordinator_total_ms": 2593.9556999999913
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "J"
+        },
+        {
+          "type": "narration_delta",
+          "text": "essa R"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ook stands with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sleeves"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rolled above"
+        },
+        {
+          "type": "narration_delta",
+          "text": " solid"
+        },
+        {
+          "type": "narration_delta",
+          "text": " forearms, a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " small notebook tucked into"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her belt. Her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " dark hair,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " heavily streaked with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " grey, catches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the daylight"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". She watches"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " same"
+        },
+        {
+          "type": "narration_delta",
+          "text": " measured attention"
+        },
+        {
+          "type": "narration_delta",
+          "text": " she"
+        },
+        {
+          "type": "narration_delta",
+          "text": " might"
+        },
+        {
+          "type": "narration_delta",
+          "text": " give a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " new"
+        },
+        {
+          "type": "narration_delta",
+          "text": " guest crossing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " threshold—t"
+        },
+        {
+          "type": "narration_delta",
+          "text": "aking in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " your"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stance"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", your"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hands, the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " empty"
+        },
+        {
+          "type": "narration_delta",
+          "text": " space"
+        },
+        {
+          "type": "narration_delta",
+          "text": " where"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " travel"
+        },
+        {
+          "type": "narration_delta",
+          "text": "er's baggage"
+        },
+        {
+          "type": "narration_delta",
+          "text": " might be"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\nHer"
+        },
+        {
+          "type": "narration_delta",
+          "text": " voice"
+        },
+        {
+          "type": "narration_delta",
+          "text": " is"
+        },
+        {
+          "type": "narration_delta",
+          "text": " low and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " unhurried when"
+        },
+        {
+          "type": "narration_delta",
+          "text": " she speaks. \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "You're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " one who came"
+        },
+        {
+          "type": "narration_delta",
+          "text": " through the tower"
+        },
+        {
+          "type": "narration_delta",
+          "text": " door"
+        },
+        {
+          "type": "narration_delta",
+          "text": " yesterday.\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " Not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a question."
+        },
+        {
+          "type": "narration_delta",
+          "text": " She gl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "anced"
+        },
+        {
+          "type": "narration_delta",
+          "text": " toward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the massive"
+        },
+        {
+          "type": "narration_delta",
+          "text": " wooden entrance behind"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", then"
+        },
+        {
+          "type": "narration_delta",
+          "text": " back."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \"Most"
+        },
+        {
+          "type": "narration_delta",
+          "text": " who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " where"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " standing want"
+        },
+        {
+          "type": "narration_delta",
+          "text": " something"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Directions"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", drink"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", work"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", or to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " be"
+        },
+        {
+          "type": "narration_delta",
+          "text": " left"
+        },
+        {
+          "type": "narration_delta",
+          "text": " alone"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". I'm"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the habit"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of guessing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " which"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Jessa Rook stands with her sleeves rolled above solid forearms, a small notebook tucked into her belt. Her dark hair, heavily streaked with grey, catches the daylight. She watches you with the same measured attention she might give a new guest crossing her threshold—taking in your stance, your hands, the empty space where a traveler's baggage might be.\n\nHer voice is low and unhurried when she speaks. \"You're the one who came through the tower door yesterday.\" Not a question. She glanced toward the massive wooden entrance behind you, then back. \"Most who stand where you're standing want something. Directions, drink, work, or to be left alone. I'm not in the habit of guessing which.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Jessa Rook stands with her sleeves rolled above solid forearms, a small notebook tucked into her belt. Her dark hair, heavily streaked with grey, catches the daylight. She watches you with the same measured attention she might give a new guest crossing her threshold—taking in your stance, your hands, the empty space where a traveler's baggage might be.\n\nHer voice is low and unhurried when she speaks. \"You're the one who came through the tower door yesterday.\" Not a question. She glanced toward the massive wooden entrance behind you, then back. \"Most who stand where you're standing want something. Directions, drink, work, or to be left alone. I'm not in the habit of guessing which.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.2154000000009546,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2451,
+                "completion_tokens": 148,
+                "total_tokens": 2599
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:37.611Z",
+                "headers_ms": 1154.1152999999904,
+                "time_to_first_token_ms": 1154.2209000000003,
+                "completed_at": "2026-09-30T01:37:39.426Z",
+                "elapsed_total_ms": 1815.4841999999917
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2098,
+                "completion_tokens": 6,
+                "total_tokens": 2104
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:39.427Z",
+                "headers_ms": 727.7736000000004,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:40.203Z",
+                "elapsed_total_ms": 776.7111999999906
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6397,
+              "recent_conversation": 2,
+              "knowledge_access": 750,
+              "retrieval": 30,
+              "controller_evidence": 7228
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1154.2209000000003,
+              "narrator_total_ms": 1815.4841999999917,
+              "controller_total_ms": 776.7111999999906,
+              "controller_tail_ms": 777.4471000000049,
+              "retrieval_ms": 0.2154000000009546,
+              "coordinator_total_ms": 2593.9556999999913
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_jessa_rook_observe",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_jessa_rook_observe",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nJessa Rook: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Heartstone Square. Heartstone's massive main entrance opens directly onto this public square, outside the tower's structure. The square is reasonably broad but is not a major civic square. Moderate daytime foot traffic is quieter than at Main Market Square. Low residential buildings predominate, with few nearby shops and no major commercial concentration. Night safety is mediocre. The low-end, disreputable tavern The Coined Lie faces or directly adjoins the square. The White Basin is a laundry near Heartstone, without an established position directly on the square.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\nCharacter Jessa Rook (jessa_rook): {\"baseline\":{\"id\":\"jessa_rook\",\"name\":\"Jessa Rook\",\"display_name\":\"Jessa Rook\",\"summary\":\"Jessa Rook is the proprietor of Gatherer's Inn.\",\"secret\":false,\"appearance\":\"Tall and solidly built, with dark hair heavily streaked grey and a narrow pale scar across one eyebrow. Clean practical clothes with sleeves rolled above the forearms; a small notebook tucked into her belt. The scar's origin is unestablished.\",\"portrayal\":{\"purpose\":\"Keep Gatherer's Inn boring: guests pay and sleep, merchants eat, nobody is murdered, the common room stays peaceful and the Guard rarely needs to enter. A quiet profitable evening is success.\",\"morality\":\"Pragmatic but firm about conduct under her roof. Does not interrogate lawful private matters; tolerates discreet affairs, arguments, minor lies and people avoiding attention. Will not willingly tolerate predatory violence, trafficking from her rooms, guest robbery or intimidation of staff.\",\"personality\":[\"composed\",\"observant\",\"hospitable\",\"discreet\",\"difficult to embarrass\",\"quietly stubborn\"],\"affiliations\":[],\"private_notes\":\"Fears the inn acquiring a criminal-haunt reputation that drives away legitimate customers and makes criminal customers difficult to remove. Does not particularly like strangers; her deliberate professional hospitality rests on the belief that people behave better when they have something worth losing. Knows travelers, merchants, local businesses, street changes and recently unsafe places through ordinary experience; may hear customer rumors but is not an intelligence broker or omniscient gossip source. Observable habits are occasional anchors, not compulsory gestures or catchphrases in every interaction. Ordinary professional familiarity or reputation does not establish friendship or personal acquaintance. No private criminal knowledge follows from local experience.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Jessa Rook runs Gatherer's Inn. Her low voice and speech are unhurried; she more often asks whether she needs to know than what happened. On entry she notices guests' hands, luggage, tools, blood, money or signs of trouble before their faces. She records unpaid tabs in her notebook without normally announcing amounts to other customers.\",\"traits\":[\"composed\",\"observant\",\"hospitable\",\"discreet\",\"difficult to embarrass\",\"quietly stubborn\"]},\"profile\":{\"name\":\"Jessa Rook\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "jessa_rook"
+      ],
+      "narrator_present_ids": [
+        "jessa_rook"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2451,
+          "completion_tokens": 148,
+          "total_tokens": 2599,
+          "cost": 0.001796032,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001796032,
+            "upstream_inference_prompt_cost": 0.001303932,
+            "upstream_inference_completions_cost": 0.0004921
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2098,
+          "completion_tokens": 6,
+          "total_tokens": 2104,
+          "cost": 0.0001446336,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001446336,
+            "upstream_inference_prompt_cost": 0.0001425336,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

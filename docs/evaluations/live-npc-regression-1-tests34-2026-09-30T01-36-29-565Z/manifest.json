@@ -1,0 +1,267 @@
+{
+  "started_at": "2026-09-30T01:36:29.567Z",
+  "models": {
+    "narrator": "moonshotai/kimi-k2.5",
+    "controller": "deepseek/deepseek-v4-flash-0731:nitro"
+  },
+  "provider": "OpenRouter",
+  "retrieval": "lexical; standard live-evaluation onlineCoordinator(world, false)",
+  "rotation": [
+    "pellan",
+    "korvin",
+    "mistress_elara",
+    "bartolomhew",
+    "dren",
+    "blackthorn",
+    "captain_doran_hale",
+    "brother_aven",
+    "sister_mereth",
+    "bram_kessel",
+    "hadrik_voss",
+    "mira_thorne",
+    "livia_marr",
+    "jessa_rook",
+    "orla_fen",
+    "niles_vanner"
+  ],
+  "tests": [
+    "observe",
+    "punch"
+  ],
+  "public_dir": "docs/evaluations/live-npc-regression-1-tests34-2026-09-30T01-36-29-565Z",
+  "private_dir": ".build/live-npc-regression-1-tests34-2026-09-30T01-36-29-565Z",
+  "source_before": "7511dd748e0ed70b92af03628bb5a78a09b5cb4027da8e2f4563a08e00878d65",
+  "scene_rule": {
+    "observe": "target NPC moved to heartstone_square with Nicco (as Tests 1-2)",
+    "punch": "Nicco moved to the target NPC canonical base location when one exists (opening-state co-location retained); otherwise target NPC moved to heartstone_square"
+  },
+  "cases": [
+    {
+      "npc_id": "pellan",
+      "test": "observe",
+      "file": "pellan-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "korvin",
+      "test": "observe",
+      "file": "korvin-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "pellan",
+      "test": "punch",
+      "file": "pellan-punch.json",
+      "outcome": "success",
+      "scene_location": "calderan_center"
+    },
+    {
+      "npc_id": "mistress_elara",
+      "test": "observe",
+      "file": "mistress_elara-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "korvin",
+      "test": "punch",
+      "file": "korvin-punch.json",
+      "outcome": "success",
+      "scene_location": "calderan_slave_market"
+    },
+    {
+      "npc_id": "bartolomhew",
+      "test": "observe",
+      "file": "bartolomhew-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "mistress_elara",
+      "test": "punch",
+      "file": "mistress_elara-punch.json",
+      "outcome": "success",
+      "scene_location": "calderan_slave_market"
+    },
+    {
+      "npc_id": "bartolomhew",
+      "test": "punch",
+      "file": "bartolomhew-punch.json",
+      "outcome": "success",
+      "scene_location": "calderan_slave_market"
+    },
+    {
+      "npc_id": "dren",
+      "test": "observe",
+      "file": "dren-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "dren",
+      "test": "punch",
+      "file": "dren-punch.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "blackthorn",
+      "test": "observe",
+      "file": "blackthorn-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "blackthorn",
+      "test": "punch",
+      "file": "blackthorn-punch.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "captain_doran_hale",
+      "test": "observe",
+      "file": "captain_doran_hale-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "captain_doran_hale",
+      "test": "punch",
+      "file": "captain_doran_hale-punch.json",
+      "outcome": "success",
+      "scene_location": "west_guard_post"
+    },
+    {
+      "npc_id": "brother_aven",
+      "test": "observe",
+      "file": "brother_aven-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "brother_aven",
+      "test": "punch",
+      "file": "brother_aven-punch.json",
+      "outcome": "success",
+      "scene_location": "open_hand_chapel"
+    },
+    {
+      "npc_id": "sister_mereth",
+      "test": "observe",
+      "file": "sister_mereth-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "bram_kessel",
+      "test": "observe",
+      "file": "bram_kessel-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "sister_mereth",
+      "test": "punch",
+      "file": "sister_mereth-punch.json",
+      "outcome": "success",
+      "scene_location": "saint_orra_house"
+    },
+    {
+      "npc_id": "bram_kessel",
+      "test": "punch",
+      "file": "bram_kessel-punch.json",
+      "outcome": "success",
+      "scene_location": "the_daily_grind"
+    },
+    {
+      "npc_id": "hadrik_voss",
+      "test": "observe",
+      "file": "hadrik_voss-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "mira_thorne",
+      "test": "observe",
+      "file": "mira_thorne-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "hadrik_voss",
+      "test": "punch",
+      "file": "hadrik_voss-punch.json",
+      "outcome": "success",
+      "scene_location": "blackiron_repairs_and_arms"
+    },
+    {
+      "npc_id": "livia_marr",
+      "test": "observe",
+      "file": "livia_marr-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "mira_thorne",
+      "test": "punch",
+      "file": "mira_thorne-punch.json",
+      "outcome": "success",
+      "scene_location": "mudlarks_herbs"
+    },
+    {
+      "npc_id": "jessa_rook",
+      "test": "observe",
+      "file": "jessa_rook-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "livia_marr",
+      "test": "punch",
+      "file": "livia_marr-punch.json",
+      "outcome": "success",
+      "scene_location": "livias_needles"
+    },
+    {
+      "npc_id": "jessa_rook",
+      "test": "punch",
+      "file": "jessa_rook-punch.json",
+      "outcome": "success",
+      "scene_location": "gatherers_inn"
+    },
+    {
+      "npc_id": "orla_fen",
+      "test": "observe",
+      "file": "orla_fen-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "niles_vanner",
+      "test": "observe",
+      "file": "niles_vanner-observe.json",
+      "outcome": "success",
+      "scene_location": "heartstone_square"
+    },
+    {
+      "npc_id": "orla_fen",
+      "test": "punch",
+      "file": "orla_fen-punch.json",
+      "outcome": "success",
+      "scene_location": "the_white_basin"
+    },
+    {
+      "npc_id": "niles_vanner",
+      "test": "punch",
+      "file": "niles_vanner-punch.json",
+      "outcome": "success",
+      "scene_location": "second_chance_pawn"
+    }
+  ],
+  "finished_at": "2026-09-30T01:38:04.599Z",
+  "source_after": "7511dd748e0ed70b92af03628bb5a78a09b5cb4027da8e2f4563a08e00878d65",
+  "source_unchanged": true
+}

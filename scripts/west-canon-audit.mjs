@@ -1,0 +1,13 @@
+import { writeFile } from 'node:fs/promises';
+import { loadWorld } from '../.build/src/world/loader.js';
+import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
+import { LexicalSearch } from '../.build/src/retrieval/lexical-search.js';
+import { evaluate } from '../.build/tests/retrieval-eval/evaluate.js';
+import { runTurnRetrievalBenchmark } from '../.build/src/dev/turn-retrieval-benchmark.js';
+const stage = process.argv[2];
+if (!['before', 'after'].includes(stage)) throw new Error('Expected before or after');
+const world = await loadWorld('data'), service = new RetrievalService(world), search = new LexicalSearch(service);
+const queries = ['Calderan','West District','Heartstone','Heartstone Square','market square','slave market','slave pens','slave auction','Back Alleys','legal slavery West','illegal slave trafficking','Grey Brook','Inquisition','Light magic','Blackwater','Davenport','Back-Back Alleys','shops near Heartstone','market square ordinary shopping','illegal trafficking','public auction','licensed sellers'];
+const report = { dataset_id: world.datasetId, queries: queries.map(query => ({ query, ...Object.fromEntries(['narrator','player'].map(a => [a,search.search({query},a).candidates.map(c=>c.chunk_id ?? c.entity_id)])) })), lexical: evaluate(search), turn: await runTurnRetrievalBenchmark(world) };
+await writeFile(`docs/evaluations/calderan-west-pass1-${stage}.json`, JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({stage, lexical: {...report.lexical, rows:undefined}, turn:{...report.turn.policy,rows:undefined}}));

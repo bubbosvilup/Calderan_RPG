@@ -2,6 +2,7 @@ import { characterSearchText } from "../world/character-contract.js";
 import { compareIds } from "../world/provenance.js";
 import { EmbeddingError } from "./embedding-provider.js";
 import { isVisible } from "./policy.js";
+import { searchableRelationships } from "./relationship-policy.js";
 import { tokenize } from "./tokenizer.js";
 import { audience } from "./validation.js";
 import type { CandidateReference, RetrievalAudience, RetrievalEntitySource, RetrievalIndexSource } from "./types.js";
@@ -42,7 +43,7 @@ export function deriveSemanticDocuments(source: RetrievalIndexSource, who: Retri
   for (const e of source.entities()) {
     if (!isVisible(e.knowledge, a)) continue;
     const parent = e.parent === null ? undefined : entities.get(e.parent);
-    const relations = e.type === "character" ? e.relationships : e.type === "faction" ? e.relations : [];
+    const relations = searchableRelationships(e, a);
     add({ entity_id: e.id }, [
       `Name: ${e.name}`, ...(e.display_name !== e.name ? [`Display name: ${e.display_name}`] : []),
       ...(e.aliases.length ? [`Aliases: ${[...new Set(e.aliases)].join("; ")}`] : []),

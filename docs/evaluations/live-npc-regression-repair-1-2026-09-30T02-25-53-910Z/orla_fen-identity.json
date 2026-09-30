@@ -1,0 +1,616 @@
+{
+  "npc_id": "orla_fen",
+  "name": "Orla Fen",
+  "test": "identity",
+  "campaign_id": "npc_regression_orla_fen_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Orla Fen who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+      "result": {
+        "narration": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.09500000000116415,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "revision",
+          "draft": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's, I'd wager—no one else walks out that door like they own the street.\" She snorts, not unkindly. \"Where from? Couldn't say. Somewhere with enough to eat and not enough work, judging by the build. East of here, maybe. Center folk talk faster. You don't talk fast.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+          "issues": [
+            {
+              "kind": "household_claim",
+              "character": "an unattributed speaker",
+              "sentence": "\"New here, that's plain. Tall, soft-handed, no trade about you. The tower's, I'd wager—no one else walks out that door like they own the street.\" She snorts, not unkindly.",
+              "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+            },
+            {
+              "kind": "invented_source",
+              "character": "an unattributed speaker",
+              "sentence": "\"Where from? Couldn't say. Somewhere with enough to eat and not enough work, judging by the build. East of here, maybe. Center folk talk faster. You don't talk fast.\"",
+              "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+            }
+          ],
+          "revision": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+          "revision_issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3211,
+            "completion_tokens": 230,
+            "total_tokens": 3441
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:28:33.272Z",
+            "headers_ms": 1497.9365000000107,
+            "time_to_first_token_ms": 1498.0617000000202,
+            "completed_at": "2026-09-30T02:28:36.570Z",
+            "elapsed_total_ms": 3297.1013000000094
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3313,
+            "completion_tokens": 167,
+            "total_tokens": 3480
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:28:36.570Z",
+            "headers_ms": 2160.4040000000095,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:28:39.940Z",
+            "elapsed_total_ms": 3369.5111000000034
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6460,
+          "recent_conversation": 2,
+          "knowledge_access": 1267,
+          "retrieval": 30,
+          "controller_evidence": 7655
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1498.0617000000202,
+          "narrator_total_ms": 3297.1013000000094,
+          "controller_total_ms": 3369.5111000000034,
+          "controller_tail_ms": 17217.495400000014,
+          "retrieval_ms": 0.09500000000116415,
+          "coordinator_total_ms": 20518.987999999983
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09500000000116415,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "revision",
+              "draft": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's, I'd wager—no one else walks out that door like they own the street.\" She snorts, not unkindly. \"Where from? Couldn't say. Somewhere with enough to eat and not enough work, judging by the build. East of here, maybe. Center folk talk faster. You don't talk fast.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+              "issues": [
+                {
+                  "kind": "household_claim",
+                  "character": "an unattributed speaker",
+                  "sentence": "\"New here, that's plain. Tall, soft-handed, no trade about you. The tower's, I'd wager—no one else walks out that door like they own the street.\" She snorts, not unkindly.",
+                  "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+                },
+                {
+                  "kind": "invented_source",
+                  "character": "an unattributed speaker",
+                  "sentence": "\"Where from? Couldn't say. Somewhere with enough to eat and not enough work, judging by the build. East of here, maybe. Center folk talk faster. You don't talk fast.\"",
+                  "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+                }
+              ],
+              "revision": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+              "revision_issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3211,
+                "completion_tokens": 230,
+                "total_tokens": 3441
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:28:33.272Z",
+                "headers_ms": 1497.9365000000107,
+                "time_to_first_token_ms": 1498.0617000000202,
+                "completed_at": "2026-09-30T02:28:36.570Z",
+                "elapsed_total_ms": 3297.1013000000094
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3313,
+                "completion_tokens": 167,
+                "total_tokens": 3480
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:28:36.570Z",
+                "headers_ms": 2160.4040000000095,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:28:39.940Z",
+                "elapsed_total_ms": 3369.5111000000034
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6460,
+              "recent_conversation": 2,
+              "knowledge_access": 1267,
+              "retrieval": 30,
+              "controller_evidence": 7655
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1498.0617000000202,
+              "narrator_total_ms": 3297.1013000000094,
+              "controller_total_ms": 3369.5111000000034,
+              "controller_tail_ms": 17217.495400000014,
+              "retrieval_ms": 0.09500000000116415,
+              "coordinator_total_ms": 20518.987999999983
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_orla_fen_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_orla_fen_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nOrla Fen: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "orla_fen"
+      ],
+      "reconciliation": {
+        "delivered": "revision",
+        "draft": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's, I'd wager—no one else walks out that door like they own the street.\" She snorts, not unkindly. \"Where from? Couldn't say. Somewhere with enough to eat and not enough work, judging by the build. East of here, maybe. Center folk talk faster. You don't talk fast.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+        "issues": [
+          {
+            "kind": "household_claim",
+            "character": "an unattributed speaker",
+            "sentence": "\"New here, that's plain. Tall, soft-handed, no trade about you. The tower's, I'd wager—no one else walks out that door like they own the street.\" She snorts, not unkindly.",
+            "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+          },
+          {
+            "kind": "invented_source",
+            "character": "an unattributed speaker",
+            "sentence": "\"Where from? Couldn't say. Somewhere with enough to eat and not enough work, judging by the build. East of here, maybe. Center folk talk faster. You don't talk fast.\"",
+            "correction": "an unattributed speaker has no rumor, report, record or hearsay about Nicco or his household. Unknown is not rumor: they may say they don't know or ask."
+          }
+        ],
+        "revision": "Orla Fen looks at Nicco—up, then down—with the slow assessment of someone who spends her days judging fabric and the people who soil it. She removes her spectacles and tucks them into her apron pocket, a practiced gesture, and folds her arms across her chest.\n\n\"Who you are?\" Her voice carries, trained by years of calling over wash-kettles and mangles. \"New here, that's plain. Tall, soft-handed, no trade about you. The tower's door is right behind you and you walked out of it easy as breathing—if I had to guess, that's yours or you're borrowing it from someone who trusts you too much.\" She snorts, not unkindly. \"Where from? I don't know your accent, your clothes, or your walk. Somewhere with enough to eat and not enough work, judging by the build. Beyond that, ask someone who keeps records.\"\n\nShe shrugs, the waterproofed apron rustling. \"If you're asking whether I've heard your name, I haven't. If you're asking whether I care, I don't, long as you're not tracking filth through my square or setting fires. The Basin's there if you need it. The rest is your business.\"",
+        "revision_issues": []
+      },
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3211,
+          "completion_tokens": 230,
+          "total_tokens": 3441,
+          "cost": 0.001790826,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001790826,
+            "upstream_inference_prompt_cost": 0.001026076,
+            "upstream_inference_completions_cost": 0.00076475
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3313,
+          "completion_tokens": 167,
+          "total_tokens": 3480,
+          "cost": 0.000572764,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2683,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000572764,
+            "upstream_inference_prompt_cost": 0.000352324,
+            "upstream_inference_completions_cost": 0.00022044
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 160,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

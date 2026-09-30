@@ -40,7 +40,9 @@ test("history, schedule and route questions trigger retrieval even without topic
 test("entity mentions: near names with head equivalence, explicit names win, foreign qualifiers block, deixis resolves to the container", async () => {
   const { world, context } = await opening();
   const m = (q: string) => Object.fromEntries(entityMentions(q, context, world));
-  for (const q of ["slave market", "slave-market", "slave markets", "slave auction", "slave auctions", "slave pen", "slave pens"]) assert.equal(m(`Where is the ${q}?`).calderan_slave_market, 1, q);
+  for (const q of ["slave market", "slave-market", "slave markets", "slave auction", "slave auctions"]) assert.equal(m(`Where is the ${q}?`).calderan_slave_market, 1, q);
+  // The supplied Slave Pens alias now makes these explicit mentions.
+  for (const q of ["slave pen", "slave pens"]) assert.equal(m(`Where is the ${q}?`).calderan_slave_market, 2, q);
   assert.deepEqual(m("Where is the slave market in Davenport?"), { davenport: 2 }, "an explicitly named other city blocks the Calderan near-name");
   assert.ok(m("Where is the slave market in Calderan?").calderan_slave_market! >= 1);
   assert.equal(m("How long has this tower been empty?").heartstone, 1);

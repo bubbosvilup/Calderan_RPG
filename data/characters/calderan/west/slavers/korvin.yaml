@@ -1,0 +1,93 @@
+schema_version: 1
+entity:
+  id: korvin
+  type: character
+  name: Korvin
+  display_name: Korvin
+  parent: null
+  aliases: []
+  summary: Korvin is a commercially reliable generalist licensed slaver in the private-seller area of
+    Calderan Slave Market.
+  tags:
+    - west_npc
+  search_context: Korvin generalist licensed slaver, practical workforce purchases, Calderan Slave
+    Market private sellers.
+  content: Korvin sells enslaved people through a licensed generalist operation in the private-seller
+    area of Calderan Slave Market. His trade is practical and commercially reliable, oriented toward
+    workforce needs rather than prestige. He also has commercial and storage activity associated
+    with the Back Alleys. He does not buy or sell children under twelve. No exact building layout or
+    residence is established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Late fifties to early sixties
+  appearance: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose
+    and small, mobile, perceptive eyes. Cheap practical clothing makes him look more like a
+    warehouse worker or livestock trader than a major slaver.
+  occupation: Generalist licensed slaver
+  base_location: calderan_slave_market
+  work_location: calderan_slave_market
+  home_location: null
+  traits:
+    - gruff
+    - pragmatic
+    - poorly mannered
+    - simple lower-class speech
+    - socially perceptive
+    - suspicious
+    - experienced at reading customers
+    - not sadistic
+  purpose: "Accumulate wealth as personal independence: reach a point where nobody can command him again."
+  morality: Treats enslaved people as property and workforce and accepts coercion and violence. He is
+    not sadistic. His personal limit is refusing to buy or sell children under twelve.
+  affiliations: []
+  relationships:
+    - target: mistress_elara
+      kind: commercial_contact
+      description: A fellow licensed seller with whom Korvin has a commercial relationship; its further
+        terms are unestablished.
+    - target: bartolomhew
+      kind: commercial_contact
+      description: A fellow licensed seller with whom Korvin has a commercial relationship; no friendship
+        is inferred.
+    - target: captain_doran_hale
+      kind: civic_contact
+      description: Contact with the captain responsible for the West District City Guard; precise personal
+        terms are unestablished.
+    - target: blackthorn
+      kind: commercial_contact
+      description: Commercial contact with Blackthorn; terms and transactions are unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - korvin
+          - blackthorn
+        awareness: private
+  private_notes: The loss of a daughter long ago is the private reason for his under-twelve limit. Do
+    not volunteer this as public knowledge. He avoids the Back-Back Alleys. He does not personally
+    know Dren by default. His private instinct about Bartolomhew has not been specified.
+chunks:
+  - id: korvin.private_background
+    entity_id: korvin
+    section: private_background
+    summary: Restricted personal background and boundaries.
+    search_context: Restricted personal background and boundaries.
+    content: He lost a daughter long ago. This is why he refuses to buy or sell children under twelve.
+      He avoids the Back-Back Alleys and does not personally know Dren by default. No additional
+      history or private judgment of Bartolomhew is established.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - korvin
+      awareness: private

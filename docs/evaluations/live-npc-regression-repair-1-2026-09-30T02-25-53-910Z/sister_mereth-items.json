@@ -1,0 +1,1343 @@
+{
+  "npc_id": "sister_mereth",
+  "name": "Sister Mereth",
+  "test": "items",
+  "campaign_id": "npc_regression_sister_mereth_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "sister_mereth",
+        "position": {
+          "kind": "carried",
+          "character_id": "sister_mereth"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Sister Mereth gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them.",
+      "result": {
+        "narration": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.08859999998821877,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [
+            {
+              "command_indexes": [
+                0
+              ],
+              "source_sentence": "She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them"
+            }
+          ],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3271,
+            "completion_tokens": 139,
+            "total_tokens": 3410
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:25.221Z",
+            "headers_ms": 1369.2984999999899,
+            "time_to_first_token_ms": 1369.4507000000012,
+            "completed_at": "2026-09-30T02:27:27.051Z",
+            "elapsed_total_ms": 1829.2706999999937
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3294,
+            "completion_tokens": 365,
+            "total_tokens": 3659
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:27.051Z",
+            "headers_ms": 2278.0708000000013,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:27:31.401Z",
+            "elapsed_total_ms": 4350.159100000004
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6363,
+          "recent_conversation": 2,
+          "knowledge_access": 1272,
+          "retrieval": 30,
+          "controller_evidence": 7253
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Sister Mereth gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "sister_mereth",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1369.4507000000012,
+          "narrator_total_ms": 1829.2706999999937,
+          "controller_total_ms": 4350.159100000004,
+          "controller_tail_ms": 4354.2467999999935,
+          "retrieval_ms": 0.08859999998821877,
+          "coordinator_total_ms": 6184.527100000007
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.08859999998821877,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [
+                {
+                  "command_indexes": [
+                    0
+                  ],
+                  "source_sentence": "She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them"
+                }
+              ],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3271,
+                "completion_tokens": 139,
+                "total_tokens": 3410
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:25.221Z",
+                "headers_ms": 1369.2984999999899,
+                "time_to_first_token_ms": 1369.4507000000012,
+                "completed_at": "2026-09-30T02:27:27.051Z",
+                "elapsed_total_ms": 1829.2706999999937
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3294,
+                "completion_tokens": 365,
+                "total_tokens": 3659
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:27.051Z",
+                "headers_ms": 2278.0708000000013,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:27:31.401Z",
+                "elapsed_total_ms": 4350.159100000004
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6363,
+              "recent_conversation": 2,
+              "knowledge_access": 1272,
+              "retrieval": 30,
+              "controller_evidence": 7253
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Sister Mereth gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "sister_mereth",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1369.4507000000012,
+              "narrator_total_ms": 1829.2706999999937,
+              "controller_total_ms": 4350.159100000004,
+              "controller_tail_ms": 4354.2467999999935,
+              "retrieval_ms": 0.08859999998821877,
+              "coordinator_total_ms": 6184.527100000007
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_sister_mereth_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "heartstone_square"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_sister_mereth_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "heartstone_square"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nSister Mereth: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "sister_mereth"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Sister Mereth stands in Heartstone Square, the heavy key ring at her waist catching the light. She pulls a worn pair of leather boots from her document bag and extends them toward Nicco without ceremony. \"From Saint Orra's stores,\" she says, her voice level and practical. \"They're sturdy enough. You'll want proper footwear if you're walking Calderan's streets.\"\n\nThe boots hang in the space between them, her grey eyes meeting his with the brusque patience of someone who has given away goods too many times to make a show of it. She does not withdraw the offer, nor does she press it upon him—simply waits to see whether he will take them.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3271,
+          "completion_tokens": 139,
+          "total_tokens": 3410,
+          "cost": 0.001520171,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001520171,
+            "upstream_inference_prompt_cost": 0.001057996,
+            "upstream_inference_completions_cost": 0.000462175
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3294,
+          "completion_tokens": 365,
+          "total_tokens": 3659,
+          "cost": 0.00084554,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2635,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00084554,
+            "upstream_inference_prompt_cost": 0.00036374,
+            "upstream_inference_completions_cost": 0.0004818
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 356,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them.",
+      "result": {
+        "narration": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.18010000001231674,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3312,
+            "completion_tokens": 105,
+            "total_tokens": 3417
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:31.408Z",
+            "headers_ms": 1338.6905000000115,
+            "time_to_first_token_ms": 1338.7812000000122,
+            "completed_at": "2026-09-30T02:27:33.057Z",
+            "elapsed_total_ms": 1648.1571000000113
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3225,
+            "completion_tokens": 498,
+            "total_tokens": 3723
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:27:33.057Z",
+            "headers_ms": 1634.7475000000122,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:27:37.268Z",
+            "elapsed_total_ms": 4211.150400000013
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6363,
+          "recent_conversation": 749,
+          "knowledge_access": 1272,
+          "retrieval": 30,
+          "controller_evidence": 6984
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "unresolved",
+              "detail": {
+                "itemPhrase": "the boots",
+                "recipientPhrase": "them",
+                "reason": "no_item",
+                "form": "give_back"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1338.7812000000122,
+          "narrator_total_ms": 1648.1571000000113,
+          "controller_total_ms": 4211.150400000013,
+          "controller_tail_ms": 4212.8475000000035,
+          "retrieval_ms": 0.18010000001231674,
+          "coordinator_total_ms": 5862.474400000006
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.18010000001231674,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3312,
+                "completion_tokens": 105,
+                "total_tokens": 3417
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:31.408Z",
+                "headers_ms": 1338.6905000000115,
+                "time_to_first_token_ms": 1338.7812000000122,
+                "completed_at": "2026-09-30T02:27:33.057Z",
+                "elapsed_total_ms": 1648.1571000000113
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3225,
+                "completion_tokens": 498,
+                "total_tokens": 3723
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:27:33.057Z",
+                "headers_ms": 1634.7475000000122,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:27:37.268Z",
+                "elapsed_total_ms": 4211.150400000013
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6363,
+              "recent_conversation": 749,
+              "knowledge_access": 1272,
+              "retrieval": 30,
+              "controller_evidence": 6984
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "unresolved",
+                  "detail": {
+                    "itemPhrase": "the boots",
+                    "recipientPhrase": "them",
+                    "reason": "no_item",
+                    "form": "give_back"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1338.7812000000122,
+              "narrator_total_ms": 1648.1571000000113,
+              "controller_total_ms": 4211.150400000013,
+              "controller_tail_ms": 4212.8475000000035,
+              "retrieval_ms": 0.18010000001231674,
+              "coordinator_total_ms": 5862.474400000006
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_sister_mereth_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "heartstone_square"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_sister_mereth_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "heartstone_square"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nSister Mereth: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "sister_mereth"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Nicco thanks Sister Mereth and extends the boots back toward her. \"You'll need them more than me.\"\n\nSister Mereth does not reach for them. Her tired face goes still, then draws tighter. \"I don't need boots.\" A short pause. \"Saint Orra's children do. You're refusing them?\"\n\nShe stands with her arms at her sides, the large key ring at her belt catching the daylight, her document bag pressed against her hip. The boots remain in her hands until someone takes them.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3312,
+          "completion_tokens": 105,
+          "total_tokens": 3417,
+          "cost": 0.001118853,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3072,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001118853,
+            "upstream_inference_prompt_cost": 0.000769728,
+            "upstream_inference_completions_cost": 0.000349125
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3225,
+          "completion_tokens": 498,
+          "total_tokens": 3723,
+          "cost": 0.0009207,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2805,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0009207,
+            "upstream_inference_prompt_cost": 0.00026334,
+            "upstream_inference_completions_cost": 0.00065736
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 491,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

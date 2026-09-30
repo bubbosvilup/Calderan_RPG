@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: blackiron_repairs_and_arms
+  type: location
+  name: Blackiron Repairs & Arms
+  display_name: Blackiron Repairs & Arms
+  parent: main_market_square
+  aliases:
+    - Blackiron
+  summary: A practical weapons, armor, repair and metalwork business on Main Market Square.
+  tags:
+    - geography
+  search_context: Ordinary armor and common weapons in West; armor repair, equipment maintenance and
+    practical metalwork on Main Market Square.
+  content: Offers common weapons, ordinary armor, repairs and practical metalwork and equipment at low
+    to lower-middle, practical prices. It does not specialize in prestigious weapons, noble-grade
+    commissions or rare enchanted equipment. Hadrik Voss is the proprietor.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

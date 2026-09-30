@@ -190,3 +190,31 @@ Only record 115's evaluation fixture explicitly grounds the formerly ambiguous r
 Development qualitative checks are narrow triage for established silence, equipped boots, closed-fixture omissions, speaker labels, explicit player actions and retrieved-lore denial. They neither authorize commands nor rewrite/block production narration, and their absence is not proof of adherence. Human/agent inspection remains necessary. No automatic correction, retry or third-model grading was implemented. Multiple development evaluation batches are preserved separately, not hidden retries.
 
 See [Phase 1L.1 review](../evaluations/PHASE_1L1_REVIEW.md) for evidence, failures and the qualified readiness decision. The next major phase has not begun.
+
+## Live NPC Regression Repair 1: authoritative narration order
+
+This section supersedes the streaming note in "Authority and lifecycle". Narrator output is now a **draft**. It is buffered and never delivered until the turn is resolved:
+
+```text
+input → natural actions / participant plan → projected context → retrieval → narrator DRAFT (buffered)
+      → controller proposal on the draft → authorization → state_proposed (frozen diagnostics)
+      → prepare(runtime + authorized commands)
+      → narration audit(draft, authorization, prepared state, knowledge access)
+          ├─ no issue: deliver the draft
+          ├─ issues: ONE revision call (original prompt + draft + authoritative outcome + specific problems) → re-audit
+          └─ still failing: deterministic redaction of flagged sentences + plain outcome statement
+      → narration_delta (single, final text) → narration_completed → commit → state_committed → turn_completed
+```
+
+Event order: `turn_started, controller_started, state_proposed, narration_delta, narration_completed, state_committed, turn_completed`.
+
+Invariant: delivered narration never asserts a durable change that authorization rejected or the controller did not propose. Acceptance resolution is controller-mediated: the controller proposes from the draft, authorization decides, and a bounded reconciliation step forces the delivered text to match. Narration is released after preparation and before commit, so abandoning the iterator still commits nothing. A turn that fails after the draft exposes no narration (`turn_failed.narration` is only what was delivered). `TurnResult.narration_reconciliation` records the draft, the issues, any revision and which text was delivered. The reconciliation step never changes state.
+
+Audit checks (`src/turn/narration-audit.ts`), all bounded and structured:
+
+- **Transfers.** Any intent, rejected proposal, or possible handover between present people that the narration verifiably completes but that did not commit. It also flags a committed transfer the narration refuses.
+- **Knowledge.** NPC dialogue that states or hints at a private player fact the speaker cannot use, states Nicco's household role as known, cites an invented source (rumor, registry, "people say"), or states arrival chronology or a shared past with Nicco. Explicitly framed guesses (the marker preceding the claim, a question, or a trailing "I'd guess") pass. Household-place history (previous owners, emptiness, debts) is flagged unless retrieved canon was supplied.
+- **Presence.** Companions from authored habits ("usually accompanied by …") and named absent NPCs acting in narration.
+- **Consequences.** Class-B physical conditions narrated without a committed condition, and class-C/D constraints (restraint, removal, detention, bans) narrated as accomplished on Nicco. See [PHYSICAL_INTERACTION.md](PHYSICAL_INTERACTION.md).
+
+The audit is a safety net behind the prompt contract, not semantic policing. Known gaps are listed in [the Repair 1 report](../evaluations/CALDERAN_LIVE_NPC_REGRESSION_REPAIR_1.md).

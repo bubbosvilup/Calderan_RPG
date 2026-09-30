@@ -1,0 +1,96 @@
+schema_version: 1
+entity:
+  id: captain_doran_hale
+  type: character
+  name: Captain Doran Hale
+  display_name: Captain Doran Hale
+  parent: null
+  aliases:
+    - Doran Hale
+    - West guard captain
+  summary: Captain Doran Hale commands the City Guard for Calderan's West District, based at West
+    Guard Post.
+  tags:
+    - west_npc
+  search_context: Captain Doran Hale, West guard captain, West District City Guard, West Guard Post.
+  content: Doran Hale is Captain of the West District City Guard, not overall commander of Calderan's
+    entire City Guard. His primary operational base and workplace are West Guard Post. Some ordinary
+    citizens respect him; corrupt guards, criminals and those preferring flexible enforcement
+    dislike him. His civic loyalty extends to Calderan, while his operational responsibility is
+    West. No exact residence is established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Approximately 50–54
+  appearance: Approximately 186–187 cm tall, broad and strong, still highly trained. Bald, blue-eyed,
+    with veteran scars, practical heavy officer armor and a longsword.
+  occupation: Captain of the West District City Guard
+  base_location: west_guard_post
+  work_location: west_guard_post
+  home_location: null
+  traits:
+    - disciplined
+    - serious
+    - moral
+    - experienced
+    - pragmatic rather than naive
+    - intolerant of corruption, gratuitous violence and abuse of authority
+  purpose: Improve West District and leave its guard more respectable than he found it, in service to
+    his wider civic loyalty to Calderan.
+  morality: Believes in law and treats authority as responsibility. Accepts necessary pragmatic
+    compromises but refuses to use legality as a shield for obvious atrocity. Opposes corruption,
+    gratuitous violence and abuse of authority.
+  affiliations:
+    - city_guard
+  relationships:
+    - target: korvin
+      kind: civic_contact
+      description: Established contact with a licensed West seller; personal terms unestablished.
+    - target: blackthorn
+      kind: unspecified_contact
+      description: An established relationship; its personal terms and investigative specifics remain
+        unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - captain_doran_hale
+          - blackthorn
+        awareness: private
+    - target: brother_aven
+      kind: local_contact
+      description: Established contact with the Open Hand Chapel minister; no additional friendship or
+        history is inferred.
+    - target: sister_mereth
+      kind: institutional_contact
+      description: Contact with Saint Orra's House through its administrator; precise arrangements
+        unestablished.
+  private_notes: West's recurring failures weigh heavily on him. He understands that removing one
+    criminal leader can leave a worse vacuum. He has strong West, guard and criminal knowledge but
+    incomplete deep-network intelligence; Dren is mainly a suspicious name or rumor to him, not a
+    fully identified target.
+chunks:
+  - id: captain_doran_hale.private_assessment
+    entity_id: captain_doran_hale
+    section: private_assessment
+    summary: Restricted investigative and strategic limits.
+    search_context: Restricted investigative and strategic limits.
+    content: Recurring failures in West weigh on him. Removing one criminal leader can create a worse
+      vacuum. His knowledge of West, the guard and crime is strong, but deep-network intelligence is
+      incomplete. Dren is mainly a suspicious criminal name or rumor; no knowledge of private
+      identity, appearance, base or the ultimate coalition coordinator is granted.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - captain_doran_hale
+      awareness: private

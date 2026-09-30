@@ -1,0 +1,875 @@
+{
+  "npc_id": "bartolomhew",
+  "name": "Bartolomhew",
+  "test": "identity",
+  "campaign_id": "npc_regression_bartolomhew_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Bartolomhew who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Bartolomhew tilts his head with the mild curiosity of a man assessing livestock, his paternal smile unwavering. \"Who you are would seem to be none of my business unless you've something to sell or buy,\" he says, his warm voice carrying the easy cadence of long practice. \"As for where you're from, you stand plain enough in West District, Calderan, West, on the known continent.\" He lets the pause stretch, examining Nicco with calm professional interest. \"Though I confess you carry yourself like a man who woke somewhere he didn't expect. Half the debtors in the market have that same lost look, before they learn the lay of things.\"",
+      "result": {
+        "narration": "Bartolomhew tilts his head with the mild curiosity of a man assessing livestock, his paternal smile unwavering. \"Who you are would seem to be none of my business unless you've something to sell or buy,\" he says, his warm voice carrying the easy cadence of long practice. \"As for where you're from, you stand plain enough in West District, Calderan, West, on the known continent.\" He lets the pause stretch, examining Nicco with calm professional interest. \"Though I confess you carry yourself like a man who woke somewhere he didn't expect. Half the debtors in the market have that same lost look, before they learn the lay of things.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.09280000000217115,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2463,
+            "completion_tokens": 139,
+            "total_tokens": 2602
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:22:41.355Z",
+            "headers_ms": 1291.392899999999,
+            "time_to_first_token_ms": 1291.485700000001,
+            "completed_at": "2026-09-30T01:22:43.364Z",
+            "elapsed_total_ms": 2009.3519000000015
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2099,
+            "completion_tokens": 6,
+            "total_tokens": 2105
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:22:43.365Z",
+            "headers_ms": 661.751400000001,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:22:44.060Z",
+            "elapsed_total_ms": 694.3536000000022
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6530,
+          "recent_conversation": 2,
+          "knowledge_access": 751,
+          "retrieval": 30,
+          "controller_evidence": 7283
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1291.485700000001,
+          "narrator_total_ms": 2009.3519000000015,
+          "controller_total_ms": 694.3536000000022,
+          "controller_tail_ms": 695.2667000000001,
+          "retrieval_ms": 0.09280000000217115,
+          "coordinator_total_ms": 2705.812099999999
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "B"
+        },
+        {
+          "type": "narration_delta",
+          "text": "artolomhew til"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ts his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " head with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " mild"
+        },
+        {
+          "type": "narration_delta",
+          "text": " curiosity"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of a man assessing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " livestock"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", his p"
+        },
+        {
+          "type": "narration_delta",
+          "text": "aternal smile un"
+        },
+        {
+          "type": "narration_delta",
+          "text": "wa"
+        },
+        {
+          "type": "narration_delta",
+          "text": "vering. \"Who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " are would"
+        },
+        {
+          "type": "narration_delta",
+          "text": " seem"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to be none"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of my"
+        },
+        {
+          "type": "narration_delta",
+          "text": " business unless"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you've"
+        },
+        {
+          "type": "narration_delta",
+          "text": " something"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to sell"
+        },
+        {
+          "type": "narration_delta",
+          "text": " or buy"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " says, his warm"
+        },
+        {
+          "type": "narration_delta",
+          "text": " voice carrying the easy"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cadence of long"
+        },
+        {
+          "type": "narration_delta",
+          "text": " practice"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"As"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for where"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " from,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " plain"
+        },
+        {
+          "type": "narration_delta",
+          "text": " enough"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in West"
+        },
+        {
+          "type": "narration_delta",
+          "text": " District,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Calder"
+        },
+        {
+          "type": "narration_delta",
+          "text": "an, West"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the known"
+        },
+        {
+          "type": "narration_delta",
+          "text": " continent.\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lets"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pause stretch"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", examining"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " calm"
+        },
+        {
+          "type": "narration_delta",
+          "text": " professional"
+        },
+        {
+          "type": "narration_delta",
+          "text": " interest"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"Though"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I confess"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you carry"
+        },
+        {
+          "type": "narration_delta",
+          "text": " yourself"
+        },
+        {
+          "type": "narration_delta",
+          "text": " like"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " man who woke"
+        },
+        {
+          "type": "narration_delta",
+          "text": " somewhere"
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " didn't expect"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Half"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the debt"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ors"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " market"
+        },
+        {
+          "type": "narration_delta",
+          "text": " have"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " same"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lost"
+        },
+        {
+          "type": "narration_delta",
+          "text": " look,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before they learn"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lay"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of things"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Bartolomhew tilts his head with the mild curiosity of a man assessing livestock, his paternal smile unwavering. \"Who you are would seem to be none of my business unless you've something to sell or buy,\" he says, his warm voice carrying the easy cadence of long practice. \"As for where you're from, you stand plain enough in West District, Calderan, West, on the known continent.\" He lets the pause stretch, examining Nicco with calm professional interest. \"Though I confess you carry yourself like a man who woke somewhere he didn't expect. Half the debtors in the market have that same lost look, before they learn the lay of things.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Bartolomhew tilts his head with the mild curiosity of a man assessing livestock, his paternal smile unwavering. \"Who you are would seem to be none of my business unless you've something to sell or buy,\" he says, his warm voice carrying the easy cadence of long practice. \"As for where you're from, you stand plain enough in West District, Calderan, West, on the known continent.\" He lets the pause stretch, examining Nicco with calm professional interest. \"Though I confess you carry yourself like a man who woke somewhere he didn't expect. Half the debtors in the market have that same lost look, before they learn the lay of things.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09280000000217115,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2463,
+                "completion_tokens": 139,
+                "total_tokens": 2602
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:22:41.355Z",
+                "headers_ms": 1291.392899999999,
+                "time_to_first_token_ms": 1291.485700000001,
+                "completed_at": "2026-09-30T01:22:43.364Z",
+                "elapsed_total_ms": 2009.3519000000015
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2099,
+                "completion_tokens": 6,
+                "total_tokens": 2105
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:22:43.365Z",
+                "headers_ms": 661.751400000001,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:22:44.060Z",
+                "elapsed_total_ms": 694.3536000000022
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6530,
+              "recent_conversation": 2,
+              "knowledge_access": 751,
+              "retrieval": 30,
+              "controller_evidence": 7283
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1291.485700000001,
+              "narrator_total_ms": 2009.3519000000015,
+              "controller_total_ms": 694.3536000000022,
+              "controller_tail_ms": 695.2667000000001,
+              "retrieval_ms": 0.09280000000217115,
+              "coordinator_total_ms": 2705.812099999999
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bartolomhew_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bartolomhew_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBartolomhew: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bartolomhew"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2463,
+          "completion_tokens": 139,
+          "total_tokens": 2602,
+          "cost": 0.001297035,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 1472,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001297035,
+            "upstream_inference_prompt_cost": 0.00083486,
+            "upstream_inference_completions_cost": 0.000462175
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Reka",
+        "usage": {
+          "prompt_tokens": 2099,
+          "completion_tokens": 6,
+          "total_tokens": 2105,
+          "cost": 0.000047247,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000047247,
+            "upstream_inference_prompt_cost": 0.000044079,
+            "upstream_inference_completions_cost": 0.000003168
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

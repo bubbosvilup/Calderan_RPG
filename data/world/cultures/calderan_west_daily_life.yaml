@@ -1,0 +1,43 @@
+schema_version: 1
+entity:
+  id: calderan_west_daily_life
+  type: world_lore
+  name: Daily Life in West District
+  display_name: Daily Life in West District
+  parent: null
+  aliases: []
+  summary: Social life in Calderan West includes working families, refugees, street children, adult
+    sex work and varied exposure to crime across an informal urban gradient.
+  tags:
+    - society
+  search_context: Calderan West social conditions, refugees, street children, adult sex work, crime and charity.
+  content: Inner-facing West has fewer unsupervised children; schooling is more common among stable
+    families. Between the more prosperous and outer portions, children may help family businesses,
+    sell small goods, act as news criers, carry messages or do small jobs. This is not an official
+    middle subdistrict. In outer West, street children are more common; some form small survival
+    groups or gangs and some steal or pick pockets. Many are not malicious and act from poverty,
+    abandonment, family loss or avoidance of institutions. West currently contains refugees and
+    displaced people due in part to current frontier skirmishes. Many seek charity; a larger
+    concentration tends toward North because of temples and religious charities. Those in outer West
+    may seek work, beg, sleep rough or become vulnerable to crime and trafficking. Exact origins and
+    populations are unestablished; current CampaignState overrides these current-state assumptions.
+    Adult sex work includes low-end establishments and street solicitation in outer West, where
+    criminal involvement or coercive economic conditions may occur; more prosperous West has
+    higher-end adult escorts and appointment-based companionship with less visible street presence.
+    All sex workers referenced are adults. Crime includes pickpocketing, theft, small street gangs,
+    organized gangs, fencing, loan sharks, smuggling, trafficking, bribery and forged documents.
+    Poor people are not inherently criminal. Outer areas are more dangerous after dark. No full
+    newspaper system, criminal code or exact crime rates are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  category: cultures
+  related_entities:
+    - calderan_west
+    - calderan_north
+    - saint_orra_house
+    - open_hand_chapel
+chunks: []

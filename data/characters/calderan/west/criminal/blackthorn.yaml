@@ -1,0 +1,135 @@
+schema_version: 1
+entity:
+  id: blackthorn
+  type: character
+  name: Blackthorn
+  display_name: Blackthorn
+  parent: null
+  aliases: []
+  summary: Blackthorn is a commercially skilled West intermediary associated with discreet business
+    and GW's.
+  tags:
+    - west_npc
+  search_context: Blackthorn commercial intermediary in West, GW's.
+  content: Blackthorn is a pragmatic commercial intermediary who handles buying, selling, shipments
+    and important customers. She is physically non-intimidating herself and is usually accompanied
+    by two large bodyguards, who are not separately authored characters. She is not primarily an
+    assassin or enforcer. Her residence is unestablished.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  role: npc
+  species: Human
+  sex: female
+  age_band: null
+  appearance: Short, approximately 155–160 cm, with a distinctly round build, aubergine-purple
+    tailored suit, black bob haircut and nearly black eyes. Usually accompanied by two large
+    bodyguards.
+  occupation: Commercial intermediary and operational manager of GW's
+  base_location: null
+  work_location: gws
+  home_location: null
+  traits:
+    - extremely pragmatic
+    - commercially gifted
+    - impatient
+    - organized
+    - strong with numbers and logistics
+    - hates delays, incompetence and wasted time
+    - ordinary emotions with essentially no moral concern for victims
+  purpose: Genuine loyalty to and admiration for Dren's competence. She wants him to advance within
+    the coalition and hopes eventually to inherit his current organizational position.
+  morality: Experiences ordinary emotions but has essentially no moral concern for victims. Focuses on
+    efficient commerce and logistics; uses violent subordinates when force is needed rather than
+    acting as the primary enforcer.
+  affiliations:
+    - carrion_dogs
+  relationships:
+    - target: dren
+      kind: lieutenant
+      description: His commercial/administrative lieutenant, genuinely loyal through admiration of his
+        competence and ambitious for succession to his current position.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - blackthorn
+          - dren
+        awareness: private
+    - target: korvin
+      kind: commercial_contact
+      description: Commercial contact; exact transactions unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - blackthorn
+          - korvin
+        awareness: private
+    - target: mistress_elara
+      kind: commercial_contact
+      description: Commercial contact; exact transactions unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - blackthorn
+          - mistress_elara
+        awareness: private
+    - target: bartolomhew
+      kind: commercial_contact
+      description: Commercial contact involving intermediated criminal trade; exact transactions unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - blackthorn
+          - bartolomhew
+        awareness: private
+    - target: captain_doran_hale
+      kind: unspecified_contact
+      description: An established relationship with the West guard captain; precise personal terms are
+        unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - blackthorn
+          - captain_doran_hale
+        awareness: private
+  private_notes: Lieutenant and commercial/administrative arm of the Carrion Dogs. Handles trafficking
+    logistics, Back-Back Alley negotiations, important clients, external slavers and security
+    coordination as well as GW's. Knows Dren's identity, appearance and base, many intermediaries,
+    major depots/routes and much of the organization; not all higher coalition secrets. Habitual
+    patterns are not runtime schedules.
+chunks:
+  - id: blackthorn.private_operations
+    entity_id: blackthorn
+    section: private_operations
+    summary: Restricted organizational knowledge and habitual activity.
+    search_context: Restricted organizational knowledge and habitual activity.
+    content: She is Dren's lieutenant and the commercial/administrative arm of the Carrion Dogs. Handles
+      buying/selling, shipments, trafficking logistics, Back-Back Alley negotiations, important
+      clients, external slavers, security coordination and GW's operational management. She knows
+      Dren's identity, appearance and base, much of Carrion Dogs operations, major depots/routes,
+      Back-Back Alley structure and many intermediaries, but not all higher coalition secrets. No
+      exact route or depot inventory is established here. Often in the Back-Back Alleys in the
+      afternoon and at GW's in the evening/night; weekly early-morning river/warehouse shipment
+      activity. These are habits, not guaranteed presence, exact times or recurring runtime events.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - blackthorn
+        - dren
+      awareness: private

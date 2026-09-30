@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: saint_orra_house
+  type: location
+  name: Saint Orra's House
+  display_name: Saint Orra's House
+  parent: calderan_west
+  aliases: []
+  summary: An orphan shelter and child charity in outer West, broadly near but not directly adjacent
+    to Calderan Slave Market.
+  tags:
+    - geography
+  search_context: An orphan shelter and child charity in outer West, broadly near but not directly
+    adjacent to Calderan Slave Market.
+  content: "The shelter houses vulnerable children and tries to keep them off the street. Capacity and
+    resources are limited; some street children refuse or leave institutional care. It maintains
+    ties to charitable religious organizations in North. Reports and concerns say some children have
+    disappeared over time. The reason is unestablished: no cause, responsible party or outcome may
+    be inferred. The name establishes no saint biography or new character. Sister Mereth is its
+    administrator and principal public representative."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

@@ -1,0 +1,1329 @@
+{
+  "npc_id": "mira_thorne",
+  "name": "Mira Thorne",
+  "test": "items",
+  "campaign_id": "npc_regression_mira_thorne_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "mira_thorne",
+        "position": {
+          "kind": "carried",
+          "character_id": "mira_thorne"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Mira Thorne gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside.",
+      "result": {
+        "narration": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.06380000000353903,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3344,
+            "completion_tokens": 159,
+            "total_tokens": 3503
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:28:01.337Z",
+            "headers_ms": 1690.6244000000006,
+            "time_to_first_token_ms": 1690.713499999998,
+            "completed_at": "2026-09-30T02:28:05.456Z",
+            "elapsed_total_ms": 4118.842400000009
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3387,
+            "completion_tokens": 182,
+            "total_tokens": 3569
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:28:05.456Z",
+            "headers_ms": 3045.388200000016,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:28:09.594Z",
+            "elapsed_total_ms": 4137.111000000004
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6777,
+          "recent_conversation": 2,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7758
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Mira Thorne gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "mira_thorne",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1690.713499999998,
+          "narrator_total_ms": 4118.842400000009,
+          "controller_total_ms": 4137.111000000004,
+          "controller_tail_ms": 4139.613299999997,
+          "retrieval_ms": 0.06380000000353903,
+          "coordinator_total_ms": 8259.890200000009
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.06380000000353903,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3344,
+                "completion_tokens": 159,
+                "total_tokens": 3503
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:28:01.337Z",
+                "headers_ms": 1690.6244000000006,
+                "time_to_first_token_ms": 1690.713499999998,
+                "completed_at": "2026-09-30T02:28:05.456Z",
+                "elapsed_total_ms": 4118.842400000009
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3387,
+                "completion_tokens": 182,
+                "total_tokens": 3569
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:28:05.456Z",
+                "headers_ms": 3045.388200000016,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:28:09.594Z",
+                "elapsed_total_ms": 4137.111000000004
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6777,
+              "recent_conversation": 2,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7758
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Mira Thorne gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "mira_thorne",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1690.713499999998,
+              "narrator_total_ms": 4118.842400000009,
+              "controller_total_ms": 4137.111000000004,
+              "controller_tail_ms": 4139.613299999997,
+              "retrieval_ms": 0.06380000000353903,
+              "coordinator_total_ms": 8259.890200000009
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mira_thorne_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mira_thorne_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nMira Thorne: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "mira_thorne"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Mira Thorne regards you with her usual assessing look, plant-stained fingertips tucked into the pockets of her layered clothes. \"You're the one who took Heartstone, then,\" she says, not quite a question. She studies your worn shoes for a moment, nose wrinkling slightly. \"Those won't do for winter. Take these.\" She pulls a pair of leather boots from her satchel—sturdy, well-made, clearly not new but carefully maintained.\n\nShe holds them out without ceremony, waiting to see if you'll accept.\n\nThe square around you carries its ordinary daytime murmur: a few passersby, the low buildings, the bulk of Heartstone's entrance behind you. The Coined Lie sits somewhere nearby, its reputation plain enough even if you haven't been inside.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3344,
+          "completion_tokens": 159,
+          "total_tokens": 3503,
+          "cost": 0.001439459,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2688,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001439459,
+            "upstream_inference_prompt_cost": 0.000910784,
+            "upstream_inference_completions_cost": 0.000528675
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3387,
+          "completion_tokens": 182,
+          "total_tokens": 3569,
+          "cost": 0.000614412,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2709,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000614412,
+            "upstream_inference_prompt_cost": 0.000374172,
+            "upstream_inference_completions_cost": 0.00024024
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 174,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood.",
+      "result": {
+        "narration": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.0764000000199303,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood.",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3379,
+            "completion_tokens": 154,
+            "total_tokens": 3533
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:28:09.599Z",
+            "headers_ms": 1329.8745000000054,
+            "time_to_first_token_ms": 1333.2932999999903,
+            "completed_at": "2026-09-30T02:28:11.914Z",
+            "elapsed_total_ms": 2315.5185000000056
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3343,
+            "completion_tokens": 318,
+            "total_tokens": 3661
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:28:11.915Z",
+            "headers_ms": 2165.679200000013,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:28:15.991Z",
+            "elapsed_total_ms": 4076.278100000025
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6777,
+          "recent_conversation": 842,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7635
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "unresolved",
+              "detail": {
+                "itemPhrase": "the boots",
+                "recipientPhrase": "them",
+                "reason": "no_item",
+                "form": "give_back"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1333.2932999999903,
+          "narrator_total_ms": 2315.5185000000056,
+          "controller_total_ms": 4076.278100000025,
+          "controller_tail_ms": 4077.942700000014,
+          "retrieval_ms": 0.0764000000199303,
+          "coordinator_total_ms": 6394.453899999993
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0764000000199303,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood.",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3379,
+                "completion_tokens": 154,
+                "total_tokens": 3533
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:28:09.599Z",
+                "headers_ms": 1329.8745000000054,
+                "time_to_first_token_ms": 1333.2932999999903,
+                "completed_at": "2026-09-30T02:28:11.914Z",
+                "elapsed_total_ms": 2315.5185000000056
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3343,
+                "completion_tokens": 318,
+                "total_tokens": 3661
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:28:11.915Z",
+                "headers_ms": 2165.679200000013,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:28:15.991Z",
+                "elapsed_total_ms": 4076.278100000025
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6777,
+              "recent_conversation": 842,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7635
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "unresolved",
+                  "detail": {
+                    "itemPhrase": "the boots",
+                    "recipientPhrase": "them",
+                    "reason": "no_item",
+                    "form": "give_back"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1333.2932999999903,
+              "narrator_total_ms": 2315.5185000000056,
+              "controller_total_ms": 4076.278100000025,
+              "controller_tail_ms": 4077.942700000014,
+              "retrieval_ms": 0.0764000000199303,
+              "coordinator_total_ms": 6394.453899999993
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mira_thorne_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mira_thorne_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nMira Thorne: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "mira_thorne"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Nicco thanks Mira Thorne, then decides to return the boots—whatever his reasoning, the offer is declined in full.\n\nMira's brows go slightly flat. She does not reach for the boots. \"Keep them or don't,\" she says. \"I'm not a cobbler holding stock.\" She turns her shoulder a fraction, not quite away, and her attention drifts toward the tower entrance with the same evaluating look she'd given it before. The winter comment hangs; she does not repeat it.\n\nFoot traffic passes through the square—an older woman with a wrapped bundle, two boys kicking a stone between them. No one lingers. The Heartstone doors stand massive and closed behind the exchange, the afternoon light falling flat on the old wood.",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3379,
+          "completion_tokens": 154,
+          "total_tokens": 3533,
+          "cost": 0.001276078,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3200,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001276078,
+            "upstream_inference_prompt_cost": 0.000764028,
+            "upstream_inference_completions_cost": 0.00051205
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3343,
+          "completion_tokens": 318,
+          "total_tokens": 3661,
+          "cost": 0.000761388,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2741,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000761388,
+            "upstream_inference_prompt_cost": 0.000341628,
+            "upstream_inference_completions_cost": 0.00041976
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 311,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

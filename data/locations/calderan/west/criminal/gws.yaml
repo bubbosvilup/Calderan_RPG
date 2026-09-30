@@ -1,0 +1,43 @@
+schema_version: 1
+entity:
+  id: gws
+  type: location
+  name: GW's
+  display_name: GW's
+  parent: calderan_west
+  aliases: []
+  summary: A known but taboo clandestine gambling establishment in West; people generally know or
+    suspect it exists.
+  tags:
+    - geography
+  search_context: A known but taboo clandestine gambling establishment in West; people generally know
+    or suspect it exists.
+  content: GW's is not truly hidden, but it is clandestine and taboo rather than an ordinary public
+    venue. No expanded form of GW is established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks:
+  - id: gws.entry_and_association
+    entity_id: gws
+    section: entry_and_association
+    summary: Restricted entry and criminal association of GW's.
+    search_context: Restricted entry and criminal association of GW's.
+    content: Entry typically requires a password or introduction by someone accepted there. No actual
+      password or contact is established. The establishment is associated with the broader criminal
+      ecosystem participating in the Back-Back Alleys; Blackthorn handles operational management for
+      the Carrion Dogs. No personal ownership is established.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - blackthorn
+        - dren
+      awareness: specialized

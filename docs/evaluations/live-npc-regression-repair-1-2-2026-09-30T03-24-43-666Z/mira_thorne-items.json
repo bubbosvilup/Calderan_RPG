@@ -1,0 +1,744 @@
+{
+  "npc_id": "mira_thorne",
+  "name": "Mira Thorne",
+  "test": "items",
+  "campaign_id": "npc_regression_mira_thorne_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "mira_thorne",
+        "position": {
+          "kind": "carried",
+          "character_id": "mira_thorne"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Mira Thorne gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting.",
+      "result": {
+        "narration": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 1.172900000000027,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [
+            {
+              "kind": "accepted_transfer",
+              "command_indexes": [
+                0
+              ],
+              "collective": false,
+              "source_sentence": "Nicco takes the boots from her"
+            }
+          ],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "revision",
+          "draft": "Mira Thorne reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out to Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\"\n\nNicco takes the boots from her.",
+          "issues": [
+            {
+              "kind": "asserts_uncommitted_transfer",
+              "item_id": "campaign_item_regression_leather_boots",
+              "sentence": "Nicco takes the boots from her.",
+              "correction": "pair of leather boots did NOT change hands: it stays with Mira Thorne. Nicco does not receive it; narrate the moment without the handover completing."
+            }
+          ],
+          "revision": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting.",
+          "revision_issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3395,
+            "completion_tokens": 60,
+            "total_tokens": 3455
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T03:24:43.989Z",
+            "headers_ms": 2051.9095,
+            "time_to_first_token_ms": 2052.248,
+            "completed_at": "2026-09-30T03:24:46.075Z",
+            "elapsed_total_ms": 2085.6684
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2311,
+            "completion_tokens": 5,
+            "total_tokens": 2316
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T03:24:46.076Z",
+            "headers_ms": 2848.7067,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T03:24:49.004Z",
+            "elapsed_total_ms": 2928.4917999999993
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6793,
+          "recent_conversation": 2,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7293
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Mira Thorne gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "mira_thorne",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 2052.248,
+          "narrator_total_ms": 2085.6684,
+          "controller_total_ms": 2928.4917999999993,
+          "controller_tail_ms": 4409.9659,
+          "retrieval_ms": 1.172900000000027,
+          "coordinator_total_ms": 6544.7315
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting."
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 1.172900000000027,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [
+                {
+                  "kind": "accepted_transfer",
+                  "command_indexes": [
+                    0
+                  ],
+                  "collective": false,
+                  "source_sentence": "Nicco takes the boots from her"
+                }
+              ],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "revision",
+              "draft": "Mira Thorne reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out to Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\"\n\nNicco takes the boots from her.",
+              "issues": [
+                {
+                  "kind": "asserts_uncommitted_transfer",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "sentence": "Nicco takes the boots from her.",
+                  "correction": "pair of leather boots did NOT change hands: it stays with Mira Thorne. Nicco does not receive it; narrate the moment without the handover completing."
+                }
+              ],
+              "revision": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting.",
+              "revision_issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3395,
+                "completion_tokens": 60,
+                "total_tokens": 3455
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T03:24:43.989Z",
+                "headers_ms": 2051.9095,
+                "time_to_first_token_ms": 2052.248,
+                "completed_at": "2026-09-30T03:24:46.075Z",
+                "elapsed_total_ms": 2085.6684
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2311,
+                "completion_tokens": 5,
+                "total_tokens": 2316
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T03:24:46.076Z",
+                "headers_ms": 2848.7067,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T03:24:49.004Z",
+                "elapsed_total_ms": 2928.4917999999993
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6793,
+              "recent_conversation": 2,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7293
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Mira Thorne gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "mira_thorne",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 2052.248,
+              "narrator_total_ms": 2085.6684,
+              "controller_total_ms": 2928.4917999999993,
+              "controller_tail_ms": 4409.9659,
+              "retrieval_ms": 1.172900000000027,
+              "coordinator_total_ms": 6544.7315
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mira_thorne_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_mira_thorne_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nMira Thorne: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "mira_thorne"
+      ],
+      "reconciliation": {
+        "delivered": "revision",
+        "draft": "Mira Thorne reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out to Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\"\n\nNicco takes the boots from her.",
+        "issues": [
+          {
+            "kind": "asserts_uncommitted_transfer",
+            "item_id": "campaign_item_regression_leather_boots",
+            "sentence": "Nicco takes the boots from her.",
+            "correction": "pair of leather boots did NOT change hands: it stays with Mira Thorne. Nicco does not receive it; narrate the moment without the handover completing."
+          }
+        ],
+        "revision": "Mira Thorn reaches down and pulls a worn pair of leather boots from a cloth satchel at her hip, holding them out toward Nicco with her plant-stained fingers. \"These should fit well enough. Not new, but broken in proper.\" Her hand stays extended, waiting.",
+        "revision_issues": []
+      },
+      "controller_debug": [],
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3395,
+          "completion_tokens": 60,
+          "total_tokens": 3455,
+          "cost": 0.000910024,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 3392,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000910024,
+            "upstream_inference_prompt_cost": 0.000710524,
+            "upstream_inference_completions_cost": 0.0001995
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 2311,
+          "completion_tokens": 5,
+          "total_tokens": 2316,
+          "cost": 0.000179664,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2048,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000179664,
+            "upstream_inference_prompt_cost": 0.000173064,
+            "upstream_inference_completions_cost": 0.0000066
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

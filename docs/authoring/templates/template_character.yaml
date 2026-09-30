@@ -35,5 +35,7 @@ entity:
   # summary above is the public_summary; traits below are stable personality tendencies.
   traits: []
   relationships: []
+  # Character edges: target, kind, description; optional knowledge narrows access.
+  # Restricted edge prose is excluded from public-owner search documents.
 # Add coherent passages only when supplied detail or visibility warrants them.
 chunks: []

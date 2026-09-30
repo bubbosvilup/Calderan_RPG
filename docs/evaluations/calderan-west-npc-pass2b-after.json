@@ -1,0 +1,2527 @@
+{
+  "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+  "queries": [
+    {
+      "query": "Bram Kessel",
+      "narrator": [
+        "bram_kessel",
+        "the_daily_grind"
+      ],
+      "player": [
+        "bram_kessel",
+        "the_daily_grind"
+      ]
+    },
+    {
+      "query": "The Daily Grind",
+      "narrator": [
+        "the_daily_grind",
+        "bram_kessel",
+        "main_market_square",
+        "calderan_west_daily_life",
+        "chevalier_fountain"
+      ],
+      "player": [
+        "the_daily_grind",
+        "bram_kessel",
+        "main_market_square",
+        "calderan_west_daily_life",
+        "chevalier_fountain"
+      ]
+    },
+    {
+      "query": "Hadrik Voss",
+      "narrator": [
+        "hadrik_voss",
+        "blackiron_repairs_and_arms"
+      ],
+      "player": [
+        "hadrik_voss",
+        "blackiron_repairs_and_arms"
+      ]
+    },
+    {
+      "query": "Blackiron",
+      "narrator": [
+        "blackiron_repairs_and_arms",
+        "hadrik_voss",
+        "main_market_square"
+      ],
+      "player": [
+        "blackiron_repairs_and_arms",
+        "hadrik_voss",
+        "main_market_square"
+      ]
+    },
+    {
+      "query": "Mira Thorne",
+      "narrator": [
+        "mira_thorne",
+        "mudlarks_herbs"
+      ],
+      "player": [
+        "mira_thorne",
+        "mudlarks_herbs"
+      ]
+    },
+    {
+      "query": "Mudlark",
+      "narrator": [
+        "mudlarks_herbs",
+        "mira_thorne",
+        "main_market_square"
+      ],
+      "player": [
+        "mudlarks_herbs",
+        "mira_thorne",
+        "main_market_square"
+      ]
+    },
+    {
+      "query": "Livia Marr",
+      "narrator": [
+        "livia_marr",
+        "livias_needles",
+        "main_market_square"
+      ],
+      "player": [
+        "livia_marr",
+        "livias_needles",
+        "main_market_square"
+      ]
+    },
+    {
+      "query": "Livia's Needles",
+      "narrator": [
+        "livias_needles",
+        "livia_marr",
+        "main_market_square"
+      ],
+      "player": [
+        "livias_needles",
+        "livia_marr",
+        "main_market_square"
+      ]
+    },
+    {
+      "query": "Jessa Rook",
+      "narrator": [
+        "jessa_rook",
+        "gatherers_inn"
+      ],
+      "player": [
+        "jessa_rook",
+        "gatherers_inn"
+      ]
+    },
+    {
+      "query": "Gatherer's Inn",
+      "narrator": [
+        "gatherers_inn",
+        "jessa_rook",
+        "calderan_south"
+      ],
+      "player": [
+        "gatherers_inn",
+        "jessa_rook",
+        "calderan_south"
+      ]
+    },
+    {
+      "query": "Orla Fen",
+      "narrator": [
+        "orla_fen",
+        "the_white_basin"
+      ],
+      "player": [
+        "orla_fen",
+        "the_white_basin"
+      ]
+    },
+    {
+      "query": "White Basin",
+      "narrator": [
+        "the_white_basin",
+        "orla_fen",
+        "heartstone_square",
+        "bartolomhew",
+        "niles_vanner"
+      ],
+      "player": [
+        "the_white_basin",
+        "orla_fen",
+        "heartstone_square",
+        "bartolomhew",
+        "niles_vanner"
+      ]
+    },
+    {
+      "query": "Niles Vanner",
+      "narrator": [
+        "niles_vanner",
+        "second_chance_pawn"
+      ],
+      "player": [
+        "niles_vanner",
+        "second_chance_pawn"
+      ]
+    },
+    {
+      "query": "Second Chance Pawn",
+      "narrator": [
+        "second_chance_pawn",
+        "niles_vanner",
+        "main_market_square",
+        "calderan",
+        "heartstone_lr"
+      ],
+      "player": [
+        "second_chance_pawn",
+        "niles_vanner",
+        "main_market_square",
+        "calderan",
+        "heartstone_lr"
+      ]
+    },
+    {
+      "query": "food delivery West",
+      "narrator": [
+        "the_daily_grind",
+        "bram_kessel",
+        "sister_mereth",
+        "heartstone_lr",
+        "heartstone_u1"
+      ],
+      "player": [
+        "the_daily_grind",
+        "bram_kessel",
+        "sister_mereth",
+        "heartstone_lr",
+        "heartstone_u1"
+      ]
+    },
+    {
+      "query": "ordinary armor West",
+      "narrator": [
+        "blackiron_repairs_and_arms",
+        "captain_doran_hale",
+        "livias_needles",
+        "calderan_west",
+        "west_governance"
+      ],
+      "player": [
+        "blackiron_repairs_and_arms",
+        "captain_doran_hale",
+        "livias_needles",
+        "calderan_west",
+        "west_governance"
+      ]
+    },
+    {
+      "query": "herbalist West",
+      "narrator": [
+        "mudlarks_herbs",
+        "mira_thorne",
+        "calderan_west",
+        "calderan_west_daily_life",
+        "west"
+      ],
+      "player": [
+        "mudlarks_herbs",
+        "mira_thorne",
+        "calderan_west",
+        "calderan_west_daily_life",
+        "west"
+      ]
+    },
+    {
+      "query": "clothes West",
+      "narrator": [
+        "livias_needles",
+        "bram_kessel",
+        "jessa_rook",
+        "mira_thorne",
+        "orla_fen"
+      ],
+      "player": [
+        "livias_needles",
+        "bram_kessel",
+        "jessa_rook",
+        "mira_thorne",
+        "orla_fen"
+      ]
+    },
+    {
+      "query": "inn near Heartstone",
+      "narrator": [
+        "gatherers_inn",
+        "heartstone",
+        "heartstone_cy",
+        "heartstone_lr",
+        "heartstone_square"
+      ],
+      "player": [
+        "gatherers_inn",
+        "heartstone",
+        "heartstone_cy",
+        "heartstone_lr",
+        "heartstone_square"
+      ]
+    },
+    {
+      "query": "laundry near Heartstone",
+      "narrator": [
+        "the_white_basin",
+        "heartstone_cy",
+        "heartstone_square",
+        "heartstone",
+        "heartstone_lr"
+      ],
+      "player": [
+        "the_white_basin",
+        "heartstone_cy",
+        "heartstone_square",
+        "heartstone",
+        "heartstone_lr"
+      ]
+    },
+    {
+      "query": "pawn shop West",
+      "narrator": [
+        "second_chance_pawn",
+        "main_market_square",
+        "niles_vanner",
+        "calderan_west",
+        "heartstone_square"
+      ],
+      "player": [
+        "second_chance_pawn",
+        "main_market_square",
+        "niles_vanner",
+        "calderan_west",
+        "heartstone_square"
+      ]
+    },
+    {
+      "query": "shops near Heartstone",
+      "narrator": [
+        "heartstone_square",
+        "main_market_square",
+        "calderan_west",
+        "second_chance_pawn",
+        "heartstone"
+      ],
+      "player": [
+        "heartstone_square",
+        "main_market_square",
+        "second_chance_pawn",
+        "calderan_west",
+        "heartstone"
+      ]
+    },
+    {
+      "query": "Main Market Square",
+      "narrator": [
+        "main_market_square",
+        "heartstone_square",
+        "calderan_slave_market",
+        "main_city_structure",
+        "blackiron_repairs_and_arms"
+      ],
+      "player": [
+        "main_market_square",
+        "heartstone_square",
+        "calderan_slave_market",
+        "main_city_structure",
+        "blackiron_repairs_and_arms"
+      ]
+    },
+    {
+      "query": "where can I buy food?",
+      "narrator": [
+        "the_daily_grind",
+        "bram_kessel",
+        "korvin",
+        "korvin.private_background",
+        "heartstone_lr"
+      ],
+      "player": [
+        "the_daily_grind",
+        "korvin",
+        "bram_kessel",
+        "heartstone_lr",
+        "heartstone_u1"
+      ]
+    },
+    {
+      "query": "where can I repair armor?",
+      "narrator": [
+        "blackiron_repairs_and_arms",
+        "livias_needles",
+        "captain_doran_hale",
+        "hadrik_voss",
+        "main_market_square"
+      ],
+      "player": [
+        "blackiron_repairs_and_arms",
+        "livias_needles",
+        "captain_doran_hale",
+        "hadrik_voss",
+        "main_market_square"
+      ]
+    },
+    {
+      "query": "Who owns The Daily Grind?",
+      "narrator": [
+        "the_daily_grind",
+        "bram_kessel",
+        "main_market_square",
+        "calderan_west_daily_life",
+        "calderan_slave_market"
+      ],
+      "player": [
+        "the_daily_grind",
+        "bram_kessel",
+        "main_market_square",
+        "calderan_west_daily_life",
+        "calderan_slave_market"
+      ]
+    }
+  ],
+  "west_pass1": [
+    {
+      "query": "Calderan",
+      "narrator": [
+        "calderan",
+        "calderan_center",
+        "calderan_east",
+        "calderan_north",
+        "calderan_slave_market"
+      ],
+      "player": [
+        "calderan",
+        "calderan_center",
+        "calderan_east",
+        "calderan_north",
+        "calderan_slave_market"
+      ]
+    },
+    {
+      "query": "West District",
+      "narrator": [
+        "calderan_west",
+        "calderan_west_daily_life",
+        "calderan_slave_market",
+        "main_city_structure",
+        "west_guard_post"
+      ],
+      "player": [
+        "calderan_west",
+        "calderan_west_daily_life",
+        "calderan_slave_market",
+        "main_city_structure",
+        "west_guard_post"
+      ]
+    },
+    {
+      "query": "Heartstone",
+      "narrator": [
+        "heartstone",
+        "heartstone_cy",
+        "heartstone_f1",
+        "heartstone_lr",
+        "heartstone_square"
+      ],
+      "player": [
+        "heartstone",
+        "heartstone_cy",
+        "heartstone_f1",
+        "heartstone_lr",
+        "heartstone_square"
+      ]
+    },
+    {
+      "query": "Heartstone Square",
+      "narrator": [
+        "heartstone_square",
+        "main_market_square",
+        "chevalier_fountain",
+        "gatherers_inn",
+        "the_coined_lie"
+      ],
+      "player": [
+        "heartstone_square",
+        "main_market_square",
+        "chevalier_fountain",
+        "gatherers_inn",
+        "the_coined_lie"
+      ]
+    },
+    {
+      "query": "market square",
+      "narrator": [
+        "main_market_square",
+        "calderan_slave_market",
+        "heartstone_square",
+        "blackiron_repairs_and_arms",
+        "chevalier_fountain"
+      ],
+      "player": [
+        "main_market_square",
+        "calderan_slave_market",
+        "heartstone_square",
+        "blackiron_repairs_and_arms",
+        "chevalier_fountain"
+      ]
+    },
+    {
+      "query": "slave market",
+      "narrator": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "slave_market_back_back_alleys",
+        "slave_market_back_back_alleys.criminal_interior"
+      ],
+      "player": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "slave_market_back_back_alleys",
+        "calderan",
+        "davenport"
+      ]
+    },
+    {
+      "query": "slave pens",
+      "narrator": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "slave_market_back_back_alleys",
+        "slave_market_back_back_alleys.criminal_interior"
+      ],
+      "player": [
+        "calderan_slave_market",
+        "slave_market_back_alleys",
+        "slave_market_back_back_alleys",
+        "calderan",
+        "davenport"
+      ]
+    },
+    {
+      "query": "slave auction",
+      "narrator": [
+        "calderan_slave_market",
+        "davenport",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "slave_market_back_back_alleys"
+      ],
+      "player": [
+        "calderan_slave_market",
+        "davenport",
+        "slave_market_back_alleys",
+        "slave_market_back_back_alleys",
+        "calderan"
+      ]
+    },
+    {
+      "query": "Back Alleys",
+      "narrator": [
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "slave_market_back_back_alleys",
+        "slave_market_back_back_alleys.criminal_interior",
+        "slave_market_back_back_alleys.criminal_network"
+      ],
+      "player": [
+        "slave_market_back_alleys",
+        "slave_market_back_back_alleys",
+        "bartolomhew",
+        "calderan_slave_market",
+        "carrion_dogs"
+      ]
+    },
+    {
+      "query": "legal slavery West",
+      "narrator": [
+        "west_slavery",
+        "calderan_west",
+        "calderan_slave_market",
+        "west",
+        "calderan"
+      ],
+      "player": [
+        "west_slavery",
+        "calderan_west",
+        "calderan_slave_market",
+        "west",
+        "calderan"
+      ]
+    },
+    {
+      "query": "illegal slave trafficking",
+      "narrator": [
+        "west_slavery",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "blackwater",
+        "calderan_slave_market"
+      ],
+      "player": [
+        "west_slavery",
+        "slave_market_back_alleys",
+        "blackwater",
+        "calderan_slave_market",
+        "continental_structure"
+      ]
+    },
+    {
+      "query": "Grey Brook",
+      "narrator": [
+        "grey_brook",
+        "calderan_west",
+        "carrion_dogs.private_organization",
+        "dren.private_baseline",
+        "slave_market_back_back_alleys.criminal_network"
+      ],
+      "player": [
+        "grey_brook",
+        "calderan_west",
+        "hadrik_voss",
+        "jessa_rook",
+        "orla_fen"
+      ]
+    },
+    {
+      "query": "Inquisition",
+      "narrator": [
+        "inquisition",
+        "bartolomhew.clerical_background",
+        "calderan_north",
+        "church",
+        "light_and_shadow"
+      ],
+      "player": [
+        "inquisition",
+        "calderan_north",
+        "church",
+        "light_and_shadow"
+      ]
+    },
+    {
+      "query": "Light magic",
+      "narrator": [
+        "light_and_shadow",
+        "nicco",
+        "inquisition",
+        "elemental_magic",
+        "magic_overview"
+      ],
+      "player": [
+        "light_and_shadow",
+        "nicco",
+        "inquisition",
+        "elemental_magic",
+        "magic_overview"
+      ]
+    },
+    {
+      "query": "Blackwater",
+      "narrator": [
+        "blackwater",
+        "calderan",
+        "chained_bay",
+        "sandspear",
+        "sorrow_sea"
+      ],
+      "player": [
+        "blackwater",
+        "calderan",
+        "chained_bay",
+        "sandspear",
+        "sorrow_sea"
+      ]
+    },
+    {
+      "query": "Davenport",
+      "narrator": [
+        "davenport",
+        "calderan",
+        "chained_bay",
+        "west",
+        "west_slavery"
+      ],
+      "player": [
+        "davenport",
+        "calderan",
+        "chained_bay",
+        "west",
+        "west_slavery"
+      ]
+    },
+    {
+      "query": "Back-Back Alleys",
+      "narrator": [
+        "slave_market_back_back_alleys",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "slave_market_back_back_alleys.criminal_interior",
+        "slave_market_back_back_alleys.criminal_network"
+      ],
+      "player": [
+        "slave_market_back_back_alleys",
+        "slave_market_back_alleys",
+        "bartolomhew",
+        "calderan_slave_market",
+        "carrion_dogs"
+      ]
+    },
+    {
+      "query": "shops near Heartstone",
+      "narrator": [
+        "heartstone_square",
+        "main_market_square",
+        "calderan_west",
+        "second_chance_pawn",
+        "heartstone"
+      ],
+      "player": [
+        "heartstone_square",
+        "main_market_square",
+        "second_chance_pawn",
+        "calderan_west",
+        "heartstone"
+      ]
+    },
+    {
+      "query": "market square ordinary shopping",
+      "narrator": [
+        "main_market_square",
+        "calderan_slave_market",
+        "livias_needles",
+        "second_chance_pawn",
+        "blackiron_repairs_and_arms"
+      ],
+      "player": [
+        "main_market_square",
+        "calderan_slave_market",
+        "livias_needles",
+        "second_chance_pawn",
+        "blackiron_repairs_and_arms"
+      ]
+    },
+    {
+      "query": "illegal trafficking",
+      "narrator": [
+        "west_slavery",
+        "blackwater",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "blackthorn.private_operations"
+      ],
+      "player": [
+        "west_slavery",
+        "blackwater",
+        "slave_market_back_alleys",
+        "calderan_slave_market",
+        "calderan_west_daily_life"
+      ]
+    },
+    {
+      "query": "public auction",
+      "narrator": [
+        "calderan_slave_market",
+        "davenport",
+        "heartstone_square",
+        "chevalier_fountain",
+        "fountain_of_the_fallen"
+      ],
+      "player": [
+        "calderan_slave_market",
+        "davenport",
+        "heartstone_square",
+        "chevalier_fountain",
+        "fountain_of_the_fallen"
+      ]
+    },
+    {
+      "query": "licensed sellers",
+      "narrator": [
+        "calderan_slave_market",
+        "korvin",
+        "bartolomhew",
+        "mistress_elara",
+        "captain_doran_hale"
+      ],
+      "player": [
+        "calderan_slave_market",
+        "korvin",
+        "bartolomhew",
+        "mistress_elara",
+        "captain_doran_hale"
+      ]
+    }
+  ],
+  "west_pass2a": [
+    {
+      "query": "Korvin",
+      "narrator": [
+        "korvin",
+        "korvin.private_background",
+        "calderan_slave_market",
+        "mistress_elara"
+      ],
+      "player": [
+        "korvin",
+        "calderan_slave_market",
+        "mistress_elara"
+      ]
+    },
+    {
+      "query": "Mistress Elara",
+      "narrator": [
+        "mistress_elara",
+        "mistress_elara.private_network",
+        "calderan_slave_market",
+        "sister_mereth",
+        "sister_mereth.private_records"
+      ],
+      "player": [
+        "mistress_elara",
+        "calderan_slave_market",
+        "sister_mereth"
+      ]
+    },
+    {
+      "query": "Bartolomhew",
+      "narrator": [
+        "bartolomhew",
+        "bartolomhew.clerical_background",
+        "bartolomhew.private_commerce",
+        "brother_aven.confidential_knowledge",
+        "calderan_slave_market"
+      ],
+      "player": [
+        "bartolomhew",
+        "calderan_slave_market"
+      ]
+    },
+    {
+      "query": "The Redemptor",
+      "narrator": [
+        "bartolomhew"
+      ],
+      "player": [
+        "bartolomhew"
+      ]
+    },
+    {
+      "query": "Blackthorn",
+      "narrator": [
+        "blackthorn",
+        "blackthorn.private_operations",
+        "bartolomhew.private_commerce",
+        "carrion_dogs.private_organization",
+        "dren"
+      ],
+      "player": [
+        "blackthorn"
+      ]
+    },
+    {
+      "query": "Dren",
+      "narrator": [
+        "dren",
+        "dren.private_baseline",
+        "blackthorn.private_operations",
+        "captain_doran_hale.private_assessment",
+        "carrion_dogs.private_organization"
+      ],
+      "player": []
+    },
+    {
+      "query": "Captain Doran Hale",
+      "narrator": [
+        "captain_doran_hale",
+        "captain_doran_hale.private_assessment",
+        "west_guard_post",
+        "blackwater",
+        "brother_aven"
+      ],
+      "player": [
+        "captain_doran_hale",
+        "west_guard_post",
+        "blackwater",
+        "brother_aven",
+        "korvin"
+      ]
+    },
+    {
+      "query": "Brother Aven",
+      "narrator": [
+        "brother_aven",
+        "brother_aven.confidential_knowledge",
+        "bartolomhew.clerical_background",
+        "open_hand_chapel"
+      ],
+      "player": [
+        "brother_aven",
+        "open_hand_chapel"
+      ]
+    },
+    {
+      "query": "Sister Mereth",
+      "narrator": [
+        "sister_mereth",
+        "sister_mereth.private_records",
+        "saint_orra_house"
+      ],
+      "player": [
+        "sister_mereth",
+        "saint_orra_house"
+      ]
+    },
+    {
+      "query": "Carrion Dogs",
+      "narrator": [
+        "carrion_dogs",
+        "carrion_dogs.private_organization",
+        "dren",
+        "blackthorn.private_operations",
+        "dren.private_baseline"
+      ],
+      "player": [
+        "carrion_dogs"
+      ]
+    },
+    {
+      "query": "Slave Market slavers",
+      "narrator": [
+        "bartolomhew",
+        "korvin",
+        "mistress_elara",
+        "calderan_slave_market",
+        "slave_market_back_alleys"
+      ],
+      "player": [
+        "bartolomhew",
+        "korvin",
+        "mistress_elara",
+        "calderan_slave_market",
+        "slave_market_back_alleys"
+      ]
+    },
+    {
+      "query": "West guard captain",
+      "narrator": [
+        "captain_doran_hale",
+        "west_guard_post",
+        "captain_doran_hale.private_assessment",
+        "brother_aven",
+        "korvin"
+      ],
+      "player": [
+        "captain_doran_hale",
+        "west_guard_post",
+        "brother_aven",
+        "korvin",
+        "sister_mereth"
+      ]
+    },
+    {
+      "query": "Saint Orra's House",
+      "narrator": [
+        "saint_orra_house",
+        "sister_mereth",
+        "brother_aven",
+        "captain_doran_hale",
+        "mistress_elara"
+      ],
+      "player": [
+        "saint_orra_house",
+        "sister_mereth",
+        "brother_aven",
+        "captain_doran_hale",
+        "mistress_elara"
+      ]
+    },
+    {
+      "query": "Open Hand Chapel",
+      "narrator": [
+        "open_hand_chapel",
+        "brother_aven",
+        "captain_doran_hale",
+        "chevalier_fountain",
+        "sister_mereth"
+      ],
+      "player": [
+        "open_hand_chapel",
+        "brother_aven",
+        "captain_doran_hale",
+        "chevalier_fountain",
+        "sister_mereth"
+      ]
+    },
+    {
+      "query": "Back-Back Alleys",
+      "narrator": [
+        "slave_market_back_back_alleys",
+        "slave_market_back_alleys",
+        "slave_market_back_alleys.off_record_contacts",
+        "slave_market_back_back_alleys.criminal_interior",
+        "slave_market_back_back_alleys.criminal_network"
+      ],
+      "player": [
+        "slave_market_back_back_alleys",
+        "slave_market_back_alleys",
+        "bartolomhew",
+        "calderan_slave_market",
+        "carrion_dogs"
+      ]
+    },
+    {
+      "query": "GW's",
+      "narrator": [
+        "gws",
+        "blackthorn",
+        "gws.entry_and_association",
+        "blackthorn.private_operations",
+        "carrion_dogs.private_organization"
+      ],
+      "player": [
+        "gws",
+        "blackthorn"
+      ]
+    },
+    {
+      "query": "Grey Brook",
+      "narrator": [
+        "grey_brook",
+        "calderan_west",
+        "carrion_dogs.private_organization",
+        "dren.private_baseline",
+        "slave_market_back_back_alleys.criminal_network"
+      ],
+      "player": [
+        "grey_brook",
+        "calderan_west",
+        "hadrik_voss",
+        "jessa_rook",
+        "orla_fen"
+      ]
+    },
+    {
+      "query": "Inquisition",
+      "narrator": [
+        "inquisition",
+        "bartolomhew.clerical_background",
+        "calderan_north",
+        "church",
+        "light_and_shadow"
+      ],
+      "player": [
+        "inquisition",
+        "calderan_north",
+        "church",
+        "light_and_shadow"
+      ]
+    },
+    {
+      "query": "Calderan",
+      "narrator": [
+        "calderan",
+        "calderan_center",
+        "calderan_east",
+        "calderan_north",
+        "calderan_slave_market"
+      ],
+      "player": [
+        "calderan",
+        "calderan_center",
+        "calderan_east",
+        "calderan_north",
+        "calderan_slave_market"
+      ]
+    },
+    {
+      "query": "West District",
+      "narrator": [
+        "calderan_west",
+        "calderan_west_daily_life",
+        "calderan_slave_market",
+        "main_city_structure",
+        "west_guard_post"
+      ],
+      "player": [
+        "calderan_west",
+        "calderan_west_daily_life",
+        "calderan_slave_market",
+        "main_city_structure",
+        "west_guard_post"
+      ]
+    }
+  ],
+  "lexical": {
+    "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+    "cases": 44,
+    "top1": {
+      "passed": 31,
+      "total": 34
+    },
+    "recall_at_5": 0.8936170212765957,
+    "mrr_at_5": 0.9460784313725492,
+    "multi_answer_recall_at_5": 0.6153846153846154,
+    "rows": [
+      {
+        "query": "capital of West",
+        "top1": "calderan",
+        "relevant": [
+          "calderan"
+        ],
+        "ids": [
+          "calderan",
+          "west",
+          "center",
+          "east",
+          "zul_rath"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "capital of Center",
+        "top1": "zul_rath",
+        "relevant": [
+          "zul_rath"
+        ],
+        "ids": [
+          "zul_rath",
+          "center",
+          "east",
+          "west",
+          "calderan"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "capital of East",
+        "top1": "vaelrost",
+        "relevant": [
+          "vaelrost"
+        ],
+        "ids": [
+          "vaelrost",
+          "east",
+          "center",
+          "main_city_structure",
+          "calderan"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "eastern coastal city",
+        "top1": "skardgard",
+        "relevant": [
+          "skardgard"
+        ],
+        "ids": [
+          "skardgard",
+          "sandspear",
+          "continent",
+          "east",
+          "vaelrost"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "mountains between Center and East",
+        "top1": "dragons_teeth_mountains",
+        "relevant": [
+          "dragons_teeth_mountains"
+        ],
+        "ids": [
+          "dragons_teeth_mountains",
+          "center",
+          "frostspire",
+          "continent",
+          "continental_structure"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "border fortress",
+        "top1": "ironbound",
+        "relevant": [
+          "ironbound"
+        ],
+        "ids": [
+          "ironbound",
+          "center",
+          "east",
+          "west",
+          "continent"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "iron coal mining",
+        "top1": "frostspire",
+        "relevant": [
+          "frostspire"
+        ],
+        "ids": [
+          "frostspire",
+          "bartolomhew",
+          "ironbound"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "pirate city",
+        "relevant": [
+          "blackwater",
+          "sandspear"
+        ],
+        "failure_category": "authoring vocabulary gap",
+        "failure_note": "Pirate/pirates/piracy and corsair/corsairs are separate exact tokens.",
+        "ids": [
+          "blackwater",
+          "city_guard",
+          "city_magistracy",
+          "main_city_structure",
+          "ironbound"
+        ],
+        "matched": 1,
+        "reciprocal_rank": 0,
+        "status": "fail"
+      },
+      {
+        "query": "corsair stronghold",
+        "top1": "sandspear",
+        "relevant": [
+          "sandspear"
+        ],
+        "ids": [
+          "sandspear",
+          "blackwater",
+          "center",
+          "west_slavery",
+          "zul_rath"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "major western port",
+        "top1": "davenport",
+        "relevant": [
+          "davenport"
+        ],
+        "ids": [
+          "davenport",
+          "khar_dune",
+          "frostspire",
+          "west",
+          "continental_structure"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "mages guild",
+        "top1": "learned_arts_guild",
+        "relevant": [
+          "learned_arts_guild"
+        ],
+        "ids": [
+          "learned_arts_guild",
+          "magic_overview",
+          "artisans_guild",
+          "merchants_guild",
+          "nicco"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "church investigators",
+        "top1": "inquisition",
+        "relevant": [
+          "inquisition"
+        ],
+        "failure_category": "authoring vocabulary gap",
+        "failure_note": "Investigators may not occur literally; Church and Inquisition are separate named institutions.",
+        "ids": [
+          "church",
+          "calderan_north",
+          "inquisition",
+          "calderan",
+          "calderan_center"
+        ],
+        "matched": 1,
+        "top1_pass": false,
+        "reciprocal_rank": 0.3333333333333333,
+        "status": "fail"
+      },
+      {
+        "query": "merchant political institution",
+        "top1": "merchants_guild",
+        "relevant": [
+          "merchants_guild"
+        ],
+        "failure_category": "authoring vocabulary gap",
+        "failure_note": "Merchant/merchants and political wording may not share exact surface forms.",
+        "ids": [
+          "merchants_guild",
+          "church",
+          "calderan",
+          "center",
+          "humans"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "legendary rare magic",
+        "top1": "light_and_shadow",
+        "relevant": [
+          "light_and_shadow"
+        ],
+        "failure_category": "inherently ambiguous",
+        "failure_note": "Magic overview also explicitly discusses rare practitioners and legendary magic (including negation).",
+        "ids": [
+          "magic_overview",
+          "light_and_shadow",
+          "learned_arts_guild",
+          "inquisition",
+          "elemental_magic"
+        ],
+        "matched": 1,
+        "top1_pass": false,
+        "reciprocal_rank": 0.5,
+        "status": "fail"
+      },
+      {
+        "query": "who has mana",
+        "top1": "mana",
+        "relevant": [
+          "mana"
+        ],
+        "ids": [
+          "mana",
+          "calderan_east",
+          "calderan_south",
+          "main_city_structure",
+          "bartolomhew"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "fire water earth air",
+        "top1": "elemental_magic",
+        "relevant": [
+          "elemental_magic"
+        ],
+        "ids": [
+          "elemental_magic",
+          "magic_subschools",
+          "calderan_slave_market",
+          "orla_fen",
+          "khar_dune"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "magic specializations",
+        "top1": "magic_subschools",
+        "relevant": [
+          "magic_subschools"
+        ],
+        "failure_category": "semantic gap",
+        "failure_note": "Specializations is absent; relevant canon uses specialized subschools/styles/branches. Magic is a generic shared term.",
+        "ids": [
+          "elemental_magic",
+          "magic_overview",
+          "magic_subschools",
+          "learned_arts_guild",
+          "mana"
+        ],
+        "matched": 1,
+        "top1_pass": false,
+        "reciprocal_rank": 0.3333333333333333,
+        "status": "fail"
+      },
+      {
+        "query": "beastfolk slavery west",
+        "relevant": [
+          "beastfolk",
+          "west_slavery"
+        ],
+        "ids": [
+          "west_slavery",
+          "calderan_slave_market",
+          "beastfolk",
+          "calderan_west",
+          "west"
+        ],
+        "matched": 2,
+        "reciprocal_rank": 0,
+        "status": "acceptable"
+      },
+      {
+        "query": "elves uncommon",
+        "top1": "elves",
+        "relevant": [
+          "elves"
+        ],
+        "ids": [
+          "elves",
+          "magic_overview",
+          "races_overview",
+          "calderan_slave_market",
+          "mixed_ancestry"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "dwarves craftsmanship",
+        "top1": "dwarves",
+        "relevant": [
+          "dwarves"
+        ],
+        "ids": [
+          "dwarves",
+          "elves",
+          "races_overview"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "legal slave port",
+        "top1": "davenport",
+        "relevant": [
+          "davenport"
+        ],
+        "ids": [
+          "davenport",
+          "calderan_slave_market",
+          "calderan",
+          "calderan_west",
+          "west_slavery"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "slave market border",
+        "relevant": [
+          "khar_dune",
+          "ironbound"
+        ],
+        "failure_category": "authoring vocabulary gap",
+        "failure_note": "Khar-Dune uses markets (plural); Ironbound lacks market. Broad West/slavery records cover more literal tokens; Ironbound falls outside five.",
+        "ids": [
+          "khar_dune",
+          "west",
+          "west_slavery",
+          "calderan_slave_market",
+          "slave_market_back_alleys"
+        ],
+        "matched": 1,
+        "reciprocal_rank": 0,
+        "status": "fail"
+      },
+      {
+        "query": "illegal slaves pirates",
+        "top1": "blackwater",
+        "relevant": [
+          "blackwater"
+        ],
+        "ids": [
+          "blackwater",
+          "slave_market_back_alleys",
+          "slave_market_back_alleys",
+          "west_slavery",
+          "calderan_slave_market"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "slave trade West",
+        "relevant": [
+          "west_slavery",
+          "davenport",
+          "calderan"
+        ],
+        "failure_category": "authoring vocabulary gap",
+        "failure_note": "West Slavery and Calderan describe legal market/control without the literal token trade; illicit-trade records cover all three tokens.",
+        "ids": [
+          "blackwater",
+          "davenport",
+          "khar_dune",
+          "bartolomhew",
+          "korvin"
+        ],
+        "matched": 1,
+        "reciprocal_rank": 0,
+        "status": "fail"
+      },
+      {
+        "query": "food storage cellar",
+        "top1": "heartstone_u1",
+        "relevant": [
+          "heartstone_u1"
+        ],
+        "ids": [
+          "heartstone_u1",
+          "heartstone_lr",
+          "the_daily_grind",
+          "heartstone_cy",
+          "heartstone_f1"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "medical recovery room",
+        "top1": "heartstone_f1",
+        "relevant": [
+          "heartstone_f1"
+        ],
+        "ids": [
+          "heartstone_f1",
+          "heartstone_lr",
+          "calderan_slave_market",
+          "mana",
+          "dren"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "courtyard medicine plants",
+        "top1": "heartstone_cy",
+        "relevant": [
+          "heartstone_cy"
+        ],
+        "ids": [
+          "heartstone_cy",
+          "heartstone_lr",
+          "mira_thorne",
+          "calderan_north",
+          "heartstone"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "living room hearth sofa",
+        "top1": "heartstone_lr",
+        "relevant": [
+          "heartstone_lr"
+        ],
+        "ids": [
+          "heartstone_lr",
+          "mana",
+          "heartstone",
+          "dren",
+          "heartstone_f1"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "Blackwater",
+        "top1": "blackwater",
+        "relevant": [
+          "blackwater"
+        ],
+        "ids": [
+          "blackwater",
+          "calderan",
+          "chained_bay",
+          "sandspear",
+          "sorrow_sea"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "The Unchained Haven",
+        "top1": "blackwater",
+        "relevant": [
+          "blackwater"
+        ],
+        "ids": [
+          "blackwater"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "Davenport",
+        "top1": "davenport",
+        "relevant": [
+          "davenport"
+        ],
+        "ids": [
+          "davenport",
+          "calderan",
+          "chained_bay",
+          "west",
+          "west_slavery"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "The Port of Chains",
+        "top1": "davenport",
+        "relevant": [
+          "davenport"
+        ],
+        "ids": [
+          "davenport",
+          "dragons_teeth_mountains"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "Ironbound",
+        "top1": "ironbound",
+        "relevant": [
+          "ironbound"
+        ],
+        "ids": [
+          "ironbound",
+          "davenport",
+          "west",
+          "west_slavery"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "The Fortress on the Edge",
+        "top1": "ironbound",
+        "relevant": [
+          "ironbound"
+        ],
+        "ids": [
+          "ironbound"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "Sandspear",
+        "top1": "sandspear",
+        "relevant": [
+          "sandspear"
+        ],
+        "ids": [
+          "sandspear",
+          "blackwater",
+          "center",
+          "chained_bay",
+          "sorrow_sea"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "Frostspire",
+        "top1": "frostspire",
+        "relevant": [
+          "frostspire"
+        ],
+        "ids": [
+          "frostspire",
+          "dragons_teeth_mountains",
+          "continental_structure",
+          "east",
+          "vaelrost"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "city on the border with Center",
+        "top1": "ironbound",
+        "relevant": [
+          "ironbound"
+        ],
+        "ids": [
+          "ironbound",
+          "west_slavery",
+          "continent",
+          "center",
+          "east"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "where do pirates operate?",
+        "relevant": [
+          "blackwater",
+          "sandspear"
+        ],
+        "failure_category": "authoring vocabulary gap",
+        "failure_note": "Natural question words and exact pirates versus corsairs forms do not encode the intended concept.",
+        "ids": [
+          "blackwater",
+          "mistress_elara",
+          "calderan_slave_market",
+          "inquisition",
+          "the_white_basin"
+        ],
+        "matched": 1,
+        "reciprocal_rank": 0,
+        "status": "fail"
+      },
+      {
+        "query": "Blackwater rivalry",
+        "relevant": [
+          "blackwater",
+          "sandspear"
+        ],
+        "ids": [
+          "blackwater",
+          "sandspear",
+          "city_magistracy",
+          "calderan",
+          "chained_bay"
+        ],
+        "matched": 2,
+        "reciprocal_rank": 0,
+        "status": "acceptable"
+      },
+      {
+        "query": "border",
+        "filters": {
+          "entity_types": [
+            "location"
+          ],
+          "parent_ids": [
+            "west"
+          ]
+        },
+        "top1": "ironbound",
+        "relevant": [
+          "ironbound"
+        ],
+        "ids": [
+          "ironbound"
+        ],
+        "matched": 1,
+        "top1_pass": true,
+        "reciprocal_rank": 1,
+        "status": "pass"
+      },
+      {
+        "query": "dragon ruler",
+        "relevant": [],
+        "diagnostic": "Token overlap with Dragon's Teeth is not evidence of a dragon ruler; inspect partial coverage, never infer a ruler.",
+        "ids": [
+          "center",
+          "dragons_teeth_mountains",
+          "frostspire",
+          "carrion_dogs",
+          "continent"
+        ],
+        "matched": 0,
+        "reciprocal_rank": 0,
+        "status": "diagnostic"
+      },
+      {
+        "query": "mages guild headquarters",
+        "relevant": [],
+        "diagnostic": "Only real canonical IDs may appear. Learned Arts may match the explicit denial of a separate Mages Guild; headquarters is not established.",
+        "ids": [
+          "calderan_center",
+          "learned_arts_guild",
+          "magic_overview",
+          "artisans_guild",
+          "merchants_guild"
+        ],
+        "matched": 0,
+        "reciprocal_rank": 0,
+        "status": "diagnostic"
+      },
+      {
+        "query": "Blackwater black water",
+        "relevant": [],
+        "diagnostic": "Blackwater and literal water tokens may retrieve different records; no combined fact about black-colored water is created.",
+        "ids": [
+          "blackwater",
+          "sandspear",
+          "blackthorn",
+          "elemental_magic",
+          "orla_fen"
+        ],
+        "matched": 0,
+        "reciprocal_rank": 0,
+        "status": "diagnostic"
+      },
+      {
+        "query": "quasarxylophone",
+        "relevant": [],
+        "diagnostic": "No lexical overlap must return zero results.",
+        "ids": [],
+        "matched": 0,
+        "reciprocal_rank": 0,
+        "status": "diagnostic"
+      }
+    ]
+  },
+  "turn": {
+    "policy": {
+      "cases": 25,
+      "top1": 25,
+      "recall_at_3": 1,
+      "recall_at_5": 1,
+      "rows": [
+        {
+          "query": "Where is the slave market?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where are the slave markets?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave-market?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "When do the slave auctions happen?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "davenport",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave auction?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "davenport",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave pen?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where are the slave pens?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What's the exact route to the slave market from here?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "main_market_square",
+            "calderan",
+            "main_city_structure"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "How do I get to the slave market?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave market in Davenport?",
+          "group": "davenport",
+          "ids": [
+            "davenport",
+            "calderan",
+            "west",
+            "west_slavery",
+            "calderan_slave_market"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Tell me about Davenport.",
+          "group": "davenport",
+          "ids": [
+            "davenport",
+            "calderan",
+            "chained_bay",
+            "west",
+            "west_slavery"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is the Port of Chains?",
+          "group": "davenport",
+          "ids": [
+            "davenport",
+            "dragons_teeth_mountains"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Who owned Heartstone before me?",
+          "group": "heartstone",
+          "ids": [
+            "heartstone",
+            "calderan_slave_market",
+            "heartstone_cy",
+            "heartstone_f1"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "How long has this tower been empty?",
+          "group": "heartstone",
+          "ids": [
+            "heartstone",
+            "heartstone_f1",
+            "heartstone_cy",
+            "heartstone_lr",
+            "mistress_elara"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Who lived in Heartstone?",
+          "group": "heartstone",
+          "ids": [
+            "heartstone",
+            "heartstone_cy",
+            "heartstone_f1",
+            "heartstone_lr"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is Calderan like?",
+          "group": "calderan",
+          "ids": [
+            "calderan",
+            "korvin",
+            "skardgard",
+            "calderan_center",
+            "calderan_east"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What are the districts of Calderan?",
+          "group": "calderan",
+          "ids": [
+            "main_city_structure",
+            "calderan",
+            "calderan_slave_market",
+            "calderan_center",
+            "calderan_east"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What do people know about Light magic?",
+          "group": "light_magic",
+          "ids": [
+            "light_and_shadow",
+            "inquisition",
+            "mana",
+            "elemental_magic"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is Light magic?",
+          "group": "light_magic",
+          "ids": [
+            "light_and_shadow",
+            "inquisition",
+            "elemental_magic",
+            "magic_overview"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Who are the Inquisition?",
+          "group": "inquisition",
+          "ids": [
+            "inquisition",
+            "calderan_north",
+            "church",
+            "light_and_shadow"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What does the Inquisition do?",
+          "group": "inquisition",
+          "ids": [
+            "inquisition",
+            "calderan_north",
+            "church",
+            "light_and_shadow"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Tell me about Ironbound.",
+          "group": "ironbound",
+          "ids": [
+            "ironbound",
+            "davenport",
+            "west",
+            "west_slavery"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is the Fortress on the Edge?",
+          "group": "ironbound",
+          "ids": [
+            "ironbound"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Do slave caravans pass through Ironbound?",
+          "group": "ironbound",
+          "ids": [
+            "ironbound",
+            "west_slavery",
+            "davenport",
+            "calderan_slave_market",
+            "khar_dune"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        }
+      ]
+    },
+    "engine_only": {
+      "cases": 25,
+      "top1": 20,
+      "recall_at_3": 0.88,
+      "recall_at_5": 0.92,
+      "rows": [
+        {
+          "query": "Where is the slave market?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where are the slave markets?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave-market?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "When do the slave auctions happen?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "davenport",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave auction?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "davenport",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave pen?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where are the slave pens?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What's the exact route to the slave market from here?",
+          "group": "slave_market",
+          "ids": [
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "calderan",
+            "main_market_square",
+            "main_city_structure"
+          ],
+          "top1": false,
+          "recall_at_3": 0,
+          "recall_at_5": 0
+        },
+        {
+          "query": "How do I get to the slave market?",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "slave_market_back_alleys",
+            "slave_market_back_alleys",
+            "slave_market_back_back_alleys",
+            "slave_market_back_back_alleys"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"",
+          "group": "slave_market",
+          "ids": [
+            "calderan_slave_market",
+            "hadrik_voss",
+            "slave_market_back_back_alleys",
+            "calderan",
+            "calderan_west"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Where is the slave market in Davenport?",
+          "group": "davenport",
+          "ids": [
+            "davenport",
+            "calderan",
+            "west",
+            "west_slavery",
+            "calderan_slave_market"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Tell me about Davenport.",
+          "group": "davenport",
+          "ids": [
+            "davenport",
+            "calderan",
+            "chained_bay",
+            "west",
+            "west_slavery"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is the Port of Chains?",
+          "group": "davenport",
+          "ids": [
+            "davenport",
+            "dragons_teeth_mountains"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Who owned Heartstone before me?",
+          "group": "heartstone",
+          "ids": [
+            "calderan_slave_market",
+            "heartstone",
+            "heartstone_cy",
+            "heartstone_f1"
+          ],
+          "top1": false,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "How long has this tower been empty?",
+          "group": "heartstone",
+          "ids": [
+            "heartstone_f1",
+            "heartstone_cy",
+            "heartstone_lr",
+            "mistress_elara",
+            "heartstone"
+          ],
+          "top1": false,
+          "recall_at_3": 0,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Who lived in Heartstone?",
+          "group": "heartstone",
+          "ids": [
+            "heartstone",
+            "heartstone_cy",
+            "heartstone_f1",
+            "heartstone_lr"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is Calderan like?",
+          "group": "calderan",
+          "ids": [
+            "korvin",
+            "skardgard",
+            "calderan",
+            "calderan_center",
+            "calderan_east"
+          ],
+          "top1": false,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What are the districts of Calderan?",
+          "group": "calderan",
+          "ids": [
+            "calderan_center",
+            "calderan_east",
+            "calderan_north",
+            "calderan_slave_market",
+            "calderan_south"
+          ],
+          "top1": false,
+          "recall_at_3": 0,
+          "recall_at_5": 0
+        },
+        {
+          "query": "What do people know about Light magic?",
+          "group": "light_magic",
+          "ids": [
+            "light_and_shadow",
+            "inquisition",
+            "mana",
+            "elemental_magic"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is Light magic?",
+          "group": "light_magic",
+          "ids": [
+            "light_and_shadow",
+            "inquisition",
+            "elemental_magic",
+            "magic_overview"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Who are the Inquisition?",
+          "group": "inquisition",
+          "ids": [
+            "inquisition",
+            "bartolomhew",
+            "calderan_north",
+            "church",
+            "light_and_shadow"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What does the Inquisition do?",
+          "group": "inquisition",
+          "ids": [
+            "inquisition",
+            "bartolomhew",
+            "calderan_north",
+            "church",
+            "light_and_shadow"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Tell me about Ironbound.",
+          "group": "ironbound",
+          "ids": [
+            "ironbound",
+            "davenport",
+            "west",
+            "west_slavery"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "What is the Fortress on the Edge?",
+          "group": "ironbound",
+          "ids": [
+            "ironbound"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        },
+        {
+          "query": "Do slave caravans pass through Ironbound?",
+          "group": "ironbound",
+          "ids": [
+            "ironbound",
+            "west_slavery",
+            "davenport",
+            "khar_dune",
+            "calderan_slave_market"
+          ],
+          "top1": true,
+          "recall_at_3": 1,
+          "recall_at_5": 1
+        }
+      ]
+    },
+    "cleaned_example": "\"Excuse me, where is the slave pen?\""
+  }
+}

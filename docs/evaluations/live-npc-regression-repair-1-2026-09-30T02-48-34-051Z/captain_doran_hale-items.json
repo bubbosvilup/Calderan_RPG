@@ -1,0 +1,1566 @@
+{
+  "npc_id": "captain_doran_hale",
+  "name": "Captain Doran Hale",
+  "test": "items",
+  "campaign_id": "npc_regression_captain_doran_hale_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "captain_doran_hale",
+        "position": {
+          "kind": "carried",
+          "character_id": "captain_doran_hale"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Captain Doran Hale gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\"",
+      "result": {
+        "narration": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\"",
+        "base_revision": 2,
+        "final_revision": 3,
+        "controller_proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorized_commands": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale",
+              "acquired_at": 0
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            },
+            "grammar": {
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation"
+            },
+            "evidence": {
+              "quote": "Nicco takes the boots.",
+              "verified": true,
+              "check": "receipt_by_nicco"
+            },
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation",
+            "source": "both"
+          }
+        ],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.09279999999853317,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [
+            {
+              "kind": "accepted_transfer",
+              "command_indexes": [
+                0
+              ],
+              "collective": false,
+              "source_sentence": "Nicco takes the boots"
+            }
+          ],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "revision",
+          "draft": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"You stood in that square a half hour watching the tower like you were waiting for someone to tell you it's yours.\" A pause, not quite a question. \"No one did. So I'm asking.\"",
+          "issues": [
+            {
+              "kind": "household_claim",
+              "character": "an unattributed speaker",
+              "sentence": "\"You stood in that square a half hour watching the tower like you were waiting for someone to tell you it's yours.\" A pause, not quite a question.",
+              "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+            }
+          ],
+          "revision": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\"",
+          "revision_issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3331,
+            "completion_tokens": 144,
+            "total_tokens": 3475
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:50:04.951Z",
+            "headers_ms": 1859.9686999999976,
+            "time_to_first_token_ms": 1861.2724000000017,
+            "completed_at": "2026-09-30T02:50:08.519Z",
+            "elapsed_total_ms": 3568.0570000000007
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3323,
+            "completion_tokens": 326,
+            "total_tokens": 3649
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:50:08.520Z",
+            "headers_ms": 1447.2497999999905,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:50:11.884Z",
+            "elapsed_total_ms": 3363.7191999999923
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6392,
+          "recent_conversation": 2,
+          "knowledge_access": 1277,
+          "retrieval": 30,
+          "controller_evidence": 7350
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "Captain Doran Hale gives Nicco a pair of leather boots",
+              "kind": "inbound_transfer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "giver": "captain_doran_hale",
+                "form": "npc_give"
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1861.2724000000017,
+          "narrator_total_ms": 3568.0570000000007,
+          "controller_total_ms": 3363.7191999999923,
+          "controller_tail_ms": 6496.325700000001,
+          "retrieval_ms": 0.09279999999853317,
+          "coordinator_total_ms": 10065.485100000005
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              },
+              "grammar": {
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation"
+              },
+              "evidence": {
+                "quote": "Nicco takes the boots.",
+                "verified": true,
+                "check": "receipt_by_nicco"
+              },
+              "authorized": true,
+              "reason": "authorized_narrative_confirmation",
+              "source": "both"
+            }
+          ]
+        },
+        {
+          "type": "narration_delta",
+          "text": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": true
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\"",
+            "base_revision": 2,
+            "final_revision": 3,
+            "controller_proposal": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              }
+            ],
+            "authorized_commands": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                },
+                "acquisition": {
+                  "acquisition_kind": "gift",
+                  "from_character_id": "captain_doran_hale",
+                  "acquired_at": 0
+                }
+              }
+            ],
+            "authorization": [
+              {
+                "command": {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                },
+                "grammar": {
+                  "authorized": true,
+                  "reason": "authorized_narrative_confirmation"
+                },
+                "evidence": {
+                  "quote": "Nicco takes the boots.",
+                  "verified": true,
+                  "check": "receipt_by_nicco"
+                },
+                "authorized": true,
+                "reason": "authorized_narrative_confirmation",
+                "source": "both"
+              }
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09279999999853317,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [
+                {
+                  "kind": "accepted_transfer",
+                  "command_indexes": [
+                    0
+                  ],
+                  "collective": false,
+                  "source_sentence": "Nicco takes the boots"
+                }
+              ],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "revision",
+              "draft": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"You stood in that square a half hour watching the tower like you were waiting for someone to tell you it's yours.\" A pause, not quite a question. \"No one did. So I'm asking.\"",
+              "issues": [
+                {
+                  "kind": "household_claim",
+                  "character": "an unattributed speaker",
+                  "sentence": "\"You stood in that square a half hour watching the tower like you were waiting for someone to tell you it's yours.\" A pause, not quite a question.",
+                  "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+                }
+              ],
+              "revision": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\"",
+              "revision_issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3331,
+                "completion_tokens": 144,
+                "total_tokens": 3475
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:50:04.951Z",
+                "headers_ms": 1859.9686999999976,
+                "time_to_first_token_ms": 1861.2724000000017,
+                "completed_at": "2026-09-30T02:50:08.519Z",
+                "elapsed_total_ms": 3568.0570000000007
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3323,
+                "completion_tokens": 326,
+                "total_tokens": 3649
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:50:08.520Z",
+                "headers_ms": 1447.2497999999905,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:50:11.884Z",
+                "elapsed_total_ms": 3363.7191999999923
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6392,
+              "recent_conversation": 2,
+              "knowledge_access": 1277,
+              "retrieval": 30,
+              "controller_evidence": 7350
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "Captain Doran Hale gives Nicco a pair of leather boots",
+                  "kind": "inbound_transfer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "giver": "captain_doran_hale",
+                    "form": "npc_give"
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1861.2724000000017,
+              "narrator_total_ms": 3568.0570000000007,
+              "controller_total_ms": 3363.7191999999923,
+              "controller_tail_ms": 6496.325700000001,
+              "retrieval_ms": 0.09279999999853317,
+              "coordinator_total_ms": 10065.485100000005
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_captain_doran_hale_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "captain_doran_hale",
+            "position": {
+              "kind": "carried",
+              "character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_captain_doran_hale_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "captain_doran_hale",
+            "position": {
+              "kind": "carried",
+              "character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nCaptain Doran Hale: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "captain_doran_hale"
+      ],
+      "reconciliation": {
+        "delivered": "revision",
+        "draft": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"You stood in that square a half hour watching the tower like you were waiting for someone to tell you it's yours.\" A pause, not quite a question. \"No one did. So I'm asking.\"",
+        "issues": [
+          {
+            "kind": "household_claim",
+            "character": "an unattributed speaker",
+            "sentence": "\"You stood in that square a half hour watching the tower like you were waiting for someone to tell you it's yours.\" A pause, not quite a question.",
+            "correction": "an unattributed speaker does not know that Nicco is owner of the household Heartstone. They may ask, say they don't know, or make an explicitly framed guess from where he stands now — never state it as known."
+          }
+        ],
+        "revision": "Captain Doran Hale reaches down and pulls a worn pair of leather boots from his belt, extending them toward Nicco. \"You'll want proper footwear if you're walking these streets,\" he says. His blue eyes remain steady, measuring. \"West doesn't forgive soft feet.\"\n\nNicco takes the boots. The leather is scuffed but solid, clearly guard-issue or former guard-issue, broken in by someone who spent long hours standing watch.\n\nThe captain's arms fold across his heavy armor, the gesture deliberate and patient. \"Half hour you've been standing there staring up at that tower.\" He tilts his bald head slightly, a veteran's assessment rather than accusation. \"Waiting for something. Permission, maybe. Or trouble.\"",
+        "revision_issues": []
+      },
+      "revision_requested": true,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3331,
+          "completion_tokens": 144,
+          "total_tokens": 3475,
+          "cost": 0.001568716,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001568716,
+            "upstream_inference_prompt_cost": 0.001089916,
+            "upstream_inference_completions_cost": 0.0004788
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3323,
+          "completion_tokens": 326,
+          "total_tokens": 3649,
+          "cost": 0.000783748,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2691,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000783748,
+            "upstream_inference_prompt_cost": 0.000353428,
+            "upstream_inference_completions_cost": 0.00043032
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 266,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\"",
+      "result": {
+        "narration": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\"",
+        "base_revision": 3,
+        "final_revision": 3,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.16849999999976717,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "captain_doran_hale",
+              "position": {
+                "kind": "carried",
+                "character_id": "captain_doran_hale"
+              }
+            }
+          ],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3367,
+            "completion_tokens": 99,
+            "total_tokens": 3466
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:50:15.021Z",
+            "headers_ms": 1420.5987000000023,
+            "time_to_first_token_ms": 1420.7046000000119,
+            "completed_at": "2026-09-30T02:50:16.726Z",
+            "elapsed_total_ms": 1705.9231
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3327,
+            "completion_tokens": 110,
+            "total_tokens": 3437
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:50:16.727Z",
+            "headers_ms": 2461.557799999995,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:50:19.968Z",
+            "elapsed_total_ms": 3240.7025999999896
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6465,
+          "recent_conversation": 823,
+          "knowledge_access": 1277,
+          "retrieval": 30,
+          "controller_evidence": 7230
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [
+            {
+              "clause": "give them back the boots",
+              "kind": "offer",
+              "status": "outcome_dependent",
+              "detail": {
+                "item_id": "campaign_item_regression_leather_boots",
+                "recipient": "captain_doran_hale",
+                "form": "give_back",
+                "attempt": true
+              }
+            }
+          ],
+          "runtime": [],
+          "candidates": [
+            {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "captain_doran_hale",
+              "position": {
+                "kind": "carried",
+                "character_id": "captain_doran_hale"
+              }
+            }
+          ],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1420.7046000000119,
+          "narrator_total_ms": 1705.9231,
+          "controller_total_ms": 3240.7025999999896,
+          "controller_tail_ms": 3244.516199999998,
+          "retrieval_ms": 0.16849999999976717,
+          "coordinator_total_ms": 4952.446299999996
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 3
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 3,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\"",
+            "base_revision": 3,
+            "final_revision": 3,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.16849999999976717,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "captain_doran_hale",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "captain_doran_hale"
+                  }
+                }
+              ],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3367,
+                "completion_tokens": 99,
+                "total_tokens": 3466
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:50:15.021Z",
+                "headers_ms": 1420.5987000000023,
+                "time_to_first_token_ms": 1420.7046000000119,
+                "completed_at": "2026-09-30T02:50:16.726Z",
+                "elapsed_total_ms": 1705.9231
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3327,
+                "completion_tokens": 110,
+                "total_tokens": 3437
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:50:16.727Z",
+                "headers_ms": 2461.557799999995,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:50:19.968Z",
+                "elapsed_total_ms": 3240.7025999999896
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6465,
+              "recent_conversation": 823,
+              "knowledge_access": 1277,
+              "retrieval": 30,
+              "controller_evidence": 7230
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [
+                {
+                  "clause": "give them back the boots",
+                  "kind": "offer",
+                  "status": "outcome_dependent",
+                  "detail": {
+                    "item_id": "campaign_item_regression_leather_boots",
+                    "recipient": "captain_doran_hale",
+                    "form": "give_back",
+                    "attempt": true
+                  }
+                }
+              ],
+              "runtime": [],
+              "candidates": [
+                {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "captain_doran_hale",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "captain_doran_hale"
+                  }
+                }
+              ],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1420.7046000000119,
+              "narrator_total_ms": 1705.9231,
+              "controller_total_ms": 3240.7025999999896,
+              "controller_tail_ms": 3244.516199999998,
+              "retrieval_ms": 0.16849999999976717,
+              "coordinator_total_ms": 4952.446299999996
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_captain_doran_hale_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_captain_doran_hale_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 3,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 3,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            },
+            "acquisition": {
+              "acquired_at": 0,
+              "acquisition_kind": "gift",
+              "from_character_id": "captain_doran_hale"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nCaptain Doran Hale: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "captain_doran_hale"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "\"You'll want proper footwear if you're walking these streets,\" Doran says. \"West doesn't forgive soft feet.\"\n\nThe captain's brow lowers at the return offer. He doesn't reach for the boots. \"I gave you those because you need them,\" he says. \"I've got armored boots. Guard issue.\" He nods toward Nicco's feet. \"Put them on. Walk back inside if that's where you're bound, or walk somewhere else. But don't walk barefoot in West District.\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3367,
+          "completion_tokens": 99,
+          "total_tokens": 3466,
+          "cost": 0.001438243,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001438243,
+            "upstream_inference_prompt_cost": 0.001109068,
+            "upstream_inference_completions_cost": 0.000329175
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3327,
+          "completion_tokens": 110,
+          "total_tokens": 3437,
+          "cost": 0.000444356,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2827,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000444356,
+            "upstream_inference_prompt_cost": 0.000299156,
+            "upstream_inference_completions_cost": 0.0001452
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 102,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

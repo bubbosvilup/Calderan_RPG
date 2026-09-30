@@ -3,6 +3,8 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import type { TurnContext } from "./context-builder.js";
 import type { PlayerIntent } from "./player-intent.js";
 import { normalizeReference, type ResolvedReference } from "./reference-resolution.js";
+import type { PhysicalInteraction } from "./physical-interaction.js";
+import { itemTerms } from "./item-reference.js";
 
 export type ConfirmationKind = "accepted_transfer" | "equipped_item" | "heard_fact" | "was_told_fact" | "agreed_event";
 export interface NarratorConfirmation { readonly kind: ConfirmationKind; readonly command_indexes: readonly number[]; readonly collective: boolean; readonly source_sentence: string }
@@ -14,6 +16,8 @@ export interface TurnEvidence {
   readonly narrator_refusals: readonly NarratorRefusal[];
   readonly resolved_references: readonly ResolvedReference[];
   readonly ambiguous_reference: boolean;
+  /** Repair 1: player-initiated physical acts this turn; the only basis for authorizing class-B conditions. */
+  readonly physical_interactions?: readonly PhysicalInteraction[];
 }
 const uncertain = /\b(not|never|no longer|maybe|perhaps|might|could|would|almost|pretend\w*|imagin\w*|consider\w*|unchanged|instead|inscription|quoted|hypothetical|if|unless)\b/i;
 // Actual refusal: explicit refusal words, handing the offer back, or a negated acceptance verb.
@@ -29,7 +33,7 @@ const actionWords = /\b(refus\w*|declin\w*|reject\w*|return\w*|tak\w*|took|keep\
 const acceptVerb = "takes?|took|accepts?|accepted|receives?|received|gathers?|gathered|snatches?|snatched|picks? up|picked up|collects?|collected|unfolds?";
 const leadIn = /^(?:without a word|after (?:a|another|the) (?:(?:brief|long|short|silent|tense) )?(?:moment|pause|beat|breath|while)(?: of [^,]+)?|finally|at last|at length|eventually|in the end),\s*|^then,?\s+/i;
 const adverbs = "(?:(?:carefully|quickly|slowly|finally|gently|then|simply|silently|wordlessly|hesitantly|cautiously) )*";
-const trailing = /\s+(?:from (?:nicco|you|him)(?:'s|s)?(?: (?:hands?|arms))?|into (?:her|his) (?:arms|hands|grasp|lap)|in (?:her|his) (?:arms|hands|lap)|against (?:her|his) (?:chest|lap|legs)|onto (?:her|his) lap|with (?:both hands|one hand)|without (?:hesitation|comment|a word)(?: on .*)?|(?:all )?at once|one by one|and sets? (?:it|them) .*)$/;
+const trailing = /\s+(?:back|from (?:nicco|you|him)(?:'s|s)?(?: (?:hands?|arms))?|into (?:her|his) (?:arms|hands|grasp|lap)|in (?:her|his) (?:arms|hands|lap)|against (?:her|his) (?:chest|lap|legs)|onto (?:her|his) lap|with (?:both hands|one hand)|without (?:hesitation|comment|a word)(?: on .*)?|(?:all )?at once|one by one|and sets? (?:it|them) .*)$/;
 const clean = (s: string) => normalizeReference(s).replace(/[,;:]$/g, "");
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const numbers: Record<string, number> = { two: 2, three: 3, four: 4, five: 5 };
@@ -84,6 +88,23 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     }
     return undefined;
   };
+  // Repair 1 inbound gifts (present character → Nicco). The giver's handover or Nicco's receipt confirms; the giver keeping,
+  // withholding or refusing vetoes. Kept separate from the outbound grammar, whose actor is always the recipient NPC.
+  const inboundIndexes = intent.candidates.flatMap((c, i) => c.kind === "transfer_item" && c.owner_id === "nicco" ? [i] : []);
+  const holderOf = (id: string) => { const it = item(id); return it && (it.position.kind === "carried" || it.position.kind === "equipped") ? it.position.character_id : undefined; };
+  // Repair 1.1: head noun or a category word unique to this item in the scene ("footwear" for the only pair of boots).
+  const terms = (id: string) => { const it = item(id); return it ? itemTerms(it, context.items) : escape(clean(id)); };
+  const itemRef = (s: string, id: string) => new RegExp(`\\b(?:${terms(id)}|them|it|the pair)\\b`, "i").test(s);
+  const itemNamed = (s: string, id: string) => new RegExp(`\\b(?:${terms(id)}|the pair)\\b`, "i").test(s);
+  const GIVE = "gives?|gave|hands?|handed|passes?|passed|presses?|pressed|shoves?|shoved|tosses?|tossed|places?|placed|puts?|drops?|dropped|slides?|slid|thrusts?";
+  const RECEIVE = "takes?|took|accepts?|accepted|receives?|received|catches?|caught|pockets?|pocketed";
+  const PASSES = "(?:(?:are|is|were|was|get|gets|got) )?(?:pass(?:es)?|passed|go|goes|went|change hands|changed hands|transfers?|transferred)\\b[^,;]*\\b(?:to|into) (?:nicco|nicco's|his)\\b";
+  const TO_NICCO = /\b(?:to (?:nicco|him)\b|into (?:nicco's|nicco|his) (?:hands?|arms|grasp|grip|palms?)|(?:nicco's|his) (?:hands?|grasp|grip)\b|over\b)/;
+  // "a smile that doesn't reach her eyes" is an idiom, never a refusal to reach for something.
+  const idiom = /\b(?:does not|doesn't|did not|didn't|never|not)\s+(?:quite\s+|fully\s+|ever\s+)?reach(?:es|ed)?\s+(?:her|his|their|the)\s+eyes\b/gi;
+  // Retrieving an item ("withdraws a pair of boots from his satchel") is not withholding; withdrawing the offer or the hand is.
+  // Repair 1.1: the giver taking the item back is withholding too.
+  const withholding = /\b(?:(?:takes?|took|taking|snatch\w*) (?:them|it|the [\w' ]{1,30}?) back|(?:keeps?|kept) (?:them|it|hold of (?:them|it)|the [\w' ]{1,30}?(?:for (?:him|her|them)sel(?:f|ves)|to (?:him|her)self|back|close))(?![\w ]*\b(?:extended|out|outstretched|held out|toward|towards|forward|offered|raised)\b)|withdr(?:aws?|ew|awing|awn) (?:them|it|(?:his|her|their|the) (?:hand|hands|offer|gift|arm))|pulls? (?:\w+ ){0,2}back|pulled (?:\w+ ){0,2}back|tucks? (?:them|it) away|tucked (?:them|it) away|holds? on to|held on to|clutch\w* (?:them|it) (?:close|tight))\b/i;
   // Refusals/contradictions invalidate the affected cooperative intent, never unrelated commands.
   for (const [sentenceIndex, sentence] of sentences.entries()) {
     const explicitActors = people.filter(p => mention(sentence, p.id));
@@ -102,13 +123,45 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     else if (explicitActors.length && !names(explicitActors[0]!.id).some(n => clean(sentence).startsWith(`${n}\'s `))) priorActor = undefined;
     const distraction = withoutOwnPossessions(clean(sentence));
     if (context.items.some(i => !offeredIds.includes(i.id) && [i.id, i.name].some(n => n && new RegExp(`\\b${escape(clean(n))}\\b`).test(distraction)))) groupDistracted = true;
-    const refusing = refusal.test(sentence.replace(notRefusal, " ")) && !(temporalHedge.test(sentence) && !/\b(refus\w*|declin\w*|reject\w*|back)\b/i.test(sentence.replace(notRefusal, " ")));
+    const refusing = refusal.test(sentence.replace(notRefusal, " ").replace(idiom, " ")) && !(temporalHedge.test(sentence) && !/\b(refus\w*|declin\w*|reject\w*|back)\b/i.test(sentence.replace(notRefusal, " ")));
     // "does not put anything on" after receipt is the requested carried-not-equipped narration, not doubt about the transfer.
-    const hedged = !refusing && uncertain.test(sentence.replace(notRefusal, " ").replace(equipIntent ? /$^/ : notEquipping, " ").replace(priorIgnorance, " "));
+    const hedged = !refusing && uncertain.test(sentence.replace(notRefusal, " ").replace(idiom, " ").replace(equipIntent ? /$^/ : notEquipping, " ").replace(priorIgnorance, " "));
     // Veto-only pronoun fallback (Phase 1O): "Nicco tells Brenna X. She does not hear him." A leading she/he may resolve to the
     // single character named in the previous sentence, but only to attach refusals/doubt, never confirmations.
     const vetoActor = actor ?? (subject && /^(she|he)$/i.test(subject[1]!) ? previousMentioned : undefined);
+    const niccoLedSentence = /^nicco\b/.test(clean(sentence));
+    for (const i of inboundIndexes) {
+      const c = intent.candidates[i] as Extract<CampaignCommand, { kind: "transfer_item" }>, giver = holderOf(c.item_id);
+      if (!giver) continue;
+      // "He takes them." after the giver (a woman) offered: the pronoun's gender excludes the giver, and only Nicco remains.
+      const giverPronoun = context.characters.find(ch => ch.id === giver)?.pronoun, lead = subject?.[1]?.toLowerCase();
+      const pronounNicco = !!giverPronoun && (lead === "he" || lead === "she") && lead !== giverPronoun && people.length === 1;
+      const niccoLed = niccoLedSentence || pronounNicco;
+      // Repair 1.1: a pronoun whose gender matches the giver, with only Nicco and the giver present, is the giver.
+      const pronounGiver = !!giverPronoun && lead === giverPronoun && people.length === 1;
+      const s = clean(sentence), byGiver = !pronounNicco && (actor === giver || pronounGiver || vetoActor === giver && (refusing || hedged));
+      // Repair 1.1: negated withholding ("does not move to withdraw the offer") is not withholding.
+      const w = withholding.exec(sentence);
+      const withheld = !!w && !/(?:\b(?:not|never|no|without|nor)\b|n't)\s+(?:\w+\s+){0,4}$/i.test(sentence.slice(0, w.index));
+      // A later hedged sentence retracts an established handover only when it concerns the transfer or the item itself.
+      // The transfer verb must take the item, Nicco or them/it as its object: "might give any of her charges" is not about the boots.
+      const aboutTransfer = itemNamed(sentence, c.item_id) || /\b(?:tak\w*|took|accept\w*|receiv\w*|giv\w*|gave|hand\w*|keep\w*|kept|return\w*|refus\w*|declin\w*|reject\w*|withdr\w*|releas\w*|let(?:s|ting)? go of|part\w* with|push\w*)\b(?:\s+[\w']+){0,2}?\s+(?:them|it|nicco|him)\b/i.test(sentence.replace(idiom, " "));
+      if ((refusing || withheld) && (byGiver || niccoLed) || hedged && (byGiver || niccoLed) && confirmed.has(i) && aboutTransfer) { refusals.push({ command_indexes: [i], source_sentence: sentence }); continue; }
+      if (refusing || hedged) continue;
+      const rest = s.replace(new RegExp(`^(?:${[...names(giver), "she", "he", "nicco"].map(escape).join("|")}),? `), "");
+      // A completed handover reaches Nicco ("to Nicco", "into his hands", "hands them over", "gives him the boots"); a gesture
+      // "toward Nicco" is still an offer.
+      const verbless = rest.replace(new RegExp(`^${adverbs}(?:${GIVE})\\s+`), "");
+      const handover = actor === giver && new RegExp(`^${adverbs}(?:${GIVE})\\b`).test(rest) && (TO_NICCO.test(verbless) || /^(?:nicco|him)\b/.test(verbless)) && itemRef(rest, c.item_id);
+      const receipt = niccoLed && new RegExp(`^${adverbs}(?:${RECEIVE})\\b`).test(rest) && itemRef(rest, c.item_id);
+      // Item-subject handover: "The boots pass into Nicco's hands", "The boots pass from his grip to Nicco's".
+      const passes = new RegExp(`^(?:the |a )?(?:[\\w']+ ){0,3}?(?:${terms(c.item_id)}|pair) ${PASSES}`, "i").test(s);
+      if (handover || receipt || passes) { confirmations.push({ kind: "accepted_transfer", command_indexes: [i], collective: false, source_sentence: sentence }); confirmed.add(i); }
+    }
     const indexes = intent.candidates.flatMap((c, i) => {
+      if (inboundIndexes.includes(i)) return [];
+      // Nicco's own act ("Nicco hands the boots back to Korvin") is never the recipient's refusal.
+      if (niccoLedSentence && refusing) return [];
       const recipient = recipientFor(c);
       return recipient === actor || (refusing || hedged) && !!recipient && recipient === vetoActor || recipient && mention(sentence, recipient) && (refusing || hedged) || c.kind === "schedule_event" && (actor && c.participants?.includes(actor) || /^(everyone|we)\b/i.test(sentence)) ? [i] : [];
     });
@@ -188,5 +241,5 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     });
     for (const c of confirmations) for (const i of c.command_indexes) confirmed.add(i);
   }
-  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false }) as TurnEvidence;
+  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}) }) as TurnEvidence;
 }

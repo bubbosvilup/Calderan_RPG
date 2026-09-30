@@ -1,0 +1,1191 @@
+{
+  "npc_id": "niles_vanner",
+  "name": "Niles Vanner",
+  "test": "identity",
+  "campaign_id": "npc_regression_niles_vanner_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Niles Vanner who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Niles Vanner's fingers pause on the small counter balance, the empty pan settling with a soft clink. He studies Nicco with the flat, patient scrutiny of a man accustomed to weighing uncertainty against risk. \"Who you are?\" he repeats, neither surprised nor offended by the question. \"A man standing in Heartstone Square asking strange questions. Beyond that, I don't make a habit of guessing.\" He tilts his head slightly, the artificial tooth catching the daylight. \"As for where you're from, you'd know that better than I would. If you're Calderan born, I've never seen you before. If you're not—\" he spreads his hands, a gesture of professional limitation rather than invitation—\"there are a thousand roads into this city, and I don't keep track of travelers.\"",
+      "result": {
+        "narration": "Niles Vanner's fingers pause on the small counter balance, the empty pan settling with a soft clink. He studies Nicco with the flat, patient scrutiny of a man accustomed to weighing uncertainty against risk. \"Who you are?\" he repeats, neither surprised nor offended by the question. \"A man standing in Heartstone Square asking strange questions. Beyond that, I don't make a habit of guessing.\" He tilts his head slightly, the artificial tooth catching the daylight. \"As for where you're from, you'd know that better than I would. If you're Calderan born, I've never seen you before. If you're not—\" he spreads his hands, a gesture of professional limitation rather than invitation—\"there are a thousand roads into this city, and I don't keep track of travelers.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.0557000000262633,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2433,
+            "completion_tokens": 160,
+            "total_tokens": 2593
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:25:26.085Z",
+            "headers_ms": 1425.4476999999897,
+            "time_to_first_token_ms": 1425.5337,
+            "completed_at": "2026-09-30T01:25:35.045Z",
+            "elapsed_total_ms": 8960.8168
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2102,
+            "completion_tokens": 6,
+            "total_tokens": 2108
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:25:35.046Z",
+            "headers_ms": 514.2592000000004,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:25:35.597Z",
+            "elapsed_total_ms": 551.112999999983
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6395,
+          "recent_conversation": 2,
+          "knowledge_access": 752,
+          "retrieval": 30,
+          "controller_evidence": 7276
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1425.5337,
+          "narrator_total_ms": 8960.8168,
+          "controller_total_ms": 551.112999999983,
+          "controller_tail_ms": 551.8029000000097,
+          "retrieval_ms": 0.0557000000262633,
+          "coordinator_total_ms": 9513.671899999987
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "N"
+        },
+        {
+          "type": "narration_delta",
+          "text": "iles"
+        },
+        {
+          "type": "narration_delta",
+          "text": " V"
+        },
+        {
+          "type": "narration_delta",
+          "text": "anner"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fingers"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pause"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " small"
+        },
+        {
+          "type": "narration_delta",
+          "text": " counter"
+        },
+        {
+          "type": "narration_delta",
+          "text": " balance"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " empty"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pan"
+        },
+        {
+          "type": "narration_delta",
+          "text": " settling"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " soft"
+        },
+        {
+          "type": "narration_delta",
+          "text": " cl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ink"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " studies"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flat"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " patient"
+        },
+        {
+          "type": "narration_delta",
+          "text": " scrutiny"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " man"
+        },
+        {
+          "type": "narration_delta",
+          "text": " accustomed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " weighing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " uncertainty"
+        },
+        {
+          "type": "narration_delta",
+          "text": " against"
+        },
+        {
+          "type": "narration_delta",
+          "text": " risk"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " are"
+        },
+        {
+          "type": "narration_delta",
+          "text": "?\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " repeats"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " neither"
+        },
+        {
+          "type": "narration_delta",
+          "text": " surprised"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nor"
+        },
+        {
+          "type": "narration_delta",
+          "text": " offended"
+        },
+        {
+          "type": "narration_delta",
+          "text": " by"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " question"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "A"
+        },
+        {
+          "type": "narration_delta",
+          "text": " man"
+        },
+        {
+          "type": "narration_delta",
+          "text": " standing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Heart"
+        },
+        {
+          "type": "narration_delta",
+          "text": "stone"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Square"
+        },
+        {
+          "type": "narration_delta",
+          "text": " asking"
+        },
+        {
+          "type": "narration_delta",
+          "text": " strange"
+        },
+        {
+          "type": "narration_delta",
+          "text": " questions"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Beyond"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " don't"
+        },
+        {
+          "type": "narration_delta",
+          "text": " make"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " habit"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " guessing"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " til"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ts"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " head"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slightly"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " artificial"
+        },
+        {
+          "type": "narration_delta",
+          "text": " tooth"
+        },
+        {
+          "type": "narration_delta",
+          "text": " catching"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " daylight"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "As"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " where"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " from"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " you'd"
+        },
+        {
+          "type": "narration_delta",
+          "text": " know"
+        },
+        {
+          "type": "narration_delta",
+          "text": " that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " better"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " would"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " If"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Calder"
+        },
+        {
+          "type": "narration_delta",
+          "text": "an"
+        },
+        {
+          "type": "narration_delta",
+          "text": " born"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " I've"
+        },
+        {
+          "type": "narration_delta",
+          "text": " never"
+        },
+        {
+          "type": "narration_delta",
+          "text": " seen"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " If"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": "—"
+        },
+        {
+          "type": "narration_delta",
+          "text": "\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " spreads"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hands"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gesture"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " professional"
+        },
+        {
+          "type": "narration_delta",
+          "text": " limitation"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rather"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than"
+        },
+        {
+          "type": "narration_delta",
+          "text": " invitation"
+        },
+        {
+          "type": "narration_delta",
+          "text": "—"
+        },
+        {
+          "type": "narration_delta",
+          "text": "\""
+        },
+        {
+          "type": "narration_delta",
+          "text": "there"
+        },
+        {
+          "type": "narration_delta",
+          "text": " are"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " thousand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " roads"
+        },
+        {
+          "type": "narration_delta",
+          "text": " into"
+        },
+        {
+          "type": "narration_delta",
+          "text": " this"
+        },
+        {
+          "type": "narration_delta",
+          "text": " city"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " don't"
+        },
+        {
+          "type": "narration_delta",
+          "text": " keep"
+        },
+        {
+          "type": "narration_delta",
+          "text": " track"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " travelers"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Niles Vanner's fingers pause on the small counter balance, the empty pan settling with a soft clink. He studies Nicco with the flat, patient scrutiny of a man accustomed to weighing uncertainty against risk. \"Who you are?\" he repeats, neither surprised nor offended by the question. \"A man standing in Heartstone Square asking strange questions. Beyond that, I don't make a habit of guessing.\" He tilts his head slightly, the artificial tooth catching the daylight. \"As for where you're from, you'd know that better than I would. If you're Calderan born, I've never seen you before. If you're not—\" he spreads his hands, a gesture of professional limitation rather than invitation—\"there are a thousand roads into this city, and I don't keep track of travelers.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Niles Vanner's fingers pause on the small counter balance, the empty pan settling with a soft clink. He studies Nicco with the flat, patient scrutiny of a man accustomed to weighing uncertainty against risk. \"Who you are?\" he repeats, neither surprised nor offended by the question. \"A man standing in Heartstone Square asking strange questions. Beyond that, I don't make a habit of guessing.\" He tilts his head slightly, the artificial tooth catching the daylight. \"As for where you're from, you'd know that better than I would. If you're Calderan born, I've never seen you before. If you're not—\" he spreads his hands, a gesture of professional limitation rather than invitation—\"there are a thousand roads into this city, and I don't keep track of travelers.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0557000000262633,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2433,
+                "completion_tokens": 160,
+                "total_tokens": 2593
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:25:26.085Z",
+                "headers_ms": 1425.4476999999897,
+                "time_to_first_token_ms": 1425.5337,
+                "completed_at": "2026-09-30T01:25:35.045Z",
+                "elapsed_total_ms": 8960.8168
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2102,
+                "completion_tokens": 6,
+                "total_tokens": 2108
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:25:35.046Z",
+                "headers_ms": 514.2592000000004,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:25:35.597Z",
+                "elapsed_total_ms": 551.112999999983
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6395,
+              "recent_conversation": 2,
+              "knowledge_access": 752,
+              "retrieval": 30,
+              "controller_evidence": 7276
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1425.5337,
+              "narrator_total_ms": 8960.8168,
+              "controller_total_ms": 551.112999999983,
+              "controller_tail_ms": 551.8029000000097,
+              "retrieval_ms": 0.0557000000262633,
+              "coordinator_total_ms": 9513.671899999987
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_niles_vanner_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_niles_vanner_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nNiles Vanner: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "niles_vanner"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "SiliconFlow",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2433,
+          "completion_tokens": 160,
+          "total_tokens": 2593,
+          "cost": 0.00145485,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00145485,
+            "upstream_inference_prompt_cost": 0.00109485,
+            "upstream_inference_completions_cost": 0.00036
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2102,
+          "completion_tokens": 6,
+          "total_tokens": 2108,
+          "cost": 0.00014924,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00014924,
+            "upstream_inference_prompt_cost": 0.00014714,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: the_white_basin
+  type: location
+  name: The White Basin
+  display_name: The White Basin
+  parent: calderan_west
+  aliases:
+    - White Basin
+  summary: A large practical laundry business near Heartstone.
+  tags:
+    - geography
+  search_context: Laundry near Heartstone; household and commercial textile washing in West.
+  content: The White Basin washes clothing, linen and household or commercial textiles. It is an
+    ordinary working-class service, not luxurious, and does not operate as a public bathhouse. Its
+    exact position relative to the square is unestablished. Orla Fen is the proprietor.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

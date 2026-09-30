@@ -93,7 +93,7 @@ test("derived associations are sorted frozen canon; runtime movement wins withou
  assert.ok(!buildTurnContext(world,c.exportSnapshot()).characters.some(p=>p.id==="pellan"));
  assert.deepEqual(world.charactersBasedAt("calderan_center").map(p=>p.id),["pellan"]);
  const unknown=new WorldStore(changed(e=>{e.base_location=null;})),u=new CampaignState(unknown,"unknown",{player_location:"calderan_center",world_time:{world_minute:0}});
- assert.deepEqual(u.exportSnapshot().runtime.npc_locations,[]);assert.doesNotThrow(()=>CampaignState.restore(unknown,structuredClone(u.exportSnapshot())));
+ assert.deepEqual(u.exportSnapshot().runtime.npc_locations.filter(n=>n.character_id==="pellan"),[]);assert.doesNotThrow(()=>CampaignState.restore(unknown,structuredClone(u.exportSnapshot())));
  u.apply({expected_revision:0,commands:[{kind:"runtime_delta",delta:{character_movements:[{character_id:"pellan",current_location:"calderan_center"}]}}]});
  assert.ok(buildTurnContext(unknown,u.exportSnapshot()).characters.some(p=>p.id==="pellan"));
 });
@@ -104,7 +104,7 @@ test("Calderan districts, fringe and one NPC pilot preserve tower topology and c
  for(const id of [...districts,"slave_market_back_alleys"]){ const e=world.getEntity(id)!;assert.equal(e.type,"location");if(e.type==="location")assert.deepEqual(e.connections,[]); }
  assert.equal(world.getEntity("slave_market_back_alleys")!.parent,"calderan_west");
  assert.deepEqual(world.getAncestors("heartstone_f1").map(e=>e.id),["heartstone","calderan_west","calderan","west","continent"]);
- assert.deepEqual(world.getEntitiesByType("character").filter(e=>e.role==="npc").map(e=>e.id),["pellan"]);
+ assert.deepEqual(world.getEntitiesByType("character").filter(e=>e.role==="npc").map(e=>e.id),["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
  const pellan=world.getEntity("pellan")!;assert.equal(pellan.type,"character");if(pellan.type!=="character")return;
  assert.equal(pellan.work_location,null);assert.equal(pellan.home_location,null);assert.deepEqual(pellan.affiliations,[]);assert.equal(pellan.private_notes,undefined);
  assert.match(pellan.traits.join(" "),/fainting/);assert.match(pellan.morality!,/falsifying records/);

@@ -1,0 +1,58 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Orla Fen
+  parent: null
+  aliases: []
+  summary: Orla Fen is the proprietor of The White Basin.
+  tags:
+    - west_merchant
+  search_context: Orla Fen, proprietor of The White Basin.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  base_location: the_white_basin
+  work_location: the_white_basin
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: orla_fen
+  name: Orla Fen
+  sex: female
+  age_band: Approximately 58–63
+  occupation: Laundry proprietor and operator of The White Basin
+  appearance: Medium height, heavy forearms and permanently reddened hands from water, soap and work.
+    Almost entirely grey hair cut short; old clothing beneath a thick waterproofed apron. Removes
+    her spectacles before working and repeatedly misplaces them in the same few spots.
+  content: Orla Fen runs The White Basin. She speaks loudly over the laundry noise and often keeps
+    that volume outside work. She recognizes regular customers by their clothes before their faces.
+    An especially filthy garment makes her quieter, as though offended by the stain. The business
+    washes textiles and is not a public bathhouse.
+  traits:
+    - hardworking
+    - unsentimental
+    - communal
+    - sharp-tongued
+    - dependable
+    - very difficult to hurry
+  purpose: Keep The White Basin reliable for households and businesses that lack the labor or
+    equipment to wash large quantities themselves.
+  morality: Practical neighborhood ethic. Refuses to knowingly use the laundry to conceal serious
+    crimes and considers selling private information beneath her. Quietly washes burial clothing or
+    children's bedding without charge when circumstances are sufficiently bad, despite unsentimental
+    speech.
+  private_notes: Fears fire and contaminated water, which can rapidly destroy the business; becomes
+    unusually serious about water quality, open flames and care around drying cloth. Hears much
+    neighborhood gossip through customers and workers but dislikes gossip. Knows Heartstone-area
+    households, textile care, local water conditions and ordinary neighborhood activity, without
+    specialized criminal or political expertise. Stains or objects in clothing are not automatic
+    proof or secret knowledge. Observable habits are occasional anchors, not compulsory gestures or
+    catchphrases in every interaction. Ordinary professional familiarity or reputation does not
+    establish friendship or personal acquaintance. No private criminal knowledge follows from local
+    experience.
+chunks: []

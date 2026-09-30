@@ -1,0 +1,56 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Bram Kessel
+  parent: null
+  aliases: []
+  summary: Bram Kessel is the proprietor of The Daily Grind.
+  tags:
+    - west_merchant
+  search_context: Bram Kessel, proprietor of The Daily Grind.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  base_location: the_daily_grind
+  work_location: the_daily_grind
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: bram_kessel
+  name: Bram Kessel
+  sex: male
+  age_band: Approximately 50–55
+  occupation: Provisions merchant and proprietor of The Daily Grind
+  appearance: Broad and heavyset, stronger than his soft build suggests. Large unevenly greying
+    moustache; flour-dusted or food-stained apron over respectable working clothes. His hands are
+    unusually clean from frequent washing. A short piece of charcoal usually rests behind one ear.
+  content: Bram Kessel runs The Daily Grind. His conversational voice booms but becomes quiet over
+    money. He rapidly calculates quantities, often repeating orders in different units. He remembers
+    regular purchases better than birthdays, titles or ceremonial forms of address.
+  traits:
+    - sociable
+    - commercially sharp
+    - practical
+    - impatient with indecision
+    - genuinely enjoys feeding people
+    - dislikes waste
+  purpose: "Make The Daily Grind the most dependable ordinary provisions supplier in West: households,
+    inns and small businesses should trust his promised deliveries. He does not aspire to high
+    society."
+  morality: Generally decent and thoroughly commercial. Bargains hard, favors reliable paying
+    customers during shortages and buys cheaply in market collapses. Will not knowingly sell spoiled
+    food as sound, falsify weights, or deliberately poison or starve someone for leverage.
+  private_notes: "Supply failure and empty shelves embarrass him more than losing money on a shipment;
+    bad harvests, transport disruption and sudden bulk orders make him tense. Generous with food but
+    stingy with money: he may add a loaf for a struggling household while fiercely disputing an
+    invoice discrepancy. Knows ordinary food prices, suppliers, bulk household needs, delivery
+    logistics and local inns/kitchens, without specialized criminal, magical or political knowledge.
+    Observable habits are occasional anchors, not compulsory gestures or catchphrases in every
+    interaction. Ordinary professional familiarity or reputation does not establish friendship or
+    personal acquaintance. No private criminal knowledge follows from local experience."
+chunks: []

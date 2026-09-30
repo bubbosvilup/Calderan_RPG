@@ -1,0 +1,952 @@
+{
+  "npc_id": "blackthorn",
+  "name": "Blackthorn",
+  "test": "punch",
+  "campaign_id": "npc_regression_blackthorn_punch",
+  "turns": [
+    {
+      "input": "*He punches Blackthorn directly in the face.*",
+      "scene_location": "heartstone_square",
+      "runtime_co_located": [
+        "blackthorn"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Blackthorn's head snaps back with the impact of Nicco's fist, her black bob swinging loose as she staggers a half-step. One hand flies to her nose—blood already welling between her fingers—while her other arm flails for balance. Her two bodyguards surge forward in unison, big hands closing on Nicco's shoulders to haul him back or drive him down.\n\n\"Hold,\" Blackthorn manages, voice thick and nasal. She blinks rapidly, eyes watering, and spits blood onto the paving stones between them. The bodyguards freeze but keep their grip. She lowers her hand to inspect the red smear across her palm, then looks up at Nicco with something colder than anger—a commercial reassessment, a ledger being rebalanced. \"Direct. Wasteful, but direct.\" She probes her upper lip with her tongue, checking teeth. \"You're bleeding equity, tower-holder.\"",
+      "result": {
+        "narration": "Blackthorn's head snaps back with the impact of Nicco's fist, her black bob swinging loose as she staggers a half-step. One hand flies to her nose—blood already welling between her fingers—while her other arm flails for balance. Her two bodyguards surge forward in unison, big hands closing on Nicco's shoulders to haul him back or drive him down.\n\n\"Hold,\" Blackthorn manages, voice thick and nasal. She blinks rapidly, eyes watering, and spits blood onto the paving stones between them. The bodyguards freeze but keep their grip. She lowers her hand to inspect the red smear across her palm, then looks up at Nicco with something colder than anger—a commercial reassessment, a ledger being rebalanced. \"Direct. Wasteful, but direct.\" She probes her upper lip with her tongue, checking teeth. \"You're bleeding equity, tower-holder.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.12180000000080327,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2379,
+            "completion_tokens": 188,
+            "total_tokens": 2567
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:01.465Z",
+            "headers_ms": 1191.768600000003,
+            "time_to_first_token_ms": 1191.8542000000016,
+            "completed_at": "2026-09-30T01:37:04.979Z",
+            "elapsed_total_ms": 3514.075100000002
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2049,
+            "completion_tokens": 6,
+            "total_tokens": 2055
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:04.980Z",
+            "headers_ms": 685.7002999999968,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:06.030Z",
+            "elapsed_total_ms": 1050.1756999999998
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6108,
+          "recent_conversation": 2,
+          "knowledge_access": 750,
+          "retrieval": 30,
+          "controller_evidence": 7036
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1191.8542000000016,
+          "narrator_total_ms": 3514.075100000002,
+          "controller_total_ms": 1050.1756999999998,
+          "controller_tail_ms": 1051.0966000000044,
+          "retrieval_ms": 0.12180000000080327,
+          "coordinator_total_ms": 4566.472699999998
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn's head"
+        },
+        {
+          "type": "narration_delta",
+          "text": " snaps"
+        },
+        {
+          "type": "narration_delta",
+          "text": " back with the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " impact"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co's fist,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her black"
+        },
+        {
+          "type": "narration_delta",
+          "text": " bob swinging"
+        },
+        {
+          "type": "narration_delta",
+          "text": " loose"
+        },
+        {
+          "type": "narration_delta",
+          "text": " as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " she stag"
+        },
+        {
+          "type": "narration_delta",
+          "text": "gers a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " half"
+        },
+        {
+          "type": "narration_delta",
+          "text": "-step. One"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flies"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to her nose"
+        },
+        {
+          "type": "narration_delta",
+          "text": "—"
+        },
+        {
+          "type": "narration_delta",
+          "text": "blood already"
+        },
+        {
+          "type": "narration_delta",
+          "text": " well"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " between her fingers"
+        },
+        {
+          "type": "narration_delta",
+          "text": "—while her other"
+        },
+        {
+          "type": "narration_delta",
+          "text": " arm"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flails"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " balance. Her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " two body"
+        },
+        {
+          "type": "narration_delta",
+          "text": "guards surge"
+        },
+        {
+          "type": "narration_delta",
+          "text": " forward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " un"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ison, big"
+        },
+        {
+          "type": "narration_delta",
+          "text": " hands closing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nicco's shoulders"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " haul"
+        },
+        {
+          "type": "narration_delta",
+          "text": " him back"
+        },
+        {
+          "type": "narration_delta",
+          "text": " or"
+        },
+        {
+          "type": "narration_delta",
+          "text": " drive"
+        },
+        {
+          "type": "narration_delta",
+          "text": " him down"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "\""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Hold"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn manages"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", voice thick"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and nasal."
+        },
+        {
+          "type": "narration_delta",
+          "text": " She bl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "inks rapidly"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", eyes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " watering, and sp"
+        },
+        {
+          "type": "narration_delta",
+          "text": "its blood"
+        },
+        {
+          "type": "narration_delta",
+          "text": " onto the paving"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stones between"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". The"
+        },
+        {
+          "type": "narration_delta",
+          "text": " bodygu"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ards freeze but"
+        },
+        {
+          "type": "narration_delta",
+          "text": " keep"
+        },
+        {
+          "type": "narration_delta",
+          "text": " their grip"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " She"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lowers"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her hand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " inspect"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " red sm"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ear across"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her palm, then"
+        },
+        {
+          "type": "narration_delta",
+          "text": " looks"
+        },
+        {
+          "type": "narration_delta",
+          "text": " up at Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co with something"
+        },
+        {
+          "type": "narration_delta",
+          "text": " colder"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than anger—a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " commercial"
+        },
+        {
+          "type": "narration_delta",
+          "text": " reass"
+        },
+        {
+          "type": "narration_delta",
+          "text": "essment, a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " ledger"
+        },
+        {
+          "type": "narration_delta",
+          "text": " being"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rebalanced"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"Direct"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". W"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ast"
+        },
+        {
+          "type": "narration_delta",
+          "text": "eful,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " but direct"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\" She probes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her upper"
+        },
+        {
+          "type": "narration_delta",
+          "text": " lip with her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " tongue, checking"
+        },
+        {
+          "type": "narration_delta",
+          "text": " teeth"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". \"You're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " bleeding"
+        },
+        {
+          "type": "narration_delta",
+          "text": " equity"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " tower"
+        },
+        {
+          "type": "narration_delta",
+          "text": "-holder"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Blackthorn's head snaps back with the impact of Nicco's fist, her black bob swinging loose as she staggers a half-step. One hand flies to her nose—blood already welling between her fingers—while her other arm flails for balance. Her two bodyguards surge forward in unison, big hands closing on Nicco's shoulders to haul him back or drive him down.\n\n\"Hold,\" Blackthorn manages, voice thick and nasal. She blinks rapidly, eyes watering, and spits blood onto the paving stones between them. The bodyguards freeze but keep their grip. She lowers her hand to inspect the red smear across her palm, then looks up at Nicco with something colder than anger—a commercial reassessment, a ledger being rebalanced. \"Direct. Wasteful, but direct.\" She probes her upper lip with her tongue, checking teeth. \"You're bleeding equity, tower-holder.\""
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Blackthorn's head snaps back with the impact of Nicco's fist, her black bob swinging loose as she staggers a half-step. One hand flies to her nose—blood already welling between her fingers—while her other arm flails for balance. Her two bodyguards surge forward in unison, big hands closing on Nicco's shoulders to haul him back or drive him down.\n\n\"Hold,\" Blackthorn manages, voice thick and nasal. She blinks rapidly, eyes watering, and spits blood onto the paving stones between them. The bodyguards freeze but keep their grip. She lowers her hand to inspect the red smear across her palm, then looks up at Nicco with something colder than anger—a commercial reassessment, a ledger being rebalanced. \"Direct. Wasteful, but direct.\" She probes her upper lip with her tongue, checking teeth. \"You're bleeding equity, tower-holder.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.12180000000080327,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2379,
+                "completion_tokens": 188,
+                "total_tokens": 2567
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:01.465Z",
+                "headers_ms": 1191.768600000003,
+                "time_to_first_token_ms": 1191.8542000000016,
+                "completed_at": "2026-09-30T01:37:04.979Z",
+                "elapsed_total_ms": 3514.075100000002
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2049,
+                "completion_tokens": 6,
+                "total_tokens": 2055
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:04.980Z",
+                "headers_ms": 685.7002999999968,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:06.030Z",
+                "elapsed_total_ms": 1050.1756999999998
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6108,
+              "recent_conversation": 2,
+              "knowledge_access": 750,
+              "retrieval": 30,
+              "controller_evidence": 7036
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1191.8542000000016,
+              "narrator_total_ms": 3514.075100000002,
+              "controller_total_ms": 1050.1756999999998,
+              "controller_tail_ms": 1051.0966000000044,
+              "retrieval_ms": 0.12180000000080327,
+              "coordinator_total_ms": 4566.472699999998
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_blackthorn_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "blackthorn",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_blackthorn_punch",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "blackthorn",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBlackthorn: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Heartstone Square. Heartstone's massive main entrance opens directly onto this public square, outside the tower's structure. The square is reasonably broad but is not a major civic square. Moderate daytime foot traffic is quieter than at Main Market Square. Low residential buildings predominate, with few nearby shops and no major commercial concentration. Night safety is mediocre. The low-end, disreputable tavern The Coined Lie faces or directly adjoins the square. The White Basin is a laundry near Heartstone, without an established position directly on the square.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\nCharacter Blackthorn (blackthorn): {\"baseline\":{\"id\":\"blackthorn\",\"name\":\"Blackthorn\",\"display_name\":\"Blackthorn\",\"summary\":\"Blackthorn is a commercially skilled West intermediary associated with discreet business and GW's.\",\"secret\":false,\"appearance\":\"Short, approximately 155–160 cm, with a distinctly round build, aubergine-purple tailored suit, black bob haircut and nearly black eyes. Usually accompanied by two large bodyguards.\",\"portrayal\":{\"purpose\":\"Genuine loyalty to and admiration for Dren's competence. She wants him to advance within the coalition and hopes eventually to inherit his current organizational position.\",\"morality\":\"Experiences ordinary emotions but has essentially no moral concern for victims. Focuses on efficient commerce and logistics; uses violent subordinates when force is needed rather than acting as the primary enforcer.\",\"personality\":[\"extremely pragmatic\",\"commercially gifted\",\"impatient\",\"organized\",\"strong with numbers and logistics\",\"hates delays, incompetence and wasted time\",\"ordinary emotions with essentially no moral concern for victims\"],\"affiliations\":[\"carrion_dogs\"],\"private_notes\":\"Lieutenant and commercial/administrative arm of the Carrion Dogs. Handles trafficking logistics, Back-Back Alley negotiations, important clients, external slavers and security coordination as well as GW's. Knows Dren's identity, appearance and base, many intermediaries, major depots/routes and much of the organization; not all higher coalition secrets. Habitual patterns are not runtime schedules.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Blackthorn is a pragmatic commercial intermediary who handles buying, selling, shipments and important customers. She is physically non-intimidating herself and is usually accompanied by two large bodyguards, who are not separately authored characters. She is not primarily an assassin or enforcer. Her residence is unestablished.\",\"traits\":[\"extremely pragmatic\",\"commercially gifted\",\"impatient\",\"organized\",\"strong with numbers and logistics\",\"hates delays, incompetence and wasted time\",\"ordinary emotions with essentially no moral concern for victims\"]},\"profile\":{\"name\":\"Blackthorn\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "blackthorn"
+      ],
+      "narrator_present_ids": [
+        "blackthorn"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2379,
+          "completion_tokens": 188,
+          "total_tokens": 2567,
+          "cost": 0.001890728,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001890728,
+            "upstream_inference_prompt_cost": 0.001265628,
+            "upstream_inference_completions_cost": 0.0006251
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2049,
+          "completion_tokens": 6,
+          "total_tokens": 2055,
+          "cost": 0.00014553,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00014553,
+            "upstream_inference_prompt_cost": 0.00014343,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

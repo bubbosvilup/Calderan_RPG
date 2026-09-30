@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: open_hand_chapel
+  type: location
+  name: The Open Hand Chapel
+  display_name: The Open Hand Chapel
+  parent: calderan_west
+  aliases:
+    - Open Hand Chapel
+  summary: A small, modest charitable chapel near Chevalier Fountain.
+  tags:
+    - geography
+  search_context: A small, modest charitable chapel near Chevalier Fountain.
+  content: The chapel welcomes people without requiring devotion to one specific deity. It offers
+    basic religious comfort and charitable assistance, with particular concern for poor people and
+    street children. It maintains some ties to broader religious charity activity in North. Brother
+    Aven serves here as the local minister, charity worker and nonmagical healer. Church doctrine is
+    not established here.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

@@ -99,7 +99,7 @@ test("TEST 2 exact: movement to the pens resolves the destination but is blocked
   assert.equal(campaign.exportSnapshot().runtime.scene.player_location, "heartstone_square"); assert.deepEqual(result.authorized_commands, []);
   assert.deepEqual(result.scene_participants!.plan.participants.map(p => [p.role, p.standing]), [["guard", "ordinary_local"]]);
   const prompt = seen[0]!.messages[0]!.content;
-  assert.match(prompt, /he has not arrived and is still at Outside Heartstone\. Do not describe him at Calderan Slave Market\./);
+  assert.match(prompt, /he has not arrived and is still at Heartstone Square\. Do not describe him at Calderan Slave Market\./);
   assert.match(prompt, /P1 - Guard \(current conversation partner\)\. Temporary; ordinary local of Calderan West District\. Affiliation unestablished/);
   assert.match(prompt, /P1 Guard \(temporary, ordinary local\): CAN USE/);
 });

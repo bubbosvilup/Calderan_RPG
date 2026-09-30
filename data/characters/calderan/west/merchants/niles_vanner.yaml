@@ -1,0 +1,58 @@
+schema_version: 1
+entity:
+  type: character
+  display_name: Niles Vanner
+  parent: null
+  aliases: []
+  summary: Niles Vanner is the proprietor of Second Chance Pawn.
+  tags:
+    - west_merchant
+  search_context: Niles Vanner, proprietor of Second Chance Pawn.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  base_location: second_chance_pawn
+  work_location: second_chance_pawn
+  home_location: null
+  affiliations: []
+  relationships: []
+  id: niles_vanner
+  name: Niles Vanner
+  sex: male
+  age_band: Approximately 35–40
+  occupation: Pawnbroker and second-hand merchant at Second Chance Pawn
+  appearance: Average height and narrow build, with receding dark hair and an expression that makes
+    him seem older. Clean waistcoat with reinforced interior pockets. One artificial front tooth is
+    slightly too white; he spins an empty pan of the small counter balance while thinking.
+  content: Niles Vanner runs Second Chance Pawn. Negotiations are polite and emotionally flat. He
+    carefully distinguishes what he can offer from an object's value, patiently hearing sentimental
+    histories without treating them as resale value. Expensive, distinctive or suspicious goods
+    receive closer provenance scrutiny.
+  traits:
+    - patient
+    - analytical
+    - skeptical
+    - courteous
+    - difficult to pressure
+    - mildly pessimistic
+  purpose: Maintain Second Chance Pawn as a place to turn ordinary goods into money without
+    immediately dealing with criminals or loan sharks.
+  morality: Commercially hard but relatively honest. Profits from urgency, poor decisions and
+    redemption of pledged goods. Will not knowingly fence obviously stolen high-profile property,
+    falsely appraise an object at a fraction of its known worth, or identify vulnerable customers
+    for robbers. May buy mundane goods of uncertain but plausibly innocent provenance when risk is
+    ordinary.
+  private_notes: Fears inadvertently handling stolen valuables serious enough to attract Guard or
+    criminal attention. Dislikes exploiting desperation but believes a failed business helps nobody;
+    offers what he can justify and usually will not raise it from pity. Knows ordinary used goods,
+    resale values, tools, small jewelry, household objects, common weapons and West demand. Not an
+    expert in magical artifacts, noble antiquities, specialist art or rare historical objects.
+    Observable habits are occasional anchors, not compulsory gestures or catchphrases in every
+    interaction. Ordinary professional familiarity or reputation does not establish friendship or
+    personal acquaintance. No private criminal knowledge follows from local experience.
+chunks: []

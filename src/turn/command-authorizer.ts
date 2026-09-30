@@ -4,6 +4,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { TurnContext } from "./context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
+import { isPhysicalCondition } from "./physical-interaction.js";
 
 /** Policy consumes resolved same-turn evidence, never searches arbitrary narration. */
 export function authorizeCommands(proposal: readonly CampaignCommand[], evidence: TurnEvidence, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>): readonly AuthorizationDiagnostic[] {
@@ -14,8 +15,23 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
     switch (command.kind) {
       case "transfer_item": {
         const item = snapshot.items.find(i => i.id === command.item_id);
-        valid = !!item && item.owner_id === "nicco" && (item.position.kind === "carried" || item.position.kind === "equipped") && item.position.character_id === "nicco" && !!command.owner_id && command.owner_id !== "nicco" && present.has(command.owner_id);
+        const holder = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? item.position.character_id : undefined;
+        // Outbound: Nicco owns and holds the item and gives it to a present character.
+        const outbound = !!item && item.owner_id === "nicco" && holder === "nicco" && !!command.owner_id && command.owner_id !== "nicco" && present.has(command.owner_id);
+        // Inbound (Repair 1): a present character who both owns and holds the exact item gives it to Nicco, who carries it.
+        // No remote transfer, no transfer from a mere carrier or owner, never directly into an equipment slot.
+        const inbound = !!item && !!holder && holder !== "nicco" && item.owner_id === holder && present.has(holder) && command.owner_id === "nicco" && command.position.kind === "carried" && command.position.character_id === "nicco";
+        valid = outbound || inbound;
         break;
+      }
+      case "set_condition": {
+        // Repair 1 class-B physical conditions: closed vocabulary, same-turn physical interaction, additive only, no status or
+        // presentation change. The grammar never confirms conditions; only verified controller evidence can (hybrid mode).
+        const current = snapshot.characters.find(c => c.id === command.character_id)?.current.conditions ?? [];
+        const added = command.conditions.filter(c => !current.includes(c));
+        const involved = (evidence.physical_interactions ?? []).some(p => p.target === command.character_id || p.actor === command.character_id || command.character_id === "nicco" && present.has(p.target));
+        const ok = present.has(command.character_id) && involved && command.status === undefined && command.presentation === undefined && current.every(c => command.conditions.includes(c)) && added.length > 0 && added.every(isPhysicalCondition);
+        return ok ? reject("rejected_insufficient_confirmation") : reject("rejected_reference_invalid");
       }
       case "place_item": {
         const item = snapshot.items.find(i => i.id === command.item_id);

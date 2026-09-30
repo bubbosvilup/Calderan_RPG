@@ -10,10 +10,10 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import { CampaignSession } from "../src/persistence/campaign-session.js";
 import { collect, metadata, mockNarrator, mockController, setup, transfer } from "./turn-fixtures.js";
 
-test("streaming lifecycle: visible narration precedes controller and one atomic commit", async () => {
+test("lifecycle (Repair 1): narration is delivered only after authorization, then one atomic commit", async () => {
   const s = setup("Brenna accepts boots from Nicco.", [transfer]); const base = s.campaign.revision;
   const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "I give boots to Brenna." }));
-  assert.deepEqual(events.map(e => e.type), ["turn_started", "narration_delta", "narration_completed", "controller_started", "state_proposed", "state_committed", "turn_completed"]);
+  assert.deepEqual(events.map(e => e.type), ["turn_started", "controller_started", "state_proposed", "narration_delta", "narration_completed", "state_committed", "turn_completed"]);
   assert.equal(s.campaign.revision, base + 1); assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna");
   assert.equal(s.coordinator.recent(s.campaign).entries()[0]!.status, "finalized");
 });

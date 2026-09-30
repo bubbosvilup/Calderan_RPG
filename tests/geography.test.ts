@@ -124,9 +124,9 @@ test("geography uses only location schema fields and adds no traversal edges or 
     // Structural guard only: this does not prove arbitrary prose contains no invented facts.
     assert(!Object.values(entity).some(value => typeof value === "number"));
   }
-  assert.deepEqual(world.getEntitiesByType("faction").map(e => e.id).sort(), ["artisans_guild", "church", "city_guard", "inquisition", "learned_arts_guild", "merchants_guild"]);
+  assert.deepEqual(world.getEntitiesByType("faction").map(e => e.id).sort(), ["artisans_guild", "carrion_dogs", "church", "city_guard", "inquisition", "learned_arts_guild", "merchants_guild"]);
   // The only character record is the canonical player (baseline opening), not a geography actor.
-  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["nicco", "pellan"]);
+  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
   assert.deepEqual(world.getEntitiesByType("event"), []);
   assert.deepEqual(world.getEntitiesByType("item"), []);
 });

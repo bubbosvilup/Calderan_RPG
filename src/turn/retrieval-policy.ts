@@ -24,6 +24,8 @@ const INTENTS: readonly [QueryIntent, RegExp][] = [
   ["route", /\b(?:how\s+(?:do|can|would|should)\s+i\s+get\s+to|how\s+to\s+get\s+to|(?:exact\s+)?route\s+to|directions?\s+to|the\s+way\s+to|which\s+way\s+(?:is|to)|how\s+far\s+(?:is|to))\b/i],
   ["schedule", /\b(?:when\s+(?:do|does|is|are|will|did)\s+(?:the\s+)?(?!you\b|i\b|we\b)\w+|what\s+time|how\s+often|opening\s+hours|what\s+days?|schedule)\b/i],
   ["history", /\b(?:who\s+(?:owned|built|lived|founded|ran|used\s+to)|how\s+long\s+(?:has|have|had|ago|since)|used\s+to\s+(?:be|belong|live|own)|before\s+(?:me|him|her|us|them|now)|history\s+of|was\s+(?:built|founded|abandoned)|how\s+old\s+is)\b/i],
+  // A service destination need not name a known business to require grounding.
+  ["location", /\bwhere\s+(?:can|could|do)\s+i\s+(?:buy|purchase|repair|sell|pawn|wash|stay|eat)\b/i],
   ["location", new RegExp(`\\b(?:where\\s+(?:is|are|was|were|can\\s+i\\s+find|do\\s+i\\s+find)\\s+${NOT_LISTENER}|location\\s+of)\\b`, "i")],
   ["lore", new RegExp(`\\b(?:what\\s+(?:is|are)\\s+${NOT_LISTENER}(?:the\\s+|a\\s+|an\\s+)?[a-z]+|what\\s+do\\s+(?:people|you|folk)\\s+know|tell\\s+me\\s+about|who\\s+(?:is|are)\\s+the)\\b`, "i")],
 ];
@@ -112,12 +114,21 @@ export async function rankForTurn(input: string, context: TurnContext, world: Wo
     if (hit) candidates.push(hit);
   }
   const tier = (c: Candidate) => c.kind === "entity" ? mentions.get(c.entity_id) ?? 0 : 0;
+  // Lexical token sets discard repetition in overlapping names such as
+  // Back Alleys / Back-Back Alleys. Prefer the longer matched explicit name.
+  const queryTokens = content(query);
+  const specificity = (c: Candidate) => {
+    if (tier(c) !== 2) return 0;
+    const e = world.getEntity(c.entity_id)!;
+    return Math.max(0, ...[e.name, e.display_name, ...e.aliases].map(content)
+      .filter(run => includesRun(queryTokens, run)).map(run => run.length));
+  };
   const s = (c: Candidate) => score.get(key(c)) ?? 0;
-  const byScore = [...candidates].sort((a, b) => tier(b) - tier(a) || s(b) - s(a));
+  const byScore = [...candidates].sort((a, b) => tier(b) - tier(a) || specificity(b) - specificity(a) || s(b) - s(a));
   const ordered: Candidate[] = [];
   for (let i = 0; i < byScore.length;) {
     const top = byScore[i]!, group = [top];
-    for (let j = i + 1; j < byScore.length && tier(byScore[j]!) === tier(top) && s(byScore[j]!) >= LOCALITY_TIE * s(top); j++) group.push(byScore[j]!);
+    for (let j = i + 1; j < byScore.length && tier(byScore[j]!) === tier(top) && specificity(byScore[j]!) === specificity(top) && s(byScore[j]!) >= LOCALITY_TIE * s(top); j++) group.push(byScore[j]!);
     ordered.push(...group.map((c, index) => ({ c, index, rank: localityRank(c.entity_id, context, world) }))
       .sort((a, b) => a.rank !== undefined && b.rank !== undefined ? a.rank - b.rank || a.index - b.index : a.index - b.index).map(x => x.c));
     i += group.length;

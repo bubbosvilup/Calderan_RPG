@@ -1,0 +1,309 @@
+{
+  "started_at": "2026-09-30T02:25:53.912Z",
+  "models": {
+    "narrator": "moonshotai/kimi-k2.5",
+    "controller": "deepseek/deepseek-v4-flash-0731:nitro"
+  },
+  "provider": "OpenRouter",
+  "retrieval": "lexical; standard live-evaluation onlineCoordinator(world, false)",
+  "rotation": [
+    "pellan",
+    "korvin",
+    "mistress_elara",
+    "bartolomhew",
+    "dren",
+    "blackthorn",
+    "captain_doran_hale",
+    "brother_aven",
+    "sister_mereth",
+    "bram_kessel",
+    "hadrik_voss",
+    "mira_thorne",
+    "livia_marr",
+    "jessa_rook",
+    "orla_fen",
+    "niles_vanner"
+  ],
+  "item_id": "campaign_item_regression_leather_boots",
+  "return_input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+  "public_dir": "docs/evaluations/live-npc-regression-repair-1-2026-09-30T02-25-53-910Z",
+  "private_dir": ".build/live-npc-regression-repair-1-2026-09-30T02-25-53-910Z",
+  "source_before": "03b4c9524b9c377462d5d2a50f30781e57a760c1e78cc486eae43f19aedaa665",
+  "cases": [
+    {
+      "npc_id": "korvin",
+      "test": "identity",
+      "file": "korvin-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "pellan",
+      "test": "identity",
+      "file": "pellan-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "korvin",
+      "test": "items",
+      "file": "korvin-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "mistress_elara",
+      "test": "identity",
+      "file": "mistress_elara-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "pellan",
+      "test": "items",
+      "file": "pellan-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "bartolomhew",
+      "test": "identity",
+      "file": "bartolomhew-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "mistress_elara",
+      "test": "items",
+      "file": "mistress_elara-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "dren",
+      "test": "identity",
+      "file": "dren-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "bartolomhew",
+      "test": "items",
+      "file": "bartolomhew-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "blackthorn",
+      "test": "identity",
+      "file": "blackthorn-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "dren",
+      "test": "items",
+      "file": "dren-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "captain_doran_hale",
+      "test": "identity",
+      "file": "captain_doran_hale-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "captain_doran_hale",
+      "test": "items",
+      "file": "captain_doran_hale-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "blackthorn",
+      "test": "items",
+      "file": "blackthorn-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "brother_aven",
+      "test": "identity",
+      "file": "brother_aven-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "sister_mereth",
+      "test": "identity",
+      "file": "sister_mereth-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "brother_aven",
+      "test": "items",
+      "file": "brother_aven-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "sister_mereth",
+      "test": "items",
+      "file": "sister_mereth-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "bram_kessel",
+      "test": "identity",
+      "file": "bram_kessel-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "hadrik_voss",
+      "test": "identity",
+      "file": "hadrik_voss-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "bram_kessel",
+      "test": "items",
+      "file": "bram_kessel-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "mira_thorne",
+      "test": "identity",
+      "file": "mira_thorne-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "hadrik_voss",
+      "test": "items",
+      "file": "hadrik_voss-items.json",
+      "outcomes": [
+        "success",
+        "controller_failed"
+      ]
+    },
+    {
+      "npc_id": "mira_thorne",
+      "test": "items",
+      "file": "mira_thorne-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "livia_marr",
+      "test": "identity",
+      "file": "livia_marr-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "jessa_rook",
+      "test": "identity",
+      "file": "jessa_rook-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "livia_marr",
+      "test": "items",
+      "file": "livia_marr-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "jessa_rook",
+      "test": "items",
+      "file": "jessa_rook-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "niles_vanner",
+      "test": "identity",
+      "file": "niles_vanner-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "orla_fen",
+      "test": "identity",
+      "file": "orla_fen-identity.json",
+      "outcomes": [
+        "success"
+      ]
+    },
+    {
+      "npc_id": "niles_vanner",
+      "test": "items",
+      "file": "niles_vanner-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "npc_id": "orla_fen",
+      "test": "items",
+      "file": "orla_fen-items.json",
+      "outcomes": [
+        "success",
+        "success"
+      ]
+    }
+  ],
+  "finished_at": "2026-09-30T02:29:06.643Z",
+  "source_after": "03b4c9524b9c377462d5d2a50f30781e57a760c1e78cc486eae43f19aedaa665",
+  "source_unchanged": true
+}

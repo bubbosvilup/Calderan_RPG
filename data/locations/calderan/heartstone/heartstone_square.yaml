@@ -2,23 +2,27 @@ schema_version: 1
 entity:
   id: heartstone_square
   type: location
-  name: Square outside Heartstone
-  display_name: Outside Heartstone
+  name: Heartstone Square
+  display_name: Heartstone Square
   parent: calderan_west
   aliases:
     - square outside Heartstone
     - public square outside Heartstone
-  summary: The public square/open public area immediately outside Heartstone Tower's main entrance, in
-    the city.
+    - Square outside Heartstone
+    - Outside Heartstone
+  summary: Heartstone Square is the reasonably broad public square immediately outside Heartstone in
+    peripheral West, primarily surrounded by low residential buildings.
   tags:
     - public
     - city
   search_context: Public square or open area immediately outside Heartstone Tower's main entrance.
-  content: This public open area lies immediately outside Heartstone Tower. It is a public city space
-    where ordinary citizens and passers-by may plausibly be present. Heartstone's massive main
-    entrance opens directly onto it. No specific landmarks, establishments, street names or
-    navigation routes are established. It lies in Calderan's West District, immediately outside the
-    tower rather than inside its structure.
+  content: Heartstone's massive main entrance opens directly onto this public square, outside the
+    tower's structure. The square is reasonably broad but is not a major civic square. Moderate
+    daytime foot traffic is quieter than at Main Market Square. Low residential buildings
+    predominate, with few nearby shops and no major commercial concentration. Night safety is
+    mediocre. The low-end, disreputable tavern The Coined Lie faces or directly adjoins the square.
+    The White Basin is a laundry near Heartstone, without an established position directly on the
+    square.
   knowledge:
     visibility:
       narrator: true

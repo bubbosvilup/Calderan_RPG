@@ -1,0 +1,1340 @@
+{
+  "counts": {
+    "turns": 48,
+    "successful": 48,
+    "gifts_committed": 0,
+    "authorized_commands": 0,
+    "proposals": 16,
+    "rejected_proposals": 16,
+    "verified_but_rejected": 3,
+    "natural_actions": 0,
+    "duplicates": 0,
+    "equipped": 0,
+    "unrelated_changes": 0,
+    "knowledge_changes": 0
+  },
+  "providers": {
+    "narrator": {
+      "SiliconFlow": 40,
+      "Venice": 8
+    },
+    "controller": {
+      "Reka": 31,
+      "Wafer": 17
+    }
+  },
+  "rows": [
+    {
+      "id": "pellan",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 1.7778999999999883,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Pellan: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "pellan",
+            "position": {
+              "kind": "carried",
+              "character_id": "pellan"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              true
+            ],
+            "checks": [
+              "receipt_of_named_item"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.13359999999920547,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Pellan: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "pellan",
+            "position": {
+              "kind": "carried",
+              "character_id": "pellan"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "no_receipt_act_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.14129999999931897,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Pellan: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "korvin",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.9953000000000429,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Korvin: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.8466000000000236,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Korvin: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "korvin",
+            "position": {
+              "kind": "carried",
+              "character_id": "korvin"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.20340000000032887,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Korvin: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mistress_elara",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.8924999999999272,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Mistress Elara: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "mistress_elara",
+            "position": {
+              "kind": "carried",
+              "character_id": "mistress_elara"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09389999999984866,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Mistress Elara: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "mistress_elara",
+            "position": {
+              "kind": "carried",
+              "character_id": "mistress_elara"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.20429999999760184,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Mistress Elara: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bartolomhew",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09280000000217115,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Bartolomhew: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "bartolomhew",
+            "position": {
+              "kind": "carried",
+              "character_id": "bartolomhew"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "quote_not_verbatim"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0684000000001106,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Bartolomhew: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "bartolomhew",
+            "position": {
+              "kind": "carried",
+              "character_id": "bartolomhew"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1224999999976717,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Bartolomhew: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dren",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": false,
+            "portrayal": false,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.07970000000204891,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": null
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "dren",
+            "position": {
+              "kind": "carried",
+              "character_id": "dren"
+            },
+            "present": false,
+            "portrayal": false,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "no_receipt_act_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0918999999994412,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": null
+          },
+          {
+            "outcome": "success",
+            "owner": "dren",
+            "position": {
+              "kind": "carried",
+              "character_id": "dren"
+            },
+            "present": false,
+            "portrayal": false,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "no_receipt_act_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.2665999999953783,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "blackthorn",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09010000000125729,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Blackthorn: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              true
+            ],
+            "checks": [
+              "receipt_of_named_item"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.12969999999768334,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Blackthorn: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1483999999909429,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Blackthorn: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "captain_doran_hale",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.10399999999935972,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Captain Doran Hale: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "captain_doran_hale",
+            "position": {
+              "kind": "carried",
+              "character_id": "captain_doran_hale"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              true
+            ],
+            "checks": [
+              "receipt_of_named_item"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.13550000000395812,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Captain Doran Hale: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "captain_doran_hale",
+            "position": {
+              "kind": "carried",
+              "character_id": "captain_doran_hale"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.12429999999585561,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Captain Doran Hale: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "brother_aven",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.08150000000023283,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Brother Aven: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "brother_aven",
+            "position": {
+              "kind": "carried",
+              "character_id": "brother_aven"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "no_receipt_act_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.07379999999830034,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Brother Aven: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "brother_aven",
+            "position": {
+              "kind": "carried",
+              "character_id": "brother_aven"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.15130000001227017,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Brother Aven: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sister_mereth",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.07490000000689179,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Sister Mereth: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "other_character_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.08009999999194406,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Sister Mereth: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "sister_mereth",
+            "position": {
+              "kind": "carried",
+              "character_id": "sister_mereth"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.18390000000363216,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Sister Mereth: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bram_kessel",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0776999999943655,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Bram Kessel: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "no_receipt_act_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.19109999999636784,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Bram Kessel: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "bram_kessel",
+            "position": {
+              "kind": "carried",
+              "character_id": "bram_kessel"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09610000002430752,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Bram Kessel: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hadrik_voss",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.06790000000910368,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Hadrik Voss: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "hadrik_voss",
+            "position": {
+              "kind": "carried",
+              "character_id": "hadrik_voss"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "other_character_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0891000000119675,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Hadrik Voss: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "hadrik_voss",
+            "position": {
+              "kind": "carried",
+              "character_id": "hadrik_voss"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "sentence_hedged_negated_or_hypothetical"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.10500000001047738,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Hadrik Voss: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mira_thorne",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0806999999913387,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Mira Thorne: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.07190000000991859,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Mira Thorne: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "mira_thorne",
+            "position": {
+              "kind": "carried",
+              "character_id": "mira_thorne"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.10169999999925494,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Mira Thorne: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "livia_marr",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.056799999991199,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Livia Marr: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "livia_marr",
+            "position": {
+              "kind": "carried",
+              "character_id": "livia_marr"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "quote_length"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1626000000105705,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Livia Marr: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "livia_marr",
+            "position": {
+              "kind": "carried",
+              "character_id": "livia_marr"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.12789999999222346,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Livia Marr: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jessa_rook",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.13219999999273568,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Jessa Rook: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "jessa_rook",
+            "position": {
+              "kind": "carried",
+              "character_id": "jessa_rook"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "other_character_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.06550000002607703,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Jessa Rook: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "jessa_rook",
+            "position": {
+              "kind": "carried",
+              "character_id": "jessa_rook"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.16869999998016283,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Jessa Rook: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "orla_fen",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0659999999916181,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Orla Fen: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "quote_length"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0560000000114087,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Orla Fen: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "orla_fen",
+            "position": {
+              "kind": "carried",
+              "character_id": "orla_fen"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0737000000081025,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Orla Fen: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "niles_vanner",
+      "tests": {
+        "identity": [
+          {
+            "outcome": "success",
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.0557000000262633,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Niles Vanner: CAN USE none; DO NOT USE F1, F2"
+          }
+        ],
+        "items": [
+          {
+            "outcome": "success",
+            "owner": "niles_vanner",
+            "position": {
+              "kind": "carried",
+              "character_id": "niles_vanner"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 1,
+            "accepted": 0,
+            "reasons": [
+              "rejected_reference_invalid"
+            ],
+            "verified": [
+              false
+            ],
+            "checks": [
+              "other_character_in_quote"
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.14209999999729916,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Niles Vanner: CAN USE none; DO NOT USE F1, F2"
+          },
+          {
+            "outcome": "success",
+            "owner": "niles_vanner",
+            "position": {
+              "kind": "carried",
+              "character_id": "niles_vanner"
+            },
+            "present": true,
+            "portrayal": true,
+            "proposed": 0,
+            "accepted": 0,
+            "reasons": [],
+            "verified": [],
+            "checks": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.09950000001117587,
+              "outcome": "not_needed"
+            },
+            "finish": "stop",
+            "knowledge_can_use": "Niles Vanner: CAN USE none; DO NOT USE F1, F2"
+          }
+        ]
+      }
+    }
+  ]
+}

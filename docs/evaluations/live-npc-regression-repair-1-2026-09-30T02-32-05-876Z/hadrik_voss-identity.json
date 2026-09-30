@@ -1,0 +1,571 @@
+{
+  "npc_id": "hadrik_voss",
+  "name": "Hadrik Voss",
+  "test": "identity",
+  "campaign_id": "npc_regression_hadrik_voss_identity",
+  "initial": {
+    "revision": 2,
+    "items": [],
+    "characters": [],
+    "item_count": 0,
+    "boot_like_count": 0,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "*He asks Hadrik Voss who they think he is and where he comes from.*",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\"",
+      "result": {
+        "narration": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\"",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.11480000001029111,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narration_reconciliation": {
+          "delivered": "draft",
+          "draft": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\"",
+          "issues": []
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 3225,
+            "completion_tokens": 169,
+            "total_tokens": 3394
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:34:09.937Z",
+            "headers_ms": 1443.5841999999975,
+            "time_to_first_token_ms": 1445.8754999999946,
+            "completed_at": "2026-09-30T02:34:12.330Z",
+            "elapsed_total_ms": 2393.0555999999924
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 3264,
+            "completion_tokens": 220,
+            "total_tokens": 3484
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T02:34:12.331Z",
+            "headers_ms": 2434.552199999991,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T02:34:16.249Z",
+            "elapsed_total_ms": 3918.2121000000043
+          }
+        },
+        "context_characters": {
+          "system": 6415,
+          "primary_context": 6525,
+          "recent_conversation": 2,
+          "knowledge_access": 1270,
+          "retrieval": 30,
+          "controller_evidence": 7451
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1445.8754999999946,
+          "narrator_total_ms": 2393.0555999999924,
+          "controller_total_ms": 3918.2121000000043,
+          "controller_tail_ms": 3924.6312000000034,
+          "retrieval_ms": 0.11480000001029111,
+          "coordinator_total_ms": 6319.809200000003
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "narration_delta",
+          "text": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\""
+        },
+        {
+          "type": "narration_completed",
+          "text": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\""
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\"",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.11480000001029111,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narration_reconciliation": {
+              "delivered": "draft",
+              "draft": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\"",
+              "issues": []
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 3225,
+                "completion_tokens": 169,
+                "total_tokens": 3394
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:34:09.937Z",
+                "headers_ms": 1443.5841999999975,
+                "time_to_first_token_ms": 1445.8754999999946,
+                "completed_at": "2026-09-30T02:34:12.330Z",
+                "elapsed_total_ms": 2393.0555999999924
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 3264,
+                "completion_tokens": 220,
+                "total_tokens": 3484
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T02:34:12.331Z",
+                "headers_ms": 2434.552199999991,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T02:34:16.249Z",
+                "elapsed_total_ms": 3918.2121000000043
+              }
+            },
+            "context_characters": {
+              "system": 6415,
+              "primary_context": 6525,
+              "recent_conversation": 2,
+              "knowledge_access": 1270,
+              "retrieval": 30,
+              "controller_evidence": 7451
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1445.8754999999946,
+              "narrator_total_ms": 2393.0555999999924,
+              "controller_total_ms": 3918.2121000000043,
+              "controller_tail_ms": 3924.6312000000034,
+              "retrieval_ms": 0.11480000001029111,
+              "coordinator_total_ms": 6319.809200000003
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_hadrik_voss_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_hadrik_voss_identity",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [],
+        "characters": [],
+        "item_count": 0,
+        "boot_like_count": 0,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\" | H1 household \"Nicco is owner of the household Heartstone.\"\nNarration and Nicco (player): F1, F2, H1. Nicco's speech and decisions still belong to the player.\nHadrik Voss: CAN USE none; DO NOT USE F1, F2, H1\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.\nUNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "hadrik_voss"
+      ],
+      "reconciliation": {
+        "delivered": "draft",
+        "draft": "Hadrik Voss's magnifying lenses remain fixed on whatever small metal component he's turning over in his thick fingers as Nicco speaks. Without looking up, the dwarf's dry voice carries the flat patience of someone who has answered this question before from customers trying to seem interesting.\n\n\"You're the one with the tower,\" he says, not a question. A brief pause, metal clinking against his workbench. \"Heartstone.\" His gaze finally lifts, the lenses exaggerating the appraisal in his pale eyes as they take in Nicco's frame, his unfamiliar clothes, the absence of any recognizable guild markings or local style. \"From outside Calderan, clearly. Beyond that—\" He shrugs those massive shoulders, already returning to his examination. \"Not my business who claims a place. Claim's kept or lost on its own.\"",
+        "issues": []
+      },
+      "revision_requested": false,
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3225,
+          "completion_tokens": 169,
+          "total_tokens": 3394,
+          "cost": 0.001595449,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2112,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001595449,
+            "upstream_inference_prompt_cost": 0.001033524,
+            "upstream_inference_completions_cost": 0.000561925
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Phala",
+        "usage": {
+          "prompt_tokens": 3264,
+          "completion_tokens": 220,
+          "total_tokens": 3484,
+          "cost": 0.000597268,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2741,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000597268,
+            "upstream_inference_prompt_cost": 0.000306868,
+            "upstream_inference_completions_cost": 0.0002904
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 212,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

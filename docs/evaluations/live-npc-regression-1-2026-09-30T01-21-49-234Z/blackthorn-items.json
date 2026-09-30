@@ -1,0 +1,2511 @@
+{
+  "npc_id": "blackthorn",
+  "name": "Blackthorn",
+  "test": "items",
+  "campaign_id": "npc_regression_blackthorn_items",
+  "initial": {
+    "revision": 2,
+    "items": [
+      {
+        "id": "campaign_item_regression_leather_boots",
+        "origin": {
+          "kind": "created"
+        },
+        "name": "pair of leather boots",
+        "owner_id": "blackthorn",
+        "position": {
+          "kind": "carried",
+          "character_id": "blackthorn"
+        }
+      }
+    ],
+    "characters": [],
+    "item_count": 1,
+    "boot_like_count": 1,
+    "equipped": []
+  },
+  "turns": [
+    {
+      "input": "Blackthorn gives Nicco a pair of leather boots.",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Blackthorn held out a pair of worn leather boots, her small round frame making the gesture look almost ceremonial. \"For you,\" she said, her nearly black eyes fixed on him with the impatience of someone who disliked wasted motion. \"Consider it a gesture. You'll want proper footwear if you're going to be walking Calderan's streets.\"\n\nNicco accepted the boots; they were plain, serviceable, scuffed at the toes from genuine use rather than artful distressing. Blackthorn's two bodyguards stood behind her in their usual positions, large and silent as furniture, while the moderate foot traffic of Heartstone Square passed around them with the distracted rhythm of people who had somewhere else to be. The Coined Lie's weathered sign creaked faintly somewhere nearby, though Blackthorn made no move toward it.",
+      "result": {
+        "narration": "Blackthorn held out a pair of worn leather boots, her small round frame making the gesture look almost ceremonial. \"For you,\" she said, her nearly black eyes fixed on him with the impatience of someone who disliked wasted motion. \"Consider it a gesture. You'll want proper footwear if you're going to be walking Calderan's streets.\"\n\nNicco accepted the boots; they were plain, serviceable, scuffed at the toes from genuine use rather than artful distressing. Blackthorn's two bodyguards stood behind her in their usual positions, large and silent as furniture, while the moderate foot traffic of Heartstone Square passed around them with the distracted rhythm of people who had somewhere else to be. The Coined Lie's weathered sign creaked faintly somewhere nearby, though Blackthorn made no move toward it.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [
+          {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_regression_leather_boots",
+            "owner_id": "nicco",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          }
+        ],
+        "authorized_commands": [],
+        "authorization": [
+          {
+            "command": {
+              "kind": "transfer_item",
+              "item_id": "campaign_item_regression_leather_boots",
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              }
+            },
+            "grammar": {
+              "authorized": false,
+              "reason": "rejected_reference_invalid"
+            },
+            "evidence": {
+              "quote": "Nicco accepted the boots",
+              "verified": true,
+              "check": "receipt_of_named_item"
+            },
+            "authorized": false,
+            "reason": "rejected_reference_invalid",
+            "source": "rejected"
+          }
+        ],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.12969999999768334,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2424,
+            "completion_tokens": 168,
+            "total_tokens": 2592
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:23:22.281Z",
+            "headers_ms": 3581.735800000002,
+            "time_to_first_token_ms": 3581.886099999996,
+            "completed_at": "2026-09-30T01:23:32.743Z",
+            "elapsed_total_ms": 10462.069299999996
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2093,
+            "completion_tokens": 92,
+            "total_tokens": 2185
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:23:32.744Z",
+            "headers_ms": 526.1631000000052,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:23:34.315Z",
+            "elapsed_total_ms": 1570.9221000000107
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6296,
+          "recent_conversation": 2,
+          "knowledge_access": 750,
+          "retrieval": 30,
+          "controller_evidence": 7201
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 3581.886099999996,
+          "narrator_total_ms": 10462.069299999996,
+          "controller_total_ms": 1570.9221000000107,
+          "controller_tail_ms": 1573.238799999992,
+          "retrieval_ms": 0.12969999999768334,
+          "coordinator_total_ms": 12036.651599999997
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn"
+        },
+        {
+          "type": "narration_delta",
+          "text": " held"
+        },
+        {
+          "type": "narration_delta",
+          "text": " out"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pair"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " worn"
+        },
+        {
+          "type": "narration_delta",
+          "text": " leather"
+        },
+        {
+          "type": "narration_delta",
+          "text": " boots"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " small"
+        },
+        {
+          "type": "narration_delta",
+          "text": " round"
+        },
+        {
+          "type": "narration_delta",
+          "text": " frame"
+        },
+        {
+          "type": "narration_delta",
+          "text": " making"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gesture"
+        },
+        {
+          "type": "narration_delta",
+          "text": " look"
+        },
+        {
+          "type": "narration_delta",
+          "text": " almost"
+        },
+        {
+          "type": "narration_delta",
+          "text": " ceremonial"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "For"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " she"
+        },
+        {
+          "type": "narration_delta",
+          "text": " said"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nearly"
+        },
+        {
+          "type": "narration_delta",
+          "text": " black"
+        },
+        {
+          "type": "narration_delta",
+          "text": " eyes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " fixed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " him"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " imp"
+        },
+        {
+          "type": "narration_delta",
+          "text": "at"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ience"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " someone"
+        },
+        {
+          "type": "narration_delta",
+          "text": " who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " dis"
+        },
+        {
+          "type": "narration_delta",
+          "text": "liked"
+        },
+        {
+          "type": "narration_delta",
+          "text": " wasted"
+        },
+        {
+          "type": "narration_delta",
+          "text": " motion"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Consider"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gesture"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " You'll"
+        },
+        {
+          "type": "narration_delta",
+          "text": " want"
+        },
+        {
+          "type": "narration_delta",
+          "text": " proper"
+        },
+        {
+          "type": "narration_delta",
+          "text": " footwear"
+        },
+        {
+          "type": "narration_delta",
+          "text": " if"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you're"
+        },
+        {
+          "type": "narration_delta",
+          "text": " going"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " be"
+        },
+        {
+          "type": "narration_delta",
+          "text": " walking"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Calder"
+        },
+        {
+          "type": "narration_delta",
+          "text": "an's"
+        },
+        {
+          "type": "narration_delta",
+          "text": " streets"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\"\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": " accepted"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " boots"
+        },
+        {
+          "type": "narration_delta",
+          "text": ";"
+        },
+        {
+          "type": "narration_delta",
+          "text": " they"
+        },
+        {
+          "type": "narration_delta",
+          "text": " were"
+        },
+        {
+          "type": "narration_delta",
+          "text": " plain"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " service"
+        },
+        {
+          "type": "narration_delta",
+          "text": "able"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " sc"
+        },
+        {
+          "type": "narration_delta",
+          "text": "uffed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " toes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " from"
+        },
+        {
+          "type": "narration_delta",
+          "text": " genuine"
+        },
+        {
+          "type": "narration_delta",
+          "text": " use"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rather"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than"
+        },
+        {
+          "type": "narration_delta",
+          "text": " art"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ful"
+        },
+        {
+          "type": "narration_delta",
+          "text": " distress"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ing"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " two"
+        },
+        {
+          "type": "narration_delta",
+          "text": " body"
+        },
+        {
+          "type": "narration_delta",
+          "text": "gu"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ards"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stood"
+        },
+        {
+          "type": "narration_delta",
+          "text": " behind"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " their"
+        },
+        {
+          "type": "narration_delta",
+          "text": " usual"
+        },
+        {
+          "type": "narration_delta",
+          "text": " positions"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " large"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " silent"
+        },
+        {
+          "type": "narration_delta",
+          "text": " as"
+        },
+        {
+          "type": "narration_delta",
+          "text": " furniture"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " while"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " moderate"
+        },
+        {
+          "type": "narration_delta",
+          "text": " foot"
+        },
+        {
+          "type": "narration_delta",
+          "text": " traffic"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Heart"
+        },
+        {
+          "type": "narration_delta",
+          "text": "stone"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Square"
+        },
+        {
+          "type": "narration_delta",
+          "text": " passed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " around"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " distracted"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rhythm"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " people"
+        },
+        {
+          "type": "narration_delta",
+          "text": " who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " had"
+        },
+        {
+          "type": "narration_delta",
+          "text": " somewhere"
+        },
+        {
+          "type": "narration_delta",
+          "text": " else"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " be"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " The"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Coin"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Lie"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " weather"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sign"
+        },
+        {
+          "type": "narration_delta",
+          "text": " c"
+        },
+        {
+          "type": "narration_delta",
+          "text": "reak"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ed"
+        },
+        {
+          "type": "narration_delta",
+          "text": " faint"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ly"
+        },
+        {
+          "type": "narration_delta",
+          "text": " somewhere"
+        },
+        {
+          "type": "narration_delta",
+          "text": " nearby"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " though"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn"
+        },
+        {
+          "type": "narration_delta",
+          "text": " made"
+        },
+        {
+          "type": "narration_delta",
+          "text": " no"
+        },
+        {
+          "type": "narration_delta",
+          "text": " move"
+        },
+        {
+          "type": "narration_delta",
+          "text": " toward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " it"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Blackthorn held out a pair of worn leather boots, her small round frame making the gesture look almost ceremonial. \"For you,\" she said, her nearly black eyes fixed on him with the impatience of someone who disliked wasted motion. \"Consider it a gesture. You'll want proper footwear if you're going to be walking Calderan's streets.\"\n\nNicco accepted the boots; they were plain, serviceable, scuffed at the toes from genuine use rather than artful distressing. Blackthorn's two bodyguards stood behind her in their usual positions, large and silent as furniture, while the moderate foot traffic of Heartstone Square passed around them with the distracted rhythm of people who had somewhere else to be. The Coined Lie's weathered sign creaked faintly somewhere nearby, though Blackthorn made no move toward it."
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": [
+            {
+              "command": {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              },
+              "grammar": {
+                "authorized": false,
+                "reason": "rejected_reference_invalid"
+              },
+              "evidence": {
+                "quote": "Nicco accepted the boots",
+                "verified": true,
+                "check": "receipt_of_named_item"
+              },
+              "authorized": false,
+              "reason": "rejected_reference_invalid",
+              "source": "rejected"
+            }
+          ]
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Blackthorn held out a pair of worn leather boots, her small round frame making the gesture look almost ceremonial. \"For you,\" she said, her nearly black eyes fixed on him with the impatience of someone who disliked wasted motion. \"Consider it a gesture. You'll want proper footwear if you're going to be walking Calderan's streets.\"\n\nNicco accepted the boots; they were plain, serviceable, scuffed at the toes from genuine use rather than artful distressing. Blackthorn's two bodyguards stood behind her in their usual positions, large and silent as furniture, while the moderate foot traffic of Heartstone Square passed around them with the distracted rhythm of people who had somewhere else to be. The Coined Lie's weathered sign creaked faintly somewhere nearby, though Blackthorn made no move toward it.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [
+              {
+                "kind": "transfer_item",
+                "item_id": "campaign_item_regression_leather_boots",
+                "owner_id": "nicco",
+                "position": {
+                  "kind": "carried",
+                  "character_id": "nicco"
+                }
+              }
+            ],
+            "authorized_commands": [],
+            "authorization": [
+              {
+                "command": {
+                  "kind": "transfer_item",
+                  "item_id": "campaign_item_regression_leather_boots",
+                  "owner_id": "nicco",
+                  "position": {
+                    "kind": "carried",
+                    "character_id": "nicco"
+                  }
+                },
+                "grammar": {
+                  "authorized": false,
+                  "reason": "rejected_reference_invalid"
+                },
+                "evidence": {
+                  "quote": "Nicco accepted the boots",
+                  "verified": true,
+                  "check": "receipt_of_named_item"
+                },
+                "authorized": false,
+                "reason": "rejected_reference_invalid",
+                "source": "rejected"
+              }
+            ],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.12969999999768334,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2424,
+                "completion_tokens": 168,
+                "total_tokens": 2592
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:23:22.281Z",
+                "headers_ms": 3581.735800000002,
+                "time_to_first_token_ms": 3581.886099999996,
+                "completed_at": "2026-09-30T01:23:32.743Z",
+                "elapsed_total_ms": 10462.069299999996
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2093,
+                "completion_tokens": 92,
+                "total_tokens": 2185
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:23:32.744Z",
+                "headers_ms": 526.1631000000052,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:23:34.315Z",
+                "elapsed_total_ms": 1570.9221000000107
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6296,
+              "recent_conversation": 2,
+              "knowledge_access": 750,
+              "retrieval": 30,
+              "controller_evidence": 7201
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 3581.886099999996,
+              "narrator_total_ms": 10462.069299999996,
+              "controller_total_ms": 1570.9221000000107,
+              "controller_tail_ms": 1573.238799999992,
+              "retrieval_ms": 0.12969999999768334,
+              "coordinator_total_ms": 12036.651599999997
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_blackthorn_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "blackthorn",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_blackthorn_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "blackthorn",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBlackthorn: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "blackthorn"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "SiliconFlow",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2424,
+          "completion_tokens": 168,
+          "total_tokens": 2592,
+          "cost": 0.0014688,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0014688,
+            "upstream_inference_prompt_cost": 0.0010908,
+            "upstream_inference_completions_cost": 0.000378
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2093,
+          "completion_tokens": 92,
+          "total_tokens": 2185,
+          "cost": 0.00017871,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00017871,
+            "upstream_inference_prompt_cost": 0.00014651,
+            "upstream_inference_completions_cost": 0.0000322
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    },
+    {
+      "input": "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me",
+      "outcome": "success",
+      "exception": null,
+      "narration": "Nicco thanks Blackthorn and holds out the boots, offering them back. \"You'll need them more than me,\" he says.\n\nBlackthorn's eyebrows rise slightly, a flicker of impatience crossing her round face. She makes no move to accept the returned boots. \"I have boots,\" she says flatly. \"Those are for you.\" She glances toward the main entrance of Heartstone, then back at Nicco, her black eyes sharp. \"Keep them, sell them, leave them in the square—I don't intend to carry a second pair home.\" Her two bodyguards stand motionless behind her, watching the exchange without expression.",
+      "result": {
+        "narration": "Nicco thanks Blackthorn and holds out the boots, offering them back. \"You'll need them more than me,\" he says.\n\nBlackthorn's eyebrows rise slightly, a flicker of impatience crossing her round face. She makes no move to accept the returned boots. \"I have boots,\" she says flatly. \"Those are for you.\" She glances toward the main entrance of Heartstone, then back at Nicco, her black eyes sharp. \"Keep them, sell them, leave them in the square—I don't intend to carry a second pair home.\" Her two bodyguards stand motionless behind her, watching the exchange without expression.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.1483999999909429,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2503,
+            "completion_tokens": 132,
+            "total_tokens": 2635
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:23:34.327Z",
+            "headers_ms": 1487.7983999999997,
+            "time_to_first_token_ms": 1488.426099999997,
+            "completed_at": "2026-09-30T01:23:41.256Z",
+            "elapsed_total_ms": 6929.634099999996
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2077,
+            "completion_tokens": 6,
+            "total_tokens": 2083
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:23:41.257Z",
+            "headers_ms": 743.7737000000052,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:23:42.034Z",
+            "elapsed_total_ms": 777.0286000000051
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6296,
+          "recent_conversation": 911,
+          "knowledge_access": 750,
+          "retrieval": 30,
+          "controller_evidence": 7029
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 2,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1488.426099999997,
+          "narrator_total_ms": 6929.634099999996,
+          "controller_total_ms": 777.0286000000051,
+          "controller_tail_ms": 778.022100000002,
+          "retrieval_ms": 0.1483999999909429,
+          "coordinator_total_ms": 7715.203900000008
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": " thanks"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " holds"
+        },
+        {
+          "type": "narration_delta",
+          "text": " out"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " boots"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " offering"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": " back"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "You'll"
+        },
+        {
+          "type": "narration_delta",
+          "text": " need"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": " more"
+        },
+        {
+          "type": "narration_delta",
+          "text": " than"
+        },
+        {
+          "type": "narration_delta",
+          "text": " me"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " says"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\n\n"
+        },
+        {
+          "type": "narration_delta",
+          "text": "Black"
+        },
+        {
+          "type": "narration_delta",
+          "text": "thorn"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s"
+        },
+        {
+          "type": "narration_delta",
+          "text": " eyebrows"
+        },
+        {
+          "type": "narration_delta",
+          "text": " rise"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slightly"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flick"
+        },
+        {
+          "type": "narration_delta",
+          "text": "er"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " imp"
+        },
+        {
+          "type": "narration_delta",
+          "text": "at"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ience"
+        },
+        {
+          "type": "narration_delta",
+          "text": " crossing"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " round"
+        },
+        {
+          "type": "narration_delta",
+          "text": " face"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " She"
+        },
+        {
+          "type": "narration_delta",
+          "text": " makes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " no"
+        },
+        {
+          "type": "narration_delta",
+          "text": " move"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " accept"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " returned"
+        },
+        {
+          "type": "narration_delta",
+          "text": " boots"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " have"
+        },
+        {
+          "type": "narration_delta",
+          "text": " boots"
+        },
+        {
+          "type": "narration_delta",
+          "text": ",\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " she"
+        },
+        {
+          "type": "narration_delta",
+          "text": " says"
+        },
+        {
+          "type": "narration_delta",
+          "text": " flat"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ly"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Those"
+        },
+        {
+          "type": "narration_delta",
+          "text": " are"
+        },
+        {
+          "type": "narration_delta",
+          "text": " for"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " She"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gl"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ances"
+        },
+        {
+          "type": "narration_delta",
+          "text": " toward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " main"
+        },
+        {
+          "type": "narration_delta",
+          "text": " entrance"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Heart"
+        },
+        {
+          "type": "narration_delta",
+          "text": "stone"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " then"
+        },
+        {
+          "type": "narration_delta",
+          "text": " back"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " black"
+        },
+        {
+          "type": "narration_delta",
+          "text": " eyes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sharp"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_delta",
+          "text": " \""
+        },
+        {
+          "type": "narration_delta",
+          "text": "Keep"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " sell"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " leave"
+        },
+        {
+          "type": "narration_delta",
+          "text": " them"
+        },
+        {
+          "type": "narration_delta",
+          "text": " in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " square"
+        },
+        {
+          "type": "narration_delta",
+          "text": "—I"
+        },
+        {
+          "type": "narration_delta",
+          "text": " don't"
+        },
+        {
+          "type": "narration_delta",
+          "text": " intend"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " carry"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " second"
+        },
+        {
+          "type": "narration_delta",
+          "text": " pair"
+        },
+        {
+          "type": "narration_delta",
+          "text": " home"
+        },
+        {
+          "type": "narration_delta",
+          "text": ".\""
+        },
+        {
+          "type": "narration_delta",
+          "text": " Her"
+        },
+        {
+          "type": "narration_delta",
+          "text": " two"
+        },
+        {
+          "type": "narration_delta",
+          "text": " body"
+        },
+        {
+          "type": "narration_delta",
+          "text": "gu"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ards"
+        },
+        {
+          "type": "narration_delta",
+          "text": " stand"
+        },
+        {
+          "type": "narration_delta",
+          "text": " motion"
+        },
+        {
+          "type": "narration_delta",
+          "text": "less"
+        },
+        {
+          "type": "narration_delta",
+          "text": " behind"
+        },
+        {
+          "type": "narration_delta",
+          "text": " her"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " watching"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " exchange"
+        },
+        {
+          "type": "narration_delta",
+          "text": " without"
+        },
+        {
+          "type": "narration_delta",
+          "text": " expression"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Nicco thanks Blackthorn and holds out the boots, offering them back. \"You'll need them more than me,\" he says.\n\nBlackthorn's eyebrows rise slightly, a flicker of impatience crossing her round face. She makes no move to accept the returned boots. \"I have boots,\" she says flatly. \"Those are for you.\" She glances toward the main entrance of Heartstone, then back at Nicco, her black eyes sharp. \"Keep them, sell them, leave them in the square—I don't intend to carry a second pair home.\" Her two bodyguards stand motionless behind her, watching the exchange without expression."
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Nicco thanks Blackthorn and holds out the boots, offering them back. \"You'll need them more than me,\" he says.\n\nBlackthorn's eyebrows rise slightly, a flicker of impatience crossing her round face. She makes no move to accept the returned boots. \"I have boots,\" she says flatly. \"Those are for you.\" She glances toward the main entrance of Heartstone, then back at Nicco, her black eyes sharp. \"Keep them, sell them, leave them in the square—I don't intend to carry a second pair home.\" Her two bodyguards stand motionless behind her, watching the exchange without expression.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.1483999999909429,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2503,
+                "completion_tokens": 132,
+                "total_tokens": 2635
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:23:34.327Z",
+                "headers_ms": 1487.7983999999997,
+                "time_to_first_token_ms": 1488.426099999997,
+                "completed_at": "2026-09-30T01:23:41.256Z",
+                "elapsed_total_ms": 6929.634099999996
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2077,
+                "completion_tokens": 6,
+                "total_tokens": 2083
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:23:41.257Z",
+                "headers_ms": 743.7737000000052,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:23:42.034Z",
+                "elapsed_total_ms": 777.0286000000051
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6296,
+              "recent_conversation": 911,
+              "knowledge_access": 750,
+              "retrieval": 30,
+              "controller_evidence": 7029
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 2,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1488.426099999997,
+              "narrator_total_ms": 6929.634099999996,
+              "controller_total_ms": 777.0286000000051,
+              "controller_tail_ms": 778.022100000002,
+              "retrieval_ms": 0.1483999999909429,
+              "coordinator_total_ms": 7715.203900000008
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_blackthorn_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "blackthorn",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_blackthorn_items",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "blackthorn",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "the_daily_grind"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "before_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "after_audit": {
+        "revision": 2,
+        "items": [
+          {
+            "id": "campaign_item_regression_leather_boots",
+            "origin": {
+              "kind": "created"
+            },
+            "name": "pair of leather boots",
+            "owner_id": "blackthorn",
+            "position": {
+              "kind": "carried",
+              "character_id": "blackthorn"
+            }
+          }
+        ],
+        "characters": [],
+        "item_count": 1,
+        "boot_like_count": 1,
+        "equipped": []
+      },
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBlackthorn: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "blackthorn"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "SiliconFlow",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2503,
+          "completion_tokens": 132,
+          "total_tokens": 2635,
+          "cost": 0.00054783,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2304,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00054783,
+            "upstream_inference_prompt_cost": 0.00025083,
+            "upstream_inference_completions_cost": 0.000297
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Reka",
+        "usage": {
+          "prompt_tokens": 2077,
+          "completion_tokens": 6,
+          "total_tokens": 2083,
+          "cost": 0.000046785,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000046785,
+            "upstream_inference_prompt_cost": 0.000043617,
+            "upstream_inference_completions_cost": 0.000003168
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

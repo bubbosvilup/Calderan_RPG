@@ -39,8 +39,8 @@ test("knowledge matrix: ordinary local × local canon permitted; × Nicco-privat
   const { context } = await opening();
   const local = new SceneParticipants().plan(SLAVE_PEN, context), foreign = new SceneParticipants().plan("*approaches a foreign traveler* \"Where is the slave market?\"", context);
   const r = retrieved(["calderan_slave_market", "local:calderan"], ["calderan", "public"]);
-  assert.match(rows(context, r, local), /P1 Passer-by \(temporary, ordinary local\): CAN USE R1 \(local:calderan\), R2 \(public\); DO NOT USE F1, F2\n/);
-  assert.match(rows(context, r, foreign), /P1 Traveler \(temporary, not local\): CAN USE R2 \(public\); DO NOT USE F1, F2, R1\n/);
+  assert.match(rows(context, r, local), /P1 Passer-by \(temporary, ordinary local\): CAN USE R1 \(local:calderan\), R2 \(public\); DO NOT USE F1, F2, H1\n/);
+  assert.match(rows(context, r, foreign), /P1 Traveler \(temporary, not local\): CAN USE R2 \(public\); DO NOT USE F1, F2, R1, H1\n/);
   const withEdge = turnFixture(false, { brennaKnowsBridge: true }), without = turnFixture();
   assert.match(rows(buildTurnContext(withEdge.world, withEdge.campaign.exportSnapshot()), {}), /Brenna: CAN USE F1 \(knows\)/);
   assert.match(rows(buildTurnContext(without.world, without.campaign.exportSnapshot()), {}), /Brenna: CAN USE none; DO NOT USE F1/);
@@ -55,8 +55,8 @@ test("retrieval is not knowledge: specialized, private and unclassified retrieve
   const ref = projectKnowledgeAccess(context, subschools.data, undefined, plan).facts.find(f => f.id === "magic_subschools")!.ref;
   const participant = projectKnowledgeAccess(context, subschools.data, undefined, plan).characters.find(c => c.kind === "ephemeral")!;
   assert.ok(participant.do_not_use.includes(ref)); assert.ok(!participant.can_use.some(u => u.ref === ref));
-  assert.match(rows(context, retrieved(["nicco", "private"], ["heartstone_square"]), plan), /P1 Passer-by \(temporary, ordinary local\): CAN USE none; DO NOT USE F1, F2, R1, R2/);
-  assert.match(rows(context, retrieved(["nicco", "private"]), plan), /Narration and Nicco \(player\): F1, F2, R1\./, "narrator access is unchanged");
+  assert.match(rows(context, retrieved(["nicco", "private"], ["heartstone_square"]), plan), /P1 Passer-by \(temporary, ordinary local\): CAN USE none; DO NOT USE F1, F2, R1, R2, H1/);
+  assert.match(rows(context, retrieved(["nicco", "private"]), plan), /Narration and Nicco \(player\): F1, F2, R1, H1\./, "narrator access is unchanged (plus the Repair 1 household fact)");
 });
 test("lifetime: departure plus a non-addressing turn expires; continued speech keeps the partner; scene change and inactivity expire", async () => {
   const { context } = await opening(), sp = new SceneParticipants();

@@ -106,12 +106,13 @@ class Check {
     }
     this.strings(policy.known_by, `${field}.known_by`, true);
   }
-  edges(value: unknown, field: string, kind: boolean): void {
+  edges(value: unknown, field: string, kind: boolean, knowledge = false): void {
     const seen = new Set<string>();
     this.array(value, field).forEach((entry, i) => {
       const p = `${field}[${i}]`;
       const edge = this.object(entry, p);
-      this.keys(edge, kind ? ["target", "kind", "description"] : ["target", "description"], p);
+      this.keys(edge, kind ? ["target", "kind", "description", ...(knowledge ? ["knowledge"] : [])] : ["target", "description"], p);
+      if (knowledge && "knowledge" in edge) this.knowledge(edge.knowledge, `${p}.knowledge`);
       const target = this.id(edge.target, `${p}.target`);
       if (seen.has(target)) this.fail(`${p}.target`, `duplicate ID ${target}`);
       seen.add(target);
@@ -174,7 +175,7 @@ function validateShape(input: WorldSource): ValidatedWorldSource {
         for (const key of ["work_location", "home_location", "species", "sex", "age_band", "appearance", "occupation", "purpose", "morality", "private_notes", "affiliations"]) if (key in e) c.fail(`entity.${key}`, "extended character fields require the complete base_location contract");
       }
       c.strings(e.traits, "entity.traits");
-      c.edges(e.relationships, "entity.relationships", true);
+      c.edges(e.relationships, "entity.relationships", true, true);
       break;
     case "event":
       c.nullableId(e.location, "entity.location");
@@ -276,7 +277,10 @@ export function validateWorldSources(inputs: readonly WorldSource[]): ValidatedW
           ref(e.home_location ?? null, "entity.home_location", ["location"]);
           refs(e.affiliations ?? [], "entity.affiliations", ["faction", "concept"]);
         } else ref(e.location ?? null, "entity.location", ["location"]);
-        e.relationships.forEach((edge, i) => ref(edge.target, `entity.relationships[${i}].target`, ["character"]));
+        e.relationships.forEach((edge, i) => {
+          ref(edge.target, `entity.relationships[${i}].target`, ["character"]);
+          knowledge(edge.knowledge, `entity.relationships[${i}].knowledge`);
+        });
         break;
       case "event":
         ref(e.location, "entity.location", ["location"]);

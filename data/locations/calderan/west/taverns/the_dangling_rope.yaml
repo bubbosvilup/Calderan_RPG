@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: the_dangling_rope
+  type: location
+  name: The Dangling Rope
+  display_name: The Dangling Rope
+  parent: calderan_west
+  aliases: []
+  summary: A low-end West tavern used for discreet meetings.
+  tags:
+    - geography
+  search_context: A low-end West tavern used for discreet meetings.
+  content: Anonymous travelers, fences and intermediaries frequent this tavern, where few questions
+    are asked. Low-level information can be obtained by someone who knows how to ask or pay. Its
+    owner and exact position within West are unestablished.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

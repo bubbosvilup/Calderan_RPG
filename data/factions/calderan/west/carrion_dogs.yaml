@@ -1,0 +1,45 @@
+schema_version: 1
+entity:
+  id: carrion_dogs
+  type: faction
+  name: Carrion Dogs
+  display_name: Carrion Dogs
+  parent: null
+  aliases: []
+  summary: The Carrion Dogs are a West criminal organization known mainly in lower and criminal circles.
+  tags:
+    - criminal_organization
+  search_context: Carrion Dogs West criminal organization.
+  content: The Carrion Dogs are one organization among several in West's criminal economy. They do not
+    control the entire Back-Back Alley economy. Their full leadership, internal structure, bases and
+    routes are not public knowledge.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: specialized
+  members:
+    - dren
+    - blackthorn
+  territory: []
+  relations: []
+chunks:
+  - id: carrion_dogs.private_organization
+    entity_id: carrion_dogs
+    section: private_organization
+    summary: Restricted organizational structure and activity.
+    search_context: Restricted organizational structure and activity.
+    content: Dren leads the Carrion Dogs; Blackthorn is his commercial and administrative lieutenant.
+      The group participates in trafficking, logistics, GW's operations and the Back-Back Alley
+      economy, with Grey Brook warehouse activity. It is one group in a wider coalition, not ruler
+      of the whole network. No ultimate coordinating leader or exact route/depot map is established.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - dren
+        - blackthorn
+      awareness: private

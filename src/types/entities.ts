@@ -74,6 +74,8 @@ export interface CharacterEntity extends BaseEntity {
     target: EntityId;
     kind: string;
     description: string;
+    /** Optional narrower access; omitted edges inherit their owner's policy. */
+    knowledge?: KnowledgeAccess;
   }>;
 }
 

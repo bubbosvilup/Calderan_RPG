@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: gatherers_inn
+  type: location
+  name: Gatherer's Inn
+  display_name: Gatherer's Inn
+  parent: calderan_west
+  aliases: []
+  summary: A respectable-to-middling inn and tavern on the general way between Heartstone and Main
+    Market Square.
+  tags:
+    - geography
+  search_context: Respectable inn near Heartstone on the general way to Main Market Square; meals and
+    lodging in West.
+  content: Notably safer and more welcoming than The Coined Lie, The Slaughtered Pig and The Dangling
+    Rope, it serves ordinary travelers, workers, merchants and visitors doing business in West.
+    Prices are moderate for West. The exact route is unestablished. Jessa Rook is the proprietor.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

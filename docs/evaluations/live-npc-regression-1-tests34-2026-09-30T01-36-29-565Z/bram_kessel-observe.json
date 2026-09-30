@@ -1,0 +1,1016 @@
+{
+  "npc_id": "bram_kessel",
+  "name": "Bram Kessel",
+  "test": "observe",
+  "campaign_id": "npc_regression_bram_kessel_observe",
+  "turns": [
+    {
+      "input": "*He looks at Bram Kessel, trying to understand what kind of person he has in front of him.*",
+      "scene_location": "heartstone_square",
+      "runtime_co_located": [
+        "bram_kessel"
+      ],
+      "outcome": "success",
+      "exception": null,
+      "narration": "Bram Kessel stands before Heartstone's entrance, flour dust visible on his apron even from a few paces away. He meets Nicco's appraisal with a direct, evaluating look of his own—head slightly tilted, the piece of charcoal tucked behind his ear catching the daylight. A moment passes before his broad mustache twitches upward at one corner.\n\n\"Haven't seen you around the square before,\" he says, his voice carrying that public boom even at moderate volume. \"New to the neighborhood, or just new to *this* side of your own door?\" He gestures vaguely toward the tower behind Nicco, the gesture of someone who has delivered to enough back entrances and servant passages to assume a building's residents need not exit through the front. His hands, notably clean, flex once at his sides—the impatient movement of a man whose mind is already half on his next stop, his next calculation, the next order to verbalize in three different measures before the customer has finished deciding.",
+      "result": {
+        "narration": "Bram Kessel stands before Heartstone's entrance, flour dust visible on his apron even from a few paces away. He meets Nicco's appraisal with a direct, evaluating look of his own—head slightly tilted, the piece of charcoal tucked behind his ear catching the daylight. A moment passes before his broad mustache twitches upward at one corner.\n\n\"Haven't seen you around the square before,\" he says, his voice carrying that public boom even at moderate volume. \"New to the neighborhood, or just new to *this* side of your own door?\" He gestures vaguely toward the tower behind Nicco, the gesture of someone who has delivered to enough back entrances and servant passages to assume a building's residents need not exit through the front. His hands, notably clean, flex once at his sides—the impatient movement of a man whose mind is already half on his next stop, his next calculation, the next order to verbalize in three different measures before the customer has finished deciding.",
+        "base_revision": 2,
+        "final_revision": 2,
+        "controller_proposal": [],
+        "authorized_commands": [],
+        "authorization": [],
+        "retrieval": {
+          "operations": 0,
+          "mode": "none",
+          "ids": [],
+          "elapsed_ms": 0.164600000003702,
+          "outcome": "not_needed"
+        },
+        "turn_evidence": {
+          "player_intents": [],
+          "runtime_intents": [],
+          "narrator_confirmations": [],
+          "narrator_refusals": [],
+          "resolved_references": [],
+          "ambiguous_reference": false
+        },
+        "narrator": {
+          "model": "moonshotai/kimi-k2.5",
+          "usage": {
+            "prompt_tokens": 2436,
+            "completion_tokens": 202,
+            "total_tokens": 2638
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:15.832Z",
+            "headers_ms": 1138.2073999999993,
+            "time_to_first_token_ms": 1138.3646999999983,
+            "completed_at": "2026-09-30T01:37:17.956Z",
+            "elapsed_total_ms": 2124.0933000000005
+          }
+        },
+        "controller": {
+          "model": "deepseek/deepseek-v4-flash-0731:nitro",
+          "usage": {
+            "prompt_tokens": 2149,
+            "completion_tokens": 6,
+            "total_tokens": 2155
+          },
+          "latency": {
+            "request_started_at": "2026-09-30T01:37:17.958Z",
+            "headers_ms": 489.35169999999925,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-09-30T01:37:18.490Z",
+            "elapsed_total_ms": 532.0274999999965
+          }
+        },
+        "context_characters": {
+          "system": 3772,
+          "primary_context": 6374,
+          "recent_conversation": 2,
+          "knowledge_access": 751,
+          "retrieval": 30,
+          "controller_evidence": 7494
+        },
+        "scene_participants": {
+          "plan": {
+            "turn": 1,
+            "participants": [],
+            "focus": null,
+            "created": null,
+            "addressed": [],
+            "expired": []
+          },
+          "after": []
+        },
+        "action_resolution": {
+          "actions": [],
+          "runtime": [],
+          "candidates": [],
+          "notes": []
+        },
+        "latency": {
+          "narrator_ttft_ms": 1138.3646999999983,
+          "narrator_total_ms": 2124.0933000000005,
+          "controller_total_ms": 532.0274999999965,
+          "controller_tail_ms": 533.6628999999957,
+          "retrieval_ms": 0.164600000003702,
+          "coordinator_total_ms": 2663.7428
+        }
+      },
+      "events": [
+        {
+          "type": "turn_started",
+          "base_revision": 2
+        },
+        {
+          "type": "narration_delta",
+          "text": "B"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ram Kessel stands"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Heart"
+        },
+        {
+          "type": "narration_delta",
+          "text": "stone's"
+        },
+        {
+          "type": "narration_delta",
+          "text": " entrance"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", flour"
+        },
+        {
+          "type": "narration_delta",
+          "text": " dust"
+        },
+        {
+          "type": "narration_delta",
+          "text": " visible"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on his apron even"
+        },
+        {
+          "type": "narration_delta",
+          "text": " from"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a few"
+        },
+        {
+          "type": "narration_delta",
+          "text": " p"
+        },
+        {
+          "type": "narration_delta",
+          "text": "aces away. He"
+        },
+        {
+          "type": "narration_delta",
+          "text": " meets"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co's appraisal"
+        },
+        {
+          "type": "narration_delta",
+          "text": " with a direct"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", evaluating"
+        },
+        {
+          "type": "narration_delta",
+          "text": " look"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of his own—"
+        },
+        {
+          "type": "narration_delta",
+          "text": "head"
+        },
+        {
+          "type": "narration_delta",
+          "text": " slightly"
+        },
+        {
+          "type": "narration_delta",
+          "text": " tilted, the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " piece"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of charcoal tucked behind"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his ear catching the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " daylight"
+        },
+        {
+          "type": "narration_delta",
+          "text": ". A"
+        },
+        {
+          "type": "narration_delta",
+          "text": " moment"
+        },
+        {
+          "type": "narration_delta",
+          "text": " passes"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " broad must"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ache t"
+        },
+        {
+          "type": "narration_delta",
+          "text": "witches upward"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " one corner.\n\n\"H"
+        },
+        {
+          "type": "narration_delta",
+          "text": "aven"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'t seen"
+        },
+        {
+          "type": "narration_delta",
+          "text": " you around"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " square before,\" he"
+        },
+        {
+          "type": "narration_delta",
+          "text": " says, his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " voice carrying that"
+        },
+        {
+          "type": "narration_delta",
+          "text": " public"
+        },
+        {
+          "type": "narration_delta",
+          "text": " boom"
+        },
+        {
+          "type": "narration_delta",
+          "text": " even"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at"
+        },
+        {
+          "type": "narration_delta",
+          "text": " moderate"
+        },
+        {
+          "type": "narration_delta",
+          "text": " volume. \"New"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the neighborhood"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", or just"
+        },
+        {
+          "type": "narration_delta",
+          "text": " new"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to *"
+        },
+        {
+          "type": "narration_delta",
+          "text": "this"
+        },
+        {
+          "type": "narration_delta",
+          "text": "* side"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of"
+        },
+        {
+          "type": "narration_delta",
+          "text": " your"
+        },
+        {
+          "type": "narration_delta",
+          "text": " own"
+        },
+        {
+          "type": "narration_delta",
+          "text": " door?\" He gestures"
+        },
+        {
+          "type": "narration_delta",
+          "text": " vaguely"
+        },
+        {
+          "type": "narration_delta",
+          "text": " toward the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " tower"
+        },
+        {
+          "type": "narration_delta",
+          "text": " behind"
+        },
+        {
+          "type": "narration_delta",
+          "text": " Nic"
+        },
+        {
+          "type": "narration_delta",
+          "text": "co,"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " gesture"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of someone"
+        },
+        {
+          "type": "narration_delta",
+          "text": " who"
+        },
+        {
+          "type": "narration_delta",
+          "text": " has"
+        },
+        {
+          "type": "narration_delta",
+          "text": " delivered"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " enough"
+        },
+        {
+          "type": "narration_delta",
+          "text": " back"
+        },
+        {
+          "type": "narration_delta",
+          "text": " entrances"
+        },
+        {
+          "type": "narration_delta",
+          "text": " and"
+        },
+        {
+          "type": "narration_delta",
+          "text": " servant"
+        },
+        {
+          "type": "narration_delta",
+          "text": " passages"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to assume"
+        },
+        {
+          "type": "narration_delta",
+          "text": " a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " building"
+        },
+        {
+          "type": "narration_delta",
+          "text": "'s residents"
+        },
+        {
+          "type": "narration_delta",
+          "text": " need"
+        },
+        {
+          "type": "narration_delta",
+          "text": " not"
+        },
+        {
+          "type": "narration_delta",
+          "text": " exit"
+        },
+        {
+          "type": "narration_delta",
+          "text": " through the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " front. His hands"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " notably"
+        },
+        {
+          "type": "narration_delta",
+          "text": " clean, flex"
+        },
+        {
+          "type": "narration_delta",
+          "text": " once"
+        },
+        {
+          "type": "narration_delta",
+          "text": " at his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " sides—the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " impatient"
+        },
+        {
+          "type": "narration_delta",
+          "text": " movement"
+        },
+        {
+          "type": "narration_delta",
+          "text": " of a"
+        },
+        {
+          "type": "narration_delta",
+          "text": " man whose"
+        },
+        {
+          "type": "narration_delta",
+          "text": " mind is already"
+        },
+        {
+          "type": "narration_delta",
+          "text": " half"
+        },
+        {
+          "type": "narration_delta",
+          "text": " on"
+        },
+        {
+          "type": "narration_delta",
+          "text": " his"
+        },
+        {
+          "type": "narration_delta",
+          "text": " next stop"
+        },
+        {
+          "type": "narration_delta",
+          "text": ","
+        },
+        {
+          "type": "narration_delta",
+          "text": " his next"
+        },
+        {
+          "type": "narration_delta",
+          "text": " calculation"
+        },
+        {
+          "type": "narration_delta",
+          "text": ", the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " next order"
+        },
+        {
+          "type": "narration_delta",
+          "text": " to"
+        },
+        {
+          "type": "narration_delta",
+          "text": " verbal"
+        },
+        {
+          "type": "narration_delta",
+          "text": "ize in"
+        },
+        {
+          "type": "narration_delta",
+          "text": " three"
+        },
+        {
+          "type": "narration_delta",
+          "text": " different measures"
+        },
+        {
+          "type": "narration_delta",
+          "text": " before"
+        },
+        {
+          "type": "narration_delta",
+          "text": " the"
+        },
+        {
+          "type": "narration_delta",
+          "text": " customer has"
+        },
+        {
+          "type": "narration_delta",
+          "text": " finished deciding"
+        },
+        {
+          "type": "narration_delta",
+          "text": "."
+        },
+        {
+          "type": "narration_completed",
+          "text": "Bram Kessel stands before Heartstone's entrance, flour dust visible on his apron even from a few paces away. He meets Nicco's appraisal with a direct, evaluating look of his own—head slightly tilted, the piece of charcoal tucked behind his ear catching the daylight. A moment passes before his broad mustache twitches upward at one corner.\n\n\"Haven't seen you around the square before,\" he says, his voice carrying that public boom even at moderate volume. \"New to the neighborhood, or just new to *this* side of your own door?\" He gestures vaguely toward the tower behind Nicco, the gesture of someone who has delivered to enough back entrances and servant passages to assume a building's residents need not exit through the front. His hands, notably clean, flex once at his sides—the impatient movement of a man whose mind is already half on his next stop, his next calculation, the next order to verbalize in three different measures before the customer has finished deciding."
+        },
+        {
+          "type": "controller_started"
+        },
+        {
+          "type": "state_proposed",
+          "diagnostics": []
+        },
+        {
+          "type": "state_committed",
+          "revision": 2,
+          "changed": false
+        },
+        {
+          "type": "turn_completed",
+          "result": {
+            "narration": "Bram Kessel stands before Heartstone's entrance, flour dust visible on his apron even from a few paces away. He meets Nicco's appraisal with a direct, evaluating look of his own—head slightly tilted, the piece of charcoal tucked behind his ear catching the daylight. A moment passes before his broad mustache twitches upward at one corner.\n\n\"Haven't seen you around the square before,\" he says, his voice carrying that public boom even at moderate volume. \"New to the neighborhood, or just new to *this* side of your own door?\" He gestures vaguely toward the tower behind Nicco, the gesture of someone who has delivered to enough back entrances and servant passages to assume a building's residents need not exit through the front. His hands, notably clean, flex once at his sides—the impatient movement of a man whose mind is already half on his next stop, his next calculation, the next order to verbalize in three different measures before the customer has finished deciding.",
+            "base_revision": 2,
+            "final_revision": 2,
+            "controller_proposal": [],
+            "authorized_commands": [],
+            "authorization": [],
+            "retrieval": {
+              "operations": 0,
+              "mode": "none",
+              "ids": [],
+              "elapsed_ms": 0.164600000003702,
+              "outcome": "not_needed"
+            },
+            "turn_evidence": {
+              "player_intents": [],
+              "runtime_intents": [],
+              "narrator_confirmations": [],
+              "narrator_refusals": [],
+              "resolved_references": [],
+              "ambiguous_reference": false
+            },
+            "narrator": {
+              "model": "moonshotai/kimi-k2.5",
+              "usage": {
+                "prompt_tokens": 2436,
+                "completion_tokens": 202,
+                "total_tokens": 2638
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:15.832Z",
+                "headers_ms": 1138.2073999999993,
+                "time_to_first_token_ms": 1138.3646999999983,
+                "completed_at": "2026-09-30T01:37:17.956Z",
+                "elapsed_total_ms": 2124.0933000000005
+              }
+            },
+            "controller": {
+              "model": "deepseek/deepseek-v4-flash-0731:nitro",
+              "usage": {
+                "prompt_tokens": 2149,
+                "completion_tokens": 6,
+                "total_tokens": 2155
+              },
+              "latency": {
+                "request_started_at": "2026-09-30T01:37:17.958Z",
+                "headers_ms": 489.35169999999925,
+                "time_to_first_token_ms": null,
+                "completed_at": "2026-09-30T01:37:18.490Z",
+                "elapsed_total_ms": 532.0274999999965
+              }
+            },
+            "context_characters": {
+              "system": 3772,
+              "primary_context": 6374,
+              "recent_conversation": 2,
+              "knowledge_access": 751,
+              "retrieval": 30,
+              "controller_evidence": 7494
+            },
+            "scene_participants": {
+              "plan": {
+                "turn": 1,
+                "participants": [],
+                "focus": null,
+                "created": null,
+                "addressed": [],
+                "expired": []
+              },
+              "after": []
+            },
+            "action_resolution": {
+              "actions": [],
+              "runtime": [],
+              "candidates": [],
+              "notes": []
+            },
+            "latency": {
+              "narrator_ttft_ms": 1138.3646999999983,
+              "narrator_total_ms": 2124.0933000000005,
+              "controller_total_ms": 532.0274999999965,
+              "controller_tail_ms": 533.6628999999957,
+              "retrieval_ms": 0.164600000003702,
+              "coordinator_total_ms": 2663.7428
+            }
+          }
+        }
+      ],
+      "before": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bram_kessel_observe",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "after": {
+        "schema_version": 1,
+        "campaign_id": "npc_regression_bram_kessel_observe",
+        "dataset_id": "sha256:5a568a5f914a5e69167fab7af1621685fa9b1c7df43dceee23ec87a73f50569d",
+        "revision": 2,
+        "runtime": {
+          "scene": {
+            "player_location": "heartstone_square",
+            "world_time": {
+              "world_minute": 0
+            }
+          },
+          "npc_locations": [
+            {
+              "character_id": "bartolomhew",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "bram_kessel",
+              "current_location": "heartstone_square"
+            },
+            {
+              "character_id": "brother_aven",
+              "current_location": "open_hand_chapel"
+            },
+            {
+              "character_id": "captain_doran_hale",
+              "current_location": "west_guard_post"
+            },
+            {
+              "character_id": "hadrik_voss",
+              "current_location": "blackiron_repairs_and_arms"
+            },
+            {
+              "character_id": "jessa_rook",
+              "current_location": "gatherers_inn"
+            },
+            {
+              "character_id": "korvin",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "livia_marr",
+              "current_location": "livias_needles"
+            },
+            {
+              "character_id": "mira_thorne",
+              "current_location": "mudlarks_herbs"
+            },
+            {
+              "character_id": "mistress_elara",
+              "current_location": "calderan_slave_market"
+            },
+            {
+              "character_id": "niles_vanner",
+              "current_location": "second_chance_pawn"
+            },
+            {
+              "character_id": "orla_fen",
+              "current_location": "the_white_basin"
+            },
+            {
+              "character_id": "pellan",
+              "current_location": "calderan_center"
+            },
+            {
+              "character_id": "sister_mereth",
+              "current_location": "saint_orra_house"
+            }
+          ],
+          "mana": {
+            "current": 100,
+            "max": 100
+          }
+        },
+        "characters": [],
+        "items": [],
+        "households": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "character_id": "nicco",
+                "status": "member",
+                "joined_at": 0,
+                "role": "owner"
+              }
+            ]
+          }
+        ],
+        "facts": [
+          {
+            "id": "campaign_fact_nicco_light_mage",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco is a Light mage.",
+              "truth": "true"
+            }
+          },
+          {
+            "id": "campaign_fact_nicco_otherworlder",
+            "content": {
+              "kind": "campaign",
+              "statement": "Nicco came to this world from another world.",
+              "truth": "true"
+            }
+          }
+        ],
+        "knowledge": [
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_light_mage",
+            "status": "knows"
+          },
+          {
+            "character_id": "nicco",
+            "fact_id": "campaign_fact_nicco_otherworlder",
+            "status": "knows"
+          }
+        ],
+        "relationships": [],
+        "goals": [],
+        "scheduled_events": []
+      },
+      "state_diff": {},
+      "knowledge_access": "[CHARACTER KNOWLEDGE ACCESS]\nFacts: F1 campaign_fact_nicco_light_mage \"Nicco is a Light mage.\" | F2 campaign_fact_nicco_otherworlder \"Nicco came to this world from another world.\"\nNarration and Nicco (player): F1, F2. Nicco's speech and decisions still belong to the player.\nBram Kessel: CAN USE none; DO NOT USE F1, F2\nA character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
+      "scene_section": "[CURRENT AUTHORITATIVE SCENE]\nLocation: Heartstone Square. Heartstone's massive main entrance opens directly onto this public square, outside the tower's structure. The square is reasonably broad but is not a major civic square. Moderate daytime foot traffic is quieter than at Main Market Square. Low residential buildings predominate, with few nearby shops and no major commercial concentration. Night safety is mediocre. The low-end, disreputable tavern The Coined Lie faces or directly adjoins the square. The White Basin is a laundry near Heartstone, without an established position directly on the square.\nWorld minute: 0. Player mana: 100/100.\nLocal ancestry and features: {\"ancestry\":[{\"id\":\"calderan_west\",\"name\":\"West District\",\"display_name\":\"Calderan West District\",\"summary\":\"West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and legal slavery-related commerce.\",\"secret\":false},{\"id\":\"calderan\",\"name\":\"Calderan\",\"display_name\":\"Calderan\",\"summary\":\"Calderan is West's inland capital, main political center, and main campaign city.\",\"secret\":false},{\"id\":\"west\",\"name\":\"West\",\"display_name\":\"West (nation)\",\"summary\":\"West is the western nation, broadly mild, temperate, and greener; Calderan is its capital.\",\"secret\":false},{\"id\":\"continent\",\"name\":\"Known Continent\",\"display_name\":\"Known Continent\",\"summary\":\"An enormous known continent comprises West, Center, and East, arranged from west to east.\",\"secret\":false}],\"features\":[{\"name\":\"Heartstone main entrance\",\"description\":\"Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.\"}]}\n[NICCO / PLAYER PROFILE]\nNarrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.\nNicco is a 35-year-old human man. He was transported into this world from another world approximately one day before the campaign begins, and he has essentially no prior lived knowledge of this world unless explicitly established later. On arrival he became the lawful owner/holder of Heartstone Tower. He is tall and overweight, with a few visible white hairs and very mild, early balding; no further appearance details are established. His magical affinity/school is Light. His currently known Light subschools are healing and sacrifice, understood only within the existing magic framework; no mechanics for sacrifice are established. Being a Light mage gives him no automatic knowledge of spells, institutions, lore, or magical theory. Nicco is the player character: his dialogue, thoughts, intentions, and deliberate actions are supplied only by the player.\nHousehold: Heartstone (owner).\n[CURRENT AUTHORITATIVE CHARACTERS]\nPortrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts.\nCharacter Nicco (nicco): {\"profile\":{\"name\":\"Nicco\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\nCharacter Bram Kessel (bram_kessel): {\"baseline\":{\"id\":\"bram_kessel\",\"name\":\"Bram Kessel\",\"display_name\":\"Bram Kessel\",\"summary\":\"Bram Kessel is the proprietor of The Daily Grind.\",\"secret\":false,\"appearance\":\"Broad and heavyset, stronger than his soft build suggests. Large unevenly greying moustache; flour-dusted or food-stained apron over respectable working clothes. His hands are unusually clean from frequent washing. A short piece of charcoal usually rests behind one ear.\",\"portrayal\":{\"purpose\":\"Make The Daily Grind the most dependable ordinary provisions supplier in West: households, inns and small businesses should trust his promised deliveries. He does not aspire to high society.\",\"morality\":\"Generally decent and thoroughly commercial. Bargains hard, favors reliable paying customers during shortages and buys cheaply in market collapses. Will not knowingly sell spoiled food as sound, falsify weights, or deliberately poison or starve someone for leverage.\",\"personality\":[\"sociable\",\"commercially sharp\",\"practical\",\"impatient with indecision\",\"genuinely enjoys feeding people\",\"dislikes waste\"],\"affiliations\":[],\"private_notes\":\"Supply failure and empty shelves embarrass him more than losing money on a shipment; bad harvests, transport disruption and sudden bulk orders make him tense. Generous with food but stingy with money: he may add a loaf for a struggling household while fiercely disputing an invoice discrepancy. Knows ordinary food prices, suppliers, bulk household needs, delivery logistics and local inns/kitchens, without specialized criminal, magical or political knowledge. Observable habits are occasional anchors, not compulsory gestures or catchphrases in every interaction. Ordinary professional familiarity or reputation does not establish friendship or personal acquaintance. No private criminal knowledge follows from local experience.\",\"authority\":\"narrator_portrayal_only_not_character_knowledge\"},\"content\":\"Bram Kessel runs The Daily Grind. His conversational voice booms but becomes quiet over money. He rapidly calculates quantities, often repeating orders in different units. He remembers regular purchases better than birthdays, titles or ceremonial forms of address.\",\"traits\":[\"sociable\",\"commercially sharp\",\"practical\",\"impatient with indecision\",\"genuinely enjoys feeding people\",\"dislikes waste\"]},\"profile\":{\"name\":\"Bram Kessel\",\"aliases\":[]},\"current\":{\"current_location\":\"heartstone_square\"},\"canonical_awareness\":[]}\n[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): []\nScheduled events: []",
+      "portrayal_supplied": true,
+      "present_ids": [
+        "nicco",
+        "bram_kessel"
+      ],
+      "narrator_present_ids": [
+        "bram_kessel"
+      ],
+      "narrator_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Venice",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2436,
+          "completion_tokens": 202,
+          "total_tokens": 2638,
+          "cost": 0.001492146,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 1472,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001492146,
+            "upstream_inference_prompt_cost": 0.000820496,
+            "upstream_inference_completions_cost": 0.00067165
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "controller_wire": {
+        "http_status": 200,
+        "reasoning_chars": 0,
+        "settled": {},
+        "upstream_provider": "Wafer",
+        "usage": {
+          "prompt_tokens": 2149,
+          "completion_tokens": 6,
+          "total_tokens": 2155,
+          "cost": 0.0001482036,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001482036,
+            "upstream_inference_prompt_cost": 0.0001461036,
+            "upstream_inference_completions_cost": 0.0000021
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "finish_reason": "stop"
+      }
+    }
+  ]
+}

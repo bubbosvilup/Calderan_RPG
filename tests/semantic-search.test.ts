@@ -260,7 +260,7 @@ test("lexical remains synchronous and hybrid falls back when semantic is absent 
 test("synthetic indexing of production canon preserves identity strengths and bounded outputs, not semantic quality evidence", async () => {
   const r = new RetrievalService(await loadWorld("data")), p = new FixtureEmbeddingProvider();
   const index = await SemanticIndex.build(r.indexSource(), p, "narrator"), hybrid = new HybridSearch(r, [index]);
-  assert.equal(index.documentCount, 56); assert.deepEqual(p.batches.map(b => b.length), [32, 24]);
+  assert.equal(index.documentCount, 107); assert.deepEqual(p.batches.map(b => b.length), [32, 32, 32, 11]);
   for (const [query, expected] of [["Blackwater", "blackwater"], ["The Unchained Haven", "blackwater"], ["Davenport", "davenport"], ["The Port of Chains", "davenport"], ["Ironbound", "ironbound"], ["The Fortress on the Edge", "ironbound"], ["Sandspear", "sandspear"], ["Frostspire", "frostspire"]]) {
     assert.equal((await hybrid.search({ query }, "narrator")).candidates[0]!.entity_id, expected);
   }

@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: west_guard_post
+  type: location
+  name: West Guard Post
+  display_name: West Guard Post
+  parent: calderan_west
+  aliases: []
+  summary: The principal West District City Guard post, near Main Market Square.
+  tags:
+    - geography
+  search_context: The principal West District City Guard post, near Main Market Square.
+  content: West guards are more often feared than respected. Some are harsh or overly violent; some
+    accept money to ignore offenses. This is not every guard, and ordinary patrols still suppress
+    obvious petty crime and public disorder. Captain Doran Hale commands the West District City
+    Guard from this post, not the whole city force. No other named guards, corruption percentages or
+    patrol schedules are established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections: []
+chunks: []

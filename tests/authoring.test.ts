@@ -23,7 +23,7 @@ test("five Heartstone locations retain classification and explicit parent refere
   const world = await loadWorld("data");
   assert.deepEqual(world.getEntitiesByType("location").map(e => e.id).filter(id => id.startsWith("heartstone")).sort(), [...ids, outside].sort());
   assert.equal(world.getEntity(outside)!.parent, "calderan_west");
-  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["nicco", "pellan"]);
+  assert.deepEqual(world.getEntitiesByType("character").map(e => e.id), ["bartolomhew", "blackthorn", "bram_kessel", "brother_aven", "captain_doran_hale", "dren", "hadrik_voss", "jessa_rook", "korvin", "livia_marr", "mira_thorne", "mistress_elara", "nicco", "niles_vanner", "orla_fen", "pellan", "sister_mereth"]);
   for (const type of ["event", "item"] as const) assert.deepEqual(world.getEntitiesByType(type), []);
   for (const id of ids) {
     const entity = world.getEntity(id)!;

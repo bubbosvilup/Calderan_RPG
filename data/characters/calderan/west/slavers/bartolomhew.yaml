@@ -1,0 +1,130 @@
+schema_version: 1
+entity:
+  id: bartolomhew
+  type: character
+  name: Bartolomhew
+  display_name: Bartolomhew
+  parent: null
+  aliases:
+    - The Redemptor
+  summary: Bartolomhew, known as The Redemptor, is a formally respectable licensed slaver specializing
+    in Beastfolk and robust laborers at Calderan Slave Market.
+  tags:
+    - west_npc
+  search_context: Bartolomhew The Redemptor licensed slaver, Beastfolk, laborers, miners, workforce,
+    Calderan Slave Market.
+  content: Bartolomhew deals in enslaved people for mining, dock and warehouse work, agricultural and
+    other difficult or industrial labor, including servile guards. Beastfolk and physically robust
+    laborers are particular specialties. He has a Back Alley presence as well as formal licensed
+    trade and may deal with captives of any age. His manner is warm, courteous and professionally
+    calm. His religious background and retained clerical cues do not establish a current clerical
+    office.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  role: npc
+  species: Human
+  sex: male
+  age_band: Around forty
+  appearance: Approximately 183–185 cm tall, blond hair extensively turned white, voluntarily retained
+    clerical tonsure, pleasant face and paternal easy smile. Warm voice; elegant clothing retains
+    clerical cues.
+  occupation: Licensed slaver specializing in Beastfolk and labor/workforce categories; The Redemptor
+  base_location: calderan_slave_market
+  work_location: calderan_slave_market
+  home_location: null
+  traits:
+    - warm and polite exterior
+    - paternal easy smile
+    - calm professional courtesy
+    - profound emotional indifference to captive suffering
+    - not gleefully sadistic
+    - not rage-driven or theatrically cruel
+    - not emotionally excited by suffering
+  purpose: Accumulate wealth and influence sufficient to force or engineer his return to the clergy.
+    He resents those responsible for his expulsion.
+  morality: Treats people as merchandise without meaningful emotional concern for their suffering. He
+    need not hate them or enjoy hurting them. Adults, children, families, Beastfolk, workers, sick
+    or violent captives and illegally sourced captives receive the same calm inventory-oriented
+    consideration. Convey detached commodification without graphic description; do not infer murders
+    or a serial-killer history.
+  affiliations: []
+  relationships:
+    - target: korvin
+      kind: commercial_contact
+      description: Commercial relationship with a fellow licensed seller; precise terms unestablished.
+    - target: blackthorn
+      kind: commercial_contact
+      description: Commercial contact with Blackthorn associated with intermediated deeper trade.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - bartolomhew
+          - blackthorn
+        awareness: private
+    - target: brother_aven
+      kind: clerical_past
+      description: Brother Aven knows his clerical past; exact expulsion details remain unresolved.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - bartolomhew
+          - brother_aven
+        awareness: private
+    - target: sister_mereth
+      kind: unspecified_contact
+      description: An established contact with the shelter administrator; its nature and terms remain
+        unestablished.
+      knowledge:
+        visibility:
+          narrator: true
+          player: false
+        known_by:
+          - bartolomhew
+          - sister_mereth
+        awareness: private
+  private_notes: He continues genuinely to identify as religious despite clerical expulsion and
+    resents clergy and the Inquisition. The reason for expulsion remains incomplete and must not be
+    filled in. He trades indirectly into the Back-Back Alleys through intermediaries; no specific
+    transaction or intermediary beyond established contacts is supplied.
+chunks:
+  - id: bartolomhew.clerical_background
+    entity_id: bartolomhew
+    section: clerical_background
+    summary: Restricted clerical background.
+    search_context: Restricted clerical background.
+    content: He was expelled from the clergy, still genuinely identifies as religious and resents clergy
+      and the Inquisition. The reason is deliberately incomplete; no misconduct, accusation or final
+      explanation is established. Brother Aven knows the clerical past without a completed expulsion
+      account.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - bartolomhew
+        - brother_aven
+      awareness: private
+  - id: bartolomhew.private_commerce
+    entity_id: bartolomhew
+    section: private_commerce
+    summary: Restricted intermediary commerce.
+    search_context: Restricted intermediary commerce.
+    content: He has indirect Back-Back Alley trade through intermediaries and commercial contact with
+      Blackthorn. Specific intermediaries, transactions and routes remain unestablished.
+    tags: []
+    knowledge:
+      visibility:
+        narrator: true
+        player: false
+      known_by:
+        - bartolomhew
+      awareness: private

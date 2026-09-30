@@ -6,6 +6,8 @@ import type { TurnContext } from "./context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { authorizeCommands } from "./command-authorizer.js";
+import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
+import { itemTerms } from "./item-reference.js";
 
 /**
  * Phase 1O evidence-backed authorization. A controller evidence quote is necessary for the evidence path and never sufficient:
@@ -17,7 +19,9 @@ export type EvidenceMode = "shadow" | "hybrid";
 export interface EvidenceCheck { readonly verified: boolean; readonly check: string }
 const QUOTE_MIN = 8;
 // Hedge, negation, hypothetical, modal/future, interruption and retraction markers anywhere in the containing sentence(s).
-const DISQUALIFY = /\b(?:not|never|no|nor|maybe|perhaps|might|could|would|should|can|cannot|will|shall|may|if|unless|whether|almost|nearly|imagin\w*|consider\w*|pretend\w*|suppos\w*|refus\w*|declin\w*|reject\w*|back|stops?|stopped|hesitat\w*|wants? to|wanted to|about to|going to|intends? to|plans? to|starts? to|started to|begins? to|began to|tries to|tried to|thinks? better|opens? (?:his|her) mouth)\b|n't\b|'ll\b|\?/i;
+// Repair 1: a bare "back" no longer disqualifies ("takes the boots back", "accepts them back" are receipts). Retreats, handing an
+// item back, instructions to someone else ("tells him to take them") and "instead" still do.
+const DISQUALIFY = /\b(?:not|never|no|nor|maybe|perhaps|might|could|would|should|can|cannot|will|shall|may|if|unless|whether|almost|nearly|imagin\w*|consider\w*|pretend\w*|suppos\w*|refus\w*|declin\w*|reject\w*|instead|steps? back|stepped back|stepping back|backs? away|backed away|backing away|draws? back|drew back|pulls? back|pulled back|(?:hands?|handed|gives?|gave|pushes?|pushed|returns?|returned|holds?|held)(?: \w+){0,4} back|(?:tells?|told|asks?|asked|urges?|urged|orders?|ordered|invites?|invited) (?:him|her|them|nicco|\w+) to|stops?|stopped|hesitat\w*|wants? to|wanted to|about to|going to|intends? to|plans? to|starts? to|started to|begins? to|began to|tries to|tried to|thinks? better|opens? (?:his|her) mouth)\b|n't\b|'ll\b|\?/i;
 const RECEIPT = "takes?|took|taking|accepts?|accepted|accepting|receives?|received|receiving|gathers?|gathered|gathering|collects?|collected|collecting|picks? up|picked up|picking up|snatches?|snatched";
 const COMMUNICATE = "tells?|told|telling|says?|said|saying|informs?|informed|informing|explains?|explained|explaining|states?|stated|stating|mentions?|mentioned|speaks?|spoke|speaking|reports?|reported|adds|added|replies|replied";
 const STOP = new Set(["the", "a", "an", "is", "are", "was", "were", "of", "to", "and", "in", "on", "at", "it", "its", "that", "this", "has", "have", "been", "be"]);
@@ -58,9 +62,14 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   if (at < 0) return { verified: false, check: "quote_not_verbatim" };
   const [sStart, sEnd] = sentenceBounds(narration, at, q.length);
   // Hedges in the narrated sentence disqualify; hedges inside dialogue belong to the speaker and are checked separately for quoted /tell.
-  if (DISQUALIFY.test(blankQuotes(narration.slice(sStart, sEnd)))) return { verified: false, check: "sentence_hedged_negated_or_hypothetical" };
+  // Repair 1: the idiom "a smile that doesn't reach her eyes" is not a negated act.
+  const sentenceText = blankQuotes(narration.slice(sStart, sEnd)).replace(/\b(?:does not|doesn't|did not|didn't|never|not)\s+(?:quite\s+|fully\s+|ever\s+)?reach(?:es|ed)?\s+(?:her|his|their|the)\s+eyes\b/gi, " ");
+  const negatedSentence = DISQUALIFY.test(sentenceText);
+  // Inbound receipts scope negation to their own clause (below): "She doesn't wait for thanks as Nicco takes the boots."
+  if (negatedSentence && !(command.kind === "transfer_item" && command.owner_id === "nicco")) return { verified: false, check: "sentence_hedged_negated_or_hypothetical" };
   const people = context.characters.filter(c => c.id !== "nicco");
-  const names = (id: string) => [id, context.characters.find(c => c.id === id)?.profile.name].filter((n): n is string => !!n).map(n => n.toLowerCase());
+  // Multi-word names ("Sister Mereth") contribute each token, so their own words are never "another person".
+  const names = (id: string) => [id, context.characters.find(c => c.id === id)?.profile.name].filter((n): n is string => !!n).map(n => n.toLowerCase()).flatMap(n => [n, ...n.split(/[\s_]+/).filter(t => t.length > 2)]);
   const allNames = ["nicco", ...people.flatMap(p => names(p.id))];
   const spans = quotedSpans(narration).filter(([s, e]) => at < e && at + q.length > s);
   // head: containing sentence from its start to the end of the quote, dialogue blanked, for subject resolution.
@@ -71,7 +80,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
    * allowed ones (recipient, Nicco) could be the real actor, present or not ("Brenna watches Maren take…"), so it disqualifies.
    */
   const leads = (subjects: readonly string[], verb: string, allowed: readonly string[]): { subject: string; at: number; end: number } | undefined => {
-    const ok = new Set(["nicco", ...allowed.flatMap(names)]);
+    const ok = new Set(["nicco", ...allowed.flatMap(names), ...allowed.flatMap(a => context.characters.find(c => c.id === a)?.profile.name?.split(/\s+/) ?? []).map(t => t.toLowerCase())]);
     for (const m of head.matchAll(new RegExp(`\\b(${subjects.map(esc).join("|")})\\b([^.!?;]{0,160}?)\\b(?:${verb})\\b`, "gi"))) {
       if (![...m[2]!.matchAll(/\b[A-Z][a-z]+\b/g)].some(w => !ok.has(w[0].toLowerCase()))) return { subject: m[1]!.toLowerCase(), at: sStart + m.index, end: sStart + m.index + m[0].length };
     }
@@ -124,6 +133,55 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     return { verified: true, check: "nicco_communicates_fact" };
   }
 
+  if (command.kind === "transfer_item" && command.owner_id === "nicco") {
+    // Repair 1 inbound: the holder hands the item to Nicco, or Nicco takes/accepts it. Nobody else may be named in the quote.
+    const held = context.items.find(i => i.id === command.item_id);
+    const giver = held && (held.position.kind === "carried" || held.position.kind === "equipped") ? held.position.character_id : undefined;
+    if (!giver || giver === "nicco") return { verified: false, check: "no_giver" };
+    if (strangerIn(q, giver) || people.some(p => p.id !== giver && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
+    // Repair 1.1: the item's head noun, or a category word unique to it among items in the scene ("footwear").
+    const noun = itemTerms(held!, context.items);
+    if (!new RegExp(`\\b(?:${noun}|them|it|the pair)\\b`, "i").test(qOutside)) return { verified: false, check: "offered_item_not_referenced" };
+    const give = "gives?|gave|giving|hands?|handed|handing|passes?|passed|passing|presses?|pressed|pressing|shoves?|shoved|shoving|tosses?|tossed|tossing|places?|placed|placing|puts?|putting|drops?|dropped|dropping|slides?|slid|sliding|thrusts?|thrusting";
+    // Negation is scoped to the clause carrying the act when the sentence negates something else; any refusal word still vetoes.
+    const clauseClean = (absolute: number) => {
+      if (!negatedSentence) return true;
+      if (/\b(?:refus\w*|declin\w*|reject\w*)\b/i.test(sentenceText)) return false;
+      const rel = absolute - sStart, cuts = [...sentenceText.matchAll(/,|;|\s(?:as|while|when|and|but)\s/gi)].map(m => m.index);
+      const from = Math.max(0, ...cuts.filter(c => c < rel)), to = Math.min(sentenceText.length, ...cuts.filter(c => c > rel));
+      return !DISQUALIFY.test(sentenceText.slice(from, to).replace(/^[,;]/, ""));
+    };
+    // "Does not release them until Nicco's hands close around the leather": a completed handover idiom.
+    if (/\b(?:does|did) not (?:release|let go of|let go)\b[^.!?]{0,40}?\buntil (?:nicco's|his) hands? (?:close|closes|closed|grip|grips|gripped|take|takes|took|settle|settles|settled)\b/i.test(sentenceText) && leads([...names(giver), "she", "he"], "does|did", [giver]))
+      return { verified: true, check: "handover_release_until" };
+    const byGiver = leads([...names(giver), "she", "he"], give, [giver]);
+    // A completed handover reaches Nicco ("to Nicco", "into his hands", "hands them over", "gives him the boots"); "toward Nicco" does not.
+    const after = head.slice(byGiver ? byGiver.end - sStart : 0);
+    if (byGiver && clauseClean(byGiver.end - 1) && (!["she", "he"].includes(byGiver.subject) || names(giver).includes(pronounRefersTo(byGiver.at) ?? "")) && (/\b(?:to (?:nicco|him)\b|into (?:nicco's|nicco|his) (?:hands?|arms|grasp|grip|palms?)|(?:nicco's|his) (?:hands?|grasp|grip)\b|over\b)/i.test(after) || /^\s*(?:nicco|him)\b/i.test(after))) return { verified: true, check: "handover_to_nicco" };
+    // Item-subject handover: "The boots pass into Nicco's hands."
+    const passes = new RegExp(`\\b(?:${noun}|pair|them)\\b (?:(?:are|is|were|was|get|gets|got) )?(?:pass(?:es)?|passed|go|goes|went|change hands|changed hands|transfers?|transferred)\\b[^,;]*\\b(?:to|into) (?:nicco|nicco's|his)\\b`, "i").exec(qOutside);
+    if (passes && clauseClean(at + passes.index)) return { verified: true, check: "item_passes_to_nicco" };
+    // A pronoun is Nicco when it resolves to him, or when its gender excludes the giver and only Nicco and the giver are present.
+    const giverPronoun = context.characters.find(c => c.id === giver)?.pronoun;
+    const pronounIsNicco = (subject: string, position: number) => pronounRefersTo(position) === "nicco" || !!giverPronoun && subject !== giverPronoun && people.length === 1;
+    const byNicco = leads(["nicco"], RECEIPT, [giver]) ?? leads(["he", "she"], RECEIPT, [giver]);
+    if (byNicco && clauseClean(byNicco.end - 1) && (byNicco.subject === "nicco" || pronounIsNicco(byNicco.subject, byNicco.at))) return { verified: true, check: "receipt_by_nicco" };
+    return { verified: false, check: negatedSentence ? "sentence_hedged_negated_or_hypothetical" : "no_handover_or_receipt" };
+  }
+
+  if (command.kind === "set_condition") {
+    const target = command.character_id;
+    const current = context.characters.find(c => c.id === target)?.current.conditions ?? [];
+    const added = command.conditions.filter(c => !current.includes(c));
+    if (!added.length || !added.every(isPhysicalCondition)) return { verified: false, check: "condition_not_in_vocabulary" };
+    // The containing sentence must be about the character (name, or a pronoun resolving to it) and carry every added tag's term.
+    const sentence = blankQuotes(narration.slice(sStart, sEnd));
+    const aboutTarget = names(target).some(n => new RegExp(`\\b${esc(n)}(?:'s)?\\b`, "i").test(sentence)) || /^\s*(?:his|her|she|he)\b/i.test(sentence) && names(target).includes(pronounRefersTo(sStart) ?? "");
+    if (!aboutTarget) return { verified: false, check: "condition_subject_not_character" };
+    if (!added.every(tag => CONDITION_TERMS[tag as PhysicalCondition].test(sentence))) return { verified: false, check: "condition_term_missing" };
+    return { verified: true, check: "physical_condition_narrated" };
+  }
+
   if (command.kind === "transfer_item") {
     const recipient = command.owner_id;
     if (!recipient) return { verified: false, check: "no_recipient" };
@@ -157,7 +215,10 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     // Otherwise this item must be referenced by a token unique to it among the offered items (sequential lists allowed).
     const own = words(itemName(command.item_id)), others = offered.filter(id => id !== command.item_id).flatMap(id => words(itemName(id)));
     const unique = own.filter(w => !others.includes(w));
-    const referenced = unique.length ? unique.some(w => new RegExp(`\\b${esc(w)}\\b`, "i").test(ref)) : ref.toLowerCase().includes(itemName(command.item_id));
+    const self = context.items.find(i => i.id === command.item_id);
+    const category = self ? itemTerms(self, context.items).split("|").slice(1) : [];
+    const referenced = (unique.length ? unique.some(w => new RegExp(`\\b${esc(w)}\\b`, "i").test(ref)) : ref.toLowerCase().includes(itemName(command.item_id)))
+      || category.some(w => new RegExp(`\\b${w}\\b`, "i").test(ref)); // Repair 1.1: unique category word ("the footwear")
     return referenced ? { verified: true, check: "receipt_of_named_item" } : { verified: false, check: "offered_item_not_referenced" };
   }
   return { verified: false, check: "evidence_path_not_supported_for_command" };
@@ -177,6 +238,8 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
     const ev = verifyEvidence(command, quote, narration, context, evidence.player_intents);
     const base = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
     if (g.authorized) return { ...base, authorized: true, reason: g.reason, source: ev.verified ? "both" : "grammar" };
+    // Repair 1: conditions have no grammar path. Validity was already checked by authorizeCommands; verified evidence completes it.
+    if (command.kind === "set_condition") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
     if (mode === "hybrid" && ev.verified && MISSING_CONFIRMATION.has(g.reason)) {
       const index = evidence.player_intents.findIndex(c => isDeepStrictEqual(c, command));
       const kind = command.kind === "set_knowledge" ? "was_told_fact" as const : "accepted_transfer" as const;
