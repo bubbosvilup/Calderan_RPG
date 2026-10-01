@@ -88,7 +88,7 @@ The authorizer's sentence templates and certainty checks are conservative heuris
 
 ## Explicit runtime commands and travel
 
-`/go <ID or exact name/alias>` and the narrow `I go [downstairs/upstairs] to <destination>.` grammar resolve only visible canonical locations and require an outgoing **direct canonical connection**. Hierarchy and shared ancestry do not imply travel. Arbitrary teleportation is rejected before model calls. No dynamic location creation or route planning exists.
+`/go <ID or name/alias>`, the existing `I go` forms and completed natural movement resolve visible canonical destinations through the deterministic weighted city graph. Routes may span multiple edges; hierarchy and shared ancestry never imply travel. Explicit `entrance` metadata resolves structural destinations. Unreachable destinations are rejected before provider calls. Successful travel advances time by the summed edge minutes atomically with arrival. See [city travel](CITY_TRAVEL.md).
 
 `/wait N` or `I wait N minutes.` supports an explicit 1–1,440 minute advance. The retained historical `*he spent N hour(s)/minute(s) ...*` form supports explicit durations, including corpus record 39. Approximate time, casual prose and unspecified overnight waiting do not advance state.
 
@@ -228,3 +228,73 @@ See [the repair report](../evaluations/RUNTIME_CONTINUITY_REPAIR_1.md).
 - **Player-authored events.** `src/turn/player-authored-events.ts` covers grab, shove, strike, injury, spill and departure acts stated in the current input's action text. They take precedence in the audit: a restated authored grab or shove is never an uncommitted constraint, and an authored injury term is never an uncommitted condition. They never authorize escalation: a broken bone, unconsciousness, death, severing or pinning is still flagged. Objects falling or spilling are not a person's condition.
 - **Grounding guards.** `src/turn/grounding-audit.ts` flags three things: exact prices not supplied by canon, state, retrieval or the player (`invented_price`); earlier payments, agreements or conversations with no support in the delivered history (`fabricated_prior_event`); and strong legal or procedural assertions (`invented_procedure`). Staff acting in the scene who are not in scene state are flagged through the existing presence check (`absent_participant`).
 
+
+## Household / Slave Trade / Relationship Runtime Pass 1
+
+See [the pass report](../evaluations/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_RUNTIME_PASS_1.md).
+
+- **Person transactions (purchase, manumission)** are player-authored runtime actions, resolved by `src/turn/person-transactions.ts`. A purchase needs three things: an explicit acceptance or payment, one exact present subject held by a present seller, and one established price. The resolver prevalidates the transaction against a real `campaign.prepare` *before narration*. The narrator receives the authoritative outcome as a note (completed, or blocked with the reason), and the transaction commits atomically with the turn's other commands. The LLM controller cannot propose purchases, so a retry can never double-charge.
+- **Household membership, household rules and relationship steps** are controller proposals, each confirmed by its own evidence:
+  - a join or departure needs the chooser's own voiced words (`src/turn/household-evidence.ts`);
+  - a rule needs the player's explicit rule declaration;
+  - a relationship step needs a verified quote of the *feeling* character's own act or words, and never applies to Nicco.
+- **Narrator context** gains an authoritative block covering money, legal status, household and relationships. It includes only in-scene edges, capped.
+- **Audit** flags two new cases: a non-member narrated as household (`uncommitted_household`), and payment narrated in a trade scene with no committed transaction (`asserts_uncommitted_purchase`).
+
+
+## Narrator-Ephemeral Character Promotion Pass 1.1
+
+See [the pass report](../evaluations/NARRATOR_EPHEMERAL_CHARACTER_PROMOTION_PASS_1_1.md).
+
+- **Narrated captives.** `src/turn/narrated-captives.ts` reads the current scene's delivered narration and finds captives the narrator invented:
+  - The scene is the trailing exchanges at the player's location; `RecentExchange.location_id` is now recorded, but never rendered into prompts.
+  - A named captive needs its name introduced as a name. An unnamed captive is a person noun in a sentence with a captivity marker.
+  - Each quote and sentence gets a speaker or subject attribution.
+- **Purchase.** `resolvePersonTransactions` may now choose such a captive as the one exact subject. The subject resolves in this order: the player's reference, then the latest price talk, then the only candidate, then the only one mentioned in the latest narration.
+- **Seller authority.** It must come from the seller's own statement: an ownership claim, or an explicit offer or price in reply to a price request. Presence or description never counts.
+- **One proposal.** The purchase emits `register_character` (with an immutable `origin_snapshot`), then `set_legal_status` (enslaved under the seller), then the ordinary `transfer_person` sale. The coordinator prevalidates all of it before narration, and a failure anywhere drops everything. It commits in one revision.
+- **After promotion.** The projected context already shows the persistent character, and a linked temporary scene participant is retired, so nobody appears twice.
+- **Promotion primitive.** `src/campaign/promotion.ts` holds the generic primitive: established facts only, collision-safe revision-scoped IDs, and the query hook `narratorEphemeralCharacters`. Only purchase is production-wired.
+
+
+## Narrator Character Persistence Pass 1.2
+
+See [the pass report](../evaluations/NARRATOR_CHARACTER_PERSISTENCE_PASS_1_2.md).
+
+- **Model.** A narrator-created person follows one path: proper name established, then campaign character, then household join, then NPC+ (not implemented). There is one exception: an unnamed person the player acquires. There is no importance scoring, and no promotion from dialogue, wounds, healing, gifts, witnessing or rumors.
+- **Name establishment.** `src/turn/name-establishment.ts` runs deterministically on the **delivered** narration at finalization, after the audit and before commit. Its commands join the already-validated turn proposal. If the combined proposal fails validation, the identity changes are dropped and the turn still commits.
+  - It promotes a person named in this exchange who is present in the scene: acting, speaking, self-introduced, or introduced by narration's own voice.
+  - It gives a name to a present *unnamed* persistent character who introduces themselves (`set_profile`). The ID, origin snapshot, legal state, household and relationships are unchanged.
+  - A linked temporary scene participant is retired.
+- **Captivity attribution.** `src/turn/narrated-captives.ts` attaches captivity markers to the nearest person reference ("Korvin studies the woman in the cage" marks the woman), and resolves pronouns by established sex.
+- **Anonymous sellers.** An anonymous seller (such as "the whittler") never becomes a character. `transfer_person` takes exactly one of `from_holder_id` or `from_counterparty` (a `CounterpartySnapshot`: label, location, authority evidence).
+  - The anonymous path requires a subject with no legal record.
+  - It writes the post-sale legal state directly (enslaved, holder = buyer).
+  - Payment leaves the tracked economy (no payee).
+  - The ledger keeps the snapshot as provenance.
+- **Named sellers.** A named narrator-created seller is promoted by the ordinary name rule inside the purchase proposal.
+
+
+## Campaign Character Location Continuity Pass 1.3
+
+See [the pass report](../evaluations/CAMPAIGN_CHARACTER_LOCATION_CONTINUITY_PASS_1_3.md).
+
+- **Rule.** A campaign (created) character moves only when the turn establishes that *they* completed movement to a known place. There is no party, follower or companion model: Nicco moving, ownership, household membership or earlier presence never moves anyone.
+- **Player-authored carrying.** In `src/turn/character-movement.ts`, `resolvePlayerCarry` handles runtime carrying before narration: a present campaign character Nicco physically carries along on his own resolved movement gets `move_character` to his arrival location. It is prevalidated with his movement, and is dropped if there is no route.
+- **Narrated movement.** The existing `move_character` is now in the controller vocabulary. It is authorized only against `TurnEvidence.character_movements` from `narratedMovements`, which requires:
+  - one resolvable mover among the characters in the scene Nicco is in or is leaving (pronouns resolve only when exactly one is compatible);
+  - completed movement (no gaze, plan, modality or negation);
+  - one concrete destination. A container or entry phrase resolves to Nicco's arrival location inside it.
+- **Controller envelope.** It gains `movable_characters` only when someone is movable.
+- **Leaving a scene.** The narrator is told who stays behind.
+- **Audit.** It no longer flags as absent a character whose move to Nicco's location commits this turn.
+
+
+### Canonical city travel (2026-10-01)
+
+Player commands, completed natural movement and explicit same-turn carrying now use
+weighted multi-hop routes. Location and route minutes commit together; a carried
+character shares the player's destination in that transaction. No household or ownership
+following is implied. `TurnResult.travel` exposes route nodes, edge costs and total time
+in existing debug output. See [city travel](CITY_TRAVEL.md) for schema, deterministic tie
+breaking, rollback, diagnostics and regression coverage.

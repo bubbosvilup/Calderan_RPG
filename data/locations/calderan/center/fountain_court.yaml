@@ -7,19 +7,24 @@ entity:
   parent: calderan_center
   aliases: []
   summary: >-
-    Fountain Court is a small, prestigious civic and social square in Calderan's Center District
-    around an elegant fountain.
-  tags: ["square","civic","social"]
+    Fountain Court is a small, prestigious civic and social square in Calderan's Center District around an
+    elegant fountain.
+  tags: [ "square", "civic", "social" ]
   search_context: "Fountain Court, elegant fountain, refined restaurants, nobles, officials, messengers"
   content: >-
-    Fountain Court is a small, prestigious square around an elegant fountain, with refined
-    restaurants. Officials, nobles, messengers and wealthy visitors pass through it, and it
-    suits formal encounters. It is not a large marketplace, a noisy fair or a street-vendor
-    zone. Its restaurants are not individually established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+    Fountain Court is a small, prestigious square around an elegant fountain, with refined restaurants.
+    Officials, nobles, messengers and wealthy visitors pass through it, and it suits formal encounters. It is
+    not a large marketplace, a noisy fair or a street-vendor zone. Its restaurants are not individually
+    established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
   features:
-    - name: "elegant fountain"
-      description: >-
-        An elegant fountain at the center of the square.
-  connections: []
+    - name: elegant fountain
+      description: An elegant fountain at the center of the square.
+    - name: canonical map placement
+      description: "Southern Center, southwest of the river and south of Gilded Row. Access: center_west_road."
+  connections:
+    - target: center_west_road
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
 chunks: []

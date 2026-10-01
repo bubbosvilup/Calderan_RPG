@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: center_bridge
+  type: location
+  name: Center Bridge
+  display_name: Center Bridge
+  parent: calderan_center
+  aliases: []
+  summary: Red civic road crosses Grey Brook between the administrative southwest bank and Gilded Row on the
+    northeast bank.
+  tags:
+    - geography
+    - bridge
+  search_context: Calderan canonical city map Center Bridge
+  content: Red civic road crosses Grey Brook between the administrative southwest bank and Gilded Row on the
+    northeast bank.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: center_west_road
+      description: bridge access; canonical city map.
+      minutes: 7
+      kind: bridge
+    - target: gilded_row
+      description: bridge access; canonical city map.
+      minutes: 5
+      kind: bridge
+chunks: []

@@ -1,47 +1,49 @@
 import type { CampaignState } from "../campaign/campaign-state.js";
 import { freezeSnapshot } from "../campaign/validation.js";
 import type { NarratorProvider, NarratorResult } from "../llm/narrator-provider.js";
-import type { GenerationRequest } from "../llm/types.js";
 import type { StateControllerProvider } from "../llm/state-controller-provider.js";
-import { parseControllerProposal } from "../llm/controller-schema.js";
-import { ProviderError, type ControllerParseDiagnostic } from "../llm/errors.js";
-/** Repair 1.2: debug-only record of a controller output that failed strict parsing. */
-interface TurnDebugBase { readonly campaign_id: string; readonly base_revision: number; readonly player_input: string }
-/** Debug-only records (Repair 1.2, Controller Reliability Pass 1). Never part of player-facing events. */
-export type TurnDebugRecord =
-  | (ControllerParseDiagnostic & TurnDebugBase & { readonly kind: "controller_parse_failure"; readonly stage: string })
-  | (TurnDebugBase & { readonly kind: "controller_normalized"; readonly normalization: NonNullable<ControllerResult["normalization"]> })
-  | (TurnDebugBase & { readonly kind: "controller_omission_candidate"; readonly candidate: CampaignCommand; readonly evidence: string; readonly proposal_size: number });
+import { ProviderError } from "../llm/errors.js";
 import type { WorldStore } from "../world/world-store.js";
-import { buildTurnContext } from "./context-builder.js";
-import { buildNarratorPrompt, NARRATOR_SYSTEM, relevanceSignals, type NarratorPromptOptions } from "./prompt-builder.js";
-import { projectKnowledgeAccess, renderKnowledgeAccess } from "./narrative-authority.js";
-import { retrieveForTurn, type TurnRetrieval } from "./retrieval-policy.js";
-import { playerIntent } from "./player-intent.js";
-import { authorizeWithEvidence, type EvidenceMode } from "./evidence-authorization.js";
-import { deriveTurnEvidence } from "./turn-evidence.js";
+import type { NarratorPromptOptions } from "./prompt-builder.js";
+import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./retrieval-policy.js";
+import type { EvidenceMode } from "./evidence-authorization.js";
 import { RecentConversation } from "./recent-conversation.js";
-import { auditNarration, outcomeLines, redactNarration, revisionRequest, sentencesOf, type AuditIssue } from "./narration-audit.js";
-import { isDeepStrictEqual } from "node:util";
-import { verifyEvidence } from "./evidence-authorization.js";
-import type { ControllerResult } from "../llm/state-controller-provider.js";
-import type { CampaignCommand } from "../campaign/types.js";
 import { SceneParticipants } from "./scene-participants.js";
-import { TurnError, type TurnEvent, type TurnFailure, type TurnRequest, type TurnResult } from "./turn-types.js";
+import { projectTurnIntent, resolveTurnIntent, type IntentStageInput } from "./stages/intent.js";
+import { composeTurnPrompt, createDraftGenerator } from "./stages/narration.js";
+import { requestControllerProposal } from "./stages/controller.js";
+import { assembleTurnCommands, authorizeTurn } from "./stages/authorization.js";
+import { createNarrationAuditor, deliverDraft, reconcileNarration } from "./stages/audit.js";
+import { prepareCommit } from "./stages/commit-preparation.js";
+import { assembleTurnResult } from "./stages/result.js";
+import { TurnError, type TurnDebugRecord, type TurnEvent, type TurnFailure, type TurnRequest } from "./turn-types.js";
+import { TurnDiagnosticObserver, type DiagnosticPhase, type TurnDiagnosticsSink } from "./turn-diagnostics.js";
+export type { TurnDebugRecord } from "./turn-types.js";
 
+/**
+ * The sole layer spanning a turn (docs/architecture/TURN_COORDINATOR.md). Hardening H2: an orchestrator over typed stages in
+ * src/turn/stages/. Contractual order: input → intent/projection → retrieval → narration (draft) → controller (proposal) →
+ * authorization → final preparation → audit/reconciliation → commit preparation → checkpoint → ONE commit → publication.
+ *
+ * Authority: stages never mutate CampaignState. `campaign.prepare` is reachable only as a validation capability; the single
+ * `campaign.commit` below is the only mutation. `stage` maps a non-TurnError failure to the code of the phase in flight.
+ */
 const active = new WeakSet<CampaignState>();
 export class TurnCoordinator {
   readonly #recent = new WeakMap<CampaignState, RecentConversation>();
   readonly #participants = new WeakMap<CampaignState, SceneParticipants>();
-  constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void } = {}) {}
+  constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
   async *runTurn(request: TurnRequest): AsyncGenerator<TurnEvent> {
     const { campaign, player_input, signal } = request;
     const base_revision = campaign.revision, start = performance.now();
-    let text = "", shown = "", narration: NarratorResult | undefined, recorded = false, owned = false;
-    let stage: TurnFailure = "context_invalid";
+    // Spanning state: only what the failure path and `finally` need. Everything else is an immutable stage output.
+    let stage: TurnFailure = "context_invalid", shown = "", narration: NarratorResult | undefined, recorded = false, owned = false;
+    const observer = this.promptOptions.diagnostics_sink ? new TurnDiagnosticObserver(base_revision) : undefined;
+    const measure = <T>(phase: DiagnosticPhase, action: () => T): T => observer ? observer.sync(phase, action) : action();
+    const measureAsync = <T>(phase: DiagnosticPhase, action: () => Promise<T>, provider = false): Promise<T> => observer ? observer.async(phase, action, provider) : action();
     const network = new AbortController();
     const cancel = () => network.abort();
     signal?.addEventListener("abort", cancel, { once: true });
@@ -50,6 +52,7 @@ export class TurnCoordinator {
       if (campaign.revision !== base_revision) throw new TurnError("stale_turn");
     };
     try {
+      // TurnInputStage: one turn per campaign, bounded input, captured base snapshot and revision.
       if (active.has(campaign)) throw new TurnError("turn_in_progress");
       active.add(campaign); owned = true;
       if (!player_input.trim() || player_input.length > 4000) throw new TurnError("invalid_input");
@@ -57,125 +60,142 @@ export class TurnCoordinator {
       const snapshot = campaign.exportSnapshot();
       yield { type: "turn_started", base_revision };
       checkpoint();
-      const baseContext = buildTurnContext(this.world, snapshot);
-      // Deterministic, pre-narration; applied only when the turn finalizes. The controller never decides who exists.
-      const basePlan = this.participants(campaign).plan(player_input, baseContext);
-      const intent = playerIntent(player_input, baseContext, snapshot, this.world, basePlan.participants, basePlan.turn);
-      // Validate player-controlled runtime effects before spending tokens. The receipt is never committed: its detached
-      // snapshot is the projected state the narrator, controller and authorization see (Phase 1S). Durable state changes only
-      // at finalization, when runtime and authorized commands are prepared together from the base revision.
-      let projected = snapshot;
-      if (intent.runtime.length) { stage = "invalid_runtime_intent"; projected = campaign.prepare({ expected_revision: base_revision, commands: intent.runtime }).snapshot; }
-      const context = projected === snapshot ? baseContext : buildTurnContext(this.world, projected);
-      const scene = context.primary.scene.player_location?.id === baseContext.primary.scene.player_location?.id ? basePlan : this.participants(campaign).plan(player_input, context);
+
+      // IntentResolutionStage: player-authored effects, resolved and prevalidated; the projection is detached (never committed here).
+      const intentInput: IntentStageInput = { world: this.world, snapshot, base_revision, player_input, prepare: proposal => campaign.prepare(proposal),
+        plan: (input, context) => this.participants(campaign).plan(input, context), finalized: this.recent(campaign).finalized() };
+      const resolved = measure("input_intent", () => resolveTurnIntent(intentInput));
+      if (resolved.intent.runtime.length) stage = "invalid_runtime_intent";
+      const { projected, context, origin, arrival, movable, prompt_intent: promptIntent, scene } = measure("projection", () => projectTurnIntent(intentInput, resolved));
+      observer?.context(context);
+      const { intent } = resolved;
+
+      // RetrievalStage: read-only and conditional; its output is evidence for narration, never authority.
       stage = "retrieval_failed";
-      const retrieved = await retrieveForTurn(player_input, context, this.world, this.retrieval);
+      const retrieved = await measureAsync("retrieval", () => retrieveForTurn(player_input, context, this.world, this.retrieval));
+      if (observer) observer.record.retrieval = { triggered: retrieved.diagnostics.mode !== "none", mode: retrieved.diagnostics.mode, ids: retrieved.diagnostics.ids,
+        reference_count: retrieved.diagnostics.ids.length, fetched_count: retrieved.data.records.length, payload_characters: retrieved.payload_characters,
+        latency_ms: retrieved.diagnostics.elapsed_ms, lexical_used: retrieved.diagnostics.mode === "lexical", fallback_to_lexical: !!retrieved.fallback_reason,
+        ...(retrieved.fallback_reason ? { fallback_reason: retrieved.fallback_reason } : {}), limits: RETRIEVAL_LIMITS,
+        ...(this.promptOptions.diagnostics_include_query && retrieved.diagnostics.query ? { query: retrieved.diagnostics.query } : {}) };
       checkpoint();
-      const recent = this.recent(campaign).forPrompt();
-      const prompt = buildNarratorPrompt(player_input, context, recent, retrieved.data, intent, this.promptOptions, scene);
+      const { recent, prompt } = measure("prompt_composition", () => composeTurnPrompt({ player_input, context, recent: this.recent(campaign).forPrompt(), retrieved: retrieved.data, prompt_intent: promptIntent, options: this.promptOptions, scene }));
+
+      if (observer?.record.context) observer.record.context.knowledge_access_compaction_used = prompt.messages.some(m => m.content.includes("Everyone else present (") || m.content.includes("DO NOT USE every other fact above"));
+
+      // NarrationStage: a buffered DRAFT, never delivered before the audit (Repair 1 authoritative narration order).
       stage = "narrator_failed";
-      // Repair 1 (authoritative narration order): the narrator's text is a DRAFT. It is buffered, never shown, until the controller,
-      // authorization, preparation and the narration audit/reconciliation have resolved the turn.
-      const generate = async (request: Pick<GenerationRequest, "system_prompt" | "messages">): Promise<{ text: string; result: NarratorResult }> => {
-        let buffer = "", result: NarratorResult | undefined;
-        for await (const event of this.narrator.stream({ ...request, signal: network.signal })) {
-          checkpoint();
-          if (event.type === "error") throw event.error;
-          if (event.type === "text_delta") { buffer += event.text; if (buffer.length > 24_000) throw new TurnError("context_too_large"); }
-          else { if (event.result.text !== buffer || !buffer.trim()) throw new TurnError("narrator_failed"); result = event.result; }
-        }
-        if (!result) throw new TurnError("narrator_failed");
-        return { text: buffer, result };
-      };
-      ({ text, result: narration } = await generate(prompt));
-      const draft = text;
-      const narratorEnd = performance.now();
+      let revisionGeneration = false;
+      if (observer) observer.record.narrator = { completed: false, streamed_characters: 0, final_text_characters: 0 };
+      const generate = createDraftGenerator(this.narrator, network.signal, checkpoint, observer ? count => {
+        const record = revisionGeneration ? observer.record.revision_narrator : observer.record.narrator;
+        if (record) record.streamed_characters += count;
+      } : undefined);
+      const drafted = await measureAsync("narrator", () => generate(prompt), true);
+      if (observer) observer.record.narrator = { streamed_characters: observer.record.narrator?.streamed_characters ?? 0, model: drafted.result.model, usage: drafted.result.usage, latency_ms: drafted.result.latency.elapsed_total_ms, completed: true, final_text_characters: drafted.text.length };
+      narration = drafted.result;
+      const draft = drafted.text, narratorEnd = performance.now();
       checkpoint();
       yield { type: "controller_started" };
+
+      // ControllerStage: a PROPOSAL only — not authorization, not state, not truth.
       checkpoint(); stage = "controller_failed";
-      const evidence = JSON.stringify({ base_revision, context, explicit_intent: intent.candidates });
-      const controller = await this.controller.propose({ player_action: player_input, prior_state: evidence, final_narration: text, signal: network.signal });
+      const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft }), true);
+      if (observer) observer.record.controller = { model: proposed.result.model, usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
+        parse_success: false, proposed_count: proposed.result.commands.length, command_kinds: proposed.result.commands.map(c => c.kind), normalization_used: !!proposed.result.normalization };
       checkpoint();
-      const proposal = parseControllerProposal(JSON.stringify({ commands: controller.commands }));
-      const turnEvidence = deriveTurnEvidence(intent, text, context);
-      const diagnostics = authorizeWithEvidence(proposal, controller.evidence, turnEvidence, text, context, projected, this.promptOptions.evidence_authorization ?? "hybrid");
-      // Controller Reliability Pass 1 (debug only, never events): normalized outputs, and deterministic candidates with verified
-      // narration evidence that the controller did not propose. Nothing is synthesized; this only measures omissions.
-      const sink = this.promptOptions.debug_sink;
-      if (sink) {
-        const base = { campaign_id: snapshot.campaign_id, base_revision, player_input };
-        if (controller.normalization) sink({ kind: "controller_normalized", ...base, normalization: controller.normalization });
-        const spans = sentencesOf(text).flatMap(s => s.length <= 240 ? [s] : s.split(/(?<=[,;:])\s+/));
-        intent.candidates.forEach((candidate, index) => {
-          const proposed = proposal.some(p => isDeepStrictEqual(p, candidate) || p.kind === "transfer_item" && candidate.kind === "transfer_item" && p.item_id === candidate.item_id && p.owner_id === candidate.owner_id);
-          if (proposed) return;
-          const evidenceSentence = turnEvidence.narrator_confirmations.find(c => c.command_indexes.includes(index))?.source_sentence ?? spans.find(s => verifyEvidence(candidate, s, text, context, turnEvidence.player_intents).verified);
-          if (evidenceSentence) sink({ kind: "controller_omission_candidate", ...base, candidate, evidence: evidenceSentence, proposal_size: proposal.length });
-        });
-      }
+
+      // AuthorizationStage: proposal → per-command decision against deterministic evidence (still detached from state).
+      const debugSink = this.promptOptions.debug_sink;
+      const sink = debugSink ? (record: TurnDebugRecord) => { try { debugSink(record); } catch { /* Optional debug emission. */ } } : undefined;
+      const authorization = measure("authorization", () => authorizeTurn({ controller: proposed.result, intent, draft, context, projected, movable, origin, arrival, world: this.world,
+        mode: this.promptOptions.evidence_authorization ?? "hybrid", sink, debug_base: { campaign_id: snapshot.campaign_id, base_revision, player_input } }));
+      observer?.authorization(authorization.diagnostics);
+      if (observer?.record.controller) observer.record.controller.parse_success = true;
       // Freeze before exposing events: consumers cannot edit commands between authorization and commit.
-      yield freezeSnapshot({ type: "state_proposed" as const, diagnostics: structuredClone(diagnostics) }) as TurnEvent;
+      yield freezeSnapshot({ type: "state_proposed" as const, diagnostics: structuredClone(authorization.diagnostics) }) as TurnEvent;
       checkpoint();
-      // Inbound gifts record their provenance deterministically (the controller vocabulary has no acquisition field).
-      const minute = projected.runtime.scene.world_time.world_minute;
-      const authorized = diagnostics.filter(d => d.authorized).map(d => {
-        const c = d.command;
-        if (c.kind !== "transfer_item" || c.owner_id !== "nicco" || c.acquisition) return c;
-        const item = projected.items.find(i => i.id === c.item_id);
-        const from = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? item.position.character_id : undefined;
-        return from ? { ...c, acquisition: { acquisition_kind: "gift" as const, from_character_id: from, acquired_at: minute } } : c;
-      });
-      const commands = [...intent.runtime, ...authorized];
+      const { authorized, commands } = assembleTurnCommands({ diagnostics: authorization.diagnostics, intent, projected });
+
+      // Final preparation: the WHOLE candidate batch, validated against the captured base revision. A receipt, not a commit.
       stage = "campaign_validation_failed";
-      const prepared = campaign.prepare({ expected_revision: base_revision, commands });
+      const prepared = measure("preparation", () => campaign.prepare({ expected_revision: base_revision, commands }));
+      if (observer) Object.assign(observer.record.commit, { prepare_changed: prepared.changed, command_count: commands.length, command_kinds: commands.map(c => c.kind) });
       checkpoint();
-      // Repair 1 reconciliation: the delivered narration must not assert what the engine rejected, voice facts a character cannot
-      // use, place absent people in the scene, or establish unrecorded consequences. One bounded revision with the authoritative
-      // outcome; if it still fails, deterministic redaction. State is never changed by this step.
-      const access = projectKnowledgeAccess(context, retrieved.data, relevanceSignals(player_input, recent, intent), scene);
-      // Runtime Continuity Repair 1: authoritative state/canon text that may supply prices or procedures, and delivered history.
-      const authoritative_text = JSON.stringify({ context, retrieved: retrieved.data });
-      const audit = (narrationText: string, ev: typeof turnEvidence) => auditNarration({ narration: narrationText, context, world: this.world, access, evidence: ev, diagnostics, committed: authorized, prepared: prepared.snapshot, scene, player_input, recent, authoritative_text });
-      const issues = audit(draft, turnEvidence);
-      let delivered: "draft" | "revision" | "redacted" = "draft", revisionText: string | undefined, revisionIssues: readonly AuditIssue[] = [];
+
+      // AuditStage: the draft must not contradict the prepared candidate. One bounded revision, then deterministic redaction.
+      // It only chooses the delivered text; state is never changed here.
+      const auditor = measure("audit", () => createNarrationAuditor({ base_revision, context, world: this.world, retrieved: retrieved.data, player_input, recent, intent, scene,
+        turn_evidence: authorization.turn_evidence, diagnostics: authorization.diagnostics, authorized, prepared: prepared.snapshot }));
+      const issues = measure("audit", () => auditor.check(draft, authorization.turn_evidence));
+      if (observer) observer.record.audit = { issue_count: issues.length, issue_kinds: issues.map(i => i.kind), reconciliation_attempted: issues.length > 0,
+        revision_issue_count: 0, revision_issue_kinds: [], redaction_used: false, delivered: "draft" };
+      let delivery = deliverDraft(draft, issues);
       if (issues.length) {
-        const outcome = outcomeLines(context, turnEvidence, diagnostics, authorized, prepared.snapshot, issues, player_input);
+        const outcome = auditor.outcome(issues);
         stage = "narrator_failed";
-        revisionText = (await generate({ ...prompt, ...revisionRequest(prompt, draft, outcome.revision, issues) })).text;
-        checkpoint();
-        revisionIssues = audit(revisionText, deriveTurnEvidence(intent, revisionText, context));
-        text = revisionIssues.length ? redactNarration(revisionText, revisionIssues, outcome.prose) : revisionText;
-        delivered = revisionIssues.length ? "redacted" : "revision";
+        revisionGeneration = true;
+        if (observer) observer.record.revision_narrator = { completed: false, streamed_characters: 0, final_text_characters: 0 };
+        delivery = await measureAsync("reconciliation", () => reconcileNarration({ auditor: { ...auditor, check: (text, evidence) => measure("reconciliation_audit", () => auditor.check(text, evidence)) },
+          generate: p => measureAsync("reconciliation_narrator", async () => {
+            const revision = await generate(p);
+            if (observer) observer.record.revision_narrator = { streamed_characters: observer.record.revision_narrator?.streamed_characters ?? 0,
+              model: revision.result.model, usage: revision.result.usage, latency_ms: revision.result.latency.elapsed_total_ms, completed: true, final_text_characters: revision.text.length };
+            return revision;
+          }, true), checkpoint, prompt, draft, issues, outcome, intent, context }));
         stage = "campaign_validation_failed";
       }
-      shown = text; // Only audited, delivered narration is ever exposed, including on a later failure.
-      yield { type: "narration_delta", text };
-      yield { type: "narration_completed", text };
+
+      if (observer?.record.audit) Object.assign(observer.record.audit, { revision_issue_count: delivery.revision_issues.length,
+        revision_issue_kinds: delivery.revision_issues.map(i => i.kind), redaction_used: delivery.delivered === "redacted", delivered: delivery.delivered });
+
+      // CommitPreparation: name-driven identity on the DELIVERED narration joins the batch, or is skipped observably (H1).
+      const plan = measure("commit_preparation", () => prepareCommit({ world: this.world, prepare: proposal => campaign.prepare(proposal), prepared, commands, finalized: this.recent(campaign).finalized(), player_input,
+        delivered: delivery.text, scene, base_revision, location_changed: origin !== arrival,
+        on_skip: reason => sink?.({ kind: "identity_establishment_skipped", campaign_id: snapshot.campaign_id, base_revision, player_input, reason }) }));
+      if (observer) Object.assign(observer.record.commit, { identity_promotion_count: plan.identity.promoted.length, identity_skipped: !!plan.identity_skipped,
+        location_changed_naming_skip: origin !== arrival });
+
+      // Delivery, then the authoritative commit.
+      shown = delivery.text; // Only audited, delivered narration is ever exposed, including on a later failure.
+      yield { type: "narration_delta", text: delivery.text };
+      yield { type: "narration_completed", text: delivery.text };
+      if (observer) { observer.phase = "commit"; }
+      const commitStart = observer ? performance.now() : 0;
       checkpoint();
-      const committed = campaign.commit(prepared); // No await/callback/yield between the last checkpoint and commit.
-      this.recent(campaign).add({ player: player_input, narration: text, status: "finalized" }); recorded = true;
-      const participantsAfter = this.participants(campaign).commit(scene, text);
-      const result: TurnResult = { narration: text, base_revision, final_revision: committed.revision,
-        controller_proposal: proposal, authorized_commands: commands, authorization: diagnostics, retrieval: retrieved.diagnostics, turn_evidence: turnEvidence,
-        narration_reconciliation: { delivered, draft, issues, ...(revisionText !== undefined ? { revision: revisionText, revision_issues: revisionIssues } : {}) },
-        narrator: { model: narration.model, usage: narration.usage, latency: narration.latency }, controller: { model: controller.model, usage: controller.usage, latency: controller.latency },
-        context_characters: { system: NARRATOR_SYSTEM.length, primary_context: JSON.stringify(context).length, recent_conversation: JSON.stringify(recent).length, knowledge_access: renderKnowledgeAccess(projectKnowledgeAccess(context, retrieved.data, relevanceSignals(player_input, recent, intent), scene)).length, retrieval: JSON.stringify(retrieved.data).length, controller_evidence: evidence.length + player_input.length + text.length },
-        scene_participants: { plan: scene, after: participantsAfter },
-        ...(intent.natural ? { action_resolution: intent.natural } : {}),
-        latency: { narrator_ttft_ms: narration.latency.time_to_first_token_ms, narrator_total_ms: narration.latency.elapsed_total_ms, controller_total_ms: controller.latency.elapsed_total_ms, controller_tail_ms: performance.now() - narratorEnd, retrieval_ms: retrieved.diagnostics.elapsed_ms, coordinator_total_ms: performance.now() - start },
-      };
+      const committed = campaign.commit(plan.receipt); // No await/callback/yield between the last checkpoint and commit.
+
+      if (observer) { observer.elapsed("commit", commitStart, false); observer.record.commit.attempted = true; observer.record.commit.succeeded = true; observer.phase = "publication"; }
+      const publicationStart = observer ? performance.now() : 0;
+
+      // Publication: conversation history and scene continuity are updated only after the commit.
+      this.recent(campaign).add({ player: player_input, narration: delivery.text, status: "finalized", location_id: prepared.snapshot.runtime.scene.player_location }); recorded = true;
+      this.participants(campaign).commit(scene, delivery.text);
+      const participantsAfter = this.participants(campaign).retire(plan.identity.promoted.flatMap(p => p.participant_id ? [p.participant_id] : []));
+      const result = assembleTurnResult({ world: this.world, base_revision, final_revision: committed.revision, player_input, proposal: authorization.proposal, commands,
+        diagnostics: authorization.diagnostics, retrieval: retrieved, turn_evidence: authorization.turn_evidence, delivery, narration, controller: proposed.result,
+        controller_prior_state: proposed.prior_state, context, recent, access: auditor.access, scene, participants_after: participantsAfter, commit_plan: plan,
+        origin, arrival, intent, narrator_end: narratorEnd, start });
+      if (observer) { observer.elapsed("publication", publicationStart, false); observer.record.outcome = "success"; }
       yield { type: "state_committed", ...committed };
       yield freezeSnapshot({ type: "turn_completed" as const, result }) as TurnEvent;
     } catch (error) {
       const code = signal?.aborted ? "cancelled" : error instanceof TurnError ? error.code : stage;
+      if (observer) { observer.record.outcome = "failure"; observer.record.failure_code = code; observer.record.failure_phase = observer.phase;
+        if (observer.phase === "commit" && !(error instanceof TurnError)) observer.record.commit.attempted = true;
+        if (code === "context_too_large") observer.record.context_too_large_cause = observer.phase;
+        if (code === "retrieval_failed" && observer.phase === "retrieval") observer.record.retrieval = { triggered: true, mode: "failed", ids: [], reference_count: 0, fetched_count: 0,
+          payload_characters: 0, latency_ms: observer.record.stage_timings.retrieval?.deterministic_ms ?? 0, lexical_used: false, limits: RETRIEVAL_LIMITS, failure_code: code };
+        if (error instanceof ProviderError) observer.record.provider_code = error.code; }
       // Repair 1.2: evaluation/debug evidence only; never part of the player-facing event.
-      if (error instanceof ProviderError && error.diagnostic) this.promptOptions.debug_sink?.({ kind: "controller_parse_failure", campaign_id: campaign.exportSnapshot().campaign_id, base_revision, player_input, stage, ...error.diagnostic });
+      if (error instanceof ProviderError && error.diagnostic) { try { this.promptOptions.debug_sink?.({ kind: "controller_parse_failure", campaign_id: campaign.exportSnapshot().campaign_id, base_revision, player_input, stage, ...error.diagnostic }); } catch { /* Optional debug emission. */ } }
       yield { type: "turn_failed", code, ...(error instanceof ProviderError ? { provider_code: error.code } : {}), narration: shown, incomplete: true, base_revision, final_revision: campaign.revision };
     } finally {
       network.abort(); signal?.removeEventListener("abort", cancel);
       // Runtime Continuity Repair 1: only delivered text is ever retained; an undelivered draft or revision never enters history.
       if (narration && !recorded) this.recent(campaign).add({ player: player_input, narration: shown, status: "state_failed" });
       if (owned) active.delete(campaign);
+      if (observer && this.promptOptions.diagnostics_sink) observer.emit(this.promptOptions.diagnostics_sink, campaign.revision);
     }
   }
 }

@@ -160,7 +160,7 @@ implementation changed. No next phase or further settlement authoring began.
 
 ## Calderan district foundation (2026-09-29)
 
-Calderan is West's largest city and political capital, a very large dense walled metropolis. Five broad urban regions are now locations under calderan: calderan_west, calderan_east, calderan_north, calderan_south, calderan_center. Their themes are predominant tendencies, never exclusive zoning. Crossing substantial parts is meaningful travel. Center has an older inner wall; this does not establish any gate, road or traversable connection.
+Calderan is West's largest city and political capital, a very large dense walled metropolis. Five broad urban regions are now locations under calderan: calderan_west, calderan_east, calderan_north, calderan_south, calderan_center. Their themes are predominant tendencies, never exclusive zoning. Crossing substantial parts is meaningful travel. Center has an older inner wall. The later canonical spatial pass authors its two gates and weighted road graph.
 
 Containment: continent ? west ? calderan ? calderan_west ? heartstone ? existing U1/LR/F1/CY. heartstone_square remains outside the tower, sibling under calderan_west. calderan_slave_market and slave_market_back_alleys are separate siblings in West; the latter is the unofficial/criminal fringe, not the official legal market. Existing tower/main-entrance connection edges are unchanged. No unrelated place received a guessed district. No new routes, measurements, operators or hooks were added.
 
@@ -179,5 +179,12 @@ East, North, South and Center now carry detailed district canon and 23 anchor lo
 
 The only new travel edges are The Merchants' Mile ↔ The Crucible, because the brief states that the street feeds directly into the market. Proximity statements ("near the Citadel", "near The Collegium") are prose, not connections.
 
-The following are features, not entities: the Masterworks (House of Making), the Gold Cloister (Saint Caldus House), the Mage Registry (The Collegium), the Crucible's specialist streets, Center's four inner-wall gates, Calderan's four cardinal gates, and the Imperial Road. The road is a feature of the Imperial Gate so that the national geography inventory under `west` stays unchanged, with no road network authored. The other three city gates are not authored as locations.
+The Masterworks (House of Making), Gold Cloister (Saint Caldus House) and Mage Registry (The Collegium) remain features. The later spatial pass promotes the Crucible's three named specialist streets and Imperial Road to travel locations. Exactly two outer gates (North and Imperial) and two Center gates (West and East) supersede the former four-gate assumptions.
 
+## Canonical city map and spatial graph (2026-10-01)
+
+[Calderan spatial canon](CALDERAN_SPATIAL_CANON.md) supersedes the earlier city-specific
+route/position omissions in this historical authoring record. Its authoritative image is
+`C:\Users\be_fr\CaldrevanRPG\city_map\city_map.png`. This does not change continental-map
+illustration limits. Runtime uses authored YAML, never image parsing. See the linked
+canon for map-label exceptions, POI placement, road/bridge hierarchy and walking calibration.

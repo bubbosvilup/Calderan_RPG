@@ -82,7 +82,7 @@ const invalid: [string, Mutation, RegExp][] = [
   ["missing chunk field", s => { Reflect.deleteProperty(find(s, "brenna").chunks[0]!, "content"); }, /chunks\[0\].content/],
   ["missing location reference", change("brenna", { location: "missing" }), /entity.location.*unknown entity/],
   ["wrong location type", change("brenna", { location: "coin" }), /entity.location.*type location/],
-  ["wrong connection type", change(room, { connections: [{ target: "brenna", description: "Test" }] }), /connections\[0\].target.*type location/],
+  ["wrong connection type", change(room, { connections: [{ target: "brenna", description: "Test", minutes: 1 }] }), /connections\[0\].target.*type location/],
   ["wrong relationship type", change("brenna", { relationships: [{ target: room, kind: "friend", description: "Test" }] }), /relationships\[0\].target.*type character/],
   ["duplicate reference IDs", change("meeting", { participants: ["brenna", "brenna"] }), /duplicate ID/],
   ["event anchor not participant", change("meeting", { participants: ["nicco"] }), /subset/],

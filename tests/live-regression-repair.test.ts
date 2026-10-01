@@ -237,7 +237,10 @@ test("M: a protected character in a valid runtime encounter gets portrayal witho
   assert.equal(service.get({ entity_id: "dren" }, "player").kind, "not_visible");
   const retrieved = await retrieveForTurn("Tell me about Dren", context, world, { service, search: new HybridSearch(service) });
   assert.ok(!JSON.stringify(retrieved.data).includes(dren.private_notes!));
-  assert.deepEqual(projectKnowledgeAccess(context, retrieved.data).characters.find(c => c.character_id === "dren")!.can_use, []);
+  // H3: Dren may use only his own authored known_by grants on restricted canon; presence still grants nothing public or player-known.
+  const access = projectKnowledgeAccess(context, retrieved.data);
+  assert.ok(access.characters.find(c => c.character_id === "dren")!.can_use.every(u => u.basis === "canonical_private"));
+  assert.ok(access.facts.filter(f => f.source === "npc_private_canon").every(f => !access.player.includes(f.ref)));
   // Without presence there is no projection at all.
   const absent = buildTurnContext(world, createOpeningCampaign(world, "repair1_absent").exportSnapshot());
   assert.ok(!absent.characters.some(c => c.id === "dren"));

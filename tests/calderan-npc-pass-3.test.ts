@@ -39,7 +39,7 @@ test("all pass 3 NPCs exist with exact affiliations, supplied workplaces and no 
   assert.match(npc("garran_holt").content, /headquarters or principal office is not established/);
   assert.match(npc("rufus_tern").content, /stables are not a separately established location/);
   for (const id of ["guard_headquarters", "city_guard_headquarters", "mage_registry", "rufus_stables", "tern_stables", "quarn_residence", "holt_residence", "severan_residence", "marta_residence", "spire_academy_classroom"]) assert.equal(world.getEntity(id), undefined, id);
-  assert.equal(world.getEntitiesByType("location").length, 74); // unchanged by this pass
+  assert.equal(world.getEntitiesByType("location").length, 96); // unchanged by this pass
   // The Magistracy remains a concept; no faction was created for it.
   assert.equal(world.getEntity("city_magistracy")!.type, "concept");
   assert.ok(!world.getEntitiesByType("faction").some(f => /magistra/i.test(f.id)));

@@ -7,26 +7,67 @@ entity:
   parent: calderan_west
   aliases:
     - market square
-  summary: Main Market Square is a very large public square anchoring ordinary shopping and everyday
-    commerce in inner-facing West.
+  summary: Main Market Square is a very large public square anchoring ordinary shopping and everyday commerce in
+    inner-facing West.
   tags:
     - geography
-  search_context: Main Market Square ordinary shopping, everyday goods, shops near Heartstone, West
-    commercial services.
-  content: The square lies in the more prosperous part of West toward Center, approximately 30 minutes
-    on foot from Heartstone. It is smaller than Calderan Slave Market and serves ordinary shopping.
-    Numerous unnamed stalls and services supply most everyday needs at low to lower-middle prices
-    and ordinary to decent quality. Rare, elite or prestigious goods generally require East, North
-    or Center. The Daily Grind, Blackiron Repairs & Arms, Mudlark's Herbs and Livia's Needles are
-    four important businesses on the square. Fountain of the Fallen stands at its center and is a
-    common meeting landmark. Second Chance Pawn and West Guard Post are nearby. The walking estimate
-    establishes no exact route.
+  search_context: Main Market Square ordinary shopping, everyday goods, shops near Heartstone, West commercial services.
+  content: The square lies in the more prosperous part of West toward Center, approximately 30 minutes on foot
+    from Heartstone. It is smaller than Calderan Slave Market and serves ordinary shopping. Numerous unnamed
+    stalls and services supply most everyday needs at low to lower-middle prices and ordinary to decent
+    quality. Rare, elite or prestigious goods generally require East, North or Center. The Daily Grind,
+    Blackiron Repairs & Arms, Mudlark's Herbs and Livia's Needles are four important businesses on the square.
+    Fountain of the Fallen stands at its center and is a common meeting landmark. Second Chance Pawn and West
+    Guard Post are nearby. The walking estimate calibrates the authored route.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "Inner-facing West, east of the western red arc and immediately west of Centers wall. Access:
+        gatherers_inn."
+  connections:
+    - target: gatherers_inn
+      description: square_access access; canonical city map.
+      minutes: 7
+      kind: square_access
+    - target: west_arterial_market
+      description: square_access access; canonical city map.
+      minutes: 8
+      kind: square_access
+    - target: center_west_gate
+      description: gate access; canonical city map.
+      minutes: 10
+      kind: gate
+    - target: the_daily_grind
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
+    - target: blackiron_repairs_and_arms
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
+    - target: mudlarks_herbs
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
+    - target: livias_needles
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
+    - target: fountain_of_the_fallen
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
+    - target: west_guard_post
+      description: square_access access; canonical city map.
+      minutes: 3
+      kind: square_access
+    - target: second_chance_pawn
+      description: square_access access; canonical city map.
+      minutes: 3
+      kind: square_access
 chunks: []

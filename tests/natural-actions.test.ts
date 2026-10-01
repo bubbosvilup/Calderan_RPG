@@ -90,16 +90,16 @@ test("TEST 1B exact (hard regression): a spoken barefoot claim never unequips wo
   assert.equal(boots(campaign).position.kind, "equipped");
   assert.match(seen[0]!.messages[0]!.content, /"position":\{"kind":"equipped","character_id":"nicco","slot":"feet","mode":"worn"\}/);
 });
-test("TEST 2 exact: movement to the pens resolves the destination but is blocked (no connection); a guard participant exists; intention has no effect", async () => {
+test("TEST 2 exact: movement to the pens follows the canonical city route; a guard participant exists; intention has no effect", async () => {
   const { world, campaign } = await opening(false), seen: GenerationRequest[] = [];
   const result = await turn(coordinator(world, ["A guard steps into Nicco's path near the square. \"Problems?\""], seen), campaign, T2);
   const actions = result.action_resolution!.actions;
-  assert.deepEqual(actions.map(a => [a.kind, a.status]), [["intention", "no_state_effect"], ["movement", "blocked"]]);
+  assert.deepEqual(actions.map(a => [a.kind, a.status]), [["intention", "no_state_effect"], ["movement", "resolved"]]);
   assert.equal(actions[1]!.detail.destination, "calderan_slave_market");
-  assert.equal(campaign.exportSnapshot().runtime.scene.player_location, "heartstone_square"); assert.deepEqual(result.authorized_commands, []);
+  assert.equal(campaign.exportSnapshot().runtime.scene.player_location, "calderan_slave_market"); assert.equal(result.travel?.minutes, 20);
   assert.deepEqual(result.scene_participants!.plan.participants.map(p => [p.role, p.standing]), [["guard", "ordinary_local"]]);
   const prompt = seen[0]!.messages[0]!.content;
-  assert.match(prompt, /he has not arrived and is still at Heartstone Square\. Do not describe him at Calderan Slave Market\./);
+  assert.match(prompt, /Location: Calderan Slave Market/);
   assert.match(prompt, /P1 - Guard \(current conversation partner\)\. Temporary; ordinary local of Calderan West District\. Affiliation unestablished/);
   assert.match(prompt, /P1 Guard \(temporary, ordinary local\): CAN USE/);
 });

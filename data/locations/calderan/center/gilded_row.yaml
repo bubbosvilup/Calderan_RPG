@@ -8,15 +8,28 @@ entity:
   aliases: []
   summary: >-
     Gilded Row is the principal prestige retail street of Calderan's Center District.
-  tags: ["street","luxury","commerce"]
+  tags: [ "street", "luxury", "commerce" ]
   search_context: "Gilded Row, luxury shops, couture, jewelry, bespoke armor, prestige weapons, art, furnishings"
   content: >-
-    Gilded Row is Center's principal prestige retail street. It holds or attracts couture,
-    high-end jewelry, luxury textiles, bespoke armor, prestige weapons, imported curiosities,
-    art and expensive furnishings. Much of its prestige craft is manufactured in East and
-    displayed, sold and consumed in Center; some firms keep a workshop in East and a showroom
-    here. No individual shops are established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
-  connections: []
+    Gilded Row is Center's principal prestige retail street. It holds or attracts couture, high-end jewelry,
+    luxury textiles, bespoke armor, prestige weapons, imported curiosities, art and expensive furnishings.
+    Much of its prestige craft is manufactured in East and displayed, sold and consumed in Center; some firms
+    keep a workshop in East and a showroom here. No individual shops are established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "Eastern Center on the northeast riverbank. Access: center_bridge."
+  connections:
+    - target: center_bridge
+      description: bridge access; canonical city map.
+      minutes: 5
+      kind: bridge
+    - target: center_east_gate
+      description: gate access; canonical city map.
+      minutes: 7
+      kind: gate
+    - target: ducal_citadel
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
 chunks: []

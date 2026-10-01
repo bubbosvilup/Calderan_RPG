@@ -5,25 +5,23 @@ entity:
   name: Heartstone Underground Level
   display_name: Heartstone U1
   parent: heartstone
-  aliases: [Heartstone underground level, Heartstone cellar, Heartstone basement, U1]
+  aliases: [ Heartstone underground level, Heartstone cellar, Heartstone basement, U1 ]
   summary: >-
-    Heartstone U1 is one large stone underground space, broader than LR and the
-    tower floors above. It is partly used for ordinary household storage;
-    much remains comparatively unused and its full extent is not completely understood.
-  tags: [household, storage, architecture, mystery]
-  search_context: Heartstone U1 underground storage level, cellar, stone pillars, central drain, old door and unexplored lower stairs.
+    Heartstone U1 is one large stone underground space, broader than LR and the tower floors above. It is
+    partly used for ordinary household storage; much remains comparatively unused and its full extent is not
+    completely understood.
+  tags: [ household, storage, architecture, mystery ]
+  search_context: Heartstone U1 underground storage level, cellar, stone pillars, central drain, old door and
+    unexplored lower stairs.
   content: >-
-    U1 is accessed directly from LR through the large visible hatch and separate
-    descending access, not through the upper-floor spiral staircase. Its floor,
-    walls, and ceiling are entirely stone. The ceiling is lower than those of
-    the upper floors, but the broad space is not inherently claustrophobic.
-    Exact dimensions and geometry are unspecified. Only part of U1 is actively
-    used, chiefly for storage; large portions remain comparatively unused.
-    Storage shelves and furnishings serve ordinary household needs without
-    fixed inventories or an assumption that every shelf is full. Its full
-    extent is not completely understood or explored. A separate old door in
-    the underground masonry opens onto additional stairs descending farther
-    below U1. Those lower stairs remain unexplored, and what lies beyond is unknown.
+    U1 is accessed directly from LR through the large visible hatch and separate descending access, not
+    through the upper-floor spiral staircase. Its floor, walls, and ceiling are entirely stone. The ceiling is
+    lower than those of the upper floors, but the broad space is not inherently claustrophobic. Exact
+    dimensions and geometry are unspecified. Only part of U1 is actively used, chiefly for storage; large
+    portions remain comparatively unused. Storage shelves and furnishings serve ordinary household needs
+    without fixed inventories or an assumption that every shelf is full. Its full extent is not completely
+    understood or explored. A separate old door in the underground masonry opens onto additional stairs
+    descending farther below U1. Those lower stairs remain unexplored, and what lies beyond is unknown.
   knowledge:
     visibility:
       narrator: true
@@ -32,9 +30,11 @@ entity:
     awareness: private
   features:
     - name: stone floor, walls, and ceiling
-      description: One broad underground space is entirely constructed in stone, with a lower ceiling than the upper floors; exact dimensions and geometry are unspecified.
+      description: One broad underground space is entirely constructed in stone, with a lower ceiling than the upper
+        floors; exact dimensions and geometry are unspecified.
     - name: LR hatch access
-      description: Separate descending access connects U1 to the large visible hatch in LR; the upper-floor spiral staircase does not reach U1.
+      description: Separate descending access connects U1 to the large visible hatch in LR; the upper-floor spiral
+        staircase does not reach U1.
     - name: stone support pillars
       description: Stone pillars support the underground construction.
     - name: arched masonry recesses and openings
@@ -42,12 +42,17 @@ entity:
     - name: circular floor drain and grate
       description: A large circular floor drain/grate lies near the central area.
     - name: wall storage shelves
-      description: Wall shelves/storage areas are intended for food, preserved goods, ordinary household supplies, common materials, and consumables such as candles; contents and quantities are unspecified.
+      description: Wall shelves/storage areas are intended for food, preserved goods, ordinary household supplies,
+        common materials, and consumables such as candles; contents and quantities are unspecified.
     - name: barrels, crates, and storage furnishings
-      description: Ordinary barrels, crates, and storage furnishings support the partly used storage area; no fixed contents or quantities are specified.
+      description: Ordinary barrels, crates, and storage furnishings support the partly used storage area; no fixed
+        contents or quantities are specified.
     - name: old door and lower descending stairs
-      description: One separate old door in the underground masonry opens onto additional stairs descending farther below U1. Their destination and what lies beyond remain unknown and undefined.
+      description: One separate old door in the underground masonry opens onto additional stairs descending farther
+        below U1. Their destination and what lies beyond remain unknown and undefined.
   connections:
     - target: heartstone_lr
       description: Separate ascending access leads back to the large visible hatch in LR.
+      minutes: 1
+      kind: stairs
 chunks: []

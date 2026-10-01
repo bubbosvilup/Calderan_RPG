@@ -6,32 +6,36 @@ entity:
   display_name: GW's
   parent: calderan_west
   aliases: []
-  summary: A known but taboo clandestine gambling establishment in West; people generally know or
-    suspect it exists.
+  summary: A known but taboo clandestine gambling establishment in West; people generally know or suspect it exists.
   tags:
     - geography
-  search_context: A known but taboo clandestine gambling establishment in West; people generally know
-    or suspect it exists.
-  content: GW's is not truly hidden, but it is clandestine and taboo rather than an ordinary public
-    venue. No expanded form of GW is established.
+  search_context: A known but taboo clandestine gambling establishment in West; people generally know or suspect it exists.
+  content: GW's is not truly hidden, but it is clandestine and taboo rather than an ordinary public venue. No
+    expanded form of GW is established.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "Near the northwest river entry, north of the Dangling Rope. Access: the_dangling_rope."
+  connections:
+    - target: the_dangling_rope
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
 chunks:
   - id: gws.entry_and_association
     entity_id: gws
     section: entry_and_association
     summary: Restricted entry and criminal association of GW's.
     search_context: Restricted entry and criminal association of GW's.
-    content: Entry typically requires a password or introduction by someone accepted there. No actual
-      password or contact is established. The establishment is associated with the broader criminal
-      ecosystem participating in the Back-Back Alleys; Blackthorn handles operational management for
-      the Carrion Dogs. No personal ownership is established.
+    content: Entry typically requires a password or introduction by someone accepted there. No actual password or
+      contact is established. The establishment is associated with the broader criminal ecosystem
+      participating in the Back-Back Alleys; Blackthorn handles operational management for the Carrion Dogs.
+      No personal ownership is established.
     tags: []
     knowledge:
       visibility:

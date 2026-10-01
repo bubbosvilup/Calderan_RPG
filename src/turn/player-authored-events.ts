@@ -2,6 +2,8 @@ import type { TurnContext } from "./context-builder.js";
 import { actionSegments, sceneDirection } from "./natural-actions.js";
 import type { PhysicalCondition } from "./physical-interaction.js";
 import { DEPART_ACT } from "./scene-departure.js";
+import { GATES } from "./language/gates.js";
+import { escapeRegExp as esc } from "./language/text.js";
 
 /**
  * Runtime Continuity Repair 1: PlayerAuthoredEventEvidence. Physical/social facts the player explicitly asserts in the CURRENT
@@ -25,7 +27,7 @@ export interface PlayerAuthoredEvent {
   readonly condition?: PhysicalCondition; readonly severe?: SevereOutcome;
 }
 
-const NEGATED = /\b(?:not|never|no(?! (?:warning|hesitation|word))|nor|almost|nearly|pretends?|pretending|threaten\w*|tries to|tried to|trying to|attempts? to|wants? to|wanted to|about to|going to|starts? to|started to|begins? to|reaches? for|would|could|might|will|should|if|unless|without)\b|n't\b/i;
+const NEGATED = GATES.player_event_negated;
 const CLASS_VERBS: readonly (readonly [PlayerEventClass, RegExp])[] = [
   ["grab", /\b(?:grab(?:s|bed|bing)?|seiz(?:es|ed|ing|e)|grip(?:s|ped|ping)?|clutch(?:es|ed|ing)?|takes? hold of|took hold of|yank(?:s|ed|ing)?|catch(?:es)? (?:him|her|hold)|caught (?:him|her|hold))\b/i],
   ["shove", /\b(?:shov(?:es|ed|ing|e)|push(?:es|ed|ing)?|thrust(?:s|ing)?|barges? into|slams? into|shoulders? (?:him|her|nicco))\b/i],
@@ -47,7 +49,6 @@ export const SEVERE_TERMS: Readonly<Record<SevereOutcome, RegExp>> = {
 };
 const SEVERE_ORDER = Object.keys(SEVERE_TERMS) as SevereOutcome[];
 
-const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const sexOf = (c: TurnContext["characters"][number]) => { const p = (c as { pronoun?: string }).pronoun; return (c.profile.sex ?? (p === "he" ? "male" : p === "she" ? "female" : undefined))?.toLowerCase(); };
 
 export function playerAuthoredEvents(input: string, context: TurnContext): readonly PlayerAuthoredEvent[] {

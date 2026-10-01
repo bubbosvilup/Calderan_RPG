@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: glasswork_row
+  type: location
+  name: Glasswork Row
+  display_name: Glasswork Row
+  parent: calderan_east
+  aliases: []
+  summary: Local craft street opening off the Crucible; its precise yellow-street alignment is not individually
+    labelled on the map.
+  tags:
+    - geography
+    - street
+  search_context: Calderan canonical city map Glasswork Row
+  content: Local craft street opening off the Crucible; its precise yellow-street alignment is not individually
+    labelled on the map.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: the_crucible
+      description: street access; canonical city map.
+      minutes: 2
+      kind: street
+chunks: []

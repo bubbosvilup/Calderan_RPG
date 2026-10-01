@@ -3,10 +3,10 @@ import type { CampaignDomains, CampaignOrigin, GoalTarget } from "./types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { fail, validateId } from "./validation.js";
 
-export type CampaignIdKind = "character" | "item" | "household" | "fact" | "goal" | "event";
+export type CampaignIdKind = "character" | "item" | "household" | "fact" | "goal" | "event" | "transaction";
 /** Caller supplies a stable local key. No randomness, names-as-identity or hidden counters. */
 export function campaignId(kind: CampaignIdKind, localKey: string): string {
-  if (!["character", "item", "household", "fact", "goal", "event"].includes(kind)) fail("id", "unknown identity domain");
+  if (!["character", "item", "household", "fact", "goal", "event", "transaction"].includes(kind)) fail("id", "unknown identity domain");
   return validateId(`campaign_${kind}_${validateId(localKey)}`);
 }
 export class CampaignIdentityResolver {
@@ -33,7 +33,7 @@ export class CampaignIdentityResolver {
   newId(id: string, kind: CampaignIdKind): void {
     validateId(id);
     if (!id.startsWith(`campaign_${kind}_`)) fail("id", "created record must use its campaign domain prefix");
-    if (this.world.hasEntity(id) || this.world.getChunk(id) || [this.domains.characters, this.domains.items, this.domains.households, this.domains.facts, this.domains.goals, this.domains.scheduled_events].some(list => list.some(record => record.id === id))) fail("id", "identity collision");
+    if (this.world.hasEntity(id) || this.world.getChunk(id) || [this.domains.characters, this.domains.items, this.domains.households, this.domains.facts, this.domains.goals, this.domains.scheduled_events, this.domains.transactions].some(list => list.some(record => record.id === id))) fail("id", "identity collision");
   }
   registration(id: string, origin: CampaignOrigin, type: "character" | "item"): void {
     const list = type === "character" ? this.domains.characters : this.domains.items;

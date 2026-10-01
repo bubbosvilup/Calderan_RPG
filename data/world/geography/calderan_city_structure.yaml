@@ -8,25 +8,24 @@ entity:
   aliases:
     - Calderan district overview
     - Districts of Calderan
-  summary: "Calderan, West's largest city and political capital, has five broad urban districts: West,
-    East, North, South, and Center."
+  summary: "Calderan, West's largest city and political capital, has five broad urban districts: West, East,
+    North, South, and Center."
   tags:
     - fundamentals
   search_context: Calderan city districts, distinct from the nations West, Center, and East.
-  content: "Calderan is a very large, dense walled metropolis. Its five broad urban districts are
-    major regions, not small neighborhoods. District themes describe predominant tendencies, not
-    exclusive zoning: labor and harder living conditions in West; manufacturing, crafts and
-    large-scale commerce in East; religion, medicine, scholarship and regulated magic in North;
-    security, military, transport and hospitality in South; wealth, finance and political
-    administration in Center. Center is enclosed by an older inner wall. Shops may exist in West,
-    taverns in Center, and temples outside North. Crossing substantial parts of a district or the
-    city is meaningful travel. Detailed district canon belongs to the five district locations. Exact
-    roads and navigation routes are not established. Its population is approximately 100,000:
-    largest in West and second most populous known globally. The roughly oval walled city has four
-    outer districts surrounding Center. Crossing most of it cardinal-to-cardinal takes approximately
-    two hours on foot, possibly somewhat less. Ordinary walking from Heartstone takes approximately
-    30 minutes to Main Market Square, 40 minutes to Calderan Central District and 20 minutes to
-    Calderan Slave Market; these estimates do not establish precise routes."
+  content: "Calderan is a very large, dense walled metropolis. Its five broad urban districts are major regions,
+    not small neighborhoods. District themes describe predominant tendencies, not exclusive zoning: labor and
+    harder living conditions in West; manufacturing, crafts and large-scale commerce in East; religion,
+    medicine, scholarship and regulated magic in North; security, military, transport and hospitality in
+    South; wealth, finance and political administration in Center. Center is enclosed by an older inner wall.
+    Shops may exist in West, taverns in Center, and temples outside North. Crossing substantial parts of a
+    district or the city is meaningful travel. Detailed district canon belongs to the five district locations.
+    The canonical city map and weighted connections establish pedestrian routes. Its population is
+    approximately 100,000: largest in West and second most populous known globally. The irregular
+    rounded-rectangular walled city has four outer districts surrounding Center. Crossing most of it
+    cardinal-to-cardinal takes approximately two hours on foot, possibly somewhat less. Ordinary walking from
+    Heartstone takes approximately 30 minutes to Main Market Square, 40 minutes to Calderan Central District
+    and 20 minutes to Calderan Slave Market; these estimates calibrate the canonical weighted routes."
   knowledge:
     visibility:
       narrator: true

@@ -10,15 +10,21 @@ entity:
   tags:
     - geography
   search_context: A low-end West tavern with rougher clientele.
-  content: Laborers, warehouse workers and petty criminals frequent this tavern. Fights are not
-    unusual and questions are generally unwelcome. Its owner and exact position within West are
-    unestablished.
+  content: Laborers, warehouse workers and petty criminals frequent this tavern. Fights are not unusual and
+    questions are generally unwelcome. Its owner is unestablished. It stands east of the Slave Market and
+    northwest of Main Market Square.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "East of Slave Market and northwest of Main Market Square. Access: west_arterial_north."
+  connections:
+    - target: west_arterial_north
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
 chunks: []

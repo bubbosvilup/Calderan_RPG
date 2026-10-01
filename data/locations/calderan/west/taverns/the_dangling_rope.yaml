@@ -10,15 +10,29 @@ entity:
   tags:
     - geography
   search_context: A low-end West tavern used for discreet meetings.
-  content: Anonymous travelers, fences and intermediaries frequent this tavern, where few questions
-    are asked. Low-level information can be obtained by someone who knows how to ask or pay. Its
-    owner and exact position within West are unestablished.
+  content: Anonymous travelers, fences and intermediaries frequent this tavern, where few questions are asked.
+    Low-level information can be obtained by someone who knows how to ask or pay. Its owner is unestablished.
+    It stands near the northwest riverbank, west of Saint Orra.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "Northwest West, near the southwest riverbank. Access: west_outer_lane."
+  connections:
+    - target: west_outer_lane
+      description: street access; canonical city map.
+      minutes: 16
+      kind: street
+    - target: gws
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
+    - target: saint_orra_house
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
 chunks: []

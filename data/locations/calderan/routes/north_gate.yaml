@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: north_gate
+  type: location
+  name: North Gate
+  display_name: North Gate
+  parent: calderan_north
+  aliases: []
+  summary: The only northern outer-wall land gate, north of the Bastion and Collegium.
+  tags:
+    - geography
+    - gate
+  search_context: Calderan canonical city map North Gate
+  content: The only northern outer-wall land gate, north of the Bastion and Collegium.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: north_arterial_west
+      description: street access; canonical city map.
+      minutes: 15
+      kind: street
+    - target: north_approach
+      description: gate access; canonical city map.
+      minutes: 3
+      kind: gate
+chunks: []

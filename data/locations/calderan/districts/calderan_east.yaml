@@ -7,33 +7,33 @@ entity:
   parent: calderan
   aliases:
     - Calderan East District
-  summary: East District is Calderan's manufacturing, industrial-artisan and large-scale commercial
-    heart, a dense low-rise district of workshops, smithies, foundries and craft halls under persistent
-    furnace smoke, and home to The Crucible, the largest market in West.
+  summary: East District is Calderan's manufacturing, industrial-artisan and large-scale commercial heart, a
+    dense low-rise district of workshops, smithies, foundries and craft halls under persistent furnace smoke,
+    and home to The Crucible, the largest market in West.
   tags:
     - geography
     - district
     - industry
     - commerce
-  search_context: East District of Calderan, urban district, manufacturing, where goods are manufactured, workshops, foundries,
-    smithies, clockwork, metallurgy, dwarves, The Crucible, Merchants' Mile, Smelter Pit.
-  content: "East is dense, busy and relatively low-rise: broad workshops, smithies, foundries, timber
-    yards, craft halls, textile houses, ateliers and metalworking shops, with no dominant skyline of
-    towers. Smoke from charcoal, coal, furnaces and forges hangs over much of it, much of it rising
-    from the lower-lying Smelter Pit. It is practical and laborious rather than elegant, and neither
-    poor nor rich: workers, skilled laborers, artisans, shopkeepers and small proprietors form most of
-    its people, alongside some wealthy workshop owners and prestigious manufacturers. Ordinary working
-    and lower-middle-class houses, often near or attached to workshops, are functional rather than
-    luxurious; there is no concentration of noble estates. East has the highest proportion of dwarves
-    in Calderan without being a dwarven district: Common and Dwarvish signage is normal, robust stone
-    and iron building is common, long-established workshop families practice strong craft traditions
-    and traditional taverns serve dark beer. Humans, elves, Beastfolk and people of mixed ancestry are
-    common too. East is famous beyond Calderan for fine clockwork and precision mechanics and for
-    high-grade metallurgy. The Merchants' Mile feeds The Crucible; the Merchants Guild's House of Scales
-    and the Artisans Guild's House of Making stand in East. Visible street crime is comparatively low
-    and City Guard patrols are denser than in West; that does not make East morally clean. These are
-    predominant tendencies, not exclusive zoning. Crossing substantial parts of a district is
-    meaningful travel; no exact roads or navigation routes are established."
+  search_context: East District of Calderan, urban district, manufacturing, where goods are manufactured,
+    workshops, foundries, smithies, clockwork, metallurgy, dwarves, The Crucible, Merchants' Mile, Smelter
+    Pit.
+  content: "East is dense, busy and relatively low-rise: broad workshops, smithies, foundries, timber yards,
+    craft halls, textile houses, ateliers and metalworking shops, with no dominant skyline of towers. Smoke
+    from charcoal, coal, furnaces and forges hangs over much of it, much of it rising from the lower-lying
+    Smelter Pit. It is practical and laborious rather than elegant, and neither poor nor rich: workers,
+    skilled laborers, artisans, shopkeepers and small proprietors form most of its people, alongside some
+    wealthy workshop owners and prestigious manufacturers. Ordinary working and lower-middle-class houses,
+    often near or attached to workshops, are functional rather than luxurious; there is no concentration of
+    noble estates. East has the highest proportion of dwarves in Calderan without being a dwarven district:
+    Common and Dwarvish signage is normal, robust stone and iron building is common, long-established workshop
+    families practice strong craft traditions and traditional taverns serve dark beer. Humans, elves,
+    Beastfolk and people of mixed ancestry are common too. East is famous beyond Calderan for fine clockwork
+    and precision mechanics and for high-grade metallurgy. The Merchants' Mile feeds The Crucible; the
+    Merchants Guild's House of Scales and the Artisans Guild's House of Making stand in East. Visible street
+    crime is comparatively low and City Guard patrols are denser than in West; that does not make East morally
+    clean. These are predominant tendencies, not exclusive zoning. Crossing substantial parts of a district is
+    meaningful travel; the canonical city map and weighted connections establish pedestrian routes."
   knowledge:
     visibility:
       narrator: true
@@ -42,38 +42,38 @@ entity:
     awareness: local:calderan
   features:
     - name: furnace smoke
-      description: Persistent smoke from charcoal, coal, furnaces and forges gives much of East a hazy,
-        smoky atmosphere, heaviest around the Smelter Pit.
+      description: Persistent smoke from charcoal, coal, furnaces and forges gives much of East a hazy, smoky
+        atmosphere, heaviest around the Smelter Pit.
     - name: bilingual signage
       description: Common and Dwarvish signage is normal on workshops, shops and taverns.
     - name: workshop warehouses
-      description: Workshops and shops keep their own storerooms and small warehouses. East is not
-        Calderan's dominant bulk-warehousing district.
+      description: Workshops and shops keep their own storerooms and small warehouses. East is not Calderan's
+        dominant bulk-warehousing district.
   connections: []
+  entrance: the_merchants_mile
 chunks:
   - id: calderan_east.industry_and_labor
     entity_id: calderan_east
     section: industry_and_labor
-    summary: East District production chain, export specialties, storage flow and labor, including
-      dwarven expertise and systemic Beastfolk slave labor.
-    search_context: East production chain, clockwork, precision mechanics, metallurgy, alloys, armor
-      materials, textiles, warehouses, Beastfolk slave labor, dwarven workshops, elven craft.
-    content: "East handles the full production chain: raw materials, processing, smelting and
-      preparation, components, workshop manufacture, finished goods, retail and export. Its two
-      specialties famous beyond Calderan are fine clockwork and precision mechanics (spring mechanisms,
-      fine gears, complex locks, precision and measuring instruments, small mechanical assemblies) and
-      high-grade metallurgy (refined alloys, strong and light metalwork, high-end armor materials,
-      precision components and specialist metal products). Dwarven expertise is strongly associated
-      with both; elven craft knowledge contributes to some specialized alloying and fine work, and
-      wood-working elves and other specialist artisans operate here. No magical metallurgy is
-      established. Textile production is important, from everyday clothing to luxury cloth and fashion
-      goods, many later sold in Center. Goods typically move from East workshops to local storage, then
-      to West warehouses and internal distribution, and on to other districts or external trade; major
-      bulk and river-linked warehousing remains associated with West. Beastfolk slave labor is common
-      and visibly systemic in heavy work: hauling, foundry work, cargo handling, workshop logistics and
-      other physically punishing industrial labor. Many such enslaved Beastfolk have few practical
-      rights and are treated primarily as labor assets. Not every Beastfolk in East is enslaved; free
-      Beastfolk live and work here as well."
+    summary: East District production chain, export specialties, storage flow and labor, including dwarven
+      expertise and systemic Beastfolk slave labor.
+    search_context: East production chain, clockwork, precision mechanics, metallurgy, alloys, armor materials,
+      textiles, warehouses, Beastfolk slave labor, dwarven workshops, elven craft.
+    content: "East handles the full production chain: raw materials, processing, smelting and preparation,
+      components, workshop manufacture, finished goods, retail and export. Its two specialties famous beyond
+      Calderan are fine clockwork and precision mechanics (spring mechanisms, fine gears, complex locks,
+      precision and measuring instruments, small mechanical assemblies) and high-grade metallurgy (refined
+      alloys, strong and light metalwork, high-end armor materials, precision components and specialist metal
+      products). Dwarven expertise is strongly associated with both; elven craft knowledge contributes to some
+      specialized alloying and fine work, and wood-working elves and other specialist artisans operate here.
+      No magical metallurgy is established. Textile production is important, from everyday clothing to luxury
+      cloth and fashion goods, many later sold in Center. Goods typically move from East workshops to local
+      storage, then to West warehouses and internal distribution, and on to other districts or external trade;
+      major bulk and river-linked warehousing remains associated with West. Beastfolk slave labor is common
+      and visibly systemic in heavy work: hauling, foundry work, cargo handling, workshop logistics and other
+      physically punishing industrial labor. Many such enslaved Beastfolk have few practical rights and are
+      treated primarily as labor assets. Not every Beastfolk in East is enslaved; free Beastfolk live and work
+      here as well."
     tags:
       - industry
       - labor
@@ -88,16 +88,15 @@ chunks:
   - id: calderan_east.crime_and_security
     entity_id: calderan_east
     section: crime_and_security
-    summary: East's comparatively low street crime, dense City Guard patrols and characteristic
-      commercial crime.
-    search_context: East District crime, guard patrols, fraud, off-book contracts, undeclared goods,
-      illicit export, bribery, guild influence.
-    content: "Visible street crime in East is comparatively low. City Guard patrols are denser than in
-      West because East holds valuable goods, production infrastructure, guild interests and heavy
-      commercial traffic. Mugging and gang violence are less characteristic than labor exploitation,
-      off-book contracts, document fraud, undeclared goods, illicit export, commercial corruption,
-      guild influence, regulatory evasion and bribery. Safer streets do not make East morally clean.
-      No specific criminal organizations, officials or cases are established."
+    summary: East's comparatively low street crime, dense City Guard patrols and characteristic commercial crime.
+    search_context: East District crime, guard patrols, fraud, off-book contracts, undeclared goods, illicit
+      export, bribery, guild influence.
+    content: "Visible street crime in East is comparatively low. City Guard patrols are denser than in West
+      because East holds valuable goods, production infrastructure, guild interests and heavy commercial
+      traffic. Mugging and gang violence are less characteristic than labor exploitation, off-book contracts,
+      document fraud, undeclared goods, illicit export, commercial corruption, guild influence, regulatory
+      evasion and bribery. Safer streets do not make East morally clean. No specific criminal organizations,
+      officials or cases are established."
     tags:
       - crime
       - security

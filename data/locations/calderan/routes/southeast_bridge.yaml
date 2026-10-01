@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: southeast_bridge
+  type: location
+  name: Southeast Bridge
+  display_name: Southeast Bridge
+  parent: calderan_south
+  aliases: []
+  summary: Red southern road bridge across Grey Brook southeast of Center, between the eastern arc and the
+    southern artery.
+  tags:
+    - geography
+    - bridge
+  search_context: Calderan canonical city map Southeast Bridge
+  content: Red southern road bridge across Grey Brook southeast of Center, between the eastern arc and the
+    southern artery.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: east_arterial_south
+      description: bridge access; canonical city map.
+      minutes: 8
+      kind: bridge
+    - target: south_arterial
+      description: bridge access; canonical city map.
+      minutes: 22
+      kind: bridge
+chunks: []

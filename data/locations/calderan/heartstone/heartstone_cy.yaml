@@ -5,26 +5,22 @@ entity:
   name: Heartstone Courtyard
   display_name: Heartstone CY
   parent: heartstone
-  aliases: [Heartstone secluded courtyard, CY]
+  aliases: [ Heartstone secluded courtyard, CY ]
   summary: >-
-    Heartstone CY is the tower's secluded outdoor courtyard, enclosed by stone
-    walls and connected directly to LR. It provides space for training,
-    medicinal planting beds, and practical outdoor work.
-  tags: [household, domestic, medicine]
+    Heartstone CY is the tower's secluded outdoor courtyard, enclosed by stone walls and connected directly to
+    LR. It provides space for training, medicinal planting beds, and practical outdoor work.
+  tags: [ household, domestic, medicine ]
   search_context: Heartstone CY secluded walled courtyard, outdoor training, medicinal beds, practical work area.
   content: >-
-    The secluded courtyard is directly associated with Heartstone's tower and
-    enclosed by stone walls, wrapping around part of the tower base. A normal
-    door connects it directly to LR, distinct from Heartstone's main exterior
-    entrance. Its training area occupies open space farther from the tower and
-    contains training dummies. Two distinct medicinal planting areas contain
-    beds intended for medicinal plants and are initially empty. A garden/tool shed
-    serves gardening and general outdoor tool storage without a specified
-    initial inventory. A practical work table supports outdoor tasks, and a
-    bench stands near or against the tower. The courtyard also includes a
-    woodshed/firewood storage area, a clothesline, and a rainwater collection
-    barrel. The baseline specifies these physical facilities rather than
-    current tools, laundry, stored quantities, or campaign-specific planting.
+    The secluded courtyard is directly associated with Heartstone's tower and enclosed by stone walls,
+    wrapping around part of the tower base. A normal door connects it directly to LR, distinct from
+    Heartstone's main exterior entrance. Its training area occupies open space farther from the tower and
+    contains training dummies. Two distinct medicinal planting areas contain beds intended for medicinal
+    plants and are initially empty. A garden/tool shed serves gardening and general outdoor tool storage
+    without a specified initial inventory. A practical work table supports outdoor tasks, and a bench stands
+    near or against the tower. The courtyard also includes a woodshed/firewood storage area, a clothesline,
+    and a rainwater collection barrel. The baseline specifies these physical facilities rather than current
+    tools, laundry, stored quantities, or campaign-specific planting.
   knowledge:
     visibility:
       narrator: true
@@ -34,24 +30,32 @@ entity:
     - name: enclosing stone walls
       description: Stone walls enclose the secluded outdoor courtyard, which wraps around part of the tower base.
     - name: LR access door
-      description: A normal door provides direct access to Heartstone LR, distinct from Heartstone's main exterior entrance.
+      description: A normal door provides direct access to Heartstone LR, distinct from Heartstone's main exterior
+        entrance.
     - name: training area and dummies
       description: A training area occupies open space farther from the tower and contains training dummies.
     - name: medicinal planting beds
-      description: Two distinct planting areas contain beds intended for medicinal plants. Both areas are initially empty; baseline canon supplies no plants.
+      description: Two distinct planting areas contain beds intended for medicinal plants. Both areas are initially
+        empty; baseline canon supplies no plants.
     - name: garden and tool shed
-      description: A shed in a perimeter area serves gardening and general outdoor tool storage; its initial inventory is unspecified.
+      description: A shed in a perimeter area serves gardening and general outdoor tool storage; its initial
+        inventory is unspecified.
     - name: practical work table
-      description: A table near the medicinal planting area supports practical outdoor tasks; no permanent tools or objects on it are specified.
+      description: A table near the medicinal planting area supports practical outdoor tasks; no permanent tools or
+        objects on it are specified.
     - name: tower-side bench
       description: A bench stands near or against the tower, near the LR courtyard door.
     - name: woodshed and firewood storage
-      description: A woodshed/storage area near the garden/tool shed and tower accommodates stacked firewood; quantities are unspecified.
+      description: A woodshed/storage area near the garden/tool shed and tower accommodates stacked firewood;
+        quantities are unspecified.
     - name: clothesline
-      description: A clothesline occupies a perimeter area and provides a place to hang laundry; current laundry is not baseline canon.
+      description: A clothesline occupies a perimeter area and provides a place to hang laundry; current laundry is
+        not baseline canon.
     - name: rainwater collection barrel
       description: A barrel in a perimeter area serves rainwater collection; its current contents are unspecified.
   connections:
     - target: heartstone_lr
       description: The normal door provides direct access from the courtyard to LR.
+      minutes: 1
+      kind: door
 chunks: []

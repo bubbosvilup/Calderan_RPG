@@ -1,3 +1,4 @@
+import { escapeRegExp as esc } from "./language/text.js";
 /**
  * Repair 1.1: bounded item references for evidence. An item is referenced by the head noun of its own name, or by a category
  * word ("footwear" for boots) when that category is derived from the item's own name/description AND no other item in the
@@ -10,7 +11,6 @@ const CATEGORIES: readonly (readonly [RegExp, readonly string[]])[] = [
   [/\b(?:rings?|necklaces?|bracelets?|brooch(?:es)?|amulets?|pendants?)\b/i, ["jewelry", "jewellery", "trinket"]],
 ];
 interface ItemLike { readonly id: string; readonly name?: string | undefined; readonly description?: string | undefined }
-const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 export const headNoun = (item: ItemLike) => (item.name ?? item.id).toLowerCase().split(/[^a-z']+/).filter(Boolean).at(-1)!;
 export function itemCategories(item: ItemLike): readonly string[] {
   const text = `${item.name ?? item.id} ${item.description ?? ""}`;

@@ -1,8 +1,7 @@
 import type { CampaignCommand } from "../campaign/types.js";
+import { quotedSpans } from "../turn/language/text.js";
 /** Phase 1N shadow experiment: deterministic verification of controller-provided evidence quotes (never used for production commits). */
 export const HEDGE = /\b(?:not|never|no|maybe|perhaps|might|could|would|if|unless|almost|imagin\w*|consider\w*|pretend\w*|refus\w*|declin\w*|reject\w*|back)\b|n't\b|\?/i;
-/** Quote spans inside quotation marks (dialogue) in the narration. */
-function quotedSpans(narration: string): [number, number][] { return [...narration.matchAll(/"[^"\n]*"|“[^”\n]*”/g)].map(m => [m.index, m.index + m[0].length]); }
 export type QuotePolicy = "strict" | "quoted_tell";
 /**
  * Deterministic quote checks. A verified quote is necessary, never sufficient.

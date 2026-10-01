@@ -4,12 +4,12 @@ import type { WorldStore } from "../world/world-store.js";
 import { CampaignState } from "../campaign/campaign-state.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { CampaignSaveError, nodeCode, saveError, type SaveErrorCode } from "./errors.js";
-import { createSaveFile, decodeSave, serializeSave, validateSaveId, type CampaignSaveFileV1 } from "./save-format.js";
+import { createSaveFile, decodeSave, serializeSave, validateSaveId, type CampaignSaveFile } from "./save-format.js";
 import { nodeSaveFileSystem, type SaveFileInfo, type SaveFileSystem } from "./filesystem.js";
 
 export type SaveSlot = "current" | "previous";
 export interface SavedCampaign { readonly status: "saved"; readonly campaign_id: string; readonly revision: number; readonly saved_at: string }
-export interface LoadedCampaign { readonly status: "loaded"; readonly slot: SaveSlot; readonly campaign: CampaignState; readonly metadata: DeepReadonly<CampaignSaveFileV1["metadata"]> }
+export interface LoadedCampaign { readonly status: "loaded"; readonly slot: SaveSlot; readonly campaign: CampaignState; readonly metadata: DeepReadonly<CampaignSaveFile["metadata"]> }
 export interface SlotListing { readonly exists: boolean; readonly status: "valid" | SaveErrorCode; readonly revision?: number; readonly saved_at?: string; readonly canonical_dataset_id?: string }
 export interface SaveListing { readonly campaign_id: string; readonly current: SlotListing; readonly previous: SlotListing }
 export interface CampaignSaveRepository {
@@ -60,7 +60,7 @@ export class FileCampaignRepository implements CampaignSaveRepository {
     if (slot !== "current" && slot !== "previous") throw new CampaignSaveError("invalid_save");
     return join(directory, slot === "current" ? "save.json" : "save.previous.json");
   }
-  private async readSlot(directory: string, id: string, slot: SaveSlot): Promise<{ text: string; file: DeepReadonly<CampaignSaveFileV1> }> {
+  private async readSlot(directory: string, id: string, slot: SaveSlot): Promise<{ text: string; file: DeepReadonly<CampaignSaveFile> }> {
     await this.directory(directory, false); const path = this.filename(directory, slot);
     if (!await this.regularFile(path)) throw new CampaignSaveError("not_found");
     const text = await this.#fs.read(path); return { text, file: decodeSave(text, this.#world, id) };

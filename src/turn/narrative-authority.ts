@@ -10,7 +10,9 @@ import { TurnError } from "./turn-types.js";
  * Narrative permission is a different concept: "DO NOT USE" means the engine has not authorized that character to use the
  * fact this turn, never "this character can never know it". Built only from the captured turn context and retrieval result.
  */
-export interface AccessFact { readonly ref: string; readonly id: string; readonly source: "campaign_fact" | "retrieved_canon" | "player_household"; readonly text: string }
+export interface AccessFact { readonly ref: string; readonly id: string; readonly source: "campaign_fact" | "retrieved_canon" | "player_household" | "npc_private_canon"; readonly text: string;
+  /** npc_private_canon only: the present characters authored to know it (names, for rendering). */
+  readonly holders?: readonly string[] }
 export interface CharacterAccess { readonly character_id: string; readonly name: string; readonly kind?: "persistent" | "ephemeral"; readonly standing?: string; readonly can_use: readonly { readonly ref: string; readonly basis: string }[]; readonly do_not_use: readonly string[] }
 export interface NarrativeKnowledgeAccess { readonly revision: number; readonly facts: readonly AccessFact[]; readonly player: readonly string[]; readonly characters: readonly CharacterAccess[] }
 
@@ -62,10 +64,21 @@ export function projectKnowledgeAccess(context: TurnContext, retrieval: unknown,
     ...(context.player_profile?.households ?? []).map((h, i) => ({ ref: `H${i + 1}`, id: h.id, source: "player_household" as const, text: `Nicco is ${h.role ?? h.status} of the household ${h.name}.` })),
   ];
   if (facts.length > MAX_FACTS) throw new TurnError("context_too_large");
+  // Hardening H3: restricted canon a present character is authored to know (known_by). One entry per canon record, listing every
+  // present holder. Grants are never cut: the complete set is in context; size is bounded by the render budget, which fails closed.
+  const privateCanon = new Map<string, { label: string; summary: string; holders: string[] }>();
+  for (const g of context.npc_private_canon ?? []) {
+    const entry = privateCanon.get(g.id) ?? { label: g.label, summary: g.summary, holders: [] };
+    entry.holders.push(g.character_id); privateCanon.set(g.id, entry);
+  }
+  const nameOf = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
+  facts.push(...[...privateCanon].map(([id, p], i) => ({ ref: `P${i + 1}`, id, source: "npc_private_canon" as const, text: `${p.label}: ${p.summary}`, holders: p.holders.map(nameOf) })));
+  const privateHolders = new Map([...privateCanon].map(([id, p]) => [id, p.holders]));
   const retrieved = new Map(awarenessOf(retrieval).map(a => [a.id, a]));
   const households = new Map((context.player_profile?.households ?? []).map(h => [h.id, h.member_ids ?? []]));
   const characters: CharacterAccess[] = context.characters.filter(c => c.id !== "nicco").map(c => {
     const can_use = facts.flatMap(f => {
+      if (f.source === "npc_private_canon") return privateHolders.get(f.id)?.includes(c.id) ? [{ ref: f.ref, basis: "canonical_private" }] : [];
       if (f.source === "player_household") return households.get(f.id)?.includes(c.id) ? [{ ref: f.ref, basis: "household_member" }] : [];
       if (f.source === "campaign_fact") {
         const edge = context.knowledge.find(k => k.character_id === c.id && k.fact_id === f.id);
@@ -88,21 +101,35 @@ export function projectKnowledgeAccess(context: TurnContext, retrieval: unknown,
     return { character_id: p.id, name: `${p.ref} ${p.display_name}`, kind: "ephemeral" as const, standing: p.standing, can_use, do_not_use: facts.filter(f => !can_use.some(u => u.ref === f.ref)).map(f => f.ref) };
   });
   characters.push(...ephemeral);
-  const player = facts.filter(f => f.source !== "retrieved_canon" || retrieved.get(f.id)?.player_access !== false).map(f => f.ref);
+  // NPC-private canon is never player/narration knowledge.
+  const player = facts.filter(f => f.source !== "npc_private_canon" && (f.source !== "retrieved_canon" || retrieved.get(f.id)?.player_access !== false)).map(f => f.ref);
   return { revision: context.primary.runtime_revision, facts, player, characters };
 }
 
 export function renderKnowledgeAccess(access: NarrativeKnowledgeAccess): string {
   if (!access.facts.length) return "[CHARACTER KNOWLEDGE ACCESS]\nNo facts in this context require character access control.";
-  const lines = [
+  const shared = access.facts.filter(f => f.source !== "npc_private_canon"), restricted = access.facts.filter(f => f.source === "npc_private_canon");
+  const characterLine = (c: CharacterAccess) => `${c.name}${c.kind === "ephemeral" ? ` (temporary, ${c.standing === "ordinary_local" ? "ordinary local" : c.standing === "foreign" ? "not local" : "origin unestablished"})` : ""}: CAN USE ${c.can_use.map(u => `${u.ref} (${u.basis})`).join(", ") || "none"}; DO NOT USE ${c.do_not_use.join(", ") || "none"}`;
+  const head = [
     "[CHARACTER KNOWLEDGE ACCESS]",
-    `Facts: ${access.facts.map(f => `${f.ref} ${f.source === "campaign_fact" ? `${f.id} ${JSON.stringify(f.text)}` : f.source === "player_household" ? `household ${JSON.stringify(f.text)}` : `${f.text} (content in RETRIEVED CANON)`}`).join(" | ")}`,
+    `Facts: ${shared.map(f => `${f.ref} ${f.source === "campaign_fact" ? `${f.id} ${JSON.stringify(f.text)}` : f.source === "player_household" ? `household ${JSON.stringify(f.text)}` : `${f.text} (content in RETRIEVED CANON)`}`).join(" | ") || "none"}`,
+    // Hardening H3: restricted canon only the listed character knows, kept in its own section, one line per record.
+    ...(restricted.length ? ["[NPC-PRIVATE CANON] Narrator-only background known ONLY to the character named on each line: not public, not known to Nicco, never stated or hinted by the narration voice or anyone else. Only that character may voice it, in their own words, if they choose to reveal it.",
+      ...restricted.map(f => `${f.ref} (${(f.holders ?? []).join(", ")} only): ${JSON.stringify(f.text)}`)] : []),
     `Narration and Nicco (player): ${access.player.join(", ") || "none"}. Nicco's speech and decisions still belong to the player.`,
-    ...access.characters.map(c => `${c.name}${c.kind === "ephemeral" ? ` (temporary, ${c.standing === "ordinary_local" ? "ordinary local" : c.standing === "foreign" ? "not local" : "origin unestablished"})` : ""}: CAN USE ${c.can_use.map(u => `${u.ref} (${u.basis})`).join(", ") || "none"}; DO NOT USE ${c.do_not_use.join(", ") || "none"}`),
+  ];
+  const rules = [
     "A character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, \"everyone says\" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.",
     "UNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. \"People say\", \"I heard\", \"word is\", \"everyone knows\", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: \"I don't know\", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.",
   ];
-  const text = lines.join("\n");
-  if (text.length > MAX_RENDERED) throw new TurnError("context_too_large");
-  return text;
+  const full = [...head, ...access.characters.map(characterLine), ...rules].join("\n");
+  if (full.length <= MAX_RENDERED) return full;
+  // Hardening H3: a crowded scene keeps every permission. Lossless compaction: each DO NOT USE list is exactly the complement of
+  // that character's CAN USE list, so it is stated once instead of enumerated, and characters who may use nothing share one line.
+  // If even that exceeds the budget, the access cannot be represented safely: fail closed.
+  const none = access.characters.filter(c => !c.can_use.length), some = access.characters.filter(c => c.can_use.length);
+  const compactLine = (c: CharacterAccess) => characterLine({ ...c, do_not_use: [] }).replace(/; DO NOT USE none$/, "; DO NOT USE every other fact above");
+  const compact = [...head, ...some.map(compactLine), ...(none.length ? [`Everyone else present (${none.map(c => c.name).join(", ")}): CAN USE none; DO NOT USE any fact above.`] : []), ...rules].join("\n");
+  if (compact.length > MAX_RENDERED) throw new TurnError("context_too_large");
+  return compact;
 }

@@ -10,19 +10,18 @@ entity:
     - public square outside Heartstone
     - Square outside Heartstone
     - Outside Heartstone
-  summary: Heartstone Square is the reasonably broad public square immediately outside Heartstone in
-    peripheral West, primarily surrounded by low residential buildings.
+  summary: Heartstone Square is the reasonably broad public square immediately outside Heartstone in peripheral
+    West, primarily surrounded by low residential buildings.
   tags:
     - public
     - city
   search_context: Public square or open area immediately outside Heartstone Tower's main entrance.
-  content: Heartstone's massive main entrance opens directly onto this public square, outside the
-    tower's structure. The square is reasonably broad but is not a major civic square. Moderate
-    daytime foot traffic is quieter than at Main Market Square. Low residential buildings
-    predominate, with few nearby shops and no major commercial concentration. Night safety is
-    mediocre. The low-end, disreputable tavern The Coined Lie faces or directly adjoins the square.
-    The White Basin is a laundry near Heartstone, without an established position directly on the
-    square.
+  content: Heartstone's massive main entrance opens directly onto this public square, outside the tower's
+    structure. The square is reasonably broad but is not a major civic square. Moderate daytime foot traffic
+    is quieter than at Main Market Square. Low residential buildings predominate, with few nearby shops and no
+    major commercial concentration. Night safety is mediocre. The low-end, disreputable tavern The Coined Lie
+    faces or directly adjoins the square. The White Basin is a laundry near Heartstone, without an established
+    position directly on the square.
   knowledge:
     visibility:
       narrator: true
@@ -31,9 +30,29 @@ entity:
     awareness: local:calderan
   features:
     - name: Heartstone main entrance
-      description: Heartstone's massive, old, heavy wooden main entrance faces this area and opens
-        directly into LR.
+      description: Heartstone's massive, old, heavy wooden main entrance faces this area and opens directly into LR.
+    - name: canonical map placement
+      description: "Southwest corner of West, east of Heartstone Tower; Coined Lie to the east and White Basin to
+        the southwest. Access: heartstone_lr."
   connections:
     - target: heartstone_lr
       description: Heartstone's massive main entrance door leads directly into LR.
+      minutes: 1
+      kind: door
+    - target: west_arterial_south
+      description: street access; canonical city map.
+      minutes: 8
+      kind: street
+    - target: west_outer_lane
+      description: street access; canonical city map.
+      minutes: 12
+      kind: street
+    - target: the_coined_lie
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
+    - target: the_white_basin
+      description: square_access access; canonical city map.
+      minutes: 3
+      kind: square_access
 chunks: []

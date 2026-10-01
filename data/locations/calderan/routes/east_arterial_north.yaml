@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: east_arterial_north
+  type: location
+  name: East Arterial Road, North
+  display_name: East Arterial Road, North
+  parent: calderan_east
+  aliases: []
+  summary: Red eastern arc northeast of Center, connecting northern roads to the Merchants Mile corridor.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map East Arterial Road, North
+  content: Red eastern arc northeast of Center, connecting northern roads to the Merchants Mile corridor.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: north_arterial_east
+      description: road access; canonical city map.
+      minutes: 22
+      kind: road
+    - target: the_merchants_mile
+      description: road access; canonical city map.
+      minutes: 18
+      kind: road
+    - target: house_of_scales
+      description: street access; canonical city map.
+      minutes: 8
+      kind: street
+chunks: []

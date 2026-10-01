@@ -5,20 +5,39 @@ entity:
   name: "The Merchants' Mile"
   display_name: "The Merchants' Mile"
   parent: calderan_east
-  aliases: ["Merchants' Mile"]
+  aliases: [ "Merchants' Mile" ]
   summary: >-
-    The Merchants' Mile is East District's primary commercial artery, a long busy street of
-    shops, trade offices and craft storefronts that feeds directly into The Crucible.
-  tags: ["street","commerce"]
-  search_context: "Merchants' Mile, Merchants Mile, East District commercial street, trade offices, counting houses, storefronts"
+    The Merchants' Mile is East District's primary commercial artery, a long busy street of shops, trade
+    offices and craft storefronts that feeds directly into The Crucible.
+  tags: [ "street", "commerce" ]
+  search_context: "Merchants' Mile, Merchants Mile, East District commercial street, trade offices, counting
+    houses, storefronts"
   content: >-
-    The Merchants' Mile is a long, busy street and the primary commercial artery of East. It is
-    lined with shops, trade offices, small counting houses and craft storefronts, often with
-    workshops behind them, and carries heavy business traffic. It is not primarily a luxury
-    street; luxury retail belongs more strongly to Center. It feeds directly into The Crucible.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
+    The Merchants' Mile is a long, busy street and the primary commercial artery of East. It is lined with
+    shops, trade offices, small counting houses and craft storefronts, often with workshops behind them, and
+    carries heavy business traffic. It is not primarily a luxury street; luxury retail belongs more strongly
+    to Center. It feeds directly into The Crucible.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "The Merchants' Mile is East District's primary commercial artery, a long busy street of shops,
+        trade offices and craft storefronts that feeds directly into The Crucible. Access:
+        east_arterial_north."
   connections:
+    - target: east_arterial_north
+      description: road access; canonical city map.
+      minutes: 18
+      kind: road
+    - target: east_arterial_south
+      description: road access; canonical city map.
+      minutes: 10
+      kind: road
+    - target: house_of_making
+      description: street access; canonical city map.
+      minutes: 12
+      kind: street
     - target: the_crucible
-      description: "The Merchants' Mile runs directly into The Crucible."
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
 chunks: []

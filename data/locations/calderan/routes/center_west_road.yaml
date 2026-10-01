@@ -1,0 +1,57 @@
+schema_version: 1
+entity:
+  id: center_west_road
+  type: location
+  name: Center West Road
+  display_name: Center West Road
+  parent: calderan_center
+  aliases: []
+  summary: Red civic road inside West Gate, south of the Registry and Courts and north of Holdings; on Grey
+    Brooks southwest bank.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map Center West Road
+  content: Red civic road inside West Gate, south of the Registry and Courts and north of Holdings; on Grey
+    Brooks southwest bank.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: center_west_gate
+      description: gate access; canonical city map.
+      minutes: 3
+      kind: gate
+    - target: center_bridge
+      description: bridge access; canonical city map.
+      minutes: 7
+      kind: bridge
+    - target: citadel_bridge
+      description: bridge access; canonical city map.
+      minutes: 8
+      kind: bridge
+    - target: calderan_civil_registry
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+    - target: ducal_archive
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+    - target: high_courts_of_calderan
+      description: street access; canonical city map.
+      minutes: 2
+      kind: street
+    - target: office_of_holdings_and_title
+      description: street access; canonical city map.
+      minutes: 2
+      kind: street
+    - target: fountain_court
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
+chunks: []

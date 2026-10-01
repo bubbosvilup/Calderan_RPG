@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: north_approach
+  type: location
+  name: North Approach
+  display_name: North Approach
+  parent: calderan
+  aliases: []
+  summary: Short exterior approach beyond North Gate. Wider northern routes are not yet authored.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map North Approach
+  content: Short exterior approach beyond North Gate. Wider northern routes are not yet authored.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: north_gate
+      description: gate access; canonical city map.
+      minutes: 3
+      kind: gate
+chunks: []

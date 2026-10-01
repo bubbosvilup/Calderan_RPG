@@ -10,16 +10,22 @@ entity:
   tags:
     - geography
   search_context: The Coined Lie is a low-end, disreputable tavern directly on or adjacent to Heartstone Square.
-  content: Petty criminals, gamblers, debtors, low-level informants, travelers who prefer few
-    questions and people avoiding notice frequent this cheap, somewhat dirty tavern. It is wary
-    toward unfamiliar visitors but not automatically hostile. Information can sometimes be bought.
-    Its owner is unestablished.
+  content: Petty criminals, gamblers, debtors, low-level informants, travelers who prefer few questions and
+    people avoiding notice frequent this cheap, somewhat dirty tavern. It is wary toward unfamiliar visitors
+    but not automatically hostile. Information can sometimes be bought. Its owner is unestablished.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "The Coined Lie is a low-end, disreputable tavern directly on or adjacent to Heartstone Square.
+        Access: heartstone_square."
+  connections:
+    - target: heartstone_square
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
 chunks: []

@@ -82,7 +82,11 @@ for(const [id,patterns] of Object.entries(portrayals))test(`Present NPC portraya
  const prompt=JSON.stringify(buildNarratorPrompt("Hello",context,[],{}, {candidates:[],runtime:[]}));
  assert.ok(prompt.includes(npc(id).purpose!));
  const access=projectKnowledgeAccess(context,{});
- assert.deepEqual(access.facts,[]);assert.deepEqual(access.player,[]);
+ // Portrayal is not knowledge. H3: the only access entries are this NPC's own authored known_by grants on restricted canon,
+ // usable by this NPC alone, never by Nicco/narration (pre-H3 these grants were unreachable and access.facts was empty).
+ assert.ok(access.facts.every(f=>f.source==="npc_private_canon"&&f.holders?.includes(npc(id).name)),`${id}: only own private grants`);
+ assert.ok(access.characters.find(c=>c.character_id===id)!.can_use.every(u=>u.basis==="canonical_private"),`${id}: portrayal grants nothing`);
+ assert.deepEqual(access.player,[]);
  assert.deepEqual(campaign.exportSnapshot().knowledge,[]);
  assert.deepEqual(campaign.exportSnapshot().goals,[]);
 });

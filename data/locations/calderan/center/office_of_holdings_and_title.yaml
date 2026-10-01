@@ -7,15 +7,21 @@ entity:
   parent: calderan_center
   aliases: []
   summary: >-
-    The Office of Holdings and Title is Calderan's office for property holdings and titles, in
-    the administrative core of the Center District.
-  tags: ["civic","property"]
+    The Office of Holdings and Title is Calderan's office for property holdings and titles, in the
+    administrative core of the Center District.
+  tags: [ "civic", "property" ]
   search_context: "Office of Holdings and Title, property, titles, deeds, holdings"
   content: >-
-    The Office of Holdings and Title deals with property holdings and titles and stands in the
-    administrative core near the Ducal Citadel. Its exact procedures and staff are not
-    established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
-  connections: []
+    The Office of Holdings and Title deals with property holdings and titles and stands in the administrative
+    core near the Ducal Citadel. Its exact procedures and staff are not established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "The Office of Holdings and Title is Calderan's office for property holdings and titles, in the
+        administrative core of the Center District. Access: center_west_road."
+  connections:
+    - target: center_west_road
+      description: street access; canonical city map.
+      minutes: 2
+      kind: street
 chunks: []

@@ -4,41 +4,47 @@ entity:
   type: location
   name: Back-Back Alleys
   display_name: Back-Back Alleys
-  parent: slave_market_back_alleys
+  parent: calderan_west
   aliases:
     - Back-Back Alleys
     - the back-back
-  summary: A deeper criminal layer beyond the Back Alleys; many locals know imperfectly that something
-    deeply wrong happens there.
+  summary: A deeper criminal layer beyond the Back Alleys; many locals know imperfectly that something deeply
+    wrong happens there.
   tags:
     - geography
-  search_context: A deeper criminal layer beyond the Back Alleys; many locals know imperfectly that
-    something deeply wrong happens there.
-  content: The Back-Back Alleys are distinct from the known but taboo Back Alleys and from normal
-    public market space. Local awareness establishes only the existence of deeper criminal trade,
-    not its exact nature, internal layout, leadership or access contacts.
+  search_context: A deeper criminal layer beyond the Back Alleys; many locals know imperfectly that something
+    deeply wrong happens there.
+  content: The Back-Back Alleys are distinct from the known but taboo Back Alleys and from normal public market
+    space. Local awareness establishes only the existence of deeper criminal trade, not its exact nature,
+    internal layout, leadership or access contacts.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "A deeper criminal layer beyond the Back Alleys; many locals know imperfectly that something
+        deeply wrong happens there. Access: slave_market_back_alleys."
+  connections:
+    - target: slave_market_back_alleys
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
 chunks:
   - id: slave_market_back_back_alleys.criminal_interior
     entity_id: slave_market_back_back_alleys
     section: criminal_interior
     summary: Private details of the Back-Back Alleys criminal economy.
     search_context: Private details of the Back-Back Alleys criminal economy.
-    content: "Accessible through the Back Alleys, the interior is labyrinthine: narrow alleys, degraded
-      buildings, unpleasant smells, controlled entrances and criminal lookouts. Multiple gangs
-      control passage. Activities may include undocumented or kidnapped captives, trafficked
-      refugees and families, adults and children as nonsexual victims of trafficking or
-      exploitation, gravely sick or injured captives, dying people, completely off-record sales,
-      forged papers, corrupt brokers and bribed guards. Clandestine doctors, apothecaries or
-      alchemists and illicit acquisition of cadavers or anatomical material may occur. These are
-      private details, not ordinary local knowledge."
+    content: "Accessible through the Back Alleys, the interior is labyrinthine: narrow alleys, degraded buildings,
+      unpleasant smells, controlled entrances and criminal lookouts. Multiple gangs control passage.
+      Activities may include undocumented or kidnapped captives, trafficked refugees and families, adults and
+      children as nonsexual victims of trafficking or exploitation, gravely sick or injured captives, dying
+      people, completely off-record sales, forged papers, corrupt brokers and bribed guards. Clandestine
+      doctors, apothecaries or alchemists and illicit acquisition of cadavers or anatomical material may
+      occur. These are private details, not ordinary local knowledge."
     tags: []
     knowledge:
       visibility:
@@ -51,12 +57,12 @@ chunks:
     section: criminal_network
     summary: Private boundaries of criminal coordination and river transit.
     search_context: Private boundaries of criminal coordination and river transit.
-    content: Multiple criminal organizations with their own leadership participate and cooperate enough
-      to keep the illicit economy operating. No single gang owns the whole area. Corruption reaches
-      some guards, brokers and wealthy clients and is particularly severe around this deeper trade.
-      Some higher coordinating authority or network appears to exist; the ultimate coordinator
-      identity and location are unestablished. Groups use warehouses near Grey Brook for some
-      illicit transport of people or goods; exact bases, routes and contacts are unknown.
+    content: Multiple criminal organizations with their own leadership participate and cooperate enough to keep
+      the illicit economy operating. No single gang owns the whole area. Corruption reaches some guards,
+      brokers and wealthy clients and is particularly severe around this deeper trade. Some higher
+      coordinating authority or network appears to exist; the ultimate coordinator identity and location are
+      unestablished. Groups use warehouses near Grey Brook for some illicit transport of people or goods;
+      exact bases, routes and contacts are unknown.
     tags: []
     knowledge:
       visibility:
@@ -69,10 +75,10 @@ chunks:
     section: remains_handoff
     summary: Private, bounded canon about covert removal of unwanted remains.
     search_context: Private, bounded canon about covert removal of unwanted remains.
-    content: When bodies or remains have no further value to illicit buyers, criminal operators may pay
-      corrupt or discreet undertakers or body-removal services to dispose of them. The Undertaker's
-      Door is slang for a covert handoff or contact in this economy, not necessarily a literal door
-      or building. No named undertakers, exact contacts or disposal procedures are established.
+    content: When bodies or remains have no further value to illicit buyers, criminal operators may pay corrupt or
+      discreet undertakers or body-removal services to dispose of them. The Undertaker's Door is slang for a
+      covert handoff or contact in this economy, not necessarily a literal door or building. No named
+      undertakers, exact contacts or disposal procedures are established.
     tags: []
     knowledge:
       visibility:

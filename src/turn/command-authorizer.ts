@@ -5,6 +5,7 @@ import type { TurnContext } from "./context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { isPhysicalCondition } from "./physical-interaction.js";
+import { ruleMatchesDeclaration } from "./household-evidence.js";
 
 /** Policy consumes resolved same-turn evidence, never searches arbitrary narration. */
 export function authorizeCommands(proposal: readonly CampaignCommand[], evidence: TurnEvidence, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>): readonly AuthorizationDiagnostic[] {
@@ -33,6 +34,14 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const ok = present.has(command.character_id) && involved && command.status === undefined && command.presentation === undefined && current.every(c => command.conditions.includes(c)) && added.length > 0 && added.every(isPhysicalCondition);
         return ok ? reject("rejected_insufficient_confirmation") : reject("rejected_reference_invalid");
       }
+      case "move_character": {
+        // Location Continuity Pass 1.3: a living created (campaign) character whose completed movement to exactly this location the
+        // narration establishes (character_movements: the grammar already restricted movers to the scene Nicco is in or left).
+        const c = snapshot.characters.find(x => x.id === command.character_id);
+        if (!c || c.origin.kind !== "created" || c.current.status === "dead") return reject("rejected_reference_invalid");
+        if (c.current.current_location === command.location_id) return reject("rejected_already_established");
+        return (evidence.character_movements ?? []).some(m => m.character_id === command.character_id && m.location_id === command.location_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
+      }
       case "leave_scene": {
         // Runtime Continuity Repair 1: a present created character, still in the scene in the projected state, whose completed
         // departure the narration establishes. No player intent is involved: the controller proposes, narration evidence confirms.
@@ -40,6 +49,28 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const ok = present.has(command.character_id) && c?.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead";
         if (!ok) return reject("rejected_reference_invalid");
         return (evidence.departures ?? []).some(d => d.character_id === command.character_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
+      }
+      // Household Pass 1. Membership is a voluntary choice voiced by the chooser; rules are the keeper's explicit declarations;
+      // relationship deltas need verified evidence (evidence path only) and never change Nicco's feelings (player agency).
+      case "join_household":
+      case "leave_household": {
+        const h = snapshot.households.find(x => x.id === command.household_id);
+        const member = h?.members.find(m => m.character_id === command.character_id);
+        const ok = !!h && present.has(command.character_id) && command.character_id !== "nicco" && (command.kind === "join_household" ? member?.status !== "member" : member?.status === "member" && member.role !== "owner");
+        if (!ok) return reject(command.kind === "join_household" && member?.status === "member" ? "rejected_already_established" : "rejected_reference_invalid");
+        const choice = command.kind === "join_household" ? "join" : "leave";
+        return (evidence.household_choices ?? []).some(c => c.character_id === command.character_id && c.choice === choice) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
+      }
+      case "add_household_rule": {
+        const h = snapshot.households.find(x => x.id === command.household_id);
+        const keeper = !!h?.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner");
+        if (!keeper) return reject("rejected_reference_invalid");
+        if ((h!.rules ?? []).some(r => r.active && r.text.trim().toLowerCase() === command.text.trim().toLowerCase())) return reject("rejected_already_established");
+        return ruleMatchesDeclaration(command.text, evidence.rule_declarations ?? []) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
+      }
+      case "adjust_relationship": {
+        const ok = command.from_character_id !== "nicco" && command.from_character_id !== command.to_character_id && present.has(command.from_character_id) && present.has(command.to_character_id);
+        return ok ? reject("rejected_insufficient_confirmation") : reject(command.from_character_id === "nicco" ? "rejected_command_not_allowed" : "rejected_reference_invalid");
       }
       case "place_item": {
         const item = snapshot.items.find(i => i.id === command.item_id);

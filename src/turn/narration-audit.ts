@@ -12,11 +12,13 @@ import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "./physical-interaction.js"
 import { verifyEvidence } from "./evidence-authorization.js";
 import { itemTerms } from "./item-reference.js";
 import type { GenerationRequest } from "../llm/types.js";
-import { sentencesOf } from "./sentences.js";
+import { GATES } from "./language/gates.js";
+import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf } from "./language/text.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
 import { narratedDepartures } from "./scene-departure.js";
 import { groundingIssues } from "./grounding-audit.js";
+import { readScene } from "./narrated-captives.js";
 
 /**
  * Live NPC Regression Repair 1: deterministic narration audit. Bounded checks over the draft narration against the resolved
@@ -24,10 +26,12 @@ import { groundingIssues } from "./grounding-audit.js";
  * structured fact the engine holds. An issue does not change state; it triggers the coordinator's bounded revision, then a
  * deterministic fallback. See docs/architecture/TURN_COORDINATOR.md (Repair 1).
  */
-export type AuditIssueKind = "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
-  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure";
+export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
+  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase";
 export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly correction: string }
 export interface NarrationAuditInput {
+  /** Pass 1.2: the turn's base revision (the projected context's revision is already past it when runtime commands exist). */
+  readonly base_revision?: number;
   readonly narration: string; readonly context: TurnContext; readonly world: WorldStore; readonly access: NarrativeKnowledgeAccess;
   readonly evidence: TurnEvidence; readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly committed: readonly CampaignCommand[];
   readonly prepared: DeepReadonly<CampaignSnapshot>; readonly scene?: SceneParticipantPlan;
@@ -39,7 +43,6 @@ export interface NarrationAuditInput {
   readonly authoritative_text?: string;
 }
 
-const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const STOP = new Set(["nicco", "is", "a", "an", "the", "to", "this", "that", "from", "of", "and", "in", "on", "was", "he", "his", "came", "come"]);
 /** Common words that alone never signal a private fact ("light" in "in this light"). */
 const COMMON = new Set(["light", "world", "another", "other", "new", "place", "man", "person", "people", "good", "time", "day", "house", "home"]);
@@ -56,7 +59,7 @@ const HISTORY = /\b(?:stood empty|been empty|was empty|empty for|abandoned|previ
 const CONSTRAINT_VERB = "(?:seiz\\w*|grab\\w*|grips?|gripp\\w*|pins?|pinn\\w*|restrain\\w*|holds?|holding|held|haul\\w*|drag\\w*|wrestl\\w*|clos\\w* on|clamp\\w* on|hustl\\w*|shov\\w*|throws?|threw|escort\\w*|arrest\\w*|detain\\w*|manacl\\w*|shackl\\w*|bar\\w*|bann\\w*)";
 /** Class C/D accomplished on Nicco: the constraint verb takes Nicco as its object, or Nicco is its passive subject. */
 const CONSTRAINT = new RegExp(`\\b${CONSTRAINT_VERB}\\b(?:\\s+[\\w']+){0,2}?\\s+nicco\\b|\\bnicco(?:'s)?\\s+(?:is|was|gets|got|being|has been)\\s+(?:\\w+\\s+)?(?:seized|grabbed|held|pinned|restrained|hauled|dragged|thrown|arrested|detained|shackled|manacled|barred|banned|escorted|clapped in irons)\\b|\\bthrown out\\b|\\bin irons\\b`, "i");
-const NEGATED = /\b(?:not|never|no|nor|without|n't|almost|nearly|would|could|might|will|if)\b|n't\b/i;
+const NEGATED = GATES.audit_negated;
 /** Runtime Continuity Repair 1: an absent person may be remembered, not placed back in the scene. */
 const ABSENCE = /\b(?:had|gone|left|leaving|empty|vacated|absence|absent|earlier|departed|departure|after)\b/i;
 /** Functional staff with an individual role (serving, guarding the door, being spoken to). Anonymous patrons are not staff. */
@@ -76,13 +79,23 @@ function withoutAuthoredContact(plain: string, authored: readonly PlayerAuthored
 function citesSource(quote: string): boolean {
   for (const m of quote.matchAll(new RegExp(SOURCE.source, "gi"))) {
     const before = quote.slice(Math.max(0, m.index - 28), m.index);
-    if (!/\b(?:if|whether|not|never|no one|nobody|haven't|hasn't|don't|didn't|won't|can't|nor|without)\b|n't\s*$/i.test(before)) return true;
+    if (!GATES.audit_source_denial.test(before)) return true;
   }
   return false;
 }
 export { sentencesOf };
+/**
+ * Hardening H3: does text disclose an NPC-private canon record? Strict on purpose: the record's own name (entity label before ":"),
+ * or a content bigram from its text whose words include one distinctive word (5+ letters, not common). One shared word is not enough.
+ */
+function disclosesPrivate(text: string, fact: { readonly id: string; readonly text: string }): boolean {
+  const [label = "", ...body] = fact.text.split(": ");
+  if (!fact.id.includes(".") && label.length >= 4 && new RegExp(`\\b${esc(label)}\\b`, "i").test(text)) return true;
+  const words = contentWords(body.join(": "));
+  return words.slice(1).some((w, k) => { const a = words[k]!; return [a, w].some(x => x.length >= 5 && !COMMON.has(x)) && new RegExp(`\\b${esc(a)}\\s+${esc(w)}\\b`, "i").test(text); });
+}
 const quotesIn = (s: string) => [...s.matchAll(/"([^"\n]*)"|“([^”\n]*)”/g)].map(m => m[1] ?? m[2]!);
-const outside = (s: string) => s.replace(/"[^"\n]*"|“[^”\n]*”/g, " ");
+const outside = (s: string) => s.replace(new RegExp(QUOTED_SPAN_SOURCE, "g"), " ");
 const contentWords = (s: string) => s.toLowerCase().replace(/[^a-z\s']/g, " ").split(/\s+/).filter(w => w.length > 2 && !STOP.has(w));
 
 export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[] {
@@ -137,13 +150,15 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   }).map(t => t.toLowerCase());
   const householdRef = new RegExp(`\\b(?:${[...new Set(householdTerms)].map(esc).join("|") || "(?!)"})\\b`, "i");
   const retrievedCanon = access.facts.some(f => f.source === "retrieved_canon");
+  const privateCanon = access.facts.filter(f => f.source === "npc_private_canon");
   for (const sentence of sentences) {
     for (const quote of quotesIn(sentence)) {
       const label = speakerOf.get(quote) ?? speakerOf.get(quote.replace(/[,.]$/, "")) ?? [...speakerOf.entries()].find(([q]) => q.startsWith(quote.slice(0, 24)))?.[1];
       if (label === "Nicco") continue;
       const who = label ? people.get(label) : undefined;
       const can = new Set(who?.can_use.map(u => u.ref) ?? []);
-      const rumorBasis = who?.can_use.some(u => /rumor|believes|suspects|public|local|canonical/.test(u.basis)) ?? false;
+      // H3: an NPC's own private canon (canonical_private) is not a source about Nicco or anyone else.
+      const rumorBasis = who?.can_use.some(u => u.basis !== "canonical_private" && /rumor|believes|suspects|public|local|canonical/.test(u.basis)) ?? false;
       const speaker = label ?? "an unattributed speaker";
       const q = quote.toLowerCase();
       // 2a. Private player facts: all content words, a distinctive word, a content bigram or "your <word>" signals the fact.
@@ -153,6 +168,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
         const signal = words.length > 0 && (words.every(has) || words.some(w => w.length >= 4 && !COMMON.has(w) && has(w)) || bigram || words.some(w => new RegExp(`\\byour\\s+${esc(w)}\\b`, "i").test(q)));
         if (signal) issues.push({ kind: "private_player_fact", character: speaker, sentence, correction: `${speaker} cannot know or hint that "${f.text}" Remove any statement, guess, rumor or hint of it; they may only react to what they see.` });
       }
+      // 2a'. Hardening H3: NPC-private canon voiced by a speaker who is not authored to know it.
+      for (const f of privateCanon.filter(x => !can.has(x.ref))) if (disclosesPrivate(q, f)) issues.push({ kind: "restricted_canon", character: speaker, sentence,
+        correction: `${speaker} does not know this; only ${(f.holders ?? []).join(", ")} may voice it. Remove it, any hint of it and any rumor about it from ${speaker}'s words.` });
       // 2b. Household ownership: only members may use it; a framed guess from present observation is allowed.
       // Guess framing is judged per sentence inside the quote ("Who you are? A man who owns a tower." is not a guess).
       const parts = q.split(/(?<=[.!?])\s+/);
@@ -171,6 +189,10 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
       const sharedPast = parts.some(p => SHARED_PAST.test(p) && /\b(?:you|your|yours)\b/i.test(p.replace(/thank[- ]you/gi, " ")) && !guessed(p, SHARED_PAST));
       if (stated(CHRONOLOGY) || stated(ARRIVAL_RECORD) || sharedPast) issues.push({ kind: "unsourced_history", character: speaker, sentence, correction: `${speaker} has no knowledge of when Nicco arrived or of any earlier meeting. Remove the claim; they may ask or guess from what they see now.` });
     }
+    // 2f. Hardening H3: the narration voice never states NPC-private canon (disclosure happens only through a holder's own words).
+    const narrated = outside(sentence);
+    for (const f of privateCanon) if (disclosesPrivate(narrated, f)) issues.push({ kind: "restricted_canon", sentence,
+      correction: `The narration may not state this: it is private knowledge of ${(f.holders ?? []).join(", ")}. Remove it from the narration; only that character may reveal it, in their own words.` });
     // 2e. History of Nicco's household place (empty for years, previous owners, debts), in dialogue or narration, unsupported by retrieved canon.
     if (!retrievedCanon && householdRef.test(sentence) && HISTORY.test(sentence)) issues.push({ kind: "unsourced_history", sentence, correction: `The history of ${household[0]?.name ?? "that place"} (previous owners, residents, how long it stood empty, debts) is not established. Remove it; nobody states it.` });
   }
@@ -195,7 +217,8 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   // Runtime Continuity Repair 1: a created (temporary) character absent at turn start (it left, or was never here) may be
   // remembered ("the stool Dell had left") but never acts in the scene again until state brings it back.
   for (const c of prepared.characters) {
-    if (c.origin.kind !== "created" || presentIds.has(c.id) || !c.profile.name) continue;
+    // Location Continuity Pass 1.3: someone whose move here commits this turn (carried or followed in) is not absent.
+    if (c.origin.kind !== "created" || presentIds.has(c.id) || !c.profile.name || c.current.current_location === prepared.runtime.scene.player_location) continue;
     const terms = [c.profile.name, ...c.profile.name.split(/\s+/).filter(t => t.length >= 4)].map(esc).join("|");
     const hit = sentences.find(s => new RegExp(`\\b(?:${terms})\\b`).test(outside(s)) && !ABSENCE.test(outside(s)));
     if (hit) issues.push({ kind: "absent_participant", character: c.profile.name, sentence: hit, correction: `${c.profile.name} is no longer in this scene (they left earlier). Remove them as a present person: they do not sit, act, speak or react here. At most, others may refer to their earlier departure.` });
@@ -239,7 +262,12 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     if (left.has(d.character_id) || authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id)) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
   }
-  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "" }));
+  // Pass 1.2: narrator-created captives of the scene (no legal record yet, ephemeral or promoted by name) are also an active trade.
+  const negotiation = context.social.legal.some(l => l.status === "enslaved" && !!l.holder_id && l.holder_id !== "nicco" && presentIds.has(l.holder_id))
+    || context.characters.some(c => /\bcaptive\b/.test(c.established_origin?.role ?? "") && !context.social.legal.some(l => l.character_id === c.id))
+    || readScene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world).captives.some(c => !c.character_id);
+  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "", trade_negotiation: negotiation }));
+  issues.push(...householdIssues(input, sentences, negotiation));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
   const unique = new Map<string, AuditIssue>();
   for (const issue of issues) unique.set(`${issue.kind}|${issue.character ?? ""}|${issue.sentence}`, issue);
@@ -304,7 +332,7 @@ function premiseIssues(input: NarrationAuditInput, sentences: readonly string[])
     const terms = itemTerms(it, context.items);
     if (niccoHolds.some(n => new RegExp(`\\b(?:${terms})\\b`, "i").test(`${n.name ?? n.id}`))) continue; // Nicco has his own such item
     const ref = giveBack && notNiccos.length === 1 ? `(?:the\\s+)?(?:${terms}|them|it)` : `(?:the\\s+)?(?:[\\w']+\\s+){0,3}?(?:${terms})`;
-    const holder = holderOf(it)!, holderNames = [name(holder), ...name(holder).split(/\s+/).filter(t => t.length > 2)].map(n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+    const holder = holderOf(it)!, holderNames = [name(holder), ...name(holder).split(/\s+/).filter(t => t.length > 2)].map(esc).join("|");
     const niccoHas = new RegExp(`\\bnicco\\b[^.!?]{0,60}?\\b(?:holds?(?: out)?|held(?: out)?|holding|extends?|extended|extending|offers?|offered|offering|hands?|handed|handing|gives?|gave|giving|returns?|returned|returning|passes?|passed|pushes?|pushed|lifts?|lifted|carries|carried|clutch\\w*|grips?)\\b[^.!?]{0,40}?\\b${ref}\\b`, "i");
     const inHands = new RegExp(`\\b${ref}\\b[^.!?]{0,40}?\\b(?:in|from)\\s+(?:nicco's|his)\\s+(?:hands?|grasp|grip|arms)\\b|\\b${ref}\\b[^.!?]{0,30}?\\b(?:remains?|stays?)\\b[^.!?]{0,20}?\\b(?:nicco's|with nicco|his to)\\b`, "i");
     const takesBack = new RegExp(`\\b(?:${holderNames}|she|he)\\b[^.!?]{0,40}?\\b(?:takes?|took|accepts?|accepted|receives?|received|reclaims?|reclaimed|gathers?)\\b[^.!?]{0,30}?\\b${ref}\\b[^.!?]{0,20}?\\bback\\b`, "i");
@@ -323,7 +351,7 @@ function premiseIssues(input: NarrationAuditInput, sentences: readonly string[])
   }
   return issues;
 }
-const HYPOTHETICAL = /\b(?:if|would|could|suppose|imagine|were to|unless|might)\b/i;
+const HYPOTHETICAL = GATES.audit_hypothetical;
 const DENIAL = /\bnever (?:actually |really )?(?:gave|given|handed)\b|\bcan(?:'t|not) (?:return|give back) what\b|\bstill (?:have|has|hold|holds|got)\b|\bnot handing\b|\b(?:was|were|am) (?:only |just )?offering\b|\bnot (?:yet )?(?:given|yours)\b/i;
 /** Dialogue that presupposes a completed gift: already given, Nicco holding it, returning it, or refusing it back. TERMS = item words. */
 const PRESUPPOSE = /\b(?:i|we)(?:'ve| have)? (?:already )?(?:gave|given|handed (?:them|it|those|you))\b|\bgive gifts twice\b|\bkeep (?:them|it|those)\b|\bsell (?:them|it|those)\b|\b(?:they're|they are|it's|it is|those are) yours\b|\byou (?:have|hold|own|got) (?:them|it|those)\b|\byour (?:TERMS)\b|\b(?:not|n't|never) (?:be )?coming back\b|\b(?:won't|will not|don't|do not|not going to|can't|cannot) take (?:them|it|those) back\b|\bdon't want (?:them|it) back\b/;
@@ -391,3 +419,29 @@ function agencyIssues(input: NarrationAuditInput, sentences: readonly string[]):
 }
 const GESTURE = /\b(?:gestur\w*|nod(?:s|ded|ding)?|smil\w*|grin\w*|shrug\w*|wav(?:es|ed|ing)|point(?:s|ed|ing)?|bow(?:s|ed|ing)?|wink\w*|sigh\w*|laugh\w*|frown\w*|turn(?:s|ed|ing)?|step(?:s|ped|ping)?|reach(?:es|ed|ing)?|extend(?:s|ed|ing)?|holds? out|held out|holding out|rais(?:es|ed|ing)|lower(?:s|ed|ing)|glanc\w*|shak(?:es|ing) his head|shook his head|lean(?:s|ed|ing)?|cross(?:es|ed|ing)|fold(?:s|ed|ing)?|shift(?:s|ed|ing)?|clench\w*|straighten\w*)\b/gi;
 const INTERNAL = /\b(?:think(?:s|ing)?|thought|believ\w*|suspect\w*|realiz\w*|knows?|knew|wonder\w*|feels?|felt|fear\w*|hop(?:es|ed|ing)|wants?|wanted|intend\w*|assum\w*|conclud\w*|decides? (?:that|she|he|they|it)|can tell|notices? that|sees? that|embarrass\w*|afraid|ashamed|nervous|uneasy|relieved|knowingly)\b/gi;
+
+/**
+ * Household Pass 1 reconciliation. (1) Narration outside dialogue must not present a present non-member as a household or family
+ * member: living, staying, being owned or being welcomed is not membership (checked after this turn's committed joins).
+ * (2) In a trade scene, narration must not show payment or a person changing hands unless a transaction committed this turn.
+ */
+function householdIssues(input: NarrationAuditInput, sentences: readonly string[], negotiation: boolean): AuditIssue[] {
+  const { context, prepared } = input, issues: AuditIssue[] = [];
+  const members = new Set(prepared.households.filter(h => h.members.some(m => m.character_id === "nicco" && m.status === "member")).flatMap(h => h.members.filter(m => m.status === "member").map(m => m.character_id)));
+  const outsiders = context.characters.filter(c => c.id !== "nicco" && !members.has(c.id));
+  const CLAIM = /\b(?:(?:a |the )?(?:member|part) of (?:the |this |his |nicco's )?(?:household|family|heartstone)|(?:joined|joins) (?:the |this |his )?(?:household|family)|household member|one of the family)\b/i;
+  const DENIED = GATES.audit_denied;
+  for (const sentence of sentences) {
+    const plain = outside(sentence);
+    if (!CLAIM.test(plain) || DENIED.test(plain)) continue;
+    const who = outsiders.find(c => { const n = c.profile.name ?? c.id; return exactNamePattern([n, ...n.split(/\s+/).filter(t => t.length > 2)], "i").test(plain); });
+    if (who) issues.push({ kind: "uncommitted_household", character: who.profile.name ?? who.id, sentence, correction: `${who.profile.name ?? who.id} is NOT a household member: no voluntary membership has been established. They may be present, staying, owned or cared for, but do not call them part of the household or family.` });
+  }
+  const traded = prepared.transactions.some(t => t.revision === prepared.revision && prepared.revision !== (input.base_revision ?? context.primary.runtime_revision));
+  if (negotiation && !traded) {
+    const PAID = /\b(?:pays?|paid|hands? over|counts? out|pockets?|takes?) (?:him |her |them |korvin |the )?(?:\w+ ){0,2}?(?:gold|coins?)\b|\b(?:changes?|changed) hands\b|\bthe (?:sale|purchase|deal) (?:is|was) (?:done|complete|made|struck)\b|\bnow (?:belongs|belonged) to nicco\b/i;
+    for (const sentence of sentences) if (PAID.test(outside(sentence)) && !DENIED.test(outside(sentence)))
+      issues.push({ kind: "asserts_uncommitted_purchase", sentence, correction: `No purchase committed this turn: no gold was paid and nobody changed hands. Keep the negotiation open or show the deal failing; do not narrate payment or a completed sale.` });
+  }
+  return issues;
+}

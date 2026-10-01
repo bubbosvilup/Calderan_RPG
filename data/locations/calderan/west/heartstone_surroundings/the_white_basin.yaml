@@ -11,15 +11,21 @@ entity:
   tags:
     - geography
   search_context: Laundry near Heartstone; household and commercial textile washing in West.
-  content: The White Basin washes clothing, linen and household or commercial textiles. It is an
-    ordinary working-class service, not luxurious, and does not operate as a public bathhouse. Its
-    exact position relative to the square is unestablished. Orla Fen is the proprietor.
+  content: The White Basin washes clothing, linen and household or commercial textiles. It is an ordinary
+    working-class service, not luxurious, and does not operate as a public bathhouse. It lies southwest of the
+    square near the outer wall. Orla Fen is the proprietor.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "Southwest of Heartstone Square beside the outer wall. Access: heartstone_square."
+  connections:
+    - target: heartstone_square
+      description: square_access access; canonical city map.
+      minutes: 3
+      kind: square_access
 chunks: []

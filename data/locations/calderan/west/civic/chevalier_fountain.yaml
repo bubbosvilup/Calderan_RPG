@@ -6,22 +6,35 @@ entity:
   display_name: Chevalier Fountain
   parent: calderan_west
   aliases: []
-  summary: A recognizable public monument-fountain approximately midway between Heartstone and Main
-    Market Square.
+  summary: A recognizable public monument-fountain approximately midway between Heartstone and Main Market Square.
   tags:
     - geography
-  search_context: A recognizable public monument-fountain approximately midway between Heartstone and
-    Main Market Square.
-  content: A wealthy knight commissioned the fountain generations ago. Its weathered mounted figure
-    gave it its common name. The larger history of the knight is not important to modern daily life
-    and remains unelaborated. The small charitable Open Hand Chapel stands nearby. No exact route or
-    magical properties are established.
+  search_context: A recognizable public monument-fountain approximately midway between Heartstone and Main Market Square.
+  content: A wealthy knight commissioned the fountain generations ago. Its weathered mounted figure gave it its
+    common name. The larger history of the knight is not important to modern daily life and remains
+    unelaborated. The small charitable Open Hand Chapel stands nearby. No exact route or magical properties
+    are established.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "A recognizable public monument-fountain approximately midway between Heartstone and Main Market
+        Square. Access: west_arterial_south."
+  connections:
+    - target: west_arterial_south
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
+    - target: gatherers_inn
+      description: street access; canonical city map.
+      minutes: 8
+      kind: street
+    - target: open_hand_chapel
+      description: street access; canonical city map.
+      minutes: 2
+      kind: street
 chunks: []

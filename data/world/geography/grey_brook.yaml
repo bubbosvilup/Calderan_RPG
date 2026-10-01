@@ -6,16 +6,17 @@ entity:
   display_name: Grey Brook
   parent: null
   aliases: []
-  summary: Grey Brook is a principal river crossing Calderan diagonally and cutting through a
-    substantial part of West District.
+  summary: Grey Brook is a principal river crossing Calderan diagonally and cutting through a substantial part
+    of West District.
   tags:
     - geography
   search_context: Grey Brook river watercourse in Calderan.
-  content: Multiple small bridges cross Grey Brook in West. Warehouses cluster along parts of its
-    banks, and legitimate goods move along and around the watercourse. Criminal transport also
-    exploits this infrastructure; parts of the warehouse and criminal economy are associated with
-    the river. No exact bridge names, routes, criminal bases or covert transit sites are
-    established.
+  content: Grey Brook enters Calderan from the northwest, runs southeast between West and North, passes through
+    Center, and exits southeast between East and South. Northwest Bridge and Southeast Bridge carry the major
+    outer arcs; Center Bridge carries the civic road and Citadel Bridge provides local access across the river
+    inside Center. Warehouses, legitimate riverside activity and criminal transport remain established. Minor
+    crossings are not individually authored; boats and covert transit routes are not simulated. The map label
+    The Calder is superseded by the locked name Grey Brook.
   knowledge:
     visibility:
       narrator: true
@@ -26,4 +27,12 @@ entity:
   related_entities:
     - calderan
     - calderan_west
+    - calderan_north
+    - calderan_center
+    - calderan_east
+    - calderan_south
+    - northwest_bridge
+    - center_bridge
+    - citadel_bridge
+    - southeast_bridge
 chunks: []

@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: northwest_bridge
+  type: location
+  name: Northwest Bridge
+  display_name: Northwest Bridge
+  parent: calderan_north
+  aliases: []
+  summary: Red road bridge over Grey Brook northwest of Center, linking the western arc with the northern artery.
+  tags:
+    - geography
+    - bridge
+  search_context: Calderan canonical city map Northwest Bridge
+  content: Red road bridge over Grey Brook northwest of Center, linking the western arc with the northern artery.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: west_arterial_north
+      description: bridge access; canonical city map.
+      minutes: 9
+      kind: bridge
+    - target: north_arterial_west
+      description: bridge access; canonical city map.
+      minutes: 9
+      kind: bridge
+chunks: []

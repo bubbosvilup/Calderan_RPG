@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: center_east_gate
+  type: location
+  name: East Gate
+  display_name: East Gate
+  parent: calderan_center
+  aliases: []
+  summary: The east-facing East Gate in Centers inner wall, west of House of Making.
+  tags:
+    - geography
+    - gate
+  search_context: Calderan canonical city map East Gate
+  content: The east-facing East Gate in Centers inner wall, west of House of Making.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: gilded_row
+      description: gate access; canonical city map.
+      minutes: 7
+      kind: gate
+    - target: house_of_making
+      description: gate access; canonical city map.
+      minutes: 4
+      kind: gate
+chunks: []

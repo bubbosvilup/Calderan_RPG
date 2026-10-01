@@ -1,0 +1,41 @@
+schema_version: 1
+entity:
+  id: west_arterial_south
+  type: location
+  name: West Arterial Road, South
+  display_name: West Arterial Road, South
+  parent: calderan_west
+  aliases: []
+  summary: Red road junction northeast of Heartstone and south of Chevalier Fountain. The diagonal southwest
+    approach joins the western arc here.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map West Arterial Road, South
+  content: Red road junction northeast of Heartstone and south of Chevalier Fountain. The diagonal southwest
+    approach joins the western arc here.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: heartstone_square
+      description: street access; canonical city map.
+      minutes: 8
+      kind: street
+    - target: west_arterial_market
+      description: road access; canonical city map.
+      minutes: 14
+      kind: road
+    - target: south_arterial
+      description: road access; canonical city map.
+      minutes: 22
+      kind: road
+    - target: chevalier_fountain
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
+chunks: []

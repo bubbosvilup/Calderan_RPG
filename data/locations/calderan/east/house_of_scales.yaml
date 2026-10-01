@@ -5,26 +5,34 @@ entity:
   name: "The House of Scales"
   display_name: "The House of Scales"
   parent: calderan_east
-  aliases: ["House of Scales"]
+  aliases: [ "House of Scales" ]
   summary: >-
-    The House of Scales is the headquarters of the Merchants Guild in Calderan's East District
-    and the city's main institutional center for organized commerce.
-  tags: ["guild","commerce"]
-  search_context: "House of Scales, Merchants Guild headquarters, cast-iron scale, negotiation halls, contracts, brokers, clerks"
+    The House of Scales is the headquarters of the Merchants Guild in Calderan's East District and the city's
+    main institutional center for organized commerce.
+  tags: [ "guild", "commerce" ]
+  search_context: "House of Scales, Merchants Guild headquarters, cast-iron scale, negotiation halls, contracts,
+    brokers, clerks"
   content: >-
-    The House of Scales is the Merchants Guild's headquarters. Its exterior is austere,
-    institutional and imposing, marked by a large cast-iron scale as its defining symbol. Inside
-    it is fast-paced and highly commercial: negotiation halls, active prices, listings and
-    contracts, clerks, brokers and a deal-making atmosphere. It is Calderan's main institutional
-    center for organized commerce, not a modern exchange.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
+    The House of Scales is the Merchants Guild's headquarters. Its exterior is austere, institutional and
+    imposing, marked by a large cast-iron scale as its defining symbol. Inside it is fast-paced and highly
+    commercial: negotiation halls, active prices, listings and contracts, clerks, brokers and a deal-making
+    atmosphere. It is Calderan's main institutional center for organized commerce, not a modern exchange.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
   features:
-    - name: "cast-iron scale"
-      description: >-
-        A large cast-iron scale, the building's defining symbol, on its austere exterior.
-    - name: "negotiation halls"
-      description: >-
-        Busy halls where prices, listings and contracts are posted and negotiated among clerks and
-        brokers.
-  connections: []
+    - name: cast-iron scale
+      description: A large cast-iron scale, the building's defining symbol, on its austere exterior.
+    - name: negotiation halls
+      description: Busy halls where prices, listings and contracts are posted and negotiated among clerks and brokers.
+    - name: canonical map placement
+      description: "The House of Scales is the headquarters of the Merchants Guild in Calderan's East District and
+        the city's main institutional center for organized commerce. Access: house_of_making."
+  connections:
+    - target: house_of_making
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
+    - target: east_arterial_north
+      description: street access; canonical city map.
+      minutes: 8
+      kind: street
 chunks: []

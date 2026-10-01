@@ -1,4 +1,5 @@
 import type { TurnContext } from "./context-builder.js";
+import { escapeRegExp } from "./language/text.js";
 
 /**
  * Ephemeral scene participants (Phase 1P): session-local people who exist in the current scene but are not CampaignState
@@ -112,15 +113,22 @@ export class SceneParticipants {
     const text = input.toLowerCase();
     const addressed = new Set(carried.filter(p => nounsOf(p).some(n => DEFINITE(`(?:${n})`).test(text))).map(p => p.id));
     let created: EphemeralSceneParticipant | undefined;
+    // Persistence Pass 1.2: a definite reference ("the slave", "the girl") to a present persistent person who began as a narrator-
+    // created person is that person, never a new temporary participant.
+    const covered = new Set(context.characters.flatMap(c => {
+      const o = c.established_origin;
+      return o ? [o.descriptor, /\b(?:enslaved|captive)\b/.test(o.role ?? "") ? "slave" : undefined, o.label.startsWith("the ") ? o.label.slice(4) : undefined].filter((x): x is string => !!x) : [];
+    }));
     for (const m of [...input.matchAll(INTRO), ...input.matchAll(NPC_SUBJECT)].sort((a, b) => a.index - b.index)) {
       const article = m[1]!.toLowerCase(), adjectives = m[2] ?? "", noun = m[3]!.toLowerCase(), spec = specFor(noun);
+      if (["the", "that", "this", "same"].includes(article) && covered.has(noun)) continue;
       if (["the", "that", "this", "same"].includes(article) && carried.some(p => addressed.has(p.id) && nounsOf(p).some(n => new RegExp(`^(?:${n})$`, "i").test(noun)))) continue;
       const id = `scene_npc_${this.#next}`;
       created = { id, ref: `P${this.#next}`, role: spec.role, display_name: spec.label ?? capital(noun), standing: FOREIGN.test(adjectives) ? "foreign" : spec.standing,
         location_id: location, locality, created_turn: turn, last_addressed_turn: turn, departed: false };
       break; // one introduction per turn keeps identity unambiguous
     }
-    const namesPersistent = context.characters.some(c => c.id !== "nicco" && new RegExp(`\\b${(c.profile.name ?? c.id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(input));
+    const namesPersistent = context.characters.some(c => c.id !== "nicco" && new RegExp(`\\b${escapeRegExp(c.profile.name ?? c.id)}\\b`, "i").test(input));
     if (!created && !addressed.size && !namesPersistent && this.#focus && carried.some(p => p.id === this.#focus) && (/["“]/.test(input) || /\b(?:you|your)\b/i.test(input))) addressed.add(this.#focus);
     let kept = carried.filter(p => {
       if (addressed.has(p.id)) return true;
@@ -139,6 +147,11 @@ export class SceneParticipants {
     return Object.freeze({ turn, participants: Object.freeze(participants.map(p => Object.freeze(p))), focus, created: created?.id ?? null, addressed: Object.freeze([...addressed]), expired: Object.freeze(expired) });
   }
 
+  /** Persistence Pass 1.2: participants who became persistent characters leave the temporary registry (no duplicate identity). */
+  retire(ids: readonly string[]): readonly EphemeralSceneParticipant[] {
+    if (ids.length) { this.#list = this.#list.filter(p => !ids.includes(p.id)); if (this.#focus && ids.includes(this.#focus)) this.#focus = null; }
+    return this.active();
+  }
   /** Apply a finalized turn: capture a conservative descriptor and a departure beat for the conversation partner. */
   commit(plan: SceneParticipantPlan, narration: string): readonly EphemeralSceneParticipant[] {
     this.#list = plan.participants.map(p => {

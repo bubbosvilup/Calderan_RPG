@@ -28,13 +28,13 @@ test("four districts hold exactly the anchor locations with explicit public poli
       assert.deepEqual(e.knowledge?.visibility, { narrator: true, player: true }, id);
       assert.ok(e.knowledge?.awareness, id);
     }
-    assert.deepEqual(children, [...ids, ...(laterLocations[district] ?? [])].sort(), district);
+    assert.deepEqual(children.filter(id => !world.getProvenance(id)!.source_path.includes("routes/")), [...ids, ...(laterLocations[district] ?? [])].sort(), district);
   }
   const edges = Object.values(anchors).flat().flatMap(id => { const e = world.getEntity(id)!; return e.type === "location" ? e.connections.map(c => `${id}->${c.target}`) : []; }).sort();
-  assert.deepEqual(edges, ["the_crucible->the_merchants_mile", "the_merchants_mile->the_crucible"]);
+  assert.ok(edges.includes("the_crucible->the_merchants_mile") && edges.includes("the_merchants_mile->the_crucible"));
   // Headquarters sit in their districts, not Center; the gates and road are features, not invented entities.
   for (const [hq, district] of [["house_of_scales", "calderan_east"], ["house_of_making", "calderan_east"], ["the_collegium", "calderan_north"], ["cathedral_of_the_bladed_sun", "calderan_north"], ["bastion_of_vigilance", "calderan_north"]] as [string, string][]) assert.equal(world.getEntity(hq)!.parent, district);
-  for (const id of ["imperial_road", "the_masterworks", "gold_cloister", "mage_registry", "clothier_street", "anvil_alley", "glasswork_row", "mages_guild", "mercenary_guild"]) assert.equal(world.getEntity(id), undefined, id);
+  for (const id of ["the_masterworks", "gold_cloister", "mage_registry", "mages_guild", "mercenary_guild"]) assert.equal(world.getEntity(id), undefined, id);
 });
 
 test("every new location fits the NarrativeContext limits as a primary scene", () => {

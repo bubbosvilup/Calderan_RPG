@@ -8,6 +8,8 @@ import { CampaignState } from "./campaign-state.js";
  */
 export const OPENING_LOCATION = "heartstone_square";
 export const OPENING_HOUSEHOLD = "campaign_household_heartstone";
+/** Household Pass 1: Nicco's starting purse in gold, taken from the historical playthrough reference. Runtime state, not canon. */
+export const OPENING_FUNDS = 500;
 export const OPENING_FACTS = [
   { id: "campaign_fact_nicco_light_mage", statement: "Nicco is a Light mage." },
   { id: "campaign_fact_nicco_otherworlder", statement: "Nicco came to this world from another world." },
@@ -18,6 +20,7 @@ export function createOpeningCampaign(world: WorldStore, campaignId: string): Ca
   campaign.apply({ expected_revision: 0, commands: [
     { kind: "create_household", id: OPENING_HOUSEHOLD, name: "Heartstone" },
     { kind: "set_membership", household_id: OPENING_HOUSEHOLD, membership: { character_id: "nicco", status: "member", role: "owner" } },
+    { kind: "set_funds", character_id: "nicco", gold: OPENING_FUNDS },
     ...OPENING_FACTS.flatMap(f => [
       { kind: "create_fact" as const, fact: { id: f.id, content: { kind: "campaign" as const, statement: f.statement, truth: "true" as const } } },
       { kind: "set_knowledge" as const, knowledge: { character_id: "nicco", fact_id: f.id, status: "knows" as const } },

@@ -127,8 +127,12 @@ bidirectional route is supplied. Never infer movement from parenthood or ID spel
 Record exact targets only when an entity exists. Keep supplied future topology in
 plain factual prose until its target can be authored. Do not invent rooms or dangling
 IDs to satisfy a connection. A future hierarchy/proximity ranking signal is derived
-behavior, not a new canonical route. Runtime movement currently does not enforce
-adjacency; that implementation boundary does not change authored topology.
+behavior, not a new canonical route. Player travel now resolves deterministic shortest-time
+routes through explicit connections and advances world time atomically. Every edge
+requires positive integer `minutes`; optional `kind` describes the crossing. Containers
+may name an explicit `entrance`; parent relationships never supply an entrance.
+See [Calderan spatial canon](CALDERAN_SPATIAL_CANON.md) and
+[city travel architecture](../architecture/CITY_TRAVEL.md).
 
 ## Heartstone identity and topology
 

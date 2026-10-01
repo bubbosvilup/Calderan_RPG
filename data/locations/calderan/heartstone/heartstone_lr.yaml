@@ -5,28 +5,23 @@ entity:
   name: Heartstone Living Floor
   display_name: Heartstone LR
   parent: heartstone
-  aliases: [Heartstone living room, Heartstone ground floor, LR]
+  aliases: [ Heartstone living room, Heartstone ground floor, LR ]
   summary: >-
-    Heartstone LR is the tower's ground-level living floor: one large, rounded,
-    roughly circular open-plan domestic space. Its kitchen and hearth seating
-    area share the same floor without separate internal rooms.
-  tags: [household, domestic, architecture]
+    Heartstone LR is the tower's ground-level living floor: one large, rounded, roughly circular open-plan
+    domestic space. Its kitchen and hearth seating area share the same floor without separate internal rooms.
+  tags: [ household, domestic, architecture ]
   search_context: Heartstone LR living room, ground-level living floor, open-plan kitchen and hearth seating.
   content: >-
-    Heartstone LR is a broad open domestic space bounded by old stone tower walls.
-    Its aged wooden floor is visibly old but remains solid and serviceable.
-    A massive wooden main entrance provides normal access from the city/outside
-    side. A second normal door, roughly opposite, leads directly to the secluded
-    courtyard on the kitchen/table side. A large stone hearth stands along one
-    side of the room, with a small hearthside alcove immediately beside it. Behind and to
-    the left of its seating area, a large table stands near the kitchen, which
-    occupies part of the same open space. The visible hatch near the kitchen
-    side provides separate descending access to U1. The continuous spiral
-    staircase is reached through a normal doorway/opening along LR's perimeter,
-    away from the center, and rises toward F1 and onward through the upper floors
-    to F6. Broad wall shelving occupies part of the perimeter near this stair side.
-    Normal illumination comes from daylight through exactly three windows,
-    candles, and the hearth when lit.
+    Heartstone LR is a broad open domestic space bounded by old stone tower walls. Its aged wooden floor is
+    visibly old but remains solid and serviceable. A massive wooden main entrance provides normal access from
+    the city/outside side. A second normal door, roughly opposite, leads directly to the secluded courtyard on
+    the kitchen/table side. A large stone hearth stands along one side of the room, with a small hearthside
+    alcove immediately beside it. Behind and to the left of its seating area, a large table stands near the
+    kitchen, which occupies part of the same open space. The visible hatch near the kitchen side provides
+    separate descending access to U1. The continuous spiral staircase is reached through a normal
+    doorway/opening along LR's perimeter, away from the center, and rises toward F1 and onward through the
+    upper floors to F6. Broad wall shelving occupies part of the perimeter near this stair side. Normal
+    illumination comes from daylight through exactly three windows, candles, and the hearth when lit.
   knowledge:
     visibility:
       narrator: true
@@ -35,45 +30,69 @@ entity:
     awareness: private
   features:
     - name: massive main entrance door
-      description: A massive, old, heavy wooden door provides normal access from the city/outside side, opposite the courtyard side. A small entrance zone/entry recess lies immediately inside, within LR.
+      description: A massive, old, heavy wooden door provides normal access from the city/outside side, opposite the
+        courtyard side. A small entrance zone/entry recess lies immediately inside, within LR.
     - name: courtyard door
-      description: A second normal door on the kitchen/table side lies roughly opposite the main entrance and leads directly to the courtyard; this is the only currently established normal direct access between LR and CY.
+      description: A second normal door on the kitchen/table side lies roughly opposite the main entrance and leads
+        directly to the courtyard; this is the only currently established normal direct access between LR and
+        CY.
     - name: aged wooden floor and stone walls
-      description: A visibly old but solid and serviceable wooden floor and old stone tower walls enclose the broad, roughly circular open-plan space.
+      description: A visibly old but solid and serviceable wooden floor and old stone tower walls enclose the broad,
+        roughly circular open-plan space.
     - name: large stone hearth
-      description: A dominant large stone hearth/fireplace stands along one side of the roughly circular room and provides important warmth and light when burning.
+      description: A dominant large stone hearth/fireplace stands along one side of the roughly circular room and
+        provides important warmth and light when burning.
     - name: hearthside alcove
       description: A small physical alcove/recess lies immediately to one side of the hearth, within LR.
     - name: hearth seating area with large sofa
-      description: A large rug, large sofa, and at least one armchair stand in front of the hearth. The sofa occupies a broadly central position relative to the hearth.
+      description: A large rug, large sofa, and at least one armchair stand in front of the hearth. The sofa
+        occupies a broadly central position relative to the hearth.
     - name: large table
-      description: A large household table stands behind and to the left of the hearth/seating area, away from the main entrance near the kitchen side. It serves meals, communal eating, and convivial/shared household use; current food, tableware, and occupants are unspecified.
+      description: A large household table stands behind and to the left of the hearth/seating area, away from the
+        main entrance near the kitchen side. It serves meals, communal eating, and convivial/shared household
+        use; current food, tableware, and occupants are unspecified.
     - name: open kitchen area
-      description: The kitchen occupies a broad curved perimeter section around or near the large table, within the same open-plan floor; it is not a separate room.
+      description: The kitchen occupies a broad curved perimeter section around or near the large table, within the
+        same open-plan floor; it is not a separate room.
     - name: visible U1 hatch
-      description: A large, obvious hatch/trapdoor near the lower/outer part of the kitchen/table side leads down to U1 by separate descending access. It is neither hidden nor concealed and is separate from the upper-floor spiral staircase; lower/outer is relative layout, not a compass direction.
+      description: A large, obvious hatch/trapdoor near the lower/outer part of the kitchen/table side leads down to
+        U1 by separate descending access. It is neither hidden nor concealed and is separate from the
+        upper-floor spiral staircase; lower/outer is relative layout, not a compass direction.
     - name: continuous spiral staircase
-      description: A normal doorway/opening along LR's perimeter, away from the center, leads into the single continuous lateral/peripheral spiral staircase. It rises near the outer tower interior toward F1 and onward to F6, not through a central tower core; U1 is accessed separately.
+      description: A normal doorway/opening along LR's perimeter, away from the center, leads into the single
+        continuous lateral/peripheral spiral staircase. It rises near the outer tower interior toward F1 and
+        onward to F6, not through a central tower core; U1 is accessed separately.
     - name: entrance shoe rack
       description: A large shoe rack near the main entrance is intended for leaving footwear when entering.
     - name: entrance equipment rack and bench
-      description: A long horizontal rack/bench/storage surface near the main entrance can hold tools, weapons, carried equipment, and miscellaneous items; current contents are unspecified.
+      description: A long horizontal rack/bench/storage surface near the main entrance can hold tools, weapons,
+        carried equipment, and miscellaneous items; current contents are unspecified.
     - name: wall shelving
-      description: A broad section of wall shelving occupies part of the perimeter near the stair-access side. It provides space for household objects, small possessions, and ordinary miscellaneous storage; no permanent contents are specified.
+      description: A broad section of wall shelving occupies part of the perimeter near the stair-access side. It
+        provides space for household objects, small possessions, and ordinary miscellaneous storage; no
+        permanent contents are specified.
     - name: three round-arched windows
-      description: >-
-        Exactly three modest, vertically oriented windows have rectangular lower
-        bodies and rounded arched tops: one near the kitchen, one near the main
-        entrance, and one roughly left of the hearth.
+      description: "Exactly three modest, vertically oriented windows have rectangular lower bodies and rounded
+        arched tops: one near the kitchen, one near the main entrance, and one roughly left of the hearth."
     - name: ordinary illumination
-      description: Daylight enters through the three windows; candles and the hearth when lit provide other normal illumination.
+      description: Daylight enters through the three windows; candles and the hearth when lit provide other normal
+        illumination.
   connections:
     - target: heartstone_square
       description: The massive main entrance door leads out to the public square directly outside Heartstone.
+      minutes: 1
+      kind: door
     - target: heartstone_cy
       description: The normal courtyard door roughly opposite the main entrance provides direct access to CY.
+      minutes: 1
+      kind: door
     - target: heartstone_u1
       description: The large visible hatch near the kitchen side and separate descending access lead to U1.
+      minutes: 1
+      kind: stairs
     - target: heartstone_f1
-      description: A normal perimeter doorway/opening leads into the continuous lateral spiral stair, which rises to F1 from the side.
+      description: A normal perimeter doorway/opening leads into the continuous lateral spiral stair, which rises to
+        F1 from the side.
+      minutes: 1
+      kind: stairs
 chunks: []

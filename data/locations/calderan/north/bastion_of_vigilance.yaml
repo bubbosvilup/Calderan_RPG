@@ -5,19 +5,25 @@ entity:
   name: "The Bastion of Vigilance"
   display_name: "The Bastion of Vigilance"
   parent: calderan_north
-  aliases: ["Bastion of Vigilance"]
+  aliases: [ "Bastion of Vigilance" ]
   summary: >-
-    The Bastion of Vigilance is the Inquisition's fortified headquarters in Calderan's North
-    District and the national administrative and operational center of the Inquisition of West.
-  tags: ["inquisition","fortification"]
+    The Bastion of Vigilance is the Inquisition's fortified headquarters in Calderan's North District and the
+    national administrative and operational center of the Inquisition of West.
+  tags: [ "inquisition", "fortification" ]
   search_context: "Bastion of Vigilance, Inquisition headquarters, High Inquisitor, archives, militia, fortress"
   content: >-
     The Bastion of Vigilance is the headquarters of the Inquisition in Calderan and the national
-    administrative and operational center for the Inquisition of West. It is fortified, austere,
-    bureaucratic and intimidating rather than theatrically gothic. The High Inquisitor of the
-    West is based in Calderan, and the Inquisition's militia, clerics and archivists work from
-    here. Its internal layout, cells and archives are not established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
-  connections: []
+    administrative and operational center for the Inquisition of West. It is fortified, austere, bureaucratic
+    and intimidating rather than theatrically gothic. The High Inquisitor of the West is based in Calderan,
+    and the Inquisition's militia, clerics and archivists work from here. Its internal layout, cells and
+    archives are not established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "South of North Gate, north of the red road. Access: north_arterial_east."
+  connections:
+    - target: north_arterial_east
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
 chunks: []

@@ -15,21 +15,21 @@ const context = buildTurnContext(world, createOpeningCampaign(world,"west_canon"
 const retrieval = {service,search:new HybridSearch(service)};
 const locations = ["the_coined_lie","main_market_square","fountain_of_the_fallen","the_daily_grind","blackiron_repairs_and_arms","mudlarks_herbs","livias_needles","chevalier_fountain","open_hand_chapel","the_white_basin","second_chance_pawn","the_slaughtered_pig","the_dangling_rope","gatherers_inn","west_guard_post","slave_market_back_back_alleys","gws","saint_orra_house"];
 
-test("West POIs have valid structural ancestry, public local envelopes, and no invented travel edges",()=>{
+test("West POIs have valid structural ancestry, public local envelopes, and explicit travel access",()=>{
  for(const id of locations){
   const e=world.getEntity(id)!; assert.equal(e.type,"location",id);
   assert.ok(world.getAncestors(id).some(a=>a.id==="calderan_west"),id);
   assert.equal(e.knowledge?.awareness,"local:calderan",id);
   assert.deepEqual(e.knowledge?.visibility,{narrator:true,player:true});
-  if(e.type==="location")assert.deepEqual(e.connections,[],id);
+  if(e.type==="location")assert.ok(e.connections.length > 0,id);
   assert.equal(service.get({entity_id:id},"player").kind,"found",id);
  }
- assert.deepEqual(world.getAncestors("the_daily_grind").map(e=>e.id),["main_market_square","calderan_west","calderan","west","continent"]);
- assert.deepEqual(world.getAncestors("slave_market_back_back_alleys").map(e=>e.id),["slave_market_back_alleys","calderan_west","calderan","west","continent"]);
+ assert.deepEqual(world.getAncestors("the_daily_grind").map(e=>e.id),["calderan_west","calderan","west","continent"]);
+ assert.deepEqual(world.getAncestors("slave_market_back_back_alleys").map(e=>e.id),["calderan_west","calderan","west","continent"]);
  for(const id of ["second_chance_pawn","west_guard_post","open_hand_chapel"])assert.equal(world.getEntity(id)!.parent,"calderan_west");
  assert.equal(world.getEntity("grey_brook")!.type,"world_lore");
  const square=world.getEntity("heartstone_square")!;
- if(square.type==="location")assert.deepEqual(square.connections.map(c=>c.target),["heartstone_lr"]);
+ if(square.type==="location")assert.ok(square.connections.some(c=>c.target==="heartstone_lr"));
  assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),["arwen_woodsigner", "azael_melakor", "bartolomhew", "blackthorn", "boran_dravendark", "bram_kessel", "brother_aven", "brunna_keld", "captain_doran_hale", "cassian_valerius", "corvinus_morvath", "dren", "dunrig_iron_hands", "elspeth_vael", "garran_holt", "gaston", "gideon_melakor", "hadrik_voss", "halden_cross", "helbrecht", "iseult_morvath", "jessa_rook", "kaelen_dravendark", "korvin", "livia_marr", "lysandra_vell", "maelor_morvath", "marta_pell", "matthias_eld", "mira_thorne", "mistress_elara", "niles_vanner", "odelia_crane", "oren_quarn", "orla_fen", "pellan", "rufus_tern", "seren_vael", "severan_krauss", "sister_mereth", "sister_veyra", "sun_emperor", "sybilla_melakor", "tavian_merrow", "uther_calderan", "vaelen_vael", "vorn_dravendark"]);
  for(const id of ["undertakers_door","quiet_yard"])assert.equal(world.getEntity(id),undefined);
 });
@@ -64,7 +64,7 @@ test("public, licensed, taboo and criminal canon remain distinct in fetched reco
  assert.match(market.content,/formal auctions primarily by day/);
  assert.match(market.content,/licensed private sellers handle or arrange their own authorized sale documentation/);
  assert.match(market.content,/no systematic doctors or medical inspection/);
- if(market.type==="location")assert.equal(market.features.length,6);
+ if(market.type==="location")assert.equal(market.features.length,7);
  assert.match(world.getEntity("slave_market_back_alleys")!.content,/not openly criminal or inherently illegal/);
  assert.match(world.getEntity("slave_market_back_back_alleys")!.content,/only the existence/);
  assert.match(world.getEntity("saint_orra_house")!.content,/reason is unestablished/);

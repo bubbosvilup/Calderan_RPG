@@ -59,7 +59,7 @@ assigned, unless a narrower rule is given. References always resolve to IDs.
 
 | Type | Fields and reference targets |
 | --- | --- |
-| location | `features: {name, description}[]`; `connections: {target, description}[]` where target is a location |
+| location | `features: {name, description}[]`; `connections: {target, description, minutes, kind?}[]` where target is a location and minutes is a positive safe integer; optional `entrance` location ID for explicit container arrival |
 | character | `role: player \| npc`; complete `base_location` contract below (or legacy `location: EntityId \| null`); `traits: string[]`; `relationships: {target, kind, description}[]` (character targets) |
 | event | `location: EntityId \| null` (one primary location); optional `related_locations: EntityId[]` (locations); `characters: EntityId[]` (characters); `participants: EntityId[]` (characters or factions); `time: WorldTime \| null`; `importance: minor \| significant \| major` |
 | faction | `members: EntityId[]` (characters); `territory: EntityId[]` (locations); `relations: {target, kind, description}[]` (factions) |

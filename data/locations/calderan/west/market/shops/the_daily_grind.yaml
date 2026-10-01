@@ -4,22 +4,28 @@ entity:
   type: location
   name: The Daily Grind
   display_name: The Daily Grind
-  parent: main_market_square
+  parent: calderan_west
   aliases: []
   summary: A general food and household provisions business on Main Market Square.
   tags:
     - geography
   search_context: Buy food, food delivery and ordinary household provisions in West; bulk food purchases on Main
     Market Square.
-  content: Offers ordinary food, household provisions, bulk quantities and large orders, with delivery
-    for sufficiently large purchases. Prices are low to lower-middle, quality ordinary to decent. It
-    has no luxury specialty goods. Bram Kessel is the proprietor.
+  content: Offers ordinary food, household provisions, bulk quantities and large orders, with delivery for
+    sufficiently large purchases. Prices are low to lower-middle, quality ordinary to decent. It has no luxury
+    specialty goods. Bram Kessel is the proprietor.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "A general food and household provisions business on Main Market Square. Access: main_market_square."
+  connections:
+    - target: main_market_square
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
 chunks: []

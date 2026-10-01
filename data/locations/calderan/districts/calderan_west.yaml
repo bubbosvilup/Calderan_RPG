@@ -7,29 +7,27 @@ entity:
   parent: calderan
   aliases:
     - Calderan West District
-  summary: West District is a large, dense and socially mixed region of Calderan, with ordinary
-    families, manual labor, workshops, warehouses, cheap businesses and respectable shops alongside
-    poverty, debt, crime and legal slavery-related commerce.
+  summary: West District is a large, dense and socially mixed region of Calderan, with ordinary families, manual
+    labor, workshops, warehouses, cheap businesses and respectable shops alongside poverty, debt, crime and
+    legal slavery-related commerce.
   tags:
     - geography
     - district
   search_context: West District of Calderan, urban district.
-  content: "West is not uniformly poor, criminal or dangerous. Heartstone lies in north-western, more
-    peripheral West. Toward Calderan's center, streets and buildings generally improve, guard
-    presence increases, businesses are more respectable and residents are on average more
-    economically stable. Toward outer West, maintenance declines, poverty and crime become more
-    visible, refugees and street children are more common, and night travel becomes more dangerous.
-    These are informal tendencies with no hard boundaries or official nested subdistricts. Ordinary
-    families and successful businesses exist across the district. Grey Brook cuts through a
-    substantial part of West, with small bridges and warehouses along parts of its banks. Main
-    Market Square anchors ordinary commerce in the more prosperous, inner-facing part; the public
-    Calderan Slave Market is another major economic center farther through West. Heartstone Square
-    is primarily residential. Guards are more often feared than respected: some are harsh, overly
-    violent or accept bribes, but this is not every guard. Ordinary patrols still suppress obvious
-    petty crime and public disorder. There is no formal curfew; being out after approximately 23:00
-    may attract guard questioning. Outer West has fewer patrols and is substantially more dangerous
-    at night; guards may carry oil lamps or torches. No exact patrol schedules or streets are
-    established."
+  content: "West is not uniformly poor, criminal or dangerous. Heartstone lies in south-western, more peripheral
+    West. Toward Calderan's center, streets and buildings generally improve, guard presence increases,
+    businesses are more respectable and residents are on average more economically stable. Toward outer West,
+    maintenance declines, poverty and crime become more visible, refugees and street children are more common,
+    and night travel becomes more dangerous. These are informal tendencies with no hard boundaries or official
+    nested subdistricts. Ordinary families and successful businesses exist across the district. Grey Brook
+    cuts through a substantial part of West, with small bridges and warehouses along parts of its banks. Main
+    Market Square anchors ordinary commerce in the more prosperous, inner-facing part; the public Calderan
+    Slave Market is another major economic center farther through West. Heartstone Square is primarily
+    residential. Guards are more often feared than respected: some are harsh, overly violent or accept bribes,
+    but this is not every guard. Ordinary patrols still suppress obvious petty crime and public disorder.
+    There is no formal curfew; being out after approximately 23:00 may attract guard questioning. Outer West
+    has fewer patrols and is substantially more dangerous at night; guards may carry oil lamps or torches. No
+    exact patrol schedules or streets are established."
   knowledge:
     visibility:
       narrator: true
@@ -38,4 +36,5 @@ entity:
     awareness: local:calderan
   features: []
   connections: []
+  entrance: west_arterial_south
 chunks: []

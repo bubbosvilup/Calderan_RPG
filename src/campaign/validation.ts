@@ -75,12 +75,28 @@ const acquisition = object({ acquired_at: optional(integer()), acquisition_kind:
 const provenance = object({ learned_at: optional(integer()), source_character_id: optional(id), source_event_id: optional(id), acquisition_kind: optional(choice("witnessed", "told", "inferred", "rumor")) });
 const target = object({ kind: choice("canonical", "character", "item", "event"), id });
 const goalStatus = choice("active", "completed", "abandoned", "failed"), eventStatus = choice("scheduled", "triggered", "completed", "cancelled");
-const characterRecord = object({ id, origin, profile, current });
+const claim = object({ text, source: choice("narration", "seller", "self", "other"), by: optional(text) });
+const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: choice("name_established", "purchase_unnamed_subject", "recruitment", "custody", "rescue"),
+  promoted_revision: integer(1), promoted_world_minute: integer(), location_id: id, label: text, ephemeral_ref: optional(text),
+  established: object({ name: optional(text), sex: optional(text), age: optional(tagged({ exact: object({ kind: choice("exact"), years: integer(0) }), approximate: object({ kind: choice("approximate"), description: text }) })),
+    species: optional(text), role: optional(text), descriptor: optional(text), appearance: optional(list(text, 24)), condition: optional(list(text, 24)), background: optional(list(claim, 12)) }),
+  evidence: list(text, 12) });
+const characterRecord = object({ id, origin, profile, current, origin_snapshot: optional(originSnapshot) });
 const itemRecord = object({ id, origin, name: optional(text), description: optional(text), owner_id: optional(nullable(id)), position, acquisition: optional(acquisition) });
 const membershipRecord = object({ character_id: id, status: choice("guest", "member", "former_member"), joined_at: optional(integer()), role: optional(text) });
 const factRecord = object({ id, content: tagged({ campaign: object({ kind: choice("campaign"), statement: text, truth: choice("true", "false", "unknown") }), canonical: object({ kind: choice("canonical"), entity_id: id, chunk_id: optional(text) }) }) });
 const knowledgeRecord = object({ character_id: id, fact_id: id, status: choice("knows", "believes", "suspects", "heard_rumor"), provenance: optional(provenance) });
-const relationshipRecord = object({ from_character_id: id, to_character_id: id, trust: integer(-100, 100), seed_context: optional(text) });
+const level = choice("none", "low", "moderate", "high");
+const dimensions = object({ trust: optional(level), wariness: optional(level), affection: optional(level), protectiveness: optional(level), respect: optional(level), fear: optional(level), hostility: optional(level), romance: optional(level) });
+const relationshipRecord = object({ from_character_id: id, to_character_id: id, trust: optional(integer(-100, 100)), dimensions: optional(dimensions), seed_context: optional(text) });
+// Household Pass 1 records.
+const documentation = choice("documented", "undocumented", "unestablished");
+const gold = integer(0, 1_000_000_000);
+const fundsRecord = object({ character_id: id, gold });
+const legalRecord = object({ character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), transfer: optional(object({ documentation, from_holder_id: optional(id), transaction_id: optional(id), note: optional(text) })) });
+const counterparty = object({ label: text, description: optional(text), location_id: id, authority_evidence: list(text, 4) });
+const transactionRecord = object({ id, kind: choice("sale", "gift", "assignment", "manumission"), subject_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: optional(id), payer_id: optional(id), payee_id: optional(id), gold: optional(gold), documentation, world_minute: integer(), revision: integer(0) });
+const ruleRecord = object({ id, text, created_revision: integer(0), active: (input: unknown, path: string) => { if (typeof input !== "boolean") fail(path, "expected boolean"); return input; } });
 const variants: Record<string, Parser> = {};
 function command(kind: string, fields: Record<string, Rule>) { variants[kind] = object({ kind: choice(kind), ...fields }); }
 command("register_character", { character: characterRecord });
@@ -103,6 +119,15 @@ command("set_goal_status", { goal_id: id, status: goalStatus });
 command("schedule_event", { id, title: text, description: optional(text), scheduled_world_minute: integer(), participants: optional(distinct(id)) });
 command("set_event_status", { event_id: id, status: eventStatus });
 command("reschedule_event", { event_id: id, scheduled_world_minute: integer() });
+command("set_funds", { character_id: id, gold });
+command("set_legal_status", { character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), documentation: optional(documentation), note: optional(text) });
+command("transfer_person", { transaction_id: id, transaction_kind: choice("sale", "gift", "assignment"), character_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: id, payment: optional(object({ payer_id: id, payee_id: optional(id), gold })), documentation, note: optional(text) });
+command("manumit", { transaction_id: id, character_id: id, by_holder_id: id, documentation, note: optional(text) });
+command("join_household", { household_id: id, character_id: id });
+command("leave_household", { household_id: id, character_id: id });
+command("add_household_rule", { household_id: id, text });
+command("set_household_rule_active", { household_id: id, rule_id: id, active: (input: unknown, path: string) => { if (typeof input !== "boolean") fail(path, "expected boolean"); return input; } });
+command("adjust_relationship", { from_character_id: id, to_character_id: id, dimension: choice("trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance"), direction: choice("raise", "lower") });
 command("runtime_delta", { delta: object({ expected_revision: optional(integer(0)), player_location: optional(id), character_movements: optional(list(object({ character_id: id, current_location: id }))), time_advance_minutes: optional(integer(0)), mana_delta: optional(integer()) }) });
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
@@ -111,14 +136,15 @@ const snapshot = object({ schema_version: integer(1, 1), campaign_id: id, datase
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: id }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),
-  households: list(object({ id, name: optional(text), members: list(membershipRecord, 100000) }), 100000),
+  households: list(object({ id, name: optional(text), members: list(membershipRecord, 100000), rules: optional(list(ruleRecord, 1000)) }), 100000),
   facts: list(factRecord, 100000), knowledge: list(knowledgeRecord, 100000), relationships: list(relationshipRecord, 100000),
   goals: list(object({ id, character_id: id, description: text, status: goalStatus, created_at: integer(), target: optional(target) }), 100000),
+  funds: list(fundsRecord, 100000), legal_statuses: list(legalRecord, 100000), transactions: list(transactionRecord, 100000),
   scheduled_events: list(object({ id, title: text, description: optional(text), scheduled_world_minute: integer(), status: eventStatus, participants: optional(distinct(id)) }), 100000) });
 /** Direct DTO validation using exactly the same record schemas as commands. */
 export function parseCampaignSnapshot(input: unknown): CampaignSnapshot { return snapshot(input, "snapshot") as CampaignSnapshot; }
 /** Small shared plain-data primitives for the persistence envelope. */
-export const dataSchema = { object, optional, text, integer, choice };
+export const dataSchema = { object, optional, text, integer, choice, list };
 export function freezeSnapshot<T>(value: T): DeepReadonly<T> {
   if (value && typeof value === "object") { for (const child of Object.values(value)) freezeSnapshot(child); Object.freeze(value); }
   return value as DeepReadonly<T>;

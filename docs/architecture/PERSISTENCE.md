@@ -15,7 +15,7 @@ owns dirty tracking. No gameplay command imports or calls filesystem persistence
 
 `src/persistence/campaign-repository.ts` defines `CampaignSaveRepository` and its
 Node filesystem implementation, `FileCampaignRepository`. `filesystem.ts` is a
-small injectable adapter for fault tests. `save-format.ts` owns the V1 envelope,
+small injectable adapter for fault tests. `save-format.ts` owns the V2 envelope,
 `strict-json.ts` bounded strict JSON parsing, `errors.ts` public typed failures,
 and `campaign-session.ts` manual-save session metadata.
 
@@ -44,12 +44,12 @@ decide whether unsaved changes should be discarded. That decision belongs to UI.
 supported schema, ID, slot availability, validation status and safe metadata.
 It does not create directories, load a live campaign or print character state.
 
-## B. V1 format
+## B. Current V2 format
 
 ```ts
-interface CampaignSaveFileV1 {
+interface CampaignSaveFile {
   format: "caldrevan_campaign_save";
-  schema_version: 1;
+  schema_version: 2;
   campaign_id: string;
   canonical_dataset_id: string;
   metadata: {
@@ -57,7 +57,9 @@ interface CampaignSaveFileV1 {
     created_at?: string;
     engine_version?: string;
   };
-  snapshot: CampaignSnapshot;
+  snapshot: CampaignSnapshot; // snapshot schema stays v1
+  canon_compatibility: "strict" | "references";
+  canon_references?: readonly { id: string; fingerprint: string }[];
 }
 ```
 
@@ -187,11 +189,30 @@ remain absent. Ownership does not become equipment. Canonical empty profile
 overrides still fall back to canon. Revision 87 restores as 87, a no-op stays 87,
 and the next changing command becomes 88.
 
-Only envelope and snapshot schema version 1 are supported. Unknown versions
-reject with `unsupported_version`; there is no migration. The future migration
-boundary belongs before V1 validation, with explicit version-to-version transforms.
-Strict dataset equality is mandatory. `dataset_mismatch` includes the saved and
-current dataset IDs in typed trusted diagnostics; no partial load is attempted.
+Envelope versions 1 and 2 are supported. `save-migrations.ts` runs the explicit
+v1 -> v2 step before strict current validation. The required persisted canon
+compatibility policy and reference manifest justify v2; the snapshot stays v1.
+Migration preserves unknown legacy fields for strict rejection, never silently
+removes them. Unsupported versions and invalid/throwing chains fail before restore.
+
+Migrated v1 saves use `strict` full-dataset identity because old files contain no
+reference evidence. New saves use `references`: IDs and SHA-256 fingerprints for
+a conservative superset of authored references in the snapshot, plus Nicco.
+Fingerprints omit only top-level name, display_name, summary, description and
+aliases. All other fields, including authored content, visibility, connections,
+and defaults remain conservative. Unrelated additions/graph changes and these
+label edits can load. Missing references fail `reference_invalid`; changed
+referenced structure fails `dataset_mismatch`. Adding an NPC requiring a new
+runtime location still fails graph validation rather than inventing campaign state.
+
+After compatibility, detached snapshot identity is rebound to the current dataset
+and the complete existing runtime reference validator runs. Direct
+`CampaignState.restore` still requires strict identity; use `decodeSave` for
+versioned compatibility. Saving never manufactures evidence for a snapshot bound
+to a different world. Loading never writes either slot or mutates authored canon.
+
+See [H4 report](../evaluations/CALDREVAN_HARDENING_H4_PERSISTENCE_DIAGNOSTICS.md)
+for the policy comparison, matrices and current verification.
 
 | Failure stage | Current | Previous | Session tracking |
 | --- | --- | --- | --- |
@@ -234,10 +255,10 @@ multi-process writers and network-filesystem guarantees are outside this phase.
 
 Public errors contain a stable code and safe message, not raw Node errors or
 stack traces: `not_found`, `invalid_json`, `invalid_save`, `unsupported_version`,
-`dataset_mismatch`, `reference_invalid`, `invalid_id`, `unsafe_path`,
+`migration_failed`, `dataset_mismatch`, `reference_invalid`, `invalid_id`, `unsafe_path`,
 `save_in_progress`, `io_error`. The inspector prints safe messages/metadata only.
 
-## J-L. Verification and scope
+## J-L. Original Phase 1J verification and scope (historical)
 
 **378 offline tests pass; typecheck passes.** The 60 new tests include rich exact
 snapshot round trips, revision preservation/no replay, all campaign domains,

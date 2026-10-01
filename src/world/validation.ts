@@ -20,7 +20,7 @@ const idPattern = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/;
 const types = ["location", "character", "event", "faction", "item", "concept", "world_lore"] as const;
 const common = ["id", "type", "name", "display_name", "parent", "aliases", "summary", "tags", "search_context", "content", "lifecycle", "knowledge"];
 const subtypeFields: Record<EntityType, string[]> = {
-  location: ["features", "connections"],
+  location: ["features", "connections", "entrance"],
   character: ["role", "location", "traits", "relationships", "base_location", "work_location", "home_location", "species", "sex", "age_band", "appearance", "occupation", "purpose", "morality", "private_notes", "affiliations"],
   event: ["location", "related_locations", "characters", "participants", "time", "importance"],
   faction: ["members", "territory", "relations"],
@@ -111,13 +111,18 @@ class Check {
     this.array(value, field).forEach((entry, i) => {
       const p = `${field}[${i}]`;
       const edge = this.object(entry, p);
-      this.keys(edge, kind ? ["target", "kind", "description", ...(knowledge ? ["knowledge"] : [])] : ["target", "description"], p);
+      this.keys(edge, kind ? ["target", "kind", "description", ...(knowledge ? ["knowledge"] : [])] : ["target", "description", "minutes", "kind"], p);
       if (knowledge && "knowledge" in edge) this.knowledge(edge.knowledge, `${p}.knowledge`);
       const target = this.id(edge.target, `${p}.target`);
       if (seen.has(target)) this.fail(`${p}.target`, `duplicate ID ${target}`);
       seen.add(target);
       this.text(edge.description, `${p}.description`);
       if (kind) this.text(edge.kind, `${p}.kind`);
+      else {
+        if (!Number.isSafeInteger(edge.minutes) || (edge.minutes as number) <= 0) this.fail(`${p}.minutes`, "expected positive safe integer minutes");
+        if (target === this.entityId) this.fail(`${p}.target`, "self travel edge");
+        if ("kind" in edge) this.choice(edge.kind, ["street", "road", "door", "stairs", "gate", "bridge", "square_access"], `${p}.kind`);
+      }
     });
   }
 }
@@ -151,6 +156,7 @@ function validateShape(input: WorldSource): ValidatedWorldSource {
         c.text(f.name, `${p}.name`); c.text(f.description, `${p}.description`);
       });
       c.edges(e.connections, "entity.connections", false);
+      if ("entrance" in e) c.id(e.entrance, "entity.entrance");
       break;
     case "character":
       c.choice(e.role, ["player", "npc"], "entity.role");
@@ -269,7 +275,7 @@ export function validateWorldSources(inputs: readonly WorldSource[]): ValidatedW
     knowledge(e.knowledge, "entity.knowledge");
     document.chunks.forEach((chunk, i) => knowledge(chunk.knowledge, `chunks[${i}].knowledge`));
     switch (e.type) {
-      case "location": e.connections.forEach((edge, i) => ref(edge.target, `entity.connections[${i}].target`, ["location"])); break;
+      case "location": if (e.entrance) ref(e.entrance, "entity.entrance", ["location"]); e.connections.forEach((edge, i) => ref(edge.target, `entity.connections[${i}].target`, ["location"])); break;
       case "character":
         if (e.base_location !== undefined) {
           ref(e.base_location, "entity.base_location", ["location"]);

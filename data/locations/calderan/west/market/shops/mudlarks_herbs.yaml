@@ -4,7 +4,7 @@ entity:
   type: location
   name: Mudlark's Herbs
   display_name: Mudlark's Herbs
-  parent: main_market_square
+  parent: calderan_west
   aliases:
     - Mudlark
   summary: A common herbal supplies and remedies business on Main Market Square.
@@ -12,14 +12,20 @@ entity:
     - geography
   search_context: Neighborhood herbalist and basic apothecary in West; common remedies on Main Market Square.
   content: Offers common herbs and remedies, simple medicinal supplies and basic apothecary or herbal
-    preparations. It is less extensive and specialized than the herbalists and apothecaries of
-    North. No rare alchemical inventory is established. Mira Thorne is the proprietor.
+    preparations. It is less extensive and specialized than the herbalists and apothecaries of North. No rare
+    alchemical inventory is established. Mira Thorne is the proprietor.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "A common herbal supplies and remedies business on Main Market Square. Access: main_market_square."
+  connections:
+    - target: main_market_square
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
 chunks: []

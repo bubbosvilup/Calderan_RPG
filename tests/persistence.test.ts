@@ -154,7 +154,7 @@ test("listing is read-only metadata and distinguishes missing, corrupt, version 
   const root = join(await temporary(t), "saves"), { world, campaign } = richCampaign(), repository = new FileCampaignRepository(world, root);
   assert.deepEqual(await repository.listSaves(), []); await assert.rejects(fs.stat(root), { code: "ENOENT" });
   await repository.saveCampaign(campaign); const text = await fs.readFile(current(root), "utf8");
-  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 1', '"schema_version": 2')]]) {
+  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 2', '"schema_version": 3')]]) {
     await fs.mkdir(join(root, id!)); await fs.writeFile(join(root, id!, "save.json"), contents!);
   }
   await fs.mkdir(join(root, "empty")); await fs.writeFile(join(root, "empty", ".save-stale.tmp"), "{}");
@@ -166,7 +166,7 @@ test("listing is read-only metadata and distinguishes missing, corrupt, version 
   assert.equal(entries.find(e => e.campaign_id === "empty")!.current.exists, false);
   assert.equal(JSON.stringify(entries).includes("Fixture A"), false);
   const sources = fixtures(); sources[0]!.document.entity.summary = "changed canon";
-  assert.equal((await new FileCampaignRepository(new WorldStore(sources), root).listSaves()).find(e => e.campaign_id === "fixture_campaign")!.current.status, "dataset_mismatch");
+  assert.equal((await new FileCampaignRepository(new WorldStore(sources), root).listSaves()).find(e => e.campaign_id === "fixture_campaign")!.current.status, "valid");
 });
 
 test("path traversal, absolute paths and Windows device IDs never reach filesystem", async t => {

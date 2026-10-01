@@ -1,0 +1,39 @@
+schema_version: 1
+entity:
+  id: west_arterial_north
+  type: location
+  name: West Arterial Road, North
+  display_name: West Arterial Road, North
+  parent: calderan_west
+  aliases: []
+  summary: Red western arc east of Saint Orra and the Slaughtered Pig, approaching the northwest river bridge.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map West Arterial Road, North
+  content: Red western arc east of Saint Orra and the Slaughtered Pig, approaching the northwest river bridge.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: west_arterial_market
+      description: road access; canonical city map.
+      minutes: 14
+      kind: road
+    - target: northwest_bridge
+      description: bridge access; canonical city map.
+      minutes: 9
+      kind: bridge
+    - target: saint_orra_house
+      description: street access; canonical city map.
+      minutes: 6
+      kind: street
+    - target: the_slaughtered_pig
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
+chunks: []

@@ -43,8 +43,8 @@ test("five Heartstone locations retain classification and explicit parent refere
 
 test("resolved topology has only LR-CY, LR-U1, LR-F1 and LR-square (main entrance) in both directions", async () => {
   const world = await loadWorld("data");
-  const edges = world.getEntitiesByType("location").flatMap(e => e.connections.map(c => `${e.id}->${c.target}`)).sort();
-  assert.deepEqual(edges, ["heartstone_cy->heartstone_lr", "heartstone_f1->heartstone_lr", "heartstone_lr->heartstone_cy", "heartstone_lr->heartstone_f1", "heartstone_lr->heartstone_square", "heartstone_lr->heartstone_u1", "heartstone_square->heartstone_lr", "heartstone_u1->heartstone_lr", "the_crucible->the_merchants_mile", "the_merchants_mile->the_crucible"]);
+  const edges = world.getEntitiesByType("location").filter(e => e.id.startsWith("heartstone_")).flatMap(e => e.connections.filter(c => c.target.startsWith("heartstone_")).map(c => `${e.id}->${c.target}`)).sort();
+  assert.deepEqual(edges, ["heartstone_cy->heartstone_lr", "heartstone_f1->heartstone_lr", "heartstone_lr->heartstone_cy", "heartstone_lr->heartstone_f1", "heartstone_lr->heartstone_square", "heartstone_lr->heartstone_u1", "heartstone_square->heartstone_lr", "heartstone_u1->heartstone_lr"]);
   const tower = world.getEntity("heartstone")!;
   assert.match(tower.content, /F1, F2, F3, F4, F5, and F6/);
   assert.match(tower.content, /F6 is the highest currently known floor/);

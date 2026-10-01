@@ -6,24 +6,33 @@ entity:
   display_name: Saint Orra's House
   parent: calderan_west
   aliases: []
-  summary: An orphan shelter and child charity in outer West, broadly near but not directly adjacent
-    to Calderan Slave Market.
+  summary: An orphan shelter and child charity in outer West, broadly near but not directly adjacent to Calderan
+    Slave Market.
   tags:
     - geography
-  search_context: An orphan shelter and child charity in outer West, broadly near but not directly
-    adjacent to Calderan Slave Market.
-  content: "The shelter houses vulnerable children and tries to keep them off the street. Capacity and
-    resources are limited; some street children refuse or leave institutional care. It maintains
-    ties to charitable religious organizations in North. Reports and concerns say some children have
-    disappeared over time. The reason is unestablished: no cause, responsible party or outcome may
-    be inferred. The name establishes no saint biography or new character. Sister Mereth is its
-    administrator and principal public representative."
+  search_context: An orphan shelter and child charity in outer West, broadly near but not directly adjacent to
+    Calderan Slave Market.
+  content: "The shelter houses vulnerable children and tries to keep them off the street. Capacity and resources
+    are limited; some street children refuse or leave institutional care. It maintains ties to charitable
+    religious organizations in North. Reports and concerns say some children have disappeared over time. The
+    reason is unestablished: no cause, responsible party or outcome may be inferred. The name establishes no
+    saint biography or new character. Sister Mereth is its administrator and principal public representative."
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "North of the Slave Market, south of Grey Brook. Access: the_dangling_rope."
+  connections:
+    - target: the_dangling_rope
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
+    - target: west_arterial_north
+      description: street access; canonical city map.
+      minutes: 6
+      kind: street
 chunks: []

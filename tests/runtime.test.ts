@@ -40,7 +40,7 @@ test("requested Brenna/Maren sequence derives presence from runtime locations", 
 test("no presence from parents, adjacency, event participants, relationships, or aliases", () => {
   const sources = fixtures();
   Object.assign(find(sources, "brenna").entity, { location: "heartstone_l1", aliases: [room], relationships: [{ target: "nicco", kind: "friend", description: "Fixture" }] });
-  Object.assign(find(sources, room).entity, { connections: [{ target: garden, description: "Fixture" }] });
+  Object.assign(find(sources, room).entity, { connections: [{ target: garden, description: "Fixture", minutes: 1 }] });
   const world = new WorldStore(sources);
   const runtime = new RuntimeState(world, { player_location: room, world_time: { world_minute: 0 } });
   assert.deepEqual(buildSceneRam(world, runtime).present_characters, []);

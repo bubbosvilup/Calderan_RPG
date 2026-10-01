@@ -10,6 +10,7 @@ import { prepareCharacterCommand } from "./characters.js";
 import { prepareItemCommand } from "./items.js";
 import { prepareSocialCommand } from "./social.js";
 import { prepareAgendaCommand } from "./agenda.js";
+import { prepareLegalCommand } from "./legal.js";
 import { compareIds } from "../world/provenance.js";
 import { validateCampaignSnapshot } from "./snapshot-validation.js";
 const RESTORE = Symbol("validated campaign restore");
@@ -26,7 +27,9 @@ function stableData(value: unknown): string {
     ? Object.fromEntries(Object.entries(child).sort(([a], [b]) => compareIds(a, b))) : child);
 }
 function orderDomains(draft: CampaignSnapshot): void {
-  for (const records of [draft.characters, draft.items, draft.households, draft.facts, draft.goals, draft.scheduled_events]) records.sort((a, b) => compareIds(a.id, b.id));
+  for (const records of [draft.characters, draft.items, draft.households, draft.facts, draft.goals, draft.scheduled_events, draft.transactions]) records.sort((a, b) => compareIds(a.id, b.id));
+  draft.funds.sort((a, b) => compareIds(a.character_id, b.character_id));
+  draft.legal_statuses.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.knowledge.sort((a, b) => compareIds(a.character_id, b.character_id) || compareIds(a.fact_id, b.fact_id));
   draft.relationships.sort((a, b) => compareIds(a.from_character_id, b.from_character_id) || compareIds(a.to_character_id, b.to_character_id));
   draft.runtime.npc_locations.sort((a, b) => compareIds(a.character_id, b.character_id));
@@ -43,7 +46,7 @@ export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, worl
   const context = { draft, refs: new CampaignIdentityResolver(world, draft) };
   for (const command of proposal.commands) {
     if (command.kind === "runtime_delta") draft.runtime = structuredClone(prepareRuntimeDelta(draft.runtime, command.delta, world, base.revision).snapshot) as RuntimeDomainSnapshot;
-    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command)) fail("command", "unsupported command");
+    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command)) fail("command", "unsupported command");
   }
   orderDomains(draft);
   const comparison = structuredClone(base) as CampaignSnapshot;
@@ -68,7 +71,7 @@ export class CampaignState {
     validateId(campaignId, "campaign_id");
     const { revision, ...runtime } = new RuntimeState(world, initialScene as SceneState, initialMana).exportSnapshot();
     this.#snapshot = validateCampaignSnapshot({ schema_version: 1 as const, campaign_id: campaignId, dataset_id: world.datasetId, revision,
-      runtime: structuredClone(runtime), characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [] }, world);
+      runtime: structuredClone(runtime), characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [] }, world);
   }
   /** Unknown-input boundary. Assigns validated current state directly, with fresh receipt ownership. */
   static restore(world: WorldStore, snapshot: unknown): CampaignState {

@@ -100,8 +100,8 @@ test("derived associations are sorted frozen canon; runtime movement wins withou
 
 test("Calderan districts, fringe and one NPC pilot preserve tower topology and canon limits", () => {
  const districts=["west","east","north","south","center"].map(s=>`calderan_${s}`);
- assert.deepEqual(world.getChildren("calderan").map(e=>e.id),[...districts].sort());
- for(const id of [...districts,"slave_market_back_alleys"]){ const e=world.getEntity(id)!;assert.equal(e.type,"location");if(e.type==="location")assert.deepEqual(e.connections,[]); }
+ assert.deepEqual(world.getChildren("calderan").map(e=>e.id),[...districts,"imperial_road","north_approach"].sort());
+ for(const id of districts){ const e=world.getEntity(id)!;assert.equal(e.type,"location");if(e.type==="location")assert.deepEqual(e.connections,[]); }
  assert.equal(world.getEntity("slave_market_back_alleys")!.parent,"calderan_west");
  assert.deepEqual(world.getAncestors("heartstone_f1").map(e=>e.id),["heartstone","calderan_west","calderan","west","continent"]);
  assert.deepEqual(world.getEntitiesByType("character").filter(e=>e.role==="npc").map(e=>e.id),["arwen_woodsigner", "azael_melakor", "bartolomhew", "blackthorn", "boran_dravendark", "bram_kessel", "brother_aven", "brunna_keld", "captain_doran_hale", "cassian_valerius", "corvinus_morvath", "dren", "dunrig_iron_hands", "elspeth_vael", "garran_holt", "gaston", "gideon_melakor", "hadrik_voss", "halden_cross", "helbrecht", "iseult_morvath", "jessa_rook", "kaelen_dravendark", "korvin", "livia_marr", "lysandra_vell", "maelor_morvath", "marta_pell", "matthias_eld", "mira_thorne", "mistress_elara", "niles_vanner", "odelia_crane", "oren_quarn", "orla_fen", "pellan", "rufus_tern", "seren_vael", "severan_krauss", "sister_mereth", "sister_veyra", "sun_emperor", "sybilla_melakor", "tavian_merrow", "uther_calderan", "vaelen_vael", "vorn_dravendark"]);

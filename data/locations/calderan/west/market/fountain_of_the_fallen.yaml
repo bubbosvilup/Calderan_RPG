@@ -10,15 +10,22 @@ entity:
   tags:
     - geography
   search_context: The central fountain of Main Market Square is a common public meeting landmark.
-  content: Fountain of the Fallen is large enough to serve as a familiar meeting point at the center
-    of Main Market Square. The reason for its name is unestablished; no wars, named heroes,
-    religious meaning or supernatural properties are established.
+  content: Fountain of the Fallen is large enough to serve as a familiar meeting point at the center of Main
+    Market Square. The reason for its name is unestablished; no wars, named heroes, religious meaning or
+    supernatural properties are established.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "The central fountain of Main Market Square is a common public meeting landmark. Access:
+        main_market_square."
+  connections:
+    - target: main_market_square
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
 chunks: []

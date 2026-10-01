@@ -1,3 +1,4 @@
+import type { CharacterMovement } from "./character-movement.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import { freezeSnapshot } from "../campaign/validation.js";
 import type { TurnContext } from "./context-builder.js";
@@ -6,6 +7,8 @@ import { normalizeReference, type ResolvedReference } from "./reference-resoluti
 import type { PhysicalInteraction } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
 import { narratedDepartures, type DepartureEvidence } from "./scene-departure.js";
+import { detectHouseholdChoices, type HouseholdChoice } from "./household-evidence.js";
+import { escapeRegExp as escape } from "./language/text.js";
 
 export type ConfirmationKind = "accepted_transfer" | "equipped_item" | "heard_fact" | "was_told_fact" | "agreed_event";
 export interface NarratorConfirmation { readonly kind: ConfirmationKind; readonly command_indexes: readonly number[]; readonly collective: boolean; readonly source_sentence: string }
@@ -19,8 +22,13 @@ export interface TurnEvidence {
   readonly ambiguous_reference: boolean;
   /** Repair 1: player-initiated physical acts this turn; the only basis for authorizing class-B conditions. */
   readonly physical_interactions?: readonly PhysicalInteraction[];
+  /** Location Continuity Pass 1.3: completed movements of campaign characters to a known location narrated this turn. */
+  readonly character_movements?: readonly CharacterMovement[];
   /** Runtime Continuity Repair 1: completed departures of present created characters narrated this turn. */
   readonly departures?: readonly DepartureEvidence[];
+  /** Household Pass 1: voluntary household choices voiced by the chooser, and the player's explicit rule declarations. */
+  readonly household_choices?: readonly HouseholdChoice[];
+  readonly rule_declarations?: readonly string[];
 }
 const uncertain = /\b(not|never|no longer|maybe|perhaps|might|could|would|almost|pretend\w*|imagin\w*|consider\w*|unchanged|instead|inscription|quoted|hypothetical|if|unless)\b/i;
 // Actual refusal: explicit refusal words, handing the offer back, or a negated acceptance verb.
@@ -38,7 +46,6 @@ const leadIn = /^(?:without a word|after (?:a|another|the) (?:(?:brief|long|shor
 const adverbs = "(?:(?:carefully|quickly|slowly|finally|gently|then|simply|silently|wordlessly|hesitantly|cautiously) )*";
 const trailing = /\s+(?:back|from (?:nicco|you|him)(?:'s|s)?(?: (?:hands?|arms))?|into (?:her|his) (?:arms|hands|grasp|lap)|in (?:her|his) (?:arms|hands|lap)|against (?:her|his) (?:chest|lap|legs)|onto (?:her|his) lap|with (?:both hands|one hand)|without (?:hesitation|comment|a word)(?: on .*)?|(?:all )?at once|one by one|and sets? (?:it|them) .*)$/;
 const clean = (s: string) => normalizeReference(s).replace(/[,;:]$/g, "");
-const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const numbers: Record<string, number> = { two: 2, three: 3, four: 4, five: 5 };
 /** Bounded group phrases resolved only against the current same-turn offer. Returns whether the phrase names the whole offered set. */
 function groupPhrase(object: string, offeredCount: number, allClothes: boolean): boolean {
@@ -244,9 +251,13 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     });
     for (const c of confirmations) for (const i of c.command_indexes) confirmed.add(i);
   }
-  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context) }) as TurnEvidence;
+  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context), ...householdOf(intent, narration, context) }) as TurnEvidence;
 }
 function departuresOf(narration: string, context: TurnContext): { departures?: DepartureEvidence[] } {
   const found = narratedDepartures(narration, context);
   return found.length ? { departures: structuredClone([...found]) } : {};
+}
+function householdOf(intent: PlayerIntent, narration: string, context: TurnContext): { household_choices?: HouseholdChoice[]; rule_declarations?: string[] } {
+  const choices = detectHouseholdChoices(narration, context), rules = intent.rule_declarations ?? [];
+  return { ...(choices.length ? { household_choices: structuredClone([...choices]) } : {}), ...(rules.length ? { rule_declarations: [...rules] } : {}) };
 }

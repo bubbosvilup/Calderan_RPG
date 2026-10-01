@@ -1,4 +1,5 @@
 import type { WorldStore } from "../world/world-store.js";
+import { escapeRegExp } from "../turn/language/text.js";
 
 /**
  * Phase 1Q dev/eval-only grounding manifest and lore-invention detector. Review-only: it never blocks, edits or patches
@@ -38,7 +39,7 @@ const ROUTE = /[^.!?\n"“]*\b(?:turn(?:s|ing)?\s+(?:left|right)|(?:\w+|two|thre
 const META = /[^.!?\n"“]*\b(?:canon(?:ical)?|the state (?:does|says|establishes|shows)|(?:not |un)established|no (?:data|information) (?:is )?available|permissions?|transactions? to complete|no transaction|nothing (?:in (?:his|her|their) (?:manner|expression|face|bearing) )?suggests (?:he|she|they) (?:knows?|recogni[sz]es)|DO NOT USE|CAN USE|scene participant|conversation partner|retriev(?:ed|al))\b[^.!?\n"”]*/gi;
 const STOP = new Set(["the", "and", "that", "this", "with", "from", "into", "have", "been", "were", "what", "your", "their", "there", "they", "them", "then", "than", "nicco", "came"]);
 const words = (s: string) => s.toLowerCase().match(/[a-z]{4,}/g)?.filter(w => !STOP.has(w)) ?? [];
-const contains = (hay: string, phrase: string) => new RegExp(`\\b${phrase.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+")}\\b`).test(hay);
+const contains = (hay: string, phrase: string) => new RegExp(`\\b${escapeRegExp(phrase.toLowerCase()).replace(/\s+/g, "\\s+")}\\b`).test(hay);
 
 export function groundingManifest(input: GroundingInput): GroundingManifest {
   // Recent-conversation replay is continuity, not canon: an earlier invention echoed back must not ground itself.

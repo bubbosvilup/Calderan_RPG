@@ -10,15 +10,21 @@ entity:
   tags:
     - geography
   search_context: Pawn shop in West near Main Market Square; practical second-hand goods and pledged property.
-  content: Offers used household goods, tools, inexpensive clothing, small jewelry, pledged property,
-    occasional common weaponry and other second-hand practical goods. It is not inherently criminal.
-    Niles Vanner is the proprietor.
+  content: Offers used household goods, tools, inexpensive clothing, small jewelry, pledged property, occasional
+    common weaponry and other second-hand practical goods. It is not inherently criminal. Niles Vanner is the
+    proprietor.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "An ordinary pawnshop near Main Market Square. Access: main_market_square."
+  connections:
+    - target: main_market_square
+      description: square_access access; canonical city map.
+      minutes: 3
+      kind: square_access
 chunks: []

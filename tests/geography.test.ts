@@ -17,7 +17,7 @@ const expectedFeatures: Record<string, string[]> = {
   east: ["national capital", "land border with Center", "armed neutrality", "cold regional climate"],
   mist_sea: [], sorrow_sea: [], silent_ocean: [], chained_bay: [],
   dragons_teeth_mountains: ["northern geographic barrier"],
-  calderan: ["capital of West", "four cardinal gates", "five-district civic structure", "legal slave-market control"],
+  calderan: ["capital of West", "two outer gates", "five-district civic structure", "legal slave-market control"],
   ironbound: ["fortified frontier city", "military and customs filtering point"],
   davenport: ["principal economic and maritime port", "stone docks and warehouses", "legal slave-market control"],
   blackwater: ["de facto autonomy", "fragmented criminal governance", "illegal maritime trade", "maritime rival"],
@@ -119,7 +119,7 @@ test("geography uses only location schema fields and adds no traversal edges or 
   const world = await loadWorld("data");
   const fields = ["id", "type", "name", "display_name", "parent", "aliases", "summary", "content", "tags", "search_context", "knowledge", "features", "connections"].sort();
   for (const entity of world.getEntitiesByType("location").filter(e => geography.includes(e.id))) {
-    assert.deepEqual(Object.keys(entity).sort(), fields);
+    assert.deepEqual(Object.keys(entity).sort(), [...fields, ...(entity.id === "calderan" ? ["entrance"] : [])].sort());
     assert.deepEqual(entity.connections, []);
     // Structural guard only: this does not prove arbitrary prose contains no invented facts.
     assert(!Object.values(entity).some(value => typeof value === "number"));

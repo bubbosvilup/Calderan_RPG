@@ -6,11 +6,12 @@ import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { loadWorld } from "../world/loader.js";
 import { turnFixture } from "./turn-fixture.js";
 import { onlineCoordinator, selectedModels } from "./turn-services.js";
+import { formatCampaignStatus } from "./campaign-status.js";
 
 const help = `Developer play loop (paid OpenRouter requests).
 Default: synthetic fixture. --canon starts the canonical opening (heartstone_square). --semantic builds a paid production embedding index. --debug shows turn diagnostics.
-/new <campaign_id>, /load <campaign_id>, /save, /status, /quit
-/go <directly connected location ID>, /wait <minutes 1..1440>, /mana <signed delta>
+/new <campaign_id>, /load <campaign_id>, /save, /status, /status debug, /quit
+/go <reachable location ID or name>, /wait <minutes 1..1440>, /mana <signed delta>
 /give <item ID> to <character ID>, /equip <item ID> <slot> <worn|held>
 /tell <fact ID> to <character ID>, /schedule <event_id> "Title" at <absolute-minute> with nicco,brenna
 Ordinary text is roleplay. Conservative authorization may reject unsupported phrasing.
@@ -35,7 +36,11 @@ else {
       else if (input === "/save") console.log(await session.save());
       else if (input.startsWith("/load ")) { session = CampaignSession.fromLoaded(await repository.loadCampaign(input.slice(6)), repository); campaign = session.campaign; console.log(`Loaded revision ${campaign.revision}.`); }
       else if (input.startsWith("/new ")) { campaign = process.argv.includes("--canon") ? createOpeningCampaign(world, input.slice(5)) : new CampaignState(world, input.slice(5), { player_location: "test_room", world_time: { world_minute: 0 } }); session = new CampaignSession(campaign, repository); console.log("New campaign; unsaved."); }
-      else if (input === "/status") console.log({ revision: campaign.revision, unsaved: session.hasUnsavedChanges, scene: campaign.exportSnapshot().runtime.scene });
+      else if (input === "/status" || input === "/status debug") {
+        console.log({ revision: campaign.revision, unsaved: session.hasUnsavedChanges, scene: campaign.exportSnapshot().runtime.scene });
+        // Household Pass 1: money, legal status, household and relationships, derived from committed state only.
+        console.log(formatCampaignStatus(campaign.exportSnapshot(), world, input === "/status debug" ? "debug" : "player"));
+      }
       else if (input) {
         active = new AbortController();
         for await (const event of coordinator.runTurn({ campaign, player_input: input, signal: active.signal })) {

@@ -54,7 +54,7 @@ test("canon has distinct official market and criminal fringe in Calderan West", 
   const slavery = world.getEntitiesByType("location").filter(e => /slave/i.test(`${e.name} ${e.aliases.join(" ")}`));
   assert.deepEqual(slavery.map(e => e.id), ["calderan_slave_market", "slave_market_back_alleys"]);
   const market = slavery[0]!;
-  assert.ok(market.type === "location"); assert.equal(market.parent, "calderan_west"); assert.deepEqual(market.connections, []);
+  assert.ok(market.type === "location"); assert.equal(market.parent, "calderan_west"); assert.ok(market.connections.some(c => c.target === "slave_market_back_alleys"));
   assert.match(market.content, /public, legal slave market in Calderan's West District/); assert.match(market.content, /publicly known/);
 });
 test("retrieval triggers on canon-sensitive world/location questions, not on ordinary conversation", async () => {

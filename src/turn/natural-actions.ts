@@ -1,3 +1,4 @@
+import { findRoute, travelDestination, type TravelRoute } from "../world/travel.js";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
@@ -7,6 +8,8 @@ import { stem } from "../retrieval/lexical-index.js";
 import { tokenize } from "../retrieval/tokenizer.js";
 import { participantForNoun, type EphemeralSceneParticipant } from "./scene-participants.js";
 import type { PhysicalInteraction } from "./physical-interaction.js";
+import { GATES } from "./language/gates.js";
+import { escapeRegExp } from "./language/text.js";
 
 /**
  * Natural player action resolution (Phase 1S). Deterministic, bounded, player-authored only.
@@ -53,7 +56,7 @@ export interface NaturalActionResolution {
   readonly physical?: readonly PhysicalInteraction[];
 }
 
-const HEDGE = /\b(?:almost|nearly|pretends?|pretending|considers?|considering|thinks? about|wants? to|wanting to|would like to|plans? to|about to|tries to|trying to|starts? to|begins? to|reaches? for|reaching for|imagines?|dreams? of|doesn'?t|does not|didn'?t|never|won'?t|will|would|could|might|should|if|someday|maybe|yesterday|earlier)\b/i;
+const HEDGE = GATES.natural_action_hedge;
 const SUBJECT = "(?:(?:he|nicco|i)\\s+)?(?:then\\s+|also\\s+|slowly\\s+|quietly\\s+)?";
 const MOVE = new RegExp(`^${SUBJECT}(?:walks?|walked|walking|strolls?|strolled|strolling|goes|go|went|going|heads?|headed|heading|returns?|returned|returning|wanders?|wandered|wandering|hurries|hurried|hurrying|runs?|ran|running|makes? his way|made his way|steps?|stepped|moves?|moved|travels?|travell?ed|crosses|crossed)\\s+(?:back\\s+)?(?:over\\s+|down\\s+|up\\s+|out\\s+|across\\s+)?(?:to|towards?|into|inside|in to|through)\\s+(.+)$`, "i");
 const DESTINATION_END = /\s+(?:looking|searching|hoping|in search|to (?:buy|see|find|look|purchase)|for\b|with\b|nearby|near\b|while\b|as\b|where\b)/i;
@@ -96,7 +99,11 @@ function clauses(segment: string): readonly string[] {
 }
 /** Destination phrase → location: explicit/near canon names, then a unique head noun among locations, features and aliases in the scene's city. */
 export function resolveDestination(phrase: string, context: TurnContext, world: WorldStore): string | undefined {
+  if (/^(?:the )?center$/i.test(phrase.trim()) && (context.primary.scene.player_location?.id === "calderan" || context.primary.scene.location_ancestry.some(a => a.id === "calderan"))) return "calderan_center";
   const locations = world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.narrator && e.knowledge.visibility.player);
+  const exactText = (text: string) => text.trim().replace(/[.!]$/, "").replace(/^the /i, "").toLowerCase();
+  const exact = locations.filter(e => [e.id, e.name, e.display_name, ...e.aliases].some(n => exactText(n) === exactText(phrase)));
+  if (exact.length === 1) return exact[0]!.id;
   const mentions = [...entityMentions(phrase, context, world)].filter(([id]) => locations.some(l => l.id === id)).sort((a, b) => b[1] - a[1]);
   if (mentions.length && (mentions.length === 1 || mentions[0]![1] > mentions[1]![1])) return mentions[0]![0];
   const head = words(phrase).at(-1);
@@ -106,13 +113,11 @@ export function resolveDestination(phrase: string, context: TurnContext, world: 
   const found = locations.filter(l => heads(l).includes(head) && (!city || l.id === city || world.getAncestors(l.id).some(a => a.id === city)));
   return found.length === 1 ? found[0]!.id : undefined;
 }
-/** A destination container (a tower) is entered through its descendant directly connected to the current location. */
-function reachable(destination: string, here: string, world: WorldStore): { readonly target?: string; readonly via_container?: boolean } {
-  const current = world.getEntity(here);
-  const connections = current?.type === "location" ? current.connections.map(c => c.target) : [];
-  if (connections.includes(destination)) return { target: destination };
-  const inside = connections.filter(t => world.getAncestors(t).some(a => a.id === destination));
-  return inside.length === 1 ? { target: inside[0]!, via_container: true } : {};
+/** Shared weighted routing for natural movement and explicit carrying. */
+export function reachable(destination: string, here: string, world: WorldStore): { readonly target?: string; readonly via_container?: boolean; readonly route?: TravelRoute } {
+  const target = travelDestination(world, destination);
+  const route = findRoute(world, here, target);
+  return route ? { target, via_container: target !== destination, route } : {};
 }
 const display = (id: string, world: WorldStore) => world.getEntity(id)?.display_name ?? id;
 
@@ -187,8 +192,8 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
         }
         if (route.target) {
           moved = true;
-          runtime.push({ kind: "runtime_delta", delta: { player_location: route.target } });
-          actions.push({ clause, kind: "movement", status: "resolved", detail: { phrase, destination, target: route.target, via_container: !!route.via_container } });
+          runtime.push({ kind: "runtime_delta", delta: { player_location: route.target, time_advance_minutes: route.route!.minutes } });
+          actions.push({ clause, kind: "movement", status: "resolved", detail: { phrase, destination, target: route.target, via_container: !!route.via_container, route: route.route } });
         } else {
           actions.push({ clause, kind: "movement", status: "blocked", detail: { phrase, destination, reason: "no_travel_connection", from: here } });
           notes.push(`Nicco sets out for ${display(destination, world)}, but no route there from ${display(here, world)} is established yet: he has not arrived and is still at ${display(here, world)}. Do not describe him at ${display(destination, world)}.`);
@@ -295,11 +300,10 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
   return Object.freeze({ actions: Object.freeze(actions), runtime: Object.freeze(runtime), candidates: Object.freeze(candidates), notes: Object.freeze(notes), ...(physical.length ? { physical: Object.freeze(physical) } : {}) });
 }
 function isTransferForm(clause: string): boolean { return [GIVE_BACK_TO, GIVE_BACK_LEADING, GIVE_BACK_DOUBLE, RETURN, OFFER].some(r => r.test(clause)); }
-const escapeName = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 /** "Korvin gives Nicco the boots", "Korvin hands the boots to him", "Korvin offers Nicco the boots". */
 function npcActClause(clause: string, names: readonly string[]): { giver: string; itemPhrase: string; offer: boolean } | undefined {
   if (!names.length) return undefined;
-  const who = `(${names.map(escapeName).join("|")}|she|he)`;
+  const who = `(${names.map(escapeRegExp).join("|")}|she|he)`;
   for (const [verbs, offer] of [[NPC_GIVE_VERB, false], [NPC_OFFER_VERB, true]] as const) {
     const direct = clause.match(new RegExp(`^${who}\\s+(?:${verbs})\\s+(?:nicco|him)\\s+(.+)$`, "i"));
     const to = direct ? null : clause.match(new RegExp(`^${who}\\s+(?:${verbs})\\s+(.+?)\\s+to\\s+(?:nicco|him)$`, "i"));
@@ -317,6 +321,6 @@ export function sceneDirection(input: string, context: TurnContext): readonly st
   const names = context.characters.map(c => c.profile.name ?? c.id);
   const sentences = input.split(/(?<=[.!?])\s+|\n+/).map(s => s.trim().replace(/[.!?]+$/, "")).filter(Boolean);
   if (!sentences.length || sentences.length > 3 || !names.length) return [];
-  const lead = new RegExp(`^(?:${names.map(escapeName).join("|")}|he|she)\\b`, "i");
+  const lead = new RegExp(`^(?:${names.map(escapeRegExp).join("|")}|he|she)\\b`, "i");
   return sentences.every(s => lead.test(s)) ? sentences : [];
 }

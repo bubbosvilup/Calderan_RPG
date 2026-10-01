@@ -19,6 +19,15 @@ export const CONTROLLER_SCHEMA = object({ commands: { type: "array", maxItems: 8
   object({ kind: choice("set_condition"), character_id: string, conditions: { type: "array", items: string, maxItems: 8 } }),
   // Runtime Continuity Repair 1: a present temporary (created) character narrated as actually leaving the scene.
   object({ kind: choice("leave_scene"), character_id: string }),
+  // Location Continuity Pass 1.3: a campaign (created) character narrated as having completed movement to a known location.
+  object({ kind: choice("move_character"), character_id: string, location_id: string }),
+  // Household Pass 1: voluntary household choices, the keeper's explicit rules, evidenced relationship steps. Person purchases and
+  // manumission are deterministic player-authored runtime actions and are deliberately NOT in the controller vocabulary.
+  object({ kind: choice("join_household"), household_id: string, character_id: string }),
+  object({ kind: choice("leave_household"), household_id: string, character_id: string }),
+  object({ kind: choice("add_household_rule"), household_id: string, text: string }),
+  object({ kind: choice("adjust_relationship"), from_character_id: string, to_character_id: string,
+    dimension: choice("trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance"), direction: choice("raise", "lower") }),
 ] } } });
 function matches(value: unknown, schema: Schema): boolean {
   if (schema.anyOf) return schema.anyOf.some(s => matches(value, s));

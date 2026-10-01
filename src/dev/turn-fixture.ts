@@ -17,8 +17,8 @@ const FIXTURE_PROSE: Record<string, string> = {
 export function turnFixture(groundGarments = false, options: { readonly brennaKnowsBridge?: boolean; readonly ironboundKnownBy?: readonly string[] } = {}) {
   const base = (id: string, name = id) => ({ id, name, display_name: name, parent: null, aliases: [], summary: FIXTURE_PROSE[id] ?? "", tags: [], search_context: "", content: FIXTURE_PROSE[id] ?? "", knowledge: { visibility: { narrator: true, player: true }, known_by: [] } });
   const entities: WorldEntity[] = [
-    { ...base("test_room", "Observation room"), type: "location", features: [], connections: [{ target: "test_hall", description: "Downstairs" }] },
-    { ...base("test_hall", "Main hall"), type: "location", features: [], connections: [{ target: "test_room", description: "Upstairs" }] },
+    { ...base("test_room", "Observation room"), type: "location", features: [], connections: [{ target: "test_hall", description: "Downstairs", minutes: 1 }] },
+    { ...base("test_hall", "Main hall"), type: "location", features: [], connections: [{ target: "test_room", description: "Upstairs", minutes: 1 }] },
     { ...base("test_remote", "Remote docks"), type: "location", features: [], connections: [] },
     { ...base("nicco", "Nicco"), type: "character", role: "player", location: null, traits: [], relationships: [] },
     ...["brenna", "gerome", "maren"].map(id => ({ ...base(id, id[0]!.toUpperCase() + id.slice(1)), type: "character" as const, role: "npc" as const, location: "test_room", traits: id === "gerome" ? ["Silent stone construct; does not speak."] : [], relationships: [] })),

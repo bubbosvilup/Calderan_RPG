@@ -5,25 +5,33 @@ entity:
   name: "The Ducal Citadel"
   display_name: "The Ducal Citadel"
   parent: calderan_center
-  aliases: ["Ducal Citadel"]
+  aliases: [ "Ducal Citadel" ]
   summary: >-
-    The Ducal Citadel in Calderan's Center District is the residence and administrative seat of
-    Duke Uther Calderan and the political center of the city.
-  tags: ["politics","governance"]
+    The Ducal Citadel in Calderan's Center District is the residence and administrative seat of Duke Uther
+    Calderan and the political center of the city.
+  tags: [ "politics", "governance" ]
   search_context: "Ducal Citadel, Duke Uther Calderan, ducal court, Ducal Council, administration, seat of government"
   content: >-
-    The Ducal Citadel is the primary residence and administrative seat of Duke Uther Calderan
-    and the political center of Calderan. It holds the private ducal residence, the ducal court,
-    executive administration, official city and state business, and the functions of the Ducal
-    Council. The Calderan Civil Registry, the Ducal Archive, the Office of Holdings and Title
-    and the High Courts of Calderan stand nearby, as do the representative offices of the three
-    guilds and the Church.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+    The Ducal Citadel is the primary residence and administrative seat of Duke Uther Calderan and the
+    political center of Calderan. It holds the private ducal residence, the ducal court, executive
+    administration, official city and state business, and the functions of the Ducal Council. The Calderan
+    Civil Registry, the Ducal Archive, the Office of Holdings and Title and the High Courts of Calderan stand
+    nearby, as do the representative offices of the three guilds and the Church.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "public" }
   features:
-    - name: "representative offices nearby"
-      description: >-
-        The Merchants Guild, Artisans Guild, Learned Arts Guild and Church of the Sun Emperor each
-        keep a representative or liaison office near the Citadel for political business; these are
-        not their headquarters.
-  connections: []
+    - name: representative offices nearby
+      description: The Merchants Guild, Artisans Guild, Learned Arts Guild and Church of the Sun Emperor each keep a
+        representative or liaison office near the Citadel for political business; these are not their
+        headquarters.
+    - name: canonical map placement
+      description: "Northern part of Center on the northeast riverbank. Access: citadel_bridge."
+  connections:
+    - target: citadel_bridge
+      description: bridge access; canonical city map.
+      minutes: 4
+      kind: bridge
+    - target: gilded_row
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
 chunks: []

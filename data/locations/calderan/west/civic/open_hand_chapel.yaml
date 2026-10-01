@@ -7,23 +7,28 @@ entity:
   parent: calderan_west
   aliases:
     - Open Hand Chapel
-  summary: A small, modest charitable parish chapel of the Church of the Sun Emperor near Chevalier
-    Fountain.
+  summary: A small, modest charitable parish chapel of the Church of the Sun Emperor near Chevalier Fountain.
   tags:
     - geography
   search_context: A small, modest charitable chapel near Chevalier Fountain.
-  content: A small parish chapel of the Church of the Sun Emperor. It welcomes people without
-    demanding proof of devotion and offers basic religious comfort and charitable assistance, with
-    particular concern for poor people and street children. It maintains some ties to broader
-    religious charity activity in North. Brother Aven, a Zealot Priest, serves here as the local
-    minister, charity worker and nonmagical healer. No particular saint, shrine dedication or local
-    practice beyond this is established.
+  content: A small parish chapel of the Church of the Sun Emperor. It welcomes people without demanding proof of
+    devotion and offers basic religious comfort and charitable assistance, with particular concern for poor
+    people and street children. It maintains some ties to broader religious charity activity in North. Brother
+    Aven, a Zealot Priest, serves here as the local minister, charity worker and nonmagical healer. No
+    particular saint, shrine dedication or local practice beyond this is established.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "A small, modest charitable parish chapel of the Church of the Sun Emperor near Chevalier
+        Fountain. Access: chevalier_fountain."
+  connections:
+    - target: chevalier_fountain
+      description: street access; canonical city map.
+      minutes: 2
+      kind: street
 chunks: []

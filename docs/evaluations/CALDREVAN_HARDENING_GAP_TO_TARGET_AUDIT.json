@@ -1,0 +1,789 @@
+{
+  "audit_id": "caldrevan_hardening_gap_to_target_audit",
+  "audit_date": "2026-10-01",
+  "audit_type": "read_only_planning",
+  "baseline_document": "CALDREVAN_CODEBASE_ARCHITECTURE_HEALTH_AUDIT",
+  "implementation_performed": false,
+  "committed": false,
+  "evidence_labels": ["MEASURED", "OBSERVED_FROM_CODE", "DOCUMENTED", "JUDGEMENT"],
+
+  "baseline": {
+    "code_health": 84.38,
+    "code_health_rounded": 84,
+    "core_deterministic_layer": 88.21,
+    "core_deterministic_layer_rounded": 88,
+    "functional_runtime_layer": 74.34,
+    "functional_runtime_layer_rounded": 74,
+    "project_maturity": 43,
+    "confidence": "medium",
+    "reproduced": true,
+    "delta_vs_prior_audit": "none",
+    "checks": {
+      "typecheck_passed": true,
+      "deterministic_tests_total": 947,
+      "deterministic_tests_passed": 947,
+      "deterministic_tests_failed": 0,
+      "deterministic_tests_skipped": 0,
+      "deterministic_suite_duration_ms": 14893.57,
+      "curated_playthrough_total": 25,
+      "curated_playthrough_passed": 25,
+      "curated_playthrough_duration_ms": 995.64,
+      "test_files": 48,
+      "test_call_sites": 542,
+      "authored_data_validation": "covered_by_green_suite",
+      "audit_authored_data_script_run": false,
+      "audit_authored_data_skip_reason": "writes an unrequested artifact into docs/evaluations"
+    },
+    "world_metrics": {
+      "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+      "total_entities": 181,
+      "total_chunks": 25,
+      "world_locations": 96,
+      "calderan_locations": 78,
+      "added_nodes": 22,
+      "city_directed_edges": 156,
+      "raw_components": 8,
+      "city_pedestrian_component": 71,
+      "isolated_structural_containers": 7,
+      "unreachable_destinations": 0,
+      "graph_diameter_minutes": 106,
+      "graph_diameter_origin": "east_arterial_north",
+      "graph_diameter_destination": "slave_market_back_back_alleys"
+    },
+    "working_tree": {
+      "modified_files": 103,
+      "untracked_files": 31,
+      "head_commit": "f24b3b6",
+      "head_date": "2026-09-30",
+      "note": "prior audit shares this date and reports identical metrics; almost certainly written against the same uncommitted tree"
+    }
+  },
+
+  "targets": {
+    "stated": {
+      "code_health": {"min": 92, "max": 95},
+      "core_deterministic_layer": {"min": 96, "max": 98},
+      "functional_runtime_layer": {"min": 90, "max": 95},
+      "project_maturity": {"min": 50, "max": 60, "mandatory": false}
+    },
+    "recommended": {
+      "code_health": {"min": 92, "preferred_min": 93, "preferred_max": 95},
+      "core_deterministic_layer": {"min": 94, "preferred_min": 95, "preferred_max": 96, "revised": true,
+        "revision_reason": "best-reasonable projection reaches 95.15; 95.59 under an alternative weighting excluding authored-canon quality. 96+ requires near-ceiling scores across all nine core dimensions simultaneously, including canon consistency ~95 which is an authoring axis code passes cannot move."},
+      "functional_runtime_layer": {"min": 88, "preferred_min": 90, "preferred_max": 92, "revised": true,
+        "revision_reason": "best-reasonable projection reaches 90.46; the stated 90 minimum is met only in the best case"},
+      "project_maturity": {"min": 48, "max": 55, "mandatory": false}
+    },
+    "gaps_from_baseline": {
+      "code_health": {"min": 7.62, "max": 10.62},
+      "core_deterministic_layer": {"min": 7.79, "max": 9.79},
+      "functional_runtime_layer": {"min": 15.66, "max": 20.66},
+      "largest_gap_layer": "functional_runtime_layer"
+    }
+  },
+
+  "layer_definitions": {
+    "formula": "LAYER_SCORE = sum(weight_d * score_d) / 100",
+    "code_health": {
+      "weight_total": 100,
+      "baseline": 84.38,
+      "weights": {
+        "architectural_clarity": 9, "state_authority_correctness": 10, "atomicity_transactional_safety": 9,
+        "test_coverage": 10, "determinism": 8, "persistence_robustness": 6, "narrator_safety_grounding": 7,
+        "controller_authorization_safety": 7, "character_continuity": 5, "world_canon_consistency": 5,
+        "travel_spatial_consistency": 5, "retrieval_architecture": 4, "maintainability": 4, "extensibility": 3,
+        "runtime_latency_architecture": 2, "observability_diagnostics": 2, "live_model_robustness": 2,
+        "gameplay_completeness": 2
+      },
+      "note": "unchanged from baseline audit for comparability"
+    },
+    "core_deterministic_layer": {
+      "weight_total": 100,
+      "baseline": 88.21,
+      "inclusion_rule": "a dimension belongs here if a deterministic test can in principle establish its correctness",
+      "weights": {
+        "state_authority_correctness": 16, "atomicity_transactional_safety": 15, "determinism": 14,
+        "persistence_robustness": 11, "controller_authorization_safety": 10, "character_continuity": 9,
+        "travel_spatial_consistency": 9, "world_canon_consistency": 8, "test_coverage": 8
+      },
+      "covers": ["campaign_state_correctness", "prepare_commit_semantics", "revision_safety",
+        "deterministic_command_resolution", "evidence_authorization", "rollback_fail_closed",
+        "travel_pathfinding", "persistence_correctness", "deterministic_character_continuity",
+        "authored_data_validation"],
+      "sensitivity_alt_weighting": {
+        "description": "world_canon_consistency excluded as an authoring axis, re-normalised to 100",
+        "weights": {"state_authority_correctness": 17, "atomicity_transactional_safety": 16, "determinism": 15,
+          "persistence_robustness": 12, "controller_authorization_safety": 11, "character_continuity": 10,
+          "travel_spatial_consistency": 10, "test_coverage": 9},
+        "baseline": 88.37,
+        "best_reasonable": 95.59
+      }
+    },
+    "functional_runtime_layer": {
+      "weight_total": 100,
+      "baseline": 74.34,
+      "inclusion_rule": "a dimension belongs here if deterministic fixtures cannot establish its real-world behaviour",
+      "weights": {
+        "live_model_robustness": 22, "narrator_safety_grounding": 20, "retrieval_architecture": 14,
+        "runtime_latency_architecture": 12, "observability_diagnostics": 10, "character_continuity": 8,
+        "context_scale_behavior": 8, "runtime_save_usability": 6
+      },
+      "covers": ["narrator_controller_integration", "live_provider_robustness", "retrieval_behavior",
+        "context_construction", "reconciliation", "natural_language_coverage", "latency_failure_behavior",
+        "continuity_under_real_model_output", "save_runtime_usability"]
+    },
+    "new_subscores_introduced": [
+      {"id": "context_scale_behavior", "baseline": 74, "evidence": "JUDGEMENT anchored to MEASURED cap-order probe"},
+      {"id": "runtime_save_usability", "baseline": 78, "evidence": "JUDGEMENT anchored to OBSERVED_FROM_CODE"},
+      {"id": "deterministic_language_robustness", "baseline": 72, "evidence": "JUDGEMENT anchored to MEASURED gate-divergence probe"}
+    ]
+  },
+
+  "gaps": [
+    {"id": "architectural_clarity", "letter": "A", "current": 86, "target": 92, "gap": 6,
+     "evidence": "OBSERVED_FROM_CODE", "change_risk": "medium_high", "passes": ["H2"],
+     "weaknesses": ["runTurn is a 176-line generator with 14 responsibilities", "26 import sources", "13 mutable locals span the generator", "stage identity only in a reassigned string"],
+     "modules": ["src/turn/turn-coordinator.ts", "src/turn/context-builder.ts"],
+     "test_gaps": ["no stage-ordering contract test"]},
+
+    {"id": "state_authority_correctness", "letter": "B", "current": 91, "target": 96, "gap": 5,
+     "evidence": "OBSERVED_FROM_CODE+MEASURED", "change_risk": "very_low", "passes": ["H1"],
+     "weaknesses": ["authority verified by example not property"],
+     "modules": ["src/campaign/campaign-state.ts", "src/campaign/validation.ts", "src/campaign/snapshot-validation.ts"],
+     "test_gaps": ["revision monotonicity", "commit idempotency", "orderDomains permutation stability", "stableData order independence"]},
+
+    {"id": "atomicity_transactional_safety", "letter": "C", "current": 91, "target": 96, "gap": 5,
+     "evidence": "OBSERVED_FROM_CODE", "change_risk": "low", "passes": ["H1"],
+     "weaknesses": ["silent catch discards identity establishment (turn-coordinator.ts:183-188)", "committed-then-cancelled is unobservable"],
+     "modules": ["src/turn/turn-coordinator.ts"],
+     "test_gaps": ["invalid_runtime_intent has 0 tests", "campaign_validation_failed has 1", "no partial-failure preservation test"]},
+
+    {"id": "test_coverage", "letter": "D", "current": 88, "target": 94, "gap": 6,
+     "evidence": "MEASURED", "change_risk": "none", "passes": ["H1"],
+     "weaknesses": ["5 of 11 failure codes untested", "0 property tests", "0 permutation tests", "0 idempotency tests", "0 simultaneous-movement tests", "1 fuzz test"],
+     "modules": ["tests/"],
+     "untested_failure_codes": ["invalid_input", "context_invalid", "context_too_large", "invalid_runtime_intent", "narrator_failed"]},
+
+    {"id": "determinism", "letter": "E", "current": 90, "target": 96, "gap": 6,
+     "evidence": "MEASURED", "change_risk": "very_low", "passes": ["H1"],
+     "weaknesses": ["language-layer determinism means reproducible, not predictable"],
+     "modules": ["src/world/travel.ts", "src/campaign/campaign-state.ts", "src/turn/"],
+     "test_gaps": ["route permutation invariance", "classifier normalisation invariance"]},
+
+    {"id": "persistence_robustness", "letter": "F", "current": 82, "target": 93, "gap": 11,
+     "evidence": "OBSERVED_FROM_CODE+MEASURED", "change_risk": "medium", "passes": ["H4"],
+     "weaknesses": ["no migration path; requireVersionOne rejects any version != 1", "snapshot schema rejects both unknown and missing fields, so a new domain breaks every save", "dataset fingerprint is SHA-256 over all authored documents: any canon edit invalidates every save"],
+     "modules": ["src/campaign/snapshot-validation.ts", "src/persistence/save-format.ts", "src/campaign/validation.ts", "src/world/world-store.ts"],
+     "test_gaps": ["save/load round-trip property", "unsupported-version fixture", "migration fixtures"],
+     "strengths_confirmed": ["atomic write wx+fsync+rename", "bounded reads", "symlink and hard-link rejection per path component", "strict JSON", "16 MiB bound", "current/previous recovery slots"]},
+
+    {"id": "narrator_safety_grounding", "letter": "G", "current": 81, "target": 90, "gap": 9,
+     "evidence": "OBSERVED_FROM_CODE+MEASURED", "change_risk": "high_if_rewritten_low_if_centralised", "passes": ["H1"],
+     "weaknesses": ["correctness rests entirely on inconsistent regex coverage", "bare-no false positive in NEGATED and DENIED causes over-redaction", "narration-audit.ts is 49168 chars with 99 regex literals"],
+     "modules": ["src/turn/narration-audit.ts", "src/turn/grounding-audit.ts", "src/turn/narrative-authority.ts"],
+     "test_gaps": ["no correct-narration-survives-audit corpus", "reconciliation and redaction rates unmeasured"]},
+
+    {"id": "controller_authorization_safety", "letter": "H", "current": 88, "target": 95, "gap": 7,
+     "evidence": "OBSERVED_FROM_CODE+MEASURED", "change_risk": "medium_high", "passes": ["H1"],
+     "weaknesses": ["DISQUALIFY is the only gate covering refusal/hesitation/retraction and is un-shared", "DISQUALIFY carries the same bare-no false positive"],
+     "modules": ["src/turn/evidence-authorization.ts", "src/turn/command-authorizer.ts", "src/turn/turn-evidence.ts"],
+     "test_gaps": ["quoted-speech-as-evidence adversarial suite", "clause-scoped negation", "collective confirmation"]},
+
+    {"id": "character_continuity", "letter": "I", "current": 83, "target": 93, "gap": 10,
+     "evidence": "OBSERVED_FROM_CODE+MEASURED", "change_risk": "medium", "passes": ["H1"],
+     "weaknesses": ["narrated-captives.ts:319 shadows the exported sentencesOf with a naive non-quote-aware splitter used by establishedFacts for promotion evidence", "duplicate-name detection scoped to a single exchange", "promotion records arrival location for a naming possibly at origin"],
+     "modules": ["src/turn/narrated-captives.ts", "src/turn/name-establishment.ts", "src/turn/sentences.ts", "src/turn/character-movement.ts"],
+     "test_gaps": ["movement during naming turn", "late naming after scene change", "promotion evidence spanning quoted dialogue", "pronoun ambiguity matrix"],
+     "already_tested": ["same-name collision", "duplicate name in one exchange", "late naming", "canon-name exclusion", "save/load round-trip", "disappear/reappear"]},
+
+    {"id": "world_canon_consistency", "letter": "J", "current": 86, "target": 90, "gap": 4,
+     "evidence": "MEASURED", "change_risk": "low", "passes": [],
+     "weaknesses": ["only 25 chunks for 181 entities bounds retrievable lore depth", "PNG-to-YAML correspondence is a manual authoring judgement"],
+     "modules": ["data/", "src/world/validation.ts"],
+     "note": "authoring-volume axis, not an engine axis; the main arithmetic obstacle to a core-deterministic 96 gate"},
+
+    {"id": "travel_spatial_consistency", "letter": "K", "current": 91, "target": 95, "gap": 4,
+     "evidence": "MEASURED", "change_risk": "very_low", "passes": ["H1"],
+     "weaknesses": ["no edge-order permutation test", "no cost-additivity property test"],
+     "modules": ["src/world/travel.ts"], "test_gaps": ["route determinism under permutation", "cost additivity"]},
+
+    {"id": "retrieval_architecture", "letter": "L", "current": 76, "target": 88, "gap": 12,
+     "evidence": "MEASURED+OBSERVED_FROM_CODE", "change_risk": "medium_high", "passes": ["H3"],
+     "weaknesses": ["known_by unreachable for restricted entities: canonical_awareness requires player AND narrator visibility (context-builder.ts:45) and known_by_present_npcs covers only retrieved entities (retrieval-policy.ts:153)", "silent .slice(0,24) in the knowledge-permission path", "multi-answer Recall@5 at 0.615"],
+     "modules": ["src/turn/retrieval-policy.ts", "src/turn/context-builder.ts", "src/turn/narrative-authority.ts", "src/retrieval/hybrid-search.ts"],
+     "test_gaps": ["forbidden-entity assertions", "secret-leakage metric", "unnecessary-retrieval metric", "precision at returned limit"]},
+
+    {"id": "maintainability", "letter": "M", "current": 74, "target": 88, "gap": 14,
+     "evidence": "MEASURED", "change_risk": "low_to_medium_high_by_item", "passes": ["H1", "H2"],
+     "weaknesses": ["13 divergent negation gates", "esc duplicated 12x", "6 different STOP sets", "3 inconsistent NUMBER_WORDS", "2 behaviourally different sentencesOf", "2 quotedSpans", "src/turn is 45% of source chars in 21% of files", "no complexity tooling"],
+     "modules": ["src/turn/"]},
+
+    {"id": "extensibility", "letter": "N", "current": 78, "target": 88, "gap": 10,
+     "evidence": "OBSERVED_FROM_CODE", "change_risk": "medium", "passes": ["H2", "H4"],
+     "weaknesses": ["no turn-stage extension point", "no prompt section registry", "new required domain field is an unmigratable save break in both directions"],
+     "modules": ["src/campaign/types.ts", "src/turn/turn-coordinator.ts", "src/turn/prompt-builder.ts"],
+     "test_gaps": ["no synthetic-domain seam test"]},
+
+    {"id": "runtime_latency_architecture", "letter": "O", "current": 72, "target": 88, "gap": 16,
+     "evidence": "MEASURED", "change_risk": "low_for_harness_medium_for_resilience", "passes": ["H5", "H2"],
+     "weaknesses": ["worst case ~140s before failure: narrator 60s + controller 20s + reconciliation narrator 60s, fully sequential", "narrator-to-controller order is inherently non-parallelisable", "reconciliation adds a second full narrator call", "no retry means transient failures become turn failures"],
+     "key_finding": "deterministic work totals ~8.8 ms per turn, under 0.1% of a turn; the latency problem is entirely provider-side and structural. Do not micro-optimise deterministic stages.",
+     "modules": ["src/turn/turn-coordinator.ts", "src/llm/openrouter/"],
+     "test_gaps": ["no latency regression harness", "no scaling test"]},
+
+    {"id": "observability_diagnostics", "letter": "P", "current": 82, "target": 94, "gap": 12,
+     "evidence": "OBSERVED_FROM_CODE", "change_risk": "low", "passes": ["H4"],
+     "weaknesses": ["failed turns emit only code, provider_code, narration, incomplete, base_revision, final_revision", "no turn_id", "no per-stage timing", "silent identity catch"],
+     "modules": ["src/turn/turn-coordinator.ts", "src/turn/turn-types.ts"],
+     "test_gaps": ["no diagnostics-on-failure assertions"]},
+
+    {"id": "live_model_robustness", "letter": "Q", "current": 61, "target": 85, "gap": 24,
+     "evidence": "MEASURED+OBSERVED_FROM_CODE", "change_risk": "medium", "passes": ["H5"],
+     "weaknesses": ["zero retry, backoff or hedging anywhere in the production path (client.ts:38 states the policy; no caller implements it)", "no fallback model; narrator pins allow_fallbacks:false with a single provider order", "no live soak data", "quantile computes p25/median/p75 only, no p95/p99", "reconciliation and redaction rates not aggregated"],
+     "modules": ["src/llm/openrouter/client.ts", "src/llm/openrouter/minimax-narrator.ts", "src/llm/openrouter/deepseek-controller.ts"],
+     "test_gaps": ["injected-transient-failure retry test", "exactly-one-commit under retry"],
+     "note": "largest weighted gap in the runtime layer; transport itself is excellent"},
+
+    {"id": "gameplay_completeness", "letter": "R", "current": 48, "target": 52, "gap": 4,
+     "evidence": "DOCUMENTED", "change_risk": "none", "passes": [],
+     "weaknesses": [], "note": "intentionally missing scope, not a code-health weakness. No feature work recommended to move this score."},
+
+    {"id": "context_scale_behavior", "letter": "new", "current": 74, "target": 92, "gap": 18,
+     "evidence": "MEASURED", "change_risk": "medium_high", "passes": ["H3"],
+     "weaknesses": ["every count cap fires long before the 32000-char serialized cap (items=48 reaches only 37%)", "facts cap 32 is monotonic with no forgetting mechanic", "selectRelevantFacts runs in projectKnowledgeAccess at coordinator line 163, AFTER buildTurnContext has already thrown", "silent .slice(0,24) inconsistent with fail-closed policy"],
+     "modules": ["src/turn/context-builder.ts", "src/turn/narrative-authority.ts"],
+     "test_gaps": ["zero tests reference context_too_large despite 4 measured reachable paths"]},
+
+    {"id": "runtime_save_usability", "letter": "new", "current": 78, "target": 88, "gap": 10,
+     "evidence": "OBSERVED_FROM_CODE+MEASURED", "change_risk": "medium", "passes": ["H4"],
+     "weaknesses": ["any canon edit invalidates every save; the current working tree modifies ~70 authored YAML files", "manual save only, no autosave"],
+     "modules": ["src/persistence/"]},
+
+    {"id": "deterministic_language_robustness", "letter": "new", "current": 72, "target": 90, "gap": 18,
+     "evidence": "MEASURED", "change_risk": "medium", "passes": ["H1"],
+     "weaknesses": ["13 independent negation/modality gates with no shared primitive", "no cue vetoed by all 12 compared gates", "10 of 12 cues produce disagreement", "refusal and hesitation caught by none of the 12 (only by DISQUALIFY)", "bare-no lookahead fix present in exactly 1 of 4 gates needing it"],
+     "modules": ["src/turn/"]}
+  ],
+
+  "cause_classification": [
+    {"area": "live_model_robustness", "score": 61, "actual_defect": true, "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": true, "intentionally_missing_scope": "partly", "verdict": "real fixable defect: absent retry is a robustness defect, not missing scope"},
+    {"area": "runtime_latency_architecture", "score": 72, "actual_defect": false, "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": true, "intentionally_missing_scope": false, "verdict": "architectural, not inefficiency; deterministic cost measured at ~8.8 ms per turn"},
+    {"area": "maintainability", "score": 74, "actual_defect": false, "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": true, "intentionally_missing_scope": false, "verdict": "genuine debt with a reliability payoff"},
+    {"area": "retrieval_architecture", "score": 76, "actual_defect": "partly", "incomplete_validation": true, "insufficient_tests": true, "architectural_debt": false, "intentionally_missing_scope": "partly", "verdict": "mixed: known_by unreachability is a real defect; multi-answer recall partly reflects a deliberate RESULT_LIMIT of 3"},
+    {"area": "extensibility", "score": 78, "actual_defect": false, "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": true, "intentionally_missing_scope": false, "verdict": "localised debt: domain seam clean, persistence and turn-pipeline seams are not"},
+    {"area": "narrator_safety_grounding", "score": 81, "actual_defect": "partly", "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": true, "intentionally_missing_scope": false, "verdict": "mixed: architecture sound, bare-no inconsistency is a real defect causing over-redaction"},
+    {"area": "character_continuity", "score": 83, "actual_defect": "partly", "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": "partly", "intentionally_missing_scope": true, "verdict": "mostly scope plus one real divergence (shadowed splitter)"},
+    {"area": "persistence_robustness", "score": 82, "actual_defect": false, "incomplete_validation": false, "insufficient_tests": true, "architectural_debt": true, "intentionally_missing_scope": true, "verdict": "architectural gap, deliberately deferred; write path is hardened"}
+  ],
+
+  "turn_coordinator_audit": {
+    "file": "src/turn/turn-coordinator.ts",
+    "lines_total": 221,
+    "chars_total": 21132,
+    "run_turn_lines": 176,
+    "avg_chars_per_line": 95,
+    "max_line_chars": 440,
+    "import_sources": 26,
+    "responsibility_count": 14,
+    "mutable_locals_spanning_body": 13,
+    "async_boundaries": 4,
+    "checkpoint_lines": [61, 64, 101, 110, 121, 123, 126, 146, 159, 173, 192],
+    "prepare_call_lines": [72, 81, 89, 158, 186],
+    "prepare_calls_per_turn": 5,
+    "build_turn_context_calls_per_turn": 3,
+    "commit_line": 193,
+    "commit_count": 1,
+    "audit_reconciliation_owner": "coordinator",
+    "commit_owner": "coordinator",
+    "recommended_stages": ["TurnInputStage", "IntentResolutionStage", "RetrievalStage", "NarrationStage", "ControllerStage", "AuthorizationStage", "AuditStage", "CommitStage"],
+    "rejected_stages": [
+      {"stage": "ProjectionStage", "reason": "inseparable from prevalidation; both prepare against the same base and feed each other"},
+      {"stage": "PublicationStage", "reason": "result assembly with no decisions; keep as a helper function"}
+    ],
+    "separable_without_behaviour_change": ["stages 1-7 (pure given snapshot/input/world)", "stages 11-12 (pure given narration/context)"],
+    "must_remain_inseparable": ["identity establishment + commit", "commit + state_committed yield"]
+  },
+
+  "language_audit": {
+    "regex_literals_src_turn": 185,
+    "named_regex_constants_src_turn": 71,
+    "turn_modules": 26,
+    "turn_lines": 3798,
+    "turn_chars": 374431,
+    "turn_share_of_source_chars": 0.45,
+    "negation_modality_gate_sites": 14,
+    "negation_modality_gates_distinct": 13,
+    "gate_locations": [
+      "src/turn/evidence-authorization.ts:26 DISQUALIFY",
+      "src/turn/character-movement.ts:37 NOT_DONE",
+      "src/turn/scene-departure.ts:30 NOT_DONE",
+      "src/turn/grounding-audit.ts:32 HEDGED",
+      "src/turn/household-evidence.ts:21 NOT_A_CHOICE",
+      "src/turn/household-evidence.ts:70 HEDGED",
+      "src/turn/narrated-captives.ts:84 HEDGE",
+      "src/turn/narration-audit.ts:62 NEGATED",
+      "src/turn/narration-audit.ts:335 HYPOTHETICAL",
+      "src/turn/narration-audit.ts:414 DENIED (function-local)",
+      "src/turn/narration-audit.ts:82 inline negation list",
+      "src/turn/natural-actions.ts:57 HEDGE",
+      "src/turn/person-transactions.ts:32 HEDGE",
+      "src/turn/player-authored-events.ts:28 NEGATED"
+    ],
+    "divergence_probe": {
+      "method": "12 top-level gates copied verbatim from source, evaluated against 12 single-cue probes",
+      "gates_compared": 12,
+      "cues": 12,
+      "cues_vetoed_by_all_gates": 0,
+      "cues_with_disagreement": 10,
+      "cues_vetoed_by_no_gate": ["refusal", "hesitates"],
+      "per_cue_veto_counts": {
+        "refusal_refuses_declines_rejects": 0, "hesitates": 0, "probably_seems": 1,
+        "looks_glances_stares": 1, "without": 2, "toward": 2, "bare_no": 3, "pretends": 3,
+        "almost_nearly": 5, "tries_to": 5, "question_mark": 7, "contraction_nt": 7
+      },
+      "clinching_finding": "the bare-no negative lookahead no(?! (?:warning|hesitation|word)) exists only in player-authored-events.ts:28; the three other gates with bare no (narration-audit.ts:62, grounding-audit.ts:32, scene-departure.ts:30) still false-positive on 'no hesitation'. The fix is in the least complete gate and missing from the most complete one."
+    },
+    "corrected_hypothesis": {
+      "claim": "scene-departure NOT_DONE and player-authored-events NEGATED contain unanchored alternatives matching inside words (star in stares, no in north/nods)",
+      "status": "FALSE",
+      "cause": "grep truncated the regex definitions at 200 characters; the full definitions are correctly \\b-terminated",
+      "lesson": "the H1 test suite must use full definitions, never truncated ones"
+    },
+    "duplicate_utilities": [
+      {"name": "esc", "definitions": 12, "consistency": "identical", "verdict": "pure duplication"},
+      {"name": "STOP", "definitions": 6, "consistency": "all_different", "verdict": "scope-specific but undocumented"},
+      {"name": "NUMBER_WORDS", "definitions": 3, "consistency": "inconsistent", "verdict": "person-transactions missing 13 and 14 where narrated-captives has them"},
+      {"name": "sentencesOf", "definitions": 2, "consistency": "behaviourally_different", "verdict": "narrated-captives.ts:319 shadows the quote-aware sentences.ts version and differs on ellipsis"},
+      {"name": "quotedSpans", "definitions": 2, "consistency": "identical", "verdict": "pure duplication"}
+    ],
+    "recommended_primitives": ["negation", "modality (epistemic vs intentional, separated)", "refusal", "completedAction", "quotedSpans", "blankQuotes", "sentencesOf", "subjectOf", "resolvePronoun", "exactName", "esc", "numberValue"],
+    "critical_constraint": "primitives must be parameterised; a union of all gates would widen every call site's veto, changing behaviour and likely increasing false negatives"
+  },
+
+  "context_scale_probe": {
+    "method": "read-only probe growing one dimension at a time from the real Calderan opening state until buildTurnContext threw",
+    "serialized_cap_chars": 32000,
+    "key_finding": "every count cap fires long before the serialized cap; at items=48 the context is at 37% of its character budget",
+    "results": [
+      {"dimension": "scheduled_events_with_nicco", "declared_cap": 16, "last_ok": 16, "failed_at": 17, "serialized_chars_near_failure": 6474, "pct_of_serialized_cap": 0.20},
+      {"dimension": "created_characters_present", "declared_cap": 24, "last_ok": 23, "failed_at": 24, "serialized_chars_near_failure": 8376, "pct_of_serialized_cap": 0.26, "note": "plus nicco = 24"},
+      {"dimension": "facts_known_by_nicco", "declared_cap": 32, "last_ok": 30, "failed_at": 31, "serialized_chars_near_failure": 8946, "pct_of_serialized_cap": 0.28, "note": "plus 2 seeded opening facts = 32"},
+      {"dimension": "items_carried_by_nicco", "declared_cap": 48, "last_ok": 48, "failed_at": 49, "serialized_chars_near_failure": 11690, "pct_of_serialized_cap": 0.37}
+    ],
+    "failure_code": "context_too_large",
+    "fails_closed": true,
+    "predictable": true,
+    "tests_covering_failure_code": 0,
+    "highest_risk_dimension": "facts_known_by_nicco",
+    "highest_risk_reason": "monotonic accumulation with no forgetting mechanic; cap 32; only 30 headroom from the opening state",
+    "architectural_finding": "selectRelevantFacts (narrative-authority.ts:27) runs inside projectKnowledgeAccess, called at turn-coordinator.ts:163, which is AFTER buildTurnContext has already thrown. The mechanism that could save the turn runs downstream of the cap that kills it."
+  },
+
+  "latency_measurements": {
+    "method": "read-only benchmark against the real Calderan dataset at the opening snapshot",
+    "context_chars": 4412,
+    "snapshot_chars": 3317,
+    "stages": [
+      {"stage": "loadWorld_cold", "ms_per_op": 310.36, "iterations": 1, "calls_per_turn": 0},
+      {"stage": "retrieveForTurn_lexical_lore", "ms_per_op": 2.4079, "iterations": 20, "calls_per_turn": 1},
+      {"stage": "playerIntent_natural_movement", "ms_per_op": 1.8254, "iterations": 200, "calls_per_turn": 1},
+      {"stage": "auditNarration", "ms_per_op": 0.6709, "iterations": 200, "calls_per_turn": 2},
+      {"stage": "campaign_prepare_one_runtime_delta", "ms_per_op": 0.4661, "iterations": 200, "calls_per_turn": 5},
+      {"stage": "campaign_prepare_empty_commands", "ms_per_op": 0.245, "iterations": 200, "calls_per_turn": 0},
+      {"stage": "buildTurnContext", "ms_per_op": 0.2132, "iterations": 200, "calls_per_turn": 3},
+      {"stage": "retrieveForTurn_declined", "ms_per_op": 0.1432, "iterations": 20, "calls_per_turn": 0},
+      {"stage": "deriveTurnEvidence", "ms_per_op": 0.0784, "iterations": 200, "calls_per_turn": 2},
+      {"stage": "structuredClone_snapshot", "ms_per_op": 0.0556, "iterations": 500, "calls_per_turn": 10},
+      {"stage": "buildNarratorPrompt", "ms_per_op": 0.0309, "iterations": 200, "calls_per_turn": 1},
+      {"stage": "json_stringify_context", "ms_per_op": 0.0197, "iterations": 500, "calls_per_turn": 6},
+      {"stage": "json_stringify_snapshot_save", "ms_per_op": 0.0155, "iterations": 500, "calls_per_turn": 0},
+      {"stage": "projectKnowledgeAccess", "ms_per_op": 0.0011, "iterations": 200, "calls_per_turn": 2},
+      {"stage": "authorizeWithEvidence_empty", "ms_per_op": 0.0004, "iterations": 200, "calls_per_turn": 1},
+      {"stage": "findRoute", "ms_per_op": 0.0002, "iterations": 500, "calls_per_turn": 1}
+    ],
+    "total_deterministic_ms_per_turn": 8.8,
+    "provider_timeouts_ms": {"narrator": 60000, "controller": 20000, "reconciliation_narrator": 60000},
+    "worst_case_turn_ms_before_failure": 140000,
+    "deterministic_share_of_turn": "under 0.1%",
+    "conclusion": "deterministic stages are not the latency problem; do not micro-optimise them",
+    "scaling_risks": [
+      {"pattern": "canonical_awareness runs world.listEntities().filter per present character", "location": "src/turn/context-builder.ts:45", "complexity": "O(present * entities)"},
+      {"pattern": "visibleItem does snapshot.items.find inside a filter plus 2 getEntity per item", "location": "src/turn/context-builder.ts:26-27", "complexity": "O(items^2)"},
+      {"pattern": "facts filtered by knowledge.some then knowledge filtered by facts.some", "location": "src/turn/context-builder.ts:28,34", "complexity": "O(facts * knowledge)"},
+      {"pattern": "socialProjection.name calls characterView per invocation", "location": "src/turn/context-builder.ts:74", "complexity": "O(calls * characters)"},
+      {"pattern": "prepare fixed overhead: 2 structuredClone + 2 stableData per call", "location": "src/campaign/campaign-state.ts:45-54", "complexity": "O(snapshot) per call, 5 calls"}
+    ],
+    "avoidable_work": [
+      {"item": "projectKnowledgeAccess and relevanceSignals fully recomputed to measure rendered length", "location": "src/turn/turn-coordinator.ts:201", "cost_ms": 0.001, "recommendation": "fix, it is free"},
+      {"item": "context serialized ~6x per turn", "cost_ms": 0.12, "recommendation": "low priority"},
+      {"item": "prepare clones and serializes twice per call, 5 calls", "cost_ms": 2.35, "recommendation": "leave; it buys the atomicity guarantee"}
+    ]
+  },
+
+  "retrieval_measurements": {
+    "turn_policy_benchmark": {"cases": 25, "top1": 25, "recall_at_3": 1.0, "recall_at_5": 1.0},
+    "engine_only_lexical": {"cases": 25, "top1": 18, "recall_at_3": 0.8, "recall_at_5": 0.88},
+    "standalone_lexical_eval": {"cases": 44, "top1_passed": 32, "top1_total": 34, "recall_at_5": 0.8723, "mrr_at_5": 0.9510, "multi_answer_recall_at_5": 0.6154},
+    "policy_vs_engine_top1_gain": 7,
+    "latency_ms": {"lexical_lore_query": 2.4079, "declined": 0.1432},
+    "pool_size": 5, "result_limit": 3, "payload_cap_chars": 10000,
+    "corpus": {"entities": 181, "chunks": 25},
+    "metrics_to_add": [
+      {"metric": "precision_at_returned_limit", "target": 0.80},
+      {"metric": "secret_leakage_rate", "target": 0.0, "hard_gate": true},
+      {"metric": "unnecessary_retrieval_rate", "target": 0.10},
+      {"metric": "multi_answer_recall_at_5", "current": 0.6154, "target": 0.75}
+    ],
+    "benchmark_case_schema": ["query", "relevant[]", "top1?", "forbidden[]", "rank_expectation", "audience", "mode", "should_retrieve"]
+  },
+
+  "failure_matrix": [
+    {"failure": "narrator_timeout", "code": "narrator_failed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "state_failed entry if narration existed", "retry_safe": true, "diagnostic": "code+provider_code", "tests": 0},
+    {"failure": "narrator_malformed_or_empty", "code": "narrator_failed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "no", "retry_safe": true, "diagnostic": "code", "tests": 0},
+    {"failure": "controller_timeout", "code": "controller_failed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "state_failed entry", "retry_safe": true, "diagnostic": "code+provider_code", "tests": 2},
+    {"failure": "controller_invalid_json", "code": "controller_failed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "state_failed entry", "retry_safe": true, "diagnostic": "controller_parse_failure debug record", "tests": 2},
+    {"failure": "controller_unsupported_command", "code": null, "turn_outcome": "succeeds, command rejected", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "normal", "retry_safe": null, "diagnostic": "authorization[].authorized=false + reason", "tests": "yes"},
+    {"failure": "retrieval_provider_failure", "code": "retrieval_failed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "no", "retry_safe": true, "diagnostic": "code", "tests": 1, "note": "occurs before narration"},
+    {"failure": "semantic_embedding_failure", "code": null, "turn_outcome": "falls back to lexical, continues", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "normal", "retry_safe": null, "diagnostic": "semantic_status + fallback_reason", "tests": "yes"},
+    {"failure": "stale_revision", "code": "stale_turn", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "depends on stage", "retry_safe": true, "diagnostic": "code", "tests": 3},
+    {"failure": "audit_failure_issues_found", "code": null, "turn_outcome": "succeeds via reconciliation or redaction", "state_mutated": "as authorized", "time_mutated": true, "recent_conversation_mutated": "delivered text only", "retry_safe": null, "diagnostic": "narration_reconciliation", "tests": "yes"},
+    {"failure": "reconciliation_failure", "code": "narrator_failed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "state_failed", "retry_safe": true, "diagnostic": "code", "tests": 0, "note": "state was prepared at line 158 but not committed; valid prepared state discarded"},
+    {"failure": "cancellation", "code": "cancelled", "state_mutated": "no unless already committed", "time_mutated": false, "recent_conversation_mutated": "state_failed if narration existed", "retry_safe": true, "diagnostic": "code", "tests": 7},
+    {"failure": "save_failure", "code": "CampaignSaveError", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "no", "retry_safe": true, "diagnostic": "typed error code", "tests": "yes"},
+    {"failure": "corrupted_save", "code": "invalid_save|invalid_json|unsafe_path", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "no", "retry_safe": null, "diagnostic": "typed code", "tests": "yes", "note": "previous slot available"},
+    {"failure": "graph_unreachable_destination", "code": null, "turn_outcome": "movement unresolved, narrator told nothing changed", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "normal", "retry_safe": null, "diagnostic": "action_resolution status", "tests": "yes"},
+    {"failure": "context_overflow", "code": "context_too_large", "state_mutated": false, "time_mutated": false, "recent_conversation_mutated": "no", "retry_safe": false, "diagnostic": "code", "tests": 0, "note": "deterministic, will recur until state changes; the only non-retryable failure"}
+  ],
+
+  "invariants": [
+    {"id": 1, "invariant": "narrator cannot mutate state", "mechanism": "narrator returns text only; no campaign handle", "tested": true, "remaining_surface": "none structurally"},
+    {"id": 2, "invariant": "controller proposal != authorization", "mechanism": "parse -> deriveTurnEvidence -> authorizeWithEvidence -> prepare", "tested": true, "remaining_surface": "authorization correctness rests on regex evidence"},
+    {"id": 3, "invariant": "player input owns deliberate Nicco actions", "mechanism": "deterministic effects from player_input only; player_agency audit kind", "tested": true, "remaining_surface": "player_agency detection is regex-based"},
+    {"id": 4, "invariant": "stale turn cannot commit", "mechanism": "expected_revision on every prepare + 11 checkpoints", "tested": true, "remaining_surface": "add per-boundary coverage"},
+    {"id": 5, "invariant": "failed turn cannot partially commit", "mechanism": "single commit at line 193", "tested": true, "remaining_surface": "identity prepare failure is silent, not unsafe"},
+    {"id": 6, "invariant": "parent != travel", "mechanism": "findRoute traverses connections only; entrance is metadata", "tested": "implicitly", "remaining_surface": "no explicit negative test"},
+    {"id": 7, "invariant": "retrieval != authority", "mechanism": "read-only service; results are prompt evidence", "tested": true, "remaining_surface": "known_by gap is the inverse problem"},
+    {"id": 8, "invariant": "ownership != household", "mechanism": "separate legal_statuses and households domains", "tested": true, "remaining_surface": "none"},
+    {"id": 9, "invariant": "household != following", "mechanism": "no follower system; movement needs carry or completed evidence", "tested": true, "remaining_surface": "narrated-movement regexes"},
+    {"id": 10, "invariant": "importance != persistence", "mechanism": "promotion triggers are name/purchase only; no scoring", "tested": true, "remaining_surface": "none"},
+    {"id": 11, "invariant": "unknown != hidden", "mechanism": "explicit visibility + known_by; facts carry truth:unknown", "tested": true, "remaining_surface": "none"},
+    {"id": 12, "invariant": "unsupported physical consequences cannot become state", "mechanism": "4 conditions only; SEVERE_TERMS rejected; uncommitted_constraint audit", "tested": true, "remaining_surface": "regex coverage of escalation language"},
+    {"id": 13, "invariant": "map PNG is not a runtime dependency", "mechanism": "MEASURED: zero references to city_map or .png in src/", "tested": "true_by_construction", "remaining_surface": "none"},
+    {"id": 14, "invariant": "manual save is explicit", "mechanism": "CampaignSession dirty flag; writes only on request", "tested": true, "remaining_surface": "no autosave (intentional)"}
+  ],
+
+  "maintainability_metrics": {
+    "src_files": 122, "src_lines": 9847, "src_chars": 832884,
+    "test_files": 48, "test_lines": 8459, "test_to_source_line_ratio": 0.86,
+    "turn_files": 26, "turn_lines": 3798, "turn_chars": 374431,
+    "turn_share_of_source_chars": 0.45, "turn_share_of_source_files": 0.21,
+    "largest_files_by_chars": [
+      {"file": "src/turn/narration-audit.ts", "chars": 49168, "lines": 428, "max_line": 883, "regex_literals": 99},
+      {"file": "src/turn/narrated-captives.ts", "chars": 31616, "lines": 373, "max_line": 339, "regex_literals": 76},
+      {"file": "src/turn/natural-actions.ts", "chars": 28848, "lines": 325, "max_line": 444, "regex_literals": 35},
+      {"file": "src/turn/person-transactions.ts", "chars": 28668, "lines": 261, "max_line": 514, "regex_literals": 27},
+      {"file": "src/turn/evidence-authorization.ts", "chars": 27966, "lines": 289, "max_line": 744, "regex_literals": 43},
+      {"file": "src/turn/prompt-builder.ts", "chars": 27768, "lines": 209, "max_line": 1580, "regex_literals": 18},
+      {"file": "src/turn/turn-evidence.ts", "chars": 27468, "lines": 263, "max_line": 575, "regex_literals": 60},
+      {"file": "src/turn/turn-coordinator.ts", "chars": 21132, "lines": 221, "max_line": 440, "regex_literals": 0}
+    ],
+    "campaign_command_variants": 30,
+    "coordinator_import_sources": 26,
+    "responsibility_domains_per_turn": 14,
+    "complexity_tooling_configured": false,
+    "complexity_proxies": ["regex literal count", "chars per file", "max line length", "import source count"]
+  },
+
+  "extensibility_assessment": {
+    "npc_plus_would_require": {
+      "modify_campaign_state_core": false,
+      "enlarge_turn_coordinator": true,
+      "enlarge_prompt_builder_directly": true,
+      "add_new_command_variants": true,
+      "alter_save_schema": true,
+      "alter_character_types": true,
+      "create_cyclic_dependencies": false
+    },
+    "save_schema_break_detail": "object() validator rejects unknown fields (validation.ts:15) AND missing required fields (validation.ts:21); requireVersionOne rejects any schema_version != 1 (snapshot-validation.ts:15-18). Both directions closed.",
+    "seams_to_stabilise_first": [
+      {"rank": 1, "seam": "save schema versioning and migration", "pass": "H4"},
+      {"rank": 2, "seam": "turn stage contracts", "pass": "H2"},
+      {"rank": 3, "seam": "prompt section registry", "pass": "H2/H3"},
+      {"rank": 4, "seam": "context budget tiering", "pass": "H3"},
+      {"rank": 5, "seam": "domain command seam (already good, needs a test)", "pass": "H1"}
+    ],
+    "goal": "after H2-H4, NPC+ should be one domain module, one prepare handler, one prompt section, one migration step and one stage extension"
+  },
+
+  "passes": [
+    {
+      "id": "H1", "name": "Deterministic language and invariant hardening",
+      "purpose": "Make the regex evidence layer explicit, shared and tested; fix the four measured defects without widening language coverage",
+      "prerequisites": [],
+      "scope": ["create src/turn/language/ with parameterised primitives", "rewire all 14 gate sites one at a time with gate-for-gate equivalence tests", "fix bare-no lookahead in 3 gates", "delete shadowed sentencesOf", "unify NUMBER_WORDS", "delete 11 esc copies and 1 quotedSpans copy", "add property/permutation/idempotency/ambiguity/negation-matrix suites", "add correct-narration-survives-audit corpus", "add 5 untested failure codes", "add parent != travel negative test"],
+      "forbidden_scope": ["widening language coverage", "new command variants", "coordinator restructuring", "prompt changes", "new audit kinds"],
+      "files": ["src/turn/language/* (new)", "14 gate sites", "src/turn/narrated-captives.ts", "src/turn/sentences.ts", "src/turn/person-transactions.ts", "tests/*"],
+      "tests_to_add": "~120-180 assertions",
+      "dimensions_improved": ["test_coverage", "determinism", "narrator_safety_grounding", "controller_authorization_safety", "character_continuity", "maintainability", "deterministic_language_robustness"],
+      "expected_delta": {"code_health": [2.5, 4.0], "core_deterministic": [2.0, 3.5], "functional_runtime": [1.0, 2.0]},
+      "regression_risk": "medium",
+      "risk_mitigation": "equivalence testing: no gate changes verdict without an explicit reviewed test change",
+      "completion_gate": ["947 + new tests green", "negation matrix committed as a locked table", "zero duplicate esc/quotedSpans/sentencesOf/NUMBER_WORDS", "all 11 failure codes referenced by >=1 test"]
+    },
+    {
+      "id": "H2", "name": "Turn pipeline decomposition and maintainability",
+      "purpose": "Extract eight stages with zero behaviour change, enabling stage timings and NPC+ extension",
+      "prerequisites": ["H1"],
+      "prerequisite_reason": "decomposing a 176-line function whose language layer is untested is the riskiest available action; H1 tests are the safety net",
+      "scope": ["8 stages each returning a frozen typed value", "preserve checkpoint and yield positions exactly", "thread turn_id", "replace 13 mutable locals with explicit stage inputs/outputs", "prompt section registry"],
+      "forbidden_scope": ["any behaviour change", "reordering stages", "moving a checkpoint", "changing commit timing", "changing audit decisions", "new commands or domains"],
+      "files": ["src/turn/stages/* (new)", "src/turn/turn-coordinator.ts", "src/turn/turn-types.ts", "src/turn/prompt-builder.ts"],
+      "tests_to_add": ["stage-contract purity tests", "golden end-to-end byte-identical TurnResult", "stage-timing presence"],
+      "dimensions_improved": ["architectural_clarity", "maintainability", "extensibility", "observability_diagnostics", "runtime_latency_architecture"],
+      "expected_delta": {"code_health": [1.5, 3.0], "core_deterministic": [0.5, 1.5], "functional_runtime": [1.5, 3.0]},
+      "regression_risk": "high",
+      "risk_mitigation": "golden-output test written and passing before any extraction; each stage extracted in a separate reviewable step",
+      "completion_gate": ["golden output byte-identical", "stages pure where claimed", "runTurn under 60 lines", "stage timings in diagnostics", "full suite green"]
+    },
+    {
+      "id": "H3", "name": "Retrieval and context scale hardening",
+      "purpose": "Fix known_by unreachability, remove silent truncation, tier context budgets, extend retrieval metrics",
+      "prerequisites": ["H2 (soft: retrieval half can start independently)"],
+      "scope": ["narrator-only awareness projection keyed on known_by, independent of retrieval and player visibility", "replace .slice(0,24) with reported or fail-closed cap", "tier caps by authority", "move selectRelevantFacts upstream of the cap check", "report every selection in diagnostics", "extend eval cases with forbidden/audience/mode/should_retrieve/rank_expectation", "add precision-at-limit, secret-leakage, unnecessary-retrieval metrics", "add context_too_large boundary tests for all six caps"],
+      "forbidden_scope": ["implementing summarisation", "raising caps without tiering", "weakening visibility filtering", "allowing authoritative scene state to be dropped"],
+      "files": ["src/turn/context-builder.ts", "src/turn/narrative-authority.ts", "src/turn/retrieval-policy.ts", "tests/retrieval-eval/cases.ts", "tests/retrieval-eval/evaluate.ts"],
+      "tests_to_add": ["secret leakage must be 0", "boundary tests for all six caps", "60-fact long-campaign scenario", "known_by reachability test"],
+      "dimensions_improved": ["retrieval_architecture", "context_scale_behavior", "narrator_safety_grounding", "world_canon_consistency"],
+      "expected_delta": {"code_health": [1.0, 2.0], "core_deterministic": [0.5, 1.0], "functional_runtime": [3.0, 5.0]},
+      "regression_risk": "medium_high",
+      "risk_mitigation": "secret-leakage rate as a hard zero gate plus explicit tests that player-visible output is unchanged",
+      "completion_gate": ["secret leakage 0", "multi-answer Recall@5 >= 0.75", "all six caps boundary-tested", "a 60-fact campaign builds context with reported selection"]
+    },
+    {
+      "id": "H4", "name": "Persistence and diagnostics hardening",
+      "purpose": "Make saves survive canon evolution and schema growth; make failures observable",
+      "prerequisites": ["H2 (diagnostics half only)"],
+      "scope": ["SUPPORTED_SCHEMA_VERSIONS and CURRENT_SCHEMA_VERSION", "ordered pure migration chain, validate once after", "distinct future-version error", "split structural compatibility from content identity", "load with recorded warning when referenced IDs resolve", "TurnDiagnostics on success and failure", "turn_id", "stage timings", "identity-skip diagnostic", "migration fixture directory", "round-trip property over 30 command kinds", "save-loader fuzz test"],
+      "forbidden_scope": ["silent dataset rebase", "autosave", "writing partially migrated saves", "making diagnostics authoritative or persisting them into saves"],
+      "files": ["src/campaign/snapshot-validation.ts", "src/persistence/save-format.ts", "src/persistence/campaign-repository.ts", "src/turn/turn-types.ts", "tests/fixtures/saves/* (new)"],
+      "tests_to_add": ["round-trip property over 30 command kinds", "fuzz over mutated save bytes", "unsupported-version and future-version fixtures", "diagnostics-on-failure for all 11 codes"],
+      "dimensions_improved": ["persistence_robustness", "observability_diagnostics", "extensibility", "runtime_save_usability"],
+      "expected_delta": {"code_health": [1.0, 2.0], "core_deterministic": [1.0, 2.0], "functional_runtime": [1.5, 3.0]},
+      "regression_risk": "medium",
+      "risk_mitigation": "golden save fixtures committed and never regenerated by the code under test",
+      "completion_gate": ["a save predating a canon edit loads with a warning after it", "migration chain tested end to end", "all 11 failure codes emit structured diagnostics"],
+      "no_v1_to_v1_migrations": true
+    },
+    {
+      "id": "H5", "name": "Live model soak and runtime reliability",
+      "purpose": "Close the largest measured gap: live-model robustness 61",
+      "prerequisites": ["H4 (diagnostics)", "H1 (reduces reconciliation rate, improving the measured numbers)"],
+      "scope": ["bounded retry with jittered exponential backoff, max 2 attempts", "retry only on timeout/rate_limited/provider_unavailable", "checkpoint before each attempt", "deterministic injected-failure test proving exactly-one-commit", "optional explicitly configured fallback narrator model", "extend quantile to p95/p99", "aggregate reconciliation and redaction rates", "consolidate the evaluation matrix into one command", "run soak at 120 turns as the gate"],
+      "forbidden_scope": ["retrying non-idempotent or non-transient classes", "retrying after commit", "silent model substitution", "treating fixture narration as live evidence"],
+      "never_retry_classes": ["model_refusal", "authentication_error", "configuration_error", "invalid_provider_response", "cancelled"],
+      "files": ["src/llm/openrouter/client.ts or new retry.ts", "src/llm/openrouter/minimax-narrator.ts", "src/llm/openrouter/deepseek-controller.ts", "src/dev/eval-narrators.ts", "src/dev/narrator-bakeoff.ts"],
+      "tests_to_add": ["injected-transient-failure retry tests", "exactly-one-commit under retry", "non-retryable classes never retried"],
+      "dimensions_improved": ["live_model_robustness", "runtime_latency_architecture", "narrator_safety_grounding", "observability_diagnostics"],
+      "expected_delta": {"code_health": [1.0, 2.0], "core_deterministic": [0.5, 1.0], "functional_runtime": [5.0, 8.0]},
+      "regression_risk": "medium",
+      "risk_mitigation": "retry is safe by construction (no mutation before the single commit) but must be asserted",
+      "requires_paid_budget": true,
+      "completion_gate": ["deterministic retry tests green", "120-turn soak completed with p95 reported", "narrator success rate, controller valid-JSON rate and reconciliation rate recorded as baselines"]
+    },
+    {
+      "id": "H6", "name": "Final reassessment",
+      "purpose": "Re-measure, re-score, decide on NPC+",
+      "prerequisites": ["H1", "H2", "H3", "H4", "H5"],
+      "scope": ["re-run every baseline check", "recompute all three layer scores with unchanged formulas", "diff against this document", "confirm or revise exit gates", "NPC+ go/no-go"],
+      "forbidden_scope": ["changing scoring formulas or weights to reach a target"],
+      "expected_delta": {"code_health": [0, 0], "core_deterministic": [0, 0], "functional_runtime": [0, 0]},
+      "regression_risk": "none",
+      "completion_gate": ["reassessment report with measured scores and an explicit gate verdict"]
+    }
+  ],
+
+  "projected_scores": {
+    "baseline": {"code_health": 84.38, "core_deterministic_layer": 88.21, "functional_runtime_layer": 74.34, "project_maturity": 43},
+    "conservative": {"code_health": 87.17, "core_deterministic_layer": 90.26, "functional_runtime_layer": 79.36, "project_maturity": [45, 47],
+      "assumption": "H1-H4 land; H5 ships retry but soak runs only at smoke size (no paid budget)"},
+    "expected": {"code_health": 90.45, "core_deterministic_layer": 92.95, "functional_runtime_layer": 85.86, "project_maturity": [48, 52],
+      "assumption": "all six passes land; soak at meaningful-comparison size; known_by and context tiering succeed without complications"},
+    "best_reasonable": {"code_health": 93.27, "core_deterministic_layer": 95.15, "functional_runtime_layer": 90.46, "project_maturity": [50, 55],
+      "assumption": "everything lands cleanly, soak at pre-release size, no blocking complication",
+      "no_perfect_scores": true,
+      "highest_single_dimension": 96,
+      "live_model_robustness_ceiling": 87,
+      "ceiling_rationale": "probabilistic model behaviour cannot be engineered to near-certainty"},
+    "gate_analysis": {
+      "code_health_target_met": "yes in best_reasonable (93.27 within 92-95)",
+      "core_deterministic_target_met": "NO - best_reasonable 95.15 is below the stated 96 minimum",
+      "core_deterministic_alt_weighting": 95.59,
+      "functional_runtime_target_met": "marginally - best_reasonable 90.46 meets the stated 90 minimum only in the best case",
+      "core_binding_constraint": "six of nine core dimensions start at 82-91; bounded hardening moves such dimensions to 94-96, not 97-98. Reaching a weighted 96+ requires essentially every core dimension at 96+ simultaneously including authored-canon quality at ~95, which is authoring volume not hardening.",
+      "recommendation": "revise core gate to >=94 (stretch 95-96)"
+    },
+    "evidence_strength": [
+      {"improvement": "test coverage gains", "basis": "evidence_backed"},
+      {"improvement": "duplicate utility consolidation", "basis": "evidence_backed"},
+      {"improvement": "retry robustness gain", "basis": "evidence_backed_defect_judgement_magnitude"},
+      {"improvement": "context cap tiering", "basis": "evidence_backed"},
+      {"improvement": "known_by fix", "basis": "evidence_backed_mechanism_judgement_magnitude"},
+      {"improvement": "coordinator decomposition value", "basis": "judgement"},
+      {"improvement": "maintainability 74 to 88", "basis": "judgement_proxied"},
+      {"improvement": "live_model 61 to 87", "basis": "judgement_weakest_number_in_report"}
+    ]
+  },
+
+  "exit_gates": {
+    "score_gates": {
+      "code_health": {"stated_min": 92, "recommended_min": 92, "stated_preferred": [94, 95], "recommended_preferred": [93, 95], "revised": false},
+      "core_deterministic_layer": {"stated_min": 96, "recommended_min": 94, "stated_preferred": [97, 98], "recommended_preferred": [95, 96], "revised": true},
+      "functional_runtime_layer": {"stated_min": 90, "recommended_min": 88, "stated_preferred": [92, 95], "recommended_preferred": [90, 92], "revised": true},
+      "project_maturity": {"mandatory": false, "projected": [48, 55], "note": "must not be pushed to 50-60 by opening new gameplay domains"}
+    },
+    "objective_conditions": [
+      {"id": 1, "condition": "deterministic suite 100% pass, >=1100 tests, 0 skipped", "verification": "npm test"},
+      {"id": 2, "condition": "curated replay 25/25", "verification": "npm run test:playthrough"},
+      {"id": 3, "condition": "typecheck clean", "verification": "npm run typecheck"},
+      {"id": 4, "condition": "all 11 failure codes referenced by >=1 test", "verification": "grep"},
+      {"id": 5, "condition": "negation matrix committed as a locked table", "verification": "test file"},
+      {"id": 6, "condition": "esc, quotedSpans, sentencesOf, NUMBER_WORDS each defined once", "verification": "grep"},
+      {"id": 7, "condition": "all six context caps boundary-tested at cap and cap+1", "verification": "test file"},
+      {"id": 8, "condition": "secret leakage rate 0", "verification": "npm run eval:retrieval"},
+      {"id": 9, "condition": "multi-answer Recall@5 >= 0.75", "verification": "npm run eval:retrieval"},
+      {"id": 10, "condition": "a save predating a canon edit loads with a warning after it", "verification": "integration test"},
+      {"id": 11, "condition": "structured diagnostics for all 11 failure codes", "verification": "test file"},
+      {"id": 12, "condition": "injected-transient tests prove exactly one commit", "verification": "test file"},
+      {"id": 13, "condition": ">=120-turn soak, p95 reported, narrator success and controller valid-JSON rates recorded", "verification": "npm run eval:narrators"},
+      {"id": 14, "condition": "byte-identical TurnResult across the H2 refactor", "verification": "test file"},
+      {"id": 15, "condition": "runTurn under 60 lines", "verification": "wc"}
+    ],
+    "rule": "a gate missed must be reported as missed, never met by adjusting weights"
+  },
+
+  "blockers": [],
+
+  "stop_conditions": {
+    "blocker": {
+      "count": 0,
+      "rationale": "no finding meets the bar. The authority model holds structurally, every failure path is fail-closed, no state-corruption path was found, and the save format refuses rather than mis-loads. NPC+ could begin on this foundation, but would be considerably more expensive and would inherit known problems."
+    },
+    "high_priority": [
+      {"rank": 1, "finding": "no save schema versioning or migration; any canon edit invalidates every save", "dimensions": ["persistence_robustness", "extensibility"], "pass": "H4",
+       "why_before_npc_plus": "NPC+ requires a new domain, which is an unmigratable break in both directions. Long playtests are how NPC+ gets validated."},
+      {"rank": 2, "finding": "13 divergent negation/modality gates with no shared primitive", "dimensions": ["narrator_safety_grounding", "controller_authorization_safety", "maintainability"], "pass": "H1",
+       "why_before_npc_plus": "NPC+ adds autonomous behaviour, more dialogue and more evidence paths; each would add another gate. Centralise before multiplying."},
+      {"rank": 3, "finding": "no provider retry; one transient failure loses a turn", "dimensions": ["live_model_robustness", "runtime_latency_architecture"], "pass": "H5",
+       "why_before_npc_plus": "lost turns during long playtests destroy the evaluation signal NPC+ needs"},
+      {"rank": 4, "finding": "context count caps fire early; relevance selection runs after the cap check", "dimensions": ["context_scale_behavior"], "pass": "H3",
+       "why_before_npc_plus": "NPC+ directly increases present-people (cap 24) and knowledge-edge (cap 96) counts, the two caps nearest to firing"}
+    ],
+    "medium": [
+      {"id": 5, "finding": "known_by unreachable for restricted entities; authored NPC knowledge is inert", "pass": "H3"},
+      {"id": 6, "finding": "silent .slice(0,24) in the knowledge-permission path", "pass": "H3"},
+      {"id": 7, "finding": "failed turns emit almost no diagnostics", "pass": "H4"},
+      {"id": 8, "finding": "two sentence splitters, one shadowing the other in the identity path", "pass": "H1"},
+      {"id": 9, "finding": "5 of 11 failure codes untested; context_too_large reachable 4 ways with 0 tests", "pass": "H1"},
+      {"id": 10, "finding": "TurnCoordinator concentration: 176-line generator, 14 responsibilities, 13 mutable locals", "pass": "H2"},
+      {"id": 11, "finding": "silent catch discarding identity establishment", "pass": "H1/H4"},
+      {"id": 12, "finding": "NUMBER_WORDS inconsistency: 13/14 parseable in one module and not another", "pass": "H1"},
+      {"id": 13, "finding": "multi-answer Recall@5 at 0.615", "pass": "H3"},
+      {"id": 14, "finding": "no property, permutation or idempotency tests anywhere", "pass": "H1"},
+      {"id": 15, "finding": "naming-location semantics when a scene change occurs in the naming turn", "pass": "H1"}
+    ],
+    "optional": [
+      {"id": 16, "finding": "projectKnowledgeAccess recomputed to measure length"},
+      {"id": 17, "finding": "context serialized ~6x per turn"},
+      {"id": 18, "finding": "O(items^2) and O(present*entities) patterns in buildTurnContext"},
+      {"id": 19, "finding": "6 divergent STOP sets"},
+      {"id": 20, "finding": "no complexity tooling"},
+      {"id": 21, "finding": "no explicit parent != travel negative test"},
+      {"id": 22, "finding": "only 25 chunks for 181 entities"},
+      {"id": 23, "finding": "narration-audit.ts at 49 KB; splitting for size alone not recommended"}
+    ]
+  },
+
+  "priority_table": [
+    {"rank": 1, "priority": "HIGH", "finding": "5 untested failure codes; no property/permutation/idempotency tests", "current_impact": "test_coverage 88", "target": "94", "effort": "S", "risk": "none", "pass": "H1", "payoff": "highest: pure addition, measured gap, immediate certainty gain"},
+    {"rank": 2, "priority": "HIGH", "finding": "duplicate primitives: 12 esc, 2 quotedSpans, 3 NUMBER_WORDS, 2 splitters", "current_impact": "maintainability 74, character_continuity 83", "target": "88, 93", "effort": "S-M", "risk": "low", "pass": "H1", "payoff": "fixes 2 real defects at trivial cost"},
+    {"rank": 3, "priority": "HIGH", "finding": "no provider retry; single transient failure loses a turn", "current_impact": "live_model_robustness 61", "target": "85", "effort": "S-M", "risk": "medium", "pass": "H5", "payoff": "largest weighted runtime gain (22 x 24); safe by construction"},
+    {"rank": 4, "priority": "HIGH", "finding": "13 divergent negation gates; bare-no fix in only 1 of 4", "current_impact": "narrator_grounding 81, controller_auth 88, maintainability 74", "target": "90, 95", "effort": "L", "risk": "medium", "pass": "H1", "payoff": "measured inconsistency; reduces over-redaction; NPC+ prerequisite"},
+    {"rank": 5, "priority": "HIGH", "finding": "context caps fire early; relevance selection runs after the cap", "current_impact": "context_scale_behavior 74", "target": "92", "effort": "M", "risk": "medium_high", "pass": "H3", "payoff": "prevents campaign-bricking context_too_large"},
+    {"rank": 6, "priority": "HIGH", "finding": "no save versioning/migration; canon edit invalidates all saves", "current_impact": "persistence 82, extensibility 78", "target": "93, 88", "effort": "M-L", "risk": "medium", "pass": "H4", "payoff": "unblocks long playtests; clearest NPC+ prerequisite"},
+    {"rank": 7, "priority": "MEDIUM", "finding": "failed turns emit almost no diagnostics", "current_impact": "observability 82", "target": "94", "effort": "S-M", "risk": "low", "pass": "H4", "payoff": "prerequisite for the H5 soak matrix"},
+    {"rank": 8, "priority": "MEDIUM", "finding": "known_by unreachable; silent slice(0,24)", "current_impact": "retrieval 76", "target": "88", "effort": "M", "risk": "medium_high", "pass": "H3", "payoff": "fixes a documented gap making authored knowledge inert"},
+    {"rank": 9, "priority": "MEDIUM", "finding": "retrieval metrics: no forbidden/leakage/precision; multi-answer 0.615", "current_impact": "retrieval 76", "target": "88", "effort": "S-M", "risk": "low", "pass": "H3", "payoff": "harness exists; secret-leakage gate is valuable"},
+    {"rank": 10, "priority": "MEDIUM", "finding": "TurnCoordinator concentration", "current_impact": "arch_clarity 86, maintainability 74, extensibility 78", "target": "92, 88", "effort": "L", "risk": "high", "pass": "H2", "payoff": "large enabling value, highest risk, gated behind H1"},
+    {"rank": 11, "priority": "MEDIUM", "finding": "character continuity stress gaps (naming location, pronouns)", "current_impact": "character_continuity 83", "target": "93", "effort": "S-M", "risk": "low", "pass": "H1", "payoff": "direct NPC+ prerequisite; additive"},
+    {"rank": 12, "priority": "MEDIUM", "finding": "p95/p99 absent; reconciliation/redaction not aggregated", "current_impact": "live_model 61, latency 72", "target": "85, 88", "effort": "S", "risk": "low", "pass": "H5", "payoff": "quantile already exists; near-free"},
+    {"rank": 13, "priority": "LOW", "finding": "silent identity catch", "current_impact": "atomicity 91, observability 82", "target": "96", "effort": "S", "risk": "none", "pass": "H1", "payoff": "one diagnostic line"},
+    {"rank": 14, "priority": "LOW", "finding": "no parent != travel negative test", "current_impact": "determinism 90", "target": "96", "effort": "S", "risk": "none", "pass": "H1", "payoff": "cheap invariant assertion"},
+    {"rank": 15, "priority": "LOW", "finding": "projectKnowledgeAccess recomputed for length", "current_impact": "latency 72", "target": "88", "effort": "S", "risk": "none", "pass": "H2", "payoff": "free; obviously redundant"},
+    {"rank": 16, "priority": "OPTIONAL", "finding": "O(items^2), O(present*entities) in context builder", "current_impact": "latency 72", "target": null, "effort": "M", "risk": "low", "pass": "defer", "payoff": "harmless now; revisit under NPC+ scale"},
+    {"rank": 17, "priority": "OPTIONAL", "finding": "6 divergent STOP sets", "current_impact": "maintainability 74", "target": "88", "effort": "S", "risk": "low", "pass": "H1", "payoff": "document scope; likely intentional"},
+    {"rank": 18, "priority": "OPTIONAL", "finding": "only 25 chunks for 181 entities", "current_impact": "canon 86", "target": "90", "effort": "L", "risk": "none", "pass": "defer", "payoff": "authoring, not hardening"}
+  ],
+
+  "sample_sizes": {
+    "smoke": {"runs_per_scenario": 3, "scenarios": 5, "total_turns": 15, "confidence_half_width_at_p090": 0.17},
+    "meaningful_comparison": {"runs_per_scenario": 10, "scenarios": 12, "total_turns": 120, "confidence_half_width_at_p090": 0.09, "is_default_gate": true},
+    "pre_release": {"runs_per_scenario": 30, "scenarios": 15, "total_turns": 450, "confidence_half_width_at_p090": 0.05, "note": "p99 needs >=100 samples per cell and should be reported as indicative only"}
+  },
+
+  "live_evaluation_matrix": [
+    {"metric": "narrator_success_rate", "source": "classifyOutcome", "available_today": true},
+    {"metric": "controller_valid_json_rate", "source": "parseControllerProposal + controller_parse_failure", "available_today": true},
+    {"metric": "controller_authorized_command_rate", "source": "authorization[].authorized", "available_today": true},
+    {"metric": "valid_action_recognition_rate", "source": "action_resolution statuses", "available_today": true},
+    {"metric": "false_state_proposal_rate", "source": "authorized=false / proposed", "available_today": true},
+    {"metric": "reconciliation_frequency", "source": "narration_reconciliation.delivered == revision", "available_today": "present_not_aggregated"},
+    {"metric": "deterministic_redaction_frequency", "source": "delivered == redacted", "available_today": "present_not_aggregated"},
+    {"metric": "narration_state_contradiction_rate", "source": "narration_reconciliation.issues[].kind", "available_today": true},
+    {"metric": "hallucinated_character_fact_rate", "source": "absent_participant, invented_source, unsourced_history", "available_today": true},
+    {"metric": "unsupported_player_action_invention", "source": "player_agency issue kind", "available_today": true},
+    {"metric": "provider_failure_rate", "source": "ProviderError.code histogram", "available_today": true},
+    {"metric": "latency_p50", "source": "quantile", "available_today": true},
+    {"metric": "latency_p95_p99", "source": "quantile", "available_today": false},
+    {"metric": "token_usage", "source": "usage", "available_today": true},
+    {"metric": "cost_per_turn", "source": "provider_reported_cost_usd", "available_today": true}
+  ],
+
+  "metrics": {
+    "providers": {"narrator_model": "z-ai/glm-5.2", "controller_model": "deepseek/deepseek-v4-flash-0731:nitro",
+      "narrator_output_tokens": 512, "narrator_timeout_ms": 60000, "controller_timeout_ms": 20000,
+      "narrator_allow_fallbacks": false, "retry_implemented": false, "backoff_implemented": false, "hedging_implemented": false},
+    "context_caps": {"present_people": 24, "items": 48, "facts": 32, "knowledge_edges": 96, "scheduled_events": 16,
+      "serialized_chars": 32000, "narrative_context_chars": 16000, "ephemeral_participants": 4,
+      "social_edges": 12, "social_members": 15, "social_rules": 12, "canonical_awareness_silent_slice": 24},
+    "recent_conversation": {"turns": 12, "chars": 16000},
+    "retrieval": {"pool_size": 5, "result_limit": 3, "payload_cap_chars": 10000, "locality_tie": 0.85},
+    "narrator_draft_cap_chars": 24000,
+    "player_input_cap_chars": 4000,
+    "save_max_bytes": 16777216,
+    "turn_failure_codes": 11,
+    "turn_failure_codes_untested": 5,
+    "campaign_command_variants": 30,
+    "negation_gates": 13,
+    "regex_literals_src_turn": 185,
+    "named_regex_constants_src_turn": 71,
+    "deterministic_ms_per_turn": 8.8,
+    "worst_case_turn_ms": 140000
+  },
+
+  "audit_discipline": {
+    "files_written": ["docs/evaluations/CALDREVAN_HARDENING_GAP_TO_TARGET_AUDIT.md", "docs/evaluations/CALDREVAN_HARDENING_GAP_TO_TARGET_AUDIT.json"],
+    "source_modified": false, "data_modified": false, "tests_modified": false, "config_modified": false,
+    "committed": false, "pushed": false,
+    "probe_scripts_location": "session scratchpad outside the repository",
+    "paid_calls": {"narrator": 0, "controller": 0,
+      "embedding": {"requests": 1, "input_texts": 94, "provider": "voyage", "mechanism": "npm run eval:retrieval", "repeated": false}},
+    "scripts_deliberately_not_run": [{"script": "src/dev/audit-authored-data.ts", "reason": "writes an unrequested artifact into docs/evaluations"}],
+    "corrected_hypotheses": [
+      {"claim": "unanchored regex alternatives in scene-departure and player-authored-events", "status": "FALSE", "cause": "grep truncation at 200 chars"},
+      {"claim": "same-name collision is an untested gap", "status": "FALSE", "cause": "it is tested in narrated-promotion.test.ts:150 and narrator-persistence.test.ts:91-105"}
+    ],
+    "weakest_number": "live_model_robustness 61 to 87 projection; depends on soak results that do not yet exist"
+  },
+
+  "final_status": "CALDREVAN HARDENING GAP-TO-TARGET AUDIT COMPLETE"
+}

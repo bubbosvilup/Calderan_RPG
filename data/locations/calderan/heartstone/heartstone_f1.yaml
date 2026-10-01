@@ -5,26 +5,24 @@ entity:
   name: Heartstone Observation Floor
   display_name: Heartstone F1
   parent: heartstone
-  aliases: [Heartstone first upper floor, Heartstone observation floor, Heartstone recovery floor, F1]
+  aliases: [ Heartstone first upper floor, Heartstone observation floor, Heartstone recovery floor, F1 ]
   summary: >-
-    Heartstone F1 is the first upper floor, a sparse open-plan private observation
-    and recovery space with a normal maximum capacity of two patient beds.
-  tags: [medicine, household, architecture]
-  search_context: Heartstone F1 observation and recovery floor, patient beds, bedside stools and tables, wardrobes, medical cabinets, medicine storage.
+    Heartstone F1 is the first upper floor, a sparse open-plan private observation and recovery space with a
+    normal maximum capacity of two patient beds.
+  tags: [ medicine, household, architecture ]
+  search_context: Heartstone F1 observation and recovery floor, patient beds, bedside stools and tables,
+    wardrobes, medical cabinets, medicine storage.
   content: >-
-    F1 is one functional, open-plan observation and recovery floor inside
-    Heartstone, without separate internal rooms. It is a simple private space,
-    not an institutional medical facility. The continuous lateral spiral
-    staircase arrives at the side/perimeter, leaving the central usable area
-    open. It connects downward to LR and continues upward toward F2.
-    The normal maximum physical patient capacity is two beds; capacity does not
-    establish current occupancy. Each bed has one simple stool, one small
-    bedside table/nightstand, and one wardrobe or tall storage cupboard intended
-    for that bed. The wardrobes are initially empty. Opposite the patient-bed
-    arrangement stand one or two large wooden medical-storage cabinets, also
-    initially empty. Their intended future use is storing medicines, dressings,
-    instruments, and ordinary medical supplies. The furnishings remain sparse;
-    no current patients or medical inventory are specified.
+    F1 is one functional, open-plan observation and recovery floor inside Heartstone, without separate
+    internal rooms. It is a simple private space, not an institutional medical facility. The continuous
+    lateral spiral staircase arrives at the side/perimeter, leaving the central usable area open. It connects
+    downward to LR and continues upward toward F2. The normal maximum physical patient capacity is two beds;
+    capacity does not establish current occupancy. Each bed has one simple stool, one small bedside
+    table/nightstand, and one wardrobe or tall storage cupboard intended for that bed. The wardrobes are
+    initially empty. Opposite the patient-bed arrangement stand one or two large wooden medical-storage
+    cabinets, also initially empty. Their intended future use is storing medicines, dressings, instruments,
+    and ordinary medical supplies. The furnishings remain sparse; no current patients or medical inventory are
+    specified.
   knowledge:
     visibility:
       narrator: true
@@ -32,12 +30,20 @@ entity:
     known_by: []
   features:
     - name: two patient stations
-      description: Two patient beds provide the normal maximum physical capacity. Each bed has one simple bedside stool, one small bedside table/nightstand, and one wardrobe or tall storage cupboard intended for that bed. Both wardrobes are initially empty; capacity is not current occupancy.
+      description: Two patient beds provide the normal maximum physical capacity. Each bed has one simple bedside
+        stool, one small bedside table/nightstand, and one wardrobe or tall storage cupboard intended for that
+        bed. Both wardrobes are initially empty; capacity is not current occupancy.
     - name: wooden medical-storage cabinets
-      description: One or two large wooden cabinets stand on the opposite wall/side from the patient-bed arrangement. They are initially empty, intended for future medicine storage, dressings, instruments, and ordinary medical supplies; no inventory is established.
+      description: One or two large wooden cabinets stand on the opposite wall/side from the patient-bed
+        arrangement. They are initially empty, intended for future medicine storage, dressings, instruments,
+        and ordinary medical supplies; no inventory is established.
     - name: lateral spiral stair access
-      description: The continuous lateral/peripheral spiral staircase reaches F1 from the side/perimeter, leaving the central usable area open. It connects downward to LR and continues upward toward F2; it is not a central tower core.
+      description: The continuous lateral/peripheral spiral staircase reaches F1 from the side/perimeter, leaving
+        the central usable area open. It connects downward to LR and continues upward toward F2; it is not a
+        central tower core.
   connections:
     - target: heartstone_lr
       description: The continuous lateral spiral staircase descends to the perimeter stair access in LR.
+      minutes: 1
+      kind: stairs
 chunks: []

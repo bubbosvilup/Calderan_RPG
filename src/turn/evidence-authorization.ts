@@ -9,6 +9,10 @@ import { authorizeCommands } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
 import { narratedDepartures } from "./scene-departure.js";
+import { detectHouseholdChoices, verifyRelationshipEvidence } from "./household-evidence.js";
+import { GATES } from "./language/gates.js";
+import { blankQuotes, escapeRegExp as esc, quotedSpans } from "./language/text.js";
+import { numberWordValue } from "./language/numbers.js";
 
 /**
  * Phase 1O evidence-backed authorization. A controller evidence quote is necessary for the evidence path and never sufficient:
@@ -22,15 +26,11 @@ const QUOTE_MIN = 8;
 // Hedge, negation, hypothetical, modal/future, interruption and retraction markers anywhere in the containing sentence(s).
 // Repair 1: a bare "back" no longer disqualifies ("takes the boots back", "accepts them back" are receipts). Retreats, handing an
 // item back, instructions to someone else ("tells him to take them") and "instead" still do.
-const DISQUALIFY = /\b(?:not|never|no|nor|maybe|perhaps|might|could|would|should|can|cannot|will|shall|may|if|unless|whether|almost|nearly|imagin\w*|consider\w*|pretend\w*|suppos\w*|refus\w*|declin\w*|reject\w*|instead|steps? back|stepped back|stepping back|backs? away|backed away|backing away|draws? back|drew back|pulls? back|pulled back|(?:hands?|handed|gives?|gave|pushes?|pushed|returns?|returned|holds?|held)(?: \w+){0,4} back|(?:tells?|told|asks?|asked|urges?|urged|orders?|ordered|invites?|invited) (?:him|her|them|nicco|\w+) to|stops?|stopped|hesitat\w*|wants? to|wanted to|about to|going to|intends? to|plans? to|starts? to|started to|begins? to|began to|tries to|tried to|thinks? better|opens? (?:his|her) mouth)\b|n't\b|'ll\b|\?/i;
+const DISQUALIFY = GATES.disqualify;
 const RECEIPT = "takes?|took|taking|accepts?|accepted|accepting|receives?|received|receiving|gathers?|gathered|gathering|collects?|collected|collecting|picks? up|picked up|picking up|snatches?|snatched";
 const COMMUNICATE = "tells?|told|telling|says?|said|saying|informs?|informed|informing|explains?|explained|explaining|states?|stated|stating|mentions?|mentioned|speaks?|spoke|speaking|reports?|reported|adds|added|replies|replied";
 const STOP = new Set(["the", "a", "an", "is", "are", "was", "were", "of", "to", "and", "in", "on", "at", "it", "its", "that", "this", "has", "have", "been", "be"]);
 const words = (s: string) => s.toLowerCase().replace(/[^a-z0-9\s']/g, " ").split(/\s+/).filter(w => w && !STOP.has(w));
-const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const quotedSpans = (text: string): [number, number][] => [...text.matchAll(/"[^"\n]*"|“[^”\n]*”/g)].map(m => [m.index, m.index + m[0].length]);
-const blankQuotes = (text: string) => text.replace(/"[^"\n]*"|“[^”\n]*”/g, m => " ".repeat(m.length));
-const numberWords: Record<string, number> = { two: 2, three: 3, four: 4, five: 5 };
 
 /** Start/end of the sentence(s) of the narration that the quote overlaps. */
 function sentenceBounds(narration: string, at: number, length: number): [number, number] {
@@ -147,7 +147,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     // Negation is scoped to the clause carrying the act when the sentence negates something else; any refusal word still vetoes.
     const clauseClean = (absolute: number) => {
       if (!negatedSentence) return true;
-      if (/\b(?:refus\w*|declin\w*|reject\w*)\b/i.test(sentenceText)) return false;
+      if (GATES.refusal.test(sentenceText)) return false;
       const rel = absolute - sStart, cuts = [...sentenceText.matchAll(/,|;|\s(?:as|while|when|and|but)\s/gi)].map(m => m.index);
       const from = Math.max(0, ...cuts.filter(c => c < rel)), to = Math.min(sentenceText.length, ...cuts.filter(c => c > rel));
       return !DISQUALIFY.test(sentenceText.slice(from, to).replace(/^[,;]/, ""));
@@ -183,9 +183,15 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     return { verified: true, check: "physical_condition_narrated" };
   }
 
+  if (command.kind === "adjust_relationship") return verifyRelationshipEvidence(command, quote, rawNarration, context);
+  if (command.kind === "join_household" || command.kind === "leave_household") {
+    const choice = command.kind === "join_household" ? "join" : "leave";
+    const found = detectHouseholdChoices(rawNarration, context).find(c => c.character_id === command.character_id && c.choice === choice);
+    return found && found.source_sentence.replace(/\s+/g, " ").includes(q) ? { verified: true, check: `household_${choice}_voiced` } : { verified: false, check: "no_voiced_household_choice" };
+  }
   if (command.kind === "leave_scene") {
     // The quote must lie within a sentence the deterministic departure grammar reads as this character's completed exit.
-    const departed = narratedDepartures(narration.slice(sStart, sEnd), context).some(d => d.character_id === command.character_id) || narratedDepartures(narration, context).some(d => d.character_id === command.character_id && d.source_sentence.replace(/s+/g, " ").includes(q));
+    const departed = narratedDepartures(narration.slice(sStart, sEnd), context).some(d => d.character_id === command.character_id) || narratedDepartures(narration, context).some(d => d.character_id === command.character_id && d.source_sentence.replace(/\s+/g, " ").includes(q));
     return departed ? { verified: true, check: "departure_narrated" } : { verified: false, check: "no_completed_departure" };
   }
 
@@ -217,7 +223,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     const group = ref.toLowerCase().match(/\b(?:them|all of them|all (two|three|four|five)|both|the (two|three|four|five) (?:items|garments|pieces|things)|the (?:clothes|clothing|garments|items|stack|bundle|pile)(?: of [a-z ]+)?)\b/);
     if (group) {
       const count = group[1] ?? group[2] ?? (group[0] === "both" ? "two" : undefined);
-      if (!count || numberWords[count] === offered.length) return { verified: true, check: "receipt_of_offered_group" };
+      if (!count || numberWordValue(count) === offered.length) return { verified: true, check: "receipt_of_offered_group" };
     }
     // Otherwise this item must be referenced by a token unique to it among the offered items (sequential lists allowed).
     const own = words(itemName(command.item_id)), others = offered.filter(id => id !== command.item_id).flatMap(id => words(itemName(id)));
@@ -246,7 +252,7 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
     const base = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
     if (g.authorized) return { ...base, authorized: true, reason: g.reason, source: ev.verified ? "both" : "grammar" };
     // Repair 1: conditions have no grammar path. Validity was already checked by authorizeCommands; verified evidence completes it.
-    if (command.kind === "set_condition" || command.kind === "leave_scene") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
+    if (command.kind === "set_condition" || command.kind === "leave_scene" || command.kind === "adjust_relationship" || command.kind === "join_household" || command.kind === "leave_household") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
     if (mode === "hybrid" && ev.verified && MISSING_CONFIRMATION.has(g.reason)) {
       const index = evidence.player_intents.findIndex(c => isDeepStrictEqual(c, command));
       const kind = command.kind === "set_knowledge" ? "was_told_fact" as const : "accepted_transfer" as const;

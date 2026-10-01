@@ -6,7 +6,7 @@ import { DatasetCompatibilityError } from "../src/campaign/snapshot-validation.j
 import { RuntimeState } from "../src/world/runtime-state.js";
 import { WorldStore } from "../src/world/world-store.js";
 import { characterView, equipmentSlot, remainingEventMinutes } from "../src/campaign/projections.js";
-import { createSaveFile, decodeSave, serializeSave, validateSaveFile, type CampaignSaveFileV1 } from "../src/persistence/save-format.js";
+import { createSaveFile, decodeSave, serializeSave, validateSaveFile, type CampaignSaveFile } from "../src/persistence/save-format.js";
 import { CampaignSaveError } from "../src/persistence/errors.js";
 import { parseSaveJson } from "../src/persistence/strict-json.js";
 import { a, b, c, boots, stored, event, goal, household, change, richCampaign } from "./persistence-fixtures.js";
@@ -125,8 +125,8 @@ for (const [name, corrupt] of corruptions) test(`restore rejects ${name} without
 
 test("format, versions, conflicting identity and dataset mismatch have typed errors", () => {
   const { world, campaign } = richCampaign();
-  const mutable = () => structuredClone(createSaveFile(campaign.exportSnapshot(), world, now)) as CampaignSaveFileV1;
-  for (const version of [0, 2]) {
+  const mutable = () => structuredClone(createSaveFile(campaign.exportSnapshot(), world, now)) as CampaignSaveFile;
+  for (const version of [0, 3]) {
     assert.throws(() => validateSaveFile({ ...mutable(), schema_version: version }, world), { code: "unsupported_version" });
     assert.throws(() => CampaignState.restore(world, { ...campaign.exportSnapshot(), schema_version: version }), { code: "unsupported_version" });
   }
@@ -135,7 +135,9 @@ test("format, versions, conflicting identity and dataset mismatch have typed err
   assert.throws(() => validateSaveFile({ ...mutable(), campaign_id: "different" }, world), { code: "invalid_save" });
   const sources = fixtures(); sources[0]!.document.entity.summary = "Different dataset"; const different = new WorldStore(sources);
   assert.throws(() => CampaignState.restore(different, campaign.exportSnapshot()), error => error instanceof DatasetCompatibilityError && error.save_dataset_id === world.datasetId && error.current_dataset_id === different.datasetId);
-  assert.throws(() => validateSaveFile(mutable(), different), error => error instanceof CampaignSaveError && error.code === "dataset_mismatch" && error.details?.save_dataset_id === world.datasetId);
+  assert.equal(validateSaveFile(mutable(), different).snapshot.dataset_id, different.datasetId);
+  const legacy = mutable(); delete legacy.canon_references; legacy.canon_compatibility = "strict";
+  assert.throws(() => validateSaveFile(legacy, different), error => error instanceof CampaignSaveError && error.code === "dataset_mismatch" && error.details?.save_dataset_id === world.datasetId);
 });
 
 test("strict JSON and plain-data boundary reject duplicate keys, hostile shapes and accessors", () => {

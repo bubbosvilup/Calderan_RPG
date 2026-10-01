@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: center_west_gate
+  type: location
+  name: West Gate
+  display_name: West Gate
+  parent: calderan_center
+  aliases: []
+  summary: The southwest-facing West Gate in Centers inner wall, east of Main Market Square and Gatherers Inn.
+  tags:
+    - geography
+    - gate
+  search_context: Calderan canonical city map West Gate
+  content: The southwest-facing West Gate in Centers inner wall, east of Main Market Square and Gatherers Inn.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: main_market_square
+      description: gate access; canonical city map.
+      minutes: 10
+      kind: gate
+    - target: gatherers_inn
+      description: gate access; canonical city map.
+      minutes: 17
+      kind: gate
+    - target: center_west_road
+      description: gate access; canonical city map.
+      minutes: 3
+      kind: gate
+chunks: []

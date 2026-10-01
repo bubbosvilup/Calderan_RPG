@@ -46,7 +46,9 @@ export interface LocationEntity extends BaseEntity {
   type: "location";
   features: Array<{ name: string; description: string }>;
   /** Directed traversable edges; hierarchy alone does not imply access. */
-  connections: Array<{ target: EntityId; description: string }>;
+  connections: Array<{ target: EntityId; description: string; minutes: number; kind?: "street" | "road" | "door" | "stairs" | "gate" | "bridge" | "square_access" }>;
+  /** Explicit arrival node for a structural container; never inferred from parent. */
+  entrance?: EntityId;
 }
 
 export interface CharacterEntity extends BaseEntity {

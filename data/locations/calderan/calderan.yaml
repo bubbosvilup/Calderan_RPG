@@ -6,31 +6,29 @@ entity:
   display_name: Calderan
   parent: west
   aliases: []
-  summary: Calderan is the inland capital and largest city of West, the realm's political, economic
-    and institutional center and the main campaign city, governed by the Duke of Calderan in the Sun
-    Emperor's name.
-  content: "Calderan lies in the northern/central-western interior of West. The established
-    five-district model applies here: West, East, North, South, and Center are predominant
-    social/economic themes, not exclusive zoning. The Sun Emperor is the sovereign of West but does not reside in
-    Calderan. Duke Uther Calderan governs the capital in his name from the Ducal Citadel, advised by
-    the nine-seat Ducal Council of Calderan; civic arrangements also include the national guilds,
-    the Church of the Sun Emperor, whose High Archon of the West sits in Calderan, the City Guard and
-    the magistracy. Calderan has four cardinal main gates, the Imperial Gate in South being the
-    largest and most tightly controlled; entry needs a writ but no general entrance tax.
-    Calderan and Davenport together hold
-    principal institutional/legal control over West's slave market. The full legal constitution of
-    that monopoly remains undefined. Calderan regards Blackwater as a politically awkward necessary
-    evil: disliked and distrusted but pragmatically tolerated for dirty economic value, absorption
-    of crime, indirect maritime defense/interdiction, and keeping worse external threats at
-    distance. This is not blanket lawful endorsement or an established treaty. Calderan is West's
-    largest city, a very large, dense walled metropolis. Its five districts are broad regions, not
-    neighborhoods. Crossing substantial parts of the city is meaningful travel.
-    Center is enclosed by an older inner wall. Calderan has approximately 100,000 inhabitants and is the second most populous city
-    known globally. Its roughly oval urban footprint has four outer districts surrounding Center.
-    Crossing most of the city cardinal-to-cardinal on foot takes approximately two hours, possibly
-    somewhat less. From Heartstone, ordinary walking takes approximately 30 minutes to Main Market
-    Square, 40 minutes to Calderan Central District and 20 minutes to Calderan Slave Market. These
-    are approximate scale references, not exact routes or travel connections."
+  summary: Calderan is the inland capital and largest city of West, the realm's political, economic and
+    institutional center and the main campaign city, governed by the Duke of Calderan in the Sun Emperor's
+    name.
+  content: "Calderan lies in the northern/central-western interior of West. The established five-district model
+    applies here: West, East, North, South, and Center are predominant social/economic themes, not exclusive
+    zoning. The Sun Emperor is the sovereign of West but does not reside in Calderan. Duke Uther Calderan
+    governs the capital in his name from the Ducal Citadel, advised by the nine-seat Ducal Council of
+    Calderan; civic arrangements also include the national guilds, the Church of the Sun Emperor, whose High
+    Archon of the West sits in Calderan, the City Guard and the magistracy. Calderan has two outer gates:
+    North Gate and the principal southern Imperial Gate; entry needs a writ but no general entrance tax.
+    Calderan and Davenport together hold principal institutional/legal control over West's slave market. The
+    full legal constitution of that monopoly remains undefined. Calderan regards Blackwater as a politically
+    awkward necessary evil: disliked and distrusted but pragmatically tolerated for dirty economic value,
+    absorption of crime, indirect maritime defense/interdiction, and keeping worse external threats at
+    distance. This is not blanket lawful endorsement or an established treaty. Calderan is West's largest
+    city, a very large, dense walled metropolis. Its five districts are broad regions, not neighborhoods.
+    Crossing substantial parts of the city is meaningful travel. Center is enclosed by an older inner wall.
+    Calderan has approximately 100,000 inhabitants and is the second most populous city known globally. Its
+    irregular rounded-rectangular urban footprint has four outer districts surrounding Center. Crossing most
+    of the city cardinal-to-cardinal on foot takes approximately two hours, possibly somewhat less. From
+    Heartstone, ordinary walking takes approximately 30 minutes to Main Market Square, 40 minutes to Calderan
+    Central District and 20 minutes to Calderan Slave Market. These are approximate scale references
+    calibrated by the canonical weighted travel graph."
   tags:
     - geography
   search_context: Calderan capital and main campaign city of West.
@@ -43,15 +41,14 @@ entity:
   features:
     - name: capital of West
       description: West's principal national political center.
-    - name: four cardinal gates
-      description: Four main gates in the outer walls, one per cardinal direction. The southern Imperial
-        Gate is the largest and best defended; the other three handle more local or specialized
-        traffic under the same general entry rules.
+    - name: two outer gates
+      description: North Gate and the southern Imperial Gate are the only major outer land gates. Imperial Gate is
+        principal, largest and best defended.
     - name: five-district civic structure
-      description: West, East, North, South, and Center Districts retain their established non-exclusive
-        themes and civic institutions.
+      description: West, East, North, South, and Center Districts retain their established non-exclusive themes and
+        civic institutions.
     - name: legal slave-market control
-      description: Calderan and Davenport share principal institutional monopoly/control over West's legal
-        slave market.
+      description: Calderan and Davenport share principal institutional monopoly/control over West's legal slave market.
   connections: []
+  entrance: imperial_gate
 chunks: []

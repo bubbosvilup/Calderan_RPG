@@ -11,17 +11,22 @@ entity:
   tags:
     - shop
     - crafts
-  search_context: The Bent Bough, bow shop, bowyer, hunting bows, war bows, arrows, Woodsigner bows,
-    Arwen Woodsigner
-  content: The Bent Bough sells hunting bows, war bows, custom bows, arrows and specialist wooden
-    equipment. Arwen Woodsigner of the Calderan Woodsigner branch works here and personally makes
-    some of its premium bows. Its exact street, layout and other staff are not established.
+  search_context: The Bent Bough, bow shop, bowyer, hunting bows, war bows, arrows, Woodsigner bows, Arwen Woodsigner
+  content: The Bent Bough sells hunting bows, war bows, custom bows, arrows and specialist wooden equipment.
+    Arwen Woodsigner of the Calderan Woodsigner branch works here and personally makes some of its premium
+    bows. It stands north of the Crucible; its internal layout and other staff remain unauthored.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "North of the Crucible and south of House of Making. Access: the_crucible."
+  connections:
+    - target: the_crucible
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
 chunks: []

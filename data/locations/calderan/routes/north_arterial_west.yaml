@@ -1,0 +1,43 @@
+schema_version: 1
+entity:
+  id: north_arterial_west
+  type: location
+  name: North Arterial Road, West
+  display_name: North Arterial Road, West
+  parent: calderan_north
+  aliases: []
+  summary: Red artery south of the Cathedral and north of the Collegium, on the northeast bank of Grey Brook.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map North Arterial Road, West
+  content: Red artery south of the Cathedral and north of the Collegium, on the northeast bank of Grey Brook.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: northwest_bridge
+      description: bridge access; canonical city map.
+      minutes: 9
+      kind: bridge
+    - target: north_arterial_east
+      description: road access; canonical city map.
+      minutes: 22
+      kind: road
+    - target: north_gate
+      description: street access; canonical city map.
+      minutes: 15
+      kind: street
+    - target: cathedral_of_the_bladed_sun
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+    - target: the_collegium
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
+chunks: []

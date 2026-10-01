@@ -1,0 +1,47 @@
+schema_version: 1
+entity:
+  id: north_arterial_east
+  type: location
+  name: North Arterial Road, East
+  display_name: North Arterial Road, East
+  parent: calderan_north
+  aliases: []
+  summary: Red artery south of the Bastion and Pyres, curving southeast past Saint Caldus House.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map North Arterial Road, East
+  content: Red artery south of the Bastion and Pyres, curving southeast past Saint Caldus House.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: north_arterial_west
+      description: road access; canonical city map.
+      minutes: 22
+      kind: road
+    - target: east_arterial_north
+      description: road access; canonical city map.
+      minutes: 22
+      kind: road
+    - target: bastion_of_vigilance
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+    - target: pyres_of_the_fallen
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
+    - target: spire_academy
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
+    - target: saint_caldus_house
+      description: street access; canonical city map.
+      minutes: 6
+      kind: street
+chunks: []

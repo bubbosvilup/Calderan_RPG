@@ -7,16 +7,23 @@ entity:
   parent: calderan_south
   aliases: []
   summary: >-
-    Stonewatch Garrison is the primary military and City Guard complex in Calderan's South
-    District, with barracks, training grounds and military stables.
-  tags: ["military","security"]
-  search_context: "Stonewatch Garrison, barracks, soldiers, City Guard facilities, training grounds, military stables, South District"
+    Stonewatch Garrison is the primary military and City Guard complex in Calderan's South District, with
+    barracks, training grounds and military stables.
+  tags: [ "military", "security" ]
+  search_context: "Stonewatch Garrison, barracks, soldiers, City Guard facilities, training grounds, military
+    stables, South District"
   content: >-
-    Stonewatch Garrison is South's primary military and Guard complex, with major barracks,
-    training grounds, military facilities, military stables and City Guard facilities. It hosts
-    both soldiers and City Guard, but military command and City Guard command remain
-    organizationally separate. No national army hierarchy or named commanders are established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
-  connections: []
+    Stonewatch Garrison is South's primary military and Guard complex, with major barracks, training grounds,
+    military facilities, military stables and City Guard facilities. It hosts both soldiers and City Guard,
+    but military command and City Guard command remain organizationally separate. No national army hierarchy
+    or named commanders are established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "East of Imperial Gate and south of South Gaol. Access: south_arterial."
+  connections:
+    - target: south_arterial
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
 chunks: []

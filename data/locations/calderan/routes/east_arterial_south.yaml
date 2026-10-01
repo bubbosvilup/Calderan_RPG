@@ -1,0 +1,39 @@
+schema_version: 1
+entity:
+  id: east_arterial_south
+  type: location
+  name: East Arterial Road, South
+  display_name: East Arterial Road, South
+  parent: calderan_east
+  aliases: []
+  summary: Red eastern arc east of the Crucible, west of the Smelter Pit and south of the Merchants Mile junction.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map East Arterial Road, South
+  content: Red eastern arc east of the Crucible, west of the Smelter Pit and south of the Merchants Mile junction.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: the_merchants_mile
+      description: road access; canonical city map.
+      minutes: 10
+      kind: road
+    - target: southeast_bridge
+      description: bridge access; canonical city map.
+      minutes: 8
+      kind: bridge
+    - target: the_crucible
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+    - target: the_smelter_pit
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+chunks: []

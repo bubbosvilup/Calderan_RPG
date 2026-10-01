@@ -5,17 +5,23 @@ entity:
   name: "Calderan South Prison"
   display_name: "Calderan South Prison"
   parent: calderan_south
-  aliases: ["The South Gaol","South Gaol"]
+  aliases: [ "The South Gaol", "South Gaol" ]
   summary: >-
-    Calderan South Prison, commonly called the South Gaol, is the main city prison, in
-    Calderan's South District.
-  tags: ["prison","law"]
+    Calderan South Prison, commonly called the South Gaol, is the main city prison, in Calderan's South
+    District.
+  tags: [ "prison", "law" ]
   search_context: "Calderan South Prison, South Gaol, city prison, detainees, jail"
   content: >-
-    Calderan South Prison, informally the South Gaol, is the main city prison. It holds
-    detainees, people under ordinary civic or criminal imprisonment and people awaiting further
-    legal process. Sentence lengths, prison law and internal conditions are not established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
-  connections: []
+    Calderan South Prison, informally the South Gaol, is the main city prison. It holds detainees, people
+    under ordinary civic or criminal imprisonment and people awaiting further legal process. Sentence lengths,
+    prison law and internal conditions are not established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "North of Stonewatch Garrison and east of Wayfarers Rest. Access: south_arterial."
+  connections:
+    - target: south_arterial
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
 chunks: []

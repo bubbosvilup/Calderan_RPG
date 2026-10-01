@@ -10,32 +10,30 @@ entity:
     - Calderan slave pens
     - The Slave Pens
     - Slave Pens
-  summary: Calderan Slave Market, locally The Slave Pens, is West District's large public, legal
-    commercial complex centered on a very large open square.
+  summary: Calderan Slave Market, locally The Slave Pens, is West District's large public, legal commercial
+    complex centered on a very large open square.
   tags:
     - geography
     - slavery
-  search_context: Calderan Slave Market, Slave Pens, slave market, slave auction, public auction,
-    licensed private sellers, holding pens and authorized sale documentation.
-  content: "A public, legal slave market in Calderan's West District, publicly known, about 20
-    minutes' walk from Heartstone. Its very large square exceeds Main Market Square: practical
-    packed earth, gravel and dirt, muddy in poor weather, sometimes dirtied by blood and
-    animal/human traffic. This major economic center has heavy daytime traffic: buyers, sellers,
-    slaves, caravans, handlers, clerks, guards, spectators and auctions. Slavery is legal and
-    socially accepted; ordinary attendance is not clandestine. The complex operates around the
-    clock, formal auctions primarily by day, direct purchases outside auction hours, much less
-    activity at night. The general authorized public auction has no named operator. Low-level
-    authorized clerks handle required ownership documentation at official auction sales; licensed
-    private sellers handle or arrange their own authorized sale documentation. No routine health
-    certification requirement is established; no systematic doctors or medical inspection are
-    present. Licensed sellers behind/around the auction conduct private acquisitions: Korvin is
-    generalist, Mistress Elara handles prestigious and socially useful captives, Bartolomhew
-    specializes in Beastfolk and labor/workforce categories. They do not operate the public auction.
-    The taboo Back Alleys and deeper criminal layer are distinct. No dominant origin or percentages:
-    sources may include war prisoners, convicted criminals, hereditary slavery, debt, economic ruin,
-    refugees, criminal trafficking, vulnerable Beastfolk, captured elves, bandit/criminal-associated
-    captives and other legally processed or illicitly laundered captives. Not every refugee,
-    Beastfolk or elf is enslaved."
+  search_context: Calderan Slave Market, Slave Pens, slave market, slave auction, public auction, licensed
+    private sellers, holding pens and authorized sale documentation.
+  content: "A public, legal slave market in Calderan's West District, publicly known, about 20 minutes' walk
+    from Heartstone. Its very large square exceeds Main Market Square: practical packed earth, gravel and
+    dirt, muddy in poor weather, sometimes dirtied by blood and animal/human traffic. This major economic
+    center has heavy daytime traffic: buyers, sellers, slaves, caravans, handlers, clerks, guards, spectators
+    and auctions. Slavery is legal and socially accepted; ordinary attendance is not clandestine. The complex
+    operates around the clock, formal auctions primarily by day, direct purchases outside auction hours, much
+    less activity at night. The general authorized public auction has no named operator. Low-level authorized
+    clerks handle required ownership documentation at official auction sales; licensed private sellers handle
+    or arrange their own authorized sale documentation. No routine health certification requirement is
+    established; no systematic doctors or medical inspection are present. Licensed sellers behind/around the
+    auction conduct private acquisitions: Korvin is generalist, Mistress Elara handles prestigious and
+    socially useful captives, Bartolomhew specializes in Beastfolk and labor/workforce categories. They do not
+    operate the public auction. The taboo Back Alleys and deeper criminal layer are distinct. No dominant
+    origin or percentages: sources may include war prisoners, convicted criminals, hereditary slavery, debt,
+    economic ruin, refugees, criminal trafficking, vulnerable Beastfolk, captured elves,
+    bandit/criminal-associated captives and other legally processed or illicitly laundered captives. Not every
+    refugee, Beastfolk or elf is enslaved."
   knowledge:
     visibility:
       narrator: true
@@ -44,18 +42,29 @@ entity:
     awareness: local:calderan
   features:
     - name: public auction area
-      description: General authorized daytime auction mechanism; authorized clerks document ownership at
-        the point of sale.
+      description: General authorized daytime auction mechanism; authorized clerks document ownership at the point
+        of sale.
     - name: holding pens
       description: Pens holding enslaved people before display and sale.
     - name: licensed private sellers
-      description: More private acquisitions behind and around the public auction; sellers handle or
-        arrange authorized documentation.
+      description: More private acquisitions behind and around the public auction; sellers handle or arrange
+        authorized documentation.
     - name: documentation clerks
       description: Low-level authorized clerks handle required official auction sale papers.
     - name: guard patrols
       description: Guard patrols attend the public complex.
     - name: loading and unloading
       description: Caravans and handlers load and unload amid market traffic.
-  connections: []
+    - name: canonical map placement
+      description: "North of Heartstone and Chevalier Fountain, west of the western red arc; Back Alleys lie toward
+        the outer western wall. Access: west_outer_lane."
+  connections:
+    - target: west_outer_lane
+      description: square_access access; canonical city map.
+      minutes: 8
+      kind: square_access
+    - target: slave_market_back_alleys
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
 chunks: []

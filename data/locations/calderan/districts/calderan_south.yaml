@@ -7,36 +7,35 @@ entity:
   parent: calderan
   aliases:
     - Calderan South District
-  summary: South District is Calderan's main traveler entrance and its military, security,
-    land-transport and hospitality district, practical and sturdy, around the Imperial Gate,
-    Stonewatch Garrison, the South Gaol, the Long Yard and many inns.
+  summary: South District is Calderan's main traveler entrance and its military, security, land-transport and
+    hospitality district, practical and sturdy, around the Imperial Gate, Stonewatch Garrison, the South Gaol,
+    the Long Yard and many inns.
   tags:
     - geography
     - district
     - security
     - transport
-  search_context: South District of Calderan, urban district, Imperial Gate, Stonewatch Garrison,
-    South Gaol, Long Yard, Wayfarer's Rest, inns, stables, caravans, couriers, mercenaries.
-  content: "South is Calderan's main entrance for travelers and its military, security, land-transport
-    and hospitality district, though not purely military. Its people include City Guard, soldiers,
-    innkeepers, stable and transport workers, travelers, merchants in transit and ordinary residents;
-    newcomers and transients are a high proportion. It is broadly average in wealth, neither poor nor
-    rich. Its architecture is practical, sturdy and neutral, less distinctive than other districts.
-    The Imperial Gate, the city's principal land entrance, opens onto the Imperial Road. Stonewatch
-    Garrison holds barracks, training grounds, military stables and Guard facilities; City Guard and
-    military soldiers remain distinct institutions. Calderan South Prison, the South Gaol, is the main
-    city prison. South is transport and logistics rather than major warehousing: stable services,
-    carriage and wagon hire, couriers, transport contractors, farriers, caravan staging and loading
-    yards, above all the Long Yard. East supplies many of its tools and fittings. There is no major
-    livestock market inside the walls; large animal trade stays outside. Inns, taverns and cheap to
-    mid-range lodgings are numerous, the Wayfarer's Rest among the largest; luxury lodging belongs
-    mainly to North and Center. Adult prostitution is technically legal in Calderan but discreet; in
-    South heavy Guard presence limits open street solicitation, though travelers can still find adult
-    paid companionship and some innkeepers know how to arrange it discreetly. Mercenary work is legal
-    and independent armed workers are easy to find in South inns and taverns; important contracts
-    inside Calderan require registration. These are predominant tendencies, not exclusive zoning.
-    Crossing substantial parts of a district is meaningful travel; no exact roads or navigation
-    routes are established."
+  search_context: South District of Calderan, urban district, Imperial Gate, Stonewatch Garrison, South Gaol,
+    Long Yard, Wayfarer's Rest, inns, stables, caravans, couriers, mercenaries.
+  content: "South is Calderan's main entrance for travelers and its military, security, land-transport and
+    hospitality district, though not purely military. Its people include City Guard, soldiers, innkeepers,
+    stable and transport workers, travelers, merchants in transit and ordinary residents; newcomers and
+    transients are a high proportion. It is broadly average in wealth, neither poor nor rich. Its architecture
+    is practical, sturdy and neutral, less distinctive than other districts. The Imperial Gate, the city's
+    principal land entrance, opens onto the Imperial Road. Stonewatch Garrison holds barracks, training
+    grounds, military stables and Guard facilities; City Guard and military soldiers remain distinct
+    institutions. Calderan South Prison, the South Gaol, is the main city prison. South is transport and
+    logistics rather than major warehousing: stable services, carriage and wagon hire, couriers, transport
+    contractors, farriers, caravan staging and loading yards, above all the Long Yard. East supplies many of
+    its tools and fittings. There is no major livestock market inside the walls; large animal trade stays
+    outside. Inns, taverns and cheap to mid-range lodgings are numerous, the Wayfarer's Rest among the
+    largest; luxury lodging belongs mainly to North and Center. Adult prostitution is technically legal in
+    Calderan but discreet; in South heavy Guard presence limits open street solicitation, though travelers can
+    still find adult paid companionship and some innkeepers know how to arrange it discreetly. Mercenary work
+    is legal and independent armed workers are easy to find in South inns and taverns; important contracts
+    inside Calderan require registration. These are predominant tendencies, not exclusive zoning. Crossing
+    substantial parts of a district is meaningful travel; the canonical city map and weighted connections
+    establish pedestrian routes."
   knowledge:
     visibility:
       narrator: true
@@ -45,10 +44,11 @@ entity:
     awareness: local:calderan
   features:
     - name: stables, carriages and couriers
-      description: Stable services, carriage and wagon hire, couriers, transport contractors and farriers
-        are common throughout South.
+      description: Stable services, carriage and wagon hire, couriers, transport contractors and farriers are common
+        throughout South.
     - name: inns and taverns
-      description: Many inns, taverns and cheap to mid-range lodgings serve travelers, caravan crews,
-        couriers, mercenaries and transport workers.
+      description: Many inns, taverns and cheap to mid-range lodgings serve travelers, caravan crews, couriers,
+        mercenaries and transport workers.
   connections: []
+  entrance: south_arterial
 chunks: []

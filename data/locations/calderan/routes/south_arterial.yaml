@@ -1,0 +1,51 @@
+schema_version: 1
+entity:
+  id: south_arterial
+  type: location
+  name: South Arterial Road
+  display_name: South Arterial Road
+  parent: calderan_south
+  aliases: []
+  summary: Red southern arc north of the Wayfarers Rest and South Gaol; the Imperial Gate approach joins here.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map South Arterial Road
+  content: Red southern arc north of the Wayfarers Rest and South Gaol; the Imperial Gate approach joins here.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: southeast_bridge
+      description: bridge access; canonical city map.
+      minutes: 22
+      kind: bridge
+    - target: west_arterial_south
+      description: road access; canonical city map.
+      minutes: 22
+      kind: road
+    - target: imperial_gate
+      description: gate access; canonical city map.
+      minutes: 14
+      kind: gate
+    - target: wayfarers_rest
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
+    - target: the_long_yard
+      description: street access; canonical city map.
+      minutes: 5
+      kind: street
+    - target: calderan_south_prison
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
+    - target: stonewatch_garrison
+      description: street access; canonical city map.
+      minutes: 7
+      kind: street
+chunks: []

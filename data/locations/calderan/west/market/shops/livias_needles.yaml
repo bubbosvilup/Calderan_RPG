@@ -4,21 +4,27 @@ entity:
   type: location
   name: Livia's Needles
   display_name: Livia's Needles
-  parent: main_market_square
+  parent: calderan_west
   aliases: []
   summary: An ordinary clothing and alterations business on Main Market Square.
   tags:
     - geography
   search_context: Ordinary clothes and clothing repairs in West; tailoring and alterations on Main Market Square.
-  content: Offers ordinary clothing, repairs, cloaks, underwear and linen, alterations and inexpensive
-    custom work. It does not provide armor, elite noble fashion or rare luxury textiles by default.
-    Livia Marr is the proprietor.
+  content: Offers ordinary clothing, repairs, cloaks, underwear and linen, alterations and inexpensive custom
+    work. It does not provide armor, elite noble fashion or rare luxury textiles by default. Livia Marr is the
+    proprietor.
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "An ordinary clothing and alterations business on Main Market Square. Access: main_market_square."
+  connections:
+    - target: main_market_square
+      description: square_access access; canonical city map.
+      minutes: 1
+      kind: square_access
 chunks: []

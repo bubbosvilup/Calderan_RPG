@@ -1,4 +1,5 @@
 import type { HybridSearch } from "../retrieval/hybrid-search.js";
+import { escapeRegExp } from "./language/text.js";
 import type { RetrievalService } from "../retrieval/retrieval-service.js";
 import { QUERY_STOPWORDS, stem } from "../retrieval/lexical-index.js";
 import { tokenize } from "../retrieval/tokenizer.js";
@@ -62,7 +63,7 @@ export function entityMentions(query: string, context: TurnContext, world: World
   const ancestors = (id: string) => world.getAncestors(id).map(a => a.id);
   for (const e of visible) for (const n of names(e)) {
     const run = content(n);
-    if (run.length > 1 || (run.length === 1 && new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(query))) { if (includesRun(q, run)) mentions.set(e.id, 2); }
+    if (run.length > 1 || (run.length === 1 && new RegExp(`\\b${escapeRegExp(n)}\\b`).test(query))) { if (includesRun(q, run)) mentions.set(e.id, 2); }
   }
   const explicitPlaces = [...mentions.keys()].filter(id => world.getEntity(id)?.type === "location");
   for (const e of visible) {
@@ -91,7 +92,18 @@ function localityRank(id: string, context: TurnContext, world: WorldStore): numb
   const i = scene.findIndex(s => chain.includes(s));
   return i >= 0 && world.getEntity(id)?.type === "location" ? i : undefined;
 }
-export const POOL_SIZE = 5, RESULT_LIMIT = 3, LOCALITY_TIE = 0.85;
+/**
+ * Hardening H3: every retrieval truncation is a named limit with a reason (values unchanged from Phase 1R).
+ *  - query_characters: the cleaned query sent to search (a bound on input, not on results);
+ *  - candidate_pool: lexical/hybrid candidates ranked by the turn policy;
+ *  - mention_lookup_pool: candidates per extra lookup for an explicitly named entity missing from the pool;
+ *  - ranked_results: candidates handed to the narrator as references (and to knowledge awareness);
+ *  - exact_fetch: full records fetched (the top candidate only);
+ *  - payload_characters: serialized retrieval payload; exceeding it fails the turn closed (retrieval_failed), never truncates lore.
+ * Measured in H3: multi-answer misses are authoring-vocabulary gaps, not these limits (see the H3 report), so none was raised.
+ */
+export const RETRIEVAL_LIMITS = Object.freeze({ query_characters: 500, candidate_pool: 5, mention_lookup_pool: 5, ranked_results: 3, exact_fetch: 1, payload_characters: 10_000 });
+export const POOL_SIZE = RETRIEVAL_LIMITS.candidate_pool, RESULT_LIMIT = RETRIEVAL_LIMITS.ranked_results, LOCALITY_TIE = 0.85;
 type Candidate = { readonly entity_id: string; readonly kind: string; readonly chunk_id?: string; readonly secret?: boolean };
 /**
  * Turn-level ranking (Phase 1R): lexical pool, then named entities first (explicit, then near/deictic; missing ones are fetched so
@@ -100,7 +112,7 @@ type Candidate = { readonly entity_id: string; readonly kind: string; readonly c
  */
 export async function rankForTurn(input: string, context: TurnContext, world: WorldStore, retrieval: TurnRetrieval, pool = POOL_SIZE) {
   const query = retrievalQuery(input), intent = queryIntent(query);
-  const found = await retrieval.search.searchWithDiagnostics({ query: query.slice(0, 500), limit: pool }, "narrator", "hybrid");
+  const found = await retrieval.search.searchWithDiagnostics({ query: query.slice(0, RETRIEVAL_LIMITS.query_characters), limit: pool }, "narrator", "hybrid");
   const keep = (c: Candidate) => !c.secret && !(context.player_profile && c.kind === "entity" && c.entity_id === "nicco");
   const score = new Map(found.debug.hits.map(h => [h.reference.chunk_id ?? h.reference.entity_id, h.lexical_score ?? h.hybrid_score]));
   const key = (c: Candidate) => c.chunk_id ?? c.entity_id;
@@ -109,7 +121,7 @@ export async function rankForTurn(input: string, context: TurnContext, world: Wo
   for (const id of mentions.keys()) {
     if (candidates.some(c => c.entity_id === id)) continue;
     const entity = world.getEntity(id)!;
-    const extra = (await retrieval.search.searchWithDiagnostics({ query: entity.name, limit: 5 }, "narrator", "hybrid")).result.candidates as readonly Candidate[];
+    const extra = (await retrieval.search.searchWithDiagnostics({ query: entity.name, limit: RETRIEVAL_LIMITS.mention_lookup_pool }, "narrator", "hybrid")).result.candidates as readonly Candidate[];
     const hit = extra.find(c => c.entity_id === id && c.kind === "entity" && keep(c));
     if (hit) candidates.push(hit);
   }
@@ -133,16 +145,16 @@ export async function rankForTurn(input: string, context: TurnContext, world: Wo
       .sort((a, b) => a.rank !== undefined && b.rank !== undefined ? a.rank - b.rank || a.index - b.index : a.index - b.index).map(x => x.c));
     i += group.length;
   }
-  return { query, intent, mentions, used_mode: found.debug.used_mode, candidates: ordered };
+  return { query, intent, mentions, used_mode: found.debug.used_mode, fallback_reason: found.debug.fallback_reason, candidates: ordered };
 }
 
 export async function retrieveForTurn(input: string, context: TurnContext, world: WorldStore, retrieval: TurnRetrieval) {
   const start = performance.now();
-  if (!retrievalRequired(input, context, world)) return { data: { records: [] as unknown[], unknown: false }, diagnostics: { operations: 0, mode: "none", ids: [], elapsed_ms: performance.now() - start, outcome: "not_needed" } satisfies RetrievalDiagnostic };
+  if (!retrievalRequired(input, context, world)) return { data: { records: [] as unknown[], unknown: false }, payload_characters: 30, fallback_reason: undefined, diagnostics: { operations: 0, mode: "none", ids: [], elapsed_ms: performance.now() - start, outcome: "not_needed" } satisfies RetrievalDiagnostic };
   try {
     const ranked = await rankForTurn(input, context, world, retrieval);
-    const candidates = ranked.candidates.slice(0, RESULT_LIMIT);
-    const first = candidates[0];
+    const candidates = ranked.candidates.slice(0, RETRIEVAL_LIMITS.ranked_results);
+    const first = candidates[0]; // RETRIEVAL_LIMITS.exact_fetch: only the top candidate's record is fetched
     const fetched = first ? retrieval.service.get({ entity_id: first.entity_id, ...(first.kind === "chunk" ? { chunk_id: first.chunk_id } : {}) }, "narrator") : undefined;
     if (fetched && fetched.kind !== "found") throw new TurnError("retrieval_failed");
     const records: unknown[] = fetched?.kind === "found" && !fetched.record.secret ? [fetched.record] : [];
@@ -156,8 +168,9 @@ export async function retrieveForTurn(input: string, context: TurnContext, world
     });
     // question_focus is prompt guidance only (Phase 1R); it is not rendered inside [RETRIEVED CANON].
     const data = { records, candidates, awareness, unknown: candidates.length === 0, ...(ranked.intent ? { question_focus: ranked.intent } : {}) };
-    if (JSON.stringify(data).length > 10_000) throw new TurnError("retrieval_failed");
-    return { data, diagnostics: { operations: (first ? 2 : 1) + [...ranked.mentions.keys()].filter(id => !(ranked.candidates as readonly Candidate[]).some(c => c.entity_id === id)).length,
+    const payload_characters = JSON.stringify(data).length;
+    if (payload_characters > RETRIEVAL_LIMITS.payload_characters) throw new TurnError("retrieval_failed");
+    return { data, payload_characters, fallback_reason: ranked.fallback_reason, diagnostics: { operations: (first ? 2 : 1) + [...ranked.mentions.keys()].filter(id => !(ranked.candidates as readonly Candidate[]).some(c => c.entity_id === id)).length,
       mode: ranked.used_mode === "hybrid" ? "hybrid" : "lexical", ids: candidates.map(c => c.kind === "chunk" && c.chunk_id ? c.chunk_id : c.entity_id), elapsed_ms: performance.now() - start, outcome: candidates.length ? "found" : "unknown",
       query: ranked.query, intent: ranked.intent, mentions: Object.fromEntries(ranked.mentions) } satisfies RetrievalDiagnostic };
   } catch { throw new TurnError("retrieval_failed"); }

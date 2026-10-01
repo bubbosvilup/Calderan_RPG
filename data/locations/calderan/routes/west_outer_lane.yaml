@@ -1,0 +1,37 @@
+schema_version: 1
+entity:
+  id: west_outer_lane
+  type: location
+  name: West Outer Lane
+  display_name: West Outer Lane
+  parent: calderan_west
+  aliases: []
+  summary: Red outer western corridor beside the Back Alleys; ends at the south bank of Grey Brook near the
+    Dangling Rope. No outer West gate exists.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map West Outer Lane
+  content: Red outer western corridor beside the Back Alleys; ends at the south bank of Grey Brook near the
+    Dangling Rope. No outer West gate exists.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: heartstone_square
+      description: street access; canonical city map.
+      minutes: 12
+      kind: street
+    - target: calderan_slave_market
+      description: square_access access; canonical city map.
+      minutes: 8
+      kind: square_access
+    - target: the_dangling_rope
+      description: street access; canonical city map.
+      minutes: 16
+      kind: street
+chunks: []

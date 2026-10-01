@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: imperial_road
+  type: location
+  name: Imperial Road
+  display_name: Imperial Road
+  parent: calderan
+  aliases: []
+  summary: Exterior road immediately south of Imperial Gate; the principal land approach. Its wider course
+    remains unauthored.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map Imperial Road
+  content: Exterior road immediately south of Imperial Gate; the principal land approach. Its wider course
+    remains unauthored.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: imperial_gate
+      description: gate access; canonical city map.
+      minutes: 3
+      kind: gate
+chunks: []

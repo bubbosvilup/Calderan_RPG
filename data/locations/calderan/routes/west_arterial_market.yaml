@@ -1,0 +1,35 @@
+schema_version: 1
+entity:
+  id: west_arterial_market
+  type: location
+  name: West Arterial Road, Market
+  display_name: West Arterial Road, Market
+  parent: calderan_west
+  aliases: []
+  summary: Red western arc east of the Slave Market and west of Main Market Square; north of the Chevalier junction.
+  tags:
+    - geography
+    - road
+  search_context: Calderan canonical city map West Arterial Road, Market
+  content: Red western arc east of the Slave Market and west of Main Market Square; north of the Chevalier junction.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: west_arterial_south
+      description: road access; canonical city map.
+      minutes: 14
+      kind: road
+    - target: west_arterial_north
+      description: road access; canonical city map.
+      minutes: 14
+      kind: road
+    - target: main_market_square
+      description: square_access access; canonical city map.
+      minutes: 8
+      kind: square_access
+chunks: []

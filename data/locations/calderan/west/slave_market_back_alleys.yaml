@@ -8,35 +8,45 @@ entity:
   aliases:
     - Back Alleys
     - Slave-Market Back Alleys
-  summary: The Back Alleys are a known but taboo trading area behind conventional slave-market
-    activity, not inherently illegal and distinct from the deeper criminal layer.
+  summary: The Back Alleys are a known but taboo trading area behind conventional slave-market activity, not
+    inherently illegal and distinct from the deeper criminal layer.
   tags:
     - geography
     - slavery
   search_context: Back Alleys, taboo sensitive private sales behind Calderan Slave Market.
-  content: "Known locally but taboo, the Back Alleys handle sensitive private sales: violent captives,
-    dangerous criminals, difficult-to-control slaves, unusual or highly specific requested
-    characteristics, moderately ill or injured but commercially viable captives, and difficult debt
-    cases. The whole area is not openly criminal or inherently illegal. Guard presence is low;
-    guards generally avoid entering without reason. Many locals imperfectly know that something
-    deeply wrong happens farther beyond, without knowing exact details. The Back-Back Alleys are a
-    distinct deeper layer, not normal public market space."
+  content: "Known locally but taboo, the Back Alleys handle sensitive private sales: violent captives, dangerous
+    criminals, difficult-to-control slaves, unusual or highly specific requested characteristics, moderately
+    ill or injured but commercially viable captives, and difficult debt cases. The whole area is not openly
+    criminal or inherently illegal. Guard presence is low; guards generally avoid entering without reason.
+    Many locals imperfectly know that something deeply wrong happens farther beyond, without knowing exact
+    details. The Back-Back Alleys are a distinct deeper layer, not normal public market space."
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
     awareness: local:calderan
-  features: []
-  connections: []
+  features:
+    - name: canonical map placement
+      description: "The Back Alleys are a known but taboo trading area behind conventional slave-market activity,
+        not inherently illegal and distinct from the deeper criminal layer. Access: calderan_slave_market."
+  connections:
+    - target: calderan_slave_market
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
+    - target: slave_market_back_back_alleys
+      description: street access; canonical city map.
+      minutes: 4
+      kind: street
 chunks:
   - id: slave_market_back_alleys.off_record_contacts
     entity_id: slave_market_back_alleys
     section: off_record_contacts
     summary: Restricted knowledge of off-record arrangements in the Back Alleys.
     search_context: Restricted knowledge of off-record arrangements in the Back Alleys.
-    content: Some illegal or off-record transactions may be arranged on request. False documentation may
-      be available through criminal contacts. No exact contacts or access routes are established.
+    content: Some illegal or off-record transactions may be arranged on request. False documentation may be
+      available through criminal contacts. No exact contacts or access routes are established.
     tags: []
     knowledge:
       visibility:

@@ -3,6 +3,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { CampaignSnapshot } from "./types.js";
 import { CampaignIdentityResolver, type CampaignIdKind } from "./identity.js";
 import { CampaignValidationError, fail, freezeSnapshot, parseCampaignSnapshot } from "./validation.js";
+import { ageStatus } from "./age.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -23,16 +24,22 @@ function unique<T>(records: readonly T[], key: (record: T) => string, field: str
 function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   const refs = new CampaignIdentityResolver(world, s), minute = s.runtime.scene.world_time.world_minute;
   const historical = (time: number | undefined, field: string) => { if (time !== undefined && time > minute) fail(field, "future provenance"); };
-  const records = [...s.characters, ...s.items, ...s.households, ...s.facts, ...s.goals, ...s.scheduled_events];
+  const records = [...s.characters, ...s.items, ...s.households, ...s.facts, ...s.goals, ...s.scheduled_events, ...s.transactions];
   unique(records, r => r.id, "id");
-  const emptyDomains = { characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [] };
+  const emptyDomains = { characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [] };
   const registration = new CampaignIdentityResolver(world, emptyDomains);
   for (const c of s.characters) {
     registration.registration(c.id, c.origin, "character");
     if (c.origin.kind === "canonical" && c.current.current_location !== undefined) fail("current_location", "canonical location must live only in runtime");
     if (c.current.current_location !== undefined) refs.location(c.current.current_location);
+    // Promotion Pass 1.1: origin snapshots belong to created characters, never to canon, and never postdate the snapshot.
+    if (c.origin_snapshot) {
+      if (c.origin.kind !== "created") fail("origin_snapshot", "only created characters carry a promotion origin");
+      if (c.origin_snapshot.promoted_revision > s.revision) fail("origin_snapshot.promoted_revision", "promotion cannot postdate the snapshot");
+      refs.location(c.origin_snapshot.location_id);
+    }
   }
-  for (const [list, kind] of [[s.households, "household"], [s.facts, "fact"], [s.goals, "goal"], [s.scheduled_events, "event"]] as const) {
+  for (const [list, kind] of [[s.households, "household"], [s.facts, "fact"], [s.goals, "goal"], [s.scheduled_events, "event"], [s.transactions, "transaction"]] as const) {
     for (const r of list) registration.newId(r.id, kind as CampaignIdKind);
   }
   refs.location(s.runtime.scene.player_location);
@@ -83,6 +90,26 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   }
   unique(s.relationships, e => `${e.from_character_id}:${e.to_character_id}`, "relationships");
   for (const e of s.relationships) { refs.character(e.from_character_id); refs.character(e.to_character_id); if (e.from_character_id === e.to_character_id) fail("relationship", "self-edge"); }
+  // Household Pass 1 domains.
+  for (const h of s.households) unique(h.rules ?? [], r => r.id, "household.rules");
+  for (const e of s.relationships) if (e.dimensions?.romance && e.dimensions.romance !== "none" && (ageStatus(world, s, e.from_character_id) !== "adult" || ageStatus(world, s, e.to_character_id) !== "adult")) fail("relationship.romance", "romance requires two established adults");
+  unique(s.funds, f => f.character_id, "funds");
+  for (const f of s.funds) refs.character(f.character_id);
+  unique(s.legal_statuses, l => l.character_id, "legal_statuses");
+  for (const l of s.legal_statuses) {
+    refs.character(l.character_id);
+    if (l.status === "enslaved") { if (!l.holder_id || l.holder_id === l.character_id) fail("legal_statuses.holder_id", "enslaved person needs another legal holder"); refs.character(l.holder_id); }
+    else if (l.holder_id !== undefined) fail("legal_statuses.holder_id", "free person has no holder");
+    if (l.transfer?.from_holder_id !== undefined) refs.character(l.transfer.from_holder_id);
+    if (l.transfer?.transaction_id !== undefined && !s.transactions.some(x => x.id === l.transfer!.transaction_id)) fail("legal_statuses.transfer", "unknown transaction");
+  }
+  for (const x of s.transactions) {
+    for (const id of [x.subject_id, x.from_holder_id, x.to_holder_id, x.payer_id, x.payee_id]) if (id !== undefined) refs.character(id);
+    // Pass 1.2: exactly one seller side — a campaign character, or an anonymous counterparty snapshot (sales only).
+    if ((x.from_holder_id === undefined) === (x.from_counterparty === undefined)) fail("transactions.from_holder_id", "a transaction has exactly one seller side");
+    if (x.from_counterparty) { if (x.kind !== "sale") fail("transactions.from_counterparty", "an anonymous counterparty can only sell"); refs.location(x.from_counterparty.location_id); }
+    historical(x.world_minute, "transactions.world_minute"); if (x.revision > s.revision) fail("transactions.revision", "future transaction");
+  }
   for (const g of s.goals) { refs.character(g.character_id); historical(g.created_at, "created_at"); if (g.target) refs.target(g.target); }
   for (const e of s.scheduled_events) e.participants?.forEach(id => refs.character(id));
 }

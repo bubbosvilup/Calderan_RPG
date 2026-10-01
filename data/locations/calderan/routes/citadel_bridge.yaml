@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: citadel_bridge
+  type: location
+  name: Citadel Bridge
+  display_name: Citadel Bridge
+  parent: calderan_center
+  aliases: []
+  summary: Local bridge between the Registry/Archive bank and the Ducal Citadel on Grey Brooks northeast bank.
+    It does not cross the inner wall.
+  tags:
+    - geography
+    - bridge
+  search_context: Calderan canonical city map Citadel Bridge
+  content: Local bridge between the Registry/Archive bank and the Ducal Citadel on Grey Brooks northeast bank.
+    It does not cross the inner wall.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: local:calderan
+  features: []
+  connections:
+    - target: center_west_road
+      description: bridge access; canonical city map.
+      minutes: 8
+      kind: bridge
+    - target: ducal_citadel
+      description: bridge access; canonical city map.
+      minutes: 4
+      kind: bridge
+chunks: []

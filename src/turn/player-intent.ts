@@ -4,12 +4,16 @@ import type { WorldStore } from "../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
 import { TurnError } from "./turn-types.js";
 import { resolveTransferIntent, type ResolvedReference } from "./reference-resolution.js";
-import { resolveNaturalActions, type NaturalActionResolution } from "./natural-actions.js";
+import { resolveNaturalActions, reachable, resolveDestination, type NaturalActionResolution } from "./natural-actions.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 
 export interface PlayerIntent { readonly candidates: readonly CampaignCommand[]; readonly runtime: readonly CampaignCommand[]; readonly resolved_references?: readonly ResolvedReference[]; readonly ambiguous_reference?: boolean;
   /** Phase 1S natural action resolution (diagnostics and narrator action lines); absent for command-grammar turns. */
-  readonly natural?: NaturalActionResolution }
+  readonly natural?: NaturalActionResolution;
+  /** Household Pass 1: authoritative narrator notes for resolved or blocked person transactions. */
+  readonly notes?: readonly string[];
+  /** Household Pass 1: the player's explicit household-rule declarations this turn. */
+  readonly rule_declarations?: readonly string[] }
 function normalize(text: string): string { return text.trim().replace(/[.!]$/, "").replace(/^the /i, "").toLowerCase(); }
 function resolve(text: string, entries: readonly { readonly id: string; readonly name?: string | undefined }[]): string | undefined {
   const found = entries.filter(e => [e.id, e.name].some(n => n && normalize(n) === normalize(text)));
@@ -33,11 +37,11 @@ export function playerIntent(input: string, context: TurnContext, snapshot: Deep
     resolved_references: [transfer.recipient, transfer.items].filter((r): r is ResolvedReference => !!r), ambiguous_reference: transfer.unresolved,
   };
   let m: RegExpMatchArray | null;
-  if ((m = text.match(/^(?:\/go |I go to |I go downstairs to |I go upstairs to )(.+?)\.?$/i))) {
-    const destination = resolve(m[1]!, world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.player && e.knowledge.visibility.narrator));
-    const current = world.getEntity(snapshot.runtime.scene.player_location);
-    if (!destination || current?.type !== "location" || !current.connections.some(c => c.target === destination)) throw new TurnError("invalid_runtime_intent");
-    runtime.push({ kind: "runtime_delta", delta: { player_location: destination } });
+  if ((m = text.match(/^(?:\/go |go to |walk back to |head to |I go to |I go downstairs to |I go upstairs to )(.+?)\.?$/i))) {
+    const destination = resolveDestination(m[1]!, context, world);
+    const route = destination && reachable(destination, snapshot.runtime.scene.player_location, world);
+    if (!route || !route.target) throw new TurnError("invalid_runtime_intent");
+    runtime.push({ kind: "runtime_delta", delta: { player_location: route.target, time_advance_minutes: route.route!.minutes } });
   } else if ((m = text.match(/^(?:\/wait (\d+)|I wait (\d+) minutes\.?|\*he spent (\d+) (hours?|minutes?) [^*]+\*)$/i))) {
     const minutes = Number(m[1] ?? m[2] ?? m[3]) * (m[4]?.toLowerCase().startsWith("hour") ? 60 : 1);
     if (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > 1440) throw new TurnError("invalid_runtime_intent");

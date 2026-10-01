@@ -5,17 +5,23 @@ entity:
   name: "The Wayfarer's Rest"
   display_name: "The Wayfarer's Rest"
   parent: calderan_south
-  aliases: ["Wayfarer's Rest"]
+  aliases: [ "Wayfarer's Rest" ]
   summary: >-
-    The Wayfarer's Rest is a large, mid-range, heavily trafficked inn in Calderan's South
-    District.
-  tags: ["inn","hospitality"]
+    The Wayfarer's Rest is a large, mid-range, heavily trafficked inn in Calderan's South District.
+  tags: [ "inn", "hospitality" ]
   search_context: "Wayfarer's Rest, Wayfarers Rest, South District inn, travelers, caravan crews, couriers, mercenaries"
   content: >-
-    The Wayfarer's Rest is a large, reliable, mid-range inn with heavy traffic. Its guests
-    include travelers, caravan personnel, couriers, mercenaries and transport workers. It is not
-    luxury accommodation. Its keeper, staff, rooms and prices are not established.
-  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"local:calderan"}
-  features: []
-  connections: []
+    The Wayfarer's Rest is a large, reliable, mid-range inn with heavy traffic. Its guests include travelers,
+    caravan personnel, couriers, mercenaries and transport workers. It is not luxury accommodation. Its
+    keeper, staff, rooms and prices are not established.
+  knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "local:calderan" }
+  features:
+    - name: canonical map placement
+      description: "The Wayfarer's Rest is a large, mid-range, heavily trafficked inn in Calderan's South District.
+        Access: south_arterial."
+  connections:
+    - target: south_arterial
+      description: street access; canonical city map.
+      minutes: 3
+      kind: street
 chunks: []
