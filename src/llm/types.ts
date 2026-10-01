@@ -13,4 +13,6 @@ export interface GenerationRequest {
   readonly messages: readonly Message[];
   readonly max_output_tokens?: number;
   readonly signal?: AbortSignal;
+  /** H5: per-attempt upper bound; providers use the smaller of this and their configured timeout. */
+  readonly timeout_ms?: number;
 }

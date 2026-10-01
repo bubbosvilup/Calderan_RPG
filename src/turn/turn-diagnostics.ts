@@ -4,6 +4,7 @@ import type { GenerationMetadata } from "../llm/types.js";
 import type { TurnContext } from "./context-builder.js";
 import { CONTEXT_LIMITS, contextSerializedCharacters } from "./context-builder.js";
 import { RETRIEVAL_LIMITS } from "./retrieval-policy.js";
+import type { ProviderAttemptRecord } from "../llm/retry.js";
 import type { AuthorizationDiagnostic, TurnFailure } from "./turn-types.js";
 
 export type DiagnosticPhase = "input_intent" | "projection" | "retrieval" | "prompt_composition" | "narrator" | "reconciliation_narrator" | "controller" | "authorization" | "preparation" | "audit" | "reconciliation" | "reconciliation_audit" | "commit_preparation" | "commit" | "publication";
@@ -17,6 +18,8 @@ export interface TurnDiagnostics {
   narrator?: { model?: string; usage?: GenerationMetadata["usage"]; latency_ms?: number; completed: boolean; streamed_characters: number; final_text_characters: number };
   revision_narrator?: TurnDiagnostics["narrator"];
   controller?: { model: string; usage: GenerationMetadata["usage"]; latency_ms: number; parse_success: boolean; proposed_count: number; command_kinds: readonly string[]; normalization_used: boolean };
+  /** H5: attempts per logical provider call (draft narrator, reconciliation narrator, controller). Counts, reasons and timing only. */
+  provider_attempts?: { narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
   authorization?: { proposed_count: number; authorized_count: number; rejected_count: number; decisions: readonly { kind: string; authorized: boolean; reason: string; evidence_check?: string }[] };
   audit?: { issue_count: number; issue_kinds: readonly string[]; reconciliation_attempted: boolean; revision_issue_count: number; revision_issue_kinds: readonly string[]; redaction_used: boolean; delivered: string };
   commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_promotion_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };

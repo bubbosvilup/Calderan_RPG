@@ -30,7 +30,7 @@ export class DeepSeekStateControllerProvider implements StateControllerProvider 
         player_action: request.player_action, prior_state: request.prior_state, final_narration: request.final_narration,
       }) }], response_format: { type: "json_schema", json_schema: { name: "campaign_proposal_with_evidence", strict: true, schema: CONTROLLER_EVIDENCE_SCHEMA } },
       provider: { require_parameters: true }, reasoning: { exclude: true, ...(this.config.reasoning_effort ? { effort: this.config.reasoning_effort } : { enabled: false }) },
-    }, false, this.config.timeout_ms ?? 20_000, request.signal)) {
+    }, false, Math.min(this.config.timeout_ms ?? 20_000, request.timeout_ms ?? Infinity), request.signal)) {
       if (event.type === "text_delta") text += event.text;
       else {
         // Evidence shape first; a legacy shape (no evidence) is accepted but can only use the grammar path downstream.

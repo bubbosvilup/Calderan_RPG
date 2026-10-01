@@ -5,6 +5,8 @@ export interface ControllerRequest {
   readonly prior_state: string;
   readonly final_narration: string;
   readonly signal?: AbortSignal;
+  /** H5: per-attempt upper bound; the provider uses the smaller of this and its configured timeout. */
+  readonly timeout_ms?: number;
 }
 /** evidence[i] is the controller-supplied verbatim quote for commands[i] (Phase 1O); absent for legacy or mock controllers. */
 export interface ControllerResult extends GenerationMetadata { readonly commands: readonly CampaignCommand[]; readonly evidence?: readonly string[];

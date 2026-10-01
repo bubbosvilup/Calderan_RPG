@@ -1,0 +1,205 @@
+{
+  "pass": "H5",
+  "date": "2026-10-01",
+  "status": "PARTIAL",
+  "live": {
+    "status": "BLOCKED",
+    "reason": "OPENROUTER_API_KEY and VOYAGE_API_KEY are not present in the execution environment; no paid provider call was made.",
+    "live_calls": 0,
+    "tokens": 0,
+    "estimated_cost_usd": 0,
+    "not_measured": [
+      "live baseline",
+      "live post-change soak",
+      "narrator/controller live quality",
+      "p95/p99 live latency",
+      "live semantic retrieval (Voyage)",
+      "live secret leakage",
+      "live player agency",
+      "live character continuity",
+      "H1 TODO live frequency",
+      "controller invalid-output retry value"
+    ],
+    "ready_to_run": {
+      "harness": "node .build/src/dev/eval-live-h5.js",
+      "aggregator": "node .build/src/dev/aggregate-diagnostics.js",
+      "scenarios": 26,
+      "turns_per_run": 35,
+      "planned": {
+        "smoke_5_runs": 175,
+        "comparison_10_runs": 350
+      },
+      "guards": [
+        "BLOCKED exit 3 without key",
+        "REFUSED exit 2 if planned turns > --max-turns (default 120)",
+        "--max-tokens (default 600000)",
+        "--budget-usd with explicit prices"
+      ],
+      "recommended_order": [
+        "1. --no-retry --runs 5 (pre-change baseline)",
+        "2. default retry --runs 5",
+        "3. unstable/critical scenarios --runs 15-20",
+        "4. --semantic with VOYAGE_API_KEY"
+      ]
+    }
+  },
+  "deterministic": {
+    "tests": {
+      "total": 1196,
+      "pass": 1192,
+      "fail": 0,
+      "todo": 4,
+      "baseline_total": 1157,
+      "new": 39,
+      "full_suite_runs_clean": "5/5"
+    },
+    "replay": "25/25",
+    "typecheck": "pass",
+    "h2_golden_file_changed": false
+  },
+  "offline_injection_not_live": {
+    "kind": "offline_injection_not_live",
+    "runs_per_case": 5,
+    "cases": [
+      "narrator_rate_limited_once",
+      "controller_rate_limited_once",
+      "narrator_rate_limited_twice",
+      "controller_rate_limited_twice",
+      "narrator_timeout_once",
+      "controller_timeout_once",
+      "narrator_timeout_twice",
+      "controller_timeout_twice",
+      "narrator_network_error_once",
+      "controller_network_error_once",
+      "narrator_network_error_twice",
+      "controller_network_error_twice",
+      "narrator_provider_unavailable_once",
+      "controller_provider_unavailable_once",
+      "narrator_provider_unavailable_twice",
+      "controller_provider_unavailable_twice",
+      "narrator_empty_once",
+      "controller_malformed_once",
+      "narrator_malformed_response_once",
+      "narrator_authentication_error",
+      "controller_configuration_error",
+      "reconciliation_rate_limited_once"
+    ],
+    "results": {
+      "retry_enabled": {
+        "turns": 110,
+        "success": 50,
+        "success_rate": 0.45454545454545453,
+        "failure_codes": {
+          "narrator_failed": 30,
+          "controller_failed": 30
+        },
+        "provider_codes": {
+          "rate_limited": 10,
+          "timeout": 10,
+          "network_error": 10,
+          "provider_unavailable": 10,
+          "structured_output_invalid": 5,
+          "invalid_provider_response": 5,
+          "authentication_error": 5,
+          "configuration_error": 5
+        },
+        "turns_with_retry": 90,
+        "recovered_calls": 50,
+        "unrecovered_retried_calls": 40,
+        "commits_total": 50,
+        "turns_with_more_than_one_commit": 0
+      },
+      "retry_disabled": {
+        "turns": 110,
+        "success": 0,
+        "success_rate": 0,
+        "failure_codes": {
+          "narrator_failed": 60,
+          "controller_failed": 50
+        },
+        "provider_codes": {
+          "rate_limited": 25,
+          "timeout": 20,
+          "network_error": 20,
+          "provider_unavailable": 20,
+          "structured_output_invalid": 5,
+          "invalid_provider_response": 5,
+          "authentication_error": 5,
+          "configuration_error": 5
+        },
+        "turns_with_retry": 0,
+        "recovered_calls": 0,
+        "unrecovered_retried_calls": 0,
+        "commits_total": 0,
+        "turns_with_more_than_one_commit": 0
+      }
+    }
+  },
+  "offline_latency": {
+    "happy_path_no_retry_ms": 2.4509167200000364,
+    "happy_path_with_retry_layer_ms": 2.3684637600000134,
+    "overhead_ms": -0.082452960000023,
+    "transient_one_failure_real_backoff_ms": {
+      "median": 364.48710400000164,
+      "min": 268.02629700000034,
+      "max": 463.2484969999996
+    },
+    "backoff_range_ms": [
+      250,
+      500
+    ]
+  },
+  "retry_policy": {
+    "max_attempts": 2,
+    "backoff_ms": [
+      250,
+      500
+    ],
+    "turn_budget_ms": 120000,
+    "min_retry_window_ms": 5000,
+    "retry_after_timeout_cap_ms": 30000,
+    "retryable": [
+      "rate_limited(429)",
+      "timeout",
+      "network_error",
+      "provider_unavailable(>=500)",
+      "narrator empty/inconsistent completion"
+    ],
+    "non_retryable": [
+      "cancelled",
+      "authentication_error",
+      "configuration_error",
+      "invalid_provider_response",
+      "structured_output_invalid",
+      "model_refusal",
+      "stale_turn",
+      "invalid_input"
+    ]
+  },
+  "worst_case_s": {
+    "before": 140,
+    "after_bound": 121.5
+  },
+  "fallback_decisions": {
+    "narrator": "deferred",
+    "controller": "deferred",
+    "model": "deferred"
+  },
+  "targets": {
+    "turn_success_ge_98pct": "not measured",
+    "controller_parse_ge_99pct": "not measured",
+    "wrong_committed_state_0": "0 in offline injection (not live)",
+    "secret_leak_0": "not measured live",
+    "redaction_lt_5pct": "not measured",
+    "reconciliation_lt_15pct": "not measured",
+    "transient_recovered_ge_90pct_injected": "100% (50/50 single-transient injected turns)",
+    "exactly_one_commit_under_retry": "100% (0 turns with >1 commit; 0 commits on failure)"
+  },
+  "error_budget": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "note": "counts cover offline injection only; no live defects could be classified"
+  }
+}

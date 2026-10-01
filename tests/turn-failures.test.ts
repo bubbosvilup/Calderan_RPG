@@ -139,8 +139,8 @@ test("narrator_failed: a failed reconciliation revision discards the prepared (u
   const narrator: NarratorProvider = { async generate() { throw new Error("unused"); }, async *stream() {
     if (call++ === 0) { const text = "Brenna accepts boots from Nicco."; yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } }; return; }
     throw new ProviderError("timeout"); } };
-  await expectFailure("narrator_failed", s, new TurnCoordinator(s.world, narrator, mockController([]), s.retrieval), "I give boots to Brenna.", { retry: true, provider_code: "timeout" });
-  assert.equal(call, 2, "the failure came from the reconciliation call, after preparation");
+  await expectFailure("narrator_failed", s, new TurnCoordinator(s.world, narrator, mockController([]), s.retrieval, { provider_retry: false }), "I give boots to Brenna.", { retry: true, provider_code: "timeout" });
+  assert.equal(call, 2, "the failure came from the reconciliation call, after preparation (single attempt: H5 retry is pinned off here and tested in provider-retry-h5)");
 });
 test("controller_failed: a controller provider error fails the turn; the delivered-nothing draft is not conversation truth", async () => {
   for (const code of ["timeout", "rate_limited", "structured_output_invalid"] as const) {

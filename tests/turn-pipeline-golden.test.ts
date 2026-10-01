@@ -51,7 +51,7 @@ async function traced(w: WorldStore, campaign: CampaignState, input: string, scr
     return { commands: [...(script.commands ?? [])], ...metadata };
   } };
   const debug: TurnDebugRecord[] = [];
-  const co = new TurnCoordinator(w, narrator, controller, retrieval as never, { debug_sink: r => debug.push(r) });
+  const co = new TurnCoordinator(w, narrator, controller, retrieval as never, { debug_sink: r => debug.push(r), provider_retry: false }); // The golden pins the single-attempt pre-H2 trace; retry traces live in provider-retry-h5.test.ts.
   const events: TurnEvent[] = [];
   for await (const e of co.runTurn({ campaign, player_input: input })) { events.push(e); trace.push({ op: "event", type: e.type }); }
   return { trace, events, debug, recent: co.recent(campaign).entries(), final_revision: campaign.revision };

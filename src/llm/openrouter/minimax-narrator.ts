@@ -47,7 +47,7 @@ export class MiniMaxNarratorProvider implements NarratorProvider {
         messages: [{ role: "system", content: request.system_prompt }, ...(this.config.roleplay_context ?? []), ...request.messages], max_tokens,
         ...(this.config.disable_reasoning ?? true ? { reasoning: { enabled: false } } : {}),
         ...(provider ? { provider: { order: [...provider.order], allow_fallbacks: provider.allow_fallbacks } } : {}),
-      }, true, this.config.timeout_ms ?? 60_000, request.signal)) {
+      }, true, Math.min(this.config.timeout_ms ?? 60_000, request.timeout_ms ?? Infinity), request.signal)) {
         if (event.type === "text_delta") { text += event.text; yield event; }
         else yield { type: "completed", result: { text, ...event.metadata } };
       }

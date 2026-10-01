@@ -3,6 +3,7 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import type { NarratorProvider, NarratorResult } from "../llm/narrator-provider.js";
 import type { StateControllerProvider } from "../llm/state-controller-provider.js";
 import { ProviderError } from "../llm/errors.js";
+import { DEFAULT_RETRY_POLICY, NO_RETRY_POLICY, ProviderBudget, type ProviderAttemptRecord, type ProviderRetryPolicy } from "../llm/retry.js";
 import type { WorldStore } from "../world/world-store.js";
 import type { NarratorPromptOptions } from "./prompt-builder.js";
 import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./retrieval-policy.js";
@@ -32,7 +33,8 @@ const active = new WeakSet<CampaignState>();
 export class TurnCoordinator {
   readonly #recent = new WeakMap<CampaignState, RecentConversation>();
   readonly #participants = new WeakMap<CampaignState, SceneParticipants>();
-  constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean } = {}) {}
+  constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean;
+  /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
@@ -87,10 +89,15 @@ export class TurnCoordinator {
       stage = "narrator_failed";
       let revisionGeneration = false;
       if (observer) observer.record.narrator = { completed: false, streamed_characters: 0, final_text_characters: 0 };
+      const retryPolicy = this.promptOptions.provider_retry === false ? NO_RETRY_POLICY : this.promptOptions.provider_retry ?? DEFAULT_RETRY_POLICY;
+      const budget = new ProviderBudget(retryPolicy);
+      const attempts = (key: "narrator" | "revision_narrator" | "controller") => (record: ProviderAttemptRecord) => { if (observer) (observer.record.provider_attempts ??= {})[key] = record; };
       const generate = createDraftGenerator(this.narrator, network.signal, checkpoint, observer ? count => {
         const record = revisionGeneration ? observer.record.revision_narrator : observer.record.narrator;
         if (record) record.streamed_characters += count;
-      } : undefined);
+      } : undefined, { policy: retryPolicy, budget, record: record => attempts(revisionGeneration ? "revision_narrator" : "narrator")(record),
+        // A discarded attempt's partial characters are not counted as the delivered stream.
+        attempt_started: () => { const record = revisionGeneration ? observer?.record.revision_narrator : observer?.record.narrator; if (record) record.streamed_characters = 0; } });
       const drafted = await measureAsync("narrator", () => generate(prompt), true);
       if (observer) observer.record.narrator = { streamed_characters: observer.record.narrator?.streamed_characters ?? 0, model: drafted.result.model, usage: drafted.result.usage, latency_ms: drafted.result.latency.elapsed_total_ms, completed: true, final_text_characters: drafted.text.length };
       narration = drafted.result;
@@ -100,7 +107,8 @@ export class TurnCoordinator {
 
       // ControllerStage: a PROPOSAL only — not authorization, not state, not truth.
       checkpoint(); stage = "controller_failed";
-      const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft }), true);
+      const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft,
+        retry: { policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
       if (observer) observer.record.controller = { model: proposed.result.model, usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
         parse_success: false, proposed_count: proposed.result.commands.length, command_kinds: proposed.result.commands.map(c => c.kind), normalization_used: !!proposed.result.normalization };
       checkpoint();
