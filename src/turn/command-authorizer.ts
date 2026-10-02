@@ -41,7 +41,7 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const c = snapshot.characters.find(x => x.id === command.character_id);
         const authoredNpcPlus = (!c || c.origin.kind === "canonical") && snapshot.premium_characters.some(p => p.character_id === command.character_id && p.metadata.active_household_member);
         if (!authoredNpcPlus && (!c || c.origin.kind !== "created" || c.current.status === "dead")) return reject("rejected_reference_invalid");
-        const now = c?.origin.kind === "created" ? c.current.current_location : snapshot.runtime.npc_locations.find(n => n.character_id === command.character_id)?.current_location;
+        const now = c?.origin.kind === "created" ? c.current.current_location : snapshot.runtime.npc_locations.find(n => n.character_id === command.character_id)?.current_location; // OFF_SCENE: undefined
         if (now === command.location_id) return reject("rejected_already_established");
         return (evidence.character_movements ?? []).some(m => m.character_id === command.character_id && m.location_id === command.location_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
       }
@@ -49,7 +49,10 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         // Runtime Continuity Repair 1: a present created character, still in the scene in the projected state, whose completed
         // departure the narration establishes. No player intent is involved: the controller proposes, narration evidence confirms.
         const c = snapshot.characters.find(x => x.id === command.character_id);
-        const ok = present.has(command.character_id) && c?.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead";
+        // Final movement closure: an ACTIVE authored NPC+ located with Nicco may depart for an unknown destination (-> OFF_SCENE) on the same evidence.
+        const authoredNpcPlus = (!c || c.origin.kind === "canonical") && snapshot.premium_characters.some(p => p.character_id === command.character_id && p.metadata.active_household_member)
+          && snapshot.runtime.npc_locations.some(n => n.character_id === command.character_id && n.current_location === snapshot.runtime.scene.player_location);
+        const ok = present.has(command.character_id) && (authoredNpcPlus || c?.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead");
         if (!ok) return reject("rejected_reference_invalid");
         return (evidence.departures ?? []).some(d => d.character_id === command.character_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
       }

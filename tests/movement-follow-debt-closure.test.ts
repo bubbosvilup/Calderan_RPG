@@ -115,7 +115,7 @@ test("D-12: ornate physical-arrival families resolve to Nicco's arrival (named s
     "Maren rounds the stairwell and steps into the hall.", "Maren descends the stairs.", "Maren appears at the bottom of the stairs a moment after he reaches the hall.", "Maren follows at a short distance."])
     assert.deepEqual(grammar(PREFIX + t), ["maren->test_hall"], t);
 });
-test("D-12 zero new false positives: intent-only, sound-only, modal, negated, temporal, habitual, imagined, other destination, quoted, someone else", () => {
+test("D-12 zero new false positives: intent-only, sound-only, modal, negated, temporal, habitual, imagined, other destination, quoted, someone else", async () => {
   for (const t of ["Maren chose to follow him.", "Maren decided to follow him down.", "He heard Maren on the stairs behind him.", "Maren's steps sounded on the stairs behind him.",
     "Maren might step into the hall.", "Maren would walk into the hall if asked.", "Maren refused to step into the hall.", "Maren did not come down into the hall.", "Maren did not appear at the bottom of the stairs.",
     "Maren walked into the hall yesterday.", "Maren usually walks into the hall at dawn.", "Maren stepped into the hall in his memory.", "Maren walked into the kitchen.", "Maren walks in the hall.",
@@ -123,7 +123,9 @@ test("D-12 zero new false positives: intent-only, sound-only, modal, negated, te
     "\"Maren steps into the hall,\" Gerome said.", "Nobody steps into the hall.", "Maren wondered whether she should step into the hall."])
     assert.deepEqual(grammar(PREFIX + t), [], t);
   assert.deepEqual(grammarProbe({ members: ["maren"], niccoMoves: false })("Maren joined him. Maren hurried after him. Maren comes down after him."), [], "Nicco did not move: no implicit follow");
-  assert.deepEqual(grammarProbe({ members: ["maren"], marenAtHall: true })(PREFIX + "Maren comes down into the hall a few paces behind."), [], "already at the arrival: no command");
+  // Already at the arrival: the grammar may report the (true) arrival as evidence, but the proposal stage drops it as already established.
+  const already = await play("Nicco goes down the stairs. Maren comes down into the hall a few paces behind.", "I go down to the main hall.", { members: ["maren"], extra: [{ kind: "move_character", character_id: "maren", location_id: "test_hall" }] });
+  assert.equal(already.result?.authorization.filter(a => a.command.kind === "move_character").length, 0, "already at the arrival: no command");
 });
 test("D-11: the bounded antecedent resolves a pronoun only to the single named subject of the window", () => {
   assert.deepEqual(women(PREFIX + "Maren's footsteps followed on the stairs. She came down after him."), ["maren->test_hall"]);
@@ -139,19 +141,20 @@ test("D-11 fail-closed: two named people, an addressee, a stay or refusal before
 
 // ================================================================================================ D-07
 const departed = (r: Awaited<ReturnType<typeof play>>) => (r.result?.narration_reconciliation?.issues ?? []).some(i => i.kind === "uncommitted_departure");
-test("D-07 reproduction: a player-ordered destination-less exit of an authored NPC+ is never delivered as done while state stays", async () => {
+test("D-07 closed: a player-ordered destination-less exit of an authored NPC+ is committed as OFF_SCENE once the narration completes it", async () => {
   const r = await play("Maren walks out, and the door shuts behind her.", "Maren, go out for a while.", { members: ["maren"] });
-  assert.ok(departed(r), "the exit is an unrecorded departure (a player order does not exempt an authored NPC)");
-  assert.equal(r.where("maren"), "test_room");
-  assert.doesNotMatch(r.result?.narration ?? "", /walks out|door shuts/i);
+  assert.ok(!departed(r), "the completed exit is recorded, so it is not an unrecorded departure");
+  assert.equal(r.where("maren"), undefined, "no location: she is off-scene");
+  assert.deepEqual(r.snapshot.runtime.npc_locations.find(n => n.character_id === "maren"), { character_id: "maren", off_scene: { last_known_location: "test_room", since_revision: r.snapshot.revision } });
+  assert.match(r.result?.narration ?? "", /walks out/i);
 });
 test("D-07: live-observed destination-less stair exits are unrecorded departures; every sentence of the exit is withdrawn", async () => {
   for (const t of ["She nodded and rose. She crossed the room to the stairs and descended, her footsteps fading.", "Maren moved toward the stairs, her footsteps receding down into the main hall below.",
-    "Maren stood. Her footsteps were soft as she crossed to the stairs and descended.", "Maren rose and moved toward the stairs. She descended out of sight.", "Maren says she is going out. She leaves the building."]) {
+    "Maren stood. Her footsteps were soft as she crossed to the stairs and descended.", "Maren rose and moved toward the stairs. She descended out of sight."]) {
     const r = await play(`Maren looked up. ${t}`, "Maren, take a walk.", { members: ["maren"] });
     assert.ok(departed(r), t);
     assert.equal(r.where("maren"), "test_room", t);
-    assert.doesNotMatch(r.result?.narration ?? "", /descended|leaves the building|receding down/i, t);
+    assert.doesNotMatch(r.result?.narration ?? "", /descended|receding down/i, t);
   }
 });
 test("D-07 zero new false positives: a stay, a plan, a hesitation, a follower after Nicco, or an arrival is not a departure", async () => {

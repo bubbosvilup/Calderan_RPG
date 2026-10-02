@@ -356,7 +356,7 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
   const here = prepared.runtime.scene.player_location, origin = input.origin ?? here;
   const display = (id: string | undefined) => id ? world.getEntity(id)?.display_name ?? id : "an unestablished place";
   const within = (place: string, at: string | undefined) => !!at && (place === at || world.getAncestors(at).some(a => a.id === place));
-  const issues: AuditIssue[] = [];
+  const issues: AuditIssue[] = [], niccoDidNotGo: string[] = [];
   for (const sentence of sentences) {
     for (const clause of outside(sentence).split(/;|,\s*(?:but|while|though|although)\s+|\s+but\s+/)) {
       for (const [re, leaving] of [[NICCO_GO, false], [NICCO_ARRIVE, false], [NICCO_LEAVE, true]] as const) {
@@ -365,6 +365,7 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
         const place = resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world);
         if (!place) continue;
         const contradicts = leaving ? place === here && origin === here : !within(place, here);
+        if (contradicts && !leaving && !niccoDidNotGo.includes(place)) niccoDidNotGo.push(place);
         if (contradicts && !issues.some(i => i.sentence === sentence && !i.character))
           issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: leaving
             ? `Nicco has NOT left ${display(here)}: no movement was recorded this turn. Keep him there; do not narrate him leaving or arriving anywhere else.`
@@ -373,8 +374,18 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
     }
   }
   const movers = persistentCharactersAt(prepared, world, [...new Set([origin, here])]);
+  // D-24: Nicco's own narrated movement was NOT committed, so nothing that depends on it can have happened. A same-turn follow that carries
+  // someone to where the narration says he went ("Maren follows him there", "came down after him") would survive the redaction of his own
+  // sentence and tell the player a follower arrived somewhere he never reached. Only the follow grammar's dependent forms are read here
+  // (explicit or implicit destination); a local "follows him over to the table" has no inter-location destination and never reaches this.
+  for (const place of niccoDidNotGo) for (const m of narratedMovements(input.narration, movers, { origin: here, arrival: place, hypothetical: true }, context, world, activeNpcPlus(prepared))) {
+    if (issues.some(i => i.sentence === m.source_sentence && i.character)) continue;
+    const who = movers.find(x => x.id === m.character_id)!.names[0]!;
+    issues.push({ kind: "uncommitted_movement", character: who, sentence: m.source_sentence, location: display(characterLocation(prepared, world, m.character_id)),
+      correction: `Nicco did NOT go to ${display(place)}: no movement was recorded. ${who} therefore did not follow him there and is still at ${display(characterLocation(prepared, world, m.character_id))}. Do not narrate ${who} following, arriving or being brought anywhere.` });
+  }
   // NPC+ Pass 9: an implicit-destination follow by an active NPC+ is held to the same standard — unrecorded, it is flagged.
-  for (const m of narratedMovements(input.narration, movers, { origin, arrival: here }, context, world, activeNpcPlus(prepared))) {
+  for (const m of narratedMovements(input.narration, movers, { origin, arrival: here, locate: id => characterLocation(prepared, world, id) }, context, world, activeNpcPlus(prepared))) {
     const now = characterLocation(prepared, world, m.character_id);
     if (now === m.location_id) continue;
     const who = movers.find(x => x.id === m.character_id)!.names[0]!;

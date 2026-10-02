@@ -9,8 +9,8 @@ import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnEvent, TurnResult } from "../src/turn/turn-types.js";
 
 /** NPC+ Pass 10 shared offline harness: the Pass 9 household fixture plus a scripted narrator/controller that records every request. */
-export function household(members: readonly string[] = ["brenna", "maren"], extra: readonly CampaignCommand[] = []) {
-  const f = turnFixture();
+export function household(members: readonly string[] = ["brenna", "maren"], extra: readonly CampaignCommand[] = [], geography: { readonly courtyard?: boolean; readonly secondStairs?: boolean } = {}) {
+  const f = turnFixture(false, geography);
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [
     { kind: "create_household", id: "campaign_household_home", name: "Home" },
     { kind: "set_membership", household_id: "campaign_household_home", membership: { character_id: "nicco", status: "member", role: "owner" } },
@@ -49,5 +49,5 @@ export function grammarProbe(o: GrammarSetting = {}) {
   const snapshot = f.campaign.exportSnapshot(), context = buildTurnContext(f.world, snapshot);
   const arrival = moves ? "test_hall" : "test_room";
   const movable = movableCharacters(snapshot, ["test_room", "test_hall"], f.world), followers = activeNpcPlus(snapshot);
-  return (narration: string) => narratedMovements(narration, movable, { origin: "test_room", arrival }, context, f.world, followers).map(m => `${m.character_id}->${m.location_id}`);
+  return (narration: string) => narratedMovements(narration, movable, { origin: "test_room", arrival, locate: id => characterLocation(snapshot, f.world, id) }, context, f.world, followers).map(m => `${m.character_id}->${m.location_id}`);
 }

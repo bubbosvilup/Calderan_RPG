@@ -10,7 +10,7 @@ import { canonReferences, checkCanonReferences, type CanonReference } from "./ca
 import { parseCampaignSnapshot } from "../campaign/validation.js";
 
 export interface CampaignSaveFile {
-  format: "caldrevan_campaign_save"; schema_version: 3;
+  format: "caldrevan_campaign_save"; schema_version: 4;
   campaign_id: string; canonical_dataset_id: string;
   metadata: { saved_at: string; created_at?: string; engine_version?: string };
   snapshot: CampaignSnapshot;
@@ -34,7 +34,7 @@ const timestamp = (value: unknown): string => {
   return value;
 };
 /** Shape first; snapshot validation has its own schema/version/reference boundary. */
-const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(3, 3), campaign_id: validateSaveId,
+const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(4, 4), campaign_id: validateSaveId,
   canonical_dataset_id: text, metadata: object({ saved_at: timestamp, created_at: optional(timestamp), engine_version: optional(text) }), snapshot: (input: unknown) => input,
   canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList) });
 export function validateSaveFile(input: unknown, world: WorldStore, expectedCampaignId?: string): DeepReadonly<CampaignSaveFile> {
@@ -64,7 +64,7 @@ export function decodeSave(text: string, world: WorldStore, expectedCampaignId?:
 export function createSaveFile(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, savedAt: string, createdAt = savedAt): DeepReadonly<CampaignSaveFile> {
   // A write may never manufacture compatibility evidence for a campaign bound to another world.
   try { validateCampaignSnapshot(snapshot, world); } catch (error) { throw saveError(error); }
-  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 3, campaign_id: snapshot.campaign_id,
+  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 4, campaign_id: snapshot.campaign_id,
     canonical_dataset_id: snapshot.dataset_id, metadata: { saved_at: savedAt, created_at: createdAt }, snapshot, canon_compatibility: "references", canon_references: canonReferences(snapshot, world) }, world);
 }
 /** Called only after validation; sorts object keys, preserves all array order and missing fields. */

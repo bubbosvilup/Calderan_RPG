@@ -196,7 +196,7 @@ export interface CampaignDomains {
   premium_reflections: PremiumReflection[];
 }
 export interface CampaignSnapshot extends CampaignDomains {
-  schema_version: 2; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  schema_version: 3; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
 }
 /** Commands are shared by future manual and model proposals, never raw mutable state. */
 export type CampaignCommand =

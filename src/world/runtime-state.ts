@@ -9,7 +9,7 @@ export { WORLD_DAY_MINUTES, DAILY_MANA_RECOVERY } from "./runtime-domain.js";
 /** Separate in-memory state. All exposed values are immutable snapshots. */
 export class RuntimeState {
   #world: WorldStore;
-  #npcLocations = new Map<string, string>();
+  #npcLocations = new Map<string, CharacterLocationState>();
   #scene: SceneState;
   #revision = 0;
   #mana: PlayerMana;
@@ -41,7 +41,7 @@ export class RuntimeState {
       if (character.base_location === null) continue; // Unestablished, not absent or homeless.
       if (startingLocation == null) throw new Error(`NPC ${character.id} requires a starting location`);
       this.requireLocation(startingLocation);
-      this.#npcLocations.set(character.id, startingLocation);
+      this.#npcLocations.set(character.id, Object.freeze({ character_id: character.id, current_location: startingLocation }));
     }
   }
 
@@ -65,7 +65,7 @@ export class RuntimeState {
 
   getNpcLocations(): readonly DeepReadonly<CharacterLocationState>[] {
     return Object.freeze([...this.#npcLocations].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)
-      .map(([character_id, current_location]) => Object.freeze({ character_id, current_location })));
+      .map(([, state]) => state));
   }
 
   getPlayerMana(): PlayerMana { return this.#mana; }
@@ -91,7 +91,7 @@ export class RuntimeState {
   applySceneDelta(input: unknown): SceneDeltaResult {
     const prepared = prepareRuntimeDelta(this.exportSnapshot(), input, this.#world, this.#revision);
     const nextScene = structuredClone(prepared.snapshot.scene);
-    const nextLocations = new Map(prepared.snapshot.npc_locations.map(n => [n.character_id, n.current_location]));
+    const nextLocations = new Map<string, CharacterLocationState>(prepared.snapshot.npc_locations.map(n => [n.character_id, structuredClone(n) as CharacterLocationState]));
     this.#scene = nextScene;
     this.#npcLocations = nextLocations;
     this.#mana = prepared.snapshot.mana;

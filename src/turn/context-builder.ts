@@ -52,7 +52,7 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   if (snapshot.dataset_id !== world.datasetId) throw new TurnError("context_invalid");
   // Detached compatibility projection; never replay commands into the authoritative campaign.
   const runtime = new RuntimeState(world, structuredClone(snapshot.runtime.scene), snapshot.runtime.mana);
-  runtime.applySceneDelta({ character_movements: snapshot.runtime.npc_locations.map(n => ({ ...n })) });
+  runtime.applySceneDelta({ character_movements: snapshot.runtime.npc_locations.map(n => n.off_scene ? { character_id: n.character_id, off_scene: true as const } : { character_id: n.character_id, current_location: n.current_location! }) });
   const projected = buildNarrativeContext(world, runtime);
   // Stronger player-output policy: omit narrator-only secret places. Repair 1 confidential encounter: a protected (narrator-only)
   // character physically present in runtime IS projected for this turn, marked confidential, so the narrator can portray them.

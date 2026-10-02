@@ -20,7 +20,7 @@ test("real legacy v1 envelope migrates to the current strict policy; unknown leg
   const { canon_compatibility: _policy, canon_references: _references, ...rest } = current;
   const old = { ...rest, schema_version: 1, snapshot: legacySnapshot(current.snapshot as unknown as Record<string, unknown>) };
   const loaded = decodeSave(JSON.stringify(old), world);
-  assert.equal(loaded.schema_version, 3); assert.equal(loaded.canon_compatibility, "strict"); assert.equal(loaded.canon_references, undefined);
+  assert.equal(loaded.schema_version, 4); assert.equal(loaded.canon_compatibility, "strict"); assert.equal(loaded.canon_references, undefined);
   assert.deepEqual(CampaignState.restore(world, loaded.snapshot).exportSnapshot(), campaign.exportSnapshot());
   assert.throws(() => validateSaveFile({ ...old, unknown_old: true }, world), { code: "invalid_save" });
   let invoked = false;
@@ -67,7 +67,7 @@ for (const recovery of ["current_valid", "current_corrupt", "both_corrupt", "cur
   });
 
 test("migration seam fills a future domain, preserves unknown data, validates strictly and runs ordered steps", () => {
-  assert.equal(CURRENT_SAVE_VERSION, 3);
+  assert.equal(CURRENT_SAVE_VERSION, 4);
   const old = { schema_version: 1, domains: { retained: ["value"] }, unknown_old: "keep" };
   const registry = {
     1: (input: Readonly<Record<string, unknown>>) => ({ ...input, schema_version: 2, domains: { ...(input.domains as object), example_future_domain: [] } }),

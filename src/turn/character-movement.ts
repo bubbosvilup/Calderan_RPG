@@ -6,7 +6,8 @@ import { reachable, resolveDestination } from "./natural-actions.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
 import { GATES } from "./language/gates.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
-import { routeDirection } from "../world/vertical-direction.js";
+import { edgeDirection, routeDirection } from "../world/vertical-direction.js";
+import { findRoute } from "../world/travel.js";
 
 /**
  * Location Continuity Pass 1.3. A campaign (created) character's location changes only when the current turn clearly establishes
@@ -22,7 +23,8 @@ import { routeDirection } from "../world/vertical-direction.js";
  *   mover must resolve to exactly one movable character, the movement must be completed (no intention, hedge, gaze or plan), and
  *   the destination must resolve to one concrete known location. Anything else changes nothing.
  */
-export interface MovableCharacter { readonly id: string; readonly names: readonly string[]; readonly sex?: "female" | "male" }
+/** `entrant`: not in the scene Nicco is in or leaves (elsewhere or off-scene). Such a character counts only as someone ARRIVING in Nicco's scene, by name. */
+export interface MovableCharacter { readonly id: string; readonly names: readonly string[]; readonly sex?: "female" | "male"; readonly entrant?: true }
 export interface CharacterMovement { readonly character_id: string; readonly location_id: string; readonly source_sentence: string }
 
 /**
@@ -49,7 +51,31 @@ export function characterLocation(snapshot: DeepReadonly<CampaignSnapshot>, worl
   const created = snapshot.characters.find(c => c.id === id && c.origin.kind === "created");
   if (created) return created.current.status === "dead" ? undefined : created.current.current_location;
   // Every authored NPC with an established default is in runtime npc_locations (snapshot validation guarantees it).
+  // OFF_SCENE has no current location (its last known place is not where the character is).
   return world.getEntity(id)?.type === "character" ? snapshot.runtime.npc_locations.find(n => n.character_id === id)?.current_location : undefined;
+}
+/**
+ * Final movement closure: ACTIVE authored NPC+ whose authoritative location is NOT in these scenes (located elsewhere, or off-scene).
+ * They never follow, never leave; they can only be narrated ARRIVING where Nicco is, by name (see narratedMovements).
+ */
+export function npcPlusEntrants(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, locations: readonly string[]): MovableCharacter[] {
+  const npcPlus = activeNpcPlus(snapshot), inScope = new Set(movableCharacters(snapshot, locations, world).map(m => m.id));
+  return world.getEntitiesByType("character").filter(e => e.role === "npc" && npcPlus.has(e.id) && !inScope.has(e.id) && !!e.knowledge?.visibility.narrator
+    && !snapshot.characters.some(c => c.id === e.id && c.origin.kind === "created")).map(e => {
+    const name = e.display_name ?? e.name ?? e.id;
+    return { id: e.id, names: [name, ...name.split(/\s+/).filter(t => t.length > 2 && /^[A-Z]/.test(t))], ...(e.sex === "female" || e.sex === "male" ? { sex: e.sex } : {}), entrant: true as const };
+  });
+}
+/**
+ * The ONE location a bare vertical direction ("goes upstairs") can mean for someone standing at `from`: the single directly connected
+ * location whose edge is read as that direction by the structured world graph. Zero or several candidates, or a container: undefined.
+ */
+export function uniqueVerticalNeighbour(world: WorldStore, from: string, direction: "UP" | "DOWN"): string | undefined {
+  const place = world.getEntity(from);
+  if (place?.type !== "location") return undefined;
+  const hits = [...new Set(place.connections.map(c => c.target))].filter(t => edgeDirection(world, from, t) === direction);
+  const only = hits.length === 1 ? hits[0]! : undefined;
+  return only && !world.getChildren(only).some(e => e.type === "location") ? only : undefined;
 }
 /**
  * H5.1: every persistent character (created or authored NPC) at one of these locations, by name. Used by the narration audit's
@@ -70,8 +96,8 @@ export function persistentCharactersAt(snapshot: DeepReadonly<CampaignSnapshot>,
 /** Not a completed movement: modality, intention, plans, negation, gaze, questions. */
 const NOT_DONE = GATES.movement_not_done;
 const CARRY = "(?:carries|carried|carrying|carry|lifts|lifted|hauls|hauled|bears|bore)";
-const WALK = "(?:follows|followed|walks|walked|goes|went|heads|headed|returns|returned|limps|limped|runs|ran|hurries|hurried|steps|stepped|trails|trailed|shuffles|shuffled|staggers|staggered|slips|slipped)";
-const TO = "(into|inside|through|to|back to|up to|out to|onto|in through)";
+const WALK = "(?:follows|followed|walks|walked|goes|went|comes|came|heads|headed|returns|returned|limps|limped|runs|ran|hurries|hurried|steps|stepped|trails|trailed|shuffles|shuffled|staggers|staggered|slips|slipped)";
+const TO = "(into|inside|through|to|back to|up to|out to|out into|onto|in through)";
 /** H5.1: a stairway leg before the destination ("follows him down the stairs into the hall", "goes downstairs to the hall"). */
 const STAIRS = "(?:(?:down|up)(?:\\s+the(?:\\s+[a-z]+)?\\s+(?:stairs|steps|staircase))?\\s+|downstairs\\s+|upstairs\\s+)?";
 const HELD = "(?:in his arms|on his back|over his shoulder|against his (?:chest|shoulder)|slung over his shoulder)";
@@ -158,7 +184,7 @@ const STEP_NOUN = "(?:footsteps|steps|footfalls|tread|treads)";
 const STEP_VERB = "(?:follow|follows|followed|come after|comes after|came after|sound behind him|sounded behind him)";
 // Follow-recognition closure: manner/time tails taken verbatim from live production drafts ("at her own pace", "a pace or two behind",
 // "behind him on the stair", "a few moments after him"). Still manner only: no place, object or bare "later".
-const FOLLOW_TAIL = /^(?:\s*(?:him|nicco|after(?: him| nicco)?|behind(?: him| nicco| her)?|a (?:step|few steps|pace|moment) (?:behind|later|after)|close behind|closely|at a distance|in silence|without a word|quietly|silently|slowly|wordlessly|shortly after|soon after|downstairs|upstairs|(?:down|up)(?: the (?:stairs|steps|staircase))?|out|at (?:her|his|its|their) own pace|a pace or two behind|a few (?:paces|steps|strides) (?:behind|back)|(?:a few moments|moments) (?:later|after)|on the (?:stairs?|steps)|first|at a (?:short|respectful|safe) distance|(?:a (?:moment|few moments|beat) )?after he (?:does|did|arrives|arrived|reaches (?:the )?[a-z]+(?: [a-z]+)?))\b)*\s*$/i;
+const FOLLOW_TAIL = /^(?:\s*(?:him|nicco|after(?: him| nicco)?|behind(?: him| nicco| her)?|a (?:step|few steps|pace|moment) (?:behind|later|after)|close behind|closely|at a distance|in silence|without a word|quietly|silently|slowly|wordlessly|shortly after|soon after|downstairs|upstairs|(?:down|up)(?: the (?:stairs|steps|staircase))?|out|there|at (?:her|his|its|their) own pace|a pace or two behind|a few (?:paces|steps|strides) (?:behind|back)|(?:a few moments|moments) (?:later|after)|on the (?:stairs?|steps)|first|at a (?:short|respectful|safe) distance|(?:a (?:moment|few moments|beat) )?after he (?:does|did|arrives|arrived|reaches (?:the )?[a-z]+(?: [a-z]+)?))\b)*\s*$/i;
 /**
  * Follow-recognition closure, DOWN-only forms (live production drafts): "Maren comes down the stairs a moment later", "Maren came down a
  * moment after", "Maren appears at the bottom step / of the stair". They name no follow verb, so they are accepted ONLY when Nicco's own
@@ -248,11 +274,18 @@ function boundedAntecedent(previous: string | undefined, current: string, movabl
  * Completed movements of movable characters narrated this turn (at most one per character, first wins). `followers` (NPC+ Pass 9):
  * active NPC+ eligible for implicit-destination following — only when Nicco moved, only if not already at his arrival.
  */
-export function narratedMovements(narration: string, movable: readonly MovableCharacter[], where: { readonly origin: string; readonly arrival: string }, context: TurnContext, world: WorldStore,
+export function narratedMovements(narration: string, movable: readonly MovableCharacter[], where: { readonly origin: string; readonly arrival: string; readonly locate?: (id: string) => string | undefined;
+  /** Audit only (D-24): `arrival` is where the NARRATION says Nicco went but state did not take him. Reads the dependent follow forms, route-free and direction-agnostic. */
+  readonly hypothetical?: boolean }, context: TurnContext, world: WorldStore,
   followers: ReadonlySet<string> = new Set()): CharacterMovement[] {
   if (!movable.length) return [];
   const names = movable.flatMap(m => m.names).map(esc).join("|");
-  const who = (token: string, subject: boolean) => byName(movable, token) ?? (subject && /^he$/i.test(token) ? undefined : byPronoun(movable, token)); // subject "he" is usually Nicco
+  const local = movable.filter(m => !m.entrant); // an entrant (elsewhere/off-scene) is never a pronoun referent, a follower or a leaver
+  const who = (token: string, subject: boolean) => byName(movable, token) ?? (subject && /^he$/i.test(token) ? undefined : byPronoun(local, token)); // subject "he" is usually Nicco
+  const placeOf = (id: string) => where.locate ? where.locate(id) : where.origin;
+  const entrantOk = (id: string, location: string) => !movable.some(m => m.id === id && m.entrant) || location === where.arrival;
+  /** Never invent geography: a mover whose own location is known needs a structured route to the destination. */
+  const routed = (id: string, location: string) => { if (where.hypothetical) return true; const here = placeOf(id); return !here || here === location || !!findRoute(world, here, location); };
   const patterns: readonly { readonly re: RegExp; readonly mover: number; readonly dest: number; readonly subject: boolean }[] = [
     { re: new RegExp(`\\b${CARRY}\\s+(${names}|her|him)\\b[^.;]*?\\b${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: false },
     { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:(?:him|nicco|after him|behind him|back|close behind)\\s+)*${STAIRS}${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: true },
@@ -262,7 +295,7 @@ export function narratedMovements(narration: string, movable: readonly MovableCh
   ];
   const out: CharacterMovement[] = [];
   // Follow-recognition closure: DOWN-only follow forms need Nicco's same-turn route to be a proven descent (UNKNOWN/OTHER fail closed).
-  const descent = where.origin !== where.arrival && followers.size > 0 && routeDirection(world, where.origin, where.arrival) === "DOWN";
+  const descent = where.origin !== where.arrival && followers.size > 0 && (where.hypothetical || routeDirection(world, where.origin, where.arrival) === "DOWN");
   const sentences = sentencesOf(narration);
   for (const [at, sentence] of sentences.entries()) {
     const plain = blankQuotes(sentence).trim();
@@ -273,11 +306,19 @@ export function narratedMovements(narration: string, movable: readonly MovableCh
         if (!m || NOT_DONE.test(clause.slice(0, m.index! + m[0].length)) || ARRIVE_VETO.test(clause)) continue;
         const id = who(m[p.mover]!, p.subject);
         const location = id ? concreteDestination(m[p.dest]!, where.arrival, where.origin, context, world) : undefined;
-        if (id && location && !out.some(o => o.character_id === id)) out.push({ character_id: id, location_id: location, source_sentence: sentence });
+        if (id && location && entrantOk(id, location) && routed(id, location) && !out.some(o => o.character_id === id)) out.push({ character_id: id, location_id: location, source_sentence: sentence });
+      }
+      // A bare vertical direction ("goes upstairs"): only the unique structured neighbour in that direction, from the mover's OWN location.
+      const bare = clause.match(new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(up|down)(?:stairs|\\s+the(?:\\s+[a-z]+)?\\s+(?:stairs|steps|staircase))?(?=\\s*(?:[.;!?]|$)|\\s+(?:and|then|as|while)\\b|,\\s+(?:and|then|as|while|[a-z]+ing)\\b)`, "i"))
+        ?? clause.match(new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:(up|down)stairs)(?=\\s*(?:[.;!?]|$)|\\s+(?:and|then|as|while)\\b|,\\s+(?:and|then|as|while|[a-z]+ing)\\b)`, "i"));
+      if (bare && !NOT_DONE.test(clause.slice(0, bare.index! + bare[0].length)) && !ARRIVE_VETO.test(clause) && !ARRIVE_STOPS.test(clause)) {
+        const id = who(bare[1]!, true), here = id ? placeOf(id) : undefined;
+        const location = id && here ? uniqueVerticalNeighbour(world, here, bare[2]!.toLowerCase() === "up" ? "UP" : "DOWN") : undefined;
+        if (id && location && entrantOk(id, location) && !out.some(o => o.character_id === id)) out.push({ character_id: id, location_id: location, source_sentence: sentence });
       }
       if (where.origin === where.arrival || !followers.size) continue;
-      const follower = implicitFollows(clause, names, movable, descent, phrase => !!phrase.trim() && concreteDestination(phrase, where.arrival, where.origin, context, world) === where.arrival, antecedent, nicco);
-      if (follower && followers.has(follower) && !context.characters.some(c => c.id === follower) && !out.some(o => o.character_id === follower))
+      const follower = implicitFollows(clause, names, local, descent, phrase => !!phrase.trim() && concreteDestination(phrase, where.arrival, where.origin, context, world) === where.arrival, antecedent, nicco);
+      if (follower && followers.has(follower) && (where.hypothetical || !context.characters.some(c => c.id === follower)) && !out.some(o => o.character_id === follower))
         out.push({ character_id: follower, location_id: where.arrival, source_sentence: sentence });
     }
   }

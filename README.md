@@ -2,7 +2,7 @@
 
 A deterministic engine for long-running, AI-narrated roleplay. The model writes the prose; the engine owns the truth: world canon, who is where, who owns what, what each character knows, and every change to any of it.
 
-**Status:** the engine is frozen and ready for UI work, with documented non-blocking debt. The next phase is the UI, built on one seam, `src/app` (`GameSession`). Verified: 1,708 tests (0 fail, 4 accepted todo), a 25-turn offline playthrough, and live runs against the real providers.
+**Status:** the engine is frozen and ready for UI work, with documented non-blocking debt, and the movement/follow subsystem is frozen too. The next phase is the UI, built on one seam, `src/app` (`GameSession`). Verified: 1,731 tests (0 fail, 4 accepted todo), a 25-turn offline playthrough, and earlier live runs against the real providers (the final movement closure is verified offline; its live probe is prepared).
 
 ## How a turn works
 
@@ -49,10 +49,10 @@ API keys are read from environment variables only. Never write them to a file.
 - [Engine capabilities before UI](docs/ENGINE_CAPABILITIES_PRE_UI.md)
 - [Turn coordinator](docs/architecture/TURN_COORDINATOR.md), [LLM providers](docs/architecture/LLM_PROVIDER.md), [campaign state](docs/architecture/CAMPAIGN_STATE.md), [persistence](docs/architecture/PERSISTENCE.md)
 - [Authoring guide](docs/authoring/AUTHORING_GUIDE.md) and [entity schema](docs/schemas/ENTITY_SCHEMA.md)
-- [Debt register](docs/evaluations/CALDREVAN_DEBT_REGISTER_AFTER_PASS_10.md) and the latest [movement and follow debt closure](docs/evaluations/CALDREVAN_MOVEMENT_FOLLOW_DEBT_CLOSURE.md)
+- [Debt register](docs/evaluations/CALDREVAN_DEBT_REGISTER_AFTER_PASS_10.md) the [movement and follow debt closure](docs/evaluations/CALDREVAN_MOVEMENT_FOLLOW_DEBT_CLOSURE.md) and the latest [final movement debt closure](docs/evaluations/CALDREVAN_FINAL_MOVEMENT_DEBT_CLOSURE.md)
 
 ## Known limits
 
-- An NPC in the household who is told to leave with no destination cannot be recorded as away; the engine keeps them in the scene and the narration says so. Fixing it needs an off-scene state (register D-07).
+- Every persistent character has one authoritative location, independent of Nicco: a known place, or off-scene after a narrated departure with no destination. The scene is only who shares Nicco's place. A UI must read this from state, never from narration.
 - Pronoun and ornate follow phrasings that the grammar does not recognise fail closed: the follow is not recorded and the audit may remove it.
 - Retrieval is lexical by default; semantic search needs a Voyage key.

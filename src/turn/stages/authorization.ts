@@ -4,7 +4,8 @@ import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { parseControllerProposal } from "../../llm/controller-schema.js";
 import type { ControllerResult } from "../../llm/state-controller-provider.js";
-import { characterLocation, narratedMovements, type MovableCharacter } from "../character-movement.js";
+import { narratedDepartures } from "../scene-departure.js";
+import { characterLocation, narratedMovements, npcPlusEntrants, type MovableCharacter } from "../character-movement.js";
 import type { TurnContext } from "../context-builder.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evidence-authorization.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
@@ -45,7 +46,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   });
   const controllerProposal = keep.map(k => parsed[k]!), duplicates_removed = parsed.length - keep.length;
   const kept = new Set(keep), quotes = duplicates_removed ? i.controller.evidence?.filter((_, k) => kept.has(k)) : i.controller.evidence;
-  const turn_evidence: TurnEvidence = { ...deriveTurnEvidence(i.intent, i.draft, i.context), character_movements: narratedMovements(i.draft, i.movable, { origin: i.origin, arrival: i.arrival }, i.context, i.world, activeNpcPlus(i.projected)) };
+  const turn_evidence: TurnEvidence = { ...deriveTurnEvidence(i.intent, i.draft, i.context), character_movements: narratedMovements(i.draft, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, activeNpcPlus(i.projected)) };
   // NPC+ Pass 3 proposal recall: a completed narrated movement of an eligible mover (created, or active authored NPC+ — the `movable`
   // set) that the controller did not propose becomes a move_character PROPOSAL. Authorization is unchanged and still decides; a mover
   // already at that destination, a request, refusal, hesitation, membership or ownership yields no evidence and so no proposal.
@@ -53,9 +54,18 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   // by authorization (the evidence names a different destination), and suppressing the derived proposal then lost a valid narrated follow.
   const derived = turn_evidence.character_movements!.filter(m => !controllerProposal.some(c => c.kind === "move_character" && c.character_id === m.character_id && c.location_id === m.location_id)
     && characterLocation(i.projected, i.world, m.character_id) !== m.location_id).map(m => ({ kind: "move_character" as const, character_id: m.character_id, location_id: m.location_id }));
-  const proposal = [...controllerProposal, ...derived];
+  // Final movement closure (D-07): a completed departure of an ACTIVE NPC+ present with Nicco whose destination the narration does not
+  // establish is OFF_SCENE evidence. A known destination always wins (it is a movement, above), and a bare stair direction is never "unknown":
+  // either it resolves to the one structured neighbour (a movement) or it fails closed (audit redacts it).
+  const moving = new Set(turn_evidence.character_movements!.map(m => m.character_id)), npcPlus = activeNpcPlus(i.projected);
+  const STAIR_WORD = /\b(?:down|up)stairs\b|\b(?:down|up)\s+the\s+(?:[a-z]+\s+)?(?:stairs|steps|staircase)\b/i;
+  const npcDepartures = narratedDepartures(i.draft, i.context, "persistent").filter(d => npcPlus.has(d.character_id) && !moving.has(d.character_id) && !STAIR_WORD.test(d.source_sentence)
+    && characterLocation(i.projected, i.world, d.character_id) === i.arrival);
+  const evidenceWithDepartures: TurnEvidence = npcDepartures.length ? { ...turn_evidence, departures: [...(turn_evidence.departures ?? []), ...npcDepartures] } : turn_evidence;
+  const departureProposals = npcDepartures.filter(d => !controllerProposal.some(c => c.kind === "leave_scene" && c.character_id === d.character_id)).map(d => ({ kind: "leave_scene" as const, character_id: d.character_id }));
+  const proposal = [...controllerProposal, ...derived, ...departureProposals];
   // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).
-  const diagnostics = authorizeWithEvidence(proposal, quotes, turn_evidence, i.draft, i.context, i.projected, i.mode);
+  const diagnostics = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode);
   // Controller Reliability Pass 1 (debug only, never events): normalized outputs, and deterministic candidates with verified
   // narration evidence that the controller did not propose. Nothing is synthesized; this only measures omissions.
   if (i.sink) {
@@ -69,7 +79,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
       if (evidenceSentence) sink({ kind: "controller_omission_candidate", ...base, candidate, evidence: evidenceSentence, proposal_size: proposal.length });
     });
   }
-  return { proposal, turn_evidence, diagnostics, duplicates_removed };
+  return { proposal, turn_evidence: evidenceWithDepartures, diagnostics, duplicates_removed };
 }
 
 export interface TurnCommands {

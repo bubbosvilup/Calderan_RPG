@@ -169,13 +169,13 @@ command("set_household_rule_active", { household_id: id, rule_id: id, active: (i
 command("adjust_relationship", { from_character_id: id, to_character_id: id, dimension: choice("trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance"), direction: choice("raise", "lower") });
 command("establish_character_contract", { character_id: id, field: choice("personality", "voice", "moral_boundary", "social_style"), text, quote: text });
 command("record_reflection", { character_id: id, notes: list(reflectionNote, 18), reflected_revision: integer(0) });
-command("runtime_delta", { delta: object({ expected_revision: optional(integer(0)), player_location: optional(id), character_movements: optional(list(object({ character_id: id, current_location: id }))), time_advance_minutes: optional(integer(0)), mana_delta: optional(integer()) }) });
+command("runtime_delta", { delta: object({ expected_revision: optional(integer(0)), player_location: optional(id), character_movements: optional(list(object({ character_id: id, current_location: optional(id), off_scene: optional((input: unknown, path: string) => { if (input !== true) fail(path, "expected true"); return input; }) }))), time_advance_minutes: optional(integer(0)), mana_delta: optional(integer()) }) });
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
-const snapshot = object({ schema_version: integer(2, 2), campaign_id: id, dataset_id: text, revision: integer(0),
+const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
-    npc_locations: list(object({ character_id: id, current_location: id }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
+    npc_locations: list(object({ character_id: id, current_location: optional(id), off_scene: optional(object({ last_known_location: id, since_revision: integer(0) })) }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),
   households: list(object({ id, name: optional(text), members: list(membershipRecord, 100000), rules: optional(list(ruleRecord, 1000)) }), 100000),
   facts: list(factRecord, 100000), knowledge: list(knowledgeRecord, 100000), relationships: list(relationshipRecord, 100000),

@@ -13,8 +13,8 @@ export class DatasetCompatibilityError extends CampaignValidationError {
   readonly code = "dataset_mismatch";
   constructor(readonly save_dataset_id: string, readonly current_dataset_id: string) { super("dataset_id", "canonical dataset mismatch"); this.name = "DatasetCompatibilityError"; }
 }
-/** NPC+ Pass 1: the current snapshot schema is 2 (premium_characters). Older snapshots reach it only through save migration. */
-export const CURRENT_SNAPSHOT_VERSION = 2;
+/** NPC+ Pass 1: schema 2 added premium_characters; schema 3 adds the OFF_SCENE variant of a character location (final movement closure). Older snapshots reach it only through save migration. */
+export const CURRENT_SNAPSHOT_VERSION = 3;
 export function requireCurrentSnapshotVersion(input: unknown): void {
   const descriptor = input && typeof input === "object" ? Object.getOwnPropertyDescriptor(input, "schema_version") : undefined;
   if (descriptor && "value" in descriptor && Number.isSafeInteger(descriptor.value) && descriptor.value !== CURRENT_SNAPSHOT_VERSION) throw new SnapshotValidationError("unsupported_version", "schema_version");
@@ -53,7 +53,12 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   if (world.getEntitiesByType("character").some(c => c.role === "player" && c.id !== "nicco")) fail("runtime", "unsupported player");
   unique(s.runtime.npc_locations, n => n.character_id, "npc_locations");
   for (const npc of world.getEntitiesByType("character").filter(c => c.role === "npc" && c.base_location !== null)) if (!s.runtime.npc_locations.some(n => n.character_id === npc.id)) fail("npc_locations", "must contain each canonical NPC with an established default exactly once");
-  for (const n of s.runtime.npc_locations) { if (!npcs.has(n.character_id)) fail("npc_locations", "not a canonical NPC"); refs.location(n.current_location); }
+  for (const n of s.runtime.npc_locations) { if (!npcs.has(n.character_id)) fail("npc_locations", "not a canonical NPC"); 
+    // One domain, two shapes: LOCATED(current_location) xor OFF_SCENE(last_known_location, since_revision). Never both, never neither.
+    if ((n.current_location === undefined) === (n.off_scene === undefined)) fail("npc_locations", "a character is either located or off-scene, never both or neither");
+    if (n.off_scene) { refs.location(n.off_scene.last_known_location); if (n.off_scene.since_revision > s.revision) fail("npc_locations", "off-scene since a future revision"); }
+    else refs.location(n.current_location!);
+  }
   const occupied = new Set<string>();
   for (const item of s.items) {
     registration.registration(item.id, item.origin, "item");

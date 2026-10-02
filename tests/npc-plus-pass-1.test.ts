@@ -160,7 +160,7 @@ test("old saves migrate: empty premium domain without Nicco-household members; d
   };
   const empty = turnFixture();
   const loadedEmpty = decodeSave(legacy(empty.campaign, empty.world), empty.world);
-  assert.deepEqual([loadedEmpty.schema_version, loadedEmpty.snapshot.schema_version, loadedEmpty.snapshot.premium_characters], [3, 2, []]);
+  assert.deepEqual([loadedEmpty.schema_version, loadedEmpty.snapshot.schema_version, loadedEmpty.snapshot.premium_characters], [4, 3, []]);
   const member = turnFixture(); keep(member.campaign); run(member.campaign, { kind: "join_household", household_id: HOME, character_id: "brenna" });
   const loaded = decodeSave(legacy(member.campaign, member.world), member.world).snapshot;
   assert.deepEqual([premium(loaded, "brenna")!.metadata.active_household_member, premium(loaded, "brenna")!.dynamic.recent_developments.map(e => e.kind), premium(loaded, "brenna")!.stable], [true, ["migrated_member"], {}]);

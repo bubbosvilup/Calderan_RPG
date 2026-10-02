@@ -7,20 +7,26 @@ import type { WorldEntity } from "../types/entities.js";
  */
 const FIXTURE_PROSE: Record<string, string> = {
   test_room: "A quiet upstairs room with a narrow bed, a small table and an arched window. Stairs lead down to the main hall.",
-  test_hall: "The ground-floor hall, with a long table and a hearth.", test_remote: "Harbor docks, far from here.",
+  test_hall: "The ground-floor hall, with a long table and a hearth.", test_remote: "Harbor docks, far from here.", test_yard: "A small walled courtyard behind the hall.", test_attic: "A dusty attic under the roof.",
   nicco: "The player character.", brenna: "A tall woman recovering from illness.", gerome: "A stone construct who serves the household.",
   maren: "A young woman staying in the tower.", remote_npc: "A stranger at the docks.",
   boots: "A pair of sturdy boots.", ring: "A plain metal ring.", pink_cotton: "A pink cotton shirt.", pink_fluffy: "A thick, fluffy pink shirt.",
   pink_shorts: "A pair of pink shorts.", brenna_boots: "Brenna's worn leather boots.", ironbound: "A guild of smiths.",
 };
 /** Noncanonical evaluation world. Never written under data/. */
-export function turnFixture(groundGarments = false, options: { readonly brennaKnowsBridge?: boolean; readonly ironboundKnownBy?: readonly string[]; readonly poison?: Readonly<Record<string, string>> } = {}) {
+export function turnFixture(groundGarments = false, options: { readonly brennaKnowsBridge?: boolean; readonly ironboundKnownBy?: readonly string[]; readonly poison?: Readonly<Record<string, string>>;
+  /** Final movement closure: extra geography. `courtyard`: test_yard beside the hall. `secondStairs`: a second ascent from the hall (test_attic), so "goes upstairs" is ambiguous. */
+  readonly courtyard?: boolean; readonly secondStairs?: boolean } = {}) {
   // Pass 10: `poison` appends adversarial text to an entity's canon (prompt-injection tests); never used by production.
   const prose = (id: string) => `${FIXTURE_PROSE[id] ?? ""}${options.poison?.[id] ? ` ${options.poison[id]}` : ""}`;
   const base = (id: string, name = id) => ({ id, name, display_name: name, parent: null, aliases: [], summary: prose(id), tags: [], search_context: "", content: prose(id), knowledge: { visibility: { narrator: true, player: true }, known_by: [] } });
   const entities: WorldEntity[] = [
     { ...base("test_room", "Observation room"), type: "location", features: [], connections: [{ target: "test_hall", description: "Downstairs", minutes: 1 }] },
-    { ...base("test_hall", "Main hall"), type: "location", features: [], connections: [{ target: "test_room", description: "Upstairs", minutes: 1 }] },
+    { ...base("test_hall", "Main hall"), type: "location", features: [], connections: [{ target: "test_room", description: "Upstairs", minutes: 1 },
+      ...(options.courtyard ? [{ target: "test_yard", description: "Out through the back door", minutes: 1, kind: "door" as const }] : []),
+      ...(options.secondStairs ? [{ target: "test_attic", description: "Upstairs, by the narrow servants' stair", minutes: 1 }] : [])] },
+    ...(options.courtyard ? [{ ...base("test_yard", "Courtyard"), type: "location" as const, features: [], connections: [{ target: "test_hall", description: "Back in through the door", minutes: 1, kind: "door" as const }] }] : []),
+    ...(options.secondStairs ? [{ ...base("test_attic", "Attic"), type: "location" as const, features: [], connections: [{ target: "test_hall", description: "Downstairs", minutes: 1 }] }] : []),
     { ...base("test_remote", "Remote docks"), type: "location", features: [], connections: [] },
     { ...base("nicco", "Nicco"), type: "character", role: "player", location: null, traits: [], relationships: [] },
     ...["brenna", "gerome", "maren"].map(id => ({ ...base(id, id[0]!.toUpperCase() + id.slice(1)), type: "character" as const, role: "npc" as const, location: "test_room", traits: id === "gerome" ? ["Silent stone construct; does not speak."] : [], relationships: [] })),

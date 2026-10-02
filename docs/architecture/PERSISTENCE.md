@@ -46,6 +46,8 @@ It does not create directories, load a live campaign or print character state.
 
 ## B. Current V2 format
 
+> **Current versions (final movement closure):** envelope `schema_version` 4, snapshot `schema_version` 3. Version 3 of the envelope (snapshot 2) migrates by step 3, which only bumps both numbers: every older location is a valid `LOCATED` entry. A runtime character location is now `{ character_id, current_location }` (LOCATED) or `{ character_id, off_scene: { last_known_location, since_revision } }` (OFF_SCENE), exactly one of the two. An old-schema file carrying `off_scene`, a malformed location, both shapes, neither, a non-location place or a future `since_revision` is rejected. The dataset hash does not depend on runtime location state. The interface below is the historical V2 sketch.
+
 ```ts
 interface CampaignSaveFile {
   format: "caldrevan_campaign_save";

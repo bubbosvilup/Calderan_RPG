@@ -191,7 +191,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   }
   if (command.kind === "leave_scene") {
     // The quote must lie within a sentence the deterministic departure grammar reads as this character's completed exit.
-    const departed = narratedDepartures(narration.slice(sStart, sEnd), context).some(d => d.character_id === command.character_id) || narratedDepartures(narration, context).some(d => d.character_id === command.character_id && d.source_sentence.replace(/\s+/g, " ").includes(q));
+    const departed = narratedDepartures(narration.slice(sStart, sEnd), context, "persistent").some(d => d.character_id === command.character_id) || narratedDepartures(narration, context, "persistent").some(d => d.character_id === command.character_id && d.source_sentence.replace(/\s+/g, " ").includes(q));
     return departed ? { verified: true, check: "departure_narrated" } : { verified: false, check: "no_completed_departure" };
   }
 

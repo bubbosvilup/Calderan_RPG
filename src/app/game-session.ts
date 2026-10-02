@@ -182,8 +182,9 @@ export class GameSession {
   }
 }
 function movementOf(before: DeepReadonly<CampaignSnapshot>, after: DeepReadonly<CampaignSnapshot>): TurnTrace["movement"] {
-  const was = new Map(before.runtime.npc_locations.map(n => [n.character_id, n.current_location]));
+  const place = (n: { readonly current_location?: string | undefined; readonly off_scene?: { readonly since_revision: number } | undefined }) => n.off_scene ? `off:${n.off_scene.since_revision}` : n.current_location;
+  const was = new Map(before.runtime.npc_locations.map(n => [n.character_id, place(n)]));
   return { location_before: before.runtime.scene.player_location, location_after: after.runtime.scene.player_location,
     minutes_elapsed: after.runtime.scene.world_time.world_minute - before.runtime.scene.world_time.world_minute,
-    characters_moved: after.runtime.npc_locations.filter(n => was.get(n.character_id) !== n.current_location).map(n => n.character_id).sort() };
+    characters_moved: after.runtime.npc_locations.filter(n => was.get(n.character_id) !== place(n)).map(n => n.character_id).sort() };
 }

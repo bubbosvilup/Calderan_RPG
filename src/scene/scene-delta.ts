@@ -1,4 +1,4 @@
-import type { CharacterLocationState, PlayerMana, SceneDelta } from "../types/scene.js";
+import type { CharacterPlacement, PlayerMana, SceneDelta } from "../types/scene.js";
 import type { WorldStore } from "../world/world-store.js";
 
 export class SceneDeltaValidationError extends Error {
@@ -14,7 +14,7 @@ export class SceneDeltaValidationError extends Error {
 
 /** A detached proposal, validated against a particular clock value, not a commit token. */
 interface ValidatedSceneDelta extends SceneDelta {
-  readonly character_movements: readonly Readonly<CharacterLocationState>[];
+  readonly character_movements: readonly Readonly<CharacterPlacement>[];
   readonly time_advance_minutes: number;
   readonly mana_delta: number;
 }
@@ -62,7 +62,7 @@ export function validateSceneDelta(input: unknown, world: WorldStore, worldMinut
   };
   let player: string | undefined;
   if (Object.hasOwn(delta, "player_location")) player = location(delta.player_location, "player_location");
-  const movements: Readonly<CharacterLocationState>[] = [];
+  const movements: Readonly<CharacterPlacement>[] = [];
   if (Object.hasOwn(delta, "character_movements")) {
     const inputMovements = delta.character_movements;
     if (!Array.isArray(inputMovements)) throw new SceneDeltaValidationError("character_movements", "expected an array");
@@ -76,7 +76,7 @@ export function validateSceneDelta(input: unknown, world: WorldStore, worldMinut
       const path = `character_movements[${i}]`;
       const descriptor = Object.getOwnPropertyDescriptor(inputMovements, String(i));
       if (!descriptor || !("value" in descriptor)) throw new SceneDeltaValidationError(path, "expected a movement data entry; holes and accessors are invalid");
-      const entry = record(descriptor.value, path, ["character_id", "current_location"]);
+      const entry = record(descriptor.value, path, ["character_id", "current_location", "off_scene"]);
       const characterId = id(entry.character_id, `${path}.character_id`);
       const character = world.getEntity(characterId);
       if (characterId === "nicco" || !character || character.type !== "character" || character.role !== "npc") {
@@ -84,6 +84,12 @@ export function validateSceneDelta(input: unknown, world: WorldStore, worldMinut
       }
       if (seen.has(characterId)) throw new SceneDeltaValidationError(`${path}.character_id`, "duplicate NPC movement", characterId);
       seen.add(characterId);
+      if (Object.hasOwn(entry, "off_scene")) {
+        // One authoritative domain: a placement is either a known location or an off-scene departure, never both or neither.
+        if (entry.off_scene !== true || Object.hasOwn(entry, "current_location")) throw new SceneDeltaValidationError(`${path}.off_scene`, "off_scene must be true and exclusive with current_location");
+        movements.push(Object.freeze({ character_id: characterId, off_scene: true as const }));
+        continue;
+      }
       const target = location(entry.current_location, `${path}.current_location`);
       movements.push(Object.freeze({ character_id: characterId, current_location: target }));
     }

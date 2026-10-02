@@ -53,7 +53,16 @@ export function prepareCharacterCommand(context: PreparationContext, command: Ca
       // Runtime Continuity Repair 1: only a created (runtime) character physically in the player's current scene can leave it.
       // Its whereabouts become unestablished (no location); the record, conditions and history stay. Re-entry needs move_character.
       const origin = refs.character(command.character_id);
-      if (origin.kind !== "created") fail("character_id", "only created characters can leave a scene through leave_scene");
+      if (origin.kind !== "created") {
+        // Final movement closure: an ACTIVE authored NPC+ present with Nicco departs for an unknown destination. Her single authoritative
+        // location becomes OFF_SCENE(last known place, this revision); nothing else about her changes (relationships, knowledge, history).
+        const entity = refs.world.getEntity(origin.canonical_entity_id);
+        const placed = draft.runtime.npc_locations.find(n => n.character_id === command.character_id);
+        if (entity?.type !== "character" || entity.role !== "npc" || !draft.premium_characters.some(p => p.character_id === command.character_id && p.metadata.active_household_member)) fail("character_id", "only created characters and active household members can leave a scene through leave_scene");
+        if (placed?.current_location !== draft.runtime.scene.player_location) fail("character_id", "character is not present in the current scene");
+        draft.runtime = structuredClone(prepareRuntimeDelta(draft.runtime, { character_movements: [{ character_id: entity.id, off_scene: true }] }, refs.world, draft.revision).snapshot) as RuntimeDomainSnapshot;
+        return true;
+      }
       const c = context.draft.characters.find(x => x.id === command.character_id);
       if (!c || c.current.current_location !== draft.runtime.scene.player_location || c.current.status === "dead") fail("character_id", "character is not present in the current scene");
       delete c.current.current_location;

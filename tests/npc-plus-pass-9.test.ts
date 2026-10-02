@@ -151,9 +151,10 @@ test("the narrator receives the neutral choice for the invited NPC+ only, and no
   assert.match(r.prompt, /Brenna stays there/);
   assert.equal(r.where("maren"), "test_room", "an invitation alone never moves anyone");
 });
-test("controller guidance: authored household members use move_character, never leave_scene", () => {
-  assert.match(CONTROLLER_POLICY, /leave_scene is only for temporary created characters/);
-  assert.match(CONTROLLER_POLICY, /never uses leave_scene: use move_character/);
+test("controller guidance: authored household members use move_character; leave_scene only for a completed departure with NO destination", () => {
+  assert.match(CONTROLLER_POLICY, /uses move_character with the known place they reached/);
+  assert.match(CONTROLLER_POLICY, /establishes NO destination at all/);
+  assert.match(CONTROLLER_POLICY, /A known place always wins over leave_scene/);
 });
 test("a controller leave_scene for an authored NPC+ is still rejected (authorization unchanged)", async () => {
   const r = await play("Nicco goes down the stairs. Maren follows him.", undefined, { commands: [{ kind: "leave_scene", character_id: "maren" }] });

@@ -154,7 +154,7 @@ test("listing is read-only metadata and distinguishes missing, corrupt, version 
   const root = join(await temporary(t), "saves"), { world, campaign } = richCampaign(), repository = new FileCampaignRepository(world, root);
   assert.deepEqual(await repository.listSaves(), []); await assert.rejects(fs.stat(root), { code: "ENOENT" });
   await repository.saveCampaign(campaign); const text = await fs.readFile(current(root), "utf8");
-  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 2', '"schema_version": 3')]]) {
+  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 3', '"schema_version": 4')]]) {
     await fs.mkdir(join(root, id!)); await fs.writeFile(join(root, id!, "save.json"), contents!);
   }
   await fs.mkdir(join(root, "empty")); await fs.writeFile(join(root, "empty", ".save-stale.tmp"), "{}");

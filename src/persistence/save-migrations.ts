@@ -2,7 +2,7 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import { CampaignSaveError } from "./errors.js";
 import { niccoHouseholdMembers } from "../campaign/premium-characters.js";
 
-export const CURRENT_SAVE_VERSION = 3;
+export const CURRENT_SAVE_VERSION = 4;
 export type SaveMigration = (input: Readonly<Record<string, unknown>>) => unknown;
 /** A key n owns exactly n -> n+1. No implicit defaults or unknown-field removal. */
 export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.freeze({
@@ -25,6 +25,18 @@ export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.f
       dynamic: { recent_developments: [{ kind: "migrated_member", household_id, revision, world_minute: minute }], private_memory_refs: [] },
       metadata: { created_revision: revision, last_updated_revision: revision, active_household_member: true } }));
     return { ...input, schema_version: 3, snapshot: { ...snapshot, schema_version: 2, premium_characters, premium_reflections: [] } };
+  },
+  /**
+   * Final movement closure: snapshot schema 2 -> 3 lets a runtime character location be OFF_SCENE as well as LOCATED. Every schema-2
+   * location is a LOCATED entry, which is already valid in schema 3, so the migration changes only the versions: lossless, no defaults.
+   */
+  3: input => {
+    const snapshot = input.snapshot as Readonly<Record<string, unknown>> | undefined;
+    if (!snapshot || typeof snapshot !== "object" || snapshot.schema_version !== 2) throw new CampaignSaveError("migration_failed");
+    // Schema 2 cannot express OFF_SCENE; an old-schema file that carries it is malformed, never silently accepted.
+    const placed = (snapshot.runtime as { npc_locations?: readonly Record<string, unknown>[] } | undefined)?.npc_locations;
+    if (!Array.isArray(placed) || placed.some(n => !n || typeof n !== "object" || Object.hasOwn(n, "off_scene") || typeof n.current_location !== "string")) throw new CampaignSaveError("migration_failed");
+    return { ...input, schema_version: 4, snapshot: { ...snapshot, schema_version: 3 } };
   },
 });
 

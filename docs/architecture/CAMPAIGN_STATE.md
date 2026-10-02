@@ -273,7 +273,7 @@ schema_version, campaign_id, canonical dataset_id, authoritative revision
 runtime:
   scene.player_location
   scene.world_time.world_minute
-  npc_locations
+  npc_locations (per character: LOCATED(place) | OFF_SCENE(last known place, since revision); the scene is derived from co-location with the player)
   mana.current / mana.max
 characters: origin + profile overrides/created profile + current state
 items: origin + overrides/created identity + ownership + position + provenance

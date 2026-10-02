@@ -22,11 +22,17 @@ export function prepareRuntimeDelta(current: DeepReadonly<RuntimeDomainSnapshot>
   const explicitMana = current.mana.current + delta.mana_delta;
   const recovered = Math.min(current.mana.max - explicitMana, crossedDays * DAILY_MANA_RECOVERY);
   const mana = Object.freeze({ current: explicitMana + recovered, max: current.mana.max });
-  const locations = new Map(current.npc_locations.map(n => [n.character_id, n.current_location]));
+  const locations = new Map<string, CharacterLocationState>(current.npc_locations.map(n => [n.character_id, n as CharacterLocationState]));
   const moved: string[] = [];
   for (const movement of delta.character_movements) {
-    if (locations.get(movement.character_id) !== movement.current_location) {
-      locations.set(movement.character_id, movement.current_location); moved.push(movement.character_id);
+    const was = locations.get(movement.character_id);
+    if (movement.off_scene) {
+      // LOCATED(A) -> OFF_SCENE(last known A, since the revision this change commits). Already off-scene: nothing changes.
+      if (!was || was.off_scene) continue;
+      locations.set(movement.character_id, Object.freeze({ character_id: movement.character_id, off_scene: Object.freeze({ last_known_location: was.current_location!, since_revision: revision + 1 }) }));
+      moved.push(movement.character_id);
+    } else if (was?.current_location !== movement.current_location) {
+      locations.set(movement.character_id, Object.freeze({ character_id: movement.character_id, current_location: movement.current_location })); moved.push(movement.character_id);
     }
   }
   const result: SceneDeltaResult = Object.freeze({ applied: true, player_moved: scene.player_location !== current.scene.player_location,
@@ -34,6 +40,6 @@ export function prepareRuntimeDelta(current: DeepReadonly<RuntimeDomainSnapshot>
   const changed = result.player_moved || moved.length > 0 || result.time_advanced_minutes > 0 || mana.current !== current.mana.current;
   if (!Number.isSafeInteger(revision + (changed ? 1 : 0))) throw new SceneDeltaValidationError("runtime_revision", "runtime revision exceeds safe-integer arithmetic");
   const snapshot: DeepReadonly<RuntimeDomainSnapshot> = Object.freeze({ scene: Object.freeze({ ...scene, world_time: Object.freeze(scene.world_time) }), mana,
-    npc_locations: Object.freeze([...locations].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([character_id, current_location]) => Object.freeze({ character_id, current_location }))) });
+    npc_locations: Object.freeze([...locations].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([, state]) => state)) });
   return Object.freeze({ snapshot, result, changed });
 }
