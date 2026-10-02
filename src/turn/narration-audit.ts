@@ -21,7 +21,7 @@ import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { readScene } from "./narrated-captives.js";
 import { resolveDestination } from "./natural-actions.js";
-import { characterLocation, narratedMovements, persistentCharactersAt } from "./character-movement.js";
+import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
 
 /**
@@ -377,8 +377,27 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
     issues.push({ kind: "uncommitted_movement", character: who, sentence: m.source_sentence, location: display(now),
       correction: `${who} did NOT go to ${display(m.location_id)}: that movement was not recorded. ${who} is still at ${display(now)}; Nicco's movement never brings anyone along. Do not narrate ${who} following, being brought or arriving there.` });
   }
+  // Follow-recognition closure: a pronoun-led ARRIVAL ("She reaches the hall floor") right after a sentence led by exactly one active NPC+
+  // Nicco left behind, when that NPC+ did not move. absent_participant covers name-led acts; this closes only the pronoun continuation.
+  if (origin !== here) {
+    const npcPlus = activeNpcPlus(prepared), behind = movers.filter(m => npcPlus.has(m.id) && characterLocation(prepared, world, m.id) !== here);
+    const others = [...movers.filter(m => !behind.includes(m)).flatMap(m => m.names), ...context.characters.filter(c => c.id !== "nicco").map(c => c.profile.name ?? c.id)];
+    const leads = (plain: string, names: readonly string[]) => names.some(n => new RegExp(`^\\W*${esc(n)}(?:'s)?\\b`, "i").test(plain));
+    let previous: MovableCharacter | undefined;
+    for (const sentence of sentences) {
+      const plain = outside(sentence).trim(), pronoun = /^\W*(?:she|he|it)\b/i.test(plain);
+      const subject = pronoun ? previous : undefined;
+      if (subject && ARRIVAL.test(plain) && !GATES.movement_not_done.test(plain) && !issues.some(i => i.sentence === sentence))
+        issues.push({ kind: "uncommitted_movement", character: subject.names[0]!, sentence, location: display(characterLocation(prepared, world, subject.id)),
+          correction: `${subject.names[0]!} did NOT arrive in ${display(here)}: no movement was recorded for them. They are still at ${display(characterLocation(prepared, world, subject.id))}; do not narrate them reaching or entering ${display(here)}.` });
+      // The antecedent must be unique: it leads the sentence and no other person (left behind or not) is named in it.
+      const lead = behind.filter(m => leads(plain, m.names)), mentioned = behind.filter(m => m.names.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(plain)));
+      previous = pronoun ? previous : lead.length === 1 && mentioned.length === 1 && !others.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(plain)) ? lead[0] : undefined;
+    }
+  }
   return issues;
 }
+const ARRIVAL = /\b(?:reach(?:es|ed)(?!\s+(?:for|out|toward|towards|across|over|up|down|into|back|behind|past)\b)|arriv(?:es|ed)|enters?|entered|steps? (?:into|onto|down into)|stepped (?:into|onto|down into)|catch(?:es)? up|caught up|joins? him|joined him)\b/i;
 
 const holderOf = (i: { readonly position: { readonly kind: string; readonly character_id?: string } }) => i.position.kind === "carried" || i.position.kind === "equipped" ? i.position.character_id : undefined;
 /**

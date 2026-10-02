@@ -1,0 +1,124 @@
+{
+  "model": "z-ai/glm-5.2",
+  "eur_per_usd": 0.95,
+  "rates_usd_per_token": {
+    "prompt": 4.1e-7,
+    "completion": 0.00000399
+  },
+  "calls": 75,
+  "spent_eur": 0.1412,
+  "by_variant": {
+    "production": {
+      "calls": 25,
+      "classes": {
+        "ABSENCE_CONTRADICTION": 0,
+        "FOLLOW": 2,
+        "REFUSAL": 0,
+        "STAY": 12,
+        "HESITATION": 0,
+        "AMBIGUOUS": 11,
+        "OTHER": 0
+      },
+      "false_absence_calls": 0,
+      "false_absence_rate": 0
+    },
+    "pass9_note": {
+      "calls": 25,
+      "classes": {
+        "ABSENCE_CONTRADICTION": 0,
+        "FOLLOW": 0,
+        "REFUSAL": 0,
+        "STAY": 16,
+        "HESITATION": 0,
+        "AMBIGUOUS": 9,
+        "OTHER": 0
+      },
+      "false_absence_calls": 0,
+      "false_absence_rate": 0
+    },
+    "away_labels": {
+      "calls": 25,
+      "classes": {
+        "ABSENCE_CONTRADICTION": 0,
+        "FOLLOW": 2,
+        "REFUSAL": 0,
+        "STAY": 7,
+        "HESITATION": 0,
+        "AMBIGUOUS": 16,
+        "OTHER": 0
+      },
+      "false_absence_calls": 0,
+      "false_absence_rate": 0
+    }
+  },
+  "tokens": {
+    "input": 276510,
+    "output": 8839
+  },
+  "latency_ms_p50": 3177,
+  "classification": "deterministic first pass in by_variant; human_review is authoritative",
+  "human_review": {
+    "legend": "F=FOLLOW S=STAY A=AMBIGUOUS X=ABSENCE_CONTRADICTION; * = hedged presence doubt ('If Maren heard the invitation'); r = invitation relocated to after the move. Rows are samples 0-4, columns invitations 0-4.",
+    "grid": {
+      "production": [
+        "F S* F S* S",
+        "S A F F S",
+        "F S S F S",
+        "F S S S S",
+        "F S* F S S"
+      ],
+      "pass9_note": [
+        "S* S S S X",
+        "F Ar S* A S",
+        "S S* S S S",
+        "F S S S S",
+        "S* Sr S X S"
+      ],
+      "away_labels": [
+        "F F F F S",
+        "F F S F S",
+        "F F F F S",
+        "F F F F S",
+        "F F F F F"
+      ]
+    },
+    "counts": {
+      "production": {
+        "FOLLOW": 9,
+        "STAY": 15,
+        "REFUSAL": 0,
+        "HESITATION": 0,
+        "AMBIGUOUS": 1,
+        "ABSENCE_CONTRADICTION": 0,
+        "OTHER": 0,
+        "hedged_presence_doubt": 3,
+        "relocated_invitation": 0,
+        "grammar_recognized_follows": 2
+      },
+      "pass9_note": {
+        "FOLLOW": 2,
+        "STAY": 19,
+        "REFUSAL": 0,
+        "HESITATION": 0,
+        "AMBIGUOUS": 2,
+        "ABSENCE_CONTRADICTION": 2,
+        "OTHER": 0,
+        "hedged_presence_doubt": 4,
+        "relocated_invitation": 2,
+        "grammar_recognized_follows": 0
+      },
+      "away_labels": {
+        "FOLLOW": 20,
+        "STAY": 5,
+        "REFUSAL": 0,
+        "HESITATION": 0,
+        "AMBIGUOUS": 0,
+        "ABSENCE_CONTRADICTION": 0,
+        "OTHER": 0,
+        "hedged_presence_doubt": 0,
+        "relocated_invitation": 0,
+        "grammar_recognized_follows": 2
+      }
+    }
+  }
+}

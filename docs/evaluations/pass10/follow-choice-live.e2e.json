@@ -1,0 +1,583 @@
+{
+  "follows": [
+    {
+      "variant": "production",
+      "invitation": 0,
+      "sample": 0,
+      "follower": "Maren",
+      "quote": "Maren follows at her own pace, arriving at the foot of the stairs a moment after Nicco.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 2,
+      "sample": 0,
+      "follower": "Maren",
+      "quote": "Maren comes down the stairs a few moments after him, hands at her sides, saying nothing.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 2,
+      "sample": 1,
+      "follower": "Maren",
+      "quote": "Maren appears at the bottom step, pausing there with one hand on the wall.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 3,
+      "sample": 1,
+      "follower": "Gerome",
+      "quote": "Gerome follows.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_hall"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 1
+        },
+        "movement_evidence": [
+          "gerome->test_hall"
+        ],
+        "decisions": [
+          "move_character:ok"
+        ],
+        "delivered": "draft",
+        "issues": []
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_hall"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 1
+        },
+        "movement_evidence": [
+          "gerome->test_hall"
+        ],
+        "decisions": [
+          "move_character:ok"
+        ],
+        "delivered": "draft",
+        "issues": []
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 0,
+      "sample": 2,
+      "follower": "Maren",
+      "quote": "Maren comes down the stairs a moment later",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 3,
+      "sample": 2,
+      "follower": "Gerome",
+      "quote": "Gerome follows.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_hall"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 1
+        },
+        "movement_evidence": [
+          "gerome->test_hall"
+        ],
+        "decisions": [
+          "move_character:ok"
+        ],
+        "delivered": "draft",
+        "issues": []
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_hall"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 1
+        },
+        "movement_evidence": [
+          "gerome->test_hall"
+        ],
+        "decisions": [
+          "move_character:ok"
+        ],
+        "delivered": "draft",
+        "issues": []
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 0,
+      "sample": 3,
+      "follower": "Maren",
+      "quote": "Maren's footsteps follow behind him on the stair",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "draft",
+        "issues": []
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "draft",
+        "issues": []
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 0,
+      "sample": 4,
+      "follower": "Maren",
+      "quote": "Maren came down a moment after, catching up near the foot of the steps.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren",
+          "player_agency:"
+        ]
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren",
+          "player_agency:"
+        ]
+      }
+    },
+    {
+      "variant": "production",
+      "invitation": 2,
+      "sample": 4,
+      "follower": "Maren",
+      "quote": "Maren appears at the bottom of the stair, pausing just inside the hall.",
+      "no_controller_proposal": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      },
+      "controller_move_with_quote": {
+        "ok": true,
+        "nicco": "test_hall",
+        "locations": {
+          "brenna": "test_room",
+          "maren": "test_room",
+          "gerome": "test_room"
+        },
+        "moved": {
+          "brenna": 0,
+          "maren": 0,
+          "gerome": 0
+        },
+        "movement_evidence": [],
+        "decisions": [
+          "move_character:rejected_insufficient_confirmation"
+        ],
+        "delivered": "redacted",
+        "issues": [
+          "absent_participant:Maren"
+        ]
+      }
+    }
+  ],
+  "regressions": {
+    "invitation alone": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_room",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 0,
+        "gerome": 0
+      },
+      "movement_evidence": [],
+      "decisions": [],
+      "delivered": "draft",
+      "issues": []
+    },
+    "she stays": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_room",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 0,
+        "gerome": 0
+      },
+      "movement_evidence": [],
+      "decisions": [],
+      "delivered": "draft",
+      "issues": []
+    },
+    "she hesitates": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_room",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 0,
+        "gerome": 0
+      },
+      "movement_evidence": [],
+      "decisions": [],
+      "delivered": "redacted",
+      "issues": [
+        "absent_participant:Maren"
+      ]
+    },
+    "no footsteps follow": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_room",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 0,
+        "gerome": 0
+      },
+      "movement_evidence": [],
+      "decisions": [],
+      "delivered": "draft",
+      "issues": []
+    },
+    "her eyes follow him": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_room",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 0,
+        "gerome": 0
+      },
+      "movement_evidence": [],
+      "decisions": [],
+      "delivered": "draft",
+      "issues": []
+    },
+    "follows his reasoning": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_room",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 0,
+        "gerome": 0
+      },
+      "movement_evidence": [],
+      "decisions": [],
+      "delivered": "redacted",
+      "issues": [
+        "absent_participant:Maren"
+      ]
+    },
+    "completed valid follow": {
+      "ok": true,
+      "nicco": "test_hall",
+      "locations": {
+        "brenna": "test_room",
+        "maren": "test_hall",
+        "gerome": "test_room"
+      },
+      "moved": {
+        "brenna": 0,
+        "maren": 1,
+        "gerome": 0
+      },
+      "movement_evidence": [
+        "maren->test_hall"
+      ],
+      "decisions": [
+        "move_character:ok"
+      ],
+      "delivered": "draft",
+      "issues": []
+    }
+  }
+}
