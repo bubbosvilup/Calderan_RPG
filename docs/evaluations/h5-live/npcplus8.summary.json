@@ -1,0 +1,485 @@
+{
+  "status": "FINISHED",
+  "dry": false,
+  "executed_turns": 120,
+  "gameplay_failures": 0,
+  "pipeline_counts": {
+    "interaction_candidates": 102,
+    "relationship_evidence": 0,
+    "relationship_evidence_out_of_bounds": 0,
+    "relationship_near_misses": 9,
+    "movement_evidence": 0,
+    "contract_evidence": 0,
+    "household_choice_evidence": 0,
+    "evidence_detections": 0,
+    "follow_invitations": 9,
+    "proposals": 8,
+    "npc_proposals": 5,
+    "authorized": 0,
+    "rejected": 8,
+    "committed_npc_commands": 0,
+    "premium_developments": 0,
+    "condition_issues": 1
+  },
+  "counts": {
+    "interaction_candidates": 102,
+    "relationship_evidence": 0,
+    "relationship_evidence_out_of_bounds": 0,
+    "relationship_near_misses": 9,
+    "movement_evidence": 0,
+    "contract_evidence": 0,
+    "household_choice_evidence": 0,
+    "evidence_detections": 0,
+    "follow_invitations": 9,
+    "proposals": 8,
+    "npc_proposals": 5,
+    "authorized": 0,
+    "rejected": 8,
+    "committed_npc_commands": 0,
+    "premium_developments": 0,
+    "condition_issues": 1
+  },
+  "outcomes": {
+    "NO_STATE_EXPECTED": 91,
+    "VALID_EVIDENCE_NOT_DETECTED": 10,
+    "EVIDENCE_DETECTED_NO_PROPOSAL": 0,
+    "PROPOSED_BUT_REJECTED": 1,
+    "COMMITTED_EXISTING_DOMAIN": 0,
+    "MISSING_DOMAIN_REPRESENTATION": 0
+  },
+  "by_class": {
+    "chore": {
+      "NO_STATE_EXPECTED": 53
+    },
+    "refusal": {
+      "NO_STATE_EXPECTED": 4
+    },
+    "food_sharing": {
+      "NO_STATE_EXPECTED": 2
+    },
+    "disagreement": {
+      "NO_STATE_EXPECTED": 2
+    },
+    "following": {
+      "PROPOSED_BUT_REJECTED": 1,
+      "VALID_EVIDENCE_NOT_DETECTED": 10
+    },
+    "practical_care": {
+      "NO_STATE_EXPECTED": 16
+    },
+    "staying": {
+      "NO_STATE_EXPECTED": 12
+    },
+    "gratitude": {
+      "NO_STATE_EXPECTED": 2
+    }
+  },
+  "stopped_at": {
+    "narration": 101,
+    "authorization": 1
+  },
+  "verifier_checks": {
+    "rejected_already_established": 1
+  },
+  "proposal_kinds": {
+    "move_character": 3,
+    "leave_scene": 2,
+    "set_knowledge": 2,
+    "adjust_relationship": 1
+  },
+  "rejection_reasons": {
+    "move_character:rejected_already_established": 2,
+    "move_character:rejected_reference_invalid": 1,
+    "leave_scene:rejected_reference_invalid": 2,
+    "set_knowledge:rejected_controller_mismatch": 2,
+    "adjust_relationship:rejected_insufficient_confirmation": 1
+  },
+  "development_kinds": {},
+  "condition_issue_tags": {
+    "knocked_down": 1
+  },
+  "relationship_probe_checks": {
+    "respect_raise:sentence_hedged_or_missing": 9
+  },
+  "reflection": {
+    "due_checks": 120,
+    "due_character_observations": 0,
+    "calls": 0,
+    "accepted": 0,
+    "rejected": 0,
+    "provider_ms_p50": null,
+    "provider_ms_p95": null
+  },
+  "latency": {
+    "narrator_p50_ms": 3380.9805999999808,
+    "narrator_p95_ms": 4539.215400000001,
+    "controller_p50_ms": 1041.6851000000024,
+    "controller_p95_ms": 2006.1930999999968
+  },
+  "charged_tokens": {
+    "narrator_input": 537567,
+    "narrator_output": 19884,
+    "controller_input": 455590,
+    "controller_output": 1148,
+    "reflection_input": 0,
+    "reflection_output": 0
+  },
+  "total_tokens": 1014189,
+  "estimated_usd": 0.306129442,
+  "secret_sentinel_leaks": 0,
+  "sessions": [
+    {
+      "session": "breakfast",
+      "turns": 24,
+      "developments": 0,
+      "reflection_calls": 0,
+      "motifs": [
+        {
+          "npc_id": "brenna",
+          "tag": "tidies",
+          "turns": [
+            1,
+            5,
+            10,
+            19,
+            24
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "tidies",
+          "turns": [
+            3,
+            19
+          ]
+        }
+      ],
+      "unrepresented_recurring": [
+        {
+          "npc_id": "brenna",
+          "class": "chore",
+          "turns": 5
+        }
+      ],
+      "final_relationships": 0,
+      "final_npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        }
+      ]
+    },
+    {
+      "session": "chores",
+      "turns": 24,
+      "developments": 0,
+      "reflection_calls": 0,
+      "motifs": [
+        {
+          "npc_id": "brenna",
+          "tag": "tidies",
+          "turns": [
+            1,
+            3,
+            16,
+            17,
+            20,
+            24
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "tidies",
+          "turns": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "checks_door_window",
+          "turns": [
+            5,
+            7,
+            19
+          ]
+        }
+      ],
+      "unrepresented_recurring": [
+        {
+          "npc_id": "brenna",
+          "class": "chore",
+          "turns": 6
+        },
+        {
+          "npc_id": "maren",
+          "class": "chore",
+          "turns": 13
+        },
+        {
+          "npc_id": "maren",
+          "class": "practical_care",
+          "turns": 3
+        }
+      ],
+      "final_relationships": 0,
+      "final_npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        }
+      ]
+    },
+    {
+      "session": "friction",
+      "turns": 24,
+      "developments": 0,
+      "reflection_calls": 0,
+      "motifs": [
+        {
+          "npc_id": "brenna",
+          "tag": "tidies",
+          "turns": [
+            1,
+            9,
+            11,
+            20
+          ]
+        },
+        {
+          "npc_id": "brenna",
+          "tag": "checks_door_window",
+          "turns": [
+            3,
+            9,
+            18,
+            19
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "tidies",
+          "turns": [
+            5,
+            10,
+            21,
+            24
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "sits_by_window",
+          "turns": [
+            15,
+            17
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "checks_door_window",
+          "turns": [
+            20,
+            23
+          ]
+        }
+      ],
+      "unrepresented_recurring": [
+        {
+          "npc_id": "brenna",
+          "class": "chore",
+          "turns": 4
+        },
+        {
+          "npc_id": "maren",
+          "class": "chore",
+          "turns": 4
+        }
+      ],
+      "final_relationships": 0,
+      "final_npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        }
+      ]
+    },
+    {
+      "session": "evening_care",
+      "turns": 24,
+      "developments": 0,
+      "reflection_calls": 0,
+      "motifs": [
+        {
+          "npc_id": "maren",
+          "tag": "tidies",
+          "turns": [
+            5,
+            7,
+            13,
+            19
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "sits_by_window",
+          "turns": [
+            9,
+            14,
+            17
+          ]
+        }
+      ],
+      "unrepresented_recurring": [
+        {
+          "npc_id": "brenna",
+          "class": "practical_care",
+          "turns": 4
+        },
+        {
+          "npc_id": "maren",
+          "class": "chore",
+          "turns": 4
+        },
+        {
+          "npc_id": "maren",
+          "class": "practical_care",
+          "turns": 3
+        }
+      ],
+      "final_relationships": 0,
+      "final_npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        }
+      ]
+    },
+    {
+      "session": "errands",
+      "turns": 24,
+      "developments": 0,
+      "reflection_calls": 0,
+      "motifs": [
+        {
+          "npc_id": "maren",
+          "tag": "checks_door_window",
+          "turns": [
+            1,
+            8,
+            22
+          ]
+        },
+        {
+          "npc_id": "brenna",
+          "tag": "tidies",
+          "turns": [
+            5,
+            7,
+            23
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "tidies",
+          "turns": [
+            5,
+            6,
+            8,
+            10,
+            18,
+            19,
+            20,
+            21,
+            23,
+            24
+          ]
+        },
+        {
+          "npc_id": "maren",
+          "tag": "sits_by_window",
+          "turns": [
+            20,
+            21,
+            24
+          ]
+        }
+      ],
+      "unrepresented_recurring": [
+        {
+          "npc_id": "brenna",
+          "class": "staying",
+          "turns": 4
+        },
+        {
+          "npc_id": "brenna",
+          "class": "chore",
+          "turns": 3
+        },
+        {
+          "npc_id": "maren",
+          "class": "chore",
+          "turns": 10
+        }
+      ],
+      "final_relationships": 0,
+      "final_npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        }
+      ]
+    }
+  ],
+  "accepted_note_review": []
+}

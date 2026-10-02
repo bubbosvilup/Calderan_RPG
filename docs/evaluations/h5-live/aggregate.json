@@ -1,0 +1,1706 @@
+{
+ "no_retry": {
+  "turns": 175,
+  "success_rate": 0.9942857142857143,
+  "first_attempt_success_rate": 0.9942857142857143,
+  "retry_recovery_rate": null,
+  "turns_with_retry": 0,
+  "unrecovered_failure_rate": 0.005714285714285714,
+  "failures": {
+   "controller_failed": 1
+  },
+  "provider_codes": {
+   "structured_output_invalid": 1
+  },
+  "latency_ms": {
+   "narrator": {
+    "n": 175,
+    "p50": 4234.890000000014,
+    "p95": 6554.4075000000885,
+    "p99": 7334.448400000052,
+    "max": 7417.742599999998,
+    "mean": 4402.893602285713
+   },
+   "controller": {
+    "n": 175,
+    "p50": 1101.1212000000523,
+    "p95": 2697.8462,
+    "p99": 3599.3885999999475,
+    "max": 5542.526599999983,
+    "mean": 1321.0075177142862
+   },
+   "reconciliation": {
+    "n": 26,
+    "p50": 2935.808799999999,
+    "p95": 4014.8534999999683,
+    "p99": 4424.262500000012,
+    "max": 4424.262500000012,
+    "mean": 3089.8383038461575
+   },
+   "total_turn": {
+    "n": 175,
+    "p50": 5924.085599999991,
+    "p95": 9543.824299999746,
+    "p99": 11403.582100000116,
+    "max": 12753.630100000068,
+    "mean": 6196.332471428554
+   }
+  },
+  "narrator": {
+   "audit_issue_rate": 0.14942528735632185,
+   "reconciliation_rate": 0.14942528735632185,
+   "redaction_rate": 0.06896551724137931,
+   "issue_kinds": {
+    "asserts_uncommitted_transfer": 6,
+    "uncommitted_constraint": 1,
+    "uncommitted_condition": 13,
+    "private_player_fact": 3,
+    "player_agency": 4
+   },
+   "revision_issue_kinds": {
+    "uncommitted_condition": 9,
+    "private_player_fact": 2,
+    "asserts_uncommitted_transfer": 1
+   },
+   "reconciliation_clean": 14,
+   "reconciliation_redacted": 12,
+   "unsupported_state_assertion_rate": 0.11428571428571428,
+   "unsupported_nicco_action_incidence": 0.022857142857142857,
+   "player_agency_delivered_after_audit": 0
+  },
+  "controller": {
+   "provider_success_rate": 0.9942857142857143,
+   "structured_parse_rate": 0.9942857142857143,
+   "proposals_per_turn": 0.21142857142857144,
+   "proposed": 37,
+   "authorized": 6,
+   "rejected": 31,
+   "authorized_rate": 0.16216216216216217,
+   "rejected_rate": 0.8378378378378378
+  },
+  "safety": {
+   "unexpected_commits": 0,
+   "secret_sentinel_in_narration": 0,
+   "nicco_agency_regex_candidates": [
+    "H_late_naming#3.2",
+    "I_household#4.0"
+   ]
+  },
+  "retrieval": {
+   "triggered": 50,
+   "modes": {
+    "none": 125,
+    "lexical": 50
+   },
+   "lexical_fallback": 50
+  },
+  "cost": {
+   "provider_calls": 375,
+   "provider_attempts": 376,
+   "tokens": {
+    "narrator_prompt": 784473,
+    "narrator_completion": 33304,
+    "controller_prompt": 760117,
+    "controller_completion": 3089,
+    "narrator_calls_with_usage": 201,
+    "controller_calls_with_usage": 174,
+    "avg_per_turn": {
+     "narrator_prompt": 4482.702857142857,
+     "narrator_completion": 190.30857142857144,
+     "controller_prompt": 4343.5257142857145,
+     "controller_completion": 17.65142857142857
+    }
+   },
+   "estimated_usd": 0.4666800736
+  },
+  "commit_kinds": {
+   "transfer_person": 8,
+   "add_household_rule": 5,
+   "transfer_item": 1
+  },
+  "rejection_reasons": {
+   "move_character:rejected_reference_invalid:evidence_path_not_supported_for_command": 4,
+   "set_condition:rejected_reference_invalid:quote_not_verbatim": 1,
+   "move_character:rejected_reference_invalid:quote_not_verbatim": 1,
+   "transfer_item:rejected_insufficient_confirmation:receipt_subject_not_recipient": 1,
+   "set_knowledge:rejected_controller_mismatch:quote_length": 1,
+   "leave_scene:rejected_reference_invalid:no_completed_departure": 4,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_offered_group": 3,
+   "transfer_item:rejected_reference_invalid:no_giver": 7,
+   "set_condition:rejected_reference_invalid:condition_term_missing": 1,
+   "set_condition:rejected_reference_invalid:physical_condition_narrated": 1,
+   "transfer_item:rejected_controller_mismatch:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_ambiguous_reference:sentence_hedged_negated_or_hypothetical": 3,
+   "adjust_relationship:rejected_insufficient_confirmation:quote_does_not_evidence_this_change": 1,
+   "leave_scene:rejected_reference_invalid:quote_not_verbatim": 1,
+   "transfer_item:rejected_reference_invalid:quote_not_verbatim": 1
+  },
+  "by_scenario": {
+   "A_conversation": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "B_movement": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "C_follower": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "D_carrying": {
+    "turns": 5,
+    "success": 4,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "E_handover": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 1,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "F_negotiation": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "G_purchase": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "H_late_naming": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "I_household": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "J_relationship": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "K_lore": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "L_restricted": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "M_ambiguous": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "N_refusal": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "O_departure": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "P_player_physical": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "Q_context_heavy": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 1,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "R_retrieval_heavy": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 2,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "S_reconciliation": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 4,
+    "redaction": 0,
+    "turns_with_issues": 4,
+    "retried": 0
+   },
+   "T_noop": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 2,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "U_agency_offer": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 1,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "V_agency_threat": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "W_agency_follow": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "X_secret_holder": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "Y_left_behind": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "Z_two_names": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   }
+  }
+ },
+ "retry": {
+  "turns": 175,
+  "success_rate": 1,
+  "first_attempt_success_rate": 1,
+  "retry_recovery_rate": null,
+  "turns_with_retry": 0,
+  "unrecovered_failure_rate": 0,
+  "failures": {},
+  "provider_codes": {},
+  "latency_ms": {
+   "narrator": {
+    "n": 175,
+    "p50": 4434.668799999985,
+    "p95": 6634.25709999993,
+    "p99": 7457.404600000009,
+    "max": 7917.67909999995,
+    "mean": 4473.1047291428495
+   },
+   "controller": {
+    "n": 175,
+    "p50": 1113.052800000005,
+    "p95": 2477.6541000000143,
+    "p99": 5271.940400000021,
+    "max": 6704.2163,
+    "mean": 1293.7677662857097
+   },
+   "reconciliation": {
+    "n": 29,
+    "p50": 3006.7626000000164,
+    "p95": 4242.394800000009,
+    "p99": 4284.54449999996,
+    "max": 4284.54449999996,
+    "mean": 3125.863003448272
+   },
+   "total_turn": {
+    "n": 175,
+    "p50": 6093.749899999999,
+    "p95": 9914.738300000012,
+    "p99": 11225.10099999985,
+    "max": 11692.463900000323,
+    "mean": 6298.794020571421
+   }
+  },
+  "narrator": {
+   "audit_issue_rate": 0.1657142857142857,
+   "reconciliation_rate": 0.1657142857142857,
+   "redaction_rate": 0.05714285714285714,
+   "issue_kinds": {
+    "invented_source": 1,
+    "asserts_uncommitted_transfer": 6,
+    "player_agency": 9,
+    "uncommitted_condition": 9,
+    "uncommitted_constraint": 2,
+    "private_player_fact": 5
+   },
+   "revision_issue_kinds": {
+    "uncommitted_condition": 6,
+    "private_player_fact": 4
+   },
+   "reconciliation_clean": 19,
+   "reconciliation_redacted": 10,
+   "unsupported_state_assertion_rate": 0.09142857142857143,
+   "unsupported_nicco_action_incidence": 0.05142857142857143,
+   "player_agency_delivered_after_audit": 0
+  },
+  "controller": {
+   "provider_success_rate": 1,
+   "structured_parse_rate": 1,
+   "proposals_per_turn": 0.2,
+   "proposed": 35,
+   "authorized": 3,
+   "rejected": 32,
+   "authorized_rate": 0.08571428571428572,
+   "rejected_rate": 0.9142857142857143
+  },
+  "safety": {
+   "unexpected_commits": 0,
+   "secret_sentinel_in_narration": 0,
+   "nicco_agency_regex_candidates": [
+    "Y_left_behind#5.1"
+   ]
+  },
+  "retrieval": {
+   "triggered": 50,
+   "modes": {
+    "none": 125,
+    "lexical": 50
+   },
+   "lexical_fallback": 50
+  },
+  "cost": {
+   "provider_calls": 379,
+   "provider_attempts": 379,
+   "tokens": {
+    "narrator_prompt": 795150,
+    "narrator_completion": 33756,
+    "controller_prompt": 764219,
+    "controller_completion": 2823,
+    "narrator_calls_with_usage": 204,
+    "controller_calls_with_usage": 175,
+    "avg_per_turn": {
+     "narrator_prompt": 4543.714285714285,
+     "narrator_completion": 192.89142857142858,
+     "controller_prompt": 4366.965714285714,
+     "controller_completion": 16.13142857142857
+    }
+   },
+   "estimated_usd": 0.47256494520000003
+  },
+  "commit_kinds": {
+   "add_household_rule": 3,
+   "transfer_person": 6
+  },
+  "rejection_reasons": {
+   "set_condition:rejected_reference_invalid:quote_not_verbatim": 1,
+   "move_character:rejected_reference_invalid:quote_not_verbatim": 1,
+   "transfer_item:rejected_insufficient_confirmation:no_receipt_act_in_quote": 1,
+   "set_knowledge:rejected_reference_invalid:fact_not_in_context": 1,
+   "leave_scene:rejected_reference_invalid:no_completed_departure": 5,
+   "set_condition:rejected_reference_invalid:condition_not_in_vocabulary": 2,
+   "move_character:rejected_reference_invalid:evidence_path_not_supported_for_command": 6,
+   "set_condition:rejected_reference_invalid:condition_subject_not_character": 1,
+   "transfer_item:rejected_insufficient_confirmation:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_reference_invalid:no_giver": 6,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_offered_group": 4,
+   "set_condition:rejected_reference_invalid:condition_term_missing": 1,
+   "set_condition:rejected_reference_invalid:physical_condition_narrated": 1,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_named_item": 1
+  },
+  "by_scenario": {
+   "A_conversation": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "B_movement": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 3,
+    "redaction": 0,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "C_follower": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "D_carrying": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "E_handover": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "F_negotiation": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "G_purchase": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "H_late_naming": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "I_household": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "J_relationship": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "K_lore": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "L_restricted": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "M_ambiguous": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 2,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "N_refusal": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "O_departure": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "P_player_physical": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "Q_context_heavy": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "R_retrieval_heavy": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 5,
+    "redaction": 3,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "S_reconciliation": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 4,
+    "redaction": 0,
+    "turns_with_issues": 4,
+    "retried": 0
+   },
+   "T_noop": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "U_agency_offer": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "V_agency_threat": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "W_agency_follow": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "X_secret_holder": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "Y_left_behind": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 3,
+    "redaction": 2,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "Z_two_names": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   }
+  }
+ },
+ "soak": {
+  "turns": 220,
+  "success_rate": 1,
+  "first_attempt_success_rate": 1,
+  "retry_recovery_rate": null,
+  "turns_with_retry": 0,
+  "unrecovered_failure_rate": 0,
+  "failures": {},
+  "provider_codes": {},
+  "latency_ms": {
+   "narrator": {
+    "n": 220,
+    "p50": 3994.4000000001397,
+    "p95": 6404.5708999999915,
+    "p99": 7264.619399999967,
+    "max": 8102.463800000027,
+    "mean": 4142.13241227273
+   },
+   "controller": {
+    "n": 220,
+    "p50": 955.4464000000153,
+    "p95": 1831.2158000000054,
+    "p99": 2526.5853000001516,
+    "max": 3945.3675999999978,
+    "mean": 1082.0598022727295
+   },
+   "reconciliation": {
+    "n": 49,
+    "p50": 2967.8024999999907,
+    "p95": 3915.964200000046,
+    "p99": 4610.722800000003,
+    "max": 4610.722800000003,
+    "mean": 3018.007381632659
+   },
+   "total_turn": {
+    "n": 220,
+    "p50": 5539.268200000282,
+    "p95": 9367.477900000056,
+    "p99": 11049.163599999389,
+    "max": 13032.392300000007,
+    "mean": 5909.031580000002
+   }
+  },
+  "narrator": {
+   "audit_issue_rate": 0.22272727272727272,
+   "reconciliation_rate": 0.22272727272727272,
+   "redaction_rate": 0.06363636363636363,
+   "issue_kinds": {
+    "asserts_uncommitted_transfer": 21,
+    "private_player_fact": 16,
+    "uncommitted_condition": 10,
+    "player_agency": 9,
+    "uncommitted_constraint": 1
+   },
+   "revision_issue_kinds": {
+    "asserts_uncommitted_transfer": 3,
+    "private_player_fact": 8,
+    "uncommitted_condition": 5
+   },
+   "reconciliation_clean": 35,
+   "reconciliation_redacted": 14,
+   "unsupported_state_assertion_rate": 0.13636363636363635,
+   "unsupported_nicco_action_incidence": 0.04090909090909091,
+   "player_agency_delivered_after_audit": 0
+  },
+  "controller": {
+   "provider_success_rate": 1,
+   "structured_parse_rate": 1,
+   "proposals_per_turn": 0.2863636363636364,
+   "proposed": 63,
+   "authorized": 2,
+   "rejected": 61,
+   "authorized_rate": 0.031746031746031744,
+   "rejected_rate": 0.9682539682539683
+  },
+  "safety": {
+   "unexpected_commits": 1,
+   "secret_sentinel_in_narration": 0,
+   "nicco_agency_regex_candidates": [
+    "B_movement#8.0"
+   ]
+  },
+  "retrieval": {
+   "triggered": 80,
+   "modes": {
+    "lexical": 80,
+    "none": 140
+   },
+   "lexical_fallback": 80
+  },
+  "cost": {
+   "provider_calls": 489,
+   "provider_attempts": 489,
+   "tokens": {
+    "narrator_prompt": 1016862,
+    "narrator_completion": 41171,
+    "controller_prompt": 929310,
+    "controller_completion": 4607,
+    "narrator_calls_with_usage": 269,
+    "controller_calls_with_usage": 220,
+    "avg_per_turn": {
+     "narrator_prompt": 4622.1,
+     "narrator_completion": 187.1409090909091,
+     "controller_prompt": 4224.136363636364,
+     "controller_completion": 20.94090909090909
+    }
+   },
+   "estimated_usd": 0.5971192179999999
+  },
+  "commit_kinds": {
+   "transfer_person": 7,
+   "transfer_item": 2,
+   "register_character": 1,
+   "set_legal_status": 1
+  },
+  "rejection_reasons": {
+   "set_condition:rejected_reference_invalid:physical_condition_narrated": 2,
+   "move_character:rejected_reference_invalid:quote_not_verbatim": 4,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_offered_group": 10,
+   "transfer_item:rejected_controller_mismatch:no_receipt_act_in_quote": 1,
+   "leave_scene:rejected_reference_invalid:quote_length": 1,
+   "transfer_item:rejected_reference_invalid:no_giver": 7,
+   "move_character:rejected_reference_invalid:sentence_hedged_negated_or_hypothetical": 1,
+   "set_condition:rejected_reference_invalid:quote_length": 1,
+   "leave_scene:rejected_reference_invalid:no_completed_departure": 8,
+   "set_condition:rejected_reference_invalid:quote_not_verbatim": 3,
+   "transfer_item:rejected_controller_mismatch:receipt_of_named_item": 4,
+   "move_character:rejected_reference_invalid:evidence_path_not_supported_for_command": 9,
+   "transfer_item:rejected_insufficient_confirmation:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_ambiguous_reference:receipt_subject_not_recipient": 1,
+   "transfer_item:rejected_insufficient_confirmation:no_receipt_act_in_quote": 2,
+   "set_condition:rejected_reference_invalid:condition_term_missing": 1,
+   "transfer_item:rejected_ambiguous_reference:sentence_hedged_negated_or_hypothetical": 1,
+   "set_condition:rejected_reference_invalid:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_ambiguous_reference:no_receipt_act_in_quote": 2,
+   "transfer_item:rejected_reference_invalid:quote_not_verbatim": 1
+  },
+  "by_scenario": {
+   "D_carrying": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "S_reconciliation": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 10,
+    "redaction": 1,
+    "turns_with_issues": 10,
+    "retried": 0
+   },
+   "E_handover": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 3,
+    "redaction": 1,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "R_retrieval_heavy": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 7,
+    "redaction": 5,
+    "turns_with_issues": 7,
+    "retried": 0
+   },
+   "T_noop": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 3,
+    "redaction": 3,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "U_agency_offer": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 3,
+    "redaction": 0,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "Q_context_heavy": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "N_refusal": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 5,
+    "redaction": 0,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "B_movement": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 4,
+    "redaction": 0,
+    "turns_with_issues": 4,
+    "retried": 0
+   },
+   "O_departure": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "C_follower": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "Y_left_behind": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 3,
+    "redaction": 1,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "L_restricted": {
+    "turns": 30,
+    "success": 30,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "X_secret_holder": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "H_late_naming": {
+    "turns": 40,
+    "success": 40,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "W_agency_follow": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 3,
+    "redaction": 1,
+    "turns_with_issues": 3,
+    "retried": 0
+   }
+  }
+ },
+ "retry_all": {
+  "turns": 395,
+  "success_rate": 1,
+  "first_attempt_success_rate": 1,
+  "retry_recovery_rate": null,
+  "turns_with_retry": 0,
+  "unrecovered_failure_rate": 0,
+  "failures": {},
+  "provider_codes": {},
+  "latency_ms": {
+   "narrator": {
+    "n": 395,
+    "p50": 4172.410199999998,
+    "p95": 6634.25709999993,
+    "p99": 7457.404600000009,
+    "max": 8102.463800000027,
+    "mean": 4288.76571721519
+   },
+   "controller": {
+    "n": 395,
+    "p50": 1021.4822000000277,
+    "p95": 2249.4892999999997,
+    "p99": 3945.3675999999978,
+    "max": 6704.2163,
+    "mean": 1175.854469873417
+   },
+   "reconciliation": {
+    "n": 78,
+    "p50": 2967.8024999999907,
+    "p95": 4242.394800000009,
+    "p99": 4610.722800000003,
+    "max": 4610.722800000003,
+    "mean": 3058.107548717951
+   },
+   "total_turn": {
+    "n": 395,
+    "p50": 5785.150199999916,
+    "p95": 9651.18879999977,
+    "p99": 11225.10099999985,
+    "max": 13032.392300000007,
+    "mean": 6081.711142278482
+   }
+  },
+  "narrator": {
+   "audit_issue_rate": 0.19746835443037974,
+   "reconciliation_rate": 0.19746835443037974,
+   "redaction_rate": 0.060759493670886074,
+   "issue_kinds": {
+    "invented_source": 1,
+    "asserts_uncommitted_transfer": 27,
+    "player_agency": 18,
+    "uncommitted_condition": 19,
+    "uncommitted_constraint": 3,
+    "private_player_fact": 21
+   },
+   "revision_issue_kinds": {
+    "uncommitted_condition": 11,
+    "private_player_fact": 12,
+    "asserts_uncommitted_transfer": 3
+   },
+   "reconciliation_clean": 54,
+   "reconciliation_redacted": 24,
+   "unsupported_state_assertion_rate": 0.11645569620253164,
+   "unsupported_nicco_action_incidence": 0.04556962025316456,
+   "player_agency_delivered_after_audit": 0
+  },
+  "controller": {
+   "provider_success_rate": 1,
+   "structured_parse_rate": 1,
+   "proposals_per_turn": 0.2481012658227848,
+   "proposed": 98,
+   "authorized": 5,
+   "rejected": 93,
+   "authorized_rate": 0.05102040816326531,
+   "rejected_rate": 0.9489795918367347
+  },
+  "safety": {
+   "unexpected_commits": 1,
+   "secret_sentinel_in_narration": 0,
+   "nicco_agency_regex_candidates": [
+    "Y_left_behind#5.1",
+    "B_movement#8.0"
+   ]
+  },
+  "retrieval": {
+   "triggered": 130,
+   "modes": {
+    "none": 265,
+    "lexical": 130
+   },
+   "lexical_fallback": 130
+  },
+  "cost": {
+   "provider_calls": 868,
+   "provider_attempts": 868,
+   "tokens": {
+    "narrator_prompt": 1812012,
+    "narrator_completion": 74927,
+    "controller_prompt": 1693529,
+    "controller_completion": 7430,
+    "narrator_calls_with_usage": 473,
+    "controller_calls_with_usage": 395,
+    "avg_per_turn": {
+     "narrator_prompt": 4587.372151898734,
+     "narrator_completion": 189.6886075949367,
+     "controller_prompt": 4287.415189873418,
+     "controller_completion": 18.810126582278482
+    }
+   },
+   "estimated_usd": 1.0696841631999998
+  },
+  "commit_kinds": {
+   "add_household_rule": 3,
+   "transfer_person": 13,
+   "transfer_item": 2,
+   "register_character": 1,
+   "set_legal_status": 1
+  },
+  "rejection_reasons": {
+   "set_condition:rejected_reference_invalid:quote_not_verbatim": 4,
+   "move_character:rejected_reference_invalid:quote_not_verbatim": 5,
+   "transfer_item:rejected_insufficient_confirmation:no_receipt_act_in_quote": 3,
+   "set_knowledge:rejected_reference_invalid:fact_not_in_context": 1,
+   "leave_scene:rejected_reference_invalid:no_completed_departure": 13,
+   "set_condition:rejected_reference_invalid:condition_not_in_vocabulary": 2,
+   "move_character:rejected_reference_invalid:evidence_path_not_supported_for_command": 15,
+   "set_condition:rejected_reference_invalid:condition_subject_not_character": 1,
+   "transfer_item:rejected_insufficient_confirmation:sentence_hedged_negated_or_hypothetical": 2,
+   "transfer_item:rejected_reference_invalid:no_giver": 13,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_offered_group": 14,
+   "set_condition:rejected_reference_invalid:condition_term_missing": 2,
+   "set_condition:rejected_reference_invalid:physical_condition_narrated": 3,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_named_item": 1,
+   "transfer_item:rejected_controller_mismatch:no_receipt_act_in_quote": 1,
+   "leave_scene:rejected_reference_invalid:quote_length": 1,
+   "move_character:rejected_reference_invalid:sentence_hedged_negated_or_hypothetical": 1,
+   "set_condition:rejected_reference_invalid:quote_length": 1,
+   "transfer_item:rejected_controller_mismatch:receipt_of_named_item": 4,
+   "transfer_item:rejected_ambiguous_reference:receipt_subject_not_recipient": 1,
+   "transfer_item:rejected_ambiguous_reference:sentence_hedged_negated_or_hypothetical": 1,
+   "set_condition:rejected_reference_invalid:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_ambiguous_reference:no_receipt_act_in_quote": 2,
+   "transfer_item:rejected_reference_invalid:quote_not_verbatim": 1
+  },
+  "by_scenario": {
+   "A_conversation": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "B_movement": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 7,
+    "redaction": 0,
+    "turns_with_issues": 7,
+    "retried": 0
+   },
+   "C_follower": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "D_carrying": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 3,
+    "redaction": 1,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "E_handover": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 3,
+    "redaction": 1,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "F_negotiation": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "G_purchase": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "H_late_naming": {
+    "turns": 60,
+    "success": 60,
+    "reconciliation": 3,
+    "redaction": 0,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "I_household": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "J_relationship": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "K_lore": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "L_restricted": {
+    "turns": 45,
+    "success": 45,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "M_ambiguous": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 2,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "N_refusal": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 6,
+    "redaction": 0,
+    "turns_with_issues": 6,
+    "retried": 0
+   },
+   "O_departure": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "P_player_physical": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "Q_context_heavy": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "R_retrieval_heavy": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 12,
+    "redaction": 8,
+    "turns_with_issues": 12,
+    "retried": 0
+   },
+   "S_reconciliation": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 14,
+    "redaction": 1,
+    "turns_with_issues": 14,
+    "retried": 0
+   },
+   "T_noop": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 3,
+    "redaction": 3,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "U_agency_offer": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 3,
+    "redaction": 0,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "V_agency_threat": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "W_agency_follow": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 4,
+    "redaction": 2,
+    "turns_with_issues": 4,
+    "retried": 0
+   },
+   "X_secret_holder": {
+    "turns": 15,
+    "success": 15,
+    "reconciliation": 2,
+    "redaction": 1,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "Y_left_behind": {
+    "turns": 30,
+    "success": 30,
+    "reconciliation": 6,
+    "redaction": 3,
+    "turns_with_issues": 6,
+    "retried": 0
+   },
+   "Z_two_names": {
+    "turns": 5,
+    "success": 5,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   }
+  }
+ },
+ "all": {
+  "turns": 570,
+  "success_rate": 0.9982456140350877,
+  "first_attempt_success_rate": 0.9982456140350877,
+  "retry_recovery_rate": null,
+  "turns_with_retry": 0,
+  "unrecovered_failure_rate": 0.0017543859649122807,
+  "failures": {
+   "controller_failed": 1
+  },
+  "provider_codes": {
+   "structured_output_invalid": 1
+  },
+  "latency_ms": {
+   "narrator": {
+    "n": 570,
+    "p50": 4196.271200000017,
+    "p95": 6554.4075000000885,
+    "p99": 7334.448400000052,
+    "max": 8102.463800000027,
+    "mean": 4323.804980175441
+   },
+   "controller": {
+    "n": 570,
+    "p50": 1036.6137999999337,
+    "p95": 2335.6668000000063,
+    "p99": 3599.3885999999475,
+    "max": 6704.2163,
+    "mean": 1220.419002105262
+   },
+   "reconciliation": {
+    "n": 104,
+    "p50": 2967.8024999999907,
+    "p95": 4148.077900000149,
+    "p99": 4600.74589999998,
+    "max": 4610.722800000003,
+    "mean": 3066.0402375000026
+   },
+   "total_turn": {
+    "n": 570,
+    "p50": 5799.567999999854,
+    "p95": 9633.180600000022,
+    "p99": 11225.10099999985,
+    "max": 13032.392300000007,
+    "mean": 6116.901901228065
+   }
+  },
+  "narrator": {
+   "audit_issue_rate": 0.1827768014059754,
+   "reconciliation_rate": 0.1827768014059754,
+   "redaction_rate": 0.0632688927943761,
+   "issue_kinds": {
+    "asserts_uncommitted_transfer": 33,
+    "uncommitted_constraint": 4,
+    "uncommitted_condition": 32,
+    "private_player_fact": 24,
+    "player_agency": 22,
+    "invented_source": 1
+   },
+   "revision_issue_kinds": {
+    "uncommitted_condition": 20,
+    "private_player_fact": 14,
+    "asserts_uncommitted_transfer": 4
+   },
+   "reconciliation_clean": 68,
+   "reconciliation_redacted": 36,
+   "unsupported_state_assertion_rate": 0.11578947368421053,
+   "unsupported_nicco_action_incidence": 0.03859649122807018,
+   "player_agency_delivered_after_audit": 0
+  },
+  "controller": {
+   "provider_success_rate": 0.9982456140350877,
+   "structured_parse_rate": 0.9982456140350877,
+   "proposals_per_turn": 0.23684210526315788,
+   "proposed": 135,
+   "authorized": 11,
+   "rejected": 124,
+   "authorized_rate": 0.08148148148148149,
+   "rejected_rate": 0.9185185185185185
+  },
+  "safety": {
+   "unexpected_commits": 1,
+   "secret_sentinel_in_narration": 0,
+   "nicco_agency_regex_candidates": [
+    "H_late_naming#3.2",
+    "I_household#4.0",
+    "Y_left_behind#5.1",
+    "B_movement#8.0"
+   ]
+  },
+  "retrieval": {
+   "triggered": 180,
+   "modes": {
+    "none": 390,
+    "lexical": 180
+   },
+   "lexical_fallback": 180
+  },
+  "cost": {
+   "provider_calls": 1243,
+   "provider_attempts": 1244,
+   "tokens": {
+    "narrator_prompt": 2596485,
+    "narrator_completion": 108231,
+    "controller_prompt": 2453646,
+    "controller_completion": 10519,
+    "narrator_calls_with_usage": 674,
+    "controller_calls_with_usage": 569,
+    "avg_per_turn": {
+     "narrator_prompt": 4555.236842105263,
+     "narrator_completion": 189.87894736842105,
+     "controller_prompt": 4304.642105263158,
+     "controller_completion": 18.45438596491228
+    }
+   },
+   "estimated_usd": 1.5363642368
+  },
+  "commit_kinds": {
+   "transfer_person": 21,
+   "add_household_rule": 8,
+   "transfer_item": 3,
+   "register_character": 1,
+   "set_legal_status": 1
+  },
+  "rejection_reasons": {
+   "move_character:rejected_reference_invalid:evidence_path_not_supported_for_command": 19,
+   "set_condition:rejected_reference_invalid:quote_not_verbatim": 5,
+   "move_character:rejected_reference_invalid:quote_not_verbatim": 6,
+   "transfer_item:rejected_insufficient_confirmation:receipt_subject_not_recipient": 1,
+   "set_knowledge:rejected_controller_mismatch:quote_length": 1,
+   "leave_scene:rejected_reference_invalid:no_completed_departure": 17,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_offered_group": 17,
+   "transfer_item:rejected_reference_invalid:no_giver": 20,
+   "set_condition:rejected_reference_invalid:condition_term_missing": 3,
+   "set_condition:rejected_reference_invalid:physical_condition_narrated": 4,
+   "transfer_item:rejected_controller_mismatch:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_ambiguous_reference:sentence_hedged_negated_or_hypothetical": 4,
+   "adjust_relationship:rejected_insufficient_confirmation:quote_does_not_evidence_this_change": 1,
+   "leave_scene:rejected_reference_invalid:quote_not_verbatim": 1,
+   "transfer_item:rejected_reference_invalid:quote_not_verbatim": 2,
+   "transfer_item:rejected_insufficient_confirmation:no_receipt_act_in_quote": 3,
+   "set_knowledge:rejected_reference_invalid:fact_not_in_context": 1,
+   "set_condition:rejected_reference_invalid:condition_not_in_vocabulary": 2,
+   "set_condition:rejected_reference_invalid:condition_subject_not_character": 1,
+   "transfer_item:rejected_insufficient_confirmation:sentence_hedged_negated_or_hypothetical": 2,
+   "transfer_item:rejected_ambiguous_reference:receipt_of_named_item": 1,
+   "transfer_item:rejected_controller_mismatch:no_receipt_act_in_quote": 1,
+   "leave_scene:rejected_reference_invalid:quote_length": 1,
+   "move_character:rejected_reference_invalid:sentence_hedged_negated_or_hypothetical": 1,
+   "set_condition:rejected_reference_invalid:quote_length": 1,
+   "transfer_item:rejected_controller_mismatch:receipt_of_named_item": 4,
+   "transfer_item:rejected_ambiguous_reference:receipt_subject_not_recipient": 1,
+   "set_condition:rejected_reference_invalid:sentence_hedged_negated_or_hypothetical": 1,
+   "transfer_item:rejected_ambiguous_reference:no_receipt_act_in_quote": 2
+  },
+  "by_scenario": {
+   "A_conversation": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 2,
+    "redaction": 1,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "B_movement": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 8,
+    "redaction": 0,
+    "turns_with_issues": 8,
+    "retried": 0
+   },
+   "C_follower": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "D_carrying": {
+    "turns": 20,
+    "success": 19,
+    "reconciliation": 5,
+    "redaction": 1,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "E_handover": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 5,
+    "redaction": 2,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "F_negotiation": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "G_purchase": {
+    "turns": 30,
+    "success": 30,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "H_late_naming": {
+    "turns": 80,
+    "success": 80,
+    "reconciliation": 4,
+    "redaction": 1,
+    "turns_with_issues": 4,
+    "retried": 0
+   },
+   "I_household": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "J_relationship": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 0,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "K_lore": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   },
+   "L_restricted": {
+    "turns": 60,
+    "success": 60,
+    "reconciliation": 2,
+    "redaction": 0,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "M_ambiguous": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 2,
+    "redaction": 2,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "N_refusal": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 8,
+    "redaction": 0,
+    "turns_with_issues": 8,
+    "retried": 0
+   },
+   "O_departure": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 2,
+    "redaction": 1,
+    "turns_with_issues": 2,
+    "retried": 0
+   },
+   "P_player_physical": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 3,
+    "redaction": 0,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "Q_context_heavy": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 3,
+    "redaction": 2,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "R_retrieval_heavy": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 14,
+    "redaction": 10,
+    "turns_with_issues": 14,
+    "retried": 0
+   },
+   "S_reconciliation": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 18,
+    "redaction": 1,
+    "turns_with_issues": 18,
+    "retried": 0
+   },
+   "T_noop": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 5,
+    "redaction": 5,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "U_agency_offer": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 5,
+    "redaction": 1,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "V_agency_threat": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 1,
+    "redaction": 1,
+    "turns_with_issues": 1,
+    "retried": 0
+   },
+   "W_agency_follow": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 5,
+    "redaction": 2,
+    "turns_with_issues": 5,
+    "retried": 0
+   },
+   "X_secret_holder": {
+    "turns": 20,
+    "success": 20,
+    "reconciliation": 3,
+    "redaction": 2,
+    "turns_with_issues": 3,
+    "retried": 0
+   },
+   "Y_left_behind": {
+    "turns": 40,
+    "success": 40,
+    "reconciliation": 6,
+    "redaction": 3,
+    "turns_with_issues": 6,
+    "retried": 0
+   },
+   "Z_two_names": {
+    "turns": 10,
+    "success": 10,
+    "reconciliation": 0,
+    "redaction": 0,
+    "turns_with_issues": 0,
+    "retried": 0
+   }
+  }
+ },
+ "samples_per_scenario": {
+  "A_conversation": 10,
+  "B_movement": 20,
+  "C_follower": 20,
+  "D_carrying": 20,
+  "E_handover": 20,
+  "F_negotiation": 10,
+  "G_purchase": 10,
+  "H_late_naming": 20,
+  "I_household": 10,
+  "J_relationship": 10,
+  "K_lore": 10,
+  "L_restricted": 20,
+  "M_ambiguous": 10,
+  "N_refusal": 20,
+  "O_departure": 20,
+  "P_player_physical": 10,
+  "Q_context_heavy": 20,
+  "R_retrieval_heavy": 20,
+  "S_reconciliation": 20,
+  "T_noop": 20,
+  "U_agency_offer": 20,
+  "V_agency_threat": 10,
+  "W_agency_follow": 20,
+  "X_secret_holder": 20,
+  "Y_left_behind": 20,
+  "Z_two_names": 10
+ }
+}

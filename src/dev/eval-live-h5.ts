@@ -9,6 +9,8 @@ import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
 import type { TurnEvent } from "../turn/turn-types.js";
 import { aggregate, renderMarkdown, type EvalRecord } from "./diagnostics-aggregate.js";
+import { reflectAfterTurn } from "../turn/reflection.js";
+import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provider.js";
 import { buildScenario, FIXTURE_SECRET, LIVE_SCENARIOS, type LiveScenario } from "./live-eval-scenarios.js";
 import { NARRATOR_OUTPUT_TOKENS, onlineCoordinator, selectedModels } from "./turn-services.js";
 
@@ -27,7 +29,7 @@ import { NARRATOR_OUTPUT_TOKENS, onlineCoordinator, selectedModels } from "./tur
 const args = process.argv.slice(2);
 const flag = (name: string) => { const i = args.indexOf(name); return i < 0 ? undefined : args[i + 1]; };
 const has = (name: string) => args.includes(name);
-const dry = has("--dry"), runs = Number(flag("--runs") ?? 5), semantic = has("--semantic"), noRetry = has("--no-retry");
+const dry = has("--dry"), runs = Number(flag("--runs") ?? 5), semantic = has("--semantic"), noRetry = has("--no-retry"), reflect = has("--reflect");
 const label = flag("--label") ?? (dry ? "dry" : "live");
 const out = flag("--out") ?? `docs/evaluations/h5-live/${label}-${new Date().toISOString().replace(/[:.]/g, "-")}.jsonl`;
 const maxTurns = Number(flag("--max-turns") ?? 120), maxTokens = Number(flag("--max-tokens") ?? 600_000), budgetUsd = flag("--budget-usd") === undefined ? undefined : Number(flag("--budget-usd"));
@@ -52,13 +54,18 @@ await mkdir(dirname(out), { recursive: true });
 await writeFile(out, JSON.stringify(header) + "\n");
 
 const AGENCY = /\bNicco\s+(?:\w+ly\s+)?(?:agrees|accepts|nods|follows|attacks|answers|replies|thinks|feels|decides|smiles|says|speaks|whispers|steps|draws|grabs|reaches|takes|refuses|hesitates|shrugs|laughs|sighs)\b/i;
-interface Checks { unexpected_commit_kinds: string[]; secret_sentinel_in_narration: boolean; nicco_agency_candidate: boolean; review_excerpt?: string }
+interface Checks { unexpected_commit_kinds: string[]; secret_sentinel_in_narration: boolean; nicco_agency_candidate: boolean; review_excerpt?: string; contracts_established?: unknown[];
+  /** NPC+ Pass 5: every absent_participant flag with the exact sentence that triggered it (draft or revision), for classification. */
+  absent_flags?: { phase: "draft" | "revision"; character?: string; sentence: string }[] }
 function check(s: LiveScenario, events: readonly TurnEvent[]): Checks {
   const done = events.at(-1), narration = events.filter(e => e.type === "narration_completed").map(e => e.type === "narration_completed" ? e.text : "").join(" ");
   const kinds = done?.type === "turn_completed" ? done.result.authorized_commands.map(c => c.kind) : [];
   const unexpected = [...new Set(kinds.filter(k => !s.allowed_commit_kinds.includes(k)))];
   const secret = narration.includes(FIXTURE_SECRET), agency = AGENCY.test(narration);
-  return { unexpected_commit_kinds: unexpected, secret_sentinel_in_narration: secret, nicco_agency_candidate: agency, ...(unexpected.length || secret || agency || s.human_review ? { review_excerpt: narration.slice(0, 400) } : {}) };
+  const rec = done?.type === "turn_completed" ? done.result.narration_reconciliation : undefined;
+  const absent = [...(rec?.issues ?? []).map(i => ({ phase: "draft" as const, i })), ...(rec?.revision_issues ?? []).map(i => ({ phase: "revision" as const, i }))]
+    .filter(x => x.i.kind === "absent_participant").map(x => ({ phase: x.phase, ...(x.i.character ? { character: x.i.character } : {}), sentence: x.i.sentence.slice(0, 300) }));
+  return { unexpected_commit_kinds: unexpected, secret_sentinel_in_narration: secret, nicco_agency_candidate: agency, ...(unexpected.length || secret || agency || s.human_review ? { review_excerpt: narration.slice(0, 400) } : {}), ...(absent.length ? { absent_flags: absent } : {}) };
 }
 async function coordinatorFor(world: ConstructorParameters<typeof RetrievalService>[0], sink: (d: TurnDiagnostics) => void): Promise<TurnCoordinator> {
   if (!dry) return onlineCoordinator(world, semantic, p => p, { narrator_client: new OpenRouterClient(), controller_client: new OpenRouterClient(), diagnostics_sink: r => sink(structuredClone(r) as TurnDiagnostics), provider_retry: retryPolicy });
@@ -79,7 +86,10 @@ outer: for (let run = 1; run <= runs; run++) for (const scenario of scenarios) {
     if ((stopped = stoppedBy())) break outer;
     captured.length = 0;
     const events: TurnEvent[] = [];
+    const stableBefore = JSON.stringify(campaign.exportSnapshot().premium_characters.map(p => [p.character_id, p.stable]));
     for await (const event of coordinator.runTurn({ campaign, player_input: input })) events.push(event);
+    // NPC+ Pass 2: contracts committed this turn (field, text, verbatim quote) for review; nothing else from state is recorded.
+    const contracts = JSON.stringify(campaign.exportSnapshot().premium_characters.map(p => [p.character_id, p.stable])) === stableBefore ? [] : campaign.exportSnapshot().premium_characters.flatMap(p => (p.stable.contract_evidence ?? []).filter(e => e.revision === campaign.revision).map(e => ({ character_id: p.character_id, ...e })));
     const current = captured.at(-1);
     if (!current) throw new Error("diagnostics sink was not called");
     executed++;
@@ -87,7 +97,10 @@ outer: for (let run = 1; run <= runs; run++) for (const scenario of scenarios) {
     const np = u.reduce((n, x) => n + (x?.prompt_tokens ?? 0), 0), nc = u.reduce((n, x) => n + (x?.completion_tokens ?? 0), 0), cp = c?.prompt_tokens ?? 0, cc = c?.completion_tokens ?? 0;
     spentTokens += np + nc + cp + cc;
     if (priced) spentUsd += (np * prices.narrator_input! + nc * prices.narrator_output! + cp * prices.controller_input! + cc * prices.controller_output!) / 1e6;
-    const record = { scenario_id: scenario.id, run, turn_index, diagnostics: current, checks: check(scenario, events) };
+    // NPC+ Pass 6 (--reflect): the explicit post-turn reflection step, outside the turn; outcomes recorded for review (notes are interpretation only).
+    const reflection = reflect && events.at(-1)?.type === "turn_completed" ? (await reflectAfterTurn(campaign, world, dry ? { async reflect() { return { text: '{"proposals":[]}' }; } } : new OpenRouterReflectionProvider(), { max_characters: 2 })).map(r => ({
+      character_id: r.character_id, status: r.status, accepted: r.accepted, rejected: r.rejected.map(x => ({ reason: x.reason, proposal: x.proposal })), notes: r.notes, usage: r.usage ?? null })) : [];
+    const record = { scenario_id: scenario.id, run, turn_index, diagnostics: current, checks: { ...check(scenario, events), ...(contracts.length ? { contracts_established: contracts } : {}) }, ...(reflection.length ? { reflection } : {}) };
     records.push({ scenario_id: scenario.id, run, diagnostics: current });
     await appendFile(out, JSON.stringify(record) + "\n");
     if (events.at(-1)?.type === "turn_failed") break; // the scenario's later turns would be built on a failed premise

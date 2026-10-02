@@ -5,6 +5,7 @@ import { projectKnowledgeAccess, renderKnowledgeAccess } from "./narrative-autho
 import { participantForNoun, renderSceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
 import { playerAuthoredEvents } from "./player-authored-events.js";
 import { escapeRegExp as escapeName } from "./language/text.js";
+import { deduplicateRecovered, renderNpcPlus } from "./npc-plus.js";
 export const NARRATOR_SYSTEM = `[ROLE]
 Narrate Caldrevan in concise ordinary prose with clearly attributed NPC dialogue; no speaker labels, JSON, logs or metadata. Evaluation/fixture metadata describes test setup, never physical apparatus.
 [HARD RULES]
@@ -197,6 +198,7 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     ...(participants ? [participants] : []),
     presentAndAbleToReact(context, sceneParticipants),
     socialBlock(context),
+    ...(context.npc_plus ? [renderNpcPlus(deduplicateRecovered(context.npc_plus, retrieval).npc)] : []),
     `[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): ${JSON.stringify(context.items)}`,
     `Scheduled events: ${JSON.stringify(context.scheduled_events)}`,
   ].join("\n");

@@ -1,7 +1,8 @@
 import { freezeSnapshot } from "../campaign/validation.js";
 import { CampaignSaveError } from "./errors.js";
+import { niccoHouseholdMembers } from "../campaign/premium-characters.js";
 
-export const CURRENT_SAVE_VERSION = 2;
+export const CURRENT_SAVE_VERSION = 3;
 export type SaveMigration = (input: Readonly<Record<string, unknown>>) => unknown;
 /** A key n owns exactly n -> n+1. No implicit defaults or unknown-field removal. */
 export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.freeze({
@@ -9,6 +10,21 @@ export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.f
     // Legacy v1 has no compatibility evidence. Migration retains strict identity.
     if (Object.hasOwn(input, "canon_compatibility") || Object.hasOwn(input, "canon_references")) throw new CampaignSaveError("migration_failed");
     return { ...input, schema_version: 2, canon_compatibility: "strict" };
+  },
+  /**
+   * NPC+ Pass 1: snapshot schema 1 -> 2 adds the premium_characters domain. Membership is the only NPC+ trigger, so the domain is
+   * derived from the save's own households: empty when Nicco keeps no household with other current members, otherwise one record
+   * per such member with empty (unknown) stable fields and a `migrated_member` history entry at the saved revision. Nothing else
+   * changes; strict validation of the target schema follows in the caller.
+   */
+  2: input => {
+    const snapshot = input.snapshot as Readonly<Record<string, unknown>> | undefined;
+    if (!snapshot || typeof snapshot !== "object" || snapshot.schema_version !== 1 || Object.hasOwn(snapshot, "premium_characters") || Object.hasOwn(snapshot, "premium_reflections")) throw new CampaignSaveError("migration_failed");
+    const revision = snapshot.revision as number, minute = (snapshot.runtime as { scene: { world_time: { world_minute: number } } }).scene.world_time.world_minute;
+    const premium_characters = [...niccoHouseholdMembers(snapshot as unknown as Parameters<typeof niccoHouseholdMembers>[0])].map(([character_id, household_id]) => ({ character_id, stable: {},
+      dynamic: { recent_developments: [{ kind: "migrated_member", household_id, revision, world_minute: minute }], private_memory_refs: [] },
+      metadata: { created_revision: revision, last_updated_revision: revision, active_household_member: true } }));
+    return { ...input, schema_version: 3, snapshot: { ...snapshot, schema_version: 2, premium_characters, premium_reflections: [] } };
   },
 });
 

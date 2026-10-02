@@ -7,6 +7,8 @@ import { loadWorld } from "../world/loader.js";
 import { turnFixture } from "./turn-fixture.js";
 import { onlineCoordinator, selectedModels } from "./turn-services.js";
 import { formatCampaignStatus } from "./campaign-status.js";
+import { runPlayTurn } from "./play-turn.js";
+import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provider.js";
 
 const help = `Developer play loop (paid OpenRouter requests).
 Default: synthetic fixture. --canon starts the canonical opening (heartstone_square). --semantic builds a paid production embedding index. --debug shows turn diagnostics.
@@ -24,6 +26,7 @@ else {
   let campaign = process.argv.includes("--canon") ? createOpeningCampaign(world, "dev_play") : fixture.campaign;
   let session = new CampaignSession(campaign, repository);
   const coordinator = await onlineCoordinator(world, process.argv.includes("--semantic"));
+  const reflectionProvider = new OpenRouterReflectionProvider();
   const lines = createInterface({ input: process.stdin, output: process.stdout, terminal: !!process.stdin.isTTY });
   let active: AbortController | undefined;
   lines.on("SIGINT", () => { if (active) active.abort(); else lines.close(); });
@@ -43,12 +46,13 @@ else {
       }
       else if (input) {
         active = new AbortController();
-        for await (const event of coordinator.runTurn({ campaign, player_input: input, signal: active.signal })) {
+        await runPlayTurn({ coordinator, world, request: { campaign, player_input: input, signal: active.signal }, reflection_provider: reflectionProvider,
+          ...(process.argv.includes("--debug") ? { reflection_diagnostics_sink: (record: unknown) => console.log(JSON.stringify({ reflection: record })) } : {}), publish: event => {
           if (event.type === "narration_delta") process.stdout.write(event.text);
           else if (event.type === "narration_completed") process.stdout.write("\n");
           else if (event.type === "turn_failed") console.log(`\nTurn incomplete: ${event.code}. Revision ${event.final_revision}.`);
           else if (event.type === "turn_completed") { console.log(`Finalized. Revision ${event.result.final_revision}; unsaved: ${session.hasUnsavedChanges}.`); if (process.argv.includes("--debug")) console.log(JSON.stringify(event.result, null, 2)); }
-        }
+        } });
         active = undefined;
       }
     } catch { console.error("Command failed; campaign was not automatically saved."); }

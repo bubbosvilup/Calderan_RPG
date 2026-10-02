@@ -13,12 +13,14 @@ import { join } from "node:path";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 const now = "2026-10-01T10:00:00.000Z";
 
-test("real legacy v1 envelope migrates to v2 strict policy; unknown legacy fields are not discarded", () => {
+/** NPC+ Pass 1: a real legacy envelope carries a schema-1 snapshot (no premium_characters domain). */
+const legacySnapshot = ({ premium_characters: _premium, premium_reflections: _reflections, ...snapshot }: Record<string, unknown>) => ({ ...snapshot, schema_version: 1 });
+test("real legacy v1 envelope migrates to the current strict policy; unknown legacy fields are not discarded", () => {
   const { campaign, world } = richCampaign(), current = createSaveFile(campaign.exportSnapshot(), world, now);
   const { canon_compatibility: _policy, canon_references: _references, ...rest } = current;
-  const old = { ...rest, schema_version: 1 };
+  const old = { ...rest, schema_version: 1, snapshot: legacySnapshot(current.snapshot as unknown as Record<string, unknown>) };
   const loaded = decodeSave(JSON.stringify(old), world);
-  assert.equal(loaded.schema_version, 2); assert.equal(loaded.canon_compatibility, "strict"); assert.equal(loaded.canon_references, undefined);
+  assert.equal(loaded.schema_version, 3); assert.equal(loaded.canon_compatibility, "strict"); assert.equal(loaded.canon_references, undefined);
   assert.deepEqual(CampaignState.restore(world, loaded.snapshot).exportSnapshot(), campaign.exportSnapshot());
   assert.throws(() => validateSaveFile({ ...old, unknown_old: true }, world), { code: "invalid_save" });
   let invoked = false;
@@ -52,7 +54,7 @@ for (const recovery of ["current_valid", "current_corrupt", "both_corrupt", "cur
       await writeFile(currentPath, JSON.stringify(value));
     }
     if (recovery === "old_migratable") {
-      const value = JSON.parse(await readFile(currentPath, "utf8")); value.schema_version = 1; delete value.canon_compatibility; delete value.canon_references;
+      const value = JSON.parse(await readFile(currentPath, "utf8")); value.schema_version = 1; delete value.canon_compatibility; delete value.canon_references; value.snapshot.schema_version = 1; delete value.snapshot.premium_characters; delete value.snapshot.premium_reflections;
       await writeFile(currentPath, JSON.stringify(value)); await writeFile(previousPath, "bad recovery");
     }
     const bytesBefore = await readFile(currentPath, "utf8"), stateBefore = campaign.exportSnapshot();
@@ -65,7 +67,7 @@ for (const recovery of ["current_valid", "current_corrupt", "both_corrupt", "cur
   });
 
 test("migration seam fills a future domain, preserves unknown data, validates strictly and runs ordered steps", () => {
-  assert.equal(CURRENT_SAVE_VERSION, 2);
+  assert.equal(CURRENT_SAVE_VERSION, 3);
   const old = { schema_version: 1, domains: { retained: ["value"] }, unknown_old: "keep" };
   const registry = {
     1: (input: Readonly<Record<string, unknown>>) => ({ ...input, schema_version: 2, domains: { ...(input.domains as object), example_future_domain: [] } }),
@@ -104,10 +106,11 @@ for (const [name, input, current, registry, code] of [
 test("invalid migration output cannot reach restore or alter live state", () => {
   const { campaign, world } = richCampaign(), before = campaign.exportSnapshot();
   const bad = migrateSave({ schema_version: 1 }, 2, { 1: () => ({ schema_version: 2, snapshot: { broken: true } }) });
-  assert.throws(() => validateSaveFile(bad, world), { code: "invalid_save" });
+  assert.throws(() => validateSaveFile(bad, world), { code: "migration_failed" }); // the real 2 -> 3 step rejects a broken snapshot
   assert.equal(campaign.exportSnapshot(), before);
   const invalidCurrent = migrateSave({ schema_version: 1 }, 2, { 1: () => ({ schema_version: 2, snapshot: { broken: true } }) }) as Record<string, unknown>;
-  assert.throws(() => validateSaveFile({ ...invalidCurrent, schema_version: 1 }, world), { code: "invalid_save" });
+  // NPC+ Pass 1: the real 2 -> 3 step inspects the snapshot, so broken legacy output now fails inside migration.
+  assert.throws(() => validateSaveFile({ ...invalidCurrent, schema_version: 1 }, world), { code: "migration_failed" });
 });
 
 for (const scenario of ["opening", "rich", "legal_purchase", "late_named"] as const) test(`semantic save round trip: ${scenario}`, () => {

@@ -4,10 +4,11 @@ import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { parseControllerProposal } from "../../llm/controller-schema.js";
 import type { ControllerResult } from "../../llm/state-controller-provider.js";
-import { narratedMovements, type MovableCharacter } from "../character-movement.js";
+import { characterLocation, narratedMovements, type MovableCharacter } from "../character-movement.js";
 import type { TurnContext } from "../context-builder.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evidence-authorization.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
+import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import { sentencesOf } from "../language/text.js";
 import type { AuthorizationDiagnostic, TurnDebugSink } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";
@@ -32,8 +33,15 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   readonly projected: DeepReadonly<CampaignSnapshot>; readonly movable: readonly MovableCharacter[]; readonly origin: string; readonly arrival: string;
   readonly world: WorldStore; readonly mode: EvidenceMode; readonly sink: TurnDebugSink | undefined;
   readonly debug_base: { readonly campaign_id: string; readonly base_revision: number; readonly player_input: string } }): AuthorizationOutcome {
-  const proposal = parseControllerProposal(JSON.stringify({ commands: i.controller.commands }));
-  const turn_evidence: TurnEvidence = { ...deriveTurnEvidence(i.intent, i.draft, i.context), character_movements: narratedMovements(i.draft, i.movable, { origin: i.origin, arrival: i.arrival }, i.context, i.world) };
+  const controllerProposal = parseControllerProposal(JSON.stringify({ commands: i.controller.commands }));
+  const turn_evidence: TurnEvidence = { ...deriveTurnEvidence(i.intent, i.draft, i.context), character_movements: narratedMovements(i.draft, i.movable, { origin: i.origin, arrival: i.arrival }, i.context, i.world, activeNpcPlus(i.projected)) };
+  // NPC+ Pass 3 proposal recall: a completed narrated movement of an eligible mover (created, or active authored NPC+ — the `movable`
+  // set) that the controller did not propose becomes a move_character PROPOSAL. Authorization is unchanged and still decides; a mover
+  // already at that destination, a request, refusal, hesitation, membership or ownership yields no evidence and so no proposal.
+  const derived = turn_evidence.character_movements!.filter(m => !controllerProposal.some(c => c.kind === "move_character" && c.character_id === m.character_id)
+    && characterLocation(i.projected, i.world, m.character_id) !== m.location_id).map(m => ({ kind: "move_character" as const, character_id: m.character_id, location_id: m.location_id }));
+  const proposal = [...controllerProposal, ...derived];
+  // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).
   const diagnostics = authorizeWithEvidence(proposal, i.controller.evidence, turn_evidence, i.draft, i.context, i.projected, i.mode);
   // Controller Reliability Pass 1 (debug only, never events): normalized outputs, and deterministic candidates with verified
   // narration evidence that the controller did not propose. Nothing is synthesized; this only measures omissions.

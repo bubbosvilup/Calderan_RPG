@@ -137,15 +137,20 @@ function resolveTarget(input: string, persistent: readonly string[], reading: Sc
   const latestText = latest?.narration ?? "";
   const cands: Cand[] = [
     ...persistent.map(id => ({ key: id, label: id, target: { kind: "persistent" as const, id }, refers: (t: string) => named(t, id), inLatest: named(latestText, id), unnamed: false })),
-    ...reading.captives.map(c => ({ key: c.ref, label: c.label, target: { kind: "narrated" as const, person: c }, refers: (t: string) => refersTo(c, t), inLatest: c.in_latest, unnamed: !c.name })),
+    ...reading.captives.map(c => {
+      const alias = aliasOf(c, input, persistent, reading, named);
+      return { key: alias?.kind === "persistent" ? alias.id : c.ref, label: c.label, target: alias ?? { kind: "narrated" as const, person: c }, refers: (t: string) => refersTo(c, t), inLatest: c.in_latest, unnamed: !c.name };
+    }),
   ];
   const labelOf = (cs: readonly Cand[]) => cs.map(c => c.target.kind === "persistent" ? c.key : c.label);
-  const byInput = cands.filter(c => c.refers(input));
+  // One entry per identity: a description aliased to a persistent candidate is that candidate (H5.1).
+  const unique = (cs: readonly Cand[]) => cs.filter((c, i) => cs.findIndex(x => x.key === c.key) === i);
+  const byInput = unique(cands.filter(c => c.refers(input)));
   // Price talk of the latest exchange: the narration's, and the player's own request ("How much for the girl?").
   const priceTexts = [...reading.units.filter(u => u.exchange === reading.latest && PRICE_TALK.test(u.text)).map(u => u.text), ...(PRICE_TALK.test(latest?.player ?? "") ? [latest!.player] : []),
     // The current input counts only with a stated amount ("for five gold"): "he pays the price instantly" (a mana cost) is not a trade.
     ...(new RegExp(`\\b${NUM}\\s+gold\\b|\\bfor ${NUM}\\b`, "i").test(input) ? [input] : [])];
-  const byOffer = cands.filter(c => priceTexts.some(t => c.refers(t)));
+  const byOffer = unique(cands.filter(c => priceTexts.some(t => c.refers(t))));
   if (byInput.length > 1) return { kind: "ambiguous", labels: labelOf(byInput) };
   if (byInput.length === 1) {
     if (byOffer.length === 1 && byOffer[0]!.key !== byInput[0]!.key) return { kind: "changed", labels: labelOf([byInput[0]!, byOffer[0]!]) };
@@ -161,6 +166,35 @@ function resolveTarget(input: string, persistent: readonly string[], reading: Sc
   const inLatest = pool.filter(c => c.inLatest);
   if (inLatest.length === 1) return inLatest[0]!.target;
   return pool.length ? { kind: "ambiguous", labels: labelOf(pool) } : undefined;
+}
+
+/**
+ * H5.1 transaction-subject stability. An UNNAMED narrated description ("a woman, auburn-haired", "the woman in the cage") beside a
+ * persistent purchase candidate is not a new person by default: appearance wording never decides identity, and the narrator may
+ * describe the same captive many ways. It becomes a distinct subject only on positive structural evidence:
+ *  - a distinctness marker in the scene or the player's words ("another woman", "the other girl", "a second captive"), or
+ *  - an established sex (declared profile, authored sex, or narration's own pronouns for that person) that the noun contradicts.
+ * Otherwise it is an alias of the one persistent candidate that the scene ties to the trade (named in the scene's narration or the
+ * player's words); with no such single candidate it is ambiguous, so a purchase that resolves to it fails closed — never a guessed
+ * person, never a newly registered one. Names are not merged here: two named people stay two people.
+ */
+const FEMALE = /^(?:woman|girl|lass)$/i, MALE = /^(?:man|boy|lad)$/i;
+function aliasOf(c: NarratedPerson, input: string, persistent: readonly string[], reading: SceneReading, named: (text: string, id: string) => boolean): Target | undefined {
+  if (c.name || c.character_id || !persistent.length || !c.noun) return undefined;
+  const marker = new RegExp(`\\b(?:another|other|second|third|different)\\s+(?:[a-z'-]+\\s+){0,2}?${esc(c.noun)}\\b`, "i");
+  if ([input, ...reading.exchanges.map(e => e.player), ...reading.units.map(u => u.text)].some(t => marker.test(t))) return undefined;
+  const nounSex = FEMALE.test(c.noun) ? "female" : MALE.test(c.noun) ? "male" : undefined;
+  const sexOf = (id: string) => {
+    const p = reading.people.find(x => x.id === id);
+    if (p?.sex) return p.sex;
+    const own = reading.units.filter(u => !u.quoted && u.speaker === id).map(u => u.text).join(" ");
+    const f = /\b(?:she|her|herself)\b/i.test(own), m = /\b(?:he|him|his|himself)\b/i.test(own);
+    return f && !m ? "female" : m && !f ? "male" : undefined;
+  };
+  const compatible = persistent.filter(id => { const s = sexOf(id); return !nounSex || !s || s === nounSex; });
+  if (!compatible.length) return undefined; // established sex makes them different people
+  const tied = compatible.filter(id => reading.units.some(u => named(u.text, id)) || reading.exchanges.some(e => named(e.player, id)) || named(input, id));
+  return tied.length === 1 ? { kind: "persistent", id: tied[0]! } : { kind: "ambiguous", labels: [c.label, ...compatible] };
 }
 
 /** Past costs and group prices are not an offer for one person. */

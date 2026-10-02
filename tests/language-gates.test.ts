@@ -27,6 +27,14 @@ const LEGACY: Readonly<Record<GateId, RegExp>> = {
   natural_action_hedge: /\b(?:almost|nearly|pretends?|pretending|considers?|considering|thinks? about|wants? to|wanting to|would like to|plans? to|about to|tries to|trying to|starts? to|begins? to|reaches? for|reaching for|imagines?|dreams? of|doesn'?t|does not|didn'?t|never|won'?t|will|would|could|might|should|if|someday|maybe|yesterday|earlier)\b/i,
   transaction_hedge: /\b(?:if|maybe|perhaps|would|could|should|might|not|never|don'?t|won'?t|how much|let me (?:look|see|think)|thinking|consider\w*)\b|\?/i,
   player_event_negated: /\b(?:not|never|no(?! (?:warning|hesitation|word))|nor|almost|nearly|pretends?|pretending|threaten\w*|tries to|tried to|trying to|attempts? to|wants? to|wanted to|about to|going to|starts? to|started to|begins? to|reaches? for|would|could|might|will|should|if|unless|without)\b|n't\b/i,
+  // H5.1: new gate, no pre-H1 legacy — this literal is its reference definition, held independently of the cue table.
+  // NPC+ Pass 4: new gates, no pre-H1 legacy — reference definitions held independently of the cue table.
+  absent_reference: /\b(?:not|never|no(?! (?:warning|hesitation|word))|nor|without|cannot|almost|nearly|would|could|might|if|unless|were to|suppose|imagine|imagines?|remember\w*|recall\w*|according to|used to|(?:thinks?|thought) of)\b|n't\b/i,
+  past_displacement: /\b(?:yesterday|earlier|ago|last night)\b/i,
+  // NPC+ Pass 9: new gates, no pre-H1 legacy — reference definitions held independently of the cue table.
+  follow_not_done: /\b(?:could|would|should|might|may|can|will|won't|shall|plans?|planning|planned|intends?|wants?|wanted|going to|about to|ready to|tries to|tried to|someday|maybe|perhaps|if|unless|whether|toward|towards|looks?|looked|looking|glances?|glanced|stares?|imagines?|thinks?|promises?|says he'?ll|not|never|no longer|almost|nearly|refus\w*|declin\w*|reject\w*|yesterday|earlier|ago|last night|tomorrow|remember\w*|recall\w*|used to)\b|n't\b|\?/i,
+  invitation_not_offered: /\b(?:not|never|if|unless|were to|suppos\w*|imagin\w*|yesterday|earlier|ago|last night|tomorrow|someday|one day|remember\w*|recall\w*|used to|threaten\w*|must|(?:have|has) to|or else|order\w*|command\w*)\b|n't\b/i,
+  player_movement_not_done: /\b(?:not|never|nor|cannot|don'?t|doesn'?t|didn'?t|won'?t|would|could|should|might|may|can|will|shall|would like to|almost|nearly|pretends?|pretending|considers?|considering|thinks? about|thinking|wants? to|wanting to|plans? to|plans?|planning|intends? to|about to|going to|tries to|trying to|starts? to|begins? to|dreams? of|imagines?|maybe|perhaps|if|unless|whether|suppose|someday|one day|later|tomorrow|tonight|yesterday|earlier)\b|n't\b|'ll\b|\?/i,
 };
 /** Gates carrying the intended H1 bare-no / no-hesitation fix. Every other gate must be verdict-identical to legacy. */
 const FIXED: ReadonlySet<GateId> = new Set(["disqualify", "departure_not_done", "grounding_hedged", "audit_negated"]);
@@ -115,6 +123,13 @@ const EXPECTED: Readonly<Record<GateId, string>> = {
   natural_action_hedge:   ".XX.........X.X......X.XX.",
   transaction_hedge:      ".X.............X.......XX.",
   player_event_negated:   ".XXX........XXX....XXX.XX.",
+  player_movement_not_done: ".XX.........X.XX.....XXXX.",
+  absent_reference:         ".XXX..........X....XX..XX.",
+  past_displacement:        "..........................",
+  // NPC+ Pass 9. follow_not_done = movement_not_done minus `later`, plus refusal/almost (so it also vetoes refuse/almost/tries).
+  // invitation_not_offered reads player input: questions and modal requests stay invitations; negation and "if" do not.
+  follow_not_done:          ".XX....X....X.XXXXX....XX.",
+  invitation_not_offered:   ".XX....................X..",
 };
 test("locked negation/modality verdict matrix (divergence between gates is explicit, never accidental)", () => {
   const cues = Object.values(CUES);
@@ -128,7 +143,8 @@ test("locked negation/modality verdict matrix (divergence between gates is expli
 test("matrix invariants: no gate vetoes a plain assertion; only refusal-aware gates veto refusal", () => {
   for (const [id, gate] of Object.entries(GATES)) assert.equal(gate.test(CUES.plain_assertion), false, id);
   const refusing = Object.entries(GATES).filter(([, g]) => g.test(CUES.refusal)).map(([id]) => id).sort();
-  assert.deepEqual(refusing, ["disqualify", "refusal"]);
+  // NPC+ Pass 9: follow_not_done is refusal-aware on purpose ("Maren refuses to follow" must never resolve to Nicco's arrival).
+  assert.deepEqual(refusing, ["disqualify", "follow_not_done", "refusal"]);
   for (const id of ["disqualify", "departure_not_done", "grounding_hedged", "audit_negated", "player_event_negated"] as const) {
     for (const phrase of [CUES.no_hesitation, CUES.no_warning, CUES.no_word]) assert.equal(GATES[id].test(phrase), false, `${id}: ${phrase}`);
   }

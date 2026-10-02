@@ -79,7 +79,7 @@ const HELD_PRONOUN = /^(?:she|he|her|him)$/i;
  * only — she/he/her/him, resolved to the unit's subject. Quoted pronouns are not resolved (they rarely mean the speaker).
  */
 function heldReferences(u: NarrationUnit, nameKey: (token: string) => string | undefined): string[] {
-  const refs = [...u.text.matchAll(new RegExp(`\\b(?:the|a|an|one|that|this)\\s+(?:[a-z'-]+\\s+){0,3}?(${SPEAKER_NOUNS})\\b|\\b(she|he|her|him)\\b|\\b([A-Za-z][a-z]{2,})(?:'s|’s)?\\b`, "gi"))]
+  const refs = [...u.text.matchAll(new RegExp(`\\b(?:the|a|an|one|that|this|another)\\s+(?:[a-z'-]+\\s+){0,3}?(${SPEAKER_NOUNS})\\b|\\b(she|he|her|him)\\b|\\b([A-Za-z][a-z]{2,})(?:'s|’s)?\\b`, "gi"))]
     .map(m => ({ index: m.index!, key: m[1] ? `noun:${m[1].toLowerCase()}` : m[2] ? (HELD_PRONOUN.test(m[2]) && !u.quoted ? u.speaker : undefined) : /^[A-Z]/.test(m[3]!) ? nameKey(m[3]!) : undefined }))
     .filter((r): r is { index: number; key: string } => !!r.key);
   return [...u.text.matchAll(CAPTIVE_G)].flatMap(m => { const r = refs.filter(x => x.index < m.index!).at(-1) ?? refs.find(x => x.index > m.index!); return r ? [r.key] : []; });
@@ -114,7 +114,7 @@ export function sceneExchanges(recent: readonly RecentExchange[], locationId: st
 
 type Sex = "female" | "male";
 export interface Person { readonly id: string; readonly names: readonly string[]; readonly sex?: Sex; readonly unnamed: boolean }
-function presentPeople(context: TurnContext): Person[] {
+export function presentPeople(context: TurnContext): Person[] {
   return context.characters.map(c => {
     const n = c.id === "nicco" ? "Nicco" : c.profile.name ?? c.id;
     const declared = (c.profile.sex ?? "").toLowerCase(), pronoun = "pronoun" in c ? c.pronoun : undefined;
@@ -237,7 +237,7 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
   const intros = introductions(units, scene, ok);
   const allText = scene.map(e => e.narration).join("\n");
   const mention = (name: string) => new RegExp(`\\b${esc(name)}(?:'s|’s)?\\b`);
-  const nounPhrase = (noun: string) => new RegExp(`\\b(?:a|an|the|that|this|one)\\s+(?:[a-z'-]+\\s+){0,3}?${esc(noun)}\\b`, "i");
+  const nounPhrase = (noun: string) => new RegExp(`\\b(?:a|an|the|that|this|one|another)\\s+(?:[a-z'-]+\\s+){0,3}?${esc(noun)}\\b`, "i");
   // Who each captivity marker is about (Pass 1.2): being held is attached to the nearest person reference, not to the sentence.
   const introNames = new Set(intros.map(i => i.name));
   const held = new Map(units.map(u => [u, heldReferences(u, t => people.find(p => p.names.includes(t))?.id ?? (introNames.has(t) ? `other:${t}` : undefined))] as const));
@@ -293,7 +293,9 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
 /** Does this text refer to the person by name or (for an unnamed person) by their description? */
 export function refersTo(person: NarratedPerson, text: string): boolean {
   if (person.name && new RegExp(`\\b${esc(person.name)}(?:'s|’s)?\\b`, "i").test(text)) return true;
-  return !person.name && !!person.noun && new RegExp(`\\b(?:the|that|this)\\s+(?:[a-z'-]+\\s+){0,2}?${esc(person.noun)}\\b`, "i").test(text);
+  // H5.1: the words between the determiner and the noun are modifiers; another determiner ends the phrase, so a simile ("the way a man
+  // sizes up a horse") is not a reference to "the man".
+  return !person.name && !!person.noun && new RegExp(`\\b(?:the|that|this)\\s+(?:(?!(?:a|an|the|this|that|his|her|their|its|my|your|one)\\b)[a-z'-]+\\s+){0,2}?${esc(person.noun)}\\b`, "i").test(text);
 }
 
 const APPEARANCE = [

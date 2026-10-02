@@ -112,14 +112,91 @@ export interface RelationshipState { from_character_id: string; to_character_id:
 export type GoalTarget = { kind: "canonical" | "character" | "item" | "event"; id: string };
 export interface CharacterGoal { id: string; character_id: string; description: string; status: "active" | "completed" | "abandoned" | "failed"; created_at: number; target?: GoalTarget }
 export interface ScheduledEvent { id: string; title: string; description?: string; scheduled_world_minute: number; status: "scheduled" | "triggered" | "completed" | "cancelled"; participants?: string[] }
+/**
+ * NPC+ premium development history. Each entry is a STRUCTURED record of a committed authoritative change involving that character,
+ * derived by diffing the domains a revision changed (NPC+ Pass 2). History, never current truth: the owning domain stays
+ * authoritative and wins on any difference. Never generated prose.
+ */
+type Stamp = { revision: number; world_minute: number };
+export type PremiumHistoryEntry = Stamp & (
+  | { kind: "joined_household" | "left_household" | "rejoined_household" | "migrated_member"; household_id: string }
+  | { kind: "relationship_changed"; actor_id: string; other_id: string; dimension: RelationshipDimension; from: RelationshipLevel; to: RelationshipLevel }
+  | { kind: "condition_added" | "condition_removed"; condition: string }
+  | { kind: "legal_status_changed"; from: "free" | "enslaved" | "unestablished"; to: "free" | "enslaved" | "unestablished"; holder_id?: string }
+  | { kind: "person_transaction"; transaction_id: string; transaction_kind: PersonTransactionKind }
+  | { kind: "household_rule_added"; household_id: string; rule_id: string }
+  | { kind: "moved"; from?: string; to?: string }
+  | { kind: "contract_established"; field: PremiumContractField }
+);
+/**
+ * NPC+ Pass 3: consolidated history. Developments leaving the recent window are FOLDED into these bounded counters; nothing is
+ * interpreted, summarized or inferred, and no current value is implied (the owning domain stays the truth). Row tables are capped:
+ * when full, the least recently changed row is evicted into the matching `other_*` counter (deterministic).
+ */
+export interface PremiumRollup {
+  first_revision: number; last_revision: number; entries: number;
+  lifecycle: { joined: number; left: number; rejoined: number; migrated: number };
+  relationships: { actor_id: string; other_id: string; dimension: RelationshipDimension; raises: number; lowers: number; first_revision: number; last_revision: number }[];
+  other_relationship_changes: number;
+  conditions: { condition: string; added: number; removed: number; last_revision: number }[];
+  other_condition_changes: number;
+  legal_changes: number;
+  transactions: { sale: number; gift: number; assignment: number; manumission: number };
+  moves: number; rules_added: number; contracts: number;
+}
+/** NPC+ Pass 2: the stable contract fields that explicit evidence may establish (moral boundaries accumulate; the rest are set once). */
+export type PremiumContractField = "personality" | "voice" | "moral_boundary" | "social_style";
+/** NPC+ Pass 2: where a campaign contract came from (the verbatim self-description and the revision it committed in). */
+export interface PremiumContractEvidence { field: PremiumContractField; revision: number; quote: string }
+/**
+ * NPC+ Pass 1: persistent premium character state, keyed by character ID. A character is NPC+ because they are, or have been, a
+ * member of a household Nicco keeps; origin (authored or created) is irrelevant and Nicco never is. It REFERENCES the authoritative
+ * domains and never shadows them: legal status, location, membership (including its `role`), relationships, conditions, inventory
+ * and canon biography stay where they are. Absent fields are unknown — never inferred from name, sex, species, profession or looks.
+ */
+export interface PremiumCharacterState {
+  character_id: string;
+  /** Campaign-established contracts only (overrides of canon). Pass 1 writes none: authored canon is rendered from canon itself. */
+  stable: { personality_contract?: string; voice_contract?: string; moral_boundaries?: string[]; baseline_social_style?: string; contract_evidence?: PremiumContractEvidence[] };
+  dynamic: {
+    /** Bounded structured developments, newest last (lifecycle events in Pass 1). */
+    recent_developments: PremiumHistoryEntry[];
+    /** NPC+ Pass 3: deterministic structured roll-up of developments that left the recent window (counts only; never prose). */
+    long_term?: PremiumRollup;
+    /** Campaign memory references (fact IDs) curated for this character; derived recovery never requires them. */
+    private_memory_refs: string[];
+  };
+  metadata: {
+    created_revision: number; last_updated_revision: number;
+    /** Lifecycle marker, validated against household membership (the authority): true exactly while a current member. */
+    active_household_member: boolean;
+  };
+}
+/**
+ * NPC+ Pass 6: reflection is INTERPRETATION, never authority. Each note cites existing evidence handles (developments, roll-ups,
+ * contract evidence, public canon, relationship state); no domain is ever changed by it, and current authoritative state always wins.
+ */
+export type ReflectionKind = "stance" | "signature_pattern" | "shared_motif" | "emerging_role" | "unresolved_tension";
+export interface ReflectionNote {
+  id: string; kind: ReflectionKind;
+  /** Short snake_case token for compact rendering ("cautious_trust"). */
+  label: string;
+  text: string; evidence_refs: string[]; confidence: "low" | "medium" | "high";
+  created_revision: number; updated_revision: number;
+}
+export interface PremiumReflection { character_id: string; notes: ReflectionNote[]; last_reflected_revision: number }
 export interface CampaignDomains {
   characters: CampaignCharacter[]; items: CampaignItem[]; households: HouseholdState[]; facts: CampaignFact[];
   knowledge: CharacterKnowledge[]; relationships: RelationshipState[]; goals: CharacterGoal[]; scheduled_events: ScheduledEvent[];
   /** Household Pass 1 domains. */
   funds: FundsRecord[]; legal_statuses: PersonLegalState[]; transactions: PersonTransaction[];
+  /** NPC+ Pass 1 domain (snapshot schema 2). */
+  premium_characters: PremiumCharacterState[];
+  /** NPC+ Pass 6 domain (snapshot schema 2): non-authoritative, evidence-cited reflection notes. */
+  premium_reflections: PremiumReflection[];
 }
 export interface CampaignSnapshot extends CampaignDomains {
-  schema_version: 1; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  schema_version: 2; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
 }
 /** Commands are shared by future manual and model proposals, never raw mutable state. */
 export type CampaignCommand =
@@ -159,5 +236,9 @@ export type CampaignCommand =
   | { kind: "leave_household"; household_id: string; character_id: string }
   | { kind: "add_household_rule"; household_id: string; text: string }
   | { kind: "set_household_rule_active"; household_id: string; rule_id: string; active: boolean }
-  | { kind: "adjust_relationship"; from_character_id: string; to_character_id: string; dimension: RelationshipDimension; direction: "raise" | "lower" };
+  | { kind: "adjust_relationship"; from_character_id: string; to_character_id: string; dimension: RelationshipDimension; direction: "raise" | "lower" }
+  /** NPC+ Pass 2: an active NPC+'s explicit self-description becomes a campaign contract (set-once fields; moral boundaries accumulate). */
+  | { kind: "establish_character_contract"; character_id: string; field: PremiumContractField; text: string; quote: string }
+  /** NPC+ Pass 6: replace one active NPC+'s validated reflection notes (interpretation only; never touches another domain). */
+  | { kind: "record_reflection"; character_id: string; notes: ReflectionNote[]; reflected_revision: number };
 export interface CampaignProposal { expected_revision: number; commands: CampaignCommand[] }

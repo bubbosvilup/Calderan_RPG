@@ -1,0 +1,50 @@
+{
+  "status": "STOPPED_BY_CAP",
+  "stopped": "tokens",
+  "dry": false,
+  "executed_turns": 31,
+  "gameplay_failures": 0,
+  "organic_developments": 0,
+  "due_checks": 31,
+  "actual_reflection_calls": 0,
+  "calls_per_100_turns": 0,
+  "reflected_characters": [],
+  "accepted": 0,
+  "rejected": 0,
+  "rejected_by_reason": {},
+  "kinds": {},
+  "new_notes": 0,
+  "updates": 0,
+  "charged_tokens": {
+    "narrator_input": 131924,
+    "narrator_output": 4784,
+    "controller_input": 117014,
+    "controller_output": 335,
+    "reflection_input": 0,
+    "reflection_output": 0
+  },
+  "estimated_usd": 0.07486955120000001,
+  "latency_p50_ms": null,
+  "latency_p95_ms": null,
+  "context_max_chars": 5065,
+  "context_delta_max": 0,
+  "wrong_reflection_commits": 0,
+  "secret_sentinel_leaks": 0,
+  "sessions": [
+    {
+      "session": "meals",
+      "turns": 15,
+      "developments": 0,
+      "calls": 0,
+      "final_reflection_notes": []
+    },
+    {
+      "session": "chores",
+      "turns": 15,
+      "developments": 0,
+      "calls": 0,
+      "final_reflection_notes": []
+    }
+  ],
+  "pending_human_reviews": 0
+}

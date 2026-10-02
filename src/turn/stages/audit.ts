@@ -48,14 +48,14 @@ export interface NarrationAuditor {
 export function createNarrationAuditor(i: { readonly base_revision: number; readonly context: TurnContext; readonly world: WorldStore; readonly retrieved: unknown;
   readonly player_input: string; readonly recent: readonly RecentExchange[]; readonly intent: TurnIntent; readonly scene: SceneParticipantPlan;
   readonly turn_evidence: TurnEvidence; readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly authorized: readonly CampaignCommand[];
-  readonly prepared: DeepReadonly<CampaignSnapshot> }): NarrationAuditor {
+  readonly prepared: DeepReadonly<CampaignSnapshot>; readonly origin?: string }): NarrationAuditor {
   const access = projectKnowledgeAccess(i.context, i.retrieved, relevanceSignals(i.player_input, i.recent, i.intent), i.scene);
   // Runtime Continuity Repair 1: authoritative state/canon text that may supply prices or procedures, and delivered history.
   const authoritative_text = JSON.stringify({ context: i.context, retrieved: i.retrieved });
   return {
     access,
     check: (narration, evidence) => auditNarration({ base_revision: i.base_revision, narration, context: i.context, world: i.world, access, evidence, diagnostics: i.diagnostics,
-      committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, authoritative_text }),
+      committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, authoritative_text, ...(i.origin ? { origin: i.origin } : {}) }),
     outcome: issues => outcomeLines(i.context, i.turn_evidence, i.diagnostics, i.authorized, i.prepared, issues, i.player_input),
   };
 }

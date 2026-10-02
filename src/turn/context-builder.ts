@@ -5,6 +5,7 @@ import { RuntimeState } from "../world/runtime-state.js";
 import type { WorldStore } from "../world/world-store.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { TurnError } from "./turn-types.js";
+import { NPC_PLUS_LIMITS, packNpcPlus } from "./npc-plus.js";
 import { describeDimensions, relationshipHeadline } from "../campaign/relationship-summary.js";
 import { knowledgeGrants } from "./knowledge-grants.js";
 
@@ -26,6 +27,10 @@ export const CONTEXT_LIMITS = Object.freeze({
   facts: 32,
   /** Scheduled events shown when more are pending (pre-H3 this many was a fatal count cap). */
   scheduled_events: 16,
+  /** NPC+ Pass 1: serialized reserve for the npc_plus envelope (key, array syntax, diagnostics) when computing its headroom. */
+  npc_plus_reserve: 600,
+  /** NPC+ Pass 1: JSON growth of rendered NPC+ lines (quotes, escapes) allowed for when converting headroom into a line budget. */
+  npc_plus_escape_factor: 1.1,
 });
 /** Optional relevance signals for selection: the player's input and recent finalized conversation. */
 export interface ContextRelevance { readonly input?: string; readonly recent_text?: string }
@@ -121,8 +126,14 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
     ...(events.length < allEvents.length ? { scheduled_events: { total: allEvents.length, shown: events.length } } : {}),
     ...socialOmitted,
   };
-  const result = { primary, characters, items, facts, knowledge, scheduled_events: events, player_profile, social,
+  const authority = { primary, characters, items, facts, knowledge, scheduled_events: events, player_profile, social,
     ...(npc_private_canon.length ? { npc_private_canon } : {}), ...(Object.keys(projection).length ? { projection } : {}) };
+  // NPC+ Pass 1: premium household continuity, packed BEFORE the serialized-size check under one global budget: the smaller of its own
+  // limit and the headroom the authoritative context leaves (minus a reserve for its JSON envelope and diagnostics). NPC+ flavour
+  // therefore degrades toward Tier D and never causes context_too_large by itself; authority is never traded for it.
+  const headroom = CONTEXT_LIMITS.serialized_characters - JSON.stringify(authority).length - CONTEXT_LIMITS.npc_plus_reserve;
+  const npc_plus = packNpcPlus(world, snapshot, new Set(present), relevance.input ?? "", Math.max(0, Math.min(NPC_PLUS_LIMITS.budget_characters, Math.floor(headroom / CONTEXT_LIMITS.npc_plus_escape_factor))));
+  const result = { ...authority, ...(npc_plus ? { npc_plus } : {}) };
   const serializedCharacters = JSON.stringify(result).length;
   if (serializedCharacters > CONTEXT_LIMITS.serialized_characters) throw new TurnError("context_too_large");
   serializedSizes.set(result, serializedCharacters);

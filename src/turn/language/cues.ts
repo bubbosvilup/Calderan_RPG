@@ -77,6 +77,19 @@ export const OBSERVATION = Object.freeze({
 export const TEMPORAL = Object.freeze({
   later: "later", someday: "someday", oneDay: "one day", forNow: "for now", tonight: "tonight", forAWhile: "for a while",
   yesterday: "yesterday", earlier: "earlier",
+  /** H5.1: player movement framed for a later day is not this turn's movement. */
+  tomorrow: "tomorrow",
+  /** NPC+ Pass 4: past displacement of an act ("said it two days ago", "told him last night"). */
+  ago: "ago", lastNight: "last night",
+});
+/** G. Recollection and attribution (NPC+ Pass 4): the act is remembered, attributed or habitual, not happening in this scene. */
+export const RECOLLECTION = Object.freeze({
+  remember: "remember\\w*", recall: "recall\\w*", accordingTo: "according to", usedTo: "used to", thinksOf: "(?:thinks?|thought) of",
+});
+
+/** H. Coercion (NPC+ Pass 9): a compelled act is an order, not an invitation the other person may decline. */
+export const COERCION = Object.freeze({
+  must: "must", haveTo: "(?:have|has) to", orElse: "or else", order: "order\\w*", command: "command\\w*",
 });
 
 /** Markers that live outside the whole-word group. */

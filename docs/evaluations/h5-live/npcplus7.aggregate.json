@@ -1,0 +1,83 @@
+{
+  "source_batches": [
+    "npcplus7",
+    "npcplus7-continuation"
+  ],
+  "turns": 61,
+  "complete_session_turns": 60,
+  "extra_prefix_turns": 1,
+  "sessions": [
+    {
+      "batch": "npcplus7",
+      "session": "meals",
+      "turns": 15
+    },
+    {
+      "batch": "npcplus7",
+      "session": "chores",
+      "turns": 15
+    },
+    {
+      "batch": "npcplus7",
+      "session": "disagreement",
+      "turns": 1
+    },
+    {
+      "batch": "npcplus7-continuation",
+      "session": "disagreement",
+      "turns": 15
+    },
+    {
+      "batch": "npcplus7-continuation",
+      "session": "assistance",
+      "turns": 15
+    }
+  ],
+  "organic_developments": 0,
+  "due_checks": 61,
+  "due_character_observations": 0,
+  "actual_reflection_calls": 0,
+  "calls_per_100_turns": 0,
+  "characters_reflected": [],
+  "accepted": 0,
+  "rejected": 0,
+  "kinds": {},
+  "new_notes": 0,
+  "updates": 0,
+  "reflection_provider_evidence_entries": 0,
+  "accepted_note_evidence_refs": 0,
+  "charged_tokens": {
+    "narrator_input": 255878,
+    "narrator_output": 9612,
+    "controller_input": 230364,
+    "controller_output": 515,
+    "reflection_input": 0,
+    "reflection_output": 0
+  },
+  "total_tokens": 496369,
+  "estimated_usd": 0.14640899120000006,
+  "context_max_chars": 5065,
+  "reflection_context_delta_max": 0,
+  "npc_plus_max_chars": 519,
+  "reflection_due_check_p50_ms": 0.008300000001327135,
+  "reflection_due_check_p95_ms": 0.028200000000651926,
+  "reflection_provider_latency_p50_ms": null,
+  "reflection_provider_latency_p95_ms": null,
+  "gameplay_provider_calls": 127,
+  "gameplay_failures": 0,
+  "wrong_reflection_commits": 0,
+  "sentinel_leaks": 0,
+  "gameplay_committed_commands": {
+    "runtime_delta": 8
+  },
+  "audit_issues": {
+    "uncommitted_condition": 3,
+    "player_agency": 1,
+    "asserts_uncommitted_transfer": 1
+  },
+  "pending_human_reviews": 0,
+  "narrator_p50_ms": 3301.0328999999983,
+  "narrator_p95_ms": 4575.601300000002,
+  "controller_p50_ms": 850.2364999999991,
+  "controller_p95_ms": 1520.1584000000003
+}

@@ -4,6 +4,7 @@ import type { CampaignSnapshot } from "./types.js";
 import { CampaignIdentityResolver, type CampaignIdKind } from "./identity.js";
 import { CampaignValidationError, fail, freezeSnapshot, parseCampaignSnapshot } from "./validation.js";
 import { ageStatus } from "./age.js";
+import { niccoHouseholdMembers, validateReflectionNotes } from "./premium-characters.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -12,9 +13,11 @@ export class DatasetCompatibilityError extends CampaignValidationError {
   readonly code = "dataset_mismatch";
   constructor(readonly save_dataset_id: string, readonly current_dataset_id: string) { super("dataset_id", "canonical dataset mismatch"); this.name = "DatasetCompatibilityError"; }
 }
-export function requireVersionOne(input: unknown): void {
+/** NPC+ Pass 1: the current snapshot schema is 2 (premium_characters). Older snapshots reach it only through save migration. */
+export const CURRENT_SNAPSHOT_VERSION = 2;
+export function requireCurrentSnapshotVersion(input: unknown): void {
   const descriptor = input && typeof input === "object" ? Object.getOwnPropertyDescriptor(input, "schema_version") : undefined;
-  if (descriptor && "value" in descriptor && Number.isSafeInteger(descriptor.value) && descriptor.value !== 1) throw new SnapshotValidationError("unsupported_version", "schema_version");
+  if (descriptor && "value" in descriptor && Number.isSafeInteger(descriptor.value) && descriptor.value !== CURRENT_SNAPSHOT_VERSION) throw new SnapshotValidationError("unsupported_version", "schema_version");
 }
 function unique<T>(records: readonly T[], key: (record: T) => string, field: string): void {
   const seen = new Set<string>();
@@ -26,7 +29,7 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   const historical = (time: number | undefined, field: string) => { if (time !== undefined && time > minute) fail(field, "future provenance"); };
   const records = [...s.characters, ...s.items, ...s.households, ...s.facts, ...s.goals, ...s.scheduled_events, ...s.transactions];
   unique(records, r => r.id, "id");
-  const emptyDomains = { characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [] };
+  const emptyDomains = { characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [], premium_characters: [], premium_reflections: [] };
   const registration = new CampaignIdentityResolver(world, emptyDomains);
   for (const c of s.characters) {
     registration.registration(c.id, c.origin, "character");
@@ -112,9 +115,45 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   }
   for (const g of s.goals) { refs.character(g.character_id); historical(g.created_at, "created_at"); if (g.target) refs.target(g.target); }
   for (const e of s.scheduled_events) e.participants?.forEach(id => refs.character(id));
+  // NPC+ Pass 1: premium state belongs to real characters other than Nicco, is active exactly while they are a current member of a
+  // household Nicco keeps (membership is the authority), and every such member has it.
+  unique(s.premium_characters, p => p.character_id, "premium_characters");
+  const members = niccoHouseholdMembers(s), householdIds = new Set(s.households.map(h => h.id));
+  for (const p of s.premium_characters) {
+    if (p.character_id === "nicco") fail("premium_characters", "Nicco is never NPC+");
+    refs.character(p.character_id);
+    if (p.metadata.active_household_member !== members.has(p.character_id)) fail("premium_characters.metadata.active_household_member", "must match household membership");
+    if (p.metadata.created_revision > p.metadata.last_updated_revision || p.metadata.last_updated_revision > s.revision) fail("premium_characters.metadata", "invalid revisions");
+    if (!p.dynamic.recent_developments.length) fail("premium_characters.dynamic.recent_developments", "lifecycle history required");
+    for (const e of p.dynamic.recent_developments) {
+      if ("household_id" in e && !householdIds.has(e.household_id)) fail("premium_characters.household_id", "unknown household");
+      if (e.kind === "relationship_changed") { refs.character(e.actor_id); refs.character(e.other_id); }
+      if (e.kind === "legal_status_changed" && e.holder_id !== undefined) refs.character(e.holder_id);
+      if (e.kind === "person_transaction" && !s.transactions.some(t => t.id === e.transaction_id)) fail("premium_characters.transaction_id", "unknown transaction");
+      if (e.kind === "moved") { if (e.from !== undefined) refs.location(e.from); if (e.to !== undefined) refs.location(e.to); }
+      historical(e.world_minute, "premium_characters.world_minute"); if (e.revision > s.revision) fail("premium_characters.revision", "future history");
+    }
+    for (const c of p.stable.contract_evidence ?? []) if (c.revision > s.revision) fail("premium_characters.contract_evidence", "future contract");
+    const r = p.dynamic.long_term;
+    if (r) {
+      if (r.first_revision > r.last_revision || r.last_revision > s.revision || !r.entries) fail("premium_characters.long_term", "invalid roll-up");
+      for (const x of r.relationships) { refs.character(x.actor_id); refs.character(x.other_id); if (x.first_revision > x.last_revision || x.last_revision > s.revision) fail("premium_characters.long_term.relationships", "invalid revisions"); }
+      unique(r.relationships, x => `${x.actor_id}>${x.other_id}:${x.dimension}`, "premium_characters.long_term.relationships");
+      unique(r.conditions, x => x.condition, "premium_characters.long_term.conditions");
+    }
+    for (const f of p.dynamic.private_memory_refs) if (!factIds.has(f)) fail("premium_characters.private_memory_refs", "unknown fact");
+  }
+  for (const id of members.keys()) if (!s.premium_characters.some(p => p.character_id === id)) fail("premium_characters", "household member without premium state");
+  // NPC+ Pass 6: reflection belongs to an NPC+, is bounded per kind, and cites only well-formed evidence handles of that character.
+  unique(s.premium_reflections, r => r.character_id, "premium_reflections");
+  for (const r of s.premium_reflections) {
+    if (!s.premium_characters.some(p => p.character_id === r.character_id)) fail("premium_reflections", "reflection without NPC+ state");
+    validateReflectionNotes(r.character_id, r.notes, s.revision);
+    if (r.last_reflected_revision > s.revision) fail("premium_reflections.last_reflected_revision", "future reflection");
+  }
 }
 export function validateCampaignSnapshot(input: unknown, world: WorldStore): DeepReadonly<CampaignSnapshot> {
-  requireVersionOne(input);
+  requireCurrentSnapshotVersion(input);
   let snapshot: CampaignSnapshot;
   try { snapshot = parseCampaignSnapshot(input); }
   catch (error) { throw new SnapshotValidationError("invalid_save", error instanceof CampaignValidationError ? error.field : "snapshot"); }

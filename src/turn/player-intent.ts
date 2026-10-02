@@ -4,7 +4,9 @@ import type { WorldStore } from "../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
 import { TurnError } from "./turn-types.js";
 import { resolveTransferIntent, type ResolvedReference } from "./reference-resolution.js";
-import { resolveNaturalActions, reachable, resolveDestination, type NaturalActionResolution } from "./natural-actions.js";
+import { resolveNaturalActions, reachable, resolveDestination, resolveMovement, DESTINATION_END, type NaturalActionResolution } from "./natural-actions.js";
+import { GATES } from "./language/gates.js";
+import { blankQuotes, sentencesOf } from "./language/text.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 
 export interface PlayerIntent { readonly candidates: readonly CampaignCommand[]; readonly runtime: readonly CampaignCommand[]; readonly resolved_references?: readonly ResolvedReference[]; readonly ambiguous_reference?: boolean;
@@ -18,6 +20,42 @@ function normalize(text: string): string { return text.trim().replace(/[.!]$/, "
 function resolve(text: string, entries: readonly { readonly id: string; readonly name?: string | undefined }[]): string | undefined {
   const found = entries.filter(e => [e.id, e.name].some(n => n && normalize(n) === normalize(text)));
   return found.length === 1 ? found[0]!.id : undefined;
+}
+/**
+ * H5.1: unmarked first-person player movement ("I go down to the main hall", "I leave the room and go downstairs to the main hall",
+ * "Let's go down to the main hall together"). A bounded clause grammar around an explicit destination phrase, tried only after the
+ * strict command forms. The movement clause may start with "I" / "let's", or continue an earlier first-person clause of the same
+ * sentence ("I leave the room and go…"); another subject ends first-person continuity. Quoted speech and *action* segments are
+ * excluded (natural-actions.ts owns those). Negation, modality, intention, plans, hypotheticals, questions and other-day framing
+ * anywhere before the movement in its sentence veto it (GATES.player_movement_not_done). Destinations must be explicit and resolve
+ * through the shared destination and route rules: "I go downstairs", "I leave" or "I wander off" move nobody, an unknown place moves
+ * nobody (free prose is not a command, so no error), and an unreachable one is blocked, never teleported. "Let's" commits only
+ * Nicco: whoever he addresses moves only if narration establishes their own following (character-movement.ts).
+ */
+const FP_VERB = "(?:go|head|walk|run|hurry|climb|step|return|move|wander|stroll|make my way|make our way)";
+const FP_PARTICLE = "(?:back\\s+)?(?:(?:down|up|over|out|across)(?:\\s+the\\s+(?:stairs|steps|staircase))?\\s+|downstairs\\s+|upstairs\\s+)?";
+const FP_SUBJECT = /^(?:i|let['’]?s|let us)\b/i;
+const FP_MOVE = new RegExp(`^(?:(?:i|let['’]?s|let us)\\s+)?(?:then\\s+|also\\s+|quietly\\s+|slowly\\s+|just\\s+|finally\\s+)?${FP_VERB}\\s+${FP_PARTICLE}(?:to|into)\\s+(.+)$`, "i");
+const FP_TAIL = /\s+(?:alone|together|now|again|quickly|at once|right away|by myself|with\s.*)$/i;
+function firstPersonMovement(text: string, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore) {
+  const prose = blankQuotes(text.replace(/\*[^*]*\*/g, " ")).replace(/[“”"]/g, " ");
+  for (const sentence of sentencesOf(prose)) {
+    let firstPerson = false, offset = 0;
+    // Captured split: even entries are clauses, odd entries the separators between them (kept to track offsets).
+    for (const [index, raw] of sentence.split(/(,\s*(?:and\s+then\s+|and\s+|then\s+)?|;\s*|\s+(?:and then|then|and)\s+)/i).entries()) {
+      const at = offset; offset += raw.length;
+      const clause = raw.trim();
+      if (index % 2 === 1 || !clause) continue;
+      if (FP_SUBJECT.test(clause)) firstPerson = true;
+      else if (!/^[a-z]/.test(clause)) firstPerson = false; // a capitalized lead is another subject, a name or an imperative
+      const m = clause.match(FP_MOVE);
+      if (!m || !firstPerson || GATES.player_movement_not_done.test(sentence.slice(0, at + raw.length))) continue;
+      let phrase = m[1]!.replace(/[.!?…]+$/, "").split(DESTINATION_END)[0]!.trim();
+      while (FP_TAIL.test(phrase)) phrase = phrase.replace(FP_TAIL, "").trim();
+      return resolveMovement(clause, phrase, snapshot.runtime.scene.player_location, context, world);
+    }
+  }
+  return undefined;
 }
 /** Small documented player command grammar, not an attempt to parse arbitrary narration. */
 export function playerIntent(input: string, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, participants: readonly EphemeralSceneParticipant[] = [], participantTurn = 0): PlayerIntent {
@@ -65,7 +103,10 @@ export function playerIntent(input: string, context: TurnContext, snapshot: Deep
   else {
     // Phase 1S: natural *action* text resolves into the same runtime/candidate intents; speech never does.
     const natural = resolveNaturalActions(text, context, snapshot, world, participants, participantTurn);
-    return { candidates: [...candidates, ...natural.candidates], runtime: [...runtime, ...natural.runtime], natural };
+    // H5.1: unmarked first-person movement, only when no *action* already moved Nicco.
+    const spoken = natural.runtime.some(c => c.kind === "runtime_delta" && !!c.delta.player_location) ? undefined : firstPersonMovement(text, context, snapshot, world);
+    const merged = spoken?.actions.length ? Object.freeze({ ...natural, actions: Object.freeze([...natural.actions, ...spoken.actions]), runtime: Object.freeze([...natural.runtime, ...spoken.runtime]), notes: Object.freeze([...natural.notes, ...spoken.notes]) }) : natural;
+    return { candidates: [...candidates, ...merged.candidates], runtime: [...runtime, ...merged.runtime], natural: merged };
   }
   return { candidates, runtime };
 }

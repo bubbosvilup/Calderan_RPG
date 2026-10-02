@@ -96,7 +96,46 @@ const fundsRecord = object({ character_id: id, gold });
 const legalRecord = object({ character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), transfer: optional(object({ documentation, from_holder_id: optional(id), transaction_id: optional(id), note: optional(text) })) });
 const counterparty = object({ label: text, description: optional(text), location_id: id, authority_evidence: list(text, 4) });
 const transactionRecord = object({ id, kind: choice("sale", "gift", "assignment", "manumission"), subject_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: optional(id), payer_id: optional(id), payee_id: optional(id), gold: optional(gold), documentation, world_minute: integer(), revision: integer(0) });
-const ruleRecord = object({ id, text, created_revision: integer(0), active: (input: unknown, path: string) => { if (typeof input !== "boolean") fail(path, "expected boolean"); return input; } });
+const boolean = (input: unknown, path: string) => { if (typeof input !== "boolean") fail(path, "expected boolean"); return input; };
+const ruleRecord = object({ id, text, created_revision: integer(0), active: boolean });
+// NPC+ Pass 1 record (snapshot schema 2).
+// NPC+ Pass 2: structured development entries (a closed tagged union) with bounded retention.
+const stamp = { revision: integer(0), world_minute: integer() };
+const lifecycle = object({ kind: choice("joined_household", "left_household", "rejoined_household", "migrated_member"), household_id: id, ...stamp });
+const dimension = choice("trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance");
+const legalState = choice("free", "enslaved", "unestablished");
+const contractField = choice("personality", "voice", "moral_boundary", "social_style");
+const conditionEntry = object({ kind: choice("condition_added", "condition_removed"), condition: text, ...stamp });
+const premiumHistory = tagged({ joined_household: lifecycle, left_household: lifecycle, rejoined_household: lifecycle, migrated_member: lifecycle,
+  relationship_changed: object({ kind: choice("relationship_changed"), actor_id: id, other_id: id, dimension, from: level, to: level, ...stamp }),
+  condition_added: conditionEntry, condition_removed: conditionEntry,
+  legal_status_changed: object({ kind: choice("legal_status_changed"), from: legalState, to: legalState, holder_id: optional(id), ...stamp }),
+  person_transaction: object({ kind: choice("person_transaction"), transaction_id: id, transaction_kind: choice("sale", "gift", "assignment", "manumission"), ...stamp }),
+  household_rule_added: object({ kind: choice("household_rule_added"), household_id: id, rule_id: id, ...stamp }),
+  moved: object({ kind: choice("moved"), from: optional(id), to: optional(id), ...stamp }),
+  contract_established: object({ kind: choice("contract_established"), field: contractField, ...stamp }) });
+/** NPC+ Pass 3 roll-up bounds: row tables are capped; evicted rows are counted in `other_*`. */
+export const PREMIUM_ROLLUP_LIMITS = Object.freeze({ relationships: 24, conditions: 12 });
+const count = integer(0, 1_000_000_000);
+const rollupRecord = object({ first_revision: integer(0), last_revision: integer(0), entries: count,
+  lifecycle: object({ joined: count, left: count, rejoined: count, migrated: count }),
+  relationships: list(object({ actor_id: id, other_id: id, dimension, raises: count, lowers: count, first_revision: integer(0), last_revision: integer(0) }), PREMIUM_ROLLUP_LIMITS.relationships),
+  other_relationship_changes: count,
+  conditions: list(object({ condition: text, added: count, removed: count, last_revision: integer(0) }), PREMIUM_ROLLUP_LIMITS.conditions),
+  other_condition_changes: count, legal_changes: count, transactions: object({ sale: count, gift: count, assignment: count, manumission: count }),
+  moves: count, rules_added: count, contracts: count });
+/** NPC+ Pass 2 retention: the newest this many developments are kept per character (older ones are dropped at write time). */
+export const PREMIUM_DEVELOPMENT_RETENTION = 16;
+/** NPC+ Pass 6 reflection caps per kind, and text bounds. */
+export const REFLECTION_LIMITS = Object.freeze({ stance: 4, signature_pattern: 4, shared_motif: 4, emerging_role: 3, unresolved_tension: 3, text: 200, label: 32, evidence_refs: 8 });
+const reflectionKind = choice("stance", "signature_pattern", "shared_motif", "emerging_role", "unresolved_tension");
+const reflectionNote = object({ id, kind: reflectionKind, label: id, text, evidence_refs: distinct(text), confidence: choice("low", "medium", "high"), created_revision: integer(0), updated_revision: integer(0) });
+const reflectionRecord = object({ character_id: id, notes: list(reflectionNote, 18), last_reflected_revision: integer(0) });
+const premiumRecord = object({ character_id: id,
+  stable: object({ personality_contract: optional(text), voice_contract: optional(text), moral_boundaries: optional(distinct(text)), baseline_social_style: optional(text),
+    contract_evidence: optional(list(object({ field: contractField, revision: integer(0), quote: text }), 64)) }),
+  dynamic: object({ recent_developments: list(premiumHistory, PREMIUM_DEVELOPMENT_RETENTION), long_term: optional(rollupRecord), private_memory_refs: distinct(id) }),
+  metadata: object({ created_revision: integer(0), last_updated_revision: integer(0), active_household_member: boolean }) });
 const variants: Record<string, Parser> = {};
 function command(kind: string, fields: Record<string, Rule>) { variants[kind] = object({ kind: choice(kind), ...fields }); }
 command("register_character", { character: characterRecord });
@@ -128,11 +167,13 @@ command("leave_household", { household_id: id, character_id: id });
 command("add_household_rule", { household_id: id, text });
 command("set_household_rule_active", { household_id: id, rule_id: id, active: (input: unknown, path: string) => { if (typeof input !== "boolean") fail(path, "expected boolean"); return input; } });
 command("adjust_relationship", { from_character_id: id, to_character_id: id, dimension: choice("trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance"), direction: choice("raise", "lower") });
+command("establish_character_contract", { character_id: id, field: choice("personality", "voice", "moral_boundary", "social_style"), text, quote: text });
+command("record_reflection", { character_id: id, notes: list(reflectionNote, 18), reflected_revision: integer(0) });
 command("runtime_delta", { delta: object({ expected_revision: optional(integer(0)), player_location: optional(id), character_movements: optional(list(object({ character_id: id, current_location: id }))), time_advance_minutes: optional(integer(0)), mana_delta: optional(integer()) }) });
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
-const snapshot = object({ schema_version: integer(1, 1), campaign_id: id, dataset_id: text, revision: integer(0),
+const snapshot = object({ schema_version: integer(2, 2), campaign_id: id, dataset_id: text, revision: integer(0),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: id }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),
@@ -140,6 +181,8 @@ const snapshot = object({ schema_version: integer(1, 1), campaign_id: id, datase
   facts: list(factRecord, 100000), knowledge: list(knowledgeRecord, 100000), relationships: list(relationshipRecord, 100000),
   goals: list(object({ id, character_id: id, description: text, status: goalStatus, created_at: integer(), target: optional(target) }), 100000),
   funds: list(fundsRecord, 100000), legal_statuses: list(legalRecord, 100000), transactions: list(transactionRecord, 100000),
+  premium_characters: list(premiumRecord, 100000),
+  premium_reflections: list(reflectionRecord, 100000),
   scheduled_events: list(object({ id, title: text, description: optional(text), scheduled_world_minute: integer(), status: eventStatus, participants: optional(distinct(id)) }), 100000) });
 /** Direct DTO validation using exactly the same record schemas as commands. */
 export function parseCampaignSnapshot(input: unknown): CampaignSnapshot { return snapshot(input, "snapshot") as CampaignSnapshot; }

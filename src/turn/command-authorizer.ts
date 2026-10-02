@@ -37,9 +37,12 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
       case "move_character": {
         // Location Continuity Pass 1.3: a living created (campaign) character whose completed movement to exactly this location the
         // narration establishes (character_movements: the grammar already restricted movers to the scene Nicco is in or left).
+        // NPC+ Pass 1: an ACTIVE authored NPC+ is movable on the same evidence; other authored NPCs remain canon-placed.
         const c = snapshot.characters.find(x => x.id === command.character_id);
-        if (!c || c.origin.kind !== "created" || c.current.status === "dead") return reject("rejected_reference_invalid");
-        if (c.current.current_location === command.location_id) return reject("rejected_already_established");
+        const authoredNpcPlus = (!c || c.origin.kind === "canonical") && snapshot.premium_characters.some(p => p.character_id === command.character_id && p.metadata.active_household_member);
+        if (!authoredNpcPlus && (!c || c.origin.kind !== "created" || c.current.status === "dead")) return reject("rejected_reference_invalid");
+        const now = c?.origin.kind === "created" ? c.current.current_location : snapshot.runtime.npc_locations.find(n => n.character_id === command.character_id)?.current_location;
+        if (now === command.location_id) return reject("rejected_already_established");
         return (evidence.character_movements ?? []).some(m => m.character_id === command.character_id && m.location_id === command.location_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
       }
       case "leave_scene": {

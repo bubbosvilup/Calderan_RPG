@@ -289,7 +289,7 @@ test("no-op commands preserve snapshot identity and revision", () => {
 
 test("snapshot contains direct typed state, one revision and dataset identity", () => {
   const { campaign, world } = setup(); register(campaign); apply(campaign, event(), fact(), item());
-  const snapshot = campaign.exportSnapshot(); assert.equal(snapshot.dataset_id, world.datasetId); assert.equal(snapshot.schema_version, 1);
+  const snapshot = campaign.exportSnapshot(); assert.equal(snapshot.dataset_id, world.datasetId); assert.equal(snapshot.schema_version, 2);
   assert.equal("revision" in snapshot.runtime, false); assert.equal("days_remaining" in snapshot.scheduled_events[0]!, false);
   assert.deepEqual(structuredClone(snapshot), snapshot);
   assert.throws(() => (snapshot.characters as CampaignCharacter[]).push(created()), TypeError);

@@ -1,0 +1,49 @@
+{
+  "status": "FINISHED",
+  "dry": false,
+  "executed_turns": 30,
+  "gameplay_failures": 0,
+  "organic_developments": 0,
+  "due_checks": 30,
+  "actual_reflection_calls": 0,
+  "calls_per_100_turns": 0,
+  "reflected_characters": [],
+  "accepted": 0,
+  "rejected": 0,
+  "rejected_by_reason": {},
+  "kinds": {},
+  "new_notes": 0,
+  "updates": 0,
+  "charged_tokens": {
+    "narrator_input": 123954,
+    "narrator_output": 4828,
+    "controller_input": 113350,
+    "controller_output": 180,
+    "reflection_input": 0,
+    "reflection_output": 0
+  },
+  "estimated_usd": 0.07153944000000004,
+  "latency_p50_ms": null,
+  "latency_p95_ms": null,
+  "context_max_chars": 5065,
+  "context_delta_max": 0,
+  "wrong_reflection_commits": 0,
+  "secret_sentinel_leaks": 0,
+  "sessions": [
+    {
+      "session": "disagreement",
+      "turns": 15,
+      "developments": 0,
+      "calls": 0,
+      "final_reflection_notes": []
+    },
+    {
+      "session": "assistance",
+      "turns": 15,
+      "developments": 0,
+      "calls": 0,
+      "final_reflection_notes": []
+    }
+  ],
+  "pending_human_reviews": 0
+}

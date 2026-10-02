@@ -5,8 +5,10 @@ import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext, type TurnContext } from "../context-builder.js";
 import { playerIntent, type PlayerIntent } from "../player-intent.js";
 import { resolvePersonTransactions, type TradeResolution } from "../person-transactions.js";
-import { movableCharacters, resolvePlayerCarry, type MovableCharacter } from "../character-movement.js";
+import { characterLocation, movableCharacters, resolvePlayerCarry, type MovableCharacter } from "../character-movement.js";
 import { extractRuleDeclarations } from "../household-evidence.js";
+import { invitedFollowers, leftBehindNotes } from "../follow-invitation.js";
+import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 
@@ -98,9 +100,12 @@ export function projectTurnIntent(i: IntentStageInput, resolved: ResolvedIntent)
   const projected = intent.runtime.length ? i.prepare({ expected_revision: i.base_revision, commands: intent.runtime }).snapshot : i.snapshot;
   const context = projected === i.snapshot ? base_context : buildTurnContext(i.world, projected, contextRelevance(i.player_input, i.finalized));
   const origin = i.snapshot.runtime.scene.player_location, arrival = projected.runtime.scene.player_location;
-  const movable = movableCharacters(projected, [origin, arrival]);
-  const leftBehind = arrival === origin ? [] : movable.filter(m => projected.characters.find(c => c.id === m.id)?.current.current_location === origin);
-  const prompt_intent: TurnIntent = leftBehind.length ? { ...intent, notes: [...intent.notes, `Nicco leaves ${i.world.getEntity(origin)?.display_name ?? origin}. ${leftBehind.map(m => m.names[0]).join(", ")} stay${leftBehind.length === 1 ? "s" : ""} there: do not have Nicco bring or carry them. Someone comes along only if they themselves clearly follow him, narrated explicitly.`] } : intent;
+  const movable = movableCharacters(projected, [origin, arrival], i.world);
+  const leftBehind = arrival === origin ? [] : movable.filter(m => characterLocation(projected, i.world, m.id) === origin);
+  // NPC+ Pass 9: an explicitly invited active NPC+ gets a neutral follow choice; everyone else keeps the conservative stay note.
+  const npcPlus = activeNpcPlus(projected), eligible = leftBehind.filter(m => npcPlus.has(m.id));
+  const invited = invitedFollowers(i.player_input, eligible, base_context.characters.filter(c => c.id !== "nicco" && !eligible.some(m => m.id === c.id)).map(c => c.profile.name ?? c.id));
+  const prompt_intent: TurnIntent = leftBehind.length ? { ...intent, notes: [...intent.notes, ...leftBehindNotes(leftBehind, invited, i.world.getEntity(origin)?.display_name ?? origin, i.world.getEntity(arrival)?.display_name ?? arrival)] } : intent;
   const planned = context.primary.scene.player_location?.id === base_context.primary.scene.player_location?.id ? base_plan : i.plan(i.player_input, context);
   // A promoted person is now persistent: the temporary participant they were is retired, so nobody appears twice.
   const scene = promotion?.participant_id ? Object.freeze({ ...planned, participants: planned.participants.filter(p => p.id !== promotion.participant_id), focus: planned.focus === promotion.participant_id ? null : planned.focus }) : planned;

@@ -5,6 +5,7 @@ import type { TurnContext } from "./context-builder.js";
 import { reachable, resolveDestination } from "./natural-actions.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
 import { GATES } from "./language/gates.js";
+import { activeNpcPlus } from "../campaign/premium-characters.js";
 
 /**
  * Location Continuity Pass 1.3. A campaign (created) character's location changes only when the current turn clearly establishes
@@ -23,14 +24,46 @@ import { GATES } from "./language/gates.js";
 export interface MovableCharacter { readonly id: string; readonly names: readonly string[]; readonly sex?: "female" | "male" }
 export interface CharacterMovement { readonly character_id: string; readonly location_id: string; readonly source_sentence: string }
 
-/** Created, living characters currently at one of these locations (the scene Nicco is in or is leaving this turn). */
-export function movableCharacters(snapshot: DeepReadonly<CampaignSnapshot>, locations: readonly string[]): MovableCharacter[] {
-  return snapshot.characters.filter(c => c.id !== "nicco" && c.origin.kind === "created" && c.current.status !== "dead" && !!c.current.current_location && locations.includes(c.current.current_location)).flatMap(c => {
+/**
+ * Created, living characters currently at one of these locations (the scene Nicco is in or is leaving this turn). NPC+ Pass 1: with
+ * `world`, ACTIVE authored NPC+ there too — once an authored character is an active household member, their current location is
+ * runtime-authoritative and moves only through the same evidence rules (never automatically, never by request, membership or
+ * ownership). Other authored NPCs stay canon-placed.
+ */
+export function movableCharacters(snapshot: DeepReadonly<CampaignSnapshot>, locations: readonly string[], world?: WorldStore): MovableCharacter[] {
+  const created = snapshot.characters.filter(c => c.id !== "nicco" && c.origin.kind === "created" && c.current.status !== "dead" && !!c.current.current_location && locations.includes(c.current.current_location)).flatMap(c => {
     const name = c.profile.name ?? c.origin_snapshot?.label;
     if (!name) return [];
     const sex = /^(?:female|woman)$/i.test(c.profile.sex ?? "") ? "female" as const : /^(?:male|man)$/i.test(c.profile.sex ?? "") ? "male" as const : undefined;
     return [{ id: c.id, names: [name, ...name.split(/\s+/).filter(t => t.length > 2 && /^[A-Z]/.test(t))], ...(sex ? { sex } : {}) }];
   });
+  if (!world) return created;
+  const npcPlus = activeNpcPlus(snapshot);
+  return [...created, ...persistentCharactersAt(snapshot, world, locations).filter(m => npcPlus.has(m.id) && !created.some(c => c.id === m.id))];
+}
+
+/** H5.1: where a persistent character is in a snapshot (created: its record; authored NPC: its runtime location). */
+export function characterLocation(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, id: string): string | undefined {
+  if (id === "nicco") return snapshot.runtime.scene.player_location;
+  const created = snapshot.characters.find(c => c.id === id && c.origin.kind === "created");
+  if (created) return created.current.status === "dead" ? undefined : created.current.current_location;
+  // Every authored NPC with an established default is in runtime npc_locations (snapshot validation guarantees it).
+  return world.getEntity(id)?.type === "character" ? snapshot.runtime.npc_locations.find(n => n.character_id === id)?.current_location : undefined;
+}
+/**
+ * H5.1: every persistent character (created or authored NPC) at one of these locations, by name. Used by the narration audit's
+ * movement backstop only: authored NPCs are never movers for authorization (their whereabouts stay canon-owned), but narration that
+ * moves them must still be detected. Authored names come from canon; sex only from a declared profile or authored sex.
+ */
+export function persistentCharactersAt(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, locations: readonly string[]): MovableCharacter[] {
+  const created = movableCharacters(snapshot, locations);
+  const authored = world.getEntitiesByType("character").filter(e => e.role === "npc" && !created.some(c => c.id === e.id)).flatMap(e => {
+    const where = characterLocation(snapshot, world, e.id);
+    if (!where || !locations.includes(where) || !e.knowledge?.visibility.narrator) return [];
+    const name = e.display_name ?? e.name ?? e.id;
+    return [{ id: e.id, names: [name, ...name.split(/\s+/).filter(t => t.length > 2 && /^[A-Z]/.test(t))], ...(e.sex === "female" || e.sex === "male" ? { sex: e.sex } : {}) }];
+  });
+  return [...created, ...authored];
 }
 
 /** Not a completed movement: modality, intention, plans, negation, gaze, questions. */
@@ -38,6 +71,8 @@ const NOT_DONE = GATES.movement_not_done;
 const CARRY = "(?:carries|carried|carrying|carry|lifts|lifted|hauls|hauled|bears|bore)";
 const WALK = "(?:follows|followed|walks|walked|goes|went|heads|headed|returns|returned|limps|limped|runs|ran|hurries|hurried|steps|stepped|trails|trailed|shuffles|shuffled|staggers|staggered|slips|slipped)";
 const TO = "(into|inside|through|to|back to|up to|out to|onto|in through)";
+/** H5.1: a stairway leg before the destination ("follows him down the stairs into the hall", "goes downstairs to the hall"). */
+const STAIRS = "(?:(?:down|up)(?:\\s+the(?:\\s+[a-z]+)?\\s+(?:stairs|steps|staircase))?\\s+|downstairs\\s+|upstairs\\s+)?";
 const HELD = "(?:in his arms|on his back|over his shoulder|against his (?:chest|shoulder)|slung over his shoulder)";
 
 /** A pronoun resolves only when exactly one movable character is compatible with it (two women: "she" resolves to nobody). */
@@ -72,20 +107,30 @@ export function concreteDestination(phrase: string, arrival: string, origin: str
 export function resolvePlayerCarry(input: string, snapshot: DeepReadonly<CampaignSnapshot>, context: TurnContext, world: WorldStore, natural: readonly CampaignCommand[]):
   { readonly runtime: readonly CampaignCommand[]; readonly notes: readonly string[]; readonly carried?: string } {
   const here = snapshot.runtime.scene.player_location;
-  const movable = movableCharacters(snapshot, [here]);
+  // H5.1: an authored NPC present in the scene can be carried too (the player's own physical act; CampaignState moves authored NPCs
+  // through runtime locations). Who may move by *narration* is unchanged: authorization still accepts only created characters.
+  const movable = persistentCharactersAt(snapshot, world, [here]).filter(m => context.characters.some(c => c.id === m.id));
   if (!movable.length) return { runtime: [], notes: [] };
   const names = movable.flatMap(m => m.names).map(esc).join("|");
-  const clauses = input.replace(/\*/g, " . ").split(/(?<=[.!?;])\s+|\s+(?:and then|then)\s+/);
+  const flat = input.replace(/\*/g, " . ");
+  const clauses = flat.split(/(?<=[.!?;])\s+|\s+(?:and then|then)\s+/);
+  let consumed = 0;
   for (const clause of clauses) {
-    const m = clause.match(new RegExp(`\\b(?:picks?|picked)\\s+(${names}|her|him)\\s+up\\b|\\b${CARRY}\\s+(${names}|her|him)\\b|\\b(${names}|her|him)\\s+${HELD}`, "i"));
+    const start = flat.indexOf(clause, consumed); consumed = start < 0 ? consumed : start + clause.length;
+    const m = clause.match(new RegExp(`\\b(?:picks?|picked|pick)\\s+(${names}|her|him)\\s+up\\b|\\b${CARRY}\\s+(${names}|her|him)\\b|\\b(${names}|her|him)\\s+${HELD}`, "i"));
     if (!m || NOT_DONE.test(clause.slice(0, m.index! + m[0].length))) continue;
     const token = (m[1] ?? m[2] ?? m[3])!;
-    const who = byName(movable, token) ?? byPronoun(movable, token);
+    // H5.1: a pronoun with no unique compatible person resolves to the one movable person the player named before it ("Maren has
+    // twisted her ankle. I lift her…"); two different names before it resolve nobody.
+    const before = flat.slice(0, Math.max(0, start) + m.index!);
+    const named = [...new Set(movable.filter(p => p.names.some(n => new RegExp(`\\b${esc(n)}\\b`).test(before))).map(p => p.id))];
+    const antecedent = /^(?:her|him)$/i.test(token) && named.length === 1 && byPronoun(movable.filter(p => p.id === named[0]), token) ? named[0] : undefined;
+    const who = byName(movable, token) ?? byPronoun(movable, token) ?? antecedent;
     if (!who) continue;
     const moved = natural.find((c): c is Extract<CampaignCommand, { kind: "runtime_delta" }> => c.kind === "runtime_delta" && !!c.delta.player_location);
     if (moved) return { runtime: [{ kind: "move_character", character_id: who, location_id: moved.delta.player_location! }], notes: [], carried: who };
     // The carry clause itself names where he takes them.
-    const rest = input.replace(/\*/g, " ").slice(input.replace(/\*/g, " ").search(new RegExp(esc(token), "i")));
+    const rest = flat.slice(Math.max(0, start) + m.index!);
     const dest = rest.match(new RegExp(`\\b${TO}\\s+([^.;,!?*]+)`, "i"));
     if (!dest) continue;
     const target = resolveDestination(dest[2]!.trim(), context, world);
@@ -98,14 +143,43 @@ export function resolvePlayerCarry(input: string, snapshot: DeepReadonly<Campaig
   return { runtime: [], notes: [] };
 }
 
-/** Completed movements of movable characters narrated this turn (at most one per character, first wins). */
-export function narratedMovements(narration: string, movable: readonly MovableCharacter[], where: { readonly origin: string; readonly arrival: string }, context: TurnContext, world: WorldStore): CharacterMovement[] {
+/**
+ * NPC+ Pass 9: implicit-destination following. Narrated following usually omits "to <place>" ("Maren follows a step behind",
+ * "Maren's lighter steps came after", "Gerome descends after him"). When Nicco moved this turn, such a completed follow by an active
+ * NPC+ he left behind resolves to HIS same-turn arrival — never to geography. The words after the verb must be follow-manner only
+ * (him, behind, a step behind, down the stairs…), so "follows the conversation", "follows his reasoning" or "follows him to the
+ * window" yield nothing; the whole clause must pass the shared `follow_not_done` gate (modal, negated, refused, gazing, other-day).
+ */
+const FOLLOW_VERB = "(?:follows|followed|trails|trailed|falls into step|fell into step|comes after|came after|descends after|descended after|climbs after|climbed after|goes after|went after|walks after|walked after)";
+const STEP_NOUN = "(?:footsteps|steps|footfalls|tread|treads)";
+const STEP_VERB = "(?:follow|follows|followed|come after|comes after|came after|sound behind him|sounded behind him)";
+const FOLLOW_TAIL = /^(?:\s*(?:him|nicco|after(?: him| nicco)?|behind(?: him| nicco)?|a (?:step|few steps|pace|moment) (?:behind|later|after)|close behind|closely|at a distance|in silence|without a word|quietly|silently|slowly|wordlessly|shortly after|soon after|downstairs|upstairs|(?:down|up)(?: the (?:stairs|steps|staircase))?|out)\b)*\s*$/i;
+function implicitFollows(clause: string, names: string, movable: readonly MovableCharacter[]): string | undefined {
+  const lead = new RegExp(`(?:^(?:(?:a moment|moments|a beat|seconds) later|after a (?:moment|pause|beat)|shortly after(?:ward)?|soon),?\\s+|^|\\band\\s+|\\bthen\\s+)(${names}|she|he)\\s+(?:(?:[a-z']+\\s+){1,3}?(?:and|then|and then)\\s+)?(?:\\w+ly\\s+)?${FOLLOW_VERB}\\b(.*)$`, "i");
+  const steps = new RegExp(`(?:^|\\band\\s+)(${names}|her|his)(?:'s)?\\s+(?:[a-z]+\\s+){0,2}?${STEP_NOUN}\\s+${STEP_VERB}\\b(.*)$`, "i");
+  for (const re of [lead, steps]) {
+    const m = clause.match(re);
+    if (!m) continue;
+    const tail = m[2]!.split(/,|\s+(?:and|as|while|before|until|then)\s+/)[0]!.replace(/[.!…"”'\s]+$/, "");
+    if (!FOLLOW_TAIL.test(tail) || GATES.follow_not_done.test(clause)) continue;
+    const token = /^his$/i.test(m[1]!) ? "him" : m[1]!;
+    return byName(movable, token) ?? (/^he$/i.test(token) ? undefined : byPronoun(movable, token));
+  }
+  return undefined;
+}
+
+/**
+ * Completed movements of movable characters narrated this turn (at most one per character, first wins). `followers` (NPC+ Pass 9):
+ * active NPC+ eligible for implicit-destination following — only when Nicco moved, only if not already at his arrival.
+ */
+export function narratedMovements(narration: string, movable: readonly MovableCharacter[], where: { readonly origin: string; readonly arrival: string }, context: TurnContext, world: WorldStore,
+  followers: ReadonlySet<string> = new Set()): CharacterMovement[] {
   if (!movable.length) return [];
   const names = movable.flatMap(m => m.names).map(esc).join("|");
   const who = (token: string, subject: boolean) => byName(movable, token) ?? (subject && /^he$/i.test(token) ? undefined : byPronoun(movable, token)); // subject "he" is usually Nicco
   const patterns: readonly { readonly re: RegExp; readonly mover: number; readonly dest: number; readonly subject: boolean }[] = [
     { re: new RegExp(`\\b${CARRY}\\s+(${names}|her|him)\\b[^.;]*?\\b${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: false },
-    { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:(?:him|nicco|after him|behind him|back|close behind)\\s+)*${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: true },
+    { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:(?:him|nicco|after him|behind him|back|close behind)\\s+)*${STAIRS}${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: true },
     { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:is|was)\\s+(?:carried|brought|led)\\s+${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: true },
     { re: new RegExp(`\\b(?:reach|reaches|reached|arrive at|arrives at|arrived at|enter|enters|entered)\\s+([^,.;]+?),?\\s+(?:with\\s+)?(${names}|her|him)\\s+(?:still\\s+)?${HELD}`, "i"), mover: 2, dest: 1, subject: false },
     { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:him\\s+|nicco\\s+)?(inside|in)\\b`, "i"), mover: 1, dest: 2, subject: true },
@@ -121,6 +195,10 @@ export function narratedMovements(narration: string, movable: readonly MovableCh
         const location = id ? concreteDestination(m[p.dest]!, where.arrival, where.origin, context, world) : undefined;
         if (id && location && !out.some(o => o.character_id === id)) out.push({ character_id: id, location_id: location, source_sentence: sentence });
       }
+      if (where.origin === where.arrival || !followers.size) continue;
+      const follower = implicitFollows(clause, names, movable);
+      if (follower && followers.has(follower) && !context.characters.some(c => c.id === follower) && !out.some(o => o.character_id === follower))
+        out.push({ character_id: follower, location_id: where.arrival, source_sentence: sentence });
     }
   }
   return out;

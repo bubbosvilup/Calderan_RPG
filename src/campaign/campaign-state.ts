@@ -13,6 +13,7 @@ import { prepareAgendaCommand } from "./agenda.js";
 import { prepareLegalCommand } from "./legal.js";
 import { compareIds } from "../world/provenance.js";
 import { validateCampaignSnapshot } from "./snapshot-validation.js";
+import { preparePremiumCommand, syncPremiumCharacters } from "./premium-characters.js";
 const RESTORE = Symbol("validated campaign restore");
 
 export interface PreparedCampaignChange {
@@ -30,6 +31,8 @@ function orderDomains(draft: CampaignSnapshot): void {
   for (const records of [draft.characters, draft.items, draft.households, draft.facts, draft.goals, draft.scheduled_events, draft.transactions]) records.sort((a, b) => compareIds(a.id, b.id));
   draft.funds.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.legal_statuses.sort((a, b) => compareIds(a.character_id, b.character_id));
+  draft.premium_characters.sort((a, b) => compareIds(a.character_id, b.character_id));
+  draft.premium_reflections.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.knowledge.sort((a, b) => compareIds(a.character_id, b.character_id) || compareIds(a.fact_id, b.fact_id));
   draft.relationships.sort((a, b) => compareIds(a.from_character_id, b.from_character_id) || compareIds(a.to_character_id, b.to_character_id));
   draft.runtime.npc_locations.sort((a, b) => compareIds(a.character_id, b.character_id));
@@ -39,15 +42,17 @@ function orderDomains(draft: CampaignSnapshot): void {
 }
 /** Pure domain preparation over an engine-owned snapshot, not a restore/deserialization API. */
 export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, world: WorldStore, input: unknown): PreparedCampaignChange {
-  if (base.dataset_id !== world.datasetId || base.schema_version !== 1) fail("dataset_id", "snapshot/canon mismatch");
+  if (base.dataset_id !== world.datasetId || base.schema_version !== 2) fail("dataset_id", "snapshot/canon mismatch");
   const proposal = parseCampaignProposal(input);
   if (proposal.expected_revision !== base.revision) fail("expected_revision", "stale campaign proposal");
   const draft = structuredClone(base) as CampaignSnapshot;
   const context = { draft, refs: new CampaignIdentityResolver(world, draft) };
   for (const command of proposal.commands) {
     if (command.kind === "runtime_delta") draft.runtime = structuredClone(prepareRuntimeDelta(draft.runtime, command.delta, world, base.revision).snapshot) as RuntimeDomainSnapshot;
-    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command)) fail("command", "unsupported command");
+    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command)) fail("command", "unsupported command");
   }
+  // NPC+ Pass 1: premium state follows membership changes made by this proposal, atomically, in the same revision.
+  syncPremiumCharacters(draft, base);
   orderDomains(draft);
   const comparison = structuredClone(base) as CampaignSnapshot;
   orderDomains(comparison);
@@ -70,8 +75,8 @@ export class CampaignState {
     if (campaignId === RESTORE) { this.#snapshot = initialScene as DeepReadonly<CampaignSnapshot>; return; }
     validateId(campaignId, "campaign_id");
     const { revision, ...runtime } = new RuntimeState(world, initialScene as SceneState, initialMana).exportSnapshot();
-    this.#snapshot = validateCampaignSnapshot({ schema_version: 1 as const, campaign_id: campaignId, dataset_id: world.datasetId, revision,
-      runtime: structuredClone(runtime), characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [] }, world);
+    this.#snapshot = validateCampaignSnapshot({ schema_version: 2 as const, campaign_id: campaignId, dataset_id: world.datasetId, revision,
+      runtime: structuredClone(runtime), characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [], premium_characters: [], premium_reflections: [] }, world);
   }
   /** Unknown-input boundary. Assigns validated current state directly, with fresh receipt ownership. */
   static restore(world: WorldStore, snapshot: unknown): CampaignState {

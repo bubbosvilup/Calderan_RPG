@@ -3,6 +3,9 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { GenerationMetadata } from "../llm/types.js";
 import type { TurnContext } from "./context-builder.js";
 import { CONTEXT_LIMITS, contextSerializedCharacters } from "./context-builder.js";
+import { deduplicateRecovered, type NpcPlusDiagnostics } from "./npc-plus.js";
+import type { retrieveForTurn } from "./retrieval-policy.js";
+type RetrievalOutcome = Awaited<ReturnType<typeof retrieveForTurn>>;
 import { RETRIEVAL_LIMITS } from "./retrieval-policy.js";
 import type { ProviderAttemptRecord } from "../llm/retry.js";
 import type { AuthorizationDiagnostic, TurnFailure } from "./turn-types.js";
@@ -12,8 +15,8 @@ export interface TurnDiagnostics {
   turn_id: string; base_revision: number; final_revision: number; outcome: "running" | "success" | "failure" | "abandoned";
   failure_code?: TurnFailure; failure_phase?: DiagnosticPhase; provider_code?: string;
   stage_timings: Partial<Record<DiagnosticPhase, { deterministic_ms: number; provider_ms: number }>>;
-  retrieval?: { triggered: boolean; mode: string; ids: readonly string[]; reference_count: number; fetched_count: number; payload_characters: number; latency_ms: number; lexical_used: boolean; fallback_to_lexical?: boolean; fallback_reason?: string; limits: typeof RETRIEVAL_LIMITS; query?: string; failure_code?: string };
-  context?: { serialized_characters: number; max_characters: number; people_shown: number; items_shown: number; facts_total: number; facts_shown: number; events_total: number; events_shown: number; relationships_total: number; relationships_shown: number; omitted_non_present_household_members: number; knowledge_access_compaction_used?: boolean; projection?: TurnContext["projection"] };
+  retrieval?: { triggered: boolean; mode: string; ids: readonly string[]; reference_count: number; fetched_count: number; payload_characters: number; latency_ms: number; lexical_used: boolean; fallback_to_lexical?: boolean; fallback_reason?: string; limits: typeof RETRIEVAL_LIMITS; query?: string; failure_code?: string; npc_plus_duplicates_removed?: number };
+  context?: { serialized_characters: number; max_characters: number; people_shown: number; items_shown: number; facts_total: number; facts_shown: number; events_total: number; events_shown: number; relationships_total: number; relationships_shown: number; omitted_non_present_household_members: number; knowledge_access_compaction_used?: boolean; projection?: TurnContext["projection"]; npc_plus?: NpcPlusDiagnostics };
   context_too_large_cause?: DiagnosticPhase;
   narrator?: { model?: string; usage?: GenerationMetadata["usage"]; latency_ms?: number; completed: boolean; streamed_characters: number; final_text_characters: number };
   revision_narrator?: TurnDiagnostics["narrator"];
@@ -58,13 +61,22 @@ export class TurnDiagnosticObserver {
     const timing = this.record.stage_timings[phase] ??= { deterministic_ms: 0, provider_ms: 0 };
     timing[provider ? "provider_ms" : "deterministic_ms"] += duration;
   }
+  /** Retrieval outcome (moved out of runTurn in NPC+ Pass 4), plus same-turn NPC+ recovered-canon duplicates removed (counts only). */
+  retrieved(retrieved: RetrievalOutcome, context: TurnContext, includeQuery: boolean): void {
+    const duplicates = context.npc_plus ? deduplicateRecovered(context.npc_plus, retrieved.data).removed : 0;
+    this.record.retrieval = { triggered: retrieved.diagnostics.mode !== "none", mode: retrieved.diagnostics.mode, ids: retrieved.diagnostics.ids,
+      reference_count: retrieved.diagnostics.ids.length, fetched_count: retrieved.data.records.length, payload_characters: retrieved.payload_characters,
+      latency_ms: retrieved.diagnostics.elapsed_ms, lexical_used: retrieved.diagnostics.mode === "lexical", fallback_to_lexical: !!retrieved.fallback_reason,
+      ...(retrieved.fallback_reason ? { fallback_reason: retrieved.fallback_reason } : {}), limits: RETRIEVAL_LIMITS,
+      ...(includeQuery && retrieved.diagnostics.query ? { query: retrieved.diagnostics.query } : {}), ...(context.npc_plus ? { npc_plus_duplicates_removed: duplicates } : {}) };
+  }
   context(context: TurnContext): void {
     this.record.context = { serialized_characters: contextSerializedCharacters(context), max_characters: CONTEXT_LIMITS.serialized_characters,
       people_shown: context.characters.length, items_shown: context.items.length, facts_total: context.projection?.facts?.total ?? context.facts.length,
       facts_shown: context.facts.length, events_total: context.projection?.scheduled_events?.total ?? context.scheduled_events.length, events_shown: context.scheduled_events.length,
       relationships_total: context.projection?.relationships?.total ?? context.social.relationships.length, relationships_shown: context.social.relationships.length,
       omitted_non_present_household_members: context.projection?.household_members_not_present?.omitted ?? 0,
-      ...(context.projection ? { projection: context.projection } : {}) };
+      ...(context.projection ? { projection: context.projection } : {}), ...(context.npc_plus ? { npc_plus: context.npc_plus.diagnostics } : {}) };
   }
   authorization(decisions: readonly AuthorizationDiagnostic[]): void {
     const count = decisions.filter(d => d.authorized).length;

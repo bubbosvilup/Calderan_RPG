@@ -75,11 +75,7 @@ export class TurnCoordinator {
       // RetrievalStage: read-only and conditional; its output is evidence for narration, never authority.
       stage = "retrieval_failed";
       const retrieved = await measureAsync("retrieval", () => retrieveForTurn(player_input, context, this.world, this.retrieval));
-      if (observer) observer.record.retrieval = { triggered: retrieved.diagnostics.mode !== "none", mode: retrieved.diagnostics.mode, ids: retrieved.diagnostics.ids,
-        reference_count: retrieved.diagnostics.ids.length, fetched_count: retrieved.data.records.length, payload_characters: retrieved.payload_characters,
-        latency_ms: retrieved.diagnostics.elapsed_ms, lexical_used: retrieved.diagnostics.mode === "lexical", fallback_to_lexical: !!retrieved.fallback_reason,
-        ...(retrieved.fallback_reason ? { fallback_reason: retrieved.fallback_reason } : {}), limits: RETRIEVAL_LIMITS,
-        ...(this.promptOptions.diagnostics_include_query && retrieved.diagnostics.query ? { query: retrieved.diagnostics.query } : {}) };
+      observer?.retrieved(retrieved, context, !!this.promptOptions.diagnostics_include_query);
       checkpoint();
       const { recent, prompt } = measure("prompt_composition", () => composeTurnPrompt({ player_input, context, recent: this.recent(campaign).forPrompt(), retrieved: retrieved.data, prompt_intent: promptIntent, options: this.promptOptions, scene }));
 
@@ -134,7 +130,7 @@ export class TurnCoordinator {
       // AuditStage: the draft must not contradict the prepared candidate. One bounded revision, then deterministic redaction.
       // It only chooses the delivered text; state is never changed here.
       const auditor = measure("audit", () => createNarrationAuditor({ base_revision, context, world: this.world, retrieved: retrieved.data, player_input, recent, intent, scene,
-        turn_evidence: authorization.turn_evidence, diagnostics: authorization.diagnostics, authorized, prepared: prepared.snapshot }));
+        turn_evidence: authorization.turn_evidence, diagnostics: authorization.diagnostics, authorized, prepared: prepared.snapshot, origin }));
       const issues = measure("audit", () => auditor.check(draft, authorization.turn_evidence));
       if (observer) observer.record.audit = { issue_count: issues.length, issue_kinds: issues.map(i => i.kind), reconciliation_attempted: issues.length > 0,
         revision_issue_count: 0, revision_issue_kinds: [], redaction_used: false, delivered: "draft" };

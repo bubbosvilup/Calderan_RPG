@@ -58,8 +58,8 @@ export interface NaturalActionResolution {
 
 const HEDGE = GATES.natural_action_hedge;
 const SUBJECT = "(?:(?:he|nicco|i)\\s+)?(?:then\\s+|also\\s+|slowly\\s+|quietly\\s+)?";
-const MOVE = new RegExp(`^${SUBJECT}(?:walks?|walked|walking|strolls?|strolled|strolling|goes|go|went|going|heads?|headed|heading|returns?|returned|returning|wanders?|wandered|wandering|hurries|hurried|hurrying|runs?|ran|running|makes? his way|made his way|steps?|stepped|moves?|moved|travels?|travell?ed|crosses|crossed)\\s+(?:back\\s+)?(?:over\\s+|down\\s+|up\\s+|out\\s+|across\\s+)?(?:to|towards?|into|inside|in to|through)\\s+(.+)$`, "i");
-const DESTINATION_END = /\s+(?:looking|searching|hoping|in search|to (?:buy|see|find|look|purchase)|for\b|with\b|nearby|near\b|while\b|as\b|where\b)/i;
+const MOVE = new RegExp(`^${SUBJECT}(?:walks?|walked|walking|strolls?|strolled|strolling|goes|go|went|going|heads?|headed|heading|returns?|returned|returning|wanders?|wandered|wandering|hurries|hurried|hurrying|runs?|ran|running|makes? his way|made his way|steps?|stepped|moves?|moved|travels?|travell?ed|crosses|crossed)\\s+(?:back\\s+)?(?:over\\s+|down\\s+|up\\s+|out\\s+|across\\s+|downstairs\\s+|upstairs\\s+)?(?:to|towards?|into|inside|in to|through)\\s+(.+)$`, "i");
+export const DESTINATION_END = /\s+(?:looking|searching|hoping|in search|to (?:buy|see|find|look|purchase)|for\b|with\b|nearby|near\b|while\b|as\b|where\b)/i;
 const REMOVE = [
   new RegExp(`^${SUBJECT}(?:takes?|took|taking|pulls?|pulled|pulling|slips?|slipped|slipping|kicks?|kicked|kicking|tugs?|tugged)\\s+off\\s+(.+)$`, "i"),
   new RegExp(`^${SUBJECT}(?:takes?|took|taking|pulls?|pulled|pulling|slips?|slipped|kicks?|kicked)\\s+(.+?)\\s+off$`, "i"),
@@ -120,6 +120,25 @@ export function reachable(destination: string, here: string, world: WorldStore):
   return route ? { target, via_container: target !== destination, route } : {};
 }
 const display = (id: string, world: WorldStore) => world.getEntity(id)?.display_name ?? id;
+/**
+ * One movement clause → its outcome through the shared destination and route rules (no teleport): resolved (one runtime delta with
+ * the route's minutes), blocked (no established connection; the narrator is told Nicco has not arrived), already here, or unresolved.
+ * Shared by natural *action* clauses and, since H5.1, by unmarked first-person movement (player-intent.ts).
+ */
+export function resolveMovement(clause: string, phrase: string, here: string, context: TurnContext, world: WorldStore):
+  { readonly actions: readonly NaturalAction[]; readonly runtime: readonly CampaignCommand[]; readonly notes: readonly string[] } {
+  const actions: NaturalAction[] = [];
+  const destination = resolveDestination(phrase, context, world);
+  if (INTENTION.test(clause)) actions.push({ clause, kind: "intention", status: "no_state_effect", detail: { text: clause.match(INTENTION)![0] } });
+  if (!destination) return { actions: [...actions, { clause, kind: "movement", status: "unresolved", detail: { phrase, reason: "unknown_destination" } }], runtime: [], notes: [] };
+  const route = reachable(destination, here, world);
+  if (destination === here || world.getAncestors(here).some(a => a.id === destination) && !route.target)
+    return { actions: [...actions, { clause, kind: "movement", status: "no_state_effect", detail: { phrase, destination, reason: "already_here" } }], runtime: [], notes: [] };
+  if (route.target) return { actions: [...actions, { clause, kind: "movement", status: "resolved", detail: { phrase, destination, target: route.target, via_container: !!route.via_container, route: route.route } }],
+    runtime: [{ kind: "runtime_delta", delta: { player_location: route.target, time_advance_minutes: route.route!.minutes } }], notes: [] };
+  return { actions: [...actions, { clause, kind: "movement", status: "blocked", detail: { phrase, destination, reason: "no_travel_connection", from: here } }], runtime: [],
+    notes: [`Nicco sets out for ${display(destination, world)}, but no route there from ${display(here, world)} is established yet: he has not arrived and is still at ${display(here, world)}. Do not describe him at ${display(destination, world)}.`] };
+}
 
 export function resolveNaturalActions(input: string, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore,
   participants: readonly EphemeralSceneParticipant[] = [], participantTurn = 0): NaturalActionResolution {
@@ -182,22 +201,9 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
       if (HEDGE.test(clause)) continue;
       let m: RegExpMatchArray | null;
       if ((m = clause.match(MOVE)) && !moved) {
-        const phrase = m[1]!.split(DESTINATION_END)[0]!.trim();
-        const destination = resolveDestination(phrase, context, world);
-        if (INTENTION.test(clause)) actions.push({ clause, kind: "intention", status: "no_state_effect", detail: { text: clause.match(INTENTION)![0] } });
-        if (!destination) { actions.push({ clause, kind: "movement", status: "unresolved", detail: { phrase, reason: "unknown_destination" } }); continue; }
-        const route = reachable(destination, here, world);
-        if (destination === here || world.getAncestors(here).some(a => a.id === destination) && !route.target) {
-          actions.push({ clause, kind: "movement", status: "no_state_effect", detail: { phrase, destination, reason: "already_here" } }); continue;
-        }
-        if (route.target) {
-          moved = true;
-          runtime.push({ kind: "runtime_delta", delta: { player_location: route.target, time_advance_minutes: route.route!.minutes } });
-          actions.push({ clause, kind: "movement", status: "resolved", detail: { phrase, destination, target: route.target, via_container: !!route.via_container, route: route.route } });
-        } else {
-          actions.push({ clause, kind: "movement", status: "blocked", detail: { phrase, destination, reason: "no_travel_connection", from: here } });
-          notes.push(`Nicco sets out for ${display(destination, world)}, but no route there from ${display(here, world)} is established yet: he has not arrived and is still at ${display(here, world)}. Do not describe him at ${display(destination, world)}.`);
-        }
+        const outcome = resolveMovement(clause, m[1]!.split(DESTINATION_END)[0]!.trim(), here, context, world);
+        actions.push(...outcome.actions); runtime.push(...outcome.runtime); notes.push(...outcome.notes);
+        moved = outcome.runtime.length > 0;
         continue;
       }
       const removal = REMOVE.map(r => clause.match(r)).find(Boolean) ?? null;

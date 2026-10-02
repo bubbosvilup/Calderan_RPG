@@ -1,4 +1,4 @@
-import { CONDITIONAL, EPISTEMIC, INSTRUCTION, INTENT, MODAL, NEGATION, NEGATIVE_CONTRACTION, OBSERVATION, REFUSAL, RETRACTION, TEMPORAL, TYPED_NEGATIVE_CONTRACTION, cueGate } from "./cues.js";
+import { COERCION, CONDITIONAL, EPISTEMIC, INSTRUCTION, INTENT, MODAL, NEGATION, NEGATIVE_CONTRACTION, OBSERVATION, RECOLLECTION, REFUSAL, RETRACTION, TEMPORAL, TYPED_NEGATIVE_CONTRACTION, cueGate } from "./cues.js";
 
 /**
  * Hardening H1: the policy table of every deterministic "not a completed / asserted act" gate. One entry per call site; each was
@@ -14,7 +14,7 @@ import { CONDITIONAL, EPISTEMIC, INSTRUCTION, INTENT, MODAL, NEGATION, NEGATIVE_
  */
 const { not, never, nor, cannot, no, noLonger, notYet, noOne, nobody, without, doesNot } = NEGATION;
 const { would, could, should, might, may, can, will, shall, wouldLikeTo } = MODAL;
-const C = CONDITIONAL, E = EPISTEMIC, I = INTENT, O = OBSERVATION, T = TEMPORAL, N = NEGATIVE_CONTRACTION, TN = TYPED_NEGATIVE_CONTRACTION;
+const C = CONDITIONAL, E = EPISTEMIC, I = INTENT, O = OBSERVATION, T = TEMPORAL, N = NEGATIVE_CONTRACTION, TN = TYPED_NEGATIVE_CONTRACTION, R = RECOLLECTION;
 
 /** H1 change 3: attempted, reached-for and epistemically hedged acts, act-scoped so ordinary prose ("seems pleased") is unaffected. */
 export const DISQUALIFY_FAILSAFE = Object.freeze([I.attemptsTo, I.attemptedTo, I.tryingTo, I.reachesFor, I.reachingFor, E.seemsTo, E.seemedTo, E.probably,
@@ -58,6 +58,38 @@ export const GATES = Object.freeze({
   natural_action_hedge: cueGate({ cues: [I.almost, I.nearly, I.pretends, I.pretending, I.considers, I.considering, I.thinksAbout, I.wantsTo, I.wantingTo, wouldLikeTo, I.plansTo,
     I.aboutTo, I.triesTo, I.tryingTo, I.startsTo, I.beginsTo, I.reachesFor, I.reachingFor, E.imagines, I.dreamsOf, TN.doesnt, doesNot, TN.didnt, never, TN.wont, will, would,
     could, might, should, C.if, T.someday, E.maybe, T.yesterday, T.earlier] }),
+  /**
+   * player-intent.ts (H5.1) — unmarked first-person player movement ("I go down to the hall"): negation, modality, intention, plans,
+   * hypotheticals, questions and other-day framing are not this turn's movement. A new gate (no pre-H1 legacy): typed contractions
+   * ("dont"), "n't" and future "'ll" included because it reads player-typed text.
+   */
+  player_movement_not_done: cueGate({ cues: [not, never, nor, cannot, TN.dont, TN.doesnt, TN.didnt, TN.wont, would, could, should, might, may, can, will, shall, wouldLikeTo,
+    I.almost, I.nearly, I.pretends, I.pretending, I.considers, I.considering, I.thinksAbout, I.thinking, I.wantsTo, I.wantingTo, I.plansTo, I.plans, I.planning, I.intendsTo,
+    I.aboutTo, I.goingTo, I.triesTo, I.tryingTo, I.startsTo, I.beginsTo, I.dreamsOf, E.imagines, E.maybe, E.perhaps, C.if, C.unless, C.whether, C.suppose,
+    T.someday, T.oneDay, T.later, T.tomorrow, T.tonight, T.yesterday, T.earlier], contraction: true, future: true, question: true }),
+  /**
+   * scene-participation.ts (NPC+ Pass 4) — an absent character's act in a clause is NOT current participation when it is negated,
+   * hypothetical, imagined, remembered, attributed ("according to") or habitual-past ("used to"). Tested on the clause up to the act.
+   */
+  absent_reference: cueGate({ cues: [not, never, no, nor, without, cannot, I.almost, I.nearly, would, could, might, C.if, C.unless, C.wereTo, C.suppose, E.imagine, E.imagines,
+    R.remember, R.recall, R.accordingTo, R.usedTo, R.thinksOf], contraction: true }),
+  /** scene-participation.ts (NPC+ Pass 4) — words right after the act that place it in an earlier time ("said yesterday", "two days ago"). */
+  past_displacement: cueGate({ cues: [T.yesterday, T.earlier, T.ago, T.lastNight] }),
+  /**
+   * character-movement.ts (NPC+ Pass 9) — implicit-destination following ("Maren follows him"), tested on the whole clause. The
+   * movement_not_done cues minus `later` ("a moment later, Maren follows" is this turn), plus almost/nearly, refusal, recollection and
+   * other-day framing: a follow resolved to Nicco's same-turn arrival must be a completed act of this turn.
+   */
+  follow_not_done: cueGate({ cues: [could, would, should, might, may, can, will, N.wont, shall, I.plans, I.planning, I.planned, I.intends, I.wants, I.wanted, I.goingTo,
+    I.aboutTo, I.readyTo, I.triesTo, I.triedTo, T.someday, E.maybe, E.perhaps, C.if, C.unless, C.whether, O.toward, O.towards, O.looks, O.looked, O.looking,
+    O.glances, O.glanced, O.stares, E.imagines, I.thinks, I.promises, I.saysHell, not, never, noLonger, I.almost, I.nearly, ...Object.values(REFUSAL),
+    T.yesterday, T.earlier, T.ago, T.lastNight, T.tomorrow, R.remember, R.recall, R.usedTo], contraction: true, question: true }),
+  /**
+   * follow-invitation.ts (NPC+ Pass 9) — a player sentence that is NOT an invitation to come along: negated, conditional, imagined,
+   * remembered, other-day, threatening or coercive. Modal requests ("would you come with me?") and questions remain invitations.
+   */
+  invitation_not_offered: cueGate({ cues: [not, never, C.if, C.unless, C.wereTo, C.supposeAny, E.imagineAny, T.yesterday, T.earlier, T.ago, T.lastNight, T.tomorrow,
+    T.someday, T.oneDay, R.remember, R.recall, R.usedTo, I.threaten, ...Object.values(COERCION)], contraction: true }),
   /** person-transactions.ts — a purchase acceptance must be unhedged; price questions and deliberation are not acceptance. */
   transaction_hedge: cueGate({ cues: [C.if, E.maybe, E.perhaps, would, could, should, might, not, never, TN.dont, TN.wont, "how much", "let me (?:look|see|think)", I.thinking, I.considerAny],
     question: true }),

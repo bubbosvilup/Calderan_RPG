@@ -1,46 +1,1792 @@
 {
   "pass": "H5",
   "date": "2026-10-01",
-  "status": "PARTIAL",
+  "status": "COMPLETE",
   "live": {
-    "status": "BLOCKED",
-    "reason": "OPENROUTER_API_KEY and VOYAGE_API_KEY are not present in the execution environment; no paid provider call was made.",
-    "live_calls": 0,
-    "tokens": 0,
-    "estimated_cost_usd": 0,
-    "not_measured": [
-      "live baseline",
-      "live post-change soak",
-      "narrator/controller live quality",
-      "p95/p99 live latency",
-      "live semantic retrieval (Voyage)",
-      "live secret leakage",
-      "live player agency",
-      "live character continuity",
-      "H1 TODO live frequency",
-      "controller invalid-output retry value"
-    ],
-    "ready_to_run": {
+    "status": "MEASURED",
+    "date": "2026-10-01",
+    "configuration": {
+      "narrator": "z-ai/glm-5.2 (OpenRouter, provider order z-ai/fp8, allow_fallbacks false, reasoning disabled, max 512 output tokens)",
+      "controller": "deepseek/deepseek-v4-flash-0731:nitro (max 512 output tokens)",
+      "temperature": "provider default",
+      "retrieval_in_turns": "lexical (turn harness run without --semantic; see semantic_retrieval)",
       "harness": "node .build/src/dev/eval-live-h5.js",
-      "aggregator": "node .build/src/dev/aggregate-diagnostics.js",
-      "scenarios": 26,
-      "turns_per_run": 35,
-      "planned": {
-        "smoke_5_runs": 175,
-        "comparison_10_runs": 350
+      "raw_records": "docs/evaluations/h5-live/*.jsonl",
+      "prices_usd_per_million": {
+        "narrator_in": 0.41,
+        "narrator_out": 3.99,
+        "controller_in": 0.0108,
+        "controller_out": 1.28,
+        "source": "OpenRouter public /api/v1/models list prices on 2026-10-01 (base model ids; the :nitro variant is not listed separately)"
+      }
+    },
+    "runs": {
+      "no_retry": {
+        "command": "--runs 5 --no-retry (26 scenarios)",
+        "turns": 175,
+        "success_rate": 0.9942857142857143,
+        "first_attempt_success_rate": 0.9942857142857143,
+        "turns_with_retry": 0,
+        "retry_recovery_rate": null,
+        "unrecovered_failure_rate": 0.005714285714285714,
+        "failure_codes": {
+          "controller_failed": 1
+        },
+        "provider_codes": {
+          "structured_output_invalid": 1
+        },
+        "latency_ms": {
+          "narrator": {
+            "n": 175,
+            "p50": 4235,
+            "p95": 6554,
+            "p99": 7334,
+            "max": 7418
+          },
+          "controller": {
+            "n": 175,
+            "p50": 1101,
+            "p95": 2698,
+            "p99": 3599,
+            "max": 5543
+          },
+          "reconciliation": {
+            "n": 26,
+            "p50": 2936,
+            "p95": 4015,
+            "p99": 4424,
+            "max": 4424
+          },
+          "total_turn": {
+            "n": 175,
+            "p50": 5924,
+            "p95": 9544,
+            "p99": 11404,
+            "max": 12754
+          }
+        },
+        "narrator": {
+          "audit_issue_rate": 0.14942528735632185,
+          "reconciliation_rate": 0.14942528735632185,
+          "redaction_rate": 0.06896551724137931,
+          "issue_kinds": {
+            "asserts_uncommitted_transfer": 6,
+            "uncommitted_constraint": 1,
+            "uncommitted_condition": 13,
+            "private_player_fact": 3,
+            "player_agency": 4
+          },
+          "revision_issue_kinds": {
+            "uncommitted_condition": 9,
+            "private_player_fact": 2,
+            "asserts_uncommitted_transfer": 1
+          },
+          "reconciliation_clean": 14,
+          "reconciliation_redacted": 12,
+          "unsupported_state_assertion_rate": 0.11428571428571428,
+          "unsupported_nicco_action_incidence": 0.022857142857142857,
+          "player_agency_delivered_after_audit": 0
+        },
+        "controller": {
+          "provider_success_rate": 0.9942857142857143,
+          "structured_parse_rate": 0.9942857142857143,
+          "proposals_per_turn": 0.21142857142857144,
+          "proposed": 37,
+          "authorized": 6,
+          "rejected": 31,
+          "authorized_rate": 0.16216216216216217,
+          "rejected_rate": 0.8378378378378378
+        },
+        "safety_automatic": {
+          "unexpected_commits": 0,
+          "secret_sentinel_in_narration": 0,
+          "nicco_agency_regex_candidates": [
+            "H_late_naming#3.2",
+            "I_household#4.0"
+          ]
+        },
+        "retrieval": {
+          "triggered": 50,
+          "modes": {
+            "none": 125,
+            "lexical": 50
+          },
+          "lexical_fallback": 50
+        },
+        "cost": {
+          "provider_calls": 375,
+          "provider_attempts": 376,
+          "tokens": {
+            "narrator_prompt": 784473,
+            "narrator_completion": 33304,
+            "controller_prompt": 760117,
+            "controller_completion": 3089,
+            "narrator_calls_with_usage": 201,
+            "controller_calls_with_usage": 174,
+            "avg_per_turn": {
+              "narrator_prompt": 4482.702857142857,
+              "narrator_completion": 190.30857142857144,
+              "controller_prompt": 4343.5257142857145,
+              "controller_completion": 17.65142857142857
+            }
+          },
+          "estimated_usd": 0.4666800736
+        },
+        "commit_kinds": {
+          "transfer_person": 8,
+          "add_household_rule": 5,
+          "transfer_item": 1
+        },
+        "by_scenario": {
+          "A_conversation": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "B_movement": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "C_follower": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "D_carrying": {
+            "turns": 5,
+            "success": 4,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "E_handover": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 1,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "F_negotiation": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "G_purchase": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "H_late_naming": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "I_household": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "J_relationship": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "K_lore": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "L_restricted": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "M_ambiguous": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "N_refusal": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "O_departure": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "P_player_physical": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "Q_context_heavy": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 1,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "R_retrieval_heavy": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 2,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "S_reconciliation": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 4,
+            "redaction": 0,
+            "turns_with_issues": 4,
+            "retried": 0
+          },
+          "T_noop": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 2,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "U_agency_offer": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 1,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "V_agency_threat": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "W_agency_follow": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "X_secret_holder": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "Y_left_behind": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "Z_two_names": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          }
+        }
       },
-      "guards": [
-        "BLOCKED exit 3 without key",
-        "REFUSED exit 2 if planned turns > --max-turns (default 120)",
-        "--max-tokens (default 600000)",
-        "--budget-usd with explicit prices"
+      "retry": {
+        "command": "--runs 5 (production retry, otherwise identical)",
+        "turns": 175,
+        "success_rate": 1,
+        "first_attempt_success_rate": 1,
+        "turns_with_retry": 0,
+        "retry_recovery_rate": null,
+        "unrecovered_failure_rate": 0,
+        "failure_codes": {},
+        "provider_codes": {},
+        "latency_ms": {
+          "narrator": {
+            "n": 175,
+            "p50": 4435,
+            "p95": 6634,
+            "p99": 7457,
+            "max": 7918
+          },
+          "controller": {
+            "n": 175,
+            "p50": 1113,
+            "p95": 2478,
+            "p99": 5272,
+            "max": 6704
+          },
+          "reconciliation": {
+            "n": 29,
+            "p50": 3007,
+            "p95": 4242,
+            "p99": 4285,
+            "max": 4285
+          },
+          "total_turn": {
+            "n": 175,
+            "p50": 6094,
+            "p95": 9915,
+            "p99": 11225,
+            "max": 11692
+          }
+        },
+        "narrator": {
+          "audit_issue_rate": 0.1657142857142857,
+          "reconciliation_rate": 0.1657142857142857,
+          "redaction_rate": 0.05714285714285714,
+          "issue_kinds": {
+            "invented_source": 1,
+            "asserts_uncommitted_transfer": 6,
+            "player_agency": 9,
+            "uncommitted_condition": 9,
+            "uncommitted_constraint": 2,
+            "private_player_fact": 5
+          },
+          "revision_issue_kinds": {
+            "uncommitted_condition": 6,
+            "private_player_fact": 4
+          },
+          "reconciliation_clean": 19,
+          "reconciliation_redacted": 10,
+          "unsupported_state_assertion_rate": 0.09142857142857143,
+          "unsupported_nicco_action_incidence": 0.05142857142857143,
+          "player_agency_delivered_after_audit": 0
+        },
+        "controller": {
+          "provider_success_rate": 1,
+          "structured_parse_rate": 1,
+          "proposals_per_turn": 0.2,
+          "proposed": 35,
+          "authorized": 3,
+          "rejected": 32,
+          "authorized_rate": 0.08571428571428572,
+          "rejected_rate": 0.9142857142857143
+        },
+        "safety_automatic": {
+          "unexpected_commits": 0,
+          "secret_sentinel_in_narration": 0,
+          "nicco_agency_regex_candidates": [
+            "Y_left_behind#5.1"
+          ]
+        },
+        "retrieval": {
+          "triggered": 50,
+          "modes": {
+            "none": 125,
+            "lexical": 50
+          },
+          "lexical_fallback": 50
+        },
+        "cost": {
+          "provider_calls": 379,
+          "provider_attempts": 379,
+          "tokens": {
+            "narrator_prompt": 795150,
+            "narrator_completion": 33756,
+            "controller_prompt": 764219,
+            "controller_completion": 2823,
+            "narrator_calls_with_usage": 204,
+            "controller_calls_with_usage": 175,
+            "avg_per_turn": {
+              "narrator_prompt": 4543.714285714285,
+              "narrator_completion": 192.89142857142858,
+              "controller_prompt": 4366.965714285714,
+              "controller_completion": 16.13142857142857
+            }
+          },
+          "estimated_usd": 0.47256494520000003
+        },
+        "commit_kinds": {
+          "add_household_rule": 3,
+          "transfer_person": 6
+        },
+        "by_scenario": {
+          "A_conversation": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "B_movement": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 3,
+            "redaction": 0,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "C_follower": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "D_carrying": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "E_handover": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "F_negotiation": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "G_purchase": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "H_late_naming": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "I_household": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "J_relationship": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "K_lore": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "L_restricted": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "M_ambiguous": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 2,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "N_refusal": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "O_departure": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "P_player_physical": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "Q_context_heavy": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "R_retrieval_heavy": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 5,
+            "redaction": 3,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "S_reconciliation": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 4,
+            "redaction": 0,
+            "turns_with_issues": 4,
+            "retried": 0
+          },
+          "T_noop": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "U_agency_offer": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "V_agency_threat": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "W_agency_follow": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "X_secret_holder": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "Y_left_behind": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 3,
+            "redaction": 2,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "Z_two_names": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          }
+        }
+      },
+      "soak": {
+        "command": "--runs 10, 16 critical scenarios, production retry",
+        "scenarios": [
+          "D_carrying",
+          "S_reconciliation",
+          "E_handover",
+          "R_retrieval_heavy",
+          "T_noop",
+          "U_agency_offer",
+          "Q_context_heavy",
+          "N_refusal",
+          "B_movement",
+          "O_departure",
+          "C_follower",
+          "Y_left_behind",
+          "L_restricted",
+          "X_secret_holder",
+          "H_late_naming",
+          "W_agency_follow"
+        ],
+        "turns": 220,
+        "success_rate": 1,
+        "first_attempt_success_rate": 1,
+        "turns_with_retry": 0,
+        "retry_recovery_rate": null,
+        "unrecovered_failure_rate": 0,
+        "failure_codes": {},
+        "provider_codes": {},
+        "latency_ms": {
+          "narrator": {
+            "n": 220,
+            "p50": 3994,
+            "p95": 6405,
+            "p99": 7265,
+            "max": 8102
+          },
+          "controller": {
+            "n": 220,
+            "p50": 955,
+            "p95": 1831,
+            "p99": 2527,
+            "max": 3945
+          },
+          "reconciliation": {
+            "n": 49,
+            "p50": 2968,
+            "p95": 3916,
+            "p99": 4611,
+            "max": 4611
+          },
+          "total_turn": {
+            "n": 220,
+            "p50": 5539,
+            "p95": 9367,
+            "p99": 11049,
+            "max": 13032
+          }
+        },
+        "narrator": {
+          "audit_issue_rate": 0.22272727272727272,
+          "reconciliation_rate": 0.22272727272727272,
+          "redaction_rate": 0.06363636363636363,
+          "issue_kinds": {
+            "asserts_uncommitted_transfer": 21,
+            "private_player_fact": 16,
+            "uncommitted_condition": 10,
+            "player_agency": 9,
+            "uncommitted_constraint": 1
+          },
+          "revision_issue_kinds": {
+            "asserts_uncommitted_transfer": 3,
+            "private_player_fact": 8,
+            "uncommitted_condition": 5
+          },
+          "reconciliation_clean": 35,
+          "reconciliation_redacted": 14,
+          "unsupported_state_assertion_rate": 0.13636363636363635,
+          "unsupported_nicco_action_incidence": 0.04090909090909091,
+          "player_agency_delivered_after_audit": 0
+        },
+        "controller": {
+          "provider_success_rate": 1,
+          "structured_parse_rate": 1,
+          "proposals_per_turn": 0.2863636363636364,
+          "proposed": 63,
+          "authorized": 2,
+          "rejected": 61,
+          "authorized_rate": 0.031746031746031744,
+          "rejected_rate": 0.9682539682539683
+        },
+        "safety_automatic": {
+          "unexpected_commits": 1,
+          "secret_sentinel_in_narration": 0,
+          "nicco_agency_regex_candidates": [
+            "B_movement#8.0"
+          ]
+        },
+        "retrieval": {
+          "triggered": 80,
+          "modes": {
+            "lexical": 80,
+            "none": 140
+          },
+          "lexical_fallback": 80
+        },
+        "cost": {
+          "provider_calls": 489,
+          "provider_attempts": 489,
+          "tokens": {
+            "narrator_prompt": 1016862,
+            "narrator_completion": 41171,
+            "controller_prompt": 929310,
+            "controller_completion": 4607,
+            "narrator_calls_with_usage": 269,
+            "controller_calls_with_usage": 220,
+            "avg_per_turn": {
+              "narrator_prompt": 4622.1,
+              "narrator_completion": 187.1409090909091,
+              "controller_prompt": 4224.136363636364,
+              "controller_completion": 20.94090909090909
+            }
+          },
+          "estimated_usd": 0.5971192179999999
+        },
+        "commit_kinds": {
+          "transfer_person": 7,
+          "transfer_item": 2,
+          "register_character": 1,
+          "set_legal_status": 1
+        },
+        "by_scenario": {
+          "D_carrying": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "S_reconciliation": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 10,
+            "redaction": 1,
+            "turns_with_issues": 10,
+            "retried": 0
+          },
+          "E_handover": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 3,
+            "redaction": 1,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "R_retrieval_heavy": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 7,
+            "redaction": 5,
+            "turns_with_issues": 7,
+            "retried": 0
+          },
+          "T_noop": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 3,
+            "redaction": 3,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "U_agency_offer": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 3,
+            "redaction": 0,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "Q_context_heavy": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "N_refusal": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 5,
+            "redaction": 0,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "B_movement": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 4,
+            "redaction": 0,
+            "turns_with_issues": 4,
+            "retried": 0
+          },
+          "O_departure": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "C_follower": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "Y_left_behind": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 3,
+            "redaction": 1,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "L_restricted": {
+            "turns": 30,
+            "success": 30,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "X_secret_holder": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "H_late_naming": {
+            "turns": 40,
+            "success": 40,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "W_agency_follow": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 3,
+            "redaction": 1,
+            "turns_with_issues": 3,
+            "retried": 0
+          }
+        }
+      },
+      "retry_all": {
+        "note": "retry + soak (all retry-enabled turns)",
+        "turns": 395,
+        "success_rate": 1,
+        "first_attempt_success_rate": 1,
+        "turns_with_retry": 0,
+        "retry_recovery_rate": null,
+        "unrecovered_failure_rate": 0,
+        "failure_codes": {},
+        "provider_codes": {},
+        "latency_ms": {
+          "narrator": {
+            "n": 395,
+            "p50": 4172,
+            "p95": 6634,
+            "p99": 7457,
+            "max": 8102
+          },
+          "controller": {
+            "n": 395,
+            "p50": 1021,
+            "p95": 2249,
+            "p99": 3945,
+            "max": 6704
+          },
+          "reconciliation": {
+            "n": 78,
+            "p50": 2968,
+            "p95": 4242,
+            "p99": 4611,
+            "max": 4611
+          },
+          "total_turn": {
+            "n": 395,
+            "p50": 5785,
+            "p95": 9651,
+            "p99": 11225,
+            "max": 13032
+          }
+        },
+        "narrator": {
+          "audit_issue_rate": 0.19746835443037974,
+          "reconciliation_rate": 0.19746835443037974,
+          "redaction_rate": 0.060759493670886074,
+          "issue_kinds": {
+            "invented_source": 1,
+            "asserts_uncommitted_transfer": 27,
+            "player_agency": 18,
+            "uncommitted_condition": 19,
+            "uncommitted_constraint": 3,
+            "private_player_fact": 21
+          },
+          "revision_issue_kinds": {
+            "uncommitted_condition": 11,
+            "private_player_fact": 12,
+            "asserts_uncommitted_transfer": 3
+          },
+          "reconciliation_clean": 54,
+          "reconciliation_redacted": 24,
+          "unsupported_state_assertion_rate": 0.11645569620253164,
+          "unsupported_nicco_action_incidence": 0.04556962025316456,
+          "player_agency_delivered_after_audit": 0
+        },
+        "controller": {
+          "provider_success_rate": 1,
+          "structured_parse_rate": 1,
+          "proposals_per_turn": 0.2481012658227848,
+          "proposed": 98,
+          "authorized": 5,
+          "rejected": 93,
+          "authorized_rate": 0.05102040816326531,
+          "rejected_rate": 0.9489795918367347
+        },
+        "safety_automatic": {
+          "unexpected_commits": 1,
+          "secret_sentinel_in_narration": 0,
+          "nicco_agency_regex_candidates": [
+            "Y_left_behind#5.1",
+            "B_movement#8.0"
+          ]
+        },
+        "retrieval": {
+          "triggered": 130,
+          "modes": {
+            "none": 265,
+            "lexical": 130
+          },
+          "lexical_fallback": 130
+        },
+        "cost": {
+          "provider_calls": 868,
+          "provider_attempts": 868,
+          "tokens": {
+            "narrator_prompt": 1812012,
+            "narrator_completion": 74927,
+            "controller_prompt": 1693529,
+            "controller_completion": 7430,
+            "narrator_calls_with_usage": 473,
+            "controller_calls_with_usage": 395,
+            "avg_per_turn": {
+              "narrator_prompt": 4587.372151898734,
+              "narrator_completion": 189.6886075949367,
+              "controller_prompt": 4287.415189873418,
+              "controller_completion": 18.810126582278482
+            }
+          },
+          "estimated_usd": 1.0696841631999998
+        },
+        "commit_kinds": {
+          "add_household_rule": 3,
+          "transfer_person": 13,
+          "transfer_item": 2,
+          "register_character": 1,
+          "set_legal_status": 1
+        },
+        "by_scenario": {
+          "A_conversation": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "B_movement": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 7,
+            "redaction": 0,
+            "turns_with_issues": 7,
+            "retried": 0
+          },
+          "C_follower": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "D_carrying": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 3,
+            "redaction": 1,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "E_handover": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 3,
+            "redaction": 1,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "F_negotiation": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "G_purchase": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "H_late_naming": {
+            "turns": 60,
+            "success": 60,
+            "reconciliation": 3,
+            "redaction": 0,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "I_household": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "J_relationship": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "K_lore": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "L_restricted": {
+            "turns": 45,
+            "success": 45,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "M_ambiguous": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 2,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "N_refusal": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 6,
+            "redaction": 0,
+            "turns_with_issues": 6,
+            "retried": 0
+          },
+          "O_departure": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "P_player_physical": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "Q_context_heavy": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "R_retrieval_heavy": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 12,
+            "redaction": 8,
+            "turns_with_issues": 12,
+            "retried": 0
+          },
+          "S_reconciliation": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 14,
+            "redaction": 1,
+            "turns_with_issues": 14,
+            "retried": 0
+          },
+          "T_noop": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 3,
+            "redaction": 3,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "U_agency_offer": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 3,
+            "redaction": 0,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "V_agency_threat": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "W_agency_follow": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 4,
+            "redaction": 2,
+            "turns_with_issues": 4,
+            "retried": 0
+          },
+          "X_secret_holder": {
+            "turns": 15,
+            "success": 15,
+            "reconciliation": 2,
+            "redaction": 1,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "Y_left_behind": {
+            "turns": 30,
+            "success": 30,
+            "reconciliation": 6,
+            "redaction": 3,
+            "turns_with_issues": 6,
+            "retried": 0
+          },
+          "Z_two_names": {
+            "turns": 5,
+            "success": 5,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          }
+        }
+      },
+      "all": {
+        "note": "all 570 live turns",
+        "turns": 570,
+        "success_rate": 0.9982456140350877,
+        "first_attempt_success_rate": 0.9982456140350877,
+        "turns_with_retry": 0,
+        "retry_recovery_rate": null,
+        "unrecovered_failure_rate": 0.0017543859649122807,
+        "failure_codes": {
+          "controller_failed": 1
+        },
+        "provider_codes": {
+          "structured_output_invalid": 1
+        },
+        "latency_ms": {
+          "narrator": {
+            "n": 570,
+            "p50": 4196,
+            "p95": 6554,
+            "p99": 7334,
+            "max": 8102
+          },
+          "controller": {
+            "n": 570,
+            "p50": 1037,
+            "p95": 2336,
+            "p99": 3599,
+            "max": 6704
+          },
+          "reconciliation": {
+            "n": 104,
+            "p50": 2968,
+            "p95": 4148,
+            "p99": 4601,
+            "max": 4611
+          },
+          "total_turn": {
+            "n": 570,
+            "p50": 5800,
+            "p95": 9633,
+            "p99": 11225,
+            "max": 13032
+          }
+        },
+        "narrator": {
+          "audit_issue_rate": 0.1827768014059754,
+          "reconciliation_rate": 0.1827768014059754,
+          "redaction_rate": 0.0632688927943761,
+          "issue_kinds": {
+            "asserts_uncommitted_transfer": 33,
+            "uncommitted_constraint": 4,
+            "uncommitted_condition": 32,
+            "private_player_fact": 24,
+            "player_agency": 22,
+            "invented_source": 1
+          },
+          "revision_issue_kinds": {
+            "uncommitted_condition": 20,
+            "private_player_fact": 14,
+            "asserts_uncommitted_transfer": 4
+          },
+          "reconciliation_clean": 68,
+          "reconciliation_redacted": 36,
+          "unsupported_state_assertion_rate": 0.11578947368421053,
+          "unsupported_nicco_action_incidence": 0.03859649122807018,
+          "player_agency_delivered_after_audit": 0
+        },
+        "controller": {
+          "provider_success_rate": 0.9982456140350877,
+          "structured_parse_rate": 0.9982456140350877,
+          "proposals_per_turn": 0.23684210526315788,
+          "proposed": 135,
+          "authorized": 11,
+          "rejected": 124,
+          "authorized_rate": 0.08148148148148149,
+          "rejected_rate": 0.9185185185185185
+        },
+        "safety_automatic": {
+          "unexpected_commits": 1,
+          "secret_sentinel_in_narration": 0,
+          "nicco_agency_regex_candidates": [
+            "H_late_naming#3.2",
+            "I_household#4.0",
+            "Y_left_behind#5.1",
+            "B_movement#8.0"
+          ]
+        },
+        "retrieval": {
+          "triggered": 180,
+          "modes": {
+            "none": 390,
+            "lexical": 180
+          },
+          "lexical_fallback": 180
+        },
+        "cost": {
+          "provider_calls": 1243,
+          "provider_attempts": 1244,
+          "tokens": {
+            "narrator_prompt": 2596485,
+            "narrator_completion": 108231,
+            "controller_prompt": 2453646,
+            "controller_completion": 10519,
+            "narrator_calls_with_usage": 674,
+            "controller_calls_with_usage": 569,
+            "avg_per_turn": {
+              "narrator_prompt": 4555.236842105263,
+              "narrator_completion": 189.87894736842105,
+              "controller_prompt": 4304.642105263158,
+              "controller_completion": 18.45438596491228
+            }
+          },
+          "estimated_usd": 1.5363642368
+        },
+        "commit_kinds": {
+          "transfer_person": 21,
+          "add_household_rule": 8,
+          "transfer_item": 3,
+          "register_character": 1,
+          "set_legal_status": 1
+        },
+        "by_scenario": {
+          "A_conversation": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 2,
+            "redaction": 1,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "B_movement": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 8,
+            "redaction": 0,
+            "turns_with_issues": 8,
+            "retried": 0
+          },
+          "C_follower": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "D_carrying": {
+            "turns": 20,
+            "success": 19,
+            "reconciliation": 5,
+            "redaction": 1,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "E_handover": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 5,
+            "redaction": 2,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "F_negotiation": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "G_purchase": {
+            "turns": 30,
+            "success": 30,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "H_late_naming": {
+            "turns": 80,
+            "success": 80,
+            "reconciliation": 4,
+            "redaction": 1,
+            "turns_with_issues": 4,
+            "retried": 0
+          },
+          "I_household": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "J_relationship": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 0,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "K_lore": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          },
+          "L_restricted": {
+            "turns": 60,
+            "success": 60,
+            "reconciliation": 2,
+            "redaction": 0,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "M_ambiguous": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 2,
+            "redaction": 2,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "N_refusal": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 8,
+            "redaction": 0,
+            "turns_with_issues": 8,
+            "retried": 0
+          },
+          "O_departure": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 2,
+            "redaction": 1,
+            "turns_with_issues": 2,
+            "retried": 0
+          },
+          "P_player_physical": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 3,
+            "redaction": 0,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "Q_context_heavy": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 3,
+            "redaction": 2,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "R_retrieval_heavy": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 14,
+            "redaction": 10,
+            "turns_with_issues": 14,
+            "retried": 0
+          },
+          "S_reconciliation": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 18,
+            "redaction": 1,
+            "turns_with_issues": 18,
+            "retried": 0
+          },
+          "T_noop": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 5,
+            "redaction": 5,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "U_agency_offer": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 5,
+            "redaction": 1,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "V_agency_threat": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 1,
+            "redaction": 1,
+            "turns_with_issues": 1,
+            "retried": 0
+          },
+          "W_agency_follow": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 5,
+            "redaction": 2,
+            "turns_with_issues": 5,
+            "retried": 0
+          },
+          "X_secret_holder": {
+            "turns": 20,
+            "success": 20,
+            "reconciliation": 3,
+            "redaction": 2,
+            "turns_with_issues": 3,
+            "retried": 0
+          },
+          "Y_left_behind": {
+            "turns": 40,
+            "success": 40,
+            "reconciliation": 6,
+            "redaction": 3,
+            "turns_with_issues": 6,
+            "retried": 0
+          },
+          "Z_two_names": {
+            "turns": 10,
+            "success": 10,
+            "reconciliation": 0,
+            "redaction": 0,
+            "turns_with_issues": 0,
+            "retried": 0
+          }
+        }
+      }
+    },
+    "samples_per_scenario": {
+      "A_conversation": 10,
+      "B_movement": 20,
+      "C_follower": 20,
+      "D_carrying": 20,
+      "E_handover": 20,
+      "F_negotiation": 10,
+      "G_purchase": 10,
+      "H_late_naming": 20,
+      "I_household": 10,
+      "J_relationship": 10,
+      "K_lore": 10,
+      "L_restricted": 20,
+      "M_ambiguous": 10,
+      "N_refusal": 20,
+      "O_departure": 20,
+      "P_player_physical": 10,
+      "Q_context_heavy": 20,
+      "R_retrieval_heavy": 20,
+      "S_reconciliation": 20,
+      "T_noop": 20,
+      "U_agency_offer": 20,
+      "V_agency_threat": 10,
+      "W_agency_follow": 20,
+      "X_secret_holder": 20,
+      "Y_left_behind": 20,
+      "Z_two_names": 10
+    },
+    "no_retry_vs_retry": {
+      "transient_provider_errors_observed": 0,
+      "retries_triggered": 0,
+      "provider_calls": 1243,
+      "conclusion": "No transient provider error occurred in 1,243 live provider calls, so live retry value is unmeasured: no improvement is claimed. The single no-retry failure (structured_output_invalid) is non-retryable by policy and would have failed identically with retry. Latency and success differences between configurations are within run-to-run noise."
+    },
+    "semantic_retrieval": {
+      "provider": {
+        "provider_id": "voyage",
+        "model_id": "voyage:voyage-4:1024",
+        "dimension": 1024,
+        "purpose": "production"
+      },
+      "index_builds": [
+        {
+          "audience": "narrator",
+          "documents": 206,
+          "milliseconds": 480663,
+          "requests": 13,
+          "tokens": 41779
+        },
+        {
+          "audience": "player",
+          "documents": 187,
+          "milliseconds": 480682,
+          "requests": 12,
+          "tokens": 39702
+        }
       ],
-      "recommended_order": [
-        "1. --no-retry --runs 5 (pre-change baseline)",
-        "2. default retry --runs 5",
-        "3. unstable/critical scenarios --runs 15-20",
-        "4. --semantic with VOYAGE_API_KEY"
-      ]
+      "voyage_usage": {
+        "requests": 26,
+        "input_texts": 441,
+        "total_tokens": 81593,
+        "responses_with_usage": 26
+      },
+      "note": "Voyage account rate-limited unpaced runs (3 RPM class); --paced-voyage used. Turn-level semantic retrieval was not exercised live for the same reason.",
+      "metrics": {
+        "lexical": {
+          "cases": 44,
+          "top1": "32/34",
+          "recall_at_3": 0.851063829787234,
+          "recall_at_5": 0.8723404255319149,
+          "mrr_at_5": 0.9509803921568628,
+          "multi_answer_recall_at_3": 0.5384615384615384,
+          "multi_answer_recall_at_5": 0.6153846153846154,
+          "failing_queries": [
+            "pirate city",
+            "church investigators",
+            "magic specializations",
+            "slave market border",
+            "slave trade West",
+            "where do pirates operate?"
+          ]
+        },
+        "semantic": {
+          "cases": 44,
+          "top1": "27/34",
+          "recall_at_3": 0.9148936170212766,
+          "recall_at_5": 0.9148936170212766,
+          "mrr_at_5": 0.8676470588235294,
+          "multi_answer_recall_at_3": 0.8461538461538461,
+          "multi_answer_recall_at_5": 0.8461538461538461,
+          "failing_queries": [
+            "capital of West",
+            "iron coal mining",
+            "mages guild",
+            "church investigators",
+            "legendary rare magic",
+            "legal slave port",
+            "slave market border",
+            "slave trade West",
+            "city on the border with Center"
+          ]
+        },
+        "hybrid": {
+          "cases": 44,
+          "top1": "32/34",
+          "recall_at_3": 0.8936170212765957,
+          "recall_at_5": 0.9574468085106383,
+          "mrr_at_5": 0.9632352941176471,
+          "multi_answer_recall_at_3": 0.6923076923076923,
+          "multi_answer_recall_at_5": 0.8461538461538461,
+          "failing_queries": [
+            "church investigators",
+            "slave trade West",
+            "city on the border with Center"
+          ]
+        }
+      }
+    },
+    "human_review": {
+      "reviewer": "Claude (model), not a human; excerpt-based (≤400 characters per flagged turn), 282 excerpts across 570 turns",
+      "restricted_canon_leakage": {
+        "confirmed": 0,
+        "checks": "fixture sentinel absent in 570/570 narrations; Korvin restricted background terms absent in all market excerpts; non-holders (Brenna, Gerome) never disclose Maren's secret in 20 L samples; holder Maren deflects in 20 X samples",
+        "limitation": "fixture secret is a sentinel token, so paraphrase leakage is weakly exercised"
+      },
+      "unsupported_nicco_actions": {
+        "audit_detected": 22,
+        "delivered_after_audit": 0,
+        "committed": 0,
+        "regex_candidates_reviewed": [
+          "H_late_naming#3.2",
+          "I_household#4.0",
+          "Y_left_behind#5.1",
+          "B_movement#8.0"
+        ],
+        "regex_false_positives": 4
+      },
+      "identity_continuity": {
+        "failures": 1,
+        "cases": [
+          "soak H_late_naming run 6 turn 2: narrator introduced an auburn-haired caged woman; the purchase committed register_character + set_legal_status + transfer_person (a newly registered person, not the pre-registered Brenna) while narration said 'She's not part of this'; next turn the purchased woman names herself Brenna (probable duplicate identity)"
+        ],
+        "minor": [
+          "Brenna's hair colour drifts across runs (brown/dark/auburn) and one run invents a fresh bruise; appearance is not authored for the created character"
+        ]
+      },
+      "wrong_location_assertions": {
+        "movement_turns": 120,
+        "completed": 119,
+        "movement_committed": 0,
+        "detail": "B/C/D/Y/O inputs ('I leave the room and go downstairs…', 'I go down to…', 'Come with me… let's go down…', 'carry her down to…', 'Gerome, you may go now') never commit player movement, follower movement or departure; narration describes the move anyway and the audit does not flag player location. Deterministic grammar matches only '/go', 'go to', 'I go to', 'I go downstairs to' (verified offline). Controller move_character/leave_scene proposals are rejected (evidence_path_not_supported_for_command 19, no_completed_departure 17)."
+      },
+      "phantom_co_movement": {
+        "observed": 0,
+        "note": "Y left-behind: 40/40 turns keep Brenna, Gerome and Maren upstairs; C follower narration not excerpted"
+      },
+      "wrong_persistent_state_claims": {
+        "purchase_narration_commit_divergence": "1/20 H purchase turns (the identity case above)",
+        "declined_sales": "consistent: narration refuses sale where no price was named, nothing committed"
+      }
+    },
+    "safety_totals": {
+      "wrong_committed_state": 1,
+      "confirmed_secret_leaks": 0,
+      "unsupported_nicco_committed_actions": 0,
+      "identity_continuity_failures": 1,
+      "narration_state_location_divergence_turns": "119 completed movement turns with no movement committed"
+    },
+    "h1_todo_live_frequency": {
+      "attributable": false,
+      "note": "diagnostics carry issue kinds, not sentences; indicators: uncommitted_condition 32 turns (clusters in no-action scenarios T/U/Q, consistent with the first-name-condition TODO), asserts_uncommitted_transfer 33 (mostly S two-item handover), invented_source 1 (H price). No TODO is demonstrated to be a major failure source; none fixed."
+    },
+    "cost": {
+      "openrouter": {
+        "provider_calls": 1243,
+        "attempts": 1244,
+        "tokens": {
+          "narrator_prompt": 2596485,
+          "narrator_completion": 108231,
+          "controller_prompt": 2453646,
+          "controller_completion": 10519,
+          "narrator_calls_with_usage": 674,
+          "controller_calls_with_usage": 569,
+          "avg_per_turn": {
+            "narrator_prompt": 4555.236842105263,
+            "narrator_completion": 189.87894736842105,
+            "controller_prompt": 4304.642105263158,
+            "controller_completion": 18.45438596491228
+          }
+        },
+        "estimated_usd": 1.5363642368
+      },
+      "voyage": {
+        "requests": 26,
+        "tokens": 81593,
+        "failed_unpaced_attempt": "1 run aborted on rate_limit before results",
+        "estimated_usd": "< 0.01"
+      }
     }
   },
   "deterministic": {
@@ -181,25 +1927,53 @@
     "after_bound": 121.5
   },
   "fallback_decisions": {
-    "narrator": "deferred",
-    "controller": "deferred",
-    "model": "deferred"
+    "narrator": "not needed: 100% narrator availability (674 calls)",
+    "controller": "not needed: 99.9% (1 structured_output_invalid in 569 calls)",
+    "model": "not implemented: bounded retry was never exercised and availability did not require it",
+    "controller_invalid_output_retry": "still deferred: 1 occurrence in 569 calls is insufficient evidence"
   },
   "targets": {
-    "turn_success_ge_98pct": "not measured",
-    "controller_parse_ge_99pct": "not measured",
-    "wrong_committed_state_0": "0 in offline injection (not live)",
-    "secret_leak_0": "not measured live",
-    "redaction_lt_5pct": "not measured",
-    "reconciliation_lt_15pct": "not measured",
-    "transient_recovered_ge_90pct_injected": "100% (50/50 single-transient injected turns)",
-    "exactly_one_commit_under_retry": "100% (0 turns with >1 commit; 0 commits on failure)"
+    "turn_success_ge_98pct": "met: 99.82% (570 turns); retry-enabled 100.0% (395)",
+    "controller_parse_ge_99pct": "met: 99.82%",
+    "wrong_committed_state_0": "NOT met: 1 probable (H_late_naming soak run 6, duplicate captive purchase)",
+    "secret_leak_0": "met (0 confirmed; excerpt-based model review)",
+    "redaction_lt_5pct": "NOT met: 6.3%",
+    "reconciliation_lt_15pct": "NOT met: 18.3%",
+    "transient_recovered_ge_90pct_injected": "100% (50/50 single-transient injected turns, offline)",
+    "transient_recovered_live": "not observable: 0 transient errors in 1,243 live calls",
+    "exactly_one_commit_under_retry": "100% offline; live: 0 turns with more than one commit"
   },
   "error_budget": {
-    "critical": 0,
-    "high": 0,
-    "medium": 0,
-    "low": 0,
-    "note": "counts cover offline injection only; no live defects could be classified"
+    "critical": 1,
+    "high": 1,
+    "medium": 2,
+    "low": 1,
+    "items": [
+      {
+        "severity": "critical",
+        "item": "probable duplicate-identity purchase committed (H soak run 6)",
+        "rate": "1/30 purchase turns"
+      },
+      {
+        "severity": "high",
+        "item": "narrated movement/departure never committed for common phrasings; audit does not flag player location",
+        "rate": "0/119 completed movement turns committed (B/C/D/O/Y)"
+      },
+      {
+        "severity": "medium",
+        "item": "reconciliation 18.3% and redaction 6.3% exceed targets",
+        "rate": "570 turns"
+      },
+      {
+        "severity": "medium",
+        "item": "household rule not proposed by controller",
+        "rate": "2/10 I_household turns"
+      },
+      {
+        "severity": "low",
+        "item": "created-character appearance drift across turns",
+        "rate": "qualitative"
+      }
+    ]
   }
 }

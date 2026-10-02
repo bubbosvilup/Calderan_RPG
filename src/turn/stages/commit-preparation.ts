@@ -4,6 +4,7 @@ import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext } from "../context-builder.js";
 import { contextRelevance } from "./intent.js";
 import { establishNames, type IdentityResolution } from "../name-establishment.js";
+import { contractCommands } from "../character-contracts.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 
@@ -29,9 +30,15 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
   readonly location_changed: boolean;
   readonly on_skip: (reason: string) => void }): CommitPlan {
   try {
+    const context = buildTurnContext(i.world, i.prepared.snapshot, contextRelevance(i.player_input, i.finalized));
     const resolved = establishNames([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", location_id: i.prepared.snapshot.runtime.scene.player_location }],
-      buildTurnContext(i.world, i.prepared.snapshot, contextRelevance(i.player_input, i.finalized)), i.world, i.prepared.snapshot, i.scene.participants, i.base_revision, { location_changed: i.location_changed });
-    const receipt = resolved.commands.length ? i.prepare({ expected_revision: i.base_revision, commands: [...i.commands, ...resolved.commands] }) : i.prepared;
+      context, i.world, i.prepared.snapshot, i.scene.participants, i.base_revision, { location_changed: i.location_changed });
+    const batch = [...i.commands, ...resolved.commands];
+    let receipt = resolved.commands.length ? i.prepare({ expected_revision: i.base_revision, commands: batch }) : i.prepared;
+    // NPC+ Pass 2: explicit self-descriptions of present active NPC+ in the DELIVERED narration become set-once campaign contracts,
+    // committed with the turn. A contract that cannot be prepared is dropped (observably), never the turn or its identity changes.
+    const contracts = contractCommands(i.delivered, context, i.prepared.snapshot);
+    if (contracts.length) try { receipt = i.prepare({ expected_revision: i.base_revision, commands: [...batch, ...contracts] }); } catch (error) { i.on_skip(`contracts: ${error instanceof Error ? error.message : String(error)}`); }
     return { receipt, identity: { promoted: resolved.promoted, named: resolved.named, skipped: resolved.skipped } };
   } catch (error) {
     // Unresolvable identity: do nothing rather than promote the wrong person; the turn still commits.

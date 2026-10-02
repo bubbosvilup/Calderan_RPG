@@ -1,0 +1,539 @@
+{
+ "before_h5_same_scenarios": {
+  "turns": 250,
+  "success_rate": 0.996,
+  "failures": {
+   "controller_failed": 1
+  },
+  "movement_turns": 99,
+  "movement_commits": 0,
+  "uncommitted_movement_turns": 0,
+  "uncommitted_movement_delivered": 0,
+  "purchase_turns": 30,
+  "purchases_committed": 21,
+  "new_person_registrations": [
+   "H_late_naming#6.2"
+  ],
+  "unexpected_commits": [
+   "H_late_naming#6.2:register_character"
+  ],
+  "secret_sentinel": 0,
+  "audit_issue_rate": 0.18072289156626506,
+  "reconciliation_rate": 0.18072289156626506,
+  "redaction_rate": 0.0321285140562249,
+  "issue_kinds": {
+   "asserts_uncommitted_transfer": 23,
+   "uncommitted_condition": 9,
+   "player_agency": 16,
+   "invented_source": 1,
+   "uncommitted_constraint": 1,
+   "private_player_fact": 1
+  },
+  "revision_issue_kinds": {
+   "uncommitted_condition": 6,
+   "asserts_uncommitted_transfer": 2
+  },
+  "controller": {
+   "proposed": 108,
+   "authorized": 0,
+   "rejected": 108
+  },
+  "latency_total": [
+   6080,
+   9562,
+   11404
+  ],
+  "tokens": {
+   "narrator_prompt": 1274029,
+   "narrator_completion": 48316,
+   "controller_prompt": 1180480,
+   "controller_completion": 7024,
+   "narrator_calls_with_usage": 295,
+   "controller_calls_with_usage": 249,
+   "avg_per_turn": {
+    "narrator_prompt": 5096.116,
+    "narrator_completion": 193.264,
+    "controller_prompt": 4721.92,
+    "controller_completion": 28.096
+   }
+  },
+  "estimated_usd": 0.7368726339999999,
+  "per_turn": {
+   "B_movement.0": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "player_agency": 8
+    },
+    "delivered": {
+     "draft": 12,
+     "revision": 8
+    },
+    "residual_movement": 0
+   },
+   "C_follower.0": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "asserts_uncommitted_transfer": 1
+    },
+    "delivered": {
+     "draft": 19,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "D_carrying.0": {
+    "n": 20,
+    "ok": 19,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 1,
+     "player_agency": 2,
+     "uncommitted_constraint": 1,
+     "asserts_uncommitted_transfer": 2
+    },
+    "delivered": {
+     "draft": 14,
+     "revision": 4,
+     "redacted": 1
+    },
+    "residual_movement": 0
+   },
+   "G_purchase.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 10
+    },
+    "residual_movement": 0
+   },
+   "G_purchase.1": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 1
+    },
+    "delivered": {
+     "draft": 9,
+     "redacted": 1
+    },
+    "residual_movement": 0
+   },
+   "G_purchase.2": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 10
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.0": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 2
+    },
+    "delivered": {
+     "draft": 18,
+     "redacted": 1,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.1": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "invented_source": 1,
+     "private_player_fact": 1
+    },
+    "delivered": {
+     "draft": 18,
+     "revision": 2
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.2": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 20
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.3": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 20
+    },
+    "residual_movement": 0
+   },
+   "O_departure.0": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 2
+    },
+    "delivered": {
+     "draft": 18,
+     "redacted": 1,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "S_reconciliation.0": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "asserts_uncommitted_transfer": 20,
+     "player_agency": 3
+    },
+    "delivered": {
+     "revision": 17,
+     "draft": 2,
+     "redacted": 1
+    },
+    "residual_movement": 0
+   },
+   "Y_left_behind.0": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "player_agency": 3,
+     "uncommitted_condition": 1
+    },
+    "delivered": {
+     "draft": 16,
+     "revision": 3,
+     "redacted": 1
+    },
+    "residual_movement": 0
+   },
+   "Y_left_behind.1": {
+    "n": 20,
+    "ok": 20,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 2
+    },
+    "delivered": {
+     "draft": 18,
+     "redacted": 2
+    },
+    "residual_movement": 0
+   }
+  }
+ },
+ "after_h5_1": {
+  "turns": 140,
+  "success_rate": 1,
+  "failures": {},
+  "movement_turns": 50,
+  "movement_commits": 50,
+  "uncommitted_movement_turns": 0,
+  "uncommitted_movement_delivered": 0,
+  "purchase_turns": 20,
+  "purchases_committed": 13,
+  "new_person_registrations": [],
+  "unexpected_commits": [],
+  "secret_sentinel": 0,
+  "audit_issue_rate": 0.2642857142857143,
+  "reconciliation_rate": 0.2642857142857143,
+  "redaction_rate": 0.05714285714285714,
+  "issue_kinds": {
+   "asserts_uncommitted_transfer": 10,
+   "absent_participant": 8,
+   "player_agency": 8,
+   "asserts_uncommitted_purchase": 1,
+   "uncommitted_condition": 12,
+   "invented_source": 1,
+   "uncommitted_departure": 1
+  },
+  "revision_issue_kinds": {
+   "uncommitted_condition": 6,
+   "player_agency": 2
+  },
+  "controller": {
+   "proposed": 51,
+   "authorized": 0,
+   "rejected": 51
+  },
+  "latency_total": [
+   6222,
+   9678,
+   12590
+  ],
+  "tokens": {
+   "narrator_prompt": 737159,
+   "narrator_completion": 28004,
+   "controller_prompt": 657102,
+   "controller_completion": 3795,
+   "narrator_calls_with_usage": 177,
+   "controller_calls_with_usage": 140,
+   "avg_per_turn": {
+    "narrator_prompt": 5265.421428571429,
+    "narrator_completion": 200.02857142857144,
+    "controller_prompt": 4693.585714285714,
+    "controller_completion": 27.107142857142858
+   }
+  },
+  "estimated_usd": 0.4259254516,
+  "per_turn": {
+   "B_movement.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 10,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "player_agency": 2
+    },
+    "delivered": {
+     "draft": 8,
+     "revision": 2
+    },
+    "residual_movement": 0
+   },
+   "C_follower.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 10,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "absent_participant": 8
+    },
+    "delivered": {
+     "draft": 2,
+     "revision": 7,
+     "redacted": 1
+    },
+    "residual_movement": 0
+   },
+   "D_carrying.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 10,
+    "npc_moved": 10,
+    "leave": 0,
+    "issues": {
+     "player_agency": 2,
+     "uncommitted_condition": 2
+    },
+    "delivered": {
+     "draft": 6,
+     "redacted": 2,
+     "revision": 2
+    },
+    "residual_movement": 0
+   },
+   "O_departure.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 10
+    },
+    "residual_movement": 0
+   },
+   "Y_left_behind.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 10,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 2,
+     "player_agency": 1
+    },
+    "delivered": {
+     "draft": 7,
+     "revision": 3
+    },
+    "residual_movement": 0
+   },
+   "Y_left_behind.1": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 10,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 4
+    },
+    "delivered": {
+     "draft": 6,
+     "redacted": 3,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "G_purchase.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 1
+    },
+    "delivered": {
+     "draft": 9,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "G_purchase.1": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "invented_source": 1
+    },
+    "delivered": {
+     "draft": 9,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "G_purchase.2": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 10
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_condition": 2
+    },
+    "delivered": {
+     "draft": 8,
+     "redacted": 1,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.1": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {},
+    "delivered": {
+     "draft": 10
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.2": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "uncommitted_departure": 1
+    },
+    "delivered": {
+     "draft": 9,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "H_late_naming.3": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "asserts_uncommitted_purchase": 1
+    },
+    "delivered": {
+     "draft": 9,
+     "revision": 1
+    },
+    "residual_movement": 0
+   },
+   "S_reconciliation.0": {
+    "n": 10,
+    "ok": 10,
+    "nicco_moved": 0,
+    "npc_moved": 0,
+    "leave": 0,
+    "issues": {
+     "asserts_uncommitted_transfer": 10,
+     "player_agency": 3,
+     "uncommitted_condition": 1
+    },
+    "delivered": {
+     "revision": 9,
+     "redacted": 1
+    },
+    "residual_movement": 0
+   }
+  }
+ }
+}

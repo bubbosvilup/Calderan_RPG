@@ -21,6 +21,8 @@ const LEAVE_TAIL = `(?=\\s+(?:the\\s+)?(?:inn|room|tavern|common room|building|p
 /** Completed exits. The actor phrase precedes the match and is resolved by the caller. */
 export const DEPART_ACT = new RegExp([
   `\\b${MOVE}\\s+(?:(?:his|her|their) way\\s+)?(?:[\\w']+\\s+){0,2}?(?:out(?:side)?\\b(?!\\s+(?:a|an|his|her|their|some|coins?|of|from)\\b)|out of the ${PLACE}\\b|through the (?:door|doorway)\\s+(?:and\\s+)?(?:into|out)\\b|into the (?:street|night|dark|darkness|rain|evening|cold|lane|alley)\\b|off into the\\b)`,
+  // H5.1: leaving by the stairs is a completed exit from the room ("heads downstairs", "goes down the stairs").
+  `\\b${MOVE}\\s+(?:(?:his|her|their) way\\s+)?(?:back\\s+)?(?:downstairs|upstairs|down the stairs|up the stairs)\\b`,
   `\\b(?:makes?|made)\\s+(?:his|her|their) way out\\b`,
   `\\b(?:takes?|took) (?:his|her|their) leave\\b`,
   `\\b(?:leaves|left|departs|departed|exits|exited)\\b${LEAVE_TAIL}`,
@@ -44,9 +46,13 @@ const namesOf = (context: TurnContext): Named[] => context.characters.map(c => {
 export function departureCandidates(context: TurnContext): readonly string[] {
   return context.characters.filter(c => c.id !== "nicco" && c.origin.kind === "created" && c.current.status !== "dead").map(c => c.id);
 }
-/** Narrated departures of present created characters, in narration order (at most one per character). */
-export function narratedDepartures(narration: string, context: TurnContext): readonly DepartureEvidence[] {
-  const candidates = departureCandidates(context);
+/**
+ * Narrated departures of present created characters, in narration order (at most one per character). H5.1: `scope: "persistent"`
+ * also detects present authored NPCs — for the narration audit only (an authored NPC cannot leave_scene, so narrating one gone is
+ * an unrecorded departure); authorization evidence keeps the default created-only scope.
+ */
+export function narratedDepartures(narration: string, context: TurnContext, scope: "created" | "persistent" = "created"): readonly DepartureEvidence[] {
+  const candidates = scope === "created" ? departureCandidates(context) : context.characters.filter(c => c.id !== "nicco" && c.current.status !== "dead").map(c => c.id);
   if (!candidates.length) return [];
   const people = namesOf(context);
   const anyName = new RegExp(`\\b(${people.flatMap(p => p.terms).map(esc).join("|") || "(?!)"})\\b`, "g");

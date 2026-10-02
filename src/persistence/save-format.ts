@@ -2,7 +2,7 @@ import type { WorldStore } from "../world/world-store.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { dataSchema, freezeSnapshot, validateId } from "../campaign/validation.js";
-import { DatasetCompatibilityError, requireVersionOne, validateCampaignSnapshot } from "../campaign/snapshot-validation.js";
+import { DatasetCompatibilityError, requireCurrentSnapshotVersion, validateCampaignSnapshot } from "../campaign/snapshot-validation.js";
 import { CampaignSaveError, saveError } from "./errors.js";
 import { MAX_SAVE_BYTES, parseSaveJson } from "./strict-json.js";
 import { migrateSave } from "./save-migrations.js";
@@ -10,15 +10,16 @@ import { canonReferences, checkCanonReferences, type CanonReference } from "./ca
 import { parseCampaignSnapshot } from "../campaign/validation.js";
 
 export interface CampaignSaveFile {
-  format: "caldrevan_campaign_save"; schema_version: 2;
+  format: "caldrevan_campaign_save"; schema_version: 3;
   campaign_id: string; canonical_dataset_id: string;
   metadata: { saved_at: string; created_at?: string; engine_version?: string };
   snapshot: CampaignSnapshot;
   canon_compatibility: "strict" | "references";
   canon_references?: readonly CanonReference[];
 }
-/** Legacy shape accepted by the migration dispatcher. */
-export type CampaignSaveFileV1 = Omit<CampaignSaveFile, "schema_version" | "canon_compatibility" | "canon_references"> & { schema_version: 1 };
+/** Legacy shapes accepted by the migration dispatcher (their snapshots are schema 1, without premium_characters). */
+export type CampaignSaveFileV1 = Omit<CampaignSaveFile, "schema_version" | "canon_compatibility" | "canon_references" | "snapshot"> & { schema_version: 1; snapshot: unknown };
+export type CampaignSaveFileV2 = Omit<CampaignSaveFile, "schema_version" | "snapshot"> & { schema_version: 2; snapshot: unknown };
 /** Lowercase snake_case plus Windows device-name exclusion; no user filenames. */
 export function validateSaveId(input: unknown): string {
   let id: string; try { id = validateId(input, "campaign_id"); } catch { throw new CampaignSaveError("invalid_id"); }
@@ -33,7 +34,7 @@ const timestamp = (value: unknown): string => {
   return value;
 };
 /** Shape first; snapshot validation has its own schema/version/reference boundary. */
-const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(2, 2), campaign_id: validateSaveId,
+const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(3, 3), campaign_id: validateSaveId,
   canonical_dataset_id: text, metadata: object({ saved_at: timestamp, created_at: optional(timestamp), engine_version: optional(text) }), snapshot: (input: unknown) => input,
   canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList) });
 export function validateSaveFile(input: unknown, world: WorldStore, expectedCampaignId?: string): DeepReadonly<CampaignSaveFile> {
@@ -42,7 +43,7 @@ export function validateSaveFile(input: unknown, world: WorldStore, expectedCamp
     const file = envelope(migrated, "save") as CampaignSaveFile;
     if (!/^sha256:[a-f0-9]{64}$/.test(file.canonical_dataset_id)) throw new CampaignSaveError("invalid_save");
     if (expectedCampaignId !== undefined && file.campaign_id !== expectedCampaignId) throw new CampaignSaveError("invalid_save");
-    requireVersionOne(file.snapshot);
+    requireCurrentSnapshotVersion(file.snapshot);
     const parsed = parseCampaignSnapshot(file.snapshot);
     if (parsed.campaign_id !== file.campaign_id || parsed.dataset_id !== file.canonical_dataset_id) throw new CampaignSaveError("invalid_save");
     if (file.canon_compatibility === "references") {
@@ -63,7 +64,7 @@ export function decodeSave(text: string, world: WorldStore, expectedCampaignId?:
 export function createSaveFile(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, savedAt: string, createdAt = savedAt): DeepReadonly<CampaignSaveFile> {
   // A write may never manufacture compatibility evidence for a campaign bound to another world.
   try { validateCampaignSnapshot(snapshot, world); } catch (error) { throw saveError(error); }
-  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 2, campaign_id: snapshot.campaign_id,
+  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 3, campaign_id: snapshot.campaign_id,
     canonical_dataset_id: snapshot.dataset_id, metadata: { saved_at: savedAt, created_at: createdAt }, snapshot, canon_compatibility: "references", canon_references: canonReferences(snapshot, world) }, world);
 }
 /** Called only after validation; sorts object keys, preserves all array order and missing fields. */

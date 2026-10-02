@@ -17,8 +17,12 @@ import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf 
 import type { RecentExchange } from "./recent-conversation.js";
 import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
 import { narratedDepartures } from "./scene-departure.js";
+import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { readScene } from "./narrated-captives.js";
+import { resolveDestination } from "./natural-actions.js";
+import { characterLocation, narratedMovements, persistentCharactersAt } from "./character-movement.js";
+import { activeNpcPlus } from "../campaign/premium-characters.js";
 
 /**
  * Live NPC Regression Repair 1: deterministic narration audit. Bounded checks over the draft narration against the resolved
@@ -27,8 +31,9 @@ import { readScene } from "./narrated-captives.js";
  * deterministic fallback. See docs/architecture/TURN_COORDINATOR.md (Repair 1).
  */
 export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
-  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase";
-export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly correction: string }
+  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase" | "uncommitted_movement";
+/** H5.1: `location` is the authoritative place of the character an uncommitted_movement issue is about (display name). */
+export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly location?: string; readonly correction: string }
 export interface NarrationAuditInput {
   /** Pass 1.2: the turn's base revision (the projected context's revision is already past it when runtime commands exist). */
   readonly base_revision?: number;
@@ -41,6 +46,8 @@ export interface NarrationAuditInput {
   readonly recent?: readonly RecentExchange[];
   /** Runtime Continuity Repair 1: serialized authoritative context (state + retrieved canon) that may supply prices or procedures. */
   readonly authoritative_text?: string;
+  /** H5.1: where Nicco was before this turn (defaults to the prepared location: no movement this turn). */
+  readonly origin?: string;
 }
 
 const STOP = new Set(["nicco", "is", "a", "an", "the", "to", "this", "that", "from", "of", "and", "in", "on", "was", "he", "his", "came", "come"]);
@@ -66,7 +73,10 @@ const ABSENCE = /\b(?:had|gone|left|leaving|empty|vacated|absence|absent|earlier
 const STAFF = /\b((?:one of (?:the |her |his |[a-z]+'s )|the |a |an |her |his |its |[a-z]+'s |the inn's )(?:[\w-]+ )?(?:serving[- ](?:woman|man|girl|boy|lad|lass|maid|staff|wench)s?|servers?|waiters?|waitress(?:es)?|barmaids?|barm[ae]n|barkeeps?|bartenders?|pot-?boys?|cooks?|kitchen (?:boy|girl|hand|staff)s?|scullions?|stable ?boys?|bouncers?|doorm[ae]n|chambermaids?|maids?|staff|employees?|hired (?:man|hand|help)|serving staff))\b/i;
 /** Objects falling or spilling ("the cup falls", "the latch fell back", "knocks over the mug") are not a person's condition. */
 const OBJECTS = "cup|mug|drink|glass|tankard|bowl|jug|bottle|plate|ale|stool|chair|coins?|latch|door|notebook|cloth|rag|dice|spoon|tray|bench|candle|lamp|hat|coat|bag|pack";
-const OBJECT_MOTION = new RegExp(`\\b(?:${OBJECTS})s?\\b[^.!?,;]{0,40}?\\b(?:falls?|fell|falling|topples?|toppled|tumbl\\w*|clatter\\w*|rolls?|rolled|spill\\w*|spilt|drip\\w*|pour\\w*|splash\\w*|slosh\\w*|drops?|dropped)\\b(?:[^.!?;]{0,60}?\\bto the (?:floor|ground))?|\\bknock\\w*\\s+(?:over\\s+)?(?:the |a |his |her |their |[a-z]+'s )?(?:[\\w']+ )?(?:${OBJECTS})s?\\b(?:\\s+over)?`, "gi");
+// NPC+ Pass 8: ambient scenery (light, shadow, dust…) "falling" across something is never a person's condition, even inside a sentence
+// a person leads ("He sets it down, so the light falls across the surface").
+const AMBIENT = "light|sunlight|moonlight|lamplight|firelight|candlelight|shadow|shade|glow|dust|ash|rain|snow|silence|quiet|hush|darkness|dusk|gloom";
+const OBJECT_MOTION = new RegExp(`\\b(?:${OBJECTS}|${AMBIENT})s?\\b[^.!?,;]{0,40}?\\b(?:falls?|fell|falling|topples?|toppled|tumbl\\w*|clatter\\w*|rolls?|rolled|spill\\w*|spilt|drip\\w*|pour\\w*|splash\\w*|slosh\\w*|drops?|dropped)\\b(?:[^.!?;]{0,60}?\\bto the (?:floor|ground))?|\\bknock\\w*\\s+(?:over\\s+)?(?:the |a |his |her |their |[a-z]+'s )?(?:[\\w']+ )?(?:${OBJECTS})s?\\b(?:\\s+over)?`, "gi");
 /** Remove restatements of a player-authored grab or shove on Nicco before the constraint check; escalations remain. */
 function withoutAuthoredContact(plain: string, authored: readonly PlayerAuthoredEvent[]): string {
   let text = plain;
@@ -210,8 +220,10 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   }
   const presentIds = new Set(context.characters.map(c => c.id));
   for (const e of world.getEntitiesByType("character")) {
-    if (e.role !== "npc" || presentIds.has(e.id) || e.name.length < 4) continue;
-    const hit = sentences.find(s => new RegExp(`\\b${esc(e.name)}\\b`).test(outside(s)));
+    // NPC+ Pass 1: an authored NPC+ whose narrated movement into this scene was authorized this turn is present in prepared state.
+    if (e.role !== "npc" || presentIds.has(e.id) || e.name.length < 4 || prepared.runtime.npc_locations.some(n => n.character_id === e.id && n.current_location === prepared.runtime.scene.player_location)) continue;
+    // NPC+ Pass 4: only PARTICIPATION by the absent character (acting, speaking, present), never a mere reference to them.
+    const hit = sentences.find(s => participatesInScene(s, [e.name]));
     if (hit) issues.push({ kind: "absent_participant", character: e.name, sentence: hit, correction: `${e.name} is not present in this scene. Remove them; only the people listed as present may act or speak.` });
   }
   // Runtime Continuity Repair 1: a created (temporary) character absent at turn start (it left, or was never here) may be
@@ -219,8 +231,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   for (const c of prepared.characters) {
     // Location Continuity Pass 1.3: someone whose move here commits this turn (carried or followed in) is not absent.
     if (c.origin.kind !== "created" || presentIds.has(c.id) || !c.profile.name || c.current.current_location === prepared.runtime.scene.player_location) continue;
-    const terms = [c.profile.name, ...c.profile.name.split(/\s+/).filter(t => t.length >= 4)].map(esc).join("|");
-    const hit = sentences.find(s => new RegExp(`\\b(?:${terms})\\b`).test(outside(s)) && !ABSENCE.test(outside(s)));
+    // NPC+ Pass 4: participation (acting, speaking, present), not a mention; remembering their exit stays allowed.
+    const names = [c.profile.name, ...c.profile.name.split(/\s+/).filter(t => t.length >= 4)];
+    const hit = sentences.find(s => participatesInScene(s, names) && !ABSENCE.test(outside(s)));
     if (hit) issues.push({ kind: "absent_participant", character: c.profile.name, sentence: hit, correction: `${c.profile.name} is no longer in this scene (they left earlier). Remove them as a present person: they do not sit, act, speak or react here. At most, others may refer to their earlier departure.` });
   }
   // Runtime Continuity Repair 1: unscaffolded staff acting in the scene (existing presence discipline, same issue kind).
@@ -257,8 +270,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
       issues.push({ kind: "uncommitted_constraint", sentence, correction: "Nicco is not restrained, held, removed, detained or banned: none of that is recorded. Characters may threaten, order or demand it in words, or start toward it, but do not narrate it as accomplished." });
   }
   // Runtime Continuity Repair 1: a temporary character narrated as gone must have a committed leave_scene (or the player wrote it).
+  // H5.1: authored NPCs too — they can never leave_scene, so narrating one gone is always an unrecorded departure.
   const left = new Set(committed.flatMap(c => c.kind === "leave_scene" ? [c.character_id] : []));
-  for (const d of narratedDepartures(narration, context)) {
+  for (const d of narratedDepartures(narration, context, "persistent")) {
     if (left.has(d.character_id) || authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id)) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
   }
@@ -268,6 +282,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     || readScene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world).captives.some(c => !c.character_id);
   issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "", trade_negotiation: negotiation }));
   issues.push(...householdIssues(input, sentences, negotiation));
+  issues.push(...movementIssues(input, sentences));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
   const unique = new Map<string, AuditIssue>();
   for (const issue of issues) unique.set(`${issue.kind}|${issue.character ?? ""}|${issue.sentence}`, issue);
@@ -289,6 +304,8 @@ export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagn
     if (c.kind === "leave_scene") revision.push(`COMMITTED: ${name(c.character_id)} has left the scene and is no longer present.`);
   }
   for (const i of issues) if (i.kind === "uncommitted_departure" && i.character) revision.push(`NOT COMMITTED: ${i.character} has not left; they are still present in the scene.`);
+  // H5.1: authoritative whereabouts for every actor the draft moved without a recorded movement.
+  for (const line of new Set(issues.flatMap(i => i.kind === "uncommitted_movement" ? [`NOT COMMITTED: ${i.character ?? "Nicco"} did not move this turn and is at ${i.location}.`] : []))) revision.push(line);
   const asserted = issues.flatMap(i => i.item_id ? [{ kind: "transfer_item" as const, item_id: i.item_id }] : []);
   for (const c of [...evidence.player_intents, ...diagnostics.filter(d => !d.authorized).map(d => d.command), ...asserted]) {
     if (c.kind !== "transfer_item" || seen.has(c.item_id)) continue;
@@ -313,6 +330,51 @@ export function redactNarration(narration: string, issues: readonly AuditIssue[]
   const paragraphs = narration.split(/\n{2,}/).map(p => sentencesOf(p).filter(s => !flagged.has(s)).join(" ")).filter(p => p.trim());
   const stated = issues.some(i => i.kind === "asserts_uncommitted_transfer" || i.kind === "contradicts_committed_transfer" || i.kind === "false_premise") ? outcome : [];
   return [...paragraphs, ...(stated.length ? [stated.join(" ")] : [])].join("\n\n").trim() || outcome.join(" ") || "The moment passes.";
+}
+
+/**
+ * H5.1 movement backstop. Narration may not move a persistent actor that prepared state leaves elsewhere: Nicco narrated completing
+ * movement to (reaching, entering) a known location he is not at, or leaving the location he is still at; a persistent character
+ * (created or authored, in the scene Nicco is in or left) narrated completing movement to a concrete known location they are not at.
+ * Conservative: explicit "Nicco" (a bare "he" is never resolved), explicit travel phrases, destinations that resolve to one known
+ * location, quoted speech ignored, hedged/modal/planned/looking clauses ignored (GATES.movement_not_done). It only flags: the movement
+ * command is never created here; state stays authoritative.
+ */
+const NICCO_GO = /\bNicco\s+(?:\w+ly\s+)?(?:descends|descended|climbs|climbed|goes|went|walks|walked|heads|headed|steps|stepped|returns|returned|hurries|hurried|makes his way|made his way|comes|came|moves|moved|crosses|crossed|wanders|wandered|strides|strode)\b[^.;]*?\b(?:to|into|onto)\s+([^.;,]+)/i;
+const NICCO_ARRIVE = /\bNicco\s+(?:\w+ly\s+)?(?:reaches|reached|enters|entered|arrives (?:at|in)|arrived (?:at|in))\s+([^.;,]+)/i;
+const NICCO_LEAVE = /\bNicco\s+(?:\w+ly\s+)?(?:leaves|left|exits|exited)\s+([^.;,]+)/i;
+const PLACE_END = /\s+(?:with|while|as|and|where|before|after|still|alone|together|behind|below|above|without)\b.*$/i;
+function movementIssues(input: NarrationAuditInput, sentences: readonly string[]): AuditIssue[] {
+  const { context, world, prepared } = input;
+  const here = prepared.runtime.scene.player_location, origin = input.origin ?? here;
+  const display = (id: string | undefined) => id ? world.getEntity(id)?.display_name ?? id : "an unestablished place";
+  const within = (place: string, at: string | undefined) => !!at && (place === at || world.getAncestors(at).some(a => a.id === place));
+  const issues: AuditIssue[] = [];
+  for (const sentence of sentences) {
+    for (const clause of outside(sentence).split(/;|,\s*(?:but|while|though|although)\s+|\s+but\s+/)) {
+      for (const [re, leaving] of [[NICCO_GO, false], [NICCO_ARRIVE, false], [NICCO_LEAVE, true]] as const) {
+        const m = clause.match(re);
+        if (!m || GATES.movement_not_done.test(clause.slice(0, m.index! + m[0].length))) continue;
+        const place = resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world);
+        if (!place) continue;
+        const contradicts = leaving ? place === here && origin === here : !within(place, here);
+        if (contradicts && !issues.some(i => i.sentence === sentence && !i.character))
+          issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: leaving
+            ? `Nicco has NOT left ${display(here)}: no movement was recorded this turn. Keep him there; do not narrate him leaving or arriving anywhere else.`
+            : `Nicco did NOT go to ${display(place)}: no such movement was recorded this turn. He is at ${display(here)}; describe him there.` });
+      }
+    }
+  }
+  const movers = persistentCharactersAt(prepared, world, [...new Set([origin, here])]);
+  // NPC+ Pass 9: an implicit-destination follow by an active NPC+ is held to the same standard — unrecorded, it is flagged.
+  for (const m of narratedMovements(input.narration, movers, { origin, arrival: here }, context, world, activeNpcPlus(prepared))) {
+    const now = characterLocation(prepared, world, m.character_id);
+    if (now === m.location_id) continue;
+    const who = movers.find(x => x.id === m.character_id)!.names[0]!;
+    issues.push({ kind: "uncommitted_movement", character: who, sentence: m.source_sentence, location: display(now),
+      correction: `${who} did NOT go to ${display(m.location_id)}: that movement was not recorded. ${who} is still at ${display(now)}; Nicco's movement never brings anyone along. Do not narrate ${who} following, being brought or arriving there.` });
+  }
+  return issues;
 }
 
 const holderOf = (i: { readonly position: { readonly kind: string; readonly character_id?: string } }) => i.position.kind === "carried" || i.position.kind === "equipped" ? i.position.character_id : undefined;
