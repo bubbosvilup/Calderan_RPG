@@ -146,6 +146,8 @@ export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<Campa
   const active = activeNpcPlus(snapshot);
   const presentActive = snapshot.premium_characters.filter(p => active.has(p.character_id) && present.has(p.character_id)).map(p => p.character_id);
   const out: NpcPlusFragment[] = [];
+  // Pass 10: who the player's words mention, computed once per NPC+ (it was recomputed for every pair: O(P²) character lookups and regex builds).
+  const mentioned_by_input = new Map(snapshot.premium_characters.map(x => [x.character_id, new RegExp(`\\b${esc(nameOf(snapshot, world, x.character_id).split(/\s+/)[0]!)}\\b`, "i").test(input)] as const));
   for (const p of snapshot.premium_characters) {
     if (!active.has(p.character_id)) continue;
     const id = p.character_id, name = nameOf(snapshot, world, id), view = characterView(snapshot, world, id);
@@ -158,7 +160,7 @@ export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<Campa
     const edge = snapshot.relationships.find(e => e.from_character_id === id && e.to_character_id === "nicco")?.dimensions ?? {};
     const dims = (Object.keys(NPC_PLUS_VOCABULARY.dimensions) as RelationshipDimension[]).filter(d => edge[d] !== undefined);
     const latest = p.dynamic.recent_developments.at(-1)!;
-    const others = new Set(snapshot.premium_characters.map(x => x.character_id).filter(x => x !== id && new RegExp(`\\b${esc(nameOf(snapshot, world, x).split(/\s+/)[0]!)}\\b`, "i").test(input)));
+    const others = new Set(snapshot.premium_characters.map(x => x.character_id).filter(x => x !== id && mentioned_by_input.get(x)));
     const ranked = rankDevelopments(p.dynamic.recent_developments, input, others);
     const chrono = (n: number) => ranked.slice(0, n).sort((a, b) => p.dynamic.recent_developments.indexOf(a) - p.dynamic.recent_developments.indexOf(b));
     const refs = npcDeepSources(world, snapshot, id).filter(s => s.kind !== "history" && s.kind !== "contract" && s.kind !== "reflection").slice(0, NPC_PLUS_LIMITS.deep_refs).map(s => s.handle);

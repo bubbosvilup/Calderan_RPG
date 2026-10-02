@@ -1,0 +1,6 @@
+1964 sentences; 5 movement detections
+all3 maren->test_hall | Maren follows a step behind, pulling the door closed after her.
+maren_only maren->test_hall | Maren follows a step behind, pulling the door closed after her.
+all3 maren->test_hall | Maren follows a step behind, catching the door he left ajar and pulling it shut against the cooler air from the stairwell.
+maren_only maren->test_hall | Maren follows a step behind, catching the door he left ajar and pulling it shut against the cooler air from the stairwell.
+all3 gerome->test_hall | Gerome's heavy tread follows shortly after.

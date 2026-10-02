@@ -1,0 +1,5 @@
+characters= 30 npc+=30 present=5 | stage ms: intent 4.23 projection 0.19 prompt 0.35 auth 0.64 audit 3.21 commit_prep 3.33 commit 0.01 | buildTurnContext 2.18 packNpcPlus 1.42 reflectionDue(all) 0.055
+characters=200 npc+=60 present=5 | stage ms: intent 5.6 projection 0.42 prompt 0.19 auth 0.33 audit 4.5 commit_prep 5.31 commit 0.01 | buildTurnContext 5.26 packNpcPlus 4.83 reflectionDue(all) 0.078
+characters=200 npc+=100 present=5 | stage ms: intent 8.09 projection 0.44 prompt 0.16 auth 0.29 audit 4.49 commit_prep 8.23 commit 0 | buildTurnContext 7.49 packNpcPlus 6.94 reflectionDue(all) 0.212
+characters=500 npc+=100 present=5 | stage ms: intent 15.93 projection 0.89 prompt 0.17 auth 0.31 audit 9.85 commit_prep 14.06 commit 0.01 | buildTurnContext 13.22 packNpcPlus 11.17 reflectionDue(all) 0.229
+characters=500 npc+=200 present=5 | stage ms: intent 21.97 projection 0.86 prompt 0.16 auth 0.34 audit 8.67 commit_prep 21.25 commit 0 | buildTurnContext 21.18 packNpcPlus 18.54 reflectionDue(all) 0.777

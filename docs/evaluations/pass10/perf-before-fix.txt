@@ -1,0 +1,10 @@
+characters= 30 npc+= 3 present=5 | stage ms: intent 1.63 projection 0.17 prompt 0.36 auth 0.69 audit 3.97 commit_prep 1.74 commit 0.01 | buildTurnContext 0.56 packNpcPlus 0.16 reflectionDue(all) 0.011
+characters= 30 npc+=30 present=5 | stage ms: intent 8.67 projection 0.15 prompt 0.2 auth 0.38 audit 2.15 commit_prep 8.69 commit 0.01 | buildTurnContext 7.46 packNpcPlus 6.71 reflectionDue(all) 0.043
+characters=100 npc+= 3 present=5 | stage ms: intent 0.95 projection 0.27 prompt 0.15 auth 0.25 audit 3.18 commit_prep 1.06 commit 0 | buildTurnContext 0.59 packNpcPlus 0.16 reflectionDue(all) 0.002
+characters=100 npc+=30 present=5 | stage ms: intent 10.61 projection 0.25 prompt 0.15 auth 0.3 audit 3.04 commit_prep 10.56 commit 0 | buildTurnContext 9.73 packNpcPlus 9.48 reflectionDue(all) 0.028
+characters=500 npc+= 3 present=5 | stage ms: intent 2.05 projection 0.89 prompt 0.18 auth 0.28 audit 9.07 commit_prep 1.75 commit 0 | buildTurnContext 0.92 packNpcPlus 0.36 reflectionDue(all) 0.004
+characters=500 npc+=30 present=5 | stage ms: intent 24.54 projection 0.77 prompt 0.14 auth 0.26 audit 8.38 commit_prep 24.71 commit 0 | buildTurnContext 23.90 packNpcPlus 22.76 reflectionDue(all) 0.041
+characters=200 npc+=60 present=5 | stage ms: intent 51.8 projection 0.45 prompt 0.4 auth 0.8 audit 6.15 commit_prep 50.03 commit 0.01 | buildTurnContext 48.30 packNpcPlus 46.22 reflectionDue(all) 0.131
+characters=200 npc+=100 present=5 | stage ms: intent 139.71 projection 0.45 prompt 0.29 auth 0.41 audit 4.99 commit_prep 135.67 commit 0.01 | buildTurnContext 132.60 packNpcPlus 131.53 reflectionDue(all) 0.232
+characters=500 npc+=100 present=5 | stage ms: intent 264.88 projection 0.93 prompt 0.23 auth 0.37 audit 9.59 commit_prep 257.13 commit 0.01 | buildTurnContext 257.58 packNpcPlus 261.58 reflectionDue(all) 0.217
+characters=500 npc+=200 present=5 | stage ms: intent 878.61 projection 0.91 prompt 0.19 auth 0.35 audit 8.99 commit_prep 858.5 commit 0.01 | buildTurnContext 823.54 packNpcPlus 865.32 reflectionDue(all) 0.782

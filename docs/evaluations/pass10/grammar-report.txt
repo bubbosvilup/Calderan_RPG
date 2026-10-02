@@ -1,0 +1,23 @@
+positive/name (single NPC+): 4928 cases, 0 false negatives {}
+positive/name (two NPC+): 4928 cases, 0 false negatives {}
+positive/pronoun (one woman): 4928 cases, 0 false negatives {}
+positive-shaped/pronoun with two women (must fail closed): 4928 cases, 0 FALSE POSITIVES {}
+negative/name: 966 cases, 0 FALSE POSITIVES {}
+negative/pronoun: 966 cases, 0 FALSE POSITIVES {}
+non-mover: 28 cases, 0 FALSE POSITIVES {}
+  unsupported: Heavy footfalls marked Maren's descent.
+  unsupported: Maren came down the stairs after him.
+  unsupported: Maren went down after him.
+  unsupported: Maren joined him a moment later.
+  RECOGNISED: Maren trailed him down.
+  RECOGNISED: Maren followed Nicco down.
+  unsupported: Maren hurried after him.
+  unsupported: Maren slipped out and down after him.
+  unsupported: Maren fell in beside him.
+  unsupported: Maren's steps sounded on the stairs behind him.
+  unsupported: Maren followed him out of the room.
+  unsupported: Maren follows him around the corner.
+  unsupported: He heard Maren on the stairs behind him.
+  RECOGNISED: She followed.
+  unsupported: Maren chose to follow him.
+  unsupported: Maren decided to follow him down.

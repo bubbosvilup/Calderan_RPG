@@ -24,7 +24,9 @@ export interface ReflectionEvidence { readonly ref: string; readonly kind: Evide
   /** Events this evidence stands for (development 1; roll-up ≥2 when it consolidates ≥2 entries; state/canon/contract 0). */
   readonly events: number; readonly strong: boolean; readonly others: readonly string[];
   /** Proven episode starts, not the number of stored changes. Removed conditions never start another episode. */
-  readonly episodes?: readonly { readonly id: string; readonly condition?: string }[] }
+  readonly episodes?: readonly { readonly id: string; readonly condition?: string }[];
+  /** Pass 10: the source records only changes of place. Location moves show where someone went, never why or how they feel about it. */
+  readonly movement_only?: boolean }
 export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly { readonly ref: string; readonly kind: EvidenceKind; readonly text: string }[];
   readonly existing: readonly { readonly kind: ReflectionKind; readonly label: string; readonly text: string }[]; readonly timeout_ms?: number }
 export interface ReflectionProvider { reflect(request: ReflectionRequest): Promise<{ readonly text: string; readonly usage?: unknown; readonly model?: string }> }
@@ -67,13 +69,13 @@ export function reflectionEvidence(world: WorldStore, snapshot: DeepReadonly<Cam
   for (const s of npcDeepSources(world, snapshot, characterId)) {
     if (s.visibility !== "public") continue;
     if (s.kind === "history") { const e = JSON.parse(s.exact_payload) as Record<string, unknown>; out.push({ ref: s.handle, kind: "development", text: describeDevelopment(e, nameOf, characterId), events: 1, strong: false, others: [e.actor_id, e.other_id, e.holder_id].filter((x): x is string => typeof x === "string" && x !== characterId),
-      episodes: e.kind === "condition_removed" ? [] : [{ id: `revision:${e.revision}`, ...(e.kind === "condition_added" ? { condition: String(e.condition) } : {}) }] }); }
+      episodes: e.kind === "condition_removed" ? [] : [{ id: `revision:${e.revision}`, ...(e.kind === "condition_added" ? { condition: String(e.condition) } : {}) }], movement_only: e.kind === "moved" }); }
     else if (s.kind === "rollup") { const r = JSON.parse(s.exact_payload) as PremiumRollup;
       // Aggregate entries alone cannot prove recurrence: add+remove is two entries, one episode.
       const episodes = r.conditions.flatMap(c => Array.from({ length: Math.min(2, c.added) }, (_, i) => ({ id: `rollup:condition:${c.condition}:${i}`, condition: c.condition })));
       // General aggregate counts do not retain enough episode identity to license recurrence.
       out.push({ ref: s.handle, kind: "rollup", text: s.exact_payload, events: r.entries >= 2 ? 2 : r.entries, strong: r.entries >= 2,
-        others: [...new Set(r.relationships.flatMap(x => [x.actor_id, x.other_id]).filter(x => x !== characterId))], episodes }); }
+        others: [...new Set(r.relationships.flatMap(x => [x.actor_id, x.other_id]).filter(x => x !== characterId))], episodes, movement_only: r.entries > 0 && r.moves === r.entries }); }
     else if (s.kind === "contract") out.push({ ref: s.handle, kind: "contract", text: s.exact_payload, events: 0, strong: true, others: [] });
     else if (s.kind === "canon") out.push({ ref: s.handle, kind: "canon", text: s.exact_payload.slice(0, 600), events: 0, strong: false, others: [] });
   }
@@ -87,6 +89,7 @@ export const REFLECTION_SYSTEM = `You interpret existing evidence about ONE hous
 Kinds: stance (how they currently approach a person or situation), signature_pattern (a recurring behaviour across several events), shared_motif (a repeated object, phrase, ritual or place with relational meaning), emerging_role (a role visible through repeated behaviour), unresolved_tension (two supported tendencies that coexist).
 Rules: interpret the cited evidence only; never invent facts, events, backstory, secrets or motives the evidence does not show. Developments are recorded state changes, not observed scenes: do not claim who caused, proposed or initiated anything unless the evidence says so, and do not claim reliance, dependence or reciprocity the evidence does not state. A relationship entry is the feelings of its first-named person toward the second, never the reverse. Preserve contradictions: if evidence pulls two ways, write a tension instead of resolving it. Prefer behavioural meaning over generic personality adjectives. No diagnosis or trauma language. No romance or attraction inference. No claims that anything is complete, permanent or official. Cite only evidence refs from the envelope, exactly as given; a note without strong enough evidence must not be written. Output fewer notes rather than weak notes; zero notes is a valid answer.
 Recurring, repeated, repeatedly, often or habitual claims require at least two distinct recorded episodes. Adding a condition and later removing it is ONE episode, not two. Unrelated evidence does not establish repeated injury. Prefer useful interpretation beyond paraphrasing stored values.
+Do not state causes or motives ("because"), wants, enjoyment, beliefs or lessons learned, who authored a rule, or any inner state of Nicco: none of that is recorded. Changes of place show where someone went, not why or how they feel about it.
 Each note: kind, label (snake_case, at most 4 words), text (one sentence, at most 160 characters), evidence_refs (refs from the envelope), confidence (low, medium, high).`;
 export const REFLECTION_SCHEMA = {
   type: "object", additionalProperties: false, required: ["proposals"],
@@ -108,6 +111,17 @@ export function parseReflectionOutput(text: string): readonly unknown[] | undefi
 const KINDS = new Set(["stance", "signature_pattern", "shared_motif", "emerging_role", "unresolved_tension"]);
 /** Deterministic content policy: what a reflection may never claim (romance, diagnosis, hidden motive/backstory, absolute or official status). */
 const FORBIDDEN = /\b(?:love[sd]?|loving|in love|romantic\w*|romance|attract\w*|desire[sd]?|crush|lover|intimate\w*|sexual\w*|relian\w*|rel(?:y|ies|ied|ying) on|depend\w*|reciproc\w*|trauma\w*|traumati\w*|ptsd|depress\w*|anxiety disorder|disorder|diagnos\w*|psycholog\w*|secretly|secret\w*|deep down|subconscious\w*|childhood|backstory|hidden (?:motive|agenda|past)|because of (?:her|his|their) past|completely|totally|entirely|unconditionally|forever|will always|always will|officially|legally)\b/i;
+/**
+ * Pass 10 — claims no recorded evidence can support, found by an offline adversarial suite (tests/npc-plus-pass-10-reflection.test.ts):
+ * causes and motives ("because she fears…": developments record that something changed, never why), inner wants and enjoyment, learned
+ * beliefs, authorship of household rules, and any inner state of Nicco (his feelings belong to the player). Counter-examples that stay valid:
+ * "approaches Nicco with growing but cautious trust" (a recorded dimension), "has moved between the hall and the room several times".
+ */
+export const UNSUPPORTED_CLAIM = /\b(?:because|since (?:she|he|they)|due to|so that|in order to|as a result|which is why|that is why|enjoy\w*|likes|liked|prefers?|preferred|wants?|wanted|wish\w*|craves?|yearn\w*|eager\w*|longs? (?:for|to)|hop(?:es|ed|ing)|happily|gladly|delights?|learn(?:ed|t|s)|realiz\w+|believes?|believed|thinks?|came to (?:believe|see|understand)|(?:created|made|wrote|proposed|set|imposed|introduced|instituted|declared|started|initiated|authored)\s+(?:(?:the|a|her|his|their)\s+)?(?:household\s+)?rules?|rule[- ]?maker)\b|\bNicco(?:'s|’s)?\s+(?:feel\w*|trust\w*|affection|fear\w*|respect|love\w*|likes|liked|want\w*|believ\w*|think\w*|decid\w*|intend\w*|hope\w*|opinion)\b/i;
+/** Pass 10: a note is world data rendered into the narrator prompt; it never needs second-person address, meta words or an instruction to the reader. */
+export const INSTRUCTION_LIKE = /\b(?:ignore|disregard|forget|override|bypass)\b[^.]{0,40}\b(?:instructions?|prompts?|rules?|above|previous|earlier|system)\b|\b(?:system prompt|as an ai|language model|assistant|narrator|you (?:must|should|are|will|shall)|do not follow)\b|^\s*(?:move|send|take|give|free|sell|buy|teleport|make|let|have)\b/i;
+/** Pass 10: when every cited source is a change of place, any stance, attachment or comfort word is unsupported ("three moves show she likes accompanying Nicco"). */
+export const MOVEMENT_STANCE = /\b(?:devot\w*|loyal\w*|attach\w*|cling\w*|fond\w*|faithful\w*|protect\w*|comfort\w*|safe\w*|secure\w*|trust\w*|affection\w*|care[sd]?|caring|companion\w*|bond\w*|enthusias\w*|willing\w*)\b/i;
 const CONTRAST = /\b(?:but|while|yet|although|though|despite|even as|whereas|versus|vs)\b/i;
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 const RECURRING = /\b(?:recurr(?:ing|ent)|repeat(?:ed(?:ly)?|ing)?|often|habitual(?:ly)?)\b/i;
@@ -147,7 +161,7 @@ export function validateProposals(raw: readonly unknown[], catalog: readonly Ref
     const claim = `${q.label.replaceAll("_", " ")} ${q.text}`;
     if (RECURRING.test(claim) && distinctEpisodes(claim, ev) < 2) { rejected.push({ reason: "insufficient_distinct_episodes", proposal: p }); continue; }
     if (q.kind === "unresolved_tension" && !CONTRAST.test(q.text)) { rejected.push({ reason: "tension_without_contrast", proposal: p }); continue; }
-    if (FORBIDDEN.test(q.text)) { rejected.push({ reason: "forbidden_inference", proposal: p }); continue; }
+    if (FORBIDDEN.test(q.text) || UNSUPPORTED_CLAIM.test(claim) || INSTRUCTION_LIKE.test(q.text) || ev.every(e => e.movement_only) && MOVEMENT_STANCE.test(claim)) { rejected.push({ reason: "forbidden_inference", proposal: p }); continue; }
     // A named person must be the character, Nicco, or someone the cited evidence involves.
     const allowed = new Set(["nicco", character.id, ...ev.flatMap(e => e.others)]);
     const named = [...knownNames].filter(([, name]) => new RegExp(`\\b${esc(name)}\\b`).test(q.text)).map(([id]) => id);

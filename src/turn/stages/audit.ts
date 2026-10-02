@@ -7,6 +7,7 @@ import { projectKnowledgeAccess, type NarrativeKnowledgeAccess } from "../narrat
 import { relevanceSignals } from "../prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
+import { characterView } from "../../campaign/projections.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";
@@ -56,7 +57,8 @@ export function createNarrationAuditor(i: { readonly base_revision: number; read
     access,
     check: (narration, evidence) => auditNarration({ base_revision: i.base_revision, narration, context: i.context, world: i.world, access, evidence, diagnostics: i.diagnostics,
       committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, authoritative_text, ...(i.origin ? { origin: i.origin } : {}) }),
-    outcome: issues => outcomeLines(i.context, i.turn_evidence, i.diagnostics, i.authorized, i.prepared, issues, i.player_input),
+    outcome: issues => outcomeLines(i.context, i.turn_evidence, i.diagnostics, i.authorized, i.prepared, issues, i.player_input,
+      { person: id => characterView(i.prepared, i.world, id).profile.name ?? i.prepared.characters.find(c => c.id === id)?.origin_snapshot?.label, place: id => i.world.getEntity(id)?.display_name }),
   };
 }
 

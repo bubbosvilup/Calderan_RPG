@@ -1,0 +1,30 @@
+limits { cap: 32000, npc_plus_budget: 4000 }
+rich n=5 history=none                        {"ok":true,"authority":9969,"npc_plus":1033,"total":11014,"tiers":{"B":1,"C":4,"D":0},"omitted":1,"refs":0,"before":807,"after":807,"people":6}
+rich n=5 history=full                        {"ok":true,"authority":9970,"npc_plus":1247,"total":11229,"tiers":{"B":1,"C":4,"D":0},"omitted":1,"refs":0,"before":1019,"after":1019,"people":6}
+rich n=5 history=rollup                      {"ok":true,"authority":10045,"npc_plus":1443,"total":11500,"tiers":{"B":1,"C":4,"D":0},"omitted":1,"refs":5,"before":1215,"after":1215,"people":6}
+rich n=10 history=none                       {"ok":true,"authority":15529,"npc_plus":1693,"total":17234,"tiers":{"B":1,"C":9,"D":0},"omitted":1,"refs":0,"before":1452,"after":1452,"people":11}
+rich n=10 history=full                       {"ok":true,"authority":15530,"npc_plus":2090,"total":17632,"tiers":{"B":1,"C":9,"D":0},"omitted":1,"refs":0,"before":1849,"after":1849,"people":11}
+rich n=10 history=rollup                     {"ok":true,"authority":15680,"npc_plus":2487,"total":18179,"tiers":{"B":1,"C":9,"D":0},"omitted":1,"refs":10,"before":2245,"after":2245,"people":11}
+rich n=20 history=none                       {"ok":true,"authority":26669,"npc_plus":3004,"total":29685,"tiers":{"B":1,"C":19,"D":0},"omitted":1,"refs":0,"before":2742,"after":2742,"people":21}
+rich n=20 history=full                       {"ok":true,"authority":26670,"npc_plus":3771,"total":30453,"tiers":{"B":1,"C":19,"D":0},"omitted":1,"refs":0,"before":3509,"after":3509,"people":21}
+rich n=20 history=rollup                     {"ok":true,"authority":26970,"npc_plus":4152,"total":31134,"tiers":{"B":1,"C":17,"D":2},"omitted":3,"refs":18,"before":4305,"after":3893,"people":21}
+lean n=30 history=none                       {"ok":true,"authority":17070,"npc_plus":2439,"total":19521,"tiers":{"B":1,"C":29,"D":0},"omitted":1,"refs":0,"before":2157,"after":2157,"people":31}
+lean n=30 history=full                       {"ok":true,"authority":17071,"npc_plus":3576,"total":20659,"tiers":{"B":1,"C":29,"D":0},"omitted":1,"refs":0,"before":3294,"after":3294,"people":31}
+lean n=30 history=rollup                     {"ok":true,"authority":17521,"npc_plus":4193,"total":21726,"tiers":{"B":1,"C":25,"D":4},"omitted":5,"refs":26,"before":4490,"after":3918,"people":31}
+lean n=30 full history + all reflection caps {"ok":true,"authority":17071,"npc_plus":4254,"total":21337,"tiers":{"B":1,"C":24,"D":5},"omitted":6,"refs":0,"before":4668,"after":3978,"people":31}
+lean n=30 rollup+reflect+facts64+events32+know3+rules5 FAIL Turn failed: context_too_large
+rich n=10 rollup+reflect+facts64+events32+know3+rules5 {"ok":true,"authority":25933,"npc_plus":4118,"total":30063,"tiers":{"B":1,"C":7,"D":2},"omitted":3,"refs":32,"before":4719,"after":3877,"people":11}
+boundary lean (no profile, no items)    first failing n=65; last ok n=64; authority chars at last ok 31418 (~491/present NPC+), npc_plus there 220
+boundary rich (profile+2 items)         first failing n=25; last ok n=24; authority chars at last ok 31125 (~1297/present NPC+), npc_plus there 352
+boundary rich + 3 facts known each      first failing n=17; last ok n=16; authority chars at last ok 31750 (~1984/present NPC+), npc_plus there 220
+boundary rich + 5 rules                 first failing n=25; last ok n=24; authority chars at last ok 31389 (~1308/present NPC+), npc_plus there 220
+anatomy lean                       n=20 {"primary":2380,"characters":4271,"items":2,"facts":179,"knowledge":173,"scheduled_events":2,"player_profile":1629,"social":4109}
+anatomy rich profile               n=20 {"primary":2380,"characters":10391,"items":2,"facts":179,"knowledge":173,"scheduled_events":2,"player_profile":1629,"social":4109}
+anatomy +2 items each              n=20 {"primary":2380,"characters":4271,"items":7701,"facts":179,"knowledge":173,"scheduled_events":2,"player_profile":1629,"social":4109}
+anatomy +3 known facts each        n=20 {"primary":2380,"characters":4271,"items":2,"facts":3137,"knowledge":7797,"scheduled_events":2,"player_profile":1629,"social":4109,"projection":33}
+anatomy +5 rules                   n=20 {"primary":2380,"characters":4271,"items":2,"facts":179,"knowledge":173,"scheduled_events":2,"player_profile":1629,"social":4373}
+anatomy +32 events                 n=20 {"primary":2380,"characters":4271,"items":2,"facts":179,"knowledge":173,"scheduled_events":2049,"player_profile":1629,"social":4109,"projection":44}
+boundary lean, each present NPC+ knows  3 of the 32 shown facts: first failing n=32
+boundary lean, each present NPC+ knows  8 of the 32 shown facts: first failing n=20
+boundary lean, each present NPC+ knows 16 of the 32 shown facts: first failing n=12
+boundary lean, each present NPC+ knows 32 of the 32 shown facts: first failing n=7

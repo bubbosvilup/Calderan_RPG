@@ -97,7 +97,7 @@ export function concreteDestination(phrase: string, arrival: string, origin: str
     if (dest === arrival || world.getAncestors(arrival).some(a => a.id === dest)) return arrival;
     return world.getChildren(dest).some(e => e.type === "location") ? undefined : dest;
   }
-  return arrival !== origin && /^(?:the\s+)?(?:(?:tower|main|front|heavy|oak|wooden)\s+)?(?:door|doorway|threshold|inside|in|home|house|tower|room|hall)\b/i.test(cleaned) ? arrival : undefined;
+  return arrival !== origin && /^(?:the\s+)?(?:(?:tower|main|front|heavy|oak|wooden)\s+)?(?:door|doorway|threshold|inside|in|home|house|tower|room|hall)\b(?!\s+(?:of|to|at|into|from|next|beyond|across|near|by|on|under|behind\s+(?!him\b|them\b)|in\s+the)\b)/i.test(cleaned) ? arrival : undefined;
 }
 
 /**
@@ -154,14 +154,22 @@ const FOLLOW_VERB = "(?:follows|followed|trails|trailed|falls into step|fell int
 const STEP_NOUN = "(?:footsteps|steps|footfalls|tread|treads)";
 const STEP_VERB = "(?:follow|follows|followed|come after|comes after|came after|sound behind him|sounded behind him)";
 const FOLLOW_TAIL = /^(?:\s*(?:him|nicco|after(?: him| nicco)?|behind(?: him| nicco)?|a (?:step|few steps|pace|moment) (?:behind|later|after)|close behind|closely|at a distance|in silence|without a word|quietly|silently|slowly|wordlessly|shortly after|soon after|downstairs|upstairs|(?:down|up)(?: the (?:stairs|steps|staircase))?|out)\b)*\s*$/i;
+/** Clause openers before the follower: time ("A moment later,") or Nicco-relative place ("Behind him,"; Pass 10: the one live follow draft opened so). */
+const LEAD_IN = "(?:(?:(?:a moment|moments|a beat|seconds) later|after a (?:moment|pause|beat)|shortly after(?:ward)?|soon|(?:close |a step |a pace )?behind (?:him|nicco)|close behind|after (?:him|nicco)),?\\s+)?";
+/** What may NOT trail a dash after a follow: a self-correction or a stop ("follows him — no, she stays"). The richest shared veto (`disqualify`) is applied too. */
+const DASH_RETRACTS = /\b(?:stays?|stayed|waits?|waited|remains?|remained|lingers?|lingered|pauses?|paused|freezes?|froze|turns? back|turned back)\b/i;
+const DASH_PLACE = /\b(?:to|into|toward|towards|through|across|onto|inside|past|around|beside|near|along|over|under|by|at)\s+(?:the|a|an|her|his|their|its|nicco|[A-Z])/;
 function implicitFollows(clause: string, names: string, movable: readonly MovableCharacter[]): string | undefined {
-  const lead = new RegExp(`(?:^(?:(?:a moment|moments|a beat|seconds) later|after a (?:moment|pause|beat)|shortly after(?:ward)?|soon),?\\s+|^|\\band\\s+|\\bthen\\s+)(${names}|she|he)\\s+(?:(?:[a-z']+\\s+){1,3}?(?:and|then|and then)\\s+)?(?:\\w+ly\\s+)?${FOLLOW_VERB}\\b(.*)$`, "i");
-  const steps = new RegExp(`(?:^|\\band\\s+)(${names}|her|his)(?:'s)?\\s+(?:[a-z]+\\s+){0,2}?${STEP_NOUN}\\s+${STEP_VERB}\\b(.*)$`, "i");
+  const lead = new RegExp(`(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+)(${names}|she|he)\\s+(?:(?:[a-z']+,?\\s+){1,3}?(?:and|then|and then)\\s+)?(?:\\w+ly\\s+)?${FOLLOW_VERB}\\b(.*)$`, "i");
+  const steps = new RegExp(`(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+)(${names}|her|his)(?:'s)?\\s+(?:[a-z]+\\s+){0,2}?${STEP_NOUN}\\s+${STEP_VERB}\\b(.*)$`, "i");
   for (const re of [lead, steps]) {
     const m = clause.match(re);
     if (!m) continue;
-    const tail = m[2]!.split(/,|\s+(?:and|as|while|before|until|then)\s+/)[0]!.replace(/[.!…"”'\s]+$/, "");
-    if (!FOLLOW_TAIL.test(tail) || GATES.follow_not_done.test(clause)) continue;
+    const head = m[2]!.split(/,|\s*[—–]\s*|…|\s+(?:and|as|while|before|until|then)\s+/)[0]!, tail = head.replace(/[.!…"”'\s]+$/, "");
+    // What trails the follow-manner words (after a comma, conjunction, dash or ellipsis) must not retract or stop it ("follows him — no, she
+    // stays", "follows him, then stops at the top"); only a dash or ellipsis is additionally held to "no other destination".
+    const rest = m[2]!.slice(head.length), afterDash = m[2]!.split(/\s*[—–]\s*|…/).slice(1).join(" ");
+    if (!FOLLOW_TAIL.test(tail) || DASH_PLACE.test(afterDash) || DASH_RETRACTS.test(rest) || GATES.disqualify.test(rest) || GATES.follow_not_done.test(clause)) continue;
     const token = /^his$/i.test(m[1]!) ? "him" : m[1]!;
     return byName(movable, token) ?? (/^he$/i.test(token) ? undefined : byPronoun(movable, token));
   }
@@ -182,7 +190,7 @@ export function narratedMovements(narration: string, movable: readonly MovableCh
     { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:(?:him|nicco|after him|behind him|back|close behind)\\s+)*${STAIRS}${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: true },
     { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:is|was)\\s+(?:carried|brought|led)\\s+${TO}\\s+([^.;,]+)`, "i"), mover: 1, dest: 3, subject: true },
     { re: new RegExp(`\\b(?:reach|reaches|reached|arrive at|arrives at|arrived at|enter|enters|entered)\\s+([^,.;]+?),?\\s+(?:with\\s+)?(${names}|her|him)\\s+(?:still\\s+)?${HELD}`, "i"), mover: 2, dest: 1, subject: false },
-    { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:him\\s+|nicco\\s+)?(inside|in)\\b`, "i"), mover: 1, dest: 2, subject: true },
+    { re: new RegExp(`(?:^|\\band\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?${WALK}\\s+(?:him\\s+|nicco\\s+)?(inside|in)(?=\\s*(?:[,.;!?…—–]|$|\\s+(?:and|then|after|behind|as|while)\\b))`, "i"), mover: 1, dest: 2, subject: true },
   ];
   const out: CharacterMovement[] = [];
   for (const sentence of sentencesOf(narration)) {

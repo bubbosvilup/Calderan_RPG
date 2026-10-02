@@ -1,0 +1,56 @@
+[STATE PRECEDENCE]
+Current structured state is the present truth. Recent or historical conversation may contain stale descriptions; on conflict, follow the structured state and ignore the stale detail.
+Current equipment is authoritative. Do not remove, replace or contradict equipped items unless the player action or current state explicitly changes them.
+Characters use only the facts [CHARACTER KNOWLEDGE ACCESS] lists as usable for them.
+
+[CURRENT AUTHORITATIVE SCENE]
+Location: Main hall. The ground-floor hall, with a long table and a hearth.
+World minute: 101. Player mana: 100/100.
+Local ancestry and features: {"ancestry":[],"features":[]}
+[NICCO / PLAYER PROFILE]
+Narrator-facing truth about the player character, not NPC knowledge. Others may perceive only his observable appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.
+NARRATOR-ONLY (origin, arrival, magic, ownership and history below are never voiced, implied, guessed at or attributed to a source by a character without a CAN USE entry):
+The player character.
+Household: Home (owner). Household roles are controlled facts (H refs in [CHARACTER KNOWLEDGE ACCESS]), not public knowledge.
+[CURRENT AUTHORITATIVE CHARACTERS]
+Character Nicco (nicco): {"profile":{"name":"Nicco","aliases":[]},"current":{"current_location":"test_hall"},"canonical_awareness":[]}
+[PRESENT AND ABLE TO REACT]
+- Nobody besides Nicco.
+Only these people exist here besides unnamed ambient traffic described by the location. Any of them may react to a salient event; none must.
+[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]
+Legal ownership is not consent, loyalty or affection. Household membership is only what is listed here. Relationships describe current feelings; portray them consistently, and let them change only through what actually happens.
+Nicco's money: not tracked. Money changes only through committed transactions; never narrate a different amount.
+Household Home: keeper Nicco; members: Brenna (away), Maren (away).
+[NPC+ HOUSEHOLD CHARACTERS] Premium continuity for household members (portrayal guidance, not public knowledge). Authoritative state above wins on any conflict. Compact keys: core=personality traits, role=household role, N{…}=their relationship toward Nicco (0 none, L low, M moderate, H high; trust, wary=wariness, aff=affection, prot=protectiveness, resp=respect, fear, host=hostility, rom=romance), recent=latest household event, away=not in this scene, deep=[…]=recoverable background not shown.
+Brenna: core=?; role=?; N{}; recent=joined; away; deep=[npcmem:brenna:canon:entity]
+Maren: core=?; role=?; N{}; recent=joined; away; deep=[npcmem:maren:canon:entity,npcmem:maren:knowledge:campaign_fact_private_secret]
+[CURRENT EQUIPMENT]
+Visible carried/equipped items (ownership and positions are authoritative): [{"name":"boots","description":"A pair of sturdy boots.","id":"boots","origin":{"kind":"canonical","canonical_entity_id":"boots"},"owner_id":"nicco","position":{"kind":"carried","character_id":"nicco"}},{"name":"pink_cotton","description":"A pink cotton shirt.","id":"pink_cotton","origin":{"kind":"canonical","canonical_entity_id":"pink_cotton"},"owner_id":"nicco","position":{"kind":"carried","character_id":"nicco"}},{"name":"pink_fluffy","description":"A thick, fluffy pink shirt.","id":"pink_fluffy","origin":{"kind":"canonical","canonical_entity_id":"pink_fluffy"},"owner_id":"nicco","position":{"kind":"carried","character_id":"nicco"}},{"name":"pink_shorts","description":"A pair of pink shorts.","id":"pink_shorts","origin":{"kind":"canonical","canonical_entity_id":"pink_shorts"},"owner_id":"nicco","position":{"kind":"carried","character_id":"nicco"}},{"name":"ring","description":"A plain metal ring.","id":"ring","origin":{"kind":"canonical","canonical_entity_id":"ring"},"owner_id":"nicco","position":{"kind":"carried","character_id":"nicco"}}]
+Scheduled events: []
+
+[CHARACTER KNOWLEDGE ACCESS]
+Facts: F1 campaign_fact_bridge_closed "The eastern bridge is closed." | R1 retrieved canon "test_hall" (content in RETRIEVED CANON) | R2 retrieved canon "maren" (content in RETRIEVED CANON) | R3 retrieved canon "test_room" (content in RETRIEVED CANON) | H1 household "Nicco is owner of the household Home."
+Narration and Nicco (player): F1, R1, R2, R3, H1. Nicco's speech and decisions still belong to the player.
+A character may voice or act on only the facts listed CAN USE for them (believes/suspects/heard_rumor: only as belief, suspicion or rumor). DO NOT USE also covers hints, rumors, "everyone says" talk and claims that imply the fact; do not invent rumors or public talk to get around it. DO NOT USE is this turn's permission, not proof of ignorance: that character may ask, say they have not heard, or defer to someone who can use it.
+UNKNOWN IS NOT A RUMOR: when a character cannot use a fact, it is unknown to them, never something they heard. "People say", "I heard", "word is", "everyone knows", registries, records, reports, past meetings or sightings are sources; a character may cite one only when a CAN USE entry with that basis exists. Allowed instead: "I don't know", a question, or a guess explicitly framed as a guess and based only on what they can see or hear right now.
+
+[HARD CHARACTER CONSTRAINTS]
+No additional hard constraints established.
+
+[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]
+{"records":[{"kind":"entity","entity_id":"test_hall","type":"location","name":"Main hall","display_name":"Main hall","summary":"The ground-floor hall, with a long table and a hearth.","secret":false,"provenance":{"source_kind":"authored_canon","dataset_id":"sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f","entity_id":"test_hall","schema_version":1},"content":"The ground-floor hall, with a long table and a hearth.","tags":[],"features":[]}],"candidates":[{"kind":"entity","entity_id":"test_hall","type":"location","name":"Main hall","display_name":"Main hall","summary":"The ground-floor hall, with a long table and a hearth.","secret":false,"provenance":{"source_kind":"authored_canon","dataset_id":"sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f","entity_id":"test_hall","schema_version":1}},{"kind":"entity","entity_id":"maren","type":"character","name":"Maren","display_name":"Maren","summary":"A young woman staying in the tower.","secret":false,"provenance":{"source_kind":"authored_canon","dataset_id":"sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f","entity_id":"maren","schema_version":1}},{"kind":"entity","entity_id":"test_room","type":"location","name":"Observation room","display_name":"Observation room","summary":"A quiet upstairs room with a narrow bed, a small table and an arched window. Stairs lead down to the main hall.","secret":false,"provenance":{"source_kind":"authored_canon","dataset_id":"sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f","entity_id":"test_room","schema_version":1}}],"awareness":[{"id":"test_hall","narrator_access":true,"player_access":true,"known_by_present_npcs":[]},{"id":"maren","narrator_access":true,"player_access":true,"known_by_present_npcs":[]},{"id":"test_room","narrator_access":true,"player_access":true,"known_by_present_npcs":[]}],"unknown":false}
+
+[UNESTABLISHED DETAILS]
+Accessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.
+
+[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]
+[]
+
+[PLAYER ACTION ? Nicco]
+I go down to the main hall. Maren, come with me.
+Explicit player request: go to test_hall.
+Nicco leaves Observation room. Brenna stays there: do not have Nicco bring or carry them. Someone comes along only if they themselves clearly follow him, narrated explicitly.
+Nicco leaves Observation room for Main hall. Maren was invited to come along and decides freely whether to follow him: do not assume either choice. If someone follows, narrate that completed choice explicitly; if someone stays, narrate that instead. Do not have Nicco bring or carry anyone.
+
+[NARRATION TASK]
+Continue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.

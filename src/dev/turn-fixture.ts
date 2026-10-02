@@ -14,8 +14,10 @@ const FIXTURE_PROSE: Record<string, string> = {
   pink_shorts: "A pair of pink shorts.", brenna_boots: "Brenna's worn leather boots.", ironbound: "A guild of smiths.",
 };
 /** Noncanonical evaluation world. Never written under data/. */
-export function turnFixture(groundGarments = false, options: { readonly brennaKnowsBridge?: boolean; readonly ironboundKnownBy?: readonly string[] } = {}) {
-  const base = (id: string, name = id) => ({ id, name, display_name: name, parent: null, aliases: [], summary: FIXTURE_PROSE[id] ?? "", tags: [], search_context: "", content: FIXTURE_PROSE[id] ?? "", knowledge: { visibility: { narrator: true, player: true }, known_by: [] } });
+export function turnFixture(groundGarments = false, options: { readonly brennaKnowsBridge?: boolean; readonly ironboundKnownBy?: readonly string[]; readonly poison?: Readonly<Record<string, string>> } = {}) {
+  // Pass 10: `poison` appends adversarial text to an entity's canon (prompt-injection tests); never used by production.
+  const prose = (id: string) => `${FIXTURE_PROSE[id] ?? ""}${options.poison?.[id] ? ` ${options.poison[id]}` : ""}`;
+  const base = (id: string, name = id) => ({ id, name, display_name: name, parent: null, aliases: [], summary: prose(id), tags: [], search_context: "", content: prose(id), knowledge: { visibility: { narrator: true, player: true }, known_by: [] } });
   const entities: WorldEntity[] = [
     { ...base("test_room", "Observation room"), type: "location", features: [], connections: [{ target: "test_hall", description: "Downstairs", minutes: 1 }] },
     { ...base("test_hall", "Main hall"), type: "location", features: [], connections: [{ target: "test_room", description: "Upstairs", minutes: 1 }] },

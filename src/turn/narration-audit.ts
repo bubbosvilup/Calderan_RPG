@@ -290,8 +290,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
 }
 
 /** Authoritative outcome lines for the revision request and the fallback (plain statements of resolved state). */
-export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagnostics: readonly AuthorizationDiagnostic[], committed: readonly CampaignCommand[], prepared: DeepReadonly<CampaignSnapshot>, issues: readonly AuditIssue[] = [], player_input?: string): { readonly revision: readonly string[]; readonly prose: readonly string[] } {
-  const name = (id: string) => id === "nicco" ? "Nicco" : context.characters.find(c => c.id === id)?.profile.name ?? id;
+export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagnostics: readonly AuthorizationDiagnostic[], committed: readonly CampaignCommand[], prepared: DeepReadonly<CampaignSnapshot>, issues: readonly AuditIssue[] = [], player_input?: string,
+  labels?: { readonly person: (id: string) => string | undefined; readonly place: (id: string) => string | undefined }): { readonly revision: readonly string[]; readonly prose: readonly string[] } {
+  const name = (id: string) => id === "nicco" ? "Nicco" : context.characters.find(c => c.id === id)?.profile.name ?? labels?.person(id) ?? id;
   const itemName = (id: string) => context.items.find(i => i.id === id)?.name ?? prepared.items.find(i => i.id === id)?.name ?? id;
   const holder = (id: string) => { const i = prepared.items.find(x => x.id === id); return i && (i.position.kind === "carried" || i.position.kind === "equipped") ? i.position.character_id : undefined; };
   const revision: string[] = [], prose: string[] = [], seen = new Set<string>();
@@ -302,6 +303,8 @@ export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagn
     if (c.kind === "transfer_item") { seen.add(c.item_id); revision.push(`COMMITTED: ${name(c.owner_id!)} now owns and carries ${itemName(c.item_id)}.`); }
     if (c.kind === "set_condition") revision.push(`RECORDED: ${name(c.character_id)} has ${c.conditions.join(", ").replace(/_/g, " ")}.`);
     if (c.kind === "leave_scene") revision.push(`COMMITTED: ${name(c.character_id)} has left the scene and is no longer present.`);
+    // Pass 10: the draft's narrated follow/move was authorized and commits; a revision that does not know it can drop it (state moved, narration silent).
+    if (c.kind === "move_character") revision.push(`COMMITTED: ${name(c.character_id)} moved to ${labels?.place(c.location_id) ?? c.location_id} and is there now: keep that arrival (do not narrate ${name(c.character_id)} staying behind or being elsewhere).`);
   }
   for (const i of issues) if (i.kind === "uncommitted_departure" && i.character) revision.push(`NOT COMMITTED: ${i.character} has not left; they are still present in the scene.`);
   // H5.1: authoritative whereabouts for every actor the draft moved without a recorded movement.

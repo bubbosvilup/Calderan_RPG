@@ -45,6 +45,9 @@ export function leftBehindNotes(left: readonly MovableCharacter[], invited: read
   const staying = left.filter(m => !invited.includes(m.id)).map(m => m.names[0]!), asked = left.filter(m => invited.includes(m.id)).map(m => m.names[0]!);
   const notes: string[] = [];
   if (staying.length) notes.push(`Nicco leaves ${from}. ${staying.join(", ")} stay${staying.length === 1 ? "s" : ""} there: do not have Nicco bring or carry them. Someone comes along only if they themselves clearly follow him, narrated explicitly.`);
-  if (asked.length) notes.push(`Nicco leaves ${from} for ${to}. ${asked.join(", ")} ${asked.length === 1 ? "was" : "were"} invited to come along and ${asked.length === 1 ? "decides" : "each decide"} freely whether to follow him: do not assume either choice. If someone follows, narrate that completed choice explicitly; if someone stays, narrate that instead. Do not have Nicco bring or carry anyone.`);
+  // Pass 10: the arrival-scene state lists an invited NPC+ as "away" and the narrator has to treat unlisted people as nonexistent, so live
+  // GLM drafts misplaced them ("was not there to hear the invitation"). The note therefore states the PRE-TURN fact (they were with Nicco in
+  // the origin when he spoke) separately from the choice; "away" is explained as relative to the arrival only. It still decides nothing.
+  if (asked.length) notes.push(`Nicco leaves ${from} for ${to}. ${asked.join(", ")} ${asked.length === 1 ? "was" : "were"} invited to come along and ${asked.length === 1 ? "decides" : "each decide"} freely whether to follow him: do not assume either choice. Before this turn ${asked.join(", ")} ${asked.length === 1 ? "was" : "were"} in ${from} with Nicco and present when he spoke; an "away" or unlisted label for them above only means they are not in ${to} at this moment. If someone follows, they arrive in ${to} after Nicco: narrate that completed choice explicitly; if someone stays, narrate that instead. Do not have Nicco bring or carry anyone.`);
   return notes;
 }

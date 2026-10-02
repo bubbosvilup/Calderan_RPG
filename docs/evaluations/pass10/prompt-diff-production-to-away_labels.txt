@@ -1,0 +1,4 @@
+- Household Home: keeper Nicco; members: Brenna (away), Maren (away).
++ Household Home: keeper Nicco; members: Brenna (away), Maren (in Observation room).
+- Maren: core=?; role=?; N{}; recent=joined; away; deep=[npcmem:maren:canon:entity,npcmem:maren:knowledge:campaign_fact_private_secret]
++ Maren: core=?; role=?; N{}; recent=joined; in Observation room; deep=[npcmem:maren:canon:entity,npcmem:maren:knowledge:campaign_fact_private_secret]

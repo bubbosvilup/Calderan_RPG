@@ -1,4 +1,4 @@
-import { COERCION, CONDITIONAL, EPISTEMIC, INSTRUCTION, INTENT, MODAL, NEGATION, NEGATIVE_CONTRACTION, OBSERVATION, RECOLLECTION, REFUSAL, RETRACTION, TEMPORAL, TYPED_NEGATIVE_CONTRACTION, cueGate } from "./cues.js";
+import { COERCION, CONDITIONAL, EPISTEMIC, HABITUAL, INSTRUCTION, INTENT, MODAL, NEGATION, NEGATIVE_CONTRACTION, OBSERVATION, RECOLLECTION, REFUSAL, RETRACTION, TEMPORAL, TYPED_NEGATIVE_CONTRACTION, cueGate } from "./cues.js";
 
 /**
  * Hardening H1: the policy table of every deterministic "not a completed / asserted act" gate. One entry per call site; each was
@@ -78,18 +78,20 @@ export const GATES = Object.freeze({
   /**
    * character-movement.ts (NPC+ Pass 9) — implicit-destination following ("Maren follows him"), tested on the whole clause. The
    * movement_not_done cues minus `later` ("a moment later, Maren follows" is this turn), plus almost/nearly, refusal, recollection and
-   * other-day framing: a follow resolved to Nicco's same-turn arrival must be a completed act of this turn.
+   * other-day framing: a follow resolved to Nicco's same-turn arrival must be a completed act of this turn. Pass 10 adds HABITUAL cues
+   * ("usually follows him" is a tendency; the adverb slot of the follow grammar accepted any -ly word).
    */
   follow_not_done: cueGate({ cues: [could, would, should, might, may, can, will, N.wont, shall, I.plans, I.planning, I.planned, I.intends, I.wants, I.wanted, I.goingTo,
     I.aboutTo, I.readyTo, I.triesTo, I.triedTo, T.someday, E.maybe, E.perhaps, C.if, C.unless, C.whether, O.toward, O.towards, O.looks, O.looked, O.looking,
     O.glances, O.glanced, O.stares, E.imagines, I.thinks, I.promises, I.saysHell, not, never, noLonger, I.almost, I.nearly, ...Object.values(REFUSAL),
-    T.yesterday, T.earlier, T.ago, T.lastNight, T.tomorrow, R.remember, R.recall, R.usedTo], contraction: true, question: true }),
+    T.yesterday, T.earlier, T.ago, T.lastNight, T.tomorrow, R.remember, R.recall, R.usedTo, ...Object.values(HABITUAL)], contraction: true, question: true }),
   /**
    * follow-invitation.ts (NPC+ Pass 9) — a player sentence that is NOT an invitation to come along: negated, conditional, imagined,
-   * remembered, other-day, threatening or coercive. Modal requests ("would you come with me?") and questions remain invitations.
+   * remembered, other-day, threatening or coercive. Modal requests ("would you come with me?") and questions remain invitations. Pass 10:
+   * it reads player-TYPED text, so apostrophe-less "dont / doesnt / didnt / wont" veto like their apostrophed forms ("Maren, dont come with me").
    */
   invitation_not_offered: cueGate({ cues: [not, never, C.if, C.unless, C.wereTo, C.supposeAny, E.imagineAny, T.yesterday, T.earlier, T.ago, T.lastNight, T.tomorrow,
-    T.someday, T.oneDay, R.remember, R.recall, R.usedTo, I.threaten, ...Object.values(COERCION)], contraction: true }),
+    T.someday, T.oneDay, R.remember, R.recall, R.usedTo, I.threaten, ...Object.values(COERCION), TN.dont, TN.doesnt, TN.didnt, TN.wont], contraction: true }),
   /** person-transactions.ts — a purchase acceptance must be unhedged; price questions and deliberation are not acceptance. */
   transaction_hedge: cueGate({ cues: [C.if, E.maybe, E.perhaps, would, could, should, might, not, never, TN.dont, TN.wont, "how much", "let me (?:look|see|think)", I.thinking, I.considerAny],
     question: true }),

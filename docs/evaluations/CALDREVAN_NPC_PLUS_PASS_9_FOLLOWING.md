@@ -228,4 +228,8 @@ No NPC+ approached the 3-development trigger. Reflection rules, prompt, validati
 3. **Precision fix for the Nicco "creak underfoot / descends" condition flag,** if a small probe confirms it is recurring.
 4. **Keep relationship vocabulary, reflection and the domain model frozen** until following produces organic `moved` developments.
 
+## M. Pass 10 amendment (2026-10-02)
+
+The run reported above is complete (`npcplus9.summary.json`: `FINISHED`, 120 of 120 turns); the counts in G were re-extracted from it and match. Nothing above was rewritten. Pass 10 addresses debts K.1, K.2 and K.5: the "Behind him," recognition gap, the narrator's belief that invited NPC+ were absent (the `(away)` labels and the presence rule), and the `uncommitted_condition` flag, whose actual cause was "descends to the **ground**-floor hall". See [Pass 10](CALDREVAN_NPC_PLUS_PASS_10_OVERNIGHT_ASSURANCE.md).
+
 CALDREVAN NPC+ PASS 9 PARTIAL

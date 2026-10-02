@@ -92,6 +92,13 @@ export const COERCION = Object.freeze({
   must: "must", haveTo: "(?:have|has) to", orElse: "or else", order: "order\\w*", command: "command\\w*",
 });
 
+/** I. Habit (NPC+ Pass 10): "Maren usually follows him" is a tendency, not this turn's act. */
+export const HABITUAL = Object.freeze({
+  usually: "usually", normally: "normally", typically: "typically", generally: "generally", habitually: "habitually", frequently: "frequently", invariably: "invariably",
+  regularly: "regularly", routinely: "routinely", customarily: "customarily", ordinarily: "ordinarily", always: "always", often: "often", sometimes: "sometimes",
+  occasionally: "occasionally", asUsual: "as usual", whenever: "whenever", everyTime: "every time", eachTime: "each time",
+});
+
 /** Markers that live outside the whole-word group. */
 export interface CueGateSpec {
   readonly cues: readonly string[];

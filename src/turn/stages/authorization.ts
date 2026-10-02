@@ -38,7 +38,9 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   // NPC+ Pass 3 proposal recall: a completed narrated movement of an eligible mover (created, or active authored NPC+ — the `movable`
   // set) that the controller did not propose becomes a move_character PROPOSAL. Authorization is unchanged and still decides; a mover
   // already at that destination, a request, refusal, hesitation, membership or ownership yields no evidence and so no proposal.
-  const derived = turn_evidence.character_movements!.filter(m => !controllerProposal.some(c => c.kind === "move_character" && c.character_id === m.character_id)
+  // Pass 10: only a controller proposal for the SAME destination suppresses the derived one. A controller move to another place is rejected
+  // by authorization (the evidence names a different destination), and suppressing the derived proposal then lost a valid narrated follow.
+  const derived = turn_evidence.character_movements!.filter(m => !controllerProposal.some(c => c.kind === "move_character" && c.character_id === m.character_id && c.location_id === m.location_id)
     && characterLocation(i.projected, i.world, m.character_id) !== m.location_id).map(m => ({ kind: "move_character" as const, character_id: m.character_id, location_id: m.location_id }));
   const proposal = [...controllerProposal, ...derived];
   // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).

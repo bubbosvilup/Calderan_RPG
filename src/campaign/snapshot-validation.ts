@@ -134,6 +134,12 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
       historical(e.world_minute, "premium_characters.world_minute"); if (e.revision > s.revision) fail("premium_characters.revision", "future history");
     }
     for (const c of p.stable.contract_evidence ?? []) if (c.revision > s.revision) fail("premium_characters.contract_evidence", "future contract");
+    // Pass 10: history is chronological (the engine only appends), and a contract exists only through an explicit self-description
+    // (`establish_character_contract` always records its evidence; the cap of 64 evidence entries is above the 28 contracts possible).
+    p.dynamic.recent_developments.forEach((e, i) => { if (i > 0 && e.revision < p.dynamic.recent_developments[i - 1]!.revision) fail("premium_characters.recent_developments", "history out of order"); });
+    const evidenced = (field: string) => (p.stable.contract_evidence ?? []).filter(c => c.field === field).length;
+    if (p.stable.personality_contract !== undefined && !evidenced("personality") || p.stable.voice_contract !== undefined && !evidenced("voice") || p.stable.baseline_social_style !== undefined && !evidenced("social_style")
+      || (p.stable.moral_boundaries ?? []).length > evidenced("moral_boundary")) fail("premium_characters.stable", "contract without evidence");
     const r = p.dynamic.long_term;
     if (r) {
       if (r.first_revision > r.last_revision || r.last_revision > s.revision || !r.entries) fail("premium_characters.long_term", "invalid roll-up");

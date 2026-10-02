@@ -1,0 +1,27 @@
+type-or-runtime cycles: 28 (import type cycles are erased by the compiler)
+modules 159 edges 482
+cycles []
+campaign -> world: 6
+dev -> campaign: 16
+dev -> llm: 25
+dev -> persistence: 6
+dev -> retrieval: 34
+dev -> retrieval-eval: 1
+dev -> scene: 1
+dev -> turn: 46
+dev -> world: 12
+llm -> campaign: 1
+llm -> turn: 1
+persistence -> campaign: 7
+retrieval -> world: 8
+scene -> world: 3
+turn -> campaign: 18
+turn -> llm: 6
+turn -> retrieval: 4
+turn -> scene: 1
+turn -> world: 4
+world -> scene: 1
+NOTE llm-> src/llm/controller-schema.ts src/campaign/validation.ts
+NOTE llm-> src/llm/openrouter/reflection-provider.ts src/turn/reflection.ts
+coordinator imports reflection: false
+importers of reflection.ts: src/dev/eval-live-h5.ts, src/dev/eval-organic-reflection.ts, src/dev/play-turn.ts, src/llm/openrouter/reflection-provider.ts
