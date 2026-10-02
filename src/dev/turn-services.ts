@@ -12,8 +12,8 @@ import type { RecentContextMode } from "../turn/prompt-builder.js";
 import type { TurnDiagnosticsSink } from "../turn/turn-diagnostics.js";
 import type { ProviderRetryPolicy } from "../llm/retry.js";
 import type { EvidenceMode } from "../turn/evidence-authorization.js";
-export const NARRATOR_OUTPUT_TOKENS = 512;
-export const selectedModels = () => ({ narrator: process.env.OPENROUTER_NARRATOR_MODEL ?? DEFAULT_NARRATOR_MODEL, controller: process.env.OPENROUTER_CONTROLLER_MODEL ?? DEFAULT_CONTROLLER_MODEL });
+import { NARRATOR_OUTPUT_TOKENS, selectedModels } from "../app/provider-config.js";
+export { NARRATOR_OUTPUT_TOKENS, selectedModels };
 /** Evaluation-only narrator substitution. The controller model, policy and clients are never derived from these fields. */
 export interface NarratorOverride { readonly model?: string; readonly disable_reasoning?: boolean; readonly narrator_client?: OpenRouterClient; readonly controller_client?: OpenRouterClient; readonly recent_context?: RecentContextMode; readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly provider_retry?: ProviderRetryPolicy | false }
 export function narratorConfig(override: NarratorOverride = {}) {
