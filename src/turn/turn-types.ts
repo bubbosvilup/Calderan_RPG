@@ -26,7 +26,7 @@ export interface TurnResult {
   readonly authorization: readonly AuthorizationDiagnostic[]; readonly retrieval: RetrievalDiagnostic;
   readonly turn_evidence: TurnEvidence;
   /** Repair 1: the draft never reaches the user unaudited. `delivered` says which text was shown. */
-  readonly narration_reconciliation?: { readonly delivered: "draft" | "revision" | "redacted"; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly revision?: string; readonly revision_issues?: readonly AuditIssue[] };
+  readonly narration_reconciliation?: { readonly delivered: "draft" | "revision" | "redacted"; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly revision?: string; readonly revision_issues?: readonly AuditIssue[]; readonly repaired_arrivals?: readonly string[] };
   readonly narrator: GenerationMetadata; readonly controller: GenerationMetadata;
   readonly context_characters: Readonly<Record<string, number>>;
   /** Phase 1P: session-local scene participants for this turn (plan) and after narration (continuity capture). Never persisted. */

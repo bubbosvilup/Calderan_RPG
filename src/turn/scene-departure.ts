@@ -29,6 +29,19 @@ export const DEPART_ACT = new RegExp([
   `(?:\\b(?:is|was|had been)\\s+|'s\\s+)(?:long\\s+)?gone\\b(?=\\s*(?:[.,;!—–-]|$)|\\s+(?:from|now|already|for good))`,
   `\\b(?:disappears?|disappeared|vanish(?:es|ed)?)\\s+(?:into|through|out)\\b`,
 ].join("|"), "i");
+/**
+ * Debt closure D-07 (audit only): a completed descent by the stairs with no destination ("crossed to the stairs and descended", "started down
+ * the stairs", "her footsteps receding down", "as she descended"). Used only when Nicco did not change place this turn, so a follower arriving
+ * after him is never read as a departure.
+ */
+const STAIRS_N = "(?:stairs?|staircase|stairwell|steps|stairhead|landing)";
+export const STAIR_EXIT = new RegExp([
+  `\\b(?:crosse[sd]?|goe?s|went|heads?|headed|walks?|walked|moves?|moved)\\s+(?:(?:the|across the)\\s+(?:room|floor)\\s+)?(?:to|toward|towards)\\s+the\\s+${STAIRS_N}\\s+and\\s+(?:descend\\w*|starts? down|started down|goes? down|went down|heads? down|headed down)\\b`,
+  `\\b(?:descends|descended|descending)\\s+(?:the\\s+${STAIRS_N}|out of (?:sight|view)|into the (?:main )?hall)\\b`,
+  `\\b(?:starts|started)\\s+down\\s+(?:the\\s+)?${STAIRS_N}\\b`,
+  `\\b(?:footsteps?|steps?|tread)\\s+(?:descend(?:s|ed|ing)?\\b|(?:reced(?:e|es|ed|ing)|fad(?:es|ed|ing)|retreat(?:s|ed|ing)?)\\s+(?:down|as (?:she|he|they) descend\\w*))`,
+  `\\bas (?:she|he) descend(?:s|ed)\\b`,
+].join("|"), "i");
 /** The door closing behind a person: the pronoun resolves to the nearest named subject. */
 const DOOR_BEHIND = /\bdoor\b[^.!?]{0,40}\b(?:shut|closed|closes|shuts|bang\w*|slam\w*|swung|swings|thud\w*)\b[^.!?]{0,20}\bbehind (?:him|her)\b/i;
 /** Hedges, negation, modality, intention and instruction frames: no completed departure (H1: "no word", "no warning" are not negation). */
@@ -49,9 +62,10 @@ export function departureCandidates(context: TurnContext): readonly string[] {
 /**
  * Narrated departures of present created characters, in narration order (at most one per character). H5.1: `scope: "persistent"`
  * also detects present authored NPCs — for the narration audit only (an authored NPC cannot leave_scene, so narrating one gone is
- * an unrecorded departure); authorization evidence keeps the default created-only scope.
+ * an unrecorded departure); authorization evidence keeps the default created-only scope. `every` (audit only, D-07): one entry per narrated sentence, so redaction removes every departure sentence. `stairs` (audit only, D-07): also reads a destination-less completed descent as a departure.
  */
-export function narratedDepartures(narration: string, context: TurnContext, scope: "created" | "persistent" = "created"): readonly DepartureEvidence[] {
+export function narratedDepartures(narration: string, context: TurnContext, scope: "created" | "persistent" = "created", options: { readonly every?: boolean; readonly stairs?: boolean } = {}): readonly DepartureEvidence[] {
+  const every = options.every ?? false;
   const candidates = scope === "created" ? departureCandidates(context) : context.characters.filter(c => c.id !== "nicco" && c.current.status !== "dead").map(c => c.id);
   if (!candidates.length) return [];
   const people = namesOf(context);
@@ -65,13 +79,26 @@ export function narratedDepartures(narration: string, context: TurnContext, scop
   };
   for (const sentence of sentencesOf(narration)) {
     const plain = blankQuotes(sentence).trim().replace(/^(?:then|finally|at last),?\s+/i, "");
-    const lead = people.find(p => new RegExp(`^(?:${p.terms.map(esc).join("|")})\\b(?!'s\\s+(?!gone\\b))`).test(plain));
+    // D-07: "Maren's gaze moved…" — a possessive body-part or expression subject is still that person ("Dell's patience is gone" stays excluded).
+    const lead = people.find(p => new RegExp(`^(?:${p.terms.map(esc).join("|")})(?:\\b(?!'s\\s+(?!gone\\b))|'s\\s+(?:gaze|eyes|face|expression|hand|hands|voice|head|attention|mouth|brow|shoulders?)\\b)`).test(plain));
     const pronounLead = plain.match(/^(he|she)\b/i);
     const subject = lead?.id ?? (pronounLead ? antecedent(pronounLead[1]!) : undefined);
-    const record = (id: string | undefined) => { if (id && candidates.includes(id) && !out.some(o => o.character_id === id)) out.push({ character_id: id, source_sentence: sentence }); };
+    const record = (id: string | undefined) => { if (id && candidates.includes(id) && (every ? !out.some(o => o.character_id === id && o.source_sentence === sentence) : !out.some(o => o.character_id === id))) out.push({ character_id: id, source_sentence: sentence }); };
     // The exit must be completed in its own clause.
     for (const clause of plain.split(/;|,\s*(?:but|while|as|though|although)\s+|\s+but\s+/)) {
       const act = DEPART_ACT.exec(clause);
+      const stair = options.stairs && !act ? STAIR_EXIT.exec(clause) : null;
+      if (stair && !NOT_DONE.test(clause.slice(stair.index, stair.index + stair[0].length))) {
+        const before = clause.slice(0, stair.index), named = [...before.matchAll(anyName)].at(-1), gap = named ? before.slice(named.index + named[0].length) : before;
+        const sound = /^(?:footsteps?|steps?|tread)/i.test(stair[0]);
+        if (sound && named && /^'s\s+(?:\w+\s+){0,2}$/.test(gap)) record(people.find(p => p.terms.includes(named[1]!))?.id);
+        else if (sound && /\b(?:her|his)\s+(?:\w+\s+){0,2}$/i.test(before)) record(named && !/\b[A-Z][a-z]+\b/.test(gap) ? people.find(p => p.terms.includes(named[1]!))?.id : antecedent(/\bher\b/i.test(before) ? "her" : "him"));
+        else if (!sound && named && !/^'s\s+\w/.test(gap) && !/\b[A-Z][a-z]+\b/.test(gap)) record(people.find(p => p.terms.includes(named[1]!))?.id);
+        else if (!sound && !named && /\b(?:he|she)\b/i.test(before)) record(subject ?? antecedent(/\bshe\b/i.test(before) ? "she" : "he"));
+        else if (!sound && !named && /,\s*(?:her|his)\s+(?:\w+\s+){0,2}$/i.test(before)) record(subject);
+      }
+      const noun = options.stairs && !act && !stair ? clause.match(/\b([A-Z][\w-]*)'s\s+(?:departure|exit)\b/) : null;
+      if (noun && !NOT_DONE.test(clause.slice(0, noun.index! + noun[0].length))) record(people.find(p => p.terms.includes(noun[1]!))?.id);
       if (act && !NOT_DONE.test(clause.slice(0, act.index + act[0].length))) {
         const before = clause.slice(0, act.index);
         const named = [...before.matchAll(anyName)].at(-1);

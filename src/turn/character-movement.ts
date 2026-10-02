@@ -151,29 +151,71 @@ export function resolvePlayerCarry(input: string, snapshot: DeepReadonly<Campaig
  * (him, behind, a step behind, down the stairs…), so "follows the conversation", "follows his reasoning" or "follows him to the
  * window" yield nothing; the whole clause must pass the shared `follow_not_done` gate (modal, negated, refused, gazing, other-day).
  */
-const FOLLOW_VERB = "(?:follows|followed|trails|trailed|falls into step|fell into step|comes after|came after|descends after|descended after|climbs after|climbed after|goes after|went after|walks after|walked after)";
+const FOLLOW_VERB = "(?:follows|followed|trails|trailed|falls into step|fell into step|comes after|came after|descends after|descended after|climbs after|climbed after|goes after|went after|walks after|walked after"
+  // Debt closure D-12: live and ornate follow verbs that assert a completed physical following.
+  + "|hurries after|hurried after|hastens after|hastened after|rushes after|rushed after|joins him|joined him|joins nicco|joined nicco|falls in (?:beside|behind) (?:him|nicco)|fell in (?:beside|behind) (?:him|nicco))";
 const STEP_NOUN = "(?:footsteps|steps|footfalls|tread|treads)";
 const STEP_VERB = "(?:follow|follows|followed|come after|comes after|came after|sound behind him|sounded behind him)";
 // Follow-recognition closure: manner/time tails taken verbatim from live production drafts ("at her own pace", "a pace or two behind",
 // "behind him on the stair", "a few moments after him"). Still manner only: no place, object or bare "later".
-const FOLLOW_TAIL = /^(?:\s*(?:him|nicco|after(?: him| nicco)?|behind(?: him| nicco| her)?|a (?:step|few steps|pace|moment) (?:behind|later|after)|close behind|closely|at a distance|in silence|without a word|quietly|silently|slowly|wordlessly|shortly after|soon after|downstairs|upstairs|(?:down|up)(?: the (?:stairs|steps|staircase))?|out|at (?:her|his|its|their) own pace|a pace or two behind|a few (?:paces|steps|strides) (?:behind|back)|(?:a few moments|moments) (?:later|after)|on the (?:stairs?|steps))\b)*\s*$/i;
+const FOLLOW_TAIL = /^(?:\s*(?:him|nicco|after(?: him| nicco)?|behind(?: him| nicco| her)?|a (?:step|few steps|pace|moment) (?:behind|later|after)|close behind|closely|at a distance|in silence|without a word|quietly|silently|slowly|wordlessly|shortly after|soon after|downstairs|upstairs|(?:down|up)(?: the (?:stairs|steps|staircase))?|out|at (?:her|his|its|their) own pace|a pace or two behind|a few (?:paces|steps|strides) (?:behind|back)|(?:a few moments|moments) (?:later|after)|on the (?:stairs?|steps)|first|at a (?:short|respectful|safe) distance|(?:a (?:moment|few moments|beat) )?after he (?:does|did|arrives|arrived|reaches (?:the )?[a-z]+(?: [a-z]+)?))\b)*\s*$/i;
 /**
  * Follow-recognition closure, DOWN-only forms (live production drafts): "Maren comes down the stairs a moment later", "Maren came down a
  * moment after", "Maren appears at the bottom step / of the stair". They name no follow verb, so they are accepted ONLY when Nicco's own
  * same-turn route is a proven pure descent (`routeDirection` === "DOWN"); then "down" and "the bottom of the stairs" can only mean his
  * arrival side. Same tail, gates and eligibility as every implicit follow.
  */
-const COME_DOWN = "(?:comes|came)\\s+down(?:\\s+the\\s+(?:stairs?|steps|staircase))?";
+const COME_DOWN = "(?:comes|came|goes|went)\\s+down(?:\\s+the\\s+(?:stairs?|steps|staircase))?";
 const APPEARS_BELOW = "(?:appears|appeared)\\s+at\\s+the\\s+(?:bottom|foot)\\s+(?:step|of\\s+the\\s+(?:stairs?|steps|staircase))";
+/**
+ * Debt closure D-12: a NAMED character's physical completed arrival at Nicco's same-turn arrival ("Gerome ducked through the doorframe and
+ * stepped into the hall", "Maren comes down into the hall a few paces behind", "Gerome descends the stairs", "Heavy footfalls marked
+ * Maren's descent"). Named subjects only; the destination must resolve to the arrival (never geography) or be a proven descent.
+ */
+const ARRIVE_MANNER = "(?:(?:\\w+ly\\s+)|(?:(?:ducks?|ducked)\\s+(?:\\w+ly\\s+)?(?:through|under)\\s+the\\s+\\w+\\s+(?:and\\s+)?)|(?:(?:rounds?|rounded)\\s+the\\s+\\w+\\s+and\\s+))*";
+const ARRIVE_VERB = "(?:steps?|stepped|walks?|walked|comes?|came|enters?|entered|arrives?|arrived|emerges?|emerged|lumbers?|lumbered|stomps?|stomped|appears?|appeared)";
+const ARRIVE_TAIL = /(?:\s+(?:a (?:step|few steps|pace|pace or two|few paces|moment|few moments|beat) (?:behind|later|after)(?: him| nicco| he does| he did)?|(?:a few moments|moments) (?:later|after)|close behind|behind (?:him|nicco)|after (?:him|nicco)|first))+$/i;
+const ARRIVE_VETO = /\b(?:usually|always|often|sometimes|never|rarely|typically|habitually|every|each|once|yesterday|tomorrow|later today|last (?:night|week|time|year)|memory|memories|dream\w*|imagin\w+|pretend\w*|at (?:dawn|dusk|night|noon|midnight|first light))\b/i;
+const ARRIVE_STOPS = /\b(?:stops|stopped|halts|halted|turns? back|turned back|retreats?|retreated|stays?|stayed|waits?|waited|remains?|remained|lingers?|lingered)\b(?!\s+(?:at|near|by)\s+the\s+(?:bottom|foot|base)\b)/i;
 /** Clause openers before the follower: time ("A moment later,") or Nicco-relative place ("Behind him,"; Pass 10: the one live follow draft opened so). */
 const LEAD_IN = "(?:(?:(?:a moment|moments|a beat|seconds) later|after a (?:moment|pause|beat)|shortly after(?:ward)?|soon|(?:close |a step |a pace )?behind (?:him|nicco)|close behind|after (?:him|nicco)),?\\s+)?";
 /** What may NOT trail a dash after a follow: a self-correction or a stop ("follows him — no, she stays"). The richest shared veto (`disqualify`) is applied too. */
 const DASH_RETRACTS = /\b(?:stays?|stayed|waits?|waited|remains?|remained|lingers?|lingered|pauses?|paused|freezes?|froze|turns? back|turned back)\b/i;
 const DASH_PLACE = /\b(?:to|into|toward|towards|through|across|onto|inside|past|around|beside|near|along|over|under|by|at)\s+(?:the|a|an|her|his|their|its|nicco|[A-Z])/;
-function implicitFollows(clause: string, names: string, movable: readonly MovableCharacter[], descent: boolean): string | undefined {
-  const lead = new RegExp(`(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+)(${names}|she|he)\\s+(?:(?:[a-z']+,?\\s+){1,3}?(?:and|then|and then)\\s+)?(?:\\w+ly\\s+)?${FOLLOW_VERB}\\b(.*)$`, "i");
+function implicitFollows(clause: string, names: string, movable: readonly MovableCharacter[], descent: boolean, isArrival: (phrase: string) => boolean, antecedent?: MovableCharacter, niccoNamed = false): string | undefined {
+  const pronoun = (token: string): string | undefined => {
+    const hit = /^he$/i.test(token) ? undefined : byPronoun(movable, token), want = /^(?:her|she)$/i.test(token) ? "female" : /^(?:him|he|his)$/i.test(token) ? "male" : undefined;
+    if (hit || !antecedent || !want || (antecedent.sex && antecedent.sex !== want) || (want === "male" && niccoNamed)) return hit;
+    return antecedent.id;
+  };
+  const lead = new RegExp(`(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+|\\bas\\s+)(${names}|she|he)\\s+(?:(?:[a-z']+,?\\s+){1,3}?(?:and|then|and then)\\s+)?(?:\\w+ly\\s+)?${FOLLOW_VERB}\\b(.*)$`, "i");
   const steps = new RegExp(`(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+)(${names}|her|his)(?:'s)?\\s+(?:[a-z]+\\s+){0,2}?${STEP_NOUN}\\s+${STEP_VERB}\\b(.*)$`, "i");
   const below = new RegExp(`(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+)(${names}|she|he)\\s+(?:\\w+ly\\s+)?(?:${COME_DOWN}|${APPEARS_BELOW})\\b(.*)$`, "i");
+  const start = `(?:^${LEAD_IN}|^|\\band\\s+|\\bthen\\s+)`;
+  const arrives = new RegExp(`${start}(${names})\\s+${ARRIVE_MANNER}${ARRIVE_VERB}\\s+(?:down\\s+(?:the\\s+(?:stairs?|steps|staircase|stairwell)\\s+)?)?(?:in)?to\\s+(.*)$`, "i");
+  const descends = new RegExp(`${start}(${names})\\s+(?:\\w+ly\\s+)?(?:descends|descended)\\s+(?:the\\s+(?:stairs?|steps|staircase|stairwell))?(.*)$`, "i");
+  const ducks = new RegExp(`${start}(${names})\\s+(?:ducks?|ducked)\\s+(?:\\w+ly\\s+)?(?:through|under)\\s+the\\s+\\w+\\s+at\\s+the\\s+(?:base|bottom|foot)\\s+of\\s+the\\s+(?:stairs?|steps|staircase|stairwell)(.*)$`, "i");
+  const marked = new RegExp(`\\b(?:footfalls|footsteps|tread|treads|steps)\\s+marked\\s+(${names})'s\\s+(descent)\\b(.*)$`, "i");
+  if (!ARRIVE_VETO.test(clause)) {
+    for (const re of [arrives]) {
+      const m = clause.match(re);
+      if (!m) continue;
+      const head = m[2]!.split(/,|\s*[—–]\s*|…|\s+(?:and|as|while|before|until|then)\s+/)[0]!.replace(/[.!…"”'\s]+$/, ""), rest = m[2]!.slice(head.length);
+      const place = head.replace(ARRIVE_TAIL, "");
+      if (!isArrival(place) || ARRIVE_STOPS.test(rest) || GATES.disqualify.test(rest) || GATES.follow_not_done.test(clause) || NOT_DONE.test(clause.slice(0, m.index! + m[0].length - m[2]!.length + place.length))) continue;
+      const who = byName(movable, m[1]!);
+      if (who) return who;
+    }
+    if (descent) for (const re of [descends, ducks, marked]) {
+      const m = clause.match(re);
+      if (!m) continue;
+      const after = re === marked ? m[3]! : m[2]!, head = after.split(/,|\s*[—–]\s*|…|\s+(?:and|as|while|before|until|then)\s+/)[0]!.replace(/[.!…"”'\s]+$/, "");
+      if (re !== ducks && !FOLLOW_TAIL.test(head.replace(ARRIVE_TAIL, "")) && head.trim()) continue;
+      if (ARRIVE_STOPS.test(after.slice(head.length)) || DASH_PLACE.test(after.split(/\s*[—–]\s*|…/).slice(1).join(" ")) || GATES.disqualify.test(after) || GATES.follow_not_done.test(clause)) continue;
+      const who = byName(movable, m[1]!);
+      if (who) return who;
+    }
+  }
   for (const re of descent ? [lead, steps, below] : [lead, steps]) {
     const m = clause.match(re);
     if (!m) continue;
@@ -185,11 +227,23 @@ function implicitFollows(clause: string, names: string, movable: readonly Movabl
     const afterDash = re === below ? (/^\s*(?:[—–]|…)/.test(rest) ? rest.replace(/^\s*(?:[—–]|…)\s*/, "").split(/,|\s*[—–]\s*|…/)[0]! : "") : m[2]!.split(/\s*[—–]\s*|…/).slice(1).join(" ");
     if (!FOLLOW_TAIL.test(tail) || DASH_PLACE.test(afterDash) || DASH_RETRACTS.test(rest) || GATES.disqualify.test(rest) || GATES.follow_not_done.test(clause)) continue;
     const token = /^his$/i.test(m[1]!) ? "him" : m[1]!;
-    return byName(movable, token) ?? (/^he$/i.test(token) ? undefined : byPronoun(movable, token));
+    return byName(movable, token) ?? pronoun(token);
   }
   return undefined;
 }
 
+/**
+ * Debt closure D-11: bounded pronoun antecedent. A pronoun-led follow ("She came down after him") resolves to the ONE movable character
+ * named in the previous sentence or earlier in the same sentence (quotes included, so an addressee counts as a competitor), and only when
+ * the previous sentence is not itself a refusal, stay or hesitation (DASH_RETRACTS and refusal words). Two movable names in that window ("Brenna looks at Maren. She follows
+ * him.") leave the pronoun unresolved; "he" additionally fails when Nicco is named in the window. No general coreference.
+ */
+function boundedAntecedent(previous: string | undefined, current: string, movable: readonly MovableCharacter[]): { antecedent?: MovableCharacter; nicco: boolean } {
+  const scope = `${previous ?? ""} ${current}`, named = (n: string) => new RegExp(`\\b${esc(n)}(?:'s)?\\b`, "i").test(scope);
+  const hits = movable.filter(m => m.names.some(named)), nicco = named("Nicco");
+  if (hits.length !== 1 || (previous && (DASH_RETRACTS.test(previous) || /\b(?:refus\w+|declin\w+|hesitat\w+|shook (?:her|his) head)\b/i.test(previous)))) return { nicco };
+  return { antecedent: hits[0]!, nicco };
+}
 /**
  * Completed movements of movable characters narrated this turn (at most one per character, first wins). `followers` (NPC+ Pass 9):
  * active NPC+ eligible for implicit-destination following — only when Nicco moved, only if not already at his arrival.
@@ -209,18 +263,20 @@ export function narratedMovements(narration: string, movable: readonly MovableCh
   const out: CharacterMovement[] = [];
   // Follow-recognition closure: DOWN-only follow forms need Nicco's same-turn route to be a proven descent (UNKNOWN/OTHER fail closed).
   const descent = where.origin !== where.arrival && followers.size > 0 && routeDirection(world, where.origin, where.arrival) === "DOWN";
-  for (const sentence of sentencesOf(narration)) {
+  const sentences = sentencesOf(narration);
+  for (const [at, sentence] of sentences.entries()) {
     const plain = blankQuotes(sentence).trim();
+    const { antecedent, nicco } = boundedAntecedent(sentences[at - 1], sentence, movable);
     for (const clause of plain.split(/;|,\s*(?:but|while|though|although)\s+|\s+but\s+/)) {
       for (const p of patterns) {
         const m = clause.match(p.re);
-        if (!m || NOT_DONE.test(clause.slice(0, m.index! + m[0].length))) continue;
+        if (!m || NOT_DONE.test(clause.slice(0, m.index! + m[0].length)) || ARRIVE_VETO.test(clause)) continue;
         const id = who(m[p.mover]!, p.subject);
         const location = id ? concreteDestination(m[p.dest]!, where.arrival, where.origin, context, world) : undefined;
         if (id && location && !out.some(o => o.character_id === id)) out.push({ character_id: id, location_id: location, source_sentence: sentence });
       }
       if (where.origin === where.arrival || !followers.size) continue;
-      const follower = implicitFollows(clause, names, movable, descent);
+      const follower = implicitFollows(clause, names, movable, descent, phrase => !!phrase.trim() && concreteDestination(phrase, where.arrival, where.origin, context, world) === where.arrival, antecedent, nicco);
       if (follower && followers.has(follower) && !context.characters.some(c => c.id === follower) && !out.some(o => o.character_id === follower))
         out.push({ character_id: follower, location_id: where.arrival, source_sentence: sentence });
     }

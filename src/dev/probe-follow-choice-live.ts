@@ -29,7 +29,7 @@ const args = process.argv.slice(2), flag = (n: string) => { const i = args.index
 const out = flag("--out") ?? "docs/evaluations/pass10/follow-choice-live.jsonl";
 const live = args.includes("--live"), samples = Number(flag("--samples") ?? 3), start = Number(flag("--sample-start") ?? 0);
 const budgetEur = Number(flag("--budget-eur") ?? 0.35), softStopEur = 0.30, eurPerUsd = Number(flag("--eur-per-usd") ?? 0.95);
-type Variant = "production" | "pass9_note" | "away_labels";
+type Variant = "production" | "pass9_note" | "away_labels" | "invited_label";
 const VARIANTS: readonly Variant[] = (flag("--variants")?.split(",") as Variant[] | undefined) ?? ["production", "pass9_note", "away_labels"];
 const INVITATIONS: readonly { readonly input: string; readonly invited: readonly string[] }[] = [
   { input: "I go down to the main hall. Maren, come with me.", invited: ["Maren"] },
@@ -67,6 +67,10 @@ function applyVariant(v: Variant, content: string, who: readonly string[]): stri
   if (v === "production") return content;
   if (v === "pass9_note") return content.split("\n").map(l => l.startsWith(`Nicco leaves ${FROM} for ${TO}. ${joinNames(who)} `) ? pass9Note(who) : l).join("\n");
   let s = content;
+  if (v === "invited_label") {
+    for (const name of who) s = s.replace(`${name} (away)`, `${name} (away from ${TO}; was in ${FROM} when invited)`).replace(new RegExp(`(${esc(name)}: [^\\n]*?); away;`), `$1; away from ${TO} (was in ${FROM} when invited);`);
+    return s;
+  }
   for (const name of who) s = s.replace(`${name} (away)`, `${name} (in ${FROM})`).replace(new RegExp(`(${esc(name)}: [^\\n]*?); away;`), `$1; in ${FROM};`);
   return s;
 }

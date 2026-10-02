@@ -28,7 +28,7 @@ export function assembleTurnResult(i: { readonly world: WorldStore; readonly bas
   const { delivery, narration, controller } = i, text = delivery.text;
   return { narration: text, base_revision: i.base_revision, final_revision: i.final_revision,
     controller_proposal: i.proposal, authorized_commands: i.commands, authorization: i.diagnostics, retrieval: i.retrieval.diagnostics, turn_evidence: i.turn_evidence,
-    narration_reconciliation: { delivered: delivery.delivered, draft: delivery.draft, issues: delivery.issues, ...(delivery.revision !== undefined ? { revision: delivery.revision, revision_issues: delivery.revision_issues } : {}) },
+    narration_reconciliation: { delivered: delivery.delivered, draft: delivery.draft, issues: delivery.issues, ...(delivery.revision !== undefined ? { revision: delivery.revision, revision_issues: delivery.revision_issues } : {}), ...(delivery.repaired_arrivals ? { repaired_arrivals: delivery.repaired_arrivals } : {}) },
     narrator: { model: narration.model, usage: narration.usage, latency: narration.latency }, controller: { model: controller.model, usage: controller.usage, latency: controller.latency },
     // knowledge_access measures the projection the audit used (pre-H2 recomputed it with identical arguments).
     context_characters: { system: NARRATOR_SYSTEM.length, primary_context: JSON.stringify(i.context).length, recent_conversation: JSON.stringify(i.recent).length,

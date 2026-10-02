@@ -114,7 +114,7 @@ export class TurnCoordinator {
       const sink = debugSink ? (record: TurnDebugRecord) => { try { debugSink(record); } catch { /* Optional debug emission. */ } } : undefined;
       const authorization = measure("authorization", () => authorizeTurn({ controller: proposed.result, intent, draft, context, projected, movable, origin, arrival, world: this.world,
         mode: this.promptOptions.evidence_authorization ?? "hybrid", sink, debug_base: { campaign_id: snapshot.campaign_id, base_revision, player_input } }));
-      observer?.authorization(authorization.diagnostics);
+      observer?.authorization(authorization.diagnostics, authorization.duplicates_removed);
       if (observer?.record.controller) observer.record.controller.parse_success = true;
       // Freeze before exposing events: consumers cannot edit commands between authorization and commit.
       yield freezeSnapshot({ type: "state_proposed" as const, diagnostics: structuredClone(authorization.diagnostics) }) as TurnEvent;

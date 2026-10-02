@@ -271,9 +271,13 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   }
   // Runtime Continuity Repair 1: a temporary character narrated as gone must have a committed leave_scene (or the player wrote it).
   // H5.1: authored NPCs too — they can never leave_scene, so narrating one gone is always an unrecorded departure.
+  // Debt closure D-07: a player-authored departure exempts only a CREATED character (its leave_scene is derivable). An authored NPC has no
+  // off-scene representation, so a destination-less exit is never narrated as done unless a committed move_character moved them elsewhere.
   const left = new Set(committed.flatMap(c => c.kind === "leave_scene" ? [c.character_id] : []));
-  for (const d of narratedDepartures(narration, context, "persistent")) {
-    if (left.has(d.character_id) || authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id)) continue;
+  const relocated = new Set(committed.flatMap(c => c.kind === "move_character" && c.location_id !== prepared.runtime.scene.player_location ? [c.character_id] : []));
+  for (const d of narratedDepartures(narration, context, "persistent", { every: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location })) {
+    const created = context.characters.find(c => c.id === d.character_id)?.origin.kind === "created";
+    if (left.has(d.character_id) || relocated.has(d.character_id) || (created && authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id))) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
   }
   // Pass 1.2: narrator-created captives of the scene (no legal record yet, ephemeral or promoted by name) are also an active trade.

@@ -1,0 +1,32 @@
+{
+  "model": "z-ai/glm-5.2",
+  "eur_per_usd": 0.95,
+  "rates_usd_per_token": {
+    "prompt": 4.1e-7,
+    "completion": 0.00000399
+  },
+  "calls": 5,
+  "spent_eur": 0.0094,
+  "by_variant": {
+    "production": {
+      "calls": 5,
+      "classes": {
+        "ABSENCE_CONTRADICTION": 0,
+        "FOLLOW": 1,
+        "REFUSAL": 0,
+        "STAY": 3,
+        "HESITATION": 0,
+        "AMBIGUOUS": 1,
+        "OTHER": 0
+      },
+      "false_absence_calls": 0,
+      "false_absence_rate": 0
+    }
+  },
+  "tokens": {
+    "input": 18510,
+    "output": 576
+  },
+  "latency_ms_p50": 3373,
+  "classification": "deterministic first pass; see report for human review"
+}

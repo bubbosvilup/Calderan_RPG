@@ -8,6 +8,7 @@ import { relevanceSignals } from "../prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 import { characterView } from "../../campaign/projections.js";
+import { escapeRegExp } from "../language/text.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";
@@ -35,6 +36,8 @@ export interface TurnDelivery {
   readonly revision?: string;
   /** Audit issues found in the revision ([] when none was requested). */
   readonly revision_issues: readonly AuditIssue[];
+  /** D-13: committed arrivals the revision (or its redaction) did not mention; one deterministic sentence each was appended to `text`. */
+  readonly repaired_arrivals?: readonly string[];
 }
 
 export interface NarrationAuditor {
@@ -44,6 +47,8 @@ export interface NarrationAuditor {
   check(narration: string, evidence: TurnEvidence): readonly AuditIssue[];
   /** Sync, pure: the authoritative outcome lines for a revision request and for redaction prose. */
   outcome(issues: readonly AuditIssue[]): { readonly revision: readonly string[]; readonly prose: readonly string[] };
+  /** D-13: authorized followers who arrived with Nicco this turn (they were not already in the arrival scene): committed state the text must not omit. */
+  arrivals(): readonly { readonly name: string; readonly place: string }[];
 }
 /** Sync. Failure mapping: the coordinator holds `campaign_validation_failed` (pre-H2 order). */
 export function createNarrationAuditor(i: { readonly base_revision: number; readonly context: TurnContext; readonly world: WorldStore; readonly retrieved: unknown;
@@ -59,6 +64,11 @@ export function createNarrationAuditor(i: { readonly base_revision: number; read
       committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, authoritative_text, ...(i.origin ? { origin: i.origin } : {}) }),
     outcome: issues => outcomeLines(i.context, i.turn_evidence, i.diagnostics, i.authorized, i.prepared, issues, i.player_input,
       { person: id => characterView(i.prepared, i.world, id).profile.name ?? i.prepared.characters.find(c => c.id === id)?.origin_snapshot?.label, place: id => i.world.getEntity(id)?.display_name }),
+    arrivals: () => {
+      const here = i.prepared.runtime.scene.player_location, place = i.world.getEntity(here)?.display_name ?? here, already = new Set(i.context.characters.map(c => c.id));
+      return [...new Map(i.authorized.flatMap(c => c.kind === "move_character" && c.location_id === here && !already.has(c.character_id)
+        ? [[c.character_id, { name: characterView(i.prepared, i.world, c.character_id).profile.name ?? i.prepared.characters.find(x => x.id === c.character_id)?.origin_snapshot?.label ?? c.character_id, place }] as const] : [])).values()];
+    },
   };
 }
 
@@ -77,6 +87,10 @@ export async function reconcileNarration(i: { readonly auditor: NarrationAuditor
   const revision = (await i.generate({ ...i.prompt, ...revisionRequest(i.prompt, i.draft, i.outcome.revision, i.issues) })).text;
   i.checkpoint();
   const revision_issues = i.auditor.check(revision, deriveTurnEvidence(i.intent, revision, i.context));
+  const text = revision_issues.length ? redactNarration(revision, revision_issues, i.outcome.prose) : revision;
+  // D-13: a committed arrival is state; if the revision or its redaction no longer mentions the mover, say so deterministically (never roll state back).
+  const omitted = i.auditor.arrivals().filter(a => !new RegExp(`\\b${escapeRegExp(a.name)}\\b`, "i").test(text));
+  const repaired_arrivals = omitted.map(a => `${a.name} has followed Nicco to ${a.place}.`);
   return { draft: i.draft, issues: i.issues, delivered: revision_issues.length ? "redacted" : "revision",
-    text: revision_issues.length ? redactNarration(revision, revision_issues, i.outcome.prose) : revision, revision, revision_issues };
+    text: repaired_arrivals.length ? `${text.trimEnd()} ${repaired_arrivals.join(" ")}`.trim() : text, revision, revision_issues, ...(repaired_arrivals.length ? { repaired_arrivals } : {}) };
 }

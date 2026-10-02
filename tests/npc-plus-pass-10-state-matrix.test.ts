@@ -70,7 +70,7 @@ for (const [label, commands] of Object.entries(CONTROLLERS)) for (const narratio
     assert.equal(r.moved("maren").length, follows ? 1 : 0, "exactly one authoritative move and one development");
     // Two identical controller proposals are both authorized (cosmetic: the second is a no-op at commit); the state change is single.
     const authorizedMoves = r.result!.authorized_commands.filter(c => c.kind === "move_character" && c.character_id === "maren").length;
-    assert.equal(authorizedMoves, follows ? (label === "duplicate" ? 2 : 1) : 0);
+    assert.equal(authorizedMoves, follows ? 1 : 0);
     assert.equal(r.result!.authorized_commands.some(c => c.kind === "leave_scene"), false);
     assert.equal(r.where("brenna"), "test_room");
   });

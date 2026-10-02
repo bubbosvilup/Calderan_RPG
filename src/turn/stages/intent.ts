@@ -89,6 +89,15 @@ export interface ProjectedTurn {
   readonly scene: SceneParticipantPlan;
 }
 
+/** D-15: names/aliases of every known character (canon and campaign) other than Nicco and the eligible NPC+, limited to those the input mentions. */
+function knownNamesIn(input: string, world: WorldStore, snapshot: IntentStageInput["snapshot"], except: readonly string[]): readonly string[] {
+  const text = input.toLowerCase(), names = new Set<string>();
+  const add = (id: string, ...labels: (string | undefined)[]) => { if (id !== "nicco" && !except.includes(id)) for (const l of labels) if (l && l.length > 1 && text.includes(l.toLowerCase())) names.add(l); };
+  for (const e of world.getEntitiesByType("character")) add(e.id, e.name, e.display_name, ...e.aliases);
+  for (const c of snapshot.characters) add(c.id, c.profile.name, ...(c.profile.aliases ?? []));
+  return [...names];
+}
+
 /**
  * Part 2 (failure mapping: `invalid_runtime_intent` when there are runtime effects — the coordinator sets it before calling —
  * otherwise `context_invalid`). Validate player-controlled runtime effects before spending tokens. The receipt is never committed:
@@ -104,7 +113,8 @@ export function projectTurnIntent(i: IntentStageInput, resolved: ResolvedIntent)
   const leftBehind = arrival === origin ? [] : movable.filter(m => characterLocation(projected, i.world, m.id) === origin);
   // NPC+ Pass 9: an explicitly invited active NPC+ gets a neutral follow choice; everyone else keeps the conservative stay note.
   const npcPlus = activeNpcPlus(projected), eligible = leftBehind.filter(m => npcPlus.has(m.id));
-  const invited = invitedFollowers(i.player_input, eligible, base_context.characters.filter(c => c.id !== "nicco" && !eligible.some(m => m.id === c.id)).map(c => c.profile.name ?? c.id));
+  const invited = invitedFollowers(i.player_input, eligible, base_context.characters.filter(c => c.id !== "nicco" && !eligible.some(m => m.id === c.id)).map(c => c.profile.name ?? c.id),
+    knownNamesIn(i.player_input, i.world, projected, eligible.map(m => m.id)));
   const prompt_intent: TurnIntent = leftBehind.length ? { ...intent, notes: [...intent.notes, ...leftBehindNotes(leftBehind, invited, i.world.getEntity(origin)?.display_name ?? origin, i.world.getEntity(arrival)?.display_name ?? arrival)] } : intent;
   const planned = context.primary.scene.player_location?.id === base_context.primary.scene.player_location?.id ? base_plan : i.plan(i.player_input, context);
   // A promoted person is now persistent: the temporary participant they were is retired, so nobody appears twice.

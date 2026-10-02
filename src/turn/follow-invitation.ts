@@ -16,11 +16,18 @@ const INVITE = /\b(?:come (?:with|along|and|back|up|down|too)|join (?:me|us)|fol
 const GROUP = /\b(?:anyone|anybody|everyone|everybody|all of you|both of you|either of you|you all|whoever)\b/i;
 const CONSENT = /\bif (?:you|she|he|they) (?:like|want|wish|prefer|feel up to it|'d like|would like|are up to it)\b/gi;
 
+const vocative = (sentence: string, name: string): boolean => {
+  const n = esc(name);
+  return new RegExp(`^\\W*${n}\\b|,\\s*${n}\\W*$|\\b${n}\\s*,|\\b${n}\\s+(?:come|join|follow|walk|keep|take)\\b`, "i").test(sentence);
+};
 /**
  * IDs of `eligible` (active NPC+ Nicco is leaving behind) explicitly invited to come along by the player's own words this turn.
  * `others`: names of other people present, so "Gerome, come with me" never reaches a different, sole eligible NPC+.
+ * `absent`: names/aliases of every other KNOWN character (present or not, eligible ones excluded). Unlike `others` (any mention), these only
+ * count when the sentence ADDRESSES them (vocative: leading "Brenna, ...", trailing ", Brenna", or "Brenna come ..."), so "come with me, we will
+ * look for Brenna" still reaches the sole eligible NPC+ while "Brenna, come with me" (Brenna absent) reaches nobody. D-15.
  */
-export function invitedFollowers(player_input: string, eligible: readonly MovableCharacter[], others: readonly string[] = []): readonly string[] {
+export function invitedFollowers(player_input: string, eligible: readonly MovableCharacter[], others: readonly string[] = [], absent: readonly string[] = []): readonly string[] {
   if (!eligible.length) return [];
   const named = (s: string) => eligible.filter(m => m.names.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(s))).map(m => m.id);
   const sentences = player_input.replace(/[*"“”]/g, " ").split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean);
@@ -30,7 +37,8 @@ export function invitedFollowers(player_input: string, eligible: readonly Movabl
     const here = named(sentence);
     // An unnamed "come with me" reaches the single eligible NPC+ only when the sentence names no other present person ("Gerome, come").
     const addressesOther = others.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(sentence));
-    const who = here.length ? here : GROUP.test(sentence) ? eligible.map(m => m.id) : addressesOther ? [] : eligible.length === 1 ? [eligible[0]!.id] : named(player_input);
+    const addressesAbsent = absent.some(n => vocative(sentence, n));
+    const who = here.length ? here : GROUP.test(sentence) ? eligible.map(m => m.id) : addressesOther || addressesAbsent ? [] : eligible.length === 1 ? [eligible[0]!.id] : named(player_input);
     for (const id of who) out.add(id);
   }
   return [...out];
