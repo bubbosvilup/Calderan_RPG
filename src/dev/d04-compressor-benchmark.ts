@@ -13,6 +13,7 @@ import { ContextBudgetManager } from "../turn/context-budget.js";
 import { NarratorContextCompactor, validateCompressionCandidate } from "../turn/context-compaction.js";
 import { COMPRESSION_SCHEMA_VERSION, COMPRESSION_POLICY_VERSION, contextHash, narratorPackOf, renderCandidateRequest, type KnowledgeUnit } from "../turn/narrator-pack.js";
 import type { GenerationMetadata } from "../llm/types.js";
+import { passiveResponseAudit,finishPassiveAudits } from "./passive-response-audit.js";
 
 export const BAKEOFF_MODELS = ["qwen/qwen3.8-flash", "openai/gpt-5.6-luna"] as const;
 type Artifact = ReturnType<typeof createBakeoffArtifact>;
@@ -142,12 +143,15 @@ export async function runD04CompressorBenchmark() {
     attempts.push({case:a.label,model:model.id,started_at:new Date().toISOString()});
     await writeFile(ledger,json(attempts),"utf8");
     let rawBody: Record<string,any> | undefined, httpStatus: number | undefined;
+    const auditWrites:Promise<void>[]=[];
     const client = new RecordingClient({fetch:async (url,init)=>{
       // Never serialize headers or credentials.
       await writeFile(resolve(out,`${stem}-request.json`),String(init?.body),"utf8");
       const result = await fetch(url,init); httpStatus=result.status;
-      const raw = await result.clone().text(); await writeFile(resolve(out,`${stem}-response.json`),raw,"utf8");
-      try { rawBody=JSON.parse(raw); } catch { /* malformed transport JSON is recorded verbatim */ }
+      auditWrites.push(passiveResponseAudit(result,async raw=>{
+        try { rawBody=JSON.parse(raw); } catch { /* malformed transport JSON is recorded verbatim */ }
+        await writeFile(resolve(out,`${stem}-response.json`),raw,"utf8");
+      }).catch(()=>{}));
       return result;
     }});
     const started=performance.now(); let response:CompressionResponse | undefined, error:string | undefined;
@@ -155,9 +159,11 @@ export async function runD04CompressorBenchmark() {
     const generation_ms=performance.now()-started;
     const evaluation=response ? evaluateBakeoffCandidate(a,response,generation_ms) : undefined;
     const cache=evaluation?.accepted ? await verifyBakeoffCache(a,live[i]!,model.id,response!) : null;
+    const end_to_end_ms=performance.now()-started;
+    await finishPassiveAudits(auditWrites);
     const cell = {case:a.label,model:model.id, provider:rawBody?.provider ?? client.metadata?.provider ?? null, returned_model:rawBody?.model ?? null,
       generation_id:rawBody?.id ?? null, attempts:1,retries:0,backoff_ms:0,http_status:httpStatus ?? null, transport_error:error ?? null,
-      generation_ms:client.metadata?.latency.elapsed_total_ms ?? generation_ms, end_to_end_ms:performance.now()-started, latency:client.metadata?.latency ?? null,
+      generation_ms:client.metadata?.latency.elapsed_total_ms ?? generation_ms, end_to_end_ms, latency:client.metadata?.latency ?? null,
       input_tokens:rawBody?.usage?.prompt_tokens ?? response?.usage?.prompt_tokens ?? null,
       output_tokens:rawBody?.usage?.completion_tokens ?? response?.usage?.completion_tokens ?? null,
       reported_cost_usd:rawBody?.usage?.cost ?? response?.cost_usd ?? null, finish_reason:rawBody?.choices?.[0]?.finish_reason ?? null,

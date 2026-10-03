@@ -1,0 +1,129 @@
+{
+  "schema": "d04-lossless-grouping-v2",
+  "policy": "d04-watermarks-v2",
+  "prompt_sha256": "0160d5d305366d7d531d5abd4636cfcdc21e55c494fedf3dc1689676fbaf9baa",
+  "schema_sha256": "ebdfcb7fa87156abb5eac0814647c35d209d40668e74c475959ab7f29ea0db9c",
+  "summary": [
+    {
+      "case": "A",
+      "schema": "d04-lossless-grouping-v2",
+      "policy": "d04-watermarks-v2",
+      "fixture_sha256": "ccd1ce10ef6365e7f3aaf32a6f25aadeeff6134e4269739e96f19064997b76cf",
+      "original_fixture_sha256": "3698e89a92a94f1659562773a03b922f27f22dde4950d945d44a9058c11dd6ea",
+      "source_hash": "cb363151f5a44adc4a670022ca83abb8aef9785ef3806f5f1a444f47b6960e39",
+      "before": 3291,
+      "target": 3126,
+      "deterministic_grouped": 3003,
+      "legal_lower_bound": 3003,
+      "layout": "expanded",
+      "target_met": true,
+      "margin": 123,
+      "groups": 17,
+      "units": 17,
+      "breakdown": {
+        "serialized_message_bytes": 12012,
+        "estimated_tokens": 3003,
+        "fixed_system_reserve_tokens": 1970,
+        "bytes": {
+          "fixed_protected": 1120,
+          "knowledge": 3913,
+          "recent_conversation": 75,
+          "retrieval_lore": 63,
+          "scene_state": 6811,
+          "other": 30
+        },
+        "token_equivalents": {
+          "fixed_protected": 280,
+          "knowledge": 978.25,
+          "recent_conversation": 18.75,
+          "retrieval_lore": 15.75,
+          "scene_state": 1702.75,
+          "other": 7.5
+        }
+      }
+    },
+    {
+      "case": "B",
+      "schema": "d04-lossless-grouping-v2",
+      "policy": "d04-watermarks-v2",
+      "fixture_sha256": "129499b7975a06267315f32f5f5d9d737d3637530109cb1e1555191d7f1485a0",
+      "original_fixture_sha256": "408b0b0cb6b11de8815b7a7429c72b0775b3fe3cca141499463be2f2775d1734",
+      "source_hash": "9ff028f113c18be382e0807719c1eeffdbc3f762dfb12d27541ef604e7b98ad0",
+      "before": 1585,
+      "target": 1505,
+      "deterministic_grouped": 1476,
+      "legal_lower_bound": 1476,
+      "layout": "expanded",
+      "target_met": true,
+      "margin": 29,
+      "groups": 7,
+      "units": 7,
+      "breakdown": {
+        "serialized_message_bytes": 5903,
+        "estimated_tokens": 1476,
+        "fixed_system_reserve_tokens": 1970,
+        "bytes": {
+          "fixed_protected": 1109,
+          "knowledge": 1728,
+          "recent_conversation": 75,
+          "retrieval_lore": 63,
+          "scene_state": 2898,
+          "other": 30
+        },
+        "token_equivalents": {
+          "fixed_protected": 277.25,
+          "knowledge": 432,
+          "recent_conversation": 18.75,
+          "retrieval_lore": 15.75,
+          "scene_state": 724.5,
+          "other": 7.5
+        }
+      }
+    },
+    {
+      "case": "C",
+      "schema": "d04-lossless-grouping-v2",
+      "policy": "d04-watermarks-v2",
+      "fixture_sha256": "96c78d50c7a979229eb58137c7d822b89ea81cd22ed3431855bc6fb9feaea541",
+      "original_fixture_sha256": "b46a7dd6678835fb00e9cce6f550df14f52decce594d01ea8883079157771e44",
+      "source_hash": "d321744ecf333e98eabdaf318890774c136f1e8a3226004e22a1244c97545490",
+      "before": 11798,
+      "target": 8287,
+      "deterministic_grouped": 8002,
+      "legal_lower_bound": 8002,
+      "layout": "dictionary",
+      "target_met": true,
+      "margin": 285,
+      "groups": 20,
+      "units": 20,
+      "breakdown": {
+        "serialized_message_bytes": 32006,
+        "estimated_tokens": 8002,
+        "fixed_system_reserve_tokens": 1970,
+        "bytes": {
+          "fixed_protected": 1140,
+          "knowledge": 15491,
+          "recent_conversation": 4322,
+          "retrieval_lore": 4212,
+          "scene_state": 6811,
+          "other": 30
+        },
+        "token_equivalents": {
+          "fixed_protected": 285,
+          "knowledge": 3872.75,
+          "recent_conversation": 1080.5,
+          "retrieval_lore": 1053,
+          "scene_state": 1702.75,
+          "other": 7.5
+        }
+      }
+    }
+  ],
+  "paid_calls": 0,
+  "production_compressor": "UNSET",
+  "production_controller": "qwen/qwen3.8-flash",
+  "production_timeout_changed": false,
+  "measurement_bug_fixed": true,
+  "main_commit": "2a033d6",
+  "v2_bakeoff_ready": true
+}

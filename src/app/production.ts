@@ -1,6 +1,7 @@
-import { NarratorContextCompactor, type CompactionPolicy } from "../turn/context-compaction.js";
+import { type CompactionPolicy } from "../turn/context-compaction.js";
+import { LosslessContextCompactor } from "../turn/lossless-context-compaction.js";
 import { ContextBudgetManager } from "../turn/context-budget.js";
-import { OpenRouterContextCompressor } from "../llm/openrouter/context-compressor.js";
+import { OpenRouterLosslessCompressor } from "../llm/openrouter/lossless-compressor.js";
 import { DEFAULT_CONTEXT_POLICY, type ContextPolicy } from "../turn/context-budget.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
@@ -37,7 +38,7 @@ export interface ProductionOptions { readonly context_policy?: ContextPolicy; re
 export async function createProductionDeps(options: ProductionOptions = {}): Promise<SessionDeps> {
   const context_policy = { ...DEFAULT_CONTEXT_POLICY, output_tokens: NARRATOR_OUTPUT_TOKENS, ...options.context_policy };
   const compressor_model = contextCompressorModel();
-  const compaction_service = new NarratorContextCompactor(compressor_model ? new OpenRouterContextCompressor(compressor_model) : undefined, new ContextBudgetManager(context_policy), options.compaction_policy);
+  const compaction_service = new LosslessContextCompactor(compressor_model ? new OpenRouterLosslessCompressor(compressor_model) : undefined, new ContextBudgetManager(context_policy), options.compaction_policy);
   const world = await loadWorld(options.data_dir ?? "data");
   let sink: ((record: DeepReadonly<TurnDiagnostics>) => unknown) | undefined;
   const status = readProviderStatus(), service = new RetrievalService(world);
