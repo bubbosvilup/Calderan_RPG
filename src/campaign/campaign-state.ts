@@ -15,6 +15,7 @@ import { compareIds } from "../world/provenance.js";
 import { validateCampaignSnapshot } from "./snapshot-validation.js";
 import { preparePremiumCommand, syncPremiumCharacters } from "./premium-characters.js";
 import { applyMannerismUserChange, parseMannerismUserChange, type MannerismUserChange } from "./mannerisms.js";
+import { applyMannerismLearning, parseMannerismLearningOperation } from "./mannerism-learning.js";
 const RESTORE = Symbol("validated campaign restore");
 
 export interface PreparedCampaignChange {
@@ -104,6 +105,13 @@ export class CampaignState {
   addMannerism(input: Omit<Extract<MannerismUserChange, { kind: "add" }>, "kind">) { return this.commit(this.prepareMannerism(parseMannerismUserChange(input, "add"))); }
   editMannerism(input: Omit<Extract<MannerismUserChange, { kind: "edit" }>, "kind">) { return this.commit(this.prepareMannerism(parseMannerismUserChange(input, "edit"))); }
   deleteMannerism(input: Omit<Extract<MannerismUserChange, { kind: "delete" }>, "kind">) { return this.commit(this.prepareMannerism(parseMannerismUserChange(input, "delete"))); }
+  /** Trusted finalized-play maintenance seam, deliberately unavailable to controller/reflection commands. */
+  maintainMannerisms(input: unknown) {
+    const operation = parseMannerismLearningOperation(input), draft = structuredClone(this.#snapshot) as CampaignSnapshot;
+    const metrics = applyMannerismLearning(draft, this.#world, operation), prepared = finishPreparation(this.#snapshot, draft, this.#world);
+    this.#prepared.set(prepared, { base: this.#snapshot, next: prepared.snapshot });
+    return { ...this.commit(prepared), metrics };
+  }
   commit(prepared: unknown): Readonly<{ revision: number; changed: boolean }> {
     if (!prepared || typeof prepared !== "object") fail("commit", "unknown preparation receipt");
     const entry = this.#prepared.get(prepared);

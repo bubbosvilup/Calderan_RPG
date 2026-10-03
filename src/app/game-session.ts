@@ -8,6 +8,7 @@ import type { CampaignSaveRepository, SaveListing, SaveSlot, SavedCampaign } fro
 import { CampaignSession } from "../persistence/campaign-session.js";
 import { validateSaveId } from "../persistence/save-format.js";
 import { reflectAfterTurn, type ReflectionProvider, type ReflectionRun } from "../turn/reflection.js";
+import { MannerismMaintenance, type MannerismExtractor, type MannerismRun } from "../turn/mannerism-extraction.js";
 import type { ReflectionDiagnostics } from "../turn/reflection-diagnostics.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
 import type { TurnEvent } from "../turn/turn-types.js";
@@ -29,6 +30,8 @@ export interface SessionDeps {
   readonly context_policy?: ContextPolicy;
   readonly compaction_service?: ContextCompactionService;
   readonly reflection_provider?: ReflectionProvider | undefined;
+  readonly mannerism_extractor?: MannerismExtractor;
+  readonly mannerism_diagnostics_sink?: (run: MannerismRun) => unknown;
   readonly provider_status?: ProviderStatus;
   /** Bounded in-memory trace ring (default 200). */
   readonly trace_capacity?: number;
@@ -55,12 +58,14 @@ const APPLICATION_COMMAND = /^\s*\/(?:save|load|new|quit|exit|status|help|debug)
 const STUB_STATUS: ProviderStatus = { mode: "stub", configured: true };
 
 export class GameSession {
+  readonly #mannerisms: MannerismMaintenance | undefined;
   readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest">>;
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
   #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
   private constructor(deps: SessionDeps, session: CampaignSession) {
     this.#deps = deps; this.#session = session;
+    this.#mannerisms = deps.mannerism_extractor ? new MannerismMaintenance(deps.world, deps.mannerism_extractor) : undefined;
     this.#coordinator = deps.createCoordinator({ diagnostics_sink: record => { this.#diagnostics = record; } });
   }
   /** New campaign from the canonical opening. Nothing is written to disk until `save()`. */
@@ -153,7 +158,7 @@ export class GameSession {
           outcome: "completed", result: completed.result, ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}), movement: movementOf(before, after), ...(this.#deps.unsafe_trace ? { unsafe: true } : {}) }));
         const view = this.getView();
         emit({ type: "turn_completed", turn_id, narration: completed.result.narration, view, trace });
-        await this.#postTurn(turn_id, trace, controller.signal, emit);
+        await this.#postTurn(turn_id, trace, controller.signal, emit, completed.result);
         if (this.getView().context_budget?.compaction_required) await this.#compact("auto", emit, true);
         return { ok: true, turn_id, narration: completed.result.narration, view: this.getView(), trace: this.#traces.find(t => t.turn_id === turn_id) ?? trace };
       }
@@ -173,14 +178,19 @@ export class GameSession {
       if (this.#status !== "closed") this.#setStatus("idle", emit);
     }
   }
-  /** Reflection never blocks the narration (already delivered) and never fails gameplay; the next input is rejected as busy until it settles. */
-  async #postTurn(turn_id: string, trace: TurnTrace, signal: AbortSignal, emit: (e: SessionEvent) => void): Promise<void> {
+  /** Optional maintenance runs after delivered narration and never fails gameplay; the next input stays busy until it settles. */
+  async #postTurn(turn_id: string, trace: TurnTrace, signal: AbortSignal, emit: (e: SessionEvent) => void, delivered: import("../turn/turn-types.js").TurnResult): Promise<void> {
     const provider = this.#deps.reflection_provider;
-    if (!provider || signal.aborted) return;
+    if ((!provider && !this.#mannerisms) || signal.aborted) return;
     this.#setStatus("post_turn", emit);
-    const campaign = this.#session.campaign, revisionBefore = campaign.revision;
+    const campaign = this.#session.campaign;
+    if (this.#mannerisms) {
+      try { const run = await this.#mannerisms.afterFinalizedTurn(campaign, turn_id, delivered, signal); try { this.#deps.mannerism_diagnostics_sink?.(run); } catch {} }
+      catch { /* Optional maintenance never fails a delivered, committed player turn. */ }
+    }
+    const revisionBefore = campaign.revision;
     let runs: readonly ReflectionRun[] = [], failedHard = false;
-    try { runs = await reflectAfterTurn(campaign, this.#deps.world, provider, { max_characters: 1, diagnostics_sink: record => { this.#reflectionRecord = record; } }); }
+    try { if (provider && !signal.aborted) runs = await reflectAfterTurn(campaign, this.#deps.world, provider, { max_characters: 1, diagnostics_sink: record => { this.#reflectionRecord = record; } }); }
     catch { failedHard = true; }
     const summary = failedHard ? { status: "failed_nonblocking" as const, characters: [], revisions_added: campaign.revision - revisionBefore } : summarizeReflection(runs, this.#reflectionRecord, campaign.revision - revisionBefore);
     const index = this.#traces.findIndex(t => t.turn_id === trace.turn_id);

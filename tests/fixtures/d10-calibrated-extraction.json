@@ -1,0 +1,1056 @@
+{
+  "model": "qwen/qwen3.8-flash",
+  "prompt_version": "d10-observation-v2",
+  "prompt_sha256": "7d296e1796c85cf1ea573afe163891a3d3cc5e7f4fbc80f1938e1b1ac525413d",
+  "schema_sha256": "301a552e4b04f7668e5f571431d00afdb3ec5a4e7d93fb8fa7872ce0d5c4dc9f",
+  "corpus_sha256": "062bb3f6de5411600c7dc0862a398e93eab84dc89c761fdecea6adaeb7029006",
+  "summary": {
+    "model": "qwen/qwen3.8-flash",
+    "prompt_version": "d10-observation-v2",
+    "raw_proposals": 9,
+    "validated_proposals": 9,
+    "accepted_proposals": 8,
+    "alias_families": [
+      "brenna:two_finger_tap:while_waiting",
+      "maren:gaze_lower:before_lie"
+    ],
+    "paid_calls": 7,
+    "cases": 25,
+    "valid_cases": 8,
+    "accepted_valid": 8,
+    "false_positives": 0,
+    "raw_model_false_positives": 0,
+    "false_negatives": 0,
+    "semantic_duplicate_errors": 0,
+    "alias_errors": 0,
+    "malformed_batches": 0,
+    "cost_usd": 0.001227394,
+    "cost_missing_calls": 0,
+    "latency_ms": {
+      "total": 19256.124900000003,
+      "mean": 2750.874985714286,
+      "median": 1621.926800000001,
+      "max": 6332.592500000001
+    },
+    "green": true
+  },
+  "batches": [
+    {
+      "case_ids": [
+        "gaze_a",
+        "gaze_b",
+        "tap_a",
+        "tap_b"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Maren lowers her gaze immediately before an obvious lie.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 2,
+            "narration": "Maren looks down just before telling a lie.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 3,
+            "narration": "Brenna taps two fingers lightly while waiting to answer.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 4,
+            "narration": "Brenna drums two fingertips while waiting.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\n  \"owned_reviewed_ids\": [\n    \"mannerism_r5_n0\",\n    \"mannerism_r6_n1\"\n  ],\n  \"observations\": [\n    {\n      \"turn_sequence\": 1,\n      \"character_id\": \"maren\",\n      \"action\": \"gaze_lower\",\n      \"trigger\": \"before_lie\",\n      \"evidence_quote\": \"Maren lowers her gaze immediately before an obvious lie.\",\n      \"requires_item_id\": null,\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    },\n    {\n      \"turn_sequence\": 2,\n      \"character_id\": \"maren\",\n      \"action\": \"gaze_lower\",\n      \"trigger\": \"before_lie\",\n      \"evidence_quote\": \"Maren looks down just before telling a lie.\",\n      \"requires_item_id\": null,\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    },\n    {\n      \"turn_sequence\": 3,\n      \"character_id\": \"brenna\",\n      \"action\": \"two_finger_tap\",\n      \"trigger\": \"while_waiting\",\n      \"evidence_quote\": \"Brenna taps two fingers lightly while waiting to answer.\",\n      \"requires_item_id\": null,\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    },\n    {\n      \"turn_sequence\": 4,\n      \"character_id\": \"brenna\",\n      \"action\": \"two_finger_tap\",\n      \"trigger\": \"while_waiting\",\n      \"evidence_quote\": \"Brenna drums two fingertips while waiting.\",\n      \"requires_item_id\": null,\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    }\n  ]\n}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 0.00041804,
+          "usage": {
+            "prompt_tokens": 1496,
+            "completion_tokens": 412,
+            "total_tokens": 1908
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:19.319Z",
+            "headers_ms": 1232.8656,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:24.316Z",
+            "elapsed_total_ms": 4996.9702
+          }
+        }
+      }
+    },
+    {
+      "case_ids": [
+        "shirt",
+        "doll",
+        "cadence",
+        "door"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Brenna smooths her plain shirt after an awkward moment.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 2,
+            "narration": "Maren clutches her cloth doll when visibly tense.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 3,
+            "narration": "Brenna leaves a short pause before addressing someone by name.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 4,
+            "narration": "Maren glances toward the door whenever someone raises their voice.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\n  \"owned_reviewed_ids\": [\n    \"mannerism_r5_n0\",\n    \"mannerism_r6_n1\"\n  ],\n  \"observations\": [\n    {\n      \"turn_sequence\": 1,\n      \"character_id\": \"brenna\",\n      \"action\": \"clothing_smooth\",\n      \"trigger\": \"after_awkwardness\",\n      \"evidence_quote\": \"Brenna smooths her plain shirt after an awkward moment.\",\n      \"requires_item_id\": \"campaign_item_plain_shirt\",\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    },\n    {\n      \"turn_sequence\": 2,\n      \"character_id\": \"maren\",\n      \"action\": \"object_grip\",\n      \"trigger\": \"when_visibly_tense\",\n      \"evidence_quote\": \"Maren clutches her cloth doll when visibly tense.\",\n      \"requires_item_id\": \"campaign_item_cloth_doll\",\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    },\n    {\n      \"turn_sequence\": 3,\n      \"character_id\": \"brenna\",\n      \"action\": \"speech_pause\",\n      \"trigger\": \"before_name\",\n      \"evidence_quote\": \"Brenna leaves a short pause before addressing someone by name.\",\n      \"requires_item_id\": null,\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    },\n    {\n      \"turn_sequence\": 4,\n      \"character_id\": \"maren\",\n      \"action\": \"door_glance\",\n      \"trigger\": \"when_voice_raised\",\n      \"evidence_quote\": \"Maren glances toward the door whenever someone raises their voice.\",\n      \"requires_item_id\": null,\n      \"requires_entity_id\": null,\n      \"equivalent_owned_ids\": []\n    }\n  ]\n}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 0.000291424,
+          "usage": {
+            "prompt_tokens": 1504,
+            "completion_tokens": 432,
+            "total_tokens": 1936
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:24.332Z",
+            "headers_ms": 1386.0809,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:30.664Z",
+            "elapsed_total_ms": 6332.304900000001
+          }
+        }
+      }
+    },
+    {
+      "case_ids": [
+        "vulnerability",
+        "affection",
+        "distrust",
+        "protective"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Maren hides vulnerability behind sarcasm.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 2,
+            "narration": "Brenna avoids showing affection.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 3,
+            "narration": "Maren distrusts authority.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 4,
+            "narration": "Brenna protects people she loves.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\n  \"owned_reviewed_ids\": [\n    \"mannerism_r5_n0\",\n    \"mannerism_r6_n1\"\n  ],\n  \"observations\": []\n}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 0.000105444,
+          "usage": {
+            "prompt_tokens": 1483,
+            "completion_tokens": 43,
+            "total_tokens": 1526
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:30.676Z",
+            "headers_ms": 887.048499999999,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:32.006Z",
+            "elapsed_total_ms": 1330.3819999999996
+          }
+        }
+      }
+    },
+    {
+      "case_ids": [
+        "playful",
+        "invented_ring",
+        "invented_doll",
+        "invented_weapon"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Maren becomes playful around friends she trusts.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 2,
+            "narration": "Maren grips her ring when visibly tense.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 3,
+            "narration": "Brenna clutches her doll when visibly tense.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 4,
+            "narration": "Maren grips her sword when visibly tense.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\n  \"owned_reviewed_ids\": [\n    \"mannerism_r5_n0\",\n    \"mannerism_r6_n1\"\n  ],\n  \"observations\": []\n}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 0.000106794,
+          "usage": {
+            "prompt_tokens": 1492,
+            "completion_tokens": 43,
+            "total_tokens": 1535
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:32.013Z",
+            "headers_ms": 1006.2561999999998,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:33.635Z",
+            "elapsed_total_ms": 1621.7538000000004
+          }
+        }
+      }
+    },
+    {
+      "case_ids": [
+        "preference",
+        "consent",
+        "attraction",
+        "ambiguous_smile"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Maren prefers sexual submission.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 2,
+            "narration": "Brenna's silence shows consent and willingness.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 3,
+            "narration": "Maren's gaze reveals her attraction.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 4,
+            "narration": "Brenna smiles when nervous.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\n  \"owned_reviewed_ids\": [\n    \"mannerism_r5_n0\",\n    \"mannerism_r6_n1\"\n  ],\n  \"observations\": []\n}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 0.000105744,
+          "usage": {
+            "prompt_tokens": 1485,
+            "completion_tokens": 43,
+            "total_tokens": 1528
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:33.642Z",
+            "headers_ms": 1105.5149999999994,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:35.176Z",
+            "elapsed_total_ms": 1533.498599999999
+          }
+        }
+      }
+    },
+    {
+      "case_ids": [
+        "ambiguous_pause",
+        "ambiguous_look",
+        "saved_handover",
+        "saved_carry"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Maren pauses before answering.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 2,
+            "narration": "Brenna looks away.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 3,
+            "narration": "Brenna accepts boots from Nicco.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          },
+          {
+            "sequence": 4,
+            "narration": "Nicco lifts Maren and carries her through the heavy door into the tower.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\n  \"owned_reviewed_ids\": [\n    \"mannerism_r5_n0\",\n    \"mannerism_r6_n1\"\n  ],\n  \"observations\": []\n}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 0.000106644,
+          "usage": {
+            "prompt_tokens": 1491,
+            "completion_tokens": 43,
+            "total_tokens": 1534
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:35.185Z",
+            "headers_ms": 889.4435999999987,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:36.603Z",
+            "elapsed_total_ms": 1418.1032999999989
+          }
+        }
+      }
+    },
+    {
+      "case_ids": [
+        "other_owner_gaze"
+      ],
+      "request": {
+        "turns": [
+          {
+            "sequence": 1,
+            "narration": "Maren drops her eyes before telling an obvious lie.",
+            "characters": [
+              {
+                "id": "brenna",
+                "name": "Brenna"
+              },
+              {
+                "id": "maren",
+                "name": "Maren"
+              }
+            ],
+            "items": [
+              {
+                "id": "campaign_item_cloth_doll",
+                "name": "cloth doll",
+                "character_id": "maren",
+                "worn": false
+              },
+              {
+                "id": "campaign_item_plain_shirt",
+                "name": "plain shirt",
+                "character_id": "brenna",
+                "worn": true
+              }
+            ]
+          }
+        ],
+        "owned": [
+          {
+            "id": "mannerism_r5_n0",
+            "character_id": "brenna",
+            "text": "Raises one eyebrow during a short exchange."
+          },
+          {
+            "id": "mannerism_r7_n2",
+            "character_id": "brenna",
+            "text": "Lowers their eyes before an obvious lie."
+          },
+          {
+            "id": "mannerism_r6_n1",
+            "character_id": "maren",
+            "text": "Tilts their head slightly while listening."
+          }
+        ],
+        "candidates": []
+      },
+      "response": {
+        "text": "{\"owned_reviewed_ids\":[\"mannerism_r5_n0\",\"mannerism_r7_n2\",\"mannerism_r6_n1\"],\"observations\":[{\"turn_sequence\":1,\"character_id\":\"maren\",\"action\":\"gaze_lower\",\"trigger\":\"before_lie\",\"evidence_quote\":\"Maren drops her eyes before telling an obvious lie.\",\"requires_item_id\":null,\"requires_entity_id\":null,\"equivalent_owned_ids\":[\"mannerism_r7_n2\"]}]}",
+        "metadata": {
+          "model": "qwen/qwen3.8-flash",
+          "provider": "Alibaba",
+          "cost_usd": 9.3304e-05,
+          "usage": {
+            "prompt_tokens": 1236,
+            "completion_tokens": 96,
+            "total_tokens": 1332
+          },
+          "latency": {
+            "request_started_at": "2026-10-03T22:49:36.613Z",
+            "headers_ms": 938.8253000000004,
+            "time_to_first_token_ms": null,
+            "completed_at": "2026-10-03T22:49:38.633Z",
+            "elapsed_total_ms": 2019.9579000000012
+          }
+        }
+      }
+    }
+  ]
+}

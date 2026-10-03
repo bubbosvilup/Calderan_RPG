@@ -1,5 +1,6 @@
 import type { CampaignProposal, CampaignSnapshot } from "./types.js";
 import type { DeepReadonly } from "../types/readonly.js";
+import { MANNERISM_ACTIONS, MANNERISM_TRIGGERS } from "./mannerism-concepts.js";
 
 export class CampaignValidationError extends Error {
   constructor(readonly field: string, reason: string) { super(`${field}: ${reason}`); this.name = "CampaignValidationError"; }
@@ -140,6 +141,12 @@ const premiumRecord = object({ character_id: id,
   dynamic: object({ recent_developments: list(premiumHistory, PREMIUM_DEVELOPMENT_RETENTION), long_term: optional(rollupRecord), private_memory_refs: distinct(id) }),
   metadata: object({ created_revision: integer(0), last_updated_revision: integer(0), active_household_member: boolean,
     initial_mannerism: optional(choice("seeded", "candidate", "seed_pool_exhausted")) }) });
+const mannerismEvidence = object({ sequence: integer(1), revision: integer(0), event_id: text, narration_hash: text, span_start: integer(0), span_end: integer(1) });
+const mannerismCandidate = object({ id, character_id: id, canonical_key: id, text, action: choice(...MANNERISM_ACTIONS), trigger: choice(...MANNERISM_TRIGGERS), requires_item_id: optional(id), requires_entity_id: optional(id),
+  evidence: list(mannerismEvidence, 5), first_observed_sequence: integer(1), last_observed_sequence: integer(1) });
+const mannerismLearning = object({ sequence: integer(1), processed_sequence: integer(0), last_turn_id: text,
+  journal: list(object({ sequence: integer(1), revision: integer(0), event_id: text, narration_hash: text, narration_length: integer(1, 20000), character_ids: distinct(id),
+    available_items: list(object({ character_id: id, item_id: id, worn: boolean }), 256) }), 16), candidates: list(mannerismCandidate, 800000) });
 const variants: Record<string, Parser> = {};
 function command(kind: string, fields: Record<string, Rule>) { variants[kind] = object({ kind: choice(kind), ...fields }); }
 command("register_character", { character: characterRecord });
@@ -177,7 +184,7 @@ command("runtime_delta", { delta: object({ expected_revision: optional(integer(0
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
-const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0),
+const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: optional(id), off_scene: optional(object({ last_known_location: id, since_revision: integer(0) })) }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),

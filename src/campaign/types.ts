@@ -208,6 +208,23 @@ export interface CampaignDomains {
 }
 export interface CampaignSnapshot extends CampaignDomains {
   schema_version: 3; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  /** Bounded derived evidence only; never narrator/controller context. Optional additive persistence extension. */
+  mannerism_learning?: MannerismLearning;
+}
+export interface MannerismEvidence {
+  sequence: number; revision: number; event_id: string; narration_hash: string; span_start: number; span_end: number;
+}
+export interface MannerismCandidate extends MannerismDefinition {
+  id: string; character_id: string; action: import("./mannerism-concepts.js").MannerismAction; trigger: import("./mannerism-concepts.js").MannerismTrigger;
+  evidence: MannerismEvidence[]; first_observed_sequence: number; last_observed_sequence: number;
+}
+export interface MannerismFinalizedSource {
+  sequence: number; revision: number; event_id: string; narration_hash: string; narration_length: number;
+  character_ids: string[]; available_items: { character_id: string; item_id: string; worn: boolean }[];
+}
+export interface MannerismLearning {
+  sequence: number; processed_sequence: number; last_turn_id: string;
+  journal: MannerismFinalizedSource[]; candidates: MannerismCandidate[];
 }
 /** Commands are shared by future manual and model proposals, never raw mutable state. */
 export type CampaignCommand =

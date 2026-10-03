@@ -5,7 +5,7 @@
 **Movement/follow state logic:** frozen  
 **Production controller:** `qwen/qwen3.8-flash` (baseline for subsequent debt-closure work)
 **Production controller frozen:** NO
-**Last updated:** 2026-10-03
+**Last updated:** 2026-10-04
 
 This is the short, living debt register intended to stay in the repository root.
 IDs are never renumbered.
@@ -18,7 +18,6 @@ IDs are never renumbered.
 |---|---|---|---|
 | **D-06** | Occasional controller `structured_output_invalid` | MINOR | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid. |
 | **D-09** | Reflection organic usefulness unmeasured | **IMPORTANT** | Reflection has not yet been proven useful on genuine organic developments. Measure after recurring-behaviour support exists. |
-| **D-10** | NPC+ Mannerism System | **IMPORTANT** | IN PROGRESS — Pass 1 authoritative slots, campaign-global uniqueness and initial seeded mannerism implemented; emergent acquisition pending. [Report](docs/evaluations/D10_MANNERISM_PASS1.md). |
 | **D-16** | `private_memory_refs` has no writer | MINOR | Dead/undefined structure today. Remove in a later schema migration or give it a concrete purpose during memory work. |
 | **D-17** | Reflection trigger counts lifecycle entries | MINOR | First reflection can happen earlier than intended because lifecycle entries count. Revisit only together with D-09/D-10 evidence. |
 | **D-19** | Reconciliation / redaction rate | **IMPORTANT** | Safe but narration is still revised/redacted more often than ideal. Remains relevant for proposal/reconciliation quality; measure by path and reduce causes without weakening audits. |
@@ -42,6 +41,8 @@ IDs are never renumbered.
 ---
 
 ## Closed
+
+**D-10 CLOSED** — emergent NPC+ mannerisms: calibrated Qwen 8/8 live recall, zero accepted hard false positives, live aliases and finalized promotion/anti-feedback/save-load verified. [Evidence](docs/evaluations/D10_MANNERISM_EXTRACTOR_CALIBRATION.md).
 
 **D-05 CLOSED** — live production retry lifecycle validated with controlled injected transient and real OpenRouter retry attempt; failed attempts cannot mutate authority; exactly one commit/effect. [Evidence](docs/evaluations/D05_LIVE_RETRY_VALIDATION.md).
 
@@ -69,9 +70,8 @@ NPC+ packing/performance, and prior regression repairs remain closed in their hi
 
 ## Priority order
 
-1. **D-10** — NPC+ Mannerism System; emergent acquisition pending.
-2. **D-19** — reduce reconciliation/redaction rate.
-3. **D-09** — measure reflection once D-10 exists.
+1. **D-19** — reduce reconciliation/redaction rate.
+2. **D-09** — measure reflection once D-10 exists.
 
 D-06 remains open pending broader runtime soak after the Qwen switch.
 
