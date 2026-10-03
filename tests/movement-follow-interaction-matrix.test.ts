@@ -38,7 +38,8 @@ const ROWS: readonly Row[] = [
   { name: "incomplete departure: no change", members: ["maren"], input: "I read by the window.", narration: "Maren starts toward the stairs, then looks back at him.", expect: { maren: "test_room" } },
   { name: "failed Nicco movement + independent NPC departure: OFF_SCENE", members: ["maren"], input: "I walk to the remote docks.", narration: "Nicco walks to the remote docks. Maren goes out for a while.", expect: { maren: "OFF_SCENE" } },
   { name: "normal local follow to the table while Nicco stays: delivered, nobody changes place", members: ["maren"], input: "I sit down and read. Maren, stay close.", narration: "Nicco settles at the table. Maren follows him over to the table.", expect: { maren: "test_room" } },
-  { name: "destination-less stair exit while Nicco stays: state stays, prose is withdrawn", members: ["maren"], input: "I stay and read. Maren, do as you like.", narration: "Maren looked up. She crossed to the stairs and descended, her footsteps fading.", expect: { maren: "test_room" } },
+  { name: "stair exit that states its direction while Nicco stays: the one structured neighbour", members: ["maren"], input: "I stay and read. Maren, do as you like.", narration: "Maren looked up. She crossed to the stairs and descended, her footsteps fading.", expect: { maren: "test_hall" } },
+  { name: "incomplete stair exit while Nicco stays: state stays, prose is withdrawn", members: ["maren"], input: "I stay and read. Maren, do as you like.", narration: "Maren looked up. She started down the stairs.", expect: { maren: "test_room" } },
 ];
 for (const row of ROWS) test(`matrix: ${row.name}`, async () => {
   const r = await play(row.narration, row.input, { members: row.members, commands: row.commands ?? [], evidence: row.evidence ?? [], extra: row.extra ?? [] });

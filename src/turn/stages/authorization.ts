@@ -4,8 +4,8 @@ import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { parseControllerProposal } from "../../llm/controller-schema.js";
 import type { ControllerResult } from "../../llm/state-controller-provider.js";
-import { narratedDepartures } from "../scene-departure.js";
-import { characterLocation, narratedMovements, npcPlusEntrants, type MovableCharacter } from "../character-movement.js";
+import { FOLLOWS_NICCO, narratedDepartures, stairDirection } from "../scene-departure.js";
+import { characterLocation, doorDestination, narratedMovements, npcPlusEntrants, uniqueVerticalNeighbour, type MovableCharacter } from "../character-movement.js";
 import type { TurnContext } from "../context-builder.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evidence-authorization.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
@@ -46,7 +46,24 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   });
   const controllerProposal = keep.map(k => parsed[k]!), duplicates_removed = parsed.length - keep.length;
   const kept = new Set(keep), quotes = duplicates_removed ? i.controller.evidence?.filter((_, k) => kept.has(k)) : i.controller.evidence;
-  const turn_evidence: TurnEvidence = { ...deriveTurnEvidence(i.intent, i.draft, i.context), character_movements: narratedMovements(i.draft, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, activeNpcPlus(i.projected)) };
+  const grammarMoves = narratedMovements(i.draft, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, activeNpcPlus(i.projected));
+  // Final movement closure: a completed stair exit that states its direction ("crosses to the stairs and descends", "her footsteps fading as she
+  // climbed") of an active NPC+ with Nicco, while Nicco stays, goes to the ONE structured neighbour in that direction. No unique neighbour: no
+  // movement (the audit withdraws the claim). Same evidence path as any other narrated movement.
+  const npcPlusIds = activeNpcPlus(i.projected);
+  const stairMoves = i.origin !== i.arrival ? [] : narratedDepartures(i.draft, i.context, "persistent", { stairs: true }).flatMap(d => {
+    const dir = npcPlusIds.has(d.character_id) && !grammarMoves.some(m => m.character_id === d.character_id) && characterLocation(i.projected, i.world, d.character_id) === i.arrival ? stairDirection(d.source_sentence) : undefined;
+    const to = dir ? uniqueVerticalNeighbour(i.world, i.arrival, dir) : undefined;
+    return to ? [{ character_id: d.character_id, location_id: to, source_sentence: d.source_sentence }] : [];
+  });
+  // A completed door exit that names no place, where the draft's nearby door wording names exactly one directly connected known place ("the courtyard door").
+  const doorMoves = i.origin !== i.arrival ? [] : narratedDepartures(i.draft, i.context, "persistent").flatMap(d => {
+    const taken = grammarMoves.some(m => m.character_id === d.character_id) || stairMoves.some(m => m.character_id === d.character_id);
+    const here = characterLocation(i.projected, i.world, d.character_id);
+    const to = npcPlusIds.has(d.character_id) && !taken && here === i.arrival && !stairDirection(d.source_sentence) ? doorDestination(i.draft, d.source_sentence, here, i.context, i.world) : undefined;
+    return to ? [{ character_id: d.character_id, location_id: to, source_sentence: d.source_sentence }] : [];
+  });
+  const turn_evidence: TurnEvidence = { ...deriveTurnEvidence(i.intent, i.draft, i.context), character_movements: [...grammarMoves, ...stairMoves, ...doorMoves] };
   // NPC+ Pass 3 proposal recall: a completed narrated movement of an eligible mover (created, or active authored NPC+ — the `movable`
   // set) that the controller did not propose becomes a move_character PROPOSAL. Authorization is unchanged and still decides; a mover
   // already at that destination, a request, refusal, hesitation, membership or ownership yields no evidence and so no proposal.
@@ -60,6 +77,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const moving = new Set(turn_evidence.character_movements!.map(m => m.character_id)), npcPlus = activeNpcPlus(i.projected);
   const STAIR_WORD = /\b(?:down|up)stairs\b|\b(?:down|up)\s+the\s+(?:[a-z]+\s+)?(?:stairs|steps|staircase)\b/i;
   const npcDepartures = narratedDepartures(i.draft, i.context, "persistent").filter(d => npcPlus.has(d.character_id) && !moving.has(d.character_id) && !STAIR_WORD.test(d.source_sentence)
+    && !(i.origin === i.arrival && FOLLOWS_NICCO.test(d.source_sentence)) // a conjoined "follows him" exit depends on Nicco, who did not go: never OFF_SCENE evidence
     && characterLocation(i.projected, i.world, d.character_id) === i.arrival);
   const evidenceWithDepartures: TurnEvidence = npcDepartures.length ? { ...turn_evidence, departures: [...(turn_evidence.departures ?? []), ...npcDepartures] } : turn_evidence;
   const departureProposals = npcDepartures.filter(d => !controllerProposal.some(c => c.kind === "leave_scene" && c.character_id === d.character_id)).map(d => ({ kind: "leave_scene" as const, character_id: d.character_id }));

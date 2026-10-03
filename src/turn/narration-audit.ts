@@ -275,7 +275,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   // off-scene representation, so a destination-less exit is never narrated as done unless a committed move_character moved them elsewhere.
   const left = new Set(committed.flatMap(c => c.kind === "leave_scene" ? [c.character_id] : []));
   const relocated = new Set(committed.flatMap(c => c.kind === "move_character" && c.location_id !== prepared.runtime.scene.player_location ? [c.character_id] : []));
-  for (const d of narratedDepartures(narration, context, "persistent", { every: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location })) {
+  for (const d of narratedDepartures(narration, context, "persistent", { every: true, broad: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location })) {
     const created = context.characters.find(c => c.id === d.character_id)?.origin.kind === "created";
     if (left.has(d.character_id) || relocated.has(d.character_id) || (created && authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id))) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
@@ -350,6 +350,7 @@ export function redactNarration(narration: string, issues: readonly AuditIssue[]
 const NICCO_GO = /\bNicco\s+(?:\w+ly\s+)?(?:descends|descended|climbs|climbed|goes|went|walks|walked|heads|headed|steps|stepped|returns|returned|hurries|hurried|makes his way|made his way|comes|came|moves|moved|crosses|crossed|wanders|wandered|strides|strode)\b[^.;]*?\b(?:to|into|onto)\s+([^.;,]+)/i;
 const NICCO_ARRIVE = /\bNicco\s+(?:\w+ly\s+)?(?:reaches|reached|enters|entered|arrives (?:at|in)|arrived (?:at|in))\s+([^.;,]+)/i;
 const NICCO_LEAVE = /\bNicco\s+(?:\w+ly\s+)?(?:leaves|left|exits|exited)\s+([^.;,]+)/i;
+const PLAYER_GO = /\bI\s+(?:\w+ly\s+)?(?:go|walk|head|set (?:off|out)|run|hurry|hasten|make my way|travel|ride|leave)\b[^.;!?]*?\b(?:to|toward|towards|for|into)\s+([^.;,!?]+)/i;
 const PLACE_END = /\s+(?:with|while|as|and|where|before|after|still|alone|together|behind|below|above|without)\b.*$/i;
 function movementIssues(input: NarrationAuditInput, sentences: readonly string[]): AuditIssue[] {
   const { context, world, prepared } = input;
@@ -372,6 +373,13 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
             : `Nicco did NOT go to ${display(place)}: no such movement was recorded this turn. He is at ${display(here)}; describe him there.` });
       }
     }
+  }
+  // D-24 (bare-pronoun form): the PLAYER asked for an inter-location move to a known place and the state did not take him there. Dependent
+  // follows ("He sets off toward the docks. Maren follows him.") are then withdrawn even when the narration never names Nicco as the subject.
+  for (const asked of String(input.player_input ?? "").split(/(?<=[.!?])\s+/)) {
+    const m = outside(asked).match(PLAYER_GO);
+    const place = m ? resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world) : undefined;
+    if (place && !within(place, here) && !niccoDidNotGo.includes(place)) niccoDidNotGo.push(place);
   }
   const movers = persistentCharactersAt(prepared, world, [...new Set([origin, here])]);
   // D-24: Nicco's own narrated movement was NOT committed, so nothing that depends on it can have happened. A same-turn follow that carries

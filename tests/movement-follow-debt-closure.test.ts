@@ -9,6 +9,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { scriptedController, scriptedNarrator } from "./provider-failure-scripts.js";
 import { characterLocation } from "../src/turn/character-movement.js";
+import type { CampaignCommand } from "../src/campaign/types.js";
 
 /** Movement/follow debt closure: D-13, D-14, D-15 (deterministic, through the real turn pipeline unless noted). */
 const mk = (id: string) => ({ id, names: [id[0]!.toUpperCase() + id.slice(1)] });
@@ -148,13 +149,12 @@ test("D-07 closed: a player-ordered destination-less exit of an authored NPC+ is
   assert.deepEqual(r.snapshot.runtime.npc_locations.find(n => n.character_id === "maren"), { character_id: "maren", off_scene: { last_known_location: "test_room", since_revision: r.snapshot.revision } });
   assert.match(r.result?.narration ?? "", /walks out/i);
 });
-test("D-07: live-observed destination-less stair exits are unrecorded departures; every sentence of the exit is withdrawn", async () => {
-  for (const t of ["She nodded and rose. She crossed the room to the stairs and descended, her footsteps fading.", "Maren moved toward the stairs, her footsteps receding down into the main hall below.",
-    "Maren stood. Her footsteps were soft as she crossed to the stairs and descended.", "Maren rose and moved toward the stairs. She descended out of sight."]) {
+test("D-07: live-observed stair exits that state their direction are movements", async () => {
+  for (const t of ["Maren moved toward the stairs, her footsteps receding down into the main hall below."]) {
     const r = await play(`Maren looked up. ${t}`, "Maren, take a walk.", { members: ["maren"] });
-    assert.ok(departed(r), t);
-    assert.equal(r.where("maren"), "test_room", t);
-    assert.doesNotMatch(r.result?.narration ?? "", /descended|receding down/i, t);
+    // Batch 3: "receding down into the main hall" states its direction (and the place), so it is a movement to the one structured neighbour.
+    assert.ok(!departed(r), t);
+    assert.equal(r.where("maren"), "test_hall", t);
   }
 });
 test("D-07 zero new false positives: a stay, a plan, a hesitation, a follower after Nicco, or an arrival is not a departure", async () => {
@@ -162,4 +162,49 @@ test("D-07 zero new false positives: a stay, a plan, a hesitation, a follower af
     "Maren said she might go down to the hall later."]) assert.ok(!departed(await play(t, "Maren, could you fetch bread?", { members: ["maren"] })), t);
   const follow = await play("Nicco goes down the stairs. Behind him, Maren's footsteps followed. She descended the stairs and stopped at the bottom.", "I go down to the main hall. Maren, come with me.", { members: ["maren"] });
   assert.ok(!departed(follow), "Nicco moved: a follower's descent is never a departure");
+});
+
+test("D-07 live families (final closure): a completed stair exit that states its direction is a movement to the ONE structured neighbour", async () => {
+  const hall = [{ kind: "runtime_delta", delta: { player_location: "test_hall" } }, { kind: "move_character", character_id: "maren", location_id: "test_hall" }] as const;
+  const room = (n: string, input: string, extra: readonly CampaignCommand[] = []) => play(`Maren looked up from where she sat. ${n}`, input, { members: ["maren"], extra });
+  // Verbatim live drafts (production narrator, 2026-10-03).
+  for (const t of ["She nodded and rose. She crossed the room to the stairs and descended, her footsteps fading.", "She crossed to the stairs and descended, her footsteps fading into the sounds of the hall below.",
+    "Maren moved toward the stairs and descended, her footsteps fading into the quiet of the room below.", "Maren rose and moved toward the stairs. She descended out of sight."]) assert.equal((await room(t, "Maren, take a walk.")).where("maren"), "test_hall", t);
+  for (const t of ["\"All right,\" she said, and crossed the hall. Her footsteps faded as she ascended, the old treads creaking once or twice underfoot.", "She crossed the hall toward the stairs, her footsteps fading as she climbed.",
+    "\"All right,\" she said, and crossed the hall to the stair. Her footsteps receded overhead as she climbed.", "She holds Nicco's gaze for a moment, then rises. Her footsteps cross the hall toward the stair, and she climbs out of sight, the sound of her movement fading overhead.",
+    "She pushes back from the table without argument and crosses to the foot of the steps. \"All right,\" she says, and her footsteps fade upward into the quiet above."]) assert.equal((await room(t, "Maren, go upstairs.", hall)).where("maren"), "test_room", t);
+  // Verbatim live descents by sound with an explicit direction (batch 2).
+  for (const t of ["\"All right.\" She rose and crossed to the stairs, her footsteps receding downward into the main hall.", "She gave a small nod and crossed to the head of the stairs, her footsteps receding downward toward the main hall."])
+    assert.equal((await room(t, "Maren, take a walk.")).where("maren"), "test_hall", t);
+  // Incomplete, paused or unrelated climbing never moves anyone, and the unrecorded claim is withdrawn.
+  for (const t of ["Maren pushed back her chair, crossed the hall toward the stairs, and started up the stairs without another word.", "Without a word she crossed the hall, her footsteps quiet on the stone floor, and started up.", "Maren moved toward the stairs, pausing at the top step, not yet descending.", "Maren climbed onto the narrow bed and pulled her knees up.",
+    "Her gaze drifts toward the arched window, then to the stairs leading down, then back again."]) {
+    const r = await room(t, "Maren, wait.", t.includes("started up") ? hall : []);
+    assert.equal(r.where("maren"), t.includes("started up") ? "test_hall" : "test_room", t);
+  }
+});
+test("final closure: door exits without a named destination are OFF_SCENE only when completed; stepping through and back is not", async () => {
+  const hall = [{ kind: "runtime_delta", delta: { player_location: "test_hall" } }, { kind: "move_character", character_id: "maren", location_id: "test_hall" }] as const;
+  const done = await play("Maren looked up from where she sat. \"All right,\" she said, and crossed the hall and pushed the door open, letting in a brief rush of cooler air before stepping through and pulling it shut behind her.", "Maren, go out for some air.", { members: ["maren"], extra: hall });
+  assert.ok(done.snapshot.runtime.npc_locations.find(n => n.character_id === "maren")?.off_scene);
+  // Verbatim live drafts (batch 2): the door falls or swings shut behind her.
+  for (const t of ["\"All right,\" she said, and pushed to her feet. She crossed the hall and pulled the door open. Cool air curled in for a moment before she stepped through, letting it fall shut behind her.",
+    "She gave a small nod and crossed the hall, pushing the door open. Cool air drifted in briefly before it swung shut behind her, leaving the hall quiet except for the low crackle of the fire."]) {
+    const r = await play(`Maren glanced up from where she sat. ${t}`, "Maren, go out into the courtyard.", { members: ["maren"], extra: hall });
+    assert.ok(r.snapshot.runtime.npc_locations.find(n => n.character_id === "maren")?.off_scene, t);
+  }
+  const back = await play("Maren looked up from where she sat. She crossed to the door, stepped through it and then back again, shaking her head.", "Maren, go out.", { members: ["maren"], extra: hall });
+  assert.equal(back.where("maren"), "test_hall");
+});
+test("D-24 (bare-pronoun form): a failed player move withdraws a dependent follow even when Nicco is only 'He'", async () => {
+  for (const t of ["He sets off toward the docks. Maren follows him.", "He goes toward the remote docks. Maren comes after him.", "He heads for the remote docks. Maren came down after him."]) {
+    const r = await play(t, "I set off for the remote docks. Maren, come with me.", { members: ["maren"] });
+    assert.deepEqual([r.snapshot.runtime.scene.player_location, r.where("maren")], ["test_room", "test_room"], t);
+    assert.doesNotMatch(r.result?.narration ?? "", /Maren (?:follows|comes|came)/, t);
+  }
+  // A move that succeeds keeps its follow, and a local follow with no failed move is untouched.
+  const ok = await play("Nicco goes down the stairs. Maren follows him.", "I go down to the main hall. Maren, come with me.", { members: ["maren"] });
+  assert.equal(ok.where("maren"), "test_hall");
+  const local = await play("Nicco settles at the table. Maren follows him over to the table.", "I sit down and read. Maren, stay close.", { members: ["maren"] });
+  assert.match(local.result?.narration ?? "", /Maren follows him over to the table/);
 });

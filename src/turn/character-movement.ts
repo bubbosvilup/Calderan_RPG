@@ -78,6 +78,34 @@ export function uniqueVerticalNeighbour(world: WorldStore, from: string, directi
   return only && !world.getChildren(only).some(e => e.type === "location") ? only : undefined;
 }
 /**
+ * Final movement closure (live batch 3): a completed exit through a door whose own sentence names no place ("steps through and pulls it shut
+ * behind her") goes to the ONE known place the draft's nearby door wording names ("the courtyard door", "the door that leads out to the
+ * courtyard", "through the door into the walled courtyard"), only when that place is directly connected to where she is. Zero or several
+ * candidates, a container, or a place with no direct connection: undefined (the departure stays destination-less, i.e. OFF_SCENE).
+ */
+export function doorDestination(narration: string, sentence: string, from: string, context: TurnContext, world: WorldStore): string | undefined {
+  const all = sentencesOf(narration).map(x => blankQuotes(x));
+  const at = all.findIndex(x => sentence.startsWith(x.slice(0, 40)) || x === blankQuotes(sentence));
+  if (at < 0) return undefined;
+  const found = new Set<string>();
+  const consider = (phrase: string | undefined) => {
+    const words = (phrase ?? "").trim().split(/\s+/).filter(Boolean);
+    for (let len = words.length; len > 0; len--) for (let start = 0; start + len <= words.length; start++) {
+      const hit = resolveDestination(words.slice(start, start + len).join(" "), context, world);
+      if (hit && hit !== from) { found.add(hit); return; }
+    }
+  };
+  for (const x of all.slice(Math.max(0, at - 4), at + 1)) {
+    for (const m of x.matchAll(/\b((?:[a-z]+\s+)?[a-z]+)\s+(?:door|doorway|gate|archway)\b/gi)) consider(m[1]!.replace(/^(?:the|a|an|that|this|her|his|open|opened|heavy|wooden|oak|small|narrow|front|back|side)\s+/i, ""));
+    for (const m of x.matchAll(/\b(?:door|doorway|gate|archway|passage)\b[^.;]{0,30}?\b(?:to|onto|into|toward|towards|out to|out onto|out into)\s+(?:the\s+)?((?:[a-z]+\s+){0,2}[a-z]+)/gi)) consider(m[1]);
+  }
+  for (const x of [at > 0 && /\b(?:door|through|steps?|stepp\w+)\b/i.test(all[at - 1]!) ? all[at - 1]! : "", all[at]!]) for (const m of x.matchAll(/\b(?:into|onto|out to|out into|out onto)\s+(?:the\s+)?((?:[a-z]+\s+){0,2}[a-z]+)/gi)) consider(m[1]);
+  const place = world.getEntity(from);
+  const [only] = found.size === 1 ? [...found] : [];
+  return only && only !== from && place?.type === "location" && place.connections.some(c => c.target === only) && !world.getChildren(only).some(e => e.type === "location") ? only : undefined;
+}
+
+/**
  * H5.1: every persistent character (created or authored NPC) at one of these locations, by name. Used by the narration audit's
  * movement backstop only: authored NPCs are never movers for authorization (their whereabouts stay canon-owned), but narration that
  * moves them must still be detected. Authored names come from canon; sex only from a declared profile or authored sex.
@@ -305,7 +333,7 @@ export function narratedMovements(narration: string, movable: readonly MovableCh
         const m = clause.match(p.re);
         if (!m || NOT_DONE.test(clause.slice(0, m.index! + m[0].length)) || ARRIVE_VETO.test(clause)) continue;
         const id = who(m[p.mover]!, p.subject);
-        const location = id ? concreteDestination(m[p.dest]!, where.arrival, where.origin, context, world) : undefined;
+        const location = id ? concreteDestination(m[p.dest]!, where.arrival, where.origin, context, world) ?? (movable.some(x => x.id === id && x.entrant) && /^(?:inside|in)$/i.test(m[p.dest]!.trim()) ? where.arrival : undefined) : undefined;
         if (id && location && entrantOk(id, location) && routed(id, location) && !out.some(o => o.character_id === id)) out.push({ character_id: id, location_id: location, source_sentence: sentence });
       }
       // A bare vertical direction ("goes upstairs"): only the unique structured neighbour in that direction, from the mover's OWN location.
