@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { isDeepStrictEqual } from "node:util";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
-import { DeepSeekStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
 import type { AuthorizationDiagnostic, TurnEvent } from "../turn/turn-types.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
@@ -54,14 +54,14 @@ async function items(): Promise<Item[]> {
 const all = await items();
 if (process.argv.includes("--list")) { for (const i of all) console.log(i.key, i.truth); console.log(all.length); process.exit(0); }
 if (!process.env.OPENROUTER_API_KEY?.trim()) throw new Error("OPENROUTER_API_KEY is not set");
-console.log(`\n=== PAID ONLINE EVALUATION (OpenRouter) ===\nPhase 1O evidence: ${all.length} DeepSeek controller calls (${DEFAULT_CONTROLLER_MODEL}), scripted narration, throwaway fixtures, hybrid mode\n`);
+console.log(`\n=== PAID ONLINE EVALUATION (OpenRouter) ===\nPhase 1O evidence: ${all.length} OpenRouter controller calls (${DEFAULT_CONTROLLER_MODEL}), scripted narration, throwaway fixtures, hybrid mode\n`);
 const metadata = { model: "scripted-narration", usage: {}, latency: { request_started_at: "scripted", headers_ms: null, time_to_first_token_ms: null, completed_at: "scripted", elapsed_total_ms: 0 } };
 type Row = Item & { turn: string; intents: number; controller_proposal: unknown; authorization: readonly AuthorizationDiagnostic[] | null; grammar_outcome: string; hybrid_outcome: string; extra_authorized: unknown[]; revision: { before: number; after: number }; controller_ms: number | null; usage: ReturnType<typeof usageOf> };
 const rows: Row[] = [];
 for (const item of all) {
   const f = turnFixture(item.ground, item.brenna_knows ? { brennaKnowsBridge: true } : {}), service = new RetrievalService(f.world), wire = capturingFetch();
   const narrator: NarratorProvider = { async generate() { return { text: item.narration, ...metadata }; }, async *stream() { yield { type: "text_delta", text: item.narration }; yield { type: "completed", result: { text: item.narration, ...metadata } }; } };
-  const coordinator = new TurnCoordinator(f.world, narrator, new DeepSeekStateControllerProvider(new OpenRouterClient({ fetch: wire.fetch }), { model: DEFAULT_CONTROLLER_MODEL }), { service, search: new HybridSearch(service) }, { evidence_authorization: "hybrid" });
+  const coordinator = new TurnCoordinator(f.world, narrator, new OpenRouterStateControllerProvider(new OpenRouterClient({ fetch: wire.fetch }), { model: DEFAULT_CONTROLLER_MODEL }), { service, search: new HybridSearch(service) }, { evidence_authorization: "hybrid" });
   const before = f.campaign.exportSnapshot(), events: TurnEvent[] = [];
   for await (const e of coordinator.runTurn({ campaign: f.campaign, player_input: item.input })) events.push(e);
   await settle(wire.captures[0]);

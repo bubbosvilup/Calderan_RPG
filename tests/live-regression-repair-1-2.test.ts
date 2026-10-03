@@ -12,7 +12,7 @@ import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/turn-coordina
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
-import { DeepSeekStateControllerProvider } from "../src/llm/openrouter/deepseek-controller.js";
+import { DeepSeekStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/deepseek-controller.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
@@ -41,7 +41,7 @@ test("1.2 controller: a strict-parse failure keeps raw output, metadata, expecte
   await assert.rejects(controllerReturning(MALFORMED).propose({ player_action: "", prior_state: "", final_narration: "" }), (error: unknown) => {
     assert.ok(error instanceof ProviderError); assert.equal(error.code, "structured_output_invalid");
     const d = error.diagnostic!;
-    assert.equal(d.raw_text, MALFORMED); assert.equal(d.model, "deepseek/deepseek-v4-flash-0731:nitro"); assert.equal(d.finish_reason, "stop");
+    assert.equal(d.raw_text, MALFORMED); assert.equal(d.model, DEFAULT_CONTROLLER_MODEL); assert.equal(d.finish_reason, "stop");
     assert.deepEqual(d.usage, { prompt_tokens: 10, completion_tokens: 7, total_tokens: 17 });
     assert.match(d.expected_schema, /campaign_proposal_with_evidence/); assert.match(d.parse_error, /^schema_mismatch/);
     assert.ok(!JSON.stringify(error).includes("test-key-not-real"));

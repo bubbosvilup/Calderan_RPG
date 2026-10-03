@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
 import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL, MINIMAX_NARRATOR_MODEL, KIMI_NARRATOR_MODEL, GEMINI_NARRATOR_MODEL, NARRATOR_PROVIDER_ROUTING } from "../src/llm/openrouter/minimax-narrator.js";
-import { CONTROLLER_POLICY } from "../src/llm/openrouter/deepseek-controller.js";
+import { CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/deepseek-controller.js";
 import { NARRATOR_SYSTEM, NARRATOR_STATE_PRECEDENCE } from "../src/turn/prompt-builder.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
@@ -60,7 +60,7 @@ test("production default narrator is GLM 5.2 pinned to Z.AI without fallbacks, r
     assert.equal(run.narratorBodies[0]!.max_tokens, 512); // Runtime Continuity Repair 1.1 production cap
     assert.deepEqual(run.narratorBodies[0]!.reasoning, { enabled: false });
     assert.equal(run.narratorBodies[0]!.stream, true);
-    assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
+    assert.equal(run.controllerBodies[0]!.model, DEFAULT_CONTROLLER_MODEL);
     assert.equal((run.controllerBodies[0]!.messages as { content: string }[])[0]!.content, CONTROLLER_POLICY);
     assert.deepEqual(run.controllerBodies[0]!.reasoning, { exclude: true, enabled: false });
     // Repair 1 authoritative order: the draft is buffered; audited narration is delivered after authorization and before one commit.
@@ -79,7 +79,7 @@ test("OPENROUTER_NARRATOR_MODEL still overrides the default; controller and reas
     assert.equal(run.narratorBodies[0]!.model, "minimax/minimax-m2-her");
     assert.deepEqual(run.narratorBodies[0]!.reasoning, { enabled: false });
     assert.equal("provider" in run.narratorBodies[0]!, false);
-    assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
+    assert.equal(run.controllerBodies[0]!.model, DEFAULT_CONTROLLER_MODEL);
   } finally { if (saved === undefined) delete process.env.OPENROUTER_NARRATOR_MODEL; else process.env.OPENROUTER_NARRATOR_MODEL = saved; }
 });
 test("Runtime Continuity Repair 1: Kimi stays available unpinned; Gemini is a Vertex-pinned manual alternative, never a fallback", async () => {
@@ -91,7 +91,7 @@ test("Runtime Continuity Repair 1: Kimi stays available unpinned; Gemini is a Ve
       assert.equal(run.narratorBodies[0]!.model, model);
       assert.deepEqual(run.narratorBodies[0]!.provider, provider);
       assert.equal(run.narratorBodies[0]!.max_tokens, NARRATOR_OUTPUT_TOKENS);
-      assert.equal(run.controllerBodies[0]!.model, "deepseek/deepseek-v4-flash-0731:nitro");
+      assert.equal(run.controllerBodies[0]!.model, DEFAULT_CONTROLLER_MODEL);
     }
     // The production pin names exactly one provider and forbids fallbacks.
     assert.deepEqual(NARRATOR_PROVIDER_ROUTING[DEFAULT_NARRATOR_MODEL], { order: ["z-ai/fp8"], allow_fallbacks: false });

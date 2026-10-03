@@ -5,7 +5,7 @@ import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { SemanticIndex } from "../retrieval/semantic-index.js";
 import { configuredEmbeddingProvider } from "./embedding-configuration.js";
 import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL } from "../llm/openrouter/minimax-narrator.js";
-import { DeepSeekStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 import type { OpenRouterClient } from "../llm/openrouter/client.js";
 import { TurnCoordinator, type TurnDebugRecord } from "../turn/turn-coordinator.js";
 import type { RecentContextMode } from "../turn/prompt-builder.js";
@@ -25,5 +25,5 @@ export async function onlineCoordinator(world: WorldStore, semantic = false, wra
   const provider = semantic ? await configuredEmbeddingProvider() : undefined;
   if (semantic && !provider) throw new Error("No configured production embedding provider");
   const indexes = provider ? [await SemanticIndex.build(service.indexSource(), provider, "narrator")] : [];
-  return new TurnCoordinator(world, wrapNarrator(new MiniMaxNarratorProvider(override.narrator_client, narratorConfig(override))), new DeepSeekStateControllerProvider(override.controller_client, { model: selectedModels().controller }), { service, search: new HybridSearch(service, indexes) }, { ...(override.recent_context ? { recent_context: override.recent_context } : {}), ...(override.evidence_authorization ? { evidence_authorization: override.evidence_authorization } : {}), ...(override.debug_sink ? { debug_sink: override.debug_sink } : {}), ...(override.diagnostics_sink ? { diagnostics_sink: override.diagnostics_sink } : {}), ...(override.provider_retry !== undefined ? { provider_retry: override.provider_retry } : {}) });
+  return new TurnCoordinator(world, wrapNarrator(new MiniMaxNarratorProvider(override.narrator_client, narratorConfig(override))), new OpenRouterStateControllerProvider(override.controller_client, { model: selectedModels().controller }), { service, search: new HybridSearch(service, indexes) }, { ...(override.recent_context ? { recent_context: override.recent_context } : {}), ...(override.evidence_authorization ? { evidence_authorization: override.evidence_authorization } : {}), ...(override.debug_sink ? { debug_sink: override.debug_sink } : {}), ...(override.diagnostics_sink ? { diagnostics_sink: override.diagnostics_sink } : {}), ...(override.provider_retry !== undefined ? { provider_retry: override.provider_retry } : {}) });
 }

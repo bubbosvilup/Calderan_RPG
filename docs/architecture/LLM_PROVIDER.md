@@ -14,9 +14,11 @@ Neither provider imports CampaignState, WorldStore, retrieval services or persis
 
 ## Selected models and configuration
 
+Production controller default as of 2026-10-03: `qwen/qwen3.8-flash`, selected by the [Round 2 bakeoff](../evaluations/CALDREVAN_CONTROLLER_MODEL_BAKEOFF_ROUND_2.md). `OpenRouterStateControllerProvider` is the canonical adapter; the former DeepSeek class name is a compatibility export. Reflection retains its prior DeepSeek default. Narrator selection is unchanged. The remaining Phase 1K descriptions below are historical foundation details.
+
 | Setting | Narrator | Controller |
 | --- | --- | --- |
-| Default requested model | `minimax/minimax-m2-her` | `deepseek/deepseek-v4-flash-0731:nitro` |
+| Default requested model | `minimax/minimax-m2-her` | `qwen/qwen3.8-flash` |
 | Default output token budget | 512 | 512 |
 | Output ceiling | 2,048 (configurable for another model) | 1,024 |
 | Total request timeout | 60 seconds | 20 seconds |
@@ -26,7 +28,7 @@ Both adapters accept model, timeout and output budget configuration. Narrator re
 
 MiniMax is selected for roleplay prose; DeepSeek is selected for compact structured interpretation. [M2-her documentation](https://openrouter.ai/minimax/minimax-m2-her) describes a 65,536-token context, a 2,048-token completion limit, and optional roleplay roles. It does not support enforced JSON output. Ordinary messages remain portable; optional `roleplay_context` in the MiniMax adapter supports `user_system`, `group`, `sample_message_user`, and `sample_message_ai`. These optional roles were inspected in documentation and tested offline, not exercised in the live benchmark.
 
-The controller uses the selected [DeepSeek model](https://openrouter.ai/deepseek/deepseek-v4-flash-0731). [Nitro routing](https://openrouter.ai/docs/guides/routing/model-variants/nitro) prioritizes throughput; this is not a guarantee of lowest first-token latency. Diagnostics record the exact requested slug, including `:nitro`. Actual upstream host identity is not captured or used by engine logic.
+The controller uses the selected [DeepSeek model](https://openrouter.ai/deepseek/deepseek-v4-flash-0731). [Nitro routing](https://openrouter.ai/docs/guides/routing/model-variants/nitro) prioritizes throughput; this is not a guarantee of lowest first-token latency. Diagnostics record the exact requested slug, including `:nitro`. Current diagnostics also retain the upstream provider when OpenRouter supplies it; engine logic does not use it.
 
 ## Streaming, completion and errors
 

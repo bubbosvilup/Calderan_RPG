@@ -1,6 +1,6 @@
 import { isDeepStrictEqual } from "node:util";
 import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL } from "../llm/openrouter/minimax-narrator.js";
-import { DeepSeekStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 import { providerError } from "../llm/errors.js";
 import type { NarratorResult } from "../llm/narrator-provider.js";
 import { BENCH_NARRATOR_PROMPT, LLM_SCENARIOS } from "./llm-scenarios.js";
@@ -9,7 +9,7 @@ const mode = process.argv[2];
 const narratorModel = process.env.OPENROUTER_NARRATOR_MODEL ?? DEFAULT_NARRATOR_MODEL;
 const controllerModel = process.env.OPENROUTER_CONTROLLER_MODEL ?? DEFAULT_CONTROLLER_MODEL;
 const narrator = new MiniMaxNarratorProvider(undefined, { model: narratorModel });
-const controller = new DeepSeekStateControllerProvider(undefined, { model: controllerModel });
+const controller = new OpenRouterStateControllerProvider(undefined, { model: controllerModel });
 console.log(JSON.stringify({ online: true, narrator_model: narratorModel, controller_model: controllerModel, date: new Date().toISOString() }));
 async function narrate(action: string, state: string): Promise<NarratorResult> {
   for await (const event of narrator.stream({ system_prompt: BENCH_NARRATOR_PROMPT, messages: [{ role: "user", content: JSON.stringify({ prior_state: state, action }) }] })) {
