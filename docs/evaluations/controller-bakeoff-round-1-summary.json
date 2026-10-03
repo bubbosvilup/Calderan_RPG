@@ -1,0 +1,1218 @@
+{
+  "setup": {
+    "date": "2026-10-03T11:58:21.846Z",
+    "git_head": "168299da56005c8448ef0c0c63b94a0905f45df5",
+    "production_model": "deepseek/deepseek-v4-flash-0731:nitro",
+    "policy_sha256": "9855736dd5e1c7a04cf60e3c0061da27a0bd6ced35ea70f987bb66da76bc6e7c",
+    "schema_sha256": "cf7d4c590df1851db62cd0ee2068969f68e7e7e26493d87d6547d737f20764fb",
+    "max_tokens": 512,
+    "timeout_ms": 20000,
+    "temperature": "unset, production provider defaults",
+    "reasoning": {
+      "exclude": true,
+      "enabled": false
+    },
+    "strict_schema": true,
+    "provider_require_parameters": true,
+    "retries": 0,
+    "models": [
+      {
+        "id": "deepseek/deepseek-v4-flash-0731",
+        "canonical_slug": "deepseek/deepseek-v4-flash-20260731",
+        "pricing": {
+          "prompt": "0.0000000188",
+          "completion": "0.00000128",
+          "input_cache_read": "0.0000000188"
+        },
+        "supported_parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "parallel_tool_calls",
+          "presence_penalty",
+          "reasoning",
+          "reasoning_effort",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_a",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": true,
+          "supported_efforts": [
+            "max",
+            "high",
+            "low"
+          ],
+          "default_effort": "high"
+        }
+      },
+      {
+        "id": "deepseek/deepseek-v4.1-flash",
+        "canonical_slug": "deepseek/deepseek-v4.1-flash-20260910",
+        "pricing": {
+          "prompt": "0.0000003",
+          "completion": "0.0000012",
+          "input_cache_read": "0.000000006"
+        },
+        "supported_parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logit_bias",
+          "logprobs",
+          "max_tokens",
+          "min_p",
+          "presence_penalty",
+          "reasoning",
+          "reasoning_effort",
+          "repetition_penalty",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": true,
+          "supported_efforts": [
+            "max",
+            "high",
+            "low"
+          ],
+          "default_effort": "high"
+        }
+      },
+      {
+        "id": "qwen/qwen3.8-flash",
+        "canonical_slug": "qwen/qwen3.8-flash-20260826",
+        "pricing": {
+          "prompt": "0.00000015",
+          "completion": "0.00000047",
+          "input_cache_read": "0.000000016",
+          "input_cache_write": "0.0000002"
+        },
+        "supported_parameters": [
+          "frequency_penalty",
+          "include_reasoning",
+          "logprobs",
+          "max_tokens",
+          "presence_penalty",
+          "reasoning",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_logprobs",
+          "top_p"
+        ],
+        "reasoning": {
+          "mandatory": false,
+          "default_enabled": true,
+          "supports_max_tokens": true
+        }
+      },
+      {
+        "id": "z-ai/glm-5.3-flashx",
+        "canonical_slug": "z-ai/glm-5.3-flashx-20260918",
+        "pricing": {
+          "prompt": "0.00000037",
+          "completion": "0.00000125",
+          "input_cache_read": "0.00000009"
+        },
+        "supported_parameters": [
+          "include_reasoning",
+          "max_tokens",
+          "reasoning",
+          "reasoning_effort",
+          "response_format",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_k",
+          "top_p"
+        ],
+        "reasoning": {
+          "mandatory": true,
+          "default_enabled": true,
+          "supported_efforts": [
+            "max",
+            "high",
+            "low"
+          ],
+          "default_effort": "max"
+        }
+      },
+      {
+        "id": "google/gemini-3.7-flash",
+        "canonical_slug": "google/gemini-3.7-flash-20260813",
+        "pricing": {
+          "prompt": "0.00000075",
+          "completion": "0.00000375",
+          "image": "0.00000075",
+          "audio": "0.00000075",
+          "input_audio_cache": "0.000000075",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000375",
+          "input_cache_read": "0.000000075",
+          "input_cache_write": "0.0000000416666666666667"
+        },
+        "supported_parameters": [
+          "include_reasoning",
+          "max_tokens",
+          "reasoning",
+          "reasoning_effort",
+          "response_format",
+          "seed",
+          "stop",
+          "structured_outputs",
+          "temperature",
+          "tool_choice",
+          "tools",
+          "top_p"
+        ],
+        "reasoning": {
+          "mandatory": true,
+          "default_enabled": true,
+          "supported_efforts": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "default_effort": "medium"
+        }
+      }
+    ],
+    "cases": [
+      {
+        "id": "01_no_command",
+        "input": "I read by the window.",
+        "narration": "Dust drifts in the window light. Brenna remains seated.",
+        "expected": [],
+        "expected_count": 0,
+        "correct_abstention": true,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "9113e327f5be831e2c271dbab867fa6f76fe89c91353e346b7203b0fadd2309a"
+      },
+      {
+        "id": "02_valid_tell",
+        "input": "/tell campaign_fact_bridge_closed to brenna",
+        "narration": "Nicco tells Brenna that the eastern bridge is closed.",
+        "expected": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "source": "tests/evidence-authorization.test.ts: explicit telling regression",
+        "expected_count": 1,
+        "correct_abstention": false,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "1ba7416efd632e250b7f7f83b1b840fadec7d68db3d8e7a682b88960d447659e"
+      },
+      {
+        "id": "03_ambiguous_intent",
+        "input": "/tell campaign_fact_bridge_closed to brenna",
+        "narration": "Nicco opens his mouth to tell Brenna that the eastern bridge is closed, then thinks better of it and says nothing.",
+        "expected": [],
+        "source": "src/dev/shadow-evidence.ts: A8",
+        "expected_count": 0,
+        "correct_abstention": true,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "21546b3ce472a5771be47e6aaa69b74291dd6bcb6507a50c1675caa37c73c469"
+      },
+      {
+        "id": "04_player_movement",
+        "input": "I go down to the main hall.",
+        "narration": "Nicco walks down to the main hall. Maren stays in the Observation room.",
+        "expected": [],
+        "engine_expected": "player_location=test_hall; controller must not propose Nicco movement",
+        "expected_count": 0,
+        "correct_abstention": true,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "1b480ed9310e0133978c86e6f19afa758bf42a67a72525625bad616d5dd63fee"
+      },
+      {
+        "id": "05_independent_npc",
+        "input": "I read by the window.",
+        "narration": "Maren heads down to the main hall.",
+        "expected": [
+          {
+            "kind": "move_character",
+            "character_id": "maren",
+            "location_id": "test_hall"
+          }
+        ],
+        "source": "tests/final-movement-closure.test.ts: independent movement",
+        "expected_count": 1,
+        "correct_abstention": false,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "0a4dd2a6b26fc69ce09d4c61b12e68ffdd79778311a7cb6ca1ebe3f1081e10cc"
+      },
+      {
+        "id": "06_npc_refusal",
+        "input": "Maren, go down to the main hall, please.",
+        "narration": "Maren shakes her head. \"No. I am staying here.\" She stays in the Observation room.",
+        "expected": [],
+        "expected_count": 0,
+        "correct_abstention": true,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "905867aa74bf0f4531f694f56adb5cee8e16b64b162411495da45d65c3f64685"
+      },
+      {
+        "id": "07_relationship",
+        "input": "I wait quietly beside Brenna.",
+        "narration": "Brenna embraces Nicco.",
+        "expected": [
+          {
+            "kind": "adjust_relationship",
+            "from_character_id": "brenna",
+            "to_character_id": "nicco",
+            "dimension": "affection",
+            "direction": "raise"
+          }
+        ],
+        "source": "production relationship evidence: embracing establishes affection",
+        "expected_count": 1,
+        "correct_abstention": false,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "cd22ca7beb8f15a81962d64f06b16423a84c6cb296e64b001f3598633689b18c"
+      },
+      {
+        "id": "08_relationship_insufficient",
+        "input": "I smile at Brenna.",
+        "narration": "Brenna politely nods. She remains seated.",
+        "expected": [],
+        "expected_count": 0,
+        "correct_abstention": true,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "cc0bf1b224c0db2bed01617621130b97ed1b740bbe778a1425b25830c348a84c"
+      },
+      {
+        "id": "09_secret_boundary",
+        "input": "Brenna, what is Maren hiding?",
+        "narration": "Brenna says, \"I do not know Maren's secret.\" Maren says nothing.",
+        "expected": [],
+        "source": "turnFixture private fact known only to Maren; no telling",
+        "expected_count": 0,
+        "correct_abstention": true,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "1232515678942c5178e7273189ffd28f6bf22023603a4c0e0b576bbbdcf82afb"
+      },
+      {
+        "id": "10_duplicate_action",
+        "input": "/tell campaign_fact_bridge_closed to brenna",
+        "narration": "Nicco tells Brenna that the eastern bridge is closed. He repeats to Brenna that the eastern bridge is closed.",
+        "expected": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "expected_count": 1,
+        "correct_abstention": false,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "0c134166b9ac22208a9873c94f662a6bb921cecd1bbf0d86973e3d2187994758"
+      },
+      {
+        "id": "11_messy_tell",
+        "input": "/tell campaign_fact_bridge_closed to brenna",
+        "narration": "Nicco turns to Brenna, who sits alert by the window, and tells her that the eastern bridge is closed.",
+        "expected": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          }
+        ],
+        "source": "src/dev/shadow-evidence.ts: A11 relative clause",
+        "expected_count": 1,
+        "correct_abstention": false,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "de24ddd1a50959476ef4357298407591d69d2ca0b2113814d8c318f94b577e51"
+      },
+      {
+        "id": "12_multi_action",
+        "input": "/tell campaign_fact_bridge_closed to brenna",
+        "narration": "Nicco tells Brenna that the eastern bridge is closed. Maren heads down to the main hall. Brenna remains seated. Nicco plans a trip to Remote docks tomorrow.",
+        "expected": [
+          {
+            "kind": "set_knowledge",
+            "knowledge": {
+              "character_id": "brenna",
+              "fact_id": "campaign_fact_bridge_closed",
+              "status": "knows",
+              "provenance": {
+                "source_character_id": "nicco",
+                "acquisition_kind": "told"
+              }
+            }
+          },
+          {
+            "kind": "move_character",
+            "character_id": "maren",
+            "location_id": "test_hall"
+          }
+        ],
+        "gold_quotes": [
+          "Nicco tells Brenna that the eastern bridge is closed.",
+          "Maren heads down to the main hall."
+        ],
+        "expected_count": 2,
+        "correct_abstention": false,
+        "unacceptable_false_positives": "Every command outside expected, including duplicate instances",
+        "request_sha256": "cc3a4578e914626fe95c47c0b907a169dc707b1847c584898adaed9fa3e09f89"
+      }
+    ]
+  },
+  "calls": 60,
+  "total_attempts": 114,
+  "paid_responses": 36,
+  "context_unavailable_ground_truth": [
+    {
+      "scenario": "05_independent_npc",
+      "command": {
+        "kind": "move_character",
+        "character_id": "maren",
+        "location_id": "test_hall"
+      }
+    },
+    {
+      "scenario": "12_multi_action",
+      "command": {
+        "kind": "move_character",
+        "character_id": "maren",
+        "location_id": "test_hall"
+      }
+    }
+  ],
+  "transport_adaptations": {
+    "z-ai/glm-5.3-flashx": "Initial native schema rejected; retries with unchanged schema through named, then required function choice; mandatory reasoning low; all rejected",
+    "google/gemini-3.7-flash": "Initial reasoning-disabled rejected; retries with reasoning low + native schema, then same schema through required function choice; all rejected"
+  },
+  "summaries": [
+    {
+      "model": "deepseek/deepseek-v4-flash-0731",
+      "calls": 12,
+      "paid_responses": 12,
+      "strict_schema_valid": 12,
+      "production_parse_valid": 12,
+      "correct_abstention": 6,
+      "abstention_cases": 6,
+      "tp": 4,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.5714285714285714,
+      "exact_matches": 9,
+      "mean_ms": 3637.367416666664,
+      "median_ms": 3414.445999999998,
+      "p95_ms": 7052.816099999996,
+      "prompt_tokens": 42780,
+      "completion_tokens": 505,
+      "cost_usd": 0.0014239880000000002,
+      "missing_cost_calls": 0,
+      "failures": 0,
+      "retries": 0,
+      "failed_attempts": 0,
+      "providers": [
+        "Reka",
+        "Venice",
+        "Sail Research",
+        "DeepInfra"
+      ],
+      "attempts": 12,
+      "failure_types": {},
+      "context_feasible_recall": 0.8
+    },
+    {
+      "model": "deepseek/deepseek-v4.1-flash",
+      "calls": 12,
+      "paid_responses": 12,
+      "strict_schema_valid": 12,
+      "production_parse_valid": 12,
+      "correct_abstention": 6,
+      "abstention_cases": 6,
+      "tp": 4,
+      "fp": 6,
+      "fn": 3,
+      "precision": 0.4,
+      "recall": 0.5714285714285714,
+      "exact_matches": 9,
+      "mean_ms": 1923.186466666665,
+      "median_ms": 1385.3992499999958,
+      "p95_ms": 6711.77399999999,
+      "prompt_tokens": 37171,
+      "completion_tokens": 793,
+      "cost_usd": 0.0037437589999999997,
+      "missing_cost_calls": 0,
+      "failures": 0,
+      "retries": 0,
+      "failed_attempts": 0,
+      "providers": [
+        "AtlasCloud",
+        "Decart",
+        "DekaLLM",
+        "Together",
+        "Wafer",
+        "OpenInference",
+        "Sail Research"
+      ],
+      "attempts": 12,
+      "failure_types": {},
+      "context_feasible_recall": 0.8
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "calls": 12,
+      "paid_responses": 12,
+      "strict_schema_valid": 12,
+      "production_parse_valid": 12,
+      "correct_abstention": 6,
+      "abstention_cases": 6,
+      "tp": 5,
+      "fp": 2,
+      "fn": 2,
+      "precision": 0.7142857142857143,
+      "recall": 0.7142857142857143,
+      "exact_matches": 10,
+      "mean_ms": 2841.872750000002,
+      "median_ms": 2143.406650000001,
+      "p95_ms": 7445.661099999999,
+      "prompt_tokens": 25684,
+      "completion_tokens": 764,
+      "cost_usd": 0.002222048,
+      "missing_cost_calls": 0,
+      "failures": 0,
+      "retries": 6,
+      "failed_attempts": 6,
+      "providers": [
+        "Alibaba"
+      ],
+      "attempts": 18,
+      "failure_types": {
+        "429:rate_limited": 6
+      },
+      "context_feasible_recall": 1
+    },
+    {
+      "model": "z-ai/glm-5.3-flashx",
+      "calls": 12,
+      "paid_responses": 0,
+      "strict_schema_valid": 0,
+      "production_parse_valid": 0,
+      "correct_abstention": null,
+      "abstention_cases": 6,
+      "tp": 0,
+      "fp": null,
+      "fn": null,
+      "precision": null,
+      "recall": null,
+      "exact_matches": 0,
+      "mean_ms": null,
+      "median_ms": null,
+      "p95_ms": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": null,
+      "missing_cost_calls": 12,
+      "failures": 12,
+      "retries": 24,
+      "failed_attempts": 36,
+      "providers": [],
+      "attempts": 36,
+      "failure_types": {
+        "404:invalid_provider_response": 36
+      },
+      "context_feasible_recall": null
+    },
+    {
+      "model": "google/gemini-3.7-flash",
+      "calls": 12,
+      "paid_responses": 0,
+      "strict_schema_valid": 0,
+      "production_parse_valid": 0,
+      "correct_abstention": null,
+      "abstention_cases": 6,
+      "tp": 0,
+      "fp": null,
+      "fn": null,
+      "precision": null,
+      "recall": null,
+      "exact_matches": 0,
+      "mean_ms": null,
+      "median_ms": null,
+      "p95_ms": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": null,
+      "missing_cost_calls": 12,
+      "failures": 12,
+      "retries": 24,
+      "failed_attempts": 36,
+      "providers": [],
+      "attempts": 36,
+      "failure_types": {
+        "400:invalid_provider_response": 36
+      },
+      "context_feasible_recall": null
+    }
+  ],
+  "per_scenario": [
+    {
+      "id": "01_no_command",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "02_valid_tell",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "03_ambiguous_intent",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "04_player_movement",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "05_independent_npc",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 1,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": [
+            "rejected_insufficient_confirmation"
+          ]
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 1,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": [
+            "rejected_insufficient_confirmation"
+          ]
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "06_npc_refusal",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "07_relationship",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "08_relationship_insufficient",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "09_secret_boundary",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "10_duplicate_action",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "11_messy_tell",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": true,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 0,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    },
+    {
+      "id": "12_multi_action",
+      "results": [
+        {
+          "model": "deepseek/deepseek-v4-flash-0731",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 0,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": []
+        },
+        {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 5,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": [
+            "rejected_controller_mismatch",
+            "rejected_controller_mismatch",
+            "rejected_controller_mismatch",
+            "rejected_controller_mismatch"
+          ]
+        },
+        {
+          "model": "qwen/qwen3.8-flash",
+          "exact_match": false,
+          "schema_valid": true,
+          "fp": 1,
+          "fn": 1,
+          "error": null,
+          "validation_rejections": [
+            "rejected_insufficient_confirmation"
+          ]
+        },
+        {
+          "model": "z-ai/glm-5.3-flashx",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        },
+        {
+          "model": "google/gemini-3.7-flash",
+          "exact_match": null,
+          "schema_valid": null,
+          "fp": null,
+          "fn": null,
+          "error": "invalid_provider_response",
+          "validation_rejections": []
+        }
+      ]
+    }
+  ]
+}
