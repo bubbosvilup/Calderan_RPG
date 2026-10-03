@@ -105,7 +105,7 @@ export class TurnCoordinator {
       checkpoint(); stage = "controller_failed";
       const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft,
         retry: { policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
-      if (observer) observer.record.controller = { model: proposed.result.model, usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
+      if (observer) observer.record.controller = { model: proposed.result.model, ...(proposed.result.provider ? { provider: proposed.result.provider } : {}), usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
         parse_success: false, proposed_count: proposed.result.commands.length, command_kinds: proposed.result.commands.map(c => c.kind), normalization_used: !!proposed.result.normalization };
       checkpoint();
 

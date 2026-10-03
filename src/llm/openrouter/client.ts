@@ -59,7 +59,9 @@ export class OpenRouterClient {
     if (signal?.aborted) cancel();
     const timer = setTimeout(() => { timedOut = true; abort.abort(); }, timeout_ms);
     let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+    let upstream_provider: string | undefined;
     const consume = (event: Record<string, unknown>): string => {
+      if (typeof event.provider === "string" && event.provider.trim()) upstream_provider ??= event.provider.trim().slice(0, 80);
       if (event.error) {
         const code = record(event.error).code;
         throw new ProviderError(typeof code === "number" ? statusCode(code) : "provider_unavailable");
@@ -118,7 +120,7 @@ export class OpenRouterClient {
       }
       if (!streaming) { const delta = consume(parse(buffer)); if (delta) yield { type: "text_delta", text: delta }; }
       if (!finished || !text.trim() || (streaming && !doneMarker)) throw new ProviderError("invalid_provider_response");
-      yield { type: "completed", metadata: { model: body.model, usage: tokens, latency: {
+      yield { type: "completed", metadata: { model: body.model, ...(upstream_provider ? { provider: upstream_provider } : {}), usage: tokens, latency: {
         request_started_at, headers_ms, time_to_first_token_ms: streaming ? first : null,
         completed_at: new Date().toISOString(), elapsed_total_ms: performance.now() - started,
       } } };

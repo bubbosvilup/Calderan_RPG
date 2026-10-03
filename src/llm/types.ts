@@ -7,7 +7,7 @@ export interface Latency {
   readonly completed_at: string;
   readonly elapsed_total_ms: number;
 }
-export interface GenerationMetadata { readonly model: string; readonly usage: Usage; readonly latency: Latency }
+export interface GenerationMetadata { readonly model: string; readonly provider?: string; readonly usage: Usage; readonly latency: Latency }
 export interface GenerationRequest {
   readonly system_prompt: string;
   readonly messages: readonly Message[];

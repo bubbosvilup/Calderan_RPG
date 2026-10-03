@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { OpenRouterClient, type TransportRequest } from "../src/llm/openrouter/client.js";
 import { MiniMaxNarratorProvider } from "../src/llm/openrouter/minimax-narrator.js";
-import { DeepSeekStateControllerProvider, CONTROLLER_POLICY } from "../src/llm/openrouter/deepseek-controller.js";
+import { DeepSeekStateControllerProvider, CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/deepseek-controller.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { ProviderError } from "../src/llm/errors.js";
 import { LLM_SCENARIOS } from "../src/dev/llm-scenarios.js";
@@ -123,7 +123,7 @@ test("configurable models, bounds and roleplay context stay adapter-local", asyn
 for (const scenario of LLM_SCENARIOS) test(`controller fixture: ${scenario.name}`, async () => {
   const result = await new DeepSeekStateControllerProvider(client(() => Response.json(completion(JSON.stringify({ commands: scenario.expected }))), (_url, init) => {
     const payload = JSON.parse(String(init.body));
-    assert.equal(payload.model, "deepseek/deepseek-v4-flash-0731:nitro"); assert.equal(payload.max_tokens, 512);
+    assert.equal(payload.model, DEFAULT_CONTROLLER_MODEL); assert.equal(payload.max_tokens, 512);
     assert.equal(payload.response_format.type, "json_schema"); assert.equal(payload.response_format.json_schema.strict, true);
     assert.equal(payload.provider.require_parameters, true); assert.equal(payload.reasoning.exclude, true);
     assert.equal(payload.messages[0].content, CONTROLLER_POLICY);
@@ -162,4 +162,15 @@ test("cancellation during streaming preserves deltas and closes connection", asy
 });
 test("invalid URL configuration is sanitized", async () => {
   await assert.rejects(collect(new OpenRouterClient({ api_key: () => fakeKey, base_url: `invalid-${fakeKey}` })), isCode("configuration_error"));
+});
+
+// Transport metadata must distinguish the requested model from the upstream provider.
+test("upstream provider metadata retains the requested model", async () => {
+  const events = await collect(client(() => Response.json(completion("Hi", { model: "upstream-alias", provider: "Alibaba" }))));
+  const last = events.at(-1)!;
+  assert.equal(last.type, "completed");
+  if (last.type === "completed") {
+    assert.equal(last.metadata.model, body.model);
+    assert.equal(last.metadata.provider, "Alibaba");
+  }
 });

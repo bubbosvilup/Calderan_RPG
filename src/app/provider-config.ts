@@ -1,5 +1,5 @@
 import { DEFAULT_NARRATOR_MODEL } from "../llm/openrouter/minimax-narrator.js";
-import { DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/deepseek-controller.js";
+import { DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 
 /** Production provider settings, single source for both the application and the dev harnesses (which re-export them). */
 export const NARRATOR_OUTPUT_TOKENS = 512;

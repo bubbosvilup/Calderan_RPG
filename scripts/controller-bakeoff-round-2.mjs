@@ -4,20 +4,24 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { isDeepStrictEqual as equal } from 'node:util';
-import { CASES, dellId, respectLower } from './controller-bakeoff-round-2-cases.mjs';
+import { CASES as ALL_CASES, dellId, respectLower } from './controller-bakeoff-round-2-cases.mjs';
 import { turnFixture } from '../.build/src/dev/turn-fixture.js';
 import { mockNarrator, metadata, collect } from '../.build/tests/turn-fixtures.js';
 import { TurnCoordinator } from '../.build/src/turn/turn-coordinator.js';
 import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../.build/src/retrieval/hybrid-search.js';
-import { DeepSeekStateControllerProvider, DEFAULT_CONTROLLER_MODEL, CONTROLLER_POLICY } from '../.build/src/llm/openrouter/deepseek-controller.js';
+import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL, CONTROLLER_POLICY } from '../.build/src/llm/openrouter/state-controller.js';
 import { OpenRouterClient } from '../.build/src/llm/openrouter/client.js';
 import { CONTROLLER_EVIDENCE_SCHEMA, parseControllerEvidenceProposal } from '../.build/src/llm/controller-schema.js';
 import { DEFAULT_RETRY_POLICY, ProviderBudget, withProviderRetry } from '../.build/src/llm/retry.js';
 import { scoreControllerCommands, falseProposalSeverity, latencyStats } from '../.build/src/dev/controller-bakeoff-metrics.js';
 
-const models=['deepseek/deepseek-v4-flash-0731:nitro','qwen/qwen3.8-flash'];
-const dir=process.argv.includes('--out')?process.argv[process.argv.indexOf('--out')+1]:'saves/controller-bakeoff-round-2';
+const switchValidation=process.argv.includes('--switch');
+const switchIds=['a01_quiet','k01_direct','k06_wrong_source','d01_already_known','r01_affection','r04_politeness','m03_temporary_exit','m02_refusal','m01_independent_return','x02_knowledge_affection','d03_repeated_embrace','a07_secret_unknown','k04_pronoun','k05_one_recipient','a05_incomplete','a03_future'];
+const CASES=switchValidation?switchIds.map(id=>{const c=ALL_CASES.find(c=>c.id===id);assert.ok(c);return c;}):ALL_CASES;
+const models=switchValidation?[DEFAULT_CONTROLLER_MODEL]:['deepseek/deepseek-v4-flash-0731:nitro','qwen/qwen3.8-flash'];
+if(switchValidation)assert.equal(DEFAULT_CONTROLLER_MODEL,'qwen/qwen3.8-flash');
+const dir=process.argv.includes('--out')?process.argv[process.argv.indexOf('--out')+1]:(switchValidation?'saves/controller-switch-qwen':'saves/controller-bakeoff-round-2');
 assert.ok(dir&&execFileSync('git',['check-ignore',dir+'/prepared.json'],{encoding:'utf8'}).trim(),'Raw output must be git-ignored');
 const hash=x=>createHash('sha256').update(typeof x==='string'?x:JSON.stringify(x)).digest('hex');
 async function sourceHash() {
@@ -43,14 +47,14 @@ function stateProjection(s) {
   const scrub=v=>Array.isArray(v)?v.map(scrub):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).filter(([k])=>!/revision$/.test(k)).map(([k,x])=>[k,scrub(x)])):v;
   return scrub({characters:s.characters,items:s.items,households:s.households,facts:s.facts,knowledge:s.knowledge,relationships:s.relationships,goals:s.goals,scheduled_events:s.scheduled_events,funds:s.funds,legal_statuses:s.legal_statuses,transactions:s.transactions,runtime:s.runtime});
 }
-async function replay(c, result, frozen) {
-  const f=fixture(c),service=new RetrievalService(f.world);let request;
+export async function replay(c, result, frozen) {
+  const f=fixture(c),service=new RetrievalService(f.world);let request,diagnostics;
   const co=new TurnCoordinator(f.world,mockNarrator(c.narration),{async propose(r){
     request={player_action:r.player_action,prior_state:r.prior_state,final_narration:r.final_narration};
     if(frozen)assert.deepEqual(request,frozen,'Frozen production request changed');return result;
-  }},{service,search:new HybridSearch(service)},{provider_retry:false});
+  }},{service,search:new HybridSearch(service)},{provider_retry:false,diagnostics_sink:r=>{diagnostics=r;}});
   const events=await collect(co.runTurn({campaign:f.campaign,player_input:c.input}));
-  return {request,result:events.find(e=>e.type==='turn_completed')?.result??null,failure:events.find(e=>e.type==='turn_failed')??null,state:stateProjection(f.campaign.exportSnapshot())};
+  return {request,diagnostics,completed_count:events.filter(e=>e.type==='turn_completed').length,result:events.find(e=>e.type==='turn_completed')?.result??null,failure:events.find(e=>e.type==='turn_failed')??null,state:stateProjection(f.campaign.exportSnapshot())};
 }
 function idsIn(v,out=new Set()) { if(v&&typeof v==='object')for(const [k,x]of Object.entries(v)){if((k==='id'||k.endsWith('_id')||k==='player_location'||k==='current_location')&&typeof x==='string')out.add(x);else idsIn(x,out);}return out; }
 function commandIds(command){const ids=[];function walk(v){if(v&&typeof v==='object')for(const[k,x]of Object.entries(v)){if(k.endsWith('_id')&&typeof x==='string')ids.push(x);else walk(x);}}walk(command);return ids;}
@@ -59,7 +63,7 @@ function reviewedSeverity(score,c){
   return score.false_positives.map(command=>({command,severity:falseProposalSeverity(command,new Set(c.known_ids),score.duplicate_proposals.some(x=>equal(x,command)),[...c.expected,...c.optional],command.kind==='set_knowledge'&&prior.context.knowledge.some(k=>k.character_id===command.knowledge.character_id&&k.fact_id===command.knowledge.fact_id&&k.status==='knows'))}));
 }
 async function prepare() {
-  assert.equal(CASES.length,30);assert.equal(new Set(CASES.map(c=>c.id)).size,30);
+  assert.equal(CASES.length,switchValidation?16:30);assert.equal(new Set(CASES.map(c=>c.id)).size,CASES.length);
   assert.ok(CASES.filter(c=>c.adversarial.length).length>=8);
   await mkdir(dir,{recursive:true});await mkdir(dir+'/cells',{recursive:true});await mkdir(dir+'/started',{recursive:true});
   const catalog=await(await fetch('https://openrouter.ai/api/v1/models')).json();
@@ -92,9 +96,9 @@ async function prepare() {
     }
     prepared.push({...c,request:p.request,input_hash:hash(p.request),known_ids:[...known].sort(),gold_authorization:p.result.authorization,gold_state:p.state,gold_state_hash:hash(p.state),exclusion_validation});
   }
-  const setup={prepared_at:new Date().toISOString(),base_head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),source_sha256:await sourceHash(),policy_sha256:hash(CONTROLLER_POLICY),schema_sha256:hash(CONTROLLER_EVIDENCE_SCHEMA),production_default:DEFAULT_CONTROLLER_MODEL,models:selected,endpoints,routing:'DeepSeek production :nitro on every case; Qwen plain ID, sole advertised Alibaba upstream; require_parameters:true unchanged',policy:{max_tokens:512,timeout_ms:20000,stream:false,reasoning:{enabled:false,exclude:true},temperature:'unset; production provider defaults',retry:'production DEFAULT_RETRY_POLICY: two attempts, 250–500 ms backoff, 120 s budget',samples_per_case:1},cases:prepared};
+  const setup={prepared_at:new Date().toISOString(),base_head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),source_sha256:await sourceHash(),policy_sha256:hash(CONTROLLER_POLICY),schema_sha256:hash(CONTROLLER_EVIDENCE_SCHEMA),production_default:DEFAULT_CONTROLLER_MODEL,models:selected,endpoints,routing:switchValidation?'Production controller default, Qwen plain ID; require_parameters:true unchanged':'DeepSeek production :nitro on every case; Qwen plain ID, sole advertised Alibaba upstream; require_parameters:true unchanged',policy:{max_tokens:512,timeout_ms:20000,stream:false,reasoning:{enabled:false,exclude:true},temperature:'unset; production provider defaults',retry:'production DEFAULT_RETRY_POLICY: two attempts, 250–500 ms backoff, 120 s budget',samples_per_case:1},cases:prepared};
   await writeFile(dir+'/prepared.json',JSON.stringify(setup,null,2),{flag:'wx'});
-  console.log(JSON.stringify({prepared:30,scored:prepared.filter(c=>c.scored).length,required_commands:prepared.reduce((s,c)=>s+c.expected.length,0),engine_owned_commands:prepared.reduce((s,c)=>s+c.optional.length,0),strict_abstention_cases:prepared.filter(c=>c.expected_abstention).length,adversarial_cases:prepared.filter(c=>c.adversarial.length).length,base_head:setup.base_head,paid_calls:0}));
+  console.log(JSON.stringify({prepared:CASES.length,scored:prepared.filter(c=>c.scored).length,required_commands:prepared.reduce((s,c)=>s+c.expected.length,0),engine_owned_commands:prepared.reduce((s,c)=>s+c.optional.length,0),strict_abstention_cases:prepared.filter(c=>c.expected_abstention).length,adversarial_cases:prepared.filter(c=>c.adversarial.length).length,base_head:setup.base_head,paid_calls:0}));
 }
 async function run(){
   assert.ok(process.env.OPENROUTER_API_KEY?.trim(),'Missing API credential');
@@ -115,7 +119,7 @@ async function run(){
       try{const res=await fetch(url,options);a.http_status=res.status;a.raw_response=await res.clone().text();try{a.response=JSON.parse(a.raw_response);}catch{}await appendFile(dir+'/attempts.jsonl',JSON.stringify({cell:key,model,...a})+'\n');return res;}
       catch(e){a.transport_error=e.name;await appendFile(dir+'/attempts.jsonl',JSON.stringify({cell:key,model,...a})+'\n');throw e;}
     };
-    const provider=new DeepSeekStateControllerProvider(new OpenRouterClient({fetch:wrapped}),{model});
+    const provider=new OpenRouterStateControllerProvider(new OpenRouterClient({fetch:wrapped}),switchValidation?{}:{model});
     const abort=new AbortController(),started=performance.now();
     try{result=await withProviderRetry({policy:DEFAULT_RETRY_POLICY,budget:new ProviderBudget(DEFAULT_RETRY_POLICY),signal:abort.signal,checkpoint(){},record:r=>{retry_record=r;},run:(_attempt,timeout_ms)=>provider.propose({...c.request,...(timeout_ms?{timeout_ms}:{})})});}
     catch(e){error=e.code??e.message;}
@@ -127,9 +131,12 @@ async function run(){
     const usage=raw?.usage??result?.usage??{};
     let cost_usd=0,cost_available=true;for(const a of attempts){if(typeof a.response?.usage?.cost==='number')cost_usd+=a.response.usage.cost;else if(a.http_status===200){const u=a.response?.usage,price=setup.models.find(m=>m.request_id===model).pricing;if(typeof u?.prompt_tokens==='number'&&typeof u?.completion_tokens==='number')cost_usd+=u.prompt_tokens*Number(price.prompt)+u.completion_tokens*Number(price.completion);else cost_available=false;}}
     const auth=validation?.result?.authorization??[];
+    if(switchValidation&&result){assert.equal(result.model,DEFAULT_CONTROLLER_MODEL);assert.equal(result.provider,raw?.provider);}
+    const invented_ids=(result?.commands??[]).flatMap(commandIds).filter(id=>!c.known_ids.includes(id));
+    const private_leak=JSON.stringify(result??{}).includes('HIDDEN_SECRET_SENTINEL');
     const authorized_outside_gold=auth.filter(a=>a.authorized&&![...c.expected,...c.optional].some(e=>equal(e,a.command))).map(a=>a.command);
     const state_match=validation?.result?equal(validation.state,c.gold_state):null;
-    const row={scenario:c.id,category:c.category,model,input_hash:c.input_hash,scored:c.scored,expected:c.expected,optional:c.optional,proposed:result?.commands??[],evidence:result?.evidence??null,...score,exact_match:result?score.exact_match:false,correct_abstention:c.expected_abstention?!!result&&result.commands.length===0:null,severity,model_outcome_available,raw_json_valid,wire_schema_valid,production_parse_valid:!!result,normalization:result?.normalization??null,api_schema_acceptance:last?.http_status===200,error,structured_output_invalid:error==='structured_output_invalid',empty_response:last?.http_status===200&&!content,refusal:error==='model_refusal',timeout:error==='timeout',finish_reason:raw?.choices?.[0]?.finish_reason??null,generation_latency_ms:result?.latency.elapsed_total_ms??(last?.http_status===200?end_to_end_ms:null),end_to_end_ms,retry_record,retries:Math.max(0,attempts.length-1),initial_http_failure:attempts[0]?.http_status>=400,usage,cost_usd:cost_available?cost_usd:null,cost_source:typeof usage.cost==='number'?'OpenRouter usage.cost':'catalog token estimate or no reported charge',provider:raw?.provider??null,validation:validation?{authorization:auth,turn_failure:validation.failure,authorized_outside_gold,state_match,actual_state_hash:hash(validation.state),gold_state_hash:c.gold_state_hash,engine_missing:c.expected.concat(c.optional).filter(e=>!validation.result?.authorized_commands.some(a=>equal(a,e))),reconciliation:validation.result?.narration_reconciliation??null}:null,attempts:attempts.map(({wire_request,raw_response,response,...a})=>({...a,provider:response?.provider??null,usage:response?.usage??null}))};
+    const row={invented_ids,private_leak,scenario:c.id,category:c.category,model,input_hash:c.input_hash,scored:c.scored,expected:c.expected,optional:c.optional,proposed:result?.commands??[],evidence:result?.evidence??null,...score,exact_match:result?score.exact_match:false,correct_abstention:c.expected_abstention?!!result&&result.commands.length===0:null,severity,model_outcome_available,raw_json_valid,wire_schema_valid,production_parse_valid:!!result,normalization:result?.normalization??null,api_schema_acceptance:last?.http_status===200,error,structured_output_invalid:error==='structured_output_invalid',empty_response:last?.http_status===200&&!content,refusal:error==='model_refusal',timeout:error==='timeout',finish_reason:raw?.choices?.[0]?.finish_reason??null,generation_latency_ms:result?.latency.elapsed_total_ms??(last?.http_status===200?end_to_end_ms:null),end_to_end_ms,retry_record,retries:Math.max(0,attempts.length-1),initial_http_failure:attempts[0]?.http_status>=400,usage,cost_usd:cost_available?cost_usd:null,cost_source:typeof usage.cost==='number'?'OpenRouter usage.cost':'catalog token estimate or no reported charge',provider:raw?.provider??null,validation:validation?{authorization:auth,turn_failure:validation.failure,authorized_outside_gold,state_match,actual_state_hash:hash(validation.state),gold_state_hash:c.gold_state_hash,engine_missing:c.expected.concat(c.optional).filter(e=>!validation.result?.authorized_commands.some(a=>equal(a,e))),reconciliation:validation.result?.narration_reconciliation??null}:null,attempts:attempts.map(({wire_request,raw_response,response,...a})=>({...a,provider:response?.provider??null,usage:response?.usage??null}))};
     await writeFile(path,JSON.stringify(row,null,2),{flag:'wx'});
     console.log(`${c.id} ${model}: ${error??(c.scored?`${row.exact_match?'exact':'mismatch'} TP=${score.true_positives.length} FP=${score.false_positives.length} FN=${score.false_negatives.length}`:'excluded contract probe')} retries=${row.retries} e2e=${(end_to_end_ms/1000).toFixed(2)}s`);
   }
@@ -145,13 +152,13 @@ async function summarize(){
   // Review severity against the frozen prior state: regranting existing knowledge is redundant, not invented knowledge.
   for(const r of rows)r.severity=reviewedSeverity(r,setup.cases.find(c=>c.id===r.scenario));
   assert.equal(new Set(rows.map(r=>r.model+':'+r.scenario)).size,rows.length);
-  assert.ok(rows.reduce((s,r)=>s+r.attempts.filter(a=>a.http_status===200).length,0)<=60,'Generated outputs repeated');
+  assert.ok(rows.reduce((s,r)=>s+r.attempts.filter(a=>a.http_status===200).length,0)<=CASES.length*models.length,'Generated outputs repeated');
   const categorySummary=rs=>{const a=aggregate(rs);return Object.fromEntries(['cells','scored_cases','tp','fp','fn','precision','context_feasible_recall','correct_abstention','abstention_cases','exact_cases','duplicates','severity','engine_missing_commands'].map(k=>[k,a[k]]));};
   const summaries=models.map(model=>({model,...aggregate(rows.filter(r=>r.model===model)),categories:Object.fromEntries(['abstention','knowledge','relationships','movement','multi-action','duplication'].map(cat=>[cat,categorySummary(rows.filter(r=>r.model===model&&r.category===cat))]))}));
-  const disagreements=[];for(const c of setup.cases){const pair=models.map(model=>rows.find(r=>r.model===model&&r.scenario===c.id));if(pair.some(r=>!r))continue;if(!scoreControllerCommands(pair[0].proposed,pair[1].proposed).exact_match||pair[0].production_parse_valid!==pair[1].production_parse_valid)disagreements.push({id:c.id,category:c.category,scored:c.scored,gold:c.expected,allowed_engine_owned:c.optional,contract_probe:c.contract_probe??null,evidence_basis:c.evidence_basis,results:pair.map(r=>({model:r.model,proposed:r.proposed,exact:c.scored?r.exact_match:null,fp:c.scored?r.false_positives:null,fn:c.scored?r.false_negatives:null,severity:c.scored?r.severity:null,semantic_probe_match:c.contract_probe?scoreControllerCommands(r.proposed,c.contract_probe).exact_match:null,engine_state_match:r.validation?.state_match??null,error:r.error}))});}
-  const manifest={round:2,status:rows.length===60?'complete':'partial',prepared_at:setup.prepared_at,analyzed_at:new Date().toISOString(),base_head:setup.base_head,source_sha256:setup.source_sha256,policy_sha256:setup.policy_sha256,schema_sha256:setup.schema_sha256,production_default:setup.production_default,routing:setup.routing,policy:setup.policy,models:setup.models.map(({request_id,id,canonical_slug,pricing,supported_parameters,reasoning})=>({request_id,id,canonical_slug,pricing,supported_parameters,reasoning})),cases:setup.cases.map(({request,gold_authorization,gold_state,known_ids,exclusion_validation,...c})=>({...c,preflight_gold_authorized:true,exclusion_validation:exclusion_validation?.map(a=>({authorized:a.authorized,reason:a.reason,evidence_check:a.evidence?.check}))??null})),summaries,disagreements};
+  const disagreements=[];for(const c of setup.cases){const pair=models.map(model=>rows.find(r=>r.model===model&&r.scenario===c.id));if(pair.length!==2||pair.some(r=>!r))continue;if(!scoreControllerCommands(pair[0].proposed,pair[1].proposed).exact_match||pair[0].production_parse_valid!==pair[1].production_parse_valid)disagreements.push({id:c.id,category:c.category,scored:c.scored,gold:c.expected,allowed_engine_owned:c.optional,contract_probe:c.contract_probe??null,evidence_basis:c.evidence_basis,results:pair.map(r=>({model:r.model,proposed:r.proposed,exact:c.scored?r.exact_match:null,fp:c.scored?r.false_positives:null,fn:c.scored?r.false_negatives:null,severity:c.scored?r.severity:null,semantic_probe_match:c.contract_probe?scoreControllerCommands(r.proposed,c.contract_probe).exact_match:null,engine_state_match:r.validation?.state_match??null,error:r.error}))});}
+  const manifest={round:switchValidation?'production-switch':2,status:rows.length===CASES.length*models.length?'complete':'partial',prepared_at:setup.prepared_at,analyzed_at:new Date().toISOString(),base_head:setup.base_head,source_sha256:setup.source_sha256,policy_sha256:setup.policy_sha256,schema_sha256:setup.schema_sha256,production_default:setup.production_default,routing:setup.routing,policy:setup.policy,models:setup.models.map(({request_id,id,canonical_slug,pricing,supported_parameters,reasoning})=>({request_id,id,canonical_slug,pricing,supported_parameters,reasoning})),cases:setup.cases.map(({request,gold_authorization,gold_state,known_ids,exclusion_validation,...c})=>({...c,preflight_gold_authorized:true,exclusion_validation:exclusion_validation?.map(a=>({authorized:a.authorized,reason:a.reason,evidence_check:a.evidence?.check}))??null})),summaries,disagreements};
   const compact='{\n'+Object.entries(manifest).map(([k,v])=>'  '+JSON.stringify(k)+': '+(['cases','summaries','disagreements'].includes(k)?'[\n'+v.map(x=>'    '+JSON.stringify(x)).join(',\n')+'\n  ]':JSON.stringify(v))).join(',\n')+'\n}\n';
-  await writeFile('docs/evaluations/controller-bakeoff-round-2-summary.json',compact);
+  await writeFile(switchValidation?dir+'/summary.json':'docs/evaluations/controller-bakeoff-round-2-summary.json',compact);
   console.log(JSON.stringify(summaries.map(({categories,...s})=>s),null,2));
 }
 if(process.argv.includes('--prepare'))await prepare();else if(process.argv.includes('--run'))await run();else if(process.argv.includes('--summarize'))await summarize();else throw new Error('Use --prepare, --run, or --summarize; build first.');

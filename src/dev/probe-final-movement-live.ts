@@ -7,7 +7,7 @@ import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { MiniMaxNarratorProvider } from "../llm/openrouter/minimax-narrator.js";
-import { DeepSeekStateControllerProvider } from "../llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider } from "../llm/openrouter/state-controller.js";
 import { narratorConfig, selectedModels } from "./turn-services.js";
 import type { GenerationRequest } from "../llm/types.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
@@ -59,7 +59,7 @@ const rate = (model: string) => { const row = catalog.data.find(r => r.id === mo
 const models = selectedModels(), narratorRate = rate(models.narrator), controllerRate = rate(models.controller);
 mkdirSync(dirname(out), { recursive: true });
 let spent = existsSync(out) ? readFileSync(out, "utf8").split("\n").filter(Boolean).reduce((n, l) => n + (JSON.parse(l) as { cost_eur: number }).cost_eur, 0) : 0;
-const innerNarrator = new MiniMaxNarratorProvider(undefined, narratorConfig()), innerController = new DeepSeekStateControllerProvider(undefined, { model: models.controller });
+const innerNarrator = new MiniMaxNarratorProvider(undefined, narratorConfig()), innerController = new OpenRouterStateControllerProvider(undefined, { model: models.controller });
 /** Save immediately, reload, and compare every household member's authoritative location (the file never leaves memory). */
 function saveLoad(f: ReturnType<typeof turnFixture>): boolean {
   try {

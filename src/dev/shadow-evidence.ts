@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { isDeepStrictEqual } from "node:util";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
-import { CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/deepseek-controller.js";
+import { CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 import { CONTROLLER_SCHEMA } from "../llm/controller-schema.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import { parseCampaignProposal } from "../campaign/validation.js";
@@ -108,7 +108,7 @@ const tellFile = process.argv.find(a => a.endsWith(".jsonl"));
 if (process.argv.includes("--list")) { for (const i of [...await loadTraces(tellFile), ...ADVERSARIAL]) console.log(i.key, i.truth, i.case_id); process.exit(0); }
 if (!process.env.OPENROUTER_API_KEY?.trim()) throw new Error("OPENROUTER_API_KEY is not set");
 const items = [...await loadTraces(tellFile), ...ADVERSARIAL];
-console.log(`\n=== PAID ONLINE EVALUATION (OpenRouter) - SHADOW ONLY, NOTHING COMMITTED ===\n${items.length} DeepSeek shadow proposals (${DEFAULT_CONTROLLER_MODEL})\n`);
+console.log(`\n=== PAID ONLINE EVALUATION (OpenRouter) - SHADOW ONLY, NOTHING COMMITTED ===\n${items.length} OpenRouter shadow proposals (${DEFAULT_CONTROLLER_MODEL})\n`);
 type Row = Item & Awaited<ReturnType<typeof shadowPropose>> & { grammar_outcome: string; strict_outcome: string; quoted_tell_outcome: string };
 const rows: Row[] = [];
 for (const item of items) {

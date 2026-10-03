@@ -20,7 +20,7 @@ export interface TurnDiagnostics {
   context_too_large_cause?: DiagnosticPhase;
   narrator?: { model?: string; usage?: GenerationMetadata["usage"]; latency_ms?: number; completed: boolean; streamed_characters: number; final_text_characters: number };
   revision_narrator?: TurnDiagnostics["narrator"];
-  controller?: { model: string; usage: GenerationMetadata["usage"]; latency_ms: number; parse_success: boolean; proposed_count: number; command_kinds: readonly string[]; normalization_used: boolean };
+  controller?: { model: string; provider?: string; usage: GenerationMetadata["usage"]; latency_ms: number; parse_success: boolean; proposed_count: number; command_kinds: readonly string[]; normalization_used: boolean };
   /** H5: attempts per logical provider call (draft narrator, reconciliation narrator, controller). Counts, reasons and timing only. */
   provider_attempts?: { narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
   authorization?: { duplicates_removed?: number; proposed_count: number; authorized_count: number; rejected_count: number; decisions: readonly { kind: string; authorized: boolean; reason: string; evidence_check?: string }[] };
