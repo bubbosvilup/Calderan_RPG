@@ -39,11 +39,11 @@ async function items(): Promise<Item[]> {
       if (truth) out.push({ key, source: prefix, input: r.input, narration: r.narration, truth, ground: r.case_id === "r115" });
     }
   };
-  add("1m", (await json("docs/evaluations/phase-1m-stage-b-20260928T2044.json")).records);
-  add("1m1", (await json("docs/evaluations/phase-1m1-stage-b-20260928T2118.json")).records);
-  add("conf", (await json("docs/evaluations/phase-1m1-confirmation-20260928T2125.json")).records);
-  add("glm", (await json("docs/evaluations/phase-1m2-glm-check-20260928T2146.json")).runs.stage_b.records);
-  const runs = (await json("docs/evaluations/phase-1n-authority-runs-20260928.json")).runs as Record<string, { records: { sequence: string; rep: number; turns: { turn: number; input: string; narration: string }[] }[] }>;
+  add("1m", (await json("docs/evaluations/archive/phase-1m-stage-b-20260928T2044.json")).records);
+  add("1m1", (await json("docs/evaluations/archive/phase-1m1-stage-b-20260928T2118.json")).records);
+  add("conf", (await json("docs/evaluations/archive/phase-1m1-confirmation-20260928T2125.json")).records);
+  add("glm", (await json("docs/evaluations/archive/phase-1m2-glm-check-20260928T2146.json")).runs.stage_b.records);
+  const runs = (await json("docs/evaluations/archive/phase-1n-authority-runs-20260928.json")).runs as Record<string, { records: { sequence: string; rep: number; turns: { turn: number; input: string; narration: string }[] }[] }>;
   for (const [prefix, run] of [["1n-before", "contamination_before"], ["1n-after", "tell_after"]] as const)
     for (const s of runs[run]!.records.filter(s => s.sequence === "tell_acquisition")) out.push({ key: `${prefix}:tell#${s.rep}`, source: prefix, input: TELL, narration: s.turns[0]!.narration, truth: TRACE_LABELS[`${prefix}:tell#${s.rep}`]!, ground: false });
   for (const [prefix, run] of [["1n-stab-dialogue", "stability_dialogue_focused"], ["1n-stab-fullprose", "stability_full_prose_reference"]] as const)

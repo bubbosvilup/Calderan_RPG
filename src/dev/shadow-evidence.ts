@@ -60,10 +60,10 @@ async function loadTraces(tellFile: string | undefined): Promise<Item[]> {
     }
   };
   const json = async (p: string) => JSON.parse(await readFile(p, "utf8"));
-  add("1m", "phase-1m-stage-b", (await json("docs/evaluations/phase-1m-stage-b-20260928T2044.json")).records);
-  add("1m1", "phase-1m1-stage-b", (await json("docs/evaluations/phase-1m1-stage-b-20260928T2118.json")).records);
-  add("conf", "phase-1m1-confirmation", (await json("docs/evaluations/phase-1m1-confirmation-20260928T2125.json")).records);
-  add("glm", "phase-1m2-glm", (await json("docs/evaluations/phase-1m2-glm-check-20260928T2146.json")).runs.stage_b.records);
+  add("1m", "phase-1m-stage-b", (await json("docs/evaluations/archive/phase-1m-stage-b-20260928T2044.json")).records);
+  add("1m1", "phase-1m1-stage-b", (await json("docs/evaluations/archive/phase-1m1-stage-b-20260928T2118.json")).records);
+  add("conf", "phase-1m1-confirmation", (await json("docs/evaluations/archive/phase-1m1-confirmation-20260928T2125.json")).records);
+  add("glm", "phase-1m2-glm", (await json("docs/evaluations/archive/phase-1m2-glm-check-20260928T2146.json")).runs.stage_b.records);
   const tell = tellFile ? (await readFile(tellFile, "utf8")).split("\n").filter(Boolean).map(l => JSON.parse(l) as { rep: number; turns: { input: string; narration: string }[] }) : [];
   for (const s of tell) { const key = `1n:kimi:tell#${s.rep}`, truth = LABELS[key]; if (truth) items.push({ key, source: "phase-1n-tell-before", case_id: "knowledge_tell", input: s.turns[0]!.input, narration: s.turns[0]!.narration, truth }); }
   return items;

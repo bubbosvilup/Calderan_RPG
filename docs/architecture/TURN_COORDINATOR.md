@@ -110,7 +110,7 @@ Default startup uses a populated synthetic development campaign. `--canon` start
 
 Use `/give <item> to <character>`, `/equip <item> <slot> <worn|held>`, `/tell <fact> to <character>` and `/schedule` as above for supported explicit actions; ordinary player prose is also accepted but conservatively authorized. Debug mode displays proposals/rejections, retrieval IDs, revisions, latency, prompt sizes and usage after finalization. Direct Node invocation avoids shell/npm flag-forwarding ambiguity.
 
-TurnCoordinator never imports or calls CampaignSaveRepository. CampaignSession dirty tracking follows the in-memory revision. The actual CLI smoke changed world minute **100 → 101**, revision **1 → 2**, printed “Finalized” and `unsaved: true`, and exited without saving. See [CLI transcript](../evaluations/phase-1l-cli.txt).
+TurnCoordinator never imports or calls CampaignSaveRepository. CampaignSession dirty tracking follows the in-memory revision. The actual CLI smoke changed world minute **100 → 101**, revision **1 → 2**, printed “Finalized” and `unsaved: true`, and exited without saving. See [CLI transcript](https://github.com/bubbosvilup/Calderan_RPG/blob/9faa6b8834cb577bf251c272d2eb7626cca181c5/docs/evaluations/phase-1l-cli.txt).
 
 ## Historical corpus, provenance and evaluation
 
@@ -130,7 +130,7 @@ npm run inspect:turn
 
 Offline replay uses exact historical narration and mock proposals, exercises the real coordinator and asserts the known conservative gap for record 115 without changing its desired labels. The dedicated harness has **25 passing tests** (parser plus 24 pairs).
 
-Online evaluation defaults to **12 curated pairs**, with explicit expansion capped at the 24 curated cases. It prints paid-online status, model IDs, date/time, per-case command precision/recall counts, final states and telemetry, and writes human-inspectable JSON. Each case starts from an isolated synthetic state; original player text is unchanged and historical assistant text is not sent. This is recontextualized evaluation, not historical state reconstruction. Qualitative fields remain pending in raw machine reports; the separately authored [review](../evaluations/PHASE_1L_REVIEW.md) assesses them without pretending an objective prose grader exists.
+Online evaluation defaults to **12 curated pairs**, with explicit expansion capped at the 24 curated cases. It prints paid-online status, model IDs, date/time, per-case command precision/recall counts, final states and telemetry, and writes human-inspectable JSON. Each case starts from an isolated synthetic state; original player text is unchanged and historical assistant text is not sent. This is recontextualized evaluation, not historical state reconstruction. Qualitative fields remain pending in raw machine reports; the separately authored [review](../evaluations/archive/PHASE_1L_REVIEW.md) assesses them without pretending an objective prose grader exists.
 
 ## Verification and measured results
 
@@ -156,7 +156,7 @@ Provider timings reuse Phase 1K metadata; retrieval, tail and total durations us
 
 Historical sample usage: **45,720 prompt + 860 completion = 46,580 tokens**. Final smoke: **18,722 + 326 = 19,048 tokens**. Preserved initial smoke: **19,295 + 824 = 20,119 tokens**. Total across those three recorded evaluation batches: **83,737 prompt + 2,010 completion = 85,747 tokens**. The additional two-request CLI smoke did not print debug usage, so its tokens are not included in that total. No pricing estimate is claimed.
 
-The qualitative review found zero clear deliberate player takeovers in the 12 final historical cases and one ambiguous case requiring human assessment. It also found major continuity issues: invented setting/equipment, a speaking silent construct, already-equipped boots being put on again, unclear speakers and poor use of retrieved lore. An initial smoke had a clear player voice takeover and metadata/JSON output. The readable-prompt revision reduced metadata echo in the observed final samples but did not solve those wider problems. See the full [qualitative review](../evaluations/PHASE_1L_REVIEW.md), [historical results](../evaluations/phase-1l-playthrough.json) and [final smoke results](../evaluations/phase-1l-smoke.json).
+The qualitative review found zero clear deliberate player takeovers in the 12 final historical cases and one ambiguous case requiring human assessment. It also found major continuity issues: invented setting/equipment, a speaking silent construct, already-equipped boots being put on again, unclear speakers and poor use of retrieved lore. An initial smoke had a clear player voice takeover and metadata/JSON output. The readable-prompt revision reduced metadata echo in the observed final samples but did not solve those wider problems. See the full [qualitative review](../evaluations/archive/PHASE_1L_REVIEW.md), [historical results](https://github.com/bubbosvilup/Calderan_RPG/blob/9faa6b8834cb577bf251c272d2eb7626cca181c5/docs/evaluations/phase-1l-playthrough.json) and [final smoke results](https://github.com/bubbosvilup/Calderan_RPG/blob/9faa6b8834cb577bf251c272d2eb7626cca181c5/docs/evaluations/phase-1l-smoke.json).
 
 ## Deferred scope and status
 
@@ -189,7 +189,7 @@ Only record 115's evaluation fixture explicitly grounds the formerly ambiguous r
 
 Development qualitative checks are narrow triage for established silence, equipped boots, closed-fixture omissions, speaker labels, explicit player actions and retrieved-lore denial. They neither authorize commands nor rewrite/block production narration, and their absence is not proof of adherence. Human/agent inspection remains necessary. No automatic correction, retry or third-model grading was implemented. Multiple development evaluation batches are preserved separately, not hidden retries.
 
-See [Phase 1L.1 review](../evaluations/PHASE_1L1_REVIEW.md) for evidence, failures and the qualified readiness decision. The next major phase has not begun.
+See [Phase 1L.1 review](../evaluations/archive/PHASE_1L1_REVIEW.md) for evidence, failures and the qualified readiness decision. The next major phase has not begun.
 
 ## Live NPC Regression Repair 1: authoritative narration order
 
@@ -217,11 +217,11 @@ Audit checks (`src/turn/narration-audit.ts`), all bounded and structured:
 - **Presence.** Companions from authored habits ("usually accompanied by …") and named absent NPCs acting in narration.
 - **Consequences.** Class-B physical conditions narrated without a committed condition, and class-C/D constraints (restraint, removal, detention, bans) narrated as accomplished on Nicco. See [PHYSICAL_INTERACTION.md](PHYSICAL_INTERACTION.md).
 
-The audit is a safety net behind the prompt contract, not semantic policing. Known gaps are listed in [the Repair 1 report](../evaluations/CALDERAN_LIVE_NPC_REGRESSION_REPAIR_1.md).
+The audit is a safety net behind the prompt contract, not semantic policing. Known gaps are listed in [the Repair 1 report](../evaluations/archive/CALDERAN_LIVE_NPC_REGRESSION_REPAIR_1.md).
 
 ## Runtime Continuity Repair 1
 
-See [the repair report](../evaluations/RUNTIME_CONTINUITY_REPAIR_1.md).
+See [the repair report](../evaluations/archive/RUNTIME_CONTINUITY_REPAIR_1.md).
 
 - **Recent conversation.** 12 completed exchanges under a 16,000-character serialized budget. Oldest complete exchanges are evicted first, and exchanges are never cut or reordered. Only player input and delivered narration are stored: a failed turn stores only what was shown and never displaces a completed exchange.
 - **Temporary participant departure.** `leave_scene { character_id }` is a controller command. It applies only to a present **created** character and follows the usual path: proposal, narration evidence (`src/turn/scene-departure.ts`), authorization, then prepare. Committing it clears the character's location: the record stays, and re-entry needs `move_character`. The audit flags an exit narrated without a committed `leave_scene` (`uncommitted_departure`), and flags a created character acting in the scene after it has left (`absent_participant`). Final movement closure: the same command also applies to an ACTIVE authored NPC+ present with Nicco whose narrated completed departure establishes no destination; it commits `OFF_SCENE(last known place)` instead of clearing a created record, and a known destination always wins as a `move_character`.
@@ -231,7 +231,7 @@ See [the repair report](../evaluations/RUNTIME_CONTINUITY_REPAIR_1.md).
 
 ## Household / Slave Trade / Relationship Runtime Pass 1
 
-See [the pass report](../evaluations/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_RUNTIME_PASS_1.md).
+See [the pass report](../evaluations/archive/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_RUNTIME_PASS_1.md).
 
 - **Person transactions (purchase, manumission)** are player-authored runtime actions, resolved by `src/turn/person-transactions.ts`. A purchase needs three things: an explicit acceptance or payment, one exact present subject held by a present seller, and one established price. The resolver prevalidates the transaction against a real `campaign.prepare` *before narration*. The narrator receives the authoritative outcome as a note (completed, or blocked with the reason), and the transaction commits atomically with the turn's other commands. The LLM controller cannot propose purchases, so a retry can never double-charge.
 - **Household membership, household rules and relationship steps** are controller proposals, each confirmed by its own evidence:
@@ -244,7 +244,7 @@ See [the pass report](../evaluations/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_RUNTIME_
 
 ## Narrator-Ephemeral Character Promotion Pass 1.1
 
-See [the pass report](../evaluations/NARRATOR_EPHEMERAL_CHARACTER_PROMOTION_PASS_1_1.md).
+See [the pass report](../evaluations/archive/NARRATOR_EPHEMERAL_CHARACTER_PROMOTION_PASS_1_1.md).
 
 - **Narrated captives.** `src/turn/narrated-captives.ts` reads the current scene's delivered narration and finds captives the narrator invented:
   - The scene is the trailing exchanges at the player's location; `RecentExchange.location_id` is now recorded, but never rendered into prompts.
@@ -259,7 +259,7 @@ See [the pass report](../evaluations/NARRATOR_EPHEMERAL_CHARACTER_PROMOTION_PASS
 
 ## Narrator Character Persistence Pass 1.2
 
-See [the pass report](../evaluations/NARRATOR_CHARACTER_PERSISTENCE_PASS_1_2.md).
+See [the pass report](../evaluations/archive/NARRATOR_CHARACTER_PERSISTENCE_PASS_1_2.md).
 
 - **Model.** A narrator-created person follows one path: proper name established, then campaign character, then household join, then NPC+ (not implemented). There is one exception: an unnamed person the player acquires. There is no importance scoring, and no promotion from dialogue, wounds, healing, gifts, witnessing or rumors.
 - **Name establishment.** `src/turn/name-establishment.ts` runs deterministically on the **delivered** narration at finalization, after the audit and before commit. Its commands join the already-validated turn proposal. If the combined proposal fails validation, the identity changes are dropped and the turn still commits.
@@ -277,7 +277,7 @@ See [the pass report](../evaluations/NARRATOR_CHARACTER_PERSISTENCE_PASS_1_2.md)
 
 ## Campaign Character Location Continuity Pass 1.3
 
-See [the pass report](../evaluations/CAMPAIGN_CHARACTER_LOCATION_CONTINUITY_PASS_1_3.md).
+See [the pass report](../evaluations/archive/CAMPAIGN_CHARACTER_LOCATION_CONTINUITY_PASS_1_3.md).
 
 - **Rule.** A campaign (created) character moves only when the turn establishes that *they* completed movement to a known place. There is no party, follower or companion model: Nicco moving, ownership, household membership or earlier presence never moves anyone.
 - **Player-authored carrying.** In `src/turn/character-movement.ts`, `resolvePlayerCarry` handles runtime carrying before narration: a present campaign character Nicco physically carries along on his own resolved movement gets `move_character` to his arrival location. It is prevalidated with his movement, and is dropped if there is no route.

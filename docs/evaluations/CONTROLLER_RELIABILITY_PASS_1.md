@@ -1,6 +1,6 @@
 # Controller reliability pass 1
 
-2026-09-30. Makes controller structured output robust to one safe, semantically equivalent JSON shape, without weakening authorization. It follows the raw capture in [Repair 1.2](CALDERAN_LIVE_NPC_REGRESSION_REPAIR_1_2.md). No canon, portrayal, narrator knowledge rule, narration audit, physical interaction, retrieval or transfer semantics changed; `data/` is unmodified.
+2026-09-30. Makes controller structured output robust to one safe, semantically equivalent JSON shape, without weakening authorization. It follows the raw capture in [Repair 1.2](archive/CALDERAN_LIVE_NPC_REGRESSION_REPAIR_1_2.md). No canon, portrayal, narrator knowledge rule, narration audit, physical interaction, retrieval or transfer semantics changed; `data/` is unmodified.
 
 ## Changes
 

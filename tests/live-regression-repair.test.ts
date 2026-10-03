@@ -21,7 +21,7 @@ import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
 import { collect, metadata } from "./turn-fixtures.js";
 
-/** Live NPC Regression Repair 1: deterministic cases derived from docs/evaluations/CALDERAN_LIVE_NPC_REGRESSION_1.md. */
+/** Live NPC Regression Repair 1: deterministic cases derived from docs/evaluations/archive/CALDERAN_LIVE_NPC_REGRESSION_1.md. */
 const RETURN_INPUT = "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me";
 const BOOTS = "campaign_item_repair_boots";
 const world = await loadWorld("data");

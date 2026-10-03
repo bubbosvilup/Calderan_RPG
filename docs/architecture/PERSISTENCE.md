@@ -213,7 +213,7 @@ and the complete existing runtime reference validator runs. Direct
 versioned compatibility. Saving never manufactures evidence for a snapshot bound
 to a different world. Loading never writes either slot or mutates authored canon.
 
-See [H4 report](../evaluations/CALDREVAN_HARDENING_H4_PERSISTENCE_DIAGNOSTICS.md)
+See [H4 report](../evaluations/archive/CALDREVAN_HARDENING_H4_PERSISTENCE_DIAGNOSTICS.md)
 for the policy comparison, matrices and current verification.
 
 | Failure stage | Current | Previous | Session tracking |

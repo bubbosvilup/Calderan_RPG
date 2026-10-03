@@ -103,7 +103,7 @@ async function runNarratorOnly(c: BakeoffCase, m: { alias: string; model: string
     narration: text, narration_complete: outcome === "success",
     latency: { headers_ms: latency?.headers_ms ?? null, ttft_ms: latency?.time_to_first_token_ms ?? null, total_ms: latency?.elapsed_total_ms ?? null },
     usage: usageOf(capture), retrieval: "retrieval" in prompt ? prompt.retrieval : null, findings: scored,
-    human_review: "pending: see docs/evaluations/PHASE_1M_REVIEW.md (agent-authored review, not human ratification)" };
+    human_review: "pending: see docs/evaluations/archive/PHASE_1M_REVIEW.md (agent-authored review, not human ratification)" };
 }
 
 async function runFullLoop(c: ReturnType<typeof stageBCases>[number], m: { alias: string; model: string }) {
