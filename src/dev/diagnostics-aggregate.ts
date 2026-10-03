@@ -70,7 +70,7 @@ export function aggregate(records: readonly EvalRecord[], prices: TokenPrices = 
   const issueKinds: Record<string, number> = {}, revisionKinds: Record<string, number> = {};
   for (const d of audited) { for (const k of d.audit!.issue_kinds) issueKinds[k] = (issueKinds[k] ?? 0) + 1; for (const k of d.audit!.revision_issue_kinds) revisionKinds[k] = (revisionKinds[k] ?? 0) + 1; }
   const reconciled = audited.filter(d => d.audit!.reconciliation_attempted);
-  const pressure = ds.flatMap(d => d.context ? [d.context.serialized_characters / d.context.max_characters] : []);
+  const pressure = ds.flatMap(d => d.context_budget ? [d.context_budget.usage_ratio] : d.context ? [d.context.serialized_characters / d.context.max_characters] : []);
   const sorted = (values: readonly number[]) => values.filter(v => v > 0);
   return {
     turns: n,

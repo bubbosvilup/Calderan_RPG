@@ -36,6 +36,7 @@ export interface SessionDeps {
   readonly unsafe_trace?: boolean;
 }
 export type SessionEvent =
+  | { readonly type: "context_compaction_completed"; readonly result: CompactionResult; readonly view: SessionView }
   | { readonly type: "player_message"; readonly turn_id: string; readonly text: string }
   | { readonly type: "status_changed"; readonly status: SessionStatus }
   | { readonly type: "narration_delta"; readonly turn_id: string; readonly text: string; /** Audited text, but not final until `turn_completed`. */ readonly provisional: true }
@@ -85,7 +86,7 @@ export class GameSession {
   getView(): SessionView {
     const view = deriveSessionView(this.#deps.world, this.#session.campaign.exportSnapshot(), { status: this.#status, last_saved_revision: this.#session.last_saved_revision, provider: this.#deps.provider_status ?? STUB_STATUS });
     let request: ReturnType<TurnCoordinator["contextRequest"]> | undefined;
-    try { request = this.#coordinator.contextRequest?.(this.#session.campaign); } catch { /* Existing coordinator fails closed with context_invalid/context_too_large on submission. */ }
+    try { request = this.#coordinator.contextRequest?.(this.#session.campaign); if (request) request = this.#deps.compaction_service?.apply?.(request) ?? request; } catch { /* Existing coordinator fails closed with context_invalid/context_too_large on submission. */ }
     return { ...view, ...(request ? { context_budget: new ContextBudgetManager(this.#deps.context_policy).measure(request) } : {}),
       context_compaction: { status: this.#status === "compacting_context" ? "compacting" : "idle", ...(this.#compactionReason ? { trigger: this.#compactionReason } : {}), ...(this.#compactionResult ? { last_result: this.#compactionResult } : {}) } };
   }
@@ -112,19 +113,24 @@ export class GameSession {
   }
   requestContextCompaction(options: { reason: CompactionReason; onEvent?: (event: SessionEvent) => void }): Promise<CompactionResult> {
     if (this.#status !== "idle") return Promise.resolve({ status: "failed", reason: options.reason, detail: "Session is busy or closed." });
-    const run = this.#compact(options.reason, e => { try { options.onEvent?.(e); } catch {} });
+    const emit = (e: SessionEvent) => { try { options.onEvent?.(e); } catch {} };
+    this.#compactionReason = options.reason; this.#status = "compacting_context"; this.#abort = new AbortController();
+    // Track before publishing status, so a synchronous UI shutdown callback can cancel and await this operation safely.
+    const run = Promise.resolve().then(() => this.#compact(options.reason, emit));
     const tracked = run.finally(() => { if (this.#inflight === tracked) this.#inflight = undefined; });
     this.#inflight = tracked;
+    emit({ type: "status_changed", status: "compacting_context" });
     return run;
   }
   async #compact(reason: CompactionReason, emit: (e: SessionEvent) => void, postTurn = false): Promise<CompactionResult> {
     this.#compactionReason = reason; this.#setStatus("compacting_context", emit);
     try {
       const request = this.#coordinator.contextRequest?.(this.#session.campaign);
-      this.#compactionResult = request ? await (this.#deps.compaction_service ?? unavailableCompactor).compact({ reason, request: structuredClone(request) })
+      this.#compactionResult = request ? await (this.#deps.compaction_service ?? unavailableCompactor).compact({ reason, request, current: () => this.#coordinator.contextRequest?.(this.#session.campaign), ...(this.#abort ? { signal: this.#abort.signal } : {}) })
         : { status: "unavailable", reason, detail: "Coordinator does not expose derived context." };
     } catch { this.#compactionResult = { status: "failed", reason, detail: "Compaction failed; active context retained." }; }
-    finally { this.#compactionReason = undefined; if (!postTurn) this.#setStatus("idle", emit); }
+    finally { if (!postTurn) { this.#compactionReason = undefined; this.#abort = undefined; if (this.#status !== "closed") this.#setStatus("idle", emit); } }
+    emit({ type: "context_compaction_completed", result: this.#compactionResult, view: this.getView() });
     return this.#compactionResult;
   }
   async #runTurn(input: string, options: SubmitOptions): Promise<TurnOutcome> {
@@ -163,7 +169,7 @@ export class GameSession {
       emit({ type: "turn_failed", turn_id, error, uncommitted_narration: "", view: this.getView() });
       return { ok: false, error, turn_id, view: this.getView() };
     } finally {
-      options.signal?.removeEventListener("abort", forward); this.#abort = undefined;
+      options.signal?.removeEventListener("abort", forward); this.#abort = undefined; this.#compactionReason = undefined;
       if (this.#status !== "closed") this.#setStatus("idle", emit);
     }
   }

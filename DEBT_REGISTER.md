@@ -16,7 +16,7 @@ IDs are never renumbered.
 
 | ID | Area | Severity | Current state / next action |
 |---|---|---|---|
-| **D-04** | Context ceiling / knowledge packing | **IMPORTANT** | **IN PROGRESS - Pass 1 context budget/lifecycle implemented.** Crowded rich scenes can exceed the context budget. Planned fix: context budget meter + LLM-assisted semantic compaction, automatic near threshold and manually triggerable. Compaction must block turn submission until complete and preserve authoritative knowledge. |
+| **D-04** | Context ceiling / knowledge packing | **IMPORTANT** | **IN PROGRESS — Pass 2 compressor pipeline implemented; model bakeoff pending.** Crowded rich scenes can exceed the context budget. Planned fix: context budget meter + LLM-assisted semantic compaction, automatic near threshold and manually triggerable. Compaction must block turn submission until complete and preserve authoritative knowledge. |
 | **D-05** | Real transient provider retry not live-exercised | **IMPORTANT** | Open. Offline retry safety is proven, including HTTP 429. The 16-call Qwen switch validation had no transient errors or retries; dedicated live validation remains required. Verify one commit max and no duplicate state. |
 | **D-06** | Occasional controller `structured_output_invalid` | MINOR | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid. |
 | **D-09** | Reflection organic usefulness unmeasured | **IMPORTANT** | Reflection has not yet been proven useful on genuine organic developments. Measure after recurring-behaviour support exists. |

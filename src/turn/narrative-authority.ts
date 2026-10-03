@@ -1,6 +1,8 @@
 import type { TurnContext } from "./context-builder.js";
+import { narratorFactTruth } from "./context-builder.js";
 import type { SceneParticipantPlan, EphemeralSceneParticipant } from "./scene-participants.js";
 import { TurnError } from "./turn-types.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 
 /**
  * Narrative knowledge access (Phase 1N). A derived, ephemeral, per-turn projection: which present character may voice or act
@@ -11,6 +13,7 @@ import { TurnError } from "./turn-types.js";
  * fact this turn, never "this character can never know it". Built only from the captured turn context and retrieval result.
  */
 export interface AccessFact { readonly ref: string; readonly id: string; readonly source: "campaign_fact" | "retrieved_canon" | "player_household" | "npc_private_canon"; readonly text: string;
+  readonly truth?: "true" | "false" | "unknown";
   /** npc_private_canon only: the present characters authored to know it (names, for rendering). */
   readonly holders?: readonly string[] }
 export interface CharacterAccess { readonly character_id: string; readonly name: string; readonly kind?: "persistent" | "ephemeral"; readonly standing?: string; readonly can_use: readonly { readonly ref: string; readonly basis: string }[]; readonly do_not_use: readonly string[] }
@@ -57,7 +60,7 @@ function awarenessOf(retrieval: unknown): readonly RetrievalAwareness[] {
  */
 export function projectKnowledgeAccess(context: TurnContext, retrieval: unknown, signals?: RelevanceSignals, scene?: SceneParticipantPlan): NarrativeKnowledgeAccess {
   const facts: AccessFact[] = [
-    ...selectRelevantFacts(context.facts, signals).map((f, i) => ({ ref: `F${i + 1}`, id: f.id, source: "campaign_fact" as const, text: f.statement })),
+    ...selectRelevantFacts(context.facts, signals).map((f, i) => ({ ref: `F${i + 1}`, id: f.id, source: "campaign_fact" as const, text: f.statement, ...(narratorFactTruth(f) ? { truth: narratorFactTruth(f)! } : {}) })),
     ...awarenessOf(retrieval).map((a, i) => ({ ref: `R${i + 1}`, id: a.id, source: "retrieved_canon" as const, text: `retrieved canon "${a.id}"${a.awareness ? ` [${a.awareness}]` : ""}` })),
     // Repair 1: Nicco's household roles (e.g. owner of Heartstone) are controlled facts, not ambient truth. Only fellow members
     // may use them; everyone else may at most guess from what is visible now (e.g. standing at its door), framed as a guess.
@@ -130,6 +133,7 @@ export function renderKnowledgeAccess(access: NarrativeKnowledgeAccess): string 
   const none = access.characters.filter(c => !c.can_use.length), some = access.characters.filter(c => c.can_use.length);
   const compactLine = (c: CharacterAccess) => characterLine({ ...c, do_not_use: [] }).replace(/; DO NOT USE none$/, "; DO NOT USE every other fact above");
   const compact = [...head, ...some.map(compactLine), ...(none.length ? [`Everyone else present (${none.map(c => c.name).join(", ")}): CAN USE none; DO NOT USE any fact above.`] : []), ...rules].join("\n");
-  if (compact.length > MAX_RENDERED) throw new TurnError("context_too_large");
+  // 6k was a token approximation. Keep its lossless formatting optimization, but let final token accounting decide capacity.
+  if (compact.length > REQUEST_RESOURCE_CHARACTERS) throw new TurnError("context_too_large");
   return compact;
 }

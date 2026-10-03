@@ -1,4 +1,5 @@
 import { ProviderError, providerError, type ProviderErrorCode } from "../errors.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../../types/resource-limits.js";
 import type { GenerationMetadata, Usage } from "../types.js";
 
 export interface ClientConfig {
@@ -48,7 +49,7 @@ export class OpenRouterClient {
     catch { throw new ProviderError("configuration_error"); }
     if (endpoint.protocol !== "https:" || endpoint.username || endpoint.password) throw new ProviderError("configuration_error");
     const payload = JSON.stringify({ ...body, stream: streaming, ...(streaming ? { stream_options: { include_usage: true } } : {}) });
-    const maxCharacters = this.#config.max_request_characters ?? 100_000;
+    const maxCharacters = this.#config.max_request_characters ?? REQUEST_RESOURCE_CHARACTERS;
     if (!Number.isSafeInteger(maxCharacters) || maxCharacters <= 0 || payload.length > maxCharacters) throw new ProviderError("configuration_error");
     const started = performance.now(), request_started_at = new Date().toISOString();
     let headers_ms: number | null = null, first: number | null = null, tokens: Usage = {}, finished = false, text = "";
@@ -60,13 +61,18 @@ export class OpenRouterClient {
     const timer = setTimeout(() => { timedOut = true; abort.abort(); }, timeout_ms);
     let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
     let upstream_provider: string | undefined;
+    let cost_usd: number | undefined;
     const consume = (event: Record<string, unknown>): string => {
       if (typeof event.provider === "string" && event.provider.trim()) upstream_provider ??= event.provider.trim().slice(0, 80);
       if (event.error) {
         const code = record(event.error).code;
         throw new ProviderError(typeof code === "number" ? statusCode(code) : "provider_unavailable");
       }
-      if (event.usage) tokens = usage(event.usage);
+      if (event.usage) {
+        tokens = usage(event.usage);
+        const cost = (event.usage as Record<string, unknown>).cost;
+        if (typeof cost === "number" && Number.isFinite(cost) && cost >= 0) cost_usd = cost;
+      }
       if (!Array.isArray(event.choices)) throw new ProviderError("invalid_provider_response");
       if (!event.choices.length) return "";
       const choice = record(event.choices[0]);
@@ -120,7 +126,7 @@ export class OpenRouterClient {
       }
       if (!streaming) { const delta = consume(parse(buffer)); if (delta) yield { type: "text_delta", text: delta }; }
       if (!finished || !text.trim() || (streaming && !doneMarker)) throw new ProviderError("invalid_provider_response");
-      yield { type: "completed", metadata: { model: body.model, ...(upstream_provider ? { provider: upstream_provider } : {}), usage: tokens, latency: {
+      yield { type: "completed", metadata: { model: body.model, ...(upstream_provider ? { provider: upstream_provider } : {}), ...(cost_usd === undefined ? {} : { cost_usd }), usage: tokens, latency: {
         request_started_at, headers_ms, time_to_first_token_ms: streaming ? first : null,
         completed_at: new Date().toISOString(), elapsed_total_ms: performance.now() - started,
       } } };

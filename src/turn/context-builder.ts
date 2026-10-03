@@ -8,6 +8,7 @@ import { TurnError } from "./turn-types.js";
 import { NPC_PLUS_LIMITS, packNpcPlus } from "./npc-plus.js";
 import { describeDimensions, relationshipHeadline } from "../campaign/relationship-summary.js";
 import { knowledgeGrants } from "./knowledge-grants.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 
 /**
  * Hardening H3 — context projection order: RAW AUTHORITATIVE STATE → deterministic relevance selection → size validation.
@@ -15,14 +16,16 @@ import { knowledgeGrants } from "./knowledge-grants.js";
  * Drop safety (see the H3 report for the full table):
  *  A. NEVER DROP — location, time, present people, items they carry/wear, legal status of present people, Nicco's households,
  *     present household members, active household rules, relationships involving Nicco, knowledge edges for shown facts, NPC
- *     known_by grants. No count cap: only the serialized budget can reject them, and then the turn fails closed.
+ *     known_by grants. No count cap: the independent resource safeguard may reject excessive input, never drop it.
  *  B. SELECT — Nicco-known facts (relevance-ranked), scheduled events (soonest first), non-present household members, relationships
  *     between two NPCs. Selection is not forgetting: CampaignState keeps everything; `projection` reports what was omitted.
- * `context_too_large` now means: even after projection, the context cannot be represented within the serialized budget.
+ * D-04: narrator capacity is checked on the final request in tokens; this builder enforces transport-scale resource bounds only.
  */
 export const CONTEXT_LIMITS = Object.freeze({
-  /** Serialized character budget for the whole turn context (unchanged from pre-H3). */
-  serialized_characters: 32_000,
+  /** Resource safeguard, derived from the transport envelope; narrator capacity is measured in tokens. */
+  serialized_characters: REQUEST_RESOURCE_CHARACTERS,
+  /** Retain the existing optional NPC+ flavour quality/headroom policy; no longer a hard context gate. */
+  npc_plus_soft_characters: 32_000,
   /** Facts shown when Nicco knows more than this (pre-H3 this many was a fatal count cap). */
   facts: 32,
   /** Scheduled events shown when more are pending (pre-H3 this many was a fatal count cap). */
@@ -35,6 +38,9 @@ export const CONTEXT_LIMITS = Object.freeze({
 /** Optional relevance signals for selection: the player's input and recent finalized conversation. */
 export interface ContextRelevance { readonly input?: string; readonly recent_text?: string; /** Developer baseline hook: already-filtered derived context, including rejected oversized packs. */ readonly inspect_serialized?: (context: string) => void }
 const serializedSizes = new WeakMap<object, number>();
+const factTruth = new WeakMap<object, "true" | "false" | "unknown">();
+/** Narrator compaction metadata only; never added to the controller's legacy context envelope. */
+export const narratorFactTruth = (fact: object) => factTruth.get(fact);
 /** Reuse the size already measured for H3's budget check; no second serialization for diagnostics. */
 export const contextSerializedCharacters = (context: TurnContext): number => serializedSizes.get(context) ?? JSON.stringify(context).length;
 
@@ -70,7 +76,7 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const items = snapshot.items.filter(i => (i.position.kind === "carried" || i.position.kind === "equipped") && here.has(i.position.character_id) && visibleItem(i)).map(i => itemView(snapshot, world, i.id));
   const niccoKnows = new Set(snapshot.knowledge.filter(k => k.character_id === "nicco").map(k => k.fact_id));
   const allFacts = snapshot.facts.filter(f => niccoKnows.has(f.id)).flatMap(f => {
-    if (f.content.kind === "campaign") return [{ id: f.id, statement: f.content.statement }];
+    if (f.content.kind === "campaign") { const fact = { id: f.id, statement: f.content.statement }; factTruth.set(fact, f.content.truth); return [fact]; }
     const owner = world.getEntity(f.content.entity_id), chunk = f.content.chunk_id ? world.getChunk(f.content.chunk_id) : undefined;
     const policy = chunk?.knowledge ?? owner?.knowledge;
     return policy?.visibility.player && policy.visibility.narrator ? [{ id: f.id, statement: chunk?.content ?? owner!.content }] : [];
@@ -128,10 +134,10 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   };
   const authority = { primary, characters, items, facts, knowledge, scheduled_events: events, player_profile, social,
     ...(npc_private_canon.length ? { npc_private_canon } : {}), ...(Object.keys(projection).length ? { projection } : {}) };
-  // NPC+ Pass 1: premium household continuity, packed BEFORE the serialized-size check under one global budget: the smaller of its own
-  // limit and the headroom the authoritative context leaves (minus a reserve for its JSON envelope and diagnostics). NPC+ flavour
+  // NPC+ Pass 1: retain its established soft flavour/headroom policy, independent of the D-04 hard token capacity check.
+  // Packing uses the smaller of its own quality limit and the old soft headroom (minus JSON reserve). NPC+ flavour
   // therefore degrades toward Tier D and never causes context_too_large by itself; authority is never traded for it.
-  const headroom = CONTEXT_LIMITS.serialized_characters - JSON.stringify(authority).length - CONTEXT_LIMITS.npc_plus_reserve;
+  const headroom = CONTEXT_LIMITS.npc_plus_soft_characters - JSON.stringify(authority).length - CONTEXT_LIMITS.npc_plus_reserve;
   const npc_plus = packNpcPlus(world, snapshot, new Set(present), relevance.input ?? "", Math.max(0, Math.min(NPC_PLUS_LIMITS.budget_characters, Math.floor(headroom / CONTEXT_LIMITS.npc_plus_escape_factor))));
   const result = { ...authority, ...(npc_plus ? { npc_plus } : {}) };
   const serializedCharacters = JSON.stringify(result).length;

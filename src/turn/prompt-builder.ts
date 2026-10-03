@@ -1,3 +1,4 @@
+import { registerNarratorPack } from "./narrator-pack.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { PlayerIntent } from "./player-intent.js";
@@ -42,7 +43,7 @@ export function hardCharacterConstraints(context: TurnContext): string[] {
  * dialogue_focused: player turns plus attributed NPC dialogue; narrator description omitted. See NARRATIVE_AUTHORITY.md.
  */
 export type RecentContextMode = "full_prose" | "state_last" | "dialogue_focused";
-export interface NarratorPromptOptions { readonly recent_context?: RecentContextMode }
+export interface NarratorPromptOptions { readonly recent_context?: RecentContextMode; /** Between-turn relevance only; never replayed as a player action. */ readonly knowledge_relevance_input?: string }
 const QUOTE = /"([^"\n]{1,400})"|“([^”\n]{1,400})”/g;
 const SPEECH = "says|said|asks|asked|replies|replied|adds|added|murmurs|murmured|whispers|whispered|mutters|muttered|answers|answered|continues|continued|repeats|repeated|calls|called|shouts|shouted|snaps|snapped|tells|told|insists|insisted|explains|explained";
 /** Unnamed narrator-created speakers get a neutral ephemeral label from their head noun ("The passer-by…" → Passer-by). */
@@ -202,10 +203,13 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     `[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): ${JSON.stringify(context.items)}`,
     `Scheduled events: ${JSON.stringify(context.scheduled_events)}`,
   ].join("\n");
-  const access = renderKnowledgeAccess(projectKnowledgeAccess(context, retrieval, relevanceSignals(input, recent, intent), sceneParticipants));
+  const knowledge = projectKnowledgeAccess(context, retrieval, relevanceSignals(input || options.knowledge_relevance_input || "", recent, intent), sceneParticipants);
+  const access = renderKnowledgeAccess(knowledge);
   const recentBlock = mode === "dialogue_focused" ? `[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(dialogueFocused(recent, context, sceneParticipants))}`
     : mode === "state_last" ? `[EARLIER CONVERSATION ? CONTINUITY ONLY, NOT STATE]\n${JSON.stringify(recent)}`
     : `[RECENT CONVERSATION ? SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(recent)}`;
-  return { system_prompt: NARRATOR_SYSTEM, messages: [{ role: "user" as const, content:
-    `${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${hardCharacterConstraints(context).join("\n") || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(retrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.` }] };
+  const knowledgePrefix = `${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n`;
+  const request = { system_prompt: NARRATOR_SYSTEM, messages: [{ role: "user" as const, content:
+    `${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${hardCharacterConstraints(context).join("\n") || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(retrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.` }] };
+  return registerNarratorPack(request, knowledge, access, { revision: context.primary.runtime_revision, location: context.primary.scene.player_location?.id, world_time: context.primary.scene.world_time, characters: context.characters.map(c => c.id) }, knowledgePrefix.length);
 }

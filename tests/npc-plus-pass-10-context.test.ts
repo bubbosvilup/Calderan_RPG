@@ -28,7 +28,7 @@ test("the true failure boundary is authoritative growth (never-drop state), and 
   const first = (knows: number) => { const cfg: Config = { ...BASE, rich: false, itemsPer: 0, facts: 32, knowsPer: knows }; let lo = 1, hi = 80; while (lo < hi) { const mid = (lo + hi) >> 1; if (measure({ ...cfg, n: mid }).ok) lo = mid + 1; else hi = mid; } return lo; };
   const [k3, k8, k32] = [first(3), first(8), first(32)];
   assert.ok(k3 > k8 && k8 > k32, `more shared knowledge per person overflows with fewer present people (${k3} > ${k8} > ${k32})`);
-  assert.ok(k32 >= 5 && k32 <= 12, `with every present NPC+ knowing all 32 shown facts the turn fails closed at ${k32} present people`);
+  assert.ok(k32 > 12 && k32 < 80, `the reconciled resource safeguard fails at ${k32} present people, beyond the historical 32k gate`);
   assert.throws(() => buildTurnContext(world, build({ ...BASE, rich: false, itemsPer: 0, facts: 32, knowsPer: 32, n: k32 }).campaign.exportSnapshot()), /context_too_large/);
 });
 test("determinism: the same snapshot builds a byte-identical context, twice and after a JSON round trip", () => {

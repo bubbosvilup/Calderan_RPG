@@ -121,7 +121,7 @@ test("context_too_large is clean at the application layer: no commit, stable cod
   const r = await session.submitPlayerInput("Hello.");
   assert.ok(!r.ok); assert.equal(r.error.code, "context_too_large"); assert.equal(r.error.retryable, false); assert.equal(r.error.turn_state_changed, false);
   assert.equal(f.campaign.exportSnapshot(), before);
-  assert.equal(session.getTurn(r.turn_id!)!.failure?.phase !== undefined, true, "the debug trace says where it failed");
+  assert.equal(r.turn_id, undefined, "oversized active context is rejected by preflight before a turn is accepted");
 });
 
 test("save errors are readable and non-mutating: corrupt save, missing save, dataset mismatch, invalid id", async () => {

@@ -1,5 +1,8 @@
 import { NARRATOR_OUTPUT_TOKENS } from "../app/provider-config.js";
 import type { NarratorRequest } from "./stages/narration.js";
+import type { ContextCompactionService } from "./context-compaction.js";
+import { TurnError } from "./turn-types.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 /** Operational request envelope, not a claim about any model's theoretical window. */
 export const DEFAULT_CONTEXT_POLICY = Object.freeze({ request_tokens: 16_000, output_tokens: NARRATOR_OUTPUT_TOKENS, overhead_tokens: 256, safety_tokens: 512, warning: 0.8, auto: 0.9, hard: 1 });
 export type ContextPolicy = { readonly [K in keyof typeof DEFAULT_CONTEXT_POLICY]: number };
@@ -28,4 +31,11 @@ export class ContextBudgetManager {
 /** Only accepts the already filtered request; never accepts a campaign/source snapshot. Exact bakeoff input. */
 export function serializeContextBaseline(request: NarratorRequest, manager = new ContextBudgetManager()): string {
   return JSON.stringify({ version: 1, estimator: "utf8-bytes/4-ceil", policy: manager.policy, budget: manager.measure(request), request }, null, 2);
+}
+/** Final narrator-only seam. Never calls a compressor during a turn or modifies the controller/context inputs. */
+export function prepareNarratorRequest(request: NarratorRequest, service?: ContextCompactionService, policy?: ContextPolicy): NarratorRequest {
+  const active = service?.apply?.(request) ?? request;
+  const manager = new ContextBudgetManager(policy);
+  if (manager.measure(active).usage_ratio > manager.policy.hard || JSON.stringify(active).length > REQUEST_RESOURCE_CHARACTERS) throw new TurnError("context_too_large");
+  return active;
 }
