@@ -4,6 +4,8 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { PreparationContext } from "./preparation.js";
 import { fail, PREMIUM_DEVELOPMENT_RETENTION, PREMIUM_ROLLUP_LIMITS, REFLECTION_LIMITS } from "./validation.js";
 import { compareIds } from "../world/provenance.js";
+import type { WorldStore } from "../world/world-store.js";
+import { assignInitialMannerism } from "./mannerisms.js";
 
 /**
  * NPC+ lifecycle and development (Pass 1 + Pass 2). Household membership is the ONLY trigger: a character becomes NPC+ when they become
@@ -84,7 +86,7 @@ export function preparePremiumCommand(context: PreparationContext, command: Camp
 }
 
 // ------------------------------------------------------------------------------------------------ lifecycle + developments
-type Draft = Domains & Pick<CampaignSnapshot, "revision" | "runtime" | "characters" | "relationships" | "legal_statuses" | "transactions">;
+type Draft = CampaignSnapshot;
 const levelOf = (dims: DeepReadonly<Partial<Record<RelationshipDimension, RelationshipLevel>>> | undefined, d: RelationshipDimension): RelationshipLevel => dims?.[d] ?? "none";
 const locationOf = (s: DeepReadonly<Draft>, id: string) => s.characters.find(c => c.id === id && c.origin.kind === "created")?.current.current_location ?? s.runtime.npc_locations.find(n => n.character_id === id)?.current_location;
 /** Structured developments of one character between two states (fixed category order; ID order within a category). */
@@ -168,15 +170,16 @@ export function foldDevelopment(rollup: PremiumRollup | undefined, e: DeepReadon
 }
 
 /** Reconcile premium state with membership and append committed developments (mutates the draft; deterministic; no-op when unchanged). */
-export function syncPremiumCharacters(draft: Draft, base: DeepReadonly<Draft>): void {
+export function syncPremiumCharacters(draft: Draft, base: DeepReadonly<Draft>, world: WorldStore): void {
   const members = niccoHouseholdMembers(draft), before = niccoHouseholdMembers(base);
   const stamp = { revision: draft.revision + 1, world_minute: draft.runtime.scene.world_time.world_minute };
   const lifecycle = new Map<string, PremiumHistoryEntry>();
-  for (const [id, household] of members) {
+  for (const [id, household] of [...members].sort(([a], [b]) => compareIds(a, b))) {
     const existing = draft.premium_characters.find(p => p.character_id === id);
     if (!existing) {
       draft.premium_characters.push({ character_id: id, stable: {}, dynamic: { recent_developments: [], private_memory_refs: [] },
         metadata: { created_revision: stamp.revision, last_updated_revision: stamp.revision, active_household_member: true } });
+      assignInitialMannerism(draft, world, draft.premium_characters.at(-1)!);
       lifecycle.set(id, { kind: "joined_household", household_id: household, ...stamp });
     } else if (!existing.metadata.active_household_member) {
       existing.metadata.active_household_member = true;

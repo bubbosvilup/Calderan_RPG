@@ -5,6 +5,7 @@ import { CampaignIdentityResolver, type CampaignIdKind } from "./identity.js";
 import { CampaignValidationError, fail, freezeSnapshot, parseCampaignSnapshot } from "./validation.js";
 import { ageStatus } from "./age.js";
 import { niccoHouseholdMembers, validateReflectionNotes } from "./premium-characters.js";
+import { validateMannerismRegistry } from "./mannerisms.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -25,6 +26,7 @@ function unique<T>(records: readonly T[], key: (record: T) => string, field: str
 }
 /** Entire graph checks; no command execution, initialization, defaults or historical replay. */
 function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
+  validateMannerismRegistry(s);
   const refs = new CampaignIdentityResolver(world, s), minute = s.runtime.scene.world_time.world_minute;
   const historical = (time: number | undefined, field: string) => { if (time !== undefined && time > minute) fail(field, "future provenance"); };
   const records = [...s.characters, ...s.items, ...s.households, ...s.facts, ...s.goals, ...s.scheduled_events, ...s.transactions];

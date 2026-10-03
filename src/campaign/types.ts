@@ -148,6 +148,14 @@ export interface PremiumRollup {
 export type PremiumContractField = "personality" | "voice" | "moral_boundary" | "social_style";
 /** NPC+ Pass 2: where a campaign contract came from (the verbatim self-description and the revision it committed in). */
 export interface PremiumContractEvidence { field: PremiumContractField; revision: number; quote: string }
+/** Small observable cue; the owning NPC+ record supplies character_id. No psychological inference or scores. */
+export interface MannerismDefinition {
+  canonical_key: string; text: string;
+  requires_item_id?: string; requires_entity_id?: string;
+}
+export interface CharacterMannerism extends MannerismDefinition {
+  id: string; source: "seeded" | "emergent" | "user"; created_revision: number; user_edited: boolean;
+}
 /**
  * NPC+ Pass 1: persistent premium character state, keyed by character ID. A character is NPC+ because they are, or have been, a
  * member of a household Nicco keeps; origin (authored or created) is irrelevant and Nicco never is. It REFERENCES the authoritative
@@ -156,6 +164,8 @@ export interface PremiumContractEvidence { field: PremiumContractField; revision
  */
 export interface PremiumCharacterState {
   character_id: string;
+  /** Additive optional schema-3 field: absent in older saves means zero slots; never seeded during restore. */
+  mannerisms?: CharacterMannerism[];
   /** Campaign-established contracts only (overrides of canon). Pass 1 writes none: authored canon is rendered from canon itself. */
   stable: { personality_contract?: string; voice_contract?: string; moral_boundaries?: string[]; baseline_social_style?: string; contract_evidence?: PremiumContractEvidence[] };
   dynamic: {
@@ -170,6 +180,7 @@ export interface PremiumCharacterState {
     created_revision: number; last_updated_revision: number;
     /** Lifecycle marker, validated against household membership (the authority): true exactly while a current member. */
     active_household_member: boolean;
+    initial_mannerism?: "seeded" | "candidate" | "seed_pool_exhausted";
   };
 }
 /**

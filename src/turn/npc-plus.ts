@@ -3,6 +3,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { characterView } from "../campaign/projections.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
+import { mannerismAvailable } from "../campaign/mannerisms.js";
 import { escapeRegExp as esc } from "./language/text.js";
 
 /**
@@ -169,12 +170,14 @@ export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<Campa
     const mentioned = [name, ...name.split(/\s+/).filter(t => t.length > 2)].some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(input));
     const addressed = mentioned || presentActive.length === 1 && presentActive[0] === id && /\b(?:you|your)\b/i.test(input);
     const here = present.has(id);
+    const cues = here ? (p.mannerisms ?? []).filter(m => mannerismAvailable(m, id, snapshot, world)).map(m => m.text) : [];
+    const mannerisms = cues.length ? `\nMannerisms:\n${cues.map(text => `- ${text}`).join("\n")}` : "";
     const score = (addressed ? 1000 : 0) + (here ? 100 : 0) + (dims.some(d => edge[d] !== "none") ? 10 : 0) + Math.max(0, 5 - Math.floor((snapshot.revision - latest.revision) / 5));
     const deep = refs.length ? `; deep=[${refs.join(",")}]` : "";
     if (here && addressed) out.push({ key: `${id}:B`, character_id: id, tier: "B", pinned: true, score, recovery_refs: refs,
-      text: `NPC+ ${name} (${id}) — personality: ${core ?? "unknown"} | voice: ${voice ?? "unknown"} | morality: ${moral ?? "unknown"} | social style: ${social ?? "unknown"} | household role: ${role ?? "unestablished"} | toward Nicco: ${dims.length ? dims.map(d => `${d} ${edge[d]}`).join(", ") : "no recorded relationship"} | recent (r${latest.revision}): ${chrono(DEVELOPMENTS.recent_b).map(e => token(e, id, snapshot, world)).join(", ")}${rollupHint ? ` | history: ${rollupHint}` : ""}${reflections.length ? ` | reflection: ${reflections.slice(0, REFLECTION_RENDER.tier_b).map(n => `${n.kind.replace(/_/g, " ")} "${n.text}"`).join("; ")}` : ""}${deep}` });
+      text: `NPC+ ${name} (${id}) — personality: ${core ?? "unknown"} | voice: ${voice ?? "unknown"} | morality: ${moral ?? "unknown"} | social style: ${social ?? "unknown"} | household role: ${role ?? "unestablished"} | toward Nicco: ${dims.length ? dims.map(d => `${d} ${edge[d]}`).join(", ") : "no recorded relationship"} | recent (r${latest.revision}): ${chrono(DEVELOPMENTS.recent_b).map(e => token(e, id, snapshot, world)).join(", ")}${rollupHint ? ` | history: ${rollupHint}` : ""}${reflections.length ? ` | reflection: ${reflections.slice(0, REFLECTION_RENDER.tier_b).map(n => `${n.kind.replace(/_/g, " ")} "${n.text}"`).join("; ")}` : ""}${deep}${mannerisms}` });
     out.push({ key: `${id}:C`, character_id: id, tier: "C", pinned: here && addressed, score, recovery_refs: refs,
-      text: `${name}: core=${core ? core.replace(/\s*,\s*/g, ",").replace(/\s+/g, "_") : "?"}${voice ? `; voice=${voice.replace(/\s+/g, "_")}` : ""}${social ? `; social=${social.replace(/\s+/g, "_")}` : ""}; role=${role ?? "?"}; N{${dims.map(d => `${NPC_PLUS_VOCABULARY.dimensions[d]}=${NPC_PLUS_VOCABULARY.levels[edge[d]!]}`).join(",")}}; recent=${chrono(DEVELOPMENTS.recent_c).map(e => token(e, id, snapshot, world)).join(",")}${rollupHint ? `; hist=${rollupHint}` : ""}${reflections.length ? `; refl=${REFLECTION_TOKEN[reflections[0]!.kind]}:${reflections[0]!.label}` : ""}${here ? "" : "; away"}${deep}` });
+      text: `${name}: core=${core ? core.replace(/\s*,\s*/g, ",").replace(/\s+/g, "_") : "?"}${voice ? `; voice=${voice.replace(/\s+/g, "_")}` : ""}${social ? `; social=${social.replace(/\s+/g, "_")}` : ""}; role=${role ?? "?"}; N{${dims.map(d => `${NPC_PLUS_VOCABULARY.dimensions[d]}=${NPC_PLUS_VOCABULARY.levels[edge[d]!]}`).join(",")}}; recent=${chrono(DEVELOPMENTS.recent_c).map(e => token(e, id, snapshot, world)).join(",")}${rollupHint ? `; hist=${rollupHint}` : ""}${reflections.length ? `; refl=${REFLECTION_TOKEN[reflections[0]!.kind]}:${reflections[0]!.label}` : ""}${here ? "" : "; away"}${deep}${mannerisms}` });
   }
   return out;
 }
@@ -240,7 +243,8 @@ export function deduplicateRecovered(npc: NpcPlusContext, retrieved: unknown): {
   return { npc: removed ? Object.freeze({ ...npc, lines: Object.freeze(lines) }) : npc, removed };
 }
 /** Narrator section (absent when no active NPC+). Authority stays in the state blocks above it. */
+export const MANNERISM_NARRATOR_RULE = "Mannerisms are small optional recurring cues: use occasionally and naturally, never in every scene or as caricature. They do not define personality, motivation, consent or internal state. Never invent objects, prerequisites or facts to perform them.";
 export function renderNpcPlus(npc: NpcPlusContext): string {
   return [`[NPC+ HOUSEHOLD CHARACTERS] Premium continuity for household members (portrayal guidance, not public knowledge). Authoritative state above wins on any conflict. Compact keys: core=personality traits, role=household role, N{…}=their relationship toward Nicco (0 none, L low, M moderate, H high; trust, wary=wariness, aff=affection, prot=protectiveness, resp=respect, fear, host=hostility, rom=romance), recent=latest household event, away=not in this scene, deep=[…]=recoverable background not shown.`,
-    ...npc.lines].join("\n");
+    ...(npc.lines.some(line => line.includes("\nMannerisms:\n")) ? [MANNERISM_NARRATOR_RULE] : []), ...npc.lines].join("\n");
 }

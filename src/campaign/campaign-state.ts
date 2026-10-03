@@ -14,6 +14,7 @@ import { prepareLegalCommand } from "./legal.js";
 import { compareIds } from "../world/provenance.js";
 import { validateCampaignSnapshot } from "./snapshot-validation.js";
 import { preparePremiumCommand, syncPremiumCharacters } from "./premium-characters.js";
+import { applyMannerismUserChange, parseMannerismUserChange, type MannerismUserChange } from "./mannerisms.js";
 const RESTORE = Symbol("validated campaign restore");
 
 export interface PreparedCampaignChange {
@@ -52,7 +53,10 @@ export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, worl
     else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command)) fail("command", "unsupported command");
   }
   // NPC+ Pass 1: premium state follows membership changes made by this proposal, atomically, in the same revision.
-  syncPremiumCharacters(draft, base);
+  syncPremiumCharacters(draft, base, world);
+  return finishPreparation(base, draft, world);
+}
+function finishPreparation(base: DeepReadonly<CampaignSnapshot>, draft: CampaignSnapshot, world: WorldStore): PreparedCampaignChange {
   orderDomains(draft);
   const comparison = structuredClone(base) as CampaignSnapshot;
   orderDomains(comparison);
@@ -62,7 +66,7 @@ export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, worl
   return Object.freeze({ expected_revision: base.revision, next_revision: draft.revision, changed, snapshot: changed ? validateCampaignSnapshot(draft, world) : base });
 }
 
-/** One in-memory authority. No domain mutators, disk I/O, history replay or external callbacks. */
+/** One in-memory authority. Manual APIs use validated receipts; no raw mutation, disk I/O, history replay or external callbacks. */
 export class CampaignState {
   readonly #world: WorldStore;
   #snapshot: DeepReadonly<CampaignSnapshot>;
@@ -88,6 +92,18 @@ export class CampaignState {
     const prepared = prepareCampaignChange(this.#snapshot, this.#world, input);
     this.#prepared.set(prepared, { base: this.#snapshot, next: prepared.snapshot }); return prepared;
   }
+  /** Separate manual API: models and reflection cannot add, edit, delete or replace mannerisms through proposals. */
+  prepareMannerism(input: unknown): PreparedCampaignChange {
+    const change = parseMannerismUserChange(input);
+    if (change.expected_revision !== this.revision) fail("expected_revision", "stale mannerism edit");
+    const draft = structuredClone(this.#snapshot) as CampaignSnapshot;
+    applyMannerismUserChange(draft, this.#world, change);
+    const prepared = finishPreparation(this.#snapshot, draft, this.#world);
+    this.#prepared.set(prepared, { base: this.#snapshot, next: prepared.snapshot }); return prepared;
+  }
+  addMannerism(input: Omit<Extract<MannerismUserChange, { kind: "add" }>, "kind">) { return this.commit(this.prepareMannerism(parseMannerismUserChange(input, "add"))); }
+  editMannerism(input: Omit<Extract<MannerismUserChange, { kind: "edit" }>, "kind">) { return this.commit(this.prepareMannerism(parseMannerismUserChange(input, "edit"))); }
+  deleteMannerism(input: Omit<Extract<MannerismUserChange, { kind: "delete" }>, "kind">) { return this.commit(this.prepareMannerism(parseMannerismUserChange(input, "delete"))); }
   commit(prepared: unknown): Readonly<{ revision: number; changed: boolean }> {
     if (!prepared || typeof prepared !== "object") fail("commit", "unknown preparation receipt");
     const entry = this.#prepared.get(prepared);
