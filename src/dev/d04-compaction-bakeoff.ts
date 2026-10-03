@@ -42,7 +42,7 @@ export function evaluateBakeoffCandidate(artifact: ReturnType<typeof createBakeo
   before:artifact.baseline, after:validator_pass ? after : null,duration_ms,usage:response.usage??null,cost_usd:response.cost_usd??null,
   human_semantic_review_required:validator_pass, validator_rejections:validator_pass ? 0:1 };
 }
-async function epistemicCase() {
+async function epistemicCase(input = "What do you know?") {
  const original = turnFixture(); const entities=structuredClone(original.world.listEntities()) as WorldEntity[];
  const lore=entities.find(e=>e.id==="ironbound")!; lore.knowledge={visibility:{narrator:true,player:false},known_by:["maren"]}; lore.content="Ironbound keeps its west ledger in a locked cabinet. Only Maren was told where the key is hidden.";
  const world=new WorldStore(entities.map(entity=>({source:`d04/${entity.id}.yaml`,document:{schema_version:1,entity,chunks:[]}})));
@@ -59,18 +59,19 @@ async function epistemicCase() {
  for(const [key,statement,truth,status] of examples) {const id=`campaign_fact_d04_${key}`;commands.push({kind:"create_fact",fact:{id,content:{kind:"campaign",statement,truth}}},{kind:"set_knowledge",knowledge:{character_id:"nicco",fact_id:id,status:"knows"}},{kind:"set_knowledge",knowledge:{character_id:"maren",fact_id:id,status}});}
  // The fact itself is narrator-visible; Brenna has no permission to use any of it. No inference of actual ignorance from that absence.
  campaign.apply({expected_revision:campaign.revision,commands}); const context=buildTurnContext(world,campaign.exportSnapshot());
- return buildNarratorPrompt("What do you know?",context,[],undefined,{candidates:[],runtime:[]});
+ return buildNarratorPrompt(input,context,[],undefined,{candidates:[],runtime:[]});
 }
 /** Local-only construction: lexical retrieval, no model/embedding calls. */
-export async function prepareD04BakeoffCases() {
- const a=await createD04CrowdedContext(); const b=await epistemicCase();
+export async function prepareD04BakeoffCases(stimuli: Partial<Record<"A"|"B"|"C",string>> = {}) {
+ const a=await createD04CrowdedContext(); const b=await epistemicCase(stimuli.B);
+ const aRequest=stimuli.A ? buildNarratorPrompt(stimuli.A,a.context,[],undefined,{candidates:[],runtime:[]}) : a.request;
  const descriptions=["the keeper counted the sealed crates against the harbor ledger", "the watchman checked the wax mark before the gate closed", "the porter recorded the warehouse door and the delivery time", "the clerk compared the receipt with the household account", "the buyer reserved the empty cart until the morning tide", "the steward retained the original invoice for the outstanding debt", "the ferryman noted the quay and the captain who signed", "the guard inspected the manifest without opening the sealed box", "the messenger left the signed copy at the west warehouse", "the owner confirmed the delivery against the old purchase record"];
  const detailed=(index:number)=>`Ledger ${index}: `+Array.from({length:20},(_,j)=>`Entry ${j+1} records that ${descriptions[(index+j)%descriptions.length]}.`).join(" ");
  const mixed=await createD04CrowdedContext({statement:detailed}), service=new RetrievalService(mixed.world), input="Tell me about the Inquisition and the harbor ledger.";
  const retrieval=await retrieveForTurn(input,mixed.context,mixed.world,{service,search:new HybridSearch(service)});
  const recent:RecentExchange[]=Array.from({length:12},(_,i)=>({player:`I ask D04 Person ${i%7} to wait while I compare the harbor ledger.`,narration:`D04 Person ${i%7} says, "I can wait here while you compare the numbered entries. The sealed copies are on the same page; I will keep my place until you have finished reading."`,status:"finalized"}));
- const c=buildNarratorPrompt(input,mixed.context,recent,retrieval.data,{candidates:[],runtime:[]});
- const artifacts={A:createBakeoffArtifact("A crowded knowledge: 7 NPC+, 32 known/16 selected facts each",a.request),B:createBakeoffArtifact("B epistemic and private distinctions",b),C:createBakeoffArtifact("C mixed ledger detail, dialogue, scene and permission-filtered lore",c)};
+ const c=buildNarratorPrompt(stimuli.C ?? input,mixed.context,recent,retrieval.data,{candidates:[],runtime:[]});
+ const artifacts={A:createBakeoffArtifact("A crowded knowledge: 7 NPC+, 32 known/16 selected facts each",aRequest),B:createBakeoffArtifact("B epistemic and private distinctions",b),C:createBakeoffArtifact("C mixed ledger detail, dialogue, scene and permission-filtered lore",c)};
  return artifacts;
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
