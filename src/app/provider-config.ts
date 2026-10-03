@@ -4,3 +4,6 @@ import { DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js"
 /** Production provider settings, single source for both the application and the dev harnesses (which re-export them). */
 export const NARRATOR_OUTPUT_TOKENS = 512;
 export const selectedModels = () => ({ narrator: process.env.OPENROUTER_NARRATOR_MODEL ?? DEFAULT_NARRATOR_MODEL, controller: process.env.OPENROUTER_CONTROLLER_MODEL ?? DEFAULT_CONTROLLER_MODEL });
+
+/** Independent, unset by default; Pass 1 never invokes a compressor model. */
+export const contextCompressorModel = () => process.env.CONTEXT_COMPRESSOR_MODEL?.trim() || undefined;

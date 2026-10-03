@@ -1,3 +1,6 @@
+import { buildTurnContext } from "./context-builder.js";
+import { buildNarratorPrompt } from "./prompt-builder.js";
+import { ContextBudgetManager, type ContextPolicy } from "./context-budget.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
 import { freezeSnapshot } from "../campaign/validation.js";
 import type { NarratorProvider, NarratorResult } from "../llm/narrator-provider.js";
@@ -34,10 +37,15 @@ export class TurnCoordinator {
   readonly #recent = new WeakMap<CampaignState, RecentConversation>();
   readonly #participants = new WeakMap<CampaignState, SceneParticipants>();
   constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean;
-  /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
+  /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly context_policy?: ContextPolicy; readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
+  /** Between-turn derived request. Uses the same projection, prompt options and retained dialogue. No hypothetical player action/retrieval. */
+  contextRequest(campaign: CampaignState) {
+    const context = buildTurnContext(this.world, campaign.exportSnapshot());
+    return buildNarratorPrompt("", context, this.recent(campaign).forPrompt(), undefined, { candidates: [], runtime: [] }, this.promptOptions);
+  }
   async *runTurn(request: TurnRequest): AsyncGenerator<TurnEvent> {
     const { campaign, player_input, signal } = request;
     const base_revision = campaign.revision, start = performance.now();
@@ -62,7 +70,6 @@ export class TurnCoordinator {
       const snapshot = campaign.exportSnapshot();
       yield { type: "turn_started", base_revision };
       checkpoint();
-
       // IntentResolutionStage: player-authored effects, resolved and prevalidated; the projection is detached (never committed here).
       const intentInput: IntentStageInput = { world: this.world, snapshot, base_revision, player_input, prepare: proposal => campaign.prepare(proposal),
         plan: (input, context) => this.participants(campaign).plan(input, context), finalized: this.recent(campaign).finalized() };
@@ -71,16 +78,14 @@ export class TurnCoordinator {
       const { projected, context, origin, arrival, movable, prompt_intent: promptIntent, scene } = measure("projection", () => projectTurnIntent(intentInput, resolved));
       observer?.context(context);
       const { intent } = resolved;
-
       // RetrievalStage: read-only and conditional; its output is evidence for narration, never authority.
       stage = "retrieval_failed";
       const retrieved = await measureAsync("retrieval", () => retrieveForTurn(player_input, context, this.world, this.retrieval));
       observer?.retrieved(retrieved, context, !!this.promptOptions.diagnostics_include_query);
       checkpoint();
       const { recent, prompt } = measure("prompt_composition", () => composeTurnPrompt({ player_input, context, recent: this.recent(campaign).forPrompt(), retrieved: retrieved.data, prompt_intent: promptIntent, options: this.promptOptions, scene }));
-
+      if (observer) observer.record.context_budget = new ContextBudgetManager(this.promptOptions.context_policy).measure(prompt);
       if (observer?.record.context) observer.record.context.knowledge_access_compaction_used = prompt.messages.some(m => m.content.includes("Everyone else present (") || m.content.includes("DO NOT USE every other fact above"));
-
       // NarrationStage: a buffered DRAFT, never delivered before the audit (Repair 1 authoritative narration order).
       stage = "narrator_failed";
       let revisionGeneration = false;

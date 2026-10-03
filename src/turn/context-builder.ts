@@ -33,7 +33,7 @@ export const CONTEXT_LIMITS = Object.freeze({
   npc_plus_escape_factor: 1.1,
 });
 /** Optional relevance signals for selection: the player's input and recent finalized conversation. */
-export interface ContextRelevance { readonly input?: string; readonly recent_text?: string }
+export interface ContextRelevance { readonly input?: string; readonly recent_text?: string; /** Developer baseline hook: already-filtered derived context, including rejected oversized packs. */ readonly inspect_serialized?: (context: string) => void }
 const serializedSizes = new WeakMap<object, number>();
 /** Reuse the size already measured for H3's budget check; no second serialization for diagnostics. */
 export const contextSerializedCharacters = (context: TurnContext): number => serializedSizes.get(context) ?? JSON.stringify(context).length;
@@ -135,6 +135,7 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const npc_plus = packNpcPlus(world, snapshot, new Set(present), relevance.input ?? "", Math.max(0, Math.min(NPC_PLUS_LIMITS.budget_characters, Math.floor(headroom / CONTEXT_LIMITS.npc_plus_escape_factor))));
   const result = { ...authority, ...(npc_plus ? { npc_plus } : {}) };
   const serializedCharacters = JSON.stringify(result).length;
+  relevance.inspect_serialized?.(JSON.stringify(result));
   if (serializedCharacters > CONTEXT_LIMITS.serialized_characters) throw new TurnError("context_too_large");
   serializedSizes.set(result, serializedCharacters);
   return result;

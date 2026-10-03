@@ -10,7 +10,7 @@ import { WORLD_DAY_MINUTES } from "../world/runtime-domain.js";
  * JSON, and contains no private canon, narrator-only facts, knowledge edges, reflection notes or evidence. A UI renders this and
  * never the CampaignSnapshot.
  */
-export type SessionStatus = "idle" | "running_turn" | "post_turn" | "closed";
+export type SessionStatus = "idle" | "running_turn" | "post_turn" | "compacting_context" | "closed";
 export interface ProviderStatus { readonly mode: "live" | "stub"; readonly configured: boolean; readonly narrator_model?: string; readonly controller_model?: string; readonly reflection_model?: string }
 export interface ViewItem { readonly id: string; readonly name: string; readonly description?: string }
 export interface ViewEquipped extends ViewItem { readonly slot: string; readonly mode: "worn" | "held" }
@@ -23,6 +23,8 @@ export interface ViewHouseholdMember {
   readonly equipment: readonly ViewEquipped[];
 }
 export interface SessionView {
+  readonly context_budget?: import("../turn/context-budget.js").ContextBudgetSnapshot;
+  readonly context_compaction?: { readonly status: "idle" | "compacting"; readonly trigger?: import("./context-compaction.js").CompactionReason; readonly last_result?: import("./context-compaction.js").CompactionResult };
   readonly session: { readonly campaign_id: string; readonly revision: number; readonly status: SessionStatus; readonly save: { readonly state: "unsaved" | "saved"; readonly last_saved_revision: number | null };
     readonly provider: ProviderStatus; readonly dataset_id: string };
   readonly scene: {

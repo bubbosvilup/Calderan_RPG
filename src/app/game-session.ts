@@ -1,3 +1,5 @@
+import { ContextBudgetManager, type ContextPolicy } from "../turn/context-budget.js";
+import { unavailableCompactor, type ContextCompactionService, type CompactionReason, type CompactionResult } from "./context-compaction.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
 import { createOpeningCampaign } from "../campaign/opening-state.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
@@ -23,7 +25,9 @@ export interface SessionHooks { readonly diagnostics_sink: (record: DeepReadonly
 export interface SessionDeps {
   readonly world: WorldStore; readonly repository: CampaignSaveRepository;
   /** Receives the session's diagnostics hook so per-turn diagnostics can be captured; a stub coordinator may ignore it. */
-  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn">;
+  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest">>;
+  readonly context_policy?: ContextPolicy;
+  readonly compaction_service?: ContextCompactionService;
   readonly reflection_provider?: ReflectionProvider | undefined;
   readonly provider_status?: ProviderStatus;
   /** Bounded in-memory trace ring (default 200). */
@@ -50,8 +54,9 @@ const APPLICATION_COMMAND = /^\s*\/(?:save|load|new|quit|exit|status|help|debug)
 const STUB_STATUS: ProviderStatus = { mode: "stub", configured: true };
 
 export class GameSession {
-  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn">;
+  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest">>;
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
+  #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
   private constructor(deps: SessionDeps, session: CampaignSession) {
     this.#deps = deps; this.#session = session;
@@ -78,7 +83,11 @@ export class GameSession {
   get lastError(): AppError | undefined { return this.#lastError; }
   /** Derived on demand from authoritative state; safe to call at any time, including while a turn runs (it shows committed state). */
   getView(): SessionView {
-    return deriveSessionView(this.#deps.world, this.#session.campaign.exportSnapshot(), { status: this.#status, last_saved_revision: this.#session.last_saved_revision, provider: this.#deps.provider_status ?? STUB_STATUS });
+    const view = deriveSessionView(this.#deps.world, this.#session.campaign.exportSnapshot(), { status: this.#status, last_saved_revision: this.#session.last_saved_revision, provider: this.#deps.provider_status ?? STUB_STATUS });
+    let request: ReturnType<TurnCoordinator["contextRequest"]> | undefined;
+    try { request = this.#coordinator.contextRequest?.(this.#session.campaign); } catch { /* Existing coordinator fails closed with context_invalid/context_too_large on submission. */ }
+    return { ...view, ...(request ? { context_budget: new ContextBudgetManager(this.#deps.context_policy).measure(request) } : {}),
+      context_compaction: { status: this.#status === "compacting_context" ? "compacting" : "idle", ...(this.#compactionReason ? { trigger: this.#compactionReason } : {}), ...(this.#compactionResult ? { last_result: this.#compactionResult } : {}) } };
   }
   #setStatus(status: SessionStatus, emit?: (e: SessionEvent) => void): void { if (this.#status !== status) { this.#status = status; emit?.({ type: "status_changed", status }); } }
   #reject(error: AppError): TurnOutcome { this.#lastError = error; return { ok: false, error, view: this.getView() }; }
@@ -90,12 +99,33 @@ export class GameSession {
   submitPlayerInput(input: string, options: SubmitOptions = {}): Promise<TurnOutcome> {
     if (this.#status === "closed") return Promise.resolve(this.#reject(appError("session_closed")));
     if (this.#status !== "idle") return Promise.resolve(this.#reject(appError("turn_in_progress")));
+    if (this.getView().context_budget?.compaction_required) {
+      void this.requestContextCompaction({ reason: "auto", ...(options.onEvent ? { onEvent: options.onEvent } : {}) });
+      return Promise.resolve(this.#reject(appError("context_too_large", { message: "Context maintenance is required before another turn; compressor availability is shown in the session view." })));
+    }
     if (APPLICATION_COMMAND.test(input)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "That is an application command; the interface must call it directly, not send it as a player action." })));
     this.#setStatus("running_turn", options.onEvent);
     const run = this.#runTurn(input, options);
     const tracked: Promise<unknown> = run.finally(() => { if (this.#inflight === tracked) this.#inflight = undefined; });
     this.#inflight = tracked;
+    return run.then(outcome => ({ ...outcome, view: this.getView() }));
+  }
+  requestContextCompaction(options: { reason: CompactionReason; onEvent?: (event: SessionEvent) => void }): Promise<CompactionResult> {
+    if (this.#status !== "idle") return Promise.resolve({ status: "failed", reason: options.reason, detail: "Session is busy or closed." });
+    const run = this.#compact(options.reason, e => { try { options.onEvent?.(e); } catch {} });
+    const tracked = run.finally(() => { if (this.#inflight === tracked) this.#inflight = undefined; });
+    this.#inflight = tracked;
     return run;
+  }
+  async #compact(reason: CompactionReason, emit: (e: SessionEvent) => void, postTurn = false): Promise<CompactionResult> {
+    this.#compactionReason = reason; this.#setStatus("compacting_context", emit);
+    try {
+      const request = this.#coordinator.contextRequest?.(this.#session.campaign);
+      this.#compactionResult = request ? await (this.#deps.compaction_service ?? unavailableCompactor).compact({ reason, request: structuredClone(request) })
+        : { status: "unavailable", reason, detail: "Coordinator does not expose derived context." };
+    } catch { this.#compactionResult = { status: "failed", reason, detail: "Compaction failed; active context retained." }; }
+    finally { this.#compactionReason = undefined; if (!postTurn) this.#setStatus("idle", emit); }
+    return this.#compactionResult;
   }
   async #runTurn(input: string, options: SubmitOptions): Promise<TurnOutcome> {
     const emit = (event: SessionEvent) => { try { options.onEvent?.(event); } catch { /* A UI callback can never affect the turn. */ } };
@@ -118,6 +148,7 @@ export class GameSession {
         const view = this.getView();
         emit({ type: "turn_completed", turn_id, narration: completed.result.narration, view, trace });
         await this.#postTurn(turn_id, trace, controller.signal, emit);
+        if (this.getView().context_budget?.compaction_required) await this.#compact("auto", emit, true);
         return { ok: true, turn_id, narration: completed.result.narration, view: this.getView(), trace: this.#traces.find(t => t.turn_id === turn_id) ?? trace };
       }
       const error = appError(failed?.code ?? "internal_error", { provider_code: failed?.provider_code, turn_state_changed: failed ? failed.final_revision !== failed.base_revision : false });

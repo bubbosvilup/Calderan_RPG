@@ -1,3 +1,4 @@
+import { DEFAULT_CONTEXT_POLICY, type ContextPolicy } from "../turn/context-budget.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { OpenRouterReflectionProvider, DEFAULT_REFLECTION_MODEL } from "../llm/openrouter/reflection-provider.js";
@@ -28,17 +29,18 @@ export function readProviderStatus(env: Readonly<Record<string, string | undefin
   const models = selectedModels();
   return { mode: "live", configured: !!env.OPENROUTER_API_KEY?.trim(), narrator_model: models.narrator, controller_model: models.controller, reflection_model: env.OPENROUTER_REFLECTION_MODEL?.trim() || process.env.OPENROUTER_CONTROLLER_MODEL || DEFAULT_REFLECTION_MODEL };
 }
-export interface ProductionOptions { readonly data_dir?: string; readonly save_dir?: string; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
+export interface ProductionOptions { readonly context_policy?: ContextPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
 /** Real wiring for a player-facing build: canonical world, file saves, live OpenRouter providers. No fixture, no dev harness. */
 export async function createProductionDeps(options: ProductionOptions = {}): Promise<SessionDeps> {
+  const context_policy = { ...DEFAULT_CONTEXT_POLICY, output_tokens: NARRATOR_OUTPUT_TOKENS, ...options.context_policy };
   const world = await loadWorld(options.data_dir ?? "data");
   let sink: ((record: DeepReadonly<TurnDiagnostics>) => unknown) | undefined;
   const status = readProviderStatus(), service = new RetrievalService(world);
   const indexes = options.embedding_provider ? [await SemanticIndex.build(service.indexSource(), options.embedding_provider, "narrator")] : [];
   // Production narrator requests always disable hidden reasoning (Phase 1M.1); the controller uses the selected model and default retry policy.
   const coordinator = new TurnCoordinator(world, new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true }),
-    new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { diagnostics_sink: record => sink?.(record) });
-  return { world, repository: new FileCampaignRepository(world, options.save_dir ?? "saves"), provider_status: status,
+    new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { context_policy, diagnostics_sink: record => sink?.(record) });
+  return { world, context_policy, repository: new FileCampaignRepository(world, options.save_dir ?? "saves"), provider_status: status,
     // One coordinator is shared; the live session owns the diagnostics hook. A UI runs one session at a time.
     createCoordinator: hooks => { sink = hooks.diagnostics_sink; return coordinator; },
     reflection_provider: new OpenRouterReflectionProvider(new OpenRouterClient(), { ...(status.reflection_model ? { model: status.reflection_model } : {}) }) };
