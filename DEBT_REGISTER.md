@@ -16,7 +16,6 @@ IDs are never renumbered.
 
 | ID | Area | Severity | Current state / next action |
 |---|---|---|---|
-| **D-05** | Real transient provider retry not live-exercised | **IMPORTANT** | Open. Offline retry safety is proven, including HTTP 429. The 16-call Qwen switch validation had no transient errors or retries; dedicated live validation remains required. Verify one commit max and no duplicate state. |
 | **D-06** | Occasional controller `structured_output_invalid` | MINOR | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid. |
 | **D-09** | Reflection organic usefulness unmeasured | **IMPORTANT** | Reflection has not yet been proven useful on genuine organic developments. Measure after recurring-behaviour support exists. |
 | **D-10** | Recurring behaviour / motifs have no representation | **IMPORTANT** | Repeated habits currently vanish unless separately remembered. Add a small derived motif source feeding existing reflection; do not create a second general memory system. |
@@ -44,6 +43,8 @@ IDs are never renumbered.
 
 ## Closed
 
+**D-05 CLOSED** — live production retry lifecycle validated with controlled injected transient and real OpenRouter retry attempt; failed attempts cannot mutate authority; exactly one commit/effect. [Evidence](docs/evaluations/D05_LIVE_RETRY_VALIDATION.md).
+
 **D-04 CLOSED** — deterministic lossless narrator-context compaction v2; live automatic maintenance and narrator comprehension validated; no LLM compressor required, `CONTEXT_COMPRESSOR_MODEL` intentionally unset. [Evidence](docs/evaluations/D04_FINAL_TARGETED_CLOSURE.md).
 
 ### Movement / follow
@@ -68,10 +69,9 @@ NPC+ packing/performance, and prior regression repairs remain closed in their hi
 
 ## Priority order
 
-1. **D-05** — real transient retry validation.
-2. **D-10** — recurring behaviour / motifs.
-3. **D-19** — reduce reconciliation/redaction rate.
-4. **D-09** — measure reflection once D-10 exists.
+1. **D-10** — recurring behaviour / motifs.
+2. **D-19** — reduce reconciliation/redaction rate.
+3. **D-09** — measure reflection once D-10 exists.
 
 D-06 remains open pending broader runtime soak after the Qwen switch.
 
