@@ -6,6 +6,11 @@ saves/
 # Local secrets (OpenRouter / Voyage keys are supplied via environment only)
 .env
 .env.*
+*.env
+*APIKEY*
+*apikey*
+*api_key*
+*api-key*
 
 # Logs, coverage and transient output
 *.log
