@@ -52,7 +52,8 @@ export function validateReflectionNotes(characterId: string, notes: DeepReadonly
   const ids = new Set<string>();
   for (const n of notes) {
     if (ids.has(n.id)) fail("premium_reflections.notes", "duplicate note id"); ids.add(n.id);
-    if (n.text.length > REFLECTION_LIMITS.text || n.label.length > REFLECTION_LIMITS.label || !n.evidence_refs.length || n.evidence_refs.length > REFLECTION_LIMITS.evidence_refs) fail("premium_reflections.notes", "unbounded note");
+    if (n.text.length > (n.structured?400:REFLECTION_LIMITS.text) || n.label.length > REFLECTION_LIMITS.label || !n.evidence_refs.length || n.evidence_refs.length > REFLECTION_LIMITS.evidence_refs) fail("premium_reflections.notes", "unbounded note");
+    if(n.structured&&(n.structured.source_revision>=n.updated_revision||n.structured.proposal.subject_character_id!==characterId||n.structured.proposal.confidence!==n.confidence||JSON.stringify(n.structured.proposal.evidence_refs)!==JSON.stringify(n.evidence_refs)))fail('premium_reflections.structured','inconsistent provenance');
     if (n.created_revision > n.updated_revision || n.updated_revision > revision) fail("premium_reflections.notes", "invalid revisions");
     for (const ref of n.evidence_refs) if (!ref.startsWith(`npcmem:${characterId}:`) && !new RegExp(`^npcrel:(?:${characterId}:[a-z0-9_]+|[a-z0-9_]+:${characterId})$`).test(ref)) fail("premium_reflections.evidence_refs", "evidence of another character");
   }

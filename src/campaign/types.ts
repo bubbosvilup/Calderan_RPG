@@ -197,6 +197,9 @@ export interface ReflectionNote {
   label: string;
   text: string; evidence_refs: string[]; confidence: "low" | "medium" | "high";
   created_revision: number; updated_revision: number;
+  /** Absent on historical free-text notes; never retroactively assigned. */
+  structured?: { format_version: 1; semantic_version: 'V2.3-CVC-E1'; source_revision: number;
+    proposal: { subject_character_id: string; evidence_refs: string[]; confidence: 'low'|'medium'|'high'; claim: Record<string,unknown> & {type:string} } };
 }
 export interface PremiumReflection { character_id: string; notes: ReflectionNote[]; last_reflected_revision: number }
 export interface CampaignDomains {

@@ -1,6 +1,7 @@
 import type { CampaignProposal, CampaignSnapshot } from "./types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { MANNERISM_ACTIONS, MANNERISM_TRIGGERS } from "./mannerism-concepts.js";
+import {STORED_REFLECTION_SCHEMA,schemaMatches} from './reflection-proposal-schema.js';
 
 export class CampaignValidationError extends Error {
   constructor(readonly field: string, reason: string) { super(`${field}: ${reason}`); this.name = "CampaignValidationError"; }
@@ -130,7 +131,33 @@ export const PREMIUM_DEVELOPMENT_RETENTION = 16;
 /** NPC+ Pass 6 reflection caps per kind, and text bounds. */
 export const REFLECTION_LIMITS = Object.freeze({ stance: 4, signature_pattern: 4, shared_motif: 4, emerging_role: 3, unresolved_tension: 3, text: 200, label: 32, evidence_refs: 8 });
 const reflectionKind = choice("stance", "signature_pattern", "shared_motif", "emerging_role", "unresolved_tension");
-const reflectionNote = object({ id, kind: reflectionKind, label: id, text, evidence_refs: distinct(text), confidence: choice("low", "medium", "high"), created_revision: integer(0), updated_revision: integer(0) });
+// Stored provenance follows the same plain-data rules as the rest of a campaign.
+// Inspect descriptors before schema matching so getters never execute on restore.
+const reflectionData = (input: unknown, path: string, depth = 0): unknown => {
+  if (depth > 4) fail(path, 'reflection nesting limit');
+  if (Array.isArray(input)) return list((value, field) => reflectionData(value, field, depth + 1), 8)(input, path);
+  if (input && typeof input === 'object') {
+    if (![Object.prototype, null].includes(Object.getPrototypeOf(input))) fail(path, 'expected plain reflection data');
+    const keys = Reflect.ownKeys(input);
+    if (keys.length > 12) fail(path, 'reflection object limit');
+    const entries = keys.map(key => {
+      if (typeof key !== 'string') fail(path, 'unknown reflection field');
+      const descriptor = Object.getOwnPropertyDescriptor(input, key)!;
+      if (!('value' in descriptor)) fail(path, 'reflection accessors are forbidden');
+      return [key, reflectionData(descriptor.value, `${path}.${key}`, depth + 1)] as const;
+    });
+    return Object.fromEntries(entries);
+  }
+  if (typeof input === 'string' || Number.isSafeInteger(input)) return input;
+  fail(path, 'invalid reflection data');
+};
+const structuredReflectionProposal: Parser = (input, path) => {
+  const proposal = reflectionData(input, path);
+  if (!schemaMatches(STORED_REFLECTION_SCHEMA.properties!.proposals!.items!, proposal)) fail(path, 'invalid structured reflection proposal');
+  return proposal;
+};
+const reflectionNote = object({ id, kind: reflectionKind, label: id, text, evidence_refs: distinct(text), confidence: choice("low", "medium", "high"), created_revision: integer(0), updated_revision: integer(0),
+  structured:optional(object({format_version:integer(1,1),semantic_version:choice('V2.3-CVC-E1'),source_revision:integer(0),proposal:structuredReflectionProposal})) });
 const reflectionRecord = object({ character_id: id, notes: list(reflectionNote, 18), last_reflected_revision: integer(0) });
 const mannerismRecord = object({ epistemic_state: optional(choice("emergent", "observed", "established")), known_by_character_ids: optional(list(id, 64)), id, canonical_key: id, text, source: choice("seeded", "emergent", "user"), created_revision: integer(0), user_edited: boolean,
   requires_item_id: optional(id), requires_entity_id: optional(id) });

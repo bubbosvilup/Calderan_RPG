@@ -6,10 +6,7 @@ import { REFLECTION_LIMITS } from "../campaign/validation.js";
 import { characterView } from "../campaign/projections.js";
 import { npcDeepSources } from "./npc-plus.js";
 import { escapeRegExp as esc } from "./language/text.js";
-import { emitReflectionDiagnostics, type ReflectionDiagnosticsSink } from "./reflection-diagnostics.js";
-import {maintenanceCall,invalidStructured} from "../llm/reliability.js";
-import {ProviderError} from "../llm/errors.js";
-import {TurnError} from "./turn-types.js";
+import type { ReflectionDiagnosticsSink } from "./reflection-diagnostics.js";
 
 /**
  * NPC+ Pass 6 — bounded, evidence-cited reflection. A small model INTERPRETS existing evidence about one active NPC+ (recent structured
@@ -30,9 +27,10 @@ export interface ReflectionEvidence { readonly ref: string; readonly kind: Evide
   readonly episodes?: readonly { readonly id: string; readonly condition?: string }[];
   /** Pass 10: the source records only changes of place. Location moves show where someone went, never why or how they feel about it. */
   readonly movement_only?: boolean }
-export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly { readonly ref: string; readonly kind: EvidenceKind; readonly text: string }[];
-  readonly existing: readonly { readonly kind: ReflectionKind; readonly label: string; readonly text: string }[]; readonly timeout_ms?: number }
-export interface ReflectionProvider { reflect(request: ReflectionRequest): Promise<{ readonly text: string; readonly usage?: unknown; readonly model?: string }> }
+export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly import('./structured/reflection-v2.js').StructuredEvidence[];
+  readonly existing: readonly { readonly kind: ReflectionKind; readonly label: string; readonly text: string }[];
+  readonly wire_schema: typeof import('./structured/reflection-v23-cvc-e1.js').E1_SCHEMA; readonly timeout_ms?: number }
+export interface ReflectionProvider { reflect(request: ReflectionRequest): Promise<{ readonly text: string; readonly usage?: unknown; readonly model?: string;readonly provider?:string;readonly cost_usd?:number }> }
 
 /** When reflection is due: ≥3 developments since the last reflection, a roll-up change, or a newly established contract. Never conversation alone. */
 export const REFLECTION_TRIGGER = Object.freeze({ developments: 3 });
@@ -205,54 +203,16 @@ export function mergeNotes(existing: readonly ReflectionNote[], accepted: readon
   return out;
 }
 
-export interface ReflectionRun { readonly attempts?: import("../llm/retry.js").ProviderAttemptRecord; readonly character_id: string; readonly status: "committed" | "malformed" | "provider_failed" | "stale" | "no_evidence";
-  readonly accepted: readonly Proposal[]; readonly rejected: readonly { readonly reason: RejectReason; readonly proposal: unknown }[]; readonly notes: number; readonly usage?: unknown; readonly model?: string;
+export interface ReflectionRun { readonly attempts?: import("../llm/retry.js").ProviderAttemptRecord; readonly character_id: string; readonly status: "committed" | "malformed" | "provider_failed" | "stale" | "no_evidence" | "persistence_failed";
+  readonly logical_reflection_id?:string;readonly source_revision?:number;readonly provider?:string;readonly cost_usd?:number;readonly attempt_details?:readonly import('./reflection-pacing.js').StructuredReflectionAttempt[];readonly semantic_result?:'accepted'|'semantic_rejected'|'no_useful_notes';
+  readonly accepted: readonly Proposal[]; readonly rejected: readonly { readonly reason: string; readonly proposal: unknown }[]; readonly notes: number; readonly usage?: unknown; readonly model?: string;
   readonly elapsed_ms?: number; readonly provider_ms?: number; readonly parsed_proposals?: number; readonly committed_revision?: number; readonly updated_notes?: number; readonly new_notes?: number }
 /**
  * Explicit post-turn operation: never inside the turn's critical commit, never able to fail gameplay. Reflects at most
  * `max_characters` due NPC+ (stable order), each as its own separate revision; a provider error, malformed output or a newer revision
  * (stale) changes nothing. Even an all-rejected run records `last_reflected_revision`, so the same evidence is not re-sent every turn.
  */
-export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../llm/retry.js").ProviderRetryPolicy } = {}): Promise<readonly ReflectionRun[]> {
-  const runs: ReflectionRun[] = [];
-  const started = performance.now();
-  const base = campaign.exportSnapshot();
-  const allDue = base.premium_characters.filter(p => reflectionDue(base, p.character_id)).map(p => p.character_id);
-  const due = allDue.slice(0, options.max_characters ?? 1);
-  try {
-  for (const id of due) {
-    const characterStarted = performance.now();
-    const snapshot = campaign.exportSnapshot();
-    const catalog = reflectionEvidence(world, snapshot, id);
-    const nameOf = (x: string) => characterView(snapshot, world, x).profile.name ?? snapshot.characters.find(c => c.id === x)?.origin_snapshot?.label ?? x;
-    const character = { id, name: nameOf(id) };
-    const existing = snapshot.premium_reflections.find(r => r.character_id === id)?.notes ?? [];
-    const empty = { character_id: id, accepted: [], rejected: [], notes: existing.length };
-    if (!catalog.length) { runs.push({ ...empty, status: "no_evidence" }); continue; }
-    let output: Awaited<ReturnType<ReflectionProvider["reflect"]>>;
-    const providerStarted = performance.now();
-    let attempts: import("../llm/retry.js").ProviderAttemptRecord|undefined;
-    const request={ character, evidence: catalog.map(e => ({ ref: e.ref, kind: e.kind, text: e.text })), existing: existing.map(n => ({ kind: n.kind, label: n.label, text: n.text })), ...(options.timeout_ms ? { timeout_ms: options.timeout_ms } : {}) };
-    try {
-      output = await maintenanceCall({subsystem:"reflection",...(options.retry_policy?{policy:options.retry_policy}:{}),checkpoint:()=>{if(campaign.revision!==snapshot.revision)throw new TurnError("stale_turn");},record:r=>{attempts=r;},run:async timeout=>{const response=await provider.reflect({...request,...(timeout?{timeout_ms:Math.min(timeout,request.timeout_ms??Infinity)}:{})});invalidStructured(response.text,()=>parseReflectionOutput(response.text)!==undefined);return response;}});
-    } catch(error) { runs.push({ ...empty, ...(attempts?{attempts}:{}),status:error instanceof TurnError?"stale":error instanceof ProviderError&&error.code==="structured_output_invalid"?"malformed":"provider_failed", elapsed_ms: performance.now() - characterStarted, provider_ms: performance.now() - providerStarted }); continue; }
-    const measured = { ...(attempts?{attempts}:{}),elapsed_ms: performance.now() - characterStarted, provider_ms: performance.now() - providerStarted,
-      ...(output.model ? { model: output.model } : {}), ...(output.usage ? { usage: output.usage } : {}) };
-    const raw = parseReflectionOutput(output.text);
-    if (!raw) { runs.push({ ...empty, ...measured, status: "malformed" }); continue; }
-    const knownNames = new Map<string, string>([...snapshot.characters.flatMap(c => c.profile.name ? [[c.id, c.profile.name] as [string, string]] : []),
-      ...world.getEntitiesByType("character").map(e => [e.id, e.name] as [string, string])].filter(([, n]) => n.length >= 3));
-    const worldWords = new Set(world.listEntities().filter(e => e.type !== "character").flatMap(e => [e.name, e.display_name]).flatMap(n => (n ?? "").toLowerCase().split(/\s+/)).filter(w => w.length >= 3));
-    const { accepted, rejected } = validateProposals(raw, catalog, character, knownNames, worldWords);
-    const notes = mergeNotes(existing as ReflectionNote[], accepted, catalog, snapshot.revision + 1);
-    try { campaign.apply({ expected_revision: snapshot.revision, commands: [{ kind: "record_reflection", character_id: id, notes, reflected_revision: snapshot.revision }] }); }
-    catch { runs.push({ ...empty, ...measured, elapsed_ms: performance.now() - characterStarted, parsed_proposals: raw.length, status: "stale", accepted, rejected }); continue; }
-    const updated = accepted.filter(p => existing.some(n => n.kind === p.kind && (n.label === p.label || norm(n.text) === norm(p.text)))).length;
-    runs.push({ character_id: id, status: "committed", accepted, rejected, notes: notes.length, ...measured, elapsed_ms: performance.now() - characterStarted,
-      parsed_proposals: raw.length, committed_revision: campaign.revision, updated_notes: updated, new_notes: accepted.length - updated });
-  }
-  return runs;
-  } finally {
-    emitReflectionDiagnostics(options.diagnostics_sink, base.revision, campaign.revision, allDue, runs, performance.now() - started);
-  }
+export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../llm/retry.js").ProviderRetryPolicy;readonly pacing?:import('./reflection-pacing.js').ReflectionPacing } = {}): Promise<readonly ReflectionRun[]> {
+  const {reflectStructuredAfterTurn}=await import('./structured-reflection-maintenance.js');
+  return reflectStructuredAfterTurn(campaign,world,provider,options);
 }
