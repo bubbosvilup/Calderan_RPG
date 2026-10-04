@@ -34,3 +34,74 @@ Before freeze: typecheck PASS; unit/integration **1,909 passed, zero failed, sam
 ## Freeze and subsequent OOS
 
 Candidate source, compiled source, immutable V2 dependency, schema, prompt, evidence version and reason codes are recorded in `v21-freeze.json` before OOS construction. Schema/prompt remain byte-identical serialized values to V2. Evidence version remains 2. The reason set adds only `contradictory_evidence` and `irrelevant_evidence`. Candidate is committed before corpus construction; no source changes during scored validation. OOS results and production decision will be recorded below.
+
+| Freeze | SHA-256 |
+| --- | --- |
+| Candidate source | `158f5977f2e500def47d1a5477aff4c56168a58605a307e82cdad84391437072` |
+| Compiled candidate | `f433b772c7a5b6e679c0a17dfa49749cbf46068aae8b135fc6e86dd434d127bd` |
+| Schema, identical to V2 | `c870bf85c44eb2dea558a5a9904e0dde91ecd74f9a93eb2ff3f7986cb3a724ba` |
+| Prompt, identical to V2 | `fa80b3d799d05f5800eed9d0dfd09433b61f2714bfac0630b35635ee68a83a09` |
+| Reason code set | `01d826ff8cb12bcf1a57f3ac231e371de7f12dcfc2da561efd9ee2ac806d789a` |
+| New OOS manifest | `a4ce459d6d7925ad8237b31714bca1ad91ddf201becb326cc0ac8045c757ee07` |
+| Blind semantic review | `2ed31cf7cc2ea488a83539dc553bbe80ae7e5aee3e2896648c10d6cd6b3d157e` |
+
+Candidate commit: `3771828` (`eval: fix reflection supporting evidence semantics`), before corpus construction. All hashes were verified again after scoring. V2 source and all 118 preserved historical raw files remain unchanged.
+
+## New independent OOS
+
+48 new request bodies: **24 deterministic fixtures and 24 scripted current-engine checkpoints; zero organic gameplay**. All 48 request hashes are unique and none matches V2 OOS. Inputs span the same eight closed claim families, with changed conditions, quoted statements, relationship targets, household IDs, paths and timelines. They include clean trajectories, compatible subject/dimension/household context, snapshots, later declines, multiple episodes/lifecycle loops, and empty-appropriate states. Scripted checkpoints result from actual engine operations; they are not campaign soak evidence. Request bodies, catalogs, source/opportunity categories, protocol and manifest were frozen before dispatch. Expected wording was not preregistered.
+
+Protocol unchanged: `deepseek/deepseek-v4-flash-0731:nitro`, `max_tokens=600`, timeout 20,000 ms, provider `require_parameters=true`, reasoning `enabled=false, exclude=true`. **48 logical/physical calls, zero retries, zero rerolls**. All 48 receipts report Baidu. Known total cost **$0.035475864**, zero unknown costs. Successful-call latency (47 available measurements): median 1,693 ms, p95 4,690 ms, range 847–6,528 ms. The invalid response has a receipt/cost but no successful completion latency metadata.
+
+**39 parsed envelopes (81.25%); eight malformed (16.67%); one `invalid_provider_response` with finish reason `length` (2.08%)**. Combined unusable envelopes: 9/48 (18.75%). Four parsed envelopes were empty. 84 complete proposals in valid envelopes; 24 additional complete objects extracted solely for diagnostic semantic review, including the first complete envelope within the invalid length response. Balanced-object extraction never repairs an envelope for acceptance. All 108 complete objects were reviewed, no unreviewable complete object remained.
+
+Blind semantic judgments were finalized and hashed before first candidate-outcome computation. Reviewer: primary Codex agent, **not human and not independent**, with validator definitions known but candidate outcomes hidden. Review files contain per-object hash, reason, USEFUL/NEUTRAL/REDUNDANT/MISLEADING/HARMFUL, SHOULD_REACH_NARRATOR and separate FACTUAL_ERROR. Only USEFUL is marked narrator YES. The reviewer did not label a true attributed statement misleading merely because its outer/nested citation lists differ.
+
+## Semantic result and comparison limitation
+
+| Classification | All reviewed | Valid-envelope objects | Old diagnostic bridge accepted | V2.1 accepted |
+| --- | ---: | ---: | ---: | ---: |
+| USEFUL | 50 | 36 | 23 | 34 |
+| NEUTRAL | 8 | 8 | 8 | 8 |
+| REDUNDANT | 46 | 36 | 15 | 8 |
+| MISLEADING | 4 | 4 | 4 | 0 |
+| HARMFUL | 0 | 0 | 0 | 0 |
+
+Old comparison uses the frozen V2 `legacyComparisonProposal` deterministic renderer and unchanged production validator over each complete valid-envelope batch, preserving batch duplicate suppression. Native old acceptance is zero because typed proposals do not match old free-prose schema. This compares validation behavior over the **same typed provider output**, not native old generation quality. Rendering already removes many old psychology-leakage opportunities; bridge labels are claim types and may suppress otherwise useful same-type proposals. Thirteen useful proposals are newly accepted relative to this bridge, while two old-bridge useful proposals are lost; 23 − 2 + 13 = 34. These counts must not be presented as general model-quality gains.
+
+All four old-bridge accepted misleading claims are rejected (**100%, 4/4**): identical-dimension pseudo-parallel, membership operations substituted as movement locations, three respect transitions counted as two, and a discontiguous movement path with wrong endpoint. The last three are independently disprovable FACTUAL_ERROR claims; **3/3 rejected, zero admitted**. Eight old-accepted neutrals are retained, zero neutral collateral. Seven old-accepted redundant restatements are rejected. No factual/count/direction/ownership/entitlement checks were loosened.
+
+### Two useful losses
+
+Both are valid-envelope scripted self-statement outputs:
+
+- `V21_engine_state_self_statement_1_1:0`: selected contract 0 and 1 correctly quote meal recordkeeping and reporting. Outer refs cite revision 6/8 contract-established history events instead of the quote handles.
+- `V21_engine_state_self_statement_1_3:0`: selected contract 0 and 2 correctly quote meal recordkeeping and marking loaned tools on day 2. Outer refs cite the four matching contract-established events, while the nested selectors resolve to two actual quoted contracts.
+
+These are accurately attributed stated commitments, not demonstrated performance or invented roles. The quotes exist and the nested reference handles resolve. Unlike V2's previously misleading statement selections, they are not nonexistent event-ID handles. V2.1 selects proof only from `evidence_refs ∩ statement_refs`, so both receive `missing_positive_evidence` and `claim_state_mismatch`. The semantic reviewer classified them USEFUL before decisions were computed; no labels were changed after reveal. A mechanical citation-contract mismatch remains real and requires a separately designed policy; it does not justify retrospectively calling the meaning false to obtain a passing gate.
+
+## Extra-evidence result
+
+Primary extra-evidence cohort requires a **valid envelope and support-only acceptance under unchanged V2 exact factual AND entitlement checks**, with the full catalog retained. This prevents wrong counts, fake parallel dimensions, or insufficient proof from being counted as otherwise supported extras. Cohorts can overlap.
+
+| Otherwise supported claim plus extras | Accepted | Rejected | Interpretation |
+| --- | ---: | ---: | --- |
+| CORROBORATING | 0 | 0 | No eligible provider exposure; not a pass |
+| Compatible CONTEXT | 1 | 0 | A supported two-rule environmental motif with membership context |
+| CONTRADICTORY | 0 | 0 | No eligible provider exposure; not a pass |
+
+Provider proposals containing corroborating snapshots were single-transition authority restatements or an invalid identical-dimension parallel claim; none was an independently entitled synthesis. The one scored compatible-context case is REDUNDANT by semantic review despite meeting structural environmental entitlement. Thus **zero fresh useful synthesis proposals with eligible extras** were observed. Several inputs offered the desired opportunities, but the unchanged provider generally cited exact proof only. Later trust declines were mostly represented correctly as mixed trajectories, rather than producing a fully supported prefix plus a conflicting extra. Wrong counts/paths were caught by exact checks, but they do not establish coverage of contradictory extras. Diagnostic malformed objects include one more supported environmental/context claim; it remains unaccepted because its envelope is invalid. Unit controls and development recovery support the implementation but cannot substitute for new OOS exposure. No extra calls or prompt tuning were performed to improve this result.
+
+## Hard gate and production status
+
+**HARD GATE FAIL**: useful lost **2**, required zero. Bad caught **4/4 (100%)**, bad escaped **0**, factual falsehood admitted **0**, neutral lost **0**. There is also insufficient fresh corroboration/contradiction exposure for the core role-specific claim. Development PASS did not carry over to an independent OOS PASS.
+
+**Production candidate NO; production changed NO.** No V2.2/V3 tuning, migration, persisted-note envelope changes, pipeline integration, packing/retrieval changes or source changes after freeze. D-09 remains **SOAK PENDING**; this evaluation does not close it. D-04/D-05/D-10 remain closed; D-26 remains open for shadow collection. Cursor behavior remains unresolved separately.
+
+## Artifacts, verification and next step
+
+Ignored raw namespace: `saves/d09-reflection-v21/`. It retains historical preservation hashes, development replay, candidate freeze, frozen manifest/request/catalogs, raw outputs/receipts, physical-call ledger, diagnostic extraction, blind review/hash, batch old-bridge and V2.1 decisions, collateral rows, evidence roles/scopes, tests and final artifact hashes. Credential audit reads the local key privately and verifies zero artifact matches; no credential is stored in tracked artifacts. Tracked harness files support reproducibility without turning saved requests into new scored calls.
+
+Checks passed before candidate freeze: typecheck; 1,909 unit/integration passes, zero failures, unchanged four TODOs; 25/25 playthrough. Candidate source, compiled artifact and V2 dependency remain frozen through final audit; post-freeze changes are evaluation harness/report only.
+
+Next step: obtain an independent semantic review of the two preserved self-statement losses and explicitly decide the relationship between outer `evidence_refs`, nested `statement_refs`, and matching statement-event provenance before authorizing a successor task. Any successor needs a new freeze and genuinely new scored requests with enough realized useful corroboration/context and scoped contradiction exposure. Provider malformation remains a separate work item. No further tuning or production work is performed here.
