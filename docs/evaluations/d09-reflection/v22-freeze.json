@@ -1,0 +1,36 @@
+{
+  "source_file": "src/dev/reflection-v22.ts",
+  "source_sha": "ca226a81952c31120ff02e2d49e8399182bea8f664c796592d88f9b5c838d0cf",
+  "schema_sha": "c870bf85c44eb2dea558a5a9904e0dde91ecd74f9a93eb2ff3f7986cb3a724ba",
+  "prompt_sha": "fa80b3d799d05f5800eed9d0dfd09433b61f2714bfac0630b35635ee68a83a09",
+  "evidence_version": 2,
+  "provenance_model_version": 1,
+  "reason_codes": [
+    "invalid_claim_shape",
+    "unknown_evidence",
+    "claim_subject_mismatch",
+    "claim_count_mismatch",
+    "claim_direction_mismatch",
+    "claim_episode_mismatch",
+    "claim_state_mismatch",
+    "claim_trajectory_mismatch",
+    "unsupported_claim_from_evidence",
+    "missing_positive_evidence",
+    "environment_not_character_evidence",
+    "missing_provenance_not_tension",
+    "authority_restatement",
+    "unsafe_statement",
+    "rendering_limit",
+    "duplicate_claim",
+    "contradictory_evidence",
+    "irrelevant_evidence",
+    "invalid_statement_provenance"
+  ],
+  "reason_codes_sha": "9c0a4fbdba02061e70a300892ab3e20ee481c8ab46c41cf0dc53e73284d07a25",
+  "dependency_hashes": {
+    "src/dev/reflection-v2.ts": "2a74c0c184c8be3137199cd765a1130d4cb8b694c51da9b56c2b014912cc84a6",
+    "src/dev/reflection-v21.ts": "158f5977f2e500def47d1a5477aff4c56168a58605a307e82cdad84391437072"
+  },
+  "schema_unchanged": true,
+  "prompt_unchanged": true
+}
