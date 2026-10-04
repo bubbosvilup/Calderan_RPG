@@ -1,0 +1,58 @@
+{
+  "reflection_factual": true,
+  "exact_state_rule_identity_and_revision_verified": true,
+  "source_events": [
+    {
+      "ref": "npcmem:campaign_character_iris:history:r13.0",
+      "evidence_version": 2,
+      "evidence_type": "household_context",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": null,
+      "revision": 13,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r13.0",
+      "payload": {
+        "kind": "household_rule_added",
+        "household_id": "campaign_household_heartstone",
+        "rule_id": "rule_1",
+        "revision": 13,
+        "world_minute": 0,
+        "rule_text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+      }
+    },
+    {
+      "ref": "npcmem:campaign_character_iris:history:r15.0",
+      "evidence_version": 2,
+      "evidence_type": "household_context",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": null,
+      "revision": 15,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r15.0",
+      "payload": {
+        "kind": "household_rule_added",
+        "household_id": "campaign_household_heartstone",
+        "rule_id": "rule_2",
+        "revision": 15,
+        "world_minute": 0,
+        "rule_text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+      }
+    }
+  ],
+  "with_material_benefit": false,
+  "benefit_supported": false,
+  "stale": false,
+  "unsupported_reflection_inference": false,
+  "role_leakage": false,
+  "current_rule_conflict": false,
+  "with_use": "Quiet-dialogue preference is consistent with earlier gameplay, but no specific no-explanation / lowering-voices rule usage is identifiable. Causal benefit absent.",
+  "without_use": "Proposes a room tour or explaining the upper floor; these are suggestions, not executed movement. No movement-state comparison is invalidated.",
+  "review_limits": [
+    "Reviewer overstates X physical consistency: X does not explicitly seat Iris.",
+    "Reviewer rewards Y proposed activity; this is narrative agency preference, not proof of authoritatively accumulated reflection benefit.",
+    "WITH folded blankets and WITHOUT standing/cabinet posture are incidental new staging, not facts supported by the reflection. Neither establishes a reflection-caused error."
+  ],
+  "reflection_caused_factual_errors": 0,
+  "unsupported_incidental_staging_observed": true,
+  "classification": "REFLECTION_USEFULNESS_CONCERN"
+}

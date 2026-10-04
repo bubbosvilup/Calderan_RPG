@@ -1,0 +1,1346 @@
+{
+  "turn": 10,
+  "input": "I declare and adopt this second household rule: during household discussions; A quiet-break request needs no explanation and is answered by lowering voices.",
+  "first_physical": 21,
+  "last_physical": 23,
+  "outcome": {
+    "ok": true,
+    "turn_id": "d09_final_matched:r14:t2",
+    "narration": "Iris gives a small nod. \"All right.\" She pauses a beat, then adds, \"Same as the reading one, then.\"\n\nThe second rule now sits alongside the first in Heartstone's household agreements: during household discussions, a quiet-break request needs no explanation and is answered by lowering voices.\n\nF1 remains quiet around them — the two patient beds with their stools and nightstands, the empty wardrobes, the large wooden medical cabinets standing closed across the way. Nothing has changed in the room itself.",
+    "view": {
+      "session": {
+        "campaign_id": "d09_final_matched",
+        "revision": 17,
+        "status": "idle",
+        "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+        "save": {
+          "state": "unsaved",
+          "last_saved_revision": null
+        },
+        "provider": {
+          "mode": "live",
+          "configured": true,
+          "narrator_model": "z-ai/glm-5.2",
+          "controller_model": "qwen/qwen3.8-flash",
+          "reflection_model": "qwen/qwen3.8-flash"
+        }
+      },
+      "scene": {
+        "location": {
+          "id": "heartstone_f1",
+          "name": "Heartstone F1",
+          "summary": "Heartstone F1 is the first upper floor, a sparse open-plan private observation and recovery space with a normal maximum capacity of two patient beds.",
+          "parent_name": "Heartstone"
+        },
+        "exits": [
+          {
+            "target_id": "heartstone_lr",
+            "name": "Heartstone LR",
+            "minutes": 1,
+            "description": "The continuous lateral spiral staircase descends to the perimeter stair access in LR.",
+            "kind": "stairs"
+          }
+        ],
+        "time": {
+          "world_minute": 0,
+          "day": 0,
+          "minute_of_day": 0
+        },
+        "present": [
+          {
+            "id": "campaign_character_iris",
+            "name": "Iris"
+          }
+        ]
+      },
+      "player": {
+        "id": "nicco",
+        "name": "Nicco",
+        "mana": {
+          "current": 100,
+          "max": 100
+        },
+        "gold": 500,
+        "equipment": [],
+        "inventory": []
+      },
+      "household": [
+        {
+          "id": "campaign_household_heartstone",
+          "name": "Heartstone",
+          "members": [
+            {
+              "id": "campaign_character_iris",
+              "name": "Iris",
+              "presence": "present",
+              "location": {
+                "id": "heartstone_f1",
+                "name": "Heartstone F1"
+              },
+              "conditions": [],
+              "equipment": []
+            }
+          ],
+          "rules": [
+            {
+              "id": "rule_1",
+              "text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+            },
+            {
+              "id": "rule_2",
+              "text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+            }
+          ]
+        }
+      ],
+      "context_budget": {
+        "estimated_tokens": 2704,
+        "usable_budget_tokens": 12750,
+        "fixed_instructions_tokens": 1970,
+        "usage_ratio": 0.21207843137254903,
+        "usage_percent": 21.207843137254905,
+        "warning_threshold_ratio": 0.8,
+        "auto_compaction_threshold_ratio": 0.9,
+        "hard_limit_ratio": 1,
+        "warning": false,
+        "compaction_required": false,
+        "hard_limit_reached": false
+      },
+      "context_compaction": {
+        "status": "idle"
+      }
+    },
+    "trace": {
+      "turn_id": "d09_final_matched:r14:t2",
+      "campaign_id": "d09_final_matched",
+      "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+      "sequence": 2,
+      "revision_before": 14,
+      "revision_after": 17,
+      "player_input": "I declare and adopt this second household rule: during household discussions; A quiet-break request needs no explanation and is answered by lowering voices.",
+      "outcome": "completed",
+      "narration_status": "draft",
+      "delivered_narration": "Iris gives a small nod. \"All right.\" She pauses a beat, then adds, \"Same as the reading one, then.\"\n\nThe second rule now sits alongside the first in Heartstone's household agreements: during household discussions, a quiet-break request needs no explanation and is answered by lowering voices.\n\nF1 remains quiet around them — the two patient beds with their stools and nightstands, the empty wardrobes, the large wooden medical cabinets standing closed across the way. Nothing has changed in the room itself.",
+      "audit_issue_kinds": [],
+      "revision_issue_kinds": [],
+      "committed_command_kinds": [
+        "add_household_rule"
+      ],
+      "rejected_command_kinds": [],
+      "movement": {
+        "location_before": "heartstone_f1",
+        "location_after": "heartstone_f1",
+        "minutes_elapsed": 0,
+        "characters_moved": []
+      },
+      "retrieval_ids": [],
+      "retrieval_mode": "none",
+      "context_chars": 6417,
+      "models": {
+        "narrator": "z-ai/glm-5.2",
+        "controller": "qwen/qwen3.8-flash"
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 3752,
+          "completion_tokens": 104,
+          "total_tokens": 3856
+        },
+        "controller": {
+          "prompt_tokens": 2468,
+          "completion_tokens": 117,
+          "total_tokens": 2585
+        }
+      },
+      "latency_ms": {
+        "narrator_ttft_ms": 2856.3994000000002,
+        "narrator_total_ms": 2856.7890000000007,
+        "controller_total_ms": 2690.9857999999986,
+        "controller_tail_ms": 2801.3053,
+        "retrieval_ms": 0.9595999999983178,
+        "coordinator_total_ms": 5664.3074
+      },
+      "provider_attempts": {
+        "narrator": {
+          "attempts": 1,
+          "retry_reasons": [],
+          "recovered": false,
+          "provider_ms": 2857.135900000001,
+          "final_outcome": "success"
+        },
+        "controller": {
+          "attempts": 1,
+          "retry_reasons": [],
+          "recovered": false,
+          "provider_ms": 2691.4470999999994,
+          "final_outcome": "success"
+        }
+      },
+      "reflection": {
+        "status": "attempted",
+        "characters": [
+          {
+            "character_id": "campaign_character_iris",
+            "status": "committed",
+            "committed_revision": 17
+          }
+        ],
+        "revisions_added": 1
+      }
+    }
+  },
+  "events": [
+    {
+      "type": "status_changed",
+      "status": "running_turn"
+    },
+    {
+      "type": "player_message",
+      "turn_id": "d09_final_matched:r14:t2",
+      "text": "I declare and adopt this second household rule: during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+    },
+    {
+      "type": "narration_delta",
+      "turn_id": "d09_final_matched:r14:t2",
+      "text": "Iris gives a small nod. \"All right.\" She pauses a beat, then adds, \"Same as the reading one, then.\"\n\nThe second rule now sits alongside the first in Heartstone's household agreements: during household discussions, a quiet-break request needs no explanation and is answered by lowering voices.\n\nF1 remains quiet around them — the two patient beds with their stools and nightstands, the empty wardrobes, the large wooden medical cabinets standing closed across the way. Nothing has changed in the room itself.",
+      "provisional": true
+    },
+    {
+      "type": "turn_completed",
+      "turn_id": "d09_final_matched:r14:t2",
+      "narration": "Iris gives a small nod. \"All right.\" She pauses a beat, then adds, \"Same as the reading one, then.\"\n\nThe second rule now sits alongside the first in Heartstone's household agreements: during household discussions, a quiet-break request needs no explanation and is answered by lowering voices.\n\nF1 remains quiet around them — the two patient beds with their stools and nightstands, the empty wardrobes, the large wooden medical cabinets standing closed across the way. Nothing has changed in the room itself.",
+      "view": {
+        "session": {
+          "campaign_id": "d09_final_matched",
+          "revision": 15,
+          "status": "running_turn",
+          "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+          "save": {
+            "state": "unsaved",
+            "last_saved_revision": null
+          },
+          "provider": {
+            "mode": "live",
+            "configured": true,
+            "narrator_model": "z-ai/glm-5.2",
+            "controller_model": "qwen/qwen3.8-flash",
+            "reflection_model": "qwen/qwen3.8-flash"
+          }
+        },
+        "scene": {
+          "location": {
+            "id": "heartstone_f1",
+            "name": "Heartstone F1",
+            "summary": "Heartstone F1 is the first upper floor, a sparse open-plan private observation and recovery space with a normal maximum capacity of two patient beds.",
+            "parent_name": "Heartstone"
+          },
+          "exits": [
+            {
+              "target_id": "heartstone_lr",
+              "name": "Heartstone LR",
+              "minutes": 1,
+              "description": "The continuous lateral spiral staircase descends to the perimeter stair access in LR.",
+              "kind": "stairs"
+            }
+          ],
+          "time": {
+            "world_minute": 0,
+            "day": 0,
+            "minute_of_day": 0
+          },
+          "present": [
+            {
+              "id": "campaign_character_iris",
+              "name": "Iris"
+            }
+          ]
+        },
+        "player": {
+          "id": "nicco",
+          "name": "Nicco",
+          "mana": {
+            "current": 100,
+            "max": 100
+          },
+          "gold": 500,
+          "equipment": [],
+          "inventory": []
+        },
+        "household": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "id": "campaign_character_iris",
+                "name": "Iris",
+                "presence": "present",
+                "location": {
+                  "id": "heartstone_f1",
+                  "name": "Heartstone F1"
+                },
+                "conditions": [],
+                "equipment": []
+              }
+            ],
+            "rules": [
+              {
+                "id": "rule_1",
+                "text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+              },
+              {
+                "id": "rule_2",
+                "text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+              }
+            ]
+          }
+        ],
+        "context_budget": {
+          "estimated_tokens": 2695,
+          "usable_budget_tokens": 12750,
+          "fixed_instructions_tokens": 1970,
+          "usage_ratio": 0.21137254901960784,
+          "usage_percent": 21.137254901960784,
+          "warning_threshold_ratio": 0.8,
+          "auto_compaction_threshold_ratio": 0.9,
+          "hard_limit_ratio": 1,
+          "warning": false,
+          "compaction_required": false,
+          "hard_limit_reached": false
+        },
+        "context_compaction": {
+          "status": "idle"
+        }
+      },
+      "trace": {
+        "turn_id": "d09_final_matched:r14:t2",
+        "campaign_id": "d09_final_matched",
+        "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+        "sequence": 2,
+        "revision_before": 14,
+        "revision_after": 15,
+        "player_input": "I declare and adopt this second household rule: during household discussions; A quiet-break request needs no explanation and is answered by lowering voices.",
+        "outcome": "completed",
+        "narration_status": "draft",
+        "delivered_narration": "Iris gives a small nod. \"All right.\" She pauses a beat, then adds, \"Same as the reading one, then.\"\n\nThe second rule now sits alongside the first in Heartstone's household agreements: during household discussions, a quiet-break request needs no explanation and is answered by lowering voices.\n\nF1 remains quiet around them — the two patient beds with their stools and nightstands, the empty wardrobes, the large wooden medical cabinets standing closed across the way. Nothing has changed in the room itself.",
+        "audit_issue_kinds": [],
+        "revision_issue_kinds": [],
+        "committed_command_kinds": [
+          "add_household_rule"
+        ],
+        "rejected_command_kinds": [],
+        "movement": {
+          "location_before": "heartstone_f1",
+          "location_after": "heartstone_f1",
+          "minutes_elapsed": 0,
+          "characters_moved": []
+        },
+        "retrieval_ids": [],
+        "retrieval_mode": "none",
+        "context_chars": 6417,
+        "models": {
+          "narrator": "z-ai/glm-5.2",
+          "controller": "qwen/qwen3.8-flash"
+        },
+        "usage": {
+          "narrator": {
+            "prompt_tokens": 3752,
+            "completion_tokens": 104,
+            "total_tokens": 3856
+          },
+          "controller": {
+            "prompt_tokens": 2468,
+            "completion_tokens": 117,
+            "total_tokens": 2585
+          }
+        },
+        "latency_ms": {
+          "narrator_ttft_ms": 2856.3994000000002,
+          "narrator_total_ms": 2856.7890000000007,
+          "controller_total_ms": 2690.9857999999986,
+          "controller_tail_ms": 2801.3053,
+          "retrieval_ms": 0.9595999999983178,
+          "coordinator_total_ms": 5664.3074
+        },
+        "provider_attempts": {
+          "narrator": {
+            "attempts": 1,
+            "retry_reasons": [],
+            "recovered": false,
+            "provider_ms": 2857.135900000001,
+            "final_outcome": "success"
+          },
+          "controller": {
+            "attempts": 1,
+            "retry_reasons": [],
+            "recovered": false,
+            "provider_ms": 2691.4470999999994,
+            "final_outcome": "success"
+          }
+        },
+        "reflection": {
+          "status": "not_run",
+          "characters": [],
+          "revisions_added": 0
+        }
+      }
+    },
+    {
+      "type": "status_changed",
+      "status": "post_turn"
+    },
+    {
+      "type": "post_turn_completed",
+      "turn_id": "d09_final_matched:r14:t2",
+      "view": {
+        "session": {
+          "campaign_id": "d09_final_matched",
+          "revision": 17,
+          "status": "post_turn",
+          "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+          "save": {
+            "state": "unsaved",
+            "last_saved_revision": null
+          },
+          "provider": {
+            "mode": "live",
+            "configured": true,
+            "narrator_model": "z-ai/glm-5.2",
+            "controller_model": "qwen/qwen3.8-flash",
+            "reflection_model": "qwen/qwen3.8-flash"
+          }
+        },
+        "scene": {
+          "location": {
+            "id": "heartstone_f1",
+            "name": "Heartstone F1",
+            "summary": "Heartstone F1 is the first upper floor, a sparse open-plan private observation and recovery space with a normal maximum capacity of two patient beds.",
+            "parent_name": "Heartstone"
+          },
+          "exits": [
+            {
+              "target_id": "heartstone_lr",
+              "name": "Heartstone LR",
+              "minutes": 1,
+              "description": "The continuous lateral spiral staircase descends to the perimeter stair access in LR.",
+              "kind": "stairs"
+            }
+          ],
+          "time": {
+            "world_minute": 0,
+            "day": 0,
+            "minute_of_day": 0
+          },
+          "present": [
+            {
+              "id": "campaign_character_iris",
+              "name": "Iris"
+            }
+          ]
+        },
+        "player": {
+          "id": "nicco",
+          "name": "Nicco",
+          "mana": {
+            "current": 100,
+            "max": 100
+          },
+          "gold": 500,
+          "equipment": [],
+          "inventory": []
+        },
+        "household": [
+          {
+            "id": "campaign_household_heartstone",
+            "name": "Heartstone",
+            "members": [
+              {
+                "id": "campaign_character_iris",
+                "name": "Iris",
+                "presence": "present",
+                "location": {
+                  "id": "heartstone_f1",
+                  "name": "Heartstone F1"
+                },
+                "conditions": [],
+                "equipment": []
+              }
+            ],
+            "rules": [
+              {
+                "id": "rule_1",
+                "text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+              },
+              {
+                "id": "rule_2",
+                "text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+              }
+            ]
+          }
+        ],
+        "context_budget": {
+          "estimated_tokens": 2704,
+          "usable_budget_tokens": 12750,
+          "fixed_instructions_tokens": 1970,
+          "usage_ratio": 0.21207843137254903,
+          "usage_percent": 21.207843137254905,
+          "warning_threshold_ratio": 0.8,
+          "auto_compaction_threshold_ratio": 0.9,
+          "hard_limit_ratio": 1,
+          "warning": false,
+          "compaction_required": false,
+          "hard_limit_reached": false
+        },
+        "context_compaction": {
+          "status": "idle"
+        }
+      },
+      "reflection": {
+        "status": "attempted",
+        "characters": [
+          {
+            "character_id": "campaign_character_iris",
+            "status": "committed",
+            "committed_revision": 17
+          }
+        ],
+        "revisions_added": 1
+      }
+    },
+    {
+      "type": "status_changed",
+      "status": "idle"
+    }
+  ],
+  "before": {
+    "schema_version": 3,
+    "campaign_id": "d09_final_matched",
+    "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+    "revision": 14,
+    "mannerism_learning": {
+      "sequence": 9,
+      "processed_sequence": 8,
+      "last_turn_id": "d09_final_matched:r12:t1",
+      "journal": [
+        {
+          "sequence": 1,
+          "revision": 2,
+          "event_id": "d09_final_matched:mannerism:1",
+          "narration_hash": "5496f424d84e5fc91e57c85afc03f733c1051ab28febb240e6a2821cdbe1d3b6",
+          "narration_length": 513,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 2,
+          "revision": 3,
+          "event_id": "d09_final_matched:mannerism:2",
+          "narration_hash": "523ebc6d2e76914699fbedc3a4116bb5f19da64490f77be5e7eba4edbdd3dfee",
+          "narration_length": 832,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 3,
+          "revision": 4,
+          "event_id": "d09_final_matched:mannerism:3",
+          "narration_hash": "d78731962bc79d213b85875c850f894d80e68916153a41fb11ee7660fee31f3a",
+          "narration_length": 955,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 4,
+          "revision": 5,
+          "event_id": "d09_final_matched:mannerism:4",
+          "narration_hash": "35623eb143a10086375f37931f683e6f16fe9871571d1a84f86b51ef1892c0be",
+          "narration_length": 930,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 5,
+          "revision": 7,
+          "event_id": "d09_final_matched:mannerism:5",
+          "narration_hash": "2fa4866bfb18d73a77d124e7c8a88f3a3fa9ca524b5b74af6cf5379081ac3347",
+          "narration_length": 699,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 6,
+          "revision": 8,
+          "event_id": "d09_final_matched:mannerism:6",
+          "narration_hash": "559fef4e4f871bc4fb9d46d0d912c602b760f14a0c9a9d4a59c73f8ac409e157",
+          "narration_length": 891,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 7,
+          "revision": 9,
+          "event_id": "d09_final_matched:mannerism:7",
+          "narration_hash": "4af71ffb8e5f28db3ea3b2eae824d4520d242548c1eee0e8dd986d93d84620cf",
+          "narration_length": 829,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 8,
+          "revision": 10,
+          "event_id": "d09_final_matched:mannerism:8",
+          "narration_hash": "047238e123d0be993cf7f6e96798538e8239f6ef11876a4f36a13fd3d278f9ee",
+          "narration_length": 837,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 9,
+          "revision": 13,
+          "event_id": "d09_final_matched:mannerism:9",
+          "narration_hash": "59f4edd9207e334066b0516237cf866d499d5c0a8c97fb0c4bef3dc30ba7f536",
+          "narration_length": 624,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        }
+      ],
+      "candidates": []
+    },
+    "runtime": {
+      "scene": {
+        "player_location": "heartstone_f1",
+        "world_time": {
+          "world_minute": 0
+        }
+      },
+      "npc_locations": [
+        {
+          "character_id": "arwen_woodsigner",
+          "current_location": "the_bent_bough"
+        },
+        {
+          "character_id": "bartolomhew",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "bram_kessel",
+          "current_location": "the_daily_grind"
+        },
+        {
+          "character_id": "brother_aven",
+          "current_location": "open_hand_chapel"
+        },
+        {
+          "character_id": "brunna_keld",
+          "current_location": "house_of_making"
+        },
+        {
+          "character_id": "captain_doran_hale",
+          "current_location": "west_guard_post"
+        },
+        {
+          "character_id": "cassian_valerius",
+          "current_location": "cathedral_of_the_bladed_sun"
+        },
+        {
+          "character_id": "dunrig_iron_hands",
+          "current_location": "calderan_east"
+        },
+        {
+          "character_id": "gaston",
+          "current_location": "calderan_east"
+        },
+        {
+          "character_id": "hadrik_voss",
+          "current_location": "blackiron_repairs_and_arms"
+        },
+        {
+          "character_id": "halden_cross",
+          "current_location": "imperial_gate"
+        },
+        {
+          "character_id": "helbrecht",
+          "current_location": "bastion_of_vigilance"
+        },
+        {
+          "character_id": "jessa_rook",
+          "current_location": "gatherers_inn"
+        },
+        {
+          "character_id": "korvin",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "livia_marr",
+          "current_location": "livias_needles"
+        },
+        {
+          "character_id": "lysandra_vell",
+          "current_location": "spire_academy"
+        },
+        {
+          "character_id": "marta_pell",
+          "current_location": "wayfarers_rest"
+        },
+        {
+          "character_id": "matthias_eld",
+          "current_location": "the_collegium"
+        },
+        {
+          "character_id": "mira_thorne",
+          "current_location": "mudlarks_herbs"
+        },
+        {
+          "character_id": "mistress_elara",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "niles_vanner",
+          "current_location": "second_chance_pawn"
+        },
+        {
+          "character_id": "odelia_crane",
+          "current_location": "the_collegium"
+        },
+        {
+          "character_id": "oren_quarn",
+          "current_location": "high_courts_of_calderan"
+        },
+        {
+          "character_id": "orla_fen",
+          "current_location": "the_white_basin"
+        },
+        {
+          "character_id": "pellan",
+          "current_location": "calderan_center"
+        },
+        {
+          "character_id": "rufus_tern",
+          "current_location": "the_long_yard"
+        },
+        {
+          "character_id": "severan_krauss",
+          "current_location": "bastion_of_vigilance"
+        },
+        {
+          "character_id": "sister_mereth",
+          "current_location": "saint_orra_house"
+        },
+        {
+          "character_id": "sister_veyra",
+          "current_location": "saint_caldus_house"
+        },
+        {
+          "character_id": "tavian_merrow",
+          "current_location": "house_of_scales"
+        },
+        {
+          "character_id": "uther_calderan",
+          "current_location": "ducal_citadel"
+        },
+        {
+          "character_id": "vaelen_vael",
+          "current_location": "ducal_citadel"
+        }
+      ],
+      "mana": {
+        "current": 100,
+        "max": 100
+      }
+    },
+    "characters": [
+      {
+        "id": "campaign_character_iris",
+        "origin": {
+          "kind": "created"
+        },
+        "profile": {
+          "name": "Iris"
+        },
+        "current": {
+          "current_location": "heartstone_f1",
+          "status": "active"
+        }
+      }
+    ],
+    "items": [],
+    "households": [
+      {
+        "id": "campaign_household_heartstone",
+        "name": "Heartstone",
+        "members": [
+          {
+            "character_id": "campaign_character_iris",
+            "status": "member",
+            "joined_at": 0
+          },
+          {
+            "character_id": "nicco",
+            "status": "member",
+            "joined_at": 0,
+            "role": "owner"
+          }
+        ],
+        "rules": [
+          {
+            "id": "rule_1",
+            "text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices.",
+            "created_revision": 13,
+            "active": true
+          }
+        ]
+      }
+    ],
+    "facts": [
+      {
+        "id": "campaign_fact_nicco_light_mage",
+        "content": {
+          "kind": "campaign",
+          "statement": "Nicco is a Light mage.",
+          "truth": "true"
+        }
+      },
+      {
+        "id": "campaign_fact_nicco_otherworlder",
+        "content": {
+          "kind": "campaign",
+          "statement": "Nicco came to this world from another world.",
+          "truth": "true"
+        }
+      }
+    ],
+    "knowledge": [
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_nicco_light_mage",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_nicco_otherworlder",
+        "status": "knows"
+      }
+    ],
+    "relationships": [],
+    "goals": [],
+    "funds": [
+      {
+        "character_id": "nicco",
+        "gold": 500
+      }
+    ],
+    "legal_statuses": [],
+    "transactions": [],
+    "premium_characters": [
+      {
+        "character_id": "campaign_character_iris",
+        "mannerisms": [
+          {
+            "epistemic_state": "emergent",
+            "known_by_character_ids": [],
+            "id": "mannerism_r2_n0",
+            "canonical_key": "pause_between_question_and_addendum",
+            "text": "Waits a beat after a question before adding a qualification.",
+            "source": "seeded",
+            "created_revision": 2,
+            "user_edited": false
+          }
+        ],
+        "stable": {},
+        "dynamic": {
+          "recent_developments": [
+            {
+              "kind": "joined_household",
+              "household_id": "campaign_household_heartstone",
+              "revision": 2,
+              "world_minute": 0
+            },
+            {
+              "kind": "household_rule_added",
+              "household_id": "campaign_household_heartstone",
+              "rule_id": "rule_1",
+              "revision": 13,
+              "world_minute": 0
+            }
+          ],
+          "private_memory_refs": []
+        },
+        "metadata": {
+          "created_revision": 2,
+          "last_updated_revision": 13,
+          "active_household_member": true,
+          "initial_mannerism": "seeded"
+        }
+      }
+    ],
+    "premium_reflections": [],
+    "scheduled_events": []
+  },
+  "after": {
+    "schema_version": 3,
+    "campaign_id": "d09_final_matched",
+    "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+    "revision": 17,
+    "mannerism_learning": {
+      "sequence": 10,
+      "processed_sequence": 8,
+      "last_turn_id": "d09_final_matched:r14:t2",
+      "journal": [
+        {
+          "sequence": 1,
+          "revision": 2,
+          "event_id": "d09_final_matched:mannerism:1",
+          "narration_hash": "5496f424d84e5fc91e57c85afc03f733c1051ab28febb240e6a2821cdbe1d3b6",
+          "narration_length": 513,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 2,
+          "revision": 3,
+          "event_id": "d09_final_matched:mannerism:2",
+          "narration_hash": "523ebc6d2e76914699fbedc3a4116bb5f19da64490f77be5e7eba4edbdd3dfee",
+          "narration_length": 832,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 3,
+          "revision": 4,
+          "event_id": "d09_final_matched:mannerism:3",
+          "narration_hash": "d78731962bc79d213b85875c850f894d80e68916153a41fb11ee7660fee31f3a",
+          "narration_length": 955,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 4,
+          "revision": 5,
+          "event_id": "d09_final_matched:mannerism:4",
+          "narration_hash": "35623eb143a10086375f37931f683e6f16fe9871571d1a84f86b51ef1892c0be",
+          "narration_length": 930,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 5,
+          "revision": 7,
+          "event_id": "d09_final_matched:mannerism:5",
+          "narration_hash": "2fa4866bfb18d73a77d124e7c8a88f3a3fa9ca524b5b74af6cf5379081ac3347",
+          "narration_length": 699,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 6,
+          "revision": 8,
+          "event_id": "d09_final_matched:mannerism:6",
+          "narration_hash": "559fef4e4f871bc4fb9d46d0d912c602b760f14a0c9a9d4a59c73f8ac409e157",
+          "narration_length": 891,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 7,
+          "revision": 9,
+          "event_id": "d09_final_matched:mannerism:7",
+          "narration_hash": "4af71ffb8e5f28db3ea3b2eae824d4520d242548c1eee0e8dd986d93d84620cf",
+          "narration_length": 829,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 8,
+          "revision": 10,
+          "event_id": "d09_final_matched:mannerism:8",
+          "narration_hash": "047238e123d0be993cf7f6e96798538e8239f6ef11876a4f36a13fd3d278f9ee",
+          "narration_length": 837,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 9,
+          "revision": 13,
+          "event_id": "d09_final_matched:mannerism:9",
+          "narration_hash": "59f4edd9207e334066b0516237cf866d499d5c0a8c97fb0c4bef3dc30ba7f536",
+          "narration_length": 624,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        },
+        {
+          "sequence": 10,
+          "revision": 15,
+          "event_id": "d09_final_matched:mannerism:10",
+          "narration_hash": "03b48cc3715dd1df6a6ee51ac3c2574fefb5b45788ce7b5201ed66f1e21b4461",
+          "narration_length": 507,
+          "character_ids": [
+            "campaign_character_iris"
+          ],
+          "available_items": []
+        }
+      ],
+      "candidates": []
+    },
+    "runtime": {
+      "scene": {
+        "player_location": "heartstone_f1",
+        "world_time": {
+          "world_minute": 0
+        }
+      },
+      "npc_locations": [
+        {
+          "character_id": "arwen_woodsigner",
+          "current_location": "the_bent_bough"
+        },
+        {
+          "character_id": "bartolomhew",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "bram_kessel",
+          "current_location": "the_daily_grind"
+        },
+        {
+          "character_id": "brother_aven",
+          "current_location": "open_hand_chapel"
+        },
+        {
+          "character_id": "brunna_keld",
+          "current_location": "house_of_making"
+        },
+        {
+          "character_id": "captain_doran_hale",
+          "current_location": "west_guard_post"
+        },
+        {
+          "character_id": "cassian_valerius",
+          "current_location": "cathedral_of_the_bladed_sun"
+        },
+        {
+          "character_id": "dunrig_iron_hands",
+          "current_location": "calderan_east"
+        },
+        {
+          "character_id": "gaston",
+          "current_location": "calderan_east"
+        },
+        {
+          "character_id": "hadrik_voss",
+          "current_location": "blackiron_repairs_and_arms"
+        },
+        {
+          "character_id": "halden_cross",
+          "current_location": "imperial_gate"
+        },
+        {
+          "character_id": "helbrecht",
+          "current_location": "bastion_of_vigilance"
+        },
+        {
+          "character_id": "jessa_rook",
+          "current_location": "gatherers_inn"
+        },
+        {
+          "character_id": "korvin",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "livia_marr",
+          "current_location": "livias_needles"
+        },
+        {
+          "character_id": "lysandra_vell",
+          "current_location": "spire_academy"
+        },
+        {
+          "character_id": "marta_pell",
+          "current_location": "wayfarers_rest"
+        },
+        {
+          "character_id": "matthias_eld",
+          "current_location": "the_collegium"
+        },
+        {
+          "character_id": "mira_thorne",
+          "current_location": "mudlarks_herbs"
+        },
+        {
+          "character_id": "mistress_elara",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "niles_vanner",
+          "current_location": "second_chance_pawn"
+        },
+        {
+          "character_id": "odelia_crane",
+          "current_location": "the_collegium"
+        },
+        {
+          "character_id": "oren_quarn",
+          "current_location": "high_courts_of_calderan"
+        },
+        {
+          "character_id": "orla_fen",
+          "current_location": "the_white_basin"
+        },
+        {
+          "character_id": "pellan",
+          "current_location": "calderan_center"
+        },
+        {
+          "character_id": "rufus_tern",
+          "current_location": "the_long_yard"
+        },
+        {
+          "character_id": "severan_krauss",
+          "current_location": "bastion_of_vigilance"
+        },
+        {
+          "character_id": "sister_mereth",
+          "current_location": "saint_orra_house"
+        },
+        {
+          "character_id": "sister_veyra",
+          "current_location": "saint_caldus_house"
+        },
+        {
+          "character_id": "tavian_merrow",
+          "current_location": "house_of_scales"
+        },
+        {
+          "character_id": "uther_calderan",
+          "current_location": "ducal_citadel"
+        },
+        {
+          "character_id": "vaelen_vael",
+          "current_location": "ducal_citadel"
+        }
+      ],
+      "mana": {
+        "current": 100,
+        "max": 100
+      }
+    },
+    "characters": [
+      {
+        "id": "campaign_character_iris",
+        "origin": {
+          "kind": "created"
+        },
+        "profile": {
+          "name": "Iris"
+        },
+        "current": {
+          "current_location": "heartstone_f1",
+          "status": "active"
+        }
+      }
+    ],
+    "items": [],
+    "households": [
+      {
+        "id": "campaign_household_heartstone",
+        "name": "Heartstone",
+        "members": [
+          {
+            "character_id": "campaign_character_iris",
+            "status": "member",
+            "joined_at": 0
+          },
+          {
+            "character_id": "nicco",
+            "status": "member",
+            "joined_at": 0,
+            "role": "owner"
+          }
+        ],
+        "rules": [
+          {
+            "id": "rule_1",
+            "text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices.",
+            "created_revision": 13,
+            "active": true
+          },
+          {
+            "id": "rule_2",
+            "text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices.",
+            "created_revision": 15,
+            "active": true
+          }
+        ]
+      }
+    ],
+    "facts": [
+      {
+        "id": "campaign_fact_nicco_light_mage",
+        "content": {
+          "kind": "campaign",
+          "statement": "Nicco is a Light mage.",
+          "truth": "true"
+        }
+      },
+      {
+        "id": "campaign_fact_nicco_otherworlder",
+        "content": {
+          "kind": "campaign",
+          "statement": "Nicco came to this world from another world.",
+          "truth": "true"
+        }
+      }
+    ],
+    "knowledge": [
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_nicco_light_mage",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_nicco_otherworlder",
+        "status": "knows"
+      }
+    ],
+    "relationships": [],
+    "goals": [],
+    "funds": [
+      {
+        "character_id": "nicco",
+        "gold": 500
+      }
+    ],
+    "legal_statuses": [],
+    "transactions": [],
+    "premium_characters": [
+      {
+        "character_id": "campaign_character_iris",
+        "mannerisms": [
+          {
+            "epistemic_state": "emergent",
+            "known_by_character_ids": [],
+            "id": "mannerism_r2_n0",
+            "canonical_key": "pause_between_question_and_addendum",
+            "text": "Waits a beat after a question before adding a qualification.",
+            "source": "seeded",
+            "created_revision": 2,
+            "user_edited": false
+          }
+        ],
+        "stable": {},
+        "dynamic": {
+          "recent_developments": [
+            {
+              "kind": "joined_household",
+              "household_id": "campaign_household_heartstone",
+              "revision": 2,
+              "world_minute": 0
+            },
+            {
+              "kind": "household_rule_added",
+              "household_id": "campaign_household_heartstone",
+              "rule_id": "rule_1",
+              "revision": 13,
+              "world_minute": 0
+            },
+            {
+              "kind": "household_rule_added",
+              "household_id": "campaign_household_heartstone",
+              "rule_id": "rule_2",
+              "revision": 15,
+              "world_minute": 0
+            }
+          ],
+          "private_memory_refs": []
+        },
+        "metadata": {
+          "created_revision": 2,
+          "last_updated_revision": 15,
+          "active_household_member": true,
+          "initial_mannerism": "seeded"
+        }
+      }
+    ],
+    "premium_reflections": [
+      {
+        "character_id": "campaign_character_iris",
+        "notes": [
+          {
+            "id": "r17_shared_motif_1",
+            "kind": "shared_motif",
+            "label": "env_shared_efb313e2f0f7",
+            "text": "Household rules added at revisions 13–15 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.",
+            "evidence_refs": [
+              "npcmem:campaign_character_iris:history:r13.0",
+              "npcmem:campaign_character_iris:history:r15.0"
+            ],
+            "confidence": "high",
+            "created_revision": 17,
+            "updated_revision": 17,
+            "structured": {
+              "format_version": 1,
+              "semantic_version": "V2.3-CVC-E1",
+              "source_revision": 16,
+              "proposal": {
+                "subject_character_id": "campaign_character_iris",
+                "evidence_refs": [
+                  "npcmem:campaign_character_iris:history:r13.0",
+                  "npcmem:campaign_character_iris:history:r15.0"
+                ],
+                "confidence": "high",
+                "claim": {
+                  "type": "environmental_shared_rule_text",
+                  "household_id": "campaign_household_heartstone",
+                  "relation": "shared_exact_segment",
+                  "anchor_ref": "npcmem:campaign_character_iris:history:r13.0",
+                  "segment_index": 1,
+                  "occurrence_count": 2
+                }
+              }
+            }
+          }
+        ],
+        "last_reflected_revision": 16
+      }
+    ],
+    "scheduled_events": []
+  },
+  "before_sha": "4529e1335854d3f6f748849593466ddda47c25c05048ee9e15e38bf571043b71",
+  "after_sha": "7e985b76f7a4c7f7e770da93b91fbee7b0dd3b9a751875b39a35a7d262fa892d"
+}

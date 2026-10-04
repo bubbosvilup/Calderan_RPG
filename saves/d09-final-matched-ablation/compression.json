@@ -1,0 +1,8 @@
+{
+  "reflection_entry": " | reflection: shared motif \"Household rules added at revisions 13–15 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"",
+  "reflection_tokens": 48,
+  "equivalent_raw_text": "r13 household rule segment: \"A quiet-break request needs no explanation and is answered by lowering voices.\"\nr15 household rule segment: \"A quiet-break request needs no explanation and is answered by lowering voices.\"",
+  "equivalent_raw_evidence_tokens": 55,
+  "value": "POSITIVE",
+  "estimator": "UTF-8 bytes/4 rounded up; supporting size evidence only; two short exact rules, not full serialized events"
+}

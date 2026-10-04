@@ -1,0 +1,76 @@
+{
+  "id": 9,
+  "turn": 4,
+  "role": "extractor",
+  "http_status": 200,
+  "latency_ms": 1140.6368000000002,
+  "reported_cost_usd": 0.000161844,
+  "usage": {
+    "prompt_tokens": 1906,
+    "completion_tokens": 28,
+    "total_tokens": 1934,
+    "cost": 0.000161844,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 1024,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.000161844,
+      "upstream_inference_prompt_cost": 0.000148684,
+      "upstream_inference_completions_cost": 0.00001316
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "receipt": {
+    "id": "gen-1791155749-9xuQg60jMvLfqgLwSXpV",
+    "object": "chat.completion",
+    "created": 1791155749,
+    "model": "qwen/qwen3.8-flash",
+    "provider": "Alibaba",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "{\n\"owned_reviewed_ids\": [\n\"mannerism_r2_n0\"\n],\n\"observations\": []\n}",
+          "refusal": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1906,
+      "completion_tokens": 28,
+      "total_tokens": 1934,
+      "cost": 0.000161844,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 1024,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.000161844,
+        "upstream_inference_prompt_cost": 0.000148684,
+        "upstream_inference_completions_cost": 0.00001316
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}

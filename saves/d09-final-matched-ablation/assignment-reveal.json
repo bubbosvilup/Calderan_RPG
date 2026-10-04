@@ -1,0 +1,20 @@
+{
+  "labels": {
+    "X": "WITH",
+    "Y": "WITHOUT"
+  },
+  "blind_review_sha": "b80fc397d44d85da80055486e07cc8b6787e8e42a41d973df2bb171762e3ea38",
+  "blind_review_frozen_at": "2026-10-04T23:17:35.380Z",
+  "reveal_file": "case-11-revealed.json",
+  "reviewer": "MODEL AGENT, NOT HUMAN",
+  "winner": "WITHOUT",
+  "scores": {
+    "WITH": 12,
+    "WITHOUT": 17,
+    "raw_dimension_sum": {
+      "WITH": 16,
+      "WITHOUT": 21
+    },
+    "rule": "dimensions 1-7 added; 8-9 subtracted (lower better)"
+  }
+}

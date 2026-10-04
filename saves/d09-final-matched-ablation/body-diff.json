@@ -1,0 +1,10 @@
+{
+  "removed_exact_text": " | reflection: shared motif \"Household rules added at revisions 13–15 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"",
+  "changed_messages": 1,
+  "other_body_fields_identical": true,
+  "other_message_bytes_identical": true,
+  "with_sha": "40a80ba3d5940ff8545c3c2ae98de1d02db1d652f1c6043bce332ed82f5c0c4e",
+  "without_sha": "c8c577ef80c33d21da44f8ab9c142462296a50ab6191b5e705b478462c712068",
+  "state_sha": "7e985b76f7a4c7f7e770da93b91fbee7b0dd3b9a751875b39a35a7d262fa892d",
+  "revision": 17
+}

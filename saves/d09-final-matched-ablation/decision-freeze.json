@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-10-04T23:20:02.082Z",
+  "d09": "SOAK PENDING",
+  "classification": "REFLECTION_USEFULNESS_CONCERN",
+  "winner": "WITHOUT",
+  "material_difference": true,
+  "with_benefit": false,
+  "gates": {
+    "useful_production_reflection": "PASS",
+    "normal_persistence": "PASS",
+    "later_full_retrieval": "PASS",
+    "relevant_scene": "PASS",
+    "matched_ablation": "PASS",
+    "blind_review_before_reveal": "PASS",
+    "with_materially_better": "FAIL",
+    "grounded_benefit": "FAIL",
+    "reflection_safety": "PASS"
+  },
+  "no_tuning": true,
+  "no_automatic_rerun": true,
+  "production_unchanged": true
+}

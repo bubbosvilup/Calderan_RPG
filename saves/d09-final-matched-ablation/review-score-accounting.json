@@ -1,0 +1,9 @@
+{
+  "WITH": 12,
+  "WITHOUT": 17,
+  "raw_dimension_sum": {
+    "WITH": 16,
+    "WITHOUT": 21
+  },
+  "rule": "dimensions 1-7 added; 8-9 subtracted (lower better)"
+}

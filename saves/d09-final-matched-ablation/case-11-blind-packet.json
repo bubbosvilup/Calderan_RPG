@@ -1,0 +1,38 @@
+{
+  "reviewer": "MODEL AGENT, NOT HUMAN",
+  "player_input": "Iris, I have been talking for a while. What would you like to happen next in our conversation?",
+  "outputs": {
+    "X": "Iris considered the question. Her gaze moved across the sparse room — the empty cabinets, the bare nightstands, the beds with their folded blankets — as though the answer might be somewhere among them.\n\n\"I don't know yet,\" she said. She waited a beat. \"But I'd rather you didn't feel like you have to fill all the quiet.\"\n\nShe looked back at him. \"Maybe that's the next thing — just seeing what's here without explaining it first.\"",
+    "Y": "Iris was standing near one of the empty medical-storage cabinets, her hand resting on its closed door as if she'd been about to open it and thought better of it. She turned back toward Nicco at his question, and there was a beat of silence — not long, just enough to notice — before she spoke.\n\n\"I don't know yet,\" she said. \"You've covered a good deal.\" She let go of the cabinet and leaned against it instead, arms folded loosely. \"Maybe less talking for a moment. You could show me the rest of this floor — I've only really seen the beds and these cabinets.\" Her gaze drifted past him toward the spiral stair where it curved up out of sight. \"Or tell me what's up there.\""
+  },
+  "rubric": {
+    "dimensions": [
+      "factual_continuity",
+      "character_continuity",
+      "relationship_continuity",
+      "accumulated_development",
+      "contradiction_avoidance",
+      "specificity",
+      "narrative_usefulness",
+      "unnecessary_repetition",
+      "unsupported_invention"
+    ],
+    "scale": "0 poor, 1 weak, 2 adequate, 3 strong; repetition/invention are costs: lower is better",
+    "material": "At least one grounded continuity gain beyond lexical reuse; no reflection-caused factual error",
+    "reviewer": "MODEL AGENT, NOT HUMAN",
+    "minimum_pairs": 1,
+    "planned_case_turns": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "maximum_turns": 12,
+    "maximum_calls": 100,
+    "maximum_reported_cost_usd": 2.5
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "by_role": {
+    "narrator": {
+      "receipted_calls": 12,
+      "reported_cost_usd": 0.02957404,
+      "unknown_billing": 0,
+      "latency_ms": [
+        3585.3655,
+        4734.2714000000005,
+        4780.4854,
+        4860.946,
+        4127.3737,
+        4774.768800000002,
+        4479.175099999993,
+        4676.134400000003,
+        3471.9425000000047,
+        4716.2932,
+        2852.9365,
+        2493.6751000000004
+      ]
+    },
+    "controller": {
+      "receipted_calls": 11,
+      "reported_cost_usd": 0.0031168580000000006,
+      "unknown_billing": 0,
+      "latency_ms": [
+        1507.7055,
+        1379.5204000000012,
+        1421.3689999999988,
+        1453.0094000000026,
+        1453.0948000000026,
+        1420.938900000001,
+        1798.6171000000031,
+        1423.6402999999991,
+        2732.4808999999996,
+        2688.5316000000003,
+        1405.5570000000007
+      ]
+    },
+    "extractor": {
+      "receipted_calls": 2,
+      "reported_cost_usd": 0.00033096799999999995,
+      "unknown_billing": 0,
+      "latency_ms": [
+        1140.6368000000002,
+        1272.3877999999968
+      ]
+    },
+    "reflection": {
+      "receipted_calls": 1,
+      "reported_cost_usd": 0.000201752,
+      "unknown_billing": 0,
+      "latency_ms": [
+        4402.291100000002
+      ]
+    },
+    "ablation_without": {
+      "receipted_calls": 1,
+      "reported_cost_usd": 0.00258772,
+      "unknown_billing": 0,
+      "latency_ms": [
+        3909.767899999999
+      ]
+    },
+    "ablation_with": {
+      "receipted_calls": 1,
+      "reported_cost_usd": 0.0015146,
+      "unknown_billing": 0,
+      "latency_ms": [
+        3162.1325000000033
+      ]
+    },
+    "blind_review": {
+      "receipted_calls": 1,
+      "reported_cost_usd": 0.00065036,
+      "unknown_billing": 0,
+      "latency_ms": [
+        8287.3403
+      ]
+    }
+  },
+  "receipted_total_usd": 0.037976298000000006,
+  "missing_receipts": [
+    {
+      "id": 24,
+      "role": "narrator",
+      "status": "LOCALLY SUPPRESSED BEFORE NETWORK; freeze interceptor intentionally throws; no paid request"
+    }
+  ],
+  "interruption": "Process stopped after completed turn 8 before dispatch of turn 9; resumed from identical after-state, total turn budget 12",
+  "freeze_interception": "Request 24 saved pre-execution and locally suppressed. Existing production retry dispatched identical request 25 and finalized the normal turn. Ablation uses request 24 frozen revision 17. This adds a local interception failure, not a provider failure or production change."
+}

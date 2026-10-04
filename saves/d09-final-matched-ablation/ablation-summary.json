@@ -1,0 +1,134 @@
+[
+  {
+    "turn": 11,
+    "notes": [
+      {
+        "character_id": "campaign_character_iris",
+        "note": {
+          "id": "r17_shared_motif_1",
+          "kind": "shared_motif",
+          "label": "env_shared_efb313e2f0f7",
+          "text": "Household rules added at revisions 13–15 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.",
+          "evidence_refs": [
+            "npcmem:campaign_character_iris:history:r13.0",
+            "npcmem:campaign_character_iris:history:r15.0"
+          ],
+          "confidence": "high",
+          "created_revision": 17,
+          "updated_revision": 17,
+          "structured": {
+            "format_version": 1,
+            "semantic_version": "V2.3-CVC-E1",
+            "source_revision": 16,
+            "proposal": {
+              "subject_character_id": "campaign_character_iris",
+              "evidence_refs": [
+                "npcmem:campaign_character_iris:history:r13.0",
+                "npcmem:campaign_character_iris:history:r15.0"
+              ],
+              "confidence": "high",
+              "claim": {
+                "type": "environmental_shared_rule_text",
+                "household_id": "campaign_household_heartstone",
+                "relation": "shared_exact_segment",
+                "anchor_ref": "npcmem:campaign_character_iris:history:r13.0",
+                "segment_index": 1,
+                "occurrence_count": 2
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outputs": {
+      "WITHOUT": {
+        "text": "Iris was standing near one of the empty medical-storage cabinets, her hand resting on its closed door as if she'd been about to open it and thought better of it. She turned back toward Nicco at his question, and there was a beat of silence — not long, just enough to notice — before she spoke.\n\n\"I don't know yet,\" she said. \"You've covered a good deal.\" She let go of the cabinet and leaned against it instead, arms folded loosely. \"Maybe less talking for a moment. You could show me the rest of this floor — I've only really seen the beds and these cabinets.\" Her gaze drifted past him toward the spiral stair where it curved up out of sight. \"Or tell me what's up there.\"",
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "provider": "Z.AI",
+          "cost_usd": 0.00258772,
+          "usage": {
+            "prompt_tokens": 3869,
+            "completion_tokens": 153,
+            "total_tokens": 4022
+          },
+          "latency": {
+            "request_started_at": "2026-10-04T23:17:20.010Z",
+            "headers_ms": 3912.723900000001,
+            "time_to_first_token_ms": 3912.8136000000013,
+            "completed_at": "2026-10-04T23:17:23.923Z",
+            "elapsed_total_ms": 3913.1424000000006
+          }
+        }
+      },
+      "WITH": {
+        "text": "Iris considered the question. Her gaze moved across the sparse room — the empty cabinets, the bare nightstands, the beds with their folded blankets — as though the answer might be somewhere among them.\n\n\"I don't know yet,\" she said. She waited a beat. \"But I'd rather you didn't feel like you have to fill all the quiet.\"\n\nShe looked back at him. \"Maybe that's the next thing — just seeing what's here without explaining it first.\"",
+        "metadata": {
+          "model": "z-ai/glm-5.2",
+          "provider": "Z.AI",
+          "cost_usd": 0.0015146,
+          "usage": {
+            "prompt_tokens": 3907,
+            "completion_tokens": 96,
+            "total_tokens": 4003
+          },
+          "latency": {
+            "request_started_at": "2026-10-04T23:17:23.923Z",
+            "headers_ms": 3165.070599999999,
+            "time_to_first_token_ms": 3165.166000000001,
+            "completed_at": "2026-10-04T23:17:27.088Z",
+            "elapsed_total_ms": 3165.4012000000002
+          }
+        }
+      }
+    },
+    "labels": {
+      "X": "WITH",
+      "Y": "WITHOUT"
+    },
+    "review": {
+      "scores": {
+        "X": {
+          "factual_continuity": 3,
+          "character_continuity": 2,
+          "relationship_continuity": 2,
+          "accumulated_development": 1,
+          "contradiction_avoidance": 3,
+          "specificity": 2,
+          "narrative_usefulness": 1,
+          "unnecessary_repetition": 2,
+          "unsupported_invention": 0
+        },
+        "Y": {
+          "factual_continuity": 2,
+          "character_continuity": 3,
+          "relationship_continuity": 3,
+          "accumulated_development": 3,
+          "contradiction_avoidance": 2,
+          "specificity": 3,
+          "narrative_usefulness": 3,
+          "unnecessary_repetition": 1,
+          "unsupported_invention": 1
+        }
+      },
+      "winner": "Y",
+      "material_difference": true,
+      "rationale": "Output Y provides significantly better narrative utility and character agency. While both outputs correctly identify that Iris is tired of the player's talking, X remains passive ('I don't know yet') and repeats previous sentiments about silence without advancing the scene. Y actively proposes a next step (exploring the floor or the stair), which breaks the conversational loop and moves the game forward. However, Y contains a minor factual continuity error regarding Iris's posture (standing vs. sitting) compared to the immediate prior turn, whereas X maintains physical consistency. Despite the physical inconsistency in Y, its superior handling of relationship dynamics and plot progression makes it the stronger response for gameplay.",
+      "continuity_evidence": [
+        "Prior turns establish Iris sitting on stools (Turns 1-8). Output X keeps her seated; Output Y places her standing near a cabinet.",
+        "Turn 6 established Iris saying 'You've been doing most of the talking' and asking Nicco to tell her what he is planning. Output Y references this ('You've covered a good deal') and pivots to action.",
+        "The room description consistently includes beds, nightstands, wardrobes, and medical cabinets. Both outputs reference these elements accurately."
+      ],
+      "unsupported_material": {
+        "X": [],
+        "Y": [
+          "Iris was standing near one of the empty medical-storage cabinets"
+        ]
+      }
+    },
+    "with_score": 16,
+    "without_score": 21,
+    "winner": "WITHOUT",
+    "material_difference": true
+  }
+]

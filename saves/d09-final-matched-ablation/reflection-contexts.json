@@ -1,0 +1,948 @@
+[
+  {
+    "physical": 23,
+    "turn": 10,
+    "character": "campaign_character_iris",
+    "source_revision": 16,
+    "state": {
+      "schema_version": 3,
+      "campaign_id": "d09_final_matched",
+      "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+      "revision": 16,
+      "mannerism_learning": {
+        "sequence": 10,
+        "processed_sequence": 8,
+        "last_turn_id": "d09_final_matched:r14:t2",
+        "journal": [
+          {
+            "sequence": 1,
+            "revision": 2,
+            "event_id": "d09_final_matched:mannerism:1",
+            "narration_hash": "5496f424d84e5fc91e57c85afc03f733c1051ab28febb240e6a2821cdbe1d3b6",
+            "narration_length": 513,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 2,
+            "revision": 3,
+            "event_id": "d09_final_matched:mannerism:2",
+            "narration_hash": "523ebc6d2e76914699fbedc3a4116bb5f19da64490f77be5e7eba4edbdd3dfee",
+            "narration_length": 832,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 3,
+            "revision": 4,
+            "event_id": "d09_final_matched:mannerism:3",
+            "narration_hash": "d78731962bc79d213b85875c850f894d80e68916153a41fb11ee7660fee31f3a",
+            "narration_length": 955,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 4,
+            "revision": 5,
+            "event_id": "d09_final_matched:mannerism:4",
+            "narration_hash": "35623eb143a10086375f37931f683e6f16fe9871571d1a84f86b51ef1892c0be",
+            "narration_length": 930,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 5,
+            "revision": 7,
+            "event_id": "d09_final_matched:mannerism:5",
+            "narration_hash": "2fa4866bfb18d73a77d124e7c8a88f3a3fa9ca524b5b74af6cf5379081ac3347",
+            "narration_length": 699,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 6,
+            "revision": 8,
+            "event_id": "d09_final_matched:mannerism:6",
+            "narration_hash": "559fef4e4f871bc4fb9d46d0d912c602b760f14a0c9a9d4a59c73f8ac409e157",
+            "narration_length": 891,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 7,
+            "revision": 9,
+            "event_id": "d09_final_matched:mannerism:7",
+            "narration_hash": "4af71ffb8e5f28db3ea3b2eae824d4520d242548c1eee0e8dd986d93d84620cf",
+            "narration_length": 829,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 8,
+            "revision": 10,
+            "event_id": "d09_final_matched:mannerism:8",
+            "narration_hash": "047238e123d0be993cf7f6e96798538e8239f6ef11876a4f36a13fd3d278f9ee",
+            "narration_length": 837,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 9,
+            "revision": 13,
+            "event_id": "d09_final_matched:mannerism:9",
+            "narration_hash": "59f4edd9207e334066b0516237cf866d499d5c0a8c97fb0c4bef3dc30ba7f536",
+            "narration_length": 624,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          },
+          {
+            "sequence": 10,
+            "revision": 15,
+            "event_id": "d09_final_matched:mannerism:10",
+            "narration_hash": "03b48cc3715dd1df6a6ee51ac3c2574fefb5b45788ce7b5201ed66f1e21b4461",
+            "narration_length": 507,
+            "character_ids": [
+              "campaign_character_iris"
+            ],
+            "available_items": []
+          }
+        ],
+        "candidates": []
+      },
+      "runtime": {
+        "scene": {
+          "player_location": "heartstone_f1",
+          "world_time": {
+            "world_minute": 0
+          }
+        },
+        "npc_locations": [
+          {
+            "character_id": "arwen_woodsigner",
+            "current_location": "the_bent_bough"
+          },
+          {
+            "character_id": "bartolomhew",
+            "current_location": "calderan_slave_market"
+          },
+          {
+            "character_id": "bram_kessel",
+            "current_location": "the_daily_grind"
+          },
+          {
+            "character_id": "brother_aven",
+            "current_location": "open_hand_chapel"
+          },
+          {
+            "character_id": "brunna_keld",
+            "current_location": "house_of_making"
+          },
+          {
+            "character_id": "captain_doran_hale",
+            "current_location": "west_guard_post"
+          },
+          {
+            "character_id": "cassian_valerius",
+            "current_location": "cathedral_of_the_bladed_sun"
+          },
+          {
+            "character_id": "dunrig_iron_hands",
+            "current_location": "calderan_east"
+          },
+          {
+            "character_id": "gaston",
+            "current_location": "calderan_east"
+          },
+          {
+            "character_id": "hadrik_voss",
+            "current_location": "blackiron_repairs_and_arms"
+          },
+          {
+            "character_id": "halden_cross",
+            "current_location": "imperial_gate"
+          },
+          {
+            "character_id": "helbrecht",
+            "current_location": "bastion_of_vigilance"
+          },
+          {
+            "character_id": "jessa_rook",
+            "current_location": "gatherers_inn"
+          },
+          {
+            "character_id": "korvin",
+            "current_location": "calderan_slave_market"
+          },
+          {
+            "character_id": "livia_marr",
+            "current_location": "livias_needles"
+          },
+          {
+            "character_id": "lysandra_vell",
+            "current_location": "spire_academy"
+          },
+          {
+            "character_id": "marta_pell",
+            "current_location": "wayfarers_rest"
+          },
+          {
+            "character_id": "matthias_eld",
+            "current_location": "the_collegium"
+          },
+          {
+            "character_id": "mira_thorne",
+            "current_location": "mudlarks_herbs"
+          },
+          {
+            "character_id": "mistress_elara",
+            "current_location": "calderan_slave_market"
+          },
+          {
+            "character_id": "niles_vanner",
+            "current_location": "second_chance_pawn"
+          },
+          {
+            "character_id": "odelia_crane",
+            "current_location": "the_collegium"
+          },
+          {
+            "character_id": "oren_quarn",
+            "current_location": "high_courts_of_calderan"
+          },
+          {
+            "character_id": "orla_fen",
+            "current_location": "the_white_basin"
+          },
+          {
+            "character_id": "pellan",
+            "current_location": "calderan_center"
+          },
+          {
+            "character_id": "rufus_tern",
+            "current_location": "the_long_yard"
+          },
+          {
+            "character_id": "severan_krauss",
+            "current_location": "bastion_of_vigilance"
+          },
+          {
+            "character_id": "sister_mereth",
+            "current_location": "saint_orra_house"
+          },
+          {
+            "character_id": "sister_veyra",
+            "current_location": "saint_caldus_house"
+          },
+          {
+            "character_id": "tavian_merrow",
+            "current_location": "house_of_scales"
+          },
+          {
+            "character_id": "uther_calderan",
+            "current_location": "ducal_citadel"
+          },
+          {
+            "character_id": "vaelen_vael",
+            "current_location": "ducal_citadel"
+          }
+        ],
+        "mana": {
+          "current": 100,
+          "max": 100
+        }
+      },
+      "characters": [
+        {
+          "id": "campaign_character_iris",
+          "origin": {
+            "kind": "created"
+          },
+          "profile": {
+            "name": "Iris"
+          },
+          "current": {
+            "current_location": "heartstone_f1",
+            "status": "active"
+          }
+        }
+      ],
+      "items": [],
+      "households": [
+        {
+          "id": "campaign_household_heartstone",
+          "name": "Heartstone",
+          "members": [
+            {
+              "character_id": "campaign_character_iris",
+              "status": "member",
+              "joined_at": 0
+            },
+            {
+              "character_id": "nicco",
+              "status": "member",
+              "joined_at": 0,
+              "role": "owner"
+            }
+          ],
+          "rules": [
+            {
+              "id": "rule_1",
+              "text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices.",
+              "created_revision": 13,
+              "active": true
+            },
+            {
+              "id": "rule_2",
+              "text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices.",
+              "created_revision": 15,
+              "active": true
+            }
+          ]
+        }
+      ],
+      "facts": [
+        {
+          "id": "campaign_fact_nicco_light_mage",
+          "content": {
+            "kind": "campaign",
+            "statement": "Nicco is a Light mage.",
+            "truth": "true"
+          }
+        },
+        {
+          "id": "campaign_fact_nicco_otherworlder",
+          "content": {
+            "kind": "campaign",
+            "statement": "Nicco came to this world from another world.",
+            "truth": "true"
+          }
+        }
+      ],
+      "knowledge": [
+        {
+          "character_id": "nicco",
+          "fact_id": "campaign_fact_nicco_light_mage",
+          "status": "knows"
+        },
+        {
+          "character_id": "nicco",
+          "fact_id": "campaign_fact_nicco_otherworlder",
+          "status": "knows"
+        }
+      ],
+      "relationships": [],
+      "goals": [],
+      "funds": [
+        {
+          "character_id": "nicco",
+          "gold": 500
+        }
+      ],
+      "legal_statuses": [],
+      "transactions": [],
+      "premium_characters": [
+        {
+          "character_id": "campaign_character_iris",
+          "mannerisms": [
+            {
+              "epistemic_state": "emergent",
+              "known_by_character_ids": [],
+              "id": "mannerism_r2_n0",
+              "canonical_key": "pause_between_question_and_addendum",
+              "text": "Waits a beat after a question before adding a qualification.",
+              "source": "seeded",
+              "created_revision": 2,
+              "user_edited": false
+            }
+          ],
+          "stable": {},
+          "dynamic": {
+            "recent_developments": [
+              {
+                "kind": "joined_household",
+                "household_id": "campaign_household_heartstone",
+                "revision": 2,
+                "world_minute": 0
+              },
+              {
+                "kind": "household_rule_added",
+                "household_id": "campaign_household_heartstone",
+                "rule_id": "rule_1",
+                "revision": 13,
+                "world_minute": 0
+              },
+              {
+                "kind": "household_rule_added",
+                "household_id": "campaign_household_heartstone",
+                "rule_id": "rule_2",
+                "revision": 15,
+                "world_minute": 0
+              }
+            ],
+            "private_memory_refs": []
+          },
+          "metadata": {
+            "created_revision": 2,
+            "last_updated_revision": 15,
+            "active_household_member": true,
+            "initial_mannerism": "seeded"
+          }
+        }
+      ],
+      "premium_reflections": [],
+      "scheduled_events": []
+    },
+    "full_catalog": [
+      {
+        "ref": "npcmem:campaign_character_iris:history:r2.0",
+        "evidence_version": 2,
+        "evidence_type": "household_membership",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": null,
+        "revision": 2,
+        "world_minute": 0,
+        "event_id": "npcmem:campaign_character_iris:history:r2.0",
+        "payload": {
+          "kind": "joined_household",
+          "household_id": "campaign_household_heartstone",
+          "revision": 2,
+          "world_minute": 0
+        }
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:history:r13.0",
+        "evidence_version": 2,
+        "evidence_type": "household_context",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": null,
+        "revision": 13,
+        "world_minute": 0,
+        "event_id": "npcmem:campaign_character_iris:history:r13.0",
+        "payload": {
+          "kind": "household_rule_added",
+          "household_id": "campaign_household_heartstone",
+          "rule_id": "rule_1",
+          "revision": 13,
+          "world_minute": 0,
+          "rule_text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+        }
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:history:r15.0",
+        "evidence_version": 2,
+        "evidence_type": "household_context",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": null,
+        "revision": 15,
+        "world_minute": 0,
+        "event_id": "npcmem:campaign_character_iris:history:r15.0",
+        "payload": {
+          "kind": "household_rule_added",
+          "household_id": "campaign_household_heartstone",
+          "rule_id": "rule_2",
+          "revision": 15,
+          "world_minute": 0,
+          "rule_text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+        }
+      }
+    ],
+    "request": {
+      "character": {
+        "id": "campaign_character_iris",
+        "name": "Iris"
+      },
+      "evidence": [
+        {
+          "ref": "npcmem:campaign_character_iris:history:r2.0",
+          "evidence_version": 2,
+          "evidence_type": "household_membership",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": null,
+          "revision": 2,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r2.0",
+          "payload": {
+            "kind": "joined_household",
+            "household_id": "campaign_household_heartstone",
+            "revision": 2,
+            "world_minute": 0
+          }
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:history:r13.0",
+          "evidence_version": 2,
+          "evidence_type": "household_context",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": null,
+          "revision": 13,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r13.0",
+          "payload": {
+            "kind": "household_rule_added",
+            "household_id": "campaign_household_heartstone",
+            "rule_id": "rule_1",
+            "revision": 13,
+            "world_minute": 0,
+            "rule_text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+          }
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:history:r15.0",
+          "evidence_version": 2,
+          "evidence_type": "household_context",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": null,
+          "revision": 15,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r15.0",
+          "payload": {
+            "kind": "household_rule_added",
+            "household_id": "campaign_household_heartstone",
+            "rule_id": "rule_2",
+            "revision": 15,
+            "world_minute": 0,
+            "rule_text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+          }
+        }
+      ],
+      "existing": [],
+      "wire_schema": {
+        "type": "object",
+        "properties": {
+          "proposals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "subject_character_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "enum": [
+                      "npcmem:campaign_character_iris:history:r13.0",
+                      "npcmem:campaign_character_iris:history:r15.0",
+                      "npcmem:campaign_character_iris:history:r2.0"
+                    ]
+                  },
+                  "minItems": 1,
+                  "maxItems": 8
+                },
+                "confidence": {
+                  "type": "string",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                },
+                "claim": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "relationship_trajectory"
+                        },
+                        "target_character_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "dimension": {
+                          "type": "string",
+                          "enum": [
+                            "trust",
+                            "wariness",
+                            "affection",
+                            "respect",
+                            "protectiveness",
+                            "fear",
+                            "hostility"
+                          ]
+                        },
+                        "from": {
+                          "type": "string",
+                          "enum": [
+                            "none",
+                            "low",
+                            "moderate",
+                            "high"
+                          ]
+                        },
+                        "to": {
+                          "type": "string",
+                          "enum": [
+                            "none",
+                            "low",
+                            "moderate",
+                            "high"
+                          ]
+                        },
+                        "direction": {
+                          "type": "string",
+                          "enum": [
+                            "increase",
+                            "decrease",
+                            "mixed"
+                          ]
+                        },
+                        "transition_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "target_character_id",
+                        "dimension",
+                        "from",
+                        "to",
+                        "direction",
+                        "transition_count"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "relationship_contrast"
+                        },
+                        "target_character_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "dimension_a": {
+                          "type": "string",
+                          "enum": [
+                            "trust",
+                            "wariness",
+                            "affection",
+                            "respect",
+                            "protectiveness",
+                            "fear",
+                            "hostility"
+                          ]
+                        },
+                        "state_a": {
+                          "type": "string",
+                          "enum": [
+                            "none",
+                            "low",
+                            "moderate",
+                            "high"
+                          ]
+                        },
+                        "dimension_b": {
+                          "type": "string",
+                          "enum": [
+                            "trust",
+                            "wariness",
+                            "affection",
+                            "respect",
+                            "protectiveness",
+                            "fear",
+                            "hostility"
+                          ]
+                        },
+                        "state_b": {
+                          "type": "string",
+                          "enum": [
+                            "none",
+                            "low",
+                            "moderate",
+                            "high"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "target_character_id",
+                        "dimension_a",
+                        "state_a",
+                        "dimension_b",
+                        "state_b"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "relationship_parallel"
+                        },
+                        "target_character_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "dimension_a": {
+                          "type": "string",
+                          "enum": [
+                            "trust",
+                            "wariness",
+                            "affection",
+                            "respect",
+                            "protectiveness",
+                            "fear",
+                            "hostility"
+                          ]
+                        },
+                        "dimension_b": {
+                          "type": "string",
+                          "enum": [
+                            "trust",
+                            "wariness",
+                            "affection",
+                            "respect",
+                            "protectiveness",
+                            "fear",
+                            "hostility"
+                          ]
+                        },
+                        "from": {
+                          "type": "string",
+                          "enum": [
+                            "none",
+                            "low",
+                            "moderate",
+                            "high"
+                          ]
+                        },
+                        "to": {
+                          "type": "string",
+                          "enum": [
+                            "none",
+                            "low",
+                            "moderate",
+                            "high"
+                          ]
+                        },
+                        "transition_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "target_character_id",
+                        "dimension_a",
+                        "dimension_b",
+                        "from",
+                        "to",
+                        "transition_count"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "condition_trajectory"
+                        },
+                        "condition_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "operations": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "add",
+                              "remove"
+                            ]
+                          },
+                          "minItems": 1,
+                          "maxItems": 8
+                        },
+                        "episode_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "condition_id",
+                        "operations",
+                        "episode_count"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "membership_trajectory"
+                        },
+                        "household_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "operations": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "join",
+                              "leave",
+                              "rejoin",
+                              "migrate"
+                            ]
+                          },
+                          "minItems": 1,
+                          "maxItems": 8
+                        },
+                        "join_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "rejoin_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "leave_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "household_id",
+                        "operations",
+                        "join_count",
+                        "rejoin_count",
+                        "leave_count"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "environmental_motif"
+                        },
+                        "household_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "event_type": {
+                          "const": "rule_added"
+                        },
+                        "occurrence_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "household_id",
+                        "event_type",
+                        "occurrence_count"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "type",
+                        "household_id",
+                        "relation",
+                        "anchor_ref",
+                        "segment_index",
+                        "occurrence_count"
+                      ],
+                      "properties": {
+                        "type": {
+                          "const": "environmental_shared_rule_text"
+                        },
+                        "household_id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "relation": {
+                          "const": "shared_exact_segment"
+                        },
+                        "anchor_ref": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "enum": [
+                            "npcmem:campaign_character_iris:history:r13.0",
+                            "npcmem:campaign_character_iris:history:r15.0"
+                          ]
+                        },
+                        "segment_index": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 7
+                        },
+                        "occurrence_count": {
+                          "type": "integer",
+                          "minimum": 2,
+                          "maximum": 8
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "subject_character_id",
+                "evidence_refs",
+                "confidence",
+                "claim"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "proposals"
+        ],
+        "additionalProperties": false
+      },
+      "timeout_ms": 20000
+    }
+  }
+]

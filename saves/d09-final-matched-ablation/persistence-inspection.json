@@ -1,0 +1,31 @@
+{
+  "source_revision": 16,
+  "persisted_revision": 17,
+  "note_id": "r17_shared_motif_1",
+  "normal_record_reflection": true,
+  "atomic_nonreflection_domains_unchanged": true,
+  "typed_metadata": {
+    "format_version": 1,
+    "semantic_version": "V2.3-CVC-E1",
+    "source_revision": 16,
+    "proposal": {
+      "subject_character_id": "campaign_character_iris",
+      "evidence_refs": [
+        "npcmem:campaign_character_iris:history:r13.0",
+        "npcmem:campaign_character_iris:history:r15.0"
+      ],
+      "confidence": "high",
+      "claim": {
+        "type": "environmental_shared_rule_text",
+        "household_id": "campaign_household_heartstone",
+        "relation": "shared_exact_segment",
+        "anchor_ref": "npcmem:campaign_character_iris:history:r13.0",
+        "segment_index": 1,
+        "occurrence_count": 2
+      }
+    }
+  },
+  "duplicate_writes": 0,
+  "stale_skips": 0,
+  "manual_memory_edits": 0
+}

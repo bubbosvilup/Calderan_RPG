@@ -1,0 +1,76 @@
+{
+  "id": 20,
+  "turn": 9,
+  "role": "controller",
+  "http_status": 200,
+  "latency_ms": 2732.4808999999996,
+  "reported_cost_usd": 0.000319268,
+  "usage": {
+    "prompt_tokens": 2473,
+    "completion_tokens": 109,
+    "total_tokens": 2582,
+    "cost": 0.000319268,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 768,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.000319268,
+      "upstream_inference_prompt_cost": 0.000268038,
+      "upstream_inference_completions_cost": 0.00005123
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "receipt": {
+    "id": "gen-1791155822-lsfJClpbq8qPLk3yv8by",
+    "object": "chat.completion",
+    "created": 1791155822,
+    "model": "qwen/qwen3.8-flash",
+    "provider": "Alibaba",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"commands\": [\n    {\n      \"command\": {\n       \"kind\": \"add_household_rule\",\n       \"household_id\": \"campaign_household_heartstone\",\n       \"text\": \"during shared reading; A quiet-break request needs no explanation and is answered by lowering voices.\"\n      },\n      \"evidence_quote\": \"Nicco spoke the rule plainly — during shared reading, a quiet-break request needs no explanation and is answered by lowering voices.\"\n    }\n  ]\n}",
+          "refusal": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2473,
+      "completion_tokens": 109,
+      "total_tokens": 2582,
+      "cost": 0.000319268,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 768,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.000319268,
+        "upstream_inference_prompt_cost": 0.000268038,
+        "upstream_inference_completions_cost": 0.00005123
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}

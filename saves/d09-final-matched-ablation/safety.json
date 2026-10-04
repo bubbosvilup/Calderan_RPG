@@ -1,0 +1,14 @@
+{
+  "production_source_freeze": "PASS",
+  "movement_commands_used": false,
+  "location": "heartstone_f1",
+  "state_divergences": 0,
+  "reflection_caused_errors": 0,
+  "relevant_bug_stop": false,
+  "d25_retested": false,
+  "reflection_duplicate_writes": 0,
+  "reflection_stale_skips": 0,
+  "normal_gameplay_turns": 11,
+  "ablation_calls": 2,
+  "paid_review_calls": 1
+}

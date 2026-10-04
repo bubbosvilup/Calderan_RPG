@@ -1,0 +1,19 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "pass": 2008,
+    "fail": 0,
+    "todo": 4,
+    "total": 2012
+  },
+  "playthrough": {
+    "pass": 25,
+    "fail": 0
+  },
+  "existing_todo_accounting": [
+    "Group pronoun phantom transfer over-redaction",
+    "First-name condition attribution to Nicco",
+    "Unnamed narrated captive price flagged without legal state",
+    "Fronted-adverbial receipt false negative"
+  ]
+}

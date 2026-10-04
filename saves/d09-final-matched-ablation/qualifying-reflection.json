@@ -1,0 +1,92 @@
+{
+  "proposal": {
+    "subject_character_id": "campaign_character_iris",
+    "evidence_refs": [
+      "npcmem:campaign_character_iris:history:r13.0",
+      "npcmem:campaign_character_iris:history:r15.0"
+    ],
+    "confidence": "high",
+    "claim": {
+      "type": "environmental_shared_rule_text",
+      "household_id": "campaign_household_heartstone",
+      "relation": "shared_exact_segment",
+      "anchor_ref": "npcmem:campaign_character_iris:history:r13.0",
+      "segment_index": 1,
+      "occurrence_count": 2
+    }
+  },
+  "text": "Household rules added at revisions 13–15 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.",
+  "stored_note": {
+    "id": "r17_shared_motif_1",
+    "kind": "shared_motif",
+    "label": "env_shared_efb313e2f0f7",
+    "text": "Household rules added at revisions 13–15 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.",
+    "evidence_refs": [
+      "npcmem:campaign_character_iris:history:r13.0",
+      "npcmem:campaign_character_iris:history:r15.0"
+    ],
+    "confidence": "high",
+    "created_revision": 17,
+    "updated_revision": 17,
+    "structured": {
+      "format_version": 1,
+      "semantic_version": "V2.3-CVC-E1",
+      "source_revision": 16,
+      "proposal": {
+        "subject_character_id": "campaign_character_iris",
+        "evidence_refs": [
+          "npcmem:campaign_character_iris:history:r13.0",
+          "npcmem:campaign_character_iris:history:r15.0"
+        ],
+        "confidence": "high",
+        "claim": {
+          "type": "environmental_shared_rule_text",
+          "household_id": "campaign_household_heartstone",
+          "relation": "shared_exact_segment",
+          "anchor_ref": "npcmem:campaign_character_iris:history:r13.0",
+          "segment_index": 1,
+          "occurrence_count": 2
+        }
+      }
+    }
+  },
+  "source_events": [
+    {
+      "ref": "npcmem:campaign_character_iris:history:r13.0",
+      "evidence_version": 2,
+      "evidence_type": "household_context",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": null,
+      "revision": 13,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r13.0",
+      "payload": {
+        "kind": "household_rule_added",
+        "household_id": "campaign_household_heartstone",
+        "rule_id": "rule_1",
+        "revision": 13,
+        "world_minute": 0,
+        "rule_text": "during shared reading; A quiet-break request needs no explanation and is answered by lowering voices."
+      }
+    },
+    {
+      "ref": "npcmem:campaign_character_iris:history:r15.0",
+      "evidence_version": 2,
+      "evidence_type": "household_context",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": null,
+      "revision": 15,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r15.0",
+      "payload": {
+        "kind": "household_rule_added",
+        "household_id": "campaign_household_heartstone",
+        "rule_id": "rule_2",
+        "revision": 15,
+        "world_minute": 0,
+        "rule_text": "during household discussions; A quiet-break request needs no explanation and is answered by lowering voices."
+      }
+    }
+  ],
+  "persistence_revision": 17
+}

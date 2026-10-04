@@ -1,0 +1,15 @@
+{
+  "later_turn": 11,
+  "revision": 17,
+  "note_id": "r17_shared_motif_1",
+  "eligible": true,
+  "eligible_source_refs": [
+    "npcmem:campaign_character_iris:history:r13.0",
+    "npcmem:campaign_character_iris:history:r15.0"
+  ],
+  "full_text_present": true,
+  "normal_selection": "production NPC+ Tier B full-text packing",
+  "relevant": "Conversation pause and quiet preferences in the same household; exact quiet-break handling has potential value",
+  "ordinary_sources_preserved": true,
+  "normal_later_receipt": 25
+}

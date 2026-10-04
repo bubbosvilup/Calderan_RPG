@@ -1,0 +1,76 @@
+{
+  "id": 23,
+  "turn": 10,
+  "role": "reflection",
+  "http_status": 200,
+  "latency_ms": 4402.291100000002,
+  "reported_cost_usd": 0.000201752,
+  "usage": {
+    "prompt_tokens": 853,
+    "completion_tokens": 303,
+    "total_tokens": 1156,
+    "cost": 0.000201752,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 512,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.000201752,
+      "upstream_inference_prompt_cost": 0.000059342,
+      "upstream_inference_completions_cost": 0.00014241
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "receipt": {
+    "id": "gen-1791155830-UyydsjSoHm75U0z7SFv6",
+    "object": "chat.completion",
+    "created": 1791155830,
+    "model": "qwen/qwen3.8-flash",
+    "provider": "Alibaba",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"proposals\": [\n    {\n      \"subject_character_id\": \"campaign_character_iris\",\n      \"evidence_refs\": [\n       \"npcmem:campaign_character_iris:history:r13.0\",\n       \"npcmem:campaign_character_iris:history:r15.0\"\n      ],\n      \"confidence\": \"high\",\n      \"claim\": {\n       \"type\": \"environmental_shared_rule_text\",\n       \"household_id\": \"campaign_household_heartstone\",\n       \"relation\": \"shared_exact_segment\",\n       \"anchor_ref\": \"npcmem:campaign_character_iris:history:r13.0\",\n       \"segment_index\": 1,\n       \"occurrence_count\": 2\n      }\n    },\n    {\n      \"subject_character_id\": \"campaign_character_iris\",\n      \"evidence_refs\": [\n       \"npcmem:campaign_character_iris:history:r2.0\"\n      ],\n      \"confidence\": \"high\",\n      \"claim\": {\n       \"type\": \"membership_trajectory\",\n       \"household_id\": \"campaign_household_heartstone\",\n       \"operations\": [\n       \"join\"\n       ],\n       \"join_count\": 1,\n       \"rejoin_count\": 0,\n       \"leave_count\": 0\n      }\n    }\n  ]\n}",
+          "refusal": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 853,
+      "completion_tokens": 303,
+      "total_tokens": 1156,
+      "cost": 0.000201752,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 512,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.000201752,
+        "upstream_inference_prompt_cost": 0.000059342,
+        "upstream_inference_completions_cost": 0.00014241
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}
