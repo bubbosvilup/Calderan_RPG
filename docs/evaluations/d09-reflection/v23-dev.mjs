@@ -1,0 +1,30 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {sha} from './lib.mjs';
+import {V2_SCHEMA,V2_SYSTEM,validateStructuredClaim as validateV2} from '../../../.build/src/dev/reflection-v2.js';
+import {evaluateStructuredOutputV23,validateStructuredClaimV23,V23_REASON_CODES} from '../../../.build/src/dev/reflection-v23.js';
+const dir='saves/d09-reflection-v23',m=JSON.parse(readFileSync('saves/d09-reflection-v22-oos/oos-manifest.json')),old=JSON.parse(readFileSync('saves/d09-reflection-v22-oos/candidate-oos-outcomes.json')),rows=[];
+for(const c of m.cases){const rs=old.rows.filter(r=>r.request_id===c.id);if(!rs.length)continue;const result=evaluateStructuredOutputV23(rs.map(r=>r.proposal),c.evidence_catalog,c.character.id,new Map(c.knownNames));for(const[i,r]of rs.entries())rows.push({...r,v23:result.diagnostics[i],v23_accepted:result.diagnostics[i].accepted});}
+const lost=rows.find(r=>r.old_accepted&&r.classification==='USEFUL'&&!r.new_accepted),c=m.cases.find(c=>c.id===lost.request_id),p=lost.proposal,catalog=c.evidence_catalog,check=(p,catalog)=>validateStructuredClaimV23(p,catalog,c.character.id);
+const snapshot=catalog.find(e=>e.evidence_type==='relationship_snapshot'),mutate=dimensions=>catalog.map(e=>e===snapshot?{...e,payload:{...e.payload,dimensions}}:e),controls=[];
+function control(name,proposal,evidence,expected){const d=check(proposal,evidence);controls.push({name,expected,actual:d.accepted,reasons:d.reasons});if(d.accepted!==expected)throw Error('Control failed: '+name);}
+control('relevant historical refs + verified current authority',p,catalog,true);
+control('current trust low contradicts proposed moderate',p,mutate({trust:'low',wariness:'high'}),false);
+control('absent comparison dimension',p,mutate({trust:'moderate'}),false);
+control('no authoritative snapshot',p,catalog.filter(e=>e!==snapshot),false);
+const stale={...snapshot,ref:'stale-directional',revision:snapshot.revision-1};
+control('stale cited snapshot with newer mismatch',{...p,evidence_refs:[stale.ref]},[...mutate({trust:'low',wariness:'high'}),stale],false);
+control('stale cited snapshot even if equal',{...p,evidence_refs:[stale.ref]},[...catalog,stale],false);
+const movement={...snapshot,ref:'owned-movement',evidence_type:'movement',payload:{kind:'moved',from:'room',to:'hall'}};
+control('unrelated movement-only citation',{...p,evidence_refs:[movement.ref]},[...catalog,movement],false);
+control('one dimension provenance only',{...p,evidence_refs:p.evidence_refs.slice(0,2)},catalog,false);
+control('foreign owned authority',p,catalog.map(e=>e===snapshot?{...e,owner_character_id:'brenna'}:e),false);
+control('ambiguous latest authority',p,[...catalog,{...snapshot,ref:'duplicate-directional'}],false);
+control('unknown ref',{...p,evidence_refs:['unknown']},catalog,false);
+control('same dimension',{...p,claim:{...p.claim,dimension_b:'trust',state_b:'moderate'}},catalog,false);
+control('none dimension assertion',{...p,claim:{...p.claim,state_b:'none'}},catalog,false);
+control('later relationship event than snapshot',p,[...catalog,{...catalog.find(e=>e.evidence_type==='relationship_change'),ref:'later-change',revision:snapshot.revision+1}],false);
+const metrics={lost_recovered:Number(lost.v23_accepted),previous_useful_preserved:rows.filter(r=>r.classification==='USEFUL'&&r.new_accepted&&r.v23_accepted).length,misleading_rejected:rows.filter(r=>r.classification==='MISLEADING'&&!r.v23_accepted).length,factual_errors_rejected:rows.filter(r=>r.factual_error&&!r.v23_accepted).length,factual_admitted:rows.filter(r=>r.factual_error&&r.v23_accepted).length,neutral_lost:rows.filter(r=>r.classification==='NEUTRAL'&&r.new_accepted&&!r.v23_accepted).length,noncontrast_diagnostic_changes:rows.filter(r=>r.proposal.claim.type!=='relationship_contrast'&&sha(r.v23)!==sha(r.diagnostic)).length,controls:controls.length};
+metrics.gate=metrics.lost_recovered===1&&metrics.previous_useful_preserved===57&&metrics.misleading_rejected===9&&metrics.factual_errors_rejected===4&&metrics.factual_admitted===0&&metrics.neutral_lost===0&&metrics.noncontrast_diagnostic_changes===0?'PASS':'FAIL';
+writeFileSync(`${dir}/dev-regression.json`,JSON.stringify({metrics,controls,rows},null,2));if(metrics.gate!=='PASS')throw Error('Stop semantic work: dev gate failed');
+const freeze={source_file:'src/dev/reflection-v23.ts',source_sha:sha(readFileSync('src/dev/reflection-v23.ts')),compiled_sha:sha(readFileSync('.build/src/dev/reflection-v23.js')),schema_sha:sha(V2_SCHEMA),prompt_sha:sha(V2_SYSTEM),evidence_version:2,provenance_model_version:1,reason_codes:V23_REASON_CODES,reason_codes_sha:sha(V23_REASON_CODES),dependencies:Object.fromEntries(['src/dev/reflection-v2.ts','src/dev/reflection-v21.ts','src/dev/reflection-v22.ts'].map(p=>[p,sha(readFileSync(p))]))};
+writeFileSync(`${dir}/candidate-freeze.json`,JSON.stringify(freeze,null,2));console.log(JSON.stringify({metrics,freeze},null,2));
