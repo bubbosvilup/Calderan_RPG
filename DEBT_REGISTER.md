@@ -24,7 +24,7 @@ IDs are never renumbered.
 | **D-20** | Reflection can delay the next command | MINOR | Reflection may sit on the critical path. Move it off the critical path when autonomy/background work is introduced. |
 | **D-21** | Type-only import cycles in `turn/` | MINOR | No runtime cycles. Clean up when the turn layer is next restructured. |
 | **D-22** | Turn-level semantic retrieval not live-tested | MINOR | Include semantic retrieval in a future live matrix / soak. |
-| **D-26** | Mannerism Epistemic Fidelity & Portrayal Repair | **OPEN ? SHADOW DATA COLLECTION** | Epistemic recurrence/awareness packing and diagnostics-only portrayal gate are live. No automatic repair; one confirmed finding in 10 fresh narrator calls / 24 cue exposures. [Evidence](docs/evaluations/D26_EPISTEMIC_SHADOW_GATE.md). |
+| **D-26** | Mannerism Epistemic Fidelity & Portrayal Repair | **OPEN — SHADOW DATA COLLECTION** | Epistemic recurrence/awareness packing and diagnostics-only portrayal gate are live. No automatic repair; one confirmed finding in 10 fresh narrator calls / 24 cue exposures. [Evidence](docs/evaluations/D26_EPISTEMIC_SHADOW_GATE.md). |
 
 ---
 
@@ -72,7 +72,7 @@ NPC+ packing/performance, and prior regression repairs remain closed in their hi
 ## Priority order
 
 1. **D-19** — reduce reconciliation/redaction rate.
-2. **D-26** — prompt-only control insufficient; design a narrow portrayal audit/reconciliation stage separately.
+2. **D-26** — OPEN — SHADOW DATA COLLECTION: measure epistemic portrayal precision before designing any repair.
 3. **D-09** — organic usefulness soak pending; D-10 exists, but reflection exposure and human review remain insufficient. Ready to resume with the D-26 shadow gate enabled; this pass does not resume the soak.
 
 D-06 remains open pending broader runtime soak after the Qwen switch.

@@ -65,7 +65,7 @@ export class MannerismPortrayalGate {
           }
           // Reported/quoted actions are not the narrator performing this cue.
           const beforeAction = paragraph.slice(0, offset - start);
-          if ((beforeAction.match(/"/g)?.length ?? 0) % 2 || beforeAction.lastIndexOf("?") > beforeAction.lastIndexOf("?")) continue;
+          if ((beforeAction.match(/"/g)?.length ?? 0) % 2 || beforeAction.lastIndexOf("\u201c") > beforeAction.lastIndexOf("\u201d")) continue;
           const local = paragraph.slice(Math.max(0, offset - start - 240), offset - start + match[0].length + 420);
           const context = `${input.player_input} ${cue.local_evidence ?? ""}`;
           const quoted = [...paragraph.matchAll(/["“]([^"”]+)["”]/g)].map(q => q[1]!).join(" ");

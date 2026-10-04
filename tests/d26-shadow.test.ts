@@ -116,6 +116,7 @@ test("D26 rejects nonexistent awareness references and manual edits reset recogn
 test("D26 ignores quoted actions and ambiguous pronouns; normal diagnostics redact local prose", () => {
   const c = cue("head_level_before_correction");
   assert.equal(inspect('Brenna says, "Maren levels her head, as is her usual gesture."', c, "Factually correct.").gate_findings_total, 0);
+  assert.equal(inspect('Brenna says, \u201cMaren levels her head, as is her usual gesture.\u201d', c, "Factually correct.").gate_findings_total, 0);
   assert.equal(inspect('Brenna sits beside Maren. She levels her head, her usual gesture.', c).gate_findings_total, 0);
   const input: PortrayalGateInput = { turn_id: "safe", revision: 1, narration: 'Maren levels her head, her usual gesture. PRIVATE_SECRET_123', cues: [c], characters, player_input: "" };
   const result = new MannerismPortrayalGate().inspect(input);
