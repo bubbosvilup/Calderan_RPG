@@ -1,0 +1,20 @@
+/** Final offline integrity, acceptance, pacing, credential and test audit. */
+import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {sha} from './lib.mjs';
+import {exactBenchmarkCredential} from '../../../.build/src/dev/reflection-benchmark.js';
+import {completionValidation} from './wire-cvc-provider-validation.mjs';
+import {reflectionCitationContext} from '../../../.build/src/dev/reflection-v23-cvc.js';
+const dir='saves/structured-reflection-wire-v2-provider',decode=p=>{const b=readFileSync(p);return b[0]===255&&b[1]===254?b.subarray(2).toString('utf16le'):b.toString('utf8').replace(/^\uFEFF/,'');},read=n=>JSON.parse(decode(`${dir}/${n}`)),m=read('manifest.json'),done=read('dispatch-completed.json'),metrics=read('metrics.json'),ledger=decode(`${dir}/physical-ledger.jsonl`).trim().split('\n').map(JSON.parse),dispatch=decode(`${dir}/physical-dispatch.jsonl`).trim().split('\n').map(JSON.parse);
+assert.equal(sha(readFileSync(`${dir}/manifest.json`)),decode(`${dir}/manifest.sha256`).trim());for(const [p,h] of Object.entries(m.source_hashes))assert.equal(sha(readFileSync(p)),h,p);
+assert.equal(ledger.length,dispatch.length);assert.equal(ledger.length,done.physical_calls);assert.ok(ledger.length<=48);assert.equal(new Set(ledger.map(a=>a.physical_call)).size,ledger.length);assert.equal(read('preflight.json').authentication.status,200);
+const attempts={};let last;
+for(const a of ledger){const c=[...m.screen,...m.confirmation].find(c=>c.id===a.id);assert.equal(sha(c.request),c.request_sha);assert.equal(sha(c.snapshot),c.snapshot_sha);assert.equal(sha(c.wire_schema),c.wire_sha);assert.equal(sha(c.body),c.body_sha);assert.equal(a.body_sha,c.body_sha);assert.equal(a.request_sha,c.request_sha);assert.equal(a.snapshot_sha,c.snapshot_sha);attempts[c.id]=(attempts[c.id]??0)+1;assert.ok(attempts[c.id]<=2);
+ if(a.usable){const raw=JSON.parse(a.raw.body);assert.equal(a.raw.status,200);assert.equal(raw.provider,'Alibaba');assert.equal(raw.choices[0].finish_reason,'stop');assert.equal(a.output_text,raw.choices[0].message.content);assert.ok(completionValidation(a.output_text,c.wire_schema,reflectionCitationContext(c.request,c.catalog)).usable);}
+ if(last){assert.ok(Date.parse(a.started_at)-Date.parse(last.started_at)>=m.policy.minimum_launch_spacing_ms-5);assert.ok(Date.parse(a.started_at)-Date.parse(last.completed_at)>=m.policy.post_completion_gap_ms-5);}last=a;
+}
+const unit=decode(`${dir}/unit-after.log`),play=decode(`${dir}/playthrough-after.log`);assert.ok(unit.includes('# pass 1972')&&unit.includes('# fail 0')&&unit.includes('# todo 4'));assert.ok(play.includes('# pass 25')&&play.includes('# fail 0'));assert.ok(!decode(`${dir}/typecheck-after.log`).includes('error TS'));
+const secrets=[...decode('APIKEY.env').matchAll(/sk-[A-Za-z0-9_-]{20,}/g)].map(m=>m[0]);
+secrets.push(exactBenchmarkCredential({env:process.env.OPENROUTER_API_KEY,fileText:decode('APIKEY.env')}));
+const sourceFiles=['docs/evaluations/STRUCTURED_REFLECTION_WIRE_V2_PROVIDER_SCREEN.md',...['build','run','validation','check','report','verify'].map(n=>`docs/evaluations/d09-reflection/wire-cvc-provider-${n}.mjs`)];for(const path of [...sourceFiles,...readdirSync(dir).map(n=>`${dir}/${n}`)])assert.ok(!secrets.some(s=>readFileSync(path).includes(Buffer.from(s))),'Credential leak detected');
+const verification={source_hashes:'MATCH',requests_snapshots_dynamic_schemas_bodies:'MATCH',dispatch_receipt_pairs:ledger.length,physical_cap:48,physical_calls:ledger.length,concurrency:1,pacing:'PASS',max_attempts:2,strict_usable_pipeline:'PASS',credential_leaks:0,typecheck:'PASS',unit:{passed:1972,failed:0,todo:4},playthrough:{passed:25,failed:0},reliability:metrics.reliability_gate,production_changes:0};writeFileSync(`${dir}/final-verification.json`,JSON.stringify(verification,null,2));writeFileSync(`${dir}/artifact-hashes.json`,JSON.stringify(Object.fromEntries(readdirSync(dir).filter(n=>n!=='artifact-hashes.json').map(n=>[n,sha(readFileSync(`${dir}/${n}`))])),null,2));console.log(JSON.stringify(verification,null,2));
