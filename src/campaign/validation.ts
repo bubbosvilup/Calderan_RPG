@@ -132,7 +132,7 @@ export const REFLECTION_LIMITS = Object.freeze({ stance: 4, signature_pattern: 4
 const reflectionKind = choice("stance", "signature_pattern", "shared_motif", "emerging_role", "unresolved_tension");
 const reflectionNote = object({ id, kind: reflectionKind, label: id, text, evidence_refs: distinct(text), confidence: choice("low", "medium", "high"), created_revision: integer(0), updated_revision: integer(0) });
 const reflectionRecord = object({ character_id: id, notes: list(reflectionNote, 18), last_reflected_revision: integer(0) });
-const mannerismRecord = object({ id, canonical_key: id, text, source: choice("seeded", "emergent", "user"), created_revision: integer(0), user_edited: boolean,
+const mannerismRecord = object({ epistemic_state: optional(choice("emergent", "observed", "established")), known_by_character_ids: optional(list(id, 64)), id, canonical_key: id, text, source: choice("seeded", "emergent", "user"), created_revision: integer(0), user_edited: boolean,
   requires_item_id: optional(id), requires_entity_id: optional(id) });
 const premiumRecord = object({ character_id: id,
   mannerisms: optional(list(mannerismRecord, 4)),

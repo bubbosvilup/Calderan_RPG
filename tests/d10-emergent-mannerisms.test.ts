@@ -258,7 +258,7 @@ test("D10 P2 actual alias evidence from distinct finalized moments shares one ca
   f.campaign = CampaignState.restore(f.world, decodeSave(serializeSave(createSaveFile(f.campaign.exportSnapshot(), f.world, "2026-10-04T00:00:00.000Z"), f.world), f.world).snapshot);
   maintenance = new MannerismMaintenance(f.world, provider);
   for (const [i, narration] of ["Maren drops her eyes before telling an obvious lie.", "The room is quiet.", "The room is quiet.", "The room is quiet."].entries()) await maintenance.afterFinalizedTurn(f.campaign, `reloaded_${i}`, { narration, final_revision: f.campaign.revision });
-  assert.equal(rows(f, "maren").length, 2); assert.equal(rows(f, "maren")[1]!.source, "emergent"); assert.equal(candidates(f).length, 0);
+  assert.equal(rows(f, "maren").length, 2); assert.equal(rows(f, "maren")[1]!.source, "emergent"); assert.equal(rows(f, "maren")[1]!.epistemic_state, "established"); assert.deepEqual(rows(f, "maren")[1]!.known_by_character_ids, []); assert.equal(candidates(f).length, 0);
 });
 
 test("D10 P2 model semantic matches outside the normalization vocabulary block acquisition before evidence", () => {

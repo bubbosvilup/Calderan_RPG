@@ -41,6 +41,7 @@ test("D10 NPC+ promotion atomically assigns exactly one seed; ordinary, guest an
   assert.equal(f.campaign.exportSnapshot(), before); assert.equal(p.snapshot.premium_characters[0]!.mannerisms!.length, 1);
   f.campaign.commit(p); const m = rows(f.campaign)[0]!;
   assert.deepEqual([m.source, m.user_edited, m.created_revision], ["seeded", false, f.campaign.revision]);
+  assert.equal(m.epistemic_state, "emergent"); assert.deepEqual(m.known_by_character_ids, []);
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "set_membership", household_id: HOME, membership: { character_id: "maren", status: "guest" } }] });
   assert.equal(f.campaign.exportSnapshot().premium_characters.some(p => p.character_id === "maren"), false);
 });
@@ -183,7 +184,7 @@ test("D10 narrator packing: cues only for present active selected NPC+; no globa
   const packed = packNpcPlus(f.world, s, new Set(["brenna"]), "Brenna")!.lines.join("\n");
   assert.ok(packed.includes("Mannerisms:")); assert.ok(!packed.includes(rows(f.campaign, "maren")[0]!.text));
   for (const key of mannerismOwners(s).keys()) assert.ok(!packed.includes(key));
-  assert.match(MANNERISM_NARRATOR_RULE, /optional recurring cues/); assert.match(MANNERISM_NARRATOR_RULE, /never in every scene/); assert.match(MANNERISM_NARRATOR_RULE, /consent or internal state/);
+  assert.match(MANNERISM_NARRATOR_RULE, /optional local cues/); assert.match(MANNERISM_NARRATOR_RULE, /never in every scene/); assert.match(MANNERISM_NARRATOR_RULE, /consent or internal state/);
   const ctx = buildTurnContext(f.world, s, { input: "Brenna" }); const prompt = buildNarratorPrompt("Brenna", ctx, [], {}, { candidates: [], runtime: [] });
   assert.ok(prompt.messages[0]!.content.includes("Mannerisms:"));
 });

@@ -104,7 +104,7 @@ export function applyMannerismLearning(s: CampaignSnapshot, world: WorldStore, o
     if (conflict) { l.candidates = l.candidates.filter(x => x !== c); metrics.observations_rejected_global_duplicate++; continue; }
     const { id: _id, character_id: _char, action: _a, trigger: _t, evidence: _e, first_observed_sequence: _f, last_observed_sequence: _last, ...definition } = c;
     const ordinal = s.premium_characters.reduce((n, p) => n + (p.mannerisms ?? []).length, 0);
-    p.mannerisms = [...(p.mannerisms ?? []), { ...definition, id: `mannerism_r${s.revision + 1}_n${ordinal}`, source: "emergent", created_revision: s.revision + 1, user_edited: false }];
+    p.mannerisms = [...(p.mannerisms ?? []), { ...definition, id: `mannerism_r${s.revision + 1}_n${ordinal}`, source: "emergent", created_revision: s.revision + 1, user_edited: false, epistemic_state: "established", known_by_character_ids: [] }];
     p.metadata.last_updated_revision = s.revision + 1; l.candidates = l.candidates.filter(x => x !== c); metrics.mannerisms_promoted++;
   }
   l.processed_sequence = operation.through_sequence;

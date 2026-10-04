@@ -3,7 +3,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { characterView } from "../campaign/projections.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
-import { mannerismAvailable } from "../campaign/mannerisms.js";
+import { mannerismAvailable, mannerismEpistemicState } from "../campaign/mannerisms.js";
 import { escapeRegExp as esc } from "./language/text.js";
 
 /**
@@ -170,7 +170,7 @@ export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<Campa
     const mentioned = [name, ...name.split(/\s+/).filter(t => t.length > 2)].some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(input));
     const addressed = mentioned || presentActive.length === 1 && presentActive[0] === id && /\b(?:you|your)\b/i.test(input);
     const here = present.has(id);
-    const cues = here ? (p.mannerisms ?? []).filter(m => mannerismAvailable(m, id, snapshot, world)).map(m => m.text) : [];
+    const cues = here ? (p.mannerisms ?? []).filter(m => mannerismAvailable(m, id, snapshot, world)).map(m => `${m.text} [recurrence=${mannerismEpistemicState(m)}; recognized_by=${(m.known_by_character_ids ?? []).map(id => nameOf(snapshot, world, id)).join(",") || "nobody"}]`) : [];
     const mannerisms = cues.length ? `\nMannerisms:\n${cues.map(text => `- ${text}`).join("\n")}` : "";
     const score = (addressed ? 1000 : 0) + (here ? 100 : 0) + (dims.some(d => edge[d] !== "none") ? 10 : 0) + Math.max(0, 5 - Math.floor((snapshot.revision - latest.revision) / 5));
     const deep = refs.length ? `; deep=[${refs.join(",")}]` : "";
@@ -243,7 +243,7 @@ export function deduplicateRecovered(npc: NpcPlusContext, retrieved: unknown): {
   return { npc: removed ? Object.freeze({ ...npc, lines: Object.freeze(lines) }) : npc, removed };
 }
 /** Narrator section (absent when no active NPC+). Authority stays in the state blocks above it. */
-export const MANNERISM_NARRATOR_RULE = "Mannerisms are small optional recurring cues: use occasionally and naturally, never in every scene or as caricature. They do not define personality, motivation, consent or internal state. Never invent objects, prerequisites or facts to perform them.";
+export const MANNERISM_NARRATOR_RULE = "Mannerisms are optional local cues: use occasionally and naturally, never in every scene or as caricature, only when their stated condition occurs. Recurrence: emergent establishes no prior occurrence; observed records an occurrence, not a habit; established supports recurrence, not universal frequency. Characters recognize a habit only if listed in recognized_by. Do not infer history, personality, psychology, motivation, consent or internal state from cue presence. Never invent objects, prerequisites or facts to perform a cue.";
 export function renderNpcPlus(npc: NpcPlusContext): string {
   return [`[NPC+ HOUSEHOLD CHARACTERS] Premium continuity for household members (portrayal guidance, not public knowledge). Authoritative state above wins on any conflict. Compact keys: core=personality traits, role=household role, N{…}=their relationship toward Nicco (0 none, L low, M moderate, H high; trust, wary=wariness, aff=affection, prot=protectiveness, resp=respect, fear, host=hostility, rom=romance), recent=latest household event, away=not in this scene, deep=[…]=recoverable background not shown.`,
     ...(npc.lines.some(line => line.includes("\nMannerisms:\n")) ? [MANNERISM_NARRATOR_RULE] : []), ...npc.lines].join("\n");

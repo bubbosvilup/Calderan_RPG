@@ -30,6 +30,7 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   validateMannerismRegistry(s);
   validateMannerismLearning(s);
   const refs = new CampaignIdentityResolver(world, s), minute = s.runtime.scene.world_time.world_minute;
+  for (const p of s.premium_characters) for (const m of p.mannerisms ?? []) for (const id of m.known_by_character_ids ?? []) refs.character(id);
   const historical = (time: number | undefined, field: string) => { if (time !== undefined && time > minute) fail(field, "future provenance"); };
   const records = [...s.characters, ...s.items, ...s.households, ...s.facts, ...s.goals, ...s.scheduled_events, ...s.transactions];
   unique(records, r => r.id, "id");

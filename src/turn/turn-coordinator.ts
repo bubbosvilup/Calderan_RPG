@@ -1,5 +1,10 @@
+import type { CampaignSnapshot } from "../campaign/types.js";
+import type { DeepReadonly } from "../types/readonly.js";
+import type { GenerationRequest } from "../llm/types.js";
+import { MannerismPortrayalGate } from "./mannerism-portrayal-gate.js";
+import { mannerismEpistemicState } from "../campaign/mannerisms.js";
 import type { ContextCompactionService } from "./context-compaction.js";
-import { buildTurnContext } from "./context-builder.js";
+import { buildTurnContext, type TurnContext } from "./context-builder.js";
 import { buildNarratorPrompt } from "./prompt-builder.js";
 import { ContextBudgetManager, prepareNarratorRequest, type ContextPolicy } from "./context-budget.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
@@ -34,6 +39,17 @@ export type { TurnDebugRecord } from "./turn-types.js";
  * `campaign.commit` below is the only mutation. `stage` maps a non-TurnError failure to the code of the phase in flight.
  */
 const active = new WeakSet<CampaignState>();
+/** Observe final audited delivery against generation-time authority and cues surviving packing. */
+function inspectPackedPortrayal(world: WorldStore, projected: DeepReadonly<CampaignSnapshot>, context: TurnContext, prompt: GenerationRequest, turn_id: string, revision: number, player_input: string, narration: string) {
+  return new MannerismPortrayalGate().inspect({ turn_id, revision, player_input, narration,
+    characters: context.characters.map(c => ({ id: c.id, name: c.profile.name ?? world.getEntity(c.id)?.name ?? c.id })),
+    cues: projected.premium_characters.flatMap(p => (p.mannerisms ?? []).filter(m => prompt.messages.some(msg => msg.content.includes(`- ${m.text} [recurrence=${mannerismEpistemicState(m)};`))).map(m => ({
+      character_id: p.character_id, character_name: context.characters.find(c => c.id === p.character_id)?.profile.name ?? world.getEntity(p.character_id)?.name ?? p.character_id,
+      mannerism: m, local_evidence: context.characters.find(c => c.id === p.character_id)?.current.presentation,
+    }))),
+  });
+}
+
 export class TurnCoordinator {
   readonly #recent = new WeakMap<CampaignState, RecentConversation>();
   readonly #lastInput = new WeakMap<CampaignState, string>();
@@ -169,6 +185,7 @@ export class TurnCoordinator {
       if (observer) Object.assign(observer.record.commit, { identity_promotion_count: plan.identity.promoted.length, identity_skipped: !!plan.identity_skipped,
         location_changed_naming_skip: origin !== arrival });
 
+      if (observer) observer.record.mannerism_portrayal = inspectPackedPortrayal(this.world, projected, context, prompt, observer.record.turn_id, base_revision, player_input, delivery.text);
       // Delivery, then the authoritative commit.
       shown = delivery.text; // Only audited, delivered narration is ever exposed, including on a later failure.
       yield { type: "narration_delta", text: delivery.text };

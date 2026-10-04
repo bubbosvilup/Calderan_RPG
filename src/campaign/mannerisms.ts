@@ -83,7 +83,7 @@ function seedRank(campaignId: string, characterId: string, key: string): number 
 }
 function entry(d: MannerismDefinition, s: CampaignSnapshot, revision: number, source: CharacterMannerism["source"]): CharacterMannerism {
   const ordinal = s.premium_characters.reduce((n, p) => n + (p.mannerisms ?? []).length, 0);
-  return { ...d, id: `mannerism_r${revision}_n${ordinal}`, source, created_revision: revision, user_edited: false };
+  return { ...d, id: `mannerism_r${revision}_n${ordinal}`, source, created_revision: revision, user_edited: false, epistemic_state: source === "emergent" ? "established" : "emergent", known_by_character_ids: [] };
 }
 /** Promotion seam. Candidate supplied only by future validated promotion tooling; no candidate acquisition runs here. */
 export function assignInitialMannerism(s: CampaignSnapshot, world: WorldStore, p: PremiumCharacterState, options: { candidate?: ValidatedMannerismCandidate; seeds?: readonly Readonly<MannerismSeed>[] } = {}): void {
@@ -117,7 +117,7 @@ export function applyMannerismUserChange(s: CampaignSnapshot, world: WorldStore,
     if (change.kind === "add") {
       if (rows.length >= MANNERISM_LIMITS.slots) fail("mannerism.slots", "maximum four; no automatic replacement");
       p.mannerisms = [...rows, entry(d, s, s.revision + 1, "user")];
-    } else p.mannerisms = rows.map(m => m === existing ? { ...d, id: m.id, source: m.source, created_revision: m.created_revision, user_edited: true } : m);
+    } else p.mannerisms = rows.map(m => m === existing ? { ...d, id: m.id, source: m.source, created_revision: m.created_revision, user_edited: true, epistemic_state: "emergent", known_by_character_ids: [] } : m);
   }
   p.metadata.last_updated_revision = s.revision + 1;
 }
@@ -125,6 +125,7 @@ export function validateMannerismRegistry(s: CampaignSnapshot): void {
   const keys = new Set<string>(), ids = new Set<string>(), texts = new Set<string>();
   for (const p of s.premium_characters) for (const m of p.mannerisms ?? []) {
     validateMannerismDefinition(m);
+    if (m.known_by_character_ids && (new Set(m.known_by_character_ids).size !== m.known_by_character_ids.length || m.known_by_character_ids.length > 64)) fail("mannerism.known_by", "bounded unique recognition IDs required");
     if ((p.mannerisms ?? []).length > MANNERISM_LIMITS.slots || keys.has(m.canonical_key) || ids.has(m.id) || texts.has(m.text.toLowerCase())) fail("mannerisms", "duplicate ownership or full slots");
     keys.add(m.canonical_key); ids.add(m.id); texts.add(m.text.toLowerCase());
     if (m.created_revision < p.metadata.created_revision || m.created_revision > p.metadata.last_updated_revision || m.created_revision > s.revision) fail("mannerism.created_revision", "invalid creation revision");
@@ -133,4 +134,9 @@ export function validateMannerismRegistry(s: CampaignSnapshot): void {
       if (!seed || seed.text !== m.text || m.requires_item_id || m.requires_entity_id) fail("mannerism", "unmodified seed must match the curated concept");
     }
   }
+}
+
+/** Recurrence is separate from acquisition source; edited/legacy user cues do not invent history. */
+export function mannerismEpistemicState(m: DeepReadonly<CharacterMannerism>): NonNullable<CharacterMannerism["epistemic_state"]> {
+  return m.epistemic_state ?? (m.source === "emergent" && !m.user_edited ? "established" : "emergent");
 }

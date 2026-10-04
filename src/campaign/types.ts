@@ -153,8 +153,11 @@ export interface MannerismDefinition {
   canonical_key: string; text: string;
   requires_item_id?: string; requires_entity_id?: string;
 }
+export type MannerismEpistemicState = "emergent" | "observed" | "established";
 export interface CharacterMannerism extends MannerismDefinition {
   id: string; source: "seeded" | "emergent" | "user"; created_revision: number; user_edited: boolean;
+  /** Optional on legacy saves; conservative effective defaults are derived without fabricating history. */
+  epistemic_state?: MannerismEpistemicState; known_by_character_ids?: string[];
 }
 /**
  * NPC+ Pass 1: persistent premium character state, keyed by character ID. A character is NPC+ because they are, or have been, a

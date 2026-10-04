@@ -12,6 +12,7 @@ import type { AuthorizationDiagnostic, TurnFailure } from "./turn-types.js";
 
 export type DiagnosticPhase = "input_intent" | "projection" | "retrieval" | "prompt_composition" | "narrator" | "reconciliation_narrator" | "controller" | "authorization" | "preparation" | "audit" | "reconciliation" | "reconciliation_audit" | "commit_preparation" | "commit" | "publication";
 export interface TurnDiagnostics {
+  mannerism_portrayal?: import("./mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
   context_budget?: import("./context-budget.js").ContextBudgetSnapshot;
   turn_id: string; base_revision: number; final_revision: number; outcome: "running" | "success" | "failure" | "abandoned";
   failure_code?: TurnFailure; failure_phase?: DiagnosticPhase; provider_code?: string;
