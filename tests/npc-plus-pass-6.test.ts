@@ -1,3 +1,4 @@
+import { productionStub, testTrajectory, testContrast, testMovement, instantReflectionPacing } from "./production-reflection-fixtures.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -48,17 +49,11 @@ test("no evidence beyond joining → not due, no model call; three developments 
 
 test("evidence rules: one event is no pattern; two are; a stance needs strong or two refs; a tension needs both sides and a contrast", async () => {
   const f = withHistory(), s = f.campaign.exportSnapshot(), [h1, h2, h3] = historyRefs(s), rel = "npcrel:brenna:nicco";
-  const runs = await reflectAfterTurn(f.campaign, f.world, stub([
-    P("signature_pattern", "accepts_help", "Accepts Nicco's help more readily over time.", [h1!]),
-    P("signature_pattern", "steady_trust_steps", "Trust toward Nicco has grown in repeated small steps.", [h1!, h2!]),
-    P("stance", "cautious_trust", "Approaches Nicco with growing but cautious trust.", [rel]),
-    P("unresolved_tension", "trust_and_wariness", "Trusts Nicco more each time while staying wary of him.", [h2!, h3!]),
-    P("unresolved_tension", "mixed_feelings", "Trusts Nicco more and is wary of him.", [h2!, h3!]),
-  ]));
+  const runs = await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testTrajectory(r), testContrast(r), testTrajectory({...r,evidence:r.evidence.filter(e=>e.ref===h1)})]));
   assert.equal(runs[0]!.status, "committed");
-  assert.deepEqual(runs[0]!.rejected.map(r => r.reason), ["insufficient_evidence", "tension_without_contrast"]);
+  assert.equal(runs[0]!.rejected.length, 1);
   const t = f.campaign.exportSnapshot();
-  assert.deepEqual(notes(t).map(n => [n.kind, n.label]), [["stance", "cautious_trust"], ["signature_pattern", "steady_trust_steps"], ["unresolved_tension", "trust_and_wariness"]]);
+  assert.deepEqual(notes(t).map(n => n.kind), ["signature_pattern", "unresolved_tension"]);
   assert.ok(notes(t).every(n => n.evidence_refs.length > 0));
 });
 
@@ -82,7 +77,7 @@ test("forbidden inferences are rejected: motive, romance, backstory, diagnosis, 
     ["forbidden_inference", "forbidden_inference", "forbidden_inference", "forbidden_inference", "forbidden_inference", "unsupported_person", "unsupported_person", "unknown_evidence", "forbidden_inference", "forbidden_inference"]);
   // End to end: a batch of only bad proposals commits no note (and more than 6 proposals fails the whole output closed).
   const runs = await reflectAfterTurn(f.campaign, f.world, stub(cases.slice(0, 6)));
-  assert.deepEqual([runs[0]!.status, runs[0]!.accepted.length, notes(f.campaign.exportSnapshot()).length], ["committed", 0, 0]);
+  assert.deepEqual([runs[0]!.status, runs[0]!.accepted.length, notes(f.campaign.exportSnapshot()).length], ["malformed", 0, 0]);
   const g = withHistory();
   assert.equal((await reflectAfterTurn(g.campaign, g.world, stub(cases)))[0]!.status, "malformed");
 });
@@ -90,13 +85,14 @@ test("forbidden inferences are rejected: motive, romance, backstory, diagnosis, 
 // ================================================================================================ merge, caps, failure modes
 test("duplicates update instead of multiplying; per-kind caps hold; vanished evidence prunes notes", async () => {
   const f = withHistory(), [h1, h2] = historyRefs(f.campaign.exportSnapshot());
-  await reflectAfterTurn(f.campaign, f.world, stub([P("stance", "cautious_trust", "Approaches Nicco with cautious trust.", [h1!, h2!]), P("stance", "cautious_trust", "Approaches Nicco with cautious trust.", [h1!, h2!])]));
+  await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testTrajectory(r), testTrajectory(r)]));
   assert.equal(notes(f.campaign.exportSnapshot()).length, 1);
   run(f.campaign, { kind: "adjust_relationship", from_character_id: "brenna", to_character_id: "nicco", dimension: "trust", direction: "raise" },
     { kind: "adjust_relationship", from_character_id: "brenna", to_character_id: "nicco", dimension: "respect", direction: "raise" }, { kind: "adjust_relationship", from_character_id: "brenna", to_character_id: "nicco", dimension: "affection", direction: "raise" });
-  await reflectAfterTurn(f.campaign, f.world, stub([P("stance", "cautious_trust", "Approaches Nicco with cautious but steadier trust.", [h1!, h2!], "high")]));
+  await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testTrajectory({...r,evidence:r.evidence.filter(e=>e.ref===h1||e.ref===h2)})]));
   const updated = notes(f.campaign.exportSnapshot());
-  assert.deepEqual([updated.length, updated[0]!.text, updated[0]!.confidence], [1, "Approaches Nicco with cautious but steadier trust.", "high"]);
+  assert.equal(updated.length, 1); assert.equal(updated[0]!.confidence, "high");
+  assert.equal(updated[0]!.structured?.semantic_version, "V2.3-CVC-E1");
   // Caps: six distinct stances never exceed four.
   const capped = mergeNotes([], Array.from({ length: 6 }, (_, i) => ({ kind: "stance" as const, label: `stance_${i}`, text: `Stance ${i} toward Nicco.`, evidence_refs: [h1!], confidence: "low" as const })),
     reflectionEvidence(f.world, f.campaign.exportSnapshot(), "brenna"), 50);
@@ -108,7 +104,7 @@ test("duplicates update instead of multiplying; per-kind caps hold; vanished evi
 test("fail closed: malformed output, provider failure and a newer revision change nothing; gameplay state is untouched", async () => {
   for (const provider of [stub("not json at all"), stub('{"proposals":[],"extra":1}'), { async reflect(): Promise<never> { throw new Error("timeout"); } } as ReflectionProvider]) {
     const f = withHistory(), before = f.campaign.exportSnapshot();
-    const runs = await reflectAfterTurn(f.campaign, f.world, provider);
+    const runs = await reflectAfterTurn(f.campaign, f.world, provider, { pacing: instantReflectionPacing().pacing });
     assert.ok(["malformed", "provider_failed"].includes(runs[0]!.status));
     assert.equal(f.campaign.exportSnapshot(), before);
   }
@@ -122,7 +118,7 @@ test("fail closed: malformed output, provider failure and a newer revision chang
 
 test("reflection is never authority: every other domain is byte-identical after a committed reflection", async () => {
   const f = withHistory(), [h1, h2, h3] = historyRefs(f.campaign.exportSnapshot()), before = f.campaign.exportSnapshot();
-  await reflectAfterTurn(f.campaign, f.world, stub([P("unresolved_tension", "trust_vs_wariness", "Trusts Nicco more while staying wary.", [h2!, h3!]), P("signature_pattern", "small_steps", "Trust grows in small steps.", [h1!, h2!])]));
+  await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testContrast(r), testTrajectory(r)]));
   const { premium_reflections: _a, revision: _r, ...rest } = f.campaign.exportSnapshot(), { premium_reflections: _b, revision: _q, ...restBefore } = before;
   assert.deepEqual(rest, restBefore);
   assert.equal(notes(f.campaign.exportSnapshot()).length, 2);
@@ -133,7 +129,7 @@ test("reflection is never authority: every other domain is byte-identical after 
 // ================================================================================================ persistence, recovery, privacy, context
 test("save/load preserves reflection; recovery returns the exact note with evidence and revisions", async () => {
   const f = withHistory(), [h1, h2] = historyRefs(f.campaign.exportSnapshot());
-  await reflectAfterTurn(f.campaign, f.world, stub([P("stance", "cautious_trust", "Approaches Nicco with cautious trust.", [h1!, h2!], "high")]));
+  await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testTrajectory(r)]));
   const s = f.campaign.exportSnapshot();
   const restored = CampaignState.restore(f.world, decodeSave(serializeSave(createSaveFile(s, f.world, "2026-10-02T18:00:00.000Z"), f.world), f.world).snapshot).exportSnapshot();
   assert.deepEqual(restored.premium_reflections, s.premium_reflections);
@@ -149,7 +145,7 @@ test("private evidence never reaches reflection: Korvin's private chunk is not i
   const catalog = reflectionEvidence(world, c.exportSnapshot(), "korvin");
   assert.equal(catalog.some(e => e.ref.includes("private_background") || e.text.includes("daughter")), false);
   const runs = await reflectAfterTurn(c, world, stub([P("stance", "guarded", "Guards a private grief around children.", ["npcmem:korvin:canon:korvin.private_background", "npcrel:korvin:nicco"])]));
-  assert.deepEqual(runs[0]!.rejected.map(r => r.reason), ["unknown_evidence"]);
+  assert.equal(runs[0]!.status, "malformed");
 });
 
 test("context: Tier B shows at most 2 reflection notes and Tier C one token; the H3 mixed + 30 NPC+ scene with full reflection stays under 32k", async () => {

@@ -1,3 +1,4 @@
+import { productionStub, testTrajectory, testContrast, testMovement, instantReflectionPacing } from "./production-reflection-fixtures.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { CampaignState } from "../src/campaign/campaign-state.js";
@@ -100,7 +101,7 @@ test("reflection revision then save/load; and a proposal computed before the loa
   const stale = await reflectAfterTurn(f.campaign, f.world, slow);
   assert.equal(stale[0]!.status, "stale");
   assert.equal(f.campaign.exportSnapshot().premium_reflections.length, 0, "a stale reflection changes nothing");
-  const fresh = await reflectAfterTurn(f.campaign, f.world, stub([{ ...note, evidence_refs: reflectionEvidence(f.world, f.campaign.exportSnapshot(), "maren").filter(e => / moved from /.test(e.text)).map(e => e.ref) }]));
+  const fresh = await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testMovement(r)]));
   assert.equal(fresh[0]!.status, "committed");
   const text = serializeSave(createSaveFile(f.campaign.exportSnapshot(), f.world, "2026-10-02T09:00:00.000Z"), f.world);
   const loaded = CampaignState.restore(f.world, decodeSave(text, f.world).snapshot).exportSnapshot();

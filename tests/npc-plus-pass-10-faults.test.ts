@@ -1,3 +1,4 @@
+import { productionStub, testTrajectory, testContrast, testMovement, instantReflectionPacing } from "./production-reflection-fixtures.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { household } from "./pass10-support.js";
@@ -69,20 +70,20 @@ for (const fault of ["timeout", "malformed", "stale", "all_rejected", "private_e
   for (const loc of ["test_room", "test_hall"]) f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "move_character", character_id: "maren", location_id: loc }] });
   const gameplay = JSON.stringify(f.campaign.exportSnapshot());
   const refs = reflectionEvidence(f.world, f.campaign.exportSnapshot(), "maren").filter(e => / moved from /.test(e.text)).map(e => e.ref);
-  const good = { kind: "shared_motif", label: "stairs_use", text: "Maren has moved between the observation room and the main hall several times.", evidence_refs: refs, confidence: "medium" };
-  const provider: ReflectionProvider = { async reflect() {
+  const provider: ReflectionProvider = { async reflect(request) {
+    const good = testMovement(request);
     if (fault === "timeout") throw new ProviderError("timeout");
     if (fault === "malformed") return { text: "{not json" };
     if (fault === "stale") { f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "move_character", character_id: "maren", location_id: "test_room" }] }); return { text: JSON.stringify({ proposals: [good] }) }; }
-    if (fault === "all_rejected") return { text: JSON.stringify({ proposals: [{ ...good, text: "Maren loves moving with Nicco." }] }) };
+    if (fault === "all_rejected") return { text: JSON.stringify({ proposals: [{ ...good, claim: {...good.claim,transition_count:8} }] }) };
     return { text: JSON.stringify({ proposals: [{ ...good, evidence_refs: ["npcmem:maren:knowledge:campaign_fact_private_secret"] }] }) };
   } };
-  const runs = await reflectAfterTurn(f.campaign, f.world, provider);
-  const expected = { timeout: "provider_failed", malformed: "malformed", stale: "stale", all_rejected: "committed", private_evidence: "committed" }[fault];
+  const runs = await reflectAfterTurn(f.campaign, f.world, provider, { pacing: instantReflectionPacing().pacing });
+  const expected = { timeout: "provider_failed", malformed: "malformed", stale: "stale", all_rejected: "committed", private_evidence: "malformed" }[fault];
   assert.equal(runs[0]!.status, expected);
   const after = f.campaign.exportSnapshot();
   assert.equal(after.premium_reflections.flatMap(x => x.notes).length, 0, "no note was stored");
-  if (fault !== "stale" && fault !== "all_rejected" && fault !== "private_evidence") assert.equal(JSON.stringify(after), gameplay, "no state change at all");
-  if (fault === "all_rejected" || fault === "private_evidence") assert.ok(runs[0]!.rejected.length > 0);
+  if (fault !== "stale" && fault !== "all_rejected") assert.equal(JSON.stringify(after), gameplay, "no state change at all");
+  if (fault === "all_rejected") assert.ok(runs[0]!.rejected.length > 0);
   assert.equal(characterLocation(after, f.world, "maren"), fault === "stale" ? "test_room" : "test_hall");
 });

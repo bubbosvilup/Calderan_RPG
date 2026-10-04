@@ -1,3 +1,4 @@
+import { productionStub, testTrajectory, testContrast, testMovement, instantReflectionPacing } from "./production-reflection-fixtures.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { build, BASE } from "./pass10-headroom.js";
@@ -45,11 +46,8 @@ test("reflection merge is deterministic: the same stub twice on identical campai
     const f = household(["maren"]);
     for (const loc of ["test_hall", "test_room", "test_hall"]) f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "move_character", character_id: "maren", location_id: loc }] });
     const refs = reflectionEvidence(f.world, f.campaign.exportSnapshot(), "maren").filter(e => / moved from /.test(e.text)).map(e => e.ref);
-    const provider: ReflectionProvider = { async reflect() { return { text: JSON.stringify({ proposals: [
-      { kind: "shared_motif", label: "b_motif", text: "Maren has moved between the observation room and the main hall several times.", evidence_refs: refs, confidence: "medium" },
-      { kind: "shared_motif", label: "a_motif", text: "Maren moved from the observation room to the main hall and back again.", evidence_refs: refs, confidence: "medium" },
-      { kind: "signature_pattern", label: "c_pattern", text: "Maren changes rooms in a regular back-and-forth.", evidence_refs: refs, confidence: "low" }] }) }; } };
-    await reflectAfterTurn(f.campaign, f.world, provider);
+    const provider = productionStub(r => { const moves=r.evidence.filter(e=>e.evidence_type==='movement');return [testMovement(r),testMovement({...r,evidence:moves.slice(0,2)})]; });
+    await reflectAfterTurn(f.campaign, f.world, provider, { pacing: instantReflectionPacing().pacing });
     return JSON.stringify(f.campaign.exportSnapshot().premium_reflections);
   };
   const a = await mk(), b = await mk();

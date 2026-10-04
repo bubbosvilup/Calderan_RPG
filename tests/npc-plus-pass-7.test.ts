@@ -1,3 +1,4 @@
+import { productionStub, testTrajectory, testContrast, testMovement, instantReflectionPacing } from "./production-reflection-fixtures.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -37,7 +38,7 @@ for (const failure of ["provider", "malformed", "stale", "rejected"] as const) t
     if (failure === "provider") throw new Error("private failure");
     if (failure === "malformed") return { text: "not JSON" };
     if (failure === "stale") f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "runtime_delta", delta: { time_advance_minutes: 1 } }] });
-    return { text: JSON.stringify({ proposals: failure === "rejected" ? [proposal("A recurring secret injury.", request.evidence.slice(0, 2).map(e => e.ref))] : [] }), usage: { prompt_tokens: 10, completion_tokens: 3, private_evidence: "NEVER_LOG" } };
+    return { text: JSON.stringify({ proposals: failure === "rejected" ? [{...testContrast(request),claim:{...testContrast(request).claim,state_a:"high"}}] : [] }), usage: { prompt_tokens: 10, completion_tokens: 3, private_evidence: "NEVER_LOG" } };
   } };
   const runs = await runPlayTurn({ ...f, request: { campaign: f.campaign, player_input: "I smile." }, publish: e => published.push(e), reflection_provider: provider, reflection_diagnostics_sink: d => diagnostic.push(d) });
   assert.equal(published.filter(e => e.type === "turn_completed").length, 1); assert.equal(published.some(e => e.type === "turn_failed"), false);
@@ -103,8 +104,8 @@ test("same-revision evidence is deduplicated and aggregate entries alone cannot 
 test("safe diagnostics include attempts, counts, revisions, tokens and timings; failing sinks do not change commit", async () => {
   const f = household(true), records: DeepReadonly<ReflectionDiagnostics>[] = [];
   const provider: ReflectionProvider = { async reflect(request) { return { text: JSON.stringify({ proposals: [
-    { ...proposal("Approaches Nicco cautiously.", ["npcrel:brenna:nicco"], "cautious"), kind: "stance" },
-    proposal("Recurring secret motives.", request.evidence.slice(0, 2).map(e => e.ref)),
+    testContrast(request),
+    {...testContrast(request),claim:{...testContrast(request).claim,state_a:"high"}},
   ] }), usage: { prompt_tokens: 123, completion_tokens: 24 } }; } };
   const runs = await reflectAfterTurn(f.campaign, f.world, provider, { diagnostics_sink: d => { records.push(d); throw new Error("sink"); } });
   const d = records[0]!; assert.equal(d.attempted, 1); assert.equal(d.due_count, 1); assert.equal(d.characters[0]?.provider_success, true);
@@ -122,9 +123,9 @@ test("due normal play commits accepted reflection only after publication", async
   let gameplay: ReturnType<typeof f.campaign.exportSnapshot> | undefined;
   const runs = await runPlayTurn({ ...f, request: { campaign: f.campaign, player_input: "I smile." },
     publish: e => { if (e.type === "turn_completed") { published = true; gameplay = f.campaign.exportSnapshot(); } },
-    reflection_provider: { async reflect() {
+    reflection_provider: { async reflect(request) {
       assert.equal(published, true);
-      return { text: JSON.stringify({ proposals: [{ ...proposal("Approaches Nicco cautiously.", ["npcrel:brenna:nicco"], "cautious"), kind: "stance" }] }) };
+      return { text: JSON.stringify({ proposals: [testContrast(request)] }) };
     } } });
   assert.equal(runs[0]?.accepted.length, 1); assert.equal(runs[0]?.status, "committed");
   const { revision: beforeRevision, premium_reflections: _beforeNotes, ...before } = gameplay!;

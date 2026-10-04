@@ -1,3 +1,4 @@
+import { productionStub, testTrajectory, testContrast, testMovement, instantReflectionPacing } from "./production-reflection-fixtures.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { turnFixture } from "../src/dev/turn-fixture.js";
@@ -36,13 +37,13 @@ test("organic moves: each commit appends exactly one `moved` development; due af
   const refs = moveRefs(f);
   assert.equal(refs.length, 3);
   for (const r of refs) assert.ok(recoverNpcContext(f.world, f.snap(), r), "recovery resolves each handle exactly");
-  const runs = await reflectAfterTurn(f.campaign, f.world, stub([P("shared_motif", "hall_and_room", "Maren has moved between the observation room and the main hall several times.", refs)]));
+  const runs = await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testMovement(r)]));
   assert.equal(runs[0]!.status, "committed"); assert.equal(runs[0]!.accepted.length, 1);
   const note = f.snap().premium_reflections.find(r => r.character_id === "maren")!.notes[0]!;
   assert.deepEqual(note.evidence_refs, refs);
   assert.equal(reflectionDue(f.snap(), "maren"), false, "reflected evidence is not re-sent");
   const ctx = buildTurnContext(f.world, f.snap(), { input: "Maren, how are you?" });
-  assert.ok(ctx.npc_plus!.lines.some(l => /hall_and_room|several times/.test(l) && /Maren/.test(l)));
+  assert.ok(ctx.npc_plus!.lines.some(l => /movement_|recorded route/.test(l) && /Maren/.test(l)));
 });
 test("mixed sequences: movement + relationship + rule, movement + condition + movement, contract + movement all reach the catalog with correct kinds", () => {
   const f = fixture();
