@@ -17,7 +17,7 @@ IDs are never renumbered.
 | ID | Area | Severity | Current state / next action |
 |---|---|---|---|
 | **D-06** | Occasional controller `structured_output_invalid` | MINOR | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid. |
-| **D-09** | Reflection organic usefulness unmeasured | **SOAK PENDING - PRODUCTION INTEGRATED** | 2026-10-05: qualified V2.3-CVC-E1 structured reflection is integrated into the real finalized-turn maintenance path, Qwen/Alibaba only. Frozen semantic/CVC/provider/exposure gates retained. Production tests and bounded live smoke PASS: one accepted note persisted, recovered and packed in a later narrator request. Closure still requires real development-rich gameplay -> accepted production reflection -> persistence -> later retrieval/packing -> demonstrated narrator benefit + ablation. [Integration report](docs/evaluations/D09_PRODUCTION_STRUCTURED_REFLECTION_INTEGRATION.md). |
+| **D-09** | Reflection organic usefulness unmeasured | **SOAK PENDING - PRODUCTION INTEGRATED** | 2026-10-05: qualified V2.3-CVC-E1 Qwen/Alibaba production integration remains PASS. Final controlled campaign run stopped after reproducing known D-25 narration/state divergence (first offending turn 6). Two environmental-count notes persisted; later packing observed, but no matched ablation or material narration benefit demonstrated. Closure still requires a valid later-use pair with grounded narration benefit; other debts remain separate. [Integration](docs/evaluations/D09_PRODUCTION_STRUCTURED_REFLECTION_INTEGRATION.md), [final soak](docs/evaluations/D09_FINAL_CAMPAIGN_SOAK_AND_ABLATION.md). |
 | **D-16** | `private_memory_refs` has no writer | MINOR | Dead/undefined structure today. Remove in a later schema migration or give it a concrete purpose during memory work. |
 | **D-17** | Reflection trigger counts lifecycle entries | MINOR | First reflection can happen earlier than intended because lifecycle entries count. Revisit only together with D-09/D-10 evidence. |
 | **D-19** | Reconciliation / redaction rate | **IMPORTANT** | Safe but narration is still revised/redacted more often than ideal. Remains relevant for proposal/reconciliation quality; measure by path and reduce causes without weakening audits. |
@@ -73,7 +73,7 @@ NPC+ packing/performance, and prior regression repairs remain closed in their hi
 
 1. **D-19** — reduce reconciliation/redaction rate.
 2. **D-26** — OPEN — NEEDS MORE DATA: evaluate organic matcher coverage and precision before repair design.
-3. **D-09** - SOAK PENDING: production integration COMPLETE; run real development-rich campaign gameplay and demonstrate persisted reflection -> later retrieval/packing -> narration benefit + ablation.
+3. **D-09** - SOAK PENDING: exact remaining gap is a valid matched later-use ablation demonstrating material grounded narration benefit; final controlled run was stopped under the mandatory bug-stop rule.
 
 D-06 remains open pending broader runtime soak after the Qwen switch.
 
