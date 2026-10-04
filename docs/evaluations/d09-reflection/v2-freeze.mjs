@@ -1,0 +1,14 @@
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import {sha} from './lib.mjs';
+import {V2_SCHEMA,V2_SYSTEM,EVIDENCE_VERSION,REASON_CODES} from '../../../.build/src/dev/reflection-v2.js';
+import {estimateContextTokens} from '../../../.build/src/turn/context-budget.js';
+const dir='saves/d09-reflection-v2';
+if(existsSync(`${dir}/candidate-freeze.json`))throw Error('Do not overwrite V2 freeze');
+const dev=JSON.parse(readFileSync(`${dir}/dev-regression.json`,'utf8'));
+if(dev.known_escapes_rejected!==6||dev.old_accepted_useful_preserved!==5||dev.old_rejected_useful_recovered!==3)throw Error('Development gate not met');
+const freeze={created_at:new Date().toISOString(),source_file:'src/dev/reflection-v2.ts',source_sha:sha(readFileSync('src/dev/reflection-v2.ts')),compiled_sha:sha(readFileSync('.build/src/dev/reflection-v2.js')),schema_sha:sha(V2_SCHEMA),prompt_sha:sha(V2_SYSTEM),evidence_version:EVIDENCE_VERSION,reason_codes:REASON_CODES,reason_codes_sha:sha(REASON_CODES),development_sha:sha(readFileSync(`${dir}/dev-regression.json`)),schema_changed:true};
+writeFileSync(`${dir}/candidate-freeze.json`,JSON.stringify(freeze,null,2));writeFileSync(`${dir}/candidate-schema.json`,JSON.stringify(V2_SCHEMA,null,2));
+const examples=dev.rows.filter(r=>r.kind==='old_accepted_useful').slice(0,2);
+const measurements=[1,2].map(n=>{const old=examples.slice(0,n).map(r=>`${r.original_proposal.kind.replaceAll('_',' ')} "${r.original_proposal.text}"`).join('; '),v2=examples.slice(0,n).map(r=>r.rendered).join('; ');return{notes:n,current_packed_text:old,v2_packed_text:v2,current_estimated_tokens:estimateContextTokens(old),v2_estimated_tokens:estimateContextTokens(v2)};});
+const cost={method:'Project estimateContextTokens: ceil UTF-8 bytes/4, NOT model tokenizer or measured narrative usage',typical_npc_plus:'Tier B maximum two displayed notes; unchanged remainder of context, so incremental delta equals two-note measurement. Tier C remains one deterministic claim-type label in a future adoption.',measurements};
+writeFileSync(`${dir}/token-cost.json`,JSON.stringify(cost,null,2));console.log(JSON.stringify({freeze,cost},null,2));

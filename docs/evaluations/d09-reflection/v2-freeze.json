@@ -1,0 +1,30 @@
+{
+  "created_at": "2026-10-04T15:17:52.244Z",
+  "source_file": "src/dev/reflection-v2.ts",
+  "source_sha": "2a74c0c184c8be3137199cd765a1130d4cb8b694c51da9b56c2b014912cc84a6",
+  "compiled_sha": "8b472a48a63775afa86074d8ff75f0533e45bc6b0259ff487d8361b49185e99f",
+  "schema_sha": "c870bf85c44eb2dea558a5a9904e0dde91ecd74f9a93eb2ff3f7986cb3a724ba",
+  "prompt_sha": "fa80b3d799d05f5800eed9d0dfd09433b61f2714bfac0630b35635ee68a83a09",
+  "evidence_version": 2,
+  "reason_codes": [
+    "invalid_claim_shape",
+    "unknown_evidence",
+    "claim_subject_mismatch",
+    "claim_count_mismatch",
+    "claim_direction_mismatch",
+    "claim_episode_mismatch",
+    "claim_state_mismatch",
+    "claim_trajectory_mismatch",
+    "unsupported_claim_from_evidence",
+    "missing_positive_evidence",
+    "environment_not_character_evidence",
+    "missing_provenance_not_tension",
+    "authority_restatement",
+    "unsafe_statement",
+    "rendering_limit",
+    "duplicate_claim"
+  ],
+  "reason_codes_sha": "667731f0ea4e39fa8b4bfabe46516ca51fbe150a834a4cc7cc2790db3e60ef20",
+  "development_sha": "db682f22343a4083e3596263bf20f8a9e891b7212ed698ef636a5f81cdebb062",
+  "schema_changed": true
+}
