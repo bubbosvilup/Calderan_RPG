@@ -1,5 +1,6 @@
 import { ProviderError, providerError, type ProviderErrorCode } from "../errors.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../../types/resource-limits.js";
+import {failureClass} from "../reliability.js";
 import type { GenerationMetadata, Usage } from "../types.js";
 
 export interface ClientConfig {
@@ -25,7 +26,7 @@ function statusCode(status: number): ProviderErrorCode {
   return status === 401 || status === 403 ? "authentication_error" : status === 429 ? "rate_limited" : status >= 500 ? "provider_unavailable" : "invalid_provider_response";
 }
 function parse(text: string): Record<string, unknown> {
-  try { return record(JSON.parse(text)); } catch { throw new ProviderError("invalid_provider_response"); }
+  try { return record(JSON.parse(text)); } catch { throw new ProviderError("invalid_provider_response",undefined,undefined,"malformed_envelope"); }
 }
 function usage(value: unknown): Usage {
   if (!value || typeof value !== "object") return {};
@@ -66,7 +67,7 @@ export class OpenRouterClient {
       if (typeof event.provider === "string" && event.provider.trim()) upstream_provider ??= event.provider.trim().slice(0, 80);
       if (event.error) {
         const code = record(event.error).code;
-        throw new ProviderError(typeof code === "number" ? statusCode(code) : "provider_unavailable");
+        throw new ProviderError(typeof code === "number" ? statusCode(code) : "provider_unavailable",undefined,undefined,typeof code==="number"&&code<500&&code!==429?"http_nonretryable":"http_retryable");
       }
       if (event.usage) {
         tokens = usage(event.usage);
@@ -79,7 +80,7 @@ export class OpenRouterClient {
       const message = record(streaming ? choice.delta : choice.message);
       if (message.refusal || choice.finish_reason === "content_filter") throw new ProviderError("model_refusal");
       if (choice.finish_reason != null) {
-        if (choice.finish_reason !== "stop") throw new ProviderError("invalid_provider_response");
+        if (choice.finish_reason !== "stop") throw new ProviderError("invalid_provider_response",undefined,undefined,choice.finish_reason==="length"?"finish_reason_length":"invalid_provider_response");
         finished = true;
       }
       const delta = message.content;
@@ -99,7 +100,7 @@ export class OpenRouterClient {
         body: payload, signal: abort.signal,
       });
       headers_ms = performance.now() - started;
-      if (!response.ok) { await response.body?.cancel(); throw new ProviderError(statusCode(response.status)); }
+      if (!response.ok) { await response.body?.cancel(); throw new ProviderError(statusCode(response.status),undefined,undefined,response.status===429||response.status>=500?"http_retryable":"http_nonretryable"); }
       if (!response.body) throw new ProviderError("invalid_provider_response");
       reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -125,7 +126,7 @@ export class OpenRouterClient {
         if (part.done) break;
       }
       if (!streaming) { const delta = consume(parse(buffer)); if (delta) yield { type: "text_delta", text: delta }; }
-      if (!finished || !text.trim() || (streaming && !doneMarker)) throw new ProviderError("invalid_provider_response");
+      if (!finished || !text.trim() || (streaming && !doneMarker)) throw new ProviderError("invalid_provider_response",undefined,undefined,!text.trim()?"empty_output":"invalid_provider_response");
       yield { type: "completed", metadata: { model: body.model, ...(upstream_provider ? { provider: upstream_provider } : {}), ...(cost_usd === undefined ? {} : { cost_usd }), usage: tokens, latency: {
         request_started_at, headers_ms, time_to_first_token_ms: streaming ? first : null,
         completed_at: new Date().toISOString(), elapsed_total_ms: performance.now() - started,
@@ -134,7 +135,7 @@ export class OpenRouterClient {
       throw new ProviderError(timedOut ? "timeout" : signal?.aborted ? "cancelled" : providerError(error).code, {
         request_started_at, headers_ms, time_to_first_token_ms: streaming ? first : null,
         completed_at: new Date().toISOString(), elapsed_total_ms: performance.now() - started,
-      });
+      },undefined,timedOut?"timeout":signal?.aborted?undefined:failureClass(error));
     } finally {
       clearTimeout(timer); signal?.removeEventListener("abort", cancel); abort.abort();
       await reader?.cancel().catch(() => {}); reader?.releaseLock();

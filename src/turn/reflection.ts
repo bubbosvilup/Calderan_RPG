@@ -7,6 +7,9 @@ import { characterView } from "../campaign/projections.js";
 import { npcDeepSources } from "./npc-plus.js";
 import { escapeRegExp as esc } from "./language/text.js";
 import { emitReflectionDiagnostics, type ReflectionDiagnosticsSink } from "./reflection-diagnostics.js";
+import {maintenanceCall,invalidStructured} from "../llm/reliability.js";
+import {ProviderError} from "../llm/errors.js";
+import {TurnError} from "./turn-types.js";
 
 /**
  * NPC+ Pass 6 — bounded, evidence-cited reflection. A small model INTERPRETS existing evidence about one active NPC+ (recent structured
@@ -202,7 +205,7 @@ export function mergeNotes(existing: readonly ReflectionNote[], accepted: readon
   return out;
 }
 
-export interface ReflectionRun { readonly character_id: string; readonly status: "committed" | "malformed" | "provider_failed" | "stale" | "no_evidence";
+export interface ReflectionRun { readonly attempts?: import("../llm/retry.js").ProviderAttemptRecord; readonly character_id: string; readonly status: "committed" | "malformed" | "provider_failed" | "stale" | "no_evidence";
   readonly accepted: readonly Proposal[]; readonly rejected: readonly { readonly reason: RejectReason; readonly proposal: unknown }[]; readonly notes: number; readonly usage?: unknown; readonly model?: string;
   readonly elapsed_ms?: number; readonly provider_ms?: number; readonly parsed_proposals?: number; readonly committed_revision?: number; readonly updated_notes?: number; readonly new_notes?: number }
 /**
@@ -210,7 +213,7 @@ export interface ReflectionRun { readonly character_id: string; readonly status:
  * `max_characters` due NPC+ (stable order), each as its own separate revision; a provider error, malformed output or a newer revision
  * (stale) changes nothing. Even an all-rejected run records `last_reflected_revision`, so the same evidence is not re-sent every turn.
  */
-export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink } = {}): Promise<readonly ReflectionRun[]> {
+export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../llm/retry.js").ProviderRetryPolicy } = {}): Promise<readonly ReflectionRun[]> {
   const runs: ReflectionRun[] = [];
   const started = performance.now();
   const base = campaign.exportSnapshot();
@@ -228,10 +231,12 @@ export async function reflectAfterTurn(campaign: CampaignState, world: WorldStor
     if (!catalog.length) { runs.push({ ...empty, status: "no_evidence" }); continue; }
     let output: Awaited<ReturnType<ReflectionProvider["reflect"]>>;
     const providerStarted = performance.now();
+    let attempts: import("../llm/retry.js").ProviderAttemptRecord|undefined;
+    const request={ character, evidence: catalog.map(e => ({ ref: e.ref, kind: e.kind, text: e.text })), existing: existing.map(n => ({ kind: n.kind, label: n.label, text: n.text })), ...(options.timeout_ms ? { timeout_ms: options.timeout_ms } : {}) };
     try {
-      output = await provider.reflect({ character, evidence: catalog.map(e => ({ ref: e.ref, kind: e.kind, text: e.text })), existing: existing.map(n => ({ kind: n.kind, label: n.label, text: n.text })), ...(options.timeout_ms ? { timeout_ms: options.timeout_ms } : {}) });
-    } catch { runs.push({ ...empty, status: "provider_failed", elapsed_ms: performance.now() - characterStarted, provider_ms: performance.now() - providerStarted }); continue; }
-    const measured = { elapsed_ms: performance.now() - characterStarted, provider_ms: performance.now() - providerStarted,
+      output = await maintenanceCall({subsystem:"reflection",...(options.retry_policy?{policy:options.retry_policy}:{}),checkpoint:()=>{if(campaign.revision!==snapshot.revision)throw new TurnError("stale_turn");},record:r=>{attempts=r;},run:async timeout=>{const response=await provider.reflect({...request,...(timeout?{timeout_ms:Math.min(timeout,request.timeout_ms??Infinity)}:{})});invalidStructured(response.text,()=>parseReflectionOutput(response.text)!==undefined);return response;}});
+    } catch(error) { runs.push({ ...empty, ...(attempts?{attempts}:{}),status:error instanceof TurnError?"stale":error instanceof ProviderError&&error.code==="structured_output_invalid"?"malformed":"provider_failed", elapsed_ms: performance.now() - characterStarted, provider_ms: performance.now() - providerStarted }); continue; }
+    const measured = { ...(attempts?{attempts}:{}),elapsed_ms: performance.now() - characterStarted, provider_ms: performance.now() - providerStarted,
       ...(output.model ? { model: output.model } : {}), ...(output.usage ? { usage: output.usage } : {}) };
     const raw = parseReflectionOutput(output.text);
     if (!raw) { runs.push({ ...empty, ...measured, status: "malformed" }); continue; }

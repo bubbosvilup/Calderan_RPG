@@ -6,7 +6,8 @@ import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 import { TurnError } from "../turn-types.js";
 import { withProviderRetry, type ProviderAttemptRecord, type ProviderBudget, type ProviderRetryPolicy } from "../../llm/retry.js";
-import { providerRetryReason } from "../../llm/retry.js";
+import {providerRetryReason} from "../../llm/retry.js";
+import { technicalRetryReason } from "../../llm/reliability.js";
 import type { TurnIntent } from "./intent.js";
 
 /**
@@ -35,8 +36,8 @@ export type DraftGenerator = (request: NarratorRequest) => Promise<NarratorDraft
  * H5: with `retry`, a transient provider failure (or an empty/inconsistent completion) restarts the call from the same request with a
  * fresh buffer; a failed attempt's partial text is dropped here and never reaches the coordinator, history or controller.
  */
-export interface DraftRetry { readonly policy: ProviderRetryPolicy; readonly budget: ProviderBudget; readonly record: (record: ProviderAttemptRecord) => void; readonly attempt_started?: (attempt: number) => void }
-const narratorRetryReason = (error: unknown): string | undefined => providerRetryReason(error) ?? (error instanceof TurnError && error.code === "narrator_failed" ? "empty_or_inconsistent_completion" : undefined);
+export interface DraftRetry { readonly technical_contract?:boolean; readonly policy: ProviderRetryPolicy; readonly budget: ProviderBudget; readonly record: (record: ProviderAttemptRecord) => void; readonly attempt_started?: (attempt: number) => void }
+const narratorRetryReason = (error: unknown, technical=false): string | undefined => (technical?technicalRetryReason(error):providerRetryReason(error)) ?? (error instanceof TurnError && error.code === "narrator_failed" ? "empty_or_inconsistent_completion" : undefined);
 export function createDraftGenerator(narrator: NarratorProvider, signal: AbortSignal, checkpoint: () => void, on_delta?: (characters: number) => void, retry?: DraftRetry): DraftGenerator {
   const once = async (request: NarratorRequest, timeout_ms?: number | undefined): Promise<NarratorDraft> => {
     let buffer = "", result: NarratorResult | undefined;
@@ -50,6 +51,6 @@ export function createDraftGenerator(narrator: NarratorProvider, signal: AbortSi
     return { text: buffer, result };
   };
   if (!retry) return request => once(request);
-  return request => withProviderRetry({ ...retry, signal, checkpoint, reason: narratorRetryReason, run: (_attempt, timeout_ms) => once(request, timeout_ms) });
+  return request => withProviderRetry({ ...retry, signal, checkpoint, reason: e=>narratorRetryReason(e,retry.technical_contract), run: (_attempt, timeout_ms) => once(request, timeout_ms) });
 }
 

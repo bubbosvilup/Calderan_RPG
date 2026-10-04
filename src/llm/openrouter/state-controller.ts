@@ -19,7 +19,7 @@ Propose add_household_rule only when the player's own action explicitly declares
 adjust_relationship records one step (raise or lower) in how one character (never Nicco) feels about another, only when the narration shows that character's own clear act or words evidencing it: for example voluntarily accepting help or confiding (trust), defending or shielding someone (protectiveness), embracing (affection), flinching away (wariness), or attacking (hostility). Nicco buying, gifting, healing or declaring family does not change another person's feelings by itself. Romance requires two adults.
 No trust commands are allowed; never infer feelings from mere presence or politeness. Return proposals only, with no prose or reasoning.
 For every proposed state command, provide the shortest exact verbatim excerpt from the finalized narration that by itself establishes that state change: it must contain who acts, the verb (the telling or taking) and what is told or taken. When one sentence establishes several changes, use that whole sentence for each of them. Do not cite reactions, implications or hypothetical statements.`;
-export interface ControllerConfig { readonly model?: string; readonly timeout_ms?: number; readonly max_output_tokens?: number; readonly reasoning_effort?: "minimal" | "low" }
+export interface ControllerConfig { readonly strict_output?:boolean; readonly model?: string; readonly timeout_ms?: number; readonly max_output_tokens?: number; readonly reasoning_effort?: "minimal" | "low" }
 export class OpenRouterStateControllerProvider implements StateControllerProvider {
   constructor(private readonly client = new OpenRouterClient(), private readonly config: ControllerConfig = {}) {}
   async propose(request: ControllerRequest): Promise<ControllerResult> {
@@ -39,16 +39,15 @@ export class OpenRouterStateControllerProvider implements StateControllerProvide
         catch { /* fall through */ }
         try { return { commands: parseControllerProposal(text), ...event.metadata }; }
         catch { /* fall through */ }
-        // Controller Reliability Pass 1: one lossless structural normalization, then the same strict parser. Authorization is unchanged.
+        // Historical R1 normalization is preserved by default; strict candidate mode retains it for diagnostics only.
         const normalization = normalizeControllerOutput(text);
         let final_parse = "not_attempted";
-        if (normalization.normalized_json) {
-          try { const parsed = parseControllerEvidenceProposal(normalization.normalized_json); return { commands: parsed.map(p => p.command), evidence: parsed.map(p => p.evidence_quote), normalization: { ...normalization, final_parse: "ok", raw_text: text }, ...event.metadata }; }
-          catch { final_parse = "strict_parse_failed_after_normalization"; }
-        }
+        // Evaluation contract keeps normalization diagnostic-only; legacy production remains unchanged.
+        if(!this.config.strict_output&&normalization.normalized_json){try{const parsed=parseControllerEvidenceProposal(normalization.normalized_json);return {commands:parsed.map(p=>p.command),evidence:parsed.map(p=>p.evidence_quote),normalization:{...normalization,final_parse:"ok",raw_text:text},...event.metadata};}catch{final_parse="strict_parse_failed_after_normalization";}}
+        if (normalization.normalized_json) final_parse = "diagnostic_only_not_accepted";
         // Repair 1.2: strict parsing unchanged; the failed output is preserved for debug artifacts only.
         throw new ProviderError("structured_output_invalid", event.metadata.latency, { raw_text: text, model: event.metadata.model, finish_reason: "stop", usage: event.metadata.usage,
-          expected_schema: "campaign_proposal_with_evidence (legacy campaign_proposal also accepted)", parse_error: diagnoseControllerOutput(text), normalization: { ...normalization, final_parse } });
+          expected_schema: "campaign_proposal_with_evidence (legacy campaign_proposal also accepted)", parse_error: diagnoseControllerOutput(text), normalization: { ...normalization, final_parse } }, (()=>{try{JSON.parse(text);return "schema_invalid" as const;}catch{return "malformed_envelope" as const;}})());
       }
     }
     throw new ProviderError("invalid_provider_response");

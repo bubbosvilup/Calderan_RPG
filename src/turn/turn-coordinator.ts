@@ -13,6 +13,7 @@ import type { NarratorProvider, NarratorResult } from "../llm/narrator-provider.
 import type { StateControllerProvider } from "../llm/state-controller-provider.js";
 import { ProviderError } from "../llm/errors.js";
 import { DEFAULT_RETRY_POLICY, NO_RETRY_POLICY, ProviderBudget, type ProviderAttemptRecord, type ProviderRetryPolicy } from "../llm/retry.js";
+import {ReliabilityMetrics,diagnosticSync} from "../llm/reliability.js";
 import type { WorldStore } from "../world/world-store.js";
 import type { NarratorPromptOptions } from "./prompt-builder.js";
 import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./retrieval-policy.js";
@@ -41,13 +42,13 @@ export type { TurnDebugRecord } from "./turn-types.js";
 const active = new WeakSet<CampaignState>();
 /** Observe final audited delivery against generation-time authority and cues surviving packing. */
 function inspectPackedPortrayal(world: WorldStore, projected: DeepReadonly<CampaignSnapshot>, context: TurnContext, prompt: GenerationRequest, turn_id: string, revision: number, player_input: string, narration: string) {
-  return new MannerismPortrayalGate().inspect({ turn_id, revision, player_input, narration,
+  return diagnosticSync(()=>new MannerismPortrayalGate().inspect({ turn_id, revision, player_input, narration,
     characters: context.characters.map(c => ({ id: c.id, name: c.profile.name ?? world.getEntity(c.id)?.name ?? c.id })),
     cues: projected.premium_characters.flatMap(p => (p.mannerisms ?? []).filter(m => prompt.messages.some(msg => msg.content.includes(`- ${m.text} [recurrence=${mannerismEpistemicState(m)};`))).map(m => ({
       character_id: p.character_id, character_name: context.characters.find(c => c.id === p.character_id)?.profile.name ?? world.getEntity(p.character_id)?.name ?? p.character_id,
       mannerism: m, local_evidence: context.characters.find(c => c.id === p.character_id)?.current.presentation,
     }))),
-  });
+  }),()=>{});
 }
 
 export class TurnCoordinator {
@@ -55,7 +56,7 @@ export class TurnCoordinator {
   readonly #lastInput = new WeakMap<CampaignState, string>();
   readonly #participants = new WeakMap<CampaignState, SceneParticipants>();
   constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean;
-  /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly context_policy?: ContextPolicy; readonly context_compaction?: ContextCompactionService; readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
+  /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly reliability_contract?:boolean; readonly context_policy?: ContextPolicy; readonly context_compaction?: ContextCompactionService; readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
@@ -71,6 +72,7 @@ export class TurnCoordinator {
     // Spanning state: only what the failure path and `finally` need. Everything else is an immutable stage output.
     let stage: TurnFailure = "context_invalid", shown = "", narration: NarratorResult | undefined, recorded = false, owned = false;
     const observer = this.promptOptions.diagnostics_sink ? new TurnDiagnosticObserver(base_revision) : undefined;
+    const reliability=new ReliabilityMetrics();
     const measure = <T>(phase: DiagnosticPhase, action: () => T): T => observer ? observer.sync(phase, action) : action();
     const measureAsync = <T>(phase: DiagnosticPhase, action: () => Promise<T>, provider = false): Promise<T> => observer ? observer.async(phase, action, provider) : action();
     const network = new AbortController();
@@ -112,11 +114,11 @@ export class TurnCoordinator {
       if (observer) observer.record.narrator = { completed: false, streamed_characters: 0, final_text_characters: 0 };
       const retryPolicy = this.promptOptions.provider_retry === false ? NO_RETRY_POLICY : this.promptOptions.provider_retry ?? DEFAULT_RETRY_POLICY;
       const budget = new ProviderBudget(retryPolicy);
-      const attempts = (key: "narrator" | "revision_narrator" | "controller") => (record: ProviderAttemptRecord) => { if (observer) (observer.record.provider_attempts ??= {})[key] = record; };
+      const attempts = (key: "narrator" | "revision_narrator" | "controller") => (record: ProviderAttemptRecord) => { reliability.observe(key==="revision_narrator"?"reconciliation":key,record);if (observer) (observer.record.provider_attempts ??= {})[key] = this.promptOptions.reliability_contract?{...record,logical_request_id:`${observer.record.turn_id}:${base_revision}:${key}`}:record; };
       const generate = createDraftGenerator(this.narrator, network.signal, checkpoint, observer ? count => {
         const record = revisionGeneration ? observer.record.revision_narrator : observer.record.narrator;
         if (record) record.streamed_characters += count;
-      } : undefined, { policy: retryPolicy, budget, record: record => attempts(revisionGeneration ? "revision_narrator" : "narrator")(record),
+      } : undefined, { technical_contract:!!this.promptOptions.reliability_contract,policy: retryPolicy, budget, record: record => attempts(revisionGeneration ? "revision_narrator" : "narrator")(record),
         // A discarded attempt's partial characters are not counted as the delivered stream.
         attempt_started: () => { const record = revisionGeneration ? observer?.record.revision_narrator : observer?.record.narrator; if (record) record.streamed_characters = 0; } });
       const drafted = await measureAsync("narrator", () => generate(prompt), true);
@@ -129,7 +131,7 @@ export class TurnCoordinator {
       // ControllerStage: a PROPOSAL only — not authorization, not state, not truth.
       checkpoint(); stage = "controller_failed";
       const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft,
-        retry: { policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
+        retry: { technical_contract:!!this.promptOptions.reliability_contract,policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
       if (observer) observer.record.controller = { model: proposed.result.model, ...(proposed.result.provider ? { provider: proposed.result.provider } : {}), usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
         parse_success: false, proposed_count: proposed.result.commands.length, command_kinds: proposed.result.commands.map(c => c.kind), normalization_used: !!proposed.result.normalization };
       checkpoint();
@@ -177,27 +179,23 @@ export class TurnCoordinator {
 
       if (observer?.record.audit) Object.assign(observer.record.audit, { revision_issue_count: delivery.revision_issues.length,
         revision_issue_kinds: delivery.revision_issues.map(i => i.kind), redaction_used: delivery.delivered === "redacted", delivered: delivery.delivered });
-
       // CommitPreparation: name-driven identity on the DELIVERED narration joins the batch, or is skipped observably (H1).
       const plan = measure("commit_preparation", () => prepareCommit({ world: this.world, prepare: proposal => campaign.prepare(proposal), prepared, commands, finalized: this.recent(campaign).finalized(), player_input,
         delivered: delivery.text, scene, base_revision, location_changed: origin !== arrival,
         on_skip: reason => sink?.({ kind: "identity_establishment_skipped", campaign_id: snapshot.campaign_id, base_revision, player_input, reason }) }));
       if (observer) Object.assign(observer.record.commit, { identity_promotion_count: plan.identity.promoted.length, identity_skipped: !!plan.identity_skipped,
         location_changed_naming_skip: origin !== arrival });
-
-      if (observer) observer.record.mannerism_portrayal = inspectPackedPortrayal(this.world, projected, context, prompt, observer.record.turn_id, base_revision, player_input, delivery.text);
-      // Delivery, then the authoritative commit.
-      shown = delivery.text; // Only audited, delivered narration is ever exposed, including on a later failure.
-      yield { type: "narration_delta", text: delivery.text };
-      yield { type: "narration_completed", text: delivery.text };
+      if (observer) {const portrayal=inspectPackedPortrayal(this.world, projected, context, prompt, observer.record.turn_id, base_revision, player_input, delivery.text);if(portrayal)observer.record.mannerism_portrayal=portrayal;else reliability.increment("shadow_skips");}
+      // A deliverable is prepared and checked before committing; publication follows the single commit.
+      if(!delivery.text.trim())throw new TurnError("narrator_failed");
+      if(!this.promptOptions.reliability_contract){shown=delivery.text;yield {type:"narration_delta",text:delivery.text};yield {type:"narration_completed",text:delivery.text};}
       if (observer) { observer.phase = "commit"; }
       const commitStart = observer ? performance.now() : 0;
       checkpoint();
       const committed = campaign.commit(plan.receipt); // No await/callback/yield between the last checkpoint and commit.
-
+      if(Object.values(observer?.record.provider_attempts??{}).some(r=>r?.recovered))reliability.increment("state_commit_after_retry_count");
       if (observer) { observer.elapsed("commit", commitStart, false); observer.record.commit.attempted = true; observer.record.commit.succeeded = true; observer.phase = "publication"; }
       const publicationStart = observer ? performance.now() : 0;
-
       // Publication: conversation history and scene continuity are updated only after the commit.
       this.recent(campaign).add({ player: player_input, narration: delivery.text, status: "finalized", location_id: prepared.snapshot.runtime.scene.player_location }); recorded = true;
       this.participants(campaign).commit(scene, delivery.text);
@@ -207,9 +205,13 @@ export class TurnCoordinator {
         controller_prior_state: proposed.prior_state, context, recent, access: auditor.access, scene, participants_after: participantsAfter, commit_plan: plan,
         origin, arrival, intent, narrator_end: narratorEnd, start });
       if (observer) { observer.elapsed("publication", publicationStart, false); observer.record.outcome = "success"; }
+      if(this.promptOptions.reliability_contract){shown=delivery.text;yield {type:"narration_delta",text:delivery.text};yield {type:"narration_completed",text:delivery.text};}
       yield { type: "state_committed", ...committed };
       yield freezeSnapshot({ type: "turn_completed" as const, result }) as TurnEvent;
     } catch (error) {
+      reliability.increment("player_turn_degraded_failure_count");
+      if(error instanceof TurnError&&error.code==="stale_turn")reliability.increment("stale_revision_count");
+      if(error instanceof TurnError&&error.code==="turn_in_progress")reliability.increment("duplicate_effect_prevented_count");
       const code = signal?.aborted ? "cancelled" : error instanceof TurnError ? error.code : stage;
       if (observer) { observer.record.outcome = "failure"; observer.record.failure_code = code; observer.record.failure_phase = observer.phase;
         if (observer.phase === "commit" && !(error instanceof TurnError)) observer.record.commit.attempted = true;
@@ -225,7 +227,7 @@ export class TurnCoordinator {
       // Runtime Continuity Repair 1: only delivered text is ever retained; an undelivered draft or revision never enters history.
       if (narration && !recorded) this.recent(campaign).add({ player: player_input, narration: shown, status: "state_failed" });
       if (owned) active.delete(campaign);
-      if (observer && this.promptOptions.diagnostics_sink) observer.emit(this.promptOptions.diagnostics_sink, campaign.revision);
+      if (observer && this.promptOptions.diagnostics_sink) {if(this.promptOptions.reliability_contract)observer.record.provider_reliability={...reliability.counters};observer.emit(this.promptOptions.diagnostics_sink, campaign.revision);}
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ProviderError, type ProviderErrorCode } from "./errors.js";
+import { ProviderError, normalizeProviderFailure,type ProviderErrorCode } from "./errors.js";
 
 /**
  * Hardening H5 — bounded transient-failure retry for provider calls. Transport classification only: a retry is a NEW request with the
@@ -66,6 +66,8 @@ export class ProviderBudget {
 /** What happened across the attempts of ONE logical provider call. No request content. */
 export interface ProviderAttemptRecord {
   attempts: number; retry_reasons: string[]; recovered: boolean;
+  failure_classes?: import("./errors.js").ProviderFailureClass[];
+  logical_request_id?:string;
   /** Cumulative wall time of all attempts (excludes backoff). */
   provider_ms: number;
   /** "success" or the final failure code (ProviderErrorCode, or a local code such as narrator_failed / cancelled / stale_turn). */
@@ -103,6 +105,7 @@ export async function withProviderRetry<T>(i: RetryRun<T>): Promise<T> {
       return result;
     } catch (error) {
       rec.provider_ms += i.policy.now() - started;
+      if(error instanceof ProviderError)(rec.failure_classes??=[]).push(normalizeProviderFailure(error));
       const reason = i.signal.aborted ? undefined : (i.reason ?? providerRetryReason)(error);
       const delay = Math.min(i.policy.max_backoff_ms, i.policy.backoff_ms + i.policy.random() * Math.max(0, i.policy.max_backoff_ms - i.policy.backoff_ms));
       if (!reason || attempt >= max || i.budget.remaining() - delay < i.policy.min_retry_window_ms) { rec.final_outcome = codeOf(error); publish(); throw error; }

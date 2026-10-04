@@ -12,6 +12,9 @@ import type { GenerationMetadata } from "../llm/types.js";
 import type { TurnResult } from "./turn-types.js";
 import { escapeRegExp } from "./language/text.js";
 import { buildTurnContext } from "./context-builder.js";
+import {maintenanceCall} from "../llm/reliability.js";
+import {ProviderError} from "../llm/errors.js";
+import {TurnError} from "./turn-types.js";
 
 export interface MannerismExtractionTurn { sequence: number; narration: string; characters: { id: string; name: string }[]; items: { id: string; name: string; character_id: string; worn: boolean }[] }
 export interface MannerismExtractionRequest {
@@ -84,12 +87,12 @@ export function validateExtractedMannerisms(output: string, request: MannerismEx
   }
   return { observations, metrics };
 }
-export interface MannerismRun { status: "queued" | "processed" | "provider_failed" | "malformed" | "stale" | "bounded_skip" | "not_needed"; metrics: MannerismMetrics; metadata?: GenerationMetadata; latency_ms?: number; sources?: number }
+export interface MannerismRun { attempts?: import("../llm/retry.js").ProviderAttemptRecord; status: "queued" | "processed" | "provider_failed" | "malformed" | "stale" | "bounded_skip" | "not_needed"; metrics: MannerismMetrics; metadata?: GenerationMetadata; latency_ms?: number; sources?: number }
 const sha = (text: string) => createHash("sha256").update(text).digest("hex");
 /** One session-local bounded raw queue; only hashes/spans/candidate summaries persist. */
 export class MannerismMaintenance {
   readonly #pending: MannerismExtractionTurn[] = [];
-  constructor(readonly world: WorldStore, readonly provider: MannerismExtractor) {}
+  constructor(readonly world: WorldStore, readonly provider: MannerismExtractor,readonly retry_policy?:import("../llm/retry.js").ProviderRetryPolicy) {}
   async afterFinalizedTurn(campaign: CampaignState, turn_id: string, result: Pick<TurnResult, "narration" | "final_revision">, signal?: AbortSignal): Promise<MannerismRun> {
     const empty = () => ({ status: "not_needed" as const, metrics: emptyMannerismMetrics() });
     const before = campaign.exportSnapshot();
@@ -113,11 +116,12 @@ export class MannerismMaintenance {
     const request = { ...frozen, ...(signal ? { signal } : {}) } as unknown as MannerismExtractionRequest;
     let validated = { observations: [] as ValidatedMannerismObservation[], metrics: emptyMannerismMetrics() }, status: MannerismRun["status"] = "processed", metadata: GenerationMetadata | undefined;
     const started = performance.now();
+    let attempts:import("../llm/retry.js").ProviderAttemptRecord|undefined;
     if (JSON.stringify(request).length > 80000) status = "bounded_skip";
     else if (turns.length) {
       let output: Awaited<ReturnType<MannerismExtractor["extract"]>>;
-      try { output = await this.provider.extract(request); metadata = output.metadata; }
-      catch { status = "provider_failed"; output = { text: "" }; }
+      try { output = await maintenanceCall({subsystem:"extractor",...(this.retry_policy?{policy:this.retry_policy}:{}),...(signal?{signal}:{}),checkpoint:()=>{if(campaign.revision!==snapshot.revision)throw new TurnError("stale_turn");if(signal?.aborted)throw new ProviderError("cancelled");},record:r=>{attempts=r;},run:async()=>{const response=await this.provider.extract(request);let value:unknown;try{value=JSON.parse(response.text);}catch{throw new ProviderError("structured_output_invalid",undefined,undefined,response.text.trim()?"malformed_envelope":"empty_output");}try{parser(value,"mannerism_extraction");}catch{throw new ProviderError("structured_output_invalid",undefined,undefined,"schema_invalid");}return response;}}); metadata = output.metadata; }
+      catch(error) { status = error instanceof ProviderError&&error.code==="structured_output_invalid"?"malformed":"provider_failed"; output = { text: "" }; }
       if (status === "processed") try { validated = validateExtractedMannerisms(output.text, request, snapshot, this.world); } catch { status = "malformed"; }
     }
     if (campaign.revision !== snapshot.revision || signal?.aborted) return { status: "stale", metrics: emptyMannerismMetrics(), latency_ms: performance.now() - started };
@@ -125,6 +129,6 @@ export class MannerismMaintenance {
     this.#pending.length = 0;
     const metrics = { ...commit.metrics, observations_considered: validated.metrics.observations_considered, observations_rejected_personality: validated.metrics.observations_rejected_personality + commit.metrics.observations_rejected_personality,
       observations_rejected_prerequisite: validated.metrics.observations_rejected_prerequisite + commit.metrics.observations_rejected_prerequisite, observations_rejected_evidence: validated.metrics.observations_rejected_evidence + commit.metrics.observations_rejected_evidence };
-    return { status, metrics, ...(metadata ? { metadata } : {}), latency_ms: performance.now() - started, sources: turns.length };
+    return { status, metrics, ...(attempts?{attempts}:{}),...(metadata ? { metadata } : {}), latency_ms: performance.now() - started, sources: turns.length };
   }
 }
