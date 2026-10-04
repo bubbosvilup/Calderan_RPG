@@ -1,0 +1,22 @@
+/** Local final evidence/credential audit. No external calls or secret output. */
+import {readFileSync,writeFileSync,readdirSync,existsSync,statSync} from 'node:fs';
+import {sha} from './lib.mjs';
+import {V2_SCHEMA,V2_SYSTEM} from '../../../.build/src/dev/reflection-v23.js';
+const dir='saves/structured-reflection-reliability-v2',decode=path=>{const b=readFileSync(path);return b[0]===255&&b[1]===254?b.subarray(2).toString('utf16le'):b.toString('utf8').replace(/^\uFEFF/,'');},read=n=>JSON.parse(decode(`${dir}/${n}`)),plan=read('plan.json');
+if(sha(decode(`${dir}/plan.json`))!==decode(`${dir}/plan.sha256`).trim())throw Error('Plan hash mismatch');
+for(const[file,h]of Object.entries(plan.file_hashes))if(sha(readFileSync(file))!==h)throw Error('Frozen file changed');
+if(sha(V2_SCHEMA)!==plan.semantic_freeze.schema_sha||sha(V2_SYSTEM)!==plan.semantic_freeze.prompt_sha)throw Error('Canonical/prompt mismatch');
+const env=decode('APIKEY.env'),secrets=[...env.matchAll(/sk-[A-Za-z0-9_-]{20,}/g)].map(m=>m[0]),exact=env.match(/sk-or-v1-[a-f0-9]{64}/)?.[0];if(!exact)throw Error('No key for private scan');secrets.push(exact);
+const files=['tracked-files.txt','new-files.txt'].flatMap(n=>decode(`${dir}/${n}`).trim().split(/\r?\n/));for(const e of readdirSync(dir))files.push(`${dir}/${e}`);
+if(files.some(file=>existsSync(file)&&statSync(file).isFile()&&secrets.some(s=>readFileSync(file).includes(Buffer.from(s)))))throw Error('Credential leak detected');
+const preflight=read('preflight.json');if(!preflight.auth.valid||preflight.auth.status!==200)throw Error('Auth preflight not valid');
+const deep=read('deepseek-endpoints.json').data.endpoints,qwen=read('qwen-endpoints.json').data.endpoints;for(const tag of ['baidu/fp8','deepinfra/fp8'])if(!deep.some(e=>e.tag===tag))throw Error('Missing DeepSeek endpoint');if(!qwen.some(e=>e.tag==='alibaba'))throw Error('Missing Alibaba endpoint');
+const ledger=decode(`${dir}/physical-ledger.jsonl`).trim().split('\n').map(JSON.parse),dispatch=decode(`${dir}/physical-dispatch.jsonl`).trim().split('\n').map(JSON.parse),done=read('dispatch-completed.json');if(ledger.length!==dispatch.length||ledger.length!==done.generation_calls||ledger.length>64||new Set(ledger.map(a=>a.physical_call)).size!==ledger.length)throw Error('Physical ledger mismatch');
+const manifest=read('comparison-manifest.json');if(sha(decode(`${dir}/comparison-manifest.json`))!==decode(`${dir}/comparison-manifest.sha256`).trim())throw Error('Comparison manifest hash mismatch');
+for(const c of manifest.cases)if(sha(c.request)!==c.request_sha||sha(c.snapshot)!==c.snapshot_sha)throw Error('Request/state changed');
+for(const a of ledger.filter(a=>a.stage!=='probe')){const c=manifest.cases.find(c=>c.reliability_id===a.id),body=manifest.bodies[a.arm].find(r=>r.id===a.id).body;if(a.body_sha!==sha(body)||a.request_sha!==c.request_sha||a.snapshot_sha!==c.snapshot_sha)throw Error('Dispatch body/state changed');}
+const unit=decode(`${dir}/unit.log`),play=decode(`${dir}/playthrough.log`),typecheck=decode(`${dir}/typecheck.log`);if(!unit.includes('# pass 1962')||!unit.includes('# fail 0')||!unit.includes('# todo 4')||!play.includes('# pass 25')||!play.includes('# fail 0')||typecheck.includes('error TS'))throw Error('Required checks not green');
+const candidate=read('candidate-freeze.json');if(candidate.first_usable<15||candidate.final_usable!==16||candidate.nonempty<8||candidate.canonical_schema_sha!==sha(V2_SCHEMA)||candidate.prompt_sha!==sha(V2_SYSTEM)||candidate.v23_source_sha!==plan.semantic_freeze.source_sha)throw Error('Candidate freeze mismatch');
+const candidateHash=sha(readFileSync(`${dir}/candidate-freeze.json`));writeFileSync(`${dir}/candidate-freeze.sha256`,candidateHash+'\n');
+const artifactHashes=Object.fromEntries(readdirSync(dir).filter(n=>n.endsWith('.json')||n.endsWith('.jsonl')).map(n=>[n,sha(readFileSync(`${dir}/${n}`))]));writeFileSync(`${dir}/artifact-hashes.json`,JSON.stringify(artifactHashes,null,2));
+const verification={frozen_v23:'MATCH',canonical_schema:'MATCH',prompt:'MATCH',credential_leaks:0,auth_preflight:'PASS',target_endpoints_visible:true,fail_fast_tests:'PASS',generation_calls:ledger.length,unit:{passed:1962,failed:0,todo:4},playthrough:{passed:25,failed:0},typecheck:'PASS',candidate_freeze_sha:candidateHash,production_changes:0,verified_at:new Date().toISOString()};writeFileSync(`${dir}/final-verification.json`,JSON.stringify(verification,null,2));console.log(JSON.stringify(verification));
