@@ -1,0 +1,14 @@
+{
+  "status": "NOT PRODUCED",
+  "target_families": [
+    "self_statement_synthesis",
+    "relationship_trajectory",
+    "relationship_contrast"
+  ],
+  "accepted": 0,
+  "persisted_notes": 0,
+  "rendered_text": null,
+  "environmental_fallback_used": false,
+  "legacy_environmental_motif_used": false,
+  "reason": "At the 12-attempt limit only one authoritative statement exists and no relationship developments exist; production returned a valid empty proposal envelope."
+}

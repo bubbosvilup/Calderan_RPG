@@ -1,0 +1,19 @@
+{
+  "normal_finalization": true,
+  "statement_contracts": [
+    {
+      "field": "moral_boundary",
+      "revision": 13,
+      "quote": "I won't sell someone who trusted me to buy comfort."
+    }
+  ],
+  "statement_revision": 13,
+  "reflection_source_revision": 14,
+  "maintenance_persistence_revision": 15,
+  "normal_record_reflection_empty": true,
+  "qualifying_note_persistence": "NOT ESTABLISHED: no target proposal",
+  "duplicate_writes": 0,
+  "stale_skips": 0,
+  "manual_memory_edits": 0,
+  "atomic_nonreflection_domains_unchanged": true
+}

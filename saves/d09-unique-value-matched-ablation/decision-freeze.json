@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-10-04T23:33:35.041Z",
+  "d09": "SOAK PENDING",
+  "classification": "QUALIFYING_REFLECTION_NOT_PRODUCED",
+  "prior_classification": "REFLECTION_USEFULNESS_CONCERN remains",
+  "recorded_attempts": 12,
+  "total_submissions": 13,
+  "additional_interrupted_submission": 1,
+  "submission_limit_deviation": true,
+  "finalized_turns": 11,
+  "artifact_integrity": "INCOMPLETE; no closure evidence",
+  "qualifying_note": false,
+  "matched_pairs": 0,
+  "material_benefit": false,
+  "no_gate_lowered": true,
+  "stop": "User maximum 12 attempts reached; no automatic rerun or tuning",
+  "prior_negative_result": "VALID NEGATIVE RESULT; WITH lost to WITHOUT; preserved"
+}

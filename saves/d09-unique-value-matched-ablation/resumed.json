@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-10-04T23:29:26.406Z",
+  "last_completed_attempt": 8,
+  "reason": "No persisted statement provenance; last four player turns ask narrower independent boundary questions, no model/prompt/config changes",
+  "maximum_attempts_total": 12
+}

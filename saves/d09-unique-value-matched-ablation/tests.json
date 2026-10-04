@@ -1,0 +1,19 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "pass": 2008,
+    "fail": 0,
+    "todo": 4,
+    "total": 2012
+  },
+  "playthrough": {
+    "pass": 25,
+    "fail": 0
+  },
+  "existing_todos": [
+    "group-pronoun phantom transfer",
+    "first-name condition attribution",
+    "unnamed captive price over-redaction",
+    "fronted-adverbial receipt false negative"
+  ]
+}

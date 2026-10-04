@@ -1,0 +1,19 @@
+{
+  "classification": "ARTIFACT_INDEX_COLLISION",
+  "original_interrupted_request": 20,
+  "original_receipt_preserved_in_ledger": true,
+  "original_receipt_cost_usd": 0.002116,
+  "original_request_payload": "OVERWRITTEN on resume; exact original body unavailable",
+  "resumed_request20": "Retained request-020.json and receipt-020.json belong to resumed turn 9",
+  "reason": "Interruption occurred after original next-turn narrator dispatch; resume initialized local counter from completed turn 8 instead of max captured request index",
+  "recorded_attempts": 12,
+  "additional_interrupted_submission": 1,
+  "total_submissions": 13,
+  "finalized_turns": 11,
+  "planned_submission_limit": 12,
+  "submission_cap_deviation": true,
+  "campaign_state_restored_from_exact_turn8_snapshot": true,
+  "possible_original_controller_dispatch": "UNKNOWN: any original next controller request could have shared overwritten index 21; retained artifacts do not establish its dispatch/completion/billing",
+  "evidence_chain_complete": false,
+  "closure_eligible": false
+}

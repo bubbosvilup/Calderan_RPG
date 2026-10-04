@@ -1,0 +1,76 @@
+{
+  "id": 22,
+  "turn": 9,
+  "role": "extractor",
+  "http_status": 200,
+  "latency_ms": 6531.822899999999,
+  "reported_cost_usd": 0.000129964,
+  "usage": {
+    "prompt_tokens": 1283,
+    "completion_tokens": 159,
+    "total_tokens": 1442,
+    "cost": 0.000129964,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 1024,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.000129964,
+      "upstream_inference_prompt_cost": 0.000055234,
+      "upstream_inference_completions_cost": 0.00007473
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "receipt": {
+    "id": "gen-1791156577-LfnVBW5wyM981m6dgJKC",
+    "object": "chat.completion",
+    "created": 1791156577,
+    "model": "qwen/qwen3.8-flash",
+    "provider": "Alibaba",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "{\n\"owned_reviewed_ids\": [\n\"mannerism_r2_n0\"\n],\n\"observations\": [\n{\n\"turn_sequence\": 8,\n\"character_id\": \"campaign_character_iris\",\n\"action\": \"two_finger_tap\",\n\"trigger\": \"after_awkwardness\",\n\"evidence_quote\": \"Iris's expression shifted — not dramatically, but enough. The question landed somewhere uncomfortable, and for a breath she didn't answer right away. Her thumb moved across the knuckles of her other hand\",\n\"requires_item_id\": null,\n\"requires_entity_id\": null,\n\"equivalent_owned_ids\": [\n\"mannerism_r2_n0\"\n]\n}\n]\n}",
+          "refusal": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 1283,
+      "completion_tokens": 159,
+      "total_tokens": 1442,
+      "cost": 0.000129964,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 1024,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.000129964,
+        "upstream_inference_prompt_cost": 0.000055234,
+        "upstream_inference_completions_cost": 0.00007473
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}

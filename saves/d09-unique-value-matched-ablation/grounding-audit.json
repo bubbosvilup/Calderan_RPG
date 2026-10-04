@@ -1,0 +1,16 @@
+{
+  "reflection_content": null,
+  "with_advantage_attributable_to_reflection": false,
+  "factual": null,
+  "unsupported": null,
+  "stale": null,
+  "authoritative_statement": {
+    "field": "moral_boundary",
+    "revision": 13,
+    "quote": "I won't sell someone who trusted me to buy comfort."
+  },
+  "statement_present_in_delivered_turn10": true,
+  "relationship_developments": 0,
+  "prior_negative_result": "VALID; preserved without reinterpretation",
+  "benefit": "NOT DEMONSTRATED"
+}

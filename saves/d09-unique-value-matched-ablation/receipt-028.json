@@ -1,0 +1,76 @@
+{
+  "id": 28,
+  "turn": 11,
+  "role": "controller",
+  "http_status": 200,
+  "latency_ms": 1479.5049,
+  "reported_cost_usd": 0.000269168,
+  "usage": {
+    "prompt_tokens": 2468,
+    "completion_tokens": 4,
+    "total_tokens": 2472,
+    "cost": 0.000269168,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 768,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.000269168,
+      "upstream_inference_prompt_cost": 0.000267288,
+      "upstream_inference_completions_cost": 0.00000188
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "receipt": {
+    "id": "gen-1791156598-2t7zNrc0xy5h2KGNhigf",
+    "object": "chat.completion",
+    "created": 1791156598,
+    "model": "qwen/qwen3.8-flash",
+    "provider": "Alibaba",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "{\"commands\":[]}",
+          "refusal": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2468,
+      "completion_tokens": 4,
+      "total_tokens": 2472,
+      "cost": 0.000269168,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 768,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.000269168,
+        "upstream_inference_prompt_cost": 0.000267288,
+        "upstream_inference_completions_cost": 0.00000188
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}

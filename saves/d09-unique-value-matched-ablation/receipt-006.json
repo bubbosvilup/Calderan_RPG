@@ -1,0 +1,850 @@
+{
+  "id": 6,
+  "turn": 3,
+  "role": "narrator",
+  "http_status": 200,
+  "latency_ms": 5180.828400000002,
+  "reported_cost_usd": 0.00225904,
+  "usage": {
+    "prompt_tokens": 3828,
+    "completion_tokens": 224,
+    "total_tokens": 4052,
+    "cost": 0.00225904,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 3584,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00225904,
+      "upstream_inference_prompt_cost": 0.00127344,
+      "upstream_inference_completions_cost": 0.0009856
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "receipt": [
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "I",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "ris shifted",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " on the edge of the bed",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": ", considering the question with",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " the same unhurried attention",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " she'd given the others",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": ". The room around them stayed",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " quiet — bare wardrobes, empty",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " cabinets, two patient stations",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " waiting for a purpose they",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " didn't yet have.\n\n\"I",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " can tell you what I've",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " seen of myself, at",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " least,\" she said. \"I don",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "'t take to people who press",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " and press until they get what they",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " want, especially when they",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " know the other person can",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "'t easily push back. Someone",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " who notices another person has",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " no leverage and uses that —",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " that's the company I lose",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " patience with.\" She paused,",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " glancing toward the window",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "less stone walls as though",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " checking the thought against something",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": ". \"As for sharing a room",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": ", it's easier when",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " no one is watching me for",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " a reaction. When I'm",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " not being studied, I",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " suppose. Someone just being *",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "in* the space,",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " doing their own thing —",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " that sits fine.\"\n\nHer",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " thumb passed lightly across her knuckles",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": ", a brief, absent",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " gesture. \"I don",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "'t know if that's",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " what you're asking.",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": " It's what I have",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": ".\"",
+            "role": "assistant"
+          },
+          "finish_reason": null,
+          "native_finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "",
+            "role": "assistant"
+          },
+          "finish_reason": "stop",
+          "native_finish_reason": "stop"
+        }
+      ]
+    },
+    {
+      "id": "gen-1791156453-Zs1CVuqCe0xDrYBANq5g",
+      "object": "chat.completion.chunk",
+      "created": 1791156453,
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "service_tier": null,
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "content": "",
+            "role": "assistant"
+          },
+          "finish_reason": "stop",
+          "native_finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 3828,
+        "completion_tokens": 224,
+        "total_tokens": 4052,
+        "cost": 0.00225904,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 3584,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00225904,
+          "upstream_inference_prompt_cost": 0.00127344,
+          "upstream_inference_completions_cost": 0.0009856
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    "[DONE]"
+  ]
+}

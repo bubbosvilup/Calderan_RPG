@@ -1,0 +1,28 @@
+{
+  "production_source_freeze": "PASS",
+  "state_divergences": 0,
+  "player_movement_commands": false,
+  "npc_movement_requests": false,
+  "characters_moved": 0,
+  "failed_attempts": [
+    {
+      "attempt": 4,
+      "error": {
+        "code": "controller_failed",
+        "provider_code": "rate_limited",
+        "message": "The state controller could not answer. The turn did not happen. The provider is rate limiting requests.",
+        "retryable": true,
+        "turn_state_changed": false
+      },
+      "state_before_sha": "6737730f2de798801efb28750115adba572b76177e85cb947784e7aecf35b0c6",
+      "state_after_sha": "6737730f2de798801efb28750115adba572b76177e85cb947784e7aecf35b0c6"
+    }
+  ],
+  "relevant_integrity_failure": "No campaign corruption; artifact indexing completeness failure disclosed",
+  "artifact_integrity": "FAIL: interrupted-request original body overwritten",
+  "reflection_caused_errors": 0,
+  "duplicate_reflection_writes": 0,
+  "stale_reflection_skips": 0,
+  "production_tuning": false,
+  "manual_memory_edits": false
+}

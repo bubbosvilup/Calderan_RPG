@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-10-04T23:30:10.560Z",
+  "turns": 12,
+  "successful_turns": 11,
+  "calls": 31,
+  "reported_cost_usd": 0.036115997999999996,
+  "qualifying_freezes": 0,
+  "ablation_calls": 0,
+  "next_stage": "OFFLINE marginal-value precheck REQUIRED before paid A/B",
+  "production_unchanged": true
+}

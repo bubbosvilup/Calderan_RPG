@@ -1,0 +1,107 @@
+{
+  "by_role": {
+    "narrator": {
+      "physical_receipts": 15,
+      "cost_receipts": 15,
+      "confirmed_reported_cost_usd": 0.034839919999999996,
+      "unknown_billing_calls": [],
+      "latency_ms": [
+        4215.3793000000005,
+        4425.923,
+        5180.828400000002,
+        4375.945899999999,
+        2890.040000000001,
+        3805.7609999999986,
+        4969.043599999997,
+        4775.123800000001,
+        4109.233099999998,
+        4230.7106,
+        5156.4439999999995,
+        3057.9824999999983,
+        2995.9533999999985,
+        5228.021200000003,
+        3366.8292999999976
+      ]
+    },
+    "controller": {
+      "physical_receipts": 14,
+      "cost_receipts": 11,
+      "confirmed_reported_cost_usd": 0.003053248,
+      "unknown_billing_calls": [
+        4,
+        9,
+        10
+      ],
+      "latency_ms": [
+        1450.9201999999996,
+        6461.1720000000005,
+        1362.5240000000013,
+        1478.4385000000002,
+        4697.298399999996,
+        4886.049799999993,
+        1413.8943999999974,
+        1541.4089000000022,
+        1438.4424,
+        1430.7888999999996,
+        6034.771299999999,
+        1495.8950000000004,
+        1479.5049,
+        2124.642599999999
+      ]
+    },
+    "extractor": {
+      "physical_receipts": 2,
+      "cost_receipts": 2,
+      "confirmed_reported_cost_usd": 0.000289318,
+      "unknown_billing_calls": [],
+      "latency_ms": [
+        1521.0956000000006,
+        6531.822899999999
+      ]
+    },
+    "reflection": {
+      "physical_receipts": 1,
+      "cost_receipts": 1,
+      "confirmed_reported_cost_usd": 0.000049512,
+      "unknown_billing_calls": [],
+      "latency_ms": [
+        1651.623599999999
+      ]
+    }
+  },
+  "confirmed_total_usd": 0.038231998,
+  "unreceipted": [
+    {
+      "physical": "possible original controller after interrupted narrator20",
+      "role": "controller",
+      "dispatch": "UNKNOWN",
+      "completion": "UNKNOWN",
+      "billing": "UNKNOWN",
+      "reason": "Original request indices could be overwritten; no trustworthy original dispatch/receipt artifact remains"
+    }
+  ],
+  "unknown_billing": [
+    {
+      "physical": 4,
+      "role": "controller",
+      "http_status": 429,
+      "billing": "UNKNOWN"
+    },
+    {
+      "physical": 9,
+      "role": "controller",
+      "http_status": 429,
+      "billing": "UNKNOWN"
+    },
+    {
+      "physical": 10,
+      "role": "controller",
+      "http_status": 429,
+      "billing": "UNKNOWN"
+    }
+  ],
+  "ablation_calls": 0,
+  "blind_review_calls": 0,
+  "artifact_integrity_deviation": "artifact-integrity-deviation.json",
+  "progress_cost_reconciliation": "progress/completion subtotal excludes original interrupted narrator receipt; authoritative confirmed cost includes every ledger receipt"
+}

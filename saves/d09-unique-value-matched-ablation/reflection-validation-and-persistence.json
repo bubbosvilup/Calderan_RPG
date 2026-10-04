@@ -1,0 +1,17 @@
+[
+  {
+    "turn": 10,
+    "character": "campaign_character_iris",
+    "source_revision": 14,
+    "physical": 26,
+    "wire_canonical_cvc": "PASS",
+    "semantic_diagnostics": [],
+    "accepted": [],
+    "rejected": [],
+    "valid_empty": true,
+    "latency_ms": 1651.623599999999,
+    "cost_usd": 0.000049512,
+    "atomic_persistence": true,
+    "nonreflection_domains_unchanged": true
+  }
+]

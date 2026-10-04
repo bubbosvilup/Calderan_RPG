@@ -1,0 +1,32 @@
+{
+  "later_requests": [
+    {
+      "physical": 27,
+      "turn": 11,
+      "body_sha": "e32f66a8dc56da0ced96bd557506bc9e0012de32ac1a177812e964089c7a889d",
+      "compact_lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: never sell someone who trusted me to buy comfort | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r13): joined, contract:moral_boundary"
+      ]
+    },
+    {
+      "physical": 29,
+      "turn": 12,
+      "body_sha": "318dd2ac5d192fb2bed000be843254655f2e8061a8e4f267f7dd0240b847de30",
+      "compact_lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: never sell someone who trusted me to buy comfort | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r13): joined, contract:moral_boundary"
+      ]
+    },
+    {
+      "physical": 31,
+      "turn": 12,
+      "body_sha": "61420d8e58404311ec8b0e890c57f1a4de1288f02b8a6991c5c488b3c23df7b4",
+      "compact_lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: never sell someone who trusted me to buy comfort | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r13): joined, contract:moral_boundary"
+      ]
+    }
+  ],
+  "full_qualifying_note_packed": false,
+  "note_exists": false,
+  "compact_current_moral_boundary_present": true,
+  "raw_authority_removed": false
+}
