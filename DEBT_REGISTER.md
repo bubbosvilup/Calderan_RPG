@@ -5,7 +5,7 @@
 **Movement/follow state logic:** frozen  
 **Production controller:** `qwen/qwen3.8-flash` (baseline for subsequent debt-closure work)
 **Production controller frozen:** NO
-**Last updated:** 2026-10-04
+**Last updated:** 2026-10-05
 
 This is the short, living debt register intended to stay in the repository root.
 IDs are never renumbered.
@@ -17,7 +17,7 @@ IDs are never renumbered.
 | ID | Area | Severity | Current state / next action |
 |---|---|---|---|
 | **D-06** | Occasional controller `structured_output_invalid` | MINOR | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid. |
-| **D-09** | Reflection organic usefulness unmeasured | **SOAK PENDING — BAKE-OFF DONE, READINESS A (NOT READY)** | 2026-10-04 provider/schema bake-off (25 frozen requests, 2x2 DeepSeek/Qwen x current/strict): no clear model winner; strict schema fixes shape only; validator still accepts ~25–55% misleading notes by primary-agent review (human review V3 pending); cursor-advance concern INSUFFICIENT; organic developments in play were only rules and moves. Next: offline semantic rule for membership/canon restatements and single-fact tensions. [Report](docs/evaluations/D09_REFLECTION_PROVIDER_SCHEMA_BAKEOFF.md), [packet](docs/evaluations/D09_REFLECTION_HUMAN_REVIEW_V3.md). V2: [evidence](docs/evaluations/D09_ORGANIC_CHARACTERIZATION_SOAK_V2.md). |
+| **D-09** | Reflection organic usefulness unmeasured | **SOAK PENDING - PRODUCTION INTEGRATED** | 2026-10-05: qualified V2.3-CVC-E1 structured reflection is integrated into the real finalized-turn maintenance path, Qwen/Alibaba only. Frozen semantic/CVC/provider/exposure gates retained. Production tests and bounded live smoke PASS: one accepted note persisted, recovered and packed in a later narrator request. Closure still requires real development-rich gameplay -> accepted production reflection -> persistence -> later retrieval/packing -> demonstrated narrator benefit + ablation. [Integration report](docs/evaluations/D09_PRODUCTION_STRUCTURED_REFLECTION_INTEGRATION.md). |
 | **D-16** | `private_memory_refs` has no writer | MINOR | Dead/undefined structure today. Remove in a later schema migration or give it a concrete purpose during memory work. |
 | **D-17** | Reflection trigger counts lifecycle entries | MINOR | First reflection can happen earlier than intended because lifecycle entries count. Revisit only together with D-09/D-10 evidence. |
 | **D-19** | Reconciliation / redaction rate | **IMPORTANT** | Safe but narration is still revised/redacted more often than ideal. Remains relevant for proposal/reconciliation quality; measure by path and reduce causes without weakening audits. |
@@ -73,7 +73,7 @@ NPC+ packing/performance, and prior regression repairs remain closed in their hi
 
 1. **D-19** — reduce reconciliation/redaction rate.
 2. **D-26** — OPEN — NEEDS MORE DATA: evaluate organic matcher coverage and precision before repair design.
-3. **D-09** — SOAK PENDING: obtain accepted-note/later-use exposure with richer structured NPC developments; investigate safely rejected reflection labels. Human review V2 is pending; more quiet iterations of this fixture will not close the debt.
+3. **D-09** - SOAK PENDING: production integration COMPLETE; run real development-rich campaign gameplay and demonstrate persisted reflection -> later retrieval/packing -> narration benefit + ablation.
 
 D-06 remains open pending broader runtime soak after the Qwen switch.
 
