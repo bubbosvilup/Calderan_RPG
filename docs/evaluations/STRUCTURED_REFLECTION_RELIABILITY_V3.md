@@ -1,5 +1,7 @@
 # Structured reflection reliability V3 — Qwen / Alibaba
 
+Documentation-first follow-up, reviewed 2026-10-04: [official-source research and future-probe requirements](STRUCTURED_REFLECTION_DOCUMENTATION_RESEARCH.md). No further inference calls were made. That addendum constrains future experiments and preserves this run's frozen plan, receipts and results.
+
 Reliability gate **FAIL**; blocker **SCHEMA_CONFORMANCE**; schema conformance **BLOCKED**. V2.3 **FROZEN / semantic PASS**. Production changed **NO**. D-09 **SOAK PENDING**. This task performs transport/schema screening only: no semantic OOS, review, acceptance scoring, production integration, narrator/controller, D-10 or D-26 change.
 
 ## Schema failure forensics
