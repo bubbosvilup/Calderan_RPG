@@ -1,3 +1,4 @@
+import type { EvidenceCheck } from "./evidence-check.js";
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
@@ -21,7 +22,7 @@ import { numberWordValue } from "./language/numbers.js";
  * See docs/architecture/EVIDENCE_AUTHORIZATION.md.
  */
 export type EvidenceMode = "shadow" | "hybrid";
-export interface EvidenceCheck { readonly verified: boolean; readonly check: string }
+export type { EvidenceCheck } from "./evidence-check.js";
 const QUOTE_MIN = 8;
 // Hedge, negation, hypothetical, modal/future, interruption and retraction markers anywhere in the containing sentence(s).
 // Repair 1: a bare "back" no longer disqualifies ("takes the boots back", "accepts them back" are receipts). Retreats, handing an

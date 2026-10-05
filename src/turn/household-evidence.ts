@@ -3,7 +3,7 @@ import type { TurnContext } from "./context-builder.js";
 import { dialogueFocused } from "./prompt-builder.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
 import { GATES } from "./language/gates.js";
-import type { EvidenceCheck } from "./evidence-authorization.js";
+import type { EvidenceCheck } from "./evidence-check.js";
 
 /**
  * Household Pass 1 evidence grammar.

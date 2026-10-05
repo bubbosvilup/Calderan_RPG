@@ -1,5 +1,5 @@
 import { NARRATOR_OUTPUT_TOKENS } from "../app/provider-config.js";
-import type { NarratorRequest } from "./stages/narration.js";
+import type { NarratorRequest } from "../llm/types.js";
 import type { ContextCompactionService } from "./context-compaction.js";
 import { TurnError } from "./turn-types.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";

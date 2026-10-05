@@ -23,7 +23,7 @@ function household(due = false) {
     { kind: "set_membership", household_id: "campaign_household_home", membership: { character_id: "nicco", status: "member", role: "owner" } },
     { kind: "join_household", household_id: "campaign_household_home", character_id: "brenna" },
   ] });
-  if (due) for (const dimension of ["trust", "respect"] as const) f.campaign.apply({ expected_revision: f.campaign.revision,
+  if (due) for (const dimension of ["trust", "respect", "trust"] as const) f.campaign.apply({ expected_revision: f.campaign.revision,
     commands: [{ kind: "adjust_relationship", from_character_id: "brenna", to_character_id: "nicco", dimension, direction: "raise" }] });
   const service = new RetrievalService(f.world);
   return { ...f, coordinator: new TurnCoordinator(f.world, mockNarrator("Brenna smiles."), mockController([]), { service, search: new HybridSearch(service) }) };

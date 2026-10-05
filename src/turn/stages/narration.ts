@@ -1,5 +1,5 @@
 import type { NarratorProvider, NarratorResult } from "../../llm/narrator-provider.js";
-import type { GenerationRequest } from "../../llm/types.js";
+import type { NarratorRequest } from "../../llm/types.js";
 import type { TurnContext } from "../context-builder.js";
 import { buildNarratorPrompt, type NarratorPromptOptions } from "../prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
@@ -16,7 +16,7 @@ import type { TurnIntent } from "./intent.js";
  * fallback model, no timeout policy here (H5).
  */
 
-export type NarratorRequest = Pick<GenerationRequest, "system_prompt" | "messages">;
+export type { NarratorRequest } from "../../llm/types.js";
 export interface TurnPrompt { readonly recent: readonly RecentExchange[]; readonly prompt: NarratorRequest }
 /**
  * Sync. Prompt composition from the bounded context, retained finalized conversation, retrieved canon, the intent as the narrator

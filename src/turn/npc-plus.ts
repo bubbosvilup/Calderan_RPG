@@ -129,7 +129,7 @@ export function npcDeepSources(world: WorldStore, snapshot: DeepReadonly<Campaig
   for (const n of snapshot.premium_reflections.find(r => r.character_id === characterId)?.notes ?? [])
     out.push({ handle: `npcmem:${characterId}:reflection:${n.id}`, character_id: characterId, kind: "reflection", visibility: "public", exact_payload: JSON.stringify({ type: "reflection_note", ...n }) });
   const niccoKnows = new Set(snapshot.knowledge.filter(k => k.character_id === "nicco" && k.status === "knows").map(k => k.fact_id));
-  const memoryIds = new Set([...snapshot.knowledge.filter(k => k.character_id === characterId).map(k => k.fact_id), ...(premium?.dynamic.private_memory_refs ?? [])]);
+  const memoryIds = new Set(snapshot.knowledge.filter(k => k.character_id === characterId).map(k => k.fact_id));
   for (const f of snapshot.facts.filter(x => memoryIds.has(x.id) && x.content.kind === "campaign"))
     out.push({ handle: `npcmem:${characterId}:knowledge:${f.id}`, character_id: characterId, kind: "knowledge", visibility: niccoKnows.has(f.id) ? "public" : "holder_private",
       exact_payload: f.content.kind === "campaign" ? f.content.statement : "" });

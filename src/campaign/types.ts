@@ -176,8 +176,8 @@ export interface PremiumCharacterState {
     recent_developments: PremiumHistoryEntry[];
     /** NPC+ Pass 3: deterministic structured roll-up of developments that left the recent window (counts only; never prose). */
     long_term?: PremiumRollup;
-    /** Campaign memory references (fact IDs) curated for this character; derived recovery never requires them. */
-    private_memory_refs: string[];
+    /** @deprecated Legacy save compatibility only. Ignored by runtime recovery; knowledge is authoritative. */
+    private_memory_refs?: string[];
   };
   metadata: {
     created_revision: number; last_updated_revision: number;

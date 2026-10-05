@@ -32,13 +32,14 @@ export interface ReflectionRequest { readonly character: { readonly id: string; 
   readonly wire_schema: typeof import('./structured/reflection-v23-cvc-e1.js').E1_SCHEMA; readonly timeout_ms?: number }
 export interface ReflectionProvider { reflect(request: ReflectionRequest): Promise<{ readonly text: string; readonly usage?: unknown; readonly model?: string;readonly provider?:string;readonly cost_usd?:number }> }
 
-/** When reflection is due: ≥3 developments since the last reflection, a roll-up change, or a newly established contract. Never conversation alone. */
+/** When reflection is due: ≥3 substantive developments since the last reflection (initial registration/migration excluded), a roll-up change, or a newly established contract. Never conversation alone. */
 export const REFLECTION_TRIGGER = Object.freeze({ developments: 3 });
 export function reflectionDue(snapshot: DeepReadonly<CampaignSnapshot>, characterId: string): boolean {
   const p = snapshot.premium_characters.find(x => x.character_id === characterId && x.metadata.active_household_member);
   if (!p) return false;
   const last = snapshot.premium_reflections.find(r => r.character_id === characterId)?.last_reflected_revision ?? -1;
-  return p.dynamic.recent_developments.filter(e => e.revision > last).length >= REFLECTION_TRIGGER.developments
+  // Initial registration is bookkeeping. Leave/rejoin remain meaningful membership evidence and trigger events.
+  return p.dynamic.recent_developments.filter(e => e.revision > last && e.kind !== "joined_household" && e.kind !== "migrated_member").length >= REFLECTION_TRIGGER.developments
     || (p.dynamic.long_term?.last_revision ?? -1) > last || (p.stable.contract_evidence ?? []).some(c => c.revision > last);
 }
 

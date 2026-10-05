@@ -157,7 +157,7 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
       unique(r.relationships, x => `${x.actor_id}>${x.other_id}:${x.dimension}`, "premium_characters.long_term.relationships");
       unique(r.conditions, x => x.condition, "premium_characters.long_term.conditions");
     }
-    for (const f of p.dynamic.private_memory_refs) if (!factIds.has(f)) fail("premium_characters.private_memory_refs", "unknown fact");
+    for (const f of p.dynamic.private_memory_refs ?? []) if (!factIds.has(f)) fail("premium_characters.private_memory_refs", "unknown fact");
   }
   for (const id of members.keys()) if (!s.premium_characters.some(p => p.character_id === id)) fail("premium_characters", "household member without premium state");
   // NPC+ Pass 6: reflection belongs to an NPC+, is bounded per kind, and cites only well-formed evidence handles of that character.

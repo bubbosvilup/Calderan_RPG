@@ -178,7 +178,7 @@ export function syncPremiumCharacters(draft: Draft, base: DeepReadonly<Draft>, w
   for (const [id, household] of [...members].sort(([a], [b]) => compareIds(a, b))) {
     const existing = draft.premium_characters.find(p => p.character_id === id);
     if (!existing) {
-      draft.premium_characters.push({ character_id: id, stable: {}, dynamic: { recent_developments: [], private_memory_refs: [] },
+      draft.premium_characters.push({ character_id: id, stable: {}, dynamic: { recent_developments: [] },
         metadata: { created_revision: stamp.revision, last_updated_revision: stamp.revision, active_household_member: true } });
       assignInitialMannerism(draft, world, draft.premium_characters.at(-1)!);
       lifecycle.set(id, { kind: "joined_household", household_id: household, ...stamp });

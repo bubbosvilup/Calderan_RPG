@@ -1,0 +1,40 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "total": 2024,
+    "passed": 2020,
+    "failed": 0,
+    "todo": 4
+  },
+  "playthrough": {
+    "passed": 25,
+    "failed": 0
+  },
+  "focused": {
+    "passed": 100,
+    "failed": 0
+  },
+  "network_transport": "blocked during complete suite/playthrough",
+  "paid_calls": 0,
+  "legacy_cycle_tool": {
+    "before_source_back_edges": 16,
+    "after_source_back_edges": 9,
+    "runtime_cycles": 0
+  },
+  "AST_cycle_tool": {
+    "before_source_back_edges": 20,
+    "after_source_back_edges": 16,
+    "runtime_cycles": 0,
+    "remaining_turn_components": 3
+  },
+  "save_compatibility": "PASS",
+  "closed_debts": [
+    "D-16",
+    "D-17",
+    "D-20"
+  ],
+  "open_minor_debts": [
+    "D-06",
+    "D-21"
+  ]
+}

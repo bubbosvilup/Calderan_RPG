@@ -3,7 +3,7 @@ import { DEFAULT_COMPACTION_POLICY, type CompactionPolicy, type CompactionResult
 import { contextHash, narratorPackOf } from "./narrator-pack.js";
 import { losslessCandidate, LOSSLESS_LAYOUTS, losslessCacheIdentity, renderLosslessCandidate, type LosslessCandidate } from "./lossless-knowledge.js";
 import type { ContextCompressorProvider } from "../llm/context-compressor-provider.js";
-import type { NarratorRequest } from "./stages/narration.js";
+import type { NarratorRequest } from "../llm/types.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 export function analyzeLosslessLayouts(request:NarratorRequest,manager=new ContextBudgetManager()) {
   const pack=narratorPackOf(request);if(!pack)throw new Error("Annotated narrator request required");

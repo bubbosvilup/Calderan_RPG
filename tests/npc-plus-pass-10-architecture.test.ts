@@ -32,3 +32,10 @@ test("runTurn stays at or below 164 lines (Pass 10 recorded 164)", () => {
 test("the NPC+ domain modules do not depend on diagnostics or evaluation code", () => {
   for (const [f, d] of edges) if (/^src\/(?:campaign\/premium-characters|turn\/npc-plus|turn\/reflection|turn\/follow-invitation|turn\/character-movement)\.ts$/.test(f)) assert.ok(!/\/(?:dev|diagnostics)|turn-diagnostics|reflection-diagnostics/.test(d) || f === "src/turn/reflection.ts", `${f} -> ${d}`);
 });
+
+test("D-21 prompt-envelope and evidence-result consumers avoid execution-module type back-edges", () => {
+  const all=graph();
+  assert.ok(!all.get("src/turn/household-evidence.ts")!.includes("src/turn/evidence-authorization.ts"));
+  for(const file of ["narrator-pack", "context-budget", "context-compaction", "lossless-context-compaction"])
+    assert.ok(!all.get(`src/turn/${file}.ts`)!.includes("src/turn/stages/narration.ts"));
+});

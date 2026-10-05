@@ -1,0 +1,176 @@
+{
+  "method": "TypeScript AST static imports/reexports/import-type queries; emitted JS static imports for runtime initialization. DFS back-edges are not an enumeration of all simple cycles.",
+  "modules": 226,
+  "source_back_edges": [
+    [
+      "src/campaign/types.ts",
+      "src/campaign/mannerism-concepts.ts",
+      "src/campaign/types.ts"
+    ],
+    [
+      "src/llm/errors.ts",
+      "src/llm/controller-schema.ts",
+      "src/llm/errors.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/name-establishment.ts",
+      "src/turn/context-builder.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/character-movement.ts",
+      "src/turn/natural-actions.ts",
+      "src/turn/retrieval-policy.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/evidence-authorization.ts",
+      "src/turn/command-authorizer.ts",
+      "src/turn/household-evidence.ts",
+      "src/turn/prompt-builder.ts",
+      "src/turn/narrative-authority.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/evidence-authorization.ts",
+      "src/turn/command-authorizer.ts",
+      "src/turn/household-evidence.ts",
+      "src/turn/prompt-builder.ts",
+      "src/turn/player-intent.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/evidence-authorization.ts",
+      "src/turn/command-authorizer.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/evidence-authorization.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/turn-types.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/context-compaction.ts",
+      "src/turn/context-budget.ts",
+      "src/turn/context-compaction.ts"
+    ],
+    [
+      "src/turn/reflection-diagnostics.ts",
+      "src/turn/reflection.ts",
+      "src/turn/reflection-diagnostics.ts"
+    ],
+    [
+      "src/turn/reflection.ts",
+      "src/turn/structured/reflection-v2.ts",
+      "src/turn/reflection.ts"
+    ],
+    [
+      "src/turn/reflection.ts",
+      "src/turn/structured/reflection-v23-cvc-e1.ts",
+      "src/turn/reflection.ts"
+    ],
+    [
+      "src/turn/reflection.ts",
+      "src/turn/structured/reflection-v23-cvc-e1.ts",
+      "src/turn/structured/reflection-v22.ts",
+      "src/turn/reflection.ts"
+    ],
+    [
+      "src/turn/reflection.ts",
+      "src/turn/structured/reflection-v23-cvc-e1.ts",
+      "src/turn/structured/reflection-v22.ts",
+      "src/turn/structured/reflection-v21.ts",
+      "src/turn/reflection.ts"
+    ],
+    [
+      "src/turn/reflection.ts",
+      "src/turn/structured/reflection-v23-cvc-e1.ts",
+      "src/turn/structured/reflection-v23-cvc.ts",
+      "src/turn/structured/reflection-v23.ts",
+      "src/turn/reflection.ts"
+    ]
+  ],
+  "source_components": [
+    [
+      "src/campaign/mannerism-concepts.ts",
+      "src/campaign/types.ts"
+    ],
+    [
+      "src/llm/controller-schema.ts",
+      "src/llm/errors.ts"
+    ],
+    [
+      "src/turn/character-movement.ts",
+      "src/turn/command-authorizer.ts",
+      "src/turn/context-builder.ts",
+      "src/turn/evidence-authorization.ts",
+      "src/turn/household-evidence.ts",
+      "src/turn/name-establishment.ts",
+      "src/turn/narrated-captives.ts",
+      "src/turn/narration-audit.ts",
+      "src/turn/narrative-authority.ts",
+      "src/turn/narrator-pack.ts",
+      "src/turn/natural-actions.ts",
+      "src/turn/player-authored-events.ts",
+      "src/turn/player-intent.ts",
+      "src/turn/prompt-builder.ts",
+      "src/turn/reference-resolution.ts",
+      "src/turn/retrieval-policy.ts",
+      "src/turn/scene-departure.ts",
+      "src/turn/scene-participants.ts",
+      "src/turn/turn-evidence.ts",
+      "src/turn/turn-types.ts"
+    ],
+    [
+      "src/turn/context-budget.ts",
+      "src/turn/context-compaction.ts"
+    ],
+    [
+      "src/turn/reflection-diagnostics.ts",
+      "src/turn/reflection.ts",
+      "src/turn/structured/reflection-v2.ts",
+      "src/turn/structured/reflection-v21.ts",
+      "src/turn/structured/reflection-v22.ts",
+      "src/turn/structured/reflection-v23-cvc-e1.ts",
+      "src/turn/structured/reflection-v23-cvc.ts",
+      "src/turn/structured/reflection-v23.ts",
+      "src/turn/structured/reflection-wire-v2-cvc.ts",
+      "src/turn/structured/reflection-wire.ts"
+    ]
+  ],
+  "runtime_back_edges": [],
+  "runtime_components": [],
+  "runtime_graph_sha256": "29614705842bed6e50e5e9af2dd9e521ed5be03cf6e26347b83f36ca7523bada",
+  "lazy_import_edges": [
+    {
+      "from": "src/dev/d04-final-live.ts"
+    },
+    {
+      "from": "src/dev/probe-follow-choice-live.ts"
+    },
+    {
+      "from": "src/dev/probe-follow-choice-live.ts"
+    },
+    {
+      "from": "src/turn/reflection.ts",
+      "to": "src/turn/structured-reflection-maintenance.ts"
+    }
+  ],
+  "runtime_edge_count": 765,
+  "runtime_edges_sha256": "5671319dd23ce0e9fe6cd7ade4d9b51718e0b8c178a93fc23be7dff1c44495aa"
+}

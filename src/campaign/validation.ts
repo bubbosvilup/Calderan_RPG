@@ -165,7 +165,7 @@ const premiumRecord = object({ character_id: id,
   mannerisms: optional(list(mannerismRecord, 4)),
   stable: object({ personality_contract: optional(text), voice_contract: optional(text), moral_boundaries: optional(distinct(text)), baseline_social_style: optional(text),
     contract_evidence: optional(list(object({ field: contractField, revision: integer(0), quote: text }), 64)) }),
-  dynamic: object({ recent_developments: list(premiumHistory, PREMIUM_DEVELOPMENT_RETENTION), long_term: optional(rollupRecord), private_memory_refs: distinct(id) }),
+  dynamic: object({ recent_developments: list(premiumHistory, PREMIUM_DEVELOPMENT_RETENTION), long_term: optional(rollupRecord), private_memory_refs: optional(distinct(id)) }),
   metadata: object({ created_revision: integer(0), last_updated_revision: integer(0), active_household_member: boolean,
     initial_mannerism: optional(choice("seeded", "candidate", "seed_pool_exhausted")) }) });
 const mannerismEvidence = object({ sequence: integer(1), revision: integer(0), event_id: text, narration_hash: text, span_start: integer(0), span_end: integer(1) });

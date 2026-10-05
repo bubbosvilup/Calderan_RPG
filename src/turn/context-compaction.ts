@@ -3,7 +3,7 @@ import type { ContextCompressorProvider, CompressionCandidate, CompressionReason
 import type { Usage } from "../llm/types.js";
 import { ContextBudgetManager, type ContextBudgetSnapshot } from "./context-budget.js";
 import { COMPRESSION_SCHEMA_VERSION, COMPRESSION_POLICY_VERSION, contextHash, narratorPackOf, renderCandidateRequest, type KnowledgeUnit, type NarratorPack } from "./narrator-pack.js";
-import type { NarratorRequest } from "./stages/narration.js";
+import type { NarratorRequest } from "../llm/types.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 export type CompactionReason = CompressionReason;
 export interface CompactionDiagnostics {

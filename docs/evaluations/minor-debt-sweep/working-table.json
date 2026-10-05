@@ -1,0 +1,52 @@
+[
+  {
+    "debt": "D-06",
+    "original_wording": "Occasional controller `structured_output_invalid` | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid.",
+    "original_severity": "MINOR",
+    "original_blocker": "Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid.",
+    "current_relevance": "Current controller reliability remains relevant; reflection reliability is a different path.",
+    "candidate_closure_condition": "Existing representative current-controller evidence covers original structured-output risk.",
+    "required_production_change": "None; evidence classification only.",
+    "required_evidence": "Controller receipts, parser/schema matching, retries and failure records."
+  },
+  {
+    "debt": "D-16",
+    "original_wording": "`private_memory_refs` has no writer | Dead/undefined structure today. Remove in a later schema migration or give it a concrete purpose during memory work.",
+    "original_severity": "MINOR",
+    "original_blocker": "Dead/undefined structure today. Remove in a later schema migration or give it a concrete purpose during memory work.",
+    "current_relevance": "Dead capability with a recovery consumer; old saves can carry values.",
+    "candidate_closure_condition": "No active writer expectation or recovery dependence; old saves load.",
+    "required_production_change": "Deprecate optional legacy field; omit creation/migration defaults; knowledge-only recovery.",
+    "required_evidence": "Nonempty legacy save round-trip, absent-field save/migration, unknown-fact rejection."
+  },
+  {
+    "debt": "D-17",
+    "original_wording": "Reflection trigger counts lifecycle entries | First reflection can happen earlier than intended because lifecycle entries count. Revisit only together with D-09/D-10 evidence.",
+    "original_severity": "MINOR",
+    "original_blocker": "First reflection can happen earlier than intended because lifecycle entries count. Revisit only together with D-09/D-10 evidence.",
+    "current_relevance": "Shadow uses the same due predicate; initial join currently advances the generic threshold.",
+    "candidate_closure_condition": "Three substantive developments required; bootstrap bookkeeping excluded; membership evidence intact.",
+    "required_production_change": "Exclude joined_household/migrated_member from generic count only.",
+    "required_evidence": "Mixed changes, cursor, leave/rejoin accepted claim, contract and rollup alternatives."
+  },
+  {
+    "debt": "D-20",
+    "original_wording": "Reflection can delay the next command | Reflection may sit on the critical path. Move it off the critical path when autonomy/background work is introduced.",
+    "original_severity": "MINOR",
+    "original_blocker": "Reflection may sit on the critical path. Move it off the critical path when autonomy/background work is introduced.",
+    "current_relevance": "Default OFF removed normal reflection latency; optional diagnostic shadow still waits.",
+    "candidate_closure_condition": "Default cannot invoke or await reflection; shadow behavior explicit and deterministic.",
+    "required_production_change": "No asynchronous machinery; document default-obsolete closure and diagnostic wait.",
+    "required_evidence": "OFF due-evidence command completion; shadow publication/order/Save/persistence tests."
+  },
+  {
+    "debt": "D-21",
+    "original_wording": "Type-only import cycles in `turn/` | No runtime cycles. Clean up when the turn layer is next restructured.",
+    "original_severity": "MINOR",
+    "original_blocker": "No runtime cycles. Clean up when the turn layer is next restructured.",
+    "current_relevance": "Genuine source type dependency cycles persist; emitted runtime graph is acyclic.",
+    "candidate_closure_condition": "Original turn-layer cycles actually removed; no runtime graph changes.",
+    "required_production_change": "Only small direct type imports and shared leaves in this bounded pass.",
+    "required_evidence": "AST and emitted-JS graph before/after; remaining components listed; runtime edge equality."
+  }
+]

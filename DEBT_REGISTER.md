@@ -16,13 +16,10 @@ IDs are never renumbered.
 
 | ID | Area | Severity | Current state / next action |
 |---|---|---|---|
-| **D-06** | Occasional controller `structured_output_invalid` | MINOR | Not observed after Qwen switch; insufficient soak to close. Open pending broader runtime evidence; 16/16 switch outputs were structured-valid. |
+| **D-06** | Occasional controller `structured_output_invalid` | MINOR | 2026-10-05 audit: Qwen switch 16/16; later raw current-schema controller receipts 32/32 parsed, plus three 429s. Reflection qualification uses a different schema/route. Remains OPEN: broader representative current-controller gameplay reliability beyond curated/controlled samples is still missing; no new paid soak. [Sweep](docs/evaluations/MINOR_DEBT_SWEEP_D06_D16_D17_D20_D21.md). |
 | **D-09** | Reflection organic usefulness unmeasured | **DEFERRED / SHADOW** | 2026-10-05: Engineering PASS; semantic safety PASS; provider reliability PASS; production integration PASS; narrative utility UNPROVEN. Default narrator exposure OFF; production generation OFF by default. Optional SHADOW during real user playthroughs records qualified notes without narrator exposure. Reopen only when real gameplay naturally produces a reflection with a plausible unique-value later-use case. Do not manufacture authority specifically to test D-09. No automatic soak or A/B; historical negative and stopped-run evidence preserved. [Current policy](docs/evaluations/D09_DEFERRED_SHADOW_POLICY.md). [Integration](docs/evaluations/D09_PRODUCTION_STRUCTURED_REFLECTION_INTEGRATION.md), [prior soak](docs/evaluations/D09_FINAL_CAMPAIGN_SOAK_AND_ABLATION.md), [matched ablation](docs/evaluations/D09_FINAL_MATCHED_NARRATION_ABLATION.md), [unique-value follow-up](docs/evaluations/D09_UNIQUE_VALUE_MATCHED_ABLATION.md), [offline eligibility](docs/evaluations/D09_QUALIFYING_REFLECTION_ELIGIBILITY.md), [final relationship run](docs/evaluations/D09_FINAL_RELATIONSHIP_UNIQUE_VALUE_ABLATION.md), [utility/packing review](docs/evaluations/D09_REFLECTION_UTILITY_AND_PACKING_REVIEW.md). |
-| **D-16** | `private_memory_refs` has no writer | MINOR | Dead/undefined structure today. Remove in a later schema migration or give it a concrete purpose during memory work. |
-| **D-17** | Reflection trigger counts lifecycle entries | MINOR | First reflection can happen earlier than intended because lifecycle entries count. Revisit only together with D-09/D-10 evidence. |
 | **D-19** | Reconciliation / redaction rate | **IMPORTANT** | Safe but narration is still revised/redacted more often than ideal. Remains relevant for proposal/reconciliation quality; measure by path and reduce causes without weakening audits. |
-| **D-20** | Reflection can delay the next command | MINOR | Reflection may sit on the critical path. Move it off the critical path when autonomy/background work is introduced. |
-| **D-21** | Type-only import cycles in `turn/` | MINOR | No runtime cycles. Clean up when the turn layer is next restructured. |
+| **D-21** | Type-only import cycles in `turn/` | MINOR | 2026-10-05 partial cleanup: prompt-envelope and evidence-result types use dependency leaves; AST source back-edges 20 to 16, zero runtime cycles, all 765 runtime dependency edges unchanged. OPEN: core turn result/evidence/audit, context budget/compaction, and reflection/schema/diagnostics type components still need extraction. [Sweep](docs/evaluations/MINOR_DEBT_SWEEP_D06_D16_D17_D20_D21.md). |
 | **D-22** | Turn-level semantic retrieval not live-tested | MINOR | Include semantic retrieval in a future live matrix / soak. |
 | **D-26** | Mannerism Epistemic Fidelity & Portrayal Repair | **OPEN — SHADOW DATA COLLECTION** | Gate remains diagnostics-only. D-09 V2: zero findings / 105 organic cue exposures, plus a manually confirmed coverage miss; more data needed before Phase C. [Organic appendix](docs/evaluations/D26_SHADOW_SOAK_APPENDIX.md), [implementation](docs/evaluations/D26_EPISTEMIC_SHADOW_GATE.md). |
 
@@ -42,6 +39,12 @@ IDs are never renumbered.
 ---
 
 ## Closed
+
+**D-16 CLOSED** - 2026-10-05: deprecated optional legacy-only `private_memory_refs`; no runtime initialization/recovery dependency, old save values preserved. Save/migration/knowledge-recovery tests PASS. [Sweep](docs/evaluations/MINOR_DEBT_SWEEP_D06_D16_D17_D20_D21.md).
+
+**D-17 CLOSED** - 2026-10-05: initial join/migration excluded from generic reflection count; leave/rejoin evidence, cursor, contract and rollup triggers preserved. Focused trigger/shadow tests PASS. [Sweep](docs/evaluations/MINOR_DEBT_SWEEP_D06_D16_D17_D20_D21.md).
+
+**D-20 CLOSED AS DEFAULT-OBSOLETE** - 2026-10-05: D-09 default OFF removes reflection wait from normal play; optional shadow is explicitly synchronous diagnostic maintenance. OFF/shadow session tests PASS. [Sweep](docs/evaluations/MINOR_DEBT_SWEEP_D06_D16_D17_D20_D21.md).
 
 **D-10 CLOSED** — emergent NPC+ mannerisms: calibrated Qwen 8/8 live recall, zero accepted hard false positives, live aliases and finalized promotion/anti-feedback/save-load verified. [Evidence](docs/evaluations/D10_MANNERISM_EXTRACTOR_CALIBRATION.md).
 
@@ -75,7 +78,7 @@ NPC+ packing/performance, and prior regression repairs remain closed in their hi
 2. **D-26** — OPEN — NEEDS MORE DATA: evaluate organic matcher coverage and precision before repair design.
 3. **D-09** - DEFERRED / SHADOW: narrative utility UNPROVEN; narrator exposure OFF. Reopen only on a naturally occurring reflection with plausible unique-value later use; no manufactured authority or automatic soak.
 
-D-06 remains open pending broader runtime soak after the Qwen switch.
+D-06 remains open pending broader representative current-controller gameplay evidence; reflection reliability is a separate schema/route. No new paid soak is scheduled.
 
 ---
 

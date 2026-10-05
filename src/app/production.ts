@@ -43,7 +43,7 @@ export function readReflectionMode(env: Readonly<Record<string, string | undefin
   if (mode !== "off" && mode !== "shadow") throw new Error("CALDREVAN_REFLECTION_MODE must be off or shadow");
   return mode;
 }
-export interface ProductionOptions { /** Defaults to off; shadow enables post-turn maintenance only. */ readonly reflection_mode?: ReflectionMode; readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
+export interface ProductionOptions { /** Defaults to off; shadow enables synchronous diagnostic post-turn maintenance only. */ readonly reflection_mode?: ReflectionMode; readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
 /** Real wiring for a player-facing build: canonical world, file saves, live OpenRouter providers. No fixture, no dev harness. */
 export async function createProductionDeps(options: ProductionOptions = {}): Promise<SessionDeps> {
   const reflection_mode = options.reflection_mode ?? readReflectionMode();

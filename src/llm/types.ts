@@ -16,3 +16,6 @@ export interface GenerationRequest {
   /** H5: per-attempt upper bound; providers use the smaller of this and their configured timeout. */
   readonly timeout_ms?: number;
 }
+
+/** Already-filtered prompt envelope, shared without depending on turn execution stages. */
+export type NarratorRequest = Pick<GenerationRequest, "system_prompt" | "messages">;

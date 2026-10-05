@@ -29,7 +29,7 @@ test("organic moves: each commit appends exactly one `moved` development; due af
   const f = fixture();
   assert.equal(reflectionDue(f.snap(), "maren"), false);
   moves(f, 1);
-  assert.equal(reflectionDue(f.snap(), "maren"), false, "joined + one move = 2 developments");
+  assert.equal(reflectionDue(f.snap(), "maren"), false, "initial join does not count toward substantive developments");
   moves(f, 2);
   const dev = f.snap().premium_characters.find(p => p.character_id === "maren")!.dynamic.recent_developments;
   assert.deepEqual(dev.map(e => e.kind), ["joined_household", "moved", "moved", "moved"]);

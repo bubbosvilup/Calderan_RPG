@@ -1,0 +1,17 @@
+{
+  "protected_register_rows_identical": {
+    "D-09": true,
+    "D-19": true,
+    "D-22": true,
+    "D-26": true
+  },
+  "emitted_runtime_edges_identical": true,
+  "runtime_edge_count": 765,
+  "runtime_cycle_count": 0,
+  "credential_scan": {
+    "files": 33,
+    "matches": 0,
+    "raw_values_printed": false
+  },
+  "paid_calls": 0
+}

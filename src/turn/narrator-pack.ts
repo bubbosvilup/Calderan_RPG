@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { NarratorRequest } from "./stages/narration.js";
+import type { NarratorRequest } from "../llm/types.js";
 import type { NarrativeKnowledgeAccess } from "./narrative-authority.js";
 import { freezeSnapshot } from "../campaign/validation.js";
 
