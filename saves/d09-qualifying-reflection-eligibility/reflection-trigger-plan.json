@@ -1,0 +1,12 @@
+{
+  "first_contract_due": true,
+  "first_request_statement_selectors": [
+    "npcmem:campaign_character_iris:contract:0"
+  ],
+  "second_contract_due": true,
+  "minimum_additional_developments": 0,
+  "reason": "A newly established contract independently makes reflection due. The second is later than any maintenance source captured after the first, even if that first attempt persisted empty. No third development is necessary.",
+  "first_attempt_may_be_valid_empty": true,
+  "no_cursor_mutation": true,
+  "rollup_required": false
+}

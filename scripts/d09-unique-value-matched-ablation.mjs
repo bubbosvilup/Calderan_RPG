@@ -1,5 +1,6 @@
 /** Bounded, single-use evidence run. Production code/configuration are never changed. */
 import assert from 'node:assert/strict';
+import {EvidenceArtifactStore} from './d09-evidence-artifacts.mjs';
 import {mkdir,readFile,writeFile,appendFile,access} from 'node:fs/promises';
 import {createHash,randomInt} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
@@ -16,6 +17,7 @@ const json=(file,value)=>writeFile(`${dir}/${file}`,JSON.stringify(value,null,2)
 const hash=value=>createHash('sha256').update(typeof value==='string'||Buffer.isBuffer(value)?value:JSON.stringify(value)).digest('hex');
 const clean=value=>Array.isArray(value)?value.map(clean):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).filter(([k])=>!['reasoning','reasoning_details','reasoning_content'].includes(k)).map(([k,v])=>[k,clean(v)])):value;
 try{await access(`${dir}/started.json`);throw Error('Run already started; refuse an accidental paid rerun.');}catch(e){if(e.code!=='ENOENT')throw e;}
+const evidenceStore=await EvidenceArtifactStore.open(dir,{mark_pending_on_resume:true});
 const plan=[
  'Iris, while we sit together here, how do you usually speak when something is difficult to say? Do you soften the words or speak plainly? Describe your usual habit in your own words.',
  'Iris, apart from how you speak, what is a firm personal boundary you hold even when others pressure you? What would you never do to vulnerable people?',
@@ -37,12 +39,13 @@ const sourcePaths=execFileSync('git',['ls-files','src','data'],{encoding:'utf8'}
 await json('plan-freeze.json',{classification:'DEVELOPMENT-RICH CONTROLLED GAMEPLAY',plan,rubric,production_sources:sources,seeded_development_history:false,seeded_reflections:false,post_setup_direct_commands:false});
 const key=exactBenchmarkCredential(process.env.OPENROUTER_API_KEY!==undefined?{env:process.env.OPENROUTER_API_KEY}:{fileText:await readFile('APIKEY.env','utf8')});process.env.OPENROUTER_API_KEY=key;
 await json('preflight.json',await benchmarkAuthentication(key));await json('started.json',{timestamp:new Date().toISOString(),plan_sha:hash(await readFile(`${dir}/plan-freeze.json`)),maximum_turns:12,maximum_calls:100});
-let campaign,world,currentTurn=0,phase='setup',calls=0,cost=0;const network=fetch,ledger=[],caseFreezes=[],observations=[],reflectionCaptures=[];
+let campaign,world,currentTurn=0,phase='setup',calls=evidenceStore.maxCapturedRequestIndex,cost=0;const network=fetch,ledger=await evidenceStore.readReceipts(),caseFreezes=[],observations=[],reflectionCaptures=[];
+cost=ledger.reduce((total,item)=>total+(item.reported_cost_usd??0),0);
 globalThis.fetch=async(url,init)=>{
  const body=init?.body?JSON.parse(String(init.body)):null;if(!body)return network(url,init);
  assert.ok(calls<100&&cost<2.5,'Frozen call/cost guard reached');
- const id=++calls,role=phase.startsWith('ablation')||phase==='blind_review'?phase:body.response_format?.json_schema?.name==='npc_reflection_v23_cvc_e1'?'reflection':body.response_format?.json_schema?.name==='npc_mannerism_observations'?'extractor':body.model===deps.provider_status.narrator_model?'narrator':'controller',started=performance.now();
- const before=campaign.exportSnapshot();await json(`request-${String(id).padStart(3,'0')}.json`,{id,turn:currentTurn,role,body,body_sha:hash(String(init.body)),source_revision:before.revision});
+ const role=phase.startsWith('ablation')||phase==='blind_review'?phase:body.response_format?.json_schema?.name==='npc_reflection_v23_cvc_e1'?'reflection':body.response_format?.json_schema?.name==='npc_mannerism_observations'?'extractor':body.model===deps.provider_status.narrator_model?'narrator':'controller',started=performance.now();
+ const before=campaign.exportSnapshot(),recorded=await evidenceStore.recordRequest({turn:currentTurn,role,body,body_sha:hash(String(init.body)),source_revision:before.revision}),id=recorded.id;calls=id;
  if(role==='reflection'){const character=JSON.parse(body.messages[1].content).character.id,c=captureProductionReflection(campaign,world,character);reflectionCaptures.push({physical:id,turn:currentTurn,character,source_revision:before.revision,state:before,full_catalog:c.catalog,request:c.request});await json('reflection-contexts.json',reflectionCaptures);}
  if(role==='narrator'&&!caseFreezes.length){
   const notes=before.premium_reflections.flatMap(r=>r.notes.filter(n=>n.structured&&families.includes(n.structured.proposal.claim.type)&&body.messages.some(m=>m.content.includes(n.text))).map(n=>({character_id:r.character_id,note:n})));
@@ -51,8 +54,8 @@ globalThis.fetch=async(url,init)=>{
  try{
   const response=await network(url,init),raw=await response.clone().text(),receipt=body.stream?raw.split(/\r?\n/).filter(l=>l.startsWith('data: ')).map(l=>{const t=l.slice(6);if(t==='[DONE]')return '[DONE]';try{return clean(JSON.parse(t));}catch{return {unparsed:t};}}):(()=>{try{return clean(JSON.parse(raw));}catch{return {unparsed:raw};}})();
   const usages=(Array.isArray(receipt)?receipt:[receipt]).filter(r=>r&&typeof r==='object'&&r.usage).map(r=>r.usage),reported=usages.at(-1)?.cost;cost+=typeof reported==='number'?reported:0;
-  const item={id,turn:currentTurn,role,http_status:response.status,latency_ms:performance.now()-started,reported_cost_usd:reported??null,usage:usages.at(-1)??null,receipt};ledger.push(item);await json(`receipt-${String(id).padStart(3,'0')}.json`,item);await json('ledger.json',ledger);return response;
- }catch(e){ledger.push({id,turn:currentTurn,role,transport_failure:true,latency_ms:performance.now()-started});await json('ledger.json',ledger);throw e;}
+  const item={id,turn:currentTurn,role,http_status:response.status,latency_ms:performance.now()-started,reported_cost_usd:reported??null,usage:usages.at(-1)??null,receipt};ledger.push(item);await evidenceStore.recordReceipt(item);await json('ledger.json',ledger);return response;
+ }catch(e){if((await evidenceStore.audit()).receipts.includes(id))throw e;const failure={id,turn:currentTurn,role,transport_failure:true,latency_ms:performance.now()-started,billing:'UNKNOWN'};await evidenceStore.recordReceipt(failure);ledger.push(failure);await json('ledger.json',ledger);throw e;}
 };
 const deps=await createProductionDeps({save_dir:`${dir}/manual-campaign-saves`});world=deps.world;assert.equal(deps.provider_status.narrator_model,'z-ai/glm-5.2');assert.equal(deps.provider_status.controller_model,'qwen/qwen3.8-flash');assert.equal(deps.provider_status.reflection_model,'qwen/qwen3.8-flash');
 campaign=createOpeningCampaign(world,'d09_unique_value');
@@ -82,5 +85,6 @@ await json('final-state.json',campaign.exportSnapshot());
 
 await json('development-completed.json',{timestamp:new Date().toISOString(),turns:observations.length,successful_turns:observations.filter(t=>t.outcome.ok).length,calls,reported_cost_usd:cost,qualifying_freezes:caseFreezes.length,ablation_calls:0,next_stage:'OFFLINE marginal-value precheck REQUIRED before paid A/B',production_unchanged:true});
 for(const [p,h]of Object.entries(sources))assert.equal(hash(await readFile(p)),h,p);
+await json('request-receipt-audit.json',await evidenceStore.audit());
 await json('source-freeze-after.json',{production_sources:sources,verified_unchanged:true});
 globalThis.fetch=network;

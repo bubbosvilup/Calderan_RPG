@@ -1,0 +1,170 @@
+{
+  "status": "PASS",
+  "proposal": {
+    "subject_character_id": "campaign_character_iris",
+    "confidence": "high",
+    "evidence_refs": [
+      "npcmem:campaign_character_iris:history:r3.0",
+      "npcmem:campaign_character_iris:history:r4.0"
+    ],
+    "claim": {
+      "type": "self_statement_synthesis",
+      "statement_refs": [
+        "npcmem:campaign_character_iris:contract:0",
+        "npcmem:campaign_character_iris:contract:1"
+      ]
+    }
+  },
+  "canonical_schema": true,
+  "wire_schema": true,
+  "validator": [
+    {
+      "proposal": {
+        "subject_character_id": "campaign_character_iris",
+        "confidence": "high",
+        "evidence_refs": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "claim": {
+          "type": "self_statement_synthesis",
+          "statement_refs": [
+            "npcmem:campaign_character_iris:contract:0",
+            "npcmem:campaign_character_iris:contract:1"
+          ]
+        }
+      },
+      "evidence_used": [
+        {
+          "ref": "npcmem:campaign_character_iris:contract:0",
+          "evidence_version": 2,
+          "evidence_type": "self_statement",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 3,
+          "world_minute": null,
+          "event_id": "statement:campaign_character_iris:3:social_style",
+          "payload": {
+            "field": "social_style",
+            "revision": 3,
+            "quote": "I don't like noise."
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:0",
+            "statement_id": "statement:campaign_character_iris:3:social_style",
+            "origin_revision": 3,
+            "field": "social_style",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+          }
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:history:r3.0",
+          "evidence_version": 2,
+          "evidence_type": "statement_event",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 3,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r3.0",
+          "payload": {
+            "kind": "contract_established",
+            "field": "social_style",
+            "revision": 3,
+            "world_minute": 0
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:0",
+            "statement_id": "statement:campaign_character_iris:3:social_style",
+            "origin_revision": 3,
+            "field": "social_style",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+          }
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:contract:1",
+          "evidence_version": 2,
+          "evidence_type": "self_statement",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 4,
+          "world_minute": null,
+          "event_id": "statement:campaign_character_iris:4:voice",
+          "payload": {
+            "field": "voice",
+            "revision": 4,
+            "quote": "I always speak softly."
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:1",
+            "statement_id": "statement:campaign_character_iris:4:voice",
+            "origin_revision": 4,
+            "field": "voice",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r4.0"
+          }
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:history:r4.0",
+          "evidence_version": 2,
+          "evidence_type": "statement_event",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 4,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r4.0",
+          "payload": {
+            "kind": "contract_established",
+            "field": "voice",
+            "revision": 4,
+            "world_minute": 0
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:1",
+            "statement_id": "statement:campaign_character_iris:4:voice",
+            "origin_revision": 4,
+            "field": "voice",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r4.0"
+          }
+        }
+      ],
+      "factual_validation": [],
+      "entitlement_validation": [],
+      "reasons": [],
+      "accepted": true,
+      "evidence_roles": [
+        {
+          "ref": "npcmem:campaign_character_iris:contract:0",
+          "role": "SUPPORTING",
+          "reason": "Required claim-specific authoritative fact; exact consistency checked by V2."
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:history:r3.0",
+          "role": "SUPPORTING",
+          "reason": "Exact subject/revision/field provenance link to selected authoritative statement; not an additional independent statement."
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:contract:1",
+          "role": "SUPPORTING",
+          "reason": "Required claim-specific authoritative fact; exact consistency checked by V2."
+        },
+        {
+          "ref": "npcmem:campaign_character_iris:history:r4.0",
+          "role": "SUPPORTING",
+          "reason": "Exact subject/revision/field provenance link to selected authoritative statement; not an additional independent statement."
+        }
+      ],
+      "scope": {
+        "type": "attributed_statements",
+        "start_revision": 3,
+        "end_revision": 4
+      }
+    }
+  ],
+  "rendered": "Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".",
+  "separate_revisions": [
+    3,
+    4
+  ],
+  "independent_statement_authorities": 2,
+  "contextual_false_rejections": 0,
+  "scope": "Offline eligibility only, not provider realization/persistence/narration benefit"
+}

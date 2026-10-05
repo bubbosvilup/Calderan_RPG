@@ -1,0 +1,23 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "pass": 2008,
+    "fail": 0,
+    "todo": 4,
+    "total": 2012
+  },
+  "playthrough": {
+    "pass": 25,
+    "fail": 0
+  },
+  "focused_harness": {
+    "pass": 7,
+    "fail": 0
+  },
+  "offline_fixtures": {
+    "tested": 32,
+    "accepted": 15,
+    "rejected": 17
+  },
+  "paid_calls": 0
+}

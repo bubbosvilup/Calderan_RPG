@@ -1,0 +1,770 @@
+[
+  {
+    "category": "moral_boundary",
+    "utterance": "I won't hurt children.",
+    "narration": "Iris says, \"I won't hurt children.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "moral_boundary",
+    "normalized_value": "never hurt children",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "moral_boundary",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+        "origin_revision": 3,
+        "field": "moral_boundary",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "moral_boundary",
+    "utterance": "I will never betray friends.",
+    "narration": "Iris says, \"I will never betray friends.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "moral_boundary",
+    "normalized_value": "never betray friends",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "moral_boundary",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+        "origin_revision": 3,
+        "field": "moral_boundary",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "moral_boundary",
+    "utterance": "I would never harm children.",
+    "narration": "Iris says, \"I would never harm children.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "moral_boundary",
+    "normalized_value": "never harm children",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "moral_boundary",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+        "origin_revision": 3,
+        "field": "moral_boundary",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "moral_boundary",
+    "utterance": "I'd never abandon children.",
+    "narration": "Iris says, \"I'd never abandon children.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "moral_boundary",
+    "normalized_value": "never abandon children",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "moral_boundary",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+        "origin_revision": 3,
+        "field": "moral_boundary",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "moral_boundary",
+    "utterance": "I shall not torture prisoners.",
+    "narration": "Iris says, \"I shall not torture prisoners.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "moral_boundary",
+    "normalized_value": "never torture prisoners",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "moral_boundary",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+        "origin_revision": 3,
+        "field": "moral_boundary",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "personal_habit",
+    "utterance": "I always speak plainly.",
+    "narration": "Iris says, \"I always speak plainly.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "voice",
+    "normalized_value": "speaks plainly",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "voice",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:voice",
+        "origin_revision": 3,
+        "field": "voice",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "personal_habit",
+    "utterance": "I speak softly.",
+    "narration": "Iris says, \"I speak softly.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "voice",
+    "normalized_value": "speaks softly",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "voice",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:voice",
+        "origin_revision": 3,
+        "field": "voice",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "personal_habit",
+    "utterance": "I don't mince words.",
+    "narration": "Iris says, \"I don't mince words.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "voice",
+    "normalized_value": "speaks plainly",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "voice",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:voice",
+        "origin_revision": 3,
+        "field": "voice",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "social_preference",
+    "utterance": "I don't like noise.",
+    "narration": "Iris says, \"I don't like noise.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "social_style",
+    "normalized_value": "dislikes noise",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "social_style",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:social_style",
+        "origin_revision": 3,
+        "field": "social_style",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "social_preference",
+    "utterance": "I do not trust strangers.",
+    "narration": "Iris says, \"I do not trust strangers.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "social_style",
+    "normalized_value": "distrusts strangers",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "social_style",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:social_style",
+        "origin_revision": 3,
+        "field": "social_style",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "social_preference",
+    "utterance": "I never care for crowds.",
+    "narration": "Iris says, \"I never care for crowds.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "social_style",
+    "normalized_value": "dislikes crowds",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "social_style",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:social_style",
+        "origin_revision": 3,
+        "field": "social_style",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "self_description",
+    "utterance": "I've always been stubborn.",
+    "narration": "Iris says, \"I've always been stubborn.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "personality",
+    "normalized_value": "stubborn",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "personality",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:personality",
+        "origin_revision": 3,
+        "field": "personality",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "self_description",
+    "utterance": "I have always been patient and careful.",
+    "narration": "Iris says, \"I have always been patient and careful.\"",
+    "accepted": true,
+    "classification": "DEFINITELY ACCEPTED in explicit active/present attribution",
+    "contract_field": "personality",
+    "normalized_value": "patient, careful",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "personality",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:personality",
+        "origin_revision": 3,
+        "field": "personality",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Exact supported anchored form; no hedge/question; attributed first person; unset active-NPC field."
+  },
+  {
+    "category": "personal_habit",
+    "utterance": "I always tap my fingers.",
+    "narration": "Iris says, \"I always tap my fingers.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "intention",
+    "utterance": "I want to rest.",
+    "narration": "Iris says, \"I want to rest.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "intention",
+    "utterance": "I will take a quiet break.",
+    "narration": "Iris says, \"I will take a quiet break.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "refusal",
+    "utterance": "I won't hurt you.",
+    "narration": "Iris says, \"I won't hurt you.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "social_preference",
+    "utterance": "I prefer quiet.",
+    "narration": "Iris says, \"I prefer quiet.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "self_description",
+    "utterance": "I am stubborn.",
+    "narration": "Iris says, \"I am stubborn.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "hedge",
+    "utterance": "Maybe I've always been stubborn.",
+    "narration": "Iris says, \"Maybe I've always been stubborn.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "conditional",
+    "utterance": "If they pressure me, I will never hurt children.",
+    "narration": "Iris says, \"If they pressure me, I will never hurt children.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "question",
+    "utterance": "Would I ever hurt children?",
+    "narration": "Iris says, \"Would I ever hurt children?\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "negation",
+    "utterance": "I don't always speak plainly.",
+    "narration": "Iris says, \"I don't always speak plainly.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "unsupported_clause",
+    "utterance": "I don't like noise because it distracts me.",
+    "narration": "Iris says, \"I don't like noise because it distracts me.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "refusal",
+    "utterance": "I won't talk now.",
+    "narration": "Iris says, \"I won't talk now.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "situational",
+    "utterance": "I don't like this.",
+    "narration": "Iris says, \"I don't like this.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "typographic_contraction",
+    "utterance": "I won’t hurt children.",
+    "narration": "Iris says, \"I won’t hurt children.\"",
+    "accepted": false,
+    "classification": "REJECTED / unsupported by current anchored grammar",
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "No contract command: unsupported full-sentence form or conservative question/hedge/conditional/pronoun gate. No reject diagnostic is emitted; reasons derive from source predicates."
+  },
+  {
+    "category": "unquoted",
+    "utterance": "Iris always speaks plainly.",
+    "accepted": false,
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "Unquoted, speakerless or non-active-NPC first-person utterance cannot establish Iris authority."
+  },
+  {
+    "category": "unattributed",
+    "utterance": "\"I always speak plainly.\"",
+    "accepted": false,
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "Unquoted, speakerless or non-active-NPC first-person utterance cannot establish Iris authority."
+  },
+  {
+    "category": "wrong_speaker",
+    "utterance": "Nicco says, \"I always speak plainly.\"",
+    "accepted": false,
+    "contract_field": null,
+    "normalized_value": null,
+    "statement_ref": null,
+    "source_event": null,
+    "revision_before": 2,
+    "revision_after": 2,
+    "reason": "Unquoted, speakerless or non-active-NPC first-person utterance cannot establish Iris authority."
+  },
+  {
+    "category": "curly_quotes",
+    "utterance": "Iris says, “I always speak plainly.”",
+    "accepted": true,
+    "contract_field": "voice",
+    "normalized_value": "speaks plainly",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "voice",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:voice",
+        "origin_revision": 3,
+        "field": "voice",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Production quote/speaker attribution succeeded."
+  },
+  {
+    "category": "pronoun_attribution",
+    "utterance": "Iris looks at Nicco. \"I always speak plainly,\" she says.",
+    "accepted": true,
+    "contract_field": "voice",
+    "normalized_value": "speaks plainly",
+    "statement_ref": "npcmem:campaign_character_iris:contract:0",
+    "source_event": {
+      "ref": "npcmem:campaign_character_iris:history:r3.0",
+      "evidence_version": 2,
+      "evidence_type": "statement_event",
+      "subject_character_id": "campaign_character_iris",
+      "owner_character_id": "campaign_character_iris",
+      "revision": 3,
+      "world_minute": 0,
+      "event_id": "npcmem:campaign_character_iris:history:r3.0",
+      "payload": {
+        "kind": "contract_established",
+        "field": "voice",
+        "revision": 3,
+        "world_minute": 0
+      },
+      "provenance": {
+        "statement_ref": "npcmem:campaign_character_iris:contract:0",
+        "statement_id": "statement:campaign_character_iris:3:voice",
+        "origin_revision": 3,
+        "field": "voice",
+        "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+      }
+    },
+    "revision_before": 2,
+    "revision_after": 3,
+    "reason": "Production quote/speaker attribution succeeded."
+  }
+]

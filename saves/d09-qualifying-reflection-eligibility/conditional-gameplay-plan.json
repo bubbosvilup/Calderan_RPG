@@ -1,0 +1,29 @@
+{
+  "status": "PREVALIDATED OFFLINE fallback; no live calls authorized this task",
+  "selected_family": "relationship_trajectory",
+  "preferred_self_statement_route": "Do not use for A/B: compact-equivalent meaning already present",
+  "classification": "DEVELOPMENT-RICH CONTROLLED GAMEPLAY",
+  "location": "heartstone_f1",
+  "movement": false,
+  "finalized_turn_target": "6-8 maximum; hard cap 8 total submitted attempts including failed/interrupted submissions",
+  "ordered_prompts": [
+    "Iris, before we decide anything, I make room for your opinion and agree to hear a disagreement. How do you regard that way of handling a decision?",
+    "Iris, I take your concern seriously and work through the practical details carefully. How does my handling of it affect what you think of my judgement?",
+    "I raise my voice while describing my side of the disagreement, then leave Iris room to reply.",
+    "I lower my voice and apologize for making the conversation uncomfortable. Iris, you may answer at your own pace.",
+    "I press my point once more and ask Iris for a direct answer, then listen."
+  ],
+  "later_prompt": "Iris, I would like your counsel before deciding how to handle a difficult disagreement. How should we approach it together?",
+  "contingency_prompts": [
+    "Iris, what do you think of the way I have listened and worked through your concern?",
+    "Iris, I stop arguing my side and give you room to say how you feel about this exchange."
+  ],
+  "branching": "After each awaited turn inspect authoritative state and production catalog. Missing development is not assumed. Freeze each evidence event and exact before/after revision. Once two respect increases exist, stop trying to develop respect. Observe the separate three-turn interaction phase only to create a genuinely later, nonredundant packing opportunity. Use at most two topic-only follow-up attempts within total 8 if a required development is absent; otherwise stop. Do not run until explicitly requested.",
+  "self_checkpoint": "If live play unexpectedly establishes self contracts, record exact provenance. After two distinct relevant contracts, stop that development phase and inspect synthesis eligibility. If only one by the bound, no self reflection/A/B case. Do not suppress automatic production maintenance.",
+  "minimum_extra_trigger_developments": "Self statements: 0. Relationship: first due after two changes plus joining; after normal maintenance, three newer changes make due again. Cursor is never changed by the harness.",
+  "marginal_precheck": "A/B only if useful accepted/persisted target exists, full text normally packed, later scene relevant, and no other compact packed source already expresses the same trajectory. Keep recent conversation and all raw authority. Otherwise STOP MARGINAL_VALUE_NOT_TESTABLE.",
+  "clean_stop": "No forced process interruption to adapt prompts. Allocate both submission and physical request IDs from exclusive artifacts; resume uses maximum captured request index, preserves unresolved calls, and audits one-to-one receipts.",
+  "realization_guaranteed": false,
+  "exact_NPC_answers_or_reactions_supplied_by_player": false,
+  "production_tuning": false
+}

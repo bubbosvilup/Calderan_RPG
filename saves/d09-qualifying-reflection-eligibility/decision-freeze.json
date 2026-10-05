@@ -1,0 +1,18 @@
+{
+  "eligibility_gate": "PASS - relationship fallback only",
+  "gates": {
+    "A_supported_distinct_forms": "PASS",
+    "B_frozen_semantics": "PASS",
+    "C_provider_visible_wire": "PASS",
+    "D_plausible_unique_marginal_value": "PASS for prevalidated relationship fallback; FAIL for selected self case",
+    "E_instrumentation_fixed": "PASS (focused tests recorded separately)"
+  },
+  "authority_eligibility": "PASS",
+  "reason": "Self synthesis is reachable but redundant. A separately controller/evidence-authorized relationship trajectory has a later normal-packing opportunity with plausible unique marginal value.",
+  "d09": "SOAK PENDING",
+  "prior_concern": "REFLECTION_USEFULNESS_CONCERN remains",
+  "previous_pair": "VALID NEGATIVE RESULT; preserved",
+  "paid_calls": 0,
+  "production_unchanged": true,
+  "next_step": "If subsequently authorized, one bounded 6-8-turn live sequence using the exact relationship fallback plan. This task performs no live run; no offline state or stubbed outputs count toward D-09 closure."
+}

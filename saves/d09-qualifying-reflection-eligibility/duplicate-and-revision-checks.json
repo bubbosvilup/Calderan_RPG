@@ -1,0 +1,329 @@
+{
+  "moral_paraphrase_same_normalized_value_skipped": {
+    "before_revision": 3,
+    "after_revision": 3,
+    "commands": [],
+    "authorized_commands": [],
+    "statements": [
+      {
+        "link": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:0",
+          "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+          "origin_revision": 3,
+          "field": "moral_boundary",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+        },
+        "quote": "I will never hurt children.",
+        "source_event": {
+          "ref": "npcmem:campaign_character_iris:history:r3.0",
+          "evidence_version": 2,
+          "evidence_type": "statement_event",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 3,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r3.0",
+          "payload": {
+            "kind": "contract_established",
+            "field": "moral_boundary",
+            "revision": 3,
+            "world_minute": 0
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:0",
+            "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+            "origin_revision": 3,
+            "field": "moral_boundary",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+          }
+        }
+      }
+    ]
+  },
+  "near_semantic_synonym_not_deduplicated": {
+    "before_revision": 3,
+    "after_revision": 4,
+    "commands": [
+      {
+        "kind": "establish_character_contract",
+        "character_id": "campaign_character_iris",
+        "field": "moral_boundary",
+        "text": "never harm children",
+        "quote": "I will never harm children."
+      }
+    ],
+    "authorized_commands": [],
+    "statements": [
+      {
+        "link": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:0",
+          "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+          "origin_revision": 3,
+          "field": "moral_boundary",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+        },
+        "quote": "I will never hurt children.",
+        "source_event": {
+          "ref": "npcmem:campaign_character_iris:history:r3.0",
+          "evidence_version": 2,
+          "evidence_type": "statement_event",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 3,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r3.0",
+          "payload": {
+            "kind": "contract_established",
+            "field": "moral_boundary",
+            "revision": 3,
+            "world_minute": 0
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:0",
+            "statement_id": "statement:campaign_character_iris:3:moral_boundary",
+            "origin_revision": 3,
+            "field": "moral_boundary",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+          }
+        }
+      },
+      {
+        "link": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:1",
+          "statement_id": "statement:campaign_character_iris:4:moral_boundary",
+          "origin_revision": 4,
+          "field": "moral_boundary",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r4.0"
+        },
+        "quote": "I will never harm children.",
+        "source_event": {
+          "ref": "npcmem:campaign_character_iris:history:r4.0",
+          "evidence_version": 2,
+          "evidence_type": "statement_event",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 4,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r4.0",
+          "payload": {
+            "kind": "contract_established",
+            "field": "moral_boundary",
+            "revision": 4,
+            "world_minute": 0
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:1",
+            "statement_id": "statement:campaign_character_iris:4:moral_boundary",
+            "origin_revision": 4,
+            "field": "moral_boundary",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r4.0"
+          }
+        }
+      }
+    ]
+  },
+  "set_once_contradiction_skipped": {
+    "before_revision": 3,
+    "after_revision": 3,
+    "commands": [],
+    "authorized_commands": [],
+    "statements": [
+      {
+        "link": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:0",
+          "statement_id": "statement:campaign_character_iris:3:voice",
+          "origin_revision": 3,
+          "field": "voice",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+        },
+        "quote": "I speak softly.",
+        "source_event": {
+          "ref": "npcmem:campaign_character_iris:history:r3.0",
+          "evidence_version": 2,
+          "evidence_type": "statement_event",
+          "subject_character_id": "campaign_character_iris",
+          "owner_character_id": "campaign_character_iris",
+          "revision": 3,
+          "world_minute": 0,
+          "event_id": "npcmem:campaign_character_iris:history:r3.0",
+          "payload": {
+            "kind": "contract_established",
+            "field": "voice",
+            "revision": 3,
+            "world_minute": 0
+          },
+          "provenance": {
+            "statement_ref": "npcmem:campaign_character_iris:contract:0",
+            "statement_id": "statement:campaign_character_iris:3:voice",
+            "origin_revision": 3,
+            "field": "voice",
+            "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+          }
+        }
+      }
+    ]
+  },
+  "same_revision_two_contracts_rejected": {
+    "proposal": {
+      "subject_character_id": "campaign_character_iris",
+      "confidence": "high",
+      "evidence_refs": [
+        "npcmem:campaign_character_iris:history:r3.0",
+        "npcmem:campaign_character_iris:history:r3.1"
+      ],
+      "claim": {
+        "type": "self_statement_synthesis",
+        "statement_refs": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ]
+      }
+    },
+    "evidence_used": [
+      {
+        "ref": "npcmem:campaign_character_iris:contract:0",
+        "evidence_version": 2,
+        "evidence_type": "self_statement",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": "campaign_character_iris",
+        "revision": 3,
+        "world_minute": null,
+        "event_id": "statement:campaign_character_iris:3:social_style",
+        "payload": {
+          "field": "social_style",
+          "revision": 3,
+          "quote": "I don't like noise."
+        },
+        "provenance": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:0",
+          "statement_id": "statement:campaign_character_iris:3:social_style",
+          "origin_revision": 3,
+          "field": "social_style",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+        }
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:contract:1",
+        "evidence_version": 2,
+        "evidence_type": "self_statement",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": "campaign_character_iris",
+        "revision": 3,
+        "world_minute": null,
+        "event_id": "statement:campaign_character_iris:3:voice",
+        "payload": {
+          "field": "voice",
+          "revision": 3,
+          "quote": "I always speak softly."
+        },
+        "provenance": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:1",
+          "statement_id": "statement:campaign_character_iris:3:voice",
+          "origin_revision": 3,
+          "field": "voice",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.1"
+        }
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:history:r3.0",
+        "evidence_version": 2,
+        "evidence_type": "statement_event",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": "campaign_character_iris",
+        "revision": 3,
+        "world_minute": 0,
+        "event_id": "npcmem:campaign_character_iris:history:r3.0",
+        "payload": {
+          "kind": "contract_established",
+          "field": "social_style",
+          "revision": 3,
+          "world_minute": 0
+        },
+        "provenance": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:0",
+          "statement_id": "statement:campaign_character_iris:3:social_style",
+          "origin_revision": 3,
+          "field": "social_style",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+        }
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:history:r3.1",
+        "evidence_version": 2,
+        "evidence_type": "statement_event",
+        "subject_character_id": "campaign_character_iris",
+        "owner_character_id": "campaign_character_iris",
+        "revision": 3,
+        "world_minute": 0,
+        "event_id": "npcmem:campaign_character_iris:history:r3.1",
+        "payload": {
+          "kind": "contract_established",
+          "field": "voice",
+          "revision": 3,
+          "world_minute": 0
+        },
+        "provenance": {
+          "statement_ref": "npcmem:campaign_character_iris:contract:1",
+          "statement_id": "statement:campaign_character_iris:3:voice",
+          "origin_revision": 3,
+          "field": "voice",
+          "source_event_ref": "npcmem:campaign_character_iris:history:r3.1"
+        }
+      }
+    ],
+    "factual_validation": [],
+    "entitlement_validation": [
+      "missing_positive_evidence"
+    ],
+    "reasons": [
+      "missing_positive_evidence"
+    ],
+    "accepted": false,
+    "evidence_roles": [
+      {
+        "ref": "npcmem:campaign_character_iris:contract:0",
+        "role": "SUPPORTING",
+        "reason": "Required claim-specific authoritative fact; exact consistency checked by V2."
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:contract:1",
+        "role": "SUPPORTING",
+        "reason": "Required claim-specific authoritative fact; exact consistency checked by V2."
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:history:r3.0",
+        "role": "SUPPORTING",
+        "reason": "Exact subject/revision/field provenance link to selected authoritative statement; not an additional independent statement."
+      },
+      {
+        "ref": "npcmem:campaign_character_iris:history:r3.1",
+        "role": "SUPPORTING",
+        "reason": "Exact subject/revision/field provenance link to selected authoritative statement; not an additional independent statement."
+      }
+    ],
+    "scope": {
+      "type": "attributed_statements",
+      "start_revision": 3,
+      "end_revision": 3
+    }
+  },
+  "same_revision_links": [
+    {
+      "statement_ref": "npcmem:campaign_character_iris:contract:0",
+      "statement_id": "statement:campaign_character_iris:3:social_style",
+      "origin_revision": 3,
+      "field": "social_style",
+      "source_event_ref": "npcmem:campaign_character_iris:history:r3.0"
+    },
+    {
+      "statement_ref": "npcmem:campaign_character_iris:contract:1",
+      "statement_id": "statement:campaign_character_iris:3:voice",
+      "origin_revision": 3,
+      "field": "voice",
+      "source_event_ref": "npcmem:campaign_character_iris:history:r3.1"
+    }
+  ],
+  "duplicate_selector_rejected": true,
+  "event_as_statement_selector_rejected": true,
+  "compatible_contextual_evidence_accepted": true
+}

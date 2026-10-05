@@ -1,0 +1,17 @@
+{
+  "fixed": true,
+  "production_changed": false,
+  "files": [
+    "scripts/d09-evidence-artifacts.mjs",
+    "scripts/d09-unique-value-matched-ablation.mjs",
+    "scripts/d09-unique-value-matched-ablation-resume.mjs"
+  ],
+  "tests": "7/7",
+  "request_20_resumes_at": 21,
+  "append_only": true,
+  "exclusive_receipts": true,
+  "interrupted_requests_preserved": true,
+  "one_to_one_audit": true,
+  "submission_cap_tested": 8,
+  "immutable_receipt_cost_recovery": true
+}
