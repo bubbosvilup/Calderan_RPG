@@ -137,7 +137,7 @@ test("a failed turn discards its participant plan", async () => {
   assert.deepEqual(coordinator.participants(campaign).active(), []);
 });
 test("prompt policy: routes, institutions, rumors/derived claims and Nicco's mental state; the context adds no route data", async () => {
-  for (const rule of ["Knowing a place is not knowing a route", "never invent institutions", "never invent rumors, public talk or claims that imply a fact", "Never assert that Nicco knows, realizes, remembers, decides, suspects, understands or intends"])
+  for (const rule of ["Knowing a place is not knowing a route", "never invent institutions", "never invent rumors, public talk or claims that imply a fact", "Never assert that Nicco knows, realizes, remembers, decides, suspects, understands, intends, feels"])
     assert.ok(NARRATOR_SYSTEM.includes(rule), rule);
   const { world, context } = await opening(), service = new RetrievalService(world);
   const r = await retrieveForTurn(SLAVE_PEN, context, world, { search: new HybridSearch(service), service });

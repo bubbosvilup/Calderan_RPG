@@ -19,6 +19,8 @@ export interface NarratorIdentityGate {
   /** Input projection only. NEVER applied to generated output, campaign truth or controller evidence. */
   mask(text: string): string;
   knowledge(access: NarrativeKnowledgeAccess): NarrativeKnowledgeAccess;
+  /** Controlled public-name disclosure only; never serialized with ordinary identity fields. */
+  selfDisclosureName(id: string): string | undefined;
 }
 const gates = new WeakMap<object, NarratorIdentityGate>();
 /** Metadata kept outside TurnContext serialization: raw engine/controller context stays byte-compatible. */
@@ -47,7 +49,10 @@ export function registerNarratorIdentities(context: object, world: WorldStore, s
     const opaque = idPattern ? text.replace(idPattern, match => idSubstitutions.get(match)!) : text;
     return pattern ? opaque.replace(pattern, match => nameLookup.get(match.toLowerCase())!) : opaque;
   };
-  gates.set(context, { identities, mask, knowledge: access => ({ ...access,
+  gates.set(context, { identities, mask, selfDisclosureName: id => {
+    const npc = characters.find(c => c.id === id);
+    return npc?.knowledge?.visibility.narrator && npc.knowledge.visibility.player ? npc.name : undefined;
+  }, knowledge: access => ({ ...access,
     facts: access.facts.map(f => ({ ...f, id: mask(f.id), text: mask(f.text), ...(f.holders ? { holders: f.holders.map(mask) } : {}) })),
     characters: access.characters.map(c => ({ ...c, character_id: mask(c.character_id), name: mask(c.name) })),
   }) });

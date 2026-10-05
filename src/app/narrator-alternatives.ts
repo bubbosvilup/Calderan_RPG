@@ -1,6 +1,7 @@
 import { MiniMaxNarratorProvider } from "../llm/openrouter/minimax-narrator.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
 import type { GenerationRequest } from "../llm/types.js";
+import { ProviderError } from "../llm/errors.js";
 
 export const ALTERNATE_NARRATOR_MODELS = Object.freeze([
   { label: "MiMo-V2.6-Flash", id: "xiaomi/mimo-v2.6-flash" },
@@ -50,7 +51,7 @@ export class NarratorAlternatives {
   }
   has(id: string): boolean { return this.#requests.has(id); }
   results(id: string): readonly Alternative[] { return [...(this.#results.get(id)?.values() ?? [])]; }
-  async regenerate(id: string, model: string): Promise<{ ok: true; alternatives: readonly Alternative[] } | { ok: false; error: string }> {
+  async regenerate(id: string, model: string): Promise<{ ok: true; alternatives: readonly Alternative[] } | { ok: false; error: string; failure_code?: string; failure_class?: string }> {
     const choice = ALTERNATE_NARRATOR_MODELS.find(candidate => candidate.id === model);
     const request = this.#requests.get(id), key = `${id}\0${model}`;
     if (!choice || !request) return { ok: false, error: "Comparison unavailable for this message or model." };
@@ -65,7 +66,7 @@ export class NarratorAlternatives {
       alternatives.set(model, { model, label: choice.label, text: result.text, actual_model: result.model, ...(result.provider ? { provider: result.provider } : {}) });
       this.#results.set(id, alternatives);
       return { ok: true, alternatives: this.results(id) };
-    } catch { return { ok: false, error: "Alternative failed. Select the model again to retry." }; }
+    } catch (error) { return { ok: false, error: "Alternative failed. Select the model again to retry.", ...(error instanceof ProviderError ? { failure_code: error.code, ...(error.failure_class ? { failure_class: error.failure_class } : {}) } : {}) }; }
     finally { this.#busy.delete(key); }
   }
 }

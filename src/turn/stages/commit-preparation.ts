@@ -5,6 +5,8 @@ import { buildTurnContext } from "../context-builder.js";
 import { contextRelevance } from "./intent.js";
 import { establishNames, type IdentityResolution } from "../name-establishment.js";
 import { contractCommands } from "../character-contracts.js";
+import { establishedCanonicalDisclosure } from "../canonical-name-disclosure.js";
+import { learnCanonicalName } from "../../campaign/identity-knowledge.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 
@@ -33,8 +35,10 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
     const context = buildTurnContext(i.world, i.prepared.snapshot, contextRelevance(i.player_input, i.finalized));
     const resolved = establishNames([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", location_id: i.prepared.snapshot.runtime.scene.player_location }],
       context, i.world, i.prepared.snapshot, i.scene.participants, i.base_revision, { location_changed: i.location_changed });
-    const batch = [...i.commands, ...resolved.commands];
-    let receipt = resolved.commands.length ? i.prepare({ expected_revision: i.base_revision, commands: batch }) : i.prepared;
+    const disclosed = i.location_changed ? undefined : establishedCanonicalDisclosure(context, i.player_input, i.finalized, i.delivered, i.scene);
+    const discovery = disclosed ? learnCanonicalName(i.world, i.prepared.snapshot, disclosed, { acquisition_kind: "told", source_character_id: disclosed, learned_at: i.prepared.snapshot.runtime.scene.world_time.world_minute }) : [];
+    const batch = [...i.commands, ...resolved.commands, ...discovery];
+    let receipt = resolved.commands.length || discovery.length ? i.prepare({ expected_revision: i.base_revision, commands: batch }) : i.prepared;
     // NPC+ Pass 2: explicit self-descriptions of present active NPC+ in the DELIVERED narration become set-once campaign contracts,
     // committed with the turn. A contract that cannot be prepared is dropped (observably), never the turn or its identity changes.
     const contracts = contractCommands(i.delivered, context, i.prepared.snapshot);

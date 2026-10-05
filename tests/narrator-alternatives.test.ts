@@ -87,6 +87,7 @@ test("an alternate provider rejection is sanitized with no automatic parameter c
   comparisons.capture({ system_prompt: "PRIVATE_REQUEST", messages: [], max_output_tokens: 640 }); comparisons.finalize("turn");
   const result = await comparisons.regenerate("turn", ALTERNATE_NARRATOR_MODELS[0]!.id);
   assert.equal(result.ok, false); assert.equal(calls, 1); assert.ok(!JSON.stringify(result).includes("PRIVATE"));
+  if (!result.ok) { assert.equal(result.failure_code, "invalid_provider_response"); assert.equal(result.failure_class, "http_nonretryable"); }
 });
 
 test("actual adapter preserves prompt/budget/reasoning; only model and routing differ, with backend-only key", async () => {

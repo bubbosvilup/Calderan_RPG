@@ -156,7 +156,7 @@ test("inert imperative source text is quoted after compaction; instruction/entit
 });
 test("bakeoff fixtures export only filtered sources and oracle evaluation rejects epistemic corruption", async () => {
  const {prepareD04BakeoffCases,evaluateBakeoffCandidate}=await import("../src/dev/d04-compaction-bakeoff.js"); const cases=await prepareD04BakeoffCases({B:"Maren and Brenna, what do you know?"});
- assert.equal(cases.A.baseline.estimated_tokens,3170); assert.ok(!JSON.stringify(cases).includes("HIDDEN_SECRET_SENTINEL"));
+ assert.equal(cases.A.baseline.estimated_tokens,3290); assert.ok(!JSON.stringify(cases).includes("HIDDEN_SECRET_SENTINEL"));
  const tags=cases.B.compression_request.source_pack.units.flatMap(u=>u.scope.map(s=>s.tag)); for(const tag of ["KNOWN","UNKNOWN_PERMISSION","SUSPECTS","FALSE_BELIEF","UNCERTAIN","RUMOR","PRIVATE"] as const)assert.ok(tags.includes(tag),tag);
  assert.ok(cases.C.baseline.usage_ratio >= .8 && cases.C.baseline.usage_ratio < 1); assert.ok(cases.C.narrator_validation_pack.request.messages[0]!.content.includes("RECENT CONVERSATION")); assert.ok(cases.C.narrator_validation_pack.request.messages[0]!.content.includes("RETRIEVED CANON"));
  const candidate=exactCandidate(cases.A.compression_request), result=evaluateBakeoffCandidate(cases.A,{candidate},12); assert.ok(result.accepted);

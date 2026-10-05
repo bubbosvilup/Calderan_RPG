@@ -47,7 +47,11 @@ function render(data) {
         try {
           const response = await fetch("/api/alternative", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message_id: message.comparison_id, model }) });
           const result = await response.json();
-          if (!response.ok || !result.ok) throw new Error();
+          if (!response.ok || !result.ok) {
+            const codes = ["configuration_error", "authentication_error", "rate_limited", "timeout", "cancelled", "provider_unavailable", "invalid_provider_response", "network_error", "model_refusal"];
+            feedback.textContent = `Alternative failed${codes.includes(result.failure_code) ? ` (${result.failure_code})` : ""}. Select the model again to retry.`;
+            return;
+          }
           showAlternatives(alternatives, result.alternatives);
           feedback.textContent = "";
         } catch { feedback.textContent = "Alternative failed. Select the model again to retry."; }
