@@ -1,5 +1,6 @@
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { projectNarratorFocus } from "./narrator-focus.js";
+import { rpgDialogue } from "./rpg-dialogue.js";
 import { registerNarratorPack } from "./narrator-pack.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
@@ -55,7 +56,8 @@ const SPEECH = "says|said|asks|asked|replies|replied|adds|added|murmurs|murmured
 const PERSON = "passer-?by|stranger|man|woman|boy|girl|child|guard|merchant|vendor|clerk|soldier|priest|priestess|innkeeper|citizen|trader|shopkeeper|beggar|sailor|porter|watchman|traveler|traveller|elder|youth|laborer|labourer|worker|servant|official|peddler|stallholder";
 type Speaker = { readonly label: string; readonly nicco: boolean };
 /**
- * Deterministic and bounded: player turns verbatim; a quote is replayed only with a safely determined speaker, otherwise omitted.
+ * Deterministic and bounded: player turns verbatim; balanced RPG speech is retained without guessing its speaker.
+ * The legacy attributed-quotation path below replays a quote only with a safely determined speaker, otherwise omits it.
  * Speakers come from an attribution clause (`"…," Maren says`, `he asks, "…"`) or the subject of the quote's own/preceding sentence
  * in the same paragraph, or an immediately preceding unambiguous NPC delivery paragraph. Unrelated intervening prose clears
  * that continuation; a mere mention (`blinks at Nicco`) never makes someone the speaker. Nicco is attributed only by an
@@ -85,6 +87,9 @@ export function dialogueFocused(recent: readonly RecentExchange[], context: Turn
   };
   return recent.map((e, index) => {
     exchangeTurn = scene ? scene.turn - (recent.length - index) : 0;
+    const legacyBeat = !e.narration.includes("*") && new RegExp(`^(?:${names}|he|she|they)\\s+(?:replies?|smiles?|shrugs?|waits?|nods?|walks?|looks?)\\b`, "i").test(e.narration.trim());
+    const rpg = legacyBeat ? undefined : rpgDialogue(e.narration);
+    if (rpg !== undefined) return { player: e.player, npc_dialogue: rpg, narrator_description: "omitted; current structured state is authoritative" };
     const dialogue: string[] = [];
     let continuation: Speaker | undefined;
     for (const paragraph of e.narration.split(/\n+/)) {
@@ -144,6 +149,7 @@ ${profile.content}${households ? `
 Household: ${households}. Household roles are controlled facts (H refs in [CHARACTER KNOWLEDGE ACCESS]), not public knowledge.` : ""}`;
 }
 /** Repair 1: who can react this turn. Canonical association is never presence. */
+export const BACKGROUND_PRESENCE_RULE = "BACKGROUND PRESENCE: Background actors are continuity context only. Do not mention, describe, or update them merely because they are present. Bring a background actor into narration only when the player's current attention, a causal event, or that actor's relevant action makes them matter.";
 export function presentAndAbleToReact(context: TurnContext, scene?: SceneParticipantPlan, background: ReadonlySet<string> = new Set(), compact: readonly unknown[] = []): string {
   const lines = context.characters.filter(c => c.id !== "nicco" && !background.has(c.id)).map(c => {
     const baseline = context.primary.scene.present_characters.find(p => p.id === c.id);
@@ -151,7 +157,7 @@ export function presentAndAbleToReact(context: TurnContext, scene?: ScenePartici
     return `- ${c.profile.name ?? c.id}${confidential ? " (CONFIDENTIAL ENCOUNTER: identity, role, affiliations and private canon are not public. Portray them from their appearance and portrayal; name them only if the player already named them or they introduce themselves; never reveal their role or organization in narration)" : ""}`;
   });
   const temporary = (scene?.participants ?? []).map(p => `- ${p.ref} ${p.display_name} (temporary)`);
-  return `[PRESENT AND ABLE TO REACT]\n${[...lines, ...temporary].join("\n") || (compact.length ? "" : "- Nobody besides Nicco.")}\n${compact.length ? `[BACKGROUND PRESENT]\n${compact.map(c => JSON.stringify(c)).join("\n")}\nBackground means compact context, not inactivity: these actors may react when causally relevant.\n` : ""}Only these people exist here besides unnamed ambient traffic described by the location. Any of them may react to a salient event; none must.`;
+  return `[PRESENT AND ABLE TO REACT]\n${[...lines, ...temporary].join("\n") || (compact.length ? "" : "- Nobody besides Nicco.")}\n${compact.length ? `[BACKGROUND PRESENT]\n${compact.map(c => JSON.stringify(c)).join("\n")}\n${BACKGROUND_PRESENCE_RULE}\n` : ""}Only these people exist here besides unnamed ambient traffic described by the location. Any of them may react to a salient event; none must.`;
 }
 /**
  * Household Pass 1: authoritative money, legal status, household and relationship state (grounding, not a narration instruction).
@@ -222,12 +228,12 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     ...context.characters.filter(c => !focus.background.has(c.id)).map(c => {
       const identity = identityGate?.identities.get(c.id), baseline = scene.present_characters.find(p => p.id === c.id);
       return focus.references(mask(`Character ${identity?.player_known_name ?? identity?.observable_label ?? name(c.id)} (${c.id}): ${JSON.stringify({
-        ...(identity ? { identity } : {}), baseline: identity && baseline ? { ...baseline, appearance: undefined, name: identity.player_known_name, display_name: identity.player_known_name ?? identity.observable_label } : baseline,
+        ...(identity ? { identity: { ...identity, internal_id: undefined } } : {}), baseline: identity && baseline ? { ...baseline, appearance: undefined, name: identity.player_known_name, display_name: identity.player_known_name ?? identity.observable_label } : baseline,
         profile: identity ? { ...c.profile, name: identity.player_known_name, aliases: identity.player_known_aliases } : c.profile,
         current: c.current, canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin })}`));
     }),
     ...(participants ? [participants] : []),
-    presentAndAbleToReact(context, sceneParticipants, focus.background, focus.compact),
+    presentAndAbleToReact(context, sceneParticipants, focus.background, focus.compact.map(c => ({ ...c, internal_id: undefined, ref: identityGate?.identities.get(c.internal_id)?.ref }))),
     focus.references(socialBlock(context)),
     ...(focus.view.npc_plus?.lines.length ? [renderNpcPlus(deduplicateRecovered(focus.view.npc_plus, focusedRetrieval).npc)] : []),
     `[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): ${JSON.stringify(context.items)}`,
@@ -235,13 +241,14 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   ].join("\n");
   const rawKnowledge = projectKnowledgeAccess(focus.view, focusedRetrieval, relevanceSignals(input || options.knowledge_relevance_input || "", recent, intent), sceneParticipants);
   const gatedKnowledge = identityGate?.knowledge(rawKnowledge) ?? rawKnowledge;
-  const knowledge = { ...gatedKnowledge, facts: gatedKnowledge.facts.map(f => ({ ...f, text: focus.references(f.text), ...(f.holders ? { holders: f.holders.map(focus.references) } : {}) })), characters: gatedKnowledge.characters.map(c => focus.background.has(c.character_id) ? { ...c, name: c.character_id } : c) };
+  const backgroundRefs = new Set([...focus.background].map(mask));
+  const knowledge = { ...gatedKnowledge, facts: gatedKnowledge.facts.map(f => ({ ...f, text: mask(focus.references(f.text)), ...(f.holders ? { holders: f.holders.map(h => mask(focus.references(h))) } : {}) })), characters: gatedKnowledge.characters.map(c => backgroundRefs.has(c.character_id) ? { ...c, name: c.character_id } : c) };
   const access = renderKnowledgeAccess(knowledge);
   const recentBlock = mode === "dialogue_focused" ? `[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(dialogueFocused(recent, context, sceneParticipants))}`
     : mode === "state_last" ? `[EARLIER CONVERSATION ? CONTINUITY ONLY, NOT STATE]\n${JSON.stringify(recent)}`
     : `[RECENT CONVERSATION ? SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(recent)}`;
   const knowledgePrefix = mask(`${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n`);
   const request = { system_prompt: NARRATOR_SYSTEM, messages: [{ role: "user" as const, content:
-    mask(`${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${focus.references(hardCharacterConstraints(context).join("\n")) || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(focusedRetrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nForeground actors have rich portrayal context; background presence is available when relevant, without requiring another introduction. Continue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.`) }] };
+    mask(`${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${focus.references(hardCharacterConstraints(context).join("\n")) || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(focusedRetrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.`) }] };
   return registerNarratorPack(request, knowledge, access, { revision: context.primary.runtime_revision, location: context.primary.scene.player_location?.id, world_time: context.primary.scene.world_time, characters: context.characters.map(c => c.id) }, knowledgePrefix.length);
 }

@@ -233,7 +233,7 @@ test("narrator prompt: NPC+ section appears only with active NPC+; no NPC+ field
   const f = turnFixture(); keep(f.campaign); run(f.campaign, { kind: "join_household", household_id: HOME, character_id: "brenna" });
   const ctx = buildTurnContext(f.world, f.campaign.exportSnapshot(), { input: "Brenna, are you all right?" });
   const prompt = buildNarratorPrompt("Brenna, are you all right?", ctx, [], {}, { candidates: [], runtime: [] }).messages[0]!.content;
-  assert.match(prompt, /\[NPC\+ HOUSEHOLD CHARACTERS\][\s\S]*NPC\+ Brenna \(brenna\)/);
+  assert.match(prompt, /\[NPC\+ HOUSEHOLD CHARACTERS\][\s\S]*NPC\+ Brenna \(NPC1\)/);
 });
 
 // ================================================================================================ stress

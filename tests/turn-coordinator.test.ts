@@ -89,7 +89,7 @@ test("prompt bounds, visibility, equipment, physical continuity and knowledge di
   const s = setup(), context = buildTurnContext(s.world, s.campaign.exportSnapshot());
   const prompt = JSON.stringify(buildNarratorPrompt("Hello Brenna", context, [], {}, { candidates: [], runtime: [] }));
   for (const absent of ["schema_version", "dataset_id", "relationships", "HIDDEN_SECRET_SENTINEL", "campaign_fact_private_secret", "remote_npc", "OPENROUTER_API_KEY"]) assert.ok(!prompt.includes(absent), absent);
-  for (const present of ["brenna_boots", "193", "Old wrist scars", "recovering", "campaign_fact_bridge_closed", "canonical_awareness"]) assert.ok(prompt.includes(present), present);
+  for (const present of ["NPC1_boots", "193", "Old wrist scars", "recovering", "campaign_fact_bridge_closed", "canonical_awareness"]) assert.ok(prompt.includes(present), present);
   assert.ok(context.knowledge.some(k => k.fact_id === "campaign_fact_bridge_closed" && k.character_id === "nicco")); assert.ok(!context.knowledge.some(k => k.fact_id === "campaign_fact_bridge_closed" && k.character_id === "brenna"));
   assert.match(prompt, /deliberate actions/); assert.match(prompt, /untrusted evidence/);
 });

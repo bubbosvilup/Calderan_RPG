@@ -57,7 +57,7 @@ for (const prelude of ["Brenna waits by the window.", "Brenna does not speak.", 
 test("paragraph attribution is scoped to one exchange, not the next player turn", () => {
   const context = fixture().context;
   const result = dialogueFocused([{ player: "", narration: "Brenna replies.", status: "finalized" }, { player: "", narration: '"The eastern bridge is closed."', status: "finalized" }], context);
-  assert.deepEqual(result.map(r => r.npc_dialogue), [[], []]);
+  assert.deepEqual(result.map(r => r.npc_dialogue), [[], ["The eastern bridge is closed."]]);
 });
 test("evaluation observation accepts an unannotated revision request without activating or calling a provider", () => {
   const request = { system_prompt: "Frozen instructions.", messages: [{ role: "user" as const, content: "[REVISION REQUIRED] Continue the same scene." }] };

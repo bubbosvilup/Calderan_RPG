@@ -31,7 +31,7 @@ test("P3.1 all three unknown canonical sellers have null player identity with en
     assert.equal(identity.internal_id, id);
     assert.equal(identity.player_known_name, null);
     assert.ok(identity.observable_label.includes("unfamiliar"));
-    assert.ok(prompt.messages[0]!.content.includes(`"internal_id":"${id}"`));
+    assert.ok(prompt.messages[0]!.content.includes(`"ref":"${identity.ref}"`));
     assert.equal(context.characters.find(c => c.id === id)!.profile.name, world.getEntity(id)!.name, "raw engine/controller identity stays canonical");
   }
   for (const name of names) assert.ok(!prompt.messages[0]!.content.includes(name), name);
@@ -55,7 +55,7 @@ test("P3.1 explicit canonical name knowledge is durable, idempotent and stores n
   const { context, prompt } = request(restored);
   assert.equal(narratorIdentityGate(context)!.identities.get("bartolomhew")!.player_known_name, "Bartolomhew");
   assert.ok(prompt.messages[0]!.content.includes('"player_known_name":"Bartolomhew"'));
-  assert.ok(prompt.messages[0]!.content.includes("Character Bartolomhew (bartolomhew)"));
+  assert.ok(prompt.messages[0]!.content.includes(`Character Bartolomhew (${narratorIdentityGate(context)!.identities.get("bartolomhew")!.ref})`));
   assert.ok(!prompt.messages[0]!.content.includes("The Redemptor"), "name discovery is not alias/title discovery");
   assert.deepEqual(learnCanonicalName(world, saved, "bartolomhew"), []);
   assert.equal(saved.knowledge.find(k => k.fact_id === fact.id)!.provenance!.source_character_id, "bartolomhew");
@@ -81,7 +81,7 @@ test("P3.1 summaries, relationships, private notes, alias/title strings and retr
   campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "join_household", household_id: "campaign_household_heartstone", character_id: "korvin" }] });
   const { context, prompt } = request(campaign, { records: [{ name: "Bartolomhew", display_name: "The Redemptor", public_summary: "Korvin works with Mistress Elara.", relationships: [{ target: "bartolomhew", description: "Bartolomhew knows Elara." }], private_notes: "Mistress Elara greets Korvin." }] });
   for (const name of names) assert.ok(!prompt.messages[0]!.content.includes(name), name);
-  assert.ok(prompt.messages[0]!.content.includes('"target":"bartolomhew"'), "stable reference IDs survive");
+  assert.ok(prompt.messages[0]!.content.includes(`"target":"${narratorIdentityGate(context)!.identities.get("bartolomhew")!.ref}"`), "stable reference IDs survive");
   const identity = narratorIdentityGate(context)!.identities.get("bartolomhew")!;
   assert.deepEqual(identity.player_known_aliases, []);
   assert.deepEqual(identity.player_known_affiliations, []);
@@ -102,7 +102,7 @@ test("P3.1 existing known fixture NPCs keep their names and unmodified engine re
   const fixture = setup(), before = fixture.campaign.exportSnapshot(), context = buildTurnContext(fixture.world, before);
   const prompt = buildNarratorPrompt("Brenna, hello.", context, [], {}, { candidates: [], runtime: [] });
   assert.equal(narratorIdentityGate(context)!.identities.get("brenna")!.player_known_name, "Brenna");
-  assert.ok(prompt.messages[0]!.content.includes("Character Brenna (brenna)"));
+  assert.ok(prompt.messages[0]!.content.includes(`Character Brenna (${narratorIdentityGate(context)!.identities.get("brenna")!.ref})`));
   assert.deepEqual(fixture.campaign.exportSnapshot(), before);
 });
 

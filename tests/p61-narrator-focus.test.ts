@@ -54,7 +54,7 @@ test("P6.1 each unknown background seller has one compact observable entry and n
     assert.ok(!text.includes(context.primary.scene.present_characters.find(c => c.id === id)!.portrayal!.private_notes!));
   }
   for (const name of ["Bartolomhew", "Korvin", "Mistress Elara", "The Redemptor"]) assert.ok(!text.includes(name));
-  assert.ok(text.includes("may react when causally relevant"));
+  assert.ok(text.includes("Any of them may react"));
 });
 
 test("P6.1 unique observable white-blond reference promotes seller with rich gated portrayal", () => {
@@ -130,8 +130,9 @@ test("P6.1 retrieval and market lore cannot restore rich background biographies"
 
 test("P6.1 background legal state and knowledge restrictions survive using internal references", () => {
   const { text, context } = project("*waiting for the AH to start*");
-  for (const l of context.social.legal) assert.ok(text.includes(`${l.character_id}: legally ${l.status}`));
-  for (const id of sellers) assert.ok(text.includes(`${id}: CAN USE`));
+  const mask = narratorIdentityGate(context)!.mask;
+  for (const l of context.social.legal) assert.ok(text.includes(`${mask(l.character_id)}: legally ${l.status}`));
+  for (const id of sellers) assert.ok(text.includes(`${mask(id)}: CAN USE`));
   assert.ok(text.includes("DO NOT USE"));
 });
 

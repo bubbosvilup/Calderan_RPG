@@ -197,9 +197,9 @@ test("Phase 1M.1 targeted variants differ only by the state-precedence block on 
     assert.doesNotMatch(before.request.messages[0]!.content, /STATE PRECEDENCE/);
   }
   const knows = await stageARequest(cases.find(c => c.id === "kn_supplies_brenna_knows@1m1")!, history);
-  assert.match(knows.request.messages[0]!.content, /brenna: CAN USE F1 \(knows\)/);
+  assert.match(knows.request.messages[0]!.content, /NPC1: CAN USE F1 \(knows\)/);
   const plain = await stageARequest(cases.find(c => c.id === "kn_supplies@1m1")!, history);
-  assert.match(plain.request.messages[0]!.content, /brenna: CAN USE none; DO NOT USE F1/);
+  assert.match(plain.request.messages[0]!.content, /NPC1: CAN USE none; DO NOT USE F1/);
 });
 test("state precedence rules are generic: no fixture names or hardcoded facts", () => {
   assert.doesNotMatch(NARRATOR_STATE_PRECEDENCE, /brenna|maren|gerome|nicco|boots|bridge/i);
