@@ -8,6 +8,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "play:ui": "npm run build --silent && node .build/src/ui/play.js",
     "inspect:save": "npm run build --silent && node .build/src/dev/inspect-save.js",
     "inspect:embedding": "npm run build --silent && node .build/src/dev/inspect-embedding.js",
     "typecheck": "tsc --noEmit",

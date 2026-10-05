@@ -1,0 +1,24 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; color: #e8dcc5; background: #171512; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 900px; height: 100dvh; margin: auto; display: flex; flex-direction: column; background: #211e19; border-inline: 1px solid #453c2b; }
+header { padding: 22px 30px; border-bottom: 1px solid #453c2b; }
+h1 { margin: 0 0 5px; font-size: 21px; letter-spacing: .22em; color: #c4a771; }
+header span, small, #status { color: #baad94; font-size: 12px; }
+#conversation { flex: 1; overflow-y: auto; padding: 28px 30px; scrollbar-color: #65573c #211e19; }
+article { margin: 0 0 26px; padding: 20px 24px; width: 92%; border: 1px solid #524734; border-radius: 4px; overflow-wrap: anywhere; }
+.narrator { background: #ddd0b5; color: #29251e; font-family: Georgia, "Times New Roman", serif; font-size: 18px; line-height: 1.7; }
+article div { white-space: pre-wrap; }
+.speaker { display: block; margin-bottom: 9px; font: 10px system-ui, sans-serif; text-transform: uppercase; letter-spacing: .16em; opacity: .7; }
+.player { margin-left: auto; width: fit-content; max-width: 85%; background: #342d21; font-size: 15px; line-height: 1.6; }
+footer { padding: 12px 30px 20px; border-top: 1px solid #453c2b; }
+#status { margin: 0 0 8px; }
+#error { font-size: 13px; line-height: 1.5; color: #efb4a1; margin: 0 0 10px; }
+form { display: flex; gap: 10px; align-items: stretch; }
+textarea { flex: 1; min-width: 0; resize: vertical; max-height: 180px; border: 1px solid #6b5a3b; border-radius: 4px; padding: 12px; font: 15px/1.5 system-ui, sans-serif; color: #f1e7d5; background: #171512; }
+button { padding: 0 22px; border: 1px solid #c4a771; border-radius: 4px; font: 14px system-ui, sans-serif; background: #b89960; color: #201b12; cursor: pointer; }
+button:disabled, textarea:disabled { opacity: .55; cursor: default; }
+:focus-visible { outline: 2px solid #ddbf83; outline-offset: 3px; }
+small { display: block; margin-top: 9px; font-size: 11px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 600px) { header { padding: 16px; } #conversation { padding: 20px 12px; } article { width: 97%; padding: 16px; } .narrator { font-size: 17px; } footer { padding: 12px; } button { padding: 0 14px; } }

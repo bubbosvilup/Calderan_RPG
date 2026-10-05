@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caldrevan</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/client.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><h1>CALDREVAN</h1><span>The Slave Pens · Playtest</span></header>
+    <section id="conversation" role="log" aria-label="Conversation" aria-live="polite"></section>
+    <footer>
+      <p id="status" role="status">Starting…</p>
+      <p id="error" role="alert" hidden></p>
+      <form id="composer">
+        <label class="sr-only" for="input">What Nicco does or says</label>
+        <textarea id="input" rows="2" maxlength="4000" placeholder="Type what Nicco does or says…" disabled></textarea>
+        <button id="send" type="submit" disabled>Send</button>
+      </form>
+      <small>Enter to send · Shift+Enter for a new line</small>
+    </footer>
+  </main>
+</body>
+</html>
