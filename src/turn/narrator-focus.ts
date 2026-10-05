@@ -5,6 +5,7 @@ import type { SceneParticipantPlan } from "./scene-participants.js";
 import { INACTIVE_EXPIRY_TURNS } from "./scene-participants.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { playerAuthoredEvents } from "./player-authored-events.js";
+import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
 import { escapeRegExp } from "./language/text.js";
 
 /** Derived narrator attention only. No roster, campaign or controller mutation. */
@@ -13,23 +14,10 @@ export function projectNarratorFocus(context: TurnContext, input: string, recent
   const canonical = context.characters.filter(c => gate?.identities.has(c.id));
   const names = (id: string) => {
     const c = context.characters.find(c => c.id === id)!, identity = gate!.identities.get(id)!;
-    return [c.id, c.profile.name, ...(c.profile.aliases ?? []), identity.observable_label, identity.observable_label.match(/\[NPC\d+\]/)?.[0]].filter((s): s is string => !!s);
+    return [c.id, c.profile.name, ...(c.profile.aliases ?? []), ...(identity.observable_label.includes(":") ? [identity.observable_label] : []), identity.ref].filter((s): s is string => !!s);
   };
-  const mentions = (text: string) => new Set(canonical.filter(c => names(c.id).some(n => new RegExp(`(?<![\\p{L}\\p{N}_])${escapeRegExp(n)}(?![\\p{L}\\p{N}_])`, "iu").test(text))).map(c => c.id));
-  const targets = (text: string) => {
-    const foundTargets = mentions(text);
-    // Observable descriptor references only in an explicit inspect/address/approach clause; ambiguous matches promote nobody.
-    for (const m of text.matchAll(/\b(?:look\w* (?:at|towards?)|inspect\w*|examin\w*|approach\w*|address\w*|speak\w* to|talk\w* to)\s+(?:the |that |a )?([^*.!?\n]{1,100})/gi)) {
-      const terms = (m[1]!.toLowerCase().match(/[a-z]+/g) ?? []).filter(w => !/^(?:the|a|an|man|woman|person|seller|slaver|with|in|and|his|her|to|at|of)$/.test(w));
-      const found = canonical.filter(c => {
-        const appearance = (gate!.identities.get(c.id)!.observable_appearance ?? "").toLowerCase();
-        return terms.length > 0 && terms.every(t => new RegExp(`\\b${escapeRegExp(t)}(?:e)?\\b`).test(appearance));
-      });
-      if (found.length === 1) foundTargets.add(found[0]!.id);
-    }
-    return foundTargets;
-  };
-  const current = targets(input);
+  const targets = (text: string) => canonicalInteractionTargets(context, text);
+  const current = new Set(targets(input));
   if (/\b(?:ask\w*|inspect\w*|examin\w*|about|specialties|services)\b/i.test(input) && /\b(?:private sellers|slavers)\b/i.test(input)) {
     for (const c of canonical) if (/\b(?:seller|slaver)\b/i.test(context.primary.scene.present_characters.find(p => p.id === c.id)?.summary ?? "")) current.add(c.id);
   }
@@ -57,8 +45,8 @@ export function projectNarratorFocus(context: TurnContext, input: string, recent
   // Explicit attention/movement elsewhere replaces recent focus, including within the same coarse location.
   const attentionShift = /\b(?:walk\w*|go(?:es|ing)?|move\w*|return\w*|join\w*|turn\w*|look\w*|focus\w*|wait\w*)\b/i;
   const shifted = current.size > 0 || attentionShift.test(input);
-  if (!shifted && !foreground.size) for (const e of recent.filter(e => e.status === "finalized").slice(-INACTIVE_EXPIRY_TURNS).reverse()) {
-    const addressed = targets(e.player);
+  if (!shifted && !foreground.size && !participants?.focus) for (const e of recent.filter(e => e.status === "finalized").slice(-INACTIVE_EXPIRY_TURNS).reverse()) {
+    const addressed = e.conversation_partner_id && canonicalIds.has(e.conversation_partner_id) ? new Set([e.conversation_partner_id]) : targets(e.player);
     for (const id of addressed) foreground.add(id);
     if (addressed.size || attentionShift.test(e.player)) break;
   }
@@ -68,9 +56,8 @@ export function projectNarratorFocus(context: TurnContext, input: string, recent
   const background = new Set(canonical.filter(c => !foreground.has(c.id)).map(c => c.id));
   const compact = canonical.filter(c => background.has(c.id)).map(c => {
     const identity = gate!.identities.get(c.id)!;
-    const appearance = gate!.mask(identity.observable_appearance ?? "").split(/[.!?]\s/)[0]!.replace(/\s+/g, " ").slice(0, 160);
     const confidential = context.primary.scene.present_characters.some(p => p.id === c.id && "confidential_encounter" in p);
-    return { internal_id: c.id, player_known_name: identity.player_known_name, observable_label: `${identity.observable_label}${appearance ? `: ${appearance}` : ""}`, present: true, ...(confidential ? { confidential_encounter: "Identity, role, affiliations and private canon are not public." } : {}) };
+    return { internal_id: c.id, player_known_name: identity.player_known_name, observable_label: gate!.mask(identity.observable_label), present: true, ...(confidential ? { confidential_encounter: "Identity, role, affiliations and private canon are not public." } : {}) };
   });
   const backgroundNames = [...background].flatMap(names);
   const referencesBackground = (text: string) => backgroundNames.some(n => new RegExp(`(?<![\\p{L}\\p{N}_])${escapeRegExp(n)}(?![\\p{L}\\p{N}_])`, "iu").test(text));

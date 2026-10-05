@@ -197,7 +197,7 @@ export class TurnCoordinator {
       if (observer) { observer.elapsed("commit", commitStart, false); observer.record.commit.attempted = true; observer.record.commit.succeeded = true; observer.phase = "publication"; }
       const publicationStart = observer ? performance.now() : 0;
       // Publication: conversation history and scene continuity are updated only after the commit.
-      this.recent(campaign).add({ player: player_input, narration: delivery.text, status: "finalized", location_id: prepared.snapshot.runtime.scene.player_location }); recorded = true;
+      this.recent(campaign).add({ player: player_input, narration: delivery.text, status: "finalized", location_id: prepared.snapshot.runtime.scene.player_location, ...(scene.canonical_location_id && scene.focus ? { conversation_partner_id: scene.focus } : {}) }); recorded = true;
       this.participants(campaign).commit(scene, delivery.text);
       const participantsAfter = this.participants(campaign).retire(plan.identity.promoted.flatMap(p => p.participant_id ? [p.participant_id] : []));
       const result = assembleTurnResult({ world: this.world, base_revision, final_revision: committed.revision, player_input, proposal: authorization.proposal, commands,

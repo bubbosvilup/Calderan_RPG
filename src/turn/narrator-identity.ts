@@ -31,7 +31,8 @@ export function registerNarratorIdentities(context: object, world: WorldStore, s
   const characters = world.getEntitiesByType("character").filter(c => c.role === "npc");
   for (const [index, npc] of characters.entries()) {
     const knowsName = snapshot.facts.some(f => known.has(f.id) && f.content.kind === "canonical" && f.content.entity_id === npc.id && f.content.chunk_id === undefined);
-    const label = `the unfamiliar ${npc.sex === "male" ? "man" : npc.sex === "female" ? "woman" : "person"} [NPC${index + 1}]`;
+    const appearance = npc.appearance?.split(/[.!?]\s/)[0]?.replace(/\s+/g, " ").slice(0, 160);
+    const label = `the ${knowsName ? "" : "unfamiliar "}${npc.sex === "male" ? "man" : npc.sex === "female" ? "woman" : "person"}${appearance ? `: ${appearance}` : ""}`;
     idSubstitutions.set(npc.id, `NPC${index + 1}`);
     identities.set(npc.id, Object.freeze({ internal_id: npc.id, ref: `NPC${index + 1}`, player_known_name: knowsName ? npc.name : null, observable_label: label,
       observable_appearance: npc.appearance ?? null, player_known_aliases: [], player_known_affiliations: [] }));

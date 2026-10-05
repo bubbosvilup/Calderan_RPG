@@ -1,5 +1,6 @@
 import type { TurnContext } from "./context-builder.js";
 import { escapeRegExp } from "./language/text.js";
+import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
 
 /**
  * Ephemeral scene participants (Phase 1P): session-local people who exist in the current scene but are not CampaignState
@@ -35,6 +36,8 @@ export interface EphemeralSceneParticipant {
 export interface SceneParticipantPlan {
   readonly turn: number; readonly participants: readonly EphemeralSceneParticipant[]; readonly focus: string | null;
   readonly created: string | null; readonly addressed: readonly string[]; readonly expired: readonly string[];
+  /** Canonical partner continuity is session-local; names remain authoritative in CampaignState knowledge. */
+  readonly canonical_location_id?: string;
 }
 
 interface RoleSpec { readonly pattern: string; readonly role: string; readonly label?: string; readonly standing: ParticipantStanding }
@@ -102,6 +105,7 @@ export class SceneParticipants {
   #next = 1;
   #turn = 0;
   #focus: string | null = null;
+  #focusLocation: string | null = null;
   active(): readonly EphemeralSceneParticipant[] { return Object.freeze([...this.#list]); }
 
   /** Deterministic pre-narration plan. Nothing changes until commit(); a failed turn simply discards the plan. */
@@ -111,7 +115,9 @@ export class SceneParticipants {
     const carried = this.#list.filter(p => p.location_id === location);
     const expired = this.#list.filter(p => p.location_id !== location).map(p => p.id);
     const text = input.toLowerCase();
-    const addressed = new Set(carried.filter(p => nounsOf(p).some(n => DEFINITE(`(?:${n})`).test(text))).map(p => p.id));
+    const canonicalTargets = canonicalInteractionTargets(context, input);
+    const addressed = new Set<string>(canonicalTargets);
+    if (!canonicalTargets.size) for (const p of carried) if (nounsOf(p).some(n => DEFINITE(`(?:${n})`).test(text))) addressed.add(p.id);
     let created: EphemeralSceneParticipant | undefined;
     // Persistence Pass 1.2: a definite reference ("the slave", "the girl") to a present persistent person who began as a narrator-
     // created person is that person, never a new temporary participant.
@@ -121,6 +127,10 @@ export class SceneParticipants {
     }));
     for (const m of [...input.matchAll(INTRO), ...input.matchAll(NPC_SUBJECT)].sort((a, b) => a.index - b.index)) {
       const article = m[1]!.toLowerCase(), adjectives = m[2] ?? "", noun = m[3]!.toLowerCase(), spec = specFor(noun);
+      // The same observable actor already exists in canon. Never create a second generic identity.
+      // "another"/"some"/"one" explicitly establish a distinct person, regardless of overlapping appearance.
+      if (!["another", "some", "one"].includes(article) && canonicalTargets.size === 1
+        && canonicalInteractionTargets(context, m[0]).size === 1) continue;
       if (["the", "that", "this", "same"].includes(article) && covered.has(noun)) continue;
       if (["the", "that", "this", "same"].includes(article) && carried.some(p => addressed.has(p.id) && nounsOf(p).some(n => new RegExp(`^(?:${n})$`, "i").test(noun)))) continue;
       const id = `scene_npc_${this.#next}`;
@@ -129,7 +139,12 @@ export class SceneParticipants {
       break; // one introduction per turn keeps identity unambiguous
     }
     const namesPersistent = context.characters.some(c => c.id !== "nicco" && new RegExp(`\\b${escapeRegExp(c.profile.name ?? c.id)}\\b`, "i").test(input));
-    if (!created && !addressed.size && !namesPersistent && this.#focus && carried.some(p => p.id === this.#focus) && (/["“]/.test(input) || /\b(?:you|your)\b/i.test(input))) addressed.add(this.#focus);
+    const explicitPerson = [...input.matchAll(INTRO), ...input.matchAll(NPC_SUBJECT)].length > 0;
+    const shifted = /\b(?:walk\w*|go(?:es|ing)?|move\w*|return\w*|join\w*|turn\w*|look\w*|focus\w*|wait\w*)\b/i.test(input);
+    const canonicalPartner = this.#focusLocation === location && context.characters.some(c => c.id === this.#focus);
+    if (!created && !addressed.size && !namesPersistent && !explicitPerson && !shifted && this.#focus
+      && (canonicalPartner || carried.some(p => p.id === this.#focus))
+      && (/["“]/.test(input) || /\b(?:you|your)\b/i.test(input) || /who am i (?:speaking|talking) (?:with|to)/i.test(input))) addressed.add(this.#focus);
     let kept = carried.filter(p => {
       if (addressed.has(p.id)) return true;
       if (p.departed || turn - p.last_addressed_turn >= INACTIVE_EXPIRY_TURNS) { expired.push(p.id); return false; }
@@ -143,8 +158,9 @@ export class SceneParticipants {
       }
     }
     const participants = created ? [...kept, created] : kept;
-    const focus = created?.id ?? [...addressed].find(id => participants.some(p => p.id === id)) ?? null;
-    return Object.freeze({ turn, participants: Object.freeze(participants.map(p => Object.freeze(p))), focus, created: created?.id ?? null, addressed: Object.freeze([...addressed]), expired: Object.freeze(expired) });
+    const canonicalFocus = !created && addressed.size === 1 && context.characters.some(c => c.id === [...addressed][0] && c.id !== "nicco") ? [...addressed][0]! : null;
+    const focus = created?.id ?? canonicalFocus ?? [...addressed].find(id => participants.some(p => p.id === id)) ?? null;
+    return Object.freeze({ turn, participants: Object.freeze(participants.map(p => Object.freeze(p))), focus, created: created?.id ?? null, addressed: Object.freeze([...addressed]), expired: Object.freeze(expired), ...(canonicalFocus ? { canonical_location_id: location } : {}) });
   }
 
   /** Persistence Pass 1.2: participants who became persistent characters leave the temporary registry (no duplicate identity). */
@@ -166,6 +182,7 @@ export class SceneParticipants {
     const used = plan.created ? Number(plan.created.slice(10)) + 1 : this.#next;
     this.#next = Math.max(this.#next, used);
     this.#turn = plan.turn; this.#focus = plan.focus;
+    this.#focusLocation = plan.canonical_location_id ?? plan.participants.find(p => p.id === plan.focus)?.location_id ?? null;
     return this.active();
   }
 }
