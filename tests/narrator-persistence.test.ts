@@ -242,7 +242,7 @@ test("historical-transcript regressions: word fragments are not names; mentions 
 });
 
 // ------------------------------------------------------------------------------------------------ narrator guardrail (§26)
-test("narrator guardrail: incidental people stay descriptive; names only when learned, introduced, identified or necessary", () => {
-  assert.match(NARRATOR_SYSTEM, /refer to incidental background people descriptively/);
-  assert.match(NARRATOR_SYSTEM, /a named person becomes a lasting character/);
+test("narrator guardrail: incidental people stay descriptive; names require in-world discovery", () => {
+  assert.match(NARRATOR_SYSTEM, /Until then describe observable traits or apparent role/);
+  assert.match(NARRATOR_SYSTEM, /introduce incidental names through in-world disclosure, not narrative necessity/);
 });
