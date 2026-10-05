@@ -16,7 +16,7 @@ import { SemanticIndex } from "../retrieval/semantic-index.js";
 import type { EmbeddingProvider } from "../retrieval/embedding-provider.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { NARRATOR_OUTPUT_TOKENS, selectedModels, contextCompressorModel, mannerismExtractorModel } from "./provider-config.js";
-import type { SessionDeps } from "./game-session.js";
+import type { SessionDeps, SessionHooks } from "./game-session.js";
 import type { ProviderStatus } from "./session-view.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
 import type { DeepReadonly } from "../types/readonly.js";
@@ -51,15 +51,16 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
   const compressor_model = contextCompressorModel();
   const compaction_service = new LosslessContextCompactor(compressor_model ? new OpenRouterLosslessCompressor(compressor_model) : undefined, new ContextBudgetManager(context_policy), options.compaction_policy);
   const world = await loadWorld(options.data_dir ?? "data");
+  let narratorSetup: SessionHooks["narrator_request_setup"];
   let sink: ((record: DeepReadonly<TurnDiagnostics>) => unknown) | undefined;
   const status = readProviderStatus(), service = new RetrievalService(world);
   const indexes = options.embedding_provider ? [await SemanticIndex.build(service.indexSource(), options.embedding_provider, "narrator")] : [];
   // Production narrator requests always disable hidden reasoning (Phase 1M.1); the controller uses the selected model and default retry policy.
   const coordinator = new TurnCoordinator(world, new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true }),
-    new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, diagnostics_sink: record => sink?.(record) });
+    new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, narrator_request_setup: request => narratorSetup?.(request) ?? request, diagnostics_sink: record => sink?.(record) });
   return { world, context_policy, compaction_service, repository: new FileCampaignRepository(world, options.save_dir ?? "saves"), provider_status: status,
     ...(options.enable_emergent_mannerisms !== false ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),
     // One coordinator is shared; the live session owns the diagnostics hook. A UI runs one session at a time.
-    createCoordinator: hooks => { sink = hooks.diagnostics_sink; return coordinator; },
+    createCoordinator: hooks => { sink = hooks.diagnostics_sink; narratorSetup = hooks.narrator_request_setup; return coordinator; },
     ...(reflection_mode === "shadow" ? { reflection_provider: new OpenRouterReflectionProvider(new OpenRouterClient(), { ...(status.reflection_model ? { model: status.reflection_model } : {}) }) } : {}) };
 }

@@ -9,7 +9,7 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { createProductionDeps } from "../src/app/index.js";
-import { createUIPlaytestSession, UI_PLAYTEST_OPENING } from "../src/app/ui-playtest.js";
+import { createUIPlaytestSession, UI_PLAYTEST_FORMAT_SEED, UI_PLAYTEST_OPENING } from "../src/app/ui-playtest.js";
 import { createPlaytestServer } from "../src/ui/server.js";
 import { mockNarrator, mockController } from "./turn-fixtures.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
@@ -18,7 +18,7 @@ const world = await loadWorld("data");
 function sessionFor(narrator: NarratorProvider) {
   const service = new RetrievalService(world);
   return createUIPlaytestSession({ world, repository: new FileCampaignRepository(world),
-    createCoordinator: hooks => new TurnCoordinator(world, narrator, mockController([]), { service, search: new HybridSearch(service) }, { diagnostics_sink: hooks.diagnostics_sink, provider_retry: false }),
+    createCoordinator: hooks => new TurnCoordinator(world, narrator, mockController([]), { service, search: new HybridSearch(service) }, { ...(hooks.narrator_request_setup ? { narrator_request_setup: hooks.narrator_request_setup } : {}), diagnostics_sink: hooks.diagnostics_sink, provider_retry: false }),
   });
 }
 
@@ -35,6 +35,10 @@ test("V0 starts a disposable canonical Slave Pens session without narrator calls
   assert.ok(!view.scene.present.some(p => p.id === "nicco"));
   assert.equal(session.listTurns().length, 0);
   assert.equal(view.session.save.state, "unsaved");
+  for (const paragraph of UI_PLAYTEST_OPENING.split("\n\n")) {
+    assert.ok(paragraph.startsWith("*") && paragraph.endsWith("*"));
+    assert.equal(paragraph.split("*").length, 3);
+  }
   const words = UI_PLAYTEST_OPENING.split(/\s+/).length;
   assert.ok(words >= 120 && words <= 220);
   await session.shutdown({ discard_unsaved: true });
@@ -51,6 +55,8 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
   });
   const narrator: NarratorProvider = { ...base, async *stream(request) {
     calls++;
+    assert.equal(request.system_prompt.includes(UI_PLAYTEST_FORMAT_SEED), calls === 1);
+    assert.equal(request.messages.some(m => m.role === "assistant" && m.content === UI_PLAYTEST_OPENING), calls === 1);
     if (calls === 1) { entered(); await waiting; }
     if (calls === 2) throw new Error("PRIVATE_PROVIDER_SENTINEL");
     yield* base.stream(request);

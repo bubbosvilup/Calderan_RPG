@@ -1,6 +1,6 @@
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
-import type { GenerationRequest } from "../llm/types.js";
+import type { GenerationRequest, NarratorRequest } from "../llm/types.js";
 import { MannerismPortrayalGate } from "./mannerism-portrayal-gate.js";
 import { mannerismEpistemicState } from "../campaign/mannerisms.js";
 import type { ContextCompactionService } from "./context-compaction.js";
@@ -55,7 +55,7 @@ export class TurnCoordinator {
   readonly #recent = new WeakMap<CampaignState, RecentConversation>();
   readonly #lastInput = new WeakMap<CampaignState, string>();
   readonly #participants = new WeakMap<CampaignState, SceneParticipants>();
-  constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean;
+  constructor(private readonly world: WorldStore, private readonly narrator: NarratorProvider, private readonly controller: StateControllerProvider, private readonly retrieval: TurnRetrieval, private readonly promptOptions: NarratorPromptOptions & { readonly narrator_request_setup?: (request: NarratorRequest) => NarratorRequest; readonly evidence_authorization?: EvidenceMode; readonly debug_sink?: (record: TurnDebugRecord) => void; readonly diagnostics_sink?: TurnDiagnosticsSink; readonly diagnostics_include_query?: boolean;
   /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly reliability_contract?:boolean; readonly context_policy?: ContextPolicy; readonly context_compaction?: ContextCompactionService; readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
@@ -105,7 +105,7 @@ export class TurnCoordinator {
       observer?.retrieved(retrieved, context, !!this.promptOptions.diagnostics_include_query);
       checkpoint();
       const { recent, prompt: directPrompt } = measure("prompt_composition", () => composeTurnPrompt({ player_input, context, recent: this.recent(campaign).forPrompt(), retrieved: retrieved.data, prompt_intent: promptIntent, options: this.promptOptions, scene }));
-      this.#lastInput.set(campaign, player_input); const prompt = prepareNarratorRequest(directPrompt, this.promptOptions.context_compaction, this.promptOptions.context_policy);
+      this.#lastInput.set(campaign, player_input); const preparedPrompt = prepareNarratorRequest(directPrompt, this.promptOptions.context_compaction, this.promptOptions.context_policy); const prompt = this.promptOptions.narrator_request_setup ? prepareNarratorRequest(this.promptOptions.narrator_request_setup(preparedPrompt), undefined, this.promptOptions.context_policy) : preparedPrompt;
       if (observer) observer.record.context_budget = new ContextBudgetManager(this.promptOptions.context_policy).measure(prompt);
       if (observer?.record.context) observer.record.context.knowledge_access_compaction_used = prompt.messages.some(m => m.content.includes("Everyone else present (") || m.content.includes("DO NOT USE every other fact above"));
       // NarrationStage: a buffered DRAFT, never delivered before the audit (Repair 1 authoritative narration order).

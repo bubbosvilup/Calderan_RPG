@@ -1,3 +1,4 @@
+import type { NarratorRequest } from "../llm/types.js";
 import { ContextBudgetManager, type ContextPolicy } from "../turn/context-budget.js";
 import { unavailableCompactor, type ContextCompactionService, type CompactionReason, type CompactionResult } from "./context-compaction.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
@@ -22,7 +23,10 @@ import { buildTrace, exportTrace, summarizeReflection, turnIdOf, type DebugExpor
  * The single application seam a UI talks to (docs/UI_ENGINE_CONTRACT.md). It composes the existing TurnCoordinator,
  * CampaignSession (manual save, dirty tracking) and the save repository; it owns no campaign truth of its own.
  */
-export interface SessionHooks { readonly diagnostics_sink: (record: DeepReadonly<TurnDiagnostics>) => unknown }
+export interface SessionHooks {
+  /** Optional application-owned narrator setup; does not affect controller requests or campaign state. */
+  readonly narrator_request_setup?: (request: NarratorRequest) => NarratorRequest;
+  readonly diagnostics_sink: (record: DeepReadonly<TurnDiagnostics>) => unknown }
 export interface SessionDeps {
   readonly world: WorldStore; readonly repository: CampaignSaveRepository;
   /** Receives the session's diagnostics hook so per-turn diagnostics can be captured; a stub coordinator may ignore it. */
