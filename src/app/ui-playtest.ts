@@ -1,18 +1,6 @@
 import { createOpeningCampaign } from "../campaign/opening-state.js";
 import { GameSession, type SessionDeps } from "./game-session.js";
 
-export const UI_PLAYTEST_FORMAT_SEED = `ROLEPLAY FORMAT
-Use chat-style roleplay formatting.
-Write all non-spoken narration, actions, gestures, physical descriptions, environmental descriptions and events inside *single asterisks*.
-Write spoken dialogue as plain text outside the asterisks. Do not put spoken dialogue in quotation marks.
-Keep the narration inside asterisks natural and descriptive rather than reducing it to terse stage directions.
-Example:
-*The man turns toward Nicco and folds his hands.*
-
-Good day to you. Looking for something in particular?
-
-*Behind him, the market continues around the pens.*`;
-
 export const UI_PLAYTEST_LOCATION = "calderan_slave_market";
 export const UI_PLAYTEST_OPENING = `*Suddenly there is daylight, dust, and the sound of voices all around Nicco.*
 
@@ -38,7 +26,8 @@ export function createUIPlaytestSession(deps: SessionDeps): GameSession {
     narrator_request_setup: request => {
       if (!initial) return request;
       initial = false;
-      return { ...request, system_prompt: `${request.system_prompt}\n\n${UI_PLAYTEST_FORMAT_SEED}`,
+      // The shared system contract owns formatting; only the opening example is one-shot.
+      return { ...request,
         messages: [{ role: "assistant", content: UI_PLAYTEST_OPENING }, ...request.messages] };
     },
   }) }, campaign);
