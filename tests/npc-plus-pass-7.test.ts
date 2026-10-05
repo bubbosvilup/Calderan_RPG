@@ -49,6 +49,17 @@ for (const failure of ["provider", "malformed", "stale", "rejected"] as const) t
   assert.equal(JSON.stringify(diagnostic).includes("NEVER_LOG"), false); assert.equal(JSON.stringify(diagnostic).includes("secret injury"), false);
 });
 
+test("CLI without a reflection provider publishes gameplay and skips maintenance", async () => {
+  const f = household(), published: TurnEvent[] = [], diagnostics: unknown[] = [];
+  let finalized: ReturnType<typeof f.campaign.exportSnapshot> | undefined;
+  const runs = await runPlayTurn({ ...f, request: { campaign: f.campaign, player_input: "I smile." },
+    publish: event => { published.push(event); if (event.type === "turn_completed") finalized = f.campaign.exportSnapshot(); },
+    reflection_diagnostics_sink: record => diagnostics.push(record) });
+  assert.equal(published.filter(event => event.type === "turn_completed").length, 1);
+  assert.deepEqual(runs, []); assert.deepEqual(diagnostics, []);
+  assert.equal(f.campaign.exportSnapshot(), finalized);
+});
+
 test("not due makes no provider call; failed/cancelled gameplay does not even check reflection", async () => {
   const f = household(), diagnostics: unknown[] = []; let calls = 0;
   const provider: ReflectionProvider = { async reflect() { calls++; return { text: '{"proposals":[]}' }; } };

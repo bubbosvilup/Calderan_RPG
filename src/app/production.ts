@@ -26,6 +26,7 @@ import type { DeepReadonly } from "../types/readonly.js";
  *   OPENROUTER_API_KEY          required for live play; read per request by the client and never copied anywhere.
  *   OPENROUTER_NARRATOR_MODEL   optional narrator model id.
  *   OPENROUTER_CONTROLLER_MODEL optional controller model id.
+ *   CALDREVAN_REFLECTION_MODE  optional off (default) or shadow; neither exposes notes to narration.
  *   OPENROUTER_REFLECTION_MODEL optional reflection model id (retains its pre-controller-migration default).
  *   MANNERISM_EXTRACTOR_MODEL  optional independent observation model id (validated D-10 default).
  *   Semantic retrieval is opt-in: pass an `embedding_provider` (VOYAGE_API_KEY applies to the Voyage provider).
@@ -35,9 +36,17 @@ export function readProviderStatus(env: Readonly<Record<string, string | undefin
   const models = selectedModels();
   return { mode: "live", configured: !!env.OPENROUTER_API_KEY?.trim(), narrator_model: models.narrator, controller_model: models.controller, reflection_model: env.OPENROUTER_REFLECTION_MODEL?.trim() || process.env.OPENROUTER_CONTROLLER_MODEL || DEFAULT_REFLECTION_MODEL };
 }
-export interface ProductionOptions { readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
+export type ReflectionMode = "off" | "shadow";
+/** D-09 is deferred. Shadow records qualified notes during real play without narrator exposure. */
+export function readReflectionMode(env: Readonly<Record<string, string | undefined>> = process.env): ReflectionMode {
+  const mode = env.CALDREVAN_REFLECTION_MODE?.trim() || "off";
+  if (mode !== "off" && mode !== "shadow") throw new Error("CALDREVAN_REFLECTION_MODE must be off or shadow");
+  return mode;
+}
+export interface ProductionOptions { /** Defaults to off; shadow enables post-turn maintenance only. */ readonly reflection_mode?: ReflectionMode; readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
 /** Real wiring for a player-facing build: canonical world, file saves, live OpenRouter providers. No fixture, no dev harness. */
 export async function createProductionDeps(options: ProductionOptions = {}): Promise<SessionDeps> {
+  const reflection_mode = options.reflection_mode ?? readReflectionMode();
   const context_policy = { ...DEFAULT_CONTEXT_POLICY, output_tokens: NARRATOR_OUTPUT_TOKENS, ...options.context_policy };
   const compressor_model = contextCompressorModel();
   const compaction_service = new LosslessContextCompactor(compressor_model ? new OpenRouterLosslessCompressor(compressor_model) : undefined, new ContextBudgetManager(context_policy), options.compaction_policy);
@@ -52,5 +61,5 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
     ...(options.enable_emergent_mannerisms !== false ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),
     // One coordinator is shared; the live session owns the diagnostics hook. A UI runs one session at a time.
     createCoordinator: hooks => { sink = hooks.diagnostics_sink; return coordinator; },
-    reflection_provider: new OpenRouterReflectionProvider(new OpenRouterClient(), { ...(status.reflection_model ? { model: status.reflection_model } : {}) }) };
+    ...(reflection_mode === "shadow" ? { reflection_provider: new OpenRouterReflectionProvider(new OpenRouterClient(), { ...(status.reflection_model ? { model: status.reflection_model } : {}) }) } : {}) };
 }

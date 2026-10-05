@@ -142,8 +142,10 @@ export function recoverNpcContext(world: WorldStore, snapshot: DeepReadonly<Camp
   return npcDeepSources(world, snapshot, m[1]!).find(s => s.handle === handle);
 }
 
+export interface NpcPlusPackingOptions { readonly include_reflections?: boolean }
+
 /** Candidate fragments for every ACTIVE NPC+ (B for present characters in focus, C for everyone), in snapshot order. */
-export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, present: ReadonlySet<string>, input = ""): readonly NpcPlusFragment[] {
+export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, present: ReadonlySet<string>, input = "", options: NpcPlusPackingOptions = {}): readonly NpcPlusFragment[] {
   const active = activeNpcPlus(snapshot);
   const presentActive = snapshot.premium_characters.filter(p => active.has(p.character_id) && present.has(p.character_id)).map(p => p.character_id);
   const out: NpcPlusFragment[] = [];
@@ -165,7 +167,7 @@ export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<Campa
     const ranked = rankDevelopments(p.dynamic.recent_developments, input, others);
     const chrono = (n: number) => ranked.slice(0, n).sort((a, b) => p.dynamic.recent_developments.indexOf(a) - p.dynamic.recent_developments.indexOf(b));
     const refs = npcDeepSources(world, snapshot, id).filter(s => s.kind !== "history" && s.kind !== "contract" && s.kind !== "reflection").slice(0, NPC_PLUS_LIMITS.deep_refs).map(s => s.handle);
-    const reflections = topReflections(snapshot, id);
+    const reflections = options.include_reflections === false ? [] : topReflections(snapshot, id);
     const rollupHint = p.dynamic.long_term ? rollupToken(p.dynamic.long_term, id, input, snapshot, world) : undefined;
     const mentioned = [name, ...name.split(/\s+/).filter(t => t.length > 2)].some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(input));
     const addressed = mentioned || presentActive.length === 1 && presentActive[0] === id && /\b(?:you|your)\b/i.test(input);
@@ -187,8 +189,8 @@ export function npcPlusFragments(world: WorldStore, snapshot: DeepReadonly<Campa
  * score (ties by snapshot order); then relevant PUBLIC deep material for selected characters, recovered by handle. Output keeps
  * snapshot order. A > B > C > D: authority is not in this budget and is never traded away here.
  */
-export function packNpcPlus(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, present: ReadonlySet<string>, input = "", budget: number = NPC_PLUS_LIMITS.budget_characters): NpcPlusContext | undefined {
-  const fragments = npcPlusFragments(world, snapshot, present, input);
+export function packNpcPlus(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, present: ReadonlySet<string>, input = "", budget: number = NPC_PLUS_LIMITS.budget_characters, options: NpcPlusPackingOptions = {}): NpcPlusContext | undefined {
+  const fragments = npcPlusFragments(world, snapshot, present, input, options);
   if (!fragments.length) return undefined;
   const order = new Map(fragments.map((f, i) => [f.key, i]));
   const chosen = new Map<string, NpcPlusFragment>(); let used = 0;

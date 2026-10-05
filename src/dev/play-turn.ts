@@ -6,7 +6,7 @@ import type { ReflectionDiagnosticsSink } from "../turn/reflection-diagnostics.j
 
 /** Publish/drain gameplay first. Await the separate post-turn operation before accepting another CLI command. */
 export async function runPlayTurn(input: { readonly coordinator: Pick<TurnCoordinator, "runTurn">; readonly world: WorldStore;
-  readonly request: TurnRequest; readonly publish: (event: TurnEvent) => void; readonly reflection_provider: ReflectionProvider;
+  readonly request: TurnRequest; readonly publish: (event: TurnEvent) => void; readonly reflection_provider?: ReflectionProvider;
   readonly reflection_diagnostics_sink?: ReflectionDiagnosticsSink; readonly max_reflection_characters?: number }): Promise<readonly ReflectionRun[]> {
   let completed = false;
   for await (const event of input.coordinator.runTurn(input.request)) {
@@ -14,7 +14,7 @@ export async function runPlayTurn(input: { readonly coordinator: Pick<TurnCoordi
     if (event.type === "turn_completed") completed = true;
     if (event.type === "turn_failed") completed = false;
   }
-  if (!completed || input.request.signal?.aborted) return [];
+  if (!completed || !input.reflection_provider || input.request.signal?.aborted) return [];
   try {
     return await reflectAfterTurn(input.request.campaign, input.world, input.reflection_provider, {
       max_characters: input.max_reflection_characters ?? 1, ...(input.reflection_diagnostics_sink ? { diagnostics_sink: input.reflection_diagnostics_sink } : {}),

@@ -8,6 +8,7 @@ import { turnFixture } from "./turn-fixture.js";
 import { onlineCoordinator, selectedModels } from "./turn-services.js";
 import { formatCampaignStatus } from "./campaign-status.js";
 import { runPlayTurn } from "./play-turn.js";
+import { readReflectionMode } from "../app/production.js";
 import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provider.js";
 
 const help = `Developer play loop (paid OpenRouter requests).
@@ -26,7 +27,7 @@ else {
   let campaign = process.argv.includes("--canon") ? createOpeningCampaign(world, "dev_play") : fixture.campaign;
   let session = new CampaignSession(campaign, repository);
   const coordinator = await onlineCoordinator(world, process.argv.includes("--semantic"));
-  const reflectionProvider = new OpenRouterReflectionProvider();
+  const reflectionProvider = readReflectionMode() === "shadow" ? new OpenRouterReflectionProvider() : undefined;
   const lines = createInterface({ input: process.stdin, output: process.stdout, terminal: !!process.stdin.isTTY });
   let active: AbortController | undefined;
   lines.on("SIGINT", () => { if (active) active.abort(); else lines.close(); });
@@ -46,7 +47,7 @@ else {
       }
       else if (input) {
         active = new AbortController();
-        await runPlayTurn({ coordinator, world, request: { campaign, player_input: input, signal: active.signal }, reflection_provider: reflectionProvider,
+        await runPlayTurn({ coordinator, world, request: { campaign, player_input: input, signal: active.signal }, ...(reflectionProvider ? { reflection_provider: reflectionProvider } : {}),
           ...(process.argv.includes("--debug") ? { reflection_diagnostics_sink: (record: unknown) => console.log(JSON.stringify({ reflection: record })) } : {}), publish: event => {
           if (event.type === "narration_delta") process.stdout.write(event.text);
           else if (event.type === "narration_completed") process.stdout.write("\n");
