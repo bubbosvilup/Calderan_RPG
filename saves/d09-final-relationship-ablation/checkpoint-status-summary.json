@@ -1,0 +1,62 @@
+[
+  {
+    "submission_id": 1,
+    "revision": 3,
+    "finalized": true,
+    "relationship_snapshot": null,
+    "relationship_developments": [],
+    "reflection_due": false,
+    "reflection_status": "skipped_not_due",
+    "reflection_proposals": [],
+    "accepted_reflection_proposals": [],
+    "rejected_reflection_proposals": [],
+    "persisted_notes": [],
+    "controller_proposals": [
+      "{\"commands\":[]}"
+    ],
+    "request_receipt_ids": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "submission_id": 2,
+    "revision": 3,
+    "finalized": false,
+    "relationship_snapshot": null,
+    "relationship_developments": [],
+    "reflection_due": false,
+    "reflection_status": "NO_MAINTENANCE_FAILED_TURN",
+    "reflection_proposals": [],
+    "accepted_reflection_proposals": [],
+    "rejected_reflection_proposals": [],
+    "persisted_notes": [],
+    "controller_proposals": [],
+    "request_receipt_ids": [
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "submission_id": 3,
+    "revision": 4,
+    "finalized": true,
+    "relationship_snapshot": null,
+    "relationship_developments": [],
+    "reflection_due": false,
+    "reflection_status": "skipped_not_due",
+    "reflection_proposals": [],
+    "accepted_reflection_proposals": [],
+    "rejected_reflection_proposals": [],
+    "persisted_notes": [],
+    "controller_proposals": [
+      "{\"commands\":[]}"
+    ],
+    "request_receipt_ids": [
+      7,
+      8
+    ]
+  }
+]

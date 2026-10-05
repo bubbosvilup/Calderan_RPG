@@ -1,0 +1,11 @@
+{
+  "classification": "RELATIONSHIP_REALIZATION_INSUFFICIENT",
+  "finalized_turns": 2,
+  "submitted_attempts": 3,
+  "WITH_calls": 0,
+  "WITHOUT_calls": 0,
+  "blind_review_calls": 0,
+  "production_unchanged": true,
+  "d09": "SOAK PENDING",
+  "instrumentation": "PASS"
+}

@@ -1,0 +1,7 @@
+{
+  "mode": "live",
+  "configured": true,
+  "narrator_model": "z-ai/glm-5.2",
+  "controller_model": "qwen/qwen3.8-flash",
+  "reflection_model": "qwen/qwen3.8-flash"
+}

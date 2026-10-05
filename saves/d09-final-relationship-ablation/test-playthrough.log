@@ -1,0 +1,164 @@
+
+> caldrevan-rpg@0.1.0 test:playthrough
+> npm run build --silent && node --test .build/tests/playthrough.test.js
+
+TAP version 13
+# Subtest: CSV quoted newlines, commas, escaped quotes and provenance
+ok 1 - CSV quoted newlines, commas, escaped quotes and provenance
+  ---
+  duration_ms: 0.9805
+  type: 'test'
+  ...
+# Subtest: historical replay record 3: pure_dialogue
+ok 2 - historical replay record 3: pure_dialogue
+  ---
+  duration_ms: 169.0804
+  type: 'test'
+  ...
+# Subtest: historical replay record 11: character_continuity
+ok 3 - historical replay record 11: character_continuity
+  ---
+  duration_ms: 75.0321
+  type: 'test'
+  ...
+# Subtest: historical replay record 25: equipment
+ok 4 - historical replay record 25: equipment
+  ---
+  duration_ms: 30.4296
+  type: 'test'
+  ...
+# Subtest: historical replay record 35: player_agency
+ok 5 - historical replay record 35: player_agency
+  ---
+  duration_ms: 40.7316
+  type: 'test'
+  ...
+# Subtest: historical replay record 39: time
+ok 6 - historical replay record 39: time
+  ---
+  duration_ms: 40.0725
+  type: 'test'
+  ...
+# Subtest: historical replay record 43: multi_npc
+ok 7 - historical replay record 43: multi_npc
+  ---
+  duration_ms: 27.2593
+  type: 'test'
+  ...
+# Subtest: historical replay record 47: ambiguous_time
+ok 8 - historical replay record 47: ambiguous_time
+  ---
+  duration_ms: 52.6017
+  type: 'test'
+  ...
+# Subtest: historical replay record 49: player_agency
+ok 9 - historical replay record 49: player_agency
+  ---
+  duration_ms: 51.2451
+  type: 'test'
+  ...
+# Subtest: historical replay record 53: knowledge
+ok 10 - historical replay record 53: knowledge
+  ---
+  duration_ms: 35.0671
+  type: 'test'
+  ...
+# Subtest: historical replay record 55: pure_dialogue
+ok 11 - historical replay record 55: pure_dialogue
+  ---
+  duration_ms: 23.828
+  type: 'test'
+  ...
+# Subtest: historical replay record 57: pure_dialogue
+ok 12 - historical replay record 57: pure_dialogue
+  ---
+  duration_ms: 30.6534
+  type: 'test'
+  ...
+# Subtest: historical replay record 65: ambiguous_time
+ok 13 - historical replay record 65: ambiguous_time
+  ---
+  duration_ms: 31.2809
+  type: 'test'
+  ...
+# Subtest: historical replay record 87: household
+ok 14 - historical replay record 87: household
+  ---
+  duration_ms: 29.8477
+  type: 'test'
+  ...
+# Subtest: historical replay record 111: movement
+ok 15 - historical replay record 111: movement
+  ---
+  duration_ms: 21.4648
+  type: 'test'
+  ...
+# Subtest: historical replay record 115: ownership
+ok 16 - historical replay record 115: ownership
+  ---
+  duration_ms: 34.7735
+  type: 'test'
+  ...
+# Subtest: historical replay record 117: equipment
+ok 17 - historical replay record 117: equipment
+  ---
+  duration_ms: 32.0869
+  type: 'test'
+  ...
+# Subtest: historical replay record 169: household
+ok 18 - historical replay record 169: household
+  ---
+  duration_ms: 45.9466
+  type: 'test'
+  ...
+# Subtest: historical replay record 171: knowledge
+ok 19 - historical replay record 171: knowledge
+  ---
+  duration_ms: 28.3726
+  type: 'test'
+  ...
+# Subtest: historical replay record 173: knowledge
+ok 20 - historical replay record 173: knowledge
+  ---
+  duration_ms: 34.4237
+  type: 'test'
+  ...
+# Subtest: historical replay record 185: ambiguous_time
+ok 21 - historical replay record 185: ambiguous_time
+  ---
+  duration_ms: 29.4571
+  type: 'test'
+  ...
+# Subtest: historical replay record 425: item_continuity
+ok 22 - historical replay record 425: item_continuity
+  ---
+  duration_ms: 41.6802
+  type: 'test'
+  ...
+# Subtest: historical replay record 443: knowledge
+ok 23 - historical replay record 443: knowledge
+  ---
+  duration_ms: 30.9983
+  type: 'test'
+  ...
+# Subtest: historical replay record 509: scheduled_event
+ok 24 - historical replay record 509: scheduled_event
+  ---
+  duration_ms: 28.5125
+  type: 'test'
+  ...
+# Subtest: historical replay record 591: multi_npc
+ok 25 - historical replay record 591: multi_npc
+  ---
+  duration_ms: 19.7784
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1216.6617

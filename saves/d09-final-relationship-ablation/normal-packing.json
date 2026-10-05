@@ -1,0 +1,78 @@
+{
+  "stage": "PHASE_1_ONLY",
+  "later_use_request_built": false,
+  "checkpoints": [
+    {
+      "submission": 1,
+      "revision": 3,
+      "normal_candidates": [
+        {
+          "key": "campaign_character_iris:B",
+          "character_id": "campaign_character_iris",
+          "tier": "B",
+          "pinned": true,
+          "score": 1105,
+          "recovery_refs": [],
+          "text": "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r2): joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+        },
+        {
+          "key": "campaign_character_iris:C",
+          "character_id": "campaign_character_iris",
+          "tier": "C",
+          "pinned": true,
+          "score": 1105,
+          "recovery_refs": [],
+          "text": "Iris: core=?; role=?; N{}; recent=joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+        }
+      ]
+    },
+    {
+      "submission": 2,
+      "revision": 3,
+      "normal_candidates": [
+        {
+          "key": "campaign_character_iris:B",
+          "character_id": "campaign_character_iris",
+          "tier": "B",
+          "pinned": true,
+          "score": 1105,
+          "recovery_refs": [],
+          "text": "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r2): joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+        },
+        {
+          "key": "campaign_character_iris:C",
+          "character_id": "campaign_character_iris",
+          "tier": "C",
+          "pinned": true,
+          "score": 1105,
+          "recovery_refs": [],
+          "text": "Iris: core=?; role=?; N{}; recent=joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+        }
+      ]
+    },
+    {
+      "submission": 3,
+      "revision": 4,
+      "normal_candidates": [
+        {
+          "key": "campaign_character_iris:B",
+          "character_id": "campaign_character_iris",
+          "tier": "B",
+          "pinned": true,
+          "score": 1105,
+          "recovery_refs": [],
+          "text": "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r2): joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+        },
+        {
+          "key": "campaign_character_iris:C",
+          "character_id": "campaign_character_iris",
+          "tier": "C",
+          "pinned": true,
+          "score": 1105,
+          "recovery_refs": [],
+          "text": "Iris: core=?; role=?; N{}; recent=joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "status": "NOT_REACHED",
+  "precheck_pass": false,
+  "reason": "No authoritative respect trajectory or persisted target note exists. No later narrator request was built.",
+  "raw_authority_removed": false,
+  "equivalent_compact_trajectory_check": "N/A",
+  "full_target_packed": false,
+  "unique_accumulated_meaning": false
+}

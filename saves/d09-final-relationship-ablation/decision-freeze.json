@@ -1,0 +1,18 @@
+{
+  "classification": "RELATIONSHIP_REALIZATION_INSUFFICIENT",
+  "qualification_gate": "FAIL - missing authoritative trajectory",
+  "reflection_gate": "NOT_REACHED",
+  "persistence_gate": "NOT_REACHED",
+  "marginal_value_gate": "NOT_REACHED",
+  "full_later_packing": "NOT_REACHED",
+  "matched_AB": "NOT_REACHED",
+  "blind_review": "NOT_REACHED",
+  "grounded_material_benefit": "NOT_DEMONSTRATED",
+  "d09": "SOAK PENDING",
+  "prior_matched_negative_preserved": true,
+  "prior_concern": "REFLECTION_USEFULNESS_CONCERN remains",
+  "automatic_rerun": false,
+  "production_unchanged": true,
+  "debt_register_updated": true,
+  "pushed": false
+}

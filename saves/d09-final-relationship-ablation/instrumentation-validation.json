@@ -1,0 +1,22 @@
+{
+  "pass": true,
+  "monotonic_unique_request_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "exclusive_submission_reservations": 3,
+  "exclusive_request_reservations": 8,
+  "exclusive_matching_receipts": 8,
+  "failed_submissions_counted": 1,
+  "pending_requests": 0,
+  "overwrites": 0,
+  "failed_turn_state_unchanged": true,
+  "request_body_hashes_verified": 8,
+  "production_source_hashes_verified": 406
+}

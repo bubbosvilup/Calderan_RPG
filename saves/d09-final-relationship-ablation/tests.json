@@ -1,0 +1,17 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "passed": 2008,
+    "failures": 0,
+    "todo": 4,
+    "total": 2012
+  },
+  "playthrough": {
+    "passed": 25,
+    "failures": 0
+  },
+  "runner_syntax": "PASS",
+  "after_live_run": true,
+  "production_tests_changed": false,
+  "log_format": "UTF-8; trailing whitespace normalized; test results preserved"
+}

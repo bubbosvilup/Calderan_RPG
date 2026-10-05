@@ -1,0 +1,36 @@
+{
+  "revision": 4,
+  "character_id": "campaign_character_iris",
+  "statement_authorities": [],
+  "first_statement": null,
+  "two_independent_statement_authorities": false,
+  "action": "NO QUALIFYING STATEMENT AUTHORITY",
+  "stop_self_statement_development": false,
+  "respect_history": [],
+  "stop_respect_development": false,
+  "reflection_notes": [],
+  "reminder": "Authority does not prove usefulness or unique marginal value. Normal maintenance must not be suppressed, forced or edited.",
+  "relationship_snapshot": null,
+  "all_relationship_developments": [],
+  "reflection_due": false,
+  "packing_candidates": [
+    {
+      "key": "campaign_character_iris:B",
+      "character_id": "campaign_character_iris",
+      "tier": "B",
+      "pinned": true,
+      "score": 1105,
+      "recovery_refs": [],
+      "text": "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r2): joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+    },
+    {
+      "key": "campaign_character_iris:C",
+      "character_id": "campaign_character_iris",
+      "tier": "C",
+      "pinned": true,
+      "score": 1105,
+      "recovery_refs": [],
+      "text": "Iris: core=?; role=?; N{}; recent=joined\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+    }
+  ]
+}

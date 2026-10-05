@@ -1,0 +1,22 @@
+{
+  "physical_requests": 8,
+  "receipts": 8,
+  "reported_cost_usd": 0.010083628,
+  "unknown_billing_ids": [
+    2,
+    5,
+    6
+  ],
+  "pending_requests": [],
+  "latency_ms": 39102.9563,
+  "by_role": {
+    "narrator": {
+      "calls": 3,
+      "cost": 0.00943608
+    },
+    "controller": {
+      "calls": 5,
+      "cost": 0.000647548
+    }
+  }
+}

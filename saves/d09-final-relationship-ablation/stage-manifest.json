@@ -1,0 +1,40 @@
+{
+  "plan": "plan-freeze.json",
+  "submissions": [
+    "submission-001.json",
+    "submission-002.json",
+    "submission-003.json"
+  ],
+  "requests": [
+    "request-001.json",
+    "request-002.json",
+    "request-003.json",
+    "request-004.json",
+    "request-005.json",
+    "request-006.json",
+    "request-007.json",
+    "request-008.json"
+  ],
+  "receipts": [
+    "receipt-001.json",
+    "receipt-002.json",
+    "receipt-003.json",
+    "receipt-004.json",
+    "receipt-005.json",
+    "receipt-006.json",
+    "receipt-007.json",
+    "receipt-008.json"
+  ],
+  "unreached": {
+    "packing_isolation": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "later_use_freeze": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "WITH_body": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "WITHOUT_body": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "body_diff": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "AB_receipts": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "anonymous_review_package": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "blind_review": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT",
+    "assignment_reveal": "NOT_REACHED - RELATIONSHIP_REALIZATION_INSUFFICIENT"
+  },
+  "no_dummy_outputs_fabricated": true
+}
