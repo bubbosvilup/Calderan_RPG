@@ -6,8 +6,12 @@ import type { SceneParticipantPlan } from "./scene-participants.js";
 import { escapeRegExp } from "./language/text.js";
 import type { PlayerIntent } from "./player-intent.js";
 import { INACTIVE_EXPIRY_TURNS } from "./scene-participants.js";
+import { rpgDialogue } from "./rpg-dialogue.js";
+import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
+import { SPEAKER_NOUNS } from "./narrated-captives.js";
+import { participatesInScene } from "./scene-participation.js";
 
-const NAME_REQUEST = /\b(?:who am i (?:speaking|talking) (?:with|to)|who are you|your name|introduce yourself|what (?:are you called|should i call you))\b/i;
+const NAME_REQUEST = /\b(?:who am i (?:speaking|talking) (?:with|to)|who are you|your name|introduce yourself|what (?:are you called|should i call you)|(?:u|you) said you are named)\b/i;
 const SELF_INTRODUCTION = /\b(?:my name(?:['’]s| is)|(?:name['’]s|i(?:['’]m| am))\s+Nicco)\b/i;
 
 /** Reuse existing address/reference/focus projection; never pick an arbitrary member of a candidate set. */
@@ -70,22 +74,69 @@ export function canonicalNameDisclosure(context: TurnContext, input: string, rec
   return name ? { internal_id: person.id, ref: identity.ref, canonical_name: name } : undefined;
 }
 
-/** Evidence-only parser: a supplied canonical self-introduction, immediately attributed by a unique observable descriptor.
+/** Leading observable subject only, never the rest of an action or an entire multi-sentence paragraph. */
+function observableSubject(text: string): string | undefined {
+  const match = text.trim().match(new RegExp(`^(?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:${SPEAKER_NOUNS})\\b`, "i"));
+  if (!match || /^another\b/i.test(match[0]) || /^\s+(?:and|or)\b/i.test(text.trim().slice(match[0].length))) return undefined;
+  return match[0];
+}
+
+/** Conservative evidence guard for engine-only attribution. Unknown explicit people and plural/opposite pronouns fail closed. */
+function noCompetingSpeaker(context: TurnContext, narration: readonly string[], target: string): boolean {
+  const identity = narratorIdentityGate(context)!.identities.get(target)!;
+  for (const block of narration) for (const sentence of block.split(/(?<=[.!?])\s+|;\s*|,\s*(?:while|whereas)\s+/)) {
+    if (/\bNPC\d+\b/.test(sentence)) return false;
+    const explicit = canonicalInteractionTargets(context, sentence);
+    // A mention of another canonical person in an attribution/action block could introduce another speaker.
+    if ([...explicit].some(id => id !== target)) return false;
+    if (context.characters.some(c => c.id !== target && c.id !== "nicco" && participatesInScene(sentence, [c.profile.name ?? c.id, ...(c.profile.aliases ?? [])]))) return false;
+    for (const event of sentence.matchAll(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\s+(?:says|asks|replies|answers|speaks|introduces|whispers|mutters)\b/g)) {
+      if (!/^(?:He|She)$/.test(event[1]!) && !canonicalInteractionTargets(context, event[1]!).has(target)) return false;
+    }
+    for (const event of sentence.matchAll(new RegExp(`\\b((?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:${SPEAKER_NOUNS}))\\s+(?:says|asks|replies|answers|speaks|introduces|whispers|mutters)\\b`, "gi"))) {
+      const resolved = canonicalInteractionTargets(context, `I address ${event[1]}`);
+      if (resolved.size !== 1 || !resolved.has(target)) return false;
+    }
+    const subject = observableSubject(sentence);
+    if (subject) {
+      const resolved = canonicalInteractionTargets(context, `I address ${subject}`);
+      if (resolved.size !== 1 || !resolved.has(target)) return false;
+    } else if (new RegExp(`^(?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:${SPEAKER_NOUNS})\\b`, "i").test(sentence.trim())) return false;
+    if (/^\s*(?:they|their)\b/i.test(sentence)) return false;
+    if (/^\s*(?:she|her)\b/i.test(sentence) && /\bman\b/.test(identity.observable_label)) return false;
+    if (/^\s*(?:he|his)\b/i.test(sentence) && /\bwoman\b/.test(identity.observable_label)) return false;
+    if (/^\s*(?:Nicco|I|you)\b/i.test(sentence) && /\b(?:says?|asks?|replies?|answers?|speaks?|introduces?)\b/i.test(sentence)) return false;
+  }
+  return true;
+}
+
+/** Evidence-only parser: a supplied canonical self-introduction in an attributed RPG speech segment.
  * No output rewriting, name mentions, inferred introductions or roster-wide discovery. Ambiguity grants nothing. */
 export function establishedCanonicalDisclosure(context: TurnContext, input: string, recent: readonly RecentExchange[], delivered: string, scene: SceneParticipantPlan, intent: PlayerIntent = { candidates: [], runtime: [] }) {
   const focus = projectNarratorFocus(context, input, recent, intent, scene);
   const capability = canonicalNameDisclosure(context, input, recent, focus.foreground, intent, scene);
   if (!capability) return undefined;
   const name = escapeRegExp(capability.canonical_name);
-  const intro = new RegExp(`^(?:["“])?(?:I'm|I’m|I am|My name is|My name's|Call me)\\s+${name}(?:[.!,"”]|$)`, "i");
+  const intro = new RegExp(`^(?:["“])?(?:I'm|I’m|I am|My name is|My name's|Call me)\\s+${name}[.!]?(?:["”])?$`, "i");
   const bareName = new RegExp(`^(?:["“])?${name}[.!]?(?:["”])?$`, "i");
+  const spoken = rpgDialogue(delivered);
+  if (!spoken?.length) return undefined;
+  const narration = [...delivered.matchAll(/(?<!\\)\*([\s\S]*?)(?<!\\)\*/g)].map(m => m[1]!);
+  const partner = recent.filter(e => e.status === "finalized").at(-1);
+  const bound = scene.focus === capability.internal_id && scene.addressed.length === 1 && scene.addressed[0] === capability.internal_id
+    && scene.canonical_location_id === context.primary.scene.player_location?.id;
+  const retained = !scene.focus && !scene.addressed.length && partner?.conversation_partner_id === capability.internal_id
+    && partner.location_id === context.primary.scene.player_location?.id;
+  const safeBound = (bound || retained) && noCompetingSpeaker(context, narration, capability.internal_id);
+  if (safeBound && spoken.some(segment => intro.test(segment) || bareName.test(segment))) return capability.internal_id;
   const paragraphs = delivered.split(/\n+/).map(p => p.trim()).filter(Boolean);
   for (let i = 1; i < paragraphs.length; i++) {
     if (!intro.test(paragraphs[i]!) && !(NAME_REQUEST.test(input) && bareName.test(paragraphs[i]!))) continue;
     const beat = paragraphs[i - 1]!;
     if (!beat.startsWith("*") || !beat.endsWith("*")) continue;
-    const subject = beat.slice(1, -1).split(/\b(?:says|replies|answers|introduces|nods|smiles|shrugs|gives|casts|looks|watches|scratches|studies|regards|tilts|meets|turns|offers|takes|leans)\b/i)[0]!.trim();
-    if (!/^the\s/i.test(subject) || /\b(?:Nicco|and|or|NPC\d+)\b/i.test(subject)) continue;
+    if (!noCompetingSpeaker(context, [beat.slice(1, -1)], capability.internal_id)) continue;
+    const subject = observableSubject(beat.slice(1, -1));
+    if (!subject || !/^the\s/i.test(subject) || /\b(?:Nicco|and|or)\b/i.test(subject) || /\bNPC\d+\b/i.test(beat)) continue;
     const attribution = projectNarratorFocus(context, `I address ${subject}`, [], { candidates: [], runtime: [] });
     if (attribution.foreground.size === 1 && attribution.foreground.has(capability.internal_id)) return capability.internal_id;
   }
