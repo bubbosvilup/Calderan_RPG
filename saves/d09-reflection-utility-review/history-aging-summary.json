@@ -1,0 +1,3870 @@
+[
+  {
+    "family": "relationship_trajectory",
+    "baseline_revision": 5,
+    "rendered": "Iris's recorded respect toward Nicco: none → moderate across 2 increases.",
+    "source_ref_types": [
+      "relationship_change",
+      "relationship_change"
+    ],
+    "first_support_loss": {
+      "revision_offset": 19,
+      "new_events": 15
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 3,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): joined, resp>N:0→L, resp>N:L→M",
+        "rollup": null,
+        "current_relationship": {
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: respect moderate | recent (r4): joined, resp>N:0→L, resp>N:L→M | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 461,
+            "chars_after": 461,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): resp>N:0→L, resp>N:L→M, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r6): resp>N:0→L, resp>N:L→M, wary>N:0→L | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 479,
+            "chars_after": 479,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 479,
+            "chars_after": 479,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 481,
+            "chars_after": 481,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 11,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 481,
+            "chars_after": 481,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 15,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 481,
+            "chars_after": 481,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 3,
+          "entries": 2,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "raises": 1,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 3
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L | history: resp_hist>N:+1/-0; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 457,
+            "chars_after": 457,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 5,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "raises": 2,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 4
+            },
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 458,
+            "chars_after": 458,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "relationship_contrast",
+    "baseline_revision": 5,
+    "rendered": "Iris's recorded feelings toward Nicco: respect moderate while wariness is low.",
+    "source_ref_types": [
+      "relationship_change",
+      "relationship_change"
+    ],
+    "first_support_loss": {
+      "revision_offset": 19,
+      "new_events": 15
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r4.1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): resp>N:0→L, wary>N:0→L, resp>N:L→M",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r4): resp>N:0→L, wary>N:0→L, resp>N:L→M | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 482,
+            "chars_after": 482,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 5,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r4.1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): wary>N:0→L, resp>N:L→M, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "claim_state_mismatch"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r6): wary>N:0→L, resp>N:L→M, wary>N:L→0 | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 483,
+            "chars_after": 483,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r4.1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "claim_state_mismatch"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r8): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 483,
+            "chars_after": 483,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 8,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r4.1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r10): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 483,
+            "chars_after": 483,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 12,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r4.1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r15): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 483,
+            "chars_after": 483,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r4.1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r20): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 483,
+            "chars_after": 483,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 4,
+          "entries": 3,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "raises": 1,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 3
+            },
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 0,
+              "first_revision": 4,
+              "last_revision": 4
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r24): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-0; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 455,
+            "chars_after": 455,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 6,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "raises": 2,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 4
+            },
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 2,
+              "lowers": 1,
+              "first_revision": 4,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r28): wary>N:0→L, wary>N:L→0, wary>N:0→L | history: wary_hist>N:+2/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 454,
+            "chars_after": 454,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "relationship_parallel",
+    "baseline_revision": 5,
+    "rendered": "Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.",
+    "source_ref_types": [
+      "relationship_change",
+      "relationship_change",
+      "relationship_change",
+      "relationship_change"
+    ],
+    "first_support_loss": {
+      "revision_offset": 17,
+      "new_events": 13
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 5,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.1",
+          "npcmem:campaign_character_iris:history:r4.1",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): resp>N:0→L, trust>N:L→M, resp>N:L→M",
+        "rollup": null,
+        "current_relationship": {
+          "trust": "moderate",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, respect moderate | recent (r4): resp>N:0→L, trust>N:L→M, resp>N:L→M | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 510,
+            "chars_after": 510,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.1",
+          "npcmem:campaign_character_iris:history:r4.1",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): trust>N:L→M, resp>N:L→M, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness low, respect moderate | recent (r6): trust>N:L→M, resp>N:L→M, wary>N:0→L | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 524,
+            "chars_after": 524,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 8,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.1",
+          "npcmem:campaign_character_iris:history:r4.1",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness low, respect moderate | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 523,
+            "chars_after": 523,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 9,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.1",
+          "npcmem:campaign_character_iris:history:r4.1",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness none, respect moderate | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 525,
+            "chars_after": 525,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 13,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.1",
+          "npcmem:campaign_character_iris:history:r4.1",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness none, respect moderate | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 525,
+            "chars_after": 525,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.1",
+          "npcmem:campaign_character_iris:history:r4.1",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 2,
+          "entries": 1,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness none, respect moderate | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 581,
+            "chars_after": 581,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 4,
+          "entries": 4,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "raises": 1,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 3
+            },
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "trust",
+              "raises": 2,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 4
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "low",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness low, respect moderate | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L | history: trust_hist>N:+2/-0; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 485,
+            "chars_after": 485,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 4,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 7,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "raises": 2,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 4
+            },
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "trust",
+              "raises": 2,
+              "lowers": 0,
+              "first_revision": 3,
+              "last_revision": 4
+            },
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "trust": "moderate",
+          "wariness": "none",
+          "respect": "moderate"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness none, respect moderate | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 485,
+            "chars_after": 485,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "condition_trajectory",
+    "baseline_revision": 7,
+    "rendered": "Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.",
+    "source_ref_types": [
+      "condition_change",
+      "condition_change",
+      "condition_change",
+      "condition_change"
+    ],
+    "first_support_loss": {
+      "revision_offset": 17,
+      "new_events": 13
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 7,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 5,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r5.0",
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): -cond:fatigued, +cond:fatigued, -cond:fatigued",
+        "rollup": null,
+        "current_relationship": null,
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r6): -cond:fatigued, +cond:fatigued, -cond:fatigued | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 487,
+            "chars_after": 487,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r5.0",
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): +cond:fatigued, -cond:fatigued, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r8): +cond:fatigued, -cond:fatigued, wary>N:0→L | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 471,
+            "chars_after": 471,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 8,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r5.0",
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r10): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 464,
+            "chars_after": 464,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 12,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 9,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r5.0",
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r12): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r12): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 465,
+            "chars_after": 465,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 17,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 13,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r5.0",
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r17): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r17): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 465,
+            "chars_after": 465,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 23,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0",
+          "npcmem:campaign_character_iris:history:r5.0",
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r22): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 2,
+          "entries": 1,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r22): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 521,
+            "chars_after": 521,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 27,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r6.0"
+        ],
+        "required_supporting_refs": 4,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r26): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 5,
+          "entries": 4,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [
+            {
+              "condition": "fatigued",
+              "added": 2,
+              "removed": 1,
+              "last_revision": 5
+            }
+          ],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r26): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 404,
+            "chars_after": 404,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 31,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 4,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r30): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 9,
+          "entries": 7,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 8,
+              "last_revision": 9
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [
+            {
+              "condition": "fatigued",
+              "added": 2,
+              "removed": 2,
+              "last_revision": 6
+            }
+          ],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r30): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 434,
+            "chars_after": 434,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "membership_trajectory",
+    "baseline_revision": 5,
+    "rendered": "Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.",
+    "source_ref_types": [
+      "household_membership",
+      "household_membership",
+      "household_membership"
+    ],
+    "first_support_loss": {
+      "revision_offset": 18,
+      "new_events": 14
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 3,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r2.0",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): joined, left, rejoined",
+        "rollup": null,
+        "current_relationship": null,
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, left, rejoined | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 466,
+            "chars_after": 466,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r2.0",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): left, rejoined, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r6): left, rejoined, wary>N:0→L | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 458,
+            "chars_after": 458,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r2.0",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 466,
+            "chars_after": 466,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r2.0",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 468,
+            "chars_after": 468,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 11,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r2.0",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 468,
+            "chars_after": 468,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 15,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r2.0",
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 468,
+            "chars_after": 468,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 3,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 3,
+          "entries": 2,
+          "lifecycle": {
+            "joined": 1,
+            "left": 1,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 399,
+            "chars_after": 399,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 3,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 5,
+          "lifecycle": {
+            "joined": 1,
+            "left": 1,
+            "rejoined": 1,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 429,
+            "chars_after": 429,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "movement_trajectory",
+    "baseline_revision": 5,
+    "rendered": "Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).",
+    "source_ref_types": [
+      "movement",
+      "movement"
+    ],
+    "first_support_loss": {
+      "revision_offset": 19,
+      "new_events": 15
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 3,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): joined, moved:heartstone_u1, moved:heartstone_f1",
+        "rollup": null,
+        "current_relationship": null,
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, moved:heartstone_u1, moved:heartstone_f1 | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 502,
+            "chars_after": 502,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): moved:heartstone_u1, moved:heartstone_f1, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r6): moved:heartstone_u1, moved:heartstone_f1, wary>N:0→L | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 494,
+            "chars_after": 494,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 476,
+            "chars_after": 476,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 478,
+            "chars_after": 478,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 11,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 478,
+            "chars_after": 478,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 15,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 478,
+            "chars_after": 478,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 3,
+          "entries": 2,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 1,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 416,
+            "chars_after": 416,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 5,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 2,
+          "rules_added": 0,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 446,
+            "chars_after": 446,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "self_statement_synthesis",
+    "baseline_revision": 5,
+    "rendered": "Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".",
+    "source_ref_types": [
+      "self_statement",
+      "self_statement"
+    ],
+    "first_support_loss": null,
+    "first_note_pruned": null,
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 3,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): joined, contract:social_style, contract:voice",
+        "rollup": null,
+        "current_relationship": null,
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, contract:social_style, contract:voice | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 488,
+            "chars_after": 488,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): contract:social_style, contract:voice, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness low | recent (r6): contract:social_style, contract:voice, wary>N:0→L | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 480,
+            "chars_after": 480,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness low | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 465,
+            "chars_after": 465,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness none | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 467,
+            "chars_after": 467,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 11,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 467,
+            "chars_after": 467,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 15,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness none | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 467,
+            "chars_after": 467,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 3,
+          "entries": 2,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 1
+        },
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness low | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 522,
+            "chars_after": 522,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 5,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 0,
+          "contracts": 2
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness none | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1 | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 552,
+            "chars_after": 552,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "environmental_motif",
+    "baseline_revision": 5,
+    "rendered": "The household recorded 2 rule additions; this is environmental context, not Iris's act.",
+    "source_ref_types": [
+      "household_context",
+      "household_context"
+    ],
+    "first_support_loss": {
+      "revision_offset": 19,
+      "new_events": 15
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 3,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): joined, rule+, rule+",
+        "rollup": null,
+        "current_relationship": null,
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, rule+, rule+ | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 464,
+            "chars_after": 464,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): rule+, rule+, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r6): rule+, rule+, wary>N:0→L | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 456,
+            "chars_after": 456,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 466,
+            "chars_after": 466,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 468,
+            "chars_after": 468,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 11,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 468,
+            "chars_after": 468,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 15,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 468,
+            "chars_after": 468,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 3,
+          "entries": 2,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 1,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 406,
+            "chars_after": 406,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 5,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 2,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_evidence",
+          "citation_not_visible"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 436,
+            "chars_after": 436,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "environmental_shared_rule_text",
+    "baseline_revision": 5,
+    "rendered": "Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.",
+    "source_ref_types": [
+      "household_context",
+      "household_context"
+    ],
+    "first_support_loss": {
+      "revision_offset": 19,
+      "new_events": 15
+    },
+    "first_note_pruned": {
+      "revision_offset": 20,
+      "new_events": 15
+    },
+    "requested_offsets": [
+      {
+        "revision_offset": 0,
+        "revision": 5,
+        "stage": "post_initial_maintenance",
+        "new_events": 0,
+        "raw_window_size": 3,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r4): joined, rule+, rule+",
+        "rollup": null,
+        "current_relationship": null,
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, rule+, rule+ | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 530,
+            "chars_after": 530,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 1,
+        "revision": 6,
+        "stage": "post_development_before_maintenance",
+        "new_events": 1,
+        "raw_window_size": 4,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r6): rule+, rule+, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r6): rule+, rule+, wary>N:0→L | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 522,
+            "chars_after": 522,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 3,
+        "revision": 8,
+        "stage": "post_development_before_maintenance",
+        "new_events": 3,
+        "raw_window_size": 6,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r8): wary>N:0→L, wary>N:L→0, wary>N:0→L",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r8): wary>N:0→L, wary>N:L→0, wary>N:0→L | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 532,
+            "chars_after": 532,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 5,
+        "revision": 10,
+        "stage": "post_development_before_maintenance",
+        "new_events": 4,
+        "raw_window_size": 7,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r10): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r10): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 534,
+            "chars_after": 534,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 10,
+        "revision": 15,
+        "stage": "post_development_before_maintenance",
+        "new_events": 8,
+        "raw_window_size": 11,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r15): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 534,
+            "chars_after": 534,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 16,
+        "revision": 21,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 12,
+        "raw_window_size": 15,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r3.0",
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": true,
+        "full_note_packed": true,
+        "recent_compact": "(r20): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": null,
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": true,
+        "revalidation_reasons": [],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r20): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 534,
+            "chars_after": 534,
+            "omitted_fragments": 1,
+            "recovery_refs": 0,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 20,
+        "revision": 25,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 15,
+        "raw_window_size": 16,
+        "supporting_refs_live": [
+          "npcmem:campaign_character_iris:history:r4.0"
+        ],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 3,
+          "entries": 2,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 1,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "low"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_or_ambiguous_evidence",
+          "citation_not_visible",
+          "invalid_environmental_anchor",
+          "unsupported_environmental_segment",
+          "invalid_environmental_authority",
+          "missing_independent_environmental_sources",
+          "claim_count_mismatch"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low | recent (r24): wary>N:0→L, wary>N:L→0, wary>N:0→L; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 407,
+            "chars_after": 407,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      },
+      {
+        "revision_offset": 24,
+        "revision": 29,
+        "stage": "post_normal_due_maintenance",
+        "new_events": 18,
+        "raw_window_size": 16,
+        "supporting_refs_live": [],
+        "required_supporting_refs": 2,
+        "note_stored": false,
+        "full_note_packed": false,
+        "recent_compact": "(r28): wary>N:L→0, wary>N:0→L, wary>N:L→0",
+        "rollup": {
+          "first_revision": 2,
+          "last_revision": 7,
+          "entries": 5,
+          "lifecycle": {
+            "joined": 1,
+            "left": 0,
+            "rejoined": 0,
+            "migrated": 0
+          },
+          "relationships": [
+            {
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "raises": 1,
+              "lowers": 1,
+              "first_revision": 6,
+              "last_revision": 7
+            }
+          ],
+          "other_relationship_changes": 0,
+          "conditions": [],
+          "other_condition_changes": 0,
+          "legal_changes": 0,
+          "transactions": {
+            "sale": 0,
+            "gift": 0,
+            "assignment": 0,
+            "manumission": 0
+          },
+          "moves": 0,
+          "rules_added": 2,
+          "contracts": 0
+        },
+        "current_relationship": {
+          "wariness": "none"
+        },
+        "old_proposal_would_validate_now": false,
+        "revalidation_reasons": [
+          "unknown_or_ambiguous_evidence",
+          "citation_not_visible",
+          "invalid_environmental_anchor",
+          "unsupported_environmental_segment",
+          "invalid_environmental_authority",
+          "missing_independent_environmental_sources",
+          "claim_count_mismatch"
+        ],
+        "normal_packed": {
+          "lines": [
+            "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r28): wary>N:L→0, wary>N:0→L, wary>N:L→0 | history: wary_hist>N:+1/-1; deep=[npcmem:campaign_character_iris:rollup:long_term]\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+          ],
+          "diagnostics": {
+            "active_count": 1,
+            "candidate_fragments": 2,
+            "selected_fragments": 1,
+            "chars_before": 437,
+            "chars_after": 437,
+            "omitted_fragments": 1,
+            "recovery_refs": 1,
+            "recovered": 0,
+            "tier_counts": {
+              "B": 1,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      }
+    ]
+  }
+]

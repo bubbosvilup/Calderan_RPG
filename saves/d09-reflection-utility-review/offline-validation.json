@@ -1,0 +1,11 @@
+{
+  "families": 9,
+  "all_initial_proposals_validated_and_persisted_offline": true,
+  "all_N_plus_10_full_notes_packed": true,
+  "nonself_notes_pruned_after_source_eviction": 8,
+  "quiet_revision_proofs": 9,
+  "network_attempts": 0,
+  "paid_calls": 0,
+  "production_source_hashes_unchanged": 406,
+  "live_closure_evidence": false
+}

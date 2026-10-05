@@ -1,0 +1,481 @@
+{
+  "offline_only": true,
+  "state": {
+    "schema_version": 3,
+    "campaign_id": "d09_packing_relationship_trajectory",
+    "dataset_id": "sha256:c885c57372c11e3bf5a967de272a0b17509a970c58653152aa06cec2e6cc1d70",
+    "revision": 10,
+    "runtime": {
+      "scene": {
+        "player_location": "heartstone_f1",
+        "world_time": {
+          "world_minute": 0
+        }
+      },
+      "npc_locations": [
+        {
+          "character_id": "arwen_woodsigner",
+          "current_location": "the_bent_bough"
+        },
+        {
+          "character_id": "bartolomhew",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "bram_kessel",
+          "current_location": "the_daily_grind"
+        },
+        {
+          "character_id": "brother_aven",
+          "current_location": "open_hand_chapel"
+        },
+        {
+          "character_id": "brunna_keld",
+          "current_location": "house_of_making"
+        },
+        {
+          "character_id": "captain_doran_hale",
+          "current_location": "west_guard_post"
+        },
+        {
+          "character_id": "cassian_valerius",
+          "current_location": "cathedral_of_the_bladed_sun"
+        },
+        {
+          "character_id": "dunrig_iron_hands",
+          "current_location": "calderan_east"
+        },
+        {
+          "character_id": "gaston",
+          "current_location": "calderan_east"
+        },
+        {
+          "character_id": "hadrik_voss",
+          "current_location": "blackiron_repairs_and_arms"
+        },
+        {
+          "character_id": "halden_cross",
+          "current_location": "imperial_gate"
+        },
+        {
+          "character_id": "helbrecht",
+          "current_location": "bastion_of_vigilance"
+        },
+        {
+          "character_id": "jessa_rook",
+          "current_location": "gatherers_inn"
+        },
+        {
+          "character_id": "korvin",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "livia_marr",
+          "current_location": "livias_needles"
+        },
+        {
+          "character_id": "lysandra_vell",
+          "current_location": "spire_academy"
+        },
+        {
+          "character_id": "marta_pell",
+          "current_location": "wayfarers_rest"
+        },
+        {
+          "character_id": "matthias_eld",
+          "current_location": "the_collegium"
+        },
+        {
+          "character_id": "mira_thorne",
+          "current_location": "mudlarks_herbs"
+        },
+        {
+          "character_id": "mistress_elara",
+          "current_location": "calderan_slave_market"
+        },
+        {
+          "character_id": "niles_vanner",
+          "current_location": "second_chance_pawn"
+        },
+        {
+          "character_id": "odelia_crane",
+          "current_location": "the_collegium"
+        },
+        {
+          "character_id": "oren_quarn",
+          "current_location": "high_courts_of_calderan"
+        },
+        {
+          "character_id": "orla_fen",
+          "current_location": "the_white_basin"
+        },
+        {
+          "character_id": "pellan",
+          "current_location": "calderan_center"
+        },
+        {
+          "character_id": "rufus_tern",
+          "current_location": "the_long_yard"
+        },
+        {
+          "character_id": "severan_krauss",
+          "current_location": "bastion_of_vigilance"
+        },
+        {
+          "character_id": "sister_mereth",
+          "current_location": "saint_orra_house"
+        },
+        {
+          "character_id": "sister_veyra",
+          "current_location": "saint_caldus_house"
+        },
+        {
+          "character_id": "tavian_merrow",
+          "current_location": "house_of_scales"
+        },
+        {
+          "character_id": "uther_calderan",
+          "current_location": "ducal_citadel"
+        },
+        {
+          "character_id": "vaelen_vael",
+          "current_location": "ducal_citadel"
+        }
+      ],
+      "mana": {
+        "current": 100,
+        "max": 100
+      }
+    },
+    "characters": [
+      {
+        "id": "campaign_character_iris",
+        "origin": {
+          "kind": "created"
+        },
+        "profile": {
+          "name": "Iris"
+        },
+        "current": {
+          "current_location": "heartstone_f1",
+          "status": "active",
+          "conditions": [
+            "fatigued"
+          ]
+        }
+      }
+    ],
+    "items": [],
+    "households": [
+      {
+        "id": "campaign_household_heartstone",
+        "name": "Heartstone",
+        "members": [
+          {
+            "character_id": "campaign_character_iris",
+            "status": "member",
+            "joined_at": 0
+          },
+          {
+            "character_id": "nicco",
+            "status": "member",
+            "joined_at": 0,
+            "role": "owner"
+          }
+        ]
+      }
+    ],
+    "facts": [
+      {
+        "id": "campaign_fact_nicco_light_mage",
+        "content": {
+          "kind": "campaign",
+          "statement": "Nicco is a Light mage.",
+          "truth": "true"
+        }
+      },
+      {
+        "id": "campaign_fact_nicco_otherworlder",
+        "content": {
+          "kind": "campaign",
+          "statement": "Nicco came to this world from another world.",
+          "truth": "true"
+        }
+      }
+    ],
+    "knowledge": [
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_nicco_light_mage",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_nicco_otherworlder",
+        "status": "knows"
+      }
+    ],
+    "relationships": [
+      {
+        "from_character_id": "campaign_character_iris",
+        "to_character_id": "nicco",
+        "dimensions": {
+          "wariness": "low",
+          "respect": "high"
+        }
+      }
+    ],
+    "goals": [],
+    "funds": [
+      {
+        "character_id": "nicco",
+        "gold": 500
+      }
+    ],
+    "legal_statuses": [],
+    "transactions": [],
+    "premium_characters": [
+      {
+        "character_id": "campaign_character_iris",
+        "mannerisms": [
+          {
+            "epistemic_state": "emergent",
+            "known_by_character_ids": [],
+            "id": "mannerism_r2_n0",
+            "canonical_key": "nose_wrinkle_at_unfamiliar_word",
+            "text": "Wrinkles their nose slightly when repeating an unfamiliar word.",
+            "source": "seeded",
+            "created_revision": 2,
+            "user_edited": false
+          }
+        ],
+        "stable": {
+          "voice_contract": "speaks softly",
+          "baseline_social_style": "dislikes noise",
+          "contract_evidence": [
+            {
+              "field": "social_style",
+              "revision": 6,
+              "quote": "I don't like noise."
+            },
+            {
+              "field": "voice",
+              "revision": 7,
+              "quote": "I always speak softly."
+            }
+          ]
+        },
+        "dynamic": {
+          "recent_developments": [
+            {
+              "kind": "joined_household",
+              "household_id": "campaign_household_heartstone",
+              "revision": 2,
+              "world_minute": 0
+            },
+            {
+              "kind": "relationship_changed",
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "from": "none",
+              "to": "low",
+              "revision": 3,
+              "world_minute": 0
+            },
+            {
+              "kind": "relationship_changed",
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "from": "low",
+              "to": "moderate",
+              "revision": 4,
+              "world_minute": 0
+            },
+            {
+              "kind": "contract_established",
+              "field": "social_style",
+              "revision": 6,
+              "world_minute": 0
+            },
+            {
+              "kind": "contract_established",
+              "field": "voice",
+              "revision": 7,
+              "world_minute": 0
+            },
+            {
+              "kind": "relationship_changed",
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "wariness",
+              "from": "none",
+              "to": "low",
+              "revision": 9,
+              "world_minute": 0
+            },
+            {
+              "kind": "relationship_changed",
+              "actor_id": "campaign_character_iris",
+              "other_id": "nicco",
+              "dimension": "respect",
+              "from": "moderate",
+              "to": "high",
+              "revision": 9,
+              "world_minute": 0
+            },
+            {
+              "kind": "condition_added",
+              "condition": "fatigued",
+              "revision": 9,
+              "world_minute": 0
+            }
+          ],
+          "private_memory_refs": []
+        },
+        "metadata": {
+          "created_revision": 2,
+          "last_updated_revision": 9,
+          "active_household_member": true,
+          "initial_mannerism": "seeded"
+        }
+      }
+    ],
+    "premium_reflections": [
+      {
+        "character_id": "campaign_character_iris",
+        "notes": [
+          {
+            "id": "r8_stance_2",
+            "kind": "stance",
+            "label": "self_statement_5ea2642f3427",
+            "text": "Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".",
+            "evidence_refs": [
+              "npcmem:campaign_character_iris:contract:0",
+              "npcmem:campaign_character_iris:contract:1"
+            ],
+            "confidence": "high",
+            "created_revision": 8,
+            "updated_revision": 8,
+            "structured": {
+              "format_version": 1,
+              "semantic_version": "V2.3-CVC-E1",
+              "source_revision": 7,
+              "proposal": {
+                "subject_character_id": "campaign_character_iris",
+                "confidence": "high",
+                "evidence_refs": [
+                  "npcmem:campaign_character_iris:contract:0",
+                  "npcmem:campaign_character_iris:contract:1"
+                ],
+                "claim": {
+                  "type": "self_statement_synthesis",
+                  "statement_refs": [
+                    "npcmem:campaign_character_iris:contract:0",
+                    "npcmem:campaign_character_iris:contract:1"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": "r5_signature_pattern_1",
+            "kind": "signature_pattern",
+            "label": "rel_traj_6ae7e9031d5a",
+            "text": "Iris's recorded respect toward Nicco: none → moderate across 2 increases.",
+            "evidence_refs": [
+              "npcmem:campaign_character_iris:history:r3.0",
+              "npcmem:campaign_character_iris:history:r4.0"
+            ],
+            "confidence": "high",
+            "created_revision": 5,
+            "updated_revision": 5,
+            "structured": {
+              "format_version": 1,
+              "semantic_version": "V2.3-CVC-E1",
+              "source_revision": 4,
+              "proposal": {
+                "subject_character_id": "campaign_character_iris",
+                "confidence": "high",
+                "evidence_refs": [
+                  "npcmem:campaign_character_iris:history:r3.0",
+                  "npcmem:campaign_character_iris:history:r4.0"
+                ],
+                "claim": {
+                  "type": "relationship_trajectory",
+                  "target_character_id": "nicco",
+                  "dimension": "respect",
+                  "from": "none",
+                  "to": "moderate",
+                  "direction": "increase",
+                  "transition_count": 2
+                }
+              }
+            }
+          },
+          {
+            "id": "r10_unresolved_tension_3",
+            "kind": "unresolved_tension",
+            "label": "rel_contrast_1945c7ab2ba0",
+            "text": "Iris's recorded feelings toward Nicco: respect high while wariness is low.",
+            "evidence_refs": [
+              "npcmem:campaign_character_iris:history:r9.0",
+              "npcmem:campaign_character_iris:history:r9.1"
+            ],
+            "confidence": "high",
+            "created_revision": 10,
+            "updated_revision": 10,
+            "structured": {
+              "format_version": 1,
+              "semantic_version": "V2.3-CVC-E1",
+              "source_revision": 9,
+              "proposal": {
+                "subject_character_id": "campaign_character_iris",
+                "confidence": "high",
+                "evidence_refs": [
+                  "npcmem:campaign_character_iris:history:r9.0",
+                  "npcmem:campaign_character_iris:history:r9.1"
+                ],
+                "claim": {
+                  "type": "relationship_contrast",
+                  "target_character_id": "nicco",
+                  "dimension_a": "respect",
+                  "state_a": "high",
+                  "dimension_b": "wariness",
+                  "state_b": "low"
+                }
+              }
+            }
+          }
+        ],
+        "last_reflected_revision": 9
+      }
+    ],
+    "scheduled_events": []
+  },
+  "packed": {
+    "lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness low, respect high | recent (r9): resp>N:L→M, wary>N:0→L, resp>N:M→H | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect high while wariness is low.\"; stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "diagnostics": {
+      "active_count": 1,
+      "candidate_fragments": 2,
+      "selected_fragments": 1,
+      "chars_before": 573,
+      "chars_after": 573,
+      "omitted_fragments": 1,
+      "recovery_refs": 0,
+      "recovered": 0,
+      "tier_counts": {
+        "B": 1,
+        "C": 0,
+        "D": 0
+      }
+    }
+  },
+  "notes_stored": 3,
+  "full_notes_packed": 2,
+  "omitted_historical_trajectory": "Iris's recorded respect toward Nicco: none → moderate across 2 increases.",
+  "reason": "High confidence contrast (kind priority 5) and self stance (4) outrank trajectory signature pattern (3); no input relevance score."
+}

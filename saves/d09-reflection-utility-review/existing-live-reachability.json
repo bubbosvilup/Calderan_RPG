@@ -1,0 +1,352 @@
+{
+  "runs": [
+    {
+      "directory": "d09-final-campaign-soak",
+      "retained_attempt_artifacts": 19,
+      "finalized": 19,
+      "relationship_change_turns": 0,
+      "turns": [
+        {
+          "file": "turn-01.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-02.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-03.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-04.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-05.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-06.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-07.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-08.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-09.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-10.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-11.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-12.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-13.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-14.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-15.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-16.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-17.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-18.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-19.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        }
+      ]
+    },
+    {
+      "directory": "d09-final-matched-ablation",
+      "retained_attempt_artifacts": 11,
+      "finalized": 11,
+      "relationship_change_turns": 0,
+      "turns": [
+        {
+          "file": "turn-01.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-02.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-03.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-04.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-05.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-06.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-07.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-08.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-09.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-10.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-11.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        }
+      ]
+    },
+    {
+      "directory": "d09-unique-value-matched-ablation",
+      "retained_attempt_artifacts": 12,
+      "finalized": 11,
+      "relationship_change_turns": 0,
+      "turns": [
+        {
+          "file": "turn-01.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-02.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-03.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-04.json",
+          "finalized": false,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-05.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-06.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-07.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-08.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-09.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-10.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-11.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-12.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        }
+      ]
+    },
+    {
+      "directory": "d09-final-relationship-ablation",
+      "retained_attempt_artifacts": 3,
+      "finalized": 2,
+      "relationship_change_turns": 0,
+      "turns": [
+        {
+          "file": "turn-01.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-02.json",
+          "finalized": false,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        },
+        {
+          "file": "turn-03.json",
+          "finalized": true,
+          "relationship_domain_changed": false,
+          "committed_relationship_command": false,
+          "recent_relationship_events": 0
+        }
+      ]
+    }
+  ],
+  "scope": "retained canonical-world turn artifacts only; not a representative organic frequency estimate; older summaries and overwritten/missing attempts excluded"
+}

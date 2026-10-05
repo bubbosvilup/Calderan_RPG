@@ -1,0 +1,15 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "pass": 2008,
+    "fail": 0,
+    "todo": 4,
+    "total": 2012
+  },
+  "playthrough": {
+    "pass": 25,
+    "fail": 0
+  },
+  "offline_replay": "PASS - 9 families; actual production parsing/persistence/packing with deterministic local responses",
+  "log_format": "UTF-8; trailing whitespace normalized; results preserved"
+}

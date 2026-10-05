@@ -1,0 +1,826 @@
+[
+  {
+    "family": "relationship_trajectory",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what do you think about respect?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r15): resp>N:0→L, resp>N:L→M, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect toward Nicco: none → moderate across 2 increases.\"\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 481,
+        "chars_after": 481,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "relationship_trajectory",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{resp=M}; recent=resp>N:0→L,resp>N:L→M; refl=pattern:rel_traj_6ae7e9031d5a\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 220,
+        "chars_after": 220,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "relationship_trajectory",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "relationship_trajectory",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 117,
+    "without_tokens": 90,
+    "controlled_small_budget_characters": 353,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{resp=M}; recent=resp>N:0→L,resp>N:L→M; refl=pattern:rel_traj_6ae7e9031d5a\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: respect moderate | recent (r4): joined, resp>N:0→L, resp>N:L→M\nMannerisms:\n- Wrinkles their nose slightly when repeating an unfamiliar word. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "relationship_contrast",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what do you think about respect?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r15): resp>N:0→L, resp>N:L→M, wary>N:0→L | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 483,
+        "chars_after": 483,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "relationship_contrast",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{wary=L,resp=M}; recent=wary>N:0→L,resp>N:L→M; refl=tension:rel_contrast_389d0761b245\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 228,
+        "chars_after": 228,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "relationship_contrast",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "relationship_contrast",
+    "variant": "stored current contrast is not revalidated at rendering/merge",
+    "first_changed_state": {
+      "revision_offset": 1,
+      "revision": 6,
+      "stage": "post_development_before_maintenance",
+      "new_events": 1,
+      "raw_window_size": 5,
+      "supporting_refs_live": [
+        "npcmem:campaign_character_iris:history:r4.0",
+        "npcmem:campaign_character_iris:history:r4.1"
+      ],
+      "required_supporting_refs": 2,
+      "note_stored": true,
+      "full_note_packed": true,
+      "recent_compact": "(r6): wary>N:0→L, resp>N:L→M, wary>N:L→0",
+      "rollup": null,
+      "current_relationship": {
+        "wariness": "none",
+        "respect": "moderate"
+      },
+      "old_proposal_would_validate_now": false,
+      "revalidation_reasons": [
+        "claim_state_mismatch"
+      ],
+      "normal_packed": {
+        "lines": [
+          "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none, respect moderate | recent (r6): wary>N:0→L, resp>N:L→M, wary>N:L→0 | reflection: unresolved tension \"Iris's recorded feelings toward Nicco: respect moderate while wariness is low.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+        ],
+        "diagnostics": {
+          "active_count": 1,
+          "candidate_fragments": 2,
+          "selected_fragments": 1,
+          "chars_before": 483,
+          "chars_after": 483,
+          "omitted_fragments": 1,
+          "recovery_refs": 0,
+          "recovered": 0,
+          "tier_counts": {
+            "B": 1,
+            "C": 0,
+            "D": 0
+          }
+        }
+      }
+    },
+    "snapshot_handle_visible_to_provider": false
+  },
+  {
+    "family": "relationship_contrast",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 123,
+    "without_tokens": 94,
+    "controlled_small_budget_characters": 368,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{wary=L,resp=M}; recent=wary>N:0→L,resp>N:L→M; refl=tension:rel_contrast_389d0761b245\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness low, respect moderate | recent (r4): resp>N:0→L, wary>N:0→L, resp>N:L→M\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "relationship_parallel",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what do you think about respect?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, wariness none, respect moderate | recent (r15): resp>N:0→L, resp>N:L→M, wary>N:L→0 | reflection: signature pattern \"Iris's recorded respect and trust toward Nicco each changed 2 times from none to moderate.\"\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 525,
+        "chars_after": 525,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "relationship_parallel",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{trust=M,resp=M}; recent=trust>N:L→M,resp>N:L→M; refl=pattern:rel_parallel_152c30a90651\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 244,
+        "chars_after": 244,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "relationship_parallel",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "relationship_parallel",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 130,
+    "without_tokens": 98,
+    "controlled_small_budget_characters": 385,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{trust=M,resp=M}; recent=trust>N:L→M,resp>N:L→M; refl=pattern:rel_parallel_152c30a90651\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: trust moderate, respect moderate | recent (r4): resp>N:0→L, trust>N:L→M, resp>N:L→M\nMannerisms:\n- Moves their chin slightly to one side after leaving a sentence unfinished. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "condition_trajectory",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, tell me about being fatigued.",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r17): -cond:fatigued, +cond:fatigued, -cond:fatigued | reflection: signature pattern \"Iris's recorded fatigued: add → remove → add → remove; 2 recorded episode starts.\"\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 477,
+        "chars_after": 477,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "condition_trajectory",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{}; recent=+cond:fatigued,-cond:fatigued; refl=pattern:condition_d3f3f22ed5c6\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 217,
+        "chars_after": 217,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "condition_trajectory",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "condition_trajectory",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 124,
+    "without_tokens": 93,
+    "controlled_small_budget_characters": 371,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{}; recent=+cond:fatigued,-cond:fatigued; refl=pattern:condition_d3f3f22ed5c6\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r6): -cond:fatigued, +cond:fatigued, -cond:fatigued\nMannerisms:\n- Draws their elbows closer to their sides before refusing. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "membership_trajectory",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what should we keep in mind?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's household membership: join → leave → rejoin; 1 initial joins, 1 rejoins, 1 leaves.\"\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 468,
+        "chars_after": 468,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "membership_trajectory",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{}; recent=left,rejoined; refl=pattern:membership_b95548dea044\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 197,
+        "chars_after": 197,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "membership_trajectory",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "membership_trajectory",
+    "variant": "inactive household member",
+    "note_stored": true,
+    "packed": null
+  },
+  {
+    "family": "membership_trajectory",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 118,
+    "without_tokens": 86,
+    "controlled_small_budget_characters": 342,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{}; recent=left,rejoined; refl=pattern:membership_b95548dea044\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, left, rejoined\nMannerisms:\n- Levels their head before correcting a spoken detail. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "movement_trajectory",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what should we keep in mind?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: signature pattern \"Iris's recorded movement: heartstone_f1 → heartstone_u1 → heartstone_f1 (2 moves).\"\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 478,
+        "chars_after": 478,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "movement_trajectory",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{}; recent=moved:heartstone_u1,moved:heartstone_f1; refl=pattern:movement_2d5da33beeaf\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 238,
+        "chars_after": 238,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "movement_trajectory",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "movement_trajectory",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 127,
+    "without_tokens": 97,
+    "controlled_small_budget_characters": 385,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{}; recent=moved:heartstone_u1,moved:heartstone_f1; refl=pattern:movement_2d5da33beeaf\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, moved:heartstone_u1, moved:heartstone_f1\nMannerisms:\n- Lets a short silence follow the listener's last word before replying. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "self_statement_synthesis",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what should we keep in mind?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: stance \"Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".\"\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 467,
+        "chars_after": 467,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "self_statement_synthesis",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; voice=speaks_softly; social=dislikes_noise; role=?; N{}; recent=contract:social_style,contract:voice; refl=stance:self_statement_5ea2642f3427\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 281,
+        "chars_after": 281,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "self_statement_synthesis",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "self_statement_synthesis",
+    "variant": "event-supported quote synthesis vs permanent quote-supported synthesis",
+    "event_supported_notes_after_24_developments": [],
+    "quote_supported_notes_after_24_developments": [
+      {
+        "id": "r5_stance_1",
+        "kind": "stance",
+        "label": "self_statement_5ea2642f3427",
+        "text": "Iris explicitly stated: \"I don't like noise.\"; \"I always speak softly.\".",
+        "evidence_refs": [
+          "npcmem:campaign_character_iris:contract:0",
+          "npcmem:campaign_character_iris:contract:1"
+        ],
+        "confidence": "high",
+        "created_revision": 5,
+        "updated_revision": 5,
+        "structured": {
+          "format_version": 1,
+          "semantic_version": "V2.3-CVC-E1",
+          "source_revision": 4,
+          "proposal": {
+            "subject_character_id": "campaign_character_iris",
+            "confidence": "high",
+            "evidence_refs": [
+              "npcmem:campaign_character_iris:contract:0",
+              "npcmem:campaign_character_iris:contract:1"
+            ],
+            "claim": {
+              "type": "self_statement_synthesis",
+              "statement_refs": [
+                "npcmem:campaign_character_iris:contract:0",
+                "npcmem:campaign_character_iris:contract:1"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "family": "self_statement_synthesis",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 123,
+    "without_tokens": 99,
+    "controlled_small_budget_characters": 392,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; voice=speaks_softly; social=dislikes_noise; role=?; N{}; recent=contract:social_style,contract:voice; refl=stance:self_statement_5ea2642f3427\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: speaks softly | morality: unknown | social style: dislikes noise | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, contract:social_style, contract:voice\nMannerisms:\n- Tilts their head slightly before answering an unfamiliar question. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "environmental_motif",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what should we keep in mind?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"The household recorded 2 rule additions; this is environmental context, not Iris's act.\"\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 468,
+        "chars_after": 468,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "environmental_motif",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{}; recent=rule+,rule+; refl=motif:env_count_fe3f0299288b\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 199,
+        "chars_after": 199,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "environmental_motif",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "environmental_motif",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 117,
+    "without_tokens": 87,
+    "controlled_small_budget_characters": 347,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{}; recent=rule+,rule+; refl=motif:env_count_fe3f0299288b\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, rule+, rule+\nMannerisms:\n- Shakes their head once after saying no, rather than before. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  },
+  {
+    "family": "environmental_shared_rule_text",
+    "variant": "topical history can re-enter Tier B before source eviction",
+    "revision_offset": 10,
+    "input": "Iris, what should we keep in mind?",
+    "packed": {
+      "lines": [
+        "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: wariness none | recent (r15): wary>N:L→0, wary>N:0→L, wary>N:L→0 | reflection: shared motif \"Household rules added at revisions 3–4 share this exact recorded text: “A quiet-break request needs no explanation and is answered by lowering voices.”.\"\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 2,
+        "selected_fragments": 1,
+        "chars_before": 534,
+        "chars_after": 534,
+        "omitted_fragments": 1,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 1,
+          "C": 0,
+          "D": 0
+        }
+      }
+    }
+  },
+  {
+    "family": "environmental_shared_rule_text",
+    "variant": "Tier C carries opaque reflection label, not full note",
+    "packed": {
+      "lines": [
+        "Iris: core=?; role=?; N{}; recent=rule+,rule+; refl=motif:env_shared_dd60e5042497\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+      ],
+      "diagnostics": {
+        "active_count": 1,
+        "candidate_fragments": 1,
+        "selected_fragments": 1,
+        "chars_before": 201,
+        "chars_after": 201,
+        "omitted_fragments": 0,
+        "recovery_refs": 0,
+        "recovered": 0,
+        "tier_counts": {
+          "B": 0,
+          "C": 1,
+          "D": 0
+        }
+      }
+    },
+    "full_note_available": false
+  },
+  {
+    "family": "environmental_shared_rule_text",
+    "variant": "10 quiet revisions, no developments",
+    "old_history_unchanged": true,
+    "full_note_packed": true
+  },
+  {
+    "family": "environmental_shared_rule_text",
+    "variant": "counterfactual packing budget, offline only",
+    "default_budget": 4000,
+    "with_tokens": 135,
+    "without_tokens": 88,
+    "controlled_small_budget_characters": 348,
+    "with_tiers": {
+      "B": 0,
+      "C": 1,
+      "D": 0
+    },
+    "without_tiers": {
+      "B": 1,
+      "C": 0,
+      "D": 0
+    },
+    "with_lines": [
+      "Iris: core=?; role=?; N{}; recent=rule+,rule+; refl=motif:env_shared_dd60e5042497\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+    ],
+    "without_lines": [
+      "NPC+ Iris (campaign_character_iris) — personality: unknown | voice: unknown | morality: unknown | social style: unknown | household role: unestablished | toward Nicco: no recorded relationship | recent (r4): joined, rule+, rule+\nMannerisms:\n- Keeps their gaze unusually still during a short explanation. [recurrence=emergent; recognized_by=nobody]"
+    ]
+  }
+]

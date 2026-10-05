@@ -1,0 +1,731 @@
+[
+  {
+    "family": "relationship_trajectory",
+    "npc_plus_tokens": 117,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 489,
+        "estimated_tokens": 124
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1495,
+        "estimated_tokens": 377
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "relationship_contrast",
+    "npc_plus_tokens": 123,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 503,
+        "estimated_tokens": 127
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1516,
+        "estimated_tokens": 382
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "relationship_parallel",
+    "npc_plus_tokens": 130,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 506,
+        "estimated_tokens": 128
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1544,
+        "estimated_tokens": 389
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "condition_trajectory",
+    "npc_plus_tokens": 124,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 350,
+        "estimated_tokens": 88
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 447,
+        "estimated_tokens": 113
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1521,
+        "estimated_tokens": 384
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "membership_trajectory",
+    "npc_plus_tokens": 118,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 447,
+        "estimated_tokens": 113
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1500,
+        "estimated_tokens": 378
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "movement_trajectory",
+    "npc_plus_tokens": 127,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 447,
+        "estimated_tokens": 113
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1536,
+        "estimated_tokens": 387
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "self_statement_synthesis",
+    "npc_plus_tokens": 123,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 447,
+        "estimated_tokens": 113
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1522,
+        "estimated_tokens": 382
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "environmental_motif",
+    "npc_plus_tokens": 117,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 688,
+        "estimated_tokens": 173
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1498,
+        "estimated_tokens": 376
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  },
+  {
+    "family": "environmental_shared_rule_text",
+    "npc_plus_tokens": 135,
+    "sections": [
+      {
+        "header": "[STATE PRECEDENCE]",
+        "characters": 443,
+        "estimated_tokens": 111
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE SCENE]",
+        "characters": 3274,
+        "estimated_tokens": 819
+      },
+      {
+        "header": "[NICCO / PLAYER PROFILE]",
+        "characters": 1601,
+        "estimated_tokens": 401
+      },
+      {
+        "header": "[CURRENT AUTHORITATIVE CHARACTERS]",
+        "characters": 334,
+        "estimated_tokens": 84
+      },
+      {
+        "header": "[PRESENT AND ABLE TO REACT]",
+        "characters": 176,
+        "estimated_tokens": 44
+      },
+      {
+        "header": "[LEGAL, HOUSEHOLD AND RELATIONSHIP STATE — AUTHORITATIVE]",
+        "characters": 688,
+        "estimated_tokens": 173
+      },
+      {
+        "header": "[NPC+ HOUSEHOLD CHARACTERS]",
+        "characters": 1564,
+        "estimated_tokens": 394
+      },
+      {
+        "header": "[CURRENT EQUIPMENT]",
+        "characters": 121,
+        "estimated_tokens": 31
+      },
+      {
+        "header": "[CHARACTER KNOWLEDGE ACCESS]",
+        "characters": 1278,
+        "estimated_tokens": 320
+      },
+      {
+        "header": "[HARD CHARACTER CONSTRAINTS]",
+        "characters": 74,
+        "estimated_tokens": 19
+      },
+      {
+        "header": "[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]",
+        "characters": 65,
+        "estimated_tokens": 17
+      },
+      {
+        "header": "[UNESTABLISHED DETAILS]",
+        "characters": 160,
+        "estimated_tokens": 40
+      },
+      {
+        "header": "[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]",
+        "characters": 72,
+        "estimated_tokens": 18
+      },
+      {
+        "header": "[PLAYER ACTION ? Nicco]",
+        "characters": 136,
+        "estimated_tokens": 34
+      },
+      {
+        "header": "[NARRATION TASK]",
+        "characters": 322,
+        "estimated_tokens": 81
+      }
+    ]
+  }
+]
