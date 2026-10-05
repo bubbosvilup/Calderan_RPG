@@ -181,7 +181,7 @@ export class TurnCoordinator {
         revision_issue_kinds: delivery.revision_issues.map(i => i.kind), redaction_used: delivery.delivered === "redacted", delivered: delivery.delivered });
       // CommitPreparation: name-driven identity on the DELIVERED narration joins the batch, or is skipped observably (H1).
       const plan = measure("commit_preparation", () => prepareCommit({ world: this.world, prepare: proposal => campaign.prepare(proposal), prepared, commands, finalized: this.recent(campaign).finalized(), player_input,
-        delivered: delivery.text, scene, base_revision, location_changed: origin !== arrival,
+        delivered: delivery.text, scene, base_revision, disclosure_intent: promptIntent, location_changed: origin !== arrival,
         on_skip: reason => sink?.({ kind: "identity_establishment_skipped", campaign_id: snapshot.campaign_id, base_revision, player_input, reason }) }));
       if (observer) Object.assign(observer.record.commit, { identity_promotion_count: plan.identity.promoted.length, identity_skipped: !!plan.identity_skipped,
         location_changed_naming_skip: origin !== arrival });
