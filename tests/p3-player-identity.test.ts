@@ -1,3 +1,4 @@
+import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -45,6 +46,7 @@ test("P3 unknown NPC appearance and personality remain available for rich observ
 test("P3 authoritative told-name knowledge remains available after transcript loss", () => {
   const campaign = market();
   campaign.apply({ expected_revision: campaign.revision, commands: [
+    ...learnCanonicalName(world, campaign.exportSnapshot(), "bartolomhew", { source_character_id: "bartolomhew", acquisition_kind: "told" }),
     { kind: "create_fact", fact: { id: "campaign_fact_bartolomhew_name", content: { kind: "campaign", statement: "The white-blond man introduced himself to Nicco as Bartolomhew.", truth: "true" } } },
     { kind: "set_knowledge", knowledge: { character_id: "nicco", fact_id: "campaign_fact_bartolomhew_name", status: "knows", provenance: { source_character_id: "bartolomhew", acquisition_kind: "told" } } },
   ] });
@@ -56,7 +58,9 @@ test("P3 authoritative told-name knowledge remains available after transcript lo
 
 test("P3 in-world naming in retained dialogue is an available disclosure, bare canon labels are not", () => {
   const recent: RecentExchange[] = [{ player: "What is your name?", narration: 'The white-blond man says, "My name is Bartolomhew."', status: "finalized" }];
-  const { request } = prompt(market(), recent);
+  const campaign = market();
+  campaign.apply({ expected_revision: campaign.revision, commands: [...learnCanonicalName(world, campaign.exportSnapshot(), "bartolomhew")] });
+  const { request } = prompt(campaign, recent);
   assert.ok(request.messages[0]!.content.includes("My name is Bartolomhew"));
   assert.ok(request.system_prompt.includes("learned them through established player knowledge or an in-world disclosure"));
 });

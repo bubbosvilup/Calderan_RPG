@@ -1,3 +1,4 @@
+import { learnCanonicalName } from "../campaign/identity-knowledge.js";
 import { WorldStore } from "../world/world-store.js";
 import { CampaignState } from "../campaign/campaign-state.js";
 import type { WorldEntity } from "../types/entities.js";
@@ -44,6 +45,8 @@ export function turnFixture(groundGarments = false, options: { readonly brennaKn
   const world = new WorldStore(entities.map(entity => ({ source: `synthetic/${entity.id}.yaml`, document: { schema_version: 1, entity, chunks: [] } })));
   const campaign = new CampaignState(world, "turn_fixture", { player_location: "test_room", world_time: { world_minute: 100 } });
   campaign.apply({ expected_revision: 0, commands: [
+    // Fixture residents are already known to Nicco; make starting knowledge explicit.
+    ...world.getEntitiesByType("character").filter(c => c.role === "npc").flatMap(c => learnCanonicalName(world, campaign.exportSnapshot(), c.id)),
     { kind: "register_character", character: { id: "brenna", origin: { kind: "canonical", canonical_entity_id: "brenna" }, profile: { appearance: { height_cm: 193, build: "muscular", eyes: "grey", hair: { color: "dark" }, scars: [{ description: "Old wrist scars" }] } }, current: { conditions: ["recovering"], presentation: "Seated and alert" } } },
     ...["boots", "ring", "pink_cotton", "pink_fluffy", "pink_shorts"].map(id => ({ kind: "register_item", item: { id, origin: { kind: "canonical", canonical_entity_id: id }, name: groundGarments ? garmentNames[id] ?? id : id, owner_id: "nicco", position: { kind: "carried", character_id: "nicco" } } })),
     { kind: "register_item", item: { id: "brenna_boots", origin: { kind: "canonical", canonical_entity_id: "brenna_boots" }, name: "Brenna's worn boots", owner_id: "brenna", position: { kind: "equipped", character_id: "brenna", slot: "feet", mode: "worn" } } },

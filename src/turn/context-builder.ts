@@ -1,3 +1,5 @@
+import { registerNarratorIdentities } from "./narrator-identity.js";
+import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import { characterView, itemView } from "../campaign/projections.js";
 import { buildNarrativeContext } from "../scene/narrative-context-builder.js";
@@ -75,7 +77,7 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const visibleItem = (item: DeepReadonly<CampaignSnapshot>["items"][number]) => item.origin.kind === "created" || !!world.getEntity(item.origin.canonical_entity_id)?.knowledge?.visibility.player && !!world.getEntity(item.origin.canonical_entity_id)?.knowledge?.visibility.narrator;
   const items = snapshot.items.filter(i => (i.position.kind === "carried" || i.position.kind === "equipped") && here.has(i.position.character_id) && visibleItem(i)).map(i => itemView(snapshot, world, i.id));
   const niccoKnows = new Set(snapshot.knowledge.filter(k => k.character_id === "nicco").map(k => k.fact_id));
-  const allFacts = snapshot.facts.filter(f => niccoKnows.has(f.id)).flatMap(f => {
+  const allFacts = snapshot.facts.filter(f => niccoKnows.has(f.id) && !isIdentityNameFact(f)).flatMap(f => {
     if (f.content.kind === "campaign") { const fact = { id: f.id, statement: f.content.statement }; factTruth.set(fact, f.content.truth); return [fact]; }
     const owner = world.getEntity(f.content.entity_id), chunk = f.content.chunk_id ? world.getChunk(f.content.chunk_id) : undefined;
     const policy = chunk?.knowledge ?? owner?.knowledge;
@@ -144,6 +146,7 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const serializedCharacters = JSON.stringify(result).length;
   relevance.inspect_serialized?.(JSON.stringify(result));
   if (serializedCharacters > CONTEXT_LIMITS.serialized_characters) throw new TurnError("context_too_large");
+  registerNarratorIdentities(result, world, snapshot);
   serializedSizes.set(result, serializedCharacters);
   return result;
 }

@@ -1,3 +1,4 @@
+import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -80,7 +81,7 @@ for(const [id,patterns] of Object.entries(portrayals))test(`Present NPC portraya
  for(const pattern of patterns)assert.ok(pattern.test(text),`${id}: portrayal requirement`);
  assert.equal(projected.portrayal.authority,"narrator_portrayal_only_not_character_knowledge");
  const prompt=JSON.stringify(buildNarratorPrompt("Hello",context,[],{}, {candidates:[],runtime:[]}));
- assert.ok(prompt.includes(npc(id).purpose!));
+ assert.ok(prompt.includes(narratorIdentityGate(context)!.mask(npc(id).purpose!)));
  const access=projectKnowledgeAccess(context,{});
  // Portrayal is not knowledge. H3: the only access entries are this NPC's own authored known_by grants on restricted canon,
  // usable by this NPC alone, never by Nicco/narration (pre-H3 these grants were unreachable and access.facts was empty).

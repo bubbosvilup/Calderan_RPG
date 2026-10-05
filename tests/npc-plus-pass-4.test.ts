@@ -1,3 +1,4 @@
+import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -78,7 +79,7 @@ test("de-duplication: an H3-retrieved source appears once; recovery without retr
   assert.equal(removed, 1);
   const prompt = buildNarratorPrompt(input, context, [], retrieved.data, { candidates: [], runtime: [] }).messages[0]!.content;
   const content = (world.getEntity("korvin") as { content: string }).content;
-  assert.equal(prompt.split(content.slice(0, 80)).length - 1, 1, "the canon payload appears exactly once");
+  assert.equal(prompt.split(narratorIdentityGate(context)!.mask(content.slice(0, 80))).length - 1, 1, "the canon payload appears exactly once");
   assert.match(npc.lines.join("\n"), /\[npcmem:korvin:canon:entity\]: same source as \[RETRIEVED CANON\]/);
   // Without that retrieval, the recovered payload is kept intact.
   const kept = deduplicateRecovered(context.npc_plus!, { records: [] });

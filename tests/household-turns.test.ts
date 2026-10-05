@@ -1,3 +1,4 @@
+import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -29,7 +30,7 @@ let serial = 0;
 function market(extra: readonly CampaignCommand[] = []): CampaignState {
   const c = createOpeningCampaign(world, `household_turns_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: "calderan_slave_market" } },
-    person(BRENNA, "Brenna", 29), { kind: "set_legal_status", character_id: BRENNA, status: "enslaved", holder_id: "korvin" }, ...extra] });
+    ...learnCanonicalName(world, c.exportSnapshot(), "korvin"), person(BRENNA, "Brenna", 29), { kind: "set_legal_status", character_id: BRENNA, status: "enslaved", holder_id: "korvin" }, ...extra] });
   return c;
 }
 const OFFER: RecentExchange = { player: "Name your price again, Korvin.", narration: 'Korvin studies the woman in the cage, then Nicco. "Five." He taps the ledger. "Papers included. Clean transfer, debt-forfeiture chain, no liens."', status: "finalized" };

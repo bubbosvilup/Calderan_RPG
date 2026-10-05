@@ -1,3 +1,4 @@
+import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -181,6 +182,7 @@ test("non-invention: only established facts survive promotion; names imply nothi
 // ------------------------------------------------------------------------------------------------ end to end
 test("end to end: no pre-registered Brenna → promoted when her name is established → bought → exactly one persistent Brenna", async () => {
   const c = market(), seen: GenerationRequest[] = [];
+  c.apply({ expected_revision: c.revision, commands: [...learnCanonicalName(world, c.exportSnapshot(), "korvin")] });
   let texts: string[] = [];
   const service = new RetrievalService(world);
   const coordinator = new TurnCoordinator(world, { async generate() { throw new Error("unused"); }, async *stream(request) { seen.push(request); const text = texts.shift()!; yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } }; } },

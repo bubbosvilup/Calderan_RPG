@@ -1,3 +1,4 @@
+import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { WorldStore } from "../src/world/world-store.js";
@@ -98,7 +99,7 @@ test("3. permission is NOT player knowledge: excluded from Nicco/narration, rend
   }
   assert.match(rendered, /\[NPC-PRIVATE CANON/);
   const prompt = buildNarratorPrompt("Hello.", context, [], undefined, { candidates: [], runtime: [] }).messages[0]!.content;
-  const outsideAccess = prompt.replace(rendered, "");
+  const outsideAccess = prompt.replace(narratorIdentityGate(context)!.mask(rendered), "");
   assert.ok(!outsideAccess.includes("salt silver") && !outsideAccess.includes("forty crowns"), "no other prompt section carries the secret");
   assert.ok(!JSON.stringify(context.characters).includes("salt silver"), "per-character baseline/profile JSON does not carry it");
 });

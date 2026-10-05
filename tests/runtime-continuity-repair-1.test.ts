@@ -1,3 +1,4 @@
+import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -173,7 +174,7 @@ test("departure 5 (long-form regression): Dell leaves at N; absent from state at
   await turn(later, campaign, "Thank you for dinner.");
   const prompt = seen.at(-1)!.messages[0]!.content;
   const present = prompt.slice(prompt.indexOf("[PRESENT AND ABLE TO REACT]"), prompt.indexOf("Only these people exist here"));
-  assert.ok(!present.includes("Dell") && present.includes("Jessa Rook"), present);
+  assert.ok(!present.includes("Dell") && present.includes(narratorIdentityGate(contextOf(campaign))!.identities.get("jessa_rook")!.observable_label), present);
   assert.ok(!contextOf(campaign).characters.some(c => c.id === DELL));
   // Narration that brings him back ("sat hunched and brooding") is an absent participant; remembering his exit is fine.
   assert.ok(kinds(audit(campaign, "Thank you for dinner.", "Nearby, Dell Harrow sat hunched and brooding at the counter.")).includes("absent_participant"));

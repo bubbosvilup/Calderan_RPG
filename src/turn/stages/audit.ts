@@ -1,3 +1,4 @@
+import { narratorIdentityGate } from "../narrator-identity.js";
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
@@ -84,7 +85,9 @@ export function deliverDraft(draft: string, issues: readonly AuditIssue[]): Turn
 export async function reconcileNarration(i: { readonly auditor: NarrationAuditor; readonly generate: DraftGenerator; readonly checkpoint: () => void;
   readonly prompt: NarratorRequest; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly outcome: { readonly revision: readonly string[]; readonly prose: readonly string[] };
   readonly intent: TurnIntent; readonly context: TurnContext }): Promise<TurnDelivery> {
-  const revision = (await i.generate({ ...i.prompt, ...revisionRequest(i.prompt, i.draft, i.outcome.revision, i.issues) })).text;
+  const revisionPrompt = { ...i.prompt, ...revisionRequest(i.prompt, i.draft, i.outcome.revision, i.issues) };
+  const identityGate = narratorIdentityGate(i.context);
+  const revision = (await i.generate(identityGate ? { ...revisionPrompt, messages: revisionPrompt.messages.map(m => ({ ...m, content: identityGate.mask(m.content) })) } : revisionPrompt)).text;
   i.checkpoint();
   const revision_issues = i.auditor.check(revision, deriveTurnEvidence(i.intent, revision, i.context));
   const text = revision_issues.length ? redactNarration(revision, revision_issues, i.outcome.prose) : revision;

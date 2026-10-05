@@ -1,3 +1,4 @@
+import { narratorIdentityGate } from "./narrator-identity.js";
 import { registerNarratorPack } from "./narrator-pack.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
@@ -185,6 +186,7 @@ export function relevanceSignals(input: string, recent: readonly RecentExchange[
   return { input, recent_text: recent.map(e => `${e.player} ${e.narration}`).join(" "), intent_fact_ids: intent.candidates.flatMap(c => c.kind === "set_knowledge" ? [c.knowledge.fact_id] : []) };
 }
 export function buildNarratorPrompt(input: string, context: TurnContext, recent: readonly RecentExchange[], retrieval: unknown, intent: PlayerIntent, options: NarratorPromptOptions = {}, sceneParticipants?: SceneParticipantPlan) {
+  const identityGate = narratorIdentityGate(context), mask = (text: string) => identityGate?.mask(text) ?? text;
   const participants = renderSceneParticipants(sceneParticipants, context);
   const mode = options.recent_context ?? "dialogue_focused";
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? context.items.find(i => i.id === id)?.name ?? id;
@@ -214,7 +216,13 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     ...(context.player_profile ? [playerProfile(context.player_profile)] : []),
     `[CURRENT AUTHORITATIVE CHARACTERS]`,
     ...(scene.present_characters.some(c => c.portrayal) ? ["Portrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts."] : []),
-    ...context.characters.map(c => `Character ${name(c.id)} (${c.id}): ${JSON.stringify({ baseline: scene.present_characters.find(p => p.id === c.id), profile: c.profile, current: c.current, canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin })}`),
+    ...context.characters.map(c => {
+      const identity = identityGate?.identities.get(c.id), baseline = scene.present_characters.find(p => p.id === c.id);
+      return `Character ${identity?.player_known_name ?? identity?.observable_label ?? name(c.id)} (${c.id}): ${JSON.stringify({
+        ...(identity ? { identity } : {}), baseline: identity && baseline ? { ...baseline, name: identity.player_known_name, display_name: identity.player_known_name ?? identity.observable_label } : baseline,
+        profile: identity ? { ...c.profile, name: identity.player_known_name, aliases: identity.player_known_aliases } : c.profile,
+        current: c.current, canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin })}`;
+    }),
     ...(participants ? [participants] : []),
     presentAndAbleToReact(context, sceneParticipants),
     socialBlock(context),
@@ -222,13 +230,14 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     `[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): ${JSON.stringify(context.items)}`,
     `Scheduled events: ${JSON.stringify(context.scheduled_events)}`,
   ].join("\n");
-  const knowledge = projectKnowledgeAccess(context, retrieval, relevanceSignals(input || options.knowledge_relevance_input || "", recent, intent), sceneParticipants);
+  const rawKnowledge = projectKnowledgeAccess(context, retrieval, relevanceSignals(input || options.knowledge_relevance_input || "", recent, intent), sceneParticipants);
+  const knowledge = identityGate?.knowledge(rawKnowledge) ?? rawKnowledge;
   const access = renderKnowledgeAccess(knowledge);
   const recentBlock = mode === "dialogue_focused" ? `[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(dialogueFocused(recent, context, sceneParticipants))}`
     : mode === "state_last" ? `[EARLIER CONVERSATION ? CONTINUITY ONLY, NOT STATE]\n${JSON.stringify(recent)}`
     : `[RECENT CONVERSATION ? SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(recent)}`;
-  const knowledgePrefix = `${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n`;
+  const knowledgePrefix = mask(`${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n`);
   const request = { system_prompt: NARRATOR_SYSTEM, messages: [{ role: "user" as const, content:
-    `${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${hardCharacterConstraints(context).join("\n") || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(retrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.` }] };
+    mask(`${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${hardCharacterConstraints(context).join("\n") || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(retrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.`) }] };
   return registerNarratorPack(request, knowledge, access, { revision: context.primary.runtime_revision, location: context.primary.scene.player_location?.id, world_time: context.primary.scene.world_time, characters: context.characters.map(c => c.id) }, knowledgePrefix.length);
 }
