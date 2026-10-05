@@ -22,3 +22,7 @@ button:disabled, textarea:disabled { opacity: .55; cursor: default; }
 small { display: block; margin-top: 9px; font-size: 11px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 600px) { header { padding: 16px; } #conversation { padding: 20px 12px; } article { width: 97%; padding: 16px; } .narrator { font-size: 17px; } footer { padding: 12px; } button { padding: 0 14px; } }
+
+.regenerate { margin-top: .75rem; font-size: .8rem; }
+.alternative { margin-top: 1rem; padding: .8rem; border-left: 2px solid #777; white-space: pre-wrap; }
+.alternative-feedback { font-size: .8rem; margin-top: .4rem; }

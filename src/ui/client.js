@@ -8,6 +8,7 @@ let submitting = false;
 let ready = false;
 let shown = 0;
 let poll;
+const comparisonViews = new Map();
 
 function showError(text) {
   error.textContent = text;
@@ -23,7 +24,45 @@ function render(data) {
     const text = document.createElement("div");
     text.textContent = message.text;
     article.append(label, text);
+    if (message.role === "narrator" && message.comparison_available) {
+      const select = document.createElement("select");
+      select.className = "regenerate";
+      select.setAttribute("aria-label", "Regenerate this narrator message with an alternate model");
+      const placeholder = document.createElement("option");
+      placeholder.textContent = "Regenerate with…"; placeholder.value = "";
+      select.append(placeholder);
+      for (const model of data.alternate_models) {
+        const option = document.createElement("option");
+        option.textContent = model.label; option.value = model.id; select.append(option);
+      }
+      const feedback = document.createElement("div");
+      feedback.className = "alternative-feedback";
+      const alternatives = document.createElement("div");
+      alternatives.className = "alternatives";
+      comparisonViews.set(message.comparison_id, { select, feedback, alternatives });
+      select.addEventListener("change", async () => {
+        const model = select.value;
+        if (!model || select.disabled) return;
+        select.disabled = true; feedback.textContent = "Generating alternative…";
+        try {
+          const response = await fetch("/api/alternative", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message_id: message.comparison_id, model }) });
+          const result = await response.json();
+          if (!response.ok || !result.ok) throw new Error();
+          showAlternatives(alternatives, result.alternatives);
+          feedback.textContent = "";
+        } catch { feedback.textContent = "Alternative failed. Select the model again to retry."; }
+        finally { select.disabled = false; select.value = ""; }
+      });
+      article.append(select, feedback, alternatives);
+    }
     conversation.append(article);
+  }
+  for (const message of data.messages) {
+    const view = comparisonViews.get(message.comparison_id);
+    if (view) {
+      view.select.disabled = !message.comparison_available || view.feedback.textContent === "Generating alternative…";
+      if (view.feedback.textContent !== "Generating alternative…") showAlternatives(view.alternatives, message.alternatives ?? []);
+    }
   }
   if (data.messages.length > shown) conversation.scrollTop = conversation.scrollHeight;
   shown = data.messages.length;
@@ -32,6 +71,16 @@ function render(data) {
   status.textContent = data.status === "closed" ? "Session ended." : submitting || !ready ? "Generating…" : data.configured ? "Your turn." : "Set OPENROUTER_API_KEY and restart to play.";
   clearTimeout(poll);
   if (!ready && data.status !== "closed" && !submitting) poll = setTimeout(load, 1000);
+}
+function showAlternatives(container, alternatives) {
+  container.replaceChildren();
+  for (const alternative of alternatives) {
+    const block = document.createElement("section"); block.className = "alternative";
+    const label = document.createElement("span"); label.className = "speaker";
+    label.textContent = `Alternative · ${alternative.label}`;
+    const text = document.createElement("div"); text.textContent = alternative.text;
+    block.append(label, text); container.append(block);
+  }
 }
 async function load() {
   try {

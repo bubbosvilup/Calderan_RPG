@@ -20,6 +20,7 @@ import type { SessionDeps, SessionHooks } from "./game-session.js";
 import type { ProviderStatus } from "./session-view.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
 import type { DeepReadonly } from "../types/readonly.js";
+import { observePreparedNarrator } from "./narrator-alternatives.js";
 
 /**
  * Environment-based provider configuration (current policy; there is no settings UI yet):
@@ -43,7 +44,11 @@ export function readReflectionMode(env: Readonly<Record<string, string | undefin
   if (mode !== "off" && mode !== "shadow") throw new Error("CALDREVAN_REFLECTION_MODE must be off or shadow");
   return mode;
 }
-export interface ProductionOptions { /** Defaults to off; shadow enables synchronous diagnostic post-turn maintenance only. */ readonly reflection_mode?: ReflectionMode; readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider }
+export interface ProductionOptions {
+  /** Optional session-local playtest capture after prompt preparation; never part of a save. */
+  readonly prepared_narrator_observer?: (request: import("../llm/types.js").GenerationRequest) => void;
+  /** Defaults to off; shadow enables synchronous diagnostic post-turn maintenance only. */ readonly reflection_mode?: ReflectionMode; readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider
+}
 /** Real wiring for a player-facing build: canonical world, file saves, live OpenRouter providers. No fixture, no dev harness. */
 export async function createProductionDeps(options: ProductionOptions = {}): Promise<SessionDeps> {
   const reflection_mode = options.reflection_mode ?? readReflectionMode();
@@ -56,7 +61,8 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
   const status = readProviderStatus(), service = new RetrievalService(world);
   const indexes = options.embedding_provider ? [await SemanticIndex.build(service.indexSource(), options.embedding_provider, "narrator")] : [];
   // Production narrator requests always disable hidden reasoning (Phase 1M.1); the controller uses the selected model and default retry policy.
-  const coordinator = new TurnCoordinator(world, new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true }),
+  const narrator = new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true });
+  const coordinator = new TurnCoordinator(world, options.prepared_narrator_observer ? observePreparedNarrator(narrator, options.prepared_narrator_observer, NARRATOR_OUTPUT_TOKENS) : narrator,
     new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, narrator_request_setup: request => narratorSetup?.(request) ?? request, diagnostics_sink: record => sink?.(record) });
   return { world, context_policy, compaction_service, repository: new FileCampaignRepository(world, options.save_dir ?? "saves"), provider_status: status,
     ...(options.enable_emergent_mannerisms !== false ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),

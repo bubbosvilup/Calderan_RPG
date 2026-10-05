@@ -14,6 +14,8 @@ import { createPlaytestServer } from "../src/ui/server.js";
 import { mockNarrator, mockController } from "./turn-fixtures.js";
 import { NARRATOR_RPG_FORMAT } from "../src/turn/prompt-builder.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
+import { NarratorAlternatives, ALTERNATE_NARRATOR_MODELS } from "../src/app/narrator-alternatives.js";
+import { NARRATOR_OUTPUT_TOKENS } from "../src/app/provider-config.js";
 
 const world = await loadWorld("data");
 function sessionFor(narrator: NarratorProvider) {
@@ -144,4 +146,55 @@ test("UI modules do not import engine internals, providers, saves or mutate camp
     const text = await readFile(`src/ui/${filename}`, "utf8");
     assert.ok(!/CampaignState|CampaignSnapshot|TurnCoordinator|\.apply\(|\.exportSnapshot\(|\.prepare\(|OpenRouter|\.\.\/(?:campaign|turn|world|llm|persistence|retrieval)\//.test(text), filename);
   }
+});
+
+test("alternate HTTP generation uses the original prepared RPG request without controller, state, trace or history changes", async t => {
+  let controllerCalls = 0, alternateCalls = 0, failed = false;
+  const captured: import("../src/llm/types.js").GenerationRequest[] = [];
+  const comparisons = new NarratorAlternatives(model => ({ generate: async request => {
+    alternateCalls++; captured.push(request);
+    return { ...await mockNarrator('"Alternate dialogue."').generate(request), model };
+  } }));
+  const originalRequests: import("../src/llm/types.js").GenerationRequest[] = [];
+  const base = mockNarrator('*The auction continues.*\n\n"Look here," a clerk calls.');
+  const narrator: NarratorProvider = { ...base, async *stream(request) {
+    if (failed) throw new Error("PRIVATE_FAILED_TURN");
+    const prepared = { system_prompt: request.system_prompt, messages: request.messages, max_output_tokens: NARRATOR_OUTPUT_TOKENS };
+    originalRequests.push(structuredClone(prepared)); comparisons.capture(prepared);
+    yield* base.stream(request);
+  } };
+  const controller = mockController([]), service = new RetrievalService(world);
+  const session = createUIPlaytestSession({ world, repository: new FileCampaignRepository(world),
+    createCoordinator: hooks => new TurnCoordinator(world, narrator, { propose: async request => { controllerCalls++; return controller.propose(request); } }, { service, search: new HybridSearch(service) }, { narrator_request_setup: hooks.narrator_request_setup!, diagnostics_sink: hooks.diagnostics_sink, provider_retry: false }),
+  });
+  const server = createPlaytestServer(session, undefined, comparisons);
+  server.listen(0, "127.0.0.1"); await once(server, "listening");
+  t.after(async () => { await session.shutdown({ discard_unsaved: true }); server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())); });
+  const address = server.address(); assert.ok(address && typeof address !== "string");
+  const url = `http://127.0.0.1:${address.port}`;
+  const post = (path: string, body: unknown, origin = url) => fetch(`${url}${path}`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: JSON.stringify(body) });
+  const opening = await (await fetch(`${url}/api/session`)).json();
+  assert.equal(opening.messages[0].comparison_id, undefined); assert.equal(opening.alternate_models.length, 6);
+  assert.equal((await post("/api/alternative", { message_id: "opening", model: ALTERNATE_NARRATOR_MODELS[0]!.id })).status, 400);
+  const first = await (await post("/api/turn", { text: "I watch the auction." })).json(); assert.equal(first.ok, true);
+  const id = first.messages[2].comparison_id; assert.equal(typeof id, "string");
+  assert.equal(first.messages[1].comparison_id, undefined); assert.equal(first.messages[2].comparison_available, true);
+  assert.ok(!JSON.stringify(first).includes("system_prompt"));
+  await post("/api/turn", { text: "I keep watching." });
+  const before = structuredClone(session.getView()), traces = structuredClone(session.listTurns()), count = controllerCalls;
+  assert.equal((await post("/api/alternative", { message_id: id, model: ALTERNATE_NARRATOR_MODELS[5]!.id }, "https://untrusted.example")).status, 403);
+  assert.equal((await post("/api/alternative", { message_id: id, model: "arbitrary/model" })).status, 422);
+  const result = await (await post("/api/alternative", { message_id: id, model: ALTERNATE_NARRATOR_MODELS[5]!.id })).json(); assert.equal(result.ok, true);
+  assert.equal(alternateCalls, 1); assert.deepEqual(captured[0], originalRequests[0]);
+  assert.ok(captured[0]!.messages.some(message => message.content === UI_PLAYTEST_OPENING));
+  assert.ok(!captured[0]!.messages.some(message => message.content.includes("I keep watching.")));
+  assert.deepEqual(session.getView(), before); assert.deepEqual(session.listTurns(), traces); assert.equal(controllerCalls, count);
+  const transcript = await (await fetch(`${url}/api/session`)).json();
+  assert.equal(transcript.messages[2].text, first.messages[2].text); assert.equal(transcript.messages[2].alternatives.length, 1);
+  assert.equal(transcript.messages.length, 5);
+  failed = true; const failedTurn = await (await post("/api/turn", { text: "Failed action" })).json(); assert.equal(failedTurn.ok, false); assert.equal(failedTurn.messages.length, 5);
+  failed = false; await post("/api/turn", { text: "I continue watching." });
+  const next = originalRequests.at(-1)!;
+  assert.ok(next.messages.some(message => message.content.includes("Look here,")), "canonical dialogue is retained by the existing dialogue-focused history");
+  assert.ok(!next.messages.some(message => message.content.includes("Alternate dialogue")));
 });
