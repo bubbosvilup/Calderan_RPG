@@ -17,7 +17,7 @@ function market() {
 }
 function prompt(campaign: CampaignState, recent: readonly RecentExchange[] = []) {
   const context = buildTurnContext(world, campaign.exportSnapshot());
-  return { context, request: buildNarratorPrompt("*I look around the pens.*", context, recent, {}, { candidates: [], runtime: [] }) };
+  return { context, request: buildNarratorPrompt("*I inspect bartolomhew, korvin and mistress_elara*", context, recent, {}, { candidates: [], runtime: [] }) };
 }
 
 test("P3 unknown canonical NPC identity references are not player-known facts or disclosure permission", () => {

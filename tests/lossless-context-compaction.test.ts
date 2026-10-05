@@ -14,7 +14,7 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { mockNarrator,mockController,collect } from "./turn-fixtures.js";
-const cases=prepareD04BakeoffCases();
+const cases=prepareD04BakeoffCases({B:"Maren and Brenna, what do you know?"});
 async function identical():Promise<NarratorPack>{const {B}=await cases,pack=structuredClone(B.narrator_validation_pack),u=pack.source.units[0]!;
   return {...pack,source:{...pack.source,units:[{...structuredClone(u),id:"fact_1",ref:"F1"},{...structuredClone(u),id:"fact_2",ref:"F2"}]}};}
 test("identical public fact text and full metadata share one canonical group, preserving separate IDs",async()=>{const p=await identical();const groups=precomputeKnowledgeGroups(p);assert.equal(groups.length,1);assert.deepEqual(groups[0]!.bindings,[0,1]);assert.deepEqual(expandLosslessCandidate(losslessCandidate(p),p),p.source.units);});

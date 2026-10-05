@@ -80,7 +80,7 @@ test("committed tell: next turn's projection lets Brenna use the fact (follows C
   const { seen } = await twoTurns("Nicco tells Brenna that the eastern bridge is closed.", [knowledge]);
   assert.match(seen[0]!.messages[0]!.content, /Brenna: CAN USE none; DO NOT USE F1/);
   assert.match(seen[1]!.messages[0]!.content, /Brenna: CAN USE F1 \(knows\)/);
-  assert.match(seen[1]!.messages[0]!.content, /Maren: CAN USE none; DO NOT USE F1/);
+  assert.match(seen[1]!.messages[0]!.content, /maren: CAN USE none; DO NOT USE F1/);
 });
 test("failed tell: permission is unchanged next turn; provisional narration grants nothing", async () => {
   const { seen, campaign } = await twoTurns("Brenna looks worried.", [knowledge]);

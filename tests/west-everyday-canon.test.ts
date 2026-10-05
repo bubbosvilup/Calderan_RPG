@@ -104,7 +104,7 @@ for(const [id,name,location] of anchors)test(`Present portrayal stays separate f
  for(const pattern of portrayal[id]!)assert.ok(pattern.test(text),`${id}: required portrayal component`);
  assert.ok(text.includes("not compulsory gestures or catchphrases"));
  assert.equal(present.portrayal.authority,"narrator_portrayal_only_not_character_knowledge");
- const prompt=JSON.stringify(buildNarratorPrompt("Hello",context,[],{}, {candidates:[],runtime:[]}));
+ const prompt=JSON.stringify(buildNarratorPrompt(`Hello ${id}`,context,[],{}, {candidates:[],runtime:[]}));
  assert.ok(prompt.includes(npc(id).purpose!));assert.ok(prompt.includes(npc(id).private_notes!));
  const access=projectKnowledgeAccess(context,{});assert.deepEqual(access.facts,[]);assert.deepEqual(access.player,[]);
  assert.deepEqual(campaign.exportSnapshot().goals,[]);assert.deepEqual(campaign.exportSnapshot().knowledge,[]);

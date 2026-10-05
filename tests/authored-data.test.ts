@@ -76,7 +76,7 @@ test("portrayal cannot leak through search text, ranking, public fetch or charac
   assert.equal(search.search({query:"Pellan"},audience).candidates[0]!.entity_id,"pellan");
  }
  const campaign=new CampaignState(guarded,"privacy",{player_location:"calderan_center",world_time:{world_minute:0}}),ctx=buildTurnContext(guarded,campaign.exportSnapshot());
- const prompt=JSON.stringify(buildNarratorPrompt("Hello",ctx,[],{}, {candidates:[],runtime:[]}));
+ const prompt=JSON.stringify(buildNarratorPrompt("Hello Pellan",ctx,[],{}, {candidates:[],runtime:[]}));
  assert.match(prompt,/ZZQSECRETSENTINEL/);assert.match(prompt,/narrator_portrayal_only_not_character_knowledge/);
  assert.ok(!JSON.stringify(projectKnowledgeAccess(ctx,[])).includes("ZZQSECRETSENTINEL"));
  const hidden=new WorldStore(changed(e=>{e.knowledge={visibility:{narrator:false,player:false},known_by:[]};e.private_notes="ZZQHIDDENSENTINEL";}));

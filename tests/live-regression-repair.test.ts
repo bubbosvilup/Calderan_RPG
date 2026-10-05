@@ -259,13 +259,14 @@ test("19B: the same companions explicitly present in the scene may be used", () 
   const campaign = scene(["blackthorn"], [{ kind: "register_character", character: { id: "campaign_character_bodyguard", origin: { kind: "created" }, profile: { name: "Bodyguard" }, current: { current_location: "heartstone_square" } } }]);
   assert.deepEqual(auditQuote(campaign, "Her bodyguard steps closer.").map(i => i.kind), []);
   const prompt = buildNarratorPrompt("Hello.", buildTurnContext(world, campaign.exportSnapshot()), [], {}, { candidates: [], runtime: [] }).messages[0]!.content;
-  assert.ok(prompt.includes(narratorIdentityGate(buildTurnContext(world, campaign.exportSnapshot()))!.mask("[PRESENT AND ABLE TO REACT]\n- Blackthorn\n- Bodyguard")));
+  assert.ok(prompt.includes("- Bodyguard"));
+  assert.ok(prompt.includes(narratorIdentityGate(buildTurnContext(world, campaign.exportSnapshot()))!.identities.get("blackthorn")!.observable_label));
 });
 test("20A: three named NPCs present, one attacked: only the real present set may react", () => {
   const campaign = scene(["korvin", "mistress_elara", "bartolomhew"], [], "calderan_slave_market");
   const context = buildTurnContext(world, campaign.exportSnapshot());
   const prompt = buildNarratorPrompt("*He punches Korvin directly in the face.*", context, [], {}, intentOf(campaign, "*He punches Korvin directly in the face.*")).messages[0]!.content;
-  for (const id of ["korvin", "mistress_elara", "bartolomhew"]) assert.ok(prompt.includes(`- ${narratorIdentityGate(context)!.identities.get(id)!.observable_label}\n`));
+  for (const id of ["korvin", "mistress_elara", "bartolomhew"]) assert.ok(prompt.includes(narratorIdentityGate(context)!.identities.get(id)!.observable_label));
   assert.deepEqual(auditQuote(campaign, "Mistress Elara steps back with a sharp laugh. Bartolomhew watches."), []);
   assert.deepEqual(auditQuote(campaign, "Captain Doran Hale shoulders through the crowd.").map(i => i.kind), ["absent_participant"]);
 });

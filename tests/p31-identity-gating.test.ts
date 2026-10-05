@@ -21,7 +21,7 @@ function market() {
 }
 function request(campaign: CampaignState, retrieved: unknown = {}) {
   const context = buildTurnContext(world, campaign.exportSnapshot());
-  return { context, prompt: buildNarratorPrompt("*I look around the pens.*", context, [], retrieved, { candidates: [], runtime: [] }) };
+  return { context, prompt: buildNarratorPrompt("*I inspect bartolomhew, korvin and mistress_elara*", context, [], retrieved, { candidates: [], runtime: [] }) };
 }
 
 test("P3.1 all three unknown canonical sellers have null player identity with engine IDs intact", () => {

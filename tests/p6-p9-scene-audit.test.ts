@@ -19,14 +19,14 @@ function market() {
   return campaign;
 }
 
-test("P6 all private sellers remain present and repeated in prompt sections during unrelated auction waits", () => {
+test("P6.1 private sellers remain engine-present but have compact narrator presence during unrelated auction waits", () => {
   const campaign = market(), context = buildTurnContext(world, campaign.exportSnapshot());
   const input = "*waiting for the AH to start*";
   const prompt = buildNarratorPrompt(input, context, [], {}, playerIntent(input, context, campaign.exportSnapshot(), world)).messages[0]!.content;
   for (const id of ["bartolomhew", "korvin", "mistress_elara"]) {
     assert.ok(context.primary.scene.present_characters.some(c => c.id === id));
     const label = narratorIdentityGate(context)!.identities.get(id)!.observable_label;
-    assert.ok(prompt.split(label).length - 1 >= 3, `${id}: primary, roster and scene lore remain repeated`);
+    assert.equal(prompt.split(label).length - 1, 1, `${id}: compact background presence replaces repeated rich roster exposure`);
   }
   assert.equal(retrievalRequired(input, context, world), false, "this reported wait needs no retrieval: repetition already comes from primary context");
   assert.ok(prompt.includes("none must"), "the contract allows irrelevant NPCs to remain unmentioned");

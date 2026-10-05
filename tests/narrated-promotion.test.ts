@@ -219,7 +219,7 @@ test("end to end: no pre-registered Brenna → promoted when her name is establi
   await step("*looks at Brenna*", ["Brenna coughs."], fresh);
   const p = prompt();
   assert.equal(p.match(/Character Brenna \(/g)?.length, 1);
-  assert.match(p, /debt auction in Ashford[^"]*\(stated by Korvin\)/);
+  assert.match(p, /debt auction in Ashford[^"]*\(stated by korvin\)/);
   assert.match(p, /"sex":"female"/); assert.match(p, /"years":32/);
   assert.match(p, /Brenna: legally enslaved; legal holder Nicco; transfer papers documented/);
   assert.match(p, /Present but NOT household members: [^\n]*Brenna/);

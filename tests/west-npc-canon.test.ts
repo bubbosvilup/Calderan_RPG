@@ -80,7 +80,7 @@ for(const [id,patterns] of Object.entries(portrayals))test(`Present NPC portraya
  assert.ok(projected.portrayal);const text=JSON.stringify(projected.portrayal);
  for(const pattern of patterns)assert.ok(pattern.test(text),`${id}: portrayal requirement`);
  assert.equal(projected.portrayal.authority,"narrator_portrayal_only_not_character_knowledge");
- const prompt=JSON.stringify(buildNarratorPrompt("Hello",context,[],{}, {candidates:[],runtime:[]}));
+ const prompt=JSON.stringify(buildNarratorPrompt(`Hello ${id}`,context,[],{}, {candidates:[],runtime:[]}));
  assert.ok(prompt.includes(narratorIdentityGate(context)!.mask(npc(id).purpose!)));
  const access=projectKnowledgeAccess(context,{});
  // Portrayal is not knowledge. H3: the only access entries are this NPC's own authored known_by grants on restricted canon,
