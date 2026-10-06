@@ -40,7 +40,7 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations"].map(id => [`#${id}`, new Element()]));
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary"].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
   return { node: (id: string) => nodes.get(`#${id}`)!, renderRpg: context.renderRpg as (target: Element, source: string) => void };
@@ -398,4 +398,20 @@ test("character whitelist uses public appearance, actual NPC+ membership and hid
   assert.equal(play.gold, 23); assert.equal(person.npc_plus, true); assert.equal(person.household, true);
   assert.equal(person.card!.appearance, entity.appearance); assert.equal(person.card!.role, entity.occupation);
   assert.doesNotMatch(JSON.stringify(play), /PRIVATE_SENTINEL|SECRET_AFFILIATION|HIDDEN_CONDITION|HIDDEN_PRESENTATION/);
+});
+
+test("household drawer uses the shared opaque card and renders existing Story tab as inert player-known text", async () => {
+  const card = { ref: "household-ref", name: "Known member", name_known: true, category: "Household", household: true, npc_plus: true, presence: "away", known_location: null,
+    role: "Porter", relationship: "Known colleague", state: "Not recorded", where: "Whereabouts not known", appearance: "An established coat.", affiliations: ["Public fellowship"],
+    public_profile: { species: "Human" }, public_summary: "<script>inert summary</script>", story_facts: [{ text: "A learned rumor.", status: "heard_rumor" }], history: [{ text: "An established account.", source: "Their account" }], observations: [], knowledge_boundary: "Public and learned information only." };
+  const data = { ...opening, play: { participants: [], household: [{ members: [card] }] } };
+  const c = await client(async () => ({ ok: true, json: async () => data }));
+  c.node("household-members").children[0]!.handlers.get("click")!({});
+  assert.equal(c.node("character-name").textContent, "Known member"); assert.equal(c.node("character-where").textContent, "Whereabouts not known");
+  c.node("story-tab").handlers.get("click")!({});
+  assert.equal(c.node("story-panel").hidden, false); assert.equal(c.node("appearance-panel").hidden, true);
+  assert.equal(c.node("character-summary").textContent, card.public_summary); assert.equal(c.node("character-summary").children.length, 0);
+  assert.match(c.node("character-facts").textContent, /heard rumor: A learned rumor/);
+  assert.equal(c.node("character-history").textContent, "Their account: An established account.");
+  c.node("appearance-tab").handlers.get("click")!({}); assert.equal(c.node("story-panel").hidden, true);
 });

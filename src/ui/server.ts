@@ -18,11 +18,12 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
   const messages: Message[] = [{ role: "narrator", text: UI_PLAYTEST_OPENING }];
   const state = () => {
     const view = session.getView();
+    const play = session.getPlayUiView();
     return { messages: messages.map(message => message.comparison_id ? { ...message, comparison_available: comparisons?.has(message.comparison_id) ?? false, alternatives: comparisons?.results(message.comparison_id) ?? [] } : message), ...(comparisons ? { alternate_models: ALTERNATE_NARRATOR_MODELS } : {}), status: session.status, configured: view.session.provider.configured,
       revision: view.session.revision,
       scene: { location: view.scene.location.name, location_id: view.scene.location.id, time_of_day: view.scene.time.time_of_day },
-      play: session.getPlayUiView(),
-      household: view.household.map(h => ({ members: h.members.map(m => ({ name: m.display_name, presence: m.presence, ...(m.location ? { location: m.location.name } : {}) })) })) };
+      play,
+      household: play.household.map(h => ({ members: h.members.map(m => ({ name: m.name_known ? m.name : "Unfamiliar household member", presence: m.presence, ...(m.known_location ? { location: m.known_location } : {}) })) })) };
   };
   return createServer(async (req, res) => {
     res.setHeader("Cache-Control", "no-store");

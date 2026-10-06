@@ -193,6 +193,7 @@ h2{margin:0;
   flex-wrap:wrap;
   gap:8px}
 .household-member{width:35px;
+  padding:0;
   height:35px;
   border:1px solid var(--cyan);
   border-radius:50%;
@@ -340,7 +341,7 @@ h3{text-transform:uppercase;
   color:var(--muted);
   font-weight:normal;
   margin-top:28px}
-#appearance-panel p{font-size:17px;
+#appearance-panel p, #story-panel p{font-size:17px;
   line-height:1.75;
   white-space:pre-wrap}
 .drawer-footer{margin-top:auto;

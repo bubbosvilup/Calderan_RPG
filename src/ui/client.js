@@ -17,17 +17,34 @@ let pending;
 let currentRevision;
 const ui = id => document.querySelector(`#${id}`);
 let selectedCharacter, returnFocus;
+function characterTab(tab) {
+  for (const key of ["appearance", "story"]) {
+    ui(`${key}-tab`)?.setAttribute("aria-selected", String(key === tab));
+    if (ui(`${key}-panel`)) ui(`${key}-panel`).hidden = key !== tab;
+  }
+}
+for (const tab of ["appearance", "story"]) ui(`${tab}-tab`)?.addEventListener("click", () => characterTab(tab));
 function closeCharacter() {
   if (ui("character-overlay")) ui("character-overlay").hidden = true;
   selectedCharacter = undefined;
-  returnFocus?.focus();
+  if (returnFocus?.isConnected === false) input.focus(); else returnFocus?.focus();
 }
 function openCharacter(person, trigger) {
   if (!person.card || !ui("character-overlay")) return;
   selectedCharacter = person.ref;
   if (trigger) returnFocus = trigger;
   const card = person.card;
+  if (trigger) characterTab("appearance");
   for (const field of ["name", "role", "relationship", "state", "where", "appearance"]) ui(`character-${field}`).textContent = card[field];
+  const details = {
+    "public-profile": Object.entries(card.public_profile ?? {}).filter(([key, value]) => value && !["appearance", "occupation"].includes(key)).map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`).join(" · "),
+    summary: card.public_summary ?? "No public summary recorded.",
+    facts: (card.story_facts ?? []).map(f => `${f.status === "knows" ? "Known" : f.status.replace(/_/g, " ")}: ${f.text}`).join("\n\n") || "No learned story facts recorded.",
+    history: (card.history ?? []).map(h => `${h.source}: ${h.text}`).join("\n\n") || "No known history recorded.",
+    observations: (card.observations ?? []).join("\n\n") || "No recognized observations recorded.",
+    boundary: card.knowledge_boundary ?? "Only what Nicco knows.",
+  };
+  for (const [field, value] of Object.entries(details)) if (ui(`character-${field}`)) ui(`character-${field}`).textContent = value;
   ui("portrait-initial").textContent = person.name_known === false || person.category === "Name unknown" ? "?" : card.name.slice(0, 1);
   ui("character-affiliations").textContent = card.affiliations.length ? card.affiliations.join(" · ") : "None known.";
   ui("character-badges").replaceChildren();
@@ -41,7 +58,10 @@ ui("character-close")?.addEventListener("click", closeCharacter);
 ui("character-backdrop")?.addEventListener("click", closeCharacter);
 ui("character-drawer")?.addEventListener("keydown", event => {
   if (event.key === "Escape") { event.preventDefault(); closeCharacter(); }
-  if (event.key === "Tab") { event.preventDefault(); (event.target === ui("character-close") ? ui("appearance-tab") : ui("character-close")).focus(); }
+  if (event.key === "Tab") {
+    event.preventDefault(); const controls = [ui("character-close"), ui("appearance-tab"), ui("story-tab")].filter(Boolean);
+    const at = controls.indexOf(event.target); controls[(at + (event.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
+  }
 });
 
 // Single unescaped stars delimit narration; double stars remain literal.
@@ -110,23 +130,26 @@ function renderScene(data) {
       name.textContent = person.name; category.textContent = person.category;
       detail.append(name, category); entry.append(avatar, detail);
       if (person.card) { entry.setAttribute("type", "button"); entry.setAttribute("aria-haspopup", "dialog"); entry.addEventListener("click", () => openCharacter(person, entry)); }
-      if (person.ref === selectedCharacter) returnFocus = entry;
+      if (person.ref === selectedCharacter && returnFocus?.className === "scene-participant") returnFocus = entry;
       ui("scene-participants").append(entry);
     }
   }
   if (selectedCharacter) {
-    const person = people.find(p => p.ref === selectedCharacter);
+    const householdCard = data.play?.household?.flatMap(g => g.members).find(c => c.ref === selectedCharacter);
+    const person = people.find(p => p.ref === selectedCharacter) ?? (householdCard ? { ref: householdCard.ref, name: householdCard.name, name_known: householdCard.name_known, card: householdCard } : undefined);
     if (person) openCharacter(person); else closeCharacter();
   }
   household.replaceChildren();
-  const members = (data.household ?? []).flatMap(group => group.members);
+  const members = data.play?.household ? data.play.household.flatMap(group => group.members).map(card => ({ name: card.name_known ? card.name : "Unfamiliar household member", presence: card.presence, location: card.known_location, card })) : (data.household ?? []).flatMap(group => group.members);
   if (ui("household-count")) ui("household-count").textContent = `${members.filter(m => m.presence === "present").length} here · ${members.filter(m => m.presence !== "present").length} elsewhere`;
   if (!members.length) {
     const empty = document.createElement("p"); empty.className = "empty-household";
     empty.textContent = "No household members yet."; household.append(empty);
   }
   for (const member of members) {
-    const card = document.createElement("div"); card.className = "household-member";
+    const card = document.createElement(member.card ? "button" : "div"); card.className = "household-member";
+    if (member.card) { card.setAttribute("type", "button"); card.setAttribute("aria-haspopup", "dialog"); card.addEventListener("click", () => openCharacter({ ref: member.card.ref, name: member.card.name, name_known: member.card.name_known, card: member.card }, card)); }
+    if (member.card?.ref === selectedCharacter && returnFocus?.className === "household-member") returnFocus = card;
     card.setAttribute("data-initial", member.name === "Unfamiliar household member" ? "?" : member.name.slice(0, 1));
     card.setAttribute("title", `${member.name} · ${member.presence === "present" ? "Here" : "Elsewhere"}`);
     const name = document.createElement("strong"); name.textContent = member.name;
