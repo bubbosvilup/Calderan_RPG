@@ -120,6 +120,8 @@ export class SceneParticipants {
   #focus: string | null = null;
   #focusLocation: string | null = null;
   active(): readonly EphemeralSceneParticipant[] { return Object.freeze([...this.#list]); }
+  /** Administrative boundary: flush focus, preserving monotonic IDs and turn numbering. */
+  resetBoundary(): void { this.#list = []; this.#focus = null; this.#focusLocation = null; }
 
   /** Deterministic pre-narration plan. Nothing changes until commit(); a failed turn simply discards the plan. */
   plan(input: string, context: TurnContext, recent: readonly RecentExchange[] = []): SceneParticipantPlan {

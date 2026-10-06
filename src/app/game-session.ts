@@ -30,7 +30,7 @@ export interface SessionHooks {
 export interface SessionDeps {
   readonly world: WorldStore; readonly repository: CampaignSaveRepository;
   /** Receives the session's diagnostics hook so per-turn diagnostics can be captured; a stub coordinator may ignore it. */
-  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest">>;
+  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity">>;
   readonly context_policy?: ContextPolicy;
   readonly compaction_service?: ContextCompactionService;
   readonly reflection_provider?: ReflectionProvider | undefined;
@@ -57,14 +57,16 @@ export type TurnOutcome =
 export type SaveOutcome = { readonly ok: true; readonly saved: SavedCampaign; readonly view: SessionView } | { readonly ok: false; readonly error: AppError };
 export type ShutdownOutcome = { readonly closed: true; readonly discarded_unsaved_changes: boolean } | { readonly closed: false; readonly error: AppError };
 export interface SubmitOptions { readonly onEvent?: (event: SessionEvent) => void; readonly signal?: AbortSignal }
+export type LocationOutcome = { readonly ok: true; readonly changed: boolean; readonly confirmation: string; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly candidates?: readonly string[]; readonly view: SessionView };
 
 /** Application commands own explicit entry points; they must never be sent to the narrator as player prose. */
-const APPLICATION_COMMAND = /^\s*\/(?:save|load|new|quit|exit|status|help|debug)(?:\s|$)/i;
+const APPLICATION_COMMAND = /^\s*\/(?:save|load|new|quit|exit|status|help|debug|location)(?:\s|$)/i;
 const STUB_STATUS: ProviderStatus = { mode: "stub", configured: true };
 
 export class GameSession {
   readonly #mannerisms: MannerismMaintenance | undefined;
-  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest">>;
+  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity">>;
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
   #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
@@ -102,6 +104,30 @@ export class GameSession {
   }
   #setStatus(status: SessionStatus, emit?: (e: SessionEvent) => void): void { if (this.#status !== status) { this.#status = status; emit?.({ type: "status_changed", status }); } }
   #reject(error: AppError): TurnOutcome { this.#lastError = error; return { ok: false, error, view: this.getView() }; }
+  /** Explicit administrative correction, never a model command or simulated journey. */
+  overridePlayerLocation(request: { readonly target: string; readonly expected_revision: number }): LocationOutcome {
+    const reject = (code: AppError["code"], message?: string, candidates?: readonly string[]): LocationOutcome => ({ ok: false,
+      error: appError(code, message ? { message } : {}), ...(candidates ? { candidates } : {}), view: this.getView() });
+    if (this.#status === "closed") return reject("session_closed");
+    if (this.#status !== "idle") return reject("turn_in_progress");
+    const campaign = this.#session.campaign;
+    if (!Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision) return reject("stale_turn");
+    if (typeof request.target !== "string" || !request.target.trim() || request.target.length > 200) return reject("invalid_input");
+    const label = request.target.trim().toLowerCase();
+    const matches = this.#deps.world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.player && e.knowledge.visibility.narrator
+      && [e.id, e.name, e.display_name].some(n => n.toLowerCase() === label));
+    if (matches.length !== 1) return reject("invalid_input", matches.length ? "Ambiguous canonical location; use a canonical ID." : "Unknown or unavailable canonical location; use a canonical ID.", matches.slice(0, 5).map(e => e.id));
+    // A coordinator without the boundary capability cannot safely offer emergency correction.
+    if (!this.#coordinator.resetSceneContinuity) return reject("internal_error", "Location correction is unavailable in this session.");
+    const target = matches[0]!, before = this.getView();
+    try {
+      const receipt = campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "runtime_delta", delta: { player_location: target.id } }] });
+      campaign.commit(receipt);
+      this.#coordinator.resetSceneContinuity(campaign);
+      this.#lastError = undefined;
+      return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} → ${target.display_name} (${target.id}). Time unchanged.`, view: this.getView() };
+    } catch { return reject("campaign_validation_failed"); }
+  }
 
   /**
    * One player turn. Rejects immediately (no mutation) when closed, busy, or when the text is an application command. A turn that
@@ -110,11 +136,11 @@ export class GameSession {
   submitPlayerInput(input: string, options: SubmitOptions = {}): Promise<TurnOutcome> {
     if (this.#status === "closed") return Promise.resolve(this.#reject(appError("session_closed")));
     if (this.#status !== "idle") return Promise.resolve(this.#reject(appError("turn_in_progress")));
+    if (APPLICATION_COMMAND.test(input)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "That is an application command; the interface must call it directly, not send it as a player action." })));
     if (this.getView().context_budget?.compaction_required) {
       void this.requestContextCompaction({ reason: "auto", ...(options.onEvent ? { onEvent: options.onEvent } : {}) });
       return Promise.resolve(this.#reject(appError("context_too_large", { message: "Context maintenance is required before another turn; compressor availability is shown in the session view." })));
     }
-    if (APPLICATION_COMMAND.test(input)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "That is an application command; the interface must call it directly, not send it as a player action." })));
     this.#setStatus("running_turn", options.onEvent);
     const run = this.#runTurn(input, options);
     const tracked: Promise<unknown> = run.finally(() => { if (this.#inflight === tracked) this.#inflight = undefined; });

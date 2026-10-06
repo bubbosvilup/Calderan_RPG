@@ -64,6 +64,12 @@ export class TurnCoordinator {
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
+  /** Explicit application correction only; no campaign history or state is rewritten. */
+  resetSceneContinuity(campaign: CampaignState): void {
+    this.#recent.set(campaign, new RecentConversation());
+    this.#lastInput.delete(campaign);
+    this.#participants.get(campaign)?.resetBoundary();
+  }
   /** Between-turn derived request. Uses the same projection, prompt options and retained dialogue. No hypothetical player action/retrieval. */
   contextRequest(campaign: CampaignState) {
     const input = this.#lastInput.get(campaign) ?? "", recent = this.recent(campaign).forPrompt();
@@ -90,7 +96,7 @@ export class TurnCoordinator {
       // TurnInputStage: one turn per campaign, bounded input, captured base snapshot and revision.
       if (active.has(campaign)) throw new TurnError("turn_in_progress");
       active.add(campaign); owned = true;
-      if (!player_input.trim() || player_input.length > 4000) throw new TurnError("invalid_input");
+      if (!player_input.trim() || player_input.length > 4000 || /^\s*\/location(?:\s|$)/i.test(player_input)) throw new TurnError("invalid_input");
       checkpoint();
       const snapshot = campaign.exportSnapshot();
       yield { type: "turn_started", base_revision };

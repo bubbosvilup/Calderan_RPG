@@ -14,6 +14,7 @@ let shown = 0;
 let poll;
 const comparisonViews = new Map();
 let pending;
+let currentRevision;
 
 // Single unescaped stars delimit narration; double stars remain literal.
 // An unfinished narration span stays italic while the next token is pending.
@@ -85,6 +86,7 @@ function showError(text) {
   error.hidden = !text;
 }
 function render(data) {
+  currentRevision = data.revision;
   const wasNear = nearBottom();
   renderScene(data);
   for (const message of data.messages.slice(shown)) {
@@ -179,6 +181,24 @@ form.addEventListener("submit", async event => {
   input.disabled = send.disabled = true;
   status.textContent = "Generating…";
   showError("");
+  if (/^\/location(?:\s|$)/i.test(text)) {
+    status.textContent = "Correcting location…";
+    try {
+      const response = await fetch("/api/location", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ target: text.replace(/^\/location\s*/i, ""), expected_revision: currentRevision }) });
+      const data = await response.json();
+      submitting = false;
+      if (Array.isArray(data.messages)) render(data);
+      if (data.ok) { input.value = ""; status.textContent = data.confirmation; }
+      else showError(data.error?.message ?? "Location correction failed.");
+    } catch {
+      submitting = false;
+      showError("Location correction response interrupted. Checking committed state.");
+      await load();
+    }
+    if (ready) input.focus();
+    return;
+  }
   const wasNear = nearBottom();
   pending = { player: bubble("player", text), narrator: bubble("narrator provisional", ""), buffer: "" };
   pending.narrator.label.textContent = "Draft · Generating…";

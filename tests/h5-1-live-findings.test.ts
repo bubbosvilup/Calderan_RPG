@@ -68,7 +68,7 @@ test("player movement grammar: bounded natural first-person forms move through t
   assert.deepEqual(intent.runtime, [{ kind: "runtime_delta", delta: { player_location: HALL, time_advance_minutes: 1 } }]);
   // Return trip from the hall.
   const back = turnFixture(); back.campaign.apply({ expected_revision: back.campaign.revision, commands: [{ kind: "runtime_delta", delta: { player_location: HALL } }] });
-  assert.deepEqual(destinationOf("I go back up to the room. Who is here?", back), [ROOM]);
+  assert.deepEqual(destinationOf("I go back up to the observation room. Who is here?", back), [ROOM]);
   assert.deepEqual(destinationOf("I head upstairs to the observation room.", back), [ROOM]);
 });
 
@@ -200,7 +200,7 @@ test("full turn Y: going down alone and coming back keeps everyone where state p
   const h = fixtureHarness();
   await h.step("I go down to the main hall alone.", ["Nicco descends to the main hall alone. Brenna, Gerome and Maren remain above."]);
   assert.equal(at(h.campaign.exportSnapshot(), h.world, "nicco"), HALL);
-  const back = await h.step("I go back up to the room. Who is here?", ["Nicco climbs back to the observation room. Brenna, Gerome and Maren are where he left them."]);
+  const back = await h.step("I go back up to the observation room. Who is here?", ["Nicco climbs back to the observation room. Brenna, Gerome and Maren are where he left them."]);
   const s = h.campaign.exportSnapshot();
   assert.deepEqual(["nicco", "brenna", "gerome", "maren"].map(id => at(s, h.world, id)), [ROOM, ROOM, ROOM, ROOM]);
   assert.deepEqual(back.diagnostics.audit?.issue_kinds, []);

@@ -1,3 +1,4 @@
+import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
@@ -162,6 +163,7 @@ export function concreteDestination(phrase: string, arrival: string, origin: str
 export function resolvePlayerCarry(input: string, snapshot: DeepReadonly<CampaignSnapshot>, context: TurnContext, world: WorldStore, natural: readonly CampaignCommand[]):
   { readonly runtime: readonly CampaignCommand[]; readonly notes: readonly string[]; readonly carried?: string } {
   const here = snapshot.runtime.scene.player_location;
+  if (resolvePlayerTravel(input, here, context, world).actions.some(a => a.status === "ambiguous")) return { runtime: [], notes: [] };
   // H5.1: an authored NPC present in the scene can be carried too (the player's own physical act; CampaignState moves authored NPCs
   // through runtime locations). Who may move by *narration* is unchanged: authorization still accepts only created characters.
   const movable = persistentCharactersAt(snapshot, world, [here]).filter(m => context.characters.some(c => c.id === m.id));
@@ -188,7 +190,7 @@ export function resolvePlayerCarry(input: string, snapshot: DeepReadonly<Campaig
     const rest = flat.slice(Math.max(0, start) + m.index!);
     const dest = rest.match(new RegExp(`\\b${TO}\\s+([^.;,!?*]+)`, "i"));
     if (!dest) continue;
-    const target = resolveDestination(dest[2]!.trim(), context, world);
+    const target = playerDestination(dest[2]!.trim(), world);
     if (!target) continue;
     const route = reachable(target, here, world);
     const name = movable.find(x => x.id === who)!.names[0]!;

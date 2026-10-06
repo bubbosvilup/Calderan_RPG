@@ -19,7 +19,8 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
   const state = () => {
     const view = session.getView();
     return { messages: messages.map(message => message.comparison_id ? { ...message, comparison_available: comparisons?.has(message.comparison_id) ?? false, alternatives: comparisons?.results(message.comparison_id) ?? [] } : message), ...(comparisons ? { alternate_models: ALTERNATE_NARRATOR_MODELS } : {}), status: session.status, configured: view.session.provider.configured,
-      scene: { location: view.scene.location.name, time_of_day: view.scene.time.time_of_day },
+      revision: view.session.revision,
+      scene: { location: view.scene.location.name, location_id: view.scene.location.id, time_of_day: view.scene.time.time_of_day },
       household: view.household.map(h => ({ members: h.members.map(m => ({ name: m.display_name, presence: m.presence, ...(m.location ? { location: m.location.name } : {}) })) })) };
   };
   return createServer(async (req, res) => {
@@ -35,7 +36,7 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
     }
     try {
       if (req.method === "GET" && req.url === "/api/session") { json(200, state()); return; }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative")) {
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location")) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
         let body = "";
         for await (const chunk of req) {
@@ -44,6 +45,15 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
         }
         let input: unknown;
         try { input = JSON.parse(body); } catch { json(400, { error: "Invalid request." }); return; }
+        if (req.url === "/api/location") {
+          if (!input || typeof input !== "object" || !("target" in input) || !("expected_revision" in input) || typeof input.target !== "string" || typeof input.expected_revision !== "number") {
+            json(400, { ok: false, error: { message: "Expected target and current revision." }, ...state() }); return;
+          }
+          const outcome = session.overridePlayerLocation({ target: input.target, expected_revision: input.expected_revision });
+          const { view: _view, ...result } = outcome;
+          json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422,
+            { ...result, ...state() }); return;
+        }
         if (req.url === "/api/alternative") {
           if (!comparisons || !input || typeof input !== "object" || !("message_id" in input) || !("model" in input) || typeof input.message_id !== "string" || typeof input.model !== "string" || !messages.some(message => message.role === "narrator" && message.comparison_id === input.message_id)) {
             json(400, { ok: false, error: "Invalid comparison request." }); return;

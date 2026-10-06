@@ -6,6 +6,7 @@ entity:
   display_name: Calderan Slave Market
   parent: calderan_west
   aliases:
+    - pens
     - West District slave pens
     - Calderan slave pens
     - The Slave Pens

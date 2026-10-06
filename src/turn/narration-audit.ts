@@ -21,6 +21,7 @@ import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { readScene } from "./narrated-captives.js";
 import { resolveDestination } from "./natural-actions.js";
+import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
 
@@ -48,6 +49,8 @@ export interface NarrationAuditInput {
   readonly authoritative_text?: string;
   /** H5.1: where Nicco was before this turn (defaults to the prepared location: no movement this turn). */
   readonly origin?: string;
+  /** Resolved before projection; companion presence may differ in the arrival context. */
+  readonly player_travel_frame?: boolean;
   /** P8: the narrator received economic anchors this turn (same decision as the prompt). */
   readonly economic_reference?: boolean;
 }
@@ -366,12 +369,22 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
   const display = (id: string | undefined) => id ? world.getEntity(id)?.display_name ?? id : "an unestablished place";
   const within = (place: string, at: string | undefined) => !!at && (place === at || world.getAncestors(at).some(a => a.id === place));
   const issues: AuditIssue[] = [], niccoDidNotGo: string[] = [];
+  const playerFrame = (input.player_travel_frame ?? (!!input.player_input && resolvePlayerTravel(input.player_input, origin, context, world).actions.length > 0))
+    || /\b(?:we are home|opens? the door and enters?)\b/i.test(input.player_input ?? "");
   for (const sentence of sentences) {
+    const plainArrival = outside(sentence).trim().replace(/^\*|\*$/g, "").trim();
+    // Contextual player-relative claims only. Remote lore, dialogue and NPC subjects do not match.
+    const relative = playerFrame && plainArrival.match(/^(?:(?:He|They|We)\s+(?:enters?|entered|reach(?:es)?|reached|arrives? (?:at|in)|arrived (?:at|in))\s+(.+?)|The journey ends at\s+(.+?)|The door opens into\s+(.+?))[.!]*$/i);
+    if (relative && !GATES.player_movement_not_done.test(plainArrival) && !/\b(?:yesterday|ago|last night|earlier|according to|describes?|remembers?|recalls?)\b/i.test(plainArrival)) {
+      let phrase = (relative[1] ?? relative[2] ?? relative[3]!).replace(PLACE_END, "").replace(/['’]s\s+(?:(?:massive|wooden)\s+)*door[.!]*$/i, "").replace(/[.!]+$/, "").trim();
+      const place = playerDestination(phrase, world);
+      if (place && !within(place, here)) issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: `Nicco is at ${display(here)}, not ${display(place)}. Remove the uncommitted current-scene arrival.` });
+    }
     for (const clause of outside(sentence).split(/;|,\s*(?:but|while|though|although)\s+|\s+but\s+/)) {
       for (const [re, leaving] of [[NICCO_GO, false], [NICCO_ARRIVE, false], [NICCO_LEAVE, true]] as const) {
         const m = clause.match(re);
         if (!m || GATES.movement_not_done.test(clause.slice(0, m.index! + m[0].length))) continue;
-        const place = resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world);
+        const place = playerDestination(m[1]!.replace(PLACE_END, "").trim(), world) ?? resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world);
         // "home" has no canonical alias or typed doorway target. Do not turn an
         // unsupported player phrase into an authoritative arrival in narration.
         if (!place && /^(?:his |the |your )?home[.!?]*$/i.test(m[1]!.replace(PLACE_END, "").trim())) {

@@ -283,3 +283,24 @@ test("time label is P11's projection at 600 and after a committed wait across it
   assert.equal(result.view.scene.time.time_of_day, "Early Afternoon");
   await f.session.shutdown({ discard_unsaved: true });
 });
+
+for (const ok of [true, false]) test(`location composer waits for final view without narrator bubbles: ${ok}`, async () => {
+  let resolveResponse!: (value: unknown) => void; const requests: any[] = [];
+  const c = await client(async (url: string, options?: any) => {
+    if (!options) return { ok: true, json: async () => ({ ...opening, revision: 7 }) };
+    requests.push([url, JSON.parse(options.body)]);
+    return new Promise(resolve => { resolveResponse = resolve; });
+  });
+  const initial = c.node("conversation").children.length;
+  c.node("input").value = "/location heartstone_lr";
+  const submitted = c.node("composer").requestSubmit(); await tick();
+  assert.equal(c.node("conversation").children.length, initial);
+  assert.equal(c.node("location").textContent, "Observation room");
+  assert.deepEqual(requests, [["/api/location", { target: "heartstone_lr", expected_revision: 7 }]]);
+  resolveResponse({ json: async () => ({ ...opening, ok, revision: ok ? 8 : 7, scene: { location: ok ? "Heartstone LR" : "Observation room", time_of_day: "Late Morning" },
+    confirmation: "Manual location correction. Time unchanged.", error: { message: "Unknown canonical location." } }) });
+  await submitted;
+  assert.equal(c.node("conversation").children.length, initial);
+  assert.equal(c.node("location").textContent, ok ? "Heartstone LR" : "Observation room");
+  assert.match(ok ? c.node("status").textContent : c.node("error").textContent, ok ? /Manual location correction/ : /Unknown canonical location/);
+});

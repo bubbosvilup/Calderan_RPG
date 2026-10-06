@@ -5,7 +5,8 @@ entity:
   name: Heartstone
   display_name: Heartstone
   parent: calderan_west
-  aliases: []
+  aliases:
+    - Heartstone Tower
   summary: Heartstone is an old, tall private residential tower of predominantly stone construction. It is
     vertically organized, structurally solid, and associated with a secluded walled courtyard.
   tags:

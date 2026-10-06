@@ -1,4 +1,5 @@
-import { findRoute, travelDestination, type TravelRoute } from "../world/travel.js";
+import { reachable } from "./travel-resolution.js";
+import { resolvePlayerTravel } from "./player-travel.js";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
@@ -14,7 +15,8 @@ import { escapeRegExp } from "./language/text.js";
 /**
  * Natural player action resolution (Phase 1S). Deterministic, bounded, player-authored only.
  *
- * - Only text inside *asterisks* is an action; everything else is Nicco's speech, and speech never changes state
+ * - Player travel has its own bounded detector (player-travel.ts), shared by plain and marked input.
+ * - Other actions require *asterisks* or existing scene-direction recognition; speech never changes state
  *   ("I'm barefoot", "I'm at the market", "I gave her the boots yesterday").
  * - An action segment is split into ordered clauses. A clause is Nicco's own action only when it has no other subject.
  *   Hedged clauses (almost, pretends, reaches for, wants to, modal/negated/future) resolve nothing.
@@ -120,12 +122,7 @@ export function resolveDestination(phrase: string, context: TurnContext, world: 
   const found = locations.filter(l => heads(l).includes(head) && (!city || l.id === city || world.getAncestors(l.id).some(a => a.id === city)));
   return found.length === 1 ? found[0]!.id : undefined;
 }
-/** Shared weighted routing for natural movement and explicit carrying. */
-export function reachable(destination: string, here: string, world: WorldStore): { readonly target?: string; readonly via_container?: boolean; readonly route?: TravelRoute } {
-  const target = travelDestination(world, destination);
-  const route = findRoute(world, here, target);
-  return route ? { target, via_container: target !== destination, route } : {};
-}
+export { reachable } from "./travel-resolution.js";
 const display = (id: string, world: WorldStore) => world.getEntity(id)?.display_name ?? id;
 /**
  * One movement clause → its outcome through the shared destination and route rules (no teleport): resolved (one runtime delta with
@@ -151,6 +148,8 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
   participants: readonly EphemeralSceneParticipant[] = [], participantTurn = 0): NaturalActionResolution {
   const actions: NaturalAction[] = [], runtime: CampaignCommand[] = [], candidates: CampaignCommand[] = [], notes: string[] = [], physical: PhysicalInteraction[] = [];
   const here = snapshot.runtime.scene.player_location;
+  const travel = resolvePlayerTravel(input, here, context, world);
+  actions.push(...travel.actions); runtime.push(...travel.runtime); notes.push(...travel.notes);
   const worn = context.items.filter(i => i.position.kind === "equipped" && i.position.character_id === "nicco" && i.owner_id === "nicco");
   type Item = (typeof context.items)[number];
   const itemFor = (phrase: string, pool: readonly Item[]) => {
@@ -194,7 +193,6 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
     const recipient = named ?? source(item) ?? (npcs.length === 1 ? npcs[0]!.id : undefined);
     return recipient ? { item, recipient } : { item, reason: "ambiguous_recipient" };
   };
-  let moved = false;
   const direction = actionSegments(input).length ? [] : sceneDirection(input, context);
   for (const segment of [...actionSegments(input), ...direction]) {
     const parts = clauses(segment);
@@ -207,12 +205,8 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
       if (attempt) { const rest = clause.slice(attempt[0].length); if (isTransferForm(rest) && !HEDGE.test(rest)) clause = rest; }
       if (HEDGE.test(clause)) continue;
       let m: RegExpMatchArray | null;
-      if ((m = clause.match(MOVE)) && !moved) {
-        const outcome = resolveMovement(clause, m[1]!.split(DESTINATION_END)[0]!.trim(), here, context, world);
-        actions.push(...outcome.actions); runtime.push(...outcome.runtime); notes.push(...outcome.notes);
-        moved = outcome.runtime.length > 0;
-        continue;
-      }
+      // Player travel is resolved once over the complete input.
+      if (clause.match(MOVE) || travel.actions.some(a => a.kind === "movement" && a.clause === clause)) continue;
       const removal = REMOVE.map(r => clause.match(r)).find(Boolean) ?? null;
       const takeOut = removal ? null : clause.match(TAKE_OUT);
       if (removal || takeOut) {

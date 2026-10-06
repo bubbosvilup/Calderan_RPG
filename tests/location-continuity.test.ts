@@ -147,7 +147,7 @@ test("controller path: a narrated follow is authorized from evidence; walking ho
     { kind: "set_legal_status", character_id: M, status: "enslaved", holder_id: "nicco" }, { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: B }]);
   const { step } = harness(c);
   // Nicco goes to the courtyard; Maren follows (narrated, controller-proposed, evidence-confirmed). Brenna — household — stays.
-  const r = await step("*walks out into the courtyard*", "Nicco walks out into the courtyard. Maren follows him into the courtyard, blinking at the light.",
+  const r = await step("*walks out into heartstone_cy*", "Nicco walks out into the courtyard. Maren follows him into the courtyard, blinking at the light.",
     [{ kind: "move_character", character_id: M, location_id: CY }, { kind: "move_character", character_id: B, location_id: CY }]);
   assert.deepEqual(r.authorization.map(a => [a.command.kind === "move_character" ? a.command.character_id : a.command.kind, a.authorized, a.reason]),
     [[M, true, "authorized_narrative_confirmation"], [B, false, "rejected_insufficient_confirmation"]]);
