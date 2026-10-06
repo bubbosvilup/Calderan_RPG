@@ -121,10 +121,11 @@ test("KNOWN over-redaction: a condition on a person named by first name only is 
   assert.equal(await deliveredAs(real(INN, [person(DELL, "Dell Harrow", INN, "male")]), "*Nicco shoves Dell hard in the chest.*", "Dell staggers back into the bar, winded, and glares at Nicco.",
     [{ kind: "set_condition", character_id: DELL, conditions: ["winded"] }]), "draft");
 });
-test("KNOWN over-redaction: a seller's price for an unnamed narrated captive is flagged as an invented price", { todo: "trade_negotiation requires a recorded legal state" }, async () => {
+// Formerly a KNOWN over-redaction TODO; resolved by P8: a price question is an economic turn, so a concrete Gold ask is grounded.
+test("a seller's concrete price for an unnamed narrated captive is not redacted as invented (P8 regression)", async () => {
   const s = real(MARKET);
   await deliveredAs(s, "*approaches the cages*", "A lean slaver leans against a post. Behind the bars a thin girl lies curled on the straw.");
-  assert.equal(await deliveredAs(s, "How much for the girl?", 'The slaver shrugs. "Three gold for the girl. No papers."'), "draft");
+  assert.equal(await deliveredAs(s, "How much for the girl?", 'The slaver shrugs. "Six hundred gold for the girl. No papers."'), "draft");
 });
 test("KNOWN false negative: a fronted adverbial hides the receipt ('Without hesitation, Brenna takes the boots')", { todo: "receipt grammar requires the recipient to lead the clause; H1 does not widen grammar" }, async () => {
   assert.equal(await deliveredAs(turnFixture(), "I give boots to Brenna.", "Without hesitation, Brenna takes the boots from Nicco.", [transfer]), "draft");

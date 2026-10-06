@@ -165,9 +165,7 @@ The test also surfaced a real gap. "What do you want for her?" initially matched
 
 **Unchanged:** the purse, `transfer_person`, payment validation, offer/acceptance resolution, legal transitions, receipts, the uncommitted-purchase audit and the controller schema. A test re-proves that a 780G sale against 500G fails with `insufficient funds` and a 450G sale leaves 50G.
 
-**Historical TODO.** *"KNOWN over-redaction: a seller's price for an unnamed narrated captive is flagged as an invented price"* now **passes** (node still reports it under TODO, so the count stays 4). "How much for the girl?" is an economic turn, so the anchors legitimately ground an asking price. This is the exact path P8 must change for narrator price freedom. The historical test file and its TODO marker were **not edited**; promoting it to an ordinary test is left to the owner.
-
-Note that its fixture price ("Three gold for the girl") is implausible against the anchors yet still delivered, because no plausibility validator exists (§10).
+**Historical TODO.** *"KNOWN over-redaction: a seller's price for an unnamed narrated captive is flagged as an invented price"* now **passes** (node still reports it under TODO, so the count stays 4). "How much for the girl?" is an economic turn, so the anchors legitimately ground an asking price. This is the exact path P8 must change for narrator price freedom. **P8 cleanup (follow-up commit):** the test was promoted to an ordinary regression with its TODO marker removed, so the TODO count is now 3. Its fixture quote changed from the implausible "Three gold for the girl" to "Six hundred gold for the girl". It still tests only the original bug: a concrete Gold ask for an unnamed captive is not redacted. No plausibility validator was added (§10).
 
 ## 14. Tests
 

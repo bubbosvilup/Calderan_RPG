@@ -47,7 +47,7 @@ P12 remains the active continuity issue; P11 still awaits live verification. The
 | ID | Status |
 |---|---|
 | **D-03** | Cosmetic invited-NPC hedge remains accepted; attempts to remove it materially distorted follow behaviour. |
-| **D-08** | Four accepted H1 TODOs remain fail-closed / over-redaction cases. |
+| **D-08** | Three accepted H1 TODOs remain fail-closed / over-redaction cases (the unnamed-captive price TODO was resolved by P8 and is now an ordinary regression). |
 | **D-12** | Follow grammar is closed for observed production language; unsupported ornate forms intentionally fail closed. |
 | **D-18** | Absent-participant possessive/pronoun gaps remain accepted until there is real coreference support. |
 | **D-23** | `runTurn` remains at the guarded 164-line ceiling. |
