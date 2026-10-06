@@ -57,6 +57,17 @@ function firstPersonMovement(text: string, context: TurnContext, snapshot: DeepR
   }
   return undefined;
 }
+/** Explicit durations only: no inferred duration, fractions, daypart or event targets. */
+function explicitWaitMinutes(text: string): number | undefined {
+  const command = text.match(/^\/wait (\d+)$/i);
+  if (command) return Number(command[1]);
+  const duration = text.match(/^(?:I )?wait (\d+) (minutes?|hours?)\.?$/i)
+    ?? text.match(/^\*waits (\d+) (minutes?|hours?)\*$/i)
+    ?? text.match(/^\*he spent (\d+) (hours?|minutes?) [^*]+\*$/i);
+  if (duration) return Number(duration[1]) * (duration[2]!.toLowerCase().startsWith("hour") ? 60 : 1);
+  if (/^(?:I )?wait (?:an|one) hour\.?$/i.test(text)) return 60;
+  return undefined;
+}
 /** Small documented player command grammar, not an attempt to parse arbitrary narration. */
 export function playerIntent(input: string, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, participants: readonly EphemeralSceneParticipant[] = [], participantTurn = 0): PlayerIntent {
   const text = input.trim();
@@ -75,13 +86,14 @@ export function playerIntent(input: string, context: TurnContext, snapshot: Deep
     resolved_references: [transfer.recipient, transfer.items].filter((r): r is ResolvedReference => !!r), ambiguous_reference: transfer.unresolved,
   };
   let m: RegExpMatchArray | null;
+  const waitMinutes = explicitWaitMinutes(text);
   if ((m = text.match(/^(?:\/go |go to |walk back to |head to |I go to |I go downstairs to |I go upstairs to )(.+?)\.?$/i))) {
     const destination = resolveDestination(m[1]!, context, world);
     const route = destination && reachable(destination, snapshot.runtime.scene.player_location, world);
     if (!route || !route.target) throw new TurnError("invalid_runtime_intent");
     runtime.push({ kind: "runtime_delta", delta: { player_location: route.target, time_advance_minutes: route.route!.minutes } });
-  } else if ((m = text.match(/^(?:\/wait (\d+)|I wait (\d+) minutes\.?|\*he spent (\d+) (hours?|minutes?) [^*]+\*)$/i))) {
-    const minutes = Number(m[1] ?? m[2] ?? m[3]) * (m[4]?.toLowerCase().startsWith("hour") ? 60 : 1);
+  } else if (waitMinutes !== undefined) {
+    const minutes = waitMinutes;
     if (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > 1440) throw new TurnError("invalid_runtime_intent");
     runtime.push({ kind: "runtime_delta", delta: { time_advance_minutes: minutes } });
   } else if ((m = text.match(/^\/mana (-?\d+)$/))) {

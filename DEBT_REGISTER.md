@@ -18,7 +18,7 @@ IDs are never renumbered.
 | **P3.4** | **CLOSED** — canonical participant continuity. [Report](P3_4_CANONICAL_PARTICIPANT_CONTINUITY.md). |
 | **P3.5** | **CLOSED** — canonical name knowledge commit. [Report](P3_5_CANONICAL_NAME_KNOWLEDGE_COMMIT.md). |
 | **P10** | **OBSERVATION ONLY / NOT ACTIVE FIX ISSUE** — historical perspective/pacing evidence preserved; no new fix work. [Evidence](P3_3_P10_P11_REGENERATION_FIX.md). |
-| **P11** | **OPEN / AUDIT COMPLETE / DESIGN PENDING** — current time-system audit only; no behavior or bucket changes. [Audit](P11_TEMPORAL_SYSTEM_AUDIT.md). |
+| **P11** | **IMPLEMENTED / LIVE VERIFICATION PENDING** — fixed derived dayparts and bounded explicit-duration waits; no wait-until or prose reconciler. [Foundation](P11_KISS_TIME_OF_DAY_FOUNDATION.md), [historical audit](P11_TEMPORAL_SYSTEM_AUDIT.md). |
 
 P11 is the only active item in this P-series scope. The unrelated D-series debts below remain unchanged. This current status supersedes historical P-series status wording in earlier evidence reports without rewriting that evidence.
 

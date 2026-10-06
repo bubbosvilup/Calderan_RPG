@@ -27,18 +27,22 @@ function market() {
 const prompt = (campaign: CampaignState, action: string, history = recent) => buildNarratorPrompt(action, buildTurnContext(world, campaign.exportSnapshot()), history, {}, { candidates: [], runtime: [] });
 
 for (const [minute, day, clock] of [[-1440, -1, "00:00"], [-1, -1, "23:59"], [0, 0, "00:00"], [359, 0, "05:59"], [600, 0, "10:00"], [1080, 0, "18:00"], [1439, 0, "23:59"], [1440, 1, "00:00"], [2041, 1, "10:01"]] as const) {
-  test(`P11 authoritative minute ${minute} projects to day ${day} ${clock}`, () => assert.deepEqual(temporalGrounding(minute), { world_minute: minute, day, actual_time: clock }));
+  test(`P11 authoritative minute ${minute} projects to day ${day} ${clock}`, () => {
+    const projection = temporalGrounding(minute);
+    assert.deepEqual({ world_minute: projection.world_minute, day: projection.day, actual_time: projection.actual_time }, { world_minute: minute, day, actual_time: clock });
+  });
 }
 test("P11 prompt/compaction grounding stays stable across conversation and changes only with runtime clock", () => {
   const campaign = market(), before = campaign.exportSnapshot();
   const first = prompt(campaign, "Hello."), next = prompt(campaign, "What do you sell?");
   for (const request of [first, next, renderCandidateRequest(narratorPackOf(next)!, [])]) {
-    assert.match(request.messages[0]!.content, /"actual_time":"10:00"/);
+    assert.match(request.messages[0]!.content, /"time_of_day":"Late Morning"/);
+    assert.ok(!request.messages[0]!.content.includes('"actual_time"'));
     assert.match(request.messages[0]!.content, /unchanged clock means unchanged time of day/);
   }
   assert.deepEqual(campaign.exportSnapshot(), before);
   campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "runtime_delta", delta: { time_advance_minutes: 480 } }] });
-  assert.match(prompt(campaign, "Hello.").messages[0]!.content, /"actual_time":"18:00"/);
+  assert.match(prompt(campaign, "Hello.").messages[0]!.content, /"time_of_day":"Late Afternoon"/);
 });
 test("P3.3 unknown identities retain correlation but explicitly forbid opaque ref rendering", () => {
   const campaign = market(), request = prompt(campaign, "I speak to the short compact man."), gate = narratorIdentityGate(buildTurnContext(world, campaign.exportSnapshot()))!;

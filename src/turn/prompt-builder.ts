@@ -222,10 +222,11 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     .concat([...new Set(playerAuthoredEvents(input, context).filter(e => !e.negated && e.actor_id && e.actor_id !== "nicco").map(e => e.evidence_quote))]
       .map(q => `Player-authored event (it happens exactly as written; do not soften or escalate it): "${q}"`));
   const scene = context.primary.scene;
+  const { day, time_of_day } = temporalGrounding(scene.world_time.world_minute);
   const state = [
     `[CURRENT AUTHORITATIVE SCENE]\nLocation: ${scene.player_location?.display_name ?? "Unestablished"}. ${focus.lore(scene.player_location?.content ?? "")}`,
     `World minute: ${scene.world_time.world_minute}. Player mana: ${scene.player_resources.mana.current}/${scene.player_resources.mana.max}.`,
-    `[AUTHORITATIVE CLOCK]\n${JSON.stringify(temporalGrounding(scene.world_time.world_minute))}\n${TEMPORAL_GROUNDING_RULE}`,
+    `[AUTHORITATIVE TIME]\n${JSON.stringify({ day, time_of_day })}\n${TEMPORAL_GROUNDING_RULE}`,
     `Local ancestry and features: ${JSON.stringify({ ancestry: scene.location_ancestry.map(a => ({ ...a, summary: focus.lore(a.summary) })), features: scene.player_location?.features.map(f => ({ ...f, description: focus.lore(f.description) })) })}`,
     ...(context.player_profile ? [playerProfile(context.player_profile)] : []),
     `[CURRENT AUTHORITATIVE CHARACTERS]`,
