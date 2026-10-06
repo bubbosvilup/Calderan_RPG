@@ -144,11 +144,11 @@ test("departure 2: a present temporary NPC leaves through controller proposal + 
   assert.equal(dell.current.current_location, undefined); assert.equal(dell.profile.name, "Dell Harrow");
   assert.ok(!contextOf(campaign).characters.some(c => c.id === DELL));
 });
-test("departure 3: an absent temporary NPC cannot leave again; canonical and unknown characters cannot use leave_scene", () => {
+test("departure 3: absent/unknown actors cannot leave; present canonical state supports departure but still requires evidence", () => {
   const campaign = inn();
   campaign.apply({ expected_revision: campaign.revision, commands: [leave] });
   assert.throws(() => campaign.prepare({ expected_revision: campaign.revision, commands: [leave] }), /not present/);
-  assert.throws(() => campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "leave_scene", character_id: "jessa_rook" }] }), /created/);
+  assert.doesNotThrow(() => campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "leave_scene", character_id: "jessa_rook" }] })); // P12.2 existing canonical OFF_SCENE, preparation is not authorization
   assert.throws(() => campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "leave_scene", character_id: "campaign_character_nobody" }] }));
   assert.throws(() => campaign.prepare({ expected_revision: campaign.revision - 1, commands: [leave] })); // stale revision
   const context = contextOf(campaign), snapshot = campaign.exportSnapshot();

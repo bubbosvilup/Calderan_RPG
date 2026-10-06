@@ -16,7 +16,7 @@ import { GATES } from "./language/gates.js";
 import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf } from "./language/text.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
-import { narratedDepartures } from "./scene-departure.js";
+import { narratedDepartures, canonicalDepartureClaims, canonicalPresenceClaims } from "./scene-departure.js";
 import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { readScene } from "./narrated-captives.js";
@@ -222,6 +222,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   for (const e of world.getEntitiesByType("character")) {
     // NPC+ Pass 1: an authored NPC+ whose narrated movement into this scene was authorized this turn is present in prepared state.
     if (e.role !== "npc" || presentIds.has(e.id) || e.name.length < 4 || prepared.runtime.npc_locations.some(n => n.character_id === e.id && n.current_location === prepared.runtime.scene.player_location)) continue;
+    for (const claim of canonicalDepartureClaims(narration, context, [{ id: e.id, name: e.name }]).filter(d => d.character_id === e.id)) {
+      issues.push({ kind: "absent_participant", character: e.name, sentence: claim.source_sentence, correction: `${e.name} is already absent; do not narrate another current-scene departure.` });
+    }
     // NPC+ Pass 4: only PARTICIPATION by the absent character (acting, speaking, present), never a mere reference to them.
     const hit = sentences.find(s => participatesInScene(s, [e.name]));
     if (hit) issues.push({ kind: "absent_participant", character: e.name, sentence: hit, correction: `${e.name} is not present in this scene. Remove them; only the people listed as present may act or speak.` });
@@ -274,8 +277,11 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   // Debt closure D-07: a player-authored departure exempts only a CREATED character (its leave_scene is derivable). An authored NPC has no
   // off-scene representation, so a destination-less exit is never narrated as done unless a committed move_character moved them elsewhere.
   const left = new Set(committed.flatMap(c => c.kind === "leave_scene" ? [c.character_id] : []));
+  for (const id of left) if (context.characters.some(c => c.id === id && c.origin.kind === "canonical")) {
+    for (const sentence of canonicalPresenceClaims(narration, context, id)) issues.push({ kind: "absent_participant", character: name(id), sentence, correction: `${name(id)} has left this scene. Do not invent a return or continued indoor presence.` });
+  }
   const relocated = new Set(committed.flatMap(c => c.kind === "move_character" && c.location_id !== prepared.runtime.scene.player_location ? [c.character_id] : []));
-  for (const d of narratedDepartures(narration, context, "persistent", { every: true, broad: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location })) {
+  for (const d of [...narratedDepartures(narration, context, "persistent", { every: true, broad: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location }), ...canonicalDepartureClaims(narration, context)]) {
     const created = context.characters.find(c => c.id === d.character_id)?.origin.kind === "created";
     if (left.has(d.character_id) || relocated.has(d.character_id) || (created && authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id))) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });

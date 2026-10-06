@@ -52,8 +52,11 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         // Final movement closure: an ACTIVE authored NPC+ located with Nicco may depart for an unknown destination (-> OFF_SCENE) on the same evidence.
         const authoredNpcPlus = (!c || c.origin.kind === "canonical") && snapshot.premium_characters.some(p => p.character_id === command.character_id && p.metadata.active_household_member)
           && snapshot.runtime.npc_locations.some(n => n.character_id === command.character_id && n.current_location === snapshot.runtime.scene.player_location);
-        const ok = present.has(command.character_id) && (authoredNpcPlus || c?.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead");
+        const canonicalPresent = command.character_id !== "nicco" && (!c || c.origin.kind === "canonical") && snapshot.runtime.npc_locations.some(n => n.character_id === command.character_id && n.current_location === snapshot.runtime.scene.player_location);
+        const ok = present.has(command.character_id) && (canonicalPresent || authoredNpcPlus || c?.origin.kind === "created" && c.current.current_location === snapshot.runtime.scene.player_location && c.current.status !== "dead");
         if (!ok) return reject("rejected_reference_invalid");
+        // Ordinary canonical departures require the strict deterministic path; a controller quote cannot bypass its gates.
+        if (canonicalPresent && !authoredNpcPlus && !(evidence.departures ?? []).some(d => d.character_id === command.character_id)) return reject("rejected_reference_invalid");
         return (evidence.departures ?? []).some(d => d.character_id === command.character_id) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
       }
       // Household Pass 1. Membership is a voluntary choice voiced by the chooser; rules are the keeper's explicit declarations;

@@ -1,0 +1,33 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "total": 2306,
+    "pass": 2302,
+    "fail": 0,
+    "todo": 4
+  },
+  "playthrough": {
+    "pass": 25,
+    "fail": 0
+  },
+  "focused": {
+    "total": 348,
+    "pass": 344,
+    "fail": 0,
+    "todo": 4,
+    "new_p122_tests": 36
+  },
+  "unchanged_sources": {
+    "src/turn/prompt-builder.ts": true,
+    "src/turn/recent-scene-narration.ts": true,
+    "src/turn/recent-conversation.ts": true,
+    "src/turn/turn-coordinator.ts": true,
+    "src/turn/temporal-grounding.ts": true,
+    "src/turn/player-intent.ts": true
+  },
+  "live_calls": 0,
+  "live_cost_usd": 0,
+  "p122_status": "IMPLEMENTED / LIVE VERIFICATION PENDING",
+  "p12_overall": "OPEN",
+  "supported_scope": "One uniquely attributed present ordinary canonical actor, completed unknown-destination departure, Nicco stays; same-turn contradiction and existing known-destination evidence excluded."
+}

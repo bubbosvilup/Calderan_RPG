@@ -4,7 +4,7 @@ import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { parseControllerProposal } from "../../llm/controller-schema.js";
 import type { ControllerResult } from "../../llm/state-controller-provider.js";
-import { FOLLOWS_NICCO, narratedDepartures, stairDirection } from "../scene-departure.js";
+import { FOLLOWS_NICCO, narratedDepartures, stairDirection, canonicalDepartureClaims, canonicalDepartureContradiction } from "../scene-departure.js";
 import { characterLocation, doorDestination, narratedMovements, npcPlusEntrants, uniqueVerticalNeighbour, type MovableCharacter } from "../character-movement.js";
 import type { TurnContext } from "../context-builder.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evidence-authorization.js";
@@ -79,8 +79,16 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const npcDepartures = narratedDepartures(i.draft, i.context, "persistent").filter(d => npcPlus.has(d.character_id) && !moving.has(d.character_id) && !STAIR_WORD.test(d.source_sentence)
     && !(i.origin === i.arrival && FOLLOWS_NICCO.test(d.source_sentence)) // a conjoined "follows him" exit depends on Nicco, who did not go: never OFF_SCENE evidence
     && characterLocation(i.projected, i.world, d.character_id) === i.arrival);
-  const evidenceWithDepartures: TurnEvidence = npcDepartures.length ? { ...turn_evidence, departures: [...(turn_evidence.departures ?? []), ...npcDepartures] } : turn_evidence;
-  const departureProposals = npcDepartures.filter(d => !controllerProposal.some(c => c.kind === "leave_scene" && c.character_id === d.character_id)).map(d => ({ kind: "leave_scene" as const, character_id: d.character_id }));
+  const claims = canonicalDepartureClaims(i.draft, i.context).filter(d => !npcPlus.has(d.character_id));
+  const canonicalActors = i.context.characters.filter(c => c.origin.kind === "canonical" && c.id !== "nicco").map(c => ({ id: c.id, names: [c.profile.name ?? c.id] }));
+  const knownMoves = narratedMovements(i.draft, canonicalActors, { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world);
+  const canonicalDepartures = new Set(claims.map(d => d.character_id)).size !== 1 ? [] : claims.filter(d => !d.ambiguous && i.origin === i.arrival
+    && characterLocation(i.projected, i.world, d.character_id) === i.arrival && !canonicalDepartureContradiction(i.draft, i.context, d.character_id)
+    && !knownMoves.some(m => m.character_id === d.character_id) && !doorDestination(i.draft, d.source_sentence, i.arrival, i.context, i.world)
+    && !STAIR_WORD.test(d.source_sentence) && !FOLLOWS_NICCO.test(d.source_sentence));
+  const departures = [...npcDepartures, ...canonicalDepartures];
+  const evidenceWithDepartures: TurnEvidence = departures.length ? { ...turn_evidence, departures: [...(turn_evidence.departures ?? []), ...departures] } : turn_evidence;
+  const departureProposals = [...new Set(departures.map(d => d.character_id))].filter(id => !controllerProposal.some(c => c.kind === "leave_scene" && c.character_id === id)).map(character_id => ({ kind: "leave_scene" as const, character_id }));
   const proposal = [...controllerProposal, ...derived, ...departureProposals];
   // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).
   const diagnostics = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode);

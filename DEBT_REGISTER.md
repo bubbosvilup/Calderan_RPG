@@ -2,7 +2,7 @@
 
 **Status:** `READY_WITH_NON_BLOCKING_DEBT`  
 **Blocking debt:** none  
-**Movement/follow state logic:** frozen  
+**Movement/follow state logic:** frozen except the narrow P12.2 canonical departure exception
 **Production controller:** `qwen/qwen3.8-flash` (baseline for subsequent debt-closure work)
 **Production controller frozen:** NO
 **Last updated:** 2026-10-06
@@ -19,9 +19,9 @@ IDs are never renumbered.
 | **P3.5** | **CLOSED** — canonical name knowledge commit. [Report](P3_5_CANONICAL_NAME_KNOWLEDGE_COMMIT.md). |
 | **P10** | **OBSERVATION ONLY / NOT ACTIVE FIX ISSUE** — historical perspective/pacing evidence preserved; no new fix work. [Evidence](P3_3_P10_P11_REGENERATION_FIX.md). |
 | **P11** | **IMPLEMENTED / LIVE VERIFICATION PENDING** — fixed derived dayparts and bounded explicit-duration waits; no wait-until or prose reconciler. [Foundation](P11_KISS_TIME_OF_DAY_FOUNDATION.md), [historical audit](P11_TEMPORAL_SYSTEM_AUDIT.md). |
-| **P12** | **OPEN / P12.1 IMPLEMENTED / P12.2 OPEN** — bounded scene-local projection implemented; canonical departure divergence and model precedence compliance remain open. [Audit](P12_IMMEDIATE_SCENE_CONTINUITY_AUDIT.md). |
+| **P12** | **OPEN / P12.1 AND P12.2 IMPLEMENTED / LIVE VERIFICATION PENDING** — bounded scene-local projection and narrow canonical departure reconciliation implemented; ordinary-play verification and remaining event continuity are open. [Audit](P12_IMMEDIATE_SCENE_CONTINUITY_AUDIT.md). |
 | **P12.1** | **IMPLEMENTED / LIVE VERIFICATION PENDING** - two finalized exchanges, 2,000-character masked narration budget; storage and typed state unchanged. [Report](P12_1_BOUNDED_RECENT_SCENE_NARRATION.md). |
-| **P12.2** | **OPEN / NOT IMPLEMENTED** - canonical actor departure/runtime reconciliation; stale departure prose can still defeat explicit structured-state precedence. |
+| **P12.2** | **IMPLEMENTED / LIVE VERIFICATION PENDING** - uniquely attributed completed current-scene canonical departures reuse OFF_SCENE; rejected covered departures are reconciled before delivery. No general movement authority. [Report](P12_2_CANONICAL_DEPARTURE_RECONCILIATION.md). |
 
 P12 remains the active continuity issue; P11 still awaits live verification. The unrelated D-series debts below remain unchanged. This current status supersedes historical P-series status wording in earlier evidence reports without rewriting that evidence.
 

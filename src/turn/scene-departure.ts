@@ -1,6 +1,8 @@
 import type { TurnContext } from "./context-builder.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
 import { GATES } from "./language/gates.js";
+import { rpgNarration } from "./rpg-dialogue.js";
+import { narratorIdentityGate } from "./narrator-identity.js";
 
 /**
  * Runtime Continuity Repair 1: deterministic departure evidence for temporary (created) characters. A departure is narrated only
@@ -14,6 +16,70 @@ import { GATES } from "./language/gates.js";
  * ("turns for the door", "starts toward the door", "looks at the door") are never departures.
  */
 export interface DepartureEvidence { readonly character_id: string; readonly source_sentence: string }
+
+export interface CanonicalDepartureClaim extends DepartureEvidence { readonly ambiguous: boolean }
+/** Bounded physical traces, not arbitrary possessives (patience, gaze, voice, etc.). */
+const TRACE_SUBJECT = /^(?:(?:'s|\u2019s)\s+|(?:his|her)\s+)(?:retreating back|footsteps?|figure)\b/i;
+const TRACE_ACT = /\b(?:disappear(?:s|ed)?|vanish(?:es|ed)?|fade(?:s|d)?)\s+(?:away|through|down|around|out)\b/i;
+function canonicalActorTerms(context: TurnContext, id: string, name: string): readonly string[] {
+  const identity = narratorIdentityGate(context)?.identities.get(id);
+  return [name, id, identity?.ref, identity?.observable_label].filter((x): x is string => !!x);
+}
+function departureSentences(narration: string): readonly { source: string; plain: string }[] {
+  const spans = narration.includes("*") ? rpgNarration(narration) : undefined;
+  return sentencesOf(narration).filter(source => !spans || spans.some(span => span.includes(source)))
+    .map(source => ({ source, plain: blankQuotes(source).replace(/\*/g, "").trim().replace(/^(?:then|finally|at last|a moment later),?\s+/i, "") }));
+}
+/** Claims are broader than permission: audit must also see ambiguous or contradictory completed exits. */
+export function canonicalDepartureClaims(narration: string, context: TurnContext, additional: readonly { readonly id: string; readonly name: string }[] = []): readonly CanonicalDepartureClaim[] {
+  const actors = [...context.characters.filter(c => c.id !== "nicco" && c.origin.kind === "canonical" && c.current.status !== "dead"), ...additional.map(c => ({ id: c.id, profile: { name: c.name } }))];
+  const terms = (id: string, name: string) => canonicalActorTerms(context, id, name);
+  const out: CanonicalDepartureClaim[] = [];
+  let previous: readonly string[] = [];
+  for (const { source, plain } of departureSentences(narration)) {
+    const explicit = actors.filter(c => terms(c.id, c.profile.name ?? c.id).some(t => new RegExp(`^${esc(t)}(?=\\b|'|\u2019)`, "i").test(plain)));
+    const pronoun = /^(?:he|she|his|her)\b/i.test(plain);
+    const descriptor = plain.match(/^the (?:unfamiliar )?(man|woman)\b/i);
+    const ids = explicit.length ? explicit.map(c => c.id) : pronoun ? previous.filter(id => {
+      const sex = context.characters.find(c => c.id === id)?.profile.sex;
+      return !sex || sex === (/^(?:she|her)\b/i.test(plain) ? "female" : "male");
+    }) : descriptor ? context.characters.filter(c => c.id !== "nicco" && (!c.profile.sex || c.profile.sex === (descriptor[1]!.toLowerCase() === "man" ? "male" : "female"))).map(c => c.id) : [];
+    const leadTerm = explicit.length ? [...terms(explicit[0]!.id, explicit[0]!.profile.name ?? explicit[0]!.id)].sort((a, b) => b.length - a.length).find(t => plain.toLowerCase().startsWith(t.toLowerCase())) : undefined;
+    const tail = leadTerm ? plain.slice(leadTerm.length) : plain;
+    const compound = !!leadTerm && /^\s*(?:and|or|,)\s+/i.test(tail);
+    if (explicit.length) previous = compound ? [] : ids;
+    else if (/^[A-Z][a-z]+\b/.test(plain) && !pronoun) previous = [];
+    const physicalTrace = TRACE_SUBJECT.test(plain) || explicit.some(c => terms(c.id, c.profile.name ?? c.id).some(t => TRACE_SUBJECT.test(plain.slice(t.length))));
+    const directAct = DEPART_ACT.exec(plain), traceAct = physicalTrace ? TRACE_ACT.exec(plain) : null;
+    const act = traceAct && (!directAct || traceAct.index < directAct.index) ? traceAct : directAct;
+    if (!act) continue;
+    const prefix = plain.slice(0, act.index + act[0].length);
+    // Intention/negation/instruction gates apply before the completion cue, not a following "until he is gone".
+    if (NOT_DONE.test(prefix) || GATES.past_displacement.test(plain.slice(act.index + act[0].length)) || /\b(?:if|unless|will|would|could|should|might|may)\b/i.test(plain) || /\b(?:had|used to|remembers?|recalls?)\b/i.test(prefix) || /\b(?:tells?|asks?|orders?|urges?|invites?)\b[\s\S]*?\bto\b/i.test(prefix)) continue;
+    // Possessive traces are whitelisted; an abstract possession being "gone" is never departure.
+    if (explicit.length && /^(?:'s|\u2019s)\s+/.test(tail) && !physicalTrace && !/^(?:'s|\u2019s)\s+(?:long\s+)?gone\b/i.test(tail)) continue;
+    const multiple = actors.filter(c => terms(c.id, c.profile.name ?? c.id).some(t => new RegExp(`\\b${esc(t)}\\b`, "i").test(plain))).length > 1;
+    const uncertainDescriptor = !explicit.length && !!descriptor && ids.some(id => !context.characters.find(c => c.id === id)?.profile.sex);
+    for (const id of ids) if (actors.some(c => c.id === id)) out.push({ character_id: id, source_sentence: source, ambiguous: ids.length !== 1 || compound || multiple || uncertainDescriptor });
+  }
+  return out;
+}
+/** No multi-step simulation: any actor-bound return or continued indoor presence blocks departure admission. */
+export function canonicalDepartureContradiction(narration: string, context: TurnContext, id: string): boolean {
+  return canonicalPresenceClaims(narration, context, id).length > 0;
+}
+export function canonicalPresenceClaims(narration: string, context: TurnContext, id: string): readonly string[] {
+  const actor = context.characters.find(c => c.id === id);
+  if (!actor) return [];
+  const out: string[] = [];
+  let bound = false;
+  for (const { source, plain } of departureSentences(narration)) {
+    if (canonicalActorTerms(context, id, actor.profile.name ?? id).some(t => new RegExp(`^${esc(t)}\\b`, "i").test(plain))) bound = true;
+    else if (!/^(?:he|she|his|her)\b/i.test(plain)) bound = false;
+    if (bound && !GATES.movement_not_done.test(plain) && /\b(?:returns?|returned|reenters?|reentered|arrives?|arrived|steps? back inside|speaks? from inside|stops? before|pauses? at|is interrupted|(?:is |stands? |standing )beside Nicco|(?:is |stands? |standing )(?:still )?(?:in|inside) the (?:room|hall))\b/i.test(plain)) out.push(source);
+  }
+  return out;
+}
 
 const MOVE = "(?:walk|stalk|storm|stomp|stagger|stumbl|stride|strode|shoulder|push|shov|slip|head|go|goes|went|step|lurch|weav|wove|limp|shambl|trudg|march|sway|swagger|ambl|saunter|hurri|hurry)\\w*";
 const PLACE = "(?:inn|room|tavern|common room|building|place|bar|premises|house|hall|taproom|door|doorway|front door)";

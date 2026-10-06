@@ -8,7 +8,7 @@ import type { DeepReadonly } from "../src/types/readonly.js";
 import type { WorldStore } from "../src/world/world-store.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { resolvePlayerCarry } from "../src/turn/character-movement.js";
+import { resolvePlayerCarry, characterLocation } from "../src/turn/character-movement.js";
 import { narratedDepartures } from "../src/turn/scene-departure.js";
 import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
 import { refersTo, readScene } from "../src/turn/narrated-captives.js";
@@ -140,8 +140,7 @@ function fixtureHarness(f = turnFixture()) {
   };
   return { ...f, step };
 }
-const at = (s: DeepReadonly<CampaignSnapshot>, world: WorldStore, id: string) => id === "nicco" ? s.runtime.scene.player_location
-  : s.characters.find(c => c.id === id)?.current.current_location ?? s.runtime.npc_locations.find(n => n.character_id === id)?.current_location ?? (() => { const e = world.getEntity(id); return e?.type === "character" ? e.location : undefined; })();
+const at = (s: DeepReadonly<CampaignSnapshot>, world: WorldStore, id: string) => characterLocation(s, world, id);
 
 test("full turn B: valid explicit movement moves Nicco; narration and state agree with no audit issue", async () => {
   const h = fixtureHarness();
@@ -179,12 +178,12 @@ test("full turn D: the carried person follows Nicco deterministically; nobody el
   assert.deepEqual(diagnostics.audit?.issue_kinds, []);
 });
 
-test("full turn O: an order to leave moves nobody; a narrated departure of an authored NPC that state cannot record is flagged", async () => {
+test("full turn O: P12.2 records a completed canonical departure; the order alone grants no movement", async () => {
   const h = fixtureHarness();
   const { result, diagnostics } = await h.step(H5_PHRASES.O, ["Gerome nods and walks out of the room.", "Gerome stands motionless and does not answer."], [{ kind: "leave_scene", character_id: "gerome" }]);
-  assert.equal(at(h.campaign.exportSnapshot(), h.world, "gerome"), ROOM);
-  assert.deepEqual(diagnostics.audit?.issue_kinds, ["uncommitted_departure"]);
-  assert.equal(result.narration, "Gerome stands motionless and does not answer.");
+  assert.equal(at(h.campaign.exportSnapshot(), h.world, "gerome"), undefined);
+  assert.deepEqual(diagnostics.audit?.issue_kinds, []);
+  assert.equal(result.narration, "Gerome nods and walks out of the room.");
 });
 
 test("full turn O (created NPC): a completed narrated departure is authorized from evidence; a vague one is not and is never narrated as done", async () => {
