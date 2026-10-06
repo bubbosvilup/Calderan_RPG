@@ -14,7 +14,9 @@ import { CARDINAL_WORD_ALTERNATION, numberWordValue } from "./language/numbers.j
 export interface GroundingInput { readonly sentences: readonly string[]; readonly player_input: string; readonly recent: readonly RecentExchange[]; readonly authoritative_text: string;
   /** Household Pass 1: an active person-trade negotiation (a present enslaved person held by a present seller). Asking prices
    * then emerge through narration; the engine owns only the agreed amount, so gold amounts are not flagged as invented. */
-  readonly trade_negotiation?: boolean }
+  readonly trade_negotiation?: boolean;
+  /** P8: the narrator received [ECONOMIC REFERENCE] anchors this turn, so concrete Gold/Silver asks are grounded. Other coins stay invented. */
+  readonly economic_reference?: boolean }
 export interface GroundingIssue { readonly kind: "invented_price" | "fabricated_prior_event" | "invented_procedure"; readonly sentence: string; readonly correction: string }
 
 /** H1: cardinals come from the canonical table (language/numbers.ts); these phrase-level amounts are this parser's own extensions. */
@@ -54,8 +56,11 @@ export function groundingIssues(input: GroundingInput): GroundingIssue[] {
   const authority = authoritative_text.toLowerCase();
   for (const sentence of sentences) {
     // 1. Exact prices.
-    const invented = amounts(sentence).find(a => !supportedAmounts.some(s => s.value === a.value && s.currency === a.currency) && !(input.trade_negotiation && a.currency === "gold"));
-    if (invented) issues.push({ kind: "invented_price", sentence, correction: `No exact price is established ("${invented.phrase}"). Say it qualitatively (cheap, modest, fair, more than usual) and never name a number of coins.` });
+    const invented = amounts(sentence).find(a => !supportedAmounts.some(s => s.value === a.value && s.currency === a.currency) && !(input.trade_negotiation && a.currency === "gold")
+      && !(input.economic_reference && (a.currency === "gold" || a.currency === "silver")));
+    if (invented) issues.push({ kind: "invented_price", sentence, correction: input.economic_reference
+      ? `Caldrevan uses only Gold and Silver ("${invented.phrase}" is not a Calderan coin). Restate the amount in whole Gold and Silver near the supplied economic anchors.`
+      : `No exact price is established ("${invented.phrase}"). Say it qualitatively (cheap, modest, fair, more than usual) and never name a number of coins.` });
     // 2. Fabricated prior events: judged per clause of the sentence (a guess, question or denial is not an assertion).
     for (const [label, claim, support] of PRIOR) {
       const part = sentence.split(/(?<=[.!?,;—])\s+/).find(p => claim.test(p) && !HEDGED.test(p.replace(claim, " ")));

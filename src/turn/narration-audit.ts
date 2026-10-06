@@ -48,6 +48,8 @@ export interface NarrationAuditInput {
   readonly authoritative_text?: string;
   /** H5.1: where Nicco was before this turn (defaults to the prepared location: no movement this turn). */
   readonly origin?: string;
+  /** P8: the narrator received economic anchors this turn (same decision as the prompt). */
+  readonly economic_reference?: boolean;
 }
 
 const STOP = new Set(["nicco", "is", "a", "an", "the", "to", "this", "that", "from", "of", "and", "in", "on", "was", "he", "his", "came", "come"]);
@@ -290,7 +292,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const negotiation = context.social.legal.some(l => l.status === "enslaved" && !!l.holder_id && l.holder_id !== "nicco" && presentIds.has(l.holder_id))
     || context.characters.some(c => /\bcaptive\b/.test(c.established_origin?.role ?? "") && !context.social.legal.some(l => l.character_id === c.id))
     || readScene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world).captives.some(c => !c.character_id);
-  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "", trade_negotiation: negotiation }));
+  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "", trade_negotiation: negotiation, economic_reference: !!input.economic_reference }));
   issues.push(...householdIssues(input, sentences, negotiation));
   issues.push(...movementIssues(input, sentences));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));

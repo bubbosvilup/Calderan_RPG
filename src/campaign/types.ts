@@ -74,6 +74,8 @@ export interface HouseholdRule { id: string; text: string; created_revision: num
 export interface HouseholdState { id: string; name?: string; members: HouseholdMembership[]; rules?: HouseholdRule[] }
 /** Household Pass 1: tracked money of a character, in gold. Characters without a record have no tracked purse. */
 export interface FundsRecord { character_id: string; gold: number }
+/** P8: campaign-specific seller tendency in whole percent, generated once at campaign creation and never rerolled. */
+export interface PriceIndexRecord { character_id: string; percent: number }
 /** Whether a person transfer is backed by papers. "unestablished" means nobody established either way; never assume clean papers. */
 export type TransferDocumentation = "documented" | "undocumented" | "unestablished";
 export interface LegalTransferRecord { documentation: TransferDocumentation; from_holder_id?: string; transaction_id?: string; note?: string }
@@ -216,6 +218,8 @@ export interface CampaignSnapshot extends CampaignDomains {
   schema_version: 3; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
   /** Bounded derived evidence only; never narrator/controller context. Optional additive persistence extension. */
   mannerism_learning?: MannerismLearning;
+  /** P8 Personal Price Index (optional additive extension; absent on pre-P8 saves). */
+  price_indices?: PriceIndexRecord[];
 }
 export interface MannerismEvidence {
   sequence: number; revision: number; event_id: string; narration_hash: string; span_start: number; span_end: number;
@@ -258,6 +262,8 @@ export type CampaignCommand =
   | { kind: "runtime_delta"; delta: SceneDelta }
   // Household Pass 1: money, person legal status, atomic person transactions, household membership/rules, relationship deltas.
   | { kind: "set_funds"; character_id: string; gold: number }
+  /** P8: campaign-creation only; the controller authorizer rejects it like every unlisted kind. */
+  | { kind: "set_price_index"; character_id: string; percent: number }
   | { kind: "set_legal_status"; character_id: string; status: "free" | "enslaved"; holder_id?: string; documentation?: TransferDocumentation; note?: string }
   /**
    * Pass 1.2: exactly one of `from_holder_id` (the current legal holder) or `from_counterparty` (an anonymous seller: sale only, of a

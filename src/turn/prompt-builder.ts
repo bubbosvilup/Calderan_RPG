@@ -13,6 +13,7 @@ import { participantForNoun, renderSceneParticipants, type SceneParticipantPlan 
 import { playerAuthoredEvents } from "./player-authored-events.js";
 import { escapeRegExp as escapeName } from "./language/text.js";
 import { deduplicateRecovered, renderNpcPlus } from "./npc-plus.js";
+import { economicBlock } from "./economic-context.js";
 export const NARRATOR_RPG_FORMAT = "RPG FORMAT: Write all non-spoken narration, actions, gestures, physical descriptions, environmental descriptions and events inside *single asterisks*. Write spoken dialogue as plain text outside the asterisks, without quotation marks. Keep narration natural and descriptive.";
 export const NARRATOR_OPAQUE_REFS = "MACHINE REFERENCES: Opaque NPC<number> refs, bracketed refs, internal IDs, fact IDs and correlation tokens are machine metadata only, even inside observable labels or prose fields. NEVER render, speak, expose, paraphrase or explain them to the player. Knowing a reference is not rendering it. Use only observable descriptors or established player-known names in diegetic narration and dialogue; use refs internally to correlate records, permissions and speakers.";
 export const NARRATOR_PLAYER_KNOWLEDGE = "PLAYER KNOWLEDGE: Use canon internally, but names, aliases, titles, affiliations, hidden roles and personal history are not player-known merely because IDs, profiles, visibility or retrieval expose them. Reveal them only when Nicco has learned them through established player knowledge or an in-world disclosure. Until then describe observable traits or apparent role, never an unknown name with a disclaimer. Preserve identities already established in-world; introduce incidental names through in-world disclosure, not narrative necessity.";
@@ -252,6 +253,7 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     .concat([...new Set(playerAuthoredEvents(input, context).filter(e => !e.negated && e.actor_id && e.actor_id !== "nicco").map(e => e.evidence_quote))]
       .map(q => `Player-authored event (it happens exactly as written; do not soften or escalate it): "${q}"`));
   const scene = context.primary.scene;
+  const economic = economicBlock(input || options.knowledge_relevance_input || "", context, recent, focus.background);
   const { day, time_of_day } = temporalGrounding(scene.world_time.world_minute);
   const state = [
     `[CURRENT AUTHORITATIVE SCENE]\nLocation: ${scene.player_location?.display_name ?? "Unestablished"}. ${focus.lore(scene.player_location?.content ?? "")}`,
@@ -271,6 +273,7 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     ...(participants ? [participants] : []),
     presentAndAbleToReact(context, sceneParticipants, focus.background, focus.compact.map(c => ({ ...c, internal_id: undefined, ref: identityGate?.identities.get(c.internal_id)?.ref }))),
     focus.references(socialBlock(context)),
+    ...(economic ? [economic] : []),
     ...(focus.view.npc_plus?.lines.length ? [renderNpcPlus(deduplicateRecovered(focus.view.npc_plus, focusedRetrieval).npc)] : []),
     `[CURRENT EQUIPMENT]\nVisible carried/equipped items (ownership and positions are authoritative): ${JSON.stringify(context.items)}`,
     `Scheduled events: ${JSON.stringify(context.scheduled_events)}`,

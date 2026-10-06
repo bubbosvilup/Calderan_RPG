@@ -1,0 +1,51 @@
+# P8 Economic Baseline V1. Authored economic canon/config, deliberately kept outside the hashed data/ world dataset so
+# saves remain strictly compatible. Values are rough plausibility ANCHORS, never mandated prices.
+# Design sanity check only (never diegetic, never shown to the player): 1 Silver ~ 4 EUR, 1 Gold ~ 40 EUR.
+schema_version: 1
+currency:
+  silver_per_gold: 10
+
+# Broad Calderan monthly income classes, in whole Gold. max_gold null: open-ended. Great merchants, financiers and high
+# nobility are intentionally absent: their wealth is too variable for a baseline.
+income_baselines:
+  poor_precarious_monthly: { label: poor or precarious worker (about 2 Silver a day), min_gold: 6, max_gold: 6 }
+  farmhand_unskilled_monthly: { label: farmhand or unskilled laborer, min_gold: 8, max_gold: 10 }
+  skilled_artisan_monthly: { label: skilled artisan, min_gold: 12, max_gold: 14 }
+  lower_bourgeoisie_monthly: { label: lower bourgeoisie, min_gold: 18, max_gold: 20 }
+  middle_bourgeoisie_monthly: { label: middle bourgeoisie, min_gold: 38, max_gold: 40 }
+  upper_bourgeoisie_monthly: { label: upper bourgeoisie, min_gold: 60, max_gold: null }
+
+# One table for every kind of exchange. category selects which anchors reach the narrator on a given turn.
+reference_prices:
+  common_bread_1kg: { label: common bread (1 kg), category: food, gold: 0, silver: 1 }
+  mug_of_beer: { label: mug of beer, category: food, gold: 0, silver: 1 }
+  simple_hot_meal: { label: simple hot meal, category: food, gold: 0, silver: 3 }
+  good_monthly_food_budget: { label: good monthly food budget for one person, category: food, gold: 8, silver: 5 }
+  large_dinner_with_spiced_wine: { label: large dinner with spiced wine, category: food, gold: 1, silver: 5 }
+  simple_inn_room_per_night: { label: simple inn room per night, category: lodging, gold: 0, silver: 5 }
+  good_dagger_or_simple_weapon: { label: good dagger or simple weapon, category: equipment, gold: 2, silver: 0 }
+  tempered_steel_greatsword: { label: tempered steel greatsword, category: equipment, gold: 12, silver: 0 }
+  full_knightly_plate: { label: full knightly plate armor, category: equipment, gold: 200, silver: 0 }
+  mercenary_or_armed_guard_per_day: { label: mercenary or armed guard per day, category: services, gold: 4, silver: 0 }
+  average_slave: { label: average slave, category: slaves, gold: 640, silver: 0 }
+  good_slave: { label: good or valuable slave, category: slaves, gold: 1000, silver: 0 }
+
+# Canonical actors who meaningfully set prices (sell, buy, run a shop, set service fees or sell people). Each receives one
+# campaign-specific Personal Price Index in percent, generated once at campaign creation and persisted.
+price_index_range_percent: { min: -30, max: 30 }
+price_setters:
+  - korvin
+  - mistress_elara
+  - bartolomhew
+  - blackthorn
+  - dren
+  - bram_kessel
+  - hadrik_voss
+  - jessa_rook
+  - marta_pell
+  - livia_marr
+  - mira_thorne
+  - niles_vanner
+  - orla_fen
+  - arwen_woodsigner
+  - rufus_tern

@@ -32,6 +32,7 @@ function stableData(value: unknown): string {
 function orderDomains(draft: CampaignSnapshot): void {
   for (const records of [draft.characters, draft.items, draft.households, draft.facts, draft.goals, draft.scheduled_events, draft.transactions]) records.sort((a, b) => compareIds(a.id, b.id));
   draft.funds.sort((a, b) => compareIds(a.character_id, b.character_id));
+  draft.price_indices?.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.legal_statuses.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.premium_characters.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.premium_reflections.sort((a, b) => compareIds(a.character_id, b.character_id));

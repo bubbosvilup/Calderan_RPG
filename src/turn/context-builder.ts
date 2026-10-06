@@ -11,6 +11,7 @@ import { NPC_PLUS_LIMITS, packNpcPlus } from "./npc-plus.js";
 import { describeDimensions, relationshipHeadline } from "../campaign/relationship-summary.js";
 import { knowledgeGrants } from "./knowledge-grants.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
+import { economy, generatePriceIndex } from "../economy/economy.js";
 
 /**
  * Hardening H3 — context projection order: RAW AUTHORITATIVE STATE → deterministic relevance selection → size validation.
@@ -184,5 +185,10 @@ function socialProjection(world: WorldStore, snapshot: DeepReadonly<CampaignSnap
   const kept = selectTop(edges, Math.max(SOCIAL_LIMITS.edges, withNicco), e => e.from_character_id === "nicco" || e.to_character_id === "nicco" ? 1 : 0);
   const relationships = kept.map(e => ({ from: name(e.from_character_id), to: name(e.to_character_id), headline: relationshipHeadline(e), dimensions: describeDimensions(e) }));
   const omitted = { ...(membersOmitted ? { household_members_not_present: { omitted: membersOmitted } } : {}), ...(kept.length < edges.length ? { relationships: { total: edges.length, shown: kept.length } } : {}) };
-  return { social: { nicco_gold: snapshot.funds.find(f => f.character_id === "nicco")?.gold ?? null, legal, households, relationships }, omitted };
+  // P8: present price-setters' persisted index. A pre-P8 save lacks the record; the same deterministic campaign derivation
+  // gives a stable value there, so nothing ever rerolls.
+  const setters = new Set(economy().price_setters);
+  const price_indices = present.filter(id => id !== "nicco" && (snapshot.price_indices?.some(p => p.character_id === id) || setters.has(id) && !snapshot.characters.some(c => c.id === id)))
+    .map(id => ({ character_id: id, name: name(id), percent: snapshot.price_indices?.find(p => p.character_id === id)?.percent ?? generatePriceIndex(snapshot.campaign_id, id) }));
+  return { social: { nicco_gold: snapshot.funds.find(f => f.character_id === "nicco")?.gold ?? null, legal, households, relationships, ...(price_indices.length ? { price_indices } : {}) }, omitted };
 }

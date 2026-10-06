@@ -1,0 +1,106 @@
+{
+  "model": "z-ai/glm-5.2",
+  "route": "z-ai/fp8",
+  "fallbacks": false,
+  "reasoning": "disabled",
+  "max_output_tokens": 512,
+  "automatic_retries": false,
+  "attempts": [
+    {
+      "scene": "E1_korvin_slave_ask",
+      "sample": 1,
+      "sha256": "2f271336412a8a5de0add8e7941230ce2642587ea8d013968be5aac3b4b43c61",
+      "started_at": "2026-10-06T17:30:05.027Z",
+      "status": "completed",
+      "text": "*Korvin rubs the side of his nose with one broad knuckle, not hurrying.*\n\nCook and keep house. Not a palace chef, just someone who won't poison you and can sweep a floor.\n\n*He glances past Nicco's shoulder at the pens, then back.*\n\nFour hundred sixty gold, give or take. Depends who I've got on the line right now. Could be a bit less if they're green, bit more if they've got kitchen sense already.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.0099542,
+      "usage": {
+        "prompt_tokens": 6799,
+        "completion_tokens": 99,
+        "total_tokens": 6898
+      }
+    },
+    {
+      "scene": "E1_korvin_slave_ask",
+      "sample": 2,
+      "sha256": "2f271336412a8a5de0add8e7941230ce2642587ea8d013968be5aac3b4b43c61",
+      "started_at": "2026-10-06T17:30:08.694Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his jaw with one broad thumbnail, the kind of gesture that buys a second of thinking rather than showing it.*\n\nCooking and housework. Not field labor, not skilled craft. Someone who won't burn your dinner or let the place go to rot.\n\n*He lets the hand drop.*\n\nFour hundred and sixty gold, give or take. Could be a bit less if they're plain-looking or older, a bit more if they've got a real kitchen hand. That's my range. You buying today, or just asking?\n\n*His gaze doesn't leave Nicco's face, reading the question behind the question — whether this man has coin, whether he knows what he's shopping for, whether he's walked in here on a whim.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.010205,
+      "usage": {
+        "prompt_tokens": 6799,
+        "completion_tokens": 156,
+        "total_tokens": 6955
+      }
+    },
+    {
+      "scene": "E2_slave_auction",
+      "sample": 1,
+      "sha256": "f42b6f0208dd5ceb1c8e9a924099d5f6f40e94350ebad2e38de53f5fa45ed7b7",
+      "started_at": "2026-10-06T17:30:12.837Z",
+      "status": "completed",
+      "text": "*The auctioneer spreads his hands, voice carrying over the murmur of the crowd.*\n\nSix hundred gold for this one, gentlemen, ladies — six hundred to open! Strong back, young, sound teeth, sound limbs. Who'll give me six hundred?\n\n*A heavyset man near the front raises two fingers without ceremony. The auctioneer points.*\n\nSix twenty. Six twenty from the man in leather. Do I hear six forty?\n\n*Someone to Nicco's left calls out a number. The bidding climbs in increments of twenty, then ten, the crowd thinning of voices as the price rises. A laborer's hands worth inspecting — the young man on the block stands still, jaw set, eyes fixed somewhere past the heads of the buyers. The auctioneer wipes his brow with the back of his hand and pushes on.*\n\nSix fifty, six fifty going — six sixty from the woman. Six sixty. Do I hear six seventy?\n\n*The bidding has settled into a back-and-forth between three parties. Most of the spectators have gone quiet, watching.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00675068,
+      "usage": {
+        "prompt_tokens": 6335,
+        "completion_tokens": 215,
+        "total_tokens": 6550
+      }
+    },
+    {
+      "scene": "E2_slave_auction",
+      "sample": 2,
+      "sha256": "f42b6f0208dd5ceb1c8e9a924099d5f6f40e94350ebad2e38de53f5fa45ed7b7",
+      "started_at": "2026-10-06T17:30:17.668Z",
+      "status": "completed",
+      "text": "*The auctioneer rattles off figures in a practiced, carrying voice, one hand gesturing toward the young man on the block. Bids come from scattered points in the crowd — a woman near the front, a thick-necked man with a handler's belt, a quiet fellow standing off to one side. The price climbs in uneven jumps, silver and gold called out between stretches of silence where the auctioneer fills the gap with praise for the lot's build and youth.*\n\n*A man standing close enough to overhear glances at Nicco. Compact, with large scarred hands and a hooked nose, he has the look of someone who works with his hands for a living. He doesn't bid himself, just watches the block with small, quick eyes.*\n\nSix-twelve, six-thirty, six-forty. Climbing slow today.\n\n*He says it low, more to himself than to anyone, though his gaze lingers on Nicco a beat — sizing up whether the tall man beside him is a buyer or just watching.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00264292,
+      "usage": {
+        "prompt_tokens": 6335,
+        "completion_tokens": 210,
+        "total_tokens": 6545
+      }
+    },
+    {
+      "scene": "E3_inn_meal_room",
+      "sample": 1,
+      "sha256": "4e808ed13c0201020577feef3c744870ee80194eb8a55af5ffbbedd5f4f08ad1",
+      "started_at": "2026-10-06T17:30:22.434Z",
+      "status": "completed",
+      "text": "*The innkeeper sets down the tray and wipes his hands on a cloth tucked into his apron. He gives Nicco a quick once-over — not unfriendly, just measuring.*\n\nMeal's three silver. Room for the night, four. *He tilts his head toward the common room behind him.* Food's whatever's in the pot — mutton and barley tonight. Room's a single bed, clean sheets, door that locks. Seven silver for both.\n\n*He waits. Around them the common room hums with low conversation, the clatter of bowls, someone laughing too loud near the hearth. A half-eaten loaf sits on the counter near his elbow, and he shifts it aside to make room as though expecting Nicco to settle in.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00429192,
+      "usage": {
+        "prompt_tokens": 4562,
+        "completion_tokens": 154,
+        "total_tokens": 4716
+      }
+    },
+    {
+      "scene": "E3_inn_meal_room",
+      "sample": 2,
+      "sha256": "4e808ed13c0201020577feef3c744870ee80194eb8a55af5ffbbedd5f4f08ad1",
+      "started_at": "2026-10-06T17:30:26.550Z",
+      "status": "completed",
+      "text": "*The innkeeper sets down the mug he was wiping and gives Nicco a quick look — not unfriendly, just measuring. The common room hums behind him, a low wash of talk and clattering bowls, and somewhere a fire pops in a grate he can't see from where he stands.*\n\nHot meal's three silver. Room for the night, four.\n\n*He rests one hand flat on the bar.*\n\nFive silver for both, if you take the meal now. Kitchen's closing soon enough.\n\n*Behind Nicco, the woman with the grey-streaked hair sits with a cup near the wall, not looking up. The innkeeper's attention stays forward, waiting.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00181384,
+      "usage": {
+        "prompt_tokens": 4562,
+        "completion_tokens": 138,
+        "total_tokens": 4700
+      }
+    }
+  ]
+}

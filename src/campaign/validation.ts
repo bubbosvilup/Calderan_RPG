@@ -197,6 +197,7 @@ command("schedule_event", { id, title: text, description: optional(text), schedu
 command("set_event_status", { event_id: id, status: eventStatus });
 command("reschedule_event", { event_id: id, scheduled_world_minute: integer() });
 command("set_funds", { character_id: id, gold });
+command("set_price_index", { character_id: id, percent: integer(-90, 90) });
 command("set_legal_status", { character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), documentation: optional(documentation), note: optional(text) });
 command("transfer_person", { transaction_id: id, transaction_kind: choice("sale", "gift", "assignment"), character_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: id, payment: optional(object({ payer_id: id, payee_id: optional(id), gold })), documentation, note: optional(text) });
 command("manumit", { transaction_id: id, character_id: id, by_holder_id: id, documentation, note: optional(text) });
@@ -212,6 +213,7 @@ const proposal = object({ expected_revision: integer(0), commands: list(tagged(v
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
 const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
+  price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: optional(id), off_scene: optional(object({ last_known_location: id, since_revision: integer(0) })) }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),

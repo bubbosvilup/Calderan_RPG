@@ -23,6 +23,14 @@ export function prepareLegalCommand(context: PreparationContext, command: Campai
       if (prior) prior.gold = command.gold; else draft.funds.push({ character_id: command.character_id, gold: command.gold });
       return true;
     }
+    case "set_price_index": {
+      // P8: generated once per campaign; a second assignment would be a reroll.
+      refs.character(command.character_id);
+      const indices = draft.price_indices ??= [];
+      if (indices.some(p => p.character_id === command.character_id)) fail("character_id", "price index already established");
+      indices.push({ character_id: command.character_id, percent: command.percent });
+      return true;
+    }
     case "set_legal_status": {
       refs.character(command.character_id);
       if (command.status === "enslaved") {
