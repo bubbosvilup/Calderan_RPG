@@ -1,0 +1,18 @@
+{
+  "protocol": "Targeted retests graded UNBLINDED (single condition each) on the same fixed 14-dimension rubric. B2 = example 2 money line removed; B4 = B3 + 'Texture never licenses new names, streets, places or history.'; B5 = B4 + example 1 gesture replaced (shipping text, modulo 'relationships'->'bonds').",
+  "dimensions": ["reaction_specificity", "embodied_behavior", "immediate_concern", "low_stakes_initiative", "conversational_naturalness", "silence", "counter_question", "engaged_actor_focus", "supporting_cast_restraint", "stock_repetition", "world_canon_discipline", "player_agency", "prose_quality", "feels_alive"],
+  "grades": {
+    "B2 S2#1": { "scores": [4,4,4,3,4,3,null,5,5,4,4,5,3,4], "notes": "Fingers move in chain loop then still; 'the books, the accounts - that wasn't mine' (money theme persists without example line). Closing paragraph explains her patience; market ambience paragraph." },
+    "B2 S2#2": { "scores": [4,4,4,3,4,3,null,5,5,4,4,5,4,4], "notes": "Jaw works once; 'The mistress handled the accounts herself.' Korvin silent; eyes track a sound." },
+    "B2 S3#1": { "scores": [3,4,4,2,4,3,null,5,5,4,4,5,4,4], "notes": "Delay before answer; 'Whatever's easy. I'm not asking for much.' Untouched cup prop." },
+    "B2 S3#2": { "scores": [3,3,2,2,4,3,null,5,5,4,4,5,4,3], "notes": "'I could eat something.' plus window light." },
+    "B4 S1#1": { "scores": [4,4,5,3,4,2,5,5,5,2,4,5,4,4], "notes": "Gaze on Nicco's soft hands (possible example-1 echo; setup also had hands); 'You tell me what you're looking to spend' margin concern; several stock beats." },
+    "B4 S1#2": { "scores": [4,4,4,4,3,1,5,5,5,2,4,5,3,4], "notes": "Walks to a pen and taps the slat; invents three unnamed candidates; 276 tokens; 'eyes narrow' + explained motive." },
+    "B4 S2#1": { "scores": [4,4,4,3,4,3,null,5,5,3,4,5,4,4], "notes": "Captive checks whether he is really asking her; kitchen for family of six, not accounts. 'Korvin says nothing' + weight shift." },
+    "B4 S2#2": { "scores": [3,3,3,2,4,3,null,5,5,2,4,5,4,3], "notes": "EXAMPLE ECHO: 'eyes move from Nicco's face to his hands, then back'. 'Until I couldn't.' (same phrase as A S2#1)." },
+    "B5 S1#1": { "scores": [4,4,5,3,4,2,5,5,5,2,4,5,4,4], "notes": "Glance past Nicco's shoulder (watching his back); asks 'what you mean by not overpaying'; tilts head, studying, folds arms (stock-heavy)." },
+    "B5 S1#2": { "scores": [5,3,4,3,4,2,5,5,5,3,4,5,4,4], "notes": "Weighs 'the way he led with a name like they'd met before' - specific to Nicco's actual line; 'am I fitting a staff?'" },
+    "B5 S2#1": { "scores": [4,4,4,2,4,3,null,5,5,3,4,5,4,4], "notes": "EXAMPLE ECHO: 'bread if there's an oven that holds heat' paraphrases example 1. Korvin silent, weight shift, boot creak." },
+    "B5 S2#2": { "scores": [4,4,5,3,5,3,null,5,5,3,5,5,4,5], "notes": "Quick check toward Korvin; 'I could learn what I'm shown. But I won't tell you I've done what I haven't.' Boundary + own concern." }
+  }
+}

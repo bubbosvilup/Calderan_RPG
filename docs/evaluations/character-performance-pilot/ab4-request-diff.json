@@ -1,0 +1,46 @@
+{
+  "static_block_chars": 2594,
+  "reminder_chars": 364,
+  "rows": [
+    {
+      "id": "S1_seller_negotiation",
+      "identical_except_inserts": true,
+      "a_sha256": "ff3198b77fec46666fdbc5c1494dcd6431868759b139d3a6b8769afca91eeee4",
+      "b_sha256": "604c14880827495737552c2fc440c502c1f03a48f91aae3c3e019908f4ec8908",
+      "a_chars": 22955,
+      "b_chars": 25913
+    },
+    {
+      "id": "S2_seller_captive",
+      "identical_except_inserts": true,
+      "a_sha256": "e91d05b5e23443ba5b9139b73b8121de492bca50cf799479c7ac02af036db6b2",
+      "b_sha256": "406ca12e59aacca1611d32b38a3aaf5c9f8151cd72c6f89444a1ede4076dd8a7",
+      "a_chars": 21227,
+      "b_chars": 24185
+    },
+    {
+      "id": "S3_quiet_guarded",
+      "identical_except_inserts": true,
+      "a_sha256": "c3210f87b5c238eb7ac47645f4f081afac3227cfe1aa2cc70ad074c1003ffe18",
+      "b_sha256": "a54c21bfd9dfb86c1ca8dcc59e9eba3fe73dd428a0f3afb535f0be225edadadd",
+      "a_chars": 22729,
+      "b_chars": 25687
+    },
+    {
+      "id": "S4_specific_physical",
+      "identical_except_inserts": true,
+      "a_sha256": "18f508e1448b8e19482233cc7209394fee3a6b28783b18186c0a347b8a23be19",
+      "b_sha256": "5a2331515723126d960a3722887ebef83e5265605705ee8a95e5ba9091a15853",
+      "a_chars": 22989,
+      "b_chars": 25947
+    },
+    {
+      "id": "S5_household_ordinary",
+      "identical_except_inserts": true,
+      "a_sha256": "52d7fa8c151a06c51f31aad5120a7d6d6143e8801f4f660cd6dfe672eb40adef",
+      "b_sha256": "3ab9e77a283da4fe5d4f85f697763cce17a1401c38c239189a3594405406b054",
+      "a_chars": 22583,
+      "b_chars": 25541
+    }
+  ]
+}

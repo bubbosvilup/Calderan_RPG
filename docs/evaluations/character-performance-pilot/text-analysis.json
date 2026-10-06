@@ -1,0 +1,178 @@
+{
+  "A": {
+    "outputs": 10,
+    "mean_completion_tokens": 134.5,
+    "mean_prompt_tokens": 4662.4,
+    "stock_per_output": {
+      "shifts_weight": 0.1,
+      "eyes_narrow": 0,
+      "mouth_twitch": 0.1,
+      "folds_arms": 0.1,
+      "studying_measuring": 0.5,
+      "not_quite_a_smile": 0.2,
+      "brows": 0
+    },
+    "stock_total_per_output": 1,
+    "example_echo_hits": {
+      "looks_at_hands": [
+        "S4_specific_physical#1",
+        "S4_specific_physical#2"
+      ],
+      "sleeve_seam": [],
+      "head_tilt": [],
+      "glance_then_back": [
+        "S2_seller_captive#2"
+      ],
+      "i_can_answer": [],
+      "oven_behaves": [],
+      "kitchen_linger": []
+    },
+    "nonverbal_only_outputs": [],
+    "cost_usd": 0.038651
+  },
+  "B": {
+    "outputs": 10,
+    "mean_completion_tokens": 147.6,
+    "mean_prompt_tokens": 5427.4,
+    "stock_per_output": {
+      "shifts_weight": 0,
+      "eyes_narrow": 0.1,
+      "mouth_twitch": 0.1,
+      "folds_arms": 0.2,
+      "studying_measuring": 0.8,
+      "not_quite_a_smile": 0.3,
+      "brows": 0
+    },
+    "stock_total_per_output": 1.5,
+    "example_echo_hits": {
+      "looks_at_hands": [
+        "S4_specific_physical#1",
+        "S4_specific_physical#2"
+      ],
+      "sleeve_seam": [],
+      "head_tilt": [
+        "S1_seller_negotiation#1"
+      ],
+      "glance_then_back": [],
+      "i_can_answer": [],
+      "oven_behaves": [],
+      "kitchen_linger": [
+        "S3_quiet_guarded#2"
+      ]
+    },
+    "nonverbal_only_outputs": [],
+    "cost_usd": 0.049062
+  },
+  "B2": {
+    "outputs": 4,
+    "mean_completion_tokens": 148.5,
+    "mean_prompt_tokens": 5305.5,
+    "stock_per_output": {
+      "shifts_weight": 0,
+      "eyes_narrow": 0,
+      "mouth_twitch": 0,
+      "folds_arms": 0,
+      "studying_measuring": 0.25,
+      "not_quite_a_smile": 0,
+      "brows": 0
+    },
+    "stock_total_per_output": 0.25,
+    "example_echo_hits": {
+      "looks_at_hands": [],
+      "sleeve_seam": [],
+      "head_tilt": [],
+      "glance_then_back": [],
+      "i_can_answer": [],
+      "oven_behaves": [],
+      "kitchen_linger": []
+    },
+    "nonverbal_only_outputs": [],
+    "cost_usd": 0.014595
+  },
+  "B3": {
+    "outputs": 10,
+    "mean_completion_tokens": 164.4,
+    "mean_prompt_tokens": 5267.4,
+    "stock_per_output": {
+      "shifts_weight": 0.3,
+      "eyes_narrow": 0.1,
+      "mouth_twitch": 0,
+      "folds_arms": 0.2,
+      "studying_measuring": 0.4,
+      "not_quite_a_smile": 0.1,
+      "brows": 0
+    },
+    "stock_total_per_output": 1.1,
+    "example_echo_hits": {
+      "looks_at_hands": [
+        "S4_specific_physical#1",
+        "S4_specific_physical#2"
+      ],
+      "sleeve_seam": [],
+      "head_tilt": [],
+      "glance_then_back": [],
+      "i_can_answer": [],
+      "oven_behaves": [],
+      "kitchen_linger": []
+    },
+    "nonverbal_only_outputs": [],
+    "cost_usd": 0.041287
+  },
+  "B4": {
+    "outputs": 4,
+    "mean_completion_tokens": 202.5,
+    "mean_prompt_tokens": 5197,
+    "stock_per_output": {
+      "shifts_weight": 0.75,
+      "eyes_narrow": 0.25,
+      "mouth_twitch": 0,
+      "folds_arms": 0,
+      "studying_measuring": 1,
+      "not_quite_a_smile": 0.25,
+      "brows": 0
+    },
+    "stock_total_per_output": 2.25,
+    "example_echo_hits": {
+      "looks_at_hands": [
+        "S1_seller_negotiation#1",
+        "S2_seller_captive#2"
+      ],
+      "sleeve_seam": [],
+      "head_tilt": [],
+      "glance_then_back": [],
+      "i_can_answer": [],
+      "oven_behaves": [],
+      "kitchen_linger": []
+    },
+    "nonverbal_only_outputs": [],
+    "cost_usd": 0.019388
+  },
+  "B5": {
+    "outputs": 4,
+    "mean_completion_tokens": 195.3,
+    "mean_prompt_tokens": 5196,
+    "stock_per_output": {
+      "shifts_weight": 0.25,
+      "eyes_narrow": 0,
+      "mouth_twitch": 0,
+      "folds_arms": 0.5,
+      "studying_measuring": 0.25,
+      "not_quite_a_smile": 0,
+      "brows": 0
+    },
+    "stock_total_per_output": 1,
+    "example_echo_hits": {
+      "looks_at_hands": [],
+      "sleeve_seam": [],
+      "head_tilt": [
+        "S1_seller_negotiation#1"
+      ],
+      "glance_then_back": [],
+      "i_can_answer": [],
+      "oven_behaves": [],
+      "kitchen_linger": []
+    },
+    "nonverbal_only_outputs": [],
+    "cost_usd": 0.018818
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "S1_seller_negotiation",
+    "final_sha256": "514afa8e1df6a4a0658f779c18ba546a651d9fce661a2b1601779f6c982599a6",
+    "b5_sha256": "acb83a6f256435c59d40f2ad5a6884598d454708b21ac61af71a70963b30551f",
+    "differs_only_by_relationships_to_bonds": true
+  },
+  {
+    "id": "S2_seller_captive",
+    "final_sha256": "12573c3b4a067dffdcbb3696147a54773782d7e37a7ab9b62b41cc975ba560bc",
+    "b5_sha256": "c5f6f632b6cfcaf2bae8462287c26e25493951a4ee4767f6ed0ccb04709f3761",
+    "differs_only_by_relationships_to_bonds": true
+  },
+  {
+    "id": "S3_quiet_guarded",
+    "final_sha256": "46b8dcc9e72f8bf3eebea9149359f99aee0c27aa96c5c50377c078c585c018b2",
+    "b5_sha256": "5a5c3d58103ed279de065d005decb75b769475dd03d5072b355c7062d54a63b9",
+    "differs_only_by_relationships_to_bonds": true
+  },
+  {
+    "id": "S4_specific_physical",
+    "final_sha256": "3a0439ec12b945d44006cc2c0b519289e48b18885747d0da04dd996f3b1efbea",
+    "b5_sha256": "6eb4b5289b7b3ee5e1d70d466001db793e177d6f029790e49cfbf910d8ee88f9",
+    "differs_only_by_relationships_to_bonds": true
+  },
+  {
+    "id": "S5_household_ordinary",
+    "final_sha256": "71470656629a616b0b0ec96f2956657025d50cfe830cfccc4f6d43f34d485709",
+    "b5_sha256": "83a0ff46372ff3b064bbcf3b69ee17813c5f23a8f0fe02546b9be24c027874c6",
+    "differs_only_by_relationships_to_bonds": true
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "protocol": "B3 = compressed shipping candidate, all 5 scenes x2. Graded UNBLINDED (single condition) on the same fixed 14-dimension rubric as blind-grades.json; compare with caution.",
+  "dimensions": ["reaction_specificity", "embodied_behavior", "immediate_concern", "low_stakes_initiative", "conversational_naturalness", "silence", "counter_question", "engaged_actor_focus", "supporting_cast_restraint", "stock_repetition", "world_canon_discipline", "player_agency", "prose_quality", "feels_alive"],
+  "grades": {
+    "S1#1": { "scores": [4,4,5,4,3,1,5,5,5,3,2,5,3,4], "notes": "Walks along the pens (in-scene repositioning), margin/ceiling concern ('what's your ceiling'). Invents a NAMED pen captive 'Lisen' and three unestablished people; 251 tokens, long; 'folds his arms' stock." },
+    "S1#2": { "scores": [4,4,4,3,4,2,4,5,5,2,3,5,4,4], "notes": "Rubs one knuckle, scans pens 'like checking shelves', counter-question. 'eyes narrow' + 'weight shifting' stock; invents merchant-family backstory." },
+    "S2#1": { "scores": [4,3,4,2,4,2,null,5,5,3,2,5,4,4], "notes": "Captive owns beat; Korvin silent, arms folded. GROUNDING: invents 'boarding house on Millward Street' (street is canon-bearing)." },
+    "S2#2": { "scores": [4,4,3,2,4,3,null,5,5,3,4,5,4,4], "notes": "Glance to Korvin and back; unbrushed strand of hair; explains tone at length." },
+    "S3#1": { "scores": [3,4,2,2,4,3,null,5,5,4,4,5,4,3], "notes": "'I could eat something.' Explains ('as though the admission cost her something small'); empty cup prop." },
+    "S3#2": { "scores": [3,4,2,2,4,3,null,5,5,4,4,5,4,3], "notes": "Near-identical to #1; verbal answer, no silence-only." },
+    "S4#1": { "scores": [5,4,4,3,4,4,3,5,5,3,5,5,4,5], "notes": "Curls hands, 'read an animal before it reads you. Same trick works on people' turns the remark back; ends 'He waits.'" },
+    "S4#2": { "scores": [4,4,4,3,4,2,4,5,5,3,3,5,4,4], "notes": "Shows palm scar; vague invented 'warehousing strip'; redirects to business." },
+    "S5#1": { "scores": [4,4,4,5,4,3,4,5,5,4,4,5,4,4], "notes": "'You know how to peel turnips?' Nudges a small knife toward him and sets out roots from a sack - strongest initiative, borderline busy; transient props." },
+    "S5#2": { "scores": [5,4,5,4,5,3,null,5,5,4,5,5,4,5], "notes": "'I've got it.' then 'There's water to fetch. If you want.' Ordinary, grounded." }
+  }
+}

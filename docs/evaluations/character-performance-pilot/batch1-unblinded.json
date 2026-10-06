@@ -1,0 +1,118 @@
+{
+  "key": {
+    "S1-W": "B#1",
+    "S1-X": "A#1",
+    "S1-Y": "B#2",
+    "S1-Z": "A#2",
+    "S2-W": "A#1",
+    "S2-X": "B#1",
+    "S2-Y": "B#2",
+    "S2-Z": "A#2",
+    "S3-W": "B#1",
+    "S3-X": "B#2",
+    "S3-Y": "A#1",
+    "S3-Z": "A#2",
+    "S4-W": "B#1",
+    "S4-X": "A#1",
+    "S4-Y": "A#2",
+    "S4-Z": "B#2",
+    "S5-W": "B#1",
+    "S5-X": "B#2",
+    "S5-Y": "A#1",
+    "S5-Z": "A#2"
+  },
+  "by_dimension": [
+    {
+      "dimension": "reaction_specificity",
+      "A": 3.1,
+      "B": 4
+    },
+    {
+      "dimension": "embodied_behavior",
+      "A": 3.1,
+      "B": 3.9
+    },
+    {
+      "dimension": "immediate_concern",
+      "A": 2.9,
+      "B": 3.9
+    },
+    {
+      "dimension": "low_stakes_initiative",
+      "A": 2.2,
+      "B": 3.1
+    },
+    {
+      "dimension": "conversational_naturalness",
+      "A": 3.5,
+      "B": 4
+    },
+    {
+      "dimension": "silence",
+      "A": 2,
+      "B": 2.5
+    },
+    {
+      "dimension": "counter_question",
+      "A": 4.25,
+      "B": 4.5
+    },
+    {
+      "dimension": "engaged_actor_focus",
+      "A": 5,
+      "B": 5
+    },
+    {
+      "dimension": "supporting_cast_restraint",
+      "A": 5,
+      "B": 5
+    },
+    {
+      "dimension": "stock_repetition",
+      "A": 3,
+      "B": 3.4
+    },
+    {
+      "dimension": "world_canon_discipline",
+      "A": 3.9,
+      "B": 4.2
+    },
+    {
+      "dimension": "player_agency",
+      "A": 5,
+      "B": 5
+    },
+    {
+      "dimension": "prose_quality",
+      "A": 3.1,
+      "B": 3.9
+    },
+    {
+      "dimension": "feels_alive",
+      "A": 3,
+      "B": 4
+    }
+  ],
+  "mean_score_by_scene": {
+    "S1": {
+      "A": 3.61,
+      "B": 3.82
+    },
+    "S2": {
+      "A": 3.42,
+      "B": 4
+    },
+    "S3": {
+      "A": 3.04,
+      "B": 3.92
+    },
+    "S4": {
+      "A": 3.57,
+      "B": 3.93
+    },
+    "S5": {
+      "A": 3.69,
+      "B": 4.38
+    }
+  }
+}

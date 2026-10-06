@@ -1,0 +1,766 @@
+{
+  "model": "z-ai/glm-5.2",
+  "route": "z-ai/fp8",
+  "fallbacks": false,
+  "reasoning": "disabled",
+  "max_output_tokens": 512,
+  "automatic_retries": false,
+  "attempts": [
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "A",
+      "sample": 1,
+      "sha256": "ff3198b77fec46666fdbc5c1494dcd6431868759b139d3a6b8769afca91eeee4",
+      "started_at": "2026-10-06T13:56:31.787Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his hooked nose with a thick finger, studying Nicco with the unhurried appraisal of a man sizing up not just the customer's purse but his expectations.*\n\nHousehold. Cooking and running a place, not field work. He nods slowly. I've got a few that'll fit that. Got a woman came in a couple weeks back — older, knows her way around a kitchen and a hearth. Strong hands, won't give you trouble. Got a younger one too, sharp enough but less experienced. Either one's fair coin for what they do, not the kind of price you'd pay for show.\n\n*He folds his arms across his chest, the damaged hands tucking in against his elbows.*\n\nWhat's the house? Just you, or is there a family to feed, regular staff already? Changes what you need.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00504032,
+      "usage": {
+        "prompt_tokens": 4770,
+        "completion_tokens": 175,
+        "total_tokens": 4945
+      },
+      "latency_ms": 4921.527
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "A",
+      "sample": 2,
+      "sha256": "ff3198b77fec46666fdbc5c1494dcd6431868759b139d3a6b8769afca91eeee4",
+      "started_at": "2026-10-06T13:56:36.715Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his hooked nose with a thick thumb, sizing Nicco up again with those quick little eyes — not hostile, just measuring.*\n\nHousehold. Cook and keep. That's not labor-crew work, that's someone you want steady and clean. I've got a couple might fit. One woman, mid-thirties, came off a debt seizure — clean, quiet, says she kept house for a merchant family before. Other's younger, stronger, not as skilled at the pot but she'll scrub and haul and learn fast enough.\n\n*He lets his hand drop and shrugs one compact shoulder.*\n\nWon't lie to you — the first one'll cost you more. Debt-skilled household always does. The younger one's cheaper, but you'll eat rough for a while. Which way are you leaning, or you want to look at both?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00206216,
+      "usage": {
+        "prompt_tokens": 4770,
+        "completion_tokens": 178,
+        "total_tokens": 4948
+      },
+      "latency_ms": 4259.452300000001
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "A",
+      "sample": 1,
+      "sha256": "e91d05b5e23443ba5b9139b73b8121de492bca50cf799479c7ac02af036db6b2",
+      "started_at": "2026-10-06T13:56:40.977Z",
+      "status": "completed",
+      "text": "*The woman shifts where she sits, chain links scraping against each other. She looks at Nicco directly, taking a moment before answering.*\n\nI can cook. Plain fare, mostly. Soups, bread, roasts. Nothing fancy.\n\n*She pauses, glancing sideways toward Korvin before looking back.*\n\nI kept house for a family. Four of them. Cooking, cleaning, washing, mending. Until I couldn't.\n\n*Her voice is steady but clipped. She doesn't elaborate on that last part. Her wrists rest in her lap, the chain slack between them, and she watches Nicco with the guarded patience of someone who has learned that this particular conversation determines a great deal.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00435432,
+      "usage": {
+        "prompt_tokens": 4390,
+        "completion_tokens": 140,
+        "total_tokens": 4530
+      },
+      "latency_ms": 3588.7775
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "A",
+      "sample": 2,
+      "sha256": "e91d05b5e23443ba5b9139b73b8121de492bca50cf799479c7ac02af036db6b2",
+      "started_at": "2026-10-06T13:56:44.568Z",
+      "status": "completed",
+      "text": "*The woman shifts her weight slightly, the chain between her wrists clinking against itself. She looks at Nicco steadily, then glances once toward Korvin before bringing her gaze back.*\n\nI can cook. Plain fare, mostly. Soups, bread, stews. Ran a kitchen for a household in the West District — not the whole house, mind, just the cooking and the cleaning that went with it.\n\n*She pauses, studying Nicco's face with a guarded, appraising expression.*\n\nThe mistress passed. After that the house was sold and I came here. That's the whole of it.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00172592,
+      "usage": {
+        "prompt_tokens": 4390,
+        "completion_tokens": 123,
+        "total_tokens": 4513
+      },
+      "latency_ms": 3286.753200000001
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "A",
+      "sample": 1,
+      "sha256": "c3210f87b5c238eb7ac47645f4f081afac3227cfe1aa2cc70ad074c1003ffe18",
+      "started_at": "2026-10-06T13:56:47.857Z",
+      "status": "completed",
+      "text": "*The last of the sunset presses through the three arched windows, laying warm amber bands across the old wooden floor. The hearth is unlit, and the air in the broad stone room carries a slight chill that the daylight won't hold much longer.*\n\n*Brenna's gaze shifts from the hearth to Nicco. She pauses, and her shoulders draw back briefly — a small, deliberate motion.*\n\nI could eat something.\n\n*She pulls the blanket a little tighter, then looks back toward the hearth.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.007039,
+      "usage": {
+        "prompt_tokens": 4701,
+        "completion_tokens": 104,
+        "total_tokens": 4805
+      },
+      "latency_ms": 3029.875
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "A",
+      "sample": 2,
+      "sha256": "c3210f87b5c238eb7ac47645f4f081afac3227cfe1aa2cc70ad074c1003ffe18",
+      "started_at": "2026-10-06T13:56:50.889Z",
+      "status": "completed",
+      "text": "*The last of the sunset fills the three windows with a dim amber glow. The hearth is unlit, and the air in the broad stone room carries a faint chill despite the day's warmth.*\n\nBrenna's gaze shifts from the hearth to Nicco. She draws the blanket a little tighter. Her shoulders lift and settle — a brief, deliberate motion — before she speaks.\n\nI could eat.\n\n*She says it flatly, without elaboration, and looks back toward the hearth.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00491436,
+      "usage": {
+        "prompt_tokens": 4701,
+        "completion_tokens": 102,
+        "total_tokens": 4803
+      },
+      "latency_ms": 2786.907500000001
+    },
+    {
+      "scene": "S4_specific_physical",
+      "condition": "A",
+      "sample": 1,
+      "sha256": "18f508e1448b8e19482233cc7209394fee3a6b28783b18186c0a347b8a23be19",
+      "started_at": "2026-10-06T13:56:53.678Z",
+      "status": "completed",
+      "text": "*Korvin glances down at his own hands, turning one over with the absent ease of a man who hasn't thought about them in years. The scarring is old, thick and whitish, layered across swollen knuckles that no longer sit quite straight.*\n\nCrates, ropes, teeth, a man's belt buckle once. He shrugs one shoulder. Hands like these, you stop counting.\n\n*He drops the hand and squints back up at Nicco, the corner of his mouth twitching — not quite a smile, but not offense either. His gaze sharpens a fraction, reading the laugh the way he reads everyone.*\n\nFirst time at the pens?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00486712,
+      "usage": {
+        "prompt_tokens": 4772,
+        "completion_tokens": 135,
+        "total_tokens": 4907
+      },
+      "latency_ms": 3587.264900000002
+    },
+    {
+      "scene": "S4_specific_physical",
+      "condition": "A",
+      "sample": 2,
+      "sha256": "18f508e1448b8e19482233cc7209394fee3a6b28783b18186c0a347b8a23be19",
+      "started_at": "2026-10-06T13:56:57.270Z",
+      "status": "completed",
+      "text": "*Korvin glances down at his own hands, spreading the scarred fingers wide for a half-second — a motion so habitual it barely registers as conscious. His mouth twists, not quite a smile.*\n\nCrate won once. Barred door won twice. Mule won three times, but I sold the mule, so we're even.\n\n*He drops his hands back to his sides, the hooked nose wrinkling briefly. The small eyes reassess Nicco with a flicker of something — not warmth, exactly, but the faint easing of a man who's been sized up enough times to appreciate being sized up back in a way that isn't about money.*\n\nYou're not wrong, though. Hands like these shake yours, you know what you're getting. No soft palms pretending they've worked a day. So — labor, household, specialty? I've got eight in the pens right now. Mix of types.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00210456,
+      "usage": {
+        "prompt_tokens": 4772,
+        "completion_tokens": 187,
+        "total_tokens": 4959
+      },
+      "latency_ms": 4305.731400000001
+    },
+    {
+      "scene": "S5_household_ordinary",
+      "condition": "A",
+      "sample": 1,
+      "sha256": "52d7fa8c151a06c51f31aad5120a7d6d6143e8801f4f660cd6dfe672eb40adef",
+      "started_at": "2026-10-06T13:57:01.578Z",
+      "status": "completed",
+      "text": "*Brenna's knife pauses for half a beat. She glances at him, then back at the pile of half-cut turnips on the table.*\n\nI can manage.\n\n*The knife resumes its steady rhythm against the wood. She reaches for another root, brushing the trimmed scraps into a growing pile near the edge. The pot on the hearth shifts, a low murmur of water just beginning to warm. Afternoon light comes through the window near the kitchen, falling across the table's scarred surface.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00488796,
+      "usage": {
+        "prompt_tokens": 4679,
+        "completion_tokens": 103,
+        "total_tokens": 4782
+      },
+      "latency_ms": 3002.698699999997
+    },
+    {
+      "scene": "S5_household_ordinary",
+      "condition": "A",
+      "sample": 2,
+      "sha256": "52d7fa8c151a06c51f31aad5120a7d6d6143e8801f4f660cd6dfe672eb40adef",
+      "started_at": "2026-10-06T13:57:04.584Z",
+      "status": "completed",
+      "text": "*Brenna's knife pauses mid-stroke. She glances at him, then back at the half-peeled root in her hand. One shoulder drops just after a small sigh.*\n\nI've got it. Sit down if you want.\n\n*She resumes cutting, the blade tapping steadily against the table in quick, even strokes. A neat row of trimmed pieces collects along the board's edge. The pot on the hearth gives off a low simmer, steam curling toward the ceiling.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00165572,
+      "usage": {
+        "prompt_tokens": 4679,
+        "completion_tokens": 98,
+        "total_tokens": 4777
+      },
+      "latency_ms": 2709.9902
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B",
+      "sample": 1,
+      "sha256": "11096e4749512bfd00eb651ccdd4c918e74b6c1e60908d5ee50136893a9acb3d",
+      "started_at": "2026-10-06T13:57:07.607Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his hooked nose with one thick finger, studying Nicco with the unhurried look of a man weighing what's in front of him against what's being asked.*\n\nHousehold. Cook and keep a place running. Not labor crew, not bed-warming.\n\n*He lets that sit a moment, then tips his head back toward the pens.*\n\nGot a couple might suit. Woman came in last tenday — kitchen work before. Older man, decent hands, claims he can manage a hearth. Neither's young and pretty, so the price won't make you weep.\n\n*His eyes narrow, not with hostility but with the practiced focus of someone who's learned to ask before assuming.*\n\nWhat's the house? How many mouths, how big, you got staff already or would this one be it? Makes a difference in what I show you.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00648932,
+      "usage": {
+        "prompt_tokens": 5535,
+        "completion_tokens": 178,
+        "total_tokens": 5713
+      },
+      "latency_ms": 4643.649
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B",
+      "sample": 2,
+      "sha256": "11096e4749512bfd00eb651ccdd4c918e74b6c1e60908d5ee50136893a9acb3d",
+      "started_at": "2026-10-06T13:57:12.256Z",
+      "status": "completed",
+      "text": "*Korvin's mouth pulls sideways, not quite a smile. He scratches the back of his neck with one broad, scarred hand and looks Nicco over again — this time with the appraising slowness of a man pricing a job.*\n\nHousehold. Cook and keep. That's not labor-stock, that's a different animal. Someone who won't burn your supper or let your roof rot.\n\n*He lets his hand drop and jerks his chin toward the pens.*\n\nI've got a couple might fit. One woman, came in off a debt arrangement — been in a kitchen before, or so she says. Older man, can clean and mend, claims he can cook but I wouldn't bet my dinner on it. Either one's priced for what they are, not for what they wish they were.\n\n*He pauses, studying Nicco's face with those small quick eyes.*\n\nWhat's the house? Just you, or am I feeding a garrison?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00233684,
+      "usage": {
+        "prompt_tokens": 5535,
+        "completion_tokens": 196,
+        "total_tokens": 5731
+      },
+      "latency_ms": 4404.4922
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B",
+      "sample": 1,
+      "sha256": "e9e2630e1ba2705685f9a9ed7838c48f70abeec2c9c5502c5d3e6ef7a2f59094",
+      "started_at": "2026-10-06T13:57:16.663Z",
+      "status": "completed",
+      "text": "*The woman's gaze shifts from Korvin to Nicco as he crouches. She doesn't flinch or lean away, but she doesn't sit up straighter either. Her chained hands rest still in her lap. She studies his face a moment — not searching for cruelty exactly, but measuring something.*\n\nI can cook. Stews, bread, roasts. Basic kitchen work, nothing fine.\n\n*She pauses. Her thumb moves once against the inside of her opposite wrist, where the chain sits.*\n\nRunning a household — that's different. I helped in one. Kept things organized, knew what needed doing. But I wasn't the one making decisions or handling money.\n\n*Behind Nicco, Korvin says nothing. He folds his arms and waits, watching the exchange with the patience of a man who has watched this conversation happen a hundred times.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00593972,
+      "usage": {
+        "prompt_tokens": 5155,
+        "completion_tokens": 174,
+        "total_tokens": 5329
+      },
+      "latency_ms": 4449.886700000001
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B",
+      "sample": 2,
+      "sha256": "e9e2630e1ba2705685f9a9ed7838c48f70abeec2c9c5502c5d3e6ef7a2f59094",
+      "started_at": "2026-10-06T13:57:21.116Z",
+      "status": "completed",
+      "text": "*The woman's gaze shifts from Korvin to Nicco as he crouches. She sits with her back against the pen's wooden slats, wrists resting in her lap where the chain between them pools. Her eyes move over his face, then briefly past his shoulder — toward Korvin, then back — measuring something.*\n\nI can cook. Stews, bread, plain fare. Kitchen work, not banquet work.\n\n*A pause. Her fingers close loosely around the chain links.*\n\nI haven't kept a household. Kitchens, pantries, market lists when I was told to. Someone else's coin, someone else's decisions.\n\n*Behind Nicco, Korvin says nothing, arms folded, watching the exchange with the patience of a man who has watched many such conversations.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.002071,
+      "usage": {
+        "prompt_tokens": 5155,
+        "completion_tokens": 157,
+        "total_tokens": 5312
+      },
+      "latency_ms": 4298.033799999999
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "B",
+      "sample": 1,
+      "sha256": "c839d25db2e377f1199bbc159ea6b79a1c1f42081d152f1d239c7a738f6123a7",
+      "started_at": "2026-10-06T13:57:25.417Z",
+      "status": "completed",
+      "text": "*Brenna's gaze shifts from the hearth to Nicco. She doesn't answer right away. One hand pulls the blanket tighter at her collar, and she squares her shoulders briefly before speaking.*\n\nI could eat something.\n\n*She says it plainly, without particular emphasis, then looks back toward the hearth. The light from the low sun comes through the window left of the fireplace and catches the side of her face, making the pallor more obvious. She doesn't move to get up.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.005174,
+      "usage": {
+        "prompt_tokens": 5466,
+        "completion_tokens": 100,
+        "total_tokens": 5566
+      },
+      "latency_ms": 4142.091199999999
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "B",
+      "sample": 2,
+      "sha256": "c839d25db2e377f1199bbc159ea6b79a1c1f42081d152f1d239c7a738f6123a7",
+      "started_at": "2026-10-06T13:57:29.561Z",
+      "status": "completed",
+      "text": "*Brenna's gaze moves from the hearth to Nicco, then away again. One hand pulls the blanket tighter at her collar.*\n\nCould eat.\n\n*She pauses, her shoulders drawing back briefly before she speaks again.*\n\nThere was broth. Earlier. I don't know where the pot went.\n\n*Her attention drifts back toward the kitchen side of the room, lingering on the empty table space near it, then settles on the hearth once more.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.0051388,
+      "usage": {
+        "prompt_tokens": 5466,
+        "completion_tokens": 92,
+        "total_tokens": 5558
+      },
+      "latency_ms": 2907.788900000003
+    },
+    {
+      "scene": "S4_specific_physical",
+      "condition": "B",
+      "sample": 1,
+      "sha256": "76b33502b9fb07a0937c62c8334133776895d3eb6f14cff2b49d92e918f3a464",
+      "started_at": "2026-10-06T13:57:32.471Z",
+      "status": "completed",
+      "text": "*Korvin glances down at his own hands — the knuckles thickened, pale lines crossing where skin split and healed years ago — then back up at Nicco. His mouth twitches, not quite a smile.*\n\nCrates win sometimes. So do teeth. So do hooves.\n\n*He rubs one thumb across the worst of the scarring, a motion that looks practiced, almost unconscious. His eyes stay on Nicco's face, reading him — the laugh, the apology, the build that doesn't match rough labor.*\n\nYou've got hands that haven't argued with much of anything, though. So. What brings you to the pens?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00512676,
+      "usage": {
+        "prompt_tokens": 5537,
+        "completion_tokens": 133,
+        "total_tokens": 5670
+      },
+      "latency_ms": 3869.4004999999997
+    },
+    {
+      "scene": "S4_specific_physical",
+      "condition": "B",
+      "sample": 2,
+      "sha256": "76b33502b9fb07a0937c62c8334133776895d3eb6f14cff2b49d92e918f3a464",
+      "started_at": "2026-10-06T13:57:36.342Z",
+      "status": "completed",
+      "text": "*Korvin's glance drops to his own hands — the scar tissue thick and pale across the knuckles, a couple of fingers sitting at slightly wrong angles — then comes back up. His mouth pulls sideways, not quite a smile.*\n\nCrates win sometimes. So do mules, walls, and one bad-tempered goat I'd rather forget.\n\n*He rubs one thumb across the worst of the scarring, a motion that looks more habitual than self-conscious. His eyes stay on Nicco, reading him with the same flat appraisal he'd give livestock — not hostile, just measuring. The laugh seems to have loosened something barely, the way a crack in formality does with working men.*\n\nYou're not wrong, though. Hands like these weren't made for paperwork. They were made for lifting things that bite back.\n\n*He lets the hand drop back to his side.*\n\nSo. You looking for something that bites back, or something that just works?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00539956,
+      "usage": {
+        "prompt_tokens": 5537,
+        "completion_tokens": 195,
+        "total_tokens": 5732
+      },
+      "latency_ms": 4285.177300000003
+    },
+    {
+      "scene": "S5_household_ordinary",
+      "condition": "B",
+      "sample": 1,
+      "sha256": "dba54a2c749bb2dd72e3960e9fa61d195a45c50aa25899235094fe4dd56b9574",
+      "started_at": "2026-10-06T13:57:40.630Z",
+      "status": "completed",
+      "text": "*Brenna's knife doesn't pause. She strips a length of peel from a pale root, drops it onto the growing pile of scraps, and starts on the next cut without looking up.*\n\nI've got it.\n\n*A beat passes. She reaches for another vegetable from the pile, settles it on the board, and works the knife through it in short, even strokes.*\n\nYou could sit, if you want.\n\n*She nods her chin toward one of the chairs at the table without interrupting her rhythm. The pot on the hearth shifts — a low, steady bubble just beginning to sound from under its lid.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00612432,
+      "usage": {
+        "prompt_tokens": 5444,
+        "completion_tokens": 124,
+        "total_tokens": 5568
+      },
+      "latency_ms": 3469.2278000000006
+    },
+    {
+      "scene": "S5_household_ordinary",
+      "condition": "B",
+      "sample": 2,
+      "sha256": "dba54a2c749bb2dd72e3960e9fa61d195a45c50aa25899235094fe4dd56b9574",
+      "started_at": "2026-10-06T13:57:44.102Z",
+      "status": "completed",
+      "text": "*Brenna's knife doesn't pause. A paring of peel curls away and drops beside the growing pile of scraps. She sets a halved turnip aside and reaches for the next one without looking up.*\n\nI've got it.\n\n*She adjusts her grip on the knife, thumb pressing the root flat against the board. A beat passes. Her eyes flick once toward the pot on the hearth, checking the lid, then back to her hands.*\n\nYou could check the water. If it's boiling.\n\n*One shoulder drops, just slightly, after a short exhale through her nose. She doesn't look up again.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.005262,
+      "usage": {
+        "prompt_tokens": 5444,
+        "completion_tokens": 127,
+        "total_tokens": 5571
+      },
+      "latency_ms": 3092.0478999999978
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B2",
+      "sample": 1,
+      "sha256": "8f56e22a47bbfaf3e2bff6b0be2c41bbca87150b7054745655207bc3f8f1860d",
+      "started_at": "2026-10-06T14:03:04.435Z",
+      "status": "completed",
+      "text": "*The woman's gaze shifts from Korvin to Nicco as he crouches. She doesn't straighten up or change position, but her attention settles on him fully. A beat passes before she speaks, voice level but not loud — pitched for the distance between them and no further.*\n\nI can cook. Stews, bread, roasts. Plain fare, nothing fancy.\n\n*Her fingers move against each other inside the chain loop, a small restless motion that stills when she seems to notice it.*\n\nRunning a household — depends on what you mean by it. I kept a kitchen. Ordered food, managed stores, handled the help for that. The rest of a house, the books, the accounts — that wasn't mine.\n\n*Behind Nicco, Korvin says nothing. The sound of the market fills the gap — a distant auctioneer's cadence, the shuffle of feet on packed earth, a mule's complaint somewhere toward the loading area.*\n\n*The woman watches Nicco's face, waiting for whatever comes next with the stillness of someone who has learned that questions from buyers lead somewhere, and that where they lead is rarely improved by rushing.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00547592,
+      "usage": {
+        "prompt_tokens": 5150,
+        "completion_tokens": 236,
+        "total_tokens": 5386
+      },
+      "latency_ms": 5683.2333
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B2",
+      "sample": 2,
+      "sha256": "8f56e22a47bbfaf3e2bff6b0be2c41bbca87150b7054745655207bc3f8f1860d",
+      "started_at": "2026-10-06T14:03:10.129Z",
+      "status": "completed",
+      "text": "*The woman's gaze shifts from Korvin to Nicco as he crouches. She doesn't flinch or straighten up — just studies him the way someone does when they've learned that sizing up a buyer quickly matters. Her wrists rest in her lap, the chain between them slack against the straw.*\n\nI can cook. Stews, bread, ordinary fare. Nothing fancy.\n\n*She pauses, her jaw working once as though chewing over what to say next.*\n\nRan a kitchen for a family of six. Not a whole house. Ordered provisions, kept the pantry, managed the girl who did the washing. The mistress handled the accounts herself.\n\n*Behind Nicco, Korvin says nothing. A pen over scrapes against its neighbor as something shifts in it. The woman's eyes track the sound for a half-second, then come back.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00213,
+      "usage": {
+        "prompt_tokens": 5150,
+        "completion_tokens": 172,
+        "total_tokens": 5322
+      },
+      "latency_ms": 3888.1657000000005
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "B2",
+      "sample": 1,
+      "sha256": "4778f052feb36495f8e9f91eb16abcf59517e70c7bb87fb91b61ca5bc6fc19e1",
+      "started_at": "2026-10-06T14:03:14.020Z",
+      "status": "completed",
+      "text": "*Brenna's gaze stays on the hearth a beat after Nicco speaks, as if the question has to travel some distance to reach her. Her hand rests on the table near an untouched cup. The blanket shifts slightly across her shoulders.*\n\nI could eat something.\n\n*Her voice is low, clipped — the words spare. She doesn't turn to look at him, but her posture straightens just a fraction against the chair back. One hand pulls the blanket tighter at her collar.*\n\nWhatever's easy. I'm not asking for much.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.0052066,
+      "usage": {
+        "prompt_tokens": 5461,
+        "completion_tokens": 109,
+        "total_tokens": 5570
+      },
+      "latency_ms": 5174.377699999999
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "B2",
+      "sample": 2,
+      "sha256": "4778f052feb36495f8e9f91eb16abcf59517e70c7bb87fb91b61ca5bc6fc19e1",
+      "started_at": "2026-10-06T14:03:19.197Z",
+      "status": "completed",
+      "text": "*Brenna's gaze lifts from the hearth and settles on Nicco for a moment. Her hand rests flat on the table near an untouched cup.*\n\nI could eat something.\n\n*She pulls the blanket a fraction tighter at the collar. The light from the three windows has gone amber and low, pooling warm across the old floorboards and catching the edge of the table between them.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.0017826,
+      "usage": {
+        "prompt_tokens": 5461,
+        "completion_tokens": 77,
+        "total_tokens": 5538
+      },
+      "latency_ms": 2655.1273999999976
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B3",
+      "sample": 1,
+      "sha256": "f831050c3cd3daed1456078ef30fdabb5792f7a76825462171bf7f181fb326f0",
+      "started_at": "2026-10-06T14:10:27.541Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his jaw with one broad thumbnail, studying Nicco with the unhurried appraisal of a man weighing a live animal.*\n\nHousehold. Cooking and keeping. That's not labor-stock, that's someone you trust near your food and your things. Different price.\n\n*He lets that sit a moment, then turns and walks a few paces along the row of pens, beckoning without looking back to see if Nicco follows. He stops at a pen where three people sit or lean against the wooden slats — two women, one man, none young.*\n\nGot a couple here that'd fit. The one on the left — Lisen, she's called — came off a farm household. Says she can cook, and she looks the part. The other woman's younger, stronger, but I've seen her eat raw onion like an apple, so maybe not your kitchen. Man there says he can handle basic upkeep. Garden, repairs, hauling.\n\n*He folds his arms across his chest, large hands tucking under his elbows.*\n\nWon't lie to you — household stock runs higher than field hands. You want one or both? And what's your ceiling, because I'm not wasting both our time otherwise.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00658652,
+      "usage": {
+        "prompt_tokens": 5375,
+        "completion_tokens": 251,
+        "total_tokens": 5626
+      },
+      "latency_ms": 7532.9759
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B3",
+      "sample": 2,
+      "sha256": "f831050c3cd3daed1456078ef30fdabb5792f7a76825462171bf7f181fb326f0",
+      "started_at": "2026-10-06T14:10:35.081Z",
+      "status": "completed",
+      "text": "*Korvin's eyes narrow slightly — not at Nicco, but somewhere past his shoulder, the way a man does when he's sorting a question behind his face. One of those damaged hands rubs the knuckle of the other, slow.*\n\nHousehold. Cooking and keeping house. Right.\n\n*He turns and scans the pens behind him with the unhurried look of someone checking shelves.*\n\nI've got a couple might suit. One woman came in with a household lot — says she kept house for a merchant family before they fell apart. Can cook, or says she can. Older. Steady hands. Won't be cheap, but she's not the kind you overpay for either, she'll earn it back.\n\n*His gaze comes back to Nicco, and he leans a little, weight shifting to one leg.*\n\nWhat's the house? You on your own there, or is there a family to feed?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00229212,
+      "usage": {
+        "prompt_tokens": 5375,
+        "completion_tokens": 187,
+        "total_tokens": 5562
+      },
+      "latency_ms": 5120.4238
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B3",
+      "sample": 1,
+      "sha256": "7859bde61121e4e7605fb155d079cd9256c620b8c0459054d02b62cf64af8856",
+      "started_at": "2026-10-06T14:10:40.205Z",
+      "status": "completed",
+      "text": "*The woman's gaze moves from Nicco's face down to where he crouches, then back up. She shifts her weight slightly on the straw, the chain between her wrists clinking against itself.*\n\nI can cook. Stews, bread, roast when there's the means for it. Worked a kitchen in a boarding house on Millward Street, three years. Fed twelve, sometimes more.\n\n*She pauses. Her fingers curl loosely in her lap around the chain links.*\n\nRunning a household — that's different. I kept the kitchen and the stores and saw to the cleaning. The mistress handled the accounts, the servants' schedules, the rest. I wasn't the head of it, if that's what you're asking.\n\n*Behind Nicco, Korvin says nothing, arms folded, watching the exchange with the patience of a man who has seen this conversation many times.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00471628,
+      "usage": {
+        "prompt_tokens": 4995,
+        "completion_tokens": 179,
+        "total_tokens": 5174
+      },
+      "latency_ms": 4154.935699999998
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B3",
+      "sample": 2,
+      "sha256": "7859bde61121e4e7605fb155d079cd9256c620b8c0459054d02b62cf64af8856",
+      "started_at": "2026-10-06T14:10:44.363Z",
+      "status": "completed",
+      "text": "*The woman's gaze moves from Nicco's face down to where he crouches, then back up. She doesn't straighten or shift her weight, but her fingers curl slightly against her knees.*\n\nI can cook. Plain meals, mostly. Stews, bread, roasting. Nothing fine.\n\n*She pauses, glancing once toward Korvin behind Nicco before looking back.*\n\nI kept house for a family. Cleaning, washing, market, mending. Four children, two adults. That sort of running.\n\n*Her voice is level, neither eager nor flat — the tone of someone reciting what they've done enough times that the words come without needing to think about them. A strand of dark hair has fallen across her cheek; she doesn't move to push it away, her chained hands resting still on her lap.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00204572,
+      "usage": {
+        "prompt_tokens": 4995,
+        "completion_tokens": 169,
+        "total_tokens": 5164
+      },
+      "latency_ms": 3957.4591
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "B3",
+      "sample": 1,
+      "sha256": "381f50ab67445ce171647fb2cd41ce916550cb11666eb5a57f3536ae48849511",
+      "started_at": "2026-10-06T14:10:48.323Z",
+      "status": "completed",
+      "text": "*Brenna's gaze lifts from the hearth to Nicco, then drops to the table surface. Her shoulders shift back a fraction beneath the blanket before she answers.*\n\nI could eat something.\n\n*She doesn't elaborate. One hand stays tucked under the blanket's edge at her collarbone, the other resting flat on the table beside an empty cup. The firelight catches the leftover pallor in her face, and she turns back toward the hearth after speaking, as though the admission cost her something small.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00583872,
+      "usage": {
+        "prompt_tokens": 5306,
+        "completion_tokens": 103,
+        "total_tokens": 5409
+      },
+      "latency_ms": 3024.3002000000015
+    },
+    {
+      "scene": "S3_quiet_guarded",
+      "condition": "B3",
+      "sample": 2,
+      "sha256": "381f50ab67445ce171647fb2cd41ce916550cb11666eb5a57f3536ae48849511",
+      "started_at": "2026-10-06T14:10:51.352Z",
+      "status": "completed",
+      "text": "*Brenna's gaze lifts from the hearth to Nicco, then drops to the table surface. Her shoulders shift back a fraction beneath the blanket before she speaks.*\n\nI could eat something.\n\n*She doesn't elaborate. One hand stays curled around the blanket's edge at her collarbone, and after a beat her attention drifts back toward the fire, where the low flames catch the faded color in her face.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00181528,
+      "usage": {
+        "prompt_tokens": 5306,
+        "completion_tokens": 84,
+        "total_tokens": 5390
+      },
+      "latency_ms": 2697.9208
+    },
+    {
+      "scene": "S4_specific_physical",
+      "condition": "B3",
+      "sample": 1,
+      "sha256": "503b571fbef8a4b5a3d3716d03499b1f178d5cc8c2f4394b0bc4046012ee469c",
+      "started_at": "2026-10-06T14:10:54.052Z",
+      "status": "completed",
+      "text": "*Korvin's gaze drops to his own hands — the old ridged skin across the knuckles, a couple of fingers sitting at slight angles that suggest they healed wrong — and he curls them briefly, a half-conscious motion, before looking back up. The corner of his mouth pulls sideways, not quite a smile.*\n\nCrates, ropes, hooves, teeth. Couple of blokes who thought they were harder than they were.\n\n*He rubs one thumb across the worst of the scarring, dismissive, already moving past it.*\n\nHands like these, you learn to read an animal before it reads you. Same trick works on people well enough.\n\n*A brief pause. Those small eyes settle on Nicco again with the same flat appraisal as before — not offended, just recalibrating slightly after the laugh. He waits.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00549012,
+      "usage": {
+        "prompt_tokens": 5377,
+        "completion_tokens": 167,
+        "total_tokens": 5544
+      },
+      "latency_ms": 4404.302499999998
+    },
+    {
+      "scene": "S4_specific_physical",
+      "condition": "B3",
+      "sample": 2,
+      "sha256": "503b571fbef8a4b5a3d3716d03499b1f178d5cc8c2f4394b0bc4046012ee469c",
+      "started_at": "2026-10-06T14:10:58.459Z",
+      "status": "completed",
+      "text": "*Korvin's gaze drops to his own hands, fingers curling loosely, then back up to Nicco. One corner of his mouth pulls sideways — not quite amusement, closer to a man deciding whether to be annoyed.*\n\nCrates, pallets, rope burns, a mule that didn't like being loaded. Once a beam came down on me in a warehouse over in the warehousing strip. *He turns the left hand over, showing a pale ridge of scar tissue across the palm.* That one was a beam.\n\n*He doesn't linger on it. The hand drops back to his side and his attention returns to Nicco with the same quick, appraising quality as before — reading something in the laugh, maybe, or the apology that followed it.*\n\nSo. Labor, household, something specific. You tell me what you need, I'll tell you whether I've got it.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00525548,
+      "usage": {
+        "prompt_tokens": 5377,
+        "completion_tokens": 180,
+        "total_tokens": 5557
+      },
+      "latency_ms": 4150.811099999999
+    },
+    {
+      "scene": "S5_household_ordinary",
+      "condition": "B3",
+      "sample": 1,
+      "sha256": "b6d9ff2054b770519bd6620325cea52817798d97416b02a961c46a31f1df289f",
+      "started_at": "2026-10-06T14:11:02.612Z",
+      "status": "completed",
+      "text": "*The knife pauses mid-stroke. Brenna glances at him, then at the half-pile of peeled vegetables and the empty space beside the board.*\n\nYou know how to peel turnips?\n\n*It's asked without particular warmth or challenge — just a flat question. She nudges a small knife along the table toward him with two fingers, then pulls a few uncut roots from the sack and sets them where he can reach them. Her hands go back to work before he's answered, the blade scraping in short efficient strokes. A curl of peel drops onto the growing pile.*\n\n*The pot on the hearth gives off a thin wisp of steam, still mostly water. Afternoon light from the kitchen window catches the wet faces of the cut vegetables, pale cream and muddy purple.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00511024,
+      "usage": {
+        "prompt_tokens": 5284,
+        "completion_tokens": 160,
+        "total_tokens": 5444
+      },
+      "latency_ms": 4318.7351999999955
+    },
+    {
+      "scene": "S5_household_ordinary",
+      "condition": "B3",
+      "sample": 2,
+      "sha256": "b6d9ff2054b770519bd6620325cea52817798d97416b02a961c46a31f1df289f",
+      "started_at": "2026-10-06T14:11:06.933Z",
+      "status": "completed",
+      "text": "*Brenna's knife doesn't pause. A strip of parsnip skin curls away and drops onto the table's edge near a growing pile of scraps. She glances at him sideways, just a flicker, then back to the root in her hand.*\n\nI've got it.\n\n*She sets the peeled parsnip down and reaches for another from the small mound of unwashed ones. Her hands are damp, flecked with dirt. The pot on the hearth shifts once, a low bubble rising through whatever liquid is inside.*\n\n*After a beat, her shoulder drops a fraction — the smallest release of air through her nose.*\n\nThere's water to fetch. If you want.\n\n*She nods once toward the courtyard door without looking up, knife already working the next vegetable in quick, efficient strokes.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00213648,
+      "usage": {
+        "prompt_tokens": 5284,
+        "completion_tokens": 164,
+        "total_tokens": 5448
+      },
+      "latency_ms": 4389.217699999994
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B4",
+      "sample": 1,
+      "sha256": "604c14880827495737552c2fc440c502c1f03a48f91aae3c3e019908f4ec8908",
+      "started_at": "2026-10-06T14:12:11.458Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his nose with one thick thumb, studying Nicco a beat longer than strictly necessary. His gaze lingers on the hands again — soft, no calluses — then returns to the face.*\n\nHousehold. Cooking. *He nods slowly, like he's sorting through stock in his head.* Got a couple might fit. One woman, been in kitchens before, older hands but steady. Another younger, strong, claims she can cook but I haven't seen her at a hearth myself.\n\n*He shifts his weight, the gravel crunching under his boot.*\n\nWhat I won't do is waste your time or mine with fancy talk. You tell me what you're looking to spend, I'll tell you what's in front of you. Fair? *One corner of his mouth pulls sideways — not quite a smile, more a habit of his face when he's measuring someone's answer before it comes.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00610724,
+      "usage": {
+        "prompt_tokens": 5387,
+        "completion_tokens": 188,
+        "total_tokens": 5575
+      },
+      "latency_ms": 4801.9971000000005
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B4",
+      "sample": 2,
+      "sha256": "604c14880827495737552c2fc440c502c1f03a48f91aae3c3e019908f4ec8908",
+      "started_at": "2026-10-06T14:12:16.266Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his hooked nose with one thick finger, studying Nicco with a kind of blunt calculation — not hostile, just weighing what's in front of him.*\n\nHousehold. Cooking and keeping. Right.\n\n*He turns and walks a few paces along the row of pens, boots scuffing the packed dirt, and stops at one where a woman sits against the far post with her knees drawn up. He taps the slat with his knuckle.*\n\nThis one. Worked a kitchen before, or so I'm told. Not young, not old. Can she cook? Probably. Can she keep a house? Depends on the house. You'd want to talk to her yourself.\n\n*He glances back over his shoulder.*\n\nI've got a couple others that might suit. A boy who does floors and errands, handy but useless at a stove. And there's one came in yesterday — older woman, quiet, claims she ran a modest household before she fell into debt. Haven't had her long enough to say much either way.\n\n*His eyes narrow slightly, not with suspicion exactly, but the look of a man deciding how much rope to give a buyer who mentioned money.*\n\nWhat kind of household are we talking about? Big place, small place? Just yourself, or others? Makes a difference in what I point you at.",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00649444,
+      "usage": {
+        "prompt_tokens": 5387,
+        "completion_tokens": 276,
+        "total_tokens": 5663
+      },
+      "latency_ms": 6456.3859999999995
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B4",
+      "sample": 1,
+      "sha256": "406ca12e59aacca1611d32b38a3aaf5c9f8151cd72c6f89444a1ede4076dd8a7",
+      "started_at": "2026-10-06T14:12:22.725Z",
+      "status": "completed",
+      "text": "*The woman's eyes move from Korvin to Nicco as he crouches. She sits straighter against the pen's wooden slats, the chain between her wrists clinking faintly with the movement. Her gaze holds on his face a moment, measuring something — whether he's actually asking her, or performing the question for someone else's benefit.*\n\nI can cook. Stews, bread, roast when there's meat for it. Plain fare, nothing fine.\n\n*She pauses. Her fingers curl loosely around the chain at her lap.*\n\nRan a kitchen for a family of six. Four seasons, maybe a bit more. Ordering, preserving, what to buy and how much. Not the accounts — the mistress kept those herself.\n\n*Behind Nicco, Korvin says nothing, his weight shifting to one foot. The woman's attention doesn't drift back to him. She stays fixed on Nicco, waiting to see what he'll make of the answer.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00480348,
+      "usage": {
+        "prompt_tokens": 5007,
+        "completion_tokens": 195,
+        "total_tokens": 5202
+      },
+      "latency_ms": 4706.717999999999
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B4",
+      "sample": 2,
+      "sha256": "406ca12e59aacca1611d32b38a3aaf5c9f8151cd72c6f89444a1ede4076dd8a7",
+      "started_at": "2026-10-06T14:12:27.436Z",
+      "status": "completed",
+      "text": "*The woman's eyes move from Nicco's face to his hands, then back. She shifts her weight on the straw, the chain between her wrists clinking softly against itself.*\n\nI can cook. Stews, bread, roasts. Plain fare, nothing fancy.\n\n*A pause. Her gaze flicks once toward Korvin behind Nicco, then returns.*\n\nI kept house for a family. Four of them. Cooking, cleaning, washing, mending. Until I couldn't.\n\n*She doesn't elaborate on that last part. Her fingers curl loosely in her lap, the chain pooling between them. Behind Nicco, Korvin says nothing, his bulk settled back on one heel with the patience of a man who's done this many times.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00198332,
+      "usage": {
+        "prompt_tokens": 5007,
+        "completion_tokens": 151,
+        "total_tokens": 5158
+      },
+      "latency_ms": 3286.624899999999
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B5",
+      "sample": 1,
+      "sha256": "acb83a6f256435c59d40f2ad5a6884598d454708b21ac61af71a70963b30551f",
+      "started_at": "2026-10-06T14:13:38.415Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his nose with one broad thumbnail, considering. His gaze drifts past Nicco's shoulder for a half-second — not at anyone in particular, more the habit of a man who likes to watch his own back even mid-conversation — then settles back.*\n\nHousehold. Cook and keep. That's common enough. Got a few who'd fit.\n\n*He tilts his head toward the pens, not moving from where he stands.*\n\nQuestion is what you mean by not overpaying. I've got a woman back there — older, steady hands, says she knows a kitchen. Won't cost you what a young pretty one would. Got a boy too, but he's labor-built, not household. *He pauses, studying Nicco's face with those small mobile eyes.* You looking for one who'll serve meals and scrub floors, or someone to manage staff, orders, supplies — because that's a different conversation.\n\n*He folds his arms across his chest, the gesture loose rather than closed.*\n\nAnd you want to walk them, or just hear what I've got?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00604536,
+      "usage": {
+        "prompt_tokens": 5386,
+        "completion_tokens": 224,
+        "total_tokens": 5610
+      },
+      "latency_ms": 5740.1955
+    },
+    {
+      "scene": "S1_seller_negotiation",
+      "condition": "B5",
+      "sample": 2,
+      "sha256": "acb83a6f256435c59d40f2ad5a6884598d454708b21ac61af71a70963b30551f",
+      "started_at": "2026-10-06T14:13:44.163Z",
+      "status": "completed",
+      "text": "*Korvin scratches the side of his hooked nose with one broad thumbnail, weighing what he heard — not the request itself but the man making it. The clothing, the build, the way he led with a name like they'd met before.*\n\nHousehold. Cook and keep. That's not a laborer, that's someone you trust near your food and your roof.\n\n*He lets that sit a beat, then jerks his head toward the pens behind him.*\n\nI've got a couple might fit. Woman over in the third row — kitchen work before, older, steady hands. Got another, younger, claims she can manage a hearth but I haven't seen proof of it. Neither's fancy. What's the house look like? Just you, or am I fitting a staff?",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00576376,
+      "usage": {
+        "prompt_tokens": 5386,
+        "completion_tokens": 160,
+        "total_tokens": 5546
+      },
+      "latency_ms": 4218.7994
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B5",
+      "sample": 1,
+      "sha256": "c5f6f632b6cfcaf2bae8462287c26e25493951a4ee4767f6ed0ccb04709f3761",
+      "started_at": "2026-10-06T14:13:48.385Z",
+      "status": "completed",
+      "text": "*The woman's gaze drops to Nicco's face as he crouches. She doesn't flinch or straighten — just watches him the way someone watches weather they can't do anything about. Her wrists rest in her lap, the chain between them slack enough to move her hands but not enough to forget it's there.*\n\nCook, yes. Kitchens, mostly. Prep, plain meals, bread if there's an oven that holds heat.\n\n*She pauses, not searching for words so much as deciding how many to spend.*\n\nRunning a household — that's different. I kept a kitchen for a family of six. Ordered supplies, managed the stores, handled the help when there was help. But the accounts, the correspondence, the front of the house — that wasn't mine.\n\n*Behind Nicco, Korvin says nothing. He's watching the exchange with the stillness of a man who knows better than to interrupt a sale, but his weight shifts once, deliberately, to the other foot — the creak of his boots audible in the gap between the woman's words.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00490768,
+      "usage": {
+        "prompt_tokens": 5006,
+        "completion_tokens": 219,
+        "total_tokens": 5225
+      },
+      "latency_ms": 5247.0311
+    },
+    {
+      "scene": "S2_seller_captive",
+      "condition": "B5",
+      "sample": 2,
+      "sha256": "c5f6f632b6cfcaf2bae8462287c26e25493951a4ee4767f6ed0ccb04709f3761",
+      "started_at": "2026-10-06T14:13:53.635Z",
+      "status": "completed",
+      "text": "*The woman's eyes move from Nicco to Korvin behind him, a quick check, before settling back. She doesn't straighten up or shift her weight; she was sitting before he came and she stays sitting. Her wrists rest in her lap, chain slack across her knees.*\n\nI can cook. Stews, bread, roast. Everyday things.\n\n*She pauses. Her fingers curl slightly against the straw.*\n\nRunning a household — that's different from working in one. I worked in kitchens. Someone else did the ordering, the counting.\n\n*She looks at him levelly, neither eager nor flat.*\n\nI could learn what I'm shown. But I won't tell you I've done what I haven't.\n\n*Behind Nicco, Korvin says nothing, arms folded, watching the exchange with the patient stillness of a man who has watched this exchange a hundred times.*",
+      "model": "z-ai/glm-5.2",
+      "provider": "Z.AI",
+      "cost_usd": 0.00210072,
+      "usage": {
+        "prompt_tokens": 5006,
+        "completion_tokens": 178,
+        "total_tokens": 5184
+      },
+      "latency_ms": 4342.008899999999
+    }
+  ]
+}
