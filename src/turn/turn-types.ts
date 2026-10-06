@@ -10,7 +10,9 @@ import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuditIssue } from "./narration-audit.js";
 export type TurnFailure = "invalid_input" | "context_invalid" | "context_too_large" | "retrieval_failed" | "invalid_runtime_intent" | "stale_turn" | "turn_in_progress" | "cancelled" | "narrator_failed" | "controller_failed" | "campaign_validation_failed";
 export class TurnError extends Error { constructor(readonly code: TurnFailure) { super(`Turn failed: ${code}`); } }
-export interface TurnRequest { readonly campaign: CampaignState; readonly player_input: string; readonly signal?: AbortSignal }
+/** Visual-only observer; these bytes are not evidence, history or a delivered turn. */
+export interface NarratorPreview { readonly action: "start" | "delta"; readonly phase: "draft" | "revision"; readonly text: string }
+export interface TurnRequest { readonly campaign: CampaignState; readonly player_input: string; readonly signal?: AbortSignal; readonly on_narrator_preview?: (event: NarratorPreview) => void }
 export interface AuthorizationDiagnostic { readonly command: CampaignCommand; readonly authorized: boolean;
   /** Phase 1O: which path authorized it, the grammar-only result, and the controller evidence check (diagnostic only). */
   readonly source?: "grammar" | "evidence" | "both" | "rejected"; readonly grammar?: { readonly authorized: boolean; readonly reason: string };
@@ -25,7 +27,7 @@ export interface TurnResult {
   readonly controller_proposal: readonly CampaignCommand[]; readonly authorized_commands: readonly CampaignCommand[];
   readonly authorization: readonly AuthorizationDiagnostic[]; readonly retrieval: RetrievalDiagnostic;
   readonly turn_evidence: TurnEvidence;
-  /** Repair 1: the draft never reaches the user unaudited. `delivered` says which text was shown. */
+  /** Repair 1: only audited text is delivered as authoritative narration. `delivered` excludes visual-only draft previews. */
   readonly narration_reconciliation?: { readonly delivered: "draft" | "revision" | "redacted"; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly revision?: string; readonly revision_issues?: readonly AuditIssue[]; readonly repaired_arrivals?: readonly string[] };
   readonly narrator: GenerationMetadata; readonly controller: GenerationMetadata;
   readonly context_characters: Readonly<Record<string, number>>;

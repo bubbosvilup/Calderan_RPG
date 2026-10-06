@@ -16,7 +16,12 @@ const assets = new Map([
 /** Transport only: all game operations go through the application facade. */
 export function createPlaytestServer(session: GameSession, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives) {
   const messages: Message[] = [{ role: "narrator", text: UI_PLAYTEST_OPENING }];
-  const state = () => ({ messages: messages.map(message => message.comparison_id ? { ...message, comparison_available: comparisons?.has(message.comparison_id) ?? false, alternatives: comparisons?.results(message.comparison_id) ?? [] } : message), ...(comparisons ? { alternate_models: ALTERNATE_NARRATOR_MODELS } : {}), status: session.status, configured: session.getView().session.provider.configured });
+  const state = () => {
+    const view = session.getView();
+    return { messages: messages.map(message => message.comparison_id ? { ...message, comparison_available: comparisons?.has(message.comparison_id) ?? false, alternatives: comparisons?.results(message.comparison_id) ?? [] } : message), ...(comparisons ? { alternate_models: ALTERNATE_NARRATOR_MODELS } : {}), status: session.status, configured: view.session.provider.configured,
+      scene: { location: view.scene.location.name, time_of_day: view.scene.time.time_of_day },
+      household: view.household.map(h => ({ members: h.members.map(m => ({ name: m.display_name, presence: m.presence, ...(m.location ? { location: m.location.name } : {}) })) })) };
+  };
   return createServer(async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
@@ -49,13 +54,23 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
         const text = input && typeof input === "object" && "text" in input ? input.text : undefined;
         if (typeof text !== "string" || !text.trim() || text.length > 4000) { json(400, { error: "Enter 1–4000 characters." }); return; }
         if (session.status === "idle") comparisons?.begin();
-        const outcome = await session.submitPlayerInput(text.trim());
+        const streaming = req.headers.accept === "application/x-ndjson";
+        const abort = new AbortController();
+        const disconnected = () => { if (!res.writableEnded) abort.abort(); };
+        if (streaming) { res.writeHead(200, { "Content-Type": "application/x-ndjson; charset=utf-8" }); res.flushHeaders(); res.on("close", disconnected); }
+        const writeEvent = (event: unknown) => { if (!res.destroyed) res.write(JSON.stringify(event) + "\n"); };
+        const outcome = await session.submitPlayerInput(text.trim(), streaming ? { signal: abort.signal, onEvent: event => {
+          if (event.type === "narrator_preview") writeEvent({ type: "draft", action: event.action, phase: event.phase, text: event.text });
+        } } : {});
+        res.off("close", disconnected);
         if (outcome.ok) {
           messages.push({ role: "player", text: text.trim() }, { role: "narrator", text: outcome.narration, ...(comparisons?.finalize(outcome.turn_id) ? { comparison_id: outcome.turn_id } : {}) });
-          json(200, { ok: true, ...state() });
+          if (streaming) { writeEvent({ type: "result", ok: true, ...state() }); res.end(); }
+          else json(200, { ok: true, ...state() });
         } else {
           console.error(`Playtest turn failed: ${outcome.error.code}${outcome.error.provider_code ? ` (${outcome.error.provider_code})` : ""}`);
-          json(outcome.error.code === "turn_in_progress" ? 409 : 422, { ok: false, error: outcome.error, ...state() });
+          if (streaming) { writeEvent({ type: "result", ok: false, error: outcome.error, ...state() }); res.end(); }
+          else json(outcome.error.code === "turn_in_progress" ? 409 : 422, { ok: false, error: outcome.error, ...state() });
         }
         return;
       }

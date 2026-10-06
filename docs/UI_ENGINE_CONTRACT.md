@@ -32,9 +32,10 @@ const outcome = await session.submitPlayerInput(text, { onEvent, signal });
 
 ## 3. Streaming and final narration
 
-Events (`SessionEvent`), in order for a successful turn: `status_changed(running_turn)`, `player_message`, `narration_delta`, `turn_completed`, [`status_changed(post_turn)`, `post_turn_completed`], `status_changed(idle)`.
+Events (`SessionEvent`), in order for a successful turn: `status_changed(running_turn)`, `player_message`, [`narrator_preview` resets/deltas for generation, retries and revision], `narration_delta`, `turn_completed`, [`status_changed(post_turn)`, `post_turn_completed`], `status_changed(idle)`.
 
-- The engine buffers the narrator draft, audits it, and only then releases text. **There is no token streaming**: `narration_delta` carries the whole audited text as one chunk and is marked `provisional: true`. It is not final until `turn_completed`.
+- UI V1 adds true provider-token previews: `narrator_preview` is `{action: "start" | "delta", phase: "draft" | "revision", text, provisional: true}`. Use one ephemeral bubble, clear it on each `start`, append deltas, and label it as a draft. It is neither evidence nor history. Remove it on failure/cancellation and replace it with the final outcome on success. Exceptions in visual observers cannot interrupt the engine.
+- The engine still buffers and audits the whole draft. `narration_delta` carries the whole audited text as one chunk and is marked `provisional: true`. It is not final until `turn_completed`. UI V1's HTTP adapter waits for the successful application outcome before publishing its finalized transcript and projected panels.
 - The authoritative record is `turn_completed.narration` (equal to `outcome.narration`). It is what was committed with the turn. If the audit rewrote or redacted the draft, `trace.narration_status` says `revision` or `redacted`.
 - On failure the event is `turn_failed` with `uncommitted_narration`. That text may have been shown provisionally but **was not committed**; show it as discarded or hide it. The campaign is unchanged (`error.turn_state_changed` is false).
 - Render three message kinds: player (`player_message`), narrator (`turn_completed`), system/error (`turn_failed`, `post_turn_completed`, errors from `save`).
@@ -46,11 +47,11 @@ Events (`SessionEvent`), in order for a successful turn: `status_changed(running
 | Block | Fields |
 |---|---|
 | `session` | `campaign_id`, `revision`, `status`, `save {state: "saved"|"unsaved", last_saved_revision}`, `provider`, `dataset_id` |
-| `scene` | `location {id,name,summary,parent_name?}`, `exits[{target_id,name,minutes,description,kind?}]`, `time {world_minute, day, minute_of_day}`, `present[{id,name}]` |
+| `scene` | `location {id,name,summary,parent_name?}`, `exits[{target_id,name,minutes,description,kind?}]`, `time {world_minute, day, minute_of_day, time_of_day}`, `present[{id,name}]` |
 | `player` | `name`, `mana {current,max}`, `gold` (**null = money not tracked**, not zero), `equipment[{id,name,slot,mode}]`, `inventory[{id,name,description?}]` |
 | `household[]` | per household Nicco belongs to: `members[]`, `rules[]` |
 
-Time is the primitive world clock only (`world_minute`, plus `day = floor(minute/1440)` and `minute_of_day`). There is no calendar, season or named date; do not invent one.
+Time retains the primitive world clock (`world_minute`, `day`, `minute_of_day`) and adds P11's centralized derived `time_of_day` label. There is no calendar, season or named date; do not invent one.
 
 ## 5. Save, load, shutdown
 
@@ -81,6 +82,8 @@ A reflection failure is **never** an error: the turn stays committed and `trace.
 `view.household[].members[]`: `id`, `name`, `role?`, `presence` (`present` | `away`), `location` (**only while present**; the engine never tells the player where an absent member is), `relationship_to_player` (one of `HOSTILE AFRAID WARY ATTACHED TRUSTING GUARDED NEUTRAL`; absent when no relationship exists), `conditions[]`, `presentation?`, `legal? {status, holder_name?}`, `equipment[]`. NPC+ internals (history, contracts, reflection notes) are never in the view.
 
 ## 8. Inventory and equipment
+
+UI V1 uses `members[].display_name` for player-facing labels: unknown canonical names are masked using committed Nicco name knowledge, and missing labels never fall back to opaque IDs. The loopback adapter transmits only `{members: [{name, presence, location?}]}`; it excludes the legacy IDs, raw names, private fields and household identifiers. `scene.time.time_of_day` comes directly from the centralized P11 `temporalGrounding` projection; the UI receives the location label and daypart, with no exact game clock or frontend bucket mapping.
 
 Supported now: Nicco's carried and stored-owned items, Nicco's equipped items by free-form slot (`slot`, `mode: worn|held`), and each household member's equipped items. Not in the view: items merely carried by household members, quantities, weight, durability, containers, shops. See `ENGINE_CAPABILITIES_PRE_UI.md`. Do not promise more.
 

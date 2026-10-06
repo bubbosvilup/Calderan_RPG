@@ -97,14 +97,20 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
 
 test("browser composer submits once, handles Enter/Shift+Enter, preserves failures and renders final text safely", async () => {
   class Element {
-    textContent = ""; className = ""; value = ""; hidden = false; disabled = false; scrollTop = 0; scrollHeight = 42;
+    private text = ""; className = ""; value = ""; hidden = false; disabled = false; scrollTop = 0; scrollHeight = 42; clientHeight = 42;
+    parent?: Element;
+    get textContent(): string { return this.text + this.children.map(c => c.textContent).join(""); }
+    set textContent(value: string) { this.text = value; this.children = []; }
     children: Element[] = []; handlers = new Map<string, (event: any) => any>();
-    append(...children: Element[]) { this.children.push(...children); }
+    append(...children: Element[]) { children.forEach(c => { c.parent = this; }); this.children.push(...children); }
+    replaceChildren(...children: Element[]) { this.text = ""; this.children = []; this.append(...children); }
+    remove() { if (this.parent) this.parent.children = this.parent.children.filter(c => c !== this); }
+    setAttribute() {}
     addEventListener(name: string, handler: (event: any) => any) { this.handlers.set(name, handler); }
     focus() {}
     requestSubmit() { return this.handlers.get("submit")!({ preventDefault() {} }); }
   }
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error"].map(id => [`#${id}`, new Element()]));
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest"].map(id => [`#${id}`, new Element()]));
   const node = (id: string) => nodes.get(`#${id}`)!;
   const opening = { messages: [{ role: "narrator", text: UI_PLAYTEST_OPENING }], status: "idle", configured: true };
   let resolvePost!: (value: unknown) => void, requestBody = "", submits = 0;
@@ -115,7 +121,7 @@ test("browser composer submits once, handles Enter/Shift+Enter, preserves failur
   };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout });
   await new Promise(resolve => setImmediate(resolve));
-  assert.equal(node("conversation").children[0]!.children[1]!.textContent, UI_PLAYTEST_OPENING);
+  assert.equal(node("conversation").children[0]!.children[1]!.textContent, UI_PLAYTEST_OPENING.replaceAll("*", ""));
   node("input").value = "  "; await node("composer").requestSubmit(); assert.equal(submits, 0);
   let prevented = false;
   node("input").handlers.get("keydown")!({ key: "Enter", shiftKey: true, preventDefault() { prevented = true; } });

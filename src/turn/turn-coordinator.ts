@@ -40,6 +40,10 @@ export type { TurnDebugRecord } from "./turn-types.js";
  * `campaign.commit` below is the only mutation. `stage` maps a non-TurnError failure to the code of the phase in flight.
  */
 const active = new WeakSet<CampaignState>();
+/** A broken visual observer must never change a generation or its authority. */
+function observePreview(request: TurnRequest, action: "start" | "delta", text: string, revision: boolean) {
+  try { request.on_narrator_preview?.({ action, text, phase: revision ? "revision" : "draft" }); } catch { /* Visual only. */ }
+}
 /** Observe final audited delivery against generation-time authority and cues surviving packing. */
 function inspectPackedPortrayal(world: WorldStore, projected: DeepReadonly<CampaignSnapshot>, context: TurnContext, prompt: GenerationRequest, turn_id: string, revision: number, player_input: string, narration: string) {
   return diagnosticSync(()=>new MannerismPortrayalGate().inspect({ turn_id, revision, player_input, narration,
@@ -120,7 +124,7 @@ export class TurnCoordinator {
         if (record) record.streamed_characters += count;
       } : undefined, { technical_contract:!!this.promptOptions.reliability_contract,policy: retryPolicy, budget, record: record => attempts(revisionGeneration ? "revision_narrator" : "narrator")(record),
         // A discarded attempt's partial characters are not counted as the delivered stream.
-        attempt_started: () => { const record = revisionGeneration ? observer?.record.revision_narrator : observer?.record.narrator; if (record) record.streamed_characters = 0; } });
+        attempt_started: () => { const record = revisionGeneration ? observer?.record.revision_narrator : observer?.record.narrator; if (record) record.streamed_characters = 0; } }, (action, text) => observePreview(request, action, text, revisionGeneration));
       const drafted = await measureAsync("narrator", () => generate(prompt), true);
       if (observer) observer.record.narrator = { streamed_characters: observer.record.narrator?.streamed_characters ?? 0, model: drafted.result.model, usage: drafted.result.usage, latency_ms: drafted.result.latency.elapsed_total_ms, completed: true, final_text_characters: drafted.text.length };
       narration = drafted.result;

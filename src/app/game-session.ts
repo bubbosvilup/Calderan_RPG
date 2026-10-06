@@ -43,6 +43,7 @@ export interface SessionDeps {
   readonly unsafe_trace?: boolean;
 }
 export type SessionEvent =
+  | ({ readonly type: "narrator_preview"; readonly provisional: true } & import("../turn/turn-types.js").NarratorPreview)
   | { readonly type: "context_compaction_completed"; readonly result: CompactionResult; readonly view: SessionView }
   | { readonly type: "player_message"; readonly turn_id: string; readonly text: string }
   | { readonly type: "status_changed"; readonly status: SessionStatus }
@@ -151,7 +152,7 @@ export class GameSession {
     let completed: Extract<TurnEvent, { type: "turn_completed" }> | undefined, failed: Extract<TurnEvent, { type: "turn_failed" }> | undefined;
     try {
       emit({ type: "player_message", turn_id, text: input });
-      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal })) {
+      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, on_narrator_preview: preview => emit({ type: "narrator_preview", ...preview, provisional: true }) })) {
         if (event.type === "narration_delta") emit({ type: "narration_delta", turn_id, text: event.text, provisional: true });
         else if (event.type === "turn_completed") completed = event;
         else if (event.type === "turn_failed") failed = event;

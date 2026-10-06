@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-06",
+  "status": "UI V1 implemented; visual browser verification unavailable",
+  "typecheck": "PASS",
+  "unit": {
+    "tests": 2330,
+    "passed": 2326,
+    "failed": 0,
+    "todo": 4
+  },
+  "focused": {
+    "tests": 184,
+    "passed": 184,
+    "failed": 0
+  },
+  "playthrough": {
+    "tests": 25,
+    "passed": 25,
+    "failed": 0
+  },
+  "new_ui_v1_tests": 24,
+  "paid_api_calls": 0,
+  "cost_usd": 0,
+  "browser": {
+    "setup": "Runtime setup succeeded",
+    "selection": "No browser is available",
+    "discovered_browsers": [],
+    "screenshots": [],
+    "desktop_visual": "NOT RUN",
+    "narrow_visual": "NOT RUN"
+  },
+  "contrast": [
+    {
+      "text": "narration",
+      "color": "#c9baa3",
+      "background": "#1d1b18",
+      "ratio": 9.03
+    },
+    {
+      "text": "dialogue",
+      "color": "#f0e7d8",
+      "background": "#1d1b18",
+      "ratio": 14.01
+    },
+    {
+      "text": "secondary",
+      "color": "#b8ad9b",
+      "background": "#1d1b18",
+      "ratio": 7.76
+    },
+    {
+      "text": "secondary",
+      "color": "#b8ad9b",
+      "background": "#191815",
+      "ratio": 8.02
+    },
+    {
+      "text": "accent",
+      "color": "#d1b98c",
+      "background": "#191815",
+      "ratio": 9.32
+    },
+    {
+      "text": "player-text",
+      "color": "#d5e5e7",
+      "background": "#272c2d",
+      "ratio": 10.91
+    },
+    {
+      "text": "player-action",
+      "color": "#b8cbd0",
+      "background": "#272c2d",
+      "ratio": 8.41
+    }
+  ],
+  "protected_behavior_files_unchanged": [
+    "src/turn/temporal-grounding.ts",
+    "src/turn/recent-conversation.ts",
+    "src/turn/prompt-builder.ts",
+    "src/turn/scene-departure.ts",
+    "src/turn/evidence-authorization.ts",
+    "src/turn/stages/authorization.ts",
+    "src/turn/stages/audit.ts",
+    "src/campaign/identity-knowledge.ts",
+    "DEBT_REGISTER.md"
+  ],
+  "authority_cases": [
+    "draft chunks preserve snapshot and empty finalized history",
+    "contradictory Korvin departure revised to remains before commit",
+    "provider failure discards visible draft",
+    "disconnect aborts before commit",
+    "preview observer exceptions ignored",
+    "provider retries reset preview and store only successful final",
+    "frontend same bubble replaced with final audited text",
+    "failed/cancelled/interrupted draft DOM removed",
+    "household views exclude unknown names, IDs, private fields and absent locations",
+    "central P11 daypart after committed wait"
+  ],
+  "responsive": {
+    "implemented_breakpoint_px": 800,
+    "desktop_sidebar_px": 250,
+    "narrow": "Stacked household below story; bounded sidebar overflow",
+    "visual_verification": "Unavailable; not inferred from DOM mocks"
+  }
+}

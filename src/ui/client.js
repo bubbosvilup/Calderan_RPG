@@ -4,26 +4,97 @@ const input = document.querySelector("#input");
 const send = document.querySelector("#send");
 const status = document.querySelector("#status");
 const error = document.querySelector("#error");
+const locationLabel = document.querySelector("#location");
+const daypart = document.querySelector("#daypart");
+const household = document.querySelector("#household-members");
+const latest = document.querySelector("#latest");
 let submitting = false;
 let ready = false;
 let shown = 0;
 let poll;
 const comparisonViews = new Map();
+let pending;
+
+// Single unescaped stars delimit narration; double stars remain literal.
+// An unfinished narration span stays italic while the next token is pending.
+function renderRpg(container, source) {
+  const spans = [];
+  let narration = false, text = "";
+  function flush() {
+    if (!text) return;
+    const span = document.createElement("span");
+    span.className = narration ? "rpg-narration" : "rpg-dialogue";
+    span.textContent = text; spans.push(span); text = "";
+  }
+  for (let i = 0; i < source.length; i++) {
+    if (source[i] === "\\" && source[i + 1] === "*") { text += "*"; i++; }
+    else if (source[i] === "*" && source[i + 1] === "*") { text += "**"; i++; }
+    else if (source[i] === "*") { flush(); narration = !narration; }
+    else text += source[i];
+  }
+  flush(); container.replaceChildren(...spans);
+}
+function nearBottom() { return conversation.scrollHeight - conversation.scrollTop - conversation.clientHeight < 100; }
+function follow(wasNear) {
+  if (wasNear) conversation.scrollTop = conversation.scrollHeight;
+  latest.hidden = nearBottom();
+}
+conversation.addEventListener("scroll", () => { latest.hidden = nearBottom(); });
+latest.addEventListener("click", () => { conversation.scrollTop = conversation.scrollHeight; latest.hidden = true; });
+function bubble(role, source) {
+  const article = document.createElement("article"); article.className = role;
+  const label = document.createElement("span"); label.className = "speaker";
+  label.textContent = role === "player" ? "Nicco" : "Narrator";
+  const text = document.createElement("div"); text.className = "message-text";
+  renderRpg(text, source); article.append(label, text); conversation.append(article);
+  return { article, label, text };
+}
+function clearPending() {
+  if (!pending) return;
+  pending.player.article.remove(); pending.narrator.article.remove(); pending = undefined;
+}
+function preview(event) {
+  if (!pending) return;
+  const wasNear = nearBottom();
+  if (event.action === "start") pending.buffer = "";
+  else pending.buffer += event.text;
+  pending.narrator.label.textContent = event.phase === "revision" ? "Draft · Revising…" : "Draft · Generating…";
+  status.textContent = event.phase === "revision" ? "Revising…" : "Generating…";
+  renderRpg(pending.narrator.text, pending.buffer); follow(wasNear);
+}
+function renderScene(data) {
+  locationLabel.textContent = data.scene?.location ?? "Caldrevan";
+  daypart.textContent = data.scene?.time_of_day ?? "—";
+  household.replaceChildren();
+  const members = (data.household ?? []).flatMap(group => group.members);
+  if (!members.length) {
+    const empty = document.createElement("p"); empty.className = "empty-household";
+    empty.textContent = "No household members yet."; household.append(empty);
+  }
+  for (const member of members) {
+    const card = document.createElement("div"); card.className = "household-member";
+    const name = document.createElement("strong"); name.textContent = member.name;
+    const detail = document.createElement("span");
+    detail.textContent = member.presence === "present" ? `Present${member.location ? ` · ${member.location}` : ""}` : "Away";
+    card.append(name, detail); household.append(card);
+  }
+}
 
 function showError(text) {
   error.textContent = text;
   error.hidden = !text;
 }
 function render(data) {
+  const wasNear = nearBottom();
+  renderScene(data);
   for (const message of data.messages.slice(shown)) {
-    const article = document.createElement("article");
-    article.className = message.role;
-    const label = document.createElement("span");
-    label.className = "speaker";
-    label.textContent = message.role === "player" ? "Nicco" : "Narrator";
-    const text = document.createElement("div");
-    text.textContent = message.text;
-    article.append(label, text);
+    const existing = pending && (message.role === "player" ? pending.player : pending.narrator);
+    const { article, label, text } = existing ?? bubble(message.role, message.text);
+    if (existing) {
+      renderRpg(text, message.text); article.className = message.role;
+      label.textContent = message.role === "player" ? "Nicco" : "Narrator";
+      article.setAttribute("aria-busy", "false");
+    }
     if (message.role === "narrator" && message.comparison_available) {
       const select = document.createElement("select");
       select.className = "regenerate";
@@ -31,7 +102,7 @@ function render(data) {
       const placeholder = document.createElement("option");
       placeholder.textContent = "Regenerate with…"; placeholder.value = "";
       select.append(placeholder);
-      for (const model of data.alternate_models) {
+      for (const model of data.alternate_models ?? []) {
         const option = document.createElement("option");
         option.textContent = model.label; option.value = model.id; select.append(option);
       }
@@ -59,8 +130,8 @@ function render(data) {
       });
       article.append(select, feedback, alternatives);
     }
-    conversation.append(article);
   }
+  pending = undefined;
   for (const message of data.messages) {
     const view = comparisonViews.get(message.comparison_id);
     if (view) {
@@ -68,7 +139,7 @@ function render(data) {
       if (view.feedback.textContent !== "Generating alternative…") showAlternatives(view.alternatives, message.alternatives ?? []);
     }
   }
-  if (data.messages.length > shown) conversation.scrollTop = conversation.scrollHeight;
+  follow(wasNear);
   shown = data.messages.length;
   ready = data.status === "idle";
   input.disabled = send.disabled = submitting || !ready;
@@ -82,8 +153,9 @@ function showAlternatives(container, alternatives) {
     const block = document.createElement("section"); block.className = "alternative";
     const label = document.createElement("span"); label.className = "speaker";
     label.textContent = `Alternative · ${alternative.label}`;
-    const text = document.createElement("div"); text.textContent = alternative.text;
-    block.append(label, text); container.append(block);
+    const note = document.createElement("small"); note.textContent = "Comparison only · Does not change the story";
+    const text = document.createElement("div"); text.className = "message-text"; renderRpg(text, alternative.text);
+    block.append(label, note, text); container.append(block);
   }
 }
 async function load() {
@@ -107,12 +179,18 @@ form.addEventListener("submit", async event => {
   input.disabled = send.disabled = true;
   status.textContent = "Generating…";
   showError("");
+  const wasNear = nearBottom();
+  pending = { player: bubble("player", text), narrator: bubble("narrator provisional", ""), buffer: "" };
+  pending.narrator.label.textContent = "Draft · Generating…";
+  pending.narrator.article.setAttribute("aria-busy", "true");
+  follow(wasNear);
   try {
-    const response = await fetch("/api/turn", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
-    const data = await response.json();
+    const response = await fetch("/api/turn", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: JSON.stringify({ text }) });
+    const data = response.headers?.get("content-type")?.startsWith("application/x-ndjson") ? await readStream(response) : await response.json();
     if (!Array.isArray(data.messages)) throw new Error();
     if (data.ok) input.value = "";
     else {
+      clearPending();
       const detail = data.error?.provider_code === "configuration_error" ? "Set OPENROUTER_API_KEY and restart to play." : data.error?.message;
       showError(data.error?.turn_state_changed ? "Turn failed after state changed. Reload to check the session." : `Turn failed. Your message was not applied.${detail ? ` ${detail}` : ""}`);
     }
@@ -120,11 +198,37 @@ form.addEventListener("submit", async event => {
     render(data);
     if (ready) input.focus();
   } catch {
+    clearPending();
     submitting = false;
     showError("Connection interrupted. Checking the conversation; the turn may have completed. Review it before sending again.");
     await load();
+    if (ready) input.focus();
   }
 });
+async function readStream(response) {
+  const reader = response.body.getReader(), decoder = new TextDecoder();
+  let buffer = "", result;
+  function lines() {
+    let end;
+    while ((end = buffer.indexOf("\n")) >= 0) {
+      const line = buffer.slice(0, end); buffer = buffer.slice(end + 1);
+      if (!line.trim()) continue;
+      const event = JSON.parse(line);
+      if (event.type === "draft") preview(event);
+      else if (event.type === "result") result = event;
+    }
+  }
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true }); lines();
+    }
+    buffer += decoder.decode(); lines();
+    if (!result) throw new Error("No finalized result");
+    return result;
+  } finally { reader.releaseLock(); }
+}
 input.addEventListener("keydown", event => {
   if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
     event.preventDefault();

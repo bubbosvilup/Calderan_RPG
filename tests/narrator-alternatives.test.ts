@@ -117,15 +117,17 @@ test("actual adapter preserves prompt/budget/reasoning; only model and routing d
 
 test("browser controls only finalized eligible narrator messages, stacks safe alternatives and replaces same model", async () => {
   class Element {
-    textContent = ""; className = ""; value = ""; hidden = false; disabled = false; scrollTop = 0; scrollHeight = 42;
+    private text = ""; className = ""; value = ""; hidden = false; disabled = false; scrollTop = 0; scrollHeight = 42; clientHeight = 42;
+    get textContent(): string { return this.text + this.children.map(c => c.textContent).join(""); }
+    set textContent(value: string) { this.text = value; this.children = []; }
     children: Element[] = []; handlers = new Map<string, (event: any) => any>();
     append(...elements: Element[]) { this.children.push(...elements); }
-    replaceChildren(...elements: Element[]) { this.children = elements; }
+    replaceChildren(...elements: Element[]) { this.text = ""; this.children = elements; }
     setAttribute(_name: string, _value: string) {}
     addEventListener(name: string, handler: (event: any) => any) { this.handlers.set(name, handler); }
     focus() {}
   }
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error"].map(id => [`#${id}`, new Element()]));
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest"].map(id => [`#${id}`, new Element()]));
   const results: any[] = [];
   let fail = false, calls = 0;
   const data = { messages: [{ role: "narrator", text: "Opening" }, { role: "player", text: "Action" }, { role: "narrator", text: "Original", comparison_id: "turn-1", comparison_available: true, alternatives: [] }], status: "idle", configured: true, alternate_models: ALTERNATE_NARRATOR_MODELS };
@@ -152,7 +154,8 @@ test("browser controls only finalized eligible narrator messages, stacks safe al
   await choose(5); await choose(0); await choose(5);
   assert.equal(alternatives!.children.length, 2);
   assert.equal(alternatives!.children[0]!.children[0]!.textContent, "Alternative · GLM 5.3 Flash");
-  assert.equal(alternatives!.children[0]!.children[1]!.textContent, "<script>alternative 3</script>");
+  assert.equal(alternatives!.children[0]!.children[1]!.textContent, "Comparison only · Does not change the story");
+  assert.equal(alternatives!.children[0]!.children[2]!.textContent, "<script>alternative 3</script>");
   fail = true; await choose(5); assert.match(feedback!.textContent, /failed/); assert.ok(!feedback!.textContent.includes("PRIVATE")); assert.equal(alternatives!.children.length, 2);
   fail = false; await choose(5); assert.equal(calls, 5); assert.equal(original!.textContent, "Original"); assert.equal(articles.length, 3);
 });

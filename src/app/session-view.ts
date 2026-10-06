@@ -3,7 +3,8 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { characterView } from "../campaign/projections.js";
 import { relationshipHeadline } from "../campaign/relationship-summary.js";
-import { WORLD_DAY_MINUTES } from "../world/runtime-domain.js";
+import { temporalGrounding, type TimeOfDay } from "../turn/temporal-grounding.js";
+import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
 
 /**
  * Read-only UI view model. Derived on demand from the authoritative snapshot and the authored canon; it owns no state, is plain
@@ -15,6 +16,8 @@ export interface ProviderStatus { readonly mode: "live" | "stub"; readonly confi
 export interface ViewItem { readonly id: string; readonly name: string; readonly description?: string }
 export interface ViewEquipped extends ViewItem { readonly slot: string; readonly mode: "worn" | "held" }
 export interface ViewHouseholdMember {
+  /** Player-safe label for the thin playtest interface; never an unknown canonical self-name. */
+  readonly display_name: string;
   readonly id: string; readonly name: string; readonly role?: string; readonly presence: "present" | "away";
   /** Only while present in the player's scene. The engine does not give the player the whereabouts of absent people. */
   readonly location?: { readonly id: string; readonly name: string };
@@ -30,7 +33,7 @@ export interface SessionView {
   readonly scene: {
     readonly location: { readonly id: string; readonly name: string; readonly summary: string; readonly parent_name?: string };
     readonly exits: readonly { readonly target_id: string; readonly name: string; readonly minutes: number; readonly description: string; readonly kind?: string }[];
-    readonly time: { readonly world_minute: number; readonly day: number; readonly minute_of_day: number };
+    readonly time: { readonly world_minute: number; readonly day: number; readonly minute_of_day: number; readonly time_of_day: TimeOfDay };
     readonly present: readonly { readonly id: string; readonly name: string }[];
   };
   readonly player: { readonly id: "nicco"; readonly name: string; readonly mana: { readonly current: number; readonly max: number }; readonly gold: number | null;
@@ -52,6 +55,15 @@ export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<Camp
     ? [{ ...itemName(i.id), slot: i.position.slot, mode: i.position.mode }] : []).sort((a, b) => a.slot < b.slot ? -1 : a.slot > b.slot ? 1 : 0);
   const location = snapshot.runtime.scene.player_location, place = world.getEntity(location);
   const minute = snapshot.runtime.scene.world_time.world_minute;
+  const { day, minute_of_day, time_of_day } = temporalGrounding(minute);
+  const knownNames = new Set(snapshot.facts.filter(f => isIdentityNameFact(f) && snapshot.knowledge.some(k => k.character_id === "nicco" && k.fact_id === f.id && k.status === "knows")).flatMap(f => f.content.kind === "canonical" ? [f.content.entity_id] : []));
+  const safeName = (id: string) => {
+    const registered = snapshot.characters.find(c => c.id === id);
+    const canonicalId = registered?.origin.kind === "canonical" ? registered.origin.canonical_entity_id : world.getEntity(id)?.type === "character" ? id : undefined;
+    if (canonicalId && !knownNames.has(canonicalId)) return "Unfamiliar household member";
+    const label = name(id);
+    return label === id ? "Household member" : label;
+  };
   const parent = place?.parent ? world.getEntity(place.parent) : undefined;
   const exits = place?.type === "location" ? place.connections.filter(c => playerVisible(world.getEntity(c.target))).map(c => ({ target_id: c.target, name: world.getEntity(c.target)?.display_name ?? c.target, minutes: c.minutes, description: c.description, ...(c.kind ? { kind: c.kind } : {}) })) : [];
   const inScene = (id: string): boolean => { try { const c = characterView(snapshot, world, id).current; return c.current_location === location && c.status !== "dead" && c.status !== "inactive"; } catch { return false; } };
@@ -65,7 +77,7 @@ export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<Camp
       const here = inScene(m.character_id), legal = snapshot.legal_statuses.find(l => l.character_id === m.character_id);
       const edge = snapshot.relationships.find(e => e.from_character_id === m.character_id && e.to_character_id === "nicco" && e.dimensions);
       const state = characterView(snapshot, world, m.character_id).current;
-      return { id: m.character_id, name: name(m.character_id), ...(m.role ? { role: m.role } : {}), presence: here ? "present" : "away",
+      return { id: m.character_id, name: name(m.character_id), display_name: safeName(m.character_id), ...(m.role ? { role: m.role } : {}), presence: here ? "present" : "away",
         ...(here ? { location: { id: location, name: place?.display_name ?? location } } : {}), ...(edge ? { relationship_to_player: relationshipHeadline(edge) } : {}),
         conditions: [...(state.conditions ?? [])], ...(state.presentation ? { presentation: state.presentation } : {}),
         ...(legal ? { legal: { status: legal.status, ...(legal.holder_id ? { holder_name: name(legal.holder_id) } : {}) } } : {}), equipment: equipmentOf(m.character_id) };
@@ -76,7 +88,7 @@ export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<Camp
   return structuredClone({ session: { campaign_id: snapshot.campaign_id, revision: snapshot.revision, status: context.status, dataset_id: snapshot.dataset_id,
       save: { state: context.last_saved_revision === snapshot.revision ? "saved" as const : "unsaved" as const, last_saved_revision: context.last_saved_revision }, provider: context.provider },
     scene: { location: { id: location, name: place?.display_name ?? location, summary: place?.summary ?? "", ...(parent ? { parent_name: parent.display_name } : {}) }, exits,
-      time: { world_minute: minute, day: Math.floor(minute / WORLD_DAY_MINUTES), minute_of_day: minute % WORLD_DAY_MINUTES }, present },
+      time: { world_minute: minute, day, minute_of_day, time_of_day }, present },
     player: { id: "nicco" as const, name: name("nicco"), mana: { current: snapshot.runtime.mana.current, max: snapshot.runtime.mana.max }, gold, equipment: equipmentOf("nicco"), inventory: carried },
     household: households });
 }

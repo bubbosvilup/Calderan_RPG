@@ -39,12 +39,12 @@ npm run typecheck
 npm test                  # compiles and runs everything offline
 npm run test:playthrough  # the 25-turn offline playthrough
 npm run play              # developer CLI (needs OPENROUTER_API_KEY; Voyage is optional)
-npm run play:ui           # minimal real-play chat at http://127.0.0.1:3000 (Ctrl+C to stop)
+npm run play:ui           # immersive disposable playtest at http://127.0.0.1:3000 (Ctrl+C to stop)
 ```
 
 API keys are read from environment variables only. Never write them to a file.
 
-The UI starts a disposable Slave Pens campaign with an authored opening. Set `OPENROUTER_API_KEY` in the launching shell for live turns; optional `OPENROUTER_NARRATOR_MODEL`, `OPENROUTER_CONTROLLER_MODEL`, and `MANNERISM_EXTRACTOR_MODEL` use the existing production defaults. No key is needed to read the opening. Reload retains the current process's transcript; restarting discards the campaign. See [V0 playtest report](docs/evaluations/UI_V0_PLAYTEST_SHELL.md).
+The UI starts a disposable Slave Pens campaign with an authored opening. Set `OPENROUTER_API_KEY` in the launching shell for live turns; optional `OPENROUTER_NARRATOR_MODEL`, `OPENROUTER_CONTROLLER_MODEL`, and `MANNERISM_EXTRACTOR_MODEL` use the existing production defaults. No key is needed to read the opening. Reload retains the current process's transcript; restarting discards the campaign. UI V1 adds a household panel, P11 daypart/location header, safe RPG typography and live provisional narrator streaming; audit replaces each draft with the finalized story. See [UI V1 report](UI_V1_IMMERSIVE_PLAYTEST_INTERFACE.md) and the [V0 playtest report](docs/evaluations/UI_V0_PLAYTEST_SHELL.md).
 
 ## Read next
 

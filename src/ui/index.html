@@ -9,8 +9,20 @@
 </head>
 <body>
   <main>
-    <header><h1>CALDREVAN</h1><span>The Slave Pens · Playtest</span></header>
-    <section id="conversation" role="log" aria-label="Conversation" aria-live="polite"></section>
+    <header>
+      <div class="brand"><h1>CALDREVAN</h1><span>Playtest</span></div>
+      <div class="scene"><span id="location">Caldrevan</span><span id="daypart">—</span></div>
+    </header>
+    <div class="workspace">
+      <div class="story">
+        <section id="conversation" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></section>
+        <button id="latest" type="button" hidden>Jump to latest ↓</button>
+      </div>
+      <aside id="household" aria-label="Household">
+        <h2>Household</h2>
+        <div id="household-members"><p class="empty-household">No household members yet.</p></div>
+      </aside>
+    </div>
     <footer>
       <p id="status" role="status">Starting…</p>
       <p id="error" role="alert" hidden></p>
