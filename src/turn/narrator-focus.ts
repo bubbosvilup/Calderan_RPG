@@ -2,7 +2,7 @@ import type { TurnContext } from "./context-builder.js";
 import type { PlayerIntent } from "./player-intent.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
-import { INACTIVE_EXPIRY_TURNS } from "./scene-participants.js";
+import { INACTIVE_EXPIRY_TURNS, castingOptions } from "./scene-participants.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { playerAuthoredEvents } from "./player-authored-events.js";
 import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
@@ -17,7 +17,8 @@ export function projectNarratorFocus(context: TurnContext, input: string, recent
     return [c.id, c.profile.name, ...(c.profile.aliases ?? []), ...(identity.observable_label.includes(":") ? [identity.observable_label] : []), identity.ref].filter((s): s is string => !!s);
   };
   const targets = (text: string) => canonicalInteractionTargets(context, text);
-  const current = new Set(targets(input));
+  // Casting fix: the current input may point back to the person the latest scene narration described (same rule as planning).
+  const current = new Set(canonicalInteractionTargets(context, input, castingOptions(context, participants?.participants ?? [], recent)));
   if (/\b(?:ask\w*|inspect\w*|examin\w*|about|specialties|services)\b/i.test(input) && /\b(?:private sellers|slavers)\b/i.test(input)) {
     for (const c of canonical) if (/\b(?:seller|slaver)\b/i.test(context.primary.scene.present_characters.find(p => p.id === c.id)?.summary ?? "")) current.add(c.id);
   }

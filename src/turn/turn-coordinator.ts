@@ -97,7 +97,7 @@ export class TurnCoordinator {
       checkpoint();
       // IntentResolutionStage: player-authored effects, resolved and prevalidated; the projection is detached (never committed here).
       const intentInput: IntentStageInput = { world: this.world, snapshot, base_revision, player_input, prepare: proposal => campaign.prepare(proposal),
-        plan: (input, context) => this.participants(campaign).plan(input, context), finalized: this.recent(campaign).finalized() };
+        plan: (input, context) => this.participants(campaign).plan(input, context, this.recent(campaign).finalized()), finalized: this.recent(campaign).finalized() };
       const resolved = measure("input_intent", () => resolveTurnIntent(intentInput));
       if (resolved.intent.runtime.length) stage = "invalid_runtime_intent";
       const { projected, context, origin, arrival, movable, prompt_intent: promptIntent, scene } = measure("projection", () => projectTurnIntent(intentInput, resolved));

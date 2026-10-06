@@ -1,6 +1,7 @@
 import type { TurnContext } from "./context-builder.js";
 import { escapeRegExp } from "./language/text.js";
-import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
+import { canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
+import type { RecentExchange } from "./recent-conversation.js";
 
 /**
  * Ephemeral scene participants (Phase 1P): session-local people who exist in the current scene but are not CampaignState
@@ -99,6 +100,18 @@ export function participantForNoun(noun: string, participants: readonly Ephemera
   return matches.length === 1 ? matches[0] : undefined;
 }
 
+/**
+ * Casting inputs for canonical reference resolution: the latest finalized narration of this scene (what a definite reference points
+ * back to) and the head nouns already owned by an established temporary participant or promoted person (never re-cast as canonical).
+ */
+export function castingOptions(context: TurnContext, participants: readonly EphemeralSceneParticipant[], recent: readonly RecentExchange[]): CastingOptions {
+  const location = context.primary.scene.player_location?.id;
+  const latest = recent.filter(e => e.status === "finalized").at(-1);
+  const owned = new Set([...participants.flatMap(p => [p.display_name.toLowerCase(), p.role, ...(p.descriptor ? [p.descriptor.split(/\s+/).at(-1)!] : [])]),
+    ...context.characters.flatMap(c => c.established_origin ? [c.established_origin.descriptor, c.established_origin.label.replace(/^the\s+/, "")].filter((x): x is string => !!x).map(x => x.toLowerCase().split(/\s+/).at(-1)!) : [])]);
+  return { ...(latest && (!latest.location_id || latest.location_id === location) ? { narration: latest.narration } : {}), owned };
+}
+
 /** Session-local registry, one per campaign session (held by the coordinator beside RecentConversation). */
 export class SceneParticipants {
   #list: EphemeralSceneParticipant[] = [];
@@ -109,13 +122,14 @@ export class SceneParticipants {
   active(): readonly EphemeralSceneParticipant[] { return Object.freeze([...this.#list]); }
 
   /** Deterministic pre-narration plan. Nothing changes until commit(); a failed turn simply discards the plan. */
-  plan(input: string, context: TurnContext): SceneParticipantPlan {
+  plan(input: string, context: TurnContext, recent: readonly RecentExchange[] = []): SceneParticipantPlan {
     const turn = this.#turn + 1, location = context.primary.scene.player_location?.id ?? "unestablished";
     const locality = [location, ...context.primary.scene.location_ancestry.map(a => a.id)];
     const carried = this.#list.filter(p => p.location_id === location);
     const expired = this.#list.filter(p => p.location_id !== location).map(p => p.id);
     const text = input.toLowerCase();
-    const canonicalTargets = canonicalInteractionTargets(context, input);
+    const casting = castingOptions(context, carried, recent);
+    const canonicalTargets = canonicalInteractionTargets(context, input, casting);
     const addressed = new Set<string>(canonicalTargets);
     if (!canonicalTargets.size) for (const p of carried) if (nounsOf(p).some(n => DEFINITE(`(?:${n})`).test(text))) addressed.add(p.id);
     let created: EphemeralSceneParticipant | undefined;
@@ -129,8 +143,10 @@ export class SceneParticipants {
       const article = m[1]!.toLowerCase(), adjectives = m[2] ?? "", noun = m[3]!.toLowerCase(), spec = specFor(noun);
       // The same observable actor already exists in canon. Never create a second generic identity.
       // "another"/"some"/"one" explicitly establish a distinct person, regardless of overlapping appearance.
+      // Casting fix: judge the whole reference clause ("walks up to the woman with the fan"), not just "walks up to the woman".
+      const clause = input.slice(m.index).split(/[*.!?\n]/)[0]!;
       if (!["another", "some", "one"].includes(article) && canonicalTargets.size === 1
-        && canonicalInteractionTargets(context, m[0]).size === 1) continue;
+        && canonicalInteractionTargets(context, clause, casting).size === 1) continue;
       if (["the", "that", "this", "same"].includes(article) && covered.has(noun)) continue;
       if (["the", "that", "this", "same"].includes(article) && carried.some(p => addressed.has(p.id) && nounsOf(p).some(n => new RegExp(`^(?:${n})$`, "i").test(noun)))) continue;
       const id = `scene_npc_${this.#next}`;

@@ -1,0 +1,1221 @@
+[
+  {
+    "id": "A1",
+    "actor": "mistress_elara",
+    "turns": [
+      {
+        "input": "*looks around the market*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*approaches the woman with the fan* Good day.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": "scene_npc_1",
+          "focus": "scene_npc_1",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": [
+            "P1 Woman"
+          ]
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": "P1 - Woman (current conversation partner). Temporary; ordinary local of Calderan West District.",
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "I am looking for Mistress Elara.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": [
+            "P1 Woman"
+          ]
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": "P1 - Woman. Temporary; ordinary local of Calderan West District.",
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "A2",
+    "actor": "mistress_elara",
+    "turns": [
+      {
+        "input": "*looks around the market*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*walks up to the woman with the fan* Good day.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": "scene_npc_1",
+          "focus": "scene_npc_1",
+          "addressed": [],
+          "participants": [
+            "P1 Woman"
+          ]
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": "P1 - Woman (current conversation partner). Temporary; ordinary local of Calderan West District.",
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "I am looking for Mistress Elara.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": [
+            "P1 Woman"
+          ]
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": "P1 - Woman. Temporary; ordinary local of Calderan West District.",
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "A3",
+    "actor": "mistress_elara",
+    "turns": [
+      {
+        "input": "*looks around the market*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*walks over to the platinum-haired woman* Who are you?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "I am looking for Mistress Elara.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "A4",
+    "actor": "mistress_elara",
+    "turns": [
+      {
+        "input": "*looks around the market*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*approaches the platinum-blonde woman with the decorative fan* Who are you?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": true,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "I am looking for Mistress Elara.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "A5",
+    "actor": "mistress_elara",
+    "turns": [
+      {
+        "input": "*looks around the market*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*goes up to the woman with the decorative fan* Who are you?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": "scene_npc_1",
+          "focus": "scene_npc_1",
+          "addressed": [],
+          "participants": [
+            "P1 Woman"
+          ]
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": "P1 - Woman (current conversation partner). Temporary; ordinary local of Calderan West District.",
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "I am looking for Mistress Elara.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": [
+            "P1 Woman"
+          ]
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": "P1 - Woman. Temporary; ordinary local of Calderan West District.",
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "A6",
+    "actor": "mistress_elara",
+    "turns": [
+      {
+        "input": "*looks around the market*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "Excuse me. Who are you?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "I am looking for Mistress Elara.",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar woman: Long straight platinum-blonde hair, green-hazel eyes, elegant expensive clothing and a decorative fan",
+        "canonical_targets": [
+          "mistress_elara"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "mistress_elara",
+          "addressed": [
+            "mistress_elara"
+          ],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC31"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24"
+        ],
+        "actor_ref": "NPC31",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "B1",
+    "actor": "korvin",
+    "turns": [
+      {
+        "input": "*heads into the back rows of the private sellers*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*approaches the short seller with the hooked nose* What have you got?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [
+          "korvin"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "korvin",
+          "addressed": [
+            "korvin"
+          ],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC24"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*asks the clerk whose stock this is*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC24"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "B2",
+    "actor": "korvin",
+    "turns": [
+      {
+        "input": "*heads into the back rows of the private sellers*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*walks up to the seller* What have you got?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*asks the clerk whose stock this is*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "B3",
+    "actor": "korvin",
+    "turns": [
+      {
+        "input": "*heads into the back rows of the private sellers*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*approaches the seller* What have you got?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*asks the clerk whose stock this is*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "B4",
+    "actor": "korvin",
+    "turns": [
+      {
+        "input": "*heads into the back rows of the private sellers*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*walks over to the man with the hooked nose* What are you selling?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*asks the clerk whose stock this is*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  },
+  {
+    "id": "B5",
+    "actor": "korvin",
+    "turns": [
+      {
+        "input": "*heads into the back rows of the private sellers*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC24",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*approaches the short, compact slaver with the hooked nose* What are you selling?",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [
+          "korvin"
+        ],
+        "plan": {
+          "created": null,
+          "focus": "korvin",
+          "addressed": [
+            "korvin"
+          ],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC24"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      },
+      {
+        "input": "*asks the clerk whose stock this is*",
+        "eligible_present": [
+          "bartolomhew",
+          "korvin",
+          "mistress_elara"
+        ],
+        "actor_eligible": true,
+        "actor_label": "the unfamiliar man: Short and compact, with a manual-labor appearance, large damaged hands, a hooked nose and small, mobile, perceptive eyes",
+        "canonical_targets": [],
+        "plan": {
+          "created": null,
+          "focus": null,
+          "addressed": [],
+          "participants": []
+        },
+        "narrator_foreground": [
+          "NPC24"
+        ],
+        "narrator_background_refs": [
+          "NPC3",
+          "NPC31"
+        ],
+        "actor_ref": "NPC24",
+        "scene_participants_block": null,
+        "self_disclosure_offered": false,
+        "identity": {
+          "promoted": [],
+          "named": [],
+          "skipped": []
+        },
+        "narrated_persons_after": [],
+        "created_characters_after": []
+      }
+    ]
+  }
+]
