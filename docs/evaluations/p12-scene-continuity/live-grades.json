@@ -1,0 +1,18 @@
+{
+  "scope": "Single-sample narrator-only diagnostic outputs, not full audited gameplay deliveries or a model ranking",
+  "model": "z-ai/glm-5.2",
+  "route": "z-ai/fp8",
+  "external_requests_completed": 7,
+  "local_capture_failures_before_http": 6,
+  "reported_cost_usd": 0.01784892,
+  "grades": [
+    {"id":"B_door","condition":"normal","grade":"UNRESOLVED","reason":"Door edges/hardware are described, but its open/closed state is not explicitly established. Not counted as a continuity pass."},
+    {"id":"B_door","condition":"diagnostic","grade":"PASS","reason":"The heavy front door stands shut."},
+    {"id":"D_restraint","condition":"normal","grade":"UNRESOLVED","reason":"Hands at her sides and no cord are described; this fails to establish the requested tied state, but does not explicitly say restraints were removed. Not counted as an explicit unbinding failure."},
+    {"id":"D_restraint","condition":"diagnostic","grade":"PASS","reason":"Wrists explicitly bound in front with cord and visible knots."},
+    {"id":"E_position","condition":"normal","grade":"OTHER_POSITION_CONTRADICTION","reason":"Standing near the table conflicts with the controlled prior seated-by-hearth fact without a causal move. The preregistered specific FAIL example was reset to the entrance, so this is reported separately rather than relabeled as that exact failure."},
+    {"id":"E_position","condition":"diagnostic","grade":"PASS","reason":"Maren is seated beside the stone hearth."},
+    {"id":"I_conflict","condition":"full_prose_conflict","grade":"PROSE_WINS","reason":"Output explicitly says Korvin is already gone while current structured context lists him present; violates the intended state-precedence rule. No causal return was invented."}
+  ],
+  "limitations": ["One output per condition; no reliability percentages", "No alternate models tested", "No live controller or embeddings", "Unrelated improvisation/agency errors are not scored as continuity failures", "Original historical delivery request/save unavailable"]
+}

@@ -19,8 +19,9 @@ IDs are never renumbered.
 | **P3.5** | **CLOSED** — canonical name knowledge commit. [Report](P3_5_CANONICAL_NAME_KNOWLEDGE_COMMIT.md). |
 | **P10** | **OBSERVATION ONLY / NOT ACTIVE FIX ISSUE** — historical perspective/pacing evidence preserved; no new fix work. [Evidence](P3_3_P10_P11_REGENERATION_FIX.md). |
 | **P11** | **IMPLEMENTED / LIVE VERIFICATION PENDING** — fixed derived dayparts and bounded explicit-duration waits; no wait-until or prose reconciler. [Foundation](P11_KISS_TIME_OF_DAY_FOUNDATION.md), [historical audit](P11_TEMPORAL_SYSTEM_AUDIT.md). |
+| **P12** | **OPEN / AUDIT COMPLETE / DESIGN DECISION PENDING** — immediate scene continuity audit: history projection omission, canonical departure divergence and a diagnostic model-priority failure; no production fix. [Audit](P12_IMMEDIATE_SCENE_CONTINUITY_AUDIT.md). |
 
-P11 is the only active item in this P-series scope. The unrelated D-series debts below remain unchanged. This current status supersedes historical P-series status wording in earlier evidence reports without rewriting that evidence.
+P12 is the active continuity audit; P11 still awaits live verification. The unrelated D-series debts below remain unchanged. This current status supersedes historical P-series status wording in earlier evidence reports without rewriting that evidence.
 
 ---
 

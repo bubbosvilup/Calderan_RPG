@@ -1,0 +1,11 @@
+{
+  "method": "Offline existing narrator adapter with fake API key and counting fake fetch; no real network",
+  "request": "B_door normal, as serialized in frozen-requests.json",
+  "serialized_signal_type": "object",
+  "failure_code": "network_error",
+  "fetch_calls": 0,
+  "cause": "AbortSignal loses its methods when captured/JSON serialized; the existing client tries signal.addEventListener before HTTP",
+  "correction": "Omit only the nonserializable signal control field when replaying; keep every system/message byte unchanged",
+  "production_changed": false,
+  "applies_to": "Six initial local normal/diagnostic attempts; conflict request had no serialized signal and completed"
+}
