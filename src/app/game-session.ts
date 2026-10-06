@@ -17,6 +17,7 @@ import type { TurnCoordinator } from "../turn/turn-coordinator.js";
 import type { WorldStore } from "../world/world-store.js";
 import { appError, toAppError, type AppError } from "./app-errors.js";
 import { deriveSessionView, type ProviderStatus, type SessionStatus, type SessionView } from "./session-view.js";
+import { derivePlayUiView } from "./play-ui-view.js";
 import { buildTrace, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**
@@ -102,6 +103,8 @@ export class GameSession {
     return { ...view, ...(request ? { context_budget: new ContextBudgetManager(this.#deps.context_policy).measure(request) } : {}),
       context_compaction: { status: this.#status === "compacting_context" ? "compacting" : "idle", ...(this.#compactionReason ? { trigger: this.#compactionReason } : {}), ...(this.#compactionResult ? { last_result: this.#compactionResult } : {}) } };
   }
+  /** Read-only, player-facing character whitelist for the play screen. */
+  getPlayUiView() { return derivePlayUiView(this.#deps.world, this.#session.campaign.exportSnapshot(), this.getView()); }
   #setStatus(status: SessionStatus, emit?: (e: SessionEvent) => void): void { if (this.#status !== status) { this.#status = status; emit?.({ type: "status_changed", status }); } }
   #reject(error: AppError): TurnOutcome { this.#lastError = error; return { ok: false, error, view: this.getView() }; }
   /** Explicit administrative correction, never a model command or simulated journey. */

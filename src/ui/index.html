@@ -1,38 +1,38 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Caldrevan</title>
-  <link rel="stylesheet" href="/style.css">
-  <script src="/client.js" defer></script>
-</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Caldrevan</title><link rel="stylesheet" href="/style.css"><script src="/client.js" defer></script></head>
 <body>
-  <main>
-    <header>
-      <div class="brand"><h1>CALDREVAN</h1><span>Playtest</span></div>
-      <div class="scene"><span id="location">Caldrevan</span><span id="daypart">—</span></div>
-    </header>
-    <div class="workspace">
-      <div class="story">
-        <section id="conversation" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></section>
-        <button id="latest" type="button" hidden>Jump to latest ↓</button>
-      </div>
-      <aside id="household" aria-label="Household">
-        <h2>Household</h2>
-        <div id="household-members"><p class="empty-household">No household members yet.</p></div>
-      </aside>
-    </div>
-    <footer>
-      <p id="status" role="status">Starting…</p>
-      <p id="error" role="alert" hidden></p>
-      <form id="composer">
-        <label class="sr-only" for="input">What Nicco does or says</label>
-        <textarea id="input" rows="2" maxlength="4000" placeholder="Type what Nicco does or says…" disabled></textarea>
-        <button id="send" type="submit" disabled>Send</button>
-      </form>
-      <small>Enter to send · Shift+Enter for a new line</small>
-    </footer>
-  </main>
-</body>
-</html>
+<main>
+<header class="top-bar">
+ <h1><span aria-hidden="true">&#9674;</span> Caldrevan</h1>
+ <div class="clock"><span id="daypart">&mdash;</span><span id="day"></span></div>
+ <nav aria-label="Main navigation"><button disabled>Nicco</button><button disabled>Household</button><button disabled>World</button><button disabled>Debug</button><button disabled aria-label="Save" title="Save - not available yet">&#128190;</button></nav>
+</header>
+<div class="workspace">
+ <div class="story">
+  <section id="conversation" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></section>
+  <button id="latest" type="button" hidden>Jump to latest &darr;</button>
+  <footer class="composer-area">
+   <p id="status" role="status">Starting&hellip;</p><p id="error" role="alert" hidden></p>
+   <form id="composer"><span class="command-mark" aria-hidden="true">/</span><label class="sr-only" for="input">What Nicco does or says</label><textarea id="input" rows="2" maxlength="4000" placeholder="What does Nicco say or do?" disabled></textarea><button id="send" type="submit" disabled>Send</button></form>
+   <small>Enter to send &middot; Shift+Enter for a new line &middot; / for commands</small>
+  </footer>
+ </div>
+ <aside class="scene-sidebar" aria-label="Scene context">
+  <section><div class="section-heading"><h2>In the scene</h2><span id="present-count">Not loaded</span></div><div id="scene-participants"></div></section>
+  <section id="household" class="household-card" aria-label="Household"><div class="section-heading"><h2>Household</h2><span id="household-count"></span></div><div id="household-members"><p class="empty-household">No household members yet.</p></div></section>
+  <section class="location-card" aria-label="Current location and gold"><div class="place"><h2>You are in</h2><strong id="location">Caldrevan</strong><code id="location-id"></code></div><div class="purse"><h2>Gold</h2><strong id="gold">Not tracked</strong></div></section>
+ </aside>
+</div>
+</main>
+<div id="character-overlay" hidden>
+ <button id="character-backdrop" class="backdrop" aria-label="Close character card" tabindex="-1"></button>
+ <section id="character-drawer" role="dialog" aria-modal="true" aria-labelledby="character-name" tabindex="-1">
+  <div class="drawer-heading"><span>Character</span><button id="character-close" aria-label="Close character card">&times;</button></div>
+  <div class="character-overview"><div><div class="portrait"><strong id="portrait-initial"></strong><span>No portrait yet</span></div><div class="portrait-actions"><button disabled>Upload</button><button disabled>Generate</button></div></div><div><h2 id="character-name"></h2><div id="character-badges"></div><dl><dt>Known role</dt><dd id="character-role"></dd><dt>With Nicco</dt><dd id="character-relationship"></dd><dt>State</dt><dd id="character-state"></dd><dt>Where</dt><dd id="character-where"></dd></dl></div></div>
+  <div class="character-tabs" role="tablist" aria-label="Character details"><button role="tab" aria-selected="true" aria-controls="appearance-panel" id="appearance-tab">Appearance</button><button role="tab" aria-selected="false" disabled>Personality</button><button role="tab" aria-selected="false" disabled>Relations</button><button role="tab" aria-selected="false" disabled>Story &amp; knowledge</button></div>
+  <section id="appearance-panel" role="tabpanel" aria-labelledby="appearance-tab"><h3>Permanent appearance</h3><p id="character-appearance"></p><h3>Affiliations</h3><p id="character-affiliations"></p></section>
+  <footer class="drawer-footer"><small>Showing only what Nicco knows</small><button disabled>Edit NPC+</button></footer>
+ </section>
+</div>
+</body></html>

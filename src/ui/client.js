@@ -15,6 +15,34 @@ let poll;
 const comparisonViews = new Map();
 let pending;
 let currentRevision;
+const ui = id => document.querySelector(`#${id}`);
+let selectedCharacter, returnFocus;
+function closeCharacter() {
+  if (ui("character-overlay")) ui("character-overlay").hidden = true;
+  selectedCharacter = undefined;
+  returnFocus?.focus();
+}
+function openCharacter(person, trigger) {
+  if (!person.card || !ui("character-overlay")) return;
+  selectedCharacter = person.ref;
+  if (trigger) returnFocus = trigger;
+  const card = person.card;
+  for (const field of ["name", "role", "relationship", "state", "where", "appearance"]) ui(`character-${field}`).textContent = card[field];
+  ui("portrait-initial").textContent = person.name_known === false || person.category === "Name unknown" ? "?" : card.name.slice(0, 1);
+  ui("character-affiliations").textContent = card.affiliations.length ? card.affiliations.join(" · ") : "None known.";
+  ui("character-badges").replaceChildren();
+  for (const label of [card.household ? "Household" : "", card.npc_plus ? "NPC+" : ""].filter(Boolean)) {
+    const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = label; ui("character-badges").append(badge);
+  }
+  ui("character-overlay").hidden = false;
+  if (trigger) ui("character-close").focus();
+}
+ui("character-close")?.addEventListener("click", closeCharacter);
+ui("character-backdrop")?.addEventListener("click", closeCharacter);
+ui("character-drawer")?.addEventListener("keydown", event => {
+  if (event.key === "Escape") { event.preventDefault(); closeCharacter(); }
+  if (event.key === "Tab") { event.preventDefault(); (event.target === ui("character-close") ? ui("appearance-tab") : ui("character-close")).focus(); }
+});
 
 // Single unescaped stars delimit narration; double stars remain literal.
 // An unfinished narration span stays italic while the next token is pending.
@@ -66,14 +94,41 @@ function preview(event) {
 function renderScene(data) {
   locationLabel.textContent = data.scene?.location ?? "Caldrevan";
   daypart.textContent = data.scene?.time_of_day ?? "—";
+  if (ui("day")) ui("day").textContent = Number.isInteger(data.play?.day) ? ` · Day ${data.play.day}` : "";
+  if (ui("location-id")) ui("location-id").textContent = data.scene?.location_id ?? "";
+  if (ui("gold")) ui("gold").textContent = typeof data.play?.gold === "number" ? String(data.play.gold) : "Not tracked";
+  const people = data.play?.participants ?? [];
+  if (ui("present-count")) ui("present-count").textContent = `${people.length} present`;
+  if (ui("scene-participants")) {
+    ui("scene-participants").replaceChildren();
+    for (const person of people) {
+      const entry = document.createElement(person.card ? "button" : "div"); entry.className = "scene-participant";
+      const unknown = person.name_known === false || person.category === "Name unknown";
+      const avatar = document.createElement("span"); avatar.className = `avatar ${person.ref === "player" ? "player-avatar" : unknown ? "unknown-avatar" : ""}`;
+      avatar.textContent = unknown ? "?" : person.name.slice(0, 1);
+      const detail = document.createElement("span"), name = document.createElement("strong"), category = document.createElement("small");
+      name.textContent = person.name; category.textContent = person.category;
+      detail.append(name, category); entry.append(avatar, detail);
+      if (person.card) { entry.setAttribute("type", "button"); entry.setAttribute("aria-haspopup", "dialog"); entry.addEventListener("click", () => openCharacter(person, entry)); }
+      if (person.ref === selectedCharacter) returnFocus = entry;
+      ui("scene-participants").append(entry);
+    }
+  }
+  if (selectedCharacter) {
+    const person = people.find(p => p.ref === selectedCharacter);
+    if (person) openCharacter(person); else closeCharacter();
+  }
   household.replaceChildren();
   const members = (data.household ?? []).flatMap(group => group.members);
+  if (ui("household-count")) ui("household-count").textContent = `${members.filter(m => m.presence === "present").length} here · ${members.filter(m => m.presence !== "present").length} elsewhere`;
   if (!members.length) {
     const empty = document.createElement("p"); empty.className = "empty-household";
     empty.textContent = "No household members yet."; household.append(empty);
   }
   for (const member of members) {
     const card = document.createElement("div"); card.className = "household-member";
+    card.setAttribute("data-initial", member.name === "Unfamiliar household member" ? "?" : member.name.slice(0, 1));
+    card.setAttribute("title", `${member.name} · ${member.presence === "present" ? "Here" : "Elsewhere"}`);
     const name = document.createElement("strong"); name.textContent = member.name;
     const detail = document.createElement("span");
     detail.textContent = member.presence === "present" ? `Present${member.location ? ` · ${member.location}` : ""}` : "Away";

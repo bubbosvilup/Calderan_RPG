@@ -21,6 +21,7 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
     return { messages: messages.map(message => message.comparison_id ? { ...message, comparison_available: comparisons?.has(message.comparison_id) ?? false, alternatives: comparisons?.results(message.comparison_id) ?? [] } : message), ...(comparisons ? { alternate_models: ALTERNATE_NARRATOR_MODELS } : {}), status: session.status, configured: view.session.provider.configured,
       revision: view.session.revision,
       scene: { location: view.scene.location.name, location_id: view.scene.location.id, time_of_day: view.scene.time.time_of_day },
+      play: session.getPlayUiView(),
       household: view.household.map(h => ({ members: h.members.map(m => ({ name: m.display_name, presence: m.presence, ...(m.location ? { location: m.location.name } : {}) })) })) };
   };
   return createServer(async (req, res) => {

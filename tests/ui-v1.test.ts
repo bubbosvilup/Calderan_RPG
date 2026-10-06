@@ -15,6 +15,7 @@ import { createPlaytestServer } from "../src/ui/server.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
 import { mockController, mockNarrator, metadata, collect } from "./turn-fixtures.js";
 import { deriveSessionView } from "../src/app/session-view.js";
+import { derivePlayUiView } from "../src/app/play-ui-view.js";
 import { temporalGrounding } from "../src/turn/temporal-grounding.js";
 import { ProviderError } from "../src/llm/errors.js";
 import { retryPolicy } from "../src/llm/retry.js";
@@ -39,7 +40,7 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest"].map(id => [`#${id}`, new Element()]));
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations"].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
   return { node: (id: string) => nodes.get(`#${id}`)!, renderRpg: context.renderRpg as (target: Element, source: string) => void };
@@ -303,4 +304,98 @@ for (const ok of [true, false]) test(`location composer waits for final view wit
   assert.equal(c.node("conversation").children.length, initial);
   assert.equal(c.node("location").textContent, ok ? "Heartstone LR" : "Observation room");
   assert.match(ok ? c.node("status").textContent : c.node("error").textContent, ok ? /Manual location correction/ : /Unknown canonical location/);
+});
+
+
+test("play shell has only requested navigation and one authoritative responsive status/composer", async () => {
+  const html = await readFile("src/ui/index.html", "utf8");
+  const nav = html.match(/<nav[^>]*>([\s\S]*?)<\/nav>/)![1]!;
+  assert.deepEqual([...nav.matchAll(/<button[^>]*>([^<]*)<\/button>/g)].map(m => m[1]), ["Nicco", "Household", "World", "Debug", "&#128190;"]);
+  assert.match(nav, /aria-label="Save"/);
+  for (const id of ["location", "location-id", "gold", "composer", "input", "scene-participants"]) assert.equal(html.split(`id="${id}"`).length - 1, 1);
+  assert.match(await readFile("src/ui/style.css", "utf8"), /@media\(max-width:720px\)/);
+});
+
+test("committed public play projection hides identities and private character fields without mutating state", async t => {
+  const f = fixture(mockNarrator("*Quiet.*"), false), url = await host(t, f);
+  const before = JSON.stringify(f.campaign.exportSnapshot());
+  const data = await (await fetch(`${url}/api/session`)).json();
+  assert.equal(JSON.stringify(f.campaign.exportSnapshot()), before);
+  assert.equal(data.play.day, 0);
+  assert.equal(data.play.gold, f.session.getView().player.gold);
+  assert.equal(data.scene.location_id, "audit_room");
+  assert.equal(data.play.participants[0].category, "You");
+  assert.ok(data.play.participants.some((p: any) => p.name === "Unfamiliar person"));
+  assert.doesNotMatch(JSON.stringify(data.play), /korvin|Korvin|private_notes|conditions|dimensions|canonical_entity_id/);
+  const ref = data.play.participants[1].ref;
+  f.campaign.apply({ expected_revision: f.campaign.revision, commands: [...learnCanonicalName(world, f.campaign.exportSnapshot(), "korvin")] });
+  const named = f.session.getPlayUiView().participants.find(p => p.name === "Korvin")!;
+  assert.equal(named.ref, ref);
+  assert.equal(named.card!.relationship, "Not recorded");
+  assert.deepEqual(named.card!.affiliations, []);
+});
+
+test("scene entries open a safe character drawer by reference and close through button, backdrop and Escape", async () => {
+  const person = { ref: "opaque", name: "Known person", category: "Household \u00b7 NPC+", card: { name: "Known person", household: true, npc_plus: true, role: "Cook", relationship: "Not recorded", state: "Not recorded", where: "Here", appearance: "An established appearance.", affiliations: [] } };
+  const data = { ...opening, scene: { ...opening.scene, location_id: "real_location" }, play: { day: 6, gold: 37, participants: [person] } };
+  const c = await client(async () => ({ ok: true, json: async () => data }));
+  assert.equal(c.node("location-id").textContent, "real_location"); assert.equal(c.node("gold").textContent, "37"); assert.equal(c.node("day").textContent, " \u00b7 Day 6");
+  assert.equal(c.node("present-count").textContent, "1 present");
+  const entry = c.node("scene-participants").children[0]!;
+  for (const close of ["character-close", "character-backdrop", "escape"]) {
+    entry.handlers.get("click")!({});
+    assert.equal(c.node("character-overlay").hidden, false);
+    assert.equal(c.node("character-name").textContent, "Known person");
+    assert.equal(c.node("character-appearance").textContent, person.card.appearance);
+    assert.equal(c.node("character-affiliations").textContent, "None known.");
+    if (close === "escape") c.node("character-drawer").handlers.get("keydown")!({ key: "Escape", preventDefault() {} });
+    else c.node(close).handlers.get("click")!({});
+    assert.equal(c.node("character-overlay").hidden, true); assert.equal(entry.focused, true);
+  }
+});
+
+test("streaming draft cannot change location ID, gold, day or participants; final committed result can", async () => {
+  let stream!: ReadableStreamDefaultController<Uint8Array>;
+  const body = new ReadableStream<Uint8Array>({ start(c) { stream = c; } });
+  const initial = { ...opening, scene: { ...opening.scene, location_id: "initial" }, play: { day: 0, gold: 11, participants: [] } };
+  const c = await client(async (_url, options) => options ? { ok: true, headers: { get: () => "application/x-ndjson" }, body } : { ok: true, json: async () => initial });
+  c.node("input").value = "Walk."; const submitted = c.node("composer").requestSubmit(); await tick();
+  const emit = (e: object) => stream.enqueue(new TextEncoder().encode(JSON.stringify(e) + "\n"));
+  emit({ type: "draft", action: "delta", phase: "draft", text: "Arrival", scene: { location_id: "fake" }, play: { gold: 999 } }); await tick();
+  assert.equal(c.node("location-id").textContent, "initial"); assert.equal(c.node("gold").textContent, "11");
+  emit({ ...initial, type: "result", ok: true, scene: { location: "Destination", location_id: "destination", time_of_day: "Evening" }, play: { day: 1, gold: 9, participants: [] }, messages: [...initial.messages, { role: "player", text: "Walk." }, { role: "narrator", text: "Arrival" }] });
+  stream.close(); await submitted;
+  assert.equal(c.node("location-id").textContent, "destination"); assert.equal(c.node("gold").textContent, "9"); assert.equal(c.node("day").textContent, " \u00b7 Day 1");
+});
+
+test("character whitelist uses public appearance, actual NPC+ membership and hides secret conditions/affiliations", () => {
+  const docs = structuredClone(documents);
+  const entity = docs.find((d: any) => d.document.entity.id === "korvin").document.entity;
+  entity.base_location = entity.location; delete entity.location;
+  Object.assign(entity, { work_location: null, home_location: null, species: null, sex: null, age_band: null, purpose: null, morality: null });
+  entity.appearance = "Grey hair and a weathered face.";
+  entity.occupation = "Hall attendant";
+  entity.private_notes = "PRIVATE_SENTINEL";
+  const secret = structuredClone(docs[0]);
+  secret.source = "ui/secret.yaml";
+  Object.assign(secret.document.entity, { id: "secret_affiliation", name: "SECRET_AFFILIATION", display_name: "SECRET_AFFILIATION", type: "concept", related_entities: [] });
+  delete secret.document.entity.features; delete secret.document.entity.connections;
+  docs.push(secret);
+  entity.affiliations = ["secret_affiliation"];
+  const w = new WorldStore(docs);
+  const c = new CampaignState(w, "ui_privacy", { player_location: "audit_room", world_time: { world_minute: 600 } });
+  c.apply({ expected_revision: c.revision, commands: [
+    ...learnCanonicalName(w, c.exportSnapshot(), "korvin"),
+    { kind: "register_character", character: { id: "korvin", origin: { kind: "canonical", canonical_entity_id: "korvin" }, profile: {}, current: { conditions: ["HIDDEN_CONDITION"], presentation: "HIDDEN_PRESENTATION" } } },
+    { kind: "create_household", id: "campaign_household_card" },
+    { kind: "set_membership", household_id: "campaign_household_card", membership: { character_id: "nicco", status: "member", role: "owner" } },
+    { kind: "join_household", household_id: "campaign_household_card", character_id: "korvin" },
+    { kind: "set_funds", character_id: "nicco", gold: 23 },
+  ] });
+  const snapshot = c.exportSnapshot();
+  const view = deriveSessionView(w, snapshot, { status: "idle", last_saved_revision: null, provider: { mode: "stub", configured: true } });
+  const play = derivePlayUiView(w, snapshot, view), person = play.participants.find(p => p.name === "Korvin")!;
+  assert.equal(play.gold, 23); assert.equal(person.npc_plus, true); assert.equal(person.household, true);
+  assert.equal(person.card!.appearance, entity.appearance); assert.equal(person.card!.role, entity.occupation);
+  assert.doesNotMatch(JSON.stringify(play), /PRIVATE_SENTINEL|SECRET_AFFILIATION|HIDDEN_CONDITION|HIDDEN_PRESENTATION/);
 });
