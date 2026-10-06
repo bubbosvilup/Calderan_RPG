@@ -3,6 +3,7 @@ import { temporalGrounding, TEMPORAL_GROUNDING_RULE } from "./temporal-grounding
 import { canonicalNameDisclosure } from "./canonical-name-disclosure.js";
 import { projectNarratorFocus } from "./narrator-focus.js";
 import { rpgDialogue } from "./rpg-dialogue.js";
+import { recentSceneNarration, RECENT_SCENE_NARRATION_RULE } from "./recent-scene-narration.js";
 import { registerNarratorPack } from "./narrator-pack.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
@@ -50,10 +51,10 @@ export function hardCharacterConstraints(context: TurnContext): string[] {
 /**
  * How session-local recent conversation reaches the narrator (Phase 1N). It is continuity, never state authority.
  * Production default (Phase 1N): dialogue_focused. full_prose: Phase 1M.1 layout. state_last: earlier conversation first (evaluated, not adopted).
- * dialogue_focused: player turns plus attributed NPC dialogue; narrator description omitted. See NARRATIVE_AUTHORITY.md.
+ * dialogue_focused: player turns plus attributed NPC dialogue; a separate bounded current-visit block carries recent narration. See NARRATIVE_AUTHORITY.md.
  */
 export type RecentContextMode = "full_prose" | "state_last" | "dialogue_focused";
-export interface NarratorPromptOptions { readonly recent_context?: RecentContextMode; /** Between-turn relevance only; never replayed as a player action. */ readonly knowledge_relevance_input?: string }
+export interface NarratorPromptOptions { readonly recent_context?: RecentContextMode; /** Finalized source with location metadata, used only for scene-local projection. */ readonly recent_scene_source?: readonly RecentExchange[]; /** Between-turn relevance only; never replayed as a player action. */ readonly knowledge_relevance_input?: string }
 const QUOTE = /"([^"\n]{1,400})"|“([^”\n]{1,400})”/g;
 const SPEECH = "says|said|asks|asked|replies|replied|adds|added|murmurs|murmured|whispers|whispered|mutters|muttered|answers|answered|continues|continued|repeats|repeated|calls|called|shouts|shouted|snaps|snapped|tells|told|insists|insisted|explains|explained";
 /** Unnamed narrator-created speakers get a neutral ephemeral label from their head noun ("The passer-by…" → Passer-by). */
@@ -253,9 +254,11 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   const recentBlock = mode === "dialogue_focused" ? `[RECENT CONVERSATION ? DIALOGUE ONLY, SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(dialogueFocused(recent, context, sceneParticipants))}`
     : mode === "state_last" ? `[EARLIER CONVERSATION ? CONTINUITY ONLY, NOT STATE]\n${JSON.stringify(recent)}`
     : `[RECENT CONVERSATION ? SUBORDINATE TO CURRENT STATE]\n${JSON.stringify(recent)}`;
+  const sceneNarration = mode === "dialogue_focused" ? recentSceneNarration(options.recent_scene_source ?? recent, scene.player_location?.id, mask) : "";
+  const sceneNarrationBlock = sceneNarration ? `[RECENT SCENE NARRATION]\n${RECENT_SCENE_NARRATION_RULE}\n${sceneNarration}\n\n` : "";
   const knowledgePrefix = mask(`${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n`);
   const disclosure = canonicalNameDisclosure(context, input, recent, focus.foreground, intent, sceneParticipants);
   const request = { system_prompt: NARRATOR_SYSTEM + (disclosure ? `\n[CONTROLLED SELF-DISCLOSURE — NOT PLAYER-KNOWN IDENTITY]\n${JSON.stringify({ ref: disclosure.ref, canonical_name_available_for_disclosure: true, player_knows_name: false, canonical_name_for_own_spoken_introduction_only: disclosure.canonical_name })}\nThis currently addressed NPC may choose to introduce themselves truthfully with this exact canonical name. Do not invent an alternative personal name, surname, alias, title or nickname for this NPC. If they give a name, it must be the supplied canonical self-name; otherwise they may decline naturally. Use the name only in their own spoken self-introduction, never in descriptive narration, attribution or metadata, exposition, labels, thoughts, summaries or descriptions. Attribute the speech by their unique observable descriptor. This capability does not grant Nicco knowledge before disclosure, compel an introduction, or disclose aliases, titles, roles, affiliations or private history.` : ""), messages: [{ role: "user" as const, content:
-    mask(`${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${focus.references(hardCharacterConstraints(context).join("\n")) || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(focusedRetrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.`) }] };
+    mask(`${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${focus.references(hardCharacterConstraints(context).join("\n")) || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(focusedRetrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from the state/canon above are unestablished, not factual negatives.\n\n${mode === "state_last" ? "" : `${recentBlock}\n\n`}`) + sceneNarrationBlock + mask(`[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.`) }] };
   return registerNarratorPack(request, knowledge, access, { revision: context.primary.runtime_revision, location: context.primary.scene.player_location?.id, world_time: context.primary.scene.world_time, characters: context.characters.map(c => c.id) }, knowledgePrefix.length);
 }

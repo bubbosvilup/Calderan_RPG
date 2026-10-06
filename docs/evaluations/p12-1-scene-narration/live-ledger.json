@@ -1,0 +1,109 @@
+{
+  "model": "z-ai/glm-5.2",
+  "route": "z-ai/fp8",
+  "max_attempts": 4,
+  "automatic_retries": false,
+  "baseline": "Reused already completed matched frozen P12 A requests, not new paid calls.",
+  "attempts": [
+    {
+      "id": "B_door",
+      "criterion": "PASS: door closed or must be opened; FAIL: already open without a causal opening; UNRESOLVED: no state established.",
+      "sha256": "51f5764748e74646dd9e191264663afcd4dde6b6ce8e44a1e5268f7631f88306",
+      "started_at": "2026-10-06T01:12:48.773Z",
+      "status": "completed",
+      "result": {
+        "text": "*Nicco crosses the front hall, boots on the wooden floor, heading for the heavy front door. The hearth sits cold to one side; the table stands bare under the late-morning light slanting through a narrow window.*\n\n*Behind him, Dell shifts his weight but says nothing. Maren's height puts her head near the doorframe as she watches Nicco move, her expression unreadable.*",
+        "model": "z-ai/glm-5.2",
+        "provider": "Z.AI",
+        "cost_usd": 0.0051854,
+        "usage": {
+          "prompt_tokens": 3443,
+          "completion_tokens": 83,
+          "total_tokens": 3526
+        },
+        "latency": {
+          "request_started_at": "2026-10-06T01:12:48.777Z",
+          "headers_ms": 3076.4528999999998,
+          "time_to_first_token_ms": 3078.0962,
+          "completed_at": "2026-10-06T01:12:51.902Z",
+          "elapsed_total_ms": 3124.1159
+        }
+      }
+    },
+    {
+      "id": "D_restraint",
+      "criterion": "PASS: wrists still tied; FAIL: free/removed restraints without removal action; UNRESOLVED: no restraint state established.",
+      "sha256": "1a6589b67f5b727a53f57ddab843d531af75ce82601e6a09ae114e453c8127c5",
+      "started_at": "2026-10-06T01:12:51.908Z",
+      "status": "completed",
+      "result": {
+        "text": "*Light from the hearth catches the length of cord binding Maren's wrists together in front of her. The knot sits centered, the rope crossing over itself twice before pulling taut against skin. Her hands are still, fingers slightly curled, the bindings keeping them close but not crushingly tight.*\n\n*Maren shifts her weight once, heel to toe, her tall frame straightening almost imperceptibly before settling again. She doesn't pull at the rope or test it, simply stands with her bound hands resting at roughly waist height.*\n\n*Dell lingers nearby, his attention drifting between Nicco and the door. The front hall holds its quiet — the hearth's low crackle, faint daylight pressing around the edges of the heavy front door.*",
+        "model": "z-ai/glm-5.2",
+        "provider": "Z.AI",
+        "cost_usd": 0.00176064,
+        "usage": {
+          "prompt_tokens": 3444,
+          "completion_tokens": 150,
+          "total_tokens": 3594
+        },
+        "latency": {
+          "request_started_at": "2026-10-06T01:12:51.908Z",
+          "headers_ms": 2904.5798,
+          "time_to_first_token_ms": 2906.2016,
+          "completed_at": "2026-10-06T01:12:56.001Z",
+          "elapsed_total_ms": 4092.2742999999996
+        }
+      }
+    },
+    {
+      "id": "E_position",
+      "criterion": "PASS: seated beside hearth or explicit subsequent movement; FAIL: reset to entrance without movement; UNRESOLVED: no local position established.",
+      "sha256": "8811174becf71be807d36b8232a08252e8079b5812faf28c43d177ea8a0c928b",
+      "started_at": "2026-10-06T01:12:56.004Z",
+      "status": "completed",
+      "result": {
+        "text": "*The front hall holds the late-morning stillness of a space with little traffic. Light from the hearth — unlit, given the hour — is unnecessary; daylight does enough through the room's few surfaces. Maren sits beside the stone hearth, her height folded onto the floor there, and Dell is somewhere behind, elsewhere in the hall.*\n\n*Maren's gaze lifts toward Nicco as he addresses her. She waits, one hand resting on her knee, her expression difficult to read — attentive but guarded, the posture of someone still taking measure of a situation she hasn't chosen.*",
+        "model": "z-ai/glm-5.2",
+        "provider": "Z.AI",
+        "cost_usd": 0.00160888,
+        "usage": {
+          "prompt_tokens": 3482,
+          "completion_tokens": 120,
+          "total_tokens": 3602
+        },
+        "latency": {
+          "request_started_at": "2026-10-06T01:12:56.005Z",
+          "headers_ms": 2998.9321999999993,
+          "time_to_first_token_ms": 2999.7916000000005,
+          "completed_at": "2026-10-06T01:12:59.619Z",
+          "elapsed_total_ms": 3613.520200000001
+        }
+      }
+    },
+    {
+      "id": "I_conflict",
+      "criterion": "PASS: current structured presence wins, or no confident absence claim. FAIL: asserts Korvin absent or invents a return to bridge the contradiction. UNRESOLVED: no readable completion.",
+      "sha256": "df2cae1ae963c59489120c245e91ed54ddd2e46e285498d166adbd41a224954e",
+      "started_at": "2026-10-06T01:12:59.622Z",
+      "status": "completed",
+      "result": {
+        "text": "*Nicco looks toward Korvin, but the compact man has already crossed the threshold and pulled the heavy front door shut behind him. The latch catches with a dull click. Faint morning light leaks in around the door's edges, but the front hall settles into stillness.*\n\n*Dell stands near the wooden table, arms folded loosely, watching the closed door for a moment before his gaze drifts back across the hall. Maren is still nearby, her tall frame the most prominent thing in the room. Neither of them speaks right away. The hearth holds no fire, just cold stone and old ash.*",
+        "model": "z-ai/glm-5.2",
+        "provider": "Z.AI",
+        "cost_usd": 0.0028554,
+        "usage": {
+          "prompt_tokens": 3477,
+          "completion_tokens": 123,
+          "total_tokens": 3600
+        },
+        "latency": {
+          "request_started_at": "2026-10-06T01:12:59.623Z",
+          "headers_ms": 2420.2482,
+          "time_to_first_token_ms": 2421.1795,
+          "completed_at": "2026-10-06T01:13:02.743Z",
+          "elapsed_total_ms": 3119.9817000000003
+        }
+      }
+    }
+  ]
+}

@@ -1,8 +1,19 @@
+const unsafeRpg = /```|\*\*|<\/?[a-z][^>]*>|^\s*(?:#{1,6}\s|[\[{}|]|(?:system|assistant|metadata|debug|speaker)\s*:)/im;
+const narrationStars = (text: string) => [...text.matchAll(/(?<!\\)\*/g)];
+/** Original complete narration spans only; malformed/legacy output supplies no guessed narration. */
+export function rpgNarration(text: string): readonly string[] {
+  if (unsafeRpg.test(text)) return [];
+  const stars = narrationStars(text);
+  if (stars.length % 2) return [];
+  const spans: string[] = [];
+  for (let i = 0; i < stars.length; i += 2) spans.push(text.slice(stars[i]!.index, stars[i + 1]!.index + 1));
+  return spans;
+}
 /** Conversational narrator output only; undefined delegates legacy attributed quotations to the old projector. */
 export function rpgDialogue(text: string): readonly string[] | undefined {
-  if (/```|\*\*|<\/?[a-z][^>]*>|^\s*(?:#{1,6}\s|[\[{}|]|(?:system|assistant|metadata|debug|speaker)\s*:)/im.test(text)) return [];
+  if (unsafeRpg.test(text)) return [];
   if (!text.trimStart().startsWith("*") && /["“”]/.test(text) && !/^\s*["“][^"“”]+["”]\s*$/.test(text)) return undefined;
-  const stars = [...text.matchAll(/(?<!\\)\*/g)];
+  const stars = narrationStars(text);
   if (stars.length % 2) return []; // An unfinished narration block authorizes no guessed speech boundary.
   const outside: string[] = [];
   let start = 0;

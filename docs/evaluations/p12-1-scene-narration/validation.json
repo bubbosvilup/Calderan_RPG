@@ -1,0 +1,30 @@
+{
+  "typecheck": "PASS",
+  "unit": {
+    "total": 2270,
+    "pass": 2266,
+    "fail": 0,
+    "historical_todo": 4
+  },
+  "playthrough": {
+    "pass": 25,
+    "fail": 0
+  },
+  "focused": {
+    "pass": 230,
+    "fail": 0,
+    "new_p121_tests": 19
+  },
+  "unchanged_source_bytes": {
+    "src/turn/recent-conversation.ts": true,
+    "src/turn/temporal-grounding.ts": true,
+    "src/turn/player-intent.ts": true
+  },
+  "frozen_baseline_difference": "B/D/E differ only by new continuity block; system prompt identical.",
+  "paid_request_hashes_match_final_code": true,
+  "live_calls": 4,
+  "live_cost_usd": 0.01141032,
+  "p121_status": "IMPLEMENTED / LIVE VERIFICATION PENDING",
+  "p12_status": "OPEN",
+  "p122_status": "OPEN / NOT IMPLEMENTED"
+}

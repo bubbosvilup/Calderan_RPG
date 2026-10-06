@@ -1,0 +1,49 @@
+{
+  "model": "z-ai/glm-5.2",
+  "route": "z-ai/fp8",
+  "calls_new": 4,
+  "completed_new": 4,
+  "cost_usd": 0.01141032,
+  "baseline_reused": true,
+  "baseline_cost_new": 0,
+  "status": "IMPLEMENTED / LIVE VERIFICATION PENDING",
+  "limitations": "One completion per condition, reused earlier matched frozen baseline; no statistical reliability claim. Door unresolved and structured-state conflict failed. Stop: projection availability and compliance limits distinguished.",
+  "rows": [
+    {
+      "id": "B_door",
+      "grade": "UNRESOLVED",
+      "reason": "Approaches heavy front door, without establishing closed/open state; no unsupported opening.",
+      "criterion": "PASS: door closed or must be opened; FAIL: already open without a causal opening; UNRESOLVED: no state established.",
+      "bounded_text": "*Nicco crosses the front hall, boots on the wooden floor, heading for the heavy front door. The hearth sits cold to one side; the table stands bare under the late-morning light slanting through a narrow window.*\n\n*Behind him, Dell shifts his weight but says nothing. Maren's height puts her head near the doorframe as she watches Nicco move, her expression unreadable.*",
+      "baseline_text": "*Nicco crosses the front hall, his footsteps quiet against the floor. Late morning light filters through the front door's edges, and the hearth sits cold and empty against the far wall. The wooden table near the bench holds nothing of note.*\n\n*Dell shifts where he stands, watching Nicco move but saying nothing. Maren, tall and still, tracks him as well, her gaze following him toward the door without comment.*\n\n*The heavy front door waits ahead, its iron hardware dark against the wood. No sound reaches the hall from beyond it.*",
+      "baseline_grade": "UNRESOLVED"
+    },
+    {
+      "id": "D_restraint",
+      "grade": "PASS",
+      "reason": "Explicit cord binding wrists and bound hands; no removal.",
+      "criterion": "PASS: wrists still tied; FAIL: free/removed restraints without removal action; UNRESOLVED: no restraint state established.",
+      "bounded_text": "*Light from the hearth catches the length of cord binding Maren's wrists together in front of her. The knot sits centered, the rope crossing over itself twice before pulling taut against skin. Her hands are still, fingers slightly curled, the bindings keeping them close but not crushingly tight.*\n\n*Maren shifts her weight once, heel to toe, her tall frame straightening almost imperceptibly before settling again. She doesn't pull at the rope or test it, simply stands with her bound hands resting at roughly waist height.*\n\n*Dell lingers nearby, his attention drifting between Nicco and the door. The front hall holds its quiet — the hearth's low crackle, faint daylight pressing around the edges of the heavy front door.*",
+      "baseline_text": "*Maren stands near the table, her tall frame casting a long shadow across the flagged floor. Late morning light comes pale through the front door's seams. The hearth holds only ash, unlit. At Nicco's glance, she shifts her weight once from heel to toe, then stills.*\n\n*Her hands rest at her sides — broad-palmed, rough-knuckled, the fingers slightly curled. A thin line of old callus crosses the base of each thumb. She doesn't move them or hide them, doesn't seem to notice the attention particularly. She simply waits, her gaze somewhere past the table's edge.*\n\n*Dell lingers near the bench, quiet. The front hall holds the stillness of a place not yet lived in.*",
+      "baseline_grade": "UNRESOLVED"
+    },
+    {
+      "id": "E_position",
+      "grade": "PASS",
+      "reason": "Explicitly sits beside stone hearth; no reset to entrance.",
+      "criterion": "PASS: seated beside hearth or explicit subsequent movement; FAIL: reset to entrance without movement; UNRESOLVED: no local position established.",
+      "bounded_text": "*The front hall holds the late-morning stillness of a space with little traffic. Light from the hearth — unlit, given the hour — is unnecessary; daylight does enough through the room's few surfaces. Maren sits beside the stone hearth, her height folded onto the floor there, and Dell is somewhere behind, elsewhere in the hall.*\n\n*Maren's gaze lifts toward Nicco as he addresses her. She waits, one hand resting on her knee, her expression difficult to read — attentive but guarded, the posture of someone still taking measure of a situation she hasn't chosen.*",
+      "baseline_text": "*The front hall is bright with late-morning light. Maren stands near the table, her height making the modest room feel smaller. She turns toward Nicco as he speaks, her expression unreadable, waiting.*\n\n*Behind Nicco, Dell lingers by the hearth, arms folded loosely. Neither he nor the quiet figure near the front door interjects.*\n\n*The hearth holds no fire at this hour, its stones cool and swept clean. A faint draft moves under the front door.*",
+      "baseline_grade": "OTHER_POSITION_CONTRADICTION (table, not preregistered entrance FAIL)"
+    },
+    {
+      "id": "I_conflict",
+      "grade": "FAIL",
+      "reason": "Asserts Korvin already crossed threshold and closed door despite structured current presence.",
+      "criterion": "PASS: current structured presence wins, or no confident absence claim. FAIL: asserts Korvin absent or invents a return to bridge the contradiction. UNRESOLVED: no readable completion.",
+      "bounded_text": "*Nicco looks toward Korvin, but the compact man has already crossed the threshold and pulled the heavy front door shut behind him. The latch catches with a dull click. Faint morning light leaks in around the door's edges, but the front hall settles into stillness.*\n\n*Dell stands near the wooden table, arms folded loosely, watching the closed door for a moment before his gaze drifts back across the hall. Maren is still nearby, her tall frame the most prominent thing in the room. Neither of them speaks right away. The hearth holds no fire, just cold stone and old ash.*",
+      "baseline_text": null,
+      "baseline_grade": "historical full-prose PROSE_WINS (different diagnostic history mode)"
+    }
+  ]
+}

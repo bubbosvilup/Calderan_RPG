@@ -93,13 +93,15 @@ A character may voice or act on only the facts listed CAN USE for them (…). DO
   - **Unnamed narrator-created speakers** get a neutral label from the subject's head noun (`The passer-by…` becomes `Passer-by`).
   - **Undetermined speakers:** the quote is omitted rather than guessed.
   - **Known limitation:** pronouns resolve to the paragraph's last sentence subject without a gender check.
-- **Omitted:** narrator description, the main carrier of stale physical-state claims (equipment, position, props). The prompt says the description was omitted and that current structured state is authoritative.
+- **Omitted from dialogue history:** narrator description, the main carrier of stale physical-state claims (equipment, position, props). The prompt says the description was omitted and that current structured state is authoritative.
 - **No new memory:** no summaries, no persistence, no new memory domain.
 - **Evaluated, not adopted:** `full_prose` (the Phase 1M.1 layout) and `state_last` (earlier conversation placed before the authoritative state) remain available only as evaluation options. The Phase 1N review records why.
 
 **Known trade-offs of `dialogue_focused`:**
 - A wrong fact spoken *inside NPC dialogue* is retained and can be repeated. The knowledge projection is the intended counterweight, and it is only partly effective.
-- References to objects mentioned only in narrator description (not dialogue) are not replayed; structured state covers durable objects.
+- Narrator-only descriptions beyond the two-exchange current-visit replay are not supplied; structured state covers durable objects.
+
+P12.1 (2026-10-06) adds a separate `[RECENT SCENE NARRATION]` block: original complete starred narration from the last two finalized exchanges in the contiguous current-location visit, limited to 2,000 characters after identity masking. A different/missing location stops replay, including on later return. NPC speech and player actions stay in dialogue history. Current structured state overrides this continuity prose; no new memory or mutation authority. The block is fixed context under knowledge compaction. [Implementation and limits](../../P12_1_BOUNDED_RECENT_SCENE_NARRATION.md).
 
 Historical playthrough windows remain an evaluation-only helper and are never used in production turns.
 
