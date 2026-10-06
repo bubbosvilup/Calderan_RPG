@@ -370,6 +370,11 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
         const m = clause.match(re);
         if (!m || GATES.movement_not_done.test(clause.slice(0, m.index! + m[0].length))) continue;
         const place = resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world);
+        // "home" has no canonical alias or typed doorway target. Do not turn an
+        // unsupported player phrase into an authoritative arrival in narration.
+        if (!place && /^(?:his |the |your )?home[.!?]*$/i.test(m[1]!.replace(PLACE_END, "").trim())) {
+          issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: `Home does not resolve to a canonical destination. Nicco is at ${display(here)}; describe that location without claiming an unrecorded home entry.` });
+        }
         if (!place) continue;
         const contradicts = leaving ? place === here && origin === here : !within(place, here);
         if (contradicts && !leaving && !niccoDidNotGo.includes(place)) niccoDidNotGo.push(place);

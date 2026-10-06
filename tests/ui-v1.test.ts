@@ -135,6 +135,26 @@ test("regeneration UI preserves canonical text and labels safely rendered altern
   assert.equal(select.disabled, false); assert.equal(select.value, "");
 });
 
+test("Heartstone header changes only on final committed result, never provisional arrival prose", async () => {
+  let stream!: ReadableStreamDefaultController<Uint8Array>;
+  const body = new ReadableStream<Uint8Array>({ start(controller) { stream = controller; } });
+  const market = { ...opening, scene: { location: "Slave Market", time_of_day: "Late Morning" } };
+  const c = await client(async (_url: string, options?: any) => options
+    ? { ok: true, headers: { get: () => "application/x-ndjson" }, body }
+    : { ok: true, json: async () => market });
+  c.node("input").value = "*goes back to Heartstone*";
+  const submitted = c.node("composer").requestSubmit(); await tick();
+  const emit = (event: object) => stream.enqueue(new TextEncoder().encode(JSON.stringify(event) + "\n"));
+  emit({ type: "draft", action: "start", phase: "draft", text: "" });
+  emit({ type: "draft", action: "delta", phase: "draft", text: "Nicco enters Heartstone Tower." }); await tick();
+  assert.equal(c.node("location").textContent, "Slave Market");
+  assert.equal(c.node("daypart").textContent, "Late Morning");
+  emit({ ...market, type: "result", ok: true, scene: { location: "Heartstone LR", time_of_day: "Early Afternoon" }, messages: [...market.messages, { role: "player", text: "*goes back to Heartstone*" }, { role: "narrator", text: "Nicco enters Heartstone Tower." }] });
+  stream.close(); await submitted;
+  assert.equal(c.node("location").textContent, "Heartstone LR");
+  assert.equal(c.node("daypart").textContent, "Early Afternoon");
+});
+
 const documents = JSON.parse(await readFile("docs/evaluations/p12-scene-continuity/fixture-world.json", "utf8"));
 const world = new WorldStore(documents);
 function fixture(narrator: NarratorProvider, known = true) {

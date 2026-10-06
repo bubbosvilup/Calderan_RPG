@@ -97,16 +97,23 @@ export function actionSegments(input: string): readonly string[] { return [...in
 function clauses(segment: string): readonly string[] {
   return segment.split(/,\s*(?:and\s+then\s+|and\s+|then\s+)?|;\s*|\s+(?:and then|then|and|when|before|after)\s+/i).map(c => c.trim()).filter(Boolean);
 }
-/** Destination phrase → location: explicit/near canon names, then a unique head noun among locations, features and aliases in the scene's city. */
+/** Whole canonical names win; local person/object heads veto incidental place mentions.
+ * A bare destination noun may use the existing city-scoped feature fallback. */
 export function resolveDestination(phrase: string, context: TurnContext, world: WorldStore): string | undefined {
   if (/^(?:the )?center$/i.test(phrase.trim()) && (context.primary.scene.player_location?.id === "calderan" || context.primary.scene.location_ancestry.some(a => a.id === "calderan"))) return "calderan_center";
   const locations = world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.narrator && e.knowledge.visibility.player);
   const exactText = (text: string) => text.trim().replace(/[.!]$/, "").replace(/^the /i, "").toLowerCase();
   const exact = locations.filter(e => [e.id, e.name, e.display_name, ...e.aliases].some(n => exactText(n) === exactText(phrase)));
   if (exact.length === 1) return exact[0]!.id;
+  if (exact.length > 1) return undefined;
+  const target = exactText(phrase).replace(/^(?:a|an|that|this)\s+/i, "");
+  if (/^(?:(?:young|old|nearby|other|waiting|standing|seated|licensed|private)\s+)*(?:man|woman|person|seller|guard|merchant|passerby|stranger|table|pen|stall|wagon|door|window)\b/i.test(target)
+    || context.characters.some(c => [c.profile.name, ...(c.profile.aliases ?? [])].some(n => n && new RegExp(`^${escapeRegExp(n)}(?:\\b|$)`, "i").test(target)))) return undefined;
   const mentions = [...entityMentions(phrase, context, world)].filter(([id]) => locations.some(l => l.id === id)).sort((a, b) => b[1] - a[1]);
   if (mentions.length && (mentions.length === 1 || mentions[0]![1] > mentions[1]![1])) return mentions[0]![0];
-  const head = words(phrase).at(-1);
+  // Never mine the last word of a longer description for a destination.
+  const tokens = words(phrase);
+  const head = tokens.length === 1 ? tokens[0] : undefined;
   if (!head) return undefined;
   const city = context.primary.scene.location_ancestry[0]?.id;
   const heads = (l: (typeof locations)[number]) => [l.name, ...l.aliases, ...l.features.map(f => f.name)].map(n => words(n).at(-1));
