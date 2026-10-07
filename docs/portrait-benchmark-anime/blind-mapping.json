@@ -1,0 +1,12 @@
+{
+  "stage1": {
+    "A": "krea/krea-2-medium",
+    "B": "google/gemini-3.1-flash-image",
+    "C": "bytedance-seed/seedream-5-0-flash",
+    "D": "krea/krea-2-medium-turbo"
+  },
+  "stage2": {
+    "X": "bytedance-seed/seedream-5-0-flash",
+    "Y": "krea/krea-2-medium"
+  }
+}

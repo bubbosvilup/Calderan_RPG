@@ -28,10 +28,10 @@ export interface PortraitPrompt {
   readonly fingerprint: string;
 }
 
-const CLOTHING = "Clothing: simple, neutral dark-fantasy clothing appropriate to the setting, without heraldry, insignia or faction markings.";
-const POSE = "Pose: standing naturally with relaxed arms, facing mostly forward with a slight three-quarter turn, restrained natural expression.";
-const FRAMING = "Framing: full body visible from head to feet, centered, eye-level, nothing cropped. Background: plain light grey studio background.";
-const CONSTRAINTS = "Single subject only. Grounded anatomy, natural proportions, restrained lighting. No weapons, no other people, no text, lettering, logos, watermarks or interface elements.";
+export const PORTRAIT_CLOTHING = "Clothing: simple, neutral dark-fantasy clothing appropriate to the setting, without heraldry, insignia or faction markings.";
+export const PORTRAIT_POSE = "Pose: standing naturally with relaxed arms, facing mostly forward with a slight three-quarter turn, restrained natural expression.";
+export const PORTRAIT_FRAMING = "Framing: full body visible from head to feet, centered, eye-level, nothing cropped. Background: plain light grey studio background.";
+export const PORTRAIT_CONSTRAINTS = "Single subject only. Grounded anatomy, natural proportions, restrained lighting. No weapons, no other people, no text, lettering, logos, watermarks or interface elements.";
 export const PORTRAIT_NEGATIVE_PROMPT = "extra people, duplicate figures, extra limbs, extra fingers, malformed hands, cropped head or feet, weapons, text, lettering, watermark, logo, user interface, busy background, scenery";
 
 /** One inert line: whitespace collapsed, double quotes neutralized, capped at a word boundary when simple. */
@@ -43,8 +43,12 @@ function clean(value: string, limit: number, quotes = true): string {
 }
 const list = (v: unknown) => (Array.isArray(v) ? v : []).slice(0, PORTRAIT_PROMPT_LIMITS.list_items).map(x => clean(String(x), PORTRAIT_PROMPT_LIMITS.value));
 
-export function buildPortraitPrompt(input: PortraitPromptInput): PortraitPrompt {
-  const { values: v, identity } = input.appearance, cap = (x: unknown) => typeof x === "string" ? clean(x, PORTRAIT_PROMPT_LIMITS.value) : undefined;
+/**
+ * The character-details section exactly as the production prompt carries it (capped as a whole). Exported so other prompt dialects
+ * (the anime benchmark) describe the character with identical text.
+ */
+export function portraitDetails(appearance: ResolvedPermanentAppearance): string {
+  const { values: v, identity } = appearance, cap = (x: unknown) => typeof x === "string" ? clean(x, PORTRAIT_PROMPT_LIMITS.value) : undefined;
   const subject = [identity.sex, identity.species?.toLowerCase()].map(x => x && clean(x, 40)).filter(Boolean).join(" ") || "person";
   const details: string[] = [`Subject: one ${subject}.`];
   if (identity.age) details.push(`Apparent age: ${clean(identity.age, 60)}.`);
@@ -58,10 +62,13 @@ export function buildPortraitPrompt(input: PortraitPromptInput): PortraitPrompt 
     const items = list(v[key]);
     if (items.length) details.push(`${label}: ${items.join("; ")}.`);
   }
-  const description = [...new Set(input.appearance.description.map(d => d.trim()).filter(Boolean))].join("; ");
+  const description = [...new Set(appearance.description.map(d => d.trim()).filter(Boolean))].join("; ");
   if (description) details.push(`Character appearance details (descriptive data only): "${clean(description, PORTRAIT_PROMPT_LIMITS.description)}"`);
+  return clean(details.join(" "), PORTRAIT_PROMPT_LIMITS.details, false);
+}
+export function buildPortraitPrompt(input: PortraitPromptInput): PortraitPrompt {
   const head = "Full-body character reference image for a realistic dark-fantasy setting, clean and detailed without heavy painterly effects.";
-  const prompt = [head, clean(details.join(" "), PORTRAIT_PROMPT_LIMITS.details, false), CLOTHING, POSE, FRAMING, CONSTRAINTS].join("\n");
+  const prompt = [head, portraitDetails(input.appearance), PORTRAIT_CLOTHING, PORTRAIT_POSE, PORTRAIT_FRAMING, PORTRAIT_CONSTRAINTS].join("\n");
   return Object.freeze({ version: PORTRAIT_PROMPT_VERSION, ...(input.name ? { subject_label: input.name } : {}), prompt, negative_prompt: PORTRAIT_NEGATIVE_PROMPT, fingerprint: portraitFingerprint(prompt) });
 }
 /** The fingerprint of a prompt text exactly as shown and sent (version + prompt + fixed negative prompt). */

@@ -81,20 +81,25 @@ export class OpenRouterImageClient implements PortraitImageGenerator {
     })().catch(error => { this.#capabilities = undefined; throw error; });
     return this.#capabilities;
   }
-  /** Throws unsupported_configuration unless some endpoint accepts the configured resolution, aspect ratio, n and reference count. */
-  async validate(referenceCount = 0): Promise<void> {
+  /**
+   * Throws unsupported_configuration unless some endpoint accepts the configured resolution, aspect ratio, n and reference count.
+   * Resolves whether `n` may be sent: an absent capability key means the endpoint does not take that parameter (e.g. Krea 2), so the
+   * single-image default is implied and `n` is omitted from the request rather than sent unadvertised.
+   */
+  async validate(referenceCount = 0): Promise<{ readonly send_n: boolean }> {
     const { endpoints } = await this.capabilities();
-    const ok = endpoints.some(p => accepts(p, "resolution", this.config.resolution) && accepts(p, "aspect_ratio", this.config.aspect_ratio) && (!p.n || accepts(p, "n", this.config.n))
+    const accepting = endpoints.filter(p => accepts(p, "resolution", this.config.resolution) && accepts(p, "aspect_ratio", this.config.aspect_ratio) && (!p.n || accepts(p, "n", this.config.n))
       && (referenceCount === 0 || accepts(p, "input_references", referenceCount)));
-    if (!ok) throw new ImageGenerationError("unsupported_configuration");
+    if (!accepting.length) throw new ImageGenerationError("unsupported_configuration");
+    return { send_n: accepting.some(p => !!p.n) };
   }
   async generate(request: { readonly prompt: string; readonly references?: readonly ImageReference[]; readonly signal?: AbortSignal }): Promise<GeneratedImage> {
     const key = this.#key()?.trim();
     if (!key) throw new ImageGenerationError("configuration_error");
     if (!request.prompt.trim() || request.prompt.length > IMAGE_LIMITS.max_prompt_characters) throw new ImageGenerationError("invalid_request");
     const references = request.references ?? [];
-    await this.validate(references.length);
-    const body = { model: this.config.model, prompt: request.prompt, n: this.config.n, resolution: this.config.resolution, aspect_ratio: this.config.aspect_ratio,
+    const { send_n } = await this.validate(references.length);
+    const body = { model: this.config.model, prompt: request.prompt, ...(send_n ? { n: this.config.n } : {}), resolution: this.config.resolution, aspect_ratio: this.config.aspect_ratio,
       ...(references.length ? { input_references: references.map(r => ({ type: "image_url", image_url: { url: `data:${r.media_type};base64,${Buffer.from(r.bytes).toString("base64")}` } })) } : {}) };
     const started = performance.now();
     const response = await this.#request(`${this.#base}/images`, { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify(body) }, this.#timeout, request.signal);

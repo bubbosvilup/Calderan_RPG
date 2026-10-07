@@ -38,6 +38,22 @@ test("client: exact request (prompt unchanged, no negative prompt, validated con
   assert.equal(plain.cost_usd, undefined); assert.equal(plain.media_type, "image/png");
 });
 
+test("client: n is sent only when an accepting endpoint advertises it (Krea 2 endpoints do not)", async () => {
+  const krea = { id: "krea/krea-2-medium", endpoints: [{ provider_slug: "krea", supported_parameters: { resolution: { type: "enum", values: ["1K"] }, aspect_ratio: { type: "enum", values: ["2:3"] },
+    input_references: { type: "range", min: 0, max: 1 } }, pricing: [] }] };
+  const calls: any[] = [];
+  const f = (async (url: string, init: RequestInit) => {
+    if (url.endsWith("/endpoints")) return new Response(JSON.stringify(krea), { status: 200 });
+    calls.push(JSON.parse(String(init.body))); return ok([{ b64_json: PNG }], 0.03);
+  }) as unknown as typeof fetch;
+  const result = await client(f, "k", { model: "krea/krea-2-medium", resolution: "1K", aspect_ratio: "2:3", n: 1 }).generate({ prompt: "p" });
+  assert.equal(result.cost_usd, 0.03);
+  assert.deepEqual(calls[0], { model: "krea/krea-2-medium", prompt: "p", resolution: "1K", aspect_ratio: "2:3" }, "no unadvertised n");
+  await assert.rejects(client(f, "k", { model: "krea/krea-2-medium", resolution: "1K", aspect_ratio: "2:3", n: 1 }).generate({ prompt: "p", references: [1, 2].map(() => ({ media_type: "image/png" as const, bytes: Buffer.from(PNG, "base64") })) }),
+    (e: unknown) => e instanceof ImageGenerationError && e.code === "unsupported_configuration", "two references exceed Krea's advertised maximum of one");
+  assert.equal(calls.length, 1);
+});
+
 test("client: failures map to safe codes without bodies; unsupported config and missing key never POST", async () => {
   const expectCode = async (c: OpenRouterImageClient, code: string, status?: number) => {
     await assert.rejects(c.generate({ prompt: "p" }), (e: unknown) => e instanceof ImageGenerationError && e.code === code && (status === undefined || e.status === status) && !/SECRET_BODY|test-key/.test(e.message));
