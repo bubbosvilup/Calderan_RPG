@@ -45,22 +45,35 @@ function editorValue(field, raw) {
   if (field.kind === "number") return value.trim() === "" ? "" : Number(value.trim());
   return value.trim().replace(/\s+/g, " ");
 }
+const NUMBER_RANGES = { height_cm: [30, 300, "cm"], weight_kg: [1, 500, "kg"] };
 function editorPatch() {
-  const patch = {};
-  let valid = true;
+  const patch = {}, invalid = [];
   for (const field of editorFields) {
     const input = ui(`appearance-${field.key}`);
     if (!input) continue;
     const next = editorValue(field, input.value), stored = field.override === null ? null : editorValue(field, field.override);
     const empty = Array.isArray(next) ? !next.length : next === "";
-    if (field.kind === "number" && !empty && !Number.isInteger(next)) valid = false;
+    const range = NUMBER_RANGES[field.key];
+    if (field.kind === "number" && !empty && (!Number.isInteger(next) || (range && (next < range[0] || next > range[1])))) { invalid.push(field.key); continue; }
     if (empty) { if (stored !== null) patch[field.key] = null; continue; }
     if (JSON.stringify(next) !== JSON.stringify(stored)) patch[field.key] = next;
   }
-  return { patch, valid };
+  return { patch, valid: !invalid.length, invalid };
+}
+// Saved values are what the field holds; inherited text is reference only. Unset fields say nothing (their placeholder is "Not set").
+function editorNote(field) {
+  if (field.override !== null) return { text: field.inherited ? "Saved value. Empty it to return to the inherited description." : "Saved value. Empty it to clear.", kind: "field-saved" };
+  return { text: field.inherited ? `Inherited (not saved): ${field.inherited}` : "", kind: "" };
 }
 function updateEditorSave() {
-  const { patch, valid } = editorPatch();
+  const { patch, valid, invalid } = editorPatch();
+  for (const field of editorFields) {
+    const input = ui(`appearance-${field.key}`), note = ui(`appearance-${field.key}-note`), range = NUMBER_RANGES[field.key];
+    if (!input || field.kind !== "number") continue;
+    const bad = invalid.includes(field.key), base = editorNote(field);
+    if (bad) input.setAttribute("aria-invalid", "true"); else input.removeAttribute?.("aria-invalid");
+    if (note) { note.textContent = bad ? `Enter a whole number from ${range[0]} to ${range[1]} ${range[2]}.` : base.text; note.className = bad ? "field-error" : base.kind; }
+  }
   if (ui("editor-save")) ui("editor-save").disabled = editorSaving || !valid || !Object.keys(patch).length;
 }
 function renderEditor(card, fill = false) {
@@ -77,7 +90,7 @@ function renderEditor(card, fill = false) {
     for (const field of editorFields) {
       const input = ui(`appearance-${field.key}`), note = ui(`appearance-${field.key}-note`);
       if (input) { input.value = field.override ?? ""; input.disabled = false; }
-      if (note) note.textContent = field.override !== null ? "Saved campaign value. Empty the field to clear it." : field.inherited ? `Inherited: ${field.inherited}` : "Not established.";
+      if (note) { const n = editorNote(field); note.textContent = n.text; note.className = n.kind; }
     }
   }
   updateEditorSave();
@@ -86,7 +99,7 @@ async function saveEditor() {
   const { patch, valid } = editorPatch();
   if (!editorRef || editorSaving || !valid || !Object.keys(patch).length) return;
   editorSaving = true; updateEditorSave();
-  const showEditorError = text => { if (ui("editor-error")) { ui("editor-error").textContent = text; ui("editor-error").hidden = !text; } };
+  const showEditorError = text => { const el = ui("editor-error"); if (el) { el.textContent = text; el.hidden = !text; if (text) el.scrollIntoView?.({ block: "center" }); } };
   try {
     const response = await fetch("/api/appearance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, patch }) });
     const data = await response.json();

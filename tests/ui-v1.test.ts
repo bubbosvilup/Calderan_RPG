@@ -462,12 +462,14 @@ test("eligible NPC+ editor opens by opaque ref, shows stored overrides only, kee
     assert.equal(c.node("member-editor").hidden, false); assert.equal(c.node("editor-name").textContent, "Member alpha");
     assert.equal(c.node("editor-appearance").textContent, "An established appearance."); assert.equal(c.node("editor-identity").textContent, "Age: Adult");
     assert.equal(c.node("appearance-build").value, "lean"); assert.equal(c.node("appearance-hair_color").value, "", "nothing inherited is prefilled");
-    assert.equal(c.node("appearance-description").value, ""); assert.match(c.node("appearance-description-note").textContent, /Inherited: An established appearance/);
-    assert.match(c.node("appearance-build-note").textContent, /Saved campaign value/); assert.equal(c.node("appearance-eyes-note").textContent, "Not established.");
+    assert.equal(c.node("appearance-description").value, ""); assert.match(c.node("appearance-description-note").textContent, /^Inherited \(not saved\): An established appearance/);
+    assert.match(c.node("appearance-build-note").textContent, /^Saved value/); assert.equal(c.node("appearance-eyes-note").textContent, "", "unset fields carry no note (placeholder only)");
     assert.equal(c.node("editor-save").disabled, true);
     c.node("appearance-build").value = "athletic"; c.node("appearance-build").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, false);
     c.node("appearance-build").value = " lean "; c.node("appearance-build").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, true, "same value after trimming is no change");
     c.node("appearance-height_cm").value = "180.5"; c.node("appearance-height_cm").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, true, "invalid number");
+    assert.equal(c.node("appearance-height_cm").attributes.get("aria-invalid"), "true"); assert.equal(c.node("appearance-height_cm-note").textContent, "Enter a whole number from 30 to 300 cm.");
+    c.node("appearance-height_cm").value = ""; c.node("appearance-height_cm").handlers.get("input")!({}); assert.equal(c.node("appearance-height_cm-note").textContent, "");
     c.node(back).handlers.get("click")!({}); assert.equal(c.node("household-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
   }
   assert.equal(JSON.stringify(data), before); assert.equal(calls, 1);
