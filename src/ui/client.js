@@ -22,6 +22,7 @@ const householdCharacters = new Map();
 function switchView(view) {
   activeView = view;
   closeCharacter();
+  if (view !== "editor") closeLightbox();
   for (const [key, id] of [["play", "play-view"], ["household", "household-view"], ["editor", "member-editor"]]) if (ui(id)) ui(id).hidden = key !== view;
   ui("household-nav")?.setAttribute("aria-pressed", String(view !== "play"));
   if (view === "household") ui("household-close")?.focus();
@@ -86,7 +87,7 @@ function renderEditor(card, fill = false) {
   // refresh on every render; it never touches the editable inputs.
   if (ui("editor-image-prompt")) ui("editor-image-prompt").value = editor?.portrait_prompt?.prompt ?? "";
   if (ui("editor-negative-prompt")) ui("editor-negative-prompt").value = editor?.portrait_prompt?.negative_prompt ?? "";
-  if (fill) showPortraitError("");
+  if (fill) { showPortraitError(""); portraitResult = ""; }
   renderPortrait(editor);
   if (ui("editor-identity")) ui("editor-identity").textContent = editor?.identity?.length ? editor.identity.map(i => `${i.label}: ${i.value}`).join(" · ") : "No established species, sex or age.";
   if (fill) {
@@ -120,51 +121,180 @@ async function saveEditor() {
   updateEditorSave();
 }
 ui("editor-save")?.addEventListener("click", () => saveEditor());
-// Portrait Image Generation V1. Generation is an explicit click (it costs money); the browser sends only the opaque ref and the
-// revision the editor opened with. The shown portrait is always the committed one: nothing optimistic, nothing on open.
-let portraitBusy = false;
+// Portrait Gallery V2. Generation is an explicit click (it costs money) asking the server for one batch of 3 options; the browser sends
+// only the opaque ref, the revision the editor opened with and, for role/delete actions, an opaque Gallery item token. What is shown is
+// always the committed projection: nothing optimistic, nothing on open. The Full Body slot never falls back to the Avatar.
+let portraitBusy = false, portraitAction = "", portraitResult = "", lightboxToken, lightboxConfirm = false, lightboxReturn;
 function showPortraitError(text) { const el = ui("portrait-error"); if (el) { el.textContent = text; el.hidden = !text; } }
+function showLightboxError(text) { const el = ui("lightbox-error"); if (el) { el.textContent = text; el.hidden = !text; } }
+function editorPortrait() { return householdCharacters.get(editorRef)?.appearance_editor?.portrait; }
+function showImage(image, url) {
+  if (!image) return;
+  if (url) { if (image.getAttribute?.("src") !== url) image.setAttribute("src", url); image.hidden = false; }
+  else image.hidden = true;
+}
+const roleLabels = item => [item.is_avatar ? "Avatar" : "", item.is_full_body ? "Full Body" : ""].filter(Boolean);
+function deleteBlock(item) {
+  if (item.is_avatar && item.is_full_body) return "This image is the Avatar and the Full Body. Choose another Avatar, and another Full Body image or clear Full Body, before deleting it.";
+  if (item.is_avatar) return "Choose another Avatar before deleting this image.";
+  if (item.is_full_body) return "Choose another Full Body image or clear Full Body first.";
+  return "";
+}
 function renderPortrait(editor) {
-  const portrait = editor?.portrait, image = ui("editor-portrait-image");
-  if (image) {
-    if (portrait?.url) { if (image.getAttribute?.("src") !== portrait.url) image.setAttribute("src", portrait.url); image.hidden = false; }
-    else image.hidden = true;
-  }
-  if (ui("editor-initial")) ui("editor-initial").hidden = !!portrait?.url;
-  if (ui("editor-portrait-label")) ui("editor-portrait-label").hidden = !!portrait?.url;
-  if (ui("editor-portrait-status")) ui("editor-portrait-status").textContent = portraitBusy ? "Generating portrait…" : !portrait?.available ? "No portrait yet"
-    : portrait.stale ? "Appearance changed since this portrait was generated." : "";
-  if (ui("portrait-generate")) { ui("portrait-generate").textContent = portraitBusy ? "Generating…" : portrait?.available ? "Regenerate" : "Generate portrait"; ui("portrait-generate").disabled = portraitBusy || !editor; }
+  const portrait = editor?.portrait, gallery = portrait?.gallery ?? [], generating = portraitBusy && portraitAction === "generate";
+  showImage(ui("editor-avatar-image"), portrait?.avatar?.url);
+  if (ui("editor-initial")) ui("editor-initial").hidden = !!portrait?.avatar;
+  if (ui("editor-avatar-status")) ui("editor-avatar-status").textContent = !portrait?.avatar ? "No avatar yet" : portrait.avatar.stale ? "Current Avatar · older appearance" : "Current Avatar";
+  if (ui("portrait-avatar-change")) ui("portrait-avatar-change").hidden = !gallery.length;
+  // Full Body: its own image or an explicit empty state, never a silent Avatar substitute.
+  showImage(ui("editor-full-body-image"), portrait?.full_body?.url);
+  if (ui("editor-full-body-label")) ui("editor-full-body-label").hidden = !!portrait?.full_body;
+  if (ui("editor-full-body-status")) ui("editor-full-body-status").textContent = !portrait?.full_body ? gallery.length ? "No image selected. Choose one from the Gallery." : "No image selected."
+    : portrait.full_body.stale ? "Appearance changed since this image was generated." : "";
+  if (ui("portrait-full-body-clear")) { ui("portrait-full-body-clear").hidden = !portrait?.full_body; ui("portrait-full-body-clear").disabled = portraitBusy; }
+  const full = !!portrait && !portrait.can_generate_batch;
+  if (ui("portrait-generate")) { ui("portrait-generate").textContent = generating ? "Generating 3 options…" : "Generate 3 options"; ui("portrait-generate").disabled = portraitBusy || !editor || full; }
+  if (ui("portrait-status")) ui("portrait-status").textContent = generating ? "Generating 3 portrait options…" : portraitResult || (full ? "Gallery is full. Delete some unused portraits first." : "");
   if (ui("portrait-reference")) { ui("portrait-reference").textContent = portrait?.reference_attached ? "Replace reference" : "Reference"; ui("portrait-reference").disabled = portraitBusy || !editor; }
   if (ui("portrait-reference-remove")) ui("portrait-reference-remove").hidden = !portrait?.reference_attached || portraitBusy;
-  if (ui("portrait-meta")) ui("portrait-meta").textContent = [portrait?.available ? `Portrait ${portrait.version_number} of ${portrait.version_count}` : "", portrait?.model_label ?? "",
-    portrait?.reference_attached ? "Reference attached" : ""].filter(Boolean).join(" · ");
+  if (ui("portrait-meta")) ui("portrait-meta").textContent = portrait?.reference_attached ? "Reference attached" : "No reference attached";
+  if (ui("portrait-gallery-count")) ui("portrait-gallery-count").textContent = gallery.length ? `${gallery.length} of ${portrait.gallery_limit}` : "";
+  renderGallery(gallery);
+  renderLightbox();
 }
-async function portraitRequest(url, body) {
+function galleryChip(label, aria, held, onClick) {
+  const chip = document.createElement("button"); chip.className = `gallery-chip${label === "Delete" ? " danger" : ""}`; chip.setAttribute("type", "button");
+  chip.setAttribute("aria-label", held ? `${label} (current)` : aria); chip.textContent = label;
+  if (label !== "Delete") chip.setAttribute("aria-pressed", String(held));
+  chip.disabled = portraitBusy || held; chip.addEventListener("click", onClick); return chip;
+}
+function renderGallery(gallery) {
+  const grid = ui("portrait-gallery");
+  if (!grid) return;
+  grid.replaceChildren();
+  if (!gallery.length) {
+    const empty = document.createElement("p"); empty.className = "gallery-empty"; empty.textContent = "No portraits yet. Generate 3 options to start the Gallery."; grid.append(empty); return;
+  }
+  gallery.forEach((item, index) => {
+    const entry = document.createElement("div"); entry.className = "gallery-item";
+    const thumb = document.createElement("button"); thumb.className = "gallery-thumb"; thumb.setAttribute("type", "button"); thumb.setAttribute("data-token", item.token);
+    thumb.setAttribute("aria-label", `View portrait ${index + 1} of ${gallery.length}${roleLabels(item).length ? ` (${roleLabels(item).join(", ")})` : ""}`);
+    const image = document.createElement("img"); image.setAttribute("src", item.url); image.setAttribute("alt", ""); image.setAttribute("loading", "lazy");
+    const badges = document.createElement("span"); badges.className = "gallery-badges";
+    for (const label of roleLabels(item)) { const badge = document.createElement("span"); badge.className = "role-badge"; badge.textContent = label; badges.append(badge); }
+    if (item.stale) { const badge = document.createElement("span"); badge.className = "stale-badge"; badge.textContent = "Older appearance"; badges.append(badge); }
+    thumb.append(image, badges);
+    thumb.addEventListener("click", () => openLightbox(item.token, thumb));
+    const actions = document.createElement("div"); actions.className = "gallery-actions";
+    actions.append(galleryChip("Avatar", `Set portrait ${index + 1} as Avatar`, item.is_avatar, () => portraitRequest("/api/portrait/avatar", { item: item.token }, "role")),
+      galleryChip("Full Body", `Set portrait ${index + 1} as Full Body`, item.is_full_body, () => portraitRequest("/api/portrait/full-body", { item: item.token }, "role")),
+      galleryChip("Delete", `Delete portrait ${index + 1}`, false, () => requestDelete(item, thumb)));
+    entry.append(thumb, actions); grid.append(entry);
+  });
+}
+function openLightbox(token, trigger, confirm = false) {
+  if (!ui("portrait-lightbox")) return;
+  lightboxToken = token; lightboxConfirm = confirm; if (trigger) lightboxReturn = trigger;
+  showLightboxError(""); renderLightbox();
+  (confirm ? ui("lightbox-confirm-cancel") : ui("lightbox-close"))?.focus();
+}
+function closeLightbox() {
+  const token = lightboxToken, back = lightboxReturn;
+  lightboxToken = undefined; lightboxConfirm = false; lightboxReturn = undefined;
+  if (ui("portrait-lightbox")) ui("portrait-lightbox").hidden = true;
+  if (!token || activeView !== "editor") return;
+  // Thumbnails re-render with committed state; return focus to the same image when it still exists.
+  const same = Array.from(ui("portrait-gallery")?.children ?? []).map(entry => entry.children?.[0]).find(thumb => (thumb?.getAttribute?.("data-token") ?? thumb?.attributes?.get?.("data-token")) === token);
+  (back?.isConnected === false ? same ?? ui("portrait-generate") : back ?? same ?? ui("portrait-generate"))?.focus?.();
+}
+function stepLightbox(delta) {
+  const gallery = editorPortrait()?.gallery ?? [], index = gallery.findIndex(item => item.token === lightboxToken);
+  if (index < 0 || gallery.length < 2) return;
+  lightboxToken = gallery[(index + delta + gallery.length) % gallery.length].token; lightboxConfirm = false; showLightboxError(""); renderLightbox();
+}
+function renderLightbox() {
+  const box = ui("portrait-lightbox");
+  if (!box || !lightboxToken) { if (box) box.hidden = true; return; }
+  const gallery = editorPortrait()?.gallery ?? [], index = gallery.findIndex(item => item.token === lightboxToken), item = gallery[index];
+  if (!item || activeView !== "editor") { closeLightbox(); return; }
+  box.hidden = false;
+  showImage(ui("lightbox-image"), item.url); ui("lightbox-image")?.setAttribute("alt", `Portrait ${index + 1} of ${gallery.length}`);
+  ui("lightbox-position").textContent = `${index + 1} of ${gallery.length}`;
+  ui("lightbox-badges").replaceChildren();
+  for (const label of [...roleLabels(item), item.stale ? "Older appearance" : ""].filter(Boolean)) {
+    const badge = document.createElement("span"); badge.className = label === "Older appearance" ? "stale-badge" : "role-badge"; badge.textContent = label; ui("lightbox-badges").append(badge);
+  }
+  ui("lightbox-meta").textContent = [`Generated ${item.generated_at.slice(0, 16).replace("T", " ")} UTC`, item.model_label, item.reference_used ? "Reference used" : ""].filter(Boolean).join(" · ");
+  for (const id of ["lightbox-prev", "lightbox-next"]) ui(id).disabled = gallery.length < 2;
+  ui("lightbox-avatar").textContent = item.is_avatar ? "Avatar ✓" : "Set as Avatar"; ui("lightbox-avatar").disabled = portraitBusy || item.is_avatar;
+  ui("lightbox-full-body").textContent = item.is_full_body ? "Full Body ✓" : "Set as Full Body"; ui("lightbox-full-body").disabled = portraitBusy || item.is_full_body;
+  ui("lightbox-delete").disabled = portraitBusy; ui("lightbox-delete").hidden = lightboxConfirm;
+  ui("lightbox-confirm").hidden = !lightboxConfirm;
+  ui("lightbox-confirm-delete").disabled = portraitBusy;
+}
+// Delete: an image holding a role is blocked before any confirmation; otherwise the viewer asks for an explicit confirmation.
+function requestDelete(item, trigger) {
+  const blocked = deleteBlock(item);
+  if (blocked) { if (lightboxToken === item.token) showLightboxError(blocked); else showPortraitError(blocked); return; }
+  if (lightboxToken === item.token) { lightboxConfirm = true; showLightboxError(""); renderLightbox(); ui("lightbox-confirm-cancel")?.focus(); }
+  else openLightbox(item.token, trigger, true);
+}
+async function portraitRequest(url, body, action) {
   if (!editorRef || portraitBusy) return;
-  portraitBusy = true; showPortraitError("");
-  const card = householdCharacters.get(editorRef); renderPortrait(card?.appearance_editor);
+  if (action === "generate" && editorPortrait() && !editorPortrait().can_generate_batch) return;
+  portraitBusy = true; portraitAction = action; showPortraitError(""); showLightboxError("");
+  if (action === "generate") portraitResult = "";
+  renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
+  const inViewer = !!lightboxToken && (action === "role" || action === "delete" || action === "full-body-clear");
   try {
     const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, ...body }) });
     const data = await response.json();
-    portraitBusy = false;
+    portraitBusy = false; portraitAction = "";
     if (data?.messages) render(data);
-    // A committed portrait or reference never touches appearance: unsaved form edits stay valid at the new revision.
-    if (data?.ok) { if (data.changed) editorRevision = currentRevision; showPortraitError(""); }
-    else showPortraitError(data?.error?.message ?? "The portrait was not generated.");
-  } catch { portraitBusy = false; showPortraitError("The portrait request failed. Check the connection and try again."); }
+    // Portrait media never touches appearance: unsaved form edits stay valid at the new revision.
+    if (data?.ok) {
+      if (data.changed) editorRevision = currentRevision;
+      if (action === "generate") portraitResult = data.message ?? "";
+      if (action === "delete") closeLightbox(); else lightboxConfirm = false;
+    } else (inViewer ? showLightboxError : showPortraitError)(data?.error?.message ?? (action === "generate" ? "Portrait generation failed." : "The portrait change was not saved."));
+  } catch {
+    portraitBusy = false; portraitAction = "";
+    (inViewer ? showLightboxError : showPortraitError)("The portrait request failed. Check the connection and try again.");
+  }
   renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
 }
-ui("portrait-generate")?.addEventListener("click", () => portraitRequest("/api/portrait/generate", {}));
+ui("portrait-generate")?.addEventListener("click", () => portraitRequest("/api/portrait/generate", {}, "generate"));
+ui("portrait-full-body-clear")?.addEventListener("click", () => portraitRequest("/api/portrait/full-body", { item: null }, "full-body-clear"));
+ui("portrait-avatar-change")?.addEventListener("click", () => { const grid = ui("portrait-gallery"); grid?.scrollIntoView?.({ block: "nearest" }); grid?.children?.[0]?.children?.[0]?.focus?.(); });
+ui("lightbox-close")?.addEventListener("click", () => closeLightbox());
+ui("lightbox-backdrop")?.addEventListener("click", () => closeLightbox());
+ui("lightbox-prev")?.addEventListener("click", () => stepLightbox(-1));
+ui("lightbox-next")?.addEventListener("click", () => stepLightbox(1));
+ui("lightbox-avatar")?.addEventListener("click", () => lightboxToken ? portraitRequest("/api/portrait/avatar", { item: lightboxToken }, "role") : undefined);
+ui("lightbox-full-body")?.addEventListener("click", () => lightboxToken ? portraitRequest("/api/portrait/full-body", { item: lightboxToken }, "role") : undefined);
+ui("lightbox-delete")?.addEventListener("click", () => { const item = editorPortrait()?.gallery?.find(i => i.token === lightboxToken); if (item) requestDelete(item); });
+ui("lightbox-confirm-cancel")?.addEventListener("click", () => { lightboxConfirm = false; renderLightbox(); ui("lightbox-delete")?.focus(); });
+ui("lightbox-confirm-delete")?.addEventListener("click", () => lightboxToken && lightboxConfirm ? portraitRequest("/api/portrait/delete", { item: lightboxToken }, "delete") : undefined);
+ui("lightbox-dialog")?.addEventListener("keydown", event => {
+  if (event.key === "Escape") { event.preventDefault(); if (lightboxConfirm) { lightboxConfirm = false; renderLightbox(); ui("lightbox-delete")?.focus(); } else closeLightbox(); }
+  else if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); stepLightbox(event.key === "ArrowLeft" ? -1 : 1); }
+  else if (event.key === "Tab") {
+    event.preventDefault();
+    const controls = ["lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", ...(lightboxConfirm ? ["lightbox-confirm-delete", "lightbox-confirm-cancel"] : [])]
+      .map(ui).filter(el => el && !el.hidden && !el.disabled);
+    if (!controls.length) return;
+    const at = controls.indexOf(event.target); controls[(at + (event.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
+  }
+});
 ui("portrait-reference")?.addEventListener("click", () => { if (!portraitBusy) ui("portrait-reference-file")?.click?.(); });
-ui("portrait-reference-remove")?.addEventListener("click", () => portraitRequest("/api/portrait/reference", { image: null }));
+ui("portrait-reference-remove")?.addEventListener("click", () => portraitRequest("/api/portrait/reference", { image: null }, "reference"));
 ui("portrait-reference-file")?.addEventListener("change", () => {
   const input = ui("portrait-reference-file"), file = input?.files?.[0];
   if (!file) return;
   input.value = "";
   if (!["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 4 * 1024 * 1024) { showPortraitError("Choose a PNG, JPEG or WebP image of at most 4 MB."); return; }
   const reader = new FileReader();
-  reader.onload = () => portraitRequest("/api/portrait/reference", { image: { data_base64: String(reader.result).replace(/^data:[^,]*,/, "") } });
+  reader.onload = () => portraitRequest("/api/portrait/reference", { image: { data_base64: String(reader.result).replace(/^data:[^,]*,/, "") } }, "reference");
   reader.onerror = () => showPortraitError("The image could not be read.");
   reader.readAsDataURL(file);
 });
@@ -195,8 +325,8 @@ function renderHousehold() {
     const portrait = document.createElement("div"); portrait.className = "portrait member-portrait";
     const initial = document.createElement("strong"); initial.textContent = card.name_known ? card.name.slice(0, 1) : "?";
     const presence = document.createElement("span"); presence.className = "presence-badge"; presence.textContent = card.presence === "present" ? "Here" : "Elsewhere";
-    // Portrait Image Generation V1: the active portrait replaces the initial when one exists.
-    if (card.portrait_url) { const image = document.createElement("img"); image.className = "portrait-image"; image.setAttribute("alt", ""); image.setAttribute("src", card.portrait_url); portrait.append(image, presence); }
+    // Portrait Gallery V2: the Avatar (never the Full Body) replaces the initial when one exists.
+    if (card.avatar_url) { const image = document.createElement("img"); image.className = "portrait-image"; image.setAttribute("alt", ""); image.setAttribute("src", card.avatar_url); portrait.append(image, presence); }
     else portrait.append(initial, presence);
     const info = document.createElement("div"); info.className = "member-card-info";
     const name = document.createElement("h2"); name.textContent = card.name; info.append(name);
@@ -252,6 +382,9 @@ function openCharacter(person, trigger) {
   };
   for (const [field, value] of Object.entries(details)) if (ui(`character-${field}`)) ui(`character-${field}`).textContent = value;
   ui("portrait-initial").textContent = person.name_known === false || person.category === "Name unknown" ? "?" : card.name.slice(0, 1);
+  showImage(ui("character-avatar-image"), card.avatar_url);
+  ui("portrait-initial").hidden = !!card.avatar_url;
+  if (ui("character-portrait-label")) ui("character-portrait-label").hidden = !!card.avatar_url;
   ui("character-affiliations").textContent = card.affiliations.length ? card.affiliations.join(" · ") : "None known.";
   ui("character-badges").replaceChildren();
   for (const label of [card.household ? "Household" : "", card.npc_plus ? "NPC+" : ""].filter(Boolean)) {
@@ -342,6 +475,7 @@ function renderScene(data) {
       const unknown = person.name_known === false || person.category === "Name unknown";
       const avatar = document.createElement("span"); avatar.className = `avatar ${person.ref === "player" ? "player-avatar" : unknown ? "unknown-avatar" : ""}`;
       avatar.textContent = unknown ? "?" : person.name.slice(0, 1);
+      if (person.card?.avatar_url) { const image = document.createElement("img"); image.className = "avatar-image"; image.setAttribute("alt", ""); image.setAttribute("src", person.card.avatar_url); avatar.replaceChildren(image); avatar.className += " has-image"; }
       const detail = document.createElement("span"), name = document.createElement("strong"), category = document.createElement("small");
       name.textContent = person.name; category.textContent = person.category;
       detail.append(name, category); entry.append(avatar, detail);
@@ -367,6 +501,7 @@ function renderScene(data) {
     if (member.card) { card.setAttribute("type", "button"); card.setAttribute("aria-haspopup", "dialog"); card.addEventListener("click", () => openCharacter({ ref: member.card.ref, name: member.card.name, name_known: member.card.name_known, card: member.card }, card)); }
     if (member.card?.ref === selectedCharacter && returnFocus?.className === "household-member") returnFocus = card;
     card.setAttribute("data-initial", member.name === "Unfamiliar household member" ? "?" : member.name.slice(0, 1));
+    if (member.card?.avatar_url) { const image = document.createElement("img"); image.className = "avatar-image"; image.setAttribute("alt", ""); image.setAttribute("src", member.card.avatar_url); card.append(image); card.className += " has-avatar"; }
     card.setAttribute("title", `${member.name} · ${member.presence === "present" ? "Here" : "Elsewhere"}`);
     const name = document.createElement("strong"); name.textContent = member.name;
     const detail = document.createElement("span");

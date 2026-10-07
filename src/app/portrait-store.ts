@@ -45,7 +45,10 @@ export class PortraitAssetStore {
     await rename(this.#inside(tmp), target);
   }
   async discard(path: string): Promise<void> { await rm(this.#inside(path), { force: true }).catch(() => undefined); }
-  async remove(campaignId: string, characterId: string, file: string): Promise<void> { await rm(this.#file(campaignId, characterId, file), { force: true }).catch(() => undefined); }
+  /** Best-effort removal of a final file; resolves false (never throws) when it could not be removed, leaving a safe orphan. */
+  async remove(campaignId: string, characterId: string, file: string): Promise<boolean> {
+    try { await rm(this.#file(campaignId, characterId, file), { force: true }); return true; } catch { return false; }
+  }
   async read(campaignId: string, characterId: string, file: string): Promise<Buffer | undefined> {
     const path = this.#file(campaignId, characterId, file);
     const info = await stat(path).catch(() => undefined);

@@ -41,7 +41,8 @@ const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color"
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-portrait-image", "editor-portrait-label", "editor-portrait-status", "portrait-generate", "portrait-reference", "portrait-reference-file", "portrait-error", "portrait-meta", "portrait-reference-remove",
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate", "portrait-reference", "portrait-reference-file", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label",
+    "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
@@ -422,7 +423,7 @@ const editorView = (overrides: Record<string, string | null> = { build: "lean" }
   fields: APPEARANCE_KEYS.map(key => ({ key, label: key, group: "body", kind: key.endsWith("_cm") || key.endsWith("_kg") ? "number" : ["scars", "distinguishing_marks", "distinctive_traits"].includes(key) ? "lines" : "text",
     override: overrides[key] ?? null, inherited: key === "description" ? "An established appearance." : null })),
   portrait_prompt: { prompt: `Full-body character reference image. Build: ${overrides.build ?? "unset"}.`, negative_prompt: "extra people, text" },
-  portrait: { available: false, url: null, stale: false, generated_at: null, model_label: null, version_number: null, version_count: 0, reference_attached: false, reference_url: null } });
+  portrait: { avatar: null, full_body: null, gallery: [], gallery_limit: 64, batch_size: 3, can_generate_batch: true, reference_attached: false, reference_url: null } });
 const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable, appearance_editor: editable ? editorView() : null,
   presence: here ? "present" : "away", known_location: here ? "Front hall" : null, role: "Known porter", relationship: "Known colleague", state: here ? "winded" : "Not recorded", appearance: "An established appearance.", where: here ? "Here, in Front hall" : "Whereabouts not known", affiliations: [], public_profile: { age_band: "Adult" } });
 const householdOpening = () => {
@@ -477,7 +478,7 @@ test("eligible NPC+ editor opens by opaque ref, shows stored overrides only, kee
   }
   assert.equal(JSON.stringify(data), before); assert.equal(calls, 1);
   const html = await readFile("src/ui/index.html", "utf8");
-  assert.match(html, /id="editor-save"[^>]*disabled/); assert.match(html, /id="portrait-generate" type="button" disabled>Generate portrait</); assert.match(html, /id="portrait-reference" type="button" disabled>Reference</);
+  assert.match(html, /id="editor-save"[^>]*disabled/); assert.match(html, /id="portrait-generate" type="button" disabled>Generate 3 options</); assert.match(html, /id="editor-full-body-label">No Full Body selected</); assert.match(html, /id="portrait-reference" type="button" disabled>Reference</);
   assert.doesNotMatch(html, /v1|v2|v3|private_notes|reflection|OpenRouter|Measurements<input|Usual attire<input|Posture &amp; bearing<input|Face<input/);
 });
 test("editor save posts only changed fields against the opened revision, refreshes from committed state, and keeps edits on a stale conflict", async () => {
@@ -514,34 +515,194 @@ test("Household zero-member view is a full empty destination and duplicate refs 
   const card = householdCard("same"), c = await client(async () => ({ ok: true, json: async () => ({ ...opening, play: { household: [{ members: [card] }, { members: [card] }] } }) }));
   assert.equal(c.node("household-totals").textContent, "1 members · 1 here with you · 0 elsewhere");
 });
-test("portrait generation is an explicit click sending only ref + opened revision; double-submit blocked; failure keeps the old portrait", async () => {
-  const posts: any[] = [];
-  let release!: (value: unknown) => void;
-  const withPortrait = (url: string | null, stale = false) => { const next = householdOpening(); const card = next.play.household[0]!.members[0]!;
-    card.appearance_editor = { ...editorView(), portrait: { available: !!url, url, stale, generated_at: url ? "2026-10-07T12:00:00.000Z" : null, model_label: url ? "bytedance-seed/seedream-5-0-flash" : null, version_number: url ? 1 : null, version_count: url ? 1 : 0, reference_attached: false, reference_url: null } } as any;
-    (card as any).portrait_url = url; return next; };
+// Portrait Gallery V2 (client). A tiny committed-state server double: the browser holds no portrait truth of its own.
+const asset = (n: number) => `/api/portrait/asset/${String(n).repeat(32).slice(0, 32)}`;
+const itemToken = (n: number) => `${n}`.repeat(32).slice(0, 32).replace(/[^0-9a-f]/g, "a");
+type Item = { token: string; url: string; is_avatar: boolean; is_full_body: boolean; stale: boolean; generated_at: string; model_label: string; reference_used: boolean };
+function galleryServer(initial: { gallery?: Item[]; full?: boolean } = {}) {
+  let gallery: Item[] = initial.gallery ?? [], revision = 12, next = gallery.length + 1, reference = false;
+  const portraitView = () => ({ avatar: gallery.find(g => g.is_avatar) ? { url: gallery.find(g => g.is_avatar)!.url, stale: gallery.find(g => g.is_avatar)!.stale } : null,
+    full_body: gallery.find(g => g.is_full_body) ? { url: gallery.find(g => g.is_full_body)!.url, stale: gallery.find(g => g.is_full_body)!.stale } : null,
+    gallery: gallery.map(g => ({ ...g })), gallery_limit: 64, batch_size: 3, can_generate_batch: !initial.full && gallery.length + 3 <= 64, reference_attached: reference, reference_url: null });
+  const state = () => { const data = householdOpening(); const card: any = data.play.household[0]!.members[0]!;
+    card.appearance_editor = { ...editorView(), portrait: portraitView() }; card.avatar_url = gallery.find(g => g.is_avatar)?.url ?? null;
+    (data.play.participants[0] as any).card = card; return { ...data, revision }; };
+  const make = (stale = false): Item => { const n = next++; return { token: itemToken(n), url: asset(n), is_avatar: false, is_full_body: false, stale, generated_at: "2026-10-07T12:34:56.000Z", model_label: "bytedance-seed/seedream-5-0-flash", reference_used: reference }; };
+  return {
+    get gallery() { return gallery; }, state,
+    batch(succeeded: number, pickIndex = 0) {
+      const first = !gallery.length, added = Array.from({ length: succeeded }, () => make());
+      if (first && added.length) added[pickIndex]!.is_avatar = true;
+      gallery = [...gallery, ...added]; if (added.length) revision++;
+      return succeeded ? { ...state(), ok: true, changed: true, requested: 3, succeeded, failed: 3 - succeeded, avatar_auto_selected: first, message: succeeded === 3 ? "3 portrait options generated." : `${succeeded} of 3 portrait options generated.` }
+        : { ...state(), ok: false, requested: 3, succeeded: 0, failed: 3, error: { message: "Portrait generation failed. The image provider failed. Nothing was saved." } };
+    },
+    role(role: "is_avatar" | "is_full_body", token: string | null) { gallery = gallery.map(g => ({ ...g, [role]: g.token === token })); revision++; return { ...state(), ok: true, changed: true }; },
+    remove(token: string) { gallery = gallery.filter(g => g.token !== token); revision++; return { ...state(), ok: true, changed: true }; },
+    stale() { gallery = gallery.map(g => ({ ...g, stale: true })); revision++; },
+    setReference(on: boolean) { reference = on; revision++; },
+  };
+}
+async function galleryClient(server: ReturnType<typeof galleryServer>, hold?: { release?: () => void }) {
+  const posts: { url: string; body: any }[] = [];
   const c = await client(async (url: string, options?: any) => {
-    if (!options) return { ok: true, json: async () => withPortrait(null) };
-    posts.push({ url, body: JSON.parse(options.body) });
-    return { ok: true, json: () => new Promise(resolve => { release = resolve; }) };
+    if (!options) return { ok: true, json: async () => server.state() };
+    const body = JSON.parse(options.body); posts.push({ url, body });
+    const answer = () => url === "/api/portrait/generate" ? server.batch(3)
+      : url === "/api/portrait/avatar" ? server.role("is_avatar", body.item)
+      : url === "/api/portrait/full-body" ? server.role("is_full_body", body.item)
+      : url === "/api/portrait/delete" ? server.remove(body.item) : { ...server.state(), ok: true, changed: false };
+    if (hold) return { ok: true, json: () => new Promise(resolve => { hold.release = () => resolve(answer()); }) };
+    return { ok: true, json: async () => answer() };
   });
   c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
-  assert.equal(c.node("editor-portrait-status").textContent, "No portrait yet"); assert.equal(c.node("portrait-generate").textContent, "Generate portrait");
-  assert.equal(c.node("portrait-generate").disabled, false); assert.equal(posts.length, 0, "nothing is generated on open");
+  return { c, posts };
+}
+const thumbs = (c: Awaited<ReturnType<typeof client>>) => c.node("portrait-gallery").children.filter(e => e.className === "gallery-item");
+const chips = (entry: Element) => entry.children[1]!.children;
+const badges = (entry: Element) => entry.children[0]!.children[1]!.children.map(b => b.textContent);
+
+test("portrait V2 first generation: empty Avatar, Full Body and Gallery; one explicit click sends ref + opened revision only; double-submit blocked; one Avatar badge; Full Body stays empty", async () => {
+  const server = galleryServer(), hold: { release?: () => void } = {};
+  const { c, posts } = await galleryClient(server, hold);
+  assert.equal(c.node("editor-avatar-status").textContent, "No avatar yet"); assert.equal(c.node("editor-avatar-image").hidden, true); assert.equal(c.node("editor-initial").hidden, false);
+  assert.equal(c.node("editor-full-body-label").hidden, false); assert.equal(c.node("editor-full-body-image").hidden, true); assert.equal(c.node("editor-full-body-status").textContent, "No image selected.");
+  assert.equal(c.node("portrait-full-body-clear").hidden, true); assert.equal(c.node("portrait-avatar-change").hidden, true);
+  assert.match(c.node("portrait-gallery").textContent, /No portraits yet/); assert.equal(c.node("portrait-generate").textContent, "Generate 3 options");
+  assert.equal(posts.length, 0, "nothing is generated on open");
   const first = c.node("portrait-generate").handlers.get("click")!({});
   c.node("portrait-generate").handlers.get("click")!({}); await tick();
   assert.equal(posts.length, 1, "a second click while generating sends nothing");
   assert.deepEqual(posts[0], { url: "/api/portrait/generate", body: { ref: "alpha", expected_revision: 12 } });
-  assert.equal(c.node("portrait-generate").disabled, true); assert.equal(c.node("portrait-generate").textContent, "Generating…"); assert.equal(c.node("editor-portrait-status").textContent, "Generating portrait…");
-  release({ ...withPortrait("/api/portrait/asset/" + "a".repeat(32)), revision: 13, ok: true, changed: true }); await first;
-  assert.equal(c.node("editor-portrait-image").attributes.get("src"), "/api/portrait/asset/" + "a".repeat(32)); assert.equal(c.node("editor-portrait-image").hidden, false);
-  assert.equal(c.node("portrait-generate").textContent, "Regenerate"); assert.equal(c.node("portrait-meta").textContent, "Portrait 1 of 1 · bytedance-seed/seedream-5-0-flash");
-  // Failure: the committed portrait stays, the error is shown, the button is usable again.
-  const second = c.node("portrait-generate").handlers.get("click")!({}); await tick();
-  assert.equal(posts[1].body.expected_revision, 13, "a committed portrait moves the editor to the new revision");
-  release({ ...withPortrait("/api/portrait/asset/" + "a".repeat(32), true), revision: 13, ok: false, error: { message: "The image provider reports insufficient credits." } }); await second;
-  assert.equal(c.node("editor-portrait-image").attributes.get("src"), "/api/portrait/asset/" + "a".repeat(32));
-  assert.equal(c.node("portrait-error").hidden, false); assert.match(c.node("portrait-error").textContent, /insufficient credits/);
-  assert.equal(c.node("portrait-generate").disabled, false); assert.equal(c.node("editor-portrait-status").textContent, "Appearance changed since this portrait was generated.");
-  assert.equal(c.node("household-cards").children[0]!.children[0]!.children[0]!.children[0]!.attributes.get("src"), "/api/portrait/asset/" + "a".repeat(32), "household card shows the portrait");
+  assert.equal(c.node("portrait-generate").disabled, true); assert.equal(c.node("portrait-generate").textContent, "Generating 3 options…"); assert.equal(c.node("portrait-status").textContent, "Generating 3 portrait options…");
+  hold.release!(); await first;
+  assert.equal(thumbs(c).length, 3); assert.equal(thumbs(c).filter(t => badges(t).includes("Avatar")).length, 1, "exactly one Avatar badge");
+  assert.equal(thumbs(c).filter(t => badges(t).includes("Full Body")).length, 0);
+  assert.equal(c.node("portrait-status").textContent, "3 portrait options generated."); assert.equal(c.node("portrait-gallery-count").textContent, "3 of 64");
+  assert.equal(c.node("editor-avatar-image").attributes.get("src"), asset(1)); assert.equal(c.node("editor-avatar-image").hidden, false); assert.equal(c.node("editor-avatar-status").textContent, "Current Avatar");
+  // No Full Body fallback: the slot stays an explicit empty state and never shows the Avatar.
+  assert.equal(c.node("editor-full-body-image").hidden, true); assert.equal(c.node("editor-full-body-label").hidden, false);
+  assert.equal(c.node("editor-full-body-image").attributes.get("src"), undefined); assert.equal(c.node("editor-full-body-status").textContent, "No image selected. Choose one from the Gallery.");
+  // Compact surfaces now show the Avatar.
+  assert.equal(c.node("household-cards").children[0]!.children[0]!.children[0]!.children[0]!.attributes.get("src"), asset(1), "Household card uses the Avatar");
+  // Next batch: posts at the new revision; Avatar unchanged.
+  const second = c.node("portrait-generate").handlers.get("click")!({}); await tick(); hold.release!(); await second;
+  assert.equal(posts[1]!.body.expected_revision, 13); assert.equal(thumbs(c).length, 6);
+  assert.equal(c.node("editor-avatar-image").attributes.get("src"), asset(1)); assert.equal(thumbs(c).filter(t => badges(t).includes("Avatar")).length, 1);
+});
+
+test("portrait V2 batch messages: partial success and total failure; existing roles untouched", async () => {
+  const server = galleryServer();
+  let outcome = 2;
+  const c = await client(async (url: string, options?: any) => {
+    if (!options) return { ok: true, json: async () => server.state() };
+    return { ok: true, json: async () => server.batch(outcome, 1) };
+  });
+  c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
+  await c.node("portrait-generate").handlers.get("click")!({});
+  assert.equal(c.node("portrait-status").textContent, "2 of 3 portrait options generated."); assert.equal(thumbs(c).length, 2);
+  assert.deepEqual(thumbs(c).map(t => badges(t).includes("Avatar")), [false, true], "the Avatar is one of the two successes");
+  outcome = 0;
+  await c.node("portrait-generate").handlers.get("click")!({});
+  assert.equal(c.node("portrait-error").hidden, false); assert.match(c.node("portrait-error").textContent, /^Portrait generation failed\./);
+  assert.equal(c.node("portrait-status").textContent, ""); assert.equal(thumbs(c).length, 2); assert.equal(c.node("editor-avatar-image").attributes.get("src"), asset(2));
+  assert.equal(c.node("portrait-generate").disabled, false);
+});
+
+test("portrait V2 roles from thumbnails: set Avatar, set Full Body, same image as both, clear Full Body; only opaque item tokens are sent", async () => {
+  const server = galleryServer(); server.batch(3, 0);
+  const { c, posts } = await galleryClient(server);
+  await chips(thumbs(c)[1]!)[0]!.handlers.get("click")!({});
+  assert.deepEqual(posts.at(-1), { url: "/api/portrait/avatar", body: { ref: "alpha", expected_revision: 13, item: itemToken(2) } });
+  assert.equal(c.node("editor-avatar-image").attributes.get("src"), asset(2)); assert.deepEqual(badges(thumbs(c)[1]!), ["Avatar"]);
+  assert.equal(chips(thumbs(c)[1]!)[0]!.disabled, true); assert.equal(chips(thumbs(c)[1]!)[0]!.attributes.get("aria-pressed"), "true"); assert.equal(chips(thumbs(c)[1]!)[0]!.attributes.get("aria-label"), "Avatar (current)");
+  assert.equal(chips(thumbs(c)[0]!)[0]!.attributes.get("aria-pressed"), "false"); assert.equal(chips(thumbs(c)[0]!)[0]!.disabled, false);
+  await chips(thumbs(c)[2]!)[1]!.handlers.get("click")!({});
+  assert.equal(posts.at(-1)!.url, "/api/portrait/full-body"); assert.equal(posts.at(-1)!.body.expected_revision, 14);
+  assert.equal(c.node("editor-full-body-image").attributes.get("src"), asset(3)); assert.equal(c.node("editor-full-body-image").hidden, false); assert.equal(c.node("editor-full-body-label").hidden, true);
+  assert.equal(c.node("editor-avatar-image").attributes.get("src"), asset(2), "Avatar unchanged");
+  await chips(thumbs(c)[1]!)[1]!.handlers.get("click")!({});
+  assert.deepEqual(badges(thumbs(c)[1]!), ["Avatar", "Full Body"], "one image can hold both roles");
+  assert.equal(c.node("portrait-full-body-clear").hidden, false);
+  await c.node("portrait-full-body-clear").handlers.get("click")!({});
+  assert.deepEqual(posts.at(-1), { url: "/api/portrait/full-body", body: { ref: "alpha", expected_revision: 16, item: null } });
+  assert.equal(c.node("editor-full-body-image").hidden, true); assert.equal(c.node("editor-full-body-label").hidden, false); assert.equal(thumbs(c).length, 3);
+  assert.equal(c.node("editor-avatar-image").attributes.get("src"), asset(2));
+  for (const post of posts) assert.deepEqual(Object.keys(post.body).sort(), post.url === "/api/portrait/generate" ? ["expected_revision", "ref"] : ["expected_revision", "item", "ref"]);
+});
+
+test("portrait V2 lightbox: opens on a thumbnail, previous/next wrap, arrows and Escape, role actions, metadata without internals", async () => {
+  const server = galleryServer(); server.batch(3, 0); server.setReference(true); server.batch(3); server.stale();
+  const { c, posts } = await galleryClient(server);
+  assert.equal(c.node("portrait-lightbox").hidden, true);
+  thumbs(c)[1]!.children[0]!.handlers.get("click")!({});
+  assert.equal(c.node("portrait-lightbox").hidden, false); assert.equal(c.node("lightbox-close").focused, true);
+  assert.equal(c.node("lightbox-image").attributes.get("src"), asset(2)); assert.equal(c.node("lightbox-position").textContent, "2 of 6");
+  assert.equal(c.node("lightbox-meta").textContent, "Generated 2026-10-07 12:34 UTC · bytedance-seed/seedream-5-0-flash");
+  assert.deepEqual(c.node("lightbox-badges").children.map(b => b.textContent), ["Older appearance"]);
+  assert.doesNotMatch(c.node("lightbox-dialog").textContent + c.node("lightbox-meta").textContent, /portrait_|\.png|[0-9a-f]{16}|\$/);
+  c.node("lightbox-next").handlers.get("click")!({}); assert.equal(c.node("lightbox-position").textContent, "3 of 6");
+  c.node("lightbox-dialog").handlers.get("keydown")!({ key: "ArrowRight", preventDefault() {} }); assert.equal(c.node("lightbox-position").textContent, "4 of 6");
+  assert.match(c.node("lightbox-meta").textContent, /Reference used$/);
+  c.node("lightbox-dialog").handlers.get("keydown")!({ key: "ArrowLeft", preventDefault() {} }); c.node("lightbox-prev").handlers.get("click")!({});
+  c.node("lightbox-prev").handlers.get("click")!({}); c.node("lightbox-prev").handlers.get("click")!({});
+  assert.equal(c.node("lightbox-position").textContent, "6 of 6", "previous wraps around");
+  assert.equal(c.node("lightbox-avatar").textContent, "Set as Avatar");
+  await c.node("lightbox-avatar").handlers.get("click")!({});
+  assert.deepEqual(posts.at(-1)!.body.item, itemToken(6)); assert.equal(c.node("lightbox-avatar").textContent, "Avatar ✓"); assert.equal(c.node("lightbox-avatar").disabled, true);
+  assert.equal(c.node("portrait-lightbox").hidden, false, "the viewer stays open on the same image after a role change");
+  await c.node("lightbox-full-body").handlers.get("click")!({});
+  assert.equal(c.node("lightbox-full-body").textContent, "Full Body ✓"); assert.deepEqual(c.node("lightbox-badges").children.map(b => b.textContent), ["Avatar", "Full Body", "Older appearance"]);
+  assert.equal(c.node("editor-avatar-status").textContent, "Current Avatar · older appearance"); assert.match(c.node("editor-full-body-status").textContent, /Appearance changed/);
+  c.node("lightbox-dialog").handlers.get("keydown")!({ key: "Escape", preventDefault() {} });
+  assert.equal(c.node("portrait-lightbox").hidden, true);
+  // Leaving the editor closes the viewer.
+  thumbs(c)[0]!.children[0]!.handlers.get("click")!({}); c.node("editor-back").handlers.get("click")!({});
+  assert.equal(c.node("portrait-lightbox").hidden, true);
+});
+
+test("portrait V2 delete: assigned images are blocked before any confirmation; unassigned ones need an explicit confirmation and close the viewer", async () => {
+  const server = galleryServer(); server.batch(3, 0); server.role("is_full_body", itemToken(2));
+  const { c, posts } = await galleryClient(server);
+  const before = posts.length;
+  await chips(thumbs(c)[0]!)[2]!.handlers.get("click")!({});
+  assert.equal(c.node("portrait-error").textContent, "Choose another Avatar before deleting this image."); assert.equal(c.node("portrait-lightbox").hidden, true);
+  thumbs(c)[1]!.children[0]!.handlers.get("click")!({});
+  c.node("lightbox-delete").handlers.get("click")!({});
+  assert.equal(c.node("lightbox-error").textContent, "Choose another Full Body image or clear Full Body first."); assert.equal(c.node("lightbox-confirm").hidden, true);
+  assert.equal(posts.length, before, "nothing is sent for a blocked delete");
+  c.node("lightbox-close").handlers.get("click")!({});
+  // Unassigned: the thumbnail's Delete opens the viewer on that image with a confirmation; Keep cancels.
+  chips(thumbs(c)[2]!)[2]!.handlers.get("click")!({});
+  assert.equal(c.node("portrait-lightbox").hidden, false); assert.equal(c.node("lightbox-position").textContent, "3 of 3");
+  assert.equal(c.node("lightbox-confirm").hidden, false); assert.equal(c.node("lightbox-delete").hidden, true); assert.equal(c.node("lightbox-confirm-cancel").focused, true);
+  c.node("lightbox-confirm-cancel").handlers.get("click")!({}); assert.equal(c.node("lightbox-confirm").hidden, true); assert.equal(posts.length, before);
+  c.node("lightbox-delete").handlers.get("click")!({}); assert.equal(c.node("lightbox-confirm").hidden, false);
+  await c.node("lightbox-confirm-delete").handlers.get("click")!({});
+  assert.deepEqual(posts.at(-1), { url: "/api/portrait/delete", body: { ref: "alpha", expected_revision: 14, item: itemToken(3) } });
+  assert.equal(c.node("portrait-lightbox").hidden, true, "the viewer closes after deleting the image it showed"); assert.equal(thumbs(c).length, 2);
+});
+
+test("portrait V2 compact surfaces: Avatar in the Household card, the scene sidebar, the sidebar roster and the drawer; placeholders without one", async () => {
+  const empty = galleryServer(), none = await client(async () => ({ ok: true, json: async () => empty.state() }));
+  assert.equal(none.node("scene-participants").children[0]!.children[0]!.textContent, "M"); assert.equal(none.node("household-members").children[0]!.children.length, 2);
+  none.node("scene-participants").children[0]!.handlers.get("click")!({});
+  assert.equal(none.node("character-avatar-image").hidden, true); assert.equal(none.node("portrait-initial").hidden, false); assert.equal(none.node("character-portrait-label").hidden, false);
+  const server = galleryServer(); server.batch(3, 1); server.role("is_full_body", itemToken(3));
+  const c = await client(async () => ({ ok: true, json: async () => server.state() }));
+  const sidebar = c.node("scene-participants").children[0]!.children[0]!;
+  assert.match(sidebar.className, /has-image/); assert.equal(sidebar.children[0]!.attributes.get("src"), asset(2), "scene sidebar uses the Avatar, not the Full Body");
+  const roster = c.node("household-members").children[0]!;
+  assert.match(roster.className, /has-avatar/); assert.equal(roster.children.find(child => child.className === "avatar-image")!.attributes.get("src"), asset(2));
+  assert.equal(c.node("household-cards").children[0]!.children[0]!.children[0]!.children[0]!.attributes.get("src"), asset(2));
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  assert.equal(c.node("character-avatar-image").attributes.get("src"), asset(2)); assert.equal(c.node("character-avatar-image").hidden, false);
+  assert.equal(c.node("portrait-initial").hidden, true); assert.equal(c.node("character-portrait-label").hidden, true);
+});
+
+test("portrait V2 Gallery limit disables generation before any request", async () => {
+  const server = galleryServer({ full: true }); server.batch(3, 0);
+  const { c, posts } = await galleryClient(server);
+  assert.equal(c.node("portrait-generate").disabled, true); assert.equal(c.node("portrait-status").textContent, "Gallery is full. Delete some unused portraits first.");
+  await c.node("portrait-generate").handlers.get("click")!({}); assert.equal(posts.length, 0);
 });

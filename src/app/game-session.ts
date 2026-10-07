@@ -3,13 +3,13 @@ import { ContextBudgetManager, type ContextPolicy } from "../turn/context-budget
 import { unavailableCompactor, type ContextCompactionService, type CompactionReason, type CompactionResult } from "./context-compaction.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
 import { createOpeningCampaign } from "../campaign/opening-state.js";
-import type { CampaignSnapshot, CharacterProfile } from "../campaign/types.js";
+import type { CampaignCommand, CampaignSnapshot, CharacterProfile } from "../campaign/types.js";
 import { applyAppearancePatch } from "../campaign/permanent-appearance.js";
 import { portraitFingerprint, PORTRAIT_PROMPT_VERSION } from "../campaign/portrait-prompt.js";
-import { portraitAssetToken, portraitRecord, MAX_PORTRAIT_VERSIONS } from "../campaign/portraits.js";
-import { decodeImage, ImageGenerationError, type ImageReference, type PortraitImageGenerator } from "../llm/openrouter/image-client.js";
+import { portraitAssetToken, portraitItemToken, portraitRecord, MAX_PORTRAIT_VERSIONS, PORTRAIT_BATCH_SIZE } from "../campaign/portraits.js";
+import { decodeImage, ImageGenerationError, type GeneratedImage, type ImageReference, type PortraitImageGenerator } from "../llm/openrouter/image-client.js";
 import { extensionFor, type PortraitAssetStore } from "./portrait-store.js";
-import { randomBytes } from "node:crypto";
+import { randomBytes, randomInt } from "node:crypto";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { CampaignSaveRepository, SaveListing, SaveSlot, SavedCampaign } from "../persistence/campaign-repository.js";
 import { CampaignSession } from "../persistence/campaign-session.js";
@@ -54,6 +54,8 @@ export interface SessionDeps {
   readonly portrait_store?: PortraitAssetStore;
   /** Safe server-side diagnostics for portrait failures: an error code and HTTP status only (never bodies, prompts or keys). */
   readonly portrait_log?: (entry: { readonly code: string; readonly status?: number }) => void;
+  /** Portrait Gallery V2 test seam: bounded index pick for the first-batch Avatar (default node:crypto randomInt, uniform). */
+  readonly portrait_pick?: (count: number) => number;
 }
 export type SessionEvent =
   | ({ readonly type: "narrator_preview"; readonly provisional: true } & import("../turn/turn-types.js").NarratorPreview)
@@ -72,9 +74,16 @@ export type ShutdownOutcome = { readonly closed: true; readonly discarded_unsave
 export interface SubmitOptions { readonly onEvent?: (event: SessionEvent) => void; readonly signal?: AbortSignal }
 export type LocationOutcome = { readonly ok: true; readonly changed: boolean; readonly confirmation: string; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly candidates?: readonly string[]; readonly view: SessionView };
-/** Portrait Image Generation V1 outcome. `cost_usd` only when the provider reported it (never estimated). */
-export type PortraitOutcome = { readonly ok: true; readonly changed: boolean; readonly cost_usd?: number; readonly view: SessionView }
+/** Portrait reference / role / delete outcome. */
+export type PortraitOutcome = { readonly ok: true; readonly changed: boolean; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly view: SessionView };
+/**
+ * Portrait Gallery V2 batch outcome. `cost_usd` is the sum of the costs the provider actually reported for the successful candidates
+ * (absent when none was reported; failed calls are never estimated). Provider bodies are never included.
+ */
+export type PortraitBatchOutcome = { readonly ok: true; readonly changed: true; readonly requested: number; readonly succeeded: number; readonly failed: number;
+    readonly avatar_auto_selected: boolean; readonly message: string; readonly cost_usd?: number; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly requested?: number; readonly succeeded?: 0; readonly failed?: number; readonly view: SessionView };
 const REFERENCE_MAX_BYTES = 4 * 1024 * 1024;
 /** Concise player-facing messages per image failure; provider bodies are never shown. */
 const PORTRAIT_MESSAGES: Readonly<Record<string, string>> = {
@@ -105,7 +114,7 @@ export class GameSession {
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
   #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
-  /** Portrait Image Generation V1: the character whose portrait is being generated (one generation per session at a time). */
+  /** Portrait Gallery V2: the character whose batch is being generated (one batch per session at a time). */
   #portraitBusy: string | undefined; #idleWaiters: (() => void)[] = [];
   private constructor(deps: SessionDeps, session: CampaignSession) {
     this.#deps = deps; this.#session = session;
@@ -213,17 +222,21 @@ export class GameSession {
   }
 
   /**
-   * Portrait Image Generation V1. Generates one portrait for an eligible managed NPC+ from the CURRENT committed appearance (the browser
-   * supplies only the opaque ref and the revision it saw; prompt, model and paths are server-side). Sequence: validate (revision,
-   * eligibility, lock) → build prompt → provider call → decode/validate → stage file → wait for any turn to finish → re-check that the
-   * prompt is unchanged → finalize file → prepare+commit metadata synchronously → expose. Any failure leaves the campaign and the active
-   * portrait unchanged; a staged or finalized-but-uncommitted file is removed. The generated image never changes appearance.
+   * Portrait Gallery V2. One explicit player action = one batch of exactly PORTRAIT_BATCH_SIZE (3) independent provider calls, run
+   * concurrently, all with the same committed prompt, the same attached reference and the same configured model (the browser supplies
+   * only the opaque ref and the revision it saw; batch size, prompt, model and paths are server-side). Sequence: validate (revision,
+   * eligibility, lock, 3 free Gallery slots) → build prompt → 3 provider calls (allSettled) → decode/validate + stage each success → wait
+   * for any turn to finish → re-check eligibility and that the prompt is unchanged → finalize the successful files → ONE metadata commit
+   * carrying every successful version (plus, on the first-ever batch into an empty Gallery with no Avatar, one uniformly random Avatar
+   * chosen among this batch's successes) → expose. Partial success keeps the successes; 0 successes changes nothing. Full Body is never
+   * selected here. A failed commit removes every finalized file of the batch. The generated images never change appearance.
    */
-  async generateNpcPortrait(request: { readonly ref: unknown; readonly expected_revision: unknown }): Promise<PortraitOutcome> {
-    const reject = (code: AppError["code"], message: string): PortraitOutcome => ({ ok: false, error: appError(code, { message }), view: this.getView() });
+  async generateNpcPortraitBatch(request: { readonly ref: unknown; readonly expected_revision: unknown }): Promise<PortraitBatchOutcome> {
+    const reject = (code: AppError["code"], message: string, counts?: { readonly succeeded: 0; readonly failed: number }): PortraitBatchOutcome =>
+      ({ ok: false, error: appError(code, { message }), ...(counts ? { requested: PORTRAIT_BATCH_SIZE, ...counts } : {}), view: this.getView() });
     if (this.#status === "closed") return reject("session_closed", "The session is closed.");
-    if (this.#status !== "idle") return reject("turn_in_progress", "A turn is running. Generate the portrait when it finishes.");
-    if (this.#portraitBusy) return reject("turn_in_progress", "A portrait is already being generated.");
+    if (this.#status !== "idle") return reject("turn_in_progress", "A turn is running. Generate portraits when it finishes.");
+    if (this.#portraitBusy) return reject("turn_in_progress", "Portraits are already being generated.");
     const generator = this.#deps.portrait_generator, store = this.#deps.portrait_store;
     if (!generator || !store) return reject("portrait_generation_failed", "Portrait generation is not available in this session.");
     const campaign = this.#session.campaign;
@@ -232,9 +245,13 @@ export class GameSession {
     if (!target) return reject("invalid_input", "This character's portrait cannot be generated.");
     const { id } = target, campaignId = target.snapshot.campaign_id, prompt = target.editor.portrait_prompt.prompt, fingerprint = portraitFingerprint(prompt);
     const existing = portraitRecord(target.snapshot, id);
-    if ((existing?.versions.length ?? 0) >= MAX_PORTRAIT_VERSIONS) return reject("portrait_generation_failed", "This character has reached the portrait version limit.");
+    // Never pay for images that could not be recorded: refuse before any provider call unless the whole batch fits.
+    if ((existing?.versions.length ?? 0) + PORTRAIT_BATCH_SIZE > MAX_PORTRAIT_VERSIONS) return reject("invalid_input", "Gallery is full. Delete some unused portraits first.");
+    // First-batch Avatar bootstrap is decided from the state BEFORE the batch: an empty Gallery and no Avatar assigned.
+    const bootstrapAvatar = !existing?.versions.length && existing?.avatar_version_id === undefined;
     this.#portraitBusy = id;
-    let staged: string | undefined;
+    const staged: { tmp: string; image: GeneratedImage; ext: string }[] = [], finalized: string[] = [];
+    let committed = false;
     try {
       const references: ImageReference[] = [];
       if (existing?.reference) {
@@ -242,38 +259,131 @@ export class GameSession {
         if (!bytes) return reject("portrait_generation_failed", "The attached reference image could not be read. Remove it or attach it again.");
         references.push({ media_type: existing.reference.media_type, bytes });
       }
-      const image = await generator.generate({ prompt, references });
-      const ext = extensionFor(image.media_type);
-      if (!ext) throw new ImageGenerationError("invalid_image");
-      staged = await store.stage(campaignId, id, image.bytes);
+      const settled = await Promise.allSettled(Array.from({ length: PORTRAIT_BATCH_SIZE }, () => generator.generate({ prompt, references })));
+      const failures: string[] = [];
+      const logFailure = (error: unknown) => {
+        const code = error instanceof ImageGenerationError ? error.code : "storage_error";
+        failures.push(code);
+        this.#deps.portrait_log?.({ code, ...(error instanceof ImageGenerationError && error.status ? { status: error.status } : {}) });
+      };
+      for (const result of settled) {
+        if (result.status === "rejected") { logFailure(result.reason); continue; }
+        try {
+          const ext = extensionFor(result.value.media_type);
+          if (!ext) throw new ImageGenerationError("invalid_image");
+          staged.push({ tmp: await store.stage(campaignId, id, result.value.bytes), image: result.value, ext });
+        } catch (error) { logFailure(error); }
+      }
+      if (!staged.length) {
+        const reason = PORTRAIT_MESSAGES[failures[0] ?? "storage_error"] ?? PORTRAIT_MESSAGES.storage_error!;
+        return reject("portrait_generation_failed", `Portrait generation failed. ${reason}`, { succeeded: 0, failed: PORTRAIT_BATCH_SIZE });
+      }
       // Never commit under a running turn: wait until the session is idle again, then re-validate against the current state.
       while (this.#now() !== "idle" && this.#now() !== "closed") await new Promise<void>(wake => this.#idleWaiters.push(wake));
-      if (this.#now() === "closed") return reject("session_closed", "The session closed before the portrait was saved.");
+      if (this.#now() === "closed") return reject("session_closed", "The session closed before the portraits were saved.");
       const now = this.#managedTarget(request.ref);
-      if (!now || now.id !== id) return reject("invalid_input", "This character can no longer be edited. The portrait was not saved.");
-      if (portraitFingerprint(now.editor.portrait_prompt.prompt) !== fingerprint) return reject("portrait_generation_failed", "The appearance changed while the portrait was generating. It was not saved; generate again.");
-      const number = (portraitRecord(now.snapshot, id)?.versions.length ?? 0) + 1;
-      const version_id = `portrait_${number}_${randomBytes(4).toString("hex")}`, asset_file = `${version_id}.${ext}`;
-      const version = { version_id, prompt_version: PORTRAIT_PROMPT_VERSION, prompt_fingerprint: fingerprint, model: image.model, created_at: new Date().toISOString(),
-        media_type: image.media_type, asset_file, ...(image.cost_usd !== undefined ? { cost_usd: image.cost_usd } : {}), ...(references.length ? { reference_used: true as const } : {}) };
-      await store.finalize(staged, campaignId, id, asset_file); staged = undefined;
+      if (!now || now.id !== id) return reject("invalid_input", "This character can no longer be edited. The portraits were not saved.");
+      if (portraitFingerprint(now.editor.portrait_prompt.prompt) !== fingerprint) return reject("portrait_generation_failed", "The appearance changed while the portraits were generating. They were not saved; generate again.");
+      const created_at = new Date().toISOString();
+      const versions = staged.map(({ image, ext }) => {
+        const version_id = `portrait_${randomBytes(6).toString("hex")}`;
+        return { version_id, prompt_version: PORTRAIT_PROMPT_VERSION, prompt_fingerprint: fingerprint, model: image.model, created_at, media_type: image.media_type, asset_file: `${version_id}.${ext}`,
+          ...(image.cost_usd !== undefined ? { cost_usd: image.cost_usd } : {}), ...(references.length ? { reference_used: true as const } : {}) };
+      });
+      for (const [index, entry] of staged.entries()) { await store.finalize(entry.tmp, campaignId, id, versions[index]!.asset_file); finalized.push(versions[index]!.asset_file); entry.tmp = ""; }
+      // Uniform over THIS batch's successes only; a CSPRNG-backed bounded integer, no persisted seed.
+      const avatar = bootstrapAvatar ? versions[this.#pick(versions.length)]!.version_id : undefined;
       try {
-        // Synchronous: no other operation can interleave between preparation and commit.
-        campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "record_portrait", character_id: id, version }] }));
-      } catch {
-        await store.remove(campaignId, id, asset_file);
-        return reject("campaign_validation_failed", "The portrait could not be recorded. Nothing was saved.");
-      }
+        // Synchronous: no other operation can interleave between preparation and commit. One revision for the whole batch.
+        campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "record_portrait_batch", character_id: id, versions, ...(avatar ? { avatar_version_id: avatar } : {}) }] }));
+        committed = true;
+      } catch { return reject("campaign_validation_failed", "The portraits could not be recorded. Nothing was saved."); }
       this.#lastError = undefined;
-      return { ok: true, changed: true, ...(image.cost_usd !== undefined ? { cost_usd: image.cost_usd } : {}), view: this.getView() };
+      const costs = versions.flatMap(v => v.cost_usd !== undefined ? [v.cost_usd] : []);
+      const succeeded = versions.length;
+      return { ok: true, changed: true, requested: PORTRAIT_BATCH_SIZE, succeeded, failed: PORTRAIT_BATCH_SIZE - succeeded, avatar_auto_selected: !!avatar,
+        message: succeeded === PORTRAIT_BATCH_SIZE ? `${succeeded} portrait options generated.` : `${succeeded} of ${PORTRAIT_BATCH_SIZE} portrait options generated.`,
+        // Sum of the costs the provider actually reported; never an estimate (absent when none was reported).
+        ...(costs.length ? { cost_usd: Math.round(costs.reduce((a, b) => a + b, 0) * 1e6) / 1e6 } : {}), view: this.getView() };
     } catch (error) {
       const code = error instanceof ImageGenerationError ? error.code : "storage_error";
       this.#deps.portrait_log?.({ code, ...(error instanceof ImageGenerationError && error.status ? { status: error.status } : {}) });
       return reject("portrait_generation_failed", PORTRAIT_MESSAGES[code] ?? PORTRAIT_MESSAGES.storage_error!);
     } finally {
-      if (staged) await store.discard(staged);
+      for (const { tmp } of staged) if (tmp) await store.discard(tmp);
+      if (!committed) for (const file of finalized) await store.remove(campaignId, id, file);
       this.#portraitBusy = undefined;
     }
+  }
+  #pick(count: number): number {
+    const index = (this.#deps.portrait_pick ?? randomInt)(count);
+    if (!Number.isSafeInteger(index) || index < 0 || index >= count) throw new Error("portrait pick out of range");
+    return index;
+  }
+
+  /** Shared preconditions for the role and delete mutations: open, idle, unlocked, current revision, an eligible managed target. */
+  #portraitMutationTarget(request: { readonly ref: unknown; readonly expected_revision: unknown }) {
+    const reject = (code: AppError["code"], message: string) => ({ ok: false as const, error: appError(code, { message }), view: this.getView() });
+    if (this.#status === "closed") return reject("session_closed", "The session is closed.");
+    if (this.#status !== "idle" || this.#portraitBusy) return reject("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    const campaign = this.#session.campaign;
+    if (typeof request.expected_revision !== "number" || request.expected_revision !== campaign.revision) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor and try again.");
+    const target = this.#managedTarget(request.ref);
+    if (!target) return reject("invalid_input", "This character's portraits cannot be changed.");
+    return { ok: true as const, campaign, id: target.id, campaignId: target.snapshot.campaign_id, record: portraitRecord(target.snapshot, target.id) };
+  }
+  /** As above, plus one Gallery item of THIS character resolved from its opaque item token (never a version ID, file name or path). */
+  #galleryTarget(request: { readonly ref: unknown; readonly expected_revision: unknown; readonly item: unknown }) {
+    const target = this.#portraitMutationTarget(request);
+    if (!target.ok) return target;
+    const version = typeof request.item === "string" && /^[0-9a-f]{32}$/.test(request.item)
+      ? target.record?.versions.find(v => portraitItemToken(target.campaignId, target.id, v.version_id) === request.item) : undefined;
+    if (!target.record || !version) return { ok: false as const, error: appError("invalid_input", { message: "That image is not in this character's gallery." }), view: this.getView() };
+    return { ...target, record: target.record, version };
+  }
+  #commitPortrait(campaign: CampaignState, command: CampaignCommand, failure: string): PortraitOutcome {
+    try {
+      const receipt = campaign.prepare({ expected_revision: campaign.revision, commands: [command] });
+      campaign.commit(receipt); this.#lastError = undefined;
+      return { ok: true, changed: receipt.changed, view: this.getView() };
+    } catch { return { ok: false, error: appError("campaign_validation_failed", { message: failure }), view: this.getView() }; }
+  }
+  /** Portrait Gallery V2: assign the Avatar role to one Gallery image (the previous Avatar loses it). No file is copied; Avatar is never cleared. */
+  setNpcPortraitAvatar(request: { readonly ref: unknown; readonly expected_revision: unknown; readonly item: unknown }): PortraitOutcome {
+    const target = this.#galleryTarget(request);
+    if (!target.ok) return target;
+    if (target.record.avatar_version_id === target.version.version_id) return { ok: true, changed: false, view: this.getView() };
+    return this.#commitPortrait(target.campaign, { kind: "set_portrait_avatar", character_id: target.id, version_id: target.version.version_id }, "The Avatar could not be changed.");
+  }
+  /** Portrait Gallery V2: assign the Full Body role to one Gallery image, or clear it with `item: null` (no image is deleted). Avatar is untouched. */
+  setNpcPortraitFullBody(request: { readonly ref: unknown; readonly expected_revision: unknown; readonly item: unknown }): PortraitOutcome {
+    if (request.item === null) {
+      const target = this.#portraitMutationTarget(request);
+      if (!target.ok) return target;
+      if (target.record?.full_body_version_id === undefined) return { ok: true, changed: false, view: this.getView() };
+      return this.#commitPortrait(target.campaign, { kind: "set_portrait_full_body", character_id: target.id, version_id: null }, "The Full Body image could not be cleared.");
+    }
+    const target = this.#galleryTarget(request);
+    if (!target.ok) return target;
+    if (target.record.full_body_version_id === target.version.version_id) return { ok: true, changed: false, view: this.getView() };
+    return this.#commitPortrait(target.campaign, { kind: "set_portrait_full_body", character_id: target.id, version_id: target.version.version_id }, "The Full Body image could not be changed.");
+  }
+  /**
+   * Portrait Gallery V2: delete one unassigned Gallery image; an image holding the Avatar or Full Body role is refused. Order: validate →
+   * commit the metadata removal → delete the file. A file that cannot be deleted after the commit stays as a safe orphan (logged) and the
+   * delete still succeeds: the save never points at a missing file.
+   */
+  async deleteNpcPortrait(request: { readonly ref: unknown; readonly expected_revision: unknown; readonly item: unknown }): Promise<PortraitOutcome> {
+    const target = this.#galleryTarget(request);
+    if (!target.ok) return target;
+    const { record, version } = target, isAvatar = record.avatar_version_id === version.version_id, isFullBody = record.full_body_version_id === version.version_id;
+    if (isAvatar || isFullBody) return { ok: false, error: appError("invalid_input", { message: isAvatar && isFullBody
+      ? "This image is the Avatar and the Full Body. Choose another Avatar, and another Full Body image or clear Full Body, before deleting it."
+      : isAvatar ? "Choose another Avatar before deleting this image." : "Choose another Full Body image or clear Full Body first." }), view: this.getView() };
+    const outcome = this.#commitPortrait(target.campaign, { kind: "delete_portrait_version", character_id: target.id, version_id: version.version_id }, "The image could not be deleted.");
+    if (!outcome.ok) return outcome;
+    if (!(await this.#deps.portrait_store!.remove(target.campaignId, target.id, version.asset_file))) this.#deps.portrait_log?.({ code: "orphaned_asset" });
+    return outcome;
   }
 
   /**

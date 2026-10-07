@@ -88,6 +88,19 @@ const portraitVersion = object({ version_id: id, prompt_version: pattern(/^[a-z0
   model: pattern(/^[a-z0-9][a-z0-9._:/-]{0,159}$/i, "a model slug"), created_at: isoTime, media_type: portraitMedia,
   asset_file: pattern(/^portrait_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a portrait asset file name"), cost_usd: optional(costUsd), reference_used: optional((input: unknown, path: string) => { if (input !== true) fail(path, "expected true"); return input; }) });
 const portraitReference = object({ media_type: portraitMedia, asset_file: pattern(/^reference_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a reference asset file name"), uploaded_at: isoTime });
+/**
+ * Portrait Gallery V2 record. V1 saves carry `active_version_id` (the portrait they display): it decodes as `avatar_version_id` and is
+ * never emitted again. Full Body is never derived from it. A record naming both legacy and V2 avatars must agree.
+ */
+const portraitRecordFields = object({ character_id: id, active_version_id: optional(id), avatar_version_id: optional(id), full_body_version_id: optional(id),
+  versions: list(portraitVersion, 64), reference: optional(portraitReference) });
+const portraitRecord: Parser = (input, path) => {
+  const { active_version_id: legacy, ...record } = portraitRecordFields(input, path) as Record<string, unknown> & { active_version_id?: string; avatar_version_id?: string };
+  if (legacy !== undefined && record.avatar_version_id !== undefined && legacy !== record.avatar_version_id) fail(`${path}.active_version_id`, "conflicts with avatar_version_id");
+  const avatar = record.avatar_version_id ?? legacy;
+  const { character_id, full_body_version_id, versions, reference } = record;
+  return { character_id, ...(avatar !== undefined ? { avatar_version_id: avatar } : {}), ...(full_body_version_id !== undefined ? { full_body_version_id } : {}), versions, ...(reference !== undefined ? { reference } : {}) };
+};
 const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: choice("name_established", "purchase_unnamed_subject", "recruitment", "custody", "rescue"),
   promoted_revision: integer(1), promoted_world_minute: integer(), location_id: id, label: text, ephemeral_ref: optional(text),
   established: object({ name: optional(text), sex: optional(text), age: optional(tagged({ exact: object({ kind: choice("exact"), years: integer(0) }), approximate: object({ kind: choice("approximate"), description: text }) })),
@@ -208,7 +221,10 @@ command("set_event_status", { event_id: id, status: eventStatus });
 command("reschedule_event", { event_id: id, scheduled_world_minute: integer() });
 command("set_funds", { character_id: id, gold });
 command("set_price_index", { character_id: id, percent: integer(-90, 90) });
-command("record_portrait", { character_id: id, version: portraitVersion });
+command("record_portrait_batch", { character_id: id, versions: list(portraitVersion, 3), avatar_version_id: optional(id) });
+command("set_portrait_avatar", { character_id: id, version_id: id });
+command("set_portrait_full_body", { character_id: id, version_id: nullable(id) });
+command("delete_portrait_version", { character_id: id, version_id: id });
 command("set_portrait_reference", { character_id: id, reference: nullable(portraitReference) });
 command("set_legal_status", { character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), documentation: optional(documentation), note: optional(text) });
 command("transfer_person", { transaction_id: id, transaction_kind: choice("sale", "gift", "assignment"), character_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: id, payment: optional(object({ payer_id: id, payee_id: optional(id), gold })), documentation, note: optional(text) });
@@ -226,7 +242,7 @@ const proposal = object({ expected_revision: integer(0), commands: list(tagged(v
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
 const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
   price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
-  portraits: optional(list(object({ character_id: id, active_version_id: optional(id), versions: list(portraitVersion, 64), reference: optional(portraitReference) }), 100000)),
+  portraits: optional(list(portraitRecord, 100000)),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: optional(id), off_scene: optional(object({ last_known_location: id, since_revision: integer(0) })) }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),

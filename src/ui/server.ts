@@ -6,6 +6,8 @@ import { UI_PLAYTEST_OPENING } from "../app/ui-playtest.js";
 
 import { ALTERNATE_NARRATOR_MODELS, type NarratorAlternatives } from "../app/narrator-alternatives.js";
 
+/** Portrait Gallery V2: batch generation, role assignment, Gallery delete and the reference upload. */
+const PORTRAIT_ROUTES = new Set(["/api/portrait/generate", "/api/portrait/avatar", "/api/portrait/full-body", "/api/portrait/delete", "/api/portrait/reference"]);
 interface Message { readonly comparison_id?: string; readonly role: "player" | "narrator"; readonly text: string }
 const assets = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
@@ -45,7 +47,7 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
         if (!file) { json(404, { error: "Not found." }); return; }
         res.writeHead(200, { "Content-Type": file.media_type, "Content-Length": String(file.bytes.length) }); res.end(file.bytes); return;
       }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/portrait/generate" || req.url === "/api/portrait/reference")) {
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || PORTRAIT_ROUTES.has(req.url ?? ""))) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
         // A reference upload carries one base64 image (at most 4 MB decoded); every other request stays small.
         const limit = req.url === "/api/portrait/reference" ? 6_000_000 : 24000;
@@ -65,13 +67,17 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422,
             { ...result, ...state() }); return;
         }
-        if (req.url === "/api/portrait/generate" || req.url === "/api/portrait/reference") {
-          // The browser supplies only the opaque ref, the revision it saw and (for a reference) the image itself: never a prompt,
-          // model, path or character ID. The server builds the prompt from committed appearance.
+        if (PORTRAIT_ROUTES.has(req.url ?? "")) {
+          // The browser supplies only the opaque ref, the revision it saw, an opaque Gallery item token (roles, delete) or the reference
+          // image itself: never a prompt, model, batch size, path, file name, version ID or character ID. The server builds the prompt from
+          // committed appearance and decides the batch size.
           const body = input && typeof input === "object" ? input as Record<string, unknown> : {};
-          const outcome = req.url === "/api/portrait/generate"
-            ? await session.generateNpcPortrait({ ref: body.ref, expected_revision: body.expected_revision })
-            : await session.setNpcPortraitReference({ ref: body.ref, expected_revision: body.expected_revision, image: body.image });
+          const base = { ref: body.ref, expected_revision: body.expected_revision };
+          const outcome = req.url === "/api/portrait/generate" ? await session.generateNpcPortraitBatch(base)
+            : req.url === "/api/portrait/avatar" ? session.setNpcPortraitAvatar({ ...base, item: body.item })
+            : req.url === "/api/portrait/full-body" ? session.setNpcPortraitFullBody({ ...base, item: body.item })
+            : req.url === "/api/portrait/delete" ? await session.deleteNpcPortrait({ ...base, item: body.item })
+            : await session.setNpcPortraitReference({ ...base, image: body.image });
           const { view: _view, ...result } = outcome;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : outcome.error.code === "portrait_generation_failed" ? 502 : 422, { ...result, ...state() }); return;
         }

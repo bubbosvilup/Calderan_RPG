@@ -238,7 +238,11 @@ export interface CharacterPortraitVersion {
 }
 /** The single uploaded reference image used to guide generation (guidance only; never read back into appearance). */
 export interface CharacterPortraitReference { media_type: PortraitMediaType; asset_file: string; uploaded_at: string }
-export interface CharacterPortraitRecord { character_id: string; active_version_id?: string; versions: CharacterPortraitVersion[]; reference?: CharacterPortraitReference }
+/**
+ * Portrait Gallery V2. `versions` IS the Gallery. Avatar and Full Body are roles that reference Gallery versions of this same record
+ * (one version may hold both, or neither). V1's `active_version_id` is legacy decode input only: it becomes `avatar_version_id`.
+ */
+export interface CharacterPortraitRecord { character_id: string; avatar_version_id?: string; full_body_version_id?: string; versions: CharacterPortraitVersion[]; reference?: CharacterPortraitReference }
 export interface MannerismEvidence {
   sequence: number; revision: number; event_id: string; narration_hash: string; span_start: number; span_end: number;
 }
@@ -282,7 +286,11 @@ export type CampaignCommand =
   | { kind: "set_funds"; character_id: string; gold: number }
   /** P8: campaign-creation only; the controller authorizer rejects it like every unlisted kind. */
   | { kind: "set_price_index"; character_id: string; percent: number }
-  | { kind: "record_portrait"; character_id: string; version: CharacterPortraitVersion }
+  /** Portrait Gallery V2: one generation batch's successful versions (1–3), plus the first-batch Avatar bootstrap when chosen. */
+  | { kind: "record_portrait_batch"; character_id: string; versions: CharacterPortraitVersion[]; avatar_version_id?: string }
+  | { kind: "set_portrait_avatar"; character_id: string; version_id: string }
+  | { kind: "set_portrait_full_body"; character_id: string; version_id: string | null }
+  | { kind: "delete_portrait_version"; character_id: string; version_id: string }
   | { kind: "set_portrait_reference"; character_id: string; reference: CharacterPortraitReference | null }
   | { kind: "set_legal_status"; character_id: string; status: "free" | "enslaved"; holder_id?: string; documentation?: TransferDocumentation; note?: string }
   /**

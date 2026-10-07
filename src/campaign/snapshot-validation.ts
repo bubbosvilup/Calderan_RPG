@@ -7,6 +7,7 @@ import { ageStatus } from "./age.js";
 import { niccoHouseholdMembers, validateReflectionNotes } from "./premium-characters.js";
 import { validateMannerismRegistry } from "./mannerisms.js";
 import { validateMannerismLearning } from "./mannerism-learning.js";
+import { validatePortraitRecords } from "./portraits.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -29,6 +30,7 @@ function unique<T>(records: readonly T[], key: (record: T) => string, field: str
 function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   validateMannerismRegistry(s);
   validateMannerismLearning(s);
+  validatePortraitRecords(s);
   const refs = new CampaignIdentityResolver(world, s), minute = s.runtime.scene.world_time.world_minute;
   for (const p of s.premium_characters) for (const m of p.mannerisms ?? []) for (const id of m.known_by_character_ids ?? []) refs.character(id);
   const historical = (time: number | undefined, field: string) => { if (time !== undefined && time > minute) fail(field, "future provenance"); };
