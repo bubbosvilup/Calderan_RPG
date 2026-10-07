@@ -10,6 +10,7 @@ import { characterPublicProfile } from "../world/character-contract.js";
 import { isPhysicalCondition } from "../turn/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
+import { buildPortraitPrompt } from "../campaign/portrait-prompt.js";
 import { appearanceLabel, appearanceLines, PERMANENT_APPEARANCE_FIELDS, resolvePermanentAppearance, type PermanentAppearanceField } from "../campaign/permanent-appearance.js";
 
 export interface PlayerCharacterView {
@@ -59,6 +60,8 @@ export interface AppearanceEditorView {
   readonly identity: readonly { readonly label: string; readonly value: string }[];
   readonly fields: readonly { readonly key: PermanentAppearanceField; readonly label: string; readonly group: "body" | "hair" | "face" | "description";
     readonly kind: "number" | "text" | "lines"; readonly unit?: "cm" | "kg"; readonly override: string | null; readonly inherited: string | null }[];
+  /** Portrait Prompt Builder V1 preview of the committed permanent appearance (read-only; nothing is generated). */
+  readonly portrait_prompt: { readonly prompt: string; readonly negative_prompt: string };
 }
 const EDITOR_GROUPS: Readonly<Record<PermanentAppearanceField, AppearanceEditorView["fields"][number]["group"]>> = { height_cm: "body", weight_kg: "body", build: "body", skin: "body",
   hair_color: "hair", hair_texture: "hair", hair_description: "hair", eyes: "face", scars: "face", distinguishing_marks: "face", distinctive_traits: "face", description: "description" };
@@ -156,6 +159,7 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
           return { key, label: appearanceLabel(key), group: EDITOR_GROUPS[key], kind, ...(key === "height_cm" ? { unit: "cm" as const } : key === "weight_kg" ? { unit: "kg" as const } : {}),
             override: value === undefined ? null : Array.isArray(value) ? value.map(text).join("\n") : text(String(value)), inherited: baseline };
         }),
+        portrait_prompt: (({ prompt, negative_prompt }) => ({ prompt: text(prompt), negative_prompt }))(buildPortraitPrompt({ appearance: permanent })),
       } : null,
       role: text(origin?.established.role ?? profile.occupation ?? householdRole ?? "Not known"), relationship: relationships.join(" · ") || "Not recorded",
       state: conditions.join(" · ") || "Not recorded", known_location: here ? text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene") : null,

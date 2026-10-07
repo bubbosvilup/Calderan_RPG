@@ -41,7 +41,7 @@ const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color"
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity",
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
@@ -420,7 +420,8 @@ test("household drawer uses the shared opaque card and renders existing Story ta
 
 const editorView = (overrides: Record<string, string | null> = { build: "lean" }) => ({ identity: [{ label: "Age", value: "Adult" }],
   fields: APPEARANCE_KEYS.map(key => ({ key, label: key, group: "body", kind: key.endsWith("_cm") || key.endsWith("_kg") ? "number" : ["scars", "distinguishing_marks", "distinctive_traits"].includes(key) ? "lines" : "text",
-    override: overrides[key] ?? null, inherited: key === "description" ? "An established appearance." : null })) });
+    override: overrides[key] ?? null, inherited: key === "description" ? "An established appearance." : null })),
+  portrait_prompt: { prompt: `Full-body character reference image. Build: ${overrides.build ?? "unset"}.`, negative_prompt: "extra people, text" } });
 const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable, appearance_editor: editable ? editorView() : null,
   presence: here ? "present" : "away", known_location: here ? "Front hall" : null, role: "Known porter", relationship: "Known colleague", state: here ? "winded" : "Not recorded", appearance: "An established appearance.", where: here ? "Here, in Front hall" : "Whereabouts not known", affiliations: [], public_profile: { age_band: "Adult" } });
 const householdOpening = () => {
@@ -465,6 +466,7 @@ test("eligible NPC+ editor opens by opaque ref, shows stored overrides only, kee
     assert.equal(c.node("appearance-description").value, ""); assert.match(c.node("appearance-description-note").textContent, /^Inherited \(not saved\): An established appearance/);
     assert.match(c.node("appearance-build-note").textContent, /^Saved value/); assert.equal(c.node("appearance-eyes-note").textContent, "", "unset fields carry no note (placeholder only)");
     assert.equal(c.node("editor-save").disabled, true);
+    assert.equal(c.node("editor-image-prompt").value, "Full-body character reference image. Build: lean."); assert.equal(c.node("editor-negative-prompt").value, "extra people, text");
     c.node("appearance-build").value = "athletic"; c.node("appearance-build").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, false);
     c.node("appearance-build").value = " lean "; c.node("appearance-build").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, true, "same value after trimming is no change");
     c.node("appearance-height_cm").value = "180.5"; c.node("appearance-height_cm").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, true, "invalid number");
@@ -501,6 +503,7 @@ test("editor save posts only changed fields against the opened revision, refresh
   assert.equal(posts[1].body.expected_revision, 12, "the opened revision, never silently refreshed");
   assert.equal(c.node("editor-error").hidden, true);
   assert.deepEqual([c.node("appearance-build").value, c.node("appearance-hair_description").value, c.node("appearance-scars").value], ["", "shoulder-length dark hair", "A thin scar\nBurn on the wrist"]);
+  assert.equal(c.node("editor-image-prompt").value, "Full-body character reference image. Build: unset.", "the preview follows committed appearance after a save");
   assert.equal(c.node("editor-save").disabled, true);
 });
 test("Household zero-member view is a full empty destination and duplicate refs do not inflate counts", async () => {

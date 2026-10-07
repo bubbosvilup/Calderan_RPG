@@ -82,6 +82,10 @@ function renderEditor(card, fill = false) {
   ui("editor-initial").textContent = card.name_known ? card.name.slice(0, 1) : "?";
   ui("editor-appearance").textContent = card.appearance;
   const editor = card.appearance_editor;
+  // Committed-only preview: the prompt is server-built from saved appearance (no client-side resolver copy), so it is safe to
+  // refresh on every render; it never touches the editable inputs.
+  if (ui("editor-image-prompt")) ui("editor-image-prompt").value = editor?.portrait_prompt?.prompt ?? "";
+  if (ui("editor-negative-prompt")) ui("editor-negative-prompt").value = editor?.portrait_prompt?.negative_prompt ?? "";
   if (ui("editor-identity")) ui("editor-identity").textContent = editor?.identity?.length ? editor.identity.map(i => `${i.label}: ${i.value}`).join(" · ") : "No established species, sex or age.";
   if (fill) {
     editorRevision = currentRevision;
