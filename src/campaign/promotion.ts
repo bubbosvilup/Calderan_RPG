@@ -1,4 +1,4 @@
-import type { CampaignCharacter, CampaignSnapshot, CharacterAppearance, CharacterOriginSnapshot, CharacterProfile } from "./types.js";
+import type { CampaignCharacter, CampaignSnapshot, CharacterAppearance, CharacterOriginSnapshot, CharacterProfile, NameSource } from "./types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { campaignId } from "./identity.js";
 
@@ -18,6 +18,8 @@ export interface PromotionInput {
   readonly promoted_revision: number;
   readonly world_minute: number;
   readonly ephemeral_ref?: string;
+  /** How the established name was learned (name establishment only); omitted when unknown. */
+  readonly name_source?: NameSource;
 }
 const slug = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 40) || "person";
 /**
@@ -30,7 +32,8 @@ export function promotedCharacterId(label: string, promotedRevision: number): st
 export function buildPromotedCharacter(input: PromotionInput): CampaignCharacter {
   const e = input.established;
   const appearance: CharacterAppearance | undefined = e.appearance?.length ? { description: e.appearance.join("; ") } : undefined;
-  const profile: CharacterProfile = { ...(e.name ? { name: e.name } : {}), ...(e.age ? { age: e.age } : {}), ...(e.sex ? { sex: e.sex } : {}), ...(e.species ? { species: e.species } : {}), ...(appearance ? { appearance } : {}) };
+  const profile: CharacterProfile = { ...(e.name ? { name: e.name } : {}), ...(e.age ? { age: e.age } : {}), ...(e.sex ? { sex: e.sex } : {}), ...(e.species ? { species: e.species } : {}), ...(appearance ? { appearance } : {}),
+    ...(e.name && input.name_source ? { name_source: input.name_source } : {}) };
   const origin_snapshot: CharacterOriginSnapshot = { source: "narrator_ephemeral", trigger: input.trigger, promoted_revision: input.promoted_revision, promoted_world_minute: input.world_minute,
     location_id: input.location_id, label: input.label, ...(input.ephemeral_ref ? { ephemeral_ref: input.ephemeral_ref } : {}),
     established: Object.fromEntries(Object.entries(e).filter(([, v]) => v !== undefined && (!Array.isArray(v) || v.length))) as CharacterOriginSnapshot["established"],

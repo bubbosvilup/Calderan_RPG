@@ -14,7 +14,14 @@ export interface CharacterProfile {
   name?: string; aliases?: string[];
   age?: { kind: "exact"; years: number } | { kind: "approximate"; description: string };
   sex?: string; gender?: string; species?: string; appearance?: CharacterAppearance; voice?: string;
+  /** Created characters: how play established `name` (set by name establishment only). Absent = unknown; never guessed. */
+  name_source?: NameSource;
 }
+/**
+ * How a created character's name was learned in play: they told it themself, narration introduced them by it, or another speaker
+ * introduced them by it. Player-assigned naming is not a supported durable path, so it has no value.
+ */
+export type NameSource = "self_disclosed" | "narrator_introduced" | "introduced_by_other";
 export interface CharacterCurrentState {
   /** Created characters only. Canonical character locations remain in runtime. */
   current_location?: string;

@@ -39,6 +39,7 @@ export interface NameIntroduction {
   readonly name: string; readonly exchange: number;
   /** pattern: introduced as a name; self: the speaker's own name; weak: a quote opening with the name. */
   readonly kind: "pattern" | "self" | "weak";
+  /** The attributed speaker of the quote it came from (self: the person themself; pattern: whoever introduced them). */
   readonly noun?: string; readonly speaker?: string; readonly narration_voice: boolean; readonly evidence: string;
 }
 export interface NarratedPerson {
@@ -245,7 +246,7 @@ function introductions(units: readonly NarrationUnit[], scene: readonly RecentEx
   const out: NameIntroduction[] = [];
   const add = (i: NameIntroduction) => { if (ok(i.name) && !out.some(o => o.name === i.name && o.exchange === i.exchange && o.kind === i.kind && o.speaker === i.speaker)) out.push(i); };
   for (const u of units) {
-    const base = { exchange: u.exchange, narration_voice: !u.quoted, evidence: u.text.slice(0, 240) };
+    const base = { exchange: u.exchange, narration_voice: !u.quoted, evidence: u.text.slice(0, 240), ...(u.quoted && u.speaker ? { speaker: u.speaker } : {}) };
     for (const m of u.text.matchAll(new RegExp(`\\b(?:a|an|the)\\s+(?:[a-z'-]+\\s+){0,3}?(${PERSON_NOUNS})\\s+(?:named|called)\\s+${NAME}\\b`, "g"))) add({ ...base, name: m[2]!, kind: "pattern", noun: m[1]!.toLowerCase() });
     for (const m of u.text.matchAll(new RegExp(`\\b${NAME},\\s+(?:a|an)\\s+(?:[a-z'-]+\\s+){0,3}?(${PERSON_NOUNS})\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern", noun: m[2]!.toLowerCase() });
     // Third-person naming of someone else ("That's Brenna", "Her name is Maren"); "my name" is a self-introduction below.
@@ -254,7 +255,7 @@ function introductions(units: readonly NarrationUnit[], scene: readonly RecentEx
     const self = u.text.match(new RegExp(`\\b(?:[Mm]y name(?:'s|’s| is)|[Cc]all me|[Tt]hey call me)\\s+${NAME}\\b`)) ?? u.text.match(new RegExp(`(?:^|[.!?,;]\\s+)(?:I'm|I’m|I am)\\s+${NAME}\\b`))
       ?? u.text.match(new RegExp(`^Name(?:'s|’s)\\s+${NAME}\\b`))
       ?? (asksName(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null);
-    if (self) add({ ...base, name: self[1]!, kind: "self", ...(u.speaker ? { speaker: u.speaker } : {}) });
+    if (self) add({ ...base, name: self[1]!, kind: "self" });
     const weak = u.text.match(new RegExp(`^${NAME}\\.\\s+\\S`));
     if (weak) add({ ...base, name: weak[1]!, kind: "weak" });
   }

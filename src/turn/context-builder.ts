@@ -1,6 +1,6 @@
 import { registerNarratorIdentities } from "./narrator-identity.js";
 import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
-import type { CampaignSnapshot } from "../campaign/types.js";
+import type { CampaignSnapshot, NameSource } from "../campaign/types.js";
 import { characterView, itemView } from "../campaign/projections.js";
 import { buildNarrativeContext } from "../scene/narrative-context-builder.js";
 import { RuntimeState } from "../world/runtime-state.js";
@@ -24,6 +24,12 @@ import { economy, generatePriceIndex } from "../economy/economy.js";
  *     between two NPCs. Selection is not forgetting: CampaignState keeps everything; `projection` reports what was omitted.
  * D-04: narrator capacity is checked on the final request in tokens; this builder enforces transport-scale resource bounds only.
  */
+/** Narrator-facing name provenance of a created character: a fixed, bounded sentence per source. */
+export const NAME_PROVENANCE: Readonly<Record<NameSource, string>> = Object.freeze({
+  self_disclosed: "They told Nicco this name themselves; Nicco did not give it.",
+  narrator_introduced: "Narration introduced them by this name; not self-disclosed, not given by Nicco.",
+  introduced_by_other: "Another speaker introduced them by this name; not self-disclosed, not given by Nicco.",
+});
 export const CONTEXT_LIMITS = Object.freeze({
   /** Resource safeguard, derived from the transport envelope; narrator capacity is measured in tokens. */
   serialized_characters: REQUEST_RESOURCE_CHARACTERS,
@@ -90,9 +96,16 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const pronoun = (id: string) => { const e = world.getEntity(id); return e?.type === "character" && e.sex === "male" ? { pronoun: "he" as const } : e?.type === "character" && e.sex === "female" ? { pronoun: "she" as const } : {}; };
   // Promotion Pass 1.1: a promoted person keeps their established identity without the old transcript: an unnamed one is shown by
   // the promotion label ("the girl"; never an invented name), and established background travels with its source.
-  const promoted = (id: string) => { const o = snapshot.characters.find(c => c.id === id)?.origin_snapshot; return o ? { label: o.label, ...(o.established.role ? { role: o.established.role } : {}), ...(o.established.descriptor ? { descriptor: o.established.descriptor } : {}),
+  // Name provenance (created characters): one fixed sentence from profile.name_source, so how the name was learned outlives the
+  // recent transcript. Unknown provenance says nothing.
+  const promoted = (id: string) => { const record = snapshot.characters.find(c => c.id === id), o = record?.origin_snapshot, source = record?.profile.name ? record.profile.name_source : undefined;
+    return o ? { label: o.label, ...(source ? { name_provenance: NAME_PROVENANCE[source] } : {}), ...(o.established.role ? { role: o.established.role } : {}), ...(o.established.descriptor ? { descriptor: o.established.descriptor } : {}),
     ...(o.established.background?.length ? { background: o.established.background.map(b => `${b.text} (${b.by ? `stated by ${b.by}` : b.source === "seller" ? "stated by the seller" : b.source === "self" ? "stated by them" : b.source === "narration" ? "narrated" : "stated by someone present"})`) } : {}) } : undefined; };
-  const labelled = (id: string) => { const view = characterView(snapshot, world, id), o = promoted(id); return o && !view.profile.name ? { ...view, profile: { ...view.profile, name: o.label }, unnamed_label: true as const } : view; };
+  const labelled = (id: string) => {
+    const full = characterView(snapshot, world, id), o = promoted(id);
+    const { name_source: _source, ...profile } = full.profile, view = { ...full, profile }; // narrated once, via name_provenance
+    return o && !view.profile.name ? { ...view, profile: { ...view.profile, name: o.label }, unnamed_label: true as const } : view;
+  };
   // Hardening H3: authored known_by grants from one cached index per immutable world (no per-character world scan). Public grants
   // keep their pre-H3 order and are no longer silently cut at 24.
   const grants = knowledgeGrants(world);

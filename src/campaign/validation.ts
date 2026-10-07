@@ -69,7 +69,8 @@ const appearance = object({ height_cm: optional(measurement), weight_kg: optiona
   hair: optional(object({ color: optional(text), texture: optional(text), description: optional(text) })), eyes: optional(text), skin: optional(text),
   scars: optional(list(object({ location: optional(text), description: text }))), distinguishing_marks: optional(distinct(text)), distinctive_traits: optional(distinct(text)), description: optional(text) });
 const profile = object({ name: optional(text), aliases: optional(distinct(text)), age: optional(tagged({ exact: object({ kind: choice("exact"), years: integer(0) }), approximate: object({ kind: choice("approximate"), description: text }) })),
-  sex: optional(text), gender: optional(text), species: optional(text), appearance: optional(appearance), voice: optional(text) });
+  sex: optional(text), gender: optional(text), species: optional(text), appearance: optional(appearance), voice: optional(text),
+  name_source: optional(choice("self_disclosed", "narrator_introduced", "introduced_by_other")) });
 const current = object({ current_location: optional(id), status: optional(choice("active", "inactive", "dead")), conditions: optional(distinct(text)), presentation: optional(text), empty_slots: optional(distinct(id)) });
 const position = tagged({ unknown: object({ kind: choice("unknown") }), carried: object({ kind: choice("carried"), character_id: id }),
   equipped: object({ kind: choice("equipped"), character_id: id, slot: id, mode: choice("worn", "held") }), stored: object({ kind: choice("stored"), location_id: id }) });

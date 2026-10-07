@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context-builder.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { RecentConversation, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { playerIntent } from "../src/turn/player-intent.js";
@@ -15,8 +15,8 @@ import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
 import { mockNarrator, mockController, collect } from "./turn-fixtures.js";
 
 // Audit characterization, not a replay of the live transcript. The identity cases below were converted to acceptance expectations
-// by the created-person identity binding fix (CREATED_PERSON_IDENTITY_BINDING_FIX.md); provenance and sleep cases still assert today's
-// deferred behavior.
+// by the created-person identity binding fix (CREATED_PERSON_IDENTITY_BINDING_FIX.md) and the provenance case by
+// CREATED_NAME_PROVENANCE_CONTINUITY_FIX.md; the sleep cases still assert today's deferred behavior.
 const world = await loadWorld("data");
 const fresh = () => new CampaignState(world, "long_continuity_audit", { player_location: "heartstone_lr", world_time: { world_minute: 600 } });
 const input1 = "name's nicco, i'm the keeper of the heartstone, what about you?";
@@ -68,7 +68,7 @@ for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name}
   assert.ok(history.forPrompt().some(e => e.narration.includes(`${name}.`)));
 });
 
-test("audit: promotion keeps attributed evidence but narrator context drops name-disclosure source after history eviction", () => {
+test("audit (fixed): promotion keeps attributed evidence and narrator context keeps the self-disclosure source after history eviction", () => {
   const campaign = fresh(), introduction = exchange("What's your name?", '"My name is Sovela," the woman says.');
   campaign.apply({ expected_revision: campaign.revision, commands: [...names(campaign, [introduction]).commands] });
   const person = campaign.exportSnapshot().characters.find(c => c.profile.name === "Sovela")!;
@@ -79,7 +79,9 @@ test("audit: promotion keeps attributed evidence but narrator context drops name
   const context = buildTurnContext(world, campaign.exportSnapshot());
   const prompt = buildNarratorPrompt("Hello.", context, recent.forPrompt(), {}, { candidates: [], runtime: [] });
   assert.ok(context.characters.some(c => c.profile.name === "Sovela"));
+  // The raw quote stays out of the prompt; a fixed provenance sentence (CREATED_NAME_PROVENANCE_CONTINUITY_FIX.md) carries the source.
   assert.doesNotMatch(JSON.stringify(prompt), /My name is Sovela|name_source|self_disclosed/);
+  assert.ok(JSON.stringify(prompt).includes(NAME_PROVENANCE.self_disclosed));
   assert.ok(view(campaign).participants.some(p => p.name === "Sovela"));
 });
 

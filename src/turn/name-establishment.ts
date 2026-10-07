@@ -1,11 +1,11 @@
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
+import type { CampaignCommand, CampaignSnapshot, NameSource } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
-import { establishedFacts, linkedParticipant, readScene } from "./narrated-captives.js";
+import { establishedFacts, linkedParticipant, readScene, type NarratedPerson } from "./narrated-captives.js";
 
 /**
  * Persistence Pass 1.2 — name-driven persistence. The character-persistence model is intentionally narrow:
@@ -33,6 +33,18 @@ export interface IdentityResolution {
   readonly named: readonly { readonly character_id: string; readonly name: string; readonly evidence: string }[];
   readonly skipped: readonly { readonly name: string; readonly reason: "not_in_scene" | "duplicate_name" | "location_changed" }[];
 }
+/**
+ * How the promoted person's name was learned, from the introductions that established it: their own self-introduction wins; else
+ * narration's own voice; else a quote attributed to another speaker (never Nicco, never the person). Anything else (a weak
+ * quote-opening name, an unattributed quote) is unknown and left out rather than guessed.
+ */
+function nameSource(p: NarratedPerson): NameSource | undefined {
+  const other = (speaker?: string) => !!speaker && speaker !== "nicco" && !p.keys.includes(speaker);
+  if (p.introductions.some(i => i.kind === "self")) return "self_disclosed";
+  if (p.introductions.some(i => i.kind === "pattern" && i.narration_voice)) return "narrator_introduced";
+  if (p.introductions.some(i => i.kind === "pattern" && other(i.speaker))) return "introduced_by_other";
+  return undefined;
+}
 export function establishNames(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>,
   participants: readonly EphemeralSceneParticipant[], baseRevision: number, options: { readonly location_changed?: boolean } = {}): IdentityResolution {
   const location = context.primary.scene.player_location?.id;
@@ -43,7 +55,8 @@ export function establishNames(recent: readonly RecentExchange[], context: TurnC
   for (const n of reading.namings.filter(x => x.exchange === reading.latest)) {
     const c = snapshot.characters.find(x => x.id === n.character_id);
     if (!c || c.profile.name) continue;
-    commands.push({ kind: "set_profile", character_id: c.id, profile: { ...structuredClone(c.profile) as typeof c.profile & object, name: n.name } as Extract<CampaignCommand, { kind: "set_profile" }>["profile"] });
+    // Late naming is always the character's own self-introduction (readScene namings come only from `self` introductions).
+    commands.push({ kind: "set_profile", character_id: c.id, profile: { ...structuredClone(c.profile) as typeof c.profile & object, name: n.name, name_source: "self_disclosed" } as Extract<CampaignCommand, { kind: "set_profile" }>["profile"] });
     named.push({ character_id: c.id, name: n.name, evidence: n.evidence });
   }
   const fresh = reading.persons.filter(p => p.name && !p.character_id && p.introductions.some(i => i.exchange === reading.latest));
@@ -54,7 +67,8 @@ export function establishNames(recent: readonly RecentExchange[], context: TurnC
     const participant = linkedParticipant(p, participants);
     const facts = establishedFacts(p, undefined, nameOf);
     const character = buildPromotedCharacter({ label: p.name!, established: { ...facts.established, ...(p.captive ? { role: "held captive (narrated)" } : {}) }, evidence: facts.evidence,
-      location_id: location, trigger: "name_established", promoted_revision: baseRevision + 1, world_minute: snapshot.runtime.scene.world_time.world_minute, ephemeral_ref: participant?.id ?? p.ref });
+      location_id: location, trigger: "name_established", promoted_revision: baseRevision + 1, world_minute: snapshot.runtime.scene.world_time.world_minute, ephemeral_ref: participant?.id ?? p.ref,
+      ...(nameSource(p) ? { name_source: nameSource(p)! } : {}) });
     commands.push({ kind: "register_character", character });
     promoted.push({ character_id: character.id, name: p.name!, ...(participant ? { participant_id: participant.id } : {}) });
   }
