@@ -10,6 +10,7 @@ import { characterPublicProfile } from "../world/character-contract.js";
 import { isPhysicalCondition } from "../turn/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
+import { appearanceLabel, appearanceLines, PERMANENT_APPEARANCE_FIELDS, resolvePermanentAppearance, type PermanentAppearanceField } from "../campaign/permanent-appearance.js";
 
 export interface PlayerCharacterView {
   readonly ref: string;
@@ -18,8 +19,10 @@ export interface PlayerCharacterView {
   readonly category: string;
   readonly household: boolean;
   readonly npc_plus: boolean;
-  /** Management-shell eligibility only; this grants no mutation or private-data access. */
+  /** Management eligibility for the Household appearance editor; grants no private-data access. */
   readonly appearance_editor_eligible: boolean;
+  /** Permanent Appearance V1: the bounded editor projection, present only when eligible. */
+  readonly appearance_editor: AppearanceEditorView | null;
   readonly presence: "present" | "away";
   readonly role: string;
   readonly relationship: string;
@@ -47,6 +50,18 @@ export function knownCreatedName(c: DeepReadonly<Pick<CampaignSnapshot["characte
   if (!c.origin_snapshot) return current;
   return current && (current === established || c.profile.name_source) ? current : established;
 }
+/**
+ * Permanent Appearance V1 editor projection for a managed NPC+: read-only identity and, per editable field, the stored campaign
+ * override (null = none stored) and what applies without one. Inherited values are never presented as stored. The editor saves
+ * against the session state's campaign revision it opened with.
+ */
+export interface AppearanceEditorView {
+  readonly identity: readonly { readonly label: string; readonly value: string }[];
+  readonly fields: readonly { readonly key: PermanentAppearanceField; readonly label: string; readonly group: "body" | "hair" | "face" | "description";
+    readonly kind: "number" | "text" | "lines"; readonly unit?: "cm" | "kg"; readonly override: string | null; readonly inherited: string | null }[];
+}
+const EDITOR_GROUPS: Readonly<Record<PermanentAppearanceField, AppearanceEditorView["fields"][number]["group"]>> = { height_cm: "body", weight_kg: "body", build: "body", skin: "body",
+  hair_color: "hair", hair_texture: "hair", hair_description: "hair", eyes: "face", scars: "face", distinguishing_marks: "face", distinctive_traits: "face", description: "description" };
 /** Matches the existing player-visible canonical grant boundary, not narrator-only access. */
 const publicAccess = (p: DeepReadonly<KnowledgeAccess> | undefined) => isVisible(p, "player") && isVisible(p, "narrator");
 
@@ -98,7 +113,12 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     const isMember = memberIds.has(id), npcPlus = snapshot.premium_characters.some(p => p.character_id === id);
     const accessible = canonical && publicAccess(canonical.knowledge) && (here || named || isMember);
     const profile = accessible ? Object.fromEntries(Object.entries(characterPublicProfile(canonical)).map(([k, v]) => [k, v === null ? null : text(v)])) : {};
-    const appearances = [profile.appearance, ...(origin?.established.appearance ?? []).map(text)].filter((v): v is string => !!v);
+    const editable = id !== "nicco" && view.current.status !== "inactive" && view.current.status !== "dead" && snapshot.premium_characters.some(p => p.character_id === id && p.metadata.active_household_member)
+      && household.some(h => h.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner") && h.members.some(m => m.character_id === id && m.status === "member" && m.role !== "owner"));
+    // Permanent appearance: public canonical prose and established origin observations; campaign profile values only for a managed
+    // member, whose appearance Nicco authors in the editor. Elsewhere profile values stay unproven and hidden.
+    const permanent = resolvePermanentAppearance(world, snapshot, id, { canonical: !!accessible, overrides: editable });
+    const appearances = appearanceLines(permanent).map(text);
     // Arbitrary conditions/presentation have no epistemic policy. Use engine-classified physical tags or established origin observations, only here.
     const conditions = here ? (view.current.conditions ?? []).filter(c => isPhysicalCondition(c) || origin?.established.condition?.includes(c)).map(c => text(c.replace(/_/g, " "))) : [];
     const relationships = accessible ? canonical.relationships.filter(r => r.target === "nicco" && publicAccess(r.knowledge ?? canonical.knowledge)).map(r => text(r.description)) : [];
@@ -127,8 +147,16 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
       ref: createHash("sha256").update(`${snapshot.campaign_id}:${id}`).digest("hex").slice(0, 24), name, name_known: named,
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),
       household: isMember, npc_plus: npcPlus, presence: here ? "present" : "away",
-      appearance_editor_eligible: id !== "nicco" && snapshot.premium_characters.some(p => p.character_id === id && p.metadata.active_household_member)
-        && household.some(h => h.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner") && h.members.some(m => m.character_id === id && m.status === "member" && m.role !== "owner")),
+      appearance_editor_eligible: editable,
+      appearance_editor: editable ? {
+        identity: ([["Species", permanent.identity.species], ["Sex", permanent.identity.sex], ["Age", permanent.identity.age]] as const).flatMap(([label, value]) => value ? [{ label, value: text(value) }] : []),
+        fields: PERMANENT_APPEARANCE_FIELDS.map(key => {
+          const value = permanent.values[key], kind = key === "height_cm" || key === "weight_kg" ? "number" as const : key === "scars" || key === "distinguishing_marks" || key === "distinctive_traits" ? "lines" as const : "text" as const;
+          const baseline = key === "description" && permanent.baseline.length ? [...new Set(permanent.baseline.map(b => text(b.text)))].join("\n\n") : null;
+          return { key, label: appearanceLabel(key), group: EDITOR_GROUPS[key], kind, ...(key === "height_cm" ? { unit: "cm" as const } : key === "weight_kg" ? { unit: "kg" as const } : {}),
+            override: value === undefined ? null : Array.isArray(value) ? value.map(text).join("\n") : text(String(value)), inherited: baseline };
+        }),
+      } : null,
       role: text(origin?.established.role ?? profile.occupation ?? householdRole ?? "Not known"), relationship: relationships.join(" · ") || "Not recorded",
       state: conditions.join(" · ") || "Not recorded", known_location: here ? text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene") : null,
       where: here ? `Here, in ${text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene")}` : "Whereabouts not known",

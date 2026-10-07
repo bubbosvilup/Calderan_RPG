@@ -3,7 +3,8 @@ import { ContextBudgetManager, type ContextPolicy } from "../turn/context-budget
 import { unavailableCompactor, type ContextCompactionService, type CompactionReason, type CompactionResult } from "./context-compaction.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
 import { createOpeningCampaign } from "../campaign/opening-state.js";
-import type { CampaignSnapshot } from "../campaign/types.js";
+import type { CampaignSnapshot, CharacterProfile } from "../campaign/types.js";
+import { applyAppearancePatch } from "../campaign/permanent-appearance.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { CampaignSaveRepository, SaveListing, SaveSlot, SavedCampaign } from "../persistence/campaign-repository.js";
 import { CampaignSession } from "../persistence/campaign-session.js";
@@ -18,6 +19,7 @@ import type { WorldStore } from "../world/world-store.js";
 import { appError, toAppError, type AppError } from "./app-errors.js";
 import { deriveSessionView, type ProviderStatus, type SessionStatus, type SessionView } from "./session-view.js";
 import { derivePlayUiView } from "./play-ui-view.js";
+import { playerCharacterProjection } from "./player-character-view.js";
 import { buildTrace, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**
@@ -60,6 +62,9 @@ export type ShutdownOutcome = { readonly closed: true; readonly discarded_unsave
 export interface SubmitOptions { readonly onEvent?: (event: SessionEvent) => void; readonly signal?: AbortSignal }
 export type LocationOutcome = { readonly ok: true; readonly changed: boolean; readonly confirmation: string; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly candidates?: readonly string[]; readonly view: SessionView };
+/** Permanent Appearance V1 editor save. `field` names the rejected patch field, when one was. */
+export type AppearanceOutcome = { readonly ok: true; readonly changed: boolean; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly field?: string; readonly view: SessionView };
 
 /** Application commands own explicit entry points; they must never be sent to the narrator as player prose. */
 const APPLICATION_COMMAND = /^\s*\/(?:save|load|new|quit|exit|status|help|debug|location)(?:\s|$)/i;
@@ -130,6 +135,35 @@ export class GameSession {
       this.#lastError = undefined;
       return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} → ${target.display_name} (${target.id}). Time unchanged.`, view: this.getView() };
     } catch { return reject("campaign_validation_failed"); }
+  }
+
+  /**
+   * Permanent Appearance V1: the Household editor's only write. Resolves the opaque ref among cards the shared projection marks
+   * editable (active managed NPC+ member, never Nicco), checks the revision the editor opened with, merges only supported appearance
+   * fields into the existing profile (everything else in it is kept as is) and commits one set_profile atomically. No controller,
+   * model or world data is involved. An unchanged result commits nothing.
+   */
+  updateNpcAppearance(request: { readonly ref: unknown; readonly expected_revision: unknown; readonly patch: unknown }): AppearanceOutcome {
+    const reject = (code: AppError["code"], message: string, field?: string): AppearanceOutcome => ({ ok: false, error: appError(code, { message }), ...(field ? { field } : {}), view: this.getView() });
+    if (this.#status === "closed") return reject("session_closed", "The session is closed.");
+    if (this.#status !== "idle") return reject("turn_in_progress", "A turn is running. Try saving the appearance again when it finishes.");
+    const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
+    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+      return reject("stale_turn", "The campaign changed since the editor opened. Your edits are kept; reopen the editor to load the current appearance.");
+    if (typeof request.ref !== "string" || !/^[0-9a-f]{24}$/.test(request.ref)) return reject("invalid_input", "Unknown character.");
+    const characters = playerCharacterProjection(this.#deps.world, snapshot);
+    const target = snapshot.characters.find(c => characters.project(c.id)?.ref === request.ref);
+    if (!target || !characters.project(target.id)?.appearance_editor_eligible) return reject("invalid_input", "This character's appearance cannot be edited.");
+    const patched = applyAppearancePatch(target.profile.appearance, request.patch);
+    if (!patched.ok) return reject("invalid_input", patched.reason, patched.field);
+    if (!patched.changed) return { ok: true, changed: false, view: this.getView() };
+    const { appearance: _previous, ...rest } = structuredClone(target.profile) as CharacterProfile;
+    const profile: CharacterProfile = { ...rest, ...(patched.appearance ? { appearance: patched.appearance } : {}) };
+    try {
+      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "set_profile", character_id: target.id, profile }] }));
+      this.#lastError = undefined;
+      return { ok: true, changed: true, view: this.getView() };
+    } catch { return reject("campaign_validation_failed", "The appearance change was refused. The campaign is unchanged."); }
   }
 
   /**

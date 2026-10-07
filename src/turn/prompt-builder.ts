@@ -264,11 +264,14 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
     `[CURRENT AUTHORITATIVE CHARACTERS]`,
     ...(scene.present_characters.some(c => c.portrayal) ? ["Portrayal fields guide NPC behavior only. Purpose is not a campaign goal. Morality/private notes/personality never grant Nicco or other NPCs knowledge; do not recite them as public facts."] : []),
     ...context.characters.filter(c => !focus.background.has(c.id)).map(c => {
-      const identity = identityGate?.identities.get(c.id), baseline = scene.present_characters.find(p => p.id === c.id);
+      const identity = identityGate?.identities.get(c.id), found = scene.present_characters.find(p => p.id === c.id);
+      // Permanent Appearance V1: with a resolved permanent appearance, it is the only appearance block (no raw profile/authored copy).
+      const resolved = "permanent_appearance" in c ? c.permanent_appearance : undefined;
+      const baseline = resolved && found ? { ...found, appearance: undefined } : found, raw = resolved ? { ...c.profile, appearance: undefined } : c.profile;
       return focus.references(mask(`Character ${identity?.player_known_name ?? identity?.observable_label ?? name(c.id)} (${c.id}): ${JSON.stringify({
-        ...(identity ? { identity: { ...identity, internal_id: undefined } } : {}), baseline: identity && baseline ? { ...baseline, appearance: undefined, name: identity.player_known_name, display_name: identity.player_known_name ?? identity.observable_label } : baseline,
-        profile: identity ? { ...c.profile, name: identity.player_known_name, aliases: identity.player_known_aliases } : c.profile,
-        current: c.current, canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin })}`));
+        ...(identity ? { identity: { ...identity, internal_id: undefined, ...(resolved ? { observable_appearance: undefined } : {}) } } : {}), baseline: identity && baseline ? { ...baseline, appearance: undefined, name: identity.player_known_name, display_name: identity.player_known_name ?? identity.observable_label } : baseline,
+        profile: identity ? { ...raw, name: identity.player_known_name, aliases: identity.player_known_aliases } : raw,
+        current: c.current, canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin, ...(resolved ? { permanent_appearance: resolved } : {}) })}`));
     }),
     ...(participants ? [participants] : []),
     presentAndAbleToReact(context, sceneParticipants, focus.background, focus.compact.map(c => ({ ...c, internal_id: undefined, ref: identityGate?.identities.get(c.internal_id)?.ref }))),

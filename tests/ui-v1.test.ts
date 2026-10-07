@@ -37,10 +37,12 @@ class Element {
   requestSubmit() { return this.handlers.get("submit")!({ preventDefault() {} }); }
 }
 const tick = () => new Promise(resolve => setImmediate(resolve));
+const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"];
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-age", "editor-image-prompt"].map(id => [`#${id}`, new Element()]));
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity",
+    ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
   return { node: (id: string) => nodes.get(`#${id}`)!, renderRpg: context.renderRpg as (target: Element, source: string) => void };
@@ -416,7 +418,10 @@ test("household drawer uses the shared opaque card and renders existing Story ta
   c.node("appearance-tab").handlers.get("click")!({}); assert.equal(c.node("story-panel").hidden, true);
 });
 
-const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable,
+const editorView = (overrides: Record<string, string | null> = { build: "lean" }) => ({ identity: [{ label: "Age", value: "Adult" }],
+  fields: APPEARANCE_KEYS.map(key => ({ key, label: key, group: "body", kind: key.endsWith("_cm") || key.endsWith("_kg") ? "number" : ["scars", "distinguishing_marks", "distinctive_traits"].includes(key) ? "lines" : "text",
+    override: overrides[key] ?? null, inherited: key === "description" ? "An established appearance." : null })) });
+const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable, appearance_editor: editable ? editorView() : null,
   presence: here ? "present" : "away", known_location: here ? "Front hall" : null, role: "Known porter", relationship: "Known colleague", state: here ? "winded" : "Not recorded", appearance: "An established appearance.", where: here ? "Here, in Front hall" : "Whereabouts not known", affiliations: [], public_profile: { age_band: "Adult" } });
 const householdOpening = () => {
   const cards = [householdCard("alpha"), householdCard("beta", false), { ...householdCard("gamma", true, false), name: "Unfamiliar person", name_known: false, role: "Not known", relationship: "Not recorded", state: "Not recorded" }];
@@ -449,20 +454,52 @@ test("Household cards preserve projected role, relationship, condition and drawe
   c.node("character-close").handlers.get("click")!({});
   c.node("scene-participants").children[0]!.handlers.get("click")!({}); assert.equal(c.node("character-name").textContent, "Member alpha");
 });
-test("eligible NPC+ editor opens by opaque ref, exposes only known appearance and returns without writes", async () => {
+test("eligible NPC+ editor opens by opaque ref, shows stored overrides only, keeps Save disabled until a change, and Cancel writes nothing", async () => {
   let calls = 0; const data = householdOpening(), before = JSON.stringify(data);
   const c = await client(async (_url, options) => { assert.equal(options, undefined); calls++; return { ok: true, json: async () => data }; });
   for (const back of ["editor-back", "editor-cancel"]) {
     c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
     assert.equal(c.node("member-editor").hidden, false); assert.equal(c.node("editor-name").textContent, "Member alpha");
-    assert.equal(c.node("editor-appearance").textContent, "An established appearance."); assert.equal(c.node("editor-age").value, "Adult");
+    assert.equal(c.node("editor-appearance").textContent, "An established appearance."); assert.equal(c.node("editor-identity").textContent, "Age: Adult");
+    assert.equal(c.node("appearance-build").value, "lean"); assert.equal(c.node("appearance-hair_color").value, "", "nothing inherited is prefilled");
+    assert.equal(c.node("appearance-description").value, ""); assert.match(c.node("appearance-description-note").textContent, /Inherited: An established appearance/);
+    assert.match(c.node("appearance-build-note").textContent, /Saved campaign value/); assert.equal(c.node("appearance-eyes-note").textContent, "Not established.");
     assert.equal(c.node("editor-save").disabled, true);
+    c.node("appearance-build").value = "athletic"; c.node("appearance-build").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, false);
+    c.node("appearance-build").value = " lean "; c.node("appearance-build").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, true, "same value after trimming is no change");
+    c.node("appearance-height_cm").value = "180.5"; c.node("appearance-height_cm").handlers.get("input")!({}); assert.equal(c.node("editor-save").disabled, true, "invalid number");
     c.node(back).handlers.get("click")!({}); assert.equal(c.node("household-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
   }
   assert.equal(JSON.stringify(data), before); assert.equal(calls, 1);
   const html = await readFile("src/ui/index.html", "utf8");
-  assert.equal((html.match(/<fieldset disabled>/g) ?? []).length, 2); assert.match(html, /id="editor-save"[^>]*disabled/);
-  assert.doesNotMatch(html, /v1|v2|v3|private_notes|reflection|OpenRouter/);
+  assert.match(html, /id="editor-save"[^>]*disabled/); assert.match(html, /<button disabled>Regenerate<\/button><button disabled>Reference<\/button>/);
+  assert.doesNotMatch(html, /v1|v2|v3|private_notes|reflection|OpenRouter|Measurements<input|Usual attire<input|Posture &amp; bearing<input|Face<input/);
+});
+test("editor save posts only changed fields against the opened revision, refreshes from committed state, and keeps edits on a stale conflict", async () => {
+  const posts: any[] = [];
+  let reply: (body: any) => any = () => { throw new Error("no reply"); };
+  const c = await client(async (url: string, options?: any) => {
+    if (!options) return { ok: true, json: async () => householdOpening() };
+    posts.push({ url, body: JSON.parse(options.body) }); return { ok: true, json: async () => reply(JSON.parse(options.body)) };
+  });
+  c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
+  c.node("appearance-build").value = ""; c.node("appearance-build").handlers.get("input")!({});
+  c.node("appearance-hair_description").value = "  shoulder-length   dark hair "; c.node("appearance-hair_description").handlers.get("input")!({});
+  c.node("appearance-scars").value = "A thin scar\n\n  Burn on the wrist  "; c.node("appearance-scars").handlers.get("input")!({});
+  // Stale: the server refuses, the edits stay, the editor stays open.
+  reply = () => ({ ...householdOpening(), revision: 13, ok: false, error: { message: "The campaign changed since the editor opened." } });
+  await c.node("editor-save").handlers.get("click")!({});
+  assert.deepEqual(posts[0], { url: "/api/appearance", body: { ref: "alpha", expected_revision: 12, patch: { build: null, hair_description: "shoulder-length dark hair", scars: ["A thin scar", "Burn on the wrist"] } } });
+  assert.equal(c.node("editor-error").hidden, false); assert.match(c.node("editor-error").textContent, /changed since the editor opened/);
+  assert.equal(c.node("appearance-hair_description").value, "  shoulder-length   dark hair "); assert.equal(c.node("member-editor").hidden, false);
+  assert.equal(c.node("editor-save").disabled, false);
+  // Success: the committed state refills the editor; nothing is pending.
+  reply = () => { const next = householdOpening(); next.play.household[0]!.members[0]!.appearance_editor = editorView({ hair_description: "shoulder-length dark hair", scars: "A thin scar\nBurn on the wrist" }); return { ...next, revision: 14, ok: true, changed: true }; };
+  await c.node("editor-save").handlers.get("click")!({});
+  assert.equal(posts[1].body.expected_revision, 12, "the opened revision, never silently refreshed");
+  assert.equal(c.node("editor-error").hidden, true);
+  assert.deepEqual([c.node("appearance-build").value, c.node("appearance-hair_description").value, c.node("appearance-scars").value], ["", "shoulder-length dark hair", "A thin scar\nBurn on the wrist"]);
+  assert.equal(c.node("editor-save").disabled, true);
 });
 test("Household zero-member view is a full empty destination and duplicate refs do not inflate counts", async () => {
   const empty = await client(async () => ({ ok: true, json: async () => ({ ...opening, play: { household: [] } }) }));

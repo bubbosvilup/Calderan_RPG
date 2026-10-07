@@ -2,6 +2,7 @@ import { registerNarratorIdentities } from "./narrator-identity.js";
 import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
 import type { CampaignSnapshot, NameSource } from "../campaign/types.js";
 import { characterView, itemView } from "../campaign/projections.js";
+import { narratorAppearance, resolvePermanentAppearance } from "../campaign/permanent-appearance.js";
 import { buildNarrativeContext } from "../scene/narrative-context-builder.js";
 import { RuntimeState } from "../world/runtime-state.js";
 import type { WorldStore } from "../world/world-store.js";
@@ -109,7 +110,11 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   // Hardening H3: authored known_by grants from one cached index per immutable world (no per-character world scan). Public grants
   // keep their pre-H3 order and are no longer silently cut at 24.
   const grants = knowledgeGrants(world);
-  const characters = present.map(id => ({ ...labelled(id), established_origin: promoted(id), locality: home(id), ...pronoun(id),
+  // Permanent Appearance V1: a character with campaign appearance values is narrated from the one resolved contract (values plus the
+  // effective description), not from separate raw profile and authored blocks. Without campaign values nothing changes.
+  const permanent = (id: string) => snapshot.characters.find(c => c.id === id)?.profile.appearance
+    ? { permanent_appearance: narratorAppearance(resolvePermanentAppearance(world, snapshot, id, { canonical: true, overrides: true })) } : {};
+  const characters = present.map(id => ({ ...labelled(id), established_origin: promoted(id), ...permanent(id), locality: home(id), ...pronoun(id),
     canonical_awareness: [...(grants.public.get(id) ?? [])],
   }));
   // Hardening H3: restricted (narrator-only) canon a PRESENT character is authored to know. Narrator access for that character

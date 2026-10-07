@@ -27,22 +27,82 @@ function switchView(view) {
   if (view === "household") ui("household-close")?.focus();
   else if (view === "play") ui("household-nav")?.focus();
 }
+// Permanent Appearance V1 editor. Inputs show only stored campaign overrides; inherited/baseline values are notes, never prefilled,
+// so saving never copies them into the profile. Inputs are filled on open and after a committed save only (a state refresh keeps
+// unsaved edits). Empty input on a stored override = explicit clear (null); empty input without one = unchanged.
+let editorRevision, editorFields = [], editorSaving = false;
 function openEditor(ref) {
   const card = householdCharacters.get(ref);
   if (!card?.appearance_editor_eligible || !card.npc_plus || !card.household) return;
   editorRef = ref;
   switchView("editor");
-  renderEditor(card);
+  renderEditor(card, true);
   ui("editor-back")?.focus();
 }
-function renderEditor(card) {
+function editorValue(field, raw) {
+  const value = String(raw ?? "");
+  if (field.kind === "lines") return value.split("\n").map(line => line.trim()).filter(Boolean);
+  if (field.kind === "number") return value.trim() === "" ? "" : Number(value.trim());
+  return value.trim().replace(/\s+/g, " ");
+}
+function editorPatch() {
+  const patch = {};
+  let valid = true;
+  for (const field of editorFields) {
+    const input = ui(`appearance-${field.key}`);
+    if (!input) continue;
+    const next = editorValue(field, input.value), stored = field.override === null ? null : editorValue(field, field.override);
+    const empty = Array.isArray(next) ? !next.length : next === "";
+    if (field.kind === "number" && !empty && !Number.isInteger(next)) valid = false;
+    if (empty) { if (stored !== null) patch[field.key] = null; continue; }
+    if (JSON.stringify(next) !== JSON.stringify(stored)) patch[field.key] = next;
+  }
+  return { patch, valid };
+}
+function updateEditorSave() {
+  const { patch, valid } = editorPatch();
+  if (ui("editor-save")) ui("editor-save").disabled = editorSaving || !valid || !Object.keys(patch).length;
+}
+function renderEditor(card, fill = false) {
   if (!ui("editor-name")) return;
   ui("editor-name").textContent = card.name;
   ui("editor-initial").textContent = card.name_known ? card.name.slice(0, 1) : "?";
   ui("editor-appearance").textContent = card.appearance;
-  ui("editor-age").value = card.public_profile?.age_band ?? "";
-  ui("editor-save").disabled = true;
+  const editor = card.appearance_editor;
+  if (ui("editor-identity")) ui("editor-identity").textContent = editor?.identity?.length ? editor.identity.map(i => `${i.label}: ${i.value}`).join(" · ") : "No established species, sex or age.";
+  if (fill) {
+    editorRevision = currentRevision;
+    editorFields = editor?.fields ?? [];
+    if (ui("editor-error")) { ui("editor-error").textContent = ""; ui("editor-error").hidden = true; }
+    for (const field of editorFields) {
+      const input = ui(`appearance-${field.key}`), note = ui(`appearance-${field.key}-note`);
+      if (input) { input.value = field.override ?? ""; input.disabled = false; }
+      if (note) note.textContent = field.override !== null ? "Saved campaign value. Empty the field to clear it." : field.inherited ? `Inherited: ${field.inherited}` : "Not established.";
+    }
+  }
+  updateEditorSave();
 }
+async function saveEditor() {
+  const { patch, valid } = editorPatch();
+  if (!editorRef || editorSaving || !valid || !Object.keys(patch).length) return;
+  editorSaving = true; updateEditorSave();
+  const showEditorError = text => { if (ui("editor-error")) { ui("editor-error").textContent = text; ui("editor-error").hidden = !text; } };
+  try {
+    const response = await fetch("/api/appearance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, patch }) });
+    const data = await response.json();
+    editorSaving = false;
+    if (data?.messages) render(data);
+    if (data?.ok) {
+      const card = householdCharacters.get(editorRef);
+      if (card && activeView === "editor") renderEditor(card, true);
+      showEditorError("");
+    } else showEditorError(data?.error?.message ?? "The appearance was not saved.");
+  } catch { editorSaving = false; showEditorError("The appearance was not saved. Check the connection and try again."); }
+  updateEditorSave();
+}
+ui("editor-save")?.addEventListener("click", () => saveEditor());
+for (const key of ["height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"])
+  ui(`appearance-${key}`)?.addEventListener("input", () => updateEditorSave());
 function renderHousehold() {
   if (!ui("household-cards")) return;
   const members = [...householdCharacters.values()];
@@ -196,7 +256,7 @@ function renderScene(data) {
   renderHousehold();
   if (activeView === "editor") {
     const card = householdCharacters.get(editorRef);
-    if (card?.appearance_editor_eligible && card.npc_plus && card.household) renderEditor(card);
+    if (card?.appearance_editor_eligible && card.npc_plus && card.household) renderEditor(card, false);
     else { editorRef = undefined; switchView("household"); }
   }
   locationLabel.textContent = data.scene?.location ?? "Caldrevan";

@@ -38,7 +38,7 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
     }
     try {
       if (req.method === "GET" && req.url === "/api/session") { json(200, state()); return; }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location")) {
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance")) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
         let body = "";
         for await (const chunk of req) {
@@ -55,6 +55,13 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
           const { view: _view, ...result } = outcome;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422,
             { ...result, ...state() }); return;
+        }
+        if (req.url === "/api/appearance") {
+          // Permanent Appearance V1: the Household editor's narrow write; eligibility, revision and patch rules live in GameSession.
+          const body = input && typeof input === "object" ? input as Record<string, unknown> : {};
+          const outcome = session.updateNpcAppearance({ ref: body.ref, expected_revision: body.expected_revision, patch: body.patch });
+          const { view: _view, ...result } = outcome;
+          json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
         }
         if (req.url === "/api/alternative") {
           if (!comparisons || !input || typeof input !== "object" || !("message_id" in input) || !("model" in input) || typeof input.message_id !== "string" || typeof input.model !== "string" || !messages.some(message => message.role === "narrator" && message.comparison_id === input.message_id)) {
