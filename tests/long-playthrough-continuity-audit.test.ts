@@ -16,7 +16,7 @@ import { mockNarrator, mockController, collect } from "./turn-fixtures.js";
 
 // Audit characterization, not a replay of the live transcript. The identity cases below were converted to acceptance expectations
 // by the created-person identity binding fix (CREATED_PERSON_IDENTITY_BINDING_FIX.md) and the provenance case by
-// CREATED_NAME_PROVENANCE_CONTINUITY_FIX.md; the sleep cases still assert today's deferred behavior.
+// CREATED_NAME_PROVENANCE_CONTINUITY_FIX.md, and the sleep cases by TEMPORAL_ACTION_RESOLVER_V1.md.
 const world = await loadWorld("data");
 const fresh = () => new CampaignState(world, "long_continuity_audit", { player_location: "heartstone_lr", world_time: { world_minute: 600 } });
 const input1 = "name's nicco, i'm the keeper of the heartstone, what about you?";
@@ -85,19 +85,33 @@ test("audit (fixed): promotion keeps attributed evidence and narrator context ke
   assert.ok(view(campaign).participants.some(p => p.name === "Sovela"));
 });
 
-for (const input of ["he sleeps for atleast 5 hours", "he sleeps for at least 5 hours", "he sleeps until night"]) {
-  test(`audit: unsupported sleep commits zero elapsed minutes despite a successful elapsed-time narration: ${input}`, async () => {
+// Converted by TEMPORAL_ACTION_RESOLVER_V1.md: the playthrough's sleeps now advance the committed clock; narration matches it.
+for (const [input, minute, label, narration] of [
+  ["he sleeps for atleast 5 hours", 900, "Afternoon", "*Five hours pass. Afternoon light slants through the window when he wakes.*"],
+  ["he sleeps for at least 5 hours", 900, "Afternoon", "*Five hours pass. Afternoon light slants through the window when he wakes.*"],
+  ["he sleeps until night", 1380, "Night", "*Hours pass. Daylight disappears and night arrives.*"],
+] as const) {
+  test(`audit (fixed): the playthrough sleep advances the committed clock and the UI: ${input}`, async () => {
     const campaign = fresh(), snapshot = campaign.exportSnapshot();
-    assert.deepEqual(playerIntent(input, buildTurnContext(world, snapshot), snapshot, world).runtime, []);
-    const service = new RetrievalService(world), narration = "*Five hours pass. Daylight disappears and night arrives.*";
+    assert.deepEqual(playerIntent(input, buildTurnContext(world, snapshot), snapshot, world).runtime, [{ kind: "runtime_delta", delta: { time_advance_minutes: minute - 600 } }]);
+    const service = new RetrievalService(world);
     const coordinator = new TurnCoordinator(world, mockNarrator(narration), mockController([]), { service, search: new HybridSearch(service) }, { provider_retry: false });
     const events = await collect(coordinator.runTurn({ campaign, player_input: input }));
     const completed = events.at(-1)!;
     assert.equal(completed.type, "turn_completed", JSON.stringify(completed));
-    assert.equal(campaign.exportSnapshot().runtime.scene.world_time.world_minute, 600);
+    assert.equal(campaign.exportSnapshot().runtime.scene.world_time.world_minute, minute);
     if (completed.type === "turn_completed") assert.equal(completed.result.narration, narration);
     const session = deriveSessionView(world, campaign.exportSnapshot(), { status: "idle", last_saved_revision: null, provider: { mode: "stub", configured: true } });
-    assert.equal(session.scene.time.time_of_day, "Late Morning");
+    assert.equal(session.scene.time.time_of_day, label);
     assert.equal(session.scene.time.day, 0);
   });
 }
+test("audit (fixed): an unsupported vague sleep commits nothing and cannot deliver completed elapsed time", async () => {
+  const campaign = fresh(), narration = "*Five hours pass. Daylight disappears and night arrives.*";
+  const service = new RetrievalService(world);
+  const coordinator = new TurnCoordinator(world, mockNarrator(narration), mockController([]), { service, search: new HybridSearch(service) }, { provider_retry: false });
+  const completed = (await collect(coordinator.runTurn({ campaign, player_input: "he sleeps for a while" }))).at(-1)!;
+  assert.equal(completed.type, "turn_completed", JSON.stringify(completed));
+  assert.equal(campaign.exportSnapshot().runtime.scene.world_time.world_minute, 600);
+  if (completed.type === "turn_completed") assert.doesNotMatch(completed.result.narration, /Five hours pass|night arrives/);
+});

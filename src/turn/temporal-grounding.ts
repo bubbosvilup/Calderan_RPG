@@ -9,6 +9,16 @@ const DAYPARTS = [
 ] as const;
 export type TimeOfDay = (typeof DAYPARTS)[number][1];
 
+/**
+ * Minute-of-day where each named period begins, derived from DAYPARTS (each start is the previous exclusive upper bound). "Midnight"
+ * spans the day boundary, so its period begins at 1410; "until midnight" means the 00:00 boundary instead (temporal-action.ts).
+ */
+export function daypartStart(label: string): number | undefined {
+  // The last occurrence: a period wrapping midnight (Midnight: 1410–1440 and 0–60) begins at its late segment.
+  const index = DAYPARTS.map(([, name]) => name.toLowerCase()).lastIndexOf(label.toLowerCase());
+  return index < 0 ? undefined : index === 0 ? 0 : DAYPARTS[index - 1]![0];
+}
+export const DAYPART_LABELS: readonly TimeOfDay[] = [...new Set(DAYPARTS.map(([, name]) => name))];
 /** Projection of the existing primitive clock, not a calendar or time-advance rule. */
 export function temporalGrounding(worldMinute: number) {
   const minute = (worldMinute % WORLD_DAY_MINUTES + WORLD_DAY_MINUTES) % WORLD_DAY_MINUTES;

@@ -7,6 +7,7 @@ import { resolveTransferIntent, type ResolvedReference } from "./reference-resol
 import { resolveNaturalActions, reachable, type NaturalActionResolution } from "./natural-actions.js";
 import { playerDestination } from "./player-travel.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
+import { MAX_TEMPORAL_ADVANCE_MINUTES, parseTemporalAction, type TemporalAction } from "./temporal-action.js";
 
 export interface PlayerIntent { readonly candidates: readonly CampaignCommand[]; readonly runtime: readonly CampaignCommand[]; readonly resolved_references?: readonly ResolvedReference[]; readonly ambiguous_reference?: boolean;
   /** Phase 1S natural action resolution (diagnostics and narrator action lines); absent for command-grammar turns. */
@@ -14,21 +15,20 @@ export interface PlayerIntent { readonly candidates: readonly CampaignCommand[];
   /** Household Pass 1: authoritative narrator notes for resolved or blocked person transactions. */
   readonly notes?: readonly string[];
   /** Household Pass 1: the player's explicit household-rule declarations this turn. */
-  readonly rule_declarations?: readonly string[] }
+  readonly rule_declarations?: readonly string[];
+  /** Temporal Action Resolver V1: the resolved wait/sleep/nap/rest request behind this turn's time advance, if any. */
+  readonly temporal?: Extract<TemporalAction, { kind: "advance" }> }
 function normalize(text: string): string { return text.trim().replace(/[.!]$/, "").replace(/^the /i, "").toLowerCase(); }
 function resolve(text: string, entries: readonly { readonly id: string; readonly name?: string | undefined }[]): string | undefined {
   const found = entries.filter(e => [e.id, e.name].some(n => n && normalize(n) === normalize(text)));
   return found.length === 1 ? found[0]!.id : undefined;
 }
-/** Explicit durations only: no inferred duration, fractions, daypart or event targets. */
+/** The `/wait N` command and the P11 starred "spent N hours <activity>" form; natural wait/sleep/nap/rest is temporal-action.ts. */
 function explicitWaitMinutes(text: string): number | undefined {
   const command = text.match(/^\/wait (\d+)$/i);
   if (command) return Number(command[1]);
-  const duration = text.match(/^(?:I )?wait (\d+) (minutes?|hours?)\.?$/i)
-    ?? text.match(/^\*waits (\d+) (minutes?|hours?)\*$/i)
-    ?? text.match(/^\*he spent (\d+) (hours?|minutes?) [^*]+\*$/i);
+  const duration = text.match(/^\*he spent (\d+) (hours?|minutes?) [^*]+\*$/i);
   if (duration) return Number(duration[1]) * (duration[2]!.toLowerCase().startsWith("hour") ? 60 : 1);
-  if (/^(?:I )?wait (?:an|one) hour\.?$/i.test(text)) return 60;
   return undefined;
 }
 /** Small documented player command grammar, not an attempt to parse arbitrary narration. */
@@ -50,7 +50,11 @@ export function playerIntent(input: string, context: TurnContext, snapshot: Deep
     resolved_references: [transfer.recipient, transfer.items].filter((r): r is ResolvedReference => !!r), ambiguous_reference: transfer.unresolved,
   };
   let m: RegExpMatchArray | null;
-  const waitMinutes = explicitWaitMinutes(text);
+  const now = snapshot.runtime.scene.world_time.world_minute;
+  const temporal = text.startsWith("/") || explicitWaitMinutes(text) !== undefined ? undefined
+    : parseTemporalAction(text, now, context.characters.filter(c => c.id !== "nicco").flatMap(c => c.profile.name ? [c.profile.name] : []));
+  if (temporal?.kind === "invalid") throw new TurnError("invalid_runtime_intent");
+  const waitMinutes = explicitWaitMinutes(text) ?? temporal?.minutes;
   if ((m = text.match(/^(?:\/go )(.+?)\.?$/i))) {
     const destination = (/^(?:the )?center$/i.test(m[1]!.trim()) && (snapshot.runtime.scene.player_location === "calderan" || world.getAncestors(snapshot.runtime.scene.player_location).some(a => a.id === "calderan")) ? "calderan_center" : playerDestination(m[1]!, world));
     const route = destination && reachable(destination, snapshot.runtime.scene.player_location, world);
@@ -58,8 +62,15 @@ export function playerIntent(input: string, context: TurnContext, snapshot: Deep
     runtime.push({ kind: "runtime_delta", delta: { player_location: route.target, time_advance_minutes: route.route!.minutes } });
   } else if (waitMinutes !== undefined) {
     const minutes = waitMinutes;
-    if (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > 1440) throw new TurnError("invalid_runtime_intent");
+    if (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > MAX_TEMPORAL_ADVANCE_MINUTES) throw new TurnError("invalid_runtime_intent");
     runtime.push({ kind: "runtime_delta", delta: { time_advance_minutes: minutes } });
+    if (temporal) {
+      // A compound action ("drinks the tea and sleeps for 5 hours") keeps its ordinary effects at no extra time; travel in the same
+      // input would charge route minutes on top of the request, so that combination is rejected rather than double-charged.
+      const natural = resolveNaturalActions(text, context, snapshot, world, participants, participantTurn);
+      if (natural.runtime.length) throw new TurnError("invalid_runtime_intent");
+      return { candidates: [...candidates, ...natural.candidates], runtime, natural, temporal };
+    }
   } else if ((m = text.match(/^\/mana (-?\d+)$/))) {
     const delta = Number(m[1]);
     // Explicit developer action; no spell-effect or recovery inference from prose.

@@ -58,6 +58,8 @@ const waits = [
   ["*waits 10 minutes*", 10], ["*waits 2 hours*", 120], ["wait an hour", 60], ["wait one hour", 60],
   ["I wait 1 hour.", 60], ["  WAIT 2 HOURS  ", 120], ["*he spent 1 hour caring for someone*", 60],
   ["*he spent 10 minutes caring for someone*", 10], ["/wait 1440", 1440], ["wait 24 hours", 1440],
+  // Temporal Action Resolver V1, from minute 600: Evening starts 1170, Sunset 1110, midnight is the next 00:00.
+  ["wait until evening", 570], ["wait until sunset", 510], ["wait until midnight", 840], ["wait half an hour", 30],
 ] as const;
 for (const [input, minutes] of waits) test(`P11 explicit wait: ${input}`, () => {
   const campaign = fresh(), snapshot = campaign.exportSnapshot();
@@ -67,7 +69,8 @@ for (const [input, minutes] of waits) test(`P11 explicit wait: ${input}`, () => 
   campaign.apply({ expected_revision: campaign.revision, commands: [...intent.runtime] });
   assert.equal(campaign.exportSnapshot().runtime.scene.world_time.world_minute, 600 + minutes);
 });
-for (const input of ["wait until evening", "wait until sunset", "wait until midnight", "wait until Korvin arrives", "wait until the next auction lot", "wait until someone knocks", "wait until the shop opens", "*waits*", "I wait", "wait", "wait for a while", "*waits for the next slave lot*", "wait 1.5 hours", "wait half an hour", '"I wait 2 hours"']) {
+// Temporal Action Resolver V1 made "wait until evening/sunset/midnight" and "wait half an hour" supported (temporal-action tests).
+for (const input of ["wait until Korvin arrives", "wait until the next auction lot", "wait until someone knocks", "wait until the shop opens", "*waits*", "I wait", "wait", "wait for a while", "*waits for the next slave lot*", "wait 1.5 hours", '"I wait 2 hours"']) {
   test(`P11 unsupported or vague duration remains non-mutating: ${input}`, () => {
     const campaign = fresh(), snapshot = campaign.exportSnapshot();
     assert.deepEqual(playerIntent(input, buildTurnContext(world, snapshot), snapshot, world).runtime, []);

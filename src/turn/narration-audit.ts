@@ -24,6 +24,7 @@ import { resolveDestination } from "./natural-actions.js";
 import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
+import { temporalGrounding } from "./temporal-grounding.js";
 
 /**
  * Live NPC Regression Repair 1: deterministic narration audit. Bounded checks over the draft narration against the resolved
@@ -32,7 +33,8 @@ import { activeNpcPlus } from "../campaign/premium-characters.js";
  * deterministic fallback. See docs/architecture/TURN_COORDINATOR.md (Repair 1).
  */
 export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
-  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase" | "uncommitted_movement";
+  | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase" | "uncommitted_movement"
+  | "uncommitted_elapsed_time";
 /** H5.1: `location` is the authoritative place of the character an uncommitted_movement issue is about (display name). */
 export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly location?: string; readonly correction: string }
 export interface NarrationAuditInput {
@@ -53,6 +55,51 @@ export interface NarrationAuditInput {
   readonly player_travel_frame?: boolean;
   /** P8: the narrator received economic anchors this turn (same decision as the prompt). */
   readonly economic_reference?: boolean;
+  /** Temporal Action Resolver V1: authoritative minutes this turn advances (prepared − base). Omitted: no elapsed-time check. */
+  readonly elapsed_minutes?: number;
+  /** The advance comes from the player's own wait/sleep/nap/rest request, so an exact narrated duration must match it. */
+  readonly temporal_request?: boolean;
+}
+
+const ELAPSED_NUMBER = "\\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|an?|several|a few|a couple of|many|some";
+const ELAPSED_DURATION = new RegExp(`\\b(?:after\\s+)?(${ELAPSED_NUMBER})\\s+(hours?|minutes?)\\s+(?:later|pass(?:es|ed)?|go(?:es)? by|went by|slip(?:s|ped)? (?:by|past|away)|crawl(?:s|ed)? (?:by|past)|drag(?:s|ged)? (?:by|on)|have passed)\\b|\\bafter\\s+(${ELAPSED_NUMBER})\\s+(hours?|minutes?)\\b|\\b(?:he|nicco|she|they)\\s+(?:sleeps|rests|naps|dozes|waits)\\s+(?:for\\s+)?(?:almost\\s+|nearly\\s+|about\\s+|roughly\\s+)?(${ELAPSED_NUMBER})\\s+(hours?|minutes?)\\b`, "i");
+const ELAPSED_TRANSITION = [
+  /\b(?:the\s+)?(?:hours|time|day|morning|afternoon|evening|night)\s+(?:pass(?:es)?|wears? on|drags? on|slips? (?:by|away|past)|goes? by|gives? way|bleeds? into|turns? (?:in)?to|fades? into|melts? into)\b/i,
+  /\b(?:night|dusk|dawn|evening|morning|noon|midday|midnight|sunset|sunrise|twilight)\s+(?:has\s+|had\s+)?(?:fallen|falls|arrives?|arrived|come|comes|settles?|breaks?|broke|creeps? in|takes? over)\b/i,
+  /\bdaylight\s+(?:disappears|fades|is gone|has gone|drains? away|dies)\b/i,
+  /\b(?:wakes?|woke|awakens?|awoke)\b[^.!?]*\b(?:later|(?:the\s+)?next (?:morning|day)|at (?:dusk|dawn|night|sunset|sunrise|noon|midnight)|to (?:dusk|dawn|night|darkness|evening|morning light|the dark))\b/i,
+  /\bby the time (?:he|nicco|she|they) (?:wakes?|woke|stirs|opens)\b/i,
+  /^(?:the\s+)?next (?:morning|day)\b/i,
+  /\b(?:he|nicco|she|they)\s+(?:sleeps|rests|naps|dozes|waits)\s+(?:until|till|through)\s+(?:the\s+)?(?:sunset|dusk|dawn|night|evening|morning|noon|midnight|afternoon|next)\b/i,
+];
+/** Plans, hypotheticals, comparisons, feelings and memories are not completed elapsed time. */
+const ELAPSED_HEDGE = /\b(?:could|would|should|might|may|can|will|shall|if|plans?|planning|intends?|considers?|considering|thinks? (?:about|of)|wants?|wishes|hopes?|maybe|perhaps|feels?|felt|seems?|as if|as though|ago|used to|wonders?|imagines?|dreams?|remembers?|recalls?|unless)\b|['’](?:ll|d)\b/i;
+const NUMBER_MINUTES: Readonly<Record<string, number>> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, a: 1, an: 1 };
+/**
+ * Temporal Action Resolver V1: narration may not complete elapsed time the clock did not advance. With no advance, a completed
+ * interval ("Five hours pass", "He wakes later"), a daypart transition ("Night has fallen") or a completed sleep-until is flagged;
+ * with the player's own temporal request, an exact narrated duration must equal the authoritative one. Plans, hypotheticals,
+ * feelings and memories are not checked.
+ */
+function elapsedTimeIssues(sentences: readonly string[], elapsed: number, request: boolean, now: number): AuditIssue[] {
+  const label = temporalGrounding(now).time_of_day;
+  const issues: AuditIssue[] = [];
+  for (const sentence of sentences) {
+    const text = sentence.replace(/^[*_"“\s]+/, "");
+    if (ELAPSED_HEDGE.test(text)) continue;
+    const duration = text.match(ELAPSED_DURATION);
+    if (elapsed === 0 && (duration || ELAPSED_TRANSITION.some(r => r.test(text)))) {
+      issues.push({ kind: "uncommitted_elapsed_time", sentence, correction: `No time passes this turn: it is still ${label}. Nicco may settle, lie down or begin to rest, but do not narrate hours passing, waking later, or the time of day changing.` });
+      continue;
+    }
+    if (elapsed > 0 && request && duration) {
+      const amount = (duration[1] ?? duration[3] ?? duration[5])!.toLowerCase(), unit = (duration[2] ?? duration[4] ?? duration[6])!.toLowerCase();
+      const count = /^\d+$/.test(amount) ? Number(amount) : NUMBER_MINUTES[amount];
+      if (count !== undefined && count * (unit.startsWith("hour") ? 60 : 1) !== elapsed) issues.push({ kind: "uncommitted_elapsed_time", sentence,
+        correction: `Exactly ${elapsed} minutes pass this turn (it is now ${label}). Do not state a different length of time.` });
+    }
+  }
+  return issues;
 }
 
 const STOP = new Set(["nicco", "is", "a", "an", "the", "to", "this", "that", "from", "of", "and", "in", "on", "was", "he", "his", "came", "come"]);
@@ -298,6 +345,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "", trade_negotiation: negotiation, economic_reference: !!input.economic_reference }));
   issues.push(...householdIssues(input, sentences, negotiation));
   issues.push(...movementIssues(input, sentences));
+  if (input.elapsed_minutes !== undefined) issues.push(...elapsedTimeIssues(sentences, input.elapsed_minutes, !!input.temporal_request, prepared.runtime.scene.world_time.world_minute));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
   const unique = new Map<string, AuditIssue>();
   for (const issue of issues) unique.set(`${issue.kind}|${issue.character ?? ""}|${issue.sentence}`, issue);
