@@ -36,6 +36,17 @@ export interface PlayerCharacterView {
   readonly knowledge_boundary: string;
 }
 
+/**
+ * The name Nicco knows a CREATED character by now, or undefined. Current over historical: the profile name wins when play established
+ * it — it equals the promotion-time established name, or name establishment wrote it with its provenance (late naming of an unnamed
+ * acquired person). Any other profile name on an origin-bearing record is unproven and the origin's established name stands. A record
+ * without an origin snapshot keeps the pre-existing rule (its profile name). Origin snapshots are never rewritten for display.
+ */
+export function knownCreatedName(c: DeepReadonly<Pick<CampaignSnapshot["characters"][number], "profile" | "origin_snapshot">>): string | undefined {
+  const current = c.profile.name, established = c.origin_snapshot?.established.name;
+  if (!c.origin_snapshot) return current;
+  return current && (current === established || c.profile.name_source) ? current : established;
+}
 /** Matches the existing player-visible canonical grant boundary, not narrator-only access. */
 const publicAccess = (p: DeepReadonly<KnowledgeAccess> | undefined) => isVisible(p, "player") && isVisible(p, "narrator");
 
@@ -57,9 +68,9 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     if (!named || entity.type !== "character" && !publicAccess(entity.knowledge)) for (const name of [entity.name, entity.display_name]) substitutions.set(name, label);
   }
   for (const c of snapshot.characters) {
-    const label = c.origin.kind === "created" ? c.origin_snapshot?.established.name ?? c.origin_snapshot?.label ?? c.profile.name ?? "Unfamiliar person" : knownNames.has(c.origin.canonical_entity_id) ? world.getEntity(c.origin.canonical_entity_id)?.name ?? "Unfamiliar person" : "Unfamiliar person";
+    const label = c.origin.kind === "created" ? knownCreatedName(c) ?? c.origin_snapshot?.label ?? "Unfamiliar person" : knownNames.has(c.origin.canonical_entity_id) ? world.getEntity(c.origin.canonical_entity_id)?.name ?? "Unfamiliar person" : "Unfamiliar person";
     substitutions.set(c.id, label);
-    const establishedName = c.origin.kind === "canonical" ? world.getEntity(c.origin.canonical_entity_id)?.name : c.origin_snapshot?.established.name;
+    const establishedName = c.origin.kind === "canonical" ? world.getEntity(c.origin.canonical_entity_id)?.name : knownCreatedName(c);
     if (c.profile.name && (c.origin.kind === "canonical" || c.origin_snapshot) && c.profile.name !== establishedName) substitutions.set(c.profile.name, label);
     for (const alias of c.profile.aliases ?? []) if (alias !== establishedName) substitutions.set(alias, label);
   }
@@ -80,8 +91,9 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     if (!canonical && record?.origin.kind !== "created") return undefined;
     const view = characterView(snapshot, world, id), origin = record?.origin_snapshot;
     const created = record?.origin.kind === "created";
-    const named = id === "nicco" || (created ? origin ? !!origin.established.name : !!record.profile.name : knownNames.has(canonicalId));
-    const name = text(named ? created ? origin?.established.name ?? view.profile.name ?? "Known person" : canonical!.name : origin?.label ?? "Unfamiliar person");
+    const createdName = created ? knownCreatedName(record) : undefined;
+    const named = id === "nicco" || (created ? !!createdName : knownNames.has(canonicalId));
+    const name = text(named ? created ? createdName! : canonical!.name : origin?.label ?? "Unfamiliar person");
     const here = view.current.current_location === snapshot.runtime.scene.player_location && view.current.status !== "inactive" && view.current.status !== "dead";
     const isMember = memberIds.has(id), npcPlus = snapshot.premium_characters.some(p => p.character_id === id);
     const accessible = canonical && publicAccess(canonical.knowledge) && (here || named || isMember);
