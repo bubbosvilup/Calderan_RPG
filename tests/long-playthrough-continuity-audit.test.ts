@@ -14,7 +14,9 @@ import { derivePlayUiView } from "../src/app/play-ui-view.js";
 import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
 import { mockNarrator, mockController, collect } from "./turn-fixtures.js";
 
-// Audit-only characterization of current behavior, not proposed fixes or a replay of the unavailable live transcript.
+// Audit characterization, not a replay of the live transcript. The identity cases below were converted to acceptance expectations
+// by the created-person identity binding fix (CREATED_PERSON_IDENTITY_BINDING_FIX.md); provenance and sleep cases still assert today's
+// deferred behavior.
 const world = await loadWorld("data");
 const fresh = () => new CampaignState(world, "long_continuity_audit", { player_location: "heartstone_lr", world_time: { world_minute: 600 } });
 const input1 = "name's nicco, i'm the keeper of the heartstone, what about you?";
@@ -28,12 +30,12 @@ function view(campaign: CampaignState) {
   return derivePlayUiView(world, snapshot, deriveSessionView(world, snapshot, { status: "idle", last_saved_revision: null, provider: { mode: "stub", configured: true } }));
 }
 
-test("audit: non-colliding quoted self-name misses reciprocal introduction but explicit confirmation promotes a durable scene member", () => {
+test("audit (fixed): non-colliding quoted self-name answers the reciprocal introduction and promotes a durable scene member once", () => {
   const campaign = fresh(), first = exchange(input1, '"Sovela." the woman says.');
-  assert.deepEqual(names(campaign, [first]).promoted, []);
-  const resolution = names(campaign, [first, exchange("so your name is Sovela?", '"Sovela." the woman says.')]);
+  const resolution = names(campaign, [first]);
   assert.equal(resolution.promoted[0]?.name, "Sovela");
   campaign.apply({ expected_revision: campaign.revision, commands: [...resolution.commands] });
+  assert.deepEqual(names(campaign, [first, exchange("so your name is Sovela?", '"Sovela." the woman says.')]).commands, []);
   const person = campaign.exportSnapshot().characters.find(c => c.profile.name === "Sovela")!;
   assert.equal(person.current.current_location, "heartstone_lr");
   assert.equal(person.current.status, "active");
@@ -43,23 +45,26 @@ test("audit: non-colliding quoted self-name misses reciprocal introduction but e
   assert.ok(view(campaign).participants.some(p => p.name === "Sovela"));
 });
 
-test("audit: an absent canonical Mira Thorne blocks a distinct woman's explicit Mira self-introduction before promotion", () => {
-  const campaign = fresh();
+test("audit (fixed): an absent canonical Mira Thorne no longer blocks a distinct woman's explicit Mira self-introduction", () => {
   assert.equal(world.getEntity("mira_thorne")?.name, "Mira Thorne");
-  assert.ok(!buildTurnContext(world, campaign.exportSnapshot()).characters.some(c => c.id === "mira_thorne"));
   for (const narration of ['"Mira." the woman says.', '"My name is Mira," the woman says.']) {
-    assert.deepEqual(names(campaign, [exchange(input2, narration)]).commands, []);
+    const campaign = fresh();
+    assert.ok(!buildTurnContext(world, campaign.exportSnapshot()).characters.some(c => c.id === "mira_thorne"));
+    const resolution = names(campaign, [exchange(input2, narration)]);
+    assert.deepEqual(resolution.promoted.map(p => p.name), ["Mira"], narration);
+    campaign.apply({ expected_revision: campaign.revision, commands: [...resolution.commands] });
+    assert.deepEqual(view(campaign).participants.map(p => p.name).sort(), ["Mira", "Nicco"]);
   }
-  assert.equal(view(campaign).participants.length, 1);
 });
 
-for (const name of ["Mira", "Sovela"]) test(`audit: unquoted RPG ${name} self-answer is not understood by created-person promotion, even on explicit confirmation`, () => {
-  const campaign = fresh(), recent = [exchange(input1, `*The woman looks at Nicco.*\n${name}.`), exchange(`so your name is ${name}?`, `*The woman nods.*\n${name}.`)];
-  const before = campaign.exportSnapshot();
-  assert.deepEqual(names(campaign, recent).commands, []);
-  assert.strictEqual(campaign.exportSnapshot(), before);
-  assert.equal(view(campaign).participants.length, 1);
-  const history = new RecentConversation(); recent.forEach(e => history.add(e));
+for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name} self-answer promotes on the reciprocal turn; confirmation does not duplicate`, () => {
+  const campaign = fresh(), first = exchange(input1, `*The woman looks at Nicco.*\n${name}.`), second = exchange(`so your name is ${name}?`, `*The woman nods.*\n${name}.`);
+  const resolution = names(campaign, [first]);
+  assert.deepEqual(resolution.promoted.map(p => p.name), [name]);
+  campaign.apply({ expected_revision: campaign.revision, commands: [...resolution.commands] });
+  assert.deepEqual(names(campaign, [first, second]).commands, []);
+  assert.deepEqual(view(campaign).participants.map(p => p.name).sort(), [name, "Nicco"].sort());
+  const history = new RecentConversation(); [first, second].forEach(e => history.add(e));
   assert.ok(history.forPrompt().some(e => e.narration.includes(`${name}.`)));
 });
 

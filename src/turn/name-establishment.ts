@@ -18,7 +18,8 @@ import { establishedFacts, linkedParticipant, readScene } from "./narrated-capti
  * and its commands commit atomically with the turn. Unresolvable cases do nothing.
  *
  * - Promotion: a named person first named in this exchange, present in the scene (acts, speaks, self-introduced or introduced by
- *   narration's own voice), not a present persistent character and not a canon name. The profile holds only established facts; a
+ *   narration's own voice), not a present persistent character and not plausibly a canon person (readScene: RPG speech, actor-bound
+ *   canon collisions). The profile holds only established facts; a
  *   name alone is enough. Two different people given the same name in one exchange are both skipped.
  * - Late naming: a present persistent character WITHOUT a name who introduces themselves by name ("My name is Maren") gets that name
  *   on the same record (set_profile). Its ID, origin snapshot, legal state, household and relationships are untouched.
@@ -36,7 +37,7 @@ export function establishNames(recent: readonly RecentExchange[], context: TurnC
   participants: readonly EphemeralSceneParticipant[], baseRevision: number, options: { readonly location_changed?: boolean } = {}): IdentityResolution {
   const location = context.primary.scene.player_location?.id;
   if (!location) return { commands: [], promoted: [], named: [], skipped: [] };
-  const reading = readScene(recent, context, world, { campaign_names: new Set(snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])) });
+  const reading = readScene(recent, context, world, { campaign_names: new Set(snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
   const nameOf = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
   const commands: CampaignCommand[] = [], promoted: IdentityResolution["promoted"][number][] = [], named: IdentityResolution["named"][number][] = [], skipped: IdentityResolution["skipped"][number][] = [];
   for (const n of reading.namings.filter(x => x.exchange === reading.latest)) {

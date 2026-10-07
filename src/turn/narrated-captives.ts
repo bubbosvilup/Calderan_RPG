@@ -6,6 +6,7 @@ import { GATES } from "./language/gates.js";
 import { NUMBER_WORDS, TENS, numberValue } from "./language/numbers.js";
 import { escapeRegExp as esc, sentencesOf } from "./language/text.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
+import { rpgDialogue, rpgNarration } from "./rpg-dialogue.js";
 
 /**
  * Narrator-created people of the current scene (Promotion Pass 1.1, generalized in Persistence Pass 1.2). A person the narrator
@@ -17,8 +18,10 @@ import type { EphemeralSceneParticipant } from "./scene-participants.js";
  * Conservatism rules:
  * - A proper name counts only when it is established AS a name: introduced by narration or someone's words ("a girl named Maren",
  *   "That's Brenna", "Her name is Maren", "Lysa, a young woman"), a self-introduction attributed to the speaker ("My name is Tomas",
- *   "I'm Tomas", a bare "Tomas." answering "What's your name?"), or — weakly — a quote opening with the name ("Brenna. Thirty-two.")
- *   that narration uses again. Capitalized words, places, titles, numbers and occupations are never names.
+ *   "I'm Tomas", a bare "Tomas." answering "What's your name?" or "Name's Nicco, what about you?"), or — weakly — a quote opening
+ *   with the name ("Brenna. Thirty-two.") that narration uses again. Capitalized words, places, titles, numbers and occupations are
+ *   never names. With `rpg_speech`, plain RPG lines are speech, but self-introductions in them need an attributed speaker.
+ * - Canon names are not global keys: an absent canon person's shared first name can belong to one described narrated speaker.
  * - A named person is present only if they act or speak in the scene, or narration's own voice introduces them; a name that is only
  *   talked about ("an old woman named Maren runs the apothecary") is not a person in the scene.
  * - A person is a captive only when a sentence about them carries a captivity marker (cage, bars, chains, auction, enslaved…).
@@ -29,6 +32,8 @@ export interface NarrationUnit {
   readonly text: string; readonly quoted: boolean; readonly exchange: number;
   /** Quoted: attributed speaker. Narration: sentence subject. A present character ID, `other:<name|noun>`, or undefined. */
   readonly speaker?: string;
+  /** Plain RPG speech outside *narration*; its speaker comes only from the immediately preceding narration beat. */
+  readonly rpg?: boolean;
 }
 export interface NameIntroduction {
   readonly name: string; readonly exchange: number;
@@ -93,7 +98,19 @@ const STOP = new Set(["the", "a", "an", "he", "she", "they", "it", "his", "her",
   "more", "less", "most", "much", "many", "few", "clean", "free", "take", "pay", "name", "price", "lord", "lady", "sir", "master", "mistress", "sorry", "afraid", "glad", "tired", "busy",
   "okay", "yours", "mine", "home", "back", "late", "new", "old", "ready", "thanks", "thank", "hungry", "cold", "hurt", "nobody", "nothing", "alone", "lost", "leaving", "coming", "going",
   ...NUMBER_WORDS, ...Object.keys(TENS)]);
-const ASK_NAME = /\b(?:your name|who are you|what(?:'s| is| are) you called|what do (?:they|people) call you)\b/i;
+const ASK_NAME = /\b(?:your name|who are you|what(?:'s| is| are) you called|what do (?:they|people) call you|what (?:do|should|shall) i call you)\b/i;
+/** The player's own name introduction; a reciprocal question after it in the same input asks for the other person's name. */
+const OWN_NAME = /\b(?:my name(?:'s|’s| is)|name(?:'s|’s)|i(?:'m|’m| am)|call me|they call me)\s+nicco\b/i;
+const RECIPROCAL = /(?:^|[,.;:!?…—–-])\s*(?:(?:and|so|but)\s+)?(?:(?:what|how) about you|and you(?:rs)?|you)\s*[?!.]*\s*$/i;
+/**
+ * A bounded name question: an explicit one ("What's your name?"), or a reciprocal "what about you?" / "and you?" closing an input
+ * in which the player first gave his own name ("Name's Nicco, what about you?"). Reciprocal phrasing alone is never a name question.
+ */
+export function asksName(player: string): boolean {
+  if (ASK_NAME.test(player)) return true;
+  const own = OWN_NAME.exec(player);
+  return !!own && RECIPROCAL.test(player.slice(own.index + own[0].length));
+}
 const NAME = "([A-Z][a-z]{2,})";
 const words = (s: string) => s.split(/\s+/).filter(t => t.length > 2);
 
@@ -136,9 +153,11 @@ function candidateNames(texts: readonly string[], ok: (n: string) => boolean): s
  * Sentences and quotes of one narration, each with its attributed speaker (quotes) or subject (sentences). Pronouns resolve to the
  * most recent subject of a compatible established sex ("He swallows" skips a woman who spoke last); unknown sex is compatible.
  */
-export function narrationUnits(narration: string, exchange: number, people: readonly Person[], others: readonly string[] = []): NarrationUnit[] {
+export function narrationUnits(narration: string, exchange: number, people: readonly Person[], others: readonly string[] = [],
+  options: { readonly rpg?: boolean; readonly carry?: readonly string[] } = {}): NarrationUnit[] {
   const out: NarrationUnit[] = [];
   const history: string[] = [];
+  const rpg = !!options.rpg && rpgNarration(narration).length > 0 && !!rpgDialogue(narration)?.length;
   const otherNames = others.map(esc).join("|") || "(?!)";
   const sexOf = (key: string): Sex | undefined => {
     const p = people.find(x => x.id === key); if (p) return p.sex;
@@ -147,7 +166,12 @@ export function narrationUnits(narration: string, exchange: number, people: read
   };
   const pronounRef = (word: string): string | null => {
     const w = word.toLowerCase(), want: Sex | undefined = /^(?:he|him|his)$/.test(w) ? "male" : /^(?:she|her)$/.test(w) ? "female" : undefined;
-    return history.find(h => !want || sexOf(h) === undefined || sexOf(h) === want) ?? null;
+    const found = history.find(h => !want || sexOf(h) === undefined || sexOf(h) === want);
+    if (found || !rpg || !want) return found ?? null;
+    // RPG beats often open on a pronoun continuing the previous exchange ("*Her eyes stay half-open…*"). Only the single earlier
+    // scene subject of that established sex qualifies; none or several attribute nothing.
+    const carried = [...new Set(options.carry ?? [])].filter(k => sexOf(k) === want);
+    return carried.length === 1 ? carried[0]! : null;
   };
   const remember = (key: string) => { const i = history.indexOf(key); if (i >= 0) history.splice(i, 1); history.unshift(key); };
   const subjectOf = (raw: string): string | null => {
@@ -166,29 +190,53 @@ export function narrationUnits(narration: string, exchange: number, people: read
   const clauseSubject = `(?:${people.flatMap(p => p.names).map(esc).join("|") || "(?!)"}|${otherNames}|he|she|they|(?:the|a|an)\\s+(?:[a-z'-]+\\s+){0,2}?[a-z-]+)`;
   const after = new RegExp(`^\\s*,?\\s*(?:(${clauseSubject})\\s+(?:${SPEECH})|(?:${SPEECH})\\s+(${clauseSubject}))\\b`, "i");
   const before = new RegExp(`(${clauseSubject})\\s+(?:${SPEECH})\\b[^"“”.!?]{0,40}[,:]\\s*$`, "i");
+  // A subject made of two people ("The woman and the girl look up") or a plural one attributes no following RPG speech.
+  const plural = new RegExp(`^(?:they|both|the two|the (?:women|men|girls|boys|children|others)|(?:(?:the|a|an)\\s+(?:[a-z'-]+\\s+){0,2}?(?:${SPEAKER_NOUNS})|[A-Z][a-z]+)\\s+(?:and|&)\\s+(?:the|a|an|his|her|their|[A-Z]))\\b`, "i");
+  let beat: string | undefined;
   const narrate = (segment: string) => {
     for (const s of segment.split(/(?<=[.!?…])\s+/)) {
       const text = s.replace(/[*_]/g, "").trim();
       if (!/[A-Za-z]{2}/.test(text)) continue;
       const subject = subjectOf(text);
       if (subject) remember(subject);
+      if (subject || plural.test(text)) beat = subject && !plural.test(text) ? subject : undefined;
       out.push({ text, quoted: false, exchange, ...(subject ? { speaker: subject } : {}) });
     }
   };
-  for (const paragraph of narration.split(/\n+/)) {
-    const quotes = [...paragraph.matchAll(QUOTE)].map(m => ({ start: m.index!, end: m.index! + m[0].length, text: (m[1] ?? m[2])! }));
+  const paragraph = (text: string) => {
+    const quotes = [...text.matchAll(QUOTE)].map(m => ({ start: m.index!, end: m.index! + m[0].length, text: (m[1] ?? m[2])! }));
     let cursor = 0;
     for (const q of quotes) {
-      const lead = paragraph.slice(cursor, q.start);
+      const lead = text.slice(cursor, q.start);
       narrate(lead);
-      const tail = after.exec(paragraph.slice(q.end, q.end + 60).replace(/^[*_]+/, "")), head = before.exec(lead.replace(/[*_]/g, ""));
+      const tail = after.exec(text.slice(q.end, q.end + 60).replace(/^[*_]+/, "")), head = before.exec(lead.replace(/[*_]/g, ""));
       const clause = tail ? tail[1] ?? tail[2] : head?.[1];
       const speaker = clause !== undefined ? subjectOf(clause) ?? history[0] : history[0];
       out.push({ text: q.text.trim(), quoted: true, exchange, ...(speaker ? { speaker } : {}) });
       cursor = q.end;
     }
-    narrate(paragraph.slice(cursor));
+    narrate(text.slice(cursor));
+  };
+  // RPG format (the project's narrator contract, shared with rpg-dialogue.ts): *narration* in single asterisks, spoken dialogue plain
+  // outside them. Used only when the narration has complete starred spans and rpgDialogue accepts it; anything else is legacy prose.
+  if (rpg) {
+    const stars = [...narration.matchAll(/(?<!\\)\*/g)].map(m => m.index!);
+    const blocks: { text: string; starred: boolean }[] = [];
+    for (let i = 0, start = 0; i <= stars.length; i += 2) {
+      blocks.push({ text: narration.slice(start, stars[i] ?? narration.length), starred: false });
+      if (i < stars.length) { blocks.push({ text: narration.slice(stars[i]! + 1, stars[i + 1]!), starred: true }); start = stars[i + 1]! + 1; }
+    }
+    for (const block of blocks) {
+      if (block.starred) { beat = undefined; block.text.split(/\n+/).forEach(paragraph); continue; }
+      for (const line of block.text.split(/\r?\n/).map(s => s.trim()).filter(s => /[A-Za-z]{2}/.test(s) && s.length <= 400)) {
+        if (/["“”]/.test(line) && !/^["“][^"“”]*["”]$/.test(line)) { paragraph(line); continue; } // legacy attributed quote
+        // Plain speech belongs to the subject of the immediately preceding narration beat; with none, it is unattributed.
+        out.push({ text: line.replace(/^["“]([\s\S]*)["”]$/, "$1").trim(), quoted: true, exchange, rpg: true, ...(beat ? { speaker: beat } : {}) });
+      }
+    }
+    return out;
   }
+  narration.split(/\n+/).forEach(paragraph);
   return out;
 }
 
@@ -202,10 +250,10 @@ function introductions(units: readonly NarrationUnit[], scene: readonly RecentEx
     for (const m of u.text.matchAll(new RegExp(`\\b${NAME},\\s+(?:a|an)\\s+(?:[a-z'-]+\\s+){0,3}?(${PERSON_NOUNS})\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern", noun: m[2]!.toLowerCase() });
     // Third-person naming of someone else ("That's Brenna", "Her name is Maren"); "my name" is a self-introduction below.
     for (const m of u.text.matchAll(new RegExp(`\\b(?:named|called|(?:[Hh]er|[Hh]is|[Tt]heir|[Tt]he (?:girl|boy|woman|man)'s) name(?:'s|’s| is| was)|(?:[Tt]his|[Tt]hat)(?: one)?(?:'s|’s| is))\\s+${NAME}\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern" });
-    if (!u.quoted) continue;
+    if (!u.quoted || (u.rpg && !u.speaker)) continue; // unattributed plain RPG speech is nobody's self-introduction
     const self = u.text.match(new RegExp(`\\b(?:[Mm]y name(?:'s|’s| is)|[Cc]all me|[Tt]hey call me)\\s+${NAME}\\b`)) ?? u.text.match(new RegExp(`(?:^|[.!?,;]\\s+)(?:I'm|I’m|I am)\\s+${NAME}\\b`))
       ?? u.text.match(new RegExp(`^Name(?:'s|’s)\\s+${NAME}\\b`))
-      ?? (ASK_NAME.test(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null);
+      ?? (asksName(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null);
     if (self) add({ ...base, name: self[1]!, kind: "self", ...(u.speaker ? { speaker: u.speaker } : {}) });
     const weak = u.text.match(new RegExp(`^${NAME}\\.\\s+\\S`));
     if (weak) add({ ...base, name: weak[1]!, kind: "weak" });
@@ -222,6 +270,11 @@ export interface ReadOptions {
   readonly unheld?: ReadonlySet<string>;
   /** Names of existing campaign characters anywhere (weak quote-opening names matching them are ignored). */
   readonly campaign_names?: ReadonlySet<string>;
+  /**
+   * Read RPG output (*narration*, plain speech) as attributed speech (created-person identity binding). Opt-in: name establishment
+   * uses it; purchase/price resolution and narration audits keep their existing projection.
+   */
+  readonly rpg_speech?: boolean;
 }
 /** Narrated people of the current scene who are not present persistent characters, plus present unheld captives and late namings. */
 export function readScene(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, options: ReadOptions = {}): SceneReading {
@@ -229,13 +282,18 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
   const people = presentPeople(context);
   const places = new Set(world.listEntities().filter(e => e.type !== "character").flatMap(e => (e.name ?? "").toLowerCase().split(/\s+/)));
   const known = new Set(people.flatMap(p => p.names.map(n => n.toLowerCase())));
-  // A canon character's name is that canon person, never a new narrator-created one; if they are not present, the name is ambiguous.
-  const canon = new Set(world.listEntities().filter(e => e.type === "character").flatMap(e => words(e.name ?? "").map(t => t.toLowerCase())));
+  // Canon names (each full name with its tokens). Names are not unique, so a canon token is not a global key; see the check below.
+  const canon = world.listEntities().filter(e => e.type === "character" && e.name).map(e => ({ full: e.name!, tokens: words(e.name!).map(t => t.toLowerCase()) }));
   const ok = (n: string) => !STOP.has(n.toLowerCase()) && !places.has(n.toLowerCase()) && numberValue(n) === undefined;
-  const units = scene.flatMap((e, i) => narrationUnits(e.narration, i, people, candidateNames(scene.map(x => x.narration), ok)));
+  const others = candidateNames(scene.map(x => x.narration), ok);
+  // With rpg_speech, pronouns opening an RPG beat may also continue the scene's single earlier subject of that sex.
+  const units: NarrationUnit[] = [];
+  for (const [i, e] of scene.entries()) units.push(...narrationUnits(e.narration, i, people, others, options.rpg_speech ? { rpg: true, carry: units.filter(u => !u.quoted && u.speaker).map(u => u.speaker!) } : {}));
   const latest = scene.length - 1;
   const intros = introductions(units, scene, ok);
   const allText = scene.map(e => e.narration).join("\n");
+  const sceneText = scene.map(e => `${e.player}\n${e.narration}`).join("\n");
+  const nounSpeaker = new RegExp(`^other:(?:${SPEAKER_NOUNS})$`, "i");
   const mention = (name: string) => new RegExp(`\\b${esc(name)}(?:'s|’s)?\\b`);
   const nounPhrase = (noun: string) => new RegExp(`\\b(?:a|an|the|that|this|one|another)\\s+(?:[a-z'-]+\\s+){0,3}?${esc(noun)}\\b`, "i");
   // Who each captivity marker is about (Pass 1.2): being held is attached to the nearest person reference, not to the sentence.
@@ -250,9 +308,19 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
     const late = selfSpeakers.filter(s => people.some(p => p.id === s && p.unnamed));
     if (late.length) { if (late.length === 1 && selfSpeakers.length === 1) { const i = mine.find(x => x.speaker === late[0])!; namings.push({ character_id: late[0]!, name, exchange: i.exchange, evidence: i.evidence }); } continue; }
     if (known.has(name.toLowerCase())) continue; // a present persistent person: never a new one
-    if (canon.has(name.toLowerCase())) continue; // canon identity: never duplicated by a narrator-created person
     if (selfSpeakers.some(s => people.some(p => p.id === s))) continue; // a named persistent person cannot claim another name
     if (selfSpeakers.length > 1) continue; // two different speakers claim the name: unresolved
+    // Canon nonduplication, actor-bound rather than string-bound. A PRESENT canon bearer of the name is `known` above. An absent canon
+    // person still owns: their whole name used as the name (a mononym), and any scene where their full name is spoken or written (the
+    // referent may be them). Otherwise a shared first name ("Mira" vs an absent Mira Thorne) belongs to a new person only when one
+    // distinct narrated actor (a described woman/man/girl…) introduced themself with it and nothing else introduced it.
+    const bearers = canon.filter(c => c.tokens.includes(name.toLowerCase()));
+    if (bearers.length) {
+      const exact = bearers.some(c => c.full.toLowerCase() === name.toLowerCase());
+      const referenced = bearers.some(c => new RegExp(`\\b${esc(c.full)}\\b`, "i").test(sceneText));
+      const bound = selfSpeakers.length === 1 && nounSpeaker.test(selfSpeakers[0]!) && mine.every(i => i.kind === "weak" || (i.kind === "self" && i.speaker === selfSpeakers[0]));
+      if (exact || referenced || !bound) continue;
+    }
     const weakOnly = mine.every(i => i.kind === "weak");
     // A weak quote-opening name ("Brenna. Thirty-two.") counts only if narration also uses it as an acting person ("Brenna coughs…"):
     // "Soft. Like it's something to be proud of." is a word, not a name. It never matches an existing campaign character (vocative).
