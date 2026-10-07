@@ -38,12 +38,21 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
     }
     try {
       if (req.method === "GET" && req.url === "/api/session") { json(200, state()); return; }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance")) {
+      // Portrait Image Generation V1: stored portrait/reference bytes by opaque token only (no path, ID or name is accepted).
+      const assetToken = req.method === "GET" ? /^\/api\/portrait\/asset\/([0-9a-f]{32})$/.exec(req.url ?? "")?.[1] : undefined;
+      if (assetToken) {
+        const file = await session.readPortraitAsset(assetToken);
+        if (!file) { json(404, { error: "Not found." }); return; }
+        res.writeHead(200, { "Content-Type": file.media_type, "Content-Length": String(file.bytes.length) }); res.end(file.bytes); return;
+      }
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/portrait/generate" || req.url === "/api/portrait/reference")) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
+        // A reference upload carries one base64 image (at most 4 MB decoded); every other request stays small.
+        const limit = req.url === "/api/portrait/reference" ? 6_000_000 : 24000;
         let body = "";
         for await (const chunk of req) {
           body += chunk.toString();
-          if (Buffer.byteLength(body) > 24000) { json(413, { error: "Message too long." }); return; }
+          if (Buffer.byteLength(body) > limit) { json(413, { error: req.url === "/api/portrait/reference" ? "The image is too large (at most 4 MB)." : "Message too long." }); return; }
         }
         let input: unknown;
         try { input = JSON.parse(body); } catch { json(400, { error: "Invalid request." }); return; }
@@ -55,6 +64,16 @@ export function createPlaytestServer(session: GameSession, assetDir = resolve("s
           const { view: _view, ...result } = outcome;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422,
             { ...result, ...state() }); return;
+        }
+        if (req.url === "/api/portrait/generate" || req.url === "/api/portrait/reference") {
+          // The browser supplies only the opaque ref, the revision it saw and (for a reference) the image itself: never a prompt,
+          // model, path or character ID. The server builds the prompt from committed appearance.
+          const body = input && typeof input === "object" ? input as Record<string, unknown> : {};
+          const outcome = req.url === "/api/portrait/generate"
+            ? await session.generateNpcPortrait({ ref: body.ref, expected_revision: body.expected_revision })
+            : await session.setNpcPortraitReference({ ref: body.ref, expected_revision: body.expected_revision, image: body.image });
+          const { view: _view, ...result } = outcome;
+          json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : outcome.error.code === "portrait_generation_failed" ? 502 : 422, { ...result, ...state() }); return;
         }
         if (req.url === "/api/appearance") {
           // Permanent Appearance V1: the Household editor's narrow write; eligibility, revision and patch rules live in GameSession.

@@ -18,6 +18,9 @@ import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { NARRATOR_OUTPUT_TOKENS, selectedModels, contextCompressorModel, mannerismExtractorModel } from "./provider-config.js";
 import type { SessionDeps, SessionHooks } from "./game-session.js";
 import type { ProviderStatus } from "./session-view.js";
+import { join } from "node:path";
+import { OpenRouterImageClient, portraitImageConfig } from "../llm/openrouter/image-client.js";
+import { PortraitAssetStore } from "./portrait-store.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { observePreparedNarrator } from "./narrator-alternatives.js";
@@ -30,6 +33,7 @@ import { observePreparedNarrator } from "./narrator-alternatives.js";
  *   CALDREVAN_REFLECTION_MODE  optional off (default) or shadow; neither exposes notes to narration.
  *   OPENROUTER_REFLECTION_MODEL optional reflection model id (retains its pre-controller-migration default).
  *   MANNERISM_EXTRACTOR_MODEL  optional independent observation model id (validated D-10 default).
+ *   CALDREVAN_PORTRAIT_MODEL / _RESOLUTION / _ASPECT_RATIO  optional portrait image config (default Seedream 5.0 Flash, 1K, 2:3).
  *   Semantic retrieval is opt-in: pass an `embedding_provider` (VOYAGE_API_KEY applies to the Voyage provider).
  * The returned status holds model ids and a boolean only, so it is safe to show in a UI and to put in diagnostics.
  */
@@ -65,6 +69,10 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
   const coordinator = new TurnCoordinator(world, options.prepared_narrator_observer ? observePreparedNarrator(narrator, options.prepared_narrator_observer, NARRATOR_OUTPUT_TOKENS) : narrator,
     new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, narrator_request_setup: request => narratorSetup?.(request) ?? request, diagnostics_sink: record => sink?.(record) });
   return { world, context_policy, compaction_service, repository: new FileCampaignRepository(world, options.save_dir ?? "saves"), provider_status: status,
+    // Portrait Image Generation V1: one application-level image model (env-overridable, validated against live capabilities on use);
+    // portrait files live beside the saves, never inside them. Diagnostics carry a code and HTTP status only.
+    portrait_generator: new OpenRouterImageClient(portraitImageConfig()), portrait_store: new PortraitAssetStore(join(options.save_dir ?? "saves", "portraits")),
+    portrait_log: entry => console.warn(`[portrait] generation failed: ${entry.code}${entry.status ? ` (HTTP ${entry.status})` : ""}`),
     ...(options.enable_emergent_mannerisms !== false ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),
     // One coordinator is shared; the live session owns the diagnostics hook. A UI runs one session at a time.
     createCoordinator: hooks => { sink = hooks.diagnostics_sink; narratorSetup = hooks.narrator_request_setup; return coordinator; },

@@ -86,6 +86,8 @@ function renderEditor(card, fill = false) {
   // refresh on every render; it never touches the editable inputs.
   if (ui("editor-image-prompt")) ui("editor-image-prompt").value = editor?.portrait_prompt?.prompt ?? "";
   if (ui("editor-negative-prompt")) ui("editor-negative-prompt").value = editor?.portrait_prompt?.negative_prompt ?? "";
+  if (fill) showPortraitError("");
+  renderPortrait(editor);
   if (ui("editor-identity")) ui("editor-identity").textContent = editor?.identity?.length ? editor.identity.map(i => `${i.label}: ${i.value}`).join(" · ") : "No established species, sex or age.";
   if (fill) {
     editorRevision = currentRevision;
@@ -118,6 +120,54 @@ async function saveEditor() {
   updateEditorSave();
 }
 ui("editor-save")?.addEventListener("click", () => saveEditor());
+// Portrait Image Generation V1. Generation is an explicit click (it costs money); the browser sends only the opaque ref and the
+// revision the editor opened with. The shown portrait is always the committed one: nothing optimistic, nothing on open.
+let portraitBusy = false;
+function showPortraitError(text) { const el = ui("portrait-error"); if (el) { el.textContent = text; el.hidden = !text; } }
+function renderPortrait(editor) {
+  const portrait = editor?.portrait, image = ui("editor-portrait-image");
+  if (image) {
+    if (portrait?.url) { if (image.getAttribute?.("src") !== portrait.url) image.setAttribute("src", portrait.url); image.hidden = false; }
+    else image.hidden = true;
+  }
+  if (ui("editor-initial")) ui("editor-initial").hidden = !!portrait?.url;
+  if (ui("editor-portrait-label")) ui("editor-portrait-label").hidden = !!portrait?.url;
+  if (ui("editor-portrait-status")) ui("editor-portrait-status").textContent = portraitBusy ? "Generating portrait…" : !portrait?.available ? "No portrait yet"
+    : portrait.stale ? "Appearance changed since this portrait was generated." : "";
+  if (ui("portrait-generate")) { ui("portrait-generate").textContent = portraitBusy ? "Generating…" : portrait?.available ? "Regenerate" : "Generate portrait"; ui("portrait-generate").disabled = portraitBusy || !editor; }
+  if (ui("portrait-reference")) { ui("portrait-reference").textContent = portrait?.reference_attached ? "Replace reference" : "Reference"; ui("portrait-reference").disabled = portraitBusy || !editor; }
+  if (ui("portrait-reference-remove")) ui("portrait-reference-remove").hidden = !portrait?.reference_attached || portraitBusy;
+  if (ui("portrait-meta")) ui("portrait-meta").textContent = [portrait?.available ? `Portrait ${portrait.version_number} of ${portrait.version_count}` : "", portrait?.model_label ?? "",
+    portrait?.reference_attached ? "Reference attached" : ""].filter(Boolean).join(" · ");
+}
+async function portraitRequest(url, body) {
+  if (!editorRef || portraitBusy) return;
+  portraitBusy = true; showPortraitError("");
+  const card = householdCharacters.get(editorRef); renderPortrait(card?.appearance_editor);
+  try {
+    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, ...body }) });
+    const data = await response.json();
+    portraitBusy = false;
+    if (data?.messages) render(data);
+    // A committed portrait or reference never touches appearance: unsaved form edits stay valid at the new revision.
+    if (data?.ok) { if (data.changed) editorRevision = currentRevision; showPortraitError(""); }
+    else showPortraitError(data?.error?.message ?? "The portrait was not generated.");
+  } catch { portraitBusy = false; showPortraitError("The portrait request failed. Check the connection and try again."); }
+  renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
+}
+ui("portrait-generate")?.addEventListener("click", () => portraitRequest("/api/portrait/generate", {}));
+ui("portrait-reference")?.addEventListener("click", () => { if (!portraitBusy) ui("portrait-reference-file")?.click?.(); });
+ui("portrait-reference-remove")?.addEventListener("click", () => portraitRequest("/api/portrait/reference", { image: null }));
+ui("portrait-reference-file")?.addEventListener("change", () => {
+  const input = ui("portrait-reference-file"), file = input?.files?.[0];
+  if (!file) return;
+  input.value = "";
+  if (!["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 4 * 1024 * 1024) { showPortraitError("Choose a PNG, JPEG or WebP image of at most 4 MB."); return; }
+  const reader = new FileReader();
+  reader.onload = () => portraitRequest("/api/portrait/reference", { image: { data_base64: String(reader.result).replace(/^data:[^,]*,/, "") } });
+  reader.onerror = () => showPortraitError("The image could not be read.");
+  reader.readAsDataURL(file);
+});
 for (const key of ["height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"])
   ui(`appearance-${key}`)?.addEventListener("input", () => updateEditorSave());
 function renderHousehold() {
@@ -145,7 +195,9 @@ function renderHousehold() {
     const portrait = document.createElement("div"); portrait.className = "portrait member-portrait";
     const initial = document.createElement("strong"); initial.textContent = card.name_known ? card.name.slice(0, 1) : "?";
     const presence = document.createElement("span"); presence.className = "presence-badge"; presence.textContent = card.presence === "present" ? "Here" : "Elsewhere";
-    portrait.append(initial, presence);
+    // Portrait Image Generation V1: the active portrait replaces the initial when one exists.
+    if (card.portrait_url) { const image = document.createElement("img"); image.className = "portrait-image"; image.setAttribute("alt", ""); image.setAttribute("src", card.portrait_url); portrait.append(image, presence); }
+    else portrait.append(initial, presence);
     const info = document.createElement("div"); info.className = "member-card-info";
     const name = document.createElement("h2"); name.textContent = card.name; info.append(name);
     if (card.npc_plus) { const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = "NPC+"; info.append(badge); }

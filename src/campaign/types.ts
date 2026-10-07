@@ -227,7 +227,18 @@ export interface CampaignSnapshot extends CampaignDomains {
   mannerism_learning?: MannerismLearning;
   /** P8 Personal Price Index (optional additive extension; absent on pre-P8 saves). */
   price_indices?: PriceIndexRecord[];
+  /** Portrait Image Generation V1: derived-media metadata (optional additive extension; absent on older saves). Never appearance truth. */
+  portraits?: CharacterPortraitRecord[];
 }
+export type PortraitMediaType = "image/png" | "image/jpeg" | "image/webp";
+/** One generated portrait image (bytes live in the local portrait asset store, never in the snapshot). */
+export interface CharacterPortraitVersion {
+  version_id: string; prompt_version: string; prompt_fingerprint: string; model: string; created_at: string;
+  media_type: PortraitMediaType; asset_file: string; cost_usd?: number; reference_used?: boolean;
+}
+/** The single uploaded reference image used to guide generation (guidance only; never read back into appearance). */
+export interface CharacterPortraitReference { media_type: PortraitMediaType; asset_file: string; uploaded_at: string }
+export interface CharacterPortraitRecord { character_id: string; active_version_id?: string; versions: CharacterPortraitVersion[]; reference?: CharacterPortraitReference }
 export interface MannerismEvidence {
   sequence: number; revision: number; event_id: string; narration_hash: string; span_start: number; span_end: number;
 }
@@ -271,6 +282,8 @@ export type CampaignCommand =
   | { kind: "set_funds"; character_id: string; gold: number }
   /** P8: campaign-creation only; the controller authorizer rejects it like every unlisted kind. */
   | { kind: "set_price_index"; character_id: string; percent: number }
+  | { kind: "record_portrait"; character_id: string; version: CharacterPortraitVersion }
+  | { kind: "set_portrait_reference"; character_id: string; reference: CharacterPortraitReference | null }
   | { kind: "set_legal_status"; character_id: string; status: "free" | "enslaved"; holder_id?: string; documentation?: TransferDocumentation; note?: string }
   /**
    * Pass 1.2: exactly one of `from_holder_id` (the current legal holder) or `from_counterparty` (an anonymous seller: sale only, of a

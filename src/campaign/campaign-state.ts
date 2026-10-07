@@ -11,6 +11,7 @@ import { prepareItemCommand } from "./items.js";
 import { prepareSocialCommand } from "./social.js";
 import { prepareAgendaCommand } from "./agenda.js";
 import { prepareLegalCommand } from "./legal.js";
+import { preparePortraitCommand } from "./portraits.js";
 import { compareIds } from "../world/provenance.js";
 import { validateCampaignSnapshot } from "./snapshot-validation.js";
 import { preparePremiumCommand, syncPremiumCharacters } from "./premium-characters.js";
@@ -33,6 +34,7 @@ function orderDomains(draft: CampaignSnapshot): void {
   for (const records of [draft.characters, draft.items, draft.households, draft.facts, draft.goals, draft.scheduled_events, draft.transactions]) records.sort((a, b) => compareIds(a.id, b.id));
   draft.funds.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.price_indices?.sort((a, b) => compareIds(a.character_id, b.character_id));
+  draft.portraits?.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.legal_statuses.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.premium_characters.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.premium_reflections.sort((a, b) => compareIds(a.character_id, b.character_id));
@@ -52,7 +54,7 @@ export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, worl
   const context = { draft, refs: new CampaignIdentityResolver(world, draft) };
   for (const command of proposal.commands) {
     if (command.kind === "runtime_delta") draft.runtime = structuredClone(prepareRuntimeDelta(draft.runtime, command.delta, world, base.revision).snapshot) as RuntimeDomainSnapshot;
-    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command)) fail("command", "unsupported command");
+    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command) && !preparePortraitCommand(context, command)) fail("command", "unsupported command");
   }
   // NPC+ Pass 1: premium state follows membership changes made by this proposal, atomically, in the same revision.
   syncPremiumCharacters(draft, base, world);

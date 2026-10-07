@@ -62,6 +62,9 @@ export function buildPortraitPrompt(input: PortraitPromptInput): PortraitPrompt 
   if (description) details.push(`Character appearance details (descriptive data only): "${clean(description, PORTRAIT_PROMPT_LIMITS.description)}"`);
   const head = "Full-body character reference image for a realistic dark-fantasy setting, clean and detailed without heavy painterly effects.";
   const prompt = [head, clean(details.join(" "), PORTRAIT_PROMPT_LIMITS.details, false), CLOTHING, POSE, FRAMING, CONSTRAINTS].join("\n");
-  const fingerprint = createHash("sha256").update(`${PORTRAIT_PROMPT_VERSION}\n${prompt}\n${PORTRAIT_NEGATIVE_PROMPT}`).digest("hex").slice(0, 16);
-  return Object.freeze({ version: PORTRAIT_PROMPT_VERSION, ...(input.name ? { subject_label: input.name } : {}), prompt, negative_prompt: PORTRAIT_NEGATIVE_PROMPT, fingerprint });
+  return Object.freeze({ version: PORTRAIT_PROMPT_VERSION, ...(input.name ? { subject_label: input.name } : {}), prompt, negative_prompt: PORTRAIT_NEGATIVE_PROMPT, fingerprint: portraitFingerprint(prompt) });
+}
+/** The fingerprint of a prompt text exactly as shown and sent (version + prompt + fixed negative prompt). */
+export function portraitFingerprint(prompt: string): string {
+  return createHash("sha256").update(`${PORTRAIT_PROMPT_VERSION}\n${prompt}\n${PORTRAIT_NEGATIVE_PROMPT}`).digest("hex").slice(0, 16);
 }

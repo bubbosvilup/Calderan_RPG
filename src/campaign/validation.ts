@@ -79,6 +79,15 @@ const provenance = object({ learned_at: optional(integer()), source_character_id
 const target = object({ kind: choice("canonical", "character", "item", "event"), id });
 const goalStatus = choice("active", "completed", "abandoned", "failed"), eventStatus = choice("scheduled", "triggered", "completed", "cancelled");
 const claim = object({ text, source: choice("narration", "seller", "self", "other"), by: optional(text) });
+// Portrait Image Generation V1: derived-media metadata. File names are store-generated tokens, never paths.
+const pattern = (re: RegExp, what: string): Parser => (input, path) => { if (typeof input !== "string" || !re.test(input)) fail(path, `expected ${what}`); return input; };
+const portraitMedia = choice("image/png", "image/jpeg", "image/webp");
+const isoTime = pattern(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/, "an ISO UTC timestamp");
+const costUsd: Parser = (input, path) => { if (typeof input !== "number" || !Number.isFinite(input) || input < 0 || input > 1000) fail(path, "expected a non-negative cost"); return input; };
+const portraitVersion = object({ version_id: id, prompt_version: pattern(/^[a-z0-9-]{1,40}$/, "a prompt version"), prompt_fingerprint: pattern(/^[0-9a-f]{16}$/, "a 16-hex fingerprint"),
+  model: pattern(/^[a-z0-9][a-z0-9._:/-]{0,159}$/i, "a model slug"), created_at: isoTime, media_type: portraitMedia,
+  asset_file: pattern(/^portrait_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a portrait asset file name"), cost_usd: optional(costUsd), reference_used: optional((input: unknown, path: string) => { if (input !== true) fail(path, "expected true"); return input; }) });
+const portraitReference = object({ media_type: portraitMedia, asset_file: pattern(/^reference_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a reference asset file name"), uploaded_at: isoTime });
 const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: choice("name_established", "purchase_unnamed_subject", "recruitment", "custody", "rescue"),
   promoted_revision: integer(1), promoted_world_minute: integer(), location_id: id, label: text, ephemeral_ref: optional(text),
   established: object({ name: optional(text), sex: optional(text), age: optional(tagged({ exact: object({ kind: choice("exact"), years: integer(0) }), approximate: object({ kind: choice("approximate"), description: text }) })),
@@ -199,6 +208,8 @@ command("set_event_status", { event_id: id, status: eventStatus });
 command("reschedule_event", { event_id: id, scheduled_world_minute: integer() });
 command("set_funds", { character_id: id, gold });
 command("set_price_index", { character_id: id, percent: integer(-90, 90) });
+command("record_portrait", { character_id: id, version: portraitVersion });
+command("set_portrait_reference", { character_id: id, reference: nullable(portraitReference) });
 command("set_legal_status", { character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), documentation: optional(documentation), note: optional(text) });
 command("transfer_person", { transaction_id: id, transaction_kind: choice("sale", "gift", "assignment"), character_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: id, payment: optional(object({ payer_id: id, payee_id: optional(id), gold })), documentation, note: optional(text) });
 command("manumit", { transaction_id: id, character_id: id, by_holder_id: id, documentation, note: optional(text) });
@@ -215,6 +226,7 @@ const proposal = object({ expected_revision: integer(0), commands: list(tagged(v
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
 const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
   price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
+  portraits: optional(list(object({ character_id: id, active_version_id: optional(id), versions: list(portraitVersion, 64), reference: optional(portraitReference) }), 100000)),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: optional(id), off_scene: optional(object({ last_known_location: id, since_revision: integer(0) })) }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),

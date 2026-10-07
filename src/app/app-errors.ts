@@ -7,7 +7,7 @@ import type { TurnFailure } from "../turn/turn-types.js";
  * The application error vocabulary is the union of the two taxonomies the engine already owns (TurnFailure, SaveErrorCode) plus
  * three session-level codes. It is a descriptor over those codes, not a new taxonomy.
  */
-export type AppErrorCode = TurnFailure | SaveErrorCode | "session_closed" | "unsaved_changes" | "internal_error";
+export type AppErrorCode = TurnFailure | SaveErrorCode | "session_closed" | "unsaved_changes" | "internal_error" | "portrait_generation_failed";
 export interface AppError {
   readonly code: AppErrorCode;
   /** Present when the code is narrator_failed / controller_failed and the provider reported why. */
@@ -36,6 +36,7 @@ const MESSAGES: Record<AppErrorCode, string> = {
   dataset_mismatch: "The save belongs to a different version of the world data and was not loaded.", reference_invalid: "The save refers to world data that no longer exists.",
   invalid_id: "That campaign name is not allowed.", unsafe_path: "The save location is not safe to use.", save_in_progress: "A save is already running.",
   io_error: "The save could not be read or written.",
+  portrait_generation_failed: "The portrait could not be generated. Nothing was saved and the current portrait is unchanged.",
   session_closed: "The session is closed.", unsaved_changes: "There are unsaved changes.", internal_error: "Something went wrong inside the game. The campaign was not changed by this action.",
 };
 /** Errors a user can only fix by changing configuration or input are not worth an automatic retry. */

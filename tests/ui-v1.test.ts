@@ -41,7 +41,7 @@ const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color"
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt",
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-portrait-image", "editor-portrait-label", "editor-portrait-status", "portrait-generate", "portrait-reference", "portrait-reference-file", "portrait-error", "portrait-meta", "portrait-reference-remove",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
@@ -421,7 +421,8 @@ test("household drawer uses the shared opaque card and renders existing Story ta
 const editorView = (overrides: Record<string, string | null> = { build: "lean" }) => ({ identity: [{ label: "Age", value: "Adult" }],
   fields: APPEARANCE_KEYS.map(key => ({ key, label: key, group: "body", kind: key.endsWith("_cm") || key.endsWith("_kg") ? "number" : ["scars", "distinguishing_marks", "distinctive_traits"].includes(key) ? "lines" : "text",
     override: overrides[key] ?? null, inherited: key === "description" ? "An established appearance." : null })),
-  portrait_prompt: { prompt: `Full-body character reference image. Build: ${overrides.build ?? "unset"}.`, negative_prompt: "extra people, text" } });
+  portrait_prompt: { prompt: `Full-body character reference image. Build: ${overrides.build ?? "unset"}.`, negative_prompt: "extra people, text" },
+  portrait: { available: false, url: null, stale: false, generated_at: null, model_label: null, version_number: null, version_count: 0, reference_attached: false, reference_url: null } });
 const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable, appearance_editor: editable ? editorView() : null,
   presence: here ? "present" : "away", known_location: here ? "Front hall" : null, role: "Known porter", relationship: "Known colleague", state: here ? "winded" : "Not recorded", appearance: "An established appearance.", where: here ? "Here, in Front hall" : "Whereabouts not known", affiliations: [], public_profile: { age_band: "Adult" } });
 const householdOpening = () => {
@@ -476,7 +477,7 @@ test("eligible NPC+ editor opens by opaque ref, shows stored overrides only, kee
   }
   assert.equal(JSON.stringify(data), before); assert.equal(calls, 1);
   const html = await readFile("src/ui/index.html", "utf8");
-  assert.match(html, /id="editor-save"[^>]*disabled/); assert.match(html, /<button disabled>Regenerate<\/button><button disabled>Reference<\/button>/);
+  assert.match(html, /id="editor-save"[^>]*disabled/); assert.match(html, /id="portrait-generate" type="button" disabled>Generate portrait</); assert.match(html, /id="portrait-reference" type="button" disabled>Reference</);
   assert.doesNotMatch(html, /v1|v2|v3|private_notes|reflection|OpenRouter|Measurements<input|Usual attire<input|Posture &amp; bearing<input|Face<input/);
 });
 test("editor save posts only changed fields against the opened revision, refreshes from committed state, and keeps edits on a stale conflict", async () => {
@@ -512,4 +513,35 @@ test("Household zero-member view is a full empty destination and duplicate refs 
   assert.equal(empty.node("household-cards").textContent, "No household members yet.");
   const card = householdCard("same"), c = await client(async () => ({ ok: true, json: async () => ({ ...opening, play: { household: [{ members: [card] }, { members: [card] }] } }) }));
   assert.equal(c.node("household-totals").textContent, "1 members · 1 here with you · 0 elsewhere");
+});
+test("portrait generation is an explicit click sending only ref + opened revision; double-submit blocked; failure keeps the old portrait", async () => {
+  const posts: any[] = [];
+  let release!: (value: unknown) => void;
+  const withPortrait = (url: string | null, stale = false) => { const next = householdOpening(); const card = next.play.household[0]!.members[0]!;
+    card.appearance_editor = { ...editorView(), portrait: { available: !!url, url, stale, generated_at: url ? "2026-10-07T12:00:00.000Z" : null, model_label: url ? "bytedance-seed/seedream-5-0-flash" : null, version_number: url ? 1 : null, version_count: url ? 1 : 0, reference_attached: false, reference_url: null } } as any;
+    (card as any).portrait_url = url; return next; };
+  const c = await client(async (url: string, options?: any) => {
+    if (!options) return { ok: true, json: async () => withPortrait(null) };
+    posts.push({ url, body: JSON.parse(options.body) });
+    return { ok: true, json: () => new Promise(resolve => { release = resolve; }) };
+  });
+  c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
+  assert.equal(c.node("editor-portrait-status").textContent, "No portrait yet"); assert.equal(c.node("portrait-generate").textContent, "Generate portrait");
+  assert.equal(c.node("portrait-generate").disabled, false); assert.equal(posts.length, 0, "nothing is generated on open");
+  const first = c.node("portrait-generate").handlers.get("click")!({});
+  c.node("portrait-generate").handlers.get("click")!({}); await tick();
+  assert.equal(posts.length, 1, "a second click while generating sends nothing");
+  assert.deepEqual(posts[0], { url: "/api/portrait/generate", body: { ref: "alpha", expected_revision: 12 } });
+  assert.equal(c.node("portrait-generate").disabled, true); assert.equal(c.node("portrait-generate").textContent, "Generating…"); assert.equal(c.node("editor-portrait-status").textContent, "Generating portrait…");
+  release({ ...withPortrait("/api/portrait/asset/" + "a".repeat(32)), revision: 13, ok: true, changed: true }); await first;
+  assert.equal(c.node("editor-portrait-image").attributes.get("src"), "/api/portrait/asset/" + "a".repeat(32)); assert.equal(c.node("editor-portrait-image").hidden, false);
+  assert.equal(c.node("portrait-generate").textContent, "Regenerate"); assert.equal(c.node("portrait-meta").textContent, "Portrait 1 of 1 · bytedance-seed/seedream-5-0-flash");
+  // Failure: the committed portrait stays, the error is shown, the button is usable again.
+  const second = c.node("portrait-generate").handlers.get("click")!({}); await tick();
+  assert.equal(posts[1].body.expected_revision, 13, "a committed portrait moves the editor to the new revision");
+  release({ ...withPortrait("/api/portrait/asset/" + "a".repeat(32), true), revision: 13, ok: false, error: { message: "The image provider reports insufficient credits." } }); await second;
+  assert.equal(c.node("editor-portrait-image").attributes.get("src"), "/api/portrait/asset/" + "a".repeat(32));
+  assert.equal(c.node("portrait-error").hidden, false); assert.match(c.node("portrait-error").textContent, /insufficient credits/);
+  assert.equal(c.node("portrait-generate").disabled, false); assert.equal(c.node("editor-portrait-status").textContent, "Appearance changed since this portrait was generated.");
+  assert.equal(c.node("household-cards").children[0]!.children[0]!.children[0]!.children[0]!.attributes.get("src"), "/api/portrait/asset/" + "a".repeat(32), "household card shows the portrait");
 });

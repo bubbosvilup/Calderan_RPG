@@ -10,7 +10,8 @@ import { characterPublicProfile } from "../world/character-contract.js";
 import { isPhysicalCondition } from "../turn/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
-import { buildPortraitPrompt } from "../campaign/portrait-prompt.js";
+import { buildPortraitPrompt, portraitFingerprint } from "../campaign/portrait-prompt.js";
+import { activePortrait, portraitAssetToken, portraitRecord } from "../campaign/portraits.js";
 import { appearanceLabel, appearanceLines, PERMANENT_APPEARANCE_FIELDS, resolvePermanentAppearance, type PermanentAppearanceField } from "../campaign/permanent-appearance.js";
 
 export interface PlayerCharacterView {
@@ -24,6 +25,8 @@ export interface PlayerCharacterView {
   readonly appearance_editor_eligible: boolean;
   /** Permanent Appearance V1: the bounded editor projection, present only when eligible. */
   readonly appearance_editor: AppearanceEditorView | null;
+  /** Portrait Image Generation V1: the active portrait image URL (opaque token route) for a managed member, else null. */
+  readonly portrait_url: string | null;
   readonly presence: "present" | "away";
   readonly role: string;
   readonly relationship: string;
@@ -62,6 +65,9 @@ export interface AppearanceEditorView {
     readonly kind: "number" | "text" | "lines"; readonly unit?: "cm" | "kg"; readonly override: string | null; readonly inherited: string | null }[];
   /** Portrait Prompt Builder V1 preview of the committed permanent appearance (read-only; nothing is generated). */
   readonly portrait_prompt: { readonly prompt: string; readonly negative_prompt: string };
+  /** Portrait Image Generation V1 status: derived media only (no paths, IDs, costs or prompts beyond the preview above). */
+  readonly portrait: { readonly available: boolean; readonly url: string | null; readonly stale: boolean; readonly generated_at: string | null; readonly model_label: string | null;
+    readonly version_number: number | null; readonly version_count: number; readonly reference_attached: boolean; readonly reference_url: string | null };
 }
 const EDITOR_GROUPS: Readonly<Record<PermanentAppearanceField, AppearanceEditorView["fields"][number]["group"]>> = { height_cm: "body", weight_kg: "body", build: "body", skin: "body",
   hair_color: "hair", hair_texture: "hair", hair_description: "hair", eyes: "face", scars: "face", distinguishing_marks: "face", distinctive_traits: "face", description: "description" };
@@ -146,6 +152,12 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     }
     const observations = here ? (snapshot.premium_characters.find(p => p.character_id === id)?.mannerisms ?? []).filter(m => m.known_by_character_ids?.includes("nicco") && mannerismEpistemicState(m) !== "emergent" && mannerismAvailable(m, id, snapshot, world)).map(m => text(m.text)) : [];
     const householdRole = household.flatMap(h => h.members).find(m => m.character_id === id && m.status === "member")?.role;
+    // Portrait Image Generation V1 (managed members only): derived media status. Stale = the active portrait was generated from a
+    // different prompt than the current committed appearance yields (the preview text below, fingerprinted exactly as sent).
+    const portraitPrompt = editable ? (({ prompt, negative_prompt }) => ({ prompt: text(prompt), negative_prompt }))(buildPortraitPrompt({ appearance: permanent })) : undefined;
+    const portraitRecordOf = editable ? portraitRecord(snapshot, id) : undefined, active = editable ? activePortrait(snapshot, id) : undefined;
+    const assetUrl = (file: string) => `/api/portrait/asset/${portraitAssetToken(snapshot.campaign_id, id, file)}`;
+    const portraitUrl = active ? assetUrl(active.asset_file) : null;
     const dto: PlayerCharacterView = {
       ref: createHash("sha256").update(`${snapshot.campaign_id}:${id}`).digest("hex").slice(0, 24), name, name_known: named,
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),
@@ -159,8 +171,12 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
           return { key, label: appearanceLabel(key), group: EDITOR_GROUPS[key], kind, ...(key === "height_cm" ? { unit: "cm" as const } : key === "weight_kg" ? { unit: "kg" as const } : {}),
             override: value === undefined ? null : Array.isArray(value) ? value.map(text).join("\n") : text(String(value)), inherited: baseline };
         }),
-        portrait_prompt: (({ prompt, negative_prompt }) => ({ prompt: text(prompt), negative_prompt }))(buildPortraitPrompt({ appearance: permanent })),
+        portrait_prompt: portraitPrompt!,
+        portrait: { available: !!active, url: portraitUrl, stale: !!active && active.prompt_fingerprint !== portraitFingerprint(portraitPrompt!.prompt), generated_at: active?.created_at ?? null,
+          model_label: active?.model ?? null, version_number: active ? portraitRecordOf!.versions.indexOf(active) + 1 : null, version_count: portraitRecordOf?.versions.length ?? 0,
+          reference_attached: !!portraitRecordOf?.reference, reference_url: portraitRecordOf?.reference ? assetUrl(portraitRecordOf.reference.asset_file) : null },
       } : null,
+      portrait_url: portraitUrl,
       role: text(origin?.established.role ?? profile.occupation ?? householdRole ?? "Not known"), relationship: relationships.join(" · ") || "Not recorded",
       state: conditions.join(" · ") || "Not recorded", known_location: here ? text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene") : null,
       where: here ? `Here, in ${text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene")}` : "Whereabouts not known",
