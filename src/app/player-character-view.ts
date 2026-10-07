@@ -18,6 +18,8 @@ export interface PlayerCharacterView {
   readonly category: string;
   readonly household: boolean;
   readonly npc_plus: boolean;
+  /** Management-shell eligibility only; this grants no mutation or private-data access. */
+  readonly appearance_editor_eligible: boolean;
   readonly presence: "present" | "away";
   readonly role: string;
   readonly relationship: string;
@@ -113,6 +115,8 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
       ref: createHash("sha256").update(`${snapshot.campaign_id}:${id}`).digest("hex").slice(0, 24), name, name_known: named,
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),
       household: isMember, npc_plus: npcPlus, presence: here ? "present" : "away",
+      appearance_editor_eligible: id !== "nicco" && snapshot.premium_characters.some(p => p.character_id === id && p.metadata.active_household_member)
+        && household.some(h => h.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner") && h.members.some(m => m.character_id === id && m.status === "member" && m.role !== "owner")),
       role: text(origin?.established.role ?? profile.occupation ?? householdRole ?? "Not known"), relationship: relationships.join(" · ") || "Not recorded",
       state: conditions.join(" · ") || "Not recorded", known_location: here ? text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene") : null,
       where: here ? `Here, in ${text(world.getEntity(snapshot.runtime.scene.player_location)?.display_name ?? "the current scene")}` : "Whereabouts not known",

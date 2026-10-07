@@ -118,3 +118,24 @@ test("NPC+ delivered self-description quotes are known accounts, not private inf
   const card = f.project(); assert.ok(card.history.some(h => h.text === "I always speak plainly." && h.source === "Their account"));
   assert.doesNotMatch(JSON.stringify(card), /PRIVATE_CONTRACT_INTERPRETATION|contract_evidence|revision|premium_/);
 });
+
+test("appearance shell eligibility requires active NPC+ membership in a household Nicco owns", () => {
+  const f = fixture();
+  assert.equal(f.project().appearance_editor_eligible, false);
+  f.campaign.apply({ expected_revision: f.campaign.revision, commands: [
+    { kind: "create_household", id: "campaign_household_editor" },
+    { kind: "set_membership", household_id: "campaign_household_editor", membership: { character_id: "nicco", status: "member", role: "owner" } },
+    { kind: "join_household", household_id: "campaign_household_editor", character_id: "korvin" },
+  ] });
+  assert.equal(f.project().appearance_editor_eligible, true);
+  f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "move_character", character_id: "korvin", location_id: "audit_path" }] });
+  const before = JSON.stringify(f.campaign.exportSnapshot()), away = f.project();
+  assert.equal(away.appearance_editor_eligible, true);
+  assert.equal(away.known_location, null);
+  assert.equal(away.state, "Not recorded");
+  assert.equal(JSON.stringify(f.campaign.exportSnapshot()), before);
+  f.campaign.apply({ expected_revision: f.campaign.revision, commands: [
+    { kind: "set_membership", household_id: "campaign_household_editor", membership: { character_id: "nicco", status: "member", role: "member" } },
+  ] });
+  assert.equal(f.project().appearance_editor_eligible, false);
+});

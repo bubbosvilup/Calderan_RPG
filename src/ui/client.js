@@ -17,6 +17,83 @@ let pending;
 let currentRevision;
 const ui = id => document.querySelector(`#${id}`);
 let selectedCharacter, returnFocus;
+let activeView = "play", householdFilter = "all", editorRef, householdLoaded = false;
+const householdCharacters = new Map();
+function switchView(view) {
+  activeView = view;
+  closeCharacter();
+  for (const [key, id] of [["play", "play-view"], ["household", "household-view"], ["editor", "member-editor"]]) if (ui(id)) ui(id).hidden = key !== view;
+  ui("household-nav")?.setAttribute("aria-pressed", String(view !== "play"));
+  if (view === "household") ui("household-close")?.focus();
+  else if (view === "play") ui("household-nav")?.focus();
+}
+function openEditor(ref) {
+  const card = householdCharacters.get(ref);
+  if (!card?.appearance_editor_eligible || !card.npc_plus || !card.household) return;
+  editorRef = ref;
+  switchView("editor");
+  renderEditor(card);
+  ui("editor-back")?.focus();
+}
+function renderEditor(card) {
+  if (!ui("editor-name")) return;
+  ui("editor-name").textContent = card.name;
+  ui("editor-initial").textContent = card.name_known ? card.name.slice(0, 1) : "?";
+  ui("editor-appearance").textContent = card.appearance;
+  ui("editor-age").value = card.public_profile?.age_band ?? "";
+  ui("editor-save").disabled = true;
+}
+function renderHousehold() {
+  if (!ui("household-cards")) return;
+  const members = [...householdCharacters.values()];
+  const here = members.filter(c => c.presence === "present").length;
+  ui("household-totals").textContent = `${members.length} members · ${here} here with you · ${members.length - here} elsewhere`;
+  for (const [key, id] of [["all", "filter-all"], ["here", "filter-here"], ["elsewhere", "filter-elsewhere"]]) ui(id)?.setAttribute("aria-pressed", String(key === householdFilter));
+  ui("household-cards").replaceChildren();
+  if (!householdLoaded) {
+    ui("household-totals").textContent = "Waiting for committed household state.";
+    const waiting = document.createElement("p"); waiting.className = "household-empty"; waiting.textContent = "Household data is not available yet.";
+    ui("household-cards").append(waiting); return;
+  }
+  const visible = members.filter(c => householdFilter === "all" || (c.presence === "present" ? "here" : "elsewhere") === householdFilter);
+  if (!visible.length) {
+    const empty = document.createElement("p"); empty.className = "household-empty";
+    empty.textContent = !members.length ? "No household members yet." : "No members in this view.";
+    ui("household-cards").append(empty);
+  }
+  for (const card of visible) {
+    const article = document.createElement("article"); article.className = "household-large-card";
+    const body = document.createElement("button"); body.className = "household-card-body"; body.setAttribute("type", "button"); body.setAttribute("aria-haspopup", "dialog");
+    body.setAttribute("aria-label", `View ${card.name}`);
+    const portrait = document.createElement("div"); portrait.className = "portrait member-portrait";
+    const initial = document.createElement("strong"); initial.textContent = card.name_known ? card.name.slice(0, 1) : "?";
+    const presence = document.createElement("span"); presence.className = "presence-badge"; presence.textContent = card.presence === "present" ? "Here" : "Elsewhere";
+    portrait.append(initial, presence);
+    const info = document.createElement("div"); info.className = "member-card-info";
+    const name = document.createElement("h2"); name.textContent = card.name; info.append(name);
+    if (card.npc_plus) { const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = "NPC+"; info.append(badge); }
+    if (card.role && card.role !== "Not known") { const role = document.createElement("p"); role.className = "member-role"; role.textContent = card.role; info.append(role); }
+    const details = document.createElement("dl");
+    for (const [label, value] of [["Where", card.known_location ?? "Elsewhere"], ["With you", card.relationship === "Not recorded" ? null : card.relationship]]) if (value) {
+      const term = document.createElement("dt"), detail = document.createElement("dd"); term.textContent = label; detail.textContent = value; details.append(term, detail);
+    }
+    info.append(details);
+    if (card.state && card.state !== "Not recorded") { const condition = document.createElement("span"); condition.className = "badge condition"; condition.textContent = card.state; info.append(condition); }
+    body.append(portrait, info);
+    body.addEventListener("click", () => openCharacter({ ref: card.ref, name: card.name, name_known: card.name_known, card }, body));
+    if (selectedCharacter === card.ref && returnFocus?.className === "household-card-body") returnFocus = body;
+    article.append(body);
+    if (card.appearance_editor_eligible && card.npc_plus && card.household) {
+      const edit = document.createElement("button"); edit.className = "member-edit"; edit.setAttribute("type", "button"); edit.setAttribute("aria-label", `Edit ${card.name}`); edit.textContent = "Edit";
+      edit.addEventListener("click", () => openEditor(card.ref)); article.append(edit);
+    }
+    ui("household-cards").append(article);
+  }
+}
+ui("household-nav")?.addEventListener("click", () => { editorRef = undefined; switchView("household"); renderHousehold(); });
+ui("household-close")?.addEventListener("click", () => switchView("play"));
+for (const key of ["all", "here", "elsewhere"]) ui(`filter-${key}`)?.addEventListener("click", () => { householdFilter = key; renderHousehold(); });
+for (const id of ["editor-back", "editor-cancel"]) ui(id)?.addEventListener("click", () => { editorRef = undefined; switchView("household"); });
 function characterTab(tab) {
   for (const key of ["appearance", "story"]) {
     ui(`${key}-tab`)?.setAttribute("aria-selected", String(key === tab));
@@ -112,6 +189,16 @@ function preview(event) {
   renderRpg(pending.narrator.text, pending.buffer); follow(wasNear);
 }
 function renderScene(data) {
+  householdCharacters.clear();
+  householdLoaded = Array.isArray(data.play?.household);
+  for (const card of data.play?.household?.flatMap(g => g.members) ?? []) householdCharacters.set(card.ref, card);
+  if (ui("household-title")) ui("household-title").textContent = data.play?.household_title ?? "Household";
+  renderHousehold();
+  if (activeView === "editor") {
+    const card = householdCharacters.get(editorRef);
+    if (card?.appearance_editor_eligible && card.npc_plus && card.household) renderEditor(card);
+    else { editorRef = undefined; switchView("household"); }
+  }
   locationLabel.textContent = data.scene?.location ?? "Caldrevan";
   daypart.textContent = data.scene?.time_of_day ?? "—";
   if (ui("day")) ui("day").textContent = Number.isInteger(data.play?.day) ? ` · Day ${data.play.day}` : "";

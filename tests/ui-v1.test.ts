@@ -40,7 +40,7 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary"].map(id => [`#${id}`, new Element()]));
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-age", "editor-image-prompt"].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
   return { node: (id: string) => nodes.get(`#${id}`)!, renderRpg: context.renderRpg as (target: Element, source: string) => void };
@@ -414,4 +414,60 @@ test("household drawer uses the shared opaque card and renders existing Story ta
   assert.match(c.node("character-facts").textContent, /heard rumor: A learned rumor/);
   assert.equal(c.node("character-history").textContent, "Their account: An established account.");
   c.node("appearance-tab").handlers.get("click")!({}); assert.equal(c.node("story-panel").hidden, true);
+});
+
+const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable,
+  presence: here ? "present" : "away", known_location: here ? "Front hall" : null, role: "Known porter", relationship: "Known colleague", state: here ? "winded" : "Not recorded", appearance: "An established appearance.", where: here ? "Here, in Front hall" : "Whereabouts not known", affiliations: [], public_profile: { age_band: "Adult" } });
+const householdOpening = () => {
+  const cards = [householdCard("alpha"), householdCard("beta", false), { ...householdCard("gamma", true, false), name: "Unfamiliar person", name_known: false, role: "Not known", relationship: "Not recorded", state: "Not recorded" }];
+  return { ...opening, revision: 12, play: { household_title: "Household", participants: cards.filter(c => c.presence === "present").map(card => ({ ...card, card })), household: [{ members: cards }] } };
+};
+test("Household navigation and close switch views without reloading or altering the Play transcript", async () => {
+  let calls = 0; const c = await client(async () => { calls++; return { ok: true, json: async () => householdOpening() }; });
+  const transcript = c.node("conversation").textContent;
+  c.node("household-nav").handlers.get("click")!({});
+  assert.equal(c.node("household-view").hidden, false); assert.equal(c.node("play-view").hidden, true);
+  assert.equal(c.node("household-totals").textContent, "3 members · 2 here with you · 1 elsewhere");
+  c.node("household-close").handlers.get("click")!({});
+  assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("household-view").hidden, true);
+  assert.equal(c.node("conversation").textContent, transcript); assert.equal(calls, 1);
+});
+for (const [filter, count, contains, absent] of [["all", 3, "Member alpha", "SECRET_"], ["here", 2, "Member alpha", "Member beta"], ["elsewhere", 1, "Member beta", "Member alpha"]] as const) test(`Household ${filter} filter uses committed presence`, async () => {
+  const c = await client(async () => ({ ok: true, json: async () => householdOpening() }));
+  c.node(`filter-${filter}`).handlers.get("click")!({});
+  assert.equal(c.node("household-cards").children.length, count);
+  assert.ok(c.node("household-cards").textContent.includes(contains)); assert.ok(!c.node("household-cards").textContent.includes(absent));
+  assert.equal(c.node(`filter-${filter}`).attributes.get("aria-pressed"), "true");
+});
+test("Household cards preserve projected role, relationship, condition and drawer identity while omitting unsupported Doing", async () => {
+  const c = await client(async () => ({ ok: true, json: async () => householdOpening() }));
+  const cards = c.node("household-cards").children;
+  assert.match(cards[0]!.textContent, /Known porter|Known colleague|winded/);
+  assert.doesNotMatch(cards[1]!.textContent, /audit_path|Path|winded|Doing/);
+  assert.doesNotMatch(cards[2]!.textContent, /Known porter|Known colleague|winded|Edit|NPC\+/);
+  cards[0]!.children[0]!.handlers.get("click")!({}); assert.equal(c.node("character-name").textContent, "Member alpha");
+  c.node("character-close").handlers.get("click")!({});
+  c.node("scene-participants").children[0]!.handlers.get("click")!({}); assert.equal(c.node("character-name").textContent, "Member alpha");
+});
+test("eligible NPC+ editor opens by opaque ref, exposes only known appearance and returns without writes", async () => {
+  let calls = 0; const data = householdOpening(), before = JSON.stringify(data);
+  const c = await client(async (_url, options) => { assert.equal(options, undefined); calls++; return { ok: true, json: async () => data }; });
+  for (const back of ["editor-back", "editor-cancel"]) {
+    c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
+    assert.equal(c.node("member-editor").hidden, false); assert.equal(c.node("editor-name").textContent, "Member alpha");
+    assert.equal(c.node("editor-appearance").textContent, "An established appearance."); assert.equal(c.node("editor-age").value, "Adult");
+    assert.equal(c.node("editor-save").disabled, true);
+    c.node(back).handlers.get("click")!({}); assert.equal(c.node("household-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
+  }
+  assert.equal(JSON.stringify(data), before); assert.equal(calls, 1);
+  const html = await readFile("src/ui/index.html", "utf8");
+  assert.equal((html.match(/<fieldset disabled>/g) ?? []).length, 2); assert.match(html, /id="editor-save"[^>]*disabled/);
+  assert.doesNotMatch(html, /v1|v2|v3|private_notes|reflection|OpenRouter/);
+});
+test("Household zero-member view is a full empty destination and duplicate refs do not inflate counts", async () => {
+  const empty = await client(async () => ({ ok: true, json: async () => ({ ...opening, play: { household: [] } }) }));
+  empty.node("household-nav").handlers.get("click")!({}); assert.equal(empty.node("household-view").hidden, false);
+  assert.equal(empty.node("household-cards").textContent, "No household members yet.");
+  const card = householdCard("same"), c = await client(async () => ({ ok: true, json: async () => ({ ...opening, play: { household: [{ members: [card] }, { members: [card] }] } }) }));
+  assert.equal(c.node("household-totals").textContent, "1 members · 1 here with you · 0 elsewhere");
 });

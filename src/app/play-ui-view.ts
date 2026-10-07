@@ -3,6 +3,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import type { SessionView } from "./session-view.js";
 import { playerCharacterProjection } from "./player-character-view.js";
+import { OPENING_HOUSEHOLD } from "../campaign/opening-state.js";
 
 /** Layout adapter only: all character knowledge decisions belong to the shared projection. */
 export function derivePlayUiView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, view: SessionView) {
@@ -14,5 +15,6 @@ export function derivePlayUiView(world: WorldStore, snapshot: DeepReadonly<Campa
   const household = view.household.map(h => ({ members: h.members.flatMap(m => {
     const card = characters.project(m.id); return card ? [card] : [];
   }) }));
-  return { participants, household, gold: view.player.gold, day: view.scene.time.day };
+  const household_title = snapshot.households.some(h => h.id === OPENING_HOUSEHOLD && h.name === "Heartstone" && h.members.some(m => m.character_id === "nicco" && m.status === "member")) ? "Household of the Heartstone" : "Household";
+  return { participants, household, household_title, gold: view.player.gold, day: view.scene.time.day };
 }
