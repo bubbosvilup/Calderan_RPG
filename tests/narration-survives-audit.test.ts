@@ -104,8 +104,8 @@ test("corpus size and coverage: every supported mechanic and every protected phr
 });
 
 /**
- * MEASURED pre-existing over-redaction, found by this corpus and deliberately NOT fixed in H1 (audit/grammar scope, not the language
- * gates). Recorded as todo tests so they stay visible in every run; each names the narration that is wrongly reconciled today.
+ * Over-redaction measured by this corpus in H1 and since FIXED (formerly todo tests): each regression names the narration that used to
+ * be wrongly reconciled and why; the negative cases around it prove the fixes did not make the audit permissive.
  */
 async function deliveredAs(setup: { world: typeof world; campaign: CampaignState }, input: string, narration: string, proposals: readonly CampaignCommand[] = []) {
   const service = new RetrievalService(setup.world);
@@ -114,12 +114,48 @@ async function deliveredAs(setup: { world: typeof world; campaign: CampaignState
   const last = (await collect(co.runTurn({ campaign: setup.campaign, player_input: input }))).at(-1)!;
   return last.type === "turn_completed" ? last.result.narration_reconciliation?.delivered : last.type;
 }
-test("KNOWN over-redaction: a group pronoun in a valid handover verifies a phantom transfer of another item", { todo: "audit 'possible transfers' treat 'them' as covering any one-item offer" }, async () => {
-  assert.equal(await deliveredAs(turnFixture(), "I give boots to Brenna.", "Brenna takes the boots from Nicco and sets them by her chair.", [transfer]), "draft");
+/** Full outcome: delivery, audit issues (kind + character/item) and the boots' owner afterwards. */
+async function audited(setup: { world: typeof world; campaign: CampaignState }, input: string, narration: string, proposals: readonly CampaignCommand[] = []) {
+  const service = new RetrievalService(setup.world);
+  const co = new TurnCoordinator(setup.world, { async generate() { throw new Error("unused"); }, async *stream() { yield { type: "text_delta", text: narration }; yield { type: "completed", result: { text: narration, ...metadata } }; } },
+    { async propose() { return { commands: [...proposals], ...metadata }; } }, { service, search: new HybridSearch(service) });
+  const last = (await collect(co.runTurn({ campaign: setup.campaign, player_input: input }))).at(-1)!;
+  assert.equal(last.type, "turn_completed");
+  const r = (last as { result: TurnResult }).result;
+  return { delivered: r.narration_reconciliation?.delivered, issues: (r.narration_reconciliation?.issues ?? []).map(i => [i.kind, i.character ?? i.item_id]), boots: setup.campaign.exportSnapshot().items.find(i => i.id === "boots")?.owner_id };
+}
+// Cause: the audit re-checks every POSSIBLE handover (here Nicco's ring) with that candidate as the only offer, and a bare "them" counted
+// as "the whole offer" even though its clause explicitly names the boots, so a phantom ring transfer was "asserted".
+test("group pronoun in a valid one-item handover does not fabricate a second transfer (formerly KNOWN over-redaction)", async () => {
+  const s = turnFixture();
+  assert.equal(await deliveredAs(s, "I give boots to Brenna.", "Brenna takes the boots from Nicco and sets them by her chair.", [transfer]), "draft");
+  assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "ring")!.owner_id, "nicco");
 });
-test("KNOWN over-redaction: a condition on a person named by first name only is attributed to Nicco", { todo: "audit condition subject matches full profile names only" }, async () => {
+test("a genuinely ambiguous 'them' stays conservative: no named item, so the unoffered ring cannot be ruled out", async () => {
+  const r = await audited(turnFixture(), "I give boots to Brenna.", "Brenna takes them from Nicco.", [transfer]);
+  assert.notEqual(r.delivered, "draft"); assert.deepEqual(r.issues, [["asserts_uncommitted_transfer", "ring"]]);
+});
+// Cause: condition subjects were matched by full profile name only; "Dell …, glares at Nicco" named only Nicco, so Dell's state was
+// attributed to Nicco. Now an established, unshared name token identifies its character (with Nicco also named, no single subject).
+test("a condition on a person named by first name only is not attributed to Nicco (formerly KNOWN over-redaction)", async () => {
   assert.equal(await deliveredAs(real(INN, [person(DELL, "Dell Harrow", INN, "male")]), "*Nicco shoves Dell hard in the chest.*", "Dell staggers back into the bar, winded, and glares at Nicco.",
     [{ kind: "set_condition", character_id: DELL, conditions: ["winded"] }]), "draft");
+});
+test("first-name resolution is exact and conservative: unique names resolve to their owner, shared and unestablished names do not", async () => {
+  // Unique and alone in the sentence: Dell is the subject, and an uncommitted condition is still caught — for Dell, not Nicco.
+  const unique = await audited(real(INN, [person(DELL, "Dell Harrow", INN, "male")]), "*Nicco shoves Dell hard in the chest.*", "Dell staggers back into the bar, winded.");
+  assert.notEqual(unique.delivered, "draft"); assert.deepEqual(unique.issues, [["uncommitted_condition", "Dell Harrow"]]);
+  // Two present Dells: the shared first name resolves to neither.
+  const shared = await audited(real(INN, [person(DELL, "Dell Harrow", INN, "male"), person("campaign_character_dell_marsh", "Dell Marsh", INN, "male")]), "*Nicco shoves Dell Harrow hard in the chest.*", "Dell staggers back into the bar, winded.");
+  assert.ok(!shared.issues.some(([, who]) => who === "Dell Harrow" || who === "Dell Marsh"), JSON.stringify(shared.issues));
+  // Recognising the attacker's first name never hides an unauthored outcome on Nicco: he is the nearest named person before the term.
+  for (const attacker of ["Dell", "Dell Harrow"]) {
+    const onNicco = await audited(real(INN, [person(DELL, "Dell Harrow", INN, "male")]), "*Nicco sips his ale.*", `With no hesitation, ${attacker} knocks Nicco unconscious.`);
+    assert.notEqual(onNicco.delivered, "draft", attacker); assert.ok(onNicco.issues.some(([k, who]) => k === "uncommitted_condition" && who !== "Dell Harrow"), JSON.stringify(onNicco.issues));
+  }
+  // A name nobody established resolves to no character at all.
+  const unknown = await audited(real(INN, [person(DELL, "Dell Harrow", INN, "male")]), "*Nicco shoves Dell hard in the chest.*", "Harlan staggers back into the bar, winded.");
+  assert.ok(!unknown.issues.some(([, who]) => who === "Dell Harrow"), JSON.stringify(unknown.issues));
 });
 // Formerly a KNOWN over-redaction TODO; resolved by P8: a price question is an economic turn, so a concrete Gold ask is grounded.
 test("a seller's concrete price for an unnamed narrated captive is not redacted as invented (P8 regression)", async () => {
@@ -127,6 +163,24 @@ test("a seller's concrete price for an unnamed narrated captive is not redacted 
   await deliveredAs(s, "*approaches the cages*", "A lean slaver leans against a post. Behind the bars a thin girl lies curled on the straw.");
   assert.equal(await deliveredAs(s, "How much for the girl?", 'The slaver shrugs. "Six hundred gold for the girl. No papers."'), "draft");
 });
-test("KNOWN false negative: a fronted adverbial hides the receipt ('Without hesitation, Brenna takes the boots')", { todo: "receipt grammar requires the recipient to lead the clause; H1 does not widen grammar" }, async () => {
-  assert.equal(await deliveredAs(turnFixture(), "I give boots to Brenna.", "Without hesitation, Brenna takes the boots from Nicco.", [transfer]), "draft");
+// Cause: the receipt grammar strips only a closed set of sentence lead-ins ("Without a word,", "Finally,"), so after "Without
+// hesitation," the recipient did not lead the clause. The closed set now includes such phrases and plain manner adverbs (no hedges).
+test("a fronted adverbial before the recipient still confirms the receipt (formerly KNOWN false negative)", async () => {
+  for (const narration of ["Without hesitation, Brenna takes the boots from Nicco.", "Carefully, Brenna accepts the boots from Nicco."]) {
+    const s = turnFixture();
+    assert.equal(await deliveredAs(s, "I give boots to Brenna.", narration, [transfer]), "draft", narration);
+    assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna", narration);
+  }
+});
+test("fronted adverbials never authorize what the turn does not: no intent, a wrong recipient, or a hedge", async () => {
+  const noIntent = await audited(turnFixture(), "*shows Brenna the boots*", "Without hesitation, Brenna takes the boots from Nicco.");
+  assert.notEqual(noIntent.delivered, "draft"); assert.equal(noIntent.boots, "nicco");
+  const wrong = await audited(turnFixture(), "I give boots to Brenna.", "Without hesitation, Maren takes the boots from Nicco.", [transfer]);
+  assert.notEqual(wrong.delivered, "draft"); assert.equal(wrong.boots, "nicco");
+  // "Perhaps" is not a stripped lead-in: the hedged sentence confirms nothing, so the transfer does not commit.
+  assert.equal((await audited(turnFixture(), "I give boots to Brenna.", "Perhaps, Brenna takes the boots from Nicco.", [transfer])).boots, "nicco");
+});
+test("unrelated prose with 'takes' is not a transfer", async () => {
+  const r = await audited(turnFixture(), "*shows Brenna the boots*", "Brenna takes a deep breath and looks out of the window.");
+  assert.equal(r.delivered, "draft"); assert.equal(r.boots, "nicco");
 });

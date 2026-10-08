@@ -6,7 +6,7 @@ import { DatasetCompatibilityError } from "../src/campaign/snapshot-validation.j
 import { RuntimeState } from "../src/world/runtime-state.js";
 import { WorldStore } from "../src/world/world-store.js";
 import { characterView, equipmentSlot, remainingEventMinutes } from "../src/campaign/projections.js";
-import { createSaveFile, decodeSave, serializeSave, validateSaveFile, type CampaignSaveFile } from "../src/persistence/save-format.js";
+import { validateSaveFileWithReport, createSaveFile, decodeSave, serializeSave, validateSaveFile, type CampaignSaveFile } from "../src/persistence/save-format.js";
 import { CampaignSaveError } from "../src/persistence/errors.js";
 import { parseSaveJson } from "../src/persistence/strict-json.js";
 import { a, b, c, boots, stored, event, goal, household, change, richCampaign } from "./persistence-fixtures.js";
@@ -87,7 +87,7 @@ const corruptions: [string, (s: CampaignSnapshot) => void][] = [
   ["negative revision", s => { s.revision = -1; }], ["fractional minute", s => { s.runtime.scene.world_time.world_minute = 0.5; }],
   ["unsafe minute", s => { s.runtime.scene.world_time.world_minute = Number.MAX_SAFE_INTEGER + 1; }],
   ["mana over maximum", s => { s.runtime.mana = { current: 101, max: 100 }; }], ["negative mana", s => { s.runtime.mana = { current: -1, max: 100 }; }],
-  ["missing NPC location", s => { s.runtime.npc_locations.pop(); }], ["duplicate NPC", s => { s.runtime.npc_locations[1] = s.runtime.npc_locations[0]!; }],
+  ["duplicate NPC", s => { s.runtime.npc_locations[1] = s.runtime.npc_locations[0]!; }],
   ["wrong NPC type", s => { s.runtime.npc_locations[0]!.character_id = "nicco"; }],
   ["invalid player location", s => { s.runtime.scene.player_location = "brenna"; }],
   ["canonical origin missing", s => { s.characters.find(v => v.id === "brenna")!.origin = { kind: "canonical", canonical_entity_id: "missing" }; }],
@@ -123,20 +123,29 @@ for (const [name, corrupt] of corruptions) test(`restore rejects ${name} without
   assert.throws(() => CampaignState.restore(world, s)); assert.equal(campaign.exportSnapshot(), before);
 });
 
+test("Save/Load v1 (D2): a canonical NPC without a runtime entry is valid (not yet placed by play), restores unchanged and stays unplaced", () => {
+  const { world, campaign } = richCampaign(), s = structuredClone(campaign.exportSnapshot()) as CampaignSnapshot, removed = s.runtime.npc_locations.pop()!;
+  const restored = CampaignState.restore(world, s);
+  assert.equal(restored.revision, campaign.revision); assert.ok(!restored.exportSnapshot().runtime.npc_locations.some(n => n.character_id === removed.character_id));
+});
+
 test("format, versions, conflicting identity and dataset mismatch have typed errors", () => {
   const { world, campaign } = richCampaign();
   const mutable = () => structuredClone(createSaveFile(campaign.exportSnapshot(), world, now)) as CampaignSaveFile;
   // NPC+ Pass 1: envelope 3 and snapshot 2 are current; a schema-1 snapshot is reachable only through save migration.
-  for (const version of [0, 5]) assert.throws(() => validateSaveFile({ ...mutable(), schema_version: version }, world), { code: "unsupported_version" });
-  for (const version of [0, 1, 2]) assert.throws(() => CampaignState.restore(world, { ...campaign.exportSnapshot(), schema_version: version }), { code: "unsupported_version" });
+  for (const version of [0, 6]) assert.throws(() => validateSaveFile({ ...mutable(), schema_version: version }, world), { code: "unsupported_version" });
+  for (const version of [0, 1, 2, 3, 4, 6]) assert.throws(() => CampaignState.restore(world, { ...campaign.exportSnapshot(), schema_version: version }), { code: "unsupported_version" });
   assert.throws(() => validateSaveFile({ ...mutable(), format: "other" }, world), { code: "invalid_save" });
   assert.throws(() => validateSaveFile({ ...mutable(), extra: true }, world), { code: "invalid_save" });
   assert.throws(() => validateSaveFile({ ...mutable(), campaign_id: "different" }, world), { code: "invalid_save" });
   const sources = fixtures(); sources[0]!.document.entity.summary = "Different dataset"; const different = new WorldStore(sources);
   assert.throws(() => CampaignState.restore(different, campaign.exportSnapshot()), error => error instanceof DatasetCompatibilityError && error.save_dataset_id === world.datasetId && error.current_dataset_id === different.datasetId);
   assert.equal(validateSaveFile(mutable(), different).snapshot.dataset_id, different.datasetId);
+  // Save/Load v1: a legacy strict save (no fingerprint evidence) on a changed world loads, flagged as unverified; nothing is invented.
   const legacy = mutable(); delete legacy.canon_references; legacy.canon_compatibility = "strict";
-  assert.throws(() => validateSaveFile(legacy, different), error => error instanceof CampaignSaveError && error.code === "dataset_mismatch" && error.details?.save_dataset_id === world.datasetId);
+  const decoded = validateSaveFileWithReport(legacy, different);
+  assert.equal(decoded.canon.tier, "compatible_with_warnings"); assert.equal(decoded.canon.unverified, true); assert.equal(decoded.canon.revision_advanced, false);
+  assert.equal(decoded.file.snapshot.revision, campaign.revision); assert.ok(CampaignSaveError);
 });
 
 test("strict JSON and plain-data boundary reject duplicate keys, hostile shapes and accessors", () => {

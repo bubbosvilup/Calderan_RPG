@@ -134,7 +134,9 @@ test("save errors are readable and non-mutating: corrupt save, missing save, dat
   const fx = turnFixture(), fxRepo = new FileCampaignRepository(fx.world, join(dir, "fx")); await fxRepo.saveCampaign(fx.campaign);
   const other = turnFixture(true).world, fxPath = join(dir, "fx", "turn_fixture", "save.json"), fxGood = await readFile(fxPath, "utf8");
   const mismatch = await GameSession.loadCampaign(depsFor(other, new FileCampaignRepository(other, join(dir, "fx")), mockNarrator(story)), "turn_fixture");
-  assert.ok(!mismatch.ok); assert.equal(mismatch.error.code, "dataset_mismatch"); assert.equal(mismatch.error.retryable, false);
+  // Save/Load v1 tiered canon compatibility: referenced NPCs whose authored location field changed still load, with a drift warning.
+  assert.ok(mismatch.ok, JSON.stringify(mismatch.ok ? "" : mismatch.error)); assert.equal(mismatch.load_report.canon.tier, "compatible_with_warnings");
+  assert.deepEqual([...mismatch.load_report.canon.drifted_references].filter(id => id === "gerome" || id === "maren"), ["gerome", "maren"]);
   assert.equal(await readFile(fxPath, "utf8"), fxGood, "no silent migration");
   const missing = await GameSession.loadCampaign(deps, "nope"); assert.ok(!missing.ok); assert.equal(missing.error.code, "not_found");
   const bad = GameSession.createCampaign(deps, "../escape"); assert.ok(!bad.ok); assert.equal(bad.error.code, "invalid_id");

@@ -306,20 +306,46 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   // change, (4) momentary texture; otherwise unsupported. A player-authored grab/shove/spill/injury is restated, never rewritten;
   // it does not authorize an escalated consequence (a broken bone, unconsciousness, pinning, arrest).
   const authored = input.player_input === undefined ? [] : playerAuthoredEvents(input.player_input, context);
+  // Subjects were matched by full profile name only, so "Dell staggers…, winded, and glares at Nicco" named only Nicco and Dell's state
+  // was attributed to him. A present character is also recognised by its established aliases and, case-sensitively, by a name token
+  // (3+ letters) that no other present character (nor Nicco) shares. Shared or unestablished first names stay unresolved.
+  const tokenOwners = new Map<string, Set<string>>();
+  for (const c of [...context.characters.map(x => ({ id: x.id, name: x.profile.name ?? x.id })), { id: "nicco", name: "Nicco" }]) for (const t of c.name.split(/\s+/)) {
+    const k = t.toLowerCase(); if (!tokenOwners.has(k)) tokenOwners.set(k, new Set()); tokenOwners.get(k)!.add(c.id);
+  }
+  const nameForms = (c: TurnContext["characters"][number]) => [
+    ...[c.profile.name ?? c.id, ...(c.profile.aliases ?? [])].map(n => new RegExp(`\\b${esc(n)}(?:'s)?\\b`, "i")),
+    ...(c.profile.name ?? "").split(/\s+/).filter(t => t.length >= 3 && /^[A-Z]/.test(t) && tokenOwners.get(t.toLowerCase())?.size === 1).map(t => new RegExp(`\\b${esc(t)}(?:'s)?\\b`)),
+  ];
   let last: string | undefined;
   for (const sentence of sentences) {
     const plain = outside(sentence);
     const physical = plain.replace(OBJECT_MOTION, " "); // objects falling or spilling are never a person's condition
-    const named = context.characters.filter(c => new RegExp(`\\b${esc(c.profile.name ?? c.id)}(?:'s)?\\b`, "i").test(plain));
-    const subject = named.length === 1 ? named[0]!.id : named.length === 0 && /^\s*(?:he|she|his|her)\b/i.test(plain) ? last : undefined;
+    const named = context.characters.filter(c => nameForms(c).some(re => re.test(plain)));
+    const single = named.length === 1 ? named[0]!.id : named.length === 0 && /^\s*(?:he|she|his|her)\b/i.test(plain) ? last : undefined;
     if (named.length === 1) last = named[0]!.id; else if (named.length > 1) last = undefined;
-    if (subject && !NEGATED.test(plain)) {
-      const conditions = prepared.characters.find(c => c.id === subject)?.current.conditions ?? [];
-      const byPlayer = authoredOn(authored, subject, ["injury", "strike", "shove", "grab"]);
-      for (const tag of PHYSICAL_CONDITIONS) if (CONDITION_TERMS[tag].test(physical) && !conditions.includes(tag) && !byPlayer.some(e => e.condition === tag))
+    // Several people named: a term belongs to Nicco when he is the nearest named person before it ("Dell knocks Nicco unconscious");
+    // any other multi-person sentence stays unattributed, as before ("Dell staggers, winded, and glares at Nicco"). Recognising first
+    // names must never let an unauthored outcome on Nicco through just because his attacker is now named too.
+    const positions = named.length > 1 ? named.flatMap(c => nameForms(c).flatMap(re => [...physical.matchAll(new RegExp(re.source, `${re.flags}g`))].map(m => ({ id: c.id, at: m.index })))) : [];
+    const subjectOf = (term: RegExp): string | undefined => {
+      if (named.length <= 1) return single;
+      const at = new RegExp(term.source, term.flags.replace("g", "")).exec(physical)?.index;
+      return at !== undefined && positions.filter(p => p.at < at).sort((a, b) => b.at - a.at)[0]?.id === "nicco" ? "nicco" : undefined;
+    };
+    if (!NEGATED.test(plain)) {
+      const byPlayerOn = (subject: string) => authoredOn(authored, subject, ["injury", "strike", "shove", "grab"]);
+      for (const tag of PHYSICAL_CONDITIONS) {
+        const subject = CONDITION_TERMS[tag].test(physical) ? subjectOf(CONDITION_TERMS[tag]) : undefined;
+        if (!subject || (prepared.characters.find(c => c.id === subject)?.current.conditions ?? []).includes(tag) || byPlayerOn(subject).some(e => e.condition === tag)) continue;
         issues.push({ kind: "uncommitted_condition", character: name(subject), sentence, correction: `No lasting ${tag.replace("_", " ")} was recorded for ${name(subject)}. Describe only momentary effects (a flinch, recoil, pain, surprise) without injury, bleeding, falling or dazing.` });
-      const severe = (Object.keys(SEVERE_TERMS) as SevereOutcome[]).find(k => SEVERE_TERMS[k].test(physical) && !byPlayer.some(e => e.severe === k));
-      if (severe) issues.push({ kind: "uncommitted_condition", character: name(subject), sentence, correction: `${name(subject)} suffers no ${severe.replace("_", " ")}: nothing like it was authored or recorded. Keep only what the player's action states and momentary effects (pain, a stagger, shock).` });
+      }
+      for (const k of Object.keys(SEVERE_TERMS) as SevereOutcome[]) {
+        const subject = SEVERE_TERMS[k].test(physical) ? subjectOf(SEVERE_TERMS[k]) : undefined;
+        if (!subject || byPlayerOn(subject).some(e => e.severe === k)) continue;
+        issues.push({ kind: "uncommitted_condition", character: name(subject), sentence, correction: `${name(subject)} suffers no ${k.replace("_", " ")}: nothing like it was authored or recorded. Keep only what the player's action states and momentary effects (pain, a stagger, shock).` });
+        break;
+      }
     }
     if (/\bnicco(?:'s)?\b/i.test(plain) && !/^\s*nicco\b/i.test(plain) && !NEGATED.test(plain) && CONSTRAINT.test(withoutAuthoredContact(plain, authored)))
       issues.push({ kind: "uncommitted_constraint", sentence, correction: "Nicco is not restrained, held, removed, detained or banned: none of that is recorded. Characters may threaten, order or demand it in words, or start toward it, but do not narrate it as accomplished." });

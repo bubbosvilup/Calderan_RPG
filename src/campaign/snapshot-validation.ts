@@ -8,6 +8,7 @@ import { niccoHouseholdMembers, validateReflectionNotes } from "./premium-charac
 import { validateMannerismRegistry } from "./mannerisms.js";
 import { validateMannerismLearning } from "./mannerism-learning.js";
 import { validatePortraitRecords } from "./portraits.js";
+import { validatePlayerCharacters } from "./player-character.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -16,8 +17,8 @@ export class DatasetCompatibilityError extends CampaignValidationError {
   readonly code = "dataset_mismatch";
   constructor(readonly save_dataset_id: string, readonly current_dataset_id: string) { super("dataset_id", "canonical dataset mismatch"); this.name = "DatasetCompatibilityError"; }
 }
-/** NPC+ Pass 1: schema 2 added premium_characters; schema 3 adds the OFF_SCENE variant of a character location (final movement closure). Older snapshots reach it only through save migration. */
-export const CURRENT_SNAPSHOT_VERSION = 3;
+/** NPC+ Pass 1: schema 2 added premium_characters; schema 3 adds the OFF_SCENE variant of a character location (final movement closure); schema 4 (Save/Load v1) formally adopts the image-generation-v1 portrait fields; schema 5 adds player_characters (Player Character Profile V1). Older snapshots reach it only through save migration. */
+export const CURRENT_SNAPSHOT_VERSION = 5;
 export function requireCurrentSnapshotVersion(input: unknown): void {
   const descriptor = input && typeof input === "object" ? Object.getOwnPropertyDescriptor(input, "schema_version") : undefined;
   if (descriptor && "value" in descriptor && Number.isSafeInteger(descriptor.value) && descriptor.value !== CURRENT_SNAPSHOT_VERSION) throw new SnapshotValidationError("unsupported_version", "schema_version");
@@ -31,6 +32,7 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   validateMannerismRegistry(s);
   validateMannerismLearning(s);
   validatePortraitRecords(s);
+  validatePlayerCharacters(s, world);
   const refs = new CampaignIdentityResolver(world, s), minute = s.runtime.scene.world_time.world_minute;
   for (const p of s.premium_characters) for (const m of p.mannerisms ?? []) for (const id of m.known_by_character_ids ?? []) refs.character(id);
   const historical = (time: number | undefined, field: string) => { if (time !== undefined && time > minute) fail(field, "future provenance"); };
@@ -59,7 +61,8 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   const npcs = new Set(world.getEntitiesByType("character").filter(c => c.role === "npc").map(c => c.id));
   if (world.getEntitiesByType("character").some(c => c.role === "player" && c.id !== "nicco")) fail("runtime", "unsupported player");
   unique(s.runtime.npc_locations, n => n.character_id, "npc_locations");
-  for (const npc of world.getEntitiesByType("character").filter(c => c.role === "npc" && c.base_location !== null)) if (!s.runtime.npc_locations.some(n => n.character_id === npc.id)) fail("npc_locations", "must contain each canonical NPC with an established default exactly once");
+  // Save/Load v1 (D2): a canonical NPC may have NO runtime entry — authored after the campaign was saved and not yet placed by play.
+  // Loading never materializes it; a later gameplay operation that places it does so through a normal committed change.
   for (const n of s.runtime.npc_locations) { if (!npcs.has(n.character_id)) fail("npc_locations", "not a canonical NPC"); 
     // One domain, two shapes: LOCATED(current_location) xor OFF_SCENE(last_known_location, since_revision). Never both, never neither.
     if ((n.current_location === undefined) === (n.off_scene === undefined)) fail("npc_locations", "a character is either located or off-scene, never both or neither");

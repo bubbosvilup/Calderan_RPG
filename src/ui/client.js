@@ -23,9 +23,11 @@ function switchView(view) {
   activeView = view;
   closeCharacter();
   if (view !== "editor") closeLightbox();
-  for (const [key, id] of [["play", "play-view"], ["household", "household-view"], ["editor", "member-editor"]]) if (ui(id)) ui(id).hidden = key !== view;
-  ui("household-nav")?.setAttribute("aria-pressed", String(view !== "play"));
+  for (const [key, id] of [["play", "play-view"], ["household", "household-view"], ["editor", "member-editor"], ["player", "player-view"]]) if (ui(id)) ui(id).hidden = key !== view;
+  ui("household-nav")?.setAttribute("aria-pressed", String(view === "household" || view === "editor"));
+  ui("player-nav")?.setAttribute("aria-pressed", String(view === "player"));
   if (view === "household") ui("household-close")?.focus();
+  else if (view === "player") ui("player-back")?.focus();
   else if (view === "play") ui("household-nav")?.focus();
 }
 // Permanent Appearance V1 editor. Inputs show only stored campaign overrides; inherited/baseline values are notes, never prefilled,
@@ -85,8 +87,10 @@ function renderEditor(card, fill = false) {
   const editor = card.appearance_editor;
   // Committed-only preview: the prompt is server-built from saved appearance (no client-side resolver copy), so it is safe to
   // refresh on every render; it never touches the editable inputs.
-  if (ui("editor-image-prompt")) ui("editor-image-prompt").value = editor?.portrait_prompt?.prompt ?? "";
-  if (ui("editor-negative-prompt")) ui("editor-negative-prompt").value = editor?.portrait_prompt?.negative_prompt ?? "";
+  if (ui("editor-image-prompt")) ui("editor-image-prompt").value = editor?.portrait_prompts?.avatar?.prompt ?? "";
+  if (ui("editor-negative-prompt")) ui("editor-negative-prompt").value = editor?.portrait_prompts?.avatar?.negative_prompt ?? "";
+  if (ui("editor-fullbody-prompt")) ui("editor-fullbody-prompt").value = editor?.portrait_prompts?.fullbody?.prompt ?? "";
+  if (ui("editor-fullbody-negative-prompt")) ui("editor-fullbody-negative-prompt").value = editor?.portrait_prompts?.fullbody?.negative_prompt ?? "";
   if (fill) { showPortraitError(""); portraitResult = ""; }
   renderPortrait(editor);
   if (ui("editor-identity")) ui("editor-identity").textContent = editor?.identity?.length ? editor.identity.map(i => `${i.label}: ${i.value}`).join(" · ") : "No established species, sex or age.";
@@ -121,10 +125,12 @@ async function saveEditor() {
   updateEditorSave();
 }
 ui("editor-save")?.addEventListener("click", () => saveEditor());
-// Portrait Gallery V2. Generation is an explicit click (it costs money) asking the server for one batch of 3 options; the browser sends
-// only the opaque ref, the revision the editor opened with and, for role/delete actions, an opaque Gallery item token. What is shown is
+// Portrait Gallery V2 + image generation v1. Generation is an explicit click (it costs money) asking the server for one batch of 3
+// options of one kind (avatar or full body) in one curated pose; the browser sends only the opaque ref, the revision the editor opened
+// with, the kind and a pose id from the server's list and, for role/delete actions, an opaque Gallery item token. What is shown is
 // always the committed projection: nothing optimistic, nothing on open. The Full Body slot never falls back to the Avatar.
-let portraitBusy = false, portraitAction = "", portraitResult = "", lightboxToken, lightboxConfirm = false, lightboxReturn;
+let portraitBusy = false, portraitAction = "", portraitKind = "", portraitResult = "", lightboxToken, lightboxConfirm = false, lightboxReturn;
+const KIND_LABELS = { avatar: "Avatar image", fullbody: "Full-body image", legacy: "Earlier image" };
 function showPortraitError(text) { const el = ui("portrait-error"); if (el) { el.textContent = text; el.hidden = !text; } }
 function showLightboxError(text) { const el = ui("lightbox-error"); if (el) { el.textContent = text; el.hidden = !text; } }
 function editorPortrait() { return householdCharacters.get(editorRef)?.appearance_editor?.portrait; }
@@ -134,6 +140,18 @@ function showImage(image, url) {
   else image.hidden = true;
 }
 const roleLabels = item => [item.is_avatar ? "Avatar" : "", item.is_full_body ? "Full Body" : ""].filter(Boolean);
+// Kind rule: a role can only be given to an image of that kind; a role an earlier image already holds stays (shown as held).
+const kindBlock = (item, role) => role === "avatar" ? !item.is_avatar && !item.can_be_avatar : !item.is_full_body && !item.can_be_full_body;
+function renderPoseSelect(select, poses) {
+  if (!select) return;
+  const ids = (poses ?? []).map(p => p.id).join(",");
+  if (select.getAttribute?.("data-poses") !== ids) {
+    const previous = select.value;
+    select.replaceChildren(...(poses ?? []).map(p => { const option = document.createElement("option"); option.setAttribute("value", p.id); option.value = p.id; option.textContent = p.label; return option; }));
+    select.setAttribute("data-poses", ids);
+    select.value = (poses ?? []).some(p => p.id === previous) ? previous : poses?.[0]?.id ?? "";
+  }
+}
 function deleteBlock(item) {
   if (item.is_avatar && item.is_full_body) return "This image is the Avatar and the Full Body. Choose another Avatar, and another Full Body image or clear Full Body, before deleting it.";
   if (item.is_avatar) return "Choose another Avatar before deleting this image.";
@@ -152,42 +170,49 @@ function renderPortrait(editor) {
   if (ui("editor-full-body-status")) ui("editor-full-body-status").textContent = !portrait?.full_body ? gallery.length ? "No image selected. Choose one from the Gallery." : "No image selected."
     : portrait.full_body.stale ? "Appearance changed since this image was generated." : "";
   if (ui("portrait-full-body-clear")) { ui("portrait-full-body-clear").hidden = !portrait?.full_body; ui("portrait-full-body-clear").disabled = portraitBusy; }
-  const full = !!portrait && !portrait.can_generate_batch;
-  if (ui("portrait-generate")) { ui("portrait-generate").textContent = generating ? "Generating 3 options…" : "Generate 3 options"; ui("portrait-generate").disabled = portraitBusy || !editor || full; }
-  if (ui("portrait-status")) ui("portrait-status").textContent = generating ? "Generating 3 portrait options…" : portraitResult || (full ? "Gallery is full. Delete some unused portraits first." : "");
-  if (ui("portrait-reference")) { ui("portrait-reference").textContent = portrait?.reference_attached ? "Replace reference" : "Reference"; ui("portrait-reference").disabled = portraitBusy || !editor; }
+  const blocked = portrait?.generation_blocked ?? "", full = !!portrait && !portrait.can_generate_batch && !blocked;
+  for (const [kind, noun] of [["avatar", "avatars"], ["fullbody", "full body"]]) {
+    const button = ui(`portrait-generate-${kind}`), select = ui(`portrait-${kind}-pose`);
+    renderPoseSelect(select, portrait?.poses?.[kind]);
+    if (select) select.disabled = portraitBusy || !editor || !!blocked;
+    // One batch at a time per session: both buttons wait while either kind is generating.
+    if (button) { button.textContent = generating && portraitKind === kind ? `Generating 3 ${noun}…` : `Generate 3 ${noun}`; button.disabled = portraitBusy || !editor || full || !!blocked; }
+  }
+  if (ui("portrait-status")) ui("portrait-status").textContent = generating ? `Generating 3 ${portraitKind === "avatar" ? "avatar" : "full-body"} options…` : portraitResult || blocked || (full ? "Gallery is full. Delete some unused portraits first." : "");
   if (ui("portrait-reference-remove")) ui("portrait-reference-remove").hidden = !portrait?.reference_attached || portraitBusy;
-  if (ui("portrait-meta")) ui("portrait-meta").textContent = portrait?.reference_attached ? "Reference attached" : "No reference attached";
+  if (ui("portrait-meta")) ui("portrait-meta").textContent = portrait?.reference_attached ? "A reference image is attached (not used)." : "";
   if (ui("portrait-gallery-count")) ui("portrait-gallery-count").textContent = gallery.length ? `${gallery.length} of ${portrait.gallery_limit}` : "";
   renderGallery(gallery);
   renderLightbox();
 }
-function galleryChip(label, aria, held, onClick) {
+function galleryChip(label, aria, held, onClick, wrongKind = false) {
   const chip = document.createElement("button"); chip.className = `gallery-chip${label === "Delete" ? " danger" : ""}`; chip.setAttribute("type", "button");
-  chip.setAttribute("aria-label", held ? `${label} (current)` : aria); chip.textContent = label;
+  chip.setAttribute("aria-label", held ? `${label} (current)` : wrongKind ? `${aria} (not available for this image kind)` : aria); chip.textContent = label;
   if (label !== "Delete") chip.setAttribute("aria-pressed", String(held));
-  chip.disabled = portraitBusy || held; chip.addEventListener("click", onClick); return chip;
+  if (wrongKind) chip.setAttribute("title", label === "Avatar" ? "Only avatar images can be the Avatar." : "Only full-body images can be the Full Body.");
+  chip.disabled = portraitBusy || held || wrongKind; chip.addEventListener("click", onClick); return chip;
 }
 function renderGallery(gallery) {
   const grid = ui("portrait-gallery");
   if (!grid) return;
   grid.replaceChildren();
   if (!gallery.length) {
-    const empty = document.createElement("p"); empty.className = "gallery-empty"; empty.textContent = "No portraits yet. Generate 3 options to start the Gallery."; grid.append(empty); return;
+    const empty = document.createElement("p"); empty.className = "gallery-empty"; empty.textContent = "No portraits yet. Generate 3 avatars or 3 full-body images to start the Gallery."; grid.append(empty); return;
   }
   gallery.forEach((item, index) => {
     const entry = document.createElement("div"); entry.className = "gallery-item";
-    const thumb = document.createElement("button"); thumb.className = "gallery-thumb"; thumb.setAttribute("type", "button"); thumb.setAttribute("data-token", item.token);
-    thumb.setAttribute("aria-label", `View portrait ${index + 1} of ${gallery.length}${roleLabels(item).length ? ` (${roleLabels(item).join(", ")})` : ""}`);
+    const thumb = document.createElement("button"); thumb.className = `gallery-thumb kind-${item.kind ?? "legacy"}`; thumb.setAttribute("type", "button"); thumb.setAttribute("data-token", item.token);
+    thumb.setAttribute("aria-label", `View portrait ${index + 1} of ${gallery.length}, ${KIND_LABELS[item.kind] ?? KIND_LABELS.legacy}${roleLabels(item).length ? ` (${roleLabels(item).join(", ")})` : ""}`);
     const image = document.createElement("img"); image.setAttribute("src", item.url); image.setAttribute("alt", ""); image.setAttribute("loading", "lazy");
     const badges = document.createElement("span"); badges.className = "gallery-badges";
     for (const label of roleLabels(item)) { const badge = document.createElement("span"); badge.className = "role-badge"; badge.textContent = label; badges.append(badge); }
     if (item.stale) { const badge = document.createElement("span"); badge.className = "stale-badge"; badge.textContent = "Older appearance"; badges.append(badge); }
+    const kindBadge = document.createElement("span"); kindBadge.className = "kind-badge"; kindBadge.textContent = KIND_LABELS[item.kind] ?? KIND_LABELS.legacy; badges.append(kindBadge);
     thumb.append(image, badges);
     thumb.addEventListener("click", () => openLightbox(item.token, thumb));
     const actions = document.createElement("div"); actions.className = "gallery-actions";
-    actions.append(galleryChip("Avatar", `Set portrait ${index + 1} as Avatar`, item.is_avatar, () => portraitRequest("/api/portrait/avatar", { item: item.token }, "role")),
-      galleryChip("Full Body", `Set portrait ${index + 1} as Full Body`, item.is_full_body, () => portraitRequest("/api/portrait/full-body", { item: item.token }, "role")),
+    actions.append(galleryChip("Avatar", `Set portrait ${index + 1} as Avatar`, item.is_avatar, () => portraitRequest("/api/portrait/avatar", { item: item.token }, "role"), kindBlock(item, "avatar")),
+      galleryChip("Full Body", `Set portrait ${index + 1} as Full Body`, item.is_full_body, () => portraitRequest("/api/portrait/full-body", { item: item.token }, "role"), kindBlock(item, "fullbody")),
       galleryChip("Delete", `Delete portrait ${index + 1}`, false, () => requestDelete(item, thumb)));
     entry.append(thumb, actions); grid.append(entry);
   });
@@ -205,7 +230,7 @@ function closeLightbox() {
   if (!token || activeView !== "editor") return;
   // Thumbnails re-render with committed state; return focus to the same image when it still exists.
   const same = Array.from(ui("portrait-gallery")?.children ?? []).map(entry => entry.children?.[0]).find(thumb => (thumb?.getAttribute?.("data-token") ?? thumb?.attributes?.get?.("data-token")) === token);
-  (back?.isConnected === false ? same ?? ui("portrait-generate") : back ?? same ?? ui("portrait-generate"))?.focus?.();
+  (back?.isConnected === false ? same ?? ui("portrait-generate-avatar") : back ?? same ?? ui("portrait-generate-avatar"))?.focus?.();
 }
 function stepLightbox(delta) {
   const gallery = editorPortrait()?.gallery ?? [], index = gallery.findIndex(item => item.token === lightboxToken);
@@ -224,10 +249,11 @@ function renderLightbox() {
   for (const label of [...roleLabels(item), item.stale ? "Older appearance" : ""].filter(Boolean)) {
     const badge = document.createElement("span"); badge.className = label === "Older appearance" ? "stale-badge" : "role-badge"; badge.textContent = label; ui("lightbox-badges").append(badge);
   }
-  ui("lightbox-meta").textContent = [`Generated ${item.generated_at.slice(0, 16).replace("T", " ")} UTC`, item.model_label, item.reference_used ? "Reference used" : ""].filter(Boolean).join(" · ");
+  ui("lightbox-meta").textContent = [KIND_LABELS[item.kind] ?? KIND_LABELS.legacy, item.pose_label ? `Pose: ${item.pose_label}` : "", `Generated ${item.generated_at.slice(0, 16).replace("T", " ")} UTC`, item.model_label,
+    item.reference_used ? "Reference used" : ""].filter(Boolean).join(" · ");
   for (const id of ["lightbox-prev", "lightbox-next"]) ui(id).disabled = gallery.length < 2;
-  ui("lightbox-avatar").textContent = item.is_avatar ? "Avatar ✓" : "Set as Avatar"; ui("lightbox-avatar").disabled = portraitBusy || item.is_avatar;
-  ui("lightbox-full-body").textContent = item.is_full_body ? "Full Body ✓" : "Set as Full Body"; ui("lightbox-full-body").disabled = portraitBusy || item.is_full_body;
+  ui("lightbox-avatar").textContent = item.is_avatar ? "Avatar ✓" : "Set as Avatar"; ui("lightbox-avatar").disabled = portraitBusy || item.is_avatar || kindBlock(item, "avatar");
+  ui("lightbox-full-body").textContent = item.is_full_body ? "Full Body ✓" : "Set as Full Body"; ui("lightbox-full-body").disabled = portraitBusy || item.is_full_body || kindBlock(item, "fullbody");
   ui("lightbox-delete").disabled = portraitBusy; ui("lightbox-delete").hidden = lightboxConfirm;
   ui("lightbox-confirm").hidden = !lightboxConfirm;
   ui("lightbox-confirm-delete").disabled = portraitBusy;
@@ -242,7 +268,7 @@ function requestDelete(item, trigger) {
 async function portraitRequest(url, body, action) {
   if (!editorRef || portraitBusy) return;
   if (action === "generate" && editorPortrait() && !editorPortrait().can_generate_batch) return;
-  portraitBusy = true; portraitAction = action; showPortraitError(""); showLightboxError("");
+  portraitBusy = true; portraitAction = action; portraitKind = action === "generate" ? body.kind : ""; showPortraitError(""); showLightboxError("");
   if (action === "generate") portraitResult = "";
   renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
   const inViewer = !!lightboxToken && (action === "role" || action === "delete" || action === "full-body-clear");
@@ -263,7 +289,7 @@ async function portraitRequest(url, body, action) {
   }
   renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
 }
-ui("portrait-generate")?.addEventListener("click", () => portraitRequest("/api/portrait/generate", {}, "generate"));
+for (const kind of ["avatar", "fullbody"]) ui(`portrait-generate-${kind}`)?.addEventListener("click", () => portraitRequest("/api/portrait/generate", { kind, pose: ui(`portrait-${kind}-pose`)?.value || "neutral" }, "generate"));
 ui("portrait-full-body-clear")?.addEventListener("click", () => portraitRequest("/api/portrait/full-body", { item: null }, "full-body-clear"));
 ui("portrait-avatar-change")?.addEventListener("click", () => { const grid = ui("portrait-gallery"); grid?.scrollIntoView?.({ block: "nearest" }); grid?.children?.[0]?.children?.[0]?.focus?.(); });
 ui("lightbox-close")?.addEventListener("click", () => closeLightbox());
@@ -286,18 +312,9 @@ ui("lightbox-dialog")?.addEventListener("keydown", event => {
     const at = controls.indexOf(event.target); controls[(at + (event.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
   }
 });
-ui("portrait-reference")?.addEventListener("click", () => { if (!portraitBusy) ui("portrait-reference-file")?.click?.(); });
+// Reference images are deferred in image generation v1 (text-to-image has no reference input): no upload control; an existing
+// reference can still be removed.
 ui("portrait-reference-remove")?.addEventListener("click", () => portraitRequest("/api/portrait/reference", { image: null }, "reference"));
-ui("portrait-reference-file")?.addEventListener("change", () => {
-  const input = ui("portrait-reference-file"), file = input?.files?.[0];
-  if (!file) return;
-  input.value = "";
-  if (!["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 4 * 1024 * 1024) { showPortraitError("Choose a PNG, JPEG or WebP image of at most 4 MB."); return; }
-  const reader = new FileReader();
-  reader.onload = () => portraitRequest("/api/portrait/reference", { image: { data_base64: String(reader.result).replace(/^data:[^,]*,/, "") } }, "reference");
-  reader.onerror = () => showPortraitError("The image could not be read.");
-  reader.readAsDataURL(file);
-});
 for (const key of ["height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"])
   ui(`appearance-${key}`)?.addEventListener("input", () => updateEditorSave());
 function renderHousehold() {
@@ -353,6 +370,89 @@ ui("household-nav")?.addEventListener("click", () => { editorRef = undefined; sw
 ui("household-close")?.addEventListener("click", () => switchView("play"));
 for (const key of ["all", "here", "elsewhere"]) ui(`filter-${key}`)?.addEventListener("click", () => { householdFilter = key; renderHousehold(); });
 for (const id of ["editor-back", "editor-cancel"]) ui(id)?.addEventListener("click", () => { editorRef = undefined; switchView("household"); });
+// Player Character Profile V1: the active player character's visible appearance. View mode lists saved values; Edit fills the form
+// from the committed profile and remembers the revision it opened with; Cancel discards; Save sends only changed keys (empty =
+// clear). "Narrator sees" is the server's projection, exactly what the narrator receives, never a client-side rendering.
+let playerProfile = null, playerEditing = false, playerRevision, playerSaving = false;
+const playerInputs = new Map();
+const playerFields = () => [...(playerProfile?.identity ?? []).map(f => ({ ...f, kind: "text" })), ...(playerProfile?.fields ?? [])];
+function showPlayerError(text) { const el = ui("player-error"); if (el) { el.textContent = text; el.hidden = !text; } }
+function playerPatch() {
+  const patch = {}, invalid = [];
+  for (const field of playerFields()) {
+    const input = playerInputs.get(field.key);
+    if (!input) continue;
+    const next = editorValue(field, input.value), stored = field.value === null ? null : editorValue(field, field.value);
+    const empty = Array.isArray(next) ? !next.length : next === "", range = NUMBER_RANGES[field.key];
+    if (field.kind === "number" && !empty && (!Number.isInteger(next) || (range && (next < range[0] || next > range[1])))) { invalid.push(field.key); continue; }
+    if (empty) { if (stored !== null) patch[field.key] = null; continue; }
+    if (JSON.stringify(next) !== JSON.stringify(stored)) patch[field.key] = next;
+  }
+  return { patch, valid: !invalid.length, invalid };
+}
+function updatePlayerSave() {
+  const { patch, valid, invalid } = playerPatch();
+  for (const [key, input] of playerInputs) if (invalid.includes(key)) input.setAttribute("aria-invalid", "true"); else input.removeAttribute?.("aria-invalid");
+  if (ui("player-save")) ui("player-save").disabled = playerSaving || !valid || !Object.keys(patch).length;
+}
+function buildPlayerForm() {
+  const form = ui("player-form");
+  if (!form) return;
+  playerInputs.clear();
+  form.replaceChildren(...playerFields().map(field => {
+    const label = document.createElement("label"), input = document.createElement(field.kind === "lines" || field.key === "description" ? "textarea" : "input");
+    label.textContent = field.kind === "lines" ? `${field.label} (one per line)` : field.unit ? `${field.label} (${field.unit})` : field.label;
+    if (field.kind === "number") { input.setAttribute("type", "number"); input.setAttribute("step", "1"); }
+    else input.setAttribute("maxlength", String(field.key === "description" ? 1000 : field.key in { sex: 1, species: 1, apparent_age: 1 } ? 60 : 200));
+    if (field.kind === "lines" || field.key === "description") input.setAttribute("rows", field.key === "description" ? "4" : "3");
+    input.setAttribute("aria-label", field.label); input.setAttribute("placeholder", "Not set");
+    input.value = field.value ?? "";
+    input.addEventListener("input", () => updatePlayerSave());
+    playerInputs.set(field.key, input); label.append(input); return label;
+  }));
+}
+function renderPlayer() {
+  const p = playerProfile;
+  if (ui("player-nav")) ui("player-nav").disabled = !p;
+  if (!p) { if (activeView === "player") switchView("play"); return; }
+  if (ui("player-name")) ui("player-name").textContent = p.name.toUpperCase();
+  if (ui("player-role")) ui("player-role").textContent = p.role_label;
+  if (ui("player-narrator-summary")) ui("player-narrator-summary").textContent = p.narrator_summary || "No visible appearance set.";
+  const details = ui("player-details");
+  if (details) details.replaceChildren(...playerFields().filter(f => f.value !== null).flatMap(f => {
+    const dt = document.createElement("dt"), dd = document.createElement("dd");
+    dt.textContent = f.unit ? `${f.label} (${f.unit})` : f.label; dd.textContent = f.kind === "lines" ? f.value.split("\n").join(" · ") : f.value; return [dt, dd];
+  }));
+  if (details && !details.children.length) { const empty = document.createElement("dd"); empty.textContent = "No visible appearance set."; details.append(empty); }
+  for (const [id, hidden] of [["player-details", playerEditing], ["player-form", !playerEditing], ["player-edit", playerEditing], ["player-cancel", !playerEditing], ["player-save", !playerEditing]]) if (ui(id)) ui(id).hidden = hidden;
+  if (ui("player-edit")) ui("player-edit").disabled = !ready;
+  updatePlayerSave();
+}
+function setPlayerEditing(editing) {
+  playerEditing = editing; showPlayerError("");
+  if (editing) { playerRevision = currentRevision; buildPlayerForm(); } else { playerInputs.clear(); ui("player-form")?.replaceChildren(); }
+  renderPlayer();
+  (editing ? [...playerInputs.values()][0] : ui("player-edit"))?.focus();
+}
+async function savePlayer() {
+  const { patch, valid } = playerPatch();
+  if (!playerEditing || playerSaving || !valid || !Object.keys(patch).length) return;
+  playerSaving = true; updatePlayerSave();
+  try {
+    const response = await fetch("/api/player-character", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ expected_revision: playerRevision, patch }) });
+    const data = await response.json();
+    playerSaving = false;
+    if (data?.messages) render(data);
+    if (data?.ok) setPlayerEditing(false);
+    else showPlayerError(data?.error?.message ?? "The profile was not saved.");
+  } catch { playerSaving = false; showPlayerError("The profile was not saved. Check the connection and try again."); }
+  updatePlayerSave();
+}
+ui("player-nav")?.addEventListener("click", () => { if (!playerProfile) return; playerEditing = false; playerInputs.clear(); switchView("player"); renderPlayer(); });
+ui("player-back")?.addEventListener("click", () => { playerEditing = false; playerInputs.clear(); switchView("play"); });
+ui("player-edit")?.addEventListener("click", () => { if (playerProfile && ready) setPlayerEditing(true); });
+ui("player-cancel")?.addEventListener("click", () => setPlayerEditing(false));
+ui("player-save")?.addEventListener("click", () => savePlayer());
 function characterTab(tab) {
   for (const key of ["appearance", "story"]) {
     ui(`${key}-tab`)?.setAttribute("aria-selected", String(key === tab));
@@ -515,7 +615,11 @@ function showError(text) {
   error.hidden = !text;
 }
 function render(data) {
+  // Save/Load v1: host mode sends `campaign` (null = start screen); the disposable playtest mode sends none.
+  renderCampaign(data);
+  if (data.campaign === null) { clearTimeout(poll); ready = false; input.disabled = send.disabled = true; status.textContent = "Choose or create a campaign."; playerProfile = null; playerEditing = false; renderPlayer(); return; }
   currentRevision = data.revision;
+  if ("player_character" in data) playerProfile = data.player_character ?? null;
   const wasNear = nearBottom();
   renderScene(data);
   for (const message of data.messages.slice(shown)) {
@@ -574,6 +678,7 @@ function render(data) {
   shown = data.messages.length;
   ready = data.status === "idle";
   input.disabled = send.disabled = submitting || !ready;
+  renderPlayer();
   status.textContent = data.status === "closed" ? "Session ended." : submitting || !ready ? "Generating…" : data.configured ? "Your turn." : "Set OPENROUTER_API_KEY and restart to play.";
   clearTimeout(poll);
   if (!ready && data.status !== "closed" && !submitting) poll = setTimeout(load, 1000);
@@ -678,6 +783,112 @@ async function readStream(response) {
     return result;
   } finally { reader.releaseLock(); }
 }
+// ------------------------------------------------------------------ Save/Load v1: campaigns, save control, load report
+// The server owns campaign truth; the browser only shows the list, sends a chosen campaign ID / slot / name, and renders the result.
+let campaignMode = false, activeCampaign, saveRequest = false, savePoll;
+const SAVE_LABELS = { saving: "Saving…", failed: "Save failed", unsaved: "Unsaved changes", saved: "Saved" };
+function resetConversation() {
+  ui("conversation")?.replaceChildren(); shown = 0; pending = undefined; comparisonViews.clear();
+}
+function renderSaveStatus(save) {
+  const el = ui("save-status"), button = ui("save-button");
+  if (!el || !button) return;
+  const key = saveRequest || save?.saving ? "saving" : save?.error ? "failed" : save?.state === "saved" ? "saved" : "unsaved";
+  el.hidden = !campaignMode || !activeCampaign; el.textContent = save ? SAVE_LABELS[key] : "";
+  el.className = `save-status save-${key}`;
+  el.setAttribute("title", key === "failed" ? "The last save failed. Your progress is still in this session; press Save to retry." : save?.autosave === "stopped" ? "Autosave is paused until the campaign is saved." : "");
+  button.disabled = !activeCampaign || saveRequest;
+}
+function renderCampaign(data) {
+  campaignMode = Object.prototype.hasOwnProperty.call(data, "campaign");
+  const id = data.campaign?.id ?? null;
+  if (campaignMode && id !== activeCampaign) { resetConversation(); closeLightbox(); activeCampaign = id; if (activeView !== "play") switchView("play"); }
+  if (ui("campaign-screen")) ui("campaign-screen").hidden = !campaignMode || !!data.campaign;
+  if (ui("campaigns-nav")) ui("campaigns-nav").hidden = !campaignMode || !data.campaign;
+  if (ui("save-button")) ui("save-button").hidden = !campaignMode || !data.campaign;
+  renderSaveStatus(data.campaign?.save);
+  // Autosave runs in the background: a light status poll keeps the indicator honest without re-rendering the story.
+  clearTimeout(savePoll);
+  if (campaignMode && data.campaign) savePoll = setTimeout(function next() { void refreshSaveStatus(); savePoll = setTimeout(next, 4000); }, 4000);
+  if (campaignMode && !data.campaign) void loadCampaignList();
+}
+async function refreshSaveStatus() {
+  if (!activeCampaign || saveRequest) return;
+  try { const data = await (await fetch("/api/save-status")).json(); if (data.campaign?.id === activeCampaign) renderSaveStatus(data.campaign.save); } catch { /* next tick */ }
+}
+function showCampaignError(text) { const el = ui("campaign-error"); if (el) { el.textContent = text; el.hidden = !text; } }
+function showLoadReport(report) {
+  const box = ui("load-report"), text = ui("load-report-text");
+  if (!box || !text) return;
+  const warnings = report?.warnings ?? [];
+  text.textContent = warnings.join(" ");
+  box.hidden = !warnings.length;
+}
+const dayLabel = minute => typeof minute === "number" ? `Day ${Math.floor(minute / 1440)}, ${String(Math.floor(minute % 1440 / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}` : "";
+async function campaignRequest(url, body) {
+  showCampaignError("");
+  for (const id of ["campaign-create", "campaigns-nav"]) if (ui(id)) ui(id).disabled = true;
+  try {
+    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await response.json();
+    if (data.ok) { showLoadReport(data.load_report); render(data); }
+    else { showCampaignError(data.error?.message ?? "That did not work."); if (!data.campaign) void loadCampaignList(); }
+    return data;
+  } catch { showCampaignError("The game server did not answer. Check that it is running."); }
+  finally { for (const id of ["campaign-create", "campaigns-nav"]) if (ui(id)) ui(id).disabled = false; }
+}
+async function loadCampaignList() {
+  const list = ui("campaign-list");
+  if (!list) return;
+  let data;
+  try { data = await (await fetch("/api/campaigns")).json(); } catch { showCampaignError("Could not list campaigns."); return; }
+  const scenarioSelect = ui("campaign-scenario");
+  if (scenarioSelect && !scenarioSelect.children?.length) {
+    for (const scenario of data.scenarios ?? []) { const option = document.createElement("option"); option.value = scenario.id; option.setAttribute("value", scenario.id); option.textContent = scenario.label; scenarioSelect.append(option); }
+    scenarioSelect.value = data.scenarios?.[0]?.id ?? "";
+    if (ui("campaign-scenario-description")) ui("campaign-scenario-description").textContent = data.scenarios?.[0]?.description ?? "";
+  }
+  list.replaceChildren();
+  if (!data.campaigns?.length) { const empty = document.createElement("p"); empty.className = "campaign-empty"; empty.textContent = "No campaigns yet. Create one below."; list.append(empty); return; }
+  for (const c of data.campaigns) {
+    const row = document.createElement("article"); row.className = "campaign-row";
+    const info = document.createElement("div"); info.className = "campaign-info";
+    const name = document.createElement("strong"); name.textContent = c.display_name;
+    const meta = document.createElement("small");
+    meta.textContent = c.status === "valid" ? [c.location_name, dayLabel(c.world_minute), c.household_members ? `${c.household_members} in household` : "", c.saved_at ? `saved ${c.saved_at.slice(0, 16).replace("T", " ")} UTC` : ""].filter(Boolean).join(" · ")
+      : c.status === "unsupported_version" ? "Made by a newer version of Caldrevan." : "The latest save cannot be read.";
+    info.append(name, meta);
+    const actions = document.createElement("div"); actions.className = "campaign-actions";
+    const button = (label, slot) => { const b = document.createElement("button"); b.setAttribute("type", "button"); b.textContent = label; b.disabled = c.locked; b.addEventListener("click", () => campaignRequest("/api/campaigns/load", { campaign_id: c.campaign_id, slot })); return b; };
+    if (c.status === "valid") actions.append(button(c.locked ? "Open elsewhere" : "Load", "current"));
+    else {
+      if (c.previous_valid) actions.append(button("Load previous save", "previous"));
+      if (c.backups?.length) actions.append(button("Load latest backup", `backup:${c.backups[0]}`));
+    }
+    row.append(info, actions); list.append(row);
+  }
+}
+ui("campaign-new")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const name = ui("campaign-name")?.value?.trim() ?? "";
+  if (!name) { showCampaignError("Enter a campaign name."); return; }
+  void campaignRequest("/api/campaigns/create", { display_name: name, scenario_id: ui("campaign-scenario")?.value || undefined });
+});
+ui("campaigns-nav")?.addEventListener("click", () => campaignRequest("/api/campaigns/close", {}));
+ui("load-report-dismiss")?.addEventListener("click", () => { if (ui("load-report")) ui("load-report").hidden = true; });
+ui("save-button")?.addEventListener("click", async () => {
+  if (!activeCampaign || saveRequest) return;
+  saveRequest = true; renderSaveStatus({ state: "unsaved" });
+  try {
+    const data = await (await fetch("/api/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })).json();
+    saveRequest = false;
+    renderSaveStatus(data.campaign?.save ?? { state: "unsaved", error: data.ok ? undefined : "failed" });
+    if (!data.ok) showError(data.error?.message ?? "The campaign could not be saved.");
+  } catch { saveRequest = false; renderSaveStatus({ state: "unsaved", error: "failed" }); showError("The save request failed. Your progress is still in this session."); }
+});
+// Missing image files (Save/Load v1): a portrait whose file is gone shows a placeholder instead of a broken image.
+document.addEventListener?.("error", event => { if (event.target?.tagName === "IMG") event.target.setAttribute("data-missing", "true"); }, true);
+document.addEventListener?.("load", event => { if (event.target?.tagName === "IMG") event.target.removeAttribute?.("data-missing"); }, true);
 input.addEventListener("keydown", event => {
   if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
     event.preventDefault();

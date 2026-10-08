@@ -2,7 +2,7 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import { CampaignSaveError } from "./errors.js";
 import { niccoHouseholdMembers } from "../campaign/premium-characters.js";
 
-export const CURRENT_SAVE_VERSION = 4;
+export const CURRENT_SAVE_VERSION = 5;
 export type SaveMigration = (input: Readonly<Record<string, unknown>>) => unknown;
 /** A key n owns exactly n -> n+1. No implicit defaults or unknown-field removal. */
 export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.freeze({
@@ -37,6 +37,18 @@ export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.f
     const placed = (snapshot.runtime as { npc_locations?: readonly Record<string, unknown>[] } | undefined)?.npc_locations;
     if (!Array.isArray(placed) || placed.some(n => !n || typeof n !== "object" || Object.hasOwn(n, "off_scene") || typeof n.current_location !== "string")) throw new CampaignSaveError("migration_failed");
     return { ...input, schema_version: 4, snapshot: { ...snapshot, schema_version: 3 } };
+  },
+  /**
+   * Save/Load v1: envelope 4 -> 5 and snapshot 3 -> 4. Format 5 introduces the optional display_name, save_reason and scenario_id
+   * metadata, the non-authoritative continuity block and reference kinds; snapshot 4 formally adopts the image-generation-v1 portrait
+   * fields (already optional in schema-3 files). Version-only and lossless: nothing is added or defaulted. A version-4 file that
+   * already carries format-5 fields is malformed and rejected, never silently accepted.
+   */
+  4: input => {
+    const snapshot = input.snapshot as Readonly<Record<string, unknown>> | undefined, metadata = input.metadata as Readonly<Record<string, unknown>> | undefined;
+    if (!snapshot || typeof snapshot !== "object" || snapshot.schema_version !== 3 || Object.hasOwn(input, "continuity")) throw new CampaignSaveError("migration_failed");
+    if (metadata && typeof metadata === "object" && ["display_name", "save_reason", "scenario_id"].some(key => Object.hasOwn(metadata, key))) throw new CampaignSaveError("migration_failed");
+    return { ...input, schema_version: 5, snapshot: { ...snapshot, schema_version: 4 } };
   },
 });
 
@@ -84,4 +96,17 @@ export function migrateSave(input: unknown, current = CURRENT_SAVE_VERSION, migr
     source++;
   }
   return value;
+}
+
+/**
+ * Player Character Profile V1: snapshot 4 -> 5, inside save format 5 (the envelope does not change). Adds `player_characters` with
+ * the deterministic canon default of each authored player character (structured canon fields only; prose is never parsed). It needs
+ * the current world, so it runs after the world-free envelope chain. Loading never rewrites the file; the first save writes snapshot
+ * 5. A schema-4 snapshot that already carries player_characters is malformed and rejected. Later canon edits never touch a stored
+ * profile: once migrated or created, the campaign profile is authoritative.
+ */
+export function migrateSnapshot4to5(snapshot: unknown, defaults: () => readonly unknown[]): Record<string, unknown> {
+  const s = snapshot as Readonly<Record<string, unknown>> | undefined;
+  if (!s || typeof s !== "object" || Array.isArray(s) || s.schema_version !== 4 || Object.hasOwn(s, "player_characters")) throw new CampaignSaveError("migration_failed");
+  return { ...s, schema_version: 5, player_characters: structuredClone(defaults()) };
 }

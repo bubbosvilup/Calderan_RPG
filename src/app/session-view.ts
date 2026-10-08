@@ -28,7 +28,9 @@ export interface ViewHouseholdMember {
 export interface SessionView {
   readonly context_budget?: import("../turn/context-budget.js").ContextBudgetSnapshot;
   readonly context_compaction?: { readonly status: "idle" | "compacting"; readonly trigger?: import("./context-compaction.js").CompactionReason; readonly last_result?: import("./context-compaction.js").CompactionResult };
-  readonly session: { readonly campaign_id: string; readonly revision: number; readonly status: SessionStatus; readonly save: { readonly state: "unsaved" | "saved"; readonly last_saved_revision: number | null };
+  readonly session: { readonly campaign_id: string; readonly revision: number; readonly status: SessionStatus; readonly save: { readonly state: "unsaved" | "saved"; readonly last_saved_revision: number | null;
+    /** Save/Load v1 compact status: a save in flight, the last save failure (cleared by a successful save), autosave mode, history append failure. */
+    readonly saving?: boolean; readonly error?: string; readonly autosave?: "off" | "on" | "stopped"; readonly transcript_error?: true };
     readonly provider: ProviderStatus; readonly dataset_id: string };
   readonly scene: {
     readonly location: { readonly id: string; readonly name: string; readonly summary: string; readonly parent_name?: string };
@@ -40,7 +42,8 @@ export interface SessionView {
     readonly equipment: readonly ViewEquipped[]; readonly inventory: readonly ViewItem[] };
   readonly household: readonly { readonly id: string; readonly name: string; readonly members: readonly ViewHouseholdMember[]; readonly rules: readonly { readonly id: string; readonly text: string }[] }[];
 }
-export interface ViewContext { readonly status: SessionStatus; readonly last_saved_revision: number | null; readonly provider: ProviderStatus }
+export interface ViewContext { readonly status: SessionStatus; readonly last_saved_revision: number | null; readonly provider: ProviderStatus;
+  readonly save_status?: { readonly saving: boolean; readonly error?: string; readonly autosave: "off" | "on" | "stopped"; readonly transcript_error?: true } }
 
 const playerVisible = (entity: DeepReadonly<{ knowledge?: { visibility: { player: boolean } } }> | undefined) => entity?.knowledge?.visibility.player !== false;
 export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, context: ViewContext): SessionView {
@@ -86,7 +89,7 @@ export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<Camp
   }));
   const carried = snapshot.items.filter(i => i.position.kind === "carried" && i.position.character_id === "nicco" || i.owner_id === "nicco" && i.position.kind === "stored").map(i => itemName(i.id));
   return structuredClone({ session: { campaign_id: snapshot.campaign_id, revision: snapshot.revision, status: context.status, dataset_id: snapshot.dataset_id,
-      save: { state: context.last_saved_revision === snapshot.revision ? "saved" as const : "unsaved" as const, last_saved_revision: context.last_saved_revision }, provider: context.provider },
+      save: { state: context.last_saved_revision === snapshot.revision ? "saved" as const : "unsaved" as const, last_saved_revision: context.last_saved_revision, ...(context.save_status ?? {}) }, provider: context.provider },
     scene: { location: { id: location, name: place?.display_name ?? location, summary: place?.summary ?? "", ...(parent ? { parent_name: parent.display_name } : {}) }, exits,
       time: { world_minute: minute, day, minute_of_day, time_of_day }, present },
     player: { id: "nicco" as const, name: name("nicco"), mana: { current: snapshot.runtime.mana.current, max: snapshot.runtime.mana.max }, gold, equipment: equipmentOf("nicco"), inventory: carried },

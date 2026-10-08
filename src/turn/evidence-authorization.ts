@@ -222,7 +222,12 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     const ref = evidenceText;
     // Group phrase covering the whole resolved offer; a stated count must equal the offer size.
     const group = ref.toLowerCase().match(/\b(?:them|all of them|all (two|three|four|five)|both|the (two|three|four|five) (?:items|garments|pieces|things)|the (?:clothes|clothing|garments|items|stack|bundle|pile)(?: of [a-z ]+)?)\b/);
-    if (group) {
+    // A bare anaphor ("them") refers back to what its clause names. When the clause explicitly names an item outside this offer
+    // ("Brenna takes the boots … sets them by her chair", checked as a hypothetical ring offer), "them" is that item, not the offer,
+    // and must not verify a phantom transfer. Explicit counts and collective nouns keep their existing meaning.
+    const anaphor = !!group && /^(?:them|all of them)$/.test(group[0]);
+    const namesOtherItem = anaphor && context.items.some(it => !offered.includes(it.id) && new RegExp(`\\b(?:${itemTerms(it, context.items)})\\b`, "i").test(ref));
+    if (group && !namesOtherItem) {
       const count = group[1] ?? group[2] ?? (group[0] === "both" ? "two" : undefined);
       if (!count || numberWordValue(count) === offered.length) return { verified: true, check: "receipt_of_offered_group" };
     }

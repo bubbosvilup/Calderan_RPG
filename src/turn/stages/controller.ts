@@ -29,7 +29,9 @@ export async function requestControllerProposal(i: { readonly controller: StateC
   /** H5: bounded transient retry; the same request is re-sent, nothing is committed before a parse, and candidate technical-contract mode retries invalid envelopes without accepting repair. */
   readonly retry?: { readonly technical_contract?:boolean; readonly policy: ProviderRetryPolicy; readonly budget: ProviderBudget; readonly checkpoint: () => void; readonly record: (record: ProviderAttemptRecord) => void } }): Promise<ControllerProposalOutput> {
   // Hardening H3: NPC-private (narrator-only) canon is not controller input; the controller proposes state from narration.
-  const { npc_private_canon: _private, npc_plus: _npcPlus, ...context } = i.context;
+  // Player Character Profile V1: the player's visible appearance is narrator-only description, never controller input.
+  const { npc_private_canon: _private, npc_plus: _npcPlus, ...shared } = i.context;
+  const context = shared.player_profile ? { ...shared, player_profile: (({ visible: _visible, ...p }) => p)(shared.player_profile) } : shared;
   const prior_state = JSON.stringify({ base_revision: i.base_revision, context, explicit_intent: i.intent.candidates,
     ...(i.movable.length ? { movable_characters: i.movable.map(m => ({ id: m.id, name: m.names[0], location_id: i.projected.characters.find(c => c.id === m.id)?.current.current_location })) } : {}) });
   const request = { player_action: i.player_input, prior_state, final_narration: i.draft, signal: i.signal };

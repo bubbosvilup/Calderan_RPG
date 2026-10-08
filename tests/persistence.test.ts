@@ -60,7 +60,9 @@ test("three saves rotate exactly one previous successful snapshot", async t => {
     assert.equal((await repository.loadCampaign("fixture_campaign")).campaign.revision, revision);
     if (revision > 1) assert.equal((await repository.loadCampaign("fixture_campaign", "previous")).campaign.revision, revision - 1);
   }
-  assert.deepEqual((await fs.readdir(join(root, "fixture_campaign"))).sort(), ["save.json", "save.previous.json"]);
+  // Save/Load v1: rolling checkpoints live in backups/ (only due ones are written; never more than five).
+  assert.deepEqual((await fs.readdir(join(root, "fixture_campaign"))).sort(), ["backups", "save.json", "save.previous.json"]);
+  assert.equal((await repository.listBackups("fixture_campaign")).length, 1, "the first save checkpoints; later autosave-cadence saves within 15 minutes do not");
 });
 
 test("corrupt current fails explicitly; previous recovery is separate and corruption is never backed up", async t => {
@@ -154,7 +156,7 @@ test("listing is read-only metadata and distinguishes missing, corrupt, version 
   const root = join(await temporary(t), "saves"), { world, campaign } = richCampaign(), repository = new FileCampaignRepository(world, root);
   assert.deepEqual(await repository.listSaves(), []); await assert.rejects(fs.stat(root), { code: "ENOENT" });
   await repository.saveCampaign(campaign); const text = await fs.readFile(current(root), "utf8");
-  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 3', '"schema_version": 4')]]) {
+  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 5', '"schema_version": 6')]]) {
     await fs.mkdir(join(root, id!)); await fs.writeFile(join(root, id!, "save.json"), contents!);
   }
   await fs.mkdir(join(root, "empty")); await fs.writeFile(join(root, "empty", ".save-stale.tmp"), "{}");

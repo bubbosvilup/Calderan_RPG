@@ -2,7 +2,24 @@
 
 Read this first. The UI talks to **one object**, `GameSession` (`src/app/game-session.ts`, re-exported from `src/app/index.ts`). It must not import `TurnCoordinator`, `CampaignState`, `CampaignSnapshot`, the OpenRouter classes, the save codecs, retrieval or reflection. Everything below is verified by `tests/application-closure.test.ts`.
 
-V0 uses the application-owned `createUIPlaytestSession` adapter (`src/app/ui-playtest.ts`) to wrap the existing canonical opening at `calderan_slave_market`, minute 600, as disposable `ui_playtest`. This arrival override is playtest-only; it changes no authored records or normal opening. The adapter returns a `GameSession`; subsequent gameplay uses only `submitPlayerInput`. The deterministic opening is presentation text, never parsed into state. V0 forces reflection off, writes no saves, and discards the session on shutdown.
+**Save/Load v1:** the Play UI uses `SessionHost` (`src/app/session-host.ts`) for persistent campaigns (section 1b). The disposable V0 mode remains behind `npm run play:ui -- --playtest`: it uses the application-owned `createUIPlaytestSession` adapter (`src/app/ui-playtest.ts`) to wrap the existing canonical opening at `calderan_slave_market`, minute 600, as disposable `ui_playtest`. This arrival override is playtest-only; it changes no authored records or normal opening. The adapter returns a `GameSession`; subsequent gameplay uses only `submitPlayerInput`. The deterministic opening is presentation text, never parsed into state. V0 forces reflection off, writes no saves, and discards the session on shutdown.
+
+## 1b. Persistent campaigns (Save/Load v1)
+
+```ts
+const deps = await createProductionDeps({ save_dir: "saves", persistent_campaigns: true }); // saves/campaigns/<id>/, autosave on
+const host = new SessionHost(deps);
+await host.listCampaigns();                                   // [{campaign_id, display_name, status, revision, saved_at, location_name, world_minute, previous_valid, backups, locked}]
+await host.createCampaign({ display_name: "My run", scenario_id: "caldrevan.slave_market.v1" }); // creates, saves (reason create), opens
+const r = await host.loadCampaign({ campaign_id, slot: "current" | "previous" | `backup:${name}` }); // r.load_report
+host.active;                                                  // the GameSession, or undefined (start screen)
+await host.closeCampaign(); await host.shutdown();            // both save a dirty campaign (reason quit) first
+```
+
+- Swaps (create/load/close) are refused with `turn_in_progress` while the active session is busy (turn, post-turn, compaction, portrait batch, save) or another swap runs. The target is opened and locked before the old session is touched; a failed load keeps the old campaign.
+- `load_report`: `{migrated_from?, canon: {tier, removed_npc_locations, drifted_references, unverified, saved_revision, revision_advanced}, continuity: restored|none|dropped|stale, transcript: available|missing|unreadable|disabled, missing_assets, orphan_assets, recovered_from?, warnings[]}`. Show `warnings` (player-safe sentences); a normal load has none.
+- `session.save({reason?})` is immediate; `view.session.save` adds `{saving, error?, autosave: off|on|stopped, transcript_error?}`. `session.getTranscript()` is the visible history; `session.campaignMeta` the display name and scenario.
+- HTTP (host mode): `GET /api/campaigns`, `POST /api/campaigns/create|load|close`, `POST /api/save`, `GET /api/save-status`. The session payload carries `campaign: null` (start screen) or `{id, display_name, save}`.
 
 ## 1. Start or load a session
 
@@ -55,9 +72,9 @@ Time retains the primitive world clock (`world_minute`, `day`, `minute_of_day`) 
 
 ## 5. Save, load, shutdown
 
-- `await session.save()` → `{ok, saved:{revision,saved_at}, view}` or `{ok:false, error}`. Manual only; **there is no autosave**. Refused with `turn_in_progress` while busy.
+- `await session.save()` → `{ok, saved:{revision,saved_at}, view}` or `{ok:false, error}`. Immediate. Refused with `turn_in_progress` while busy. **Autosave** (Save/Load v1) runs only when `deps.autosave` is set (the persistent Play UI): coalesced 2 s after committed mutations, at most 10 s later, never while busy; see docs/architecture/PERSISTENCE.md.
 - Unsaved indicator: `view.session.save.state` (`revision !== last_saved_revision`) or `session.hasUnsavedChanges`. A new campaign is unsaved until the first save. A turn that changes nothing leaves a saved campaign saved.
-- `await session.shutdown({discard_unsaved?})`: cancels an active request, waits for the turn and any reflection to settle (reflection cannot be cancelled; wait is bounded by the reflection provider timeout, 20 s by default), then if there are unsaved changes returns `{closed:false, error: unsaved_changes}` and the session stays open. Ask the user; to quit anyway call again with `discard_unsaved: true`. It never saves.
+- `await session.shutdown({discard_unsaved?})`: cancels an active request, waits for the turn and any reflection to settle (reflection cannot be cancelled; wait is bounded by the reflection provider timeout, 20 s by default), then if there are unsaved changes returns `{closed:false, error: unsaved_changes}` and the session stays open. Ask the user; to quit anyway call again with `discard_unsaved: true`. With `save_reason: "quit"` it first saves a dirty campaign (the host does this on close and process shutdown).
 
 ## 6. Busy and error state
 
@@ -81,6 +98,13 @@ A reflection failure is **never** an error: the turn stays committed and `trace.
 
 `view.household[].members[]`: `id`, `name`, `role?`, `presence` (`present` | `away`), `location` (**only while present**; the engine never tells the player where an absent member is), `relationship_to_player` (one of `HOSTILE AFRAID WARY ATTACHED TRUSTING GUARDED NEUTRAL`; absent when no relationship exists), `conditions[]`, `presentation?`, `legal? {status, holder_name?}`, `equipment[]`. NPC+ internals (history, contracts, reflection notes) are never in the view.
 
+## 7b. Player character profile (Player Character Profile V1)
+
+- `session.getPlayerProfileView()` → `{name, role_label: "Player Character", identity[{key: sex|species|apparent_age, label, value|null}], fields[{key, label, group, kind: number|text|lines, unit?, value|null}], narrator_summary}`, or `null`. It is read-only and never dirties. `narrator_summary` is exactly the visible-appearance string the narrator receives each turn (`derivePlayerCharacterContext`). It is not a UI rendering.
+- `session.updatePlayerProfile({expected_revision, patch})` → `{ok, changed, view}` or `{ok:false, error, field?}`. This is the player's only profile write. `patch` keys are the identity keys plus the NPC+ permanent-appearance keys (`height_cm weight_kg build skin hair_color hair_texture hair_description eyes scars distinguishing_marks distinctive_traits description`): omitted = unchanged, `null` = clear, a value = set. Errors: unknown keys (including `name`, `background`), control characters, over-limit values (identity 60, text 200, description 1000, 12 list items) → `invalid_input`; a revision other than the current one → `stale_turn`; busy → `turn_in_progress`. A refused edit changes nothing. A changed edit commits one `set_player_character_profile` (revision + 1, unsaved, autosave). An unchanged patch does not commit.
+- The name is not editable. Clothing is not in the profile (it is current equipment). There is no biography, background or stats field.
+- HTTP: the session payload carries `player_character` (the view above, or `null`); `POST /api/player-character {expected_revision, patch}` returns 200 / 409 (stale, busy) / 422 (invalid), each with the fresh state.
+
 ## 8. Inventory and equipment
 
 UI V1 uses `members[].display_name` for player-facing labels: unknown canonical names are masked using committed Nicco name knowledge, and missing labels never fall back to opaque IDs. The loopback adapter transmits only `{members: [{name, presence, location?}]}`; it excludes the legacy IDs, raw names, private fields and household identifiers. `scene.time.time_of_day` comes directly from the centralized P11 `temporalGrounding` projection; the UI receives the location label and daypart, with no exact game clock or frontend bucket mapping.
@@ -99,7 +123,7 @@ Every completed or failed turn gets a `TurnTrace` (bounded in-memory ring of 200
 
 ## 10. What the UI must not mutate or read
 
-- Never write campaign state, authored canon (`data/`) or the save files directly. The only mutations are `submitPlayerInput`, `save`, `shutdown` and `loadCampaign`/`createCampaign`.
+- Never write campaign state, authored canon (`data/`) or the save files directly. The only mutations are `submitPlayerInput`, `save`, `shutdown`, `loadCampaign`/`createCampaign` and the narrow editor writes (NPC+ appearance/portraits, `updatePlayerProfile`).
 - Never read `CampaignSnapshot` or save JSON for display. It holds private campaign facts, knowledge edges and reflection notes the player must not see.
 - Never render `trace` fields as story text; they are diagnostics.
 

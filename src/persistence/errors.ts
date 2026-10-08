@@ -1,23 +1,24 @@
 import { DatasetCompatibilityError, SnapshotValidationError } from "../campaign/snapshot-validation.js";
 import { CampaignValidationError } from "../campaign/validation.js";
 
-export type SaveErrorCode = "not_found" | "invalid_json" | "invalid_save" | "unsupported_version" | "migration_failed" | "dataset_mismatch" | "reference_invalid" | "invalid_id" | "unsafe_path" | "save_in_progress" | "io_error";
+export type SaveErrorCode = "not_found" | "invalid_json" | "invalid_save" | "unsupported_version" | "migration_failed" | "dataset_mismatch" | "reference_invalid" | "invalid_id" | "unsafe_path" | "save_in_progress" | "campaign_locked" | "io_error";
 const recoveryHints: Record<SaveErrorCode, string> = {
   not_found: "Inspect available saves and select an existing slot.",
   invalid_json: "Inspect both slots; explicitly load a valid previous slot. Preserve the corrupt file before replacing it.",
   invalid_save: "Inspect both slots; explicitly load a valid previous slot or retain the file for schema repair.",
   unsupported_version: "Use an engine supporting this save version, or explicitly select a supported previous slot.",
   migration_failed: "Preserve the original save and use an engine with a valid migration, or explicitly select a valid previous slot.",
-  dataset_mismatch: "Use compatible authored canon, or explicitly select a compatible previous slot.",
-  reference_invalid: "Restore the required authored references, or explicitly select a valid previous slot.",
+  dataset_mismatch: "Authored canon changed a record this campaign depends on in a way its saved state cannot be applied to (a record changed kind or the reconciled state no longer validates). Restore that canon, or explicitly select a compatible previous slot or backup.",
+  reference_invalid: "Authored canon no longer contains a record this campaign depends on. Restore it (or add a migration), or explicitly select a valid previous slot or backup.",
   invalid_id: "Use a bounded lowercase campaign ID without path separators or reserved device names.",
   unsafe_path: "Use a save directory without links, junctions or hard-linked save files, outside authored data.",
   save_in_progress: "Wait for the current explicit save to finish before saving again.",
+  campaign_locked: "Another running game holds this campaign. Close it first; a lock left by a process that no longer runs is recovered automatically.",
   io_error: "Inspect disk permissions and both slots before retrying; a complete replacement may already be visible.",
 };
 export class CampaignSaveError extends Error {
   readonly recovery_hint: string;
-  constructor(readonly code: SaveErrorCode, readonly details?: Readonly<{ save_dataset_id: string; current_dataset_id: string }>) {
+  constructor(readonly code: SaveErrorCode, readonly details?: Readonly<{ save_dataset_id?: string; current_dataset_id?: string; ids?: readonly string[] }>) {
     super(`Campaign persistence: ${code}. ${recoveryHints[code]}`); this.name = "CampaignSaveError"; this.recovery_hint = recoveryHints[code];
   }
 }

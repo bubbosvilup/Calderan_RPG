@@ -155,12 +155,12 @@ test("recovery returns the exact source; private recovered memory is never rende
 test("old saves migrate: empty premium domain without Nicco-household members; derived records for existing members", () => {
   const legacy = (c: CampaignState, world: WorldStore) => {
     const file = JSON.parse(serializeSave(createSaveFile(c.exportSnapshot(), world, "2026-10-02T09:00:00.000Z"), world));
-    file.schema_version = 2; file.snapshot.schema_version = 1; delete file.snapshot.premium_characters; delete file.snapshot.premium_reflections;
+    file.schema_version = 2; file.snapshot.schema_version = 1; delete file.snapshot.premium_characters; delete file.snapshot.premium_reflections; delete file.snapshot.player_characters;
     return JSON.stringify(file);
   };
   const empty = turnFixture();
   const loadedEmpty = decodeSave(legacy(empty.campaign, empty.world), empty.world);
-  assert.deepEqual([loadedEmpty.schema_version, loadedEmpty.snapshot.schema_version, loadedEmpty.snapshot.premium_characters], [4, 3, []]);
+  assert.deepEqual([loadedEmpty.schema_version, loadedEmpty.snapshot.schema_version, loadedEmpty.snapshot.premium_characters], [5, 5, []]);
   const member = turnFixture(); keep(member.campaign); run(member.campaign, { kind: "join_household", household_id: HOME, character_id: "brenna" });
   const loaded = decodeSave(legacy(member.campaign, member.world), member.world).snapshot;
   assert.deepEqual([premium(loaded, "brenna")!.metadata.active_household_member, premium(loaded, "brenna")!.dynamic.recent_developments.map(e => e.kind), premium(loaded, "brenna")!.stable], [true, ["migrated_member"], {}]);

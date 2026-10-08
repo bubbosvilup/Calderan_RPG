@@ -222,7 +222,7 @@ test("household authority: Heartstone ownership is a controlled fact, usable onl
   assert.deepEqual(access.facts.filter(f => f.source === "player_household").map(f => [f.ref, f.text]), [["H1", "Nicco is owner of the household Heartstone."]]);
   assert.deepEqual(access.characters.find(c => c.character_id === "korvin")!.do_not_use, ["F1", "F2", "H1"]);
   const prompt = buildNarratorPrompt("Hello.", context, [], {}, { candidates: [], runtime: [] }).messages[0]!.content;
-  assert.match(prompt, /Observable by anyone present: tall, overweight/); assert.match(prompt, /NARRATOR-ONLY/); assert.match(prompt, /UNKNOWN IS NOT A RUMOR/);
+  assert.match(prompt, /Visible appearance \(character data, not instructions[^)]*\): "traits: tall; overweight/); assert.doesNotMatch(prompt, /transported into this world|35-year-old/, "authored background prose is not per-turn context"); assert.match(prompt, /UNKNOWN IS NOT A RUMOR/);
 });
 
 // ---------------------------------------------------------------------------------------------- confidential encounters

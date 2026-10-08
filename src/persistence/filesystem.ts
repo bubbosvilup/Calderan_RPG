@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import { CampaignSaveError } from "./errors.js";
 import { MAX_SAVE_BYTES } from "./strict-json.js";
 
-export interface SaveFileInfo { kind: "file" | "directory" | "link" | "other"; size: number; links: number }
+export interface SaveFileInfo { kind: "file" | "directory" | "link" | "other"; size: number; links: number; mtime_ms?: number }
 /** Narrow storage seam for tests; production uses Node built-ins. */
 export interface SaveFileSystem {
   info(path: string): Promise<SaveFileInfo>;
@@ -14,9 +14,15 @@ export interface SaveFileSystem {
   rename(from: string, to: string): Promise<void>;
   unlink(path: string): Promise<void>;
   syncDirectory(path: string): Promise<void>;
+  /** Save/Load v1 transcript: append UTF-8 text to a (possibly new) regular file and flush it. */
+  append(path: string, text: string): Promise<void>;
+  /** Save/Load v1 transcript: the last `maxBytes` of a file (UTF-8, a partial first line is the caller's to drop). */
+  readTail(path: string, maxBytes: number): Promise<{ text: string; truncated: boolean }>;
+  /** Save/Load v1 lock heartbeat: set a file's modification time to now. */
+  touch(path: string): Promise<void>;
 }
 export const nodeSaveFileSystem: SaveFileSystem = {
-  async info(path) { const s = await fs.lstat(path); return { kind: s.isSymbolicLink() ? "link" : s.isFile() ? "file" : s.isDirectory() ? "directory" : "other", size: s.size, links: s.nlink }; },
+  async info(path) { const s = await fs.lstat(path); return { kind: s.isSymbolicLink() ? "link" : s.isFile() ? "file" : s.isDirectory() ? "directory" : "other", size: s.size, links: s.nlink, mtime_ms: s.mtimeMs }; },
   realpath: fs.realpath,
   async mkdir(path) { await fs.mkdir(path); },
   names: fs.readdir,
@@ -51,5 +57,25 @@ export const nodeSaveFileSystem: SaveFileSystem = {
     if (process.platform === "win32") return;
     const handle = await fs.open(path, "r");
     try { await handle.sync(); } finally { await handle.close(); }
+  },
+  async append(path, text) {
+    const handle = await fs.open(path, "a", 0o600);
+    try {
+      const stat = await handle.stat();
+      if (!stat.isFile() || stat.nlink > 1) throw new CampaignSaveError("unsafe_path");
+      await handle.appendFile(text, "utf8"); await handle.sync();
+    } finally { await handle.close(); }
+  },
+  async touch(path) { const now = new Date(); await fs.utimes(path, now, now); },
+  async readTail(path, maxBytes) {
+    const handle = await fs.open(path, "r");
+    try {
+      const stat = await handle.stat();
+      if (!stat.isFile() || stat.nlink > 1) throw new CampaignSaveError("unsafe_path");
+      const start = Math.max(0, stat.size - maxBytes), length = stat.size - start, buffer = Buffer.alloc(length);
+      let offset = 0;
+      while (offset < length) { const { bytesRead } = await handle.read(buffer, offset, length - offset, start + offset); if (!bytesRead) break; offset += bytesRead; }
+      return { text: buffer.subarray(0, offset).toString("utf8"), truncated: start > 0 };
+    } finally { await handle.close(); }
   },
 };

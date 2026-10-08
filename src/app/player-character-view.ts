@@ -10,7 +10,9 @@ import { characterPublicProfile } from "../world/character-contract.js";
 import { isPhysicalCondition } from "../turn/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
-import { buildPortraitPrompt, portraitFingerprint } from "../campaign/portrait-prompt.js";
+import { appearanceFingerprint, composePortraitPrompt, portraitDetails, portraitPoseOptions, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";
+import { ageStatus } from "../campaign/age.js";
+import { RAENA_IMAGE_STACK } from "./image-stack.js";
 import { avatarPortrait, fullBodyPortrait, MAX_PORTRAIT_VERSIONS, PORTRAIT_BATCH_SIZE, portraitAssetToken, portraitItemToken, portraitRecord } from "../campaign/portraits.js";
 import { appearanceLabel, appearanceLines, PERMANENT_APPEARANCE_FIELDS, resolvePermanentAppearance, type PermanentAppearanceField } from "../campaign/permanent-appearance.js";
 
@@ -63,16 +65,24 @@ export interface AppearanceEditorView {
   readonly identity: readonly { readonly label: string; readonly value: string }[];
   readonly fields: readonly { readonly key: PermanentAppearanceField; readonly label: string; readonly group: "body" | "hair" | "face" | "description";
     readonly kind: "number" | "text" | "lines"; readonly unit?: "cm" | "kg"; readonly override: string | null; readonly inherited: string | null }[];
-  /** Portrait Prompt Builder V1 preview of the committed permanent appearance (read-only; nothing is generated). */
-  readonly portrait_prompt: { readonly prompt: string; readonly negative_prompt: string };
+  /** Image generation v1 read-only previews (neutral pose) of the prompts the committed appearance yields per kind; nothing is generated. */
+  readonly portrait_prompts: Readonly<Record<PortraitKind, { readonly prompt: string; readonly negative_prompt: string }>>;
+  /** The masked character-details section every portrait prompt carries (the session composes the sent prompt from this). */
+  readonly portrait_details: string;
   /** Portrait Gallery V2 status: derived media only (no paths, file names, internal IDs, fingerprints or costs). */
   readonly portrait: PortraitEditorView;
 }
-/** One role slot. `stale` = generated from a different prompt than the current committed appearance yields. */
+/** One role slot. `stale` = generated from a different appearance than the current committed one describes. */
 export interface PortraitRoleView { readonly url: string; readonly stale: boolean }
 /** One Gallery image. `token` is an opaque per-item handle for role and delete actions (not the asset token, not a version ID). */
 export interface PortraitGalleryItemView { readonly token: string; readonly url: string; readonly is_avatar: boolean; readonly is_full_body: boolean; readonly stale: boolean;
-  readonly generated_at: string; readonly model_label: string; readonly reference_used: boolean }
+  readonly generated_at: string; readonly model_label: string; readonly reference_used: boolean;
+  /** `legacy` = generated before image generation v1 (no kind): viewable, keeps any role it holds, cannot receive a new one. */
+  readonly kind: "avatar" | "fullbody" | "legacy";
+  /** Pose label for v1 images, else null. */
+  readonly pose_label: string | null;
+  /** Whether this image may be assigned the role now (kind rule); a role it already holds is shown by is_avatar / is_full_body. */
+  readonly can_be_avatar: boolean; readonly can_be_full_body: boolean }
 export interface PortraitEditorView {
   /** null = no Avatar yet. */
   readonly avatar: PortraitRoleView | null;
@@ -80,8 +90,13 @@ export interface PortraitEditorView {
   readonly full_body: PortraitRoleView | null;
   readonly gallery: readonly PortraitGalleryItemView[];
   readonly gallery_limit: number; readonly batch_size: number;
-  /** False when fewer than `batch_size` Gallery slots remain: generation is refused before any provider call. */
+  /** False when fewer than `batch_size` Gallery slots remain, or generation is blocked: refused before any provider call. */
   readonly can_generate_batch: boolean;
+  /** Why generation is unavailable for this character (e.g. not an established adult), else null. */
+  readonly generation_blocked: string | null;
+  /** The curated pose choices per kind (ids are what the browser sends; texts stay server-side). */
+  readonly poses: Readonly<Record<PortraitKind, readonly { readonly id: PortraitPose; readonly label: string }[]>>;
+  /** Reference image: stored data is kept, but v1 generation does not use it (deferred to a future image-edit path). */
   readonly reference_attached: boolean; readonly reference_url: string | null;
 }
 const EDITOR_GROUPS: Readonly<Record<PermanentAppearanceField, AppearanceEditorView["fields"][number]["group"]>> = { height_cm: "body", weight_kg: "body", build: "body", skin: "body",
@@ -167,20 +182,25 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     }
     const observations = here ? (snapshot.premium_characters.find(p => p.character_id === id)?.mannerisms ?? []).filter(m => m.known_by_character_ids?.includes("nicco") && mannerismEpistemicState(m) !== "emergent" && mannerismAvailable(m, id, snapshot, world)).map(m => text(m.text)) : [];
     const householdRole = household.flatMap(h => h.members).find(m => m.character_id === id && m.status === "member")?.role;
-    // Portrait Gallery V2. Compact surfaces get the Avatar for any projected character that has one (portraits only ever exist for
-    // characters Nicco managed). The Gallery, role slots and staleness are editor-only (managed members). Stale = an image was generated
-    // from a different prompt than the current committed appearance yields (the preview text below, fingerprinted exactly as sent).
-    const portraitPrompt = editable ? (({ prompt, negative_prompt }) => ({ prompt: text(prompt), negative_prompt }))(buildPortraitPrompt({ appearance: permanent })) : undefined;
+    // Portrait Gallery V2 + image generation v1. Compact surfaces get the Avatar for any projected character that has one (portraits only
+    // ever exist for characters Nicco managed). The Gallery, role slots and staleness are editor-only (managed members). Stale = an image
+    // was generated from a different appearance than the current committed one (appearance fingerprint over the masked details, exactly
+    // as the session sends them). Pre-v1 images carry a whole-prompt fingerprint and therefore show as stale.
+    const details = editable ? text(portraitDetails(permanent)) : "";
+    const preview = (kind: PortraitKind) => composePortraitPrompt({ details, kind, pose: "neutral", trigger: RAENA_IMAGE_STACK.trigger });
     const assetUrl = (file: string) => `/api/portrait/asset/${portraitAssetToken(snapshot.campaign_id, id, file)}`;
     const avatar = avatarPortrait(snapshot, id), avatarUrl = avatar ? assetUrl(avatar.asset_file) : null;
     const portraitView = (): PortraitEditorView => {
-      const record = portraitRecord(snapshot, id), fullBody = fullBodyPortrait(snapshot, id), current = portraitFingerprint(portraitPrompt!.prompt);
-      const versions = record?.versions ?? [];
+      const record = portraitRecord(snapshot, id), fullBody = fullBodyPortrait(snapshot, id), current = appearanceFingerprint(details);
+      const versions = record?.versions ?? [], blocked = ageStatus(world, snapshot, id) === "minor" ? "Portrait generation is only available for adult characters." : null;
+      const poseLabel = (kind: PortraitKind, pose: string | undefined) => pose ? portraitPoseOptions(kind).find(p => p.id === pose)?.label ?? null : null;
       return { avatar: avatar ? { url: avatarUrl!, stale: avatar.prompt_fingerprint !== current } : null,
         full_body: fullBody ? { url: assetUrl(fullBody.asset_file), stale: fullBody.prompt_fingerprint !== current } : null,
         gallery: versions.map(v => ({ token: portraitItemToken(snapshot.campaign_id, id, v.version_id), url: assetUrl(v.asset_file), is_avatar: v.version_id === record!.avatar_version_id,
-          is_full_body: v.version_id === record!.full_body_version_id, stale: v.prompt_fingerprint !== current, generated_at: v.created_at, model_label: v.model, reference_used: v.reference_used === true })),
-        gallery_limit: MAX_PORTRAIT_VERSIONS, batch_size: PORTRAIT_BATCH_SIZE, can_generate_batch: versions.length + PORTRAIT_BATCH_SIZE <= MAX_PORTRAIT_VERSIONS,
+          is_full_body: v.version_id === record!.full_body_version_id, stale: v.prompt_fingerprint !== current, generated_at: v.created_at, model_label: v.style_id ?? v.model,
+          reference_used: v.reference_used === true, kind: v.kind ?? "legacy", pose_label: v.kind ? poseLabel(v.kind, v.pose) : null, can_be_avatar: v.kind === "avatar", can_be_full_body: v.kind === "fullbody" })),
+        gallery_limit: MAX_PORTRAIT_VERSIONS, batch_size: PORTRAIT_BATCH_SIZE, can_generate_batch: !blocked && versions.length + PORTRAIT_BATCH_SIZE <= MAX_PORTRAIT_VERSIONS,
+        generation_blocked: blocked, poses: { avatar: portraitPoseOptions("avatar"), fullbody: portraitPoseOptions("fullbody") },
         reference_attached: !!record?.reference, reference_url: record?.reference ? assetUrl(record.reference.asset_file) : null };
     };
     const dto: PlayerCharacterView = {
@@ -196,7 +216,8 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
           return { key, label: appearanceLabel(key), group: EDITOR_GROUPS[key], kind, ...(key === "height_cm" ? { unit: "cm" as const } : key === "weight_kg" ? { unit: "kg" as const } : {}),
             override: value === undefined ? null : Array.isArray(value) ? value.map(text).join("\n") : text(String(value)), inherited: baseline };
         }),
-        portrait_prompt: portraitPrompt!,
+        portrait_prompts: { avatar: preview("avatar"), fullbody: preview("fullbody") },
+        portrait_details: details,
         portrait: portraitView(),
       } : null,
       avatar_url: avatarUrl,

@@ -14,13 +14,13 @@ import { FileCampaignRepository } from "../src/persistence/campaign-repository.j
 const now = "2026-10-01T10:00:00.000Z";
 
 /** NPC+ Pass 1: a real legacy envelope carries a schema-1 snapshot (no premium_characters domain). */
-const legacySnapshot = ({ premium_characters: _premium, premium_reflections: _reflections, ...snapshot }: Record<string, unknown>) => ({ ...snapshot, schema_version: 1 });
+const legacySnapshot = ({ premium_characters: _premium, premium_reflections: _reflections, player_characters: _players, ...snapshot }: Record<string, unknown>) => ({ ...snapshot, schema_version: 1 });
 test("real legacy v1 envelope migrates to the current strict policy; unknown legacy fields are not discarded", () => {
   const { campaign, world } = richCampaign(), current = createSaveFile(campaign.exportSnapshot(), world, now);
   const { canon_compatibility: _policy, canon_references: _references, ...rest } = current;
   const old = { ...rest, schema_version: 1, snapshot: legacySnapshot(current.snapshot as unknown as Record<string, unknown>) };
   const loaded = decodeSave(JSON.stringify(old), world);
-  assert.equal(loaded.schema_version, 4); assert.equal(loaded.canon_compatibility, "strict"); assert.equal(loaded.canon_references, undefined);
+  assert.equal(loaded.schema_version, 5); assert.equal(loaded.canon_compatibility, "strict"); assert.equal(loaded.canon_references, undefined);
   assert.deepEqual(CampaignState.restore(world, loaded.snapshot).exportSnapshot(), campaign.exportSnapshot());
   assert.throws(() => validateSaveFile({ ...old, unknown_old: true }, world), { code: "invalid_save" });
   let invoked = false;
@@ -54,20 +54,22 @@ for (const recovery of ["current_valid", "current_corrupt", "both_corrupt", "cur
       await writeFile(currentPath, JSON.stringify(value));
     }
     if (recovery === "old_migratable") {
-      const value = JSON.parse(await readFile(currentPath, "utf8")); value.schema_version = 1; delete value.canon_compatibility; delete value.canon_references; value.snapshot.schema_version = 1; delete value.snapshot.premium_characters; delete value.snapshot.premium_reflections;
+      const value = JSON.parse(await readFile(currentPath, "utf8")); value.schema_version = 1; delete value.canon_compatibility; delete value.canon_references; value.snapshot.schema_version = 1; delete value.snapshot.premium_characters; delete value.snapshot.premium_reflections; delete value.snapshot.player_characters;
       await writeFile(currentPath, JSON.stringify(value)); await writeFile(previousPath, "bad recovery");
     }
     const bytesBefore = await readFile(currentPath, "utf8"), stateBefore = campaign.exportSnapshot();
-    if (recovery === "current_corrupt" || recovery === "both_corrupt" || recovery === "current_incompatible")
-      await assert.rejects(repository.loadCampaign(stateBefore.campaign_id), { code: recovery === "current_incompatible" ? "dataset_mismatch" : "invalid_json" });
-    else assert.deepEqual((await repository.loadCampaign(stateBefore.campaign_id)).campaign.exportSnapshot(), stateBefore);
+    // Save/Load v1 tiers: a fingerprint that no longer matches is content drift (warning), not an unloadable save.
+    if (recovery === "current_incompatible") assert.deepEqual((await repository.loadCampaign(stateBefore.campaign_id)).canon.tier, "compatible_with_warnings");
+    if (recovery === "current_corrupt" || recovery === "both_corrupt")
+      await assert.rejects(repository.loadCampaign(stateBefore.campaign_id), { code: "invalid_json" });
+    else if (recovery !== "current_incompatible") assert.deepEqual((await repository.loadCampaign(stateBefore.campaign_id)).campaign.exportSnapshot(), stateBefore);
     if (recovery === "both_corrupt" || recovery === "old_migratable") await assert.rejects(repository.loadCampaign(stateBefore.campaign_id, "previous"), { code: "invalid_json" });
     else assert.deepEqual((await repository.loadCampaign(stateBefore.campaign_id, "previous")).campaign.exportSnapshot(), first);
     assert.equal(await readFile(currentPath, "utf8"), bytesBefore); assert.equal(campaign.exportSnapshot(), stateBefore);
   });
 
 test("migration seam fills a future domain, preserves unknown data, validates strictly and runs ordered steps", () => {
-  assert.equal(CURRENT_SAVE_VERSION, 4);
+  assert.equal(CURRENT_SAVE_VERSION, 5);
   const old = { schema_version: 1, domains: { retained: ["value"] }, unknown_old: "keep" };
   const registry = {
     1: (input: Readonly<Record<string, unknown>>) => ({ ...input, schema_version: 2, domains: { ...(input.domains as object), example_future_domain: [] } }),
@@ -170,7 +172,7 @@ for (const drift of ["summary", "display_name", "unrelated_addition", "removed_l
     if (drift === "unrelated_graph" || drift === "saved_graph") {
       const entity = find(sources, drift === "saved_graph" ? room : kitchen).entity;
       if (entity.type === "location") entity.connections.push({ target: "heartstone", description: "test path", minutes: 1 });
-      if (drift === "saved_graph") expected = "dataset_mismatch";
+      // Save/Load v1: a structural edit to a referenced record loads with a drift warning (tier compatible_with_warnings).
     }
     const alternate = new WorldStore(sources);
     if (expected) assert.throws(() => decodeSave(text, alternate), { code: expected });

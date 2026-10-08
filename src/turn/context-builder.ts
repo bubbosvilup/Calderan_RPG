@@ -11,6 +11,7 @@ import { TurnError } from "./turn-types.js";
 import { NPC_PLUS_LIMITS, packNpcPlus } from "./npc-plus.js";
 import { describeDimensions, relationshipHeadline } from "../campaign/relationship-summary.js";
 import { knowledgeGrants } from "./knowledge-grants.js";
+import { activePlayerCharacterId, derivePlayerCharacterContext } from "../campaign/player-character.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 import { economy, generatePriceIndex } from "../economy/economy.js";
 
@@ -137,11 +138,16 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const latest = Math.max(0, ...allEvents.map(e => e.scheduled_world_minute)) + 1;
   const events = selectTop(allEvents, CONTEXT_LIMITS.scheduled_events, e => latest - e.scheduled_world_minute);
   // Narrator-facing truth about the player character (canonical baseline + current household roles); never NPC knowledge.
-  const player = world.getEntity("nicco");
+  // Player Character Profile V1: the ACTIVE player character (v1 always Nicco) through the one canonical projection.
+  const player = world.getEntity(activePlayerCharacterId(snapshot) ?? "nicco");
+  const visible = derivePlayerCharacterContext(world, snapshot);
   const player_profile = player?.type === "character" && player.role === "player" && player.knowledge?.visibility.narrator ? {
-    name: player.name, content: player.content,
-    // Repair 1: what others can perceive, kept apart from narrator-only biography.
-    observable: player.type === "character" ? [...player.traits] : [],
+    // Nicco's authored `content` prose (origin, arrival, ownership history, magic) stays private authored canon: it is never sent
+    // automatically. Narrator-visible player truth is the structured profile below plus controlled facts with access lists.
+    name: player.name,
+    // Repair 1 + Player Character Profile V1: what others can perceive comes from the campaign profile (structured, editable,
+    // always present), kept apart from narrator-only canon prose. Never NPC knowledge, never retrieval-dependent.
+    ...(visible ? { visible } : {}),
     households: snapshot.households.flatMap(h => h.members.filter(m => m.character_id === "nicco" && m.status !== "former_member").map(m => ({ id: h.id, name: h.name ?? h.id, status: m.status, ...(m.role ? { role: m.role } : {}),
       // Household knowledge policy: only fellow current members may use Nicco's membership; ownership is not public.
       member_ids: h.members.filter(x => x.status !== "former_member").map(x => x.character_id) }))),

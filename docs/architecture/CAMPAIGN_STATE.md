@@ -9,6 +9,10 @@ Status: **READY FOR PERSISTENCE FOUNDATION**. This phase implements deterministi
 in-memory domains and atomic preparation/commit. It does not implement save/load,
 a filesystem repository, database, narrator integration, or campaign retrieval.
 
+Player Character Profile V1 adds the campaign-owned `player_characters[]` domain (snapshot 5): the active player
+character's bounded, structured visible appearance. It is seeded from canon and never overwritten by it, it is edited only through
+`set_player_character_profile`, and it is never NPC knowledge. See [PLAYER_CHARACTER.md](PLAYER_CHARACTER.md).
+
 ## A. Truth and ownership
 
 | Layer | Authority | Contains |

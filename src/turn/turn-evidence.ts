@@ -42,7 +42,12 @@ const notEquipping =/\b(?:does not|doesn't|did not|didn't|not|no|never)\b(?: \w+
 const temporalHedge =/\b(?:immediately|at first|right away|just yet|yet)\b/i;
 const actionWords = /\b(refus\w*|declin\w*|reject\w*|return\w*|tak\w*|took|keep\w*|kept|accept\w*|receiv\w*|giv\w*|gave|hear\w*|told|tell\w*|agree\w*|hands?|handed|push\w*|back|ownership|transfer|equip\w*|meeting)\b/i;
 const acceptVerb = "takes?|took|accepts?|accepted|receives?|received|gathers?|gathered|snatches?|snatched|picks? up|picked up|collects?|collected|unfolds?";
-const leadIn = /^(?:without a word|after (?:a|another|the) (?:(?:brief|long|short|silent|tense) )?(?:moment|pause|beat|breath|while)(?: of [^,]+)?|finally|at last|at length|eventually|in the end),\s*|^then,?\s+/i;
+/**
+ * Fronted discourse/manner modifiers stripped before the clause-leading-subject grammar. A CLOSED list: "Without hesitation, Brenna
+ * takes the boots" was once missed because only "without a word" was known, so the recipient did not lead the clause. Hedges and
+ * evidentials ("perhaps", "apparently", "supposedly") are deliberately absent: they keep disqualifying downstream.
+ */
+const leadIn = /^(?:without (?:a word|hesitation|a moment's hesitation|pause|delay|comment|ceremony|fuss)|after (?:a|another|the) (?:(?:brief|long|short|silent|tense) )?(?:moment|pause|beat|breath|while)(?: of [^,]+)?|finally|at last|at length|eventually|in the end|carefully|quickly|slowly|gently|simply|silently|wordlessly|hesitantly|cautiously|quietly|calmly|eagerly|reluctantly|gratefully|deftly|smoothly|briskly|gingerly),\s*|^then,?\s+/i;
 const adverbs = "(?:(?:carefully|quickly|slowly|finally|gently|then|simply|silently|wordlessly|hesitantly|cautiously) )*";
 const trailing = /\s+(?:back|from (?:nicco|you|him)(?:'s|s)?(?: (?:hands?|arms))?|into (?:her|his) (?:arms|hands|grasp|lap)|in (?:her|his) (?:arms|hands|lap)|against (?:her|his) (?:chest|lap|legs)|onto (?:her|his) lap|with (?:both hands|one hand)|without (?:hesitation|comment|a word)(?: on .*)?|(?:all )?at once|one by one|and sets? (?:it|them) .*)$/;
 const clean = (s: string) => normalizeReference(s).replace(/[,;:]$/g, "");

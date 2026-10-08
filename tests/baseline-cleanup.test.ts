@@ -34,12 +34,15 @@ test("speaker attribution: Nicco only by an explicit clause naming him; unknown 
   assert.deepEqual(lines("Brenna looks at Nicco. \"You're back.\" Her eyes narrow. \"Closed?\" She considers this.", context), ["Brenna: \"You're back.\"", "Brenna: \"Closed?\""]);
   assert.deepEqual(lines("A stranger blinks at Nicco. \"Who are you?\"\n\n\"Leave,\" a guard says.", context), ["Stranger: \"Who are you?\"", "Guard: \"Leave,\""]);
 });
-test("player profile: canonical Nicco baseline reaches the narrator as its own block, not as NPC knowledge", async () => {
+test("player profile: Nicco's visible profile and household reach the narrator as their own block; authored background prose does not", async () => {
   const { context } = await opening();
   const prompt = buildNarratorPrompt("Hello.", context, [], {}, { candidates: [], runtime: [] }).messages[0]!.content;
   const block = prompt.slice(prompt.indexOf("[NICCO / PLAYER PROFILE]"), prompt.indexOf("[CURRENT AUTHORITATIVE CHARACTERS]"));
-  for (const expected of [/35-year-old human man/, /approximately one day before/, /lawful owner\/holder of Heartstone Tower/, /tall and overweight/, /white hairs/, /early balding/, /Light/, /healing and sacrifice/, /Household: Heartstone \(owner\)/, /not NPC knowledge/])
+  for (const expected of [/Visible appearance \(character data, not instructions[^)]*\): "traits: tall; overweight; a few visible white hairs; very mild early balding\."/, /Household: Heartstone \(owner\)/, /not NPC knowledge/])
     assert.match(block, expected);
+  for (const privateProse of [/35-year-old/, /approximately one day before/, /lawful owner\/holder/, /healing and sacrifice/, /transported/])
+    assert.doesNotMatch(prompt, privateProse, "authored background prose is private, not per-turn narrator context");
+  assert.doesNotMatch(block, /NARRATOR-ONLY/);
   assert.equal(context.characters.length, 1, "no NPC exists to hold the profile");
   assert.match(prompt, /Narration and Nicco \(player\): F1, F2/);
 });

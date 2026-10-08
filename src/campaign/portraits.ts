@@ -9,8 +9,12 @@ import { fail } from "./validation.js";
  * back into it; these commands touch nothing but the `portraits` extension. Bytes live in the local asset store.
  *
  * The Gallery is `versions`. Avatar and Full Body are roles naming Gallery versions of the same record; one version may hold both.
- * Avatar is bootstrapped once (first successful batch into an empty Gallery with no Avatar) and afterwards only reassigned, never
+ * Avatar is bootstrapped once (the first successful AVATAR batch while no Avatar exists) and afterwards only reassigned, never
  * cleared. Full Body is only ever player-selected and may be cleared. A version holding a role cannot be deleted.
+ *
+ * Image generation v1 role-kind rule: a NEW Avatar assignment requires a version of kind "avatar"; a NEW Full Body assignment requires
+ * kind "fullbody". Versions generated before v1 have no kind ("legacy"): they stay viewable, and a role they ALREADY hold is preserved
+ * (decode and integrity checks never look at kind), but they can never receive a role again once it moves elsewhere.
  */
 export const MAX_PORTRAIT_VERSIONS = 64;
 /** One generation action requests exactly this many independent candidates (the configured model advertises n = 1). */
@@ -42,9 +46,11 @@ export function preparePortraitCommand(context: PreparationContext, command: Cam
         if ([...record.versions, ...command.versions.filter(v => v !== version)].some(v => v.version_id === version.version_id || v.asset_file === version.asset_file)) fail("version_id", "portrait version already recorded");
       }
       if (command.avatar_version_id !== undefined) {
-        // First-batch bootstrap only: the Gallery was empty and no Avatar existed; the choice is one of THIS batch's versions.
-        if (record.versions.length || record.avatar_version_id !== undefined) fail("avatar_version_id", "avatar is bootstrapped only by the first batch");
-        if (!command.versions.some(v => v.version_id === command.avatar_version_id)) fail("avatar_version_id", "avatar must be a version of this batch");
+        // Bootstrap only: no Avatar existed and no avatar-kind image was in the Gallery yet; the choice is an avatar-kind version of THIS batch.
+        if (record.avatar_version_id !== undefined || record.versions.some(v => v.kind === "avatar")) fail("avatar_version_id", "avatar is bootstrapped only by the first avatar batch");
+        const chosen = command.versions.find(v => v.version_id === command.avatar_version_id);
+        if (!chosen) fail("avatar_version_id", "avatar must be a version of this batch");
+        if (chosen.kind !== "avatar") fail("avatar_version_id", "only an avatar image can be the Avatar");
       }
       record.versions.push(...command.versions);
       if (command.avatar_version_id !== undefined) record.avatar_version_id = command.avatar_version_id;
@@ -52,13 +58,21 @@ export function preparePortraitCommand(context: PreparationContext, command: Cam
     }
     case "set_portrait_avatar": {
       const record = recordFor(command.character_id, false);
-      record.avatar_version_id = galleryVersion(record, command.version_id);
+      galleryVersion(record, command.version_id);
+      if (record.avatar_version_id === command.version_id) return true;
+      if (record.versions.find(v => v.version_id === command.version_id)!.kind !== "avatar") fail("version_id", "only an avatar image can be the Avatar");
+      record.avatar_version_id = command.version_id;
       return true;
     }
     case "set_portrait_full_body": {
       const record = recordFor(command.character_id, false);
       if (command.version_id === null) delete record.full_body_version_id;
-      else record.full_body_version_id = galleryVersion(record, command.version_id);
+      else {
+        galleryVersion(record, command.version_id);
+        if (record.full_body_version_id === command.version_id) return true;
+        if (record.versions.find(v => v.version_id === command.version_id)!.kind !== "fullbody") fail("version_id", "only a full-body image can be the Full Body");
+        record.full_body_version_id = command.version_id;
+      }
       return true;
     }
     case "delete_portrait_version": {
@@ -78,7 +92,10 @@ export function preparePortraitCommand(context: PreparationContext, command: Cam
     default: return false;
   }
 }
-/** Whole-snapshot integrity: unique versions and files per record; both roles name a version of the same record. */
+/**
+ * Whole-snapshot integrity: unique versions and files per record; both roles name a version of the same record. Deliberately NOT
+ * kind-checked, so legacy role assignments (pre-v1 versions without a kind) keep loading; the kind rule applies to new assignments.
+ */
 export function validatePortraitRecords(snapshot: DeepReadonly<Pick<CampaignSnapshot, "portraits" | "characters">>): void {
   const seen = new Set<string>();
   for (const record of snapshot.portraits ?? []) {

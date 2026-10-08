@@ -111,7 +111,7 @@ test("legacy v2 save of a household with a former NPC+ migrates to the current v
   const f = household(["brenna", "maren"]);
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "leave_household", household_id: "campaign_household_home", character_id: "maren" }] });
   const file = JSON.parse(serializeSave(createSaveFile(f.campaign.exportSnapshot(), f.world, "2026-10-02T09:00:00.000Z"), f.world));
-  file.schema_version = 2; file.snapshot.schema_version = 1; delete file.snapshot.premium_characters; delete file.snapshot.premium_reflections;
+  file.schema_version = 2; file.snapshot.schema_version = 1; delete file.snapshot.premium_characters; delete file.snapshot.premium_reflections; delete file.snapshot.player_characters;
   const migrated = decodeSave(JSON.stringify(file), f.world).snapshot;
   assert.deepEqual(migrated.premium_characters.map(p => [p.character_id, p.metadata.active_household_member]), [["brenna", true]], "only current members are derived; a former member has no record to reconstruct");
   assert.doesNotThrow(() => CampaignState.restore(f.world, migrated));

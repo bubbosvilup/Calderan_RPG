@@ -35,7 +35,7 @@ const MESSAGES: Record<AppErrorCode, string> = {
   unsupported_version: "The save was written by a different engine version.", migration_failed: "The save could not be upgraded.",
   dataset_mismatch: "The save belongs to a different version of the world data and was not loaded.", reference_invalid: "The save refers to world data that no longer exists.",
   invalid_id: "That campaign name is not allowed.", unsafe_path: "The save location is not safe to use.", save_in_progress: "A save is already running.",
-  io_error: "The save could not be read or written.",
+  io_error: "The save could not be read or written.", campaign_locked: "Another running game has this campaign open.",
   portrait_generation_failed: "The portrait could not be generated. Nothing was saved and the current portrait is unchanged.",
   session_closed: "The session is closed.", unsaved_changes: "There are unsaved changes.", internal_error: "Something went wrong inside the game. The campaign was not changed by this action.",
 };

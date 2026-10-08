@@ -25,7 +25,7 @@ test("NPC+ growth can never cause context_too_large by itself: the same authorit
   for (const history of ["none", "full", "rollup"] as const) assert.equal(measure({ ...BASE, rich: false, itemsPer: 0, n: 30, history, reflections: true }).ok, true, history);
 });
 test("the true failure boundary is authoritative growth (never-drop state), and it is quadratic in shared knowledge: present people × shown facts known", () => {
-  const first = (knows: number) => { const cfg: Config = { ...BASE, rich: false, itemsPer: 0, facts: 32, knowsPer: knows }; let lo = 1, hi = 80; while (lo < hi) { const mid = (lo + hi) >> 1; if (measure({ ...cfg, n: mid }).ok) lo = mid + 1; else hi = mid; } return lo; };
+  const first = (knows: number) => { const cfg: Config = { ...BASE, rich: false, itemsPer: 0, facts: 32, knowsPer: knows }; let lo = 1, hi = 200; while (lo < hi) { const mid = (lo + hi) >> 1; if (measure({ ...cfg, n: mid }).ok) lo = mid + 1; else hi = mid; } return lo; };
   const [k3, k8, k32] = [first(3), first(8), first(32)];
   assert.ok(k3 > k8 && k8 > k32, `more shared knowledge per person overflows with fewer present people (${k3} > ${k8} > ${k32})`);
   assert.ok(k32 > 12 && k32 < 80, `the reconciled resource safeguard fails at ${k32} present people, beyond the historical 32k gate`);

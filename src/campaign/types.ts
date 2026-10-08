@@ -221,8 +221,25 @@ export interface CampaignDomains {
   /** NPC+ Pass 6 domain (snapshot schema 2): non-authoritative, evidence-cited reflection notes. */
   premium_reflections: PremiumReflection[];
 }
+/**
+ * Player Character Profile V1 (snapshot 5): the campaign-authoritative visible identity and permanent appearance of a player
+ * character. It references the canonical player entity (v1: "nicco") and never duplicates it as a campaign character record.
+ * Initialized from canon when the campaign is created (or migrated); afterwards canon edits never rewrite it. Visible physical truth
+ * only: no biography/background (what Nicco reveals about his past enters facts/knowledge through play), no clothing (worn items are
+ * authoritative in the item domain), no stats. Never NPC knowledge.
+ */
+export interface PlayerCharacterProfile {
+  character_id: string;
+  sex?: string; species?: string; apparent_age?: string;
+  appearance: CharacterAppearance;
+}
 export interface CampaignSnapshot extends CampaignDomains {
-  schema_version: 3; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  schema_version: 5; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  /**
+   * Player Character Profile V1: exactly one profile per authored player character (v1: Nicco only). The active player character
+   * is resolved through activePlayerCharacterId(); a later multi-PC model adds an explicit active ID without changing consumers.
+   */
+  player_characters: PlayerCharacterProfile[];
   /** Bounded derived evidence only; never narrator/controller context. Optional additive persistence extension. */
   mannerism_learning?: MannerismLearning;
   /** P8 Personal Price Index (optional additive extension; absent on pre-P8 saves). */
@@ -231,11 +248,21 @@ export interface CampaignSnapshot extends CampaignDomains {
   portraits?: CharacterPortraitRecord[];
 }
 export type PortraitMediaType = "image/png" | "image/jpeg" | "image/webp";
-/** One generated portrait image (bytes live in the local portrait asset store, never in the snapshot). */
+/**
+ * One generated portrait image (bytes live in the local portrait asset store, never in the snapshot). Image generation v1 adds the
+ * optional fields after `reference_used` (additive: versions written before v1 have none of them, decode unchanged, stay viewable and
+ * keep any role they already hold; a version without `kind` can never RECEIVE a role). `prompt_fingerprint` is the appearance
+ * fingerprint used for staleness. `seed` is recorded for traceability, not as a reproducibility guarantee. `billable_units` and
+ * `cost_usd` are recorded only when the provider returned them (never invented).
+ */
 export interface CharacterPortraitVersion {
   version_id: string; prompt_version: string; prompt_fingerprint: string; model: string; created_at: string;
   media_type: PortraitMediaType; asset_file: string; cost_usd?: number; reference_used?: boolean;
+  kind?: PortraitVersionKind; pose?: string; prompt?: string; seed?: number; provider_seed?: number; provider?: string; style_id?: string;
+  width?: number; height?: number; billable_units?: number;
 }
+/** What a generated image was framed as: a square bust-up Avatar, or a head-to-feet Full Body. Decides which role it may take. */
+export type PortraitVersionKind = "avatar" | "fullbody";
 /** The single uploaded reference image used to guide generation (guidance only; never read back into appearance). */
 export interface CharacterPortraitReference { media_type: PortraitMediaType; asset_file: string; uploaded_at: string }
 /**
@@ -292,6 +319,8 @@ export type CampaignCommand =
   | { kind: "set_portrait_full_body"; character_id: string; version_id: string | null }
   | { kind: "delete_portrait_version"; character_id: string; version_id: string }
   | { kind: "set_portrait_reference"; character_id: string; reference: CharacterPortraitReference | null }
+  /** Player Character Profile V1: replace one player character's profile (application editor only; never a controller proposal). */
+  | { kind: "set_player_character_profile"; profile: PlayerCharacterProfile }
   | { kind: "set_legal_status"; character_id: string; status: "free" | "enslaved"; holder_id?: string; documentation?: TransferDocumentation; note?: string }
   /**
    * Pass 1.2: exactly one of `from_holder_id` (the current legal holder) or `from_counterparty` (an anonymous seller: sale only, of a

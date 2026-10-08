@@ -1,8 +1,101 @@
 # Phase 1J: Manual Persistence & Restore Foundation
 
+> ## Save/Load v1 (current): persistent campaigns
+>
+> This section supersedes the Phase 1J "no autosave" policy and the V2/V4 format notes below wherever they conflict. Everything else
+> (strict JSON, validation, path safety, two-slot rotation, explicit recovery) still holds. Design: `docs/save_load_v1_design.md`;
+> audit: `docs/save_load_audit.md`.
+>
+> **Campaign root.** The Play UI stores real campaigns under `saves/campaigns/<campaign_id>/`:
+>
+> ```text
+> saves/campaigns/<campaign_id>/
+>   save.json              current slot (save format 5, snapshot 5)
+>   save.previous.json     the preceding successful save (rotated by every save)
+>   backups/               up to 5 rolling checkpoints r<revision>-<timestamp>.json (save JSON only: no images, no transcript)
+>   transcript.jsonl       campaign history (narrative, never canonical)
+>   portraits/<character token>/portrait_… | reference_…   image files (bytes never in JSON)
+>   .lock                  writer lock {pid, token}; a dead holder's lock is recovered
+> saves/.deleted/<campaign_id>-<timestamp>/   soft-deleted campaigns (moved, never purged automatically)
+> ```
+>
+> Campaign IDs are engine-generated (`campaign_<yyyymmdd>_<6 hex>`), immutable and never derived from the display name. The
+> disposable playtest mode (`npm run play:ui -- --playtest`) keeps the old layout under `saves/ui_playtest/` and never saves.
+>
+> **Versions (current).** Save format **5**, snapshot **5**. Readers accept older files only through the migration steps below.
+> Snapshot 5 (Player Character Profile V1) is described in its own paragraph below.
+>
+> *History of the format-5 step (Save/Load v1, at which time the snapshot was 4):* format 5 adds optional
+> `metadata.display_name`, `metadata.save_reason` (`create | manual | autosave | quit`), `metadata.scenario_id` (e.g.
+> `caldrevan.slave_market.v1`), a written `engine_version`, the optional non-authoritative `continuity` block and an optional
+> `kind` per canon reference. Snapshot 4 formally adopted the image-generation-v1 portrait fields. Migration `4 → 5` (envelope) /
+> `3 → 4` (snapshot) is version-only and lossless; a version-4 file carrying format-5 fields is rejected (`migration_failed`). A
+> format-4 file is migrated through both steps (envelope 4 → 5, snapshot 3 → 4 → 5). Rule from now on: every new persisted field, even optional, gets a
+> version bump and a migration step, so older builds report `unsupported_version` instead of `invalid_save`. Loading never rewrites a
+> file; the first save after a load writes the current version. A newer file is refused with `unsupported_version` and left untouched.
+>
+> **Snapshot 5 (Player Character Profile V1).** Snapshot 5 adds `player_characters[]`: exactly one bounded profile per authored player
+> character (v1: Nicco), holding `character_id`, optional `sex`/`species`/`apparent_age` and a structured `appearance` (the NPC+
+> `CharacterAppearance` shape). The envelope stays format 5. Snapshot migration `4 → 5` (`migrateSnapshot4to5`) is the first
+> world-aware step: it runs inside `validateSaveFileWithReport` after the envelope steps and adds the deterministic canon default
+> (`defaultPlayerCharacters(world)`: canon `sex`, `species`, `age_band` and `traits` only; prose is never parsed). A snapshot-4 file
+> that already carries `player_characters` fails with `migration_failed`; the load report carries `snapshot_migrated_from: 4`. As
+> always, the source file is not rewritten; the first save writes snapshot 5. After that the profile is campaign-owned: canon edits
+> to the player character never overwrite it (canon only seeds new or migrated campaigns). Snapshot validation enforces exactly one
+> profile per authored player, no unknown keys, no control characters, field limits (identity 60, text 200, description 1000, 12
+> list items) and ≤ 6000 serialized characters, so a save cannot smuggle a large prompt-injection field. See `PLAYER_CHARACTER.md`.
+>
+> **Canonical vs continuity vs history.**
+> - *Canonical state* is the snapshot (all campaign domains, revision, portraits metadata). It is the only authority.
+> - *Continuity* (`continuity` in the save) is the bounded recent conversation, ≤ 12 finalized exchanges, marked
+>   `"authority": "non_authoritative"`. On load it is added to the narrator's conversation window only when its `revision` equals
+>   the saved revision. It is never replayed, never parsed into state, never validated against canon; a malformed block is dropped
+>   with a load-report note and never makes a save unloadable.
+> - *History* (`transcript.jsonl`) is append-only JSONL (`{i, at, role, text, revision, turn_id?}`), written only after a
+>   canonical save succeeded (entries up to the saved revision). A failed append leaves the canonical save valid, is reported as
+>   `transcript_error` and retried at the next save. Loading an older slot writes a `{kind:"rollback", revision}` marker before the next
+>   append; readers hide abandoned entries. A missing or damaged transcript never blocks a load. Backups never copy it.
+> - *Derived* state (Scene RAM, turn context, prompts, views, portrait URLs/tokens, staleness, retrieval indexes) is rebuilt.
+>   *Transient* state (temporary scene participants, traces, diagnostics, UI state) is discarded; a load is a scene boundary for
+>   temporary participants.
+>
+> **Canon compatibility tiers** (replacing the all-or-nothing fingerprint check). `compatible`: additions anywhere, label/prose
+> edits, edits to records the campaign does not reference. Additive canon never mutates a loaded campaign: a newly authored NPC
+> gets no runtime entry, the revision is unchanged and the session stays saved (it remains available through the WorldStore; play
+> may place it later through a normal committed change). `compatible_with_warnings`: a referenced record changed non-label
+> content (drift, IDs reported), a runtime-only location entry of a removed NPC was dropped (revision + 1), or a legacy strict save
+> without fingerprint evidence loads on a changed world (`unverified`). `incompatible`: a referenced record disappeared
+> (`reference_invalid`, IDs listed) or changed kind / the reconciled state no longer validates (`dataset_mismatch`). Load stops; the
+> save is never modified; no replacement canon is invented. Revision only advances when reconciliation changed state.
+>
+> **Autosave (deliberate policy).** After committed mutations only (turn commits, NPC+ edits, player profile edits, household/role/portrait changes,
+> location correction, a completed portrait batch, load reconciliation); viewing never dirties. A delivered exchange that committed
+> no state (most dialogue) also schedules an autosave and a quit-save so its continuity and history reach disk; it does not mark the
+> campaign "Unsaved changes" (found in the live validation: such turns were otherwise lost on restart). Debounce 2 s, maximum delay 10 s,
+> one save at a time, coalesced; a mutation during a save causes exactly one follow-up. Never during a turn, post-turn step,
+> compaction, portrait batch, save, or campaign load/swap. Ordinary failures retry with backoff 2 s / 10 s / 30 s, then wait for the
+> next mutation; a corrupt/incompatible slot, a lost lock or an unsafe path STOPS autosave until a successful explicit save. Manual
+> Save is immediate. Graceful shutdown (Ctrl+C, campaign switch) saves a dirty campaign with reason `quit` first.
+>
+> **Backups and recovery.** Every save rotates current → previous as before. A checkpoint is written for `create`/`manual`/`quit`
+> saves and at most every 15 minutes of autosaves; 5 are kept. A corrupt or unreadable current slot is never overwritten: loading
+> fails; the start screen offers *Load previous save* / *Load latest backup*; the first save of that explicitly recovered session
+> moves the corrupt file aside as `save.corrupt-<timestamp>.json` (kept) and writes a fresh current. The load report records the source.
+>
+> **Image assets.** Saves reference portrait files by bare file name (`asset_file`) per character; the path is rebuilt from the
+> campaign root, the campaign ID and a per-character hash. Deleting a Gallery image commits metadata only; the file is removed once
+> no retained state (live campaign, `save.json`, `save.previous.json`, any kept backup) references it — protection keeps the file,
+> never the Gallery entry. Orphans (files no retained state references) are detected and reported, never removed automatically;
+> the explicit cleanup (`removePortraitOrphans({confirm:true})`) stays inside the campaign's portrait tree. A missing image file
+> never blocks a load: the record stays, the load report counts it and the UI shows a placeholder.
+>
+> **Locking.** One writer per campaign: the session host holds `<campaign>/.lock` while a campaign is open; saves by anyone else are
+> refused (`campaign_locked`). The holder refreshes the lock's modification time every 30 s; a lock is held only while its PID runs
+> AND its heartbeat is younger than 90 s, so a crashed holder frees it at once and a reused PID (seen live on Windows) within 90 s.
+
 ## Manual-save policy and ownership
 
-**Phase 1J does not autosave.** CampaignState is the authoritative in-memory
+**Phase 1J did not autosave** (superseded by Save/Load v1 above for the Play UI; CLI and tests still save only explicitly). CampaignState is the authoritative in-memory
 truth between saves. Unsaved changes may be lost when the process exits. No
 timers, per-command/per-turn saves, exit handlers or implicit save-before-load
 exist. Saving is an explicit engine operation for a future Save button.
@@ -46,7 +139,7 @@ It does not create directories, load a live campaign or print character state.
 
 ## B. Current V2 format
 
-> **Current versions (final movement closure):** envelope `schema_version` 4, snapshot `schema_version` 3. Version 3 of the envelope (snapshot 2) migrates by step 3, which only bumps both numbers: every older location is a valid `LOCATED` entry. A runtime character location is now `{ character_id, current_location }` (LOCATED) or `{ character_id, off_scene: { last_known_location, since_revision } }` (OFF_SCENE), exactly one of the two. An old-schema file carrying `off_scene`, a malformed location, both shapes, neither, a non-location place or a future `since_revision` is rejected. The dataset hash does not depend on runtime location state. The interface below is the historical V2 sketch.
+> **Historical versions (final movement closure; superseded by Save/Load v1 above):** envelope `schema_version` 4, snapshot `schema_version` 3. Version 3 of the envelope (snapshot 2) migrates by step 3, which only bumps both numbers: every older location is a valid `LOCATED` entry. A runtime character location is now `{ character_id, current_location }` (LOCATED) or `{ character_id, off_scene: { last_known_location, since_revision } }` (OFF_SCENE), exactly one of the two. An old-schema file carrying `off_scene`, a malformed location, both shapes, neither, a non-location place or a future `since_revision` is rejected. The dataset hash does not depend on runtime location state. The interface below is the historical V2 sketch.
 
 ```ts
 interface CampaignSaveFile {

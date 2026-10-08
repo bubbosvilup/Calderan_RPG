@@ -165,9 +165,9 @@ test("save/load: LOCATED and OFF_SCENE persist; old saves migrate losslessly; th
   assert.equal(off.canonical_dataset_id, located.canonical_dataset_id, "the dataset hash does not depend on runtime location state");
   // An envelope-3 / snapshot-2 save (only LOCATED entries) migrates by version bump alone.
   const legacy = JSON.parse(serializeSave(located, f.world));
-  legacy.schema_version = 3; legacy.snapshot.schema_version = 2;
+  legacy.schema_version = 3; legacy.snapshot.schema_version = 2; delete legacy.snapshot.player_characters;
   const migrated = migrateSave(legacy) as { schema_version: number; snapshot: CampaignSnapshot };
-  assert.equal(migrated.schema_version, 4); assert.equal(migrated.snapshot.schema_version, 3);
+  assert.equal(migrated.schema_version, 5); assert.equal(migrated.snapshot.schema_version, 4);
   assert.deepEqual(JSON.parse(JSON.stringify({ ...migrated.snapshot, schema_version: 0 })), { ...legacy.snapshot, schema_version: 0 }, "nothing else changed");
   assert.deepEqual(JSON.parse(JSON.stringify(validateSaveFile(legacy, f.world).snapshot.runtime)), JSON.parse(JSON.stringify(located.snapshot.runtime)), "old save loads losslessly");
   // An OFF_SCENE entry can never ride in an old-schema file.

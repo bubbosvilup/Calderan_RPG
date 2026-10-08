@@ -5,3 +5,5 @@ export * from "./turn-trace.js";
 export * from "./production.js";
 export * from "./context-compaction.js";
 export * from "../turn/context-budget.js";
+export * from "./session-host.js";
+export * from "./scenarios.js";

@@ -68,7 +68,7 @@ test("save format and migration output are byte-stable: serialize twice, decode 
   const text = serializeSave(createSaveFile(f.campaign.exportSnapshot(), f.world, "2026-10-02T09:00:00.000Z"), f.world);
   assert.equal(serializeSave(createSaveFile(f.campaign.exportSnapshot(), f.world, "2026-10-02T09:00:00.000Z"), f.world), text);
   assert.equal(serializeSave(decodeSave(text, f.world), f.world), text);
-  const legacy = JSON.parse(text); legacy.schema_version = 2; legacy.snapshot.schema_version = 1; delete legacy.snapshot.premium_characters; delete legacy.snapshot.premium_reflections;
+  const legacy = JSON.parse(text); legacy.schema_version = 2; legacy.snapshot.schema_version = 1; delete legacy.snapshot.premium_characters; delete legacy.snapshot.premium_reflections; delete legacy.snapshot.player_characters;
   const a = JSON.stringify(decodeSave(JSON.stringify(legacy), f.world)), b = JSON.stringify(decodeSave(JSON.stringify(legacy), f.world));
   assert.equal(a, b);
 });

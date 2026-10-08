@@ -1,10 +1,10 @@
 import type { ResolvedPermanentAppearance } from "./permanent-appearance.js";
-import { portraitDetails, PORTRAIT_CLOTHING, PORTRAIT_CONSTRAINTS, PORTRAIT_FRAMING, PORTRAIT_POSE } from "./portrait-prompt.js";
+import { portraitDetails } from "./portrait-prompt.js";
 
 /**
  * Anime Portrait Benchmark V1: a deterministic, conservative Danbooru/booru-style tag layer for character reference portraits, and the
- * two prompt dialects the benchmark compares. NOT wired into production generation: the production prompt is unchanged until the
- * benchmark result is reviewed (ANIME_PORTRAIT_MODEL_BENCHMARK_V1.md).
+ * two prompt dialects the benchmark compares. NOT wired into production generation: production uses the v1 anime prompts in
+ * portrait-prompt.ts (Raena-Qwen-Image); this module keeps the frozen benchmark dialects (ANIME_PORTRAIT_MODEL_BENCHMARK_V1.md).
  *
  * Rules: only structured established facts map to tags, and only when the WHOLE normalized field value (or list item) is an entry of a
  * closed vocabulary below. Prose is never parsed, nothing is inferred, unknown traits are omitted, weight never maps to a tag. Output is
@@ -69,15 +69,20 @@ export function flattenAnimePortraitTags(tags: AnimePortraitTags, options: { rea
 }
 
 export type AnimePromptDialect = "natural" | "hybrid";
+/** The frozen pre-v1 fixed lines the benchmark dialects were run with (kept verbatim so benchmark prompts stay reproducible). */
+export const BENCHMARK_CLOTHING = "Clothing: simple, neutral dark-fantasy clothing appropriate to the setting, without heraldry, insignia or faction markings.";
+export const BENCHMARK_POSE = "Pose: standing naturally with relaxed arms, facing mostly forward with a slight three-quarter turn, restrained natural expression.";
+export const BENCHMARK_FRAMING = "Framing: full body visible from head to feet, centered, eye-level, nothing cropped. Background: plain light grey studio background.";
+export const BENCHMARK_CONSTRAINTS = "Single subject only. Grounded anatomy, natural proportions, restrained lighting. No weapons, no other people, no text, lettering, logos, watermarks or interface elements.";
 /** Fixed anime intent: grounded mature anime fantasy, explicitly not photoreal/3D/painterly/chibi. */
 export const ANIME_INTENT = "Anime fantasy character illustration for a dark-fantasy RPG: grounded, mature anime art style with clean lineart and controlled cel shading, adult proportions, restrained muted palette. Not photorealistic, not a photograph, not a 3D render, not a painterly or oil-painting style, not western comic style, not chibi.";
 /**
  * Benchmark prompt dialects over IDENTICAL character text: A = natural-language anime prompt; B = hybrid (adds the booru tag block).
- * Both reuse the production details section and its fixed clothing, pose, framing and constraint lines verbatim.
+ * Both reuse the production details section and the frozen benchmark clothing, pose, framing and constraint lines verbatim.
  */
 export function buildAnimeBenchmarkPrompt(appearance: ResolvedPermanentAppearance, options: { readonly dialect: AnimePromptDialect; readonly quality?: boolean }): string {
   const lines = [ANIME_INTENT];
   if (options.dialect === "hybrid") lines.push(`Booru-style visual tags: ${flattenAnimePortraitTags(buildAnimePortraitTags(appearance), { quality: options.quality === true }).join(", ")}.`);
-  lines.push(`Character details: ${portraitDetails(appearance)}`, PORTRAIT_CLOTHING, PORTRAIT_POSE, PORTRAIT_FRAMING, PORTRAIT_CONSTRAINTS);
+  lines.push(`Character details: ${portraitDetails(appearance)}`, BENCHMARK_CLOTHING, BENCHMARK_POSE, BENCHMARK_FRAMING, BENCHMARK_CONSTRAINTS);
   return lines.join("\n");
 }

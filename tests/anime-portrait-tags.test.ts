@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ANIME_QUALITY_TAGS, buildAnimeBenchmarkPrompt, buildAnimePortraitTags, flattenAnimePortraitTags } from "../src/campaign/anime-portrait-tags.js";
+import { ANIME_QUALITY_TAGS, BENCHMARK_FRAMING, BENCHMARK_POSE, buildAnimeBenchmarkPrompt, buildAnimePortraitTags, flattenAnimePortraitTags } from "../src/campaign/anime-portrait-tags.js";
 import { buildPortraitPrompt, portraitDetails } from "../src/campaign/portrait-prompt.js";
 import type { ResolvedPermanentAppearance } from "../src/campaign/permanent-appearance.js";
 
@@ -49,13 +49,15 @@ test("quality prefix only on request; never Pony score tags, deprecated or misle
   for (const banned of ["score_9", "score_8_up", "source_anime", "rating_safe", "newest", "absurdres", "lineart", "cel shading", "light background", "pointed ears"]) assert.ok(!quality.includes(banned), banned);
 });
 
-test("dialects: identical character details and fixed lines; hybrid adds exactly the tag line; the production prompt is unchanged", () => {
+test("dialects: identical character details and frozen fixed lines; hybrid adds exactly the tag line; production v1 shares the details but no booru tags", () => {
   const natural = buildAnimeBenchmarkPrompt(MIRA, { dialect: "natural" }).split("\n"), hybrid = buildAnimeBenchmarkPrompt(MIRA, { dialect: "hybrid" }).split("\n");
   assert.deepEqual(hybrid.filter(l => !l.startsWith("Booru-style visual tags: ")), natural);
   assert.equal(hybrid.filter(l => l.startsWith("Booru-style visual tags: ")).length, 1);
   assert.ok(natural.includes(`Character details: ${portraitDetails(MIRA)}`));
   assert.match(natural[0]!, /^Anime fantasy character illustration/); assert.match(natural[0]!, /Not photorealistic/);
-  const production = buildPortraitPrompt({ appearance: MIRA }).prompt;
-  assert.match(production, /^Full-body character reference image for a realistic dark-fantasy setting/, "production head unchanged");
-  assert.ok(production.includes(portraitDetails(MIRA)) && !/anime|booru/i.test(production), "production prompt carries no anime/booru text");
+  assert.ok(natural.includes(BENCHMARK_POSE) && natural.includes(BENCHMARK_FRAMING), "benchmark dialects keep their frozen pre-v1 lines");
+  // Image generation v1: production uses the anime Raena prompt (a deliberate change from the realistic V1 head), never booru tags.
+  const production = buildPortraitPrompt({ appearance: MIRA, kind: "fullbody", trigger: "Anime illustration of" }).prompt;
+  assert.match(production, /^Anime illustration of an adult fantasy RPG character/, "production head is the v1 anime head");
+  assert.ok(production.includes(portraitDetails(MIRA)) && !/booru|1girl|masterpiece/i.test(production), "production prompt carries no booru tags");
 });

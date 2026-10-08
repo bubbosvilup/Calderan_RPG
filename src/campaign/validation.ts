@@ -83,10 +83,15 @@ const claim = object({ text, source: choice("narration", "seller", "self", "othe
 const pattern = (re: RegExp, what: string): Parser => (input, path) => { if (typeof input !== "string" || !re.test(input)) fail(path, `expected ${what}`); return input; };
 const portraitMedia = choice("image/png", "image/jpeg", "image/webp");
 const isoTime = pattern(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/, "an ISO UTC timestamp");
+const promptText: Parser = (input, path) => { if (typeof input !== "string" || !input.trim() || input.length > 4000) fail(path, "expected a prompt of at most 4000 characters"); return input; };
 const costUsd: Parser = (input, path) => { if (typeof input !== "number" || !Number.isFinite(input) || input < 0 || input > 1000) fail(path, "expected a non-negative cost"); return input; };
 const portraitVersion = object({ version_id: id, prompt_version: pattern(/^[a-z0-9-]{1,40}$/, "a prompt version"), prompt_fingerprint: pattern(/^[0-9a-f]{16}$/, "a 16-hex fingerprint"),
   model: pattern(/^[a-z0-9][a-z0-9._:/-]{0,159}$/i, "a model slug"), created_at: isoTime, media_type: portraitMedia,
-  asset_file: pattern(/^portrait_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a portrait asset file name"), cost_usd: optional(costUsd), reference_used: optional((input: unknown, path: string) => { if (input !== true) fail(path, "expected true"); return input; }) });
+  asset_file: pattern(/^portrait_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a portrait asset file name"), cost_usd: optional(costUsd), reference_used: optional((input: unknown, path: string) => { if (input !== true) fail(path, "expected true"); return input; }),
+  // Image generation v1 (optional, additive; absent on older versions).
+  kind: optional(choice("avatar", "fullbody")), pose: optional(pattern(/^[a-z][a-z0-9_]{0,39}$/, "a pose id")), prompt: optional(promptText),
+  seed: optional(integer(0)), provider_seed: optional(integer(0)), provider: optional(pattern(/^[a-z0-9][a-z0-9._-]{0,59}$/i, "a provider slug")),
+  style_id: optional(pattern(/^[a-z0-9][a-z0-9._:/-]{0,159}$/i, "a style adapter id")), width: optional(integer(64, 8192)), height: optional(integer(64, 8192)), billable_units: optional(costUsd) });
 const portraitReference = object({ media_type: portraitMedia, asset_file: pattern(/^reference_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/, "a reference asset file name"), uploaded_at: isoTime });
 /**
  * Portrait Gallery V2 record. V1 saves carry `active_version_id` (the portrait they display): it decodes as `avatar_version_id` and is
@@ -226,6 +231,9 @@ command("set_portrait_avatar", { character_id: id, version_id: id });
 command("set_portrait_full_body", { character_id: id, version_id: nullable(id) });
 command("delete_portrait_version", { character_id: id, version_id: id });
 command("set_portrait_reference", { character_id: id, reference: nullable(portraitReference) });
+// Player Character Profile V1: shape here; tighter content bounds (lengths, list sizes, control characters) in player-character.ts.
+const playerProfile = object({ character_id: id, sex: optional(text), species: optional(text), apparent_age: optional(text), appearance });
+command("set_player_character_profile", { profile: playerProfile });
 command("set_legal_status", { character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), documentation: optional(documentation), note: optional(text) });
 command("transfer_person", { transaction_id: id, transaction_kind: choice("sale", "gift", "assignment"), character_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: id, payment: optional(object({ payer_id: id, payee_id: optional(id), gold })), documentation, note: optional(text) });
 command("manumit", { transaction_id: id, character_id: id, by_holder_id: id, documentation, note: optional(text) });
@@ -240,7 +248,8 @@ command("runtime_delta", { delta: object({ expected_revision: optional(integer(0
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
-const snapshot = object({ schema_version: integer(3, 3), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
+const snapshot = object({ schema_version: integer(5, 5), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
+  player_characters: list(playerProfile, 8),
   price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
   portraits: optional(list(portraitRecord, 100000)),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
