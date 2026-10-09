@@ -7,20 +7,24 @@ entity:
   parent: continent
   aliases: []
   summary: >-
-    Center is the central, broadly arid and desert-dominated nation; Zul-Rath is its
-    capital.
+    Center is the central, broadly arid and desert-dominated nation, Beastfolk-led and martial,
+    famous for spices and silk; Zul-Rath is its capital.
   content: >-
     Center directly borders West and East. Its major mapped settlements are Zul-Rath,
-    Khar-Dune, and Sandspear, without excluding other settlements. The Dragon's Teeth
-    Mountains complicate passage across northern portions of the Center–East transition.
-    West–Center violence is concentrated around their frontier, rather than permanent
-    formally declared total war. Zul-Rath may employ or tolerate Sandspear corsairs when
-    useful. Khar-Dune's underground markets and Sandspear's maritime groups do not establish
-    Center's complete government. Its ruler, political system, religion, and internal
-    institutions remain otherwise undefined; West's monarchy and guild structure are not
-    assigned to it.
+    Khar-Dune, Sandspear, and an oasis settlement in the desert interior between Khar-Dune
+    and Zul-Rath, without excluding other settlements. The Dragon's Teeth Mountains complicate
+    passage across northern portions of the Center–East transition. Beastfolk are politically and
+    culturally central to Center and form most of its traditional upper class, though humans and
+    other peoples also live there. Its culture is broadly honour-conscious, martial, proud,
+    commercially active and deeply involved in the slave trade, and it is a functioning
+    civilization with institutions, law, nobility, merchants and prestige craft, not merely a
+    slave or criminal economy. Magic is prohibited throughout Center, and its ruler is chosen
+    every five years by a martial tournament. West–Center relations are hostile and rivalrous,
+    with recurring frontier skirmishes but no formally declared total war, and remain economically
+    porous. Zul-Rath may employ or tolerate Sandspear corsairs when useful. Center's religion
+    remains undefined.
   tags: [geography]
-  search_context: "Center nation on the known continent, distinct from Calderan's Center District."
+  search_context: "Center nation on Aureth, the known continent, distinct from Calderan's Center District; Beastfolk-led desert nation, spices, silk, honour and martial culture, magic forbidden, five-year ruler tournament."
   knowledge:
     visibility:
       narrator: true
@@ -35,6 +39,36 @@ entity:
       description: "Center directly borders East."
     - name: "arid regional climate"
       description: "Broadly arid and desert-dominated; not a uniform climate rule."
+    - name: "magic prohibited"
+      description: "Magic is illegal throughout Center; penalties depend on severity and context."
+    - name: "tournament rulership"
+      description: "The ruler is chosen every five years by a martial tournament; a former winner may not compete again."
   connections: []
-chunks: []
-
+chunks:
+  - id: center.society_and_law
+    entity_id: center
+    section: society_and_law
+    summary: Center's magic prohibition, five-year tournament rulership, noble continuity and the porous West–Center rivalry.
+    search_context: Center law, magic forbidden, magic punishment, mages in Center, ruler tournament, five-year rule, martial duels, Beastfolk nobility, who rules Center, West–Center rivalry and trade.
+    content: >-
+      Because Beastfolk cannot use magic, magic is widely seen in Center as alien, dangerous and
+      untrustworthy, and it is prohibited throughout Center; punishment depends on severity and
+      context and may include imprisonment, exile or severe criminal penalties, and death in extreme
+      cases of lethal magical violence. This is national law and culture, not every individual's
+      attitude, and no detailed criminal code is established. Center's ruler is chosen every five
+      years by a dangerous martial tournament of duels without magic, sometimes fought to the death;
+      the winner rules Center from Zul-Rath for five years and may never compete again, while old,
+      mostly Beastfolk noble families keep wealth, advise each ruler and provide continuity. The
+      ruler's title, the current ruler and the tournament's detailed rules are not established.
+      West–Center trade continues across the rivalry, and elites on both sides can profit from
+      conflict, captives, displaced people, weapons, trade disruption and slave commerce. The
+      rivalry's deep origin is undefined, and neither side is established as having deliberately
+      created it.
+    tags:
+      - law
+      - government
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

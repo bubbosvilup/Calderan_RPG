@@ -8,16 +8,19 @@ entity:
   aliases:
     - Woodsigners
     - Woodsigner clan
-  summary: The Woodsigners of Calderan are a small branch of a much larger Wood Elf clan, known for
-    fine woodcraft and highly regarded bows.
+  summary: The Woodsigners of Calderan are a small urban branch descended from the broader Woodsinger
+    forest-elven culture of Woodsong Forest, known for fine woodcraft and highly regarded bows.
   tags:
     - crafts
     - elves
     - woodcraft
-  search_context: Woodsigner, Woodsigners, Wood Elf clan, elven bows, woodcraft, bowyers, Arwen
-    Woodsigner, The Bent Bough
-  content: The Calderan Woodsigners are a small branch of a much larger Wood Elf clan whose wider
-    history is not established. The branch came to Calderan through ducal invitation to contribute
+  search_context: Woodsigner, Woodsigners, Calderan wood elves, Calderan branch of the Woodsingers,
+    Wood Elf clan, elven bows, woodcraft, bowyers, Arwen Woodsigner, The Bent Bough
+  content: The Calderan Woodsigners are a small urban branch descended from the broader Woodsinger
+    culture of Woodsong Forest, the much larger forest-elven people from which they derive; the
+    branch's own wider history is not established. Adapted to city life and ducal patronage, it still
+    preserves recognizable Woodsinger traditions in bowmaking, woodcraft and cultural identity. The
+    branch came to Calderan through ducal invitation to contribute
     specialist woodcraft; neither the date nor the inviting Duke is established. Its members are
     relatively few and long-lived. Internally it is comparatively egalitarian, without a rigid
     clan-chief structure. Its specialties are bows, fine woodcraft, weapon stocks, precision wooden

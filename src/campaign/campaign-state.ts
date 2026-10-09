@@ -49,7 +49,7 @@ function orderDomains(draft: CampaignSnapshot): void {
 }
 /** Pure domain preparation over an engine-owned snapshot, not a restore/deserialization API. */
 export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, world: WorldStore, input: unknown): PreparedCampaignChange {
-  if (base.dataset_id !== world.datasetId || base.schema_version !== 5) fail("dataset_id", "snapshot/canon mismatch");
+  if (base.dataset_id !== world.datasetId || base.schema_version !== 6) fail("dataset_id", "snapshot/canon mismatch");
   const proposal = parseCampaignProposal(input);
   if (proposal.expected_revision !== base.revision) fail("expected_revision", "stale campaign proposal");
   const draft = structuredClone(base) as CampaignSnapshot;
@@ -85,7 +85,7 @@ export class CampaignState {
     if (campaignId === RESTORE) { this.#snapshot = initialScene as DeepReadonly<CampaignSnapshot>; return; }
     validateId(campaignId, "campaign_id");
     const { revision, ...runtime } = new RuntimeState(world, initialScene as SceneState, initialMana).exportSnapshot();
-    this.#snapshot = validateCampaignSnapshot({ schema_version: 5 as const, campaign_id: campaignId, dataset_id: world.datasetId, revision, player_characters: defaultPlayerCharacters(world),
+    this.#snapshot = validateCampaignSnapshot({ schema_version: 6 as const, campaign_id: campaignId, dataset_id: world.datasetId, revision, next_item_sequence: 1, player_characters: defaultPlayerCharacters(world),
       runtime: structuredClone(runtime), characters: [], items: [], households: [], facts: [], knowledge: [], relationships: [], goals: [], scheduled_events: [], funds: [], legal_statuses: [], transactions: [], premium_characters: [], premium_reflections: [] }, world);
   }
   /** Unknown-input boundary. Assigns validated current state directly, with fresh receipt ownership. */

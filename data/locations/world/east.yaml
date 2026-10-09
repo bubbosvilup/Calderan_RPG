@@ -7,8 +7,8 @@ entity:
   parent: continent
   aliases: []
   summary: >-
-    East is the cold, snowy eastern nation with capital Vaelrost and an armed-neutral stance
-    toward the West–Center conflict.
+    East is the cold, snowy eastern nation with capital Vaelrost, a resource-rich, pragmatic land of
+    mines, cold seas and durable craft that keeps an armed-neutral stance toward the West–Center conflict.
   content: >-
     East directly borders Center and shares no direct land border with West. Snow and severe
     winter conditions characterize the region broadly, without requiring uniform conditions.
@@ -17,10 +17,18 @@ entity:
     and seeks to prevent its violence from entering East. Frontier forces may repel armed
     groups or incursions from either side. Frostspire helps enforce this policy. Armed
     neutrality does not establish pacifism, friendship, or an alliance with either nation.
-    East's internal government, ruler, culture, religion, and broader foreign policy remain
-    undefined.
+    East is broadly colder, more isolated, pragmatic and resource-oriented, less commercially
+    cosmopolitan than West and less politically expansionist than Center or West, militarily
+    capable but generally defensive. It is resource-rich but climate-constrained, not poor: its
+    economy rests on iron, coal, stone, timber where the land allows, cold-region animal products,
+    fish, whale products and rare resources from ice-bound regions, transformed into durable tools,
+    heavy equipment, ships, cold-weather goods, preserved food and practical craft. It imports
+    spices, luxury textiles, warm-region fruit and other luxuries, and precision and high-fashion
+    goods from Calderan and Center. East trades when useful but avoids being drawn deeply into the
+    West–Center rivalry. East's internal government, ruler, religion, and broader foreign policy
+    remain undefined.
   tags: [geography]
-  search_context: "East nation on the known continent, distinct from Calderan's East District."
+  search_context: "East nation on Aureth, the known continent, distinct from Calderan's East District; cold snowy nation, miners, iron and coal, whalers, cold-sea sailors, durable goods, armed neutrality."
   knowledge:
     visibility:
       narrator: true
@@ -37,4 +45,3 @@ entity:
       description: "Broadly cold and snowy with severe winters; not uniform everywhere."
   connections: []
 chunks: []
-

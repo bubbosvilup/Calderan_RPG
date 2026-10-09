@@ -49,7 +49,7 @@ test("D-16 current records omit deprecated refs; old nonempty refs round-trip wi
 
 test("D-16 old schema migration stays readable and omits unsupported new-runtime refs", () => {
   const f = fixture(), old = JSON.parse(save(f));
-  old.schema_version = 2; old.snapshot.schema_version = 1; delete old.snapshot.player_characters;
+  old.schema_version = 2; old.snapshot.schema_version = 1; delete old.snapshot.player_characters; delete old.snapshot.next_item_sequence;
   delete old.snapshot.premium_characters; delete old.snapshot.premium_reflections;
   const restored = decodeSave(JSON.stringify(old), f.world).snapshot;
   assert.equal(restored.premium_characters[0]!.dynamic.recent_developments[0]!.kind, "migrated_member");

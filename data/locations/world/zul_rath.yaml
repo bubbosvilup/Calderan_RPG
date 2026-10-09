@@ -7,17 +7,24 @@ entity:
   parent: center
   aliases: []
   summary: >-
-    Zul-Rath is Center's capital and major political center in the arid nation's
-    northern/central interior.
+    Zul-Rath is Center's capital and its political and economic center, a Beastfolk-led city famous
+    for the finest spices and silk in Aureth and a major hub of slave export.
   content: >-
-    Zul-Rath participates indirectly in Center's wider economic and military system. It may
-    employ or tolerate forces such as Sandspear's corsairs when useful, including disruption
-    of shipping and West trade without formal national war. Khar-Dune intermediaries may
-    route captives toward labor sites, works, or pits associated with Zul-Rath or Center.
-    Its ruler, dynasty, government system, districts, religion, exact architecture, detailed
-    economy, and demographics remain undefined.
+    Zul-Rath lies in Center's northern/central interior and is its political and economic center,
+    culturally led by Beastfolk. Center's tournament-chosen ruler governs from here for five years,
+    advised by old, mostly Beastfolk noble families who keep wealth and influence across reigns;
+    the ruler's title, the current ruler and noble family names are not established. The city has a
+    reliable freshwater supply and an oasis or water feature within or associated with it, and is
+    one of the few major Center areas with meaningful local tree growth, though timber remains
+    limited. Its wealth and elite prestige coexist with slavery, criminal commerce, unequal
+    treatment, military culture and honour politics; it is a functioning major city with
+    institutions, merchants, craft, nobility and law. Zul-Rath participates in Center's wider
+    economic and military system and may employ or tolerate forces such as Sandspear's corsairs to
+    disrupt shipping and West trade without formal national war. Khar-Dune intermediaries may route
+    captives toward labor sites, works, or pits associated with Zul-Rath or Center. Its religion,
+    exact architecture and districts remain undefined.
   tags: [geography]
-  search_context: ""
+  search_context: "Zul-Rath capital of Center, Beastfolk city, spices, spice trade, silk and fine textiles, luxury fabrics, Beastfolk nobles, human foreign merchants, ruler tournament, slave export."
   knowledge:
     visibility:
       narrator: true
@@ -26,6 +33,43 @@ entity:
   features:
     - name: "capital of Center"
       description: "Center's major national political center."
+    - name: "spices and silk"
+      description: "Source of Aureth's most prized spices and silk and fine textiles."
+    - name: "reliable oasis water"
+      description: "A reliable freshwater supply and an oasis or water feature within or associated with the city."
   connections: []
-chunks: []
-
+chunks:
+  - id: zul_rath.economy_and_society
+    entity_id: zul_rath
+    section: economy_and_society
+    summary: Zul-Rath's luxury economy of spices and silk, resources, food and water, trade, foreign-facing human merchants and slave export.
+    search_context: Zul-Rath economy, spice traders, spice trade, silk weavers, silk workers, fine textiles, luxury fabrics, human merchants, Beastfolk merchants, timber imports, irrigated farms, captives exported west.
+    content: >-
+      Zul-Rath's most famous products are spices and fine textiles, above all silk, among the
+      highest-quality luxury goods in Aureth. Center and Zul-Rath are the continent's dominant source
+      of most culinary spices and of high-value spice trade; salt is not exclusive to Center and is
+      also found elsewhere, including West. Zul-Rath silk and luxury textiles are expensive,
+      prestigious and widely exported. Local resources include sand, stone, limited woodland and
+      oasis water; food comes from irrigated production, regional agriculture where water permits and
+      trade, and water remains strategically important. Zul-Rath exports spices, silk, fine textiles
+      and luxury fabrics, desert luxury goods, and slaves and captives. It imports timber and
+      high-quality wood for major construction, some of it through West and Calderan trade, plus some
+      manufactured goods, selected Calderan metal and precision products, and foreign luxury goods;
+      genuine Woodsong timber remains scarce. It trades with other Center settlements, with Calderan
+      and West despite the rivalry, and with East where useful; no treaties or tariffs are
+      established. Humans are disproportionately used as foreign-facing merchants and commercial
+      intermediaries because they ease dealings with other nations and peoples; this is a social and
+      institutional tendency, not a rule, and Beastfolk trade as well. Slave export is a significant
+      part of the city's economy, including many Beastfolk captives: people treated by authorities or
+      society as weak, troublesome, unwanted or burdensome, or who are captured or convicted, may be
+      enslaved in this oppressive institution. A large share of Beastfolk slaves reaching West come
+      through Zul-Rath and Center networks, though not all. Legal and illegal practice overlap
+      heavily: abuses, falsified origins, illegal treatment and trafficking are common.
+    tags:
+      - economy
+      - trade
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

@@ -2,6 +2,7 @@ import { registerNarratorIdentities } from "./narrator-identity.js";
 import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
 import type { CampaignSnapshot, NameSource } from "../campaign/types.js";
 import { characterView, itemView } from "../campaign/projections.js";
+import { itemsAt } from "./item-projection.js";
 import { narratorAppearance, resolvePermanentAppearance } from "../campaign/permanent-appearance.js";
 import { buildNarrativeContext } from "../scene/narrative-context-builder.js";
 import { RuntimeState } from "../world/runtime-state.js";
@@ -159,7 +160,10 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
     ...(events.length < allEvents.length ? { scheduled_events: { total: allEvents.length, shown: events.length } } : {}),
     ...socialOmitted,
   };
-  const authority = { primary, characters, items, facts, knowledge, scheduled_events: events, player_profile, social,
+  // Item Domain V1: materialized items lying at the current location, with stable IDs for the controller (omitted when none, so
+  // ordinary contexts are unchanged). The narrator prompt does not render this field.
+  const here_items = primary.scene.player_location ? itemsAt(snapshot, primary.scene.player_location.id).filter(visibleItem).map(i => itemView(snapshot, world, i.id)) : [];
+  const authority = { primary, characters, items, ...(here_items.length ? { items_here: here_items } : {}), facts, knowledge, scheduled_events: events, player_profile, social,
     ...(npc_private_canon.length ? { npc_private_canon } : {}), ...(Object.keys(projection).length ? { projection } : {}) };
   // NPC+ Pass 1: retain its established soft flavour/headroom policy, independent of the D-04 hard token capacity check.
   // Packing uses the smaller of its own quality limit and the old soft headroom (minus JSON reserve). NPC+ flavour

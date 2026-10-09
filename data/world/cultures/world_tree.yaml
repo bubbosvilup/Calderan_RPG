@@ -1,0 +1,34 @@
+schema_version: 1
+entity:
+  id: world_tree
+  type: world_lore
+  name: The World Tree
+  display_name: The World Tree
+  parent: null
+  aliases: []
+  summary: "Restricted: a unique tree deep within Woodsong Forest, revered and guarded by the Woodsingers."
+  tags:
+    - secret
+    - woodsingers
+  search_context: Restricted Woodsinger sacred knowledge
+  content: >-
+    The World Tree physically exists deep within Woodsong Forest; its exact location is not established. The
+    Woodsingers regard it as unique, alive in more than an ordinary botanical sense, possessing its own will, and the
+    guardian and protector of the forest, and they guard knowledge of it from outsiders. Their understanding of which
+    wood may acceptably be taken is partly rooted in their tradition surrounding it. Woodsinger tradition
+    connects the Tree and the forest to the ancient creation myth of Aureth in ways richer than public
+    folklore; the content of those traditions is not established. Its existence is canon; the
+    Woodsingers' understanding of its nature is their belief, and how much of it is objectively true remains
+    unresolved. It is not established as a god, and its powers, age, origin and any means of communication are not
+    established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by: []
+    awareness: private
+  category: cultures
+  related_entities:
+    - calderan_northern_forest
+    - woodsingers
+chunks: []

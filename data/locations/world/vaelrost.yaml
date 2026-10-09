@@ -8,13 +8,15 @@ entity:
   aliases: []
   summary: >-
     Vaelrost is East's political capital and a major urban center deep in the cold,
-    snow-dominated eastern nation.
+    snow-dominated eastern nation, its administrative seat and main trade and craft hub.
   content: >-
-    Vaelrost lies farther east/northeast relative to Frostspire. Its internal government and
-    culture remain deliberately underdefined. No ruler, dynasty, magical ice walls, or
+    Vaelrost lies farther east/northeast relative to Frostspire. It is East's administrative
+    capital and military/political center, a cold-climate city that distributes the interior's
+    resources and links Frostspire and Skardgard through trade and craft. Its internal government
+    and culture remain deliberately underdefined. No ruler, dynasty, magical ice walls, or
     supernatural architecture is established.
   tags: [geography]
-  search_context: ""
+  search_context: "Vaelrost capital of East, cold city, craftsmen, furriers, leatherworkers, cold-weather clothing, practical metalwork, merchants, East trade hub."
   knowledge:
     visibility:
       narrator: true
@@ -24,5 +26,26 @@ entity:
     - name: "capital of East"
       description: "East's national political capital."
   connections: []
-chunks: []
-
+chunks:
+  - id: vaelrost.economy
+    entity_id: vaelrost
+    section: economy
+    summary: Vaelrost's durable crafts, cold-weather goods and its role redistributing East's resources and imports.
+    search_context: Vaelrost economy, Vaelrost craftsmen, furriers, leatherworkers, cold-weather clothing, practical smiths, preserved food, merchants, imported spices and silk.
+    content: >-
+      Vaelrost produces durable manufactured goods, cold-weather clothing, leather and fur work,
+      practical metalwork and preserved food, and provides administrative and merchant services. It
+      is not superior to Calderan in precision manufacture or to Frostspire in extraction. It
+      receives iron, coal and raw materials from Frostspire, marine goods from Skardgard and other
+      regional products, and imports or redistributes spices and luxury textiles and silk from Center,
+      precision and luxury goods from Calderan, and selected southern foods and luxuries. It exports
+      processed durable goods, cold-weather equipment and East's resources in redistributed form.
+      Exact routes are not established.
+    tags:
+      - economy
+      - trade
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

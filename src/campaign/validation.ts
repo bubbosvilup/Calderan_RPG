@@ -112,7 +112,9 @@ const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: c
     species: optional(text), role: optional(text), descriptor: optional(text), appearance: optional(list(text, 24)), condition: optional(list(text, 24)), background: optional(list(claim, 12)) }),
   evidence: list(text, 12) });
 const characterRecord = object({ id, origin, profile, current, origin_snapshot: optional(originSnapshot) });
-const itemRecord = object({ id, origin, name: optional(text), description: optional(text), owner_id: optional(nullable(id)), position, acquisition: optional(acquisition) });
+const itemCategory = choice("weapon", "armor", "clothing", "tool", "consumable", "document", "valuable", "material", "miscellaneous");
+const itemRecord = object({ id, origin, name: optional(text), description: optional(text), owner_id: optional(nullable(id)), position, acquisition: optional(acquisition),
+  category: optional(itemCategory), created_revision: optional(integer(1)) });
 const membershipRecord = object({ character_id: id, status: choice("guest", "member", "former_member"), joined_at: optional(integer()), role: optional(text) });
 const factRecord = object({ id, content: tagged({ campaign: object({ kind: choice("campaign"), statement: text, truth: choice("true", "false", "unknown") }), canonical: object({ kind: choice("canonical"), entity_id: id, chunk_id: optional(text) }) }) });
 const knowledgeRecord = object({ character_id: id, fact_id: id, status: choice("knows", "believes", "suspects", "heard_rumor"), provenance: optional(provenance) });
@@ -211,6 +213,8 @@ command("move_character", { character_id: id, location_id: id });
 command("leave_scene", { character_id: id });
 command("set_slot_knowledge", { character_id: id, slot: id, state: choice("empty", "unknown") });
 command("register_item", { item: itemRecord });
+// Item Domain V1: no id field exists, so a proposer cannot choose one (unknown keys are rejected).
+command("create_item", { name: text, description: optional(text), category: optional(itemCategory), owner_id: optional(nullable(id)), position });
 command("place_item", { item_id: id, position });
 command("transfer_item", { item_id: id, owner_id: nullable(id), position, acquisition: optional(acquisition) });
 command("create_household", { id, name: optional(text) });
@@ -248,7 +252,7 @@ command("runtime_delta", { delta: object({ expected_revision: optional(integer(0
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
-const snapshot = object({ schema_version: integer(5, 5), campaign_id: id, dataset_id: text, revision: integer(0), mannerism_learning: optional(mannerismLearning),
+const snapshot = object({ schema_version: integer(6, 6), campaign_id: id, dataset_id: text, revision: integer(0), next_item_sequence: integer(1, 99_999_999), mannerism_learning: optional(mannerismLearning),
   player_characters: list(playerProfile, 8),
   price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
   portraits: optional(list(portraitRecord, 100000)),

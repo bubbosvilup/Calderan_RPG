@@ -133,8 +133,8 @@ test("format, versions, conflicting identity and dataset mismatch have typed err
   const { world, campaign } = richCampaign();
   const mutable = () => structuredClone(createSaveFile(campaign.exportSnapshot(), world, now)) as CampaignSaveFile;
   // NPC+ Pass 1: envelope 3 and snapshot 2 are current; a schema-1 snapshot is reachable only through save migration.
-  for (const version of [0, 6]) assert.throws(() => validateSaveFile({ ...mutable(), schema_version: version }, world), { code: "unsupported_version" });
-  for (const version of [0, 1, 2, 3, 4, 6]) assert.throws(() => CampaignState.restore(world, { ...campaign.exportSnapshot(), schema_version: version }), { code: "unsupported_version" });
+  for (const version of [0, 6, 7]) assert.throws(() => validateSaveFile({ ...mutable(), schema_version: version }, world), { code: "unsupported_version" });
+  for (const version of [0, 1, 2, 3, 4, 5, 7]) assert.throws(() => CampaignState.restore(world, { ...campaign.exportSnapshot(), schema_version: version }), { code: "unsupported_version" });
   assert.throws(() => validateSaveFile({ ...mutable(), format: "other" }, world), { code: "invalid_save" });
   assert.throws(() => validateSaveFile({ ...mutable(), extra: true }, world), { code: "invalid_save" });
   assert.throws(() => validateSaveFile({ ...mutable(), campaign_id: "different" }, world), { code: "invalid_save" });

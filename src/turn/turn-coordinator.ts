@@ -20,6 +20,7 @@ import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./retriev
 import type { EvidenceMode } from "./evidence-authorization.js";
 import { RecentConversation } from "./recent-conversation.js";
 import { SceneParticipants } from "./scene-participants.js";
+import { backgroundGroundingOption } from "./background-grounding.js";
 import { projectTurnIntent, resolveTurnIntent, type IntentStageInput } from "./stages/intent.js";
 import { composeTurnPrompt, createDraftGenerator } from "./stages/narration.js";
 import { requestControllerProposal } from "./stages/controller.js";
@@ -28,7 +29,7 @@ import { createNarrationAuditor, deliverDraft, reconcileNarration } from "./stag
 import { prepareCommit } from "./stages/commit-preparation.js";
 import { assembleTurnResult } from "./stages/result.js";
 import { TurnError, type TurnDebugRecord, type TurnEvent, type TurnFailure, type TurnRequest } from "./turn-types.js";
-import { TurnDiagnosticObserver, type DiagnosticPhase, type TurnDiagnosticsSink } from "./turn-diagnostics.js";
+import { TurnDiagnosticObserver, controllerModelDiagnostics, type DiagnosticPhase, type TurnDiagnosticsSink } from "./turn-diagnostics.js";
 export type { TurnDebugRecord } from "./turn-types.js";
 
 /**
@@ -114,7 +115,7 @@ export class TurnCoordinator {
       const retrieved = await measureAsync("retrieval", () => retrieveForTurn(player_input, context, this.world, this.retrieval));
       observer?.retrieved(retrieved, context, !!this.promptOptions.diagnostics_include_query);
       checkpoint();
-      const { recent, prompt: directPrompt } = measure("prompt_composition", () => composeTurnPrompt({ player_input, context, recent: this.recent(campaign).forPrompt(), retrieved: retrieved.data, prompt_intent: promptIntent, options: { ...this.promptOptions, recent_scene_source: this.recent(campaign).finalized() }, scene }));
+      const { recent, prompt: directPrompt } = measure("prompt_composition", () => composeTurnPrompt({ player_input, context, recent: this.recent(campaign).forPrompt(), retrieved: retrieved.data, prompt_intent: promptIntent, options: { ...this.promptOptions, recent_scene_source: this.recent(campaign).finalized(), ...backgroundGroundingOption(this.world, context, player_input, this.recent(campaign).finalized(), scene) }, scene }));
       this.#lastInput.set(campaign, player_input); const preparedPrompt = prepareNarratorRequest(directPrompt, this.promptOptions.context_compaction, this.promptOptions.context_policy); const prompt = this.promptOptions.narrator_request_setup ? prepareNarratorRequest(this.promptOptions.narrator_request_setup(preparedPrompt), undefined, this.promptOptions.context_policy) : preparedPrompt;
       if (observer) observer.record.context_budget = new ContextBudgetManager(this.promptOptions.context_policy).measure(prompt);
       if (observer?.record.context) observer.record.context.knowledge_access_compaction_used = prompt.messages.some(m => m.content.includes("Everyone else present (") || m.content.includes("DO NOT USE every other fact above"));
@@ -142,7 +143,7 @@ export class TurnCoordinator {
       checkpoint(); stage = "controller_failed";
       const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft,
         retry: { technical_contract:!!this.promptOptions.reliability_contract,policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
-      if (observer) observer.record.controller = { model: proposed.result.model, ...(proposed.result.provider ? { provider: proposed.result.provider } : {}), usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
+      if (observer) observer.record.controller = { ...controllerModelDiagnostics(proposed.result), usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
         parse_success: false, proposed_count: proposed.result.commands.length, command_kinds: proposed.result.commands.map(c => c.kind), normalization_used: !!proposed.result.normalization };
       checkpoint();
 

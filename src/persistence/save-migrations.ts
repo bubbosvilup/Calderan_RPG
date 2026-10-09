@@ -105,6 +105,17 @@ export function migrateSave(input: unknown, current = CURRENT_SAVE_VERSION, migr
  * 5. A schema-4 snapshot that already carries player_characters is malformed and rejected. Later canon edits never touch a stored
  * profile: once migrated or created, the campaign profile is authoritative.
  */
+/**
+ * Item Domain V1: snapshot 5 -> 6 adds the campaign item ID allocator. Nothing is inferred from narration or transcripts: existing
+ * items are kept exactly. The allocator starts above any ID already in the engine namespace (campaign_item_NNNNNNNN), else at 1; strict
+ * snapshot validation follows in the caller (and rejects a non-created item squatting in that namespace).
+ */
+export function migrateSnapshot5to6(snapshot: unknown): Record<string, unknown> {
+  const s = snapshot as Readonly<Record<string, unknown>> | undefined;
+  if (!s || typeof s !== "object" || Array.isArray(s) || s.schema_version !== 5 || Object.hasOwn(s, "next_item_sequence") || !Array.isArray(s.items)) throw new CampaignSaveError("migration_failed");
+  const used = (s.items as readonly unknown[]).flatMap(i => { const m = i && typeof i === "object" && typeof (i as { id?: unknown }).id === "string" ? /^campaign_item_(\d{8})$/.exec((i as { id: string }).id) : null; return m ? [Number(m[1])] : []; });
+  return { ...s, schema_version: 6, next_item_sequence: Math.max(0, ...used) + 1 };
+}
 export function migrateSnapshot4to5(snapshot: unknown, defaults: () => readonly unknown[]): Record<string, unknown> {
   const s = snapshot as Readonly<Record<string, unknown>> | undefined;
   if (!s || typeof s !== "object" || Array.isArray(s) || s.schema_version !== 4 || Object.hasOwn(s, "player_characters")) throw new CampaignSaveError("migration_failed");

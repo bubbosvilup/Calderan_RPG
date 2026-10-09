@@ -30,7 +30,8 @@ test("RPG contract leaves provider, model, route, sampling and wire adapter sour
   const expected: Record<string, string> = {
     "src/app/provider-config.ts": "269faeaeb5b945c69651768a2a64e83f92740e8c60edc4db27d4f0c27de09269",
     "src/llm/openrouter/minimax-narrator.ts": "5dbfb52558a1bbb186e819cb6b87cc37806d84b326c363bc566d7f27750a777a",
-    "src/llm/openrouter/client.ts": "056f9226920d1b35603d96011902b074b0c3f2e7cc00a9c1a0283da51542cb93"
+    // Re-baselined by Controller Reliability Pass 2 (OpenRouter `models` fallback serialization + safe error/response-model diagnostics; narrator wire unchanged).
+    "src/llm/openrouter/client.ts": "aff9e3450953a902302aec81b2b45a33c1988ac8efa3730cf2eb919d1418235c"
 };
   for (const [path, digest] of Object.entries(expected)) {
     assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), digest, path);

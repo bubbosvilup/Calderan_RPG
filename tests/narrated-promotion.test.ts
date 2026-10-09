@@ -56,7 +56,9 @@ test("Brenna live shape: a narrator-invented captive is promoted, legally set up
   assert.deepEqual([brenna.id, brenna.origin.kind, brenna.profile.name, o.source, o.trigger, o.promoted_revision, o.location_id], [`campaign_character_r${before + 1}_brenna`, "created", "Brenna", "narrator_ephemeral", "name_established", before + 1, MARKET]); // named: the ordinary name rule
   assert.deepEqual([o.established.sex, o.established.age, brenna.current.current_location, brenna.current.status], ["female", { kind: "exact", years: 32 }, MARKET, "active"]);
   assert.ok(o.established.condition!.includes("feverish") && o.established.condition!.includes("coughing"));
-  assert.deepEqual(o.established.background!.map(b => b.source), ["seller"]); assert.match(o.established.background![0]!.text, /debt auction in Ashford/);
+  // Background Grounding V1: "Ashford" is not canon, so the seller's claim naming it is an unverified named place and is not frozen
+  // into durable background (it remains only in raw evidence). Name, age and condition are unaffected.
+  assert.equal(o.established.background, undefined); assert.ok(o.evidence.some(e => /debt auction in Ashford/.test(e)));
   const legal = c.exportSnapshot().legal_statuses.find(l => l.character_id === brenna.id)!;
   assert.deepEqual([legal.status, legal.holder_id, legal.transfer!.documentation, legal.transfer!.from_holder_id], ["enslaved", "nicco", "documented", "korvin"]);
   assert.match(legal.transfer!.note!, /debt-forfeiture chain/);
@@ -220,7 +222,9 @@ test("end to end: no pre-registered Brenna → promoted when her name is establi
   await step("*looks at Brenna*", ["Brenna coughs."], fresh);
   const p = prompt();
   assert.equal(p.match(/Character Brenna \(/g)?.length, 1);
-  assert.match(p, new RegExp(`debt auction in Ashford[^"]*\\(stated by ${narratorIdentityGate(buildTurnContext(world, c.exportSnapshot()))!.identities.get("korvin")!.ref}\\)`));
+  // Background Grounding V1: the seller's claim names "Ashford", which is not canon, so it never reaches a fresh session as established background.
+  assert.ok(narratorIdentityGate(buildTurnContext(world, c.exportSnapshot()))!.identities.get("korvin")!.ref);
+  assert.doesNotMatch(p, /debt auction in Ashford/);
   assert.match(p, /"sex":"female"/); assert.match(p, /"years":32/);
   assert.match(p, /Brenna: legally enslaved; legal holder Nicco; transfer papers documented/);
   assert.match(p, /Present but NOT household members: [^\n]*Brenna/);

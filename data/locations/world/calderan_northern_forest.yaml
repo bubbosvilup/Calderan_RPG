@@ -1,0 +1,45 @@
+schema_version: 1
+entity:
+  id: calderan_northern_forest
+  type: location
+  name: "Woodsong Forest"
+  display_name: "Woodsong Forest"
+  parent: continent
+  aliases: ["Northern Forest"]
+  summary: >-
+    Woodsong Forest is a large, dense, lush forest broadly north of Calderan, home of the Woodsinger
+    elves and one of the major traditional population centers of Aureth's elves, and the source of
+    scarce premium timber.
+  content: >-
+    Woodsong Forest lies broadly north of Calderan; exact borders are not established. It is large,
+    dense, and lush, and human traffic there is relatively limited compared with the populated areas
+    around Calderan. Elves are significantly present: it is one of the major traditional population
+    centers of elves in Aureth, though not the exclusive homeland of all elves, and elves also live
+    elsewhere. Its principal traditional elven population is the Woodsingers, a relatively isolated
+    forest-elven culture of defenders, archers and wood craftsmen. The western end of the Dragon's
+    Teeth Mountains approaches the region where the forest begins. The forest holds unusual and rare
+    wildlife, not individually established. It is not a commercial logging zone: Woodsingers do not
+    freely cut healthy trees, so genuine Woodsong timber is scarce, expensive and highly valued, and
+    its external economic importance comes from that premium timber, Woodsinger woodcraft, bows and
+    specialist elven craft, with Calderan an important market for legitimate Woodsong craft. The
+    forest faces illegal incursions by poachers, illegal loggers, hunters seeking rare creatures and
+    slave raiders, and Woodsingers actively resist them. Governance, settlements, clans and
+    population figures are not established.
+  tags: [geography]
+  search_context: "Woodsong Forest north of Calderan, Woodsinger elves, wood elves, forest elves, elven homeland, elven archers, premium Woodsong timber, elven woodcraft and bows, rare wildlife, poachers, illegal logging, elf slave raids."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "dense lush forest"
+      description: "Large, dense, and lush, broadly north of Calderan; exact borders unestablished."
+    - name: "major elven population center"
+      description: "One of the major traditional population centers of elves in Aureth, chiefly the Woodsingers; not the exclusive homeland of all elves."
+    - name: "limited human traffic"
+      description: "Human traffic is relatively limited compared with the populated areas around Calderan."
+    - name: "scarce premium timber"
+      description: "Genuine Woodsong timber comes only from wood the Woodsingers allow to be taken, so it is scarce, expensive and highly valued."
+  connections: []
+chunks: []

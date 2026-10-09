@@ -7,25 +7,33 @@ entity:
   parent: west
   aliases: ["The Unchained Haven"]
   summary: >-
-    Blackwater, The Unchained Haven, is a criminal maritime enclave on West's southwestern
-    coast, outside effective normal direct West control.
+    Blackwater, The Unchained Haven, is a pirate and smuggler haven on a hard-to-reach promontory of
+    West's southwestern coast, under a Duke risen from smuggling and outside effective normal direct
+    West control.
   content: >-
-    Its dark coastal/cliff environment supports a persistent maritime criminal culture.
-    Conventional state governance is weak or absent, but power exists in fragmented,
-    unstable competition among smuggling interests, pirate captains, and criminal cartels.
-    Black-market commerce includes fencing stolen goods, illegal slave traffic, transfer or
-    sale of unregistered or stolen captives, and people kidnapped from neighboring nations.
-    Geographic containment in West does not imply effective direct political control.
-    Calderan dislikes and distrusts Blackwater but pragmatically tolerates some of its
-    existence for dirty economic value, absorption of crime, indirect maritime
-    defense/interdiction, and keeping worse external threats at distance. Tolerance is not
-    lawful endorsement or a formal treaty. Blackwater's persistent maritime/commercial
-    rivalry with Sandspear involves Sorrow Sea and Chained Bay routes, smuggling,
-    piracy/corsair activity, protection rackets, captured cargo, slave traffic, and wartime
-    spoils. Their ships sometimes fight bloody naval engagements; this is not formal
-    West–Center naval war, and no winner is predetermined.
+    Blackwater grew organically because pirates and smugglers needed a defensible base. It stands on
+    a difficult-to-reach, near-isolated coastal promontory associated with West; its harbour lies
+    below the main settlement, and a long stone stair and steep approach climb to the elevated,
+    naturally defensible town. Its dark coastal/cliff environment supports a persistent maritime
+    criminal culture. A Duke whose background is as a former smuggler and underworld maritime figure,
+    and who succeeded in legitimising his position, leads Blackwater; his name is not established.
+    His title lets Blackwater conduct limited official diplomacy and trade, but conventional state
+    governance remains weak and real power is still contested among smuggling interests, pirate
+    captains and criminal cartels. It attracts pirates, smugglers, criminals, former pirates, veteran
+    sailors, fugitives and people expelled or unwelcome elsewhere, making it a cosmopolitan melting
+    pot; not every resident is actively criminal, and an ordinary internal economy exists.
+    Black-market commerce includes fencing stolen goods, illegal slave traffic, transfer or sale of
+    unregistered or stolen captives, and people kidnapped from neighboring nations. Geographic
+    containment in West does not imply effective direct political control. Calderan dislikes and
+    distrusts Blackwater but pragmatically tolerates some of its existence for dirty economic value,
+    absorption of crime, indirect maritime defense/interdiction, and keeping worse external threats
+    at distance. Tolerance is not lawful endorsement or a formal treaty. Blackwater's persistent
+    maritime/commercial rivalry with Sandspear involves Sorrow Sea and Chained Bay routes, smuggling,
+    piracy/corsair activity, protection rackets, captured cargo, slave traffic, and wartime spoils.
+    Their ships sometimes fight bloody naval engagements; this is not formal West–Center naval war,
+    and no winner is predetermined.
   tags: [geography]
-  search_context: ""
+  search_context: "Blackwater pirate haven, Unchained Haven, pirates, smugglers, fences, black market, contraband, Blackwater Fire rum, exotic fruit, outlaw port, harbour stair."
   knowledge:
     visibility:
       narrator: true
@@ -35,11 +43,45 @@ entity:
     - name: "de facto autonomy"
       description: "Outside effective normal direct West control, despite geographic containment within West."
     - name: "fragmented criminal governance"
-      description: "Competing smuggling interests, pirate captains, and criminal cartels exercise unstable power; no formal council is established."
+      description: "A Duke risen from smuggling holds the legitimising title, but smuggling interests, pirate captains and criminal cartels still contest real power; no formal council is established."
     - name: "illegal maritime trade"
       description: "Black-market trade, stolen goods, kidnapping, and illegal/unregistered slave traffic."
     - name: "maritime rival"
       description: "Sandspear"
+    - name: "harbour stair and elevated town"
+      description: "The harbour lies below the town, reached by a long stone stair and steep approach; the elevated settlement is naturally defensible and hard to assault."
+    - name: "Blackwater Fire"
+      description: "A famous locally produced rum, exported and smuggled throughout Aureth."
   connections: []
-chunks: []
-
+chunks:
+  - id: blackwater.illicit_economy
+    entity_id: blackwater
+    section: illicit_economy
+    summary: Blackwater's mostly illicit economy, contraband, Blackwater Fire rum, exotic fruit, unlawful captive trade and hostile trade relations.
+    search_context: Blackwater economy, pirates, smugglers, piracy, fencing, contraband alcohol, Blackwater Fire rum, exotic fruit, bananas, kiwi, kidnapped captives, Davenport and Sandspear hostility.
+    content: >-
+      Most of Blackwater's economy is illegal or semi-legal: smuggling, fencing stolen goods, black
+      markets, piracy, illicit trafficking and contraband. Common contraband
+      includes alcohol, stolen goods, exotic fruit, illegal captives, undeclared cargo and rare
+      foreign goods. Its warmer local climate allows fruit unusual elsewhere in Aureth, such as
+      bananas and kiwi, to be grown or traded; no plantations are established. Blackwater Fire, a
+      rum produced locally, is exported and smuggled throughout Aureth and is widely regarded as one
+      of the continent's finest and most famous strong drinks, a common reference point when people
+      speak of exceptional liquor; nothing magical about it is established. Blackwater is heavily
+      involved in illegal slave trafficking, distinct from West's legal regulated trade: kidnapped
+      people, unregistered captives, people whose origin cannot be legally documented, captives
+      rejected by ordinary legal channels, and dangerous, aggressive or difficult captives, sometimes
+      including minors. It is a significant source and channel for such captives, though not every
+      difficult or illegal captive comes from it. Officially it can keep limited commerce with
+      Davenport, Calderan, Sandspear, Skardgard and other ports, but it is distrusted, and its
+      relations with Davenport and Sandspear are especially hostile because its pirates prey on their
+      shipping. No formal alliances are established.
+    tags:
+      - economy
+      - crime
+      - trade
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

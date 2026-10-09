@@ -17,7 +17,7 @@ entity:
     extraction or trade of rare resources from ice-bound regions. The rare resources are not
     individually specified. Exact fleet numbers and naval strength remain undefined.
   tags: [geography]
-  search_context: ""
+  search_context: "Skardgard principal port of East, whalers, whaling, shipwrights, cold-sea sailors, fishing, whale oil, northern maritime trade."
   knowledge:
     visibility:
       narrator: true
@@ -31,5 +31,26 @@ entity:
     - name: "whaling, shipbuilding, and high-seas fishing"
       description: "Experienced sailors support these activities and maritime trade, including rare resources from ice-bound regions."
   connections: []
-chunks: []
-
+chunks:
+  - id: skardgard.maritime_economy
+    entity_id: skardgard
+    section: maritime_economy
+    summary: Skardgard's whaling, fishing and shipbuilding economy, its robust cold-sea ships, exports, imports and trade partners.
+    search_context: Skardgard economy, whalers, Skardgard sailor, cold-sea fishers, preserved fish, whale oil, shipwrights, robust long-range ships, northern maritime trade.
+    content: >-
+      Skardgard produces fish and preserved fish, whale oil and whale-derived industrial materials,
+      ships, marine products and rare resources from ice-bound northern regions, which are not
+      individually established. Its ships are robust, durable, cold-sea capable and suited to long
+      voyages, unlike Davenport's large fleet and commercial construction or Sandspear's fast raiding
+      craft. It exports maritime goods throughout East and beyond, to Vaelrost, Frostspire, Davenport
+      and Center ports, and possibly to Blackwater through less formal channels. It imports iron and
+      coal from Frostspire, spices, textiles and luxury goods from elsewhere, and specialist
+      manufactured components.
+    tags:
+      - economy
+      - maritime
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

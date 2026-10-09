@@ -14,7 +14,8 @@ entity:
   content: >-
     Possessing mana does not imply magical ability. Why some people can use it remains
     undefined: no genetic, divine, training, bloodline, racial, or aptitude-test explanation
-    is established. Mana can be spent and recovered; storage or manipulation through other
+    is established. One restriction is established without explanation: Beastfolk, as currently
+    understood, cannot use magic. Mana can be spent and recovered; storage or manipulation through other
     means may be established later. Nicco's intended maximum is 100; actual current mana is
     engine-authoritative and stays between zero and maximum. The player establishes attempted
     or known abilities; no fixed spellbook is established. Approximate expenditure anchors are

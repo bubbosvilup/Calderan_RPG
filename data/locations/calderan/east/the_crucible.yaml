@@ -18,7 +18,7 @@ entity:
     general goods, large-scale stalls, auction lots and high-volume trade, from common goods to rare and
     expensive ones. Mornings have a strong food and farmer-market component; daytime brings broad general
     commerce. Specialized commercial streets adjoin the square. Textile commerce is especially important:
-    everyday clothing, luxury cloth and fashion production, including high-end goods later sold in Center.
+    everyday clothing, luxury cloth and fashion production, including high-end goods later sold in the Center District.
     Weapons, armor, jewelry and prestige craft are also available. The Merchants' Mile feeds directly into it.
   knowledge: { "visibility": { "narrator": true, "player": true }, "known_by": [], "awareness": "public" }
   features:

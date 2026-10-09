@@ -1,6 +1,7 @@
 import type { CampaignCommand, CampaignSnapshot, NameSource } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
+import { classifyBackgroundClaim } from "./background-grounding.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
@@ -65,7 +66,7 @@ export function establishNames(recent: readonly RecentExchange[], context: TurnC
     if (!p.present) { skipped.push({ name: p.name!, reason: "not_in_scene" }); continue; }
     if (options.location_changed) { skipped.push({ name: p.name!, reason: "location_changed" }); continue; }
     const participant = linkedParticipant(p, participants);
-    const facts = establishedFacts(p, undefined, nameOf);
+    const facts = establishedFacts(p, undefined, nameOf, text => classifyBackgroundClaim(text, world).status !== "unverified");
     const character = buildPromotedCharacter({ label: p.name!, established: { ...facts.established, ...(p.captive ? { role: "held captive (narrated)" } : {}) }, evidence: facts.evidence,
       location_id: location, trigger: "name_established", promoted_revision: baseRevision + 1, world_minute: snapshot.runtime.scene.world_time.world_minute, ephemeral_ref: participant?.id ?? p.ref,
       ...(nameSource(p) ? { name_source: nameSource(p)! } : {}) });

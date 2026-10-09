@@ -81,7 +81,7 @@ export async function reflectStructuredAfterTurn(campaign: CampaignState, world:
     const base = campaign.exportSnapshot(), due = base.premium_characters.filter(p => reflectionDue(base, p.character_id)).map(p => p.character_id), runs: ReflectionRun[] = [], started = performance.now(), pacing = options.pacing ?? reflectionPacing;
     try {
         for (const id of due.slice(0, options.max_characters ?? 1)) {
-            const c = captureProductionReflection(campaign, world, id), source = c.snapshot.revision, logical = `${c.snapshot.campaign_id}:${id}:r${source}`, begin = performance.now(), details: StructuredReflectionAttempt[] = [], attempts: ProviderAttemptRecord = { attempts: 0, retry_reasons: [], failure_classes: [], logical_request_id: logical, recovered: false, provider_ms: 0, final_outcome: 'pending' }, empty = { character_id: id, accepted: [], rejected: [], notes: c.existing.length, logical_reflection_id: logical, source_revision: source, model: 'qwen/qwen3.8-flash', provider: 'Alibaba' };
+            const c = captureProductionReflection(campaign, world, id), source = c.snapshot.revision, logical = `${c.snapshot.campaign_id}:${id}:r${source}`, begin = performance.now(), details: StructuredReflectionAttempt[] = [], attempts: ProviderAttemptRecord = { attempts: 0, retry_reasons: [], failure_classes: [], logical_request_id: logical, recovered: false, provider_ms: 0, final_outcome: 'pending' }, empty = { character_id: id, accepted: [], rejected: [], notes: c.existing.length, logical_reflection_id: logical, source_revision: source, model: 'anthropic/claude-haiku-5.5', provider: 'openrouter' };
             if (!c.catalog.length) {
                 runs.push({ ...empty, status: 'no_evidence' });
                 continue;

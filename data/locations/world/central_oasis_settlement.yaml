@@ -1,0 +1,66 @@
+schema_version: 1
+entity:
+  id: central_oasis_settlement
+  type: location
+  name: "Central Oasis"
+  display_name: "Central Oasis (provisional name)"
+  parent: center
+  aliases: []
+  summary: >-
+    A settlement grown around a natural freshwater oasis in Center's desert interior,
+    broadly between Khar-Dune and Zul-Rath; the traditional homeland and cultural center of
+    a distinct dark-skinned human people known for horsemanship and mounted warfare. Its proper name is not
+    yet established.
+  content: >-
+    The settlement grew around a natural freshwater oasis in Center's desert interior,
+    broadly between Khar-Dune and Zul-Rath. The oasis and the settlement share the same
+    proper name, which is not yet established; "Central Oasis" is a descriptive
+    placeholder. It is the traditional homeland and cultural center of a distinct
+    dark-skinned human population native to Center, with its own culture and identity. Mounted
+    combat is culturally important among them: martial training commonly begins young, excellent
+    horsemanship and mounted fighting are a recognizable tradition, and their warriors are known for
+    fighting with a single curved, scimitar-like sword or with two, valuing mobility, endurance and
+    athleticism. Members are often tall, athletic and lean rather than heavily built; this is a
+    common tendency shaped by lifestyle, not a rule, and their martial skill comes from culture and
+    training, not biology. Not every member is a warrior. Horses are culturally and economically
+    important, water is central to life, oasis agriculture exists, and supporting caravans and
+    providing mounted guards are relevant livelihoods. The oasis water is known for unusual red
+    reflections and glints; it is not blood, and public knowledge does not explain the phenomenon.
+    The people's own name, their religion,
+    government, social system, rulers, military organization, crops, horse breeds, clothing, and
+    history remain unestablished.
+  tags: [geography]
+  search_context: "Desert oasis settlement in Center between Khar-Dune and Zul-Rath; freshwater oasis; homeland of a dark-skinned human desert people; horse riders, mounted warriors, oasis horse rider, cavalry tradition, curved swords, scimitars, dual swords, caravan guards, martial training from youth, red reflections in the oasis water; proper name not yet established."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "natural freshwater oasis"
+      description: "The settlement grew around it; oasis and settlement share one proper name, not yet established."
+    - name: "cultural homeland"
+      description: "Traditional homeland and cultural center of a distinct dark-skinned human people with their own culture and identity."
+    - name: "mounted martial tradition"
+      description: "Mounted combat is culturally important; training commonly begins young; warriors are associated with curved, scimitar-like swords."
+  connections: []
+chunks:
+  - id: central_oasis_settlement.red_waters
+    entity_id: central_oasis_settlement
+    section: red_waters
+    summary: The Central Oasis water's unusual red reflections, a culturally notable phenomenon with no public explanation.
+    search_context: Strange oasis water, red reflections, red glints, reddish shimmer, oasis water not blood, what is strange about the oasis, oasis wonder.
+    content: >-
+      The water of the Central Oasis shows unusual red reflections and glints, most noticeable in some
+      light; the water itself is ordinary drinkable water, not blood, and is not reddened by any known
+      mineral or dye. Travellers remark on it, and it is culturally notable among the oasis people and along
+      the desert routes, but public knowledge does not explain why it happens. Any local customs, beliefs or
+      taboos about it, and whether it changes over time, are not established.
+    tags:
+      - wonder
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []
+      awareness: public

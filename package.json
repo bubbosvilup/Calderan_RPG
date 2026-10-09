@@ -30,7 +30,8 @@
     "eval:authority": "npm run build --silent && node .build/src/dev/eval-authority.js",
     "eval:shadow-evidence": "npm run build --silent && node .build/src/dev/shadow-evidence.js",
     "eval:evidence": "npm run build --silent && node .build/src/dev/eval-evidence.js",
-    "eval:participants": "npm run build --silent && node .build/src/dev/eval-participants.js"
+    "benchmark:controller": "npm run build --silent && node .build/src/dev/controller-benchmark.js",
+    "eval:participants":"npm run build --silent && node .build/src/dev/eval-participants.js"
   },
   "dependencies": {
     "yaml": "^2.9.1"

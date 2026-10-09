@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: sun_emperor_shadow_warnings
+  type: world_lore
+  name: The Sun Emperor's Warnings Against Shadow
+  display_name: The Sun Emperor's Warnings Against Shadow
+  parent: null
+  aliases: []
+  summary: "Restricted: the oldest Church records preserve the Sun Emperor's prohibitions on Shadow as specific, urgent warnings, as though he had concrete reason to fear it."
+  tags:
+    - secret
+    - religion
+  search_context: Restricted Church historical record
+  content: >-
+    The Church's dogma against Shadow descends from prohibitions and warnings the Sun Emperor left before his
+    disappearance, which the Church later preserved and hardened into doctrine. In the oldest records available to
+    the highest levels of the Church, those warnings read less like abstract theology than like specific and urgent
+    cautions, as though the founder had concrete reason to fear Shadow. The records do not say what he feared, and
+    later doctrine generalized the warnings into the public teaching that Shadow is corruptive and hostile to the
+    divine order. This is a restricted reading of Church history, not public doctrine; who in the Church holds or
+    studies these records is not established.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by: []
+    awareness: private
+  category: religion
+  related_entities:
+    - church_doctrine
+    - sun_emperor
+    - light_and_shadow
+chunks: []

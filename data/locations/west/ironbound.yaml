@@ -7,21 +7,26 @@ entity:
   parent: west
   aliases: ["The Fortress on the Edge"]
   summary: >-
-    Ironbound is a major fortified frontier city east of Calderan, on West's side of the
-    West–Center border.
+    Ironbound is a small fortified military city east of Calderan at the principal West–Center land
+    passage, on West's side of the border, governed by a military authority.
   content: >-
-    Ironbound's defensive and administrative role makes it more than a settlement near the
-    frontier. Its massive fortress-gate character and heavy stone-and-iron fortifications
-    block armed incursions and desert raids, bearing physical evidence of repeated violent
-    border clashes. It is a major military filtering point with important customs and
-    border-control functions, high political tension, and frequent contact with the
-    consequences of skirmishes. Official enforcement and unofficial corruption coexist.
-    Authorities may ignore, facilitate, or inadequately investigate slave caravans
-    originating in raids and cross-border violence. Not every guard is corrupt, and not all
-    slave traffic through Ironbound is legal. It belongs to West rather than being an
-    independent nation or autonomous city-state.
+    Ironbound grew from military encampments, permanent garrisoning, defensive construction and
+    support infrastructure into a walled fortress-city. Its defensive and administrative role makes
+    it more than a settlement near the frontier. Its massive fortress-gate character and heavy
+    stone-and-iron fortifications block armed incursions and desert raids, bearing physical evidence
+    of repeated violent border clashes. It is a major military filtering point with important
+    customs and border-control functions, high political tension, and frequent contact with the
+    consequences of skirmishes. Unlike ordinary ducal cities, it is governed by a military authority
+    led by a general; the general's identity is not established, and the current leadership is
+    strict and disciplinarian. Official enforcement and unofficial corruption coexist. Authorities
+    may ignore, facilitate, or inadequately investigate slave caravans originating in raids and
+    cross-border violence. Not every guard is corrupt, and not all slave traffic through Ironbound
+    is legal. Its population is disproportionately soldiers, military support personnel, veterans,
+    smiths and merchants serving troops; civilians, farmers and families also live there, but it is
+    not a large ordinary civilian city. It belongs to West rather than being an independent nation
+    or autonomous city-state.
   tags: [geography]
-  search_context: ""
+  search_context: "Ironbound fortress city, West–Center frontier, border garrison, soldiers, veterans, mercenaries and guards for hire, military smiths, armour repair, customs, frontier smuggling."
   knowledge:
     visibility:
       narrator: true
@@ -32,6 +37,44 @@ entity:
       description: "Massive fortress-gate character, heavy stone-and-iron defenses, and visible damage from repeated clashes."
     - name: "military and customs filtering point"
       description: "Defensive and administrative border control on West's side of the frontier; official enforcement coexists with unofficial corruption."
+    - name: "military governance"
+      description: "Governed by a military authority led by a general rather than a Duke; the general's identity is not established."
   connections: []
-chunks: []
-
+chunks:
+  - id: ironbound.military_economy
+    entity_id: ironbound
+    section: military_economy
+    summary: Ironbound's military-support economy, repair smithing and iron recycling, food and water, dependency on West, vice economy and demographic weakness.
+    search_context: Ironbound economy, soldiers, veterans, mercenaries for hire, guards, military smiths, weapon and armour repair, recycled iron, garrison supplies, wells, siege, military discipline, garrison vice.
+    content: >-
+      Ironbound's economy exists mainly to sustain military life: weapons, armour, repairs and
+      equipment maintenance, military supplies, food provisioning, inns and support services,
+      military trade, and mercenary or veteran labour. It is known as a place to recruit skilled
+      guards, mercenaries, veterans and soldiers for hire. Its many smiths are practical and durable
+      repair specialists hardened by military conditions, not elite luxury smiths, and are not
+      regarded as Calderan's equals; much iron is reclaimed and recycled from broken weapons, damaged
+      armour and battlefield salvage. Natural resources are few: some stone quarries, farmland and
+      ordinary local materials, with the wider Dragon's Teeth region near enough for stone and
+      materials to matter; no mines lie under the city. Industrial inputs are iron, coal, wood and
+      stone; luxury textiles, spices and fashion are of little interest there. Farmers in and around
+      Ironbound sell directly to the city and garrison under military protection, so food is
+      relatively self-sufficient in normal conditions, while food variety, nonessential goods and
+      specialist supplies come from Calderan and Davenport. Ironbound is not on a major river; wells
+      and externally supplied water are normally sufficient, water is culturally treated as not to
+      be wasted, and prolonged isolation places serious pressure on water and supplies. The city is
+      strategically supported by the rest of West, and Calderan and Davenport have a strong national
+      interest in keeping it supplied and populated; it would be economically weaker without that
+      support. A persistent illegal sex-work economy exists around the garrison: the military
+      authority officially suppresses it as damaging to discipline, but soldiers create demand, some
+      local guards tolerate it and enforcement is inconsistent. Its main long-term vulnerability is
+      demographic: few stable civilian families relative to the military presence, low natural
+      replacement and dependence on new soldiers, recruits and support from wider West; without
+      continual reinforcement it would gradually shrink.
+    tags:
+      - economy
+      - military
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

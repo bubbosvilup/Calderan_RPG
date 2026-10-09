@@ -83,7 +83,7 @@ const nicco = world.getEntity("nicco") as unknown as { traits?: string[] };
 test("a new campaign holds one deterministic default profile from canon structured fields; the view is the narrator projection; no name/biography field", async () => {
   const root = await temp(), { s, host } = await created(root);
   const snap = await savedSnapshot(root, s.campaignId);
-  assert.equal(snap.schema_version, 5);
+  assert.equal(snap.schema_version, 6);
   assert.deepEqual(snap.player_characters, [defaultPlayerCharacterProfile(world, "nicco")]);
   assert.deepEqual(snap.player_characters[0].appearance.distinctive_traits, nicco.traits, "canon traits seed the profile; prose is never parsed");
   assert.deepEqual(defaultPlayerCharacterProfile(world, "nicco"), defaultPlayerCharacterProfile(world, "nicco"));
@@ -241,17 +241,17 @@ test("save -> restart -> load preserves the profile; the narrator gets it after 
 test("migration 4 -> 5: an old campaign gains the deterministic canon default in memory; the source file is never rewritten", async () => {
   const root = await temp(), { s, host } = await created(root); const id = s.campaignId; await host.shutdown();
   const path = join(root, "campaigns", id, "save.json"), save = JSON.parse(await fs.readFile(path, "utf8"));
-  delete save.snapshot.player_characters; save.snapshot.schema_version = 4;
+  delete save.snapshot.player_characters; delete save.snapshot.next_item_sequence; save.snapshot.schema_version = 4;
   const bytes = JSON.stringify(save); await fs.writeFile(path, bytes);
   const decoded = decodeSaveWithReport(bytes, world);
-  assert.equal(decoded.snapshot_migrated_from, 4); assert.equal(decoded.file.snapshot.schema_version, 5);
+  assert.equal(decoded.snapshot_migrated_from, 4); assert.equal(decoded.file.snapshot.schema_version, 6); // 4 -> 5 -> 6 (Item Domain V1)
   assert.deepEqual(decoded.file.snapshot.player_characters, [defaultPlayerCharacterProfile(world, "nicco")]);
   const loaded = await GameSession.loadCampaign(processDeps(root).deps, id); assert.ok(loaded.ok);
   assert.deepEqual(profileOf(loaded.session).fields.find(f => f.key === "distinctive_traits")!.value, nicco.traits!.join("\n"));
   assert.equal(await fs.readFile(path, "utf8"), bytes, "load never rewrites the source");
   assert.ok((await loaded.session.save()).ok);
   const resaved = JSON.parse(await fs.readFile(path, "utf8"));
-  assert.deepEqual([resaved.schema_version, resaved.snapshot.schema_version], [5, 5]);
+  assert.deepEqual([resaved.schema_version, resaved.snapshot.schema_version], [5, 6]);
   await loaded.session.shutdown();
   // A v4 snapshot that already carries v5 fields is not a v4 snapshot.
   const smuggled = { ...save, snapshot: { ...save.snapshot, player_characters: [] } };

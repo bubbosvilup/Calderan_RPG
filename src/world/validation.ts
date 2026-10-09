@@ -97,7 +97,14 @@ class Check {
   }
   knowledge(value: unknown, field: string): void {
     const policy = this.object(value, field);
-    this.keys(policy, ["visibility", "known_by", "awareness"], field);
+    this.keys(policy, ["visibility", "known_by", "awareness", "secrecy"], field);
+    if ("secrecy" in policy) {
+      if (policy.secrecy !== "holder_only" && policy.secrecy !== "author_only") this.fail(`${field}.secrecy`, "expected holder_only or author_only");
+      const v = policy.visibility as { narrator?: unknown; player?: unknown } | undefined;
+      if (v?.narrator !== false || v?.player !== false) this.fail(`${field}.visibility`, "sealed canon (secrecy) must be invisible to narrator and player");
+      if ("awareness" in policy) this.fail(`${field}.awareness`, "sealed canon (secrecy) has no ordinary awareness");
+      if (policy.secrecy === "author_only" && Array.isArray(policy.known_by) && policy.known_by.length) this.fail(`${field}.known_by`, "author_only canon has no fictional holder");
+    }
     if ("awareness" in policy && (typeof policy.awareness !== "string" || !/^(?:public|specialized|private|local:[a-z][a-z0-9]*(?:_[a-z0-9]+)*)$/.test(policy.awareness))) this.fail(`${field}.awareness`, "expected public, specialized, private or local:<location_id>");
     const visibility = this.object(policy.visibility, `${field}.visibility`);
     this.keys(visibility, ["narrator", "player"], `${field}.visibility`);
@@ -260,6 +267,8 @@ export function validateWorldSources(inputs: readonly WorldSource[]): ValidatedW
       const target = entities.get(id);
       if (!target) return c.fail(field, `unknown entity ${id}`);
       if (allowed && !allowed.includes(target.type)) c.fail(field, `${id} must reference type ${allowed.join(" or ")}`);
+      // Sealed canon is never reachable by following an edge from unsealed canon (no ID or existence leak through references).
+      if (target.knowledge?.secrecy && !e.knowledge?.secrecy) c.fail(field, `${id} is sealed canon and may only be referenced by sealed canon`);
     };
     const refs = (ids: readonly string[], field: string, allowed?: readonly EntityType[]) => ids.forEach((id, i) => ref(id, `${field}[${i}]`, allowed));
     ref(e.parent, "entity.parent", [e.type]);

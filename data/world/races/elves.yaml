@@ -12,10 +12,13 @@ entity:
   search_context: ""
   content: >-
     Elves are somewhat socially and culturally apart. Enslaved elves may exist but are
-    relatively uncommon. Exact lifespan, biological bonuses, a nation or fixed homeland,
-    universal personality, and a complete culture remain undefined.
+    relatively uncommon. The large forest north of Calderan is one of the major traditional
+    population centers of elves in Aureth, not the exclusive homeland of all elves; its principal
+    traditional elven people are the Woodsingers. Not every elf is a Woodsinger. Exact
+    lifespan, biological bonuses, an elven nation or government, universal personality, and
+    a complete culture remain undefined.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   category: "races"
-  related_entities: []
+  related_entities: ["calderan_northern_forest","woodsingers"]
 chunks: []
 

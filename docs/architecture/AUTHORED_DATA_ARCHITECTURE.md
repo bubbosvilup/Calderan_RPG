@@ -68,6 +68,21 @@ Full WorldStore, indexSource and semantic builder filter_owner metadata remain p
 
 Private portrayal is intended to guide a narrator, not to be recited to a player. This phase verifies deterministic projection boundaries, not perfect LLM obedience; no paid narrator run was required for the additive bounded scene block. Independently retrievable restricted facts belong in policy-scoped chunks. Short baseline personality/purpose does not need duplicated chunks.
 
+## Knowledge tiers and secret canon
+
+**Prompt instructions are not a secrecy boundary. Secret facts must be withheld by the engine.** A record's `knowledge` policy, enforced in code and validated at load, decides which paths may ever read it. Wording such as "do not reveal this" is never the protection.
+
+| Tier | Authoring | Who can read it |
+|---|---|---|
+| 0 Public canon | `visibility {narrator:true, player:true}`, usually `awareness: public` or `local:<id>` | Retrieved normally when relevant (lexical/semantic/hybrid, scene ancestry, background grounding, player search). Ordinary characters may use it per `awareness`. |
+| 1 Restricted canon | `visibility {narrator:true, player:false}`, `awareness: private` or `specialized`, `known_by` explicit NPC IDs (may be empty) | Indexed for the narrator audience, but turn retrieval drops player-invisible candidates, so it reaches the prompt only as NPC-private canon of a present `known_by` holder (H3). Examples: `sun_emperor.light_secret`, `world_tree`, `sun_emperor_shadow_warnings`. |
+| 2 Manual secret | `secrecy: holder_only`, `visibility {narrator:false, player:false}`, no `awareness`, `known_by: []` by default | Never indexed, fetched, embedded, projected or name-matched by any audience. Its one path to the narrator is the H3 NPC-private grant (label and summary) for a present NPC the author explicitly lists in `known_by`. No holder is ever inferred from culture, rank or residence. Examples: `world_tree_sleeper`, `oasis_sleeper`. |
+| 3 Deepest world truth | `secrecy: author_only`, `visibility {narrator:false, player:false}`, no `awareness`, `known_by` must stay empty | Author and engine truth only. Nothing reads it during play; validation rejects any holder. Examples: `aureth_true_identity`, `shadow_adversary`, `beastfolk_origin_truth`. |
+
+Rules enforced by validation: sealed canon (`secrecy`) must be invisible to both audiences and carry no `awareness`; `author_only` may not have `known_by`; no unsealed record may reference a sealed one (parent, related entities, any edge), so neither its ID nor its existence leaks through a public record. Sealed records are excluded from background-grounding name verification and from captive-name heuristics. Keep authority boundaries physical: a public record never contains a secret paragraph; secrets live in their own files (sealed canon under `data/world/secrets/`).
+
+To grant a tier 2 secret, add specific NPC IDs to its `known_by`. `known_by` takes NPC character IDs only: there is no group or faction grant, so a group's knowledge means listing its members. Promoting a tier 3 truth to holders requires deliberately changing it to tier 2 or splitting off a tier 2 record; do not weaken tier 3 in place.
+
 ## Geography and pilot
 
 Five district IDs are real locations parented to calderan. Heartstone and its outside square are separate children of calderan_west; U1/LR/F1/CY remain structurally under heartstone. Official market and criminal fringe are distinct West children. Parent expresses containment only: existing eight directed tower/entrance edges remain unchanged and no new district routes are authored.

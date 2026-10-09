@@ -2,6 +2,7 @@ import type { EvidenceCheck } from "./evidence-check.js";
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
+import type { WorldStore } from "../world/world-store.js";
 import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
 import type { TurnContext } from "./context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
@@ -24,6 +25,8 @@ import { numberWordValue } from "./language/numbers.js";
 export type EvidenceMode = "shadow" | "hybrid";
 export type { EvidenceCheck } from "./evidence-check.js";
 const QUOTE_MIN = 8;
+/** Titles never identify an absent owner by themselves ("Lord" alone is not Lord Pellan). */
+const HONORIFIC = new Set(["lord", "lady", "sir", "dame", "duke", "duchess", "master", "mistress", "captain", "brother", "sister", "father", "mother", "the"]);
 // Hedge, negation, hypothetical, modal/future, interruption and retraction markers anywhere in the containing sentence(s).
 // Repair 1: a bare "back" no longer disqualifies ("takes the boots back", "accepts them back" are receipts). Retreats, handing an
 // item back, instructions to someone else ("tells him to take them") and "instead" still do.
@@ -54,7 +57,7 @@ function precedingNamedSubject(narration: string, at: number, candidates: readon
 }
 
 /** Deterministic, act-level verification of one controller evidence quote against the finalized narration. */
-export function verifyEvidence(command: CampaignCommand, quote: string | undefined, rawNarration: string, context: TurnContext, intents: readonly CampaignCommand[]): EvidenceCheck {
+export function verifyEvidence(command: CampaignCommand, quote: string | undefined, rawNarration: string, context: TurnContext, intents: readonly CampaignCommand[], ownerNames?: (id: string) => readonly string[]): EvidenceCheck {
   if (quote === undefined) return { verified: false, check: "no_quote" };
   // Typographic whitespace only (paragraph breaks vs spaces): demonstrated necessary in the Phase 1O DeepSeek run. No semantic normalization.
   const narration = rawNarration.replace(/\s+/g, " ");
@@ -184,6 +187,22 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     return { verified: true, check: "physical_condition_narrated" };
   }
 
+  if (command.kind === "create_item") {
+    // Item Domain V1: the verbatim, unhedged quote must name the object (one distinctive word of the proposed name). Whether the
+    // object needs persistent identity is the controller's semantic decision; there is deliberately no verb grammar here.
+    const nameWords = words(command.name).filter(w => w.length >= 3);
+    const named = nameWords.some(w => new RegExp(`\\b${esc(w)}(?:e?s)?\\b`, "i").test(q));
+    if (!named) return { verified: false, check: "materialized_object_not_named" };
+    // Ownership need not be physically present, but an ABSENT owner is never inferred: the quoted sentence must name them
+    // ("Lord Pellan's signet ring"), so "a signet ring lies on the desk" cannot assign Pellan. Present owners are unchanged.
+    if (typeof command.owner_id === "string" && !context.characters.some(c => c.id === command.owner_id)) {
+      const tokens = (ownerNames?.(command.owner_id) ?? []).flatMap(n => n.split(/[\s_]+/)).map(t => t.toLowerCase()).filter(t => t.length >= 3 && !HONORIFIC.has(t));
+      const sentence = narration.slice(sStart, sEnd);
+      if (!tokens.some(t => new RegExp(`\\b${esc(t)}(?:['’]s)?\\b`, "i").test(sentence))) return { verified: false, check: "absent_owner_not_named" };
+      return { verified: true, check: "materialized_object_named_absent_owner_named" };
+    }
+    return { verified: true, check: "materialized_object_named" };
+  }
   if (command.kind === "adjust_relationship") return verifyRelationshipEvidence(command, quote, rawNarration, context);
   if (command.kind === "join_household" || command.kind === "leave_household") {
     const choice = command.kind === "join_household" ? "join" : "leave";
@@ -250,20 +269,23 @@ const MISSING_CONFIRMATION = new Set(["rejected_insufficient_confirmation", "rej
  * reject through the unchanged authorizer. Shadow mode records evidence checks but authorizes exactly as the grammar does.
  */
 export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quotes: readonly string[] | undefined, evidence: TurnEvidence, narration: string,
-  context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, mode: EvidenceMode): readonly AuthorizationDiagnostic[] {
-  const grammar = authorizeCommands(proposal, evidence, context, snapshot);
+  context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, mode: EvidenceMode, world?: WorldStore): readonly AuthorizationDiagnostic[] {
+  const grammar = authorizeCommands(proposal, evidence, context, snapshot, world);
+  // Item Domain V1: display names of a possibly absent owner (authored canon, or a campaign character's established name).
+  const ownerNames = (id: string): readonly string[] => { const e = world?.getEntity(id); const c = snapshot.characters.find(x => x.id === id);
+    return [...(e?.type === "character" ? [e.name, ...e.aliases] : []), ...(c?.profile.name ? [c.profile.name] : []), ...(world ? [] : [id])]; };
   const decided = grammar.map((g, i): AuthorizationDiagnostic => {
     const command = proposal[i]!, quote = quotes?.[i];
-    const ev = verifyEvidence(command, quote, narration, context, evidence.player_intents);
+    const ev = verifyEvidence(command, quote, narration, context, evidence.player_intents, ownerNames);
     const base = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
     if (g.authorized) return { ...base, authorized: true, reason: g.reason, source: ev.verified ? "both" : "grammar" };
     // Repair 1: conditions have no grammar path. Validity was already checked by authorizeCommands; verified evidence completes it.
-    if (command.kind === "set_condition" || command.kind === "leave_scene" || command.kind === "adjust_relationship" || command.kind === "join_household" || command.kind === "leave_household") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
+    if (command.kind === "create_item" || command.kind === "set_condition" || command.kind === "leave_scene" || command.kind === "adjust_relationship" || command.kind === "join_household" || command.kind === "leave_household") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
     if (mode === "hybrid" && ev.verified && MISSING_CONFIRMATION.has(g.reason)) {
       const index = evidence.player_intents.findIndex(c => isDeepStrictEqual(c, command));
       const kind = command.kind === "set_knowledge" ? "was_told_fact" as const : "accepted_transfer" as const;
       const withQuote = { ...evidence, narrator_confirmations: [...evidence.narrator_confirmations, { kind, command_indexes: [index], collective: false, source_sentence: quote! }] };
-      const d = authorizeCommands([command], withQuote, context, snapshot)[0]!;
+      const d = authorizeCommands([command], withQuote, context, snapshot, world)[0]!;
       if (d.authorized) return { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" };
       return { ...base, authorized: false, reason: d.reason, source: "rejected" };
     }

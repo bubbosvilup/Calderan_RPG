@@ -10,7 +10,8 @@ import { E1_SCHEMA, E1_SYSTEM, evaluateStructuredOutputE1 } from '../src/turn/st
 import { E1_SCHEMA as frozenSchema, E1_SYSTEM as frozenPrompt } from '../src/dev/reflection-v23-cvc-e1.js';
 import { STORED_REFLECTION_SCHEMA } from '../src/campaign/reflection-proposal-schema.js';
 import { ProviderError } from '../src/llm/errors.js';
-import { OpenRouterReflectionProvider, ReflectionProviderError } from '../src/llm/openrouter/reflection-provider.js';
+import { OpenRouterReflectionProvider, ReflectionProviderError, DEFAULT_REFLECTION_MODEL } from '../src/llm/openrouter/reflection-provider.js';
+import { createProductionDeps } from '../src/app/production.js';
 import { instantReflectionPacing, testContrast, testEnvironment, productionStub } from './production-reflection-fixtures.js';
 import { createSaveFile, serializeSave, decodeSave } from '../src/persistence/save-format.js';
 import { CampaignState } from '../src/campaign/campaign-state.js';
@@ -76,7 +77,7 @@ test('semantic rejection has no reroll and preserves qualified batch acceptance'
 test('all accepted distinct claims persist coherently, while a malformed batch persists none', async () => { const f = fixture(), runs = await reflectAfterTurn(f.campaign, f.world, productionStub(r => { const p = testEnvironment(r); return [p, { ...p, claim: { ...p.claim, anchor_ref: p.evidence_refs[1] } }]; }), options()); assert.equal(runs[0]!.accepted.length, 2); const notes = f.campaign.exportSnapshot().premium_reflections[0]!.notes; assert.equal(notes.length, 2); assert.notEqual(notes[0]!.label, notes[1]!.label); });
 test('legacy notes and new structured notes round-trip manual Save and remain recoverable and hidden from narration', async () => { const f = fixture(), ref = captureProductionReflection(f.campaign, f.world, 'maren').request.evidence[0]!.ref; f.run([{ kind: 'record_reflection', character_id: 'maren', reflected_revision: 0, notes: [{ id: 'legacy_note', kind: 'stance', label: 'historical', text: 'Historical interpretation.', evidence_refs: [ref], confidence: 'low', created_revision: 1, updated_revision: 1 }] }]); await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testEnvironment(r)]), options()); const snapshot = f.campaign.exportSnapshot(), save = serializeSave(createSaveFile(snapshot, f.world, '2026-10-05T00:00:00.000Z'), f.world), restored = CampaignState.restore(f.world, decodeSave(save, f.world).snapshot).exportSnapshot(); assert.deepEqual(restored.premium_reflections, snapshot.premium_reflections); assert.equal(restored.premium_reflections[0]!.notes.find(n => n.id === 'legacy_note')!.structured, undefined); const note = restored.premium_reflections[0]!.notes.find(n => n.structured)!; assert.ok(recoverNpcContext(f.world, restored, `npcmem:maren:reflection:${note.id}`)!.exact_payload.includes('V2.3-CVC-E1')); const context = buildTurnContext(f.world, restored, { input: 'Maren, tell me about the workshop.' }); assert.ok(context.npc_plus!.lines.every(l => !l.includes(' | reflection:') && !l.includes('; refl='))); assert.deepEqual(context.npc_plus, buildTurnContext(f.world, { ...restored, premium_reflections: [] }, { input: 'Maren, tell me about the workshop.' }).npc_plus); assert.deepEqual(restored.premium_reflections, snapshot.premium_reflections); });
 test('real post-turn publication remains successful when reflection transport fails twice', async () => { const f = fixture(), service = new RetrievalService(f.world), coordinator = new TurnCoordinator(f.world, mockNarrator('Maren nods.'), mockController([]), { service, search: new HybridSearch(service) }), published: string[] = []; let finalized: ReturnType<typeof f.campaign.exportSnapshot> | undefined; const runs = await runPlayTurn({ coordinator, world: f.world, request: { campaign: f.campaign, player_input: 'I wait.' }, publish: e => published.push(e.type), reflection_provider: { async reflect() { assert.equal(published.at(-1), 'turn_completed'); finalized = f.campaign.exportSnapshot(); throw new ProviderError('configuration_error'); } } }); assert.ok(published.includes('narration_delta')); assert.equal(published.filter(t => t === 'turn_completed').length, 1); assert.equal(published.includes('turn_failed'), false); assert.equal(runs[0]!.status, 'provider_failed'); assert.equal(f.campaign.exportSnapshot(), finalized); });
-test('reflection adapter enforces exact Qwen/Alibaba config, stop finish and reasoning exclusion', async () => { const f = fixture(), request = captureProductionReflection(f.campaign, f.world, 'maren').request, bodies: Record<string, unknown>[] = []; const provider = new OpenRouterReflectionProvider(undefined, { api_key: () => 'test-key', fetch: async (_url, init) => { bodies.push(JSON.parse(String(init!.body))); return new Response(JSON.stringify({ provider: 'Alibaba', choices: [{ finish_reason: 'stop', message: { content: '{"proposals":[]}' } }], usage: { prompt_tokens: 10, completion_tokens: 4, cost: 0.0001 } }), { status: 200 }); } }); const result = await provider.reflect(request); assert.equal(result.provider, 'Alibaba'); assert.equal(bodies[0]!.model, 'qwen/qwen3.8-flash'); assert.deepEqual(bodies[0]!.provider, { require_parameters: true, only: ['alibaba'], order: ['alibaba'], allow_fallbacks: false }); assert.deepEqual(bodies[0]!.reasoning, { enabled: false, exclude: true }); assert.equal((bodies[0]!.messages as {
+test('reflection adapter enforces exact Haiku config (no provider pin), unchanged strict schema, stop finish and reasoning exclusion', async () => { const f = fixture(), request = captureProductionReflection(f.campaign, f.world, 'maren').request, bodies: Record<string, unknown>[] = []; const provider = new OpenRouterReflectionProvider(undefined, { api_key: () => 'test-key', fetch: async (_url, init) => { bodies.push(JSON.parse(String(init!.body))); return new Response(JSON.stringify({ provider: 'Azure', model: 'anthropic/claude-haiku-5.5', choices: [{ finish_reason: 'stop', message: { content: '{"proposals":[]}' } }], usage: { prompt_tokens: 10, completion_tokens: 4, cost: 0.0001 } }), { status: 200 }); } }); const result = await provider.reflect(request); assert.equal(result.provider, 'Azure'); assert.equal(bodies[0]!.model, 'anthropic/claude-haiku-5.5'); assert.equal('models' in bodies[0]!, false); assert.deepEqual(bodies[0]!.provider, { require_parameters: true }); assert.equal(bodies[0]!.max_tokens, 600); assert.equal(bodies[0]!.stream, false); assert.deepEqual((bodies[0]!.response_format as { json_schema: { schema: unknown; strict: boolean } }).json_schema.schema, request.wire_schema); assert.deepEqual(bodies[0]!.reasoning, { enabled: false, exclude: true }); assert.equal((bodies[0]!.messages as {
     content: string;
 }[])[0]!.content, E1_SYSTEM); });
 
@@ -97,4 +98,38 @@ test('a new qualified claim never retroactively versions a historical note with 
  f.run([{kind:'record_reflection',character_id:'maren',reflected_revision:0,notes:[old]}]);
  await reflectAfterTurn(f.campaign,f.world,productionStub(r=>[testEnvironment(r)]),options());
  const notes=f.campaign.exportSnapshot().premium_reflections[0]!.notes;assert.equal(notes.length,2);assert.deepEqual(notes.find(n=>n.id===old.id),old);assert.equal(notes.filter(n=>n.structured).length,1);
+});
+
+test('Haiku reflection through the real adapter: valid output commits through the unchanged schema/validator; 429, 503 and malformed output skip without mutation', async () => {
+ for (const mode of ['ok', '429', '503', 'malformed'] as const) {
+  const f = fixture(), before = f.campaign.exportSnapshot(); let calls = 0;
+  const provider = new OpenRouterReflectionProvider(undefined, { api_key: () => 'test-key', fetch: async (_url, init) => {
+   calls++; const body = JSON.parse(String(init!.body));
+   assert.equal(body.model, DEFAULT_REFLECTION_MODEL); assert.equal('models' in body, false); assert.equal(body.max_tokens, 600);
+   assert.equal(body.model, 'anthropic/claude-haiku-5.5'); assert.deepEqual(body.provider, { require_parameters: true });
+   if (mode === '429') return new Response(JSON.stringify({ error: { code: 429, message: 'limited' } }), { status: 429, headers: { 'retry-after': '1' } });
+   if (mode === '503') return new Response('{}', { status: 503 });
+   const user = JSON.parse(body.messages[1].content), content = mode === 'malformed' ? '{bad' : JSON.stringify({ proposals: [testEnvironment({ character: user.character, evidence: user.evidence } as Parameters<typeof testEnvironment>[0])] });
+   return new Response(JSON.stringify({ model: DEFAULT_REFLECTION_MODEL, provider: 'Azure', choices: [{ finish_reason: 'stop', message: { content } }], usage: { prompt_tokens: 10, completion_tokens: 4, cost: 0.0001 } }), { status: 200 });
+  } });
+  const runs = await reflectAfterTurn(f.campaign, f.world, provider, options());
+  assert.ok(calls >= 1, mode);
+  if (mode === 'ok') { assert.equal(runs[0]!.status, 'committed'); assert.equal(f.campaign.exportSnapshot().premium_reflections[0]!.notes.length, 1); assert.equal(runs[0]!.attempt_details?.[0]?.model, 'anthropic/claude-haiku-5.5'); assert.equal(runs[0]!.attempt_details?.[0]?.provider, 'Azure'); }
+  else { assert.notEqual(runs[0]!.status, 'committed', mode); assert.deepEqual(f.campaign.exportSnapshot().premium_reflections, before.premium_reflections, mode); }
+ }
+});
+
+test('production shadow wiring: a controller model override never reaches reflection (regression: configuration_error)', async () => {
+ const saved = { c: process.env.OPENROUTER_CONTROLLER_MODEL, r: process.env.OPENROUTER_REFLECTION_MODEL, k: process.env.OPENROUTER_API_KEY }, original = globalThis.fetch, bodies: Record<string, unknown>[] = [];
+ process.env.OPENROUTER_CONTROLLER_MODEL = 'custom/controller'; delete process.env.OPENROUTER_REFLECTION_MODEL; process.env.OPENROUTER_API_KEY = 'test-key-not-real';
+ try {
+  const deps = await createProductionDeps({ reflection_mode: 'shadow', enable_emergent_mannerisms: false });
+  assert.equal(deps.provider_status!.reflection_model, DEFAULT_REFLECTION_MODEL); assert.equal(deps.provider_status!.controller_model, 'custom/controller');
+  globalThis.fetch = (async (_url: unknown, init?: RequestInit) => { bodies.push(JSON.parse(String(init!.body))); return new Response(JSON.stringify({ provider: 'Azure', model: DEFAULT_REFLECTION_MODEL, choices: [{ finish_reason: 'stop', message: { content: '{"proposals":[]}' } }], usage: {} }), { status: 200 }); }) as typeof fetch;
+  const f = fixture(), result = await deps.reflection_provider!.reflect(captureProductionReflection(f.campaign, f.world, 'maren').request);
+  assert.equal(result.text, '{"proposals":[]}'); assert.equal(bodies.length, 1); assert.equal(bodies[0]!.model, 'anthropic/claude-haiku-5.5');
+ } finally {
+  globalThis.fetch = original;
+  for (const [k, v] of [['OPENROUTER_CONTROLLER_MODEL', saved.c], ['OPENROUTER_REFLECTION_MODEL', saved.r], ['OPENROUTER_API_KEY', saved.k]] as const) if (v === undefined) delete process.env[k]; else process.env[k] = v;
+ }
 });

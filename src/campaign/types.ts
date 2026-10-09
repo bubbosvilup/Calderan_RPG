@@ -70,10 +70,15 @@ export interface ItemAcquisition {
   acquired_at?: number; acquisition_kind?: "gift" | "purchase" | "loot" | "found" | "created";
   from_character_id?: string; event_id?: string;
 }
+/** Item Domain V1: broad, optional, descriptive only (no gameplay effect yet). */
+export type ItemCategory = "weapon" | "armor" | "clothing" | "tool" | "consumable" | "document" | "valuable" | "material" | "miscellaneous";
 export interface CampaignItem {
   id: string; origin: CampaignOrigin; name?: string; description?: string;
   /** Omission: unknown. null: explicitly unowned. Independent of position. */
   owner_id?: string | null; position: ItemPosition; acquisition?: ItemAcquisition;
+  category?: ItemCategory;
+  /** Item Domain V1: set only on engine-materialized items (create_item); the revision that created them. */
+  created_revision?: number;
 }
 export interface HouseholdMembership { character_id: string; status: "guest" | "member" | "former_member"; joined_at?: number; role?: string }
 /** Household Pass 1: a campaign-authored household rule. Runtime fact, never authored canon. */
@@ -234,7 +239,12 @@ export interface PlayerCharacterProfile {
   appearance: CharacterAppearance;
 }
 export interface CampaignSnapshot extends CampaignDomains {
-  schema_version: 5; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  schema_version: 6; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  /**
+   * Item Domain V1 (snapshot 6): the campaign-owned item ID allocator, the sequence number create_item assigns next. Advanced only
+   * inside the same atomic preparation that persists the item, so rejected, failed or no-op proposals never consume an ID.
+   */
+  next_item_sequence: number;
   /**
    * Player Character Profile V1: exactly one profile per authored player character (v1: Nicco only). The active player character
    * is resolved through activePlayerCharacterId(); a later multi-PC model adds an explicit active ID without changing consumers.
@@ -295,6 +305,11 @@ export type CampaignCommand =
   | { kind: "leave_scene"; character_id: string }
   | { kind: "set_slot_knowledge"; character_id: string; slot: string; state: "empty" | "unknown" }
   | { kind: "register_item"; item: CampaignItem }
+  /**
+   * Item Domain V1: materialize a persistent item instance. The proposer supplies data only; the engine allocates the ID
+   * (campaign_item_NNNNNNNN from next_item_sequence) during atomic preparation. V1 positions: carried by a character or lying at a location.
+   */
+  | { kind: "create_item"; name: string; description?: string; category?: ItemCategory; owner_id?: string | null; position: ItemPosition }
   | { kind: "place_item"; item_id: string; position: ItemPosition }
   | { kind: "transfer_item"; item_id: string; owner_id: string | null; position: ItemPosition; acquisition?: ItemAcquisition }
   | { kind: "create_household"; id: string; name?: string }

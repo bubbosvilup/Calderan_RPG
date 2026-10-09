@@ -8,8 +8,15 @@ const choice = (...values: string[]): Schema => ({ type: "string", enum: values 
 const object = (properties: Record<string, Schema>): Schema => ({ type: "object", properties, required: Object.keys(properties), additionalProperties: false });
 const position: Schema = { anyOf: [object({ kind: choice("carried"), character_id: string }),
   object({ kind: choice("equipped"), character_id: string, slot: string, mode: choice("worn", "held") })] };
+// Item Domain V1: a materialized item starts carried by a character or lying at a location; the engine allocates its ID (none here).
+const createPosition: Schema = { anyOf: [object({ kind: choice("carried"), character_id: string }), object({ kind: choice("stored"), location_id: string })] };
+const category = choice("weapon", "armor", "clothing", "tool", "consumable", "document", "valuable", "material", "miscellaneous");
+const createItem = { kind: choice("create_item"), name: string, description: string, category, position: createPosition };
 /** Deliberately small Phase 1K vocabulary. Relationship and arbitrary runtime edits are excluded. */
 export const CONTROLLER_SCHEMA = object({ commands: { type: "array", maxItems: 8, items: { anyOf: [
+  // Owner unknown: the variant without owner_id (never guessed). Owner known: owner_id names that character.
+  object(createItem),
+  object({ ...createItem, owner_id: string }),
   object({ kind: choice("place_item"), item_id: string, position }),
   object({ kind: choice("transfer_item"), item_id: string, owner_id: string, position }),
   object({ kind: choice("schedule_event"), id: string, title: string, scheduled_world_minute: integer, participants: { type: "array", items: string, maxItems: 16 } }),

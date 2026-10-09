@@ -9,6 +9,7 @@ import { validateMannerismRegistry } from "./mannerisms.js";
 import { validateMannerismLearning } from "./mannerism-learning.js";
 import { validatePortraitRecords } from "./portraits.js";
 import { validatePlayerCharacters } from "./player-character.js";
+import { engineItemSequence } from "./items.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -17,8 +18,8 @@ export class DatasetCompatibilityError extends CampaignValidationError {
   readonly code = "dataset_mismatch";
   constructor(readonly save_dataset_id: string, readonly current_dataset_id: string) { super("dataset_id", "canonical dataset mismatch"); this.name = "DatasetCompatibilityError"; }
 }
-/** NPC+ Pass 1: schema 2 added premium_characters; schema 3 adds the OFF_SCENE variant of a character location (final movement closure); schema 4 (Save/Load v1) formally adopts the image-generation-v1 portrait fields; schema 5 adds player_characters (Player Character Profile V1). Older snapshots reach it only through save migration. */
-export const CURRENT_SNAPSHOT_VERSION = 5;
+/** NPC+ Pass 1: schema 2 added premium_characters; schema 3 adds the OFF_SCENE variant of a character location (final movement closure); schema 4 (Save/Load v1) formally adopts the image-generation-v1 portrait fields; schema 5 adds player_characters (Player Character Profile V1); schema 6 adds next_item_sequence (Item Domain V1). Older snapshots reach it only through save migration. */
+export const CURRENT_SNAPSHOT_VERSION = 6;
 export function requireCurrentSnapshotVersion(input: unknown): void {
   const descriptor = input && typeof input === "object" ? Object.getOwnPropertyDescriptor(input, "schema_version") : undefined;
   if (descriptor && "value" in descriptor && Number.isSafeInteger(descriptor.value) && descriptor.value !== CURRENT_SNAPSHOT_VERSION) throw new SnapshotValidationError("unsupported_version", "schema_version");
@@ -73,6 +74,11 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   for (const item of s.items) {
     registration.registration(item.id, item.origin, "item");
     if (item.origin.kind === "created" && !item.name) fail("item.name", "created item requires a name");
+    // Item Domain V1: an engine-namespace ID was allocated by create_item, so it is created, below the allocator, and carries its
+    // creation revision; created_revision exists only on such items.
+    const sequence = engineItemSequence(item.id);
+    if (sequence !== undefined && (item.origin.kind !== "created" || sequence < 1 || sequence >= s.next_item_sequence || item.created_revision === undefined)) fail("item.id", "engine item ID outside the allocated sequence");
+    if (item.created_revision !== undefined && (sequence === undefined || item.created_revision > s.revision)) fail("item.created_revision", "invalid creation revision");
     if (item.owner_id != null) refs.character(item.owner_id);
     const p = item.position;
     if (p.kind === "stored") refs.location(p.location_id);

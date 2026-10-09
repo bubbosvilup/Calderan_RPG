@@ -1,0 +1,43 @@
+schema_version: 1
+entity:
+  id: aureth_trade
+  type: world_lore
+  name: Trade Between the Nations
+  display_name: Trade Between the Nations
+  parent: null
+  aliases: []
+  summary: >-
+    Broad economic tendencies linking West, Center and East, which continue alongside the West–Center rivalry and East's armed neutrality.
+  tags:
+    - economy
+    - trade
+  search_context: Trade between West, Center and East, Center spices and silk, West armour and precision goods, East iron, coal and whale products, cross-border and maritime commerce.
+  content: >-
+    These are broad tendencies, not routes, volumes or treaties. Center sends West spices, silk and fine
+    textiles, desert goods and captives, through Khar-Dune caravans and by sea among other ways. West sends
+    Center precision manufactures, weapons and armour, wood and selected luxury craft, chiefly from
+    Calderan. East sends West and Center iron, coal, cold-sea and whale products and durable northern
+    goods, chiefly from Frostspire and Skardgard. West and Center send East spices, luxury textiles,
+    warm-region food and luxuries, and precision and luxury manufactures. Political hostility between West
+    and Center does not stop commerce, and East trades when useful while avoiding the rivalry.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: public
+  category: fundamentals
+  related_entities:
+    - west
+    - center
+    - east
+    - zul_rath
+    - khar_dune
+    - sandspear
+    - calderan
+    - davenport
+    - vaelrost
+    - frostspire
+    - skardgard
+    - west_trade_network
+chunks: []

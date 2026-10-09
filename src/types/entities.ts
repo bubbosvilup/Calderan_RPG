@@ -18,10 +18,18 @@ export type LifecycleState = "active" | "inactive" | "destroyed" | "dead" | "ret
  * Omitted means unclassified: no ordinary-awareness permission. known_by and campaign edges are unaffected.
  */
 export type KnowledgeAwareness = "public" | "specialized" | "private" | `local:${string}`;
+/**
+ * Sealed canon (knowledge tiers 2 and 3, see AUTHORED_DATA_ARCHITECTURE.md). Both require visibility {narrator:false, player:false}
+ * and no awareness, so no retrieval index, scene projection or ordinary-awareness path ever reads them:
+ * - holder_only (tier 2, manual secret): reaches the narrator ONLY as NPC-private canon of a PRESENT known_by holder;
+ * - author_only (tier 3, deepest world truth): never reaches the narrator; known_by must stay empty.
+ */
+export type KnowledgeSecrecy = "holder_only" | "author_only";
 export interface KnowledgeAccess {
   visibility: { narrator: boolean; player: boolean };
   known_by: EntityId[];
   awareness?: KnowledgeAwareness;
+  secrecy?: KnowledgeSecrecy;
 }
 
 export interface BaseEntity {

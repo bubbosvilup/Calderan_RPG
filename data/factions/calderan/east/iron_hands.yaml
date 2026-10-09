@@ -24,7 +24,9 @@ entity:
     strength with relatively low weight, used for armor, weapons, specialist components and
     precision industry. Its quality comes from alloy composition, temperature, technique, sequencing
     and generational expertise, not from magic, and the exact process is closely guarded clan
-    knowledge. The elder Dunrig Iron Hands oversees the network."
+    knowledge. This tradition underlies the armour Calderan is famous for, durable yet comparatively
+    flexible and finely crafted; people informally call it \"Calderan metal\", a technique and alloy
+    tradition rather than a separate natural material. The elder Dunrig Iron Hands oversees the network."
   knowledge:
     visibility:
       narrator: true

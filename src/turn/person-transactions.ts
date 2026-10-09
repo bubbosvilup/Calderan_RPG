@@ -3,6 +3,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { WorldStore } from "../world/world-store.js";
+import { classifyBackgroundClaim } from "./background-grounding.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
 import { establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type SceneReading } from "./narrated-captives.js";
@@ -66,7 +67,7 @@ export function resolvePersonTransactions(input: string, context: TurnContext, s
     const target = reading ? resolveTarget(input, candidates, reading, named, latestOf(recent)) : undefined;
     const subject = target ? (target.kind === "persistent" ? target.id : undefined) : pick(candidates);
     if (target?.kind === "narrated" && reading) {
-      promotion = purchaseNarrated(target.person, reading, { input, context, snapshot, baseRevision, acceptance, participants: options.participants ?? [], latest: latestOf(recent), commands, notes, diagnostics, name, txId });
+      promotion = purchaseNarrated(target.person, reading, { input, context, snapshot, baseRevision, acceptance, participants: options.participants ?? [], latest: latestOf(recent), commands, notes, diagnostics, name, txId, ...(options.world ? { keepClaim: (text: string) => classifyBackgroundClaim(text, options.world!).status !== "unverified" } : {}) });
     }
     else if (target?.kind === "ambiguous" || target?.kind === "changed") {
       const labels = target.labels;
@@ -210,6 +211,8 @@ interface PurchaseScope {
   readonly participants: readonly EphemeralSceneParticipant[]; readonly latest: RecentExchange | undefined;
   readonly commands: CampaignCommand[]; readonly notes: string[]; readonly diagnostics: TradeResolution["diagnostics"][number][];
   readonly name: (id: string) => string; readonly txId: (subject: string) => string;
+  /** Background Grounding V1: rejects unverified named background claims before they become durable. */
+  readonly keepClaim?: (text: string) => boolean;
 }
 /**
  * A seller is (a) a present persistent character, (b) a narrator-created person with an established proper name (promoted by the
@@ -272,7 +275,7 @@ function purchaseNarrated(subjectPerson: NarratedPerson, reading: SceneReading, 
   const participant = subjectPerson.character_id ? undefined : linkedParticipant(subjectPerson, s.participants);
   let subjectId = subjectPerson.character_id;
   if (!subjectId) {
-    const facts = establishedFacts(subjectPerson, seller.key, s.name);
+    const facts = establishedFacts(subjectPerson, seller.key, s.name, s.keepClaim);
     const character = buildPromotedCharacter({ label, established: { ...facts.established, role: `enslaved; offered for sale by ${seller.label}` }, evidence: facts.evidence, location_id: location,
       trigger: subjectPerson.name ? "name_established" : "purchase_unnamed_subject", promoted_revision: s.baseRevision + 1, world_minute: minute, ephemeral_ref: participant?.id ?? subjectPerson.ref });
     s.commands.push({ kind: "register_character", character });
@@ -284,7 +287,7 @@ function purchaseNarrated(subjectPerson: NarratedPerson, reading: SceneReading, 
   } else {
     let holder = seller.kind === "persistent" ? seller.id : undefined;
     if (seller.kind === "named") { // the ordinary name rule: a named narrator-created seller is a campaign character, never anonymous
-      const facts = establishedFacts(seller.person, undefined, s.name);
+      const facts = establishedFacts(seller.person, undefined, s.name, s.keepClaim);
       const character = buildPromotedCharacter({ label: seller.label, established: facts.established, evidence: facts.evidence, location_id: location, trigger: "name_established", promoted_revision: s.baseRevision + 1, world_minute: minute, ephemeral_ref: seller.person.ref });
       s.commands.push({ kind: "register_character", character }); holder = character.id;
     }

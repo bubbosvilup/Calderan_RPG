@@ -8,8 +8,9 @@ entity:
   aliases: ["Church doctrine","Sun Emperor doctrine"]
   summary: >-
     Public doctrine of the Church of the Sun Emperor: the Sun Emperor as divine, immortal
-    sovereign and bearer of purifying Light, and the virtues of obedience, duty, labor,
-    sacrifice, endurance and social order.
+    founder, sovereign and bearer of purifying Light, long absent from the world; Shadow as
+    forbidden and corruptive; and the virtues of obedience, duty, labor, sacrifice, endurance and
+    social order.
   tags: ["religion","doctrine"]
   search_context: "Church doctrine, Sun Emperor, divine Light, purification, Shadow, obedience, duty, sacrifice, suffering, afterlife, cremation, slavery doctrine"
   content: >-
@@ -26,8 +27,26 @@ entity:
     doctrinal beliefs, not proven cosmology.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   category: religion
-  related_entities: ["church","sun_emperor","light_and_shadow","west_slavery"]
+  related_entities: ["church","sun_emperor","light_and_shadow","west_slavery","aureth_creation_myth"]
 chunks:
+  - id: church_doctrine.founder_and_shadow
+    entity_id: church_doctrine
+    section: founder_and_shadow
+    summary: "Church teaching on the Sun Emperor as founder and protector of the ordered world, his long absence, the prohibition of Shadow, and the older dragon myth."
+    search_context: "Sun Emperor founder, creation, protector of the world, absent emperor, disappearance, awaited return, why Shadow magic is forbidden, Shadow heresy, Church and the old Aureth myth, ancestral folklore"
+    content: >-
+      The Church teaches that the Sun Emperor founded and protects the divinely ordered world and that
+      his Light sustains that order. He disappeared from the world long ago; the Church does not teach
+      how or why, does not declare him dead, and believers variously regard him as hidden, withdrawn
+      into divine transcendence or awaiting the hour of his return, while West remains governed in his
+      name. The Church holds that its prohibition of Shadow rests on the Sun Emperor's own teaching:
+      Shadow is forbidden, corruptive and hostile to the divine order and to creation, and Shadow magic
+      is absolute heresy. The older ancestral myth of Aureth the golden dragon predates the Church,
+      which absorbed, reinterpreted or overwrote much of it within its own account and treats the
+      dragon tale itself as folklore. These are doctrinal beliefs, not proven cosmology; the details of
+      the founder's teaching and of any expected return are not established.
+    tags: ["shadow","founder"]
+    knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   - id: church_doctrine.afterlife_and_funerary
     entity_id: church_doctrine
     section: afterlife_and_funerary

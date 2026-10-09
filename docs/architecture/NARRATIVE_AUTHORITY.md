@@ -221,3 +221,28 @@ Historical playthrough windows remain an evaluation-only helper and are never us
   - narration never creates participants;
   - a generic guard's affiliation is unestablished.
 - **Diagnostics:** `TurnResult.action_resolution` lists resolved, blocked and unresolved actions, destination and item resolution, pre-narration runtime effects, outcome-dependent candidates and narrator notes.
+
+## 10. Ephemeral background policy (Background Grounding V1)
+
+Narrator-improvised people (captives, passers-by) have no authored background. Their background is **campaign truth only after it
+is established in play and verified**; WorldStore remains world truth.
+
+- **Progressive revelation.** Nothing is generated at spawn. A background fact emerges only when play asks for it, usually one fact
+  per exchange; a person may answer partly, vaguely, falsely or refuse, and the rest stays unknown.
+- **When grounding applies** (`src/turn/background-grounding.ts`, `backgroundNeed`): the player's turn asks someone other than
+  Nicco about origin, earlier life/occupation, how they were enslaved, or family/home, and someone is there to be asked. Looking,
+  clothing or injury questions do not trigger it. The question classes are a small auditable pattern table.
+- **What the narrator receives.** A separate `[BACKGROUND GROUNDING ? <topics>]` block, built deterministically from structured canon
+  (not from player-text retrieval ranking): already-established background first, as authority; the scene's own slave-source
+  categories and West slavery canon; every named settlement/region on Aureth (names only, provisional placeholders described, never
+  offered as proper names); one-line notes for canonical slave-flow places; peoples canon for species in play, with homelands framed as
+  possibilities never assumed for an individual. It assigns nothing to anyone. Ordinary turns carry no block and are unchanged.
+- **Narrator creativity.** Individual life details, unnamed villages, farms, households and jobs remain the narrator's to invent.
+  Named cities, regions, nations, cultures and factions must come from canon or stay vague.
+- **Guardrail and persistence.** Background sentences extracted at promotion (`establishedFacts`) are checked by
+  `classifyBackgroundClaim`: proper-name-like places/cultures/factions in place position are resolved against WorldStore names and
+  aliases. VERIFIED (all resolve) and GENERIC (no named place) claims may persist; UNVERIFIED claims (e.g. "the Marches") are not
+  established facts and never enter the durable background or the narrator-facing projection. Verbatim promotion evidence remains raw
+  provenance. No WorldStore entity is ever created from narration.
+- **Authority.** Established background always wins; grounding lists it first and the narrator must not offer alternatives.
+

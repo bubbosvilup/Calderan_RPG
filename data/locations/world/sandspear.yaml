@@ -7,12 +7,14 @@ entity:
   parent: center
   aliases: []
   summary: >-
-    Sandspear is a southern Center desert/coastal stronghold centered on a massive solitary
-    black-basalt tower, with corsair and mercenary-mariner activity.
+    Sandspear is Center's major corsair and maritime city, a southern desert/coastal stronghold
+    centered on a massive solitary black-basalt tower, famous for fast ships and skilled sailors.
   content: >-
     The defining tower rises from the desert near the coast in far southern Center.
     Sandspear is violent and lightly regulated, dominated by navigator guilds/groups and
-    warlords without a fixed detailed government. Its economy spans piracy, corsair warfare,
+    warlords without a fixed detailed government. It is Center's principal maritime city, but
+    unlike Davenport its strength is fast ships, skilled sailors, corsairs and naval raiding rather
+    than large conventional fleet building. Its economy spans piracy, corsair warfare,
     mercenary service, and maritime disruption. Zul-Rath may employ or tolerate its forces
     to harass shipping and disrupt West trade without formal national war; not every corsair
     is a direct government soldier. Sandspear persistently rivals Blackwater over Chained
@@ -21,7 +23,7 @@ entity:
     wartime spoils, sometimes producing bloody naval engagements. This rivalry does not
     establish formal West–Center naval war or a predetermined winner.
   tags: [geography]
-  search_context: ""
+  search_context: "Sandspear corsair port of Center, black-basalt tower, corsairs, fast raiding ships, sailors, privateers, Center navy, captured cargo, rivalry with Davenport and Blackwater."
   knowledge:
     visibility:
       narrator: true
@@ -36,6 +38,32 @@ entity:
       description: "Dominant social actors without a fully defined or rigid city government."
     - name: "maritime rival"
       description: "Blackwater"
+    - name: "fast raiding ships"
+      description: "Its shipwrights favour fast vessels built for raiding, corsair work and desert-coast conditions."
   connections: []
-chunks: []
-
+chunks:
+  - id: sandspear.maritime_economy
+    entity_id: sandspear
+    section: maritime_economy
+    summary: Sandspear's shipbuilding, fishing, corsair and maritime economy, legal and illicit trade, and its rivalries with Davenport and Blackwater.
+    search_context: Sandspear economy, corsairs, privateers, fast ships, shipwrights, ship repair, sailors, fishers, captured cargo, maritime trade, Center goods by sea, Davenport rivalry.
+    content: >-
+      Sandspear's economy includes shipbuilding, ship repair, fishing, maritime trade, corsair
+      activity, mercenary maritime work, seized and captured cargo, slave trafficking, and sailors and
+      naval labour. Its vessels are generally built for speed, raiding, desert-coast conditions and
+      corsair or privateering roles; Davenport remains superior and more famous for large
+      conventional and fleet shipbuilding. Legal commerce includes fish, ship services, maritime
+      cargo, Center goods, and spices and textiles in transit; illicit or semi-legal commerce
+      includes captured cargo, slaves, contraband and piracy spoils. With Davenport it has a
+      geopolitical rivalry of maritime incidents, raiding and privateering, and commercial
+      competition; with Blackwater, competition over piracy and contraband and mutual hostility,
+      though opportunistic dealings still happen. Neither is a formal permanent war, and no pirate
+      code or admiralty system is established.
+    tags:
+      - economy
+      - maritime
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

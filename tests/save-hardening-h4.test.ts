@@ -14,7 +14,7 @@ import { FileCampaignRepository } from "../src/persistence/campaign-repository.j
 const now = "2026-10-01T10:00:00.000Z";
 
 /** NPC+ Pass 1: a real legacy envelope carries a schema-1 snapshot (no premium_characters domain). */
-const legacySnapshot = ({ premium_characters: _premium, premium_reflections: _reflections, player_characters: _players, ...snapshot }: Record<string, unknown>) => ({ ...snapshot, schema_version: 1 });
+const legacySnapshot = ({ premium_characters: _premium, premium_reflections: _reflections, player_characters: _players, next_item_sequence: _items, ...snapshot }: Record<string, unknown>) => ({ ...snapshot, schema_version: 1 });
 test("real legacy v1 envelope migrates to the current strict policy; unknown legacy fields are not discarded", () => {
   const { campaign, world } = richCampaign(), current = createSaveFile(campaign.exportSnapshot(), world, now);
   const { canon_compatibility: _policy, canon_references: _references, ...rest } = current;
@@ -54,7 +54,7 @@ for (const recovery of ["current_valid", "current_corrupt", "both_corrupt", "cur
       await writeFile(currentPath, JSON.stringify(value));
     }
     if (recovery === "old_migratable") {
-      const value = JSON.parse(await readFile(currentPath, "utf8")); value.schema_version = 1; delete value.canon_compatibility; delete value.canon_references; value.snapshot.schema_version = 1; delete value.snapshot.premium_characters; delete value.snapshot.premium_reflections; delete value.snapshot.player_characters;
+      const value = JSON.parse(await readFile(currentPath, "utf8")); value.schema_version = 1; delete value.canon_compatibility; delete value.canon_references; value.snapshot.schema_version = 1; delete value.snapshot.premium_characters; delete value.snapshot.premium_reflections; delete value.snapshot.player_characters; delete value.snapshot.next_item_sequence;
       await writeFile(currentPath, JSON.stringify(value)); await writeFile(previousPath, "bad recovery");
     }
     const bytesBefore = await readFile(currentPath, "utf8"), stateBefore = campaign.exportSnapshot();

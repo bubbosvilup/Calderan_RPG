@@ -13,10 +13,12 @@ entity:
   search_context: ""
   content: >-
     Craftsmanship, construction, technical trades, and skilled material work are cultural
-    patterns, not biological absolutes. Not every dwarf is an artisan. No racial stat bonuses
-    or dwarf nation are established.
+    patterns, not biological absolutes. Not every dwarf is an artisan. Their ancestral
+    homeland is the Dragon's Teeth Mountains; many have since dispersed into cities across
+    West, Center and East, where their metalwork and craft are in demand. No racial stat
+    bonuses or unified dwarf nation are established.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   category: "races"
-  related_entities: []
+  related_entities: ["dragons_teeth_mountains"]
 chunks: []
 

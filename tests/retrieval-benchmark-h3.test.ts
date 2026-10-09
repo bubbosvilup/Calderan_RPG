@@ -22,7 +22,7 @@ test("benchmark covers every required category", () => {
   for (const c of ["exact_entity", "alias", "multiple_exact", "lexical_lore", "multi_answer", "ambiguous", "conversational", "restricted", "npc_known_restricted", "ordinary_action"]) assert.ok(categories.has(c as never), c);
 });
 test("hard gates: zero secret leakage and zero forbidden results across ALL cases (all restricted canon checked on every query)", () => {
-  assert.equal(result.restricted_records_checked, 19);
+  assert.equal(result.restricted_records_checked, 26); // +1 World Tree (West pass); +6 mythology pass: 1 restricted Church record, 2 holder_only, 3 author_only
   assert.equal(result.secret_leakage_rate, 0);
   assert.equal(result.forbidden_result_rate, 0, JSON.stringify(result.rows.filter(r => r.forbidden_hit.length)));
 });

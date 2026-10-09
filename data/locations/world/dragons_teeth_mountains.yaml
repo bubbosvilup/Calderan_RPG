@@ -7,16 +7,26 @@ entity:
   parent: continent
   aliases: []
   summary: >-
-    A major northern interior mountain chain spans the transition between Center and East,
-    forming a geographic barrier near Frostspire.
+    A major mountainous spine across Aureth's northern and eastern side, from near the forest
+    north of Calderan to the Center–East transition near Frostspire; the ancestral homeland
+    of Aureth's dwarves.
   content: >-
-    The range extends broadly across the northern continental interior rather than forming
-    one isolated peak. It separates or complicates passage between portions of Center and
-    East and lies near Frostspire. Exact elevations, length, peaks, passes, mountain
+    The range extends broadly across the northern and eastern side of the continent rather
+    than forming one isolated peak. Its broad western end approaches the region where the
+    forest north of Calderan begins; farther east it separates or complicates passage
+    between portions of Center and East and lies near Frostspire. The range is the ancestral
+    homeland and principal historic origin of Aureth's dwarves; dwarf communities and clans
+    originate there. Dwarves are highly regarded for metalworking and skilled craftsmanship,
+    and over time many have dispersed into cities across West, Center and East, where city
+    authorities, nobles, merchants or institutions may recruit or employ dwarf artisans for
+    that reputation. Iron, stone and other ordinary metal and stone materials from the region reach
+    Calderan for processing. No single unified dwarf kingdom, clan names, political structure, specific
+    mines or resources, or supernatural forging abilities are established, and not every
+    dwarf is a craftsman. Exact elevations, length, peaks, passes, mountain
     settlements, and the origin of its name remain unspecified. Its name does not establish
     dragons or a dragon history.
   tags: [geography]
-  search_context: ""
+  search_context: "Dragon's Teeth Mountains, northern and eastern mountain range of Aureth; ancestral homeland and origin of the dwarves; dwarf clans, dwarven smiths, metalworking and craftsmanship; mountain dwarves later dispersed into cities."
   knowledge:
     visibility:
       narrator: true
@@ -25,6 +35,8 @@ entity:
   features:
     - name: "northern geographic barrier"
       description: "The extended mountain chain complicates passage across portions of the Center–East transition."
+    - name: "ancestral dwarven homeland"
+      description: "Principal historic origin of Aureth's dwarves and their clans; no single dwarf kingdom is established."
   connections: []
 chunks: []
 

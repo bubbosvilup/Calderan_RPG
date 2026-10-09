@@ -16,6 +16,7 @@ import { SemanticIndex } from "../retrieval/semantic-index.js";
 import type { EmbeddingProvider } from "../retrieval/embedding-provider.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { NARRATOR_OUTPUT_TOKENS, selectedModels, contextCompressorModel, mannerismExtractorModel } from "./provider-config.js";
+import { DEFAULT_CONTROLLER_FALLBACK_MODELS } from "../llm/openrouter/state-controller.js";
 import type { SessionDeps, SessionHooks } from "./game-session.js";
 import type { ProviderStatus } from "./session-view.js";
 import { join } from "node:path";
@@ -31,10 +32,11 @@ import { observePreparedNarrator } from "./narrator-alternatives.js";
  * Environment-based provider configuration (current policy; there is no settings UI yet):
  *   OPENROUTER_API_KEY          required for live play; read per request by the client and never copied anywhere.
  *   OPENROUTER_NARRATOR_MODEL   optional narrator model id.
- *   OPENROUTER_CONTROLLER_MODEL optional controller model id.
+ *   OPENROUTER_CONTROLLER_MODEL optional controller model id; default openai/gpt-6-luna.
+ *   OPENROUTER_CONTROLLER_FALLBACK_MODELS optional comma list for OpenRouter `models` fallback, or "none"; default anthropic/claude-haiku-5.5.
  *   CALDREVAN_REFLECTION_MODE  optional off (default) or shadow; neither exposes notes to narration.
- *   OPENROUTER_REFLECTION_MODEL optional reflection model id (retains its pre-controller-migration default).
- *   MANNERISM_EXTRACTOR_MODEL  optional independent observation model id (validated D-10 default).
+ *   OPENROUTER_REFLECTION_MODEL optional reflection model id; the qualified adapter accepts only its default (anthropic/claude-haiku-5.5).
+ *   MANNERISM_EXTRACTOR_MODEL  optional independent observation model id; default openai/gpt-6-luna.
  *   HF_TOKEN                    portrait images (image generation v1): Raelina/Raena-Qwen-Image on fal-ai via the Hugging Face router
  *                               (src/app/image-stack.ts). Read per request, never logged. Absent = generation fails with a clear message.
  *                               OpenRouter is not used for images.
@@ -43,7 +45,13 @@ import { observePreparedNarrator } from "./narrator-alternatives.js";
  */
 export function readProviderStatus(env: Readonly<Record<string, string | undefined>> = process.env): ProviderStatus {
   const models = selectedModels();
-  return { mode: "live", configured: !!env.OPENROUTER_API_KEY?.trim(), narrator_model: models.narrator, controller_model: models.controller, reflection_model: env.OPENROUTER_REFLECTION_MODEL?.trim() || process.env.OPENROUTER_CONTROLLER_MODEL || DEFAULT_REFLECTION_MODEL };
+  return { mode: "live", configured: !!env.OPENROUTER_API_KEY?.trim(), narrator_model: models.narrator, controller_model: models.controller, reflection_model: env.OPENROUTER_REFLECTION_MODEL?.trim() || DEFAULT_REFLECTION_MODEL };
+}
+/** Controller model fallback (OpenRouter `models`): OPENROUTER_CONTROLLER_FALLBACK_MODELS is a comma list, or "none" to disable; unset = Claude Haiku 5.5. */
+export function controllerFallbackModels(env: Readonly<Record<string, string | undefined>> = process.env): readonly string[] {
+  const raw = env.OPENROUTER_CONTROLLER_FALLBACK_MODELS?.trim();
+  if (raw === undefined || raw === "") return DEFAULT_CONTROLLER_FALLBACK_MODELS;
+  return raw.toLowerCase() === "none" ? [] : raw.split(",").map(model => model.trim()).filter(Boolean);
 }
 export type ReflectionMode = "off" | "shadow";
 /** D-09 is deferred. Shadow records qualified notes during real play without narrator exposure. */
@@ -76,7 +84,7 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
   // Production narrator requests always disable hidden reasoning (Phase 1M.1); the controller uses the selected model and default retry policy.
   const narrator = new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true });
   const coordinator = new TurnCoordinator(world, options.prepared_narrator_observer ? observePreparedNarrator(narrator, options.prepared_narrator_observer, NARRATOR_OUTPUT_TOKENS) : narrator,
-    new OpenRouterStateControllerProvider(undefined, { model: status.controller_model! }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, narrator_request_setup: request => narratorSetup?.(request) ?? request, diagnostics_sink: record => sink?.(record) });
+    new OpenRouterStateControllerProvider(undefined, { model: status.controller_model!, fallback_models: controllerFallbackModels() }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, narrator_request_setup: request => narratorSetup?.(request) ?? request, diagnostics_sink: record => sink?.(record) });
   const saveDir = options.save_dir ?? "saves", campaignsRoot = join(saveDir, "campaigns"), persistent = options.persistent_campaigns === true;
   const engine_version = await readFile("package.json", "utf8").then(text => (JSON.parse(text) as { version?: unknown }).version, () => undefined);
   return { world, context_policy, compaction_service, repository: new FileCampaignRepository(world, persistent ? campaignsRoot : saveDir), provider_status: status,

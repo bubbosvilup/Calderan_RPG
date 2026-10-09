@@ -1,0 +1,64 @@
+schema_version: 1
+entity:
+  id: woodsingers
+  type: world_lore
+  name: Woodsingers
+  display_name: Woodsingers
+  parent: null
+  aliases:
+    - Woodsinger
+    - Woodsinger elves
+    - Wood singers
+  summary: >-
+    The Woodsingers are the principal traditional elven people of Woodsong Forest, a relatively isolated
+    forest-elven culture of defenders, archers and wood craftsmen who "sing the wood" rather than cut it.
+  tags:
+    - elves
+    - culture
+  search_context: Woodsinger elves of Woodsong Forest, forest elves, wood singers, singing the wood, elven archers, forest defenders, premium bows, Woodsong timber, rare elven captives, elf slave raids.
+  content: >-
+    The Woodsingers, "those who sing the wood", are a relatively isolated forest-elven culture of Woodsong
+    Forest. They limit outside contact, partly to protect the forest and its secrets, and are skilled forest
+    defenders, warriors, archers and wood craftsmen. Their woodcraft is culturally described as singing the wood
+    rather than ordinary aggressive harvesting and shaping; its mechanics are not established. They do not freely
+    cut healthy Woodsong trees; acceptable wood traditionally comes from naturally fallen timber, dying trees and
+    wood understood to have been yielded by the forest, which keeps genuine Woodsong timber scarce, expensive and
+    highly valued. Woodsong timber and Woodsinger craft contribute to premium bows, fine woodcraft and luxury
+    wooden goods, and Calderan is an important market for legitimate Woodsinger craft. Woodsingers actively resist
+    illegal logging, poaching and hostile incursions. They preserve a richer traditional corpus about Aureth's
+    creation myth than ordinary populations; this does not make their versions objectively correct, and its
+    contents are not public. Slave raiders target them because elves are relatively uncommon in the slave market
+    and some wealthy buyers, including some Calderan nobles, pay high prices for forest elves as rare, prestigious
+    captives. This is an external threat, not a Woodsinger trade: they do not cooperate, not all Calderan nobles
+    take part, and not every captured elf is a Woodsinger. Their government, clans and leaders are not established.
+    The Woodsigners of Calderan's East District are a small urban branch descended from this culture.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  category: cultures
+  related_entities:
+    - calderan_northern_forest
+    - elves
+    - aureth_creation_myth
+    - calderan
+    - woodsigner
+chunks:
+  - id: woodsingers.sacred_tree
+    entity_id: woodsingers
+    section: sacred_tree
+    summary: Woodsinger tradition reveres an ancient sacred tree deep in Woodsong Forest.
+    search_context: Sacred tree of the Woodsingers, ancient sacred tree, Woodsinger reverence, forest continuity and protection, elven tradition.
+    content: >-
+      Woodsinger tradition reveres an ancient sacred tree deep in Woodsong Forest, associated with the forest's
+      continuity and protection. This is cultural belief and reverence; outsiders know little more, and the
+      Woodsingers do not share its location or their traditions about it.
+    tags:
+      - tradition
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []
+      awareness: public

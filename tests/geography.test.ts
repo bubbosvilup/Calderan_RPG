@@ -6,30 +6,32 @@ import { buildNarrativeContext } from "../src/scene/narrative-context-builder.js
 
 const memberships = {
   west: ["calderan", "ironbound", "davenport", "blackwater"],
-  center: ["zul_rath", "khar_dune", "sandspear"],
+  center: ["zul_rath", "khar_dune", "sandspear", "central_oasis_settlement"],
   east: ["vaelrost", "frostspire", "skardgard"],
 };
-const geography = ["continent", ...Object.keys(memberships), ...Object.values(memberships).flat(), "mist_sea", "sorrow_sea", "silent_ocean", "chained_bay", "dragons_teeth_mountains"];
+const geography = ["continent", ...Object.keys(memberships), ...Object.values(memberships).flat(), "mist_sea", "sorrow_sea", "silent_ocean", "chained_bay", "dragons_teeth_mountains", "calderan_northern_forest"];
 const expectedFeatures: Record<string, string[]> = {
   continent: ["continental nations"],
   west: ["national capital", "land border with Center", "temperate regional climate"],
-  center: ["national capital", "land border with West", "land border with East", "arid regional climate"],
+  center: ["national capital", "land border with West", "land border with East", "arid regional climate", "magic prohibited", "tournament rulership"],
   east: ["national capital", "land border with Center", "armed neutrality", "cold regional climate"],
   mist_sea: [], sorrow_sea: [], silent_ocean: [], chained_bay: [],
-  dragons_teeth_mountains: ["northern geographic barrier"],
+  dragons_teeth_mountains: ["northern geographic barrier", "ancestral dwarven homeland"],
+  calderan_northern_forest: ["dense lush forest", "major elven population center", "limited human traffic", "scarce premium timber"],
+  central_oasis_settlement: ["natural freshwater oasis", "cultural homeland", "mounted martial tradition"],
   calderan: ["capital of West", "two outer gates", "five-district civic structure", "legal slave-market control"],
-  ironbound: ["fortified frontier city", "military and customs filtering point"],
-  davenport: ["principal economic and maritime port", "stone docks and warehouses", "legal slave-market control"],
-  blackwater: ["de facto autonomy", "fragmented criminal governance", "illegal maritime trade", "maritime rival"],
-  zul_rath: ["capital of Center"],
+  ironbound: ["fortified frontier city", "military and customs filtering point", "military governance"],
+  davenport: ["principal economic and maritime port", "stone docks and warehouses", "legal slave-market control", "West's principal shipyards", "renowned pearls"],
+  blackwater: ["de facto autonomy", "fragmented criminal governance", "illegal maritime trade", "maritime rival", "harbour stair and elevated town", "Blackwater Fire"],
+  zul_rath: ["capital of Center", "spices and silk", "reliable oasis water"],
   khar_dune: ["fortified caravan watering point", "underground slave and contraband markets"],
-  sandspear: ["solitary black-basalt tower", "corsair and mercenary-mariner stronghold", "navigator groups and warlords", "maritime rival"],
+  sandspear: ["solitary black-basalt tower", "corsair and mercenary-mariner stronghold", "navigator groups and warlords", "maritime rival", "fast raiding ships"],
   vaelrost: ["capital of East"],
   frostspire: ["rocky spur and fortified keep", "iron and coal mining", "military frontier garrison", "armed neutrality"],
   skardgard: ["principal coastal city", "fjord-like coast and dark stone fortifications", "whaling, shipbuilding, and high-seas fishing"],
 };
 
-test("geography loads as 19 locations with explicit identity, containment, and classification", async () => {
+test("geography loads as 21 locations with explicit identity, containment, and classification", async () => {
   const world = await loadWorld("data");
   const locations = world.getEntitiesByType("location");
   // City-internal locations (Heartstone, the square outside it, the slave market) sit below Calderan and are not national geography.
@@ -43,7 +45,7 @@ test("geography loads as 19 locations with explicit identity, containment, and c
     assert(Object.isFrozen(entity));
   }
   assert.equal(world.getEntity("continent")!.parent, null);
-  assert.deepEqual(world.getChildren("continent").map(e => e.id).sort(), ["center", "dragons_teeth_mountains", "east", "west"]);
+  assert.deepEqual(world.getChildren("continent").map(e => e.id).sort(), ["calderan_northern_forest", "center", "dragons_teeth_mountains", "east", "west"]);
   for (const [nation, cities] of Object.entries(memberships)) {
     assert.equal(world.getEntity(nation)!.parent, "continent");
     assert.deepEqual(world.getChildren(nation).map(e => e.id).sort(), [...cities].sort());

@@ -1,0 +1,48 @@
+schema_version: 1
+entity:
+  id: west_trade_network
+  type: world_lore
+  name: West Trade and Supply
+  display_name: West Trade and Supply
+  parent: null
+  aliases: []
+  summary: >-
+    The broad supply and trade links of West's major cities, which continue alongside the West–Center rivalry.
+  tags:
+    - economy
+    - trade
+  search_context: West trade, imports and exports, raw materials, Calderan manufacturing, Davenport port, Dragon's Teeth iron and stone, Woodsong timber, Zul-Rath textiles, salt and spices, Blackwater contraband, Ironbound supply.
+  content: >-
+    These are lore-level commercial links, not exact routes, volumes or treaties. Iron, stone and other raw
+    materials from the Dragon's Teeth Mountains region reach Calderan for processing. Premium timber and Woodsinger
+    craft from Woodsong Forest reach Calderan. Farms and granaries around Calderan feed the city. Fine textiles, salt,
+    spices and luxury fashion inputs reach Calderan from Center and Zul-Rath-linked trade. Calderan exports armour,
+    weapons, precision metalwork and clockwork, bows, fine woodcraft, textiles and fashion across Aureth. Davenport
+    supplies fish, marine food, pearls, marine materials, fruit and ships to Calderan and wider Aureth, while Calderan
+    sends inland farm produce and manufactured goods to Davenport. Blackwater exports Blackwater Fire, contraband and
+    exotic goods, largely through smuggling. West's institutions, above all Calderan and Davenport, keep Ironbound
+    supplied and populated. Ordinary commerce with Center continues despite political tension and border skirmishes,
+    and Calderan and Davenport also trade with East, including Vaelrost and Skardgard.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: public
+  category: fundamentals
+  related_entities:
+    - west
+    - calderan
+    - davenport
+    - ironbound
+    - blackwater
+    - calderan_northern_forest
+    - woodsingers
+    - dragons_teeth_mountains
+    - center
+    - zul_rath
+    - east
+    - vaelrost
+    - skardgard
+    - west_slavery
+chunks: []

@@ -7,7 +7,11 @@ export interface Latency {
   readonly completed_at: string;
   readonly elapsed_total_ms: number;
 }
-export interface GenerationMetadata { readonly model: string; readonly provider?: string; readonly usage: Usage; readonly latency: Latency; readonly cost_usd?: number }
+/**
+ * `model` is the REQUESTED (primary) model. `response_model` is the model OpenRouter reports in the response body, which differs
+ * when a `models` fallback answered. `generation_id` is OpenRouter's gen-… id (body `id` or X-Generation-Id), safe to log.
+ */
+export interface GenerationMetadata { readonly model: string; readonly response_model?: string; readonly generation_id?: string; readonly provider?: string; readonly usage: Usage; readonly latency: Latency; readonly cost_usd?: number }
 export interface GenerationRequest {
   readonly system_prompt: string;
   readonly messages: readonly Message[];

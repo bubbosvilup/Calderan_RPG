@@ -23,14 +23,20 @@ export interface TurnDiagnostics {
   context_too_large_cause?: DiagnosticPhase;
   narrator?: { model?: string; usage?: GenerationMetadata["usage"]; latency_ms?: number; completed: boolean; streamed_characters: number; final_text_characters: number };
   revision_narrator?: TurnDiagnostics["narrator"];
-  controller?: { model: string; provider?: string; usage: GenerationMetadata["usage"]; latency_ms: number; parse_success: boolean; proposed_count: number; command_kinds: readonly string[]; normalization_used: boolean };
+  /** `model` is the requested primary; `response_model` what OpenRouter reported; `model_fallback` true when a `models` fallback answered. */
+  controller?: { model: string; response_model?: string; requested_models?: readonly string[]; model_fallback?: boolean; generation_id?: string; provider?: string; usage: GenerationMetadata["usage"]; latency_ms: number; parse_success: boolean; proposed_count: number; command_kinds: readonly string[]; normalization_used: boolean };
   /** H5: attempts per logical provider call (draft narrator, reconciliation narrator, controller). Counts, reasons and timing only. */
   provider_attempts?: { narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
   authorization?: { duplicates_removed?: number; proposed_count: number; authorized_count: number; rejected_count: number; decisions: readonly { kind: string; authorized: boolean; reason: string; evidence_check?: string }[] };
   audit?: { issue_count: number; issue_kinds: readonly string[]; reconciliation_attempted: boolean; revision_issue_count: number; revision_issue_kinds: readonly string[]; redaction_used: boolean; delivered: string };
   commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_promotion_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };
 }
-export type TurnDiagnosticsSink = (record: DeepReadonly<TurnDiagnostics>) => unknown;
+/** Controller model identity for diagnostics: requested primary, answering model, fallback flag, generation id, upstream provider. No content. */
+export function controllerModelDiagnostics(r: import("../llm/state-controller-provider.js").ControllerResult): Pick<NonNullable<TurnDiagnostics["controller"]>, "model" | "response_model" | "requested_models" | "model_fallback" | "generation_id" | "provider"> {
+  return { model: r.model, ...(r.response_model ? { response_model: r.response_model } : {}), ...(r.requested_models ? { requested_models: [...r.requested_models] } : {}),
+    ...(r.model_fallback === undefined ? {} : { model_fallback: r.model_fallback }), ...(r.generation_id ? { generation_id: r.generation_id } : {}), ...(r.provider ? { provider: r.provider } : {}) };
+}
+export type TurnDiagnosticsSink =(record: DeepReadonly<TurnDiagnostics>) => unknown;
 let sequence = 0;
 /** Opt-in observer; never passed to prompts, campaign state or save serialization. */
 export class TurnDiagnosticObserver {

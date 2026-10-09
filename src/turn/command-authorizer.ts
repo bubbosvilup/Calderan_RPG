@@ -1,14 +1,19 @@
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
+import type { WorldStore } from "../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { isPhysicalCondition } from "./physical-interaction.js";
 import { ruleMatchesDeclaration } from "./household-evidence.js";
 
+/** Item Domain V1 owner check: an authored character (world) or a campaign character (snapshot). Never the player's absence or presence. */
+export function knownCharacter(id: string, snapshot: DeepReadonly<CampaignSnapshot>, world?: WorldStore): boolean {
+  return snapshot.characters.some(c => c.id === id) || (world ? world.getEntity(id)?.type === "character" : snapshot.runtime.npc_locations.some(n => n.character_id === id));
+}
 /** Policy consumes resolved same-turn evidence, never searches arbitrary narration. */
-export function authorizeCommands(proposal: readonly CampaignCommand[], evidence: TurnEvidence, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>): readonly AuthorizationDiagnostic[] {
+export function authorizeCommands(proposal: readonly CampaignCommand[], evidence: TurnEvidence, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world?: WorldStore): readonly AuthorizationDiagnostic[] {
   const present = new Set(context.characters.map(c => c.id));
   return proposal.map(command => {
     const reject = (reason: AuthorizationDiagnostic["reason"]): AuthorizationDiagnostic => ({ command, authorized: false, reason });
@@ -24,6 +29,21 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const inbound = !!item && !!holder && holder !== "nicco" && item.owner_id === holder && present.has(holder) && command.owner_id === "nicco" && command.position.kind === "carried" && command.position.character_id === "nicco";
         valid = outbound || inbound;
         break;
+      }
+      case "create_item": {
+        // Item Domain V1: the controller decides semantically that an object needs persistent identity; the engine checks the
+        // references here (a present holder or the current scene location; a present owner or none) and refuses re-materializing an
+        // item already in state at that position. There is no grammar path: only a verified narration quote completes it (hybrid).
+        const p = command.position, here = snapshot.runtime.scene.player_location;
+        const placed = p.kind === "carried" ? present.has(p.character_id) : p.kind === "stored" && p.location_id === here;
+        // Ownership is social/legal, not physical: an owner must resolve to a known character, present or not (an absent owner
+        // additionally needs the narration to name them; see verifyEvidence). Position rules above stay strictly physical.
+        const owner = command.owner_id === undefined || command.owner_id === null || present.has(command.owner_id) || knownCharacter(command.owner_id, snapshot, world);
+        if (!placed || !owner || !command.name.trim()) return reject("rejected_reference_invalid");
+        const norm = (s: string | undefined) => (s ?? "").trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
+        const samePlace = (q: DeepReadonly<CampaignSnapshot>["items"][number]["position"]) => p.kind === "carried" ? (q.kind === "carried" || q.kind === "equipped") && q.character_id === p.character_id : q.kind === "stored" && p.kind === "stored" && q.location_id === p.location_id;
+        if (snapshot.items.some(i => norm(i.name) === norm(command.name) && samePlace(i.position))) return reject("rejected_already_established");
+        return reject("rejected_insufficient_confirmation");
       }
       case "set_condition": {
         // Repair 1 class-B physical conditions: closed vocabulary, same-turn physical interaction, additive only, no status or

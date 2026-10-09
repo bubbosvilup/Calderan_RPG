@@ -18,7 +18,7 @@ entity:
     establishes neither an alliance nor friendship with West or Center, and does not define
     East's entire foreign policy.
   tags: [geography]
-  search_context: ""
+  search_context: "Frostspire mining and garrison town of East, miners, iron and coal mining, haulers, frontier soldiers, smiths, armed neutrality."
   knowledge:
     visibility:
       narrator: true
@@ -34,5 +34,23 @@ entity:
     - name: "armed neutrality"
       description: "Frostspire enforces East's neutral stance toward the West–Center conflict, repelling incursions from either side when necessary."
   connections: []
-chunks: []
-
+chunks:
+  - id: frostspire.mining_economy
+    entity_id: frostspire
+    section: mining_economy
+    summary: Frostspire's mining economy, its iron, coal and stone exports, its imports and the work of the town.
+    search_context: Frostspire economy, miners, iron miners, coal miners, East miner, Frostspire worker, haulers, garrison smiths, mining supplies, food imports.
+    content: >-
+      Frostspire's economy is dominated by mines, transport, military support, smithing and repair,
+      and logistics. It exports iron, coal and stone and other mining products to Vaelrost, Skardgard
+      and the rest of East, and in some foreign trade, potentially including Calderan; no exact shares
+      are established. Its climate and mining specialization mean it imports food, textiles, some
+      timber, luxury goods and other goods hard to produce locally. No magical ores are established.
+    tags:
+      - economy
+      - mining
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

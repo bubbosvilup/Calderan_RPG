@@ -90,7 +90,7 @@ test("create campaign (host): stable generated ID, display name, scenario record
   assert.match(id, /^campaign_\d{8}_[0-9a-f]{6}$/); assert.deepEqual(session.campaignMeta, { display_name: "Nicco in Calderan", scenario_id: "caldrevan.slave_market.v1" });
   assert.equal(session.hasUnsavedChanges, false); assert.equal(session.getView().scene.location.id, "calderan_slave_market");
   const save = JSON.parse(await fs.readFile(join(root, "campaigns", id, "save.json"), "utf8"));
-  assert.deepEqual([save.schema_version, save.snapshot.schema_version, save.metadata.display_name, save.metadata.scenario_id, save.metadata.save_reason, save.metadata.engine_version], [5, 5, "Nicco in Calderan", "caldrevan.slave_market.v1", "create", "0.1.0"]);
+  assert.deepEqual([save.schema_version, save.snapshot.schema_version, save.metadata.display_name, save.metadata.scenario_id, save.metadata.save_reason, save.metadata.engine_version], [5, 6, "Nicco in Calderan", "caldrevan.slave_market.v1", "create", "0.1.0"]);
   assert.match(save.canonical_dataset_id, /^sha256:/);
   const listed = await host.listCampaigns();
   assert.deepEqual(listed.map(c => [c.campaign_id, c.display_name, c.status, c.location_name]), [[id, "Nicco in Calderan", "valid", world.getEntity("calderan_slave_market")!.display_name]]);

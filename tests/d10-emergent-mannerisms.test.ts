@@ -234,7 +234,7 @@ test("D10 P2 future UI and narrator keep unpromoted candidate evidence private",
 test("D10 P2B provider uses validated independent model, strict schema, no reasoning/streaming; production enables extraction", async () => {
   const f = mannerismFixture(), r = request(f, "Brenna taps two fingers while waiting."); let calls = 0;
   const client = new OpenRouterClient({ api_key: () => "offline-test-key", fetch: async (_url, init) => {
-    calls++; const body = JSON.parse(String(init?.body)); assert.equal(body.model, "qwen/qwen3.8-flash"); assert.equal(body.stream, false);
+    calls++; const body = JSON.parse(String(init?.body)); assert.equal(body.model, "openai/gpt-6-luna"); assert.equal(body.stream, false);
     assert.deepEqual(body.reasoning, { exclude: true, enabled: false }); assert.equal(body.response_format.json_schema.strict, true);
     assert.deepEqual(body.provider, { require_parameters: true }); assert.equal(body.max_tokens, 2048);
     return new Response(JSON.stringify({ choices: [{ message: { content: output(r, [wire(r, tap)]) }, finish_reason: "stop" }], usage: { prompt_tokens: 20, completion_tokens: 10, total_tokens: 30, cost: 0.00001 }, provider: "offline" }));
@@ -244,9 +244,9 @@ test("D10 P2B provider uses validated independent model, strict schema, no reaso
   assert.ok((await createProductionDeps()).mannerism_extractor instanceof OpenRouterMannerismExtractor);
   assert.equal((await createProductionDeps({ enable_emergent_mannerisms: false })).mannerism_extractor, undefined);
   assert.ok((await createProductionDeps({ enable_emergent_mannerisms: true })).mannerism_extractor instanceof OpenRouterMannerismExtractor);
-  assert.equal(mannerismExtractorModel({ OPENROUTER_CONTROLLER_MODEL: "other/controller", OPENROUTER_NARRATOR_MODEL: "other/narrator" }), "qwen/qwen3.8-flash");
+  assert.equal(mannerismExtractorModel({ OPENROUTER_CONTROLLER_MODEL: "other/controller", OPENROUTER_NARRATOR_MODEL: "other/narrator" }), "openai/gpt-6-luna");
   assert.equal(mannerismExtractorModel({ MANNERISM_EXTRACTOR_MODEL: " separate/extractor ", OPENROUTER_CONTROLLER_MODEL: "other/controller" }), "separate/extractor");
-  assert.equal(mannerismExtractorModel({ MANNERISM_EXTRACTOR_MODEL: "   " }), "qwen/qwen3.8-flash");
+  assert.equal(mannerismExtractorModel({ MANNERISM_EXTRACTOR_MODEL: "   " }), "openai/gpt-6-luna");
 });
 
 test("D10 P2 actual alias evidence from distinct finalized moments shares one candidate; reload keeps its first two moments", async () => {
@@ -305,4 +305,28 @@ test("D10 P2B frozen live observations keep safety/alias decisions and complete 
   assert.deepEqual([raw, validated, acquired, globallyRejected], [9, 9, 8, 1]);
   const proof = await replayCalibratedMannerisms(frozen);
   assert.equal(proof.finalized_turns, 16); assert.equal(proof.slot_2_promoted, true); assert.equal(proof.paid_calls, 0);
+});
+
+test("Luna mannerism extraction through the real OpenRouter adapter: valid output processes and persists; 429/5xx/network/malformed skip with no candidates", async () => {
+  for (const mode of ["ok", "429", "503", "network", "malformed"] as const) {
+    const g = mannerismFixture(); let calls = 0;
+    const client = new OpenRouterClient({ api_key: () => "offline-test-key", fetch: async (_url, init) => {
+      calls++; const body = JSON.parse(String(init?.body));
+      assert.equal(body.model, "openai/gpt-6-luna"); assert.equal("models" in body, false); assert.deepEqual(body.provider, { require_parameters: true });
+      assert.equal(body.max_tokens, 2048); assert.equal(body.stream, false); assert.deepEqual(body.reasoning, { exclude: true, enabled: false });
+      if (mode === "429") return new Response(JSON.stringify({ error: { code: 429, message: "limited" } }), { status: 429 });
+      if (mode === "503") return new Response("{}", { status: 503 });
+      if (mode === "network") throw new TypeError("fetch failed");
+      const data = JSON.parse(body.messages[1].content.slice(MANNERISM_EXTRACTOR_TASK.length)) as MannerismExtractionRequest;
+      return new Response(JSON.stringify({ model: "openai/gpt-6-luna", provider: "OpenAI", choices: [{ message: { content: mode === "malformed" ? "not json" : output(data, [wire(data, tap)]) }, finish_reason: "stop" }], usage: { prompt_tokens: 20, completion_tokens: 10, total_tokens: 30 } }));
+    } });
+    const m = new MannerismMaintenance(g.world, new OpenRouterMannerismExtractor(client));
+    let run: Awaited<ReturnType<MannerismMaintenance["afterFinalizedTurn"]>> | undefined;
+    for (let i = 0; i < 4; i++) run = await m.afterFinalizedTurn(g.campaign, `luna_${i}`, { narration: "Brenna taps two fingers while waiting.", final_revision: g.campaign.revision });
+    assert.equal(run!.status, mode === "ok" ? "processed" : mode === "malformed" ? "malformed" : "provider_failed", mode);
+    assert.equal(calls, 1, mode);
+    assert.equal(candidates(g).length, mode === "ok" ? 1 : 0, mode);
+    const snapshot = g.campaign.exportSnapshot(), restored = decodeSave(serializeSave(createSaveFile(snapshot, g.world, "2026-10-08T00:00:00.000Z"), g.world), g.world).snapshot;
+    assert.deepEqual(restored.mannerism_learning, snapshot.mannerism_learning, mode);
+  }
 });

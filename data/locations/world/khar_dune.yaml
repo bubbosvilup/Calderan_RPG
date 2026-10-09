@@ -7,20 +7,23 @@ entity:
   parent: center
   aliases: []
   summary: >-
-    Khar-Dune is a fortified desert settlement in western/southwestern Center with major
-    underground slave and contraband markets.
+    Khar-Dune is Center's fortified frontier and caravan city in western/southwestern Center, a
+    mercenary and cross-border exchange hub with major underground slave and contraband markets.
   content: >-
-    Khar-Dune lies relatively near the West frontier and Chained Bay region. It developed
-    around a watering point for mercenary caravans, surrounded by thick lime/mud-brick
-    walls, and grew in importance as unofficial West–Center conflict intensified. Desert
-    raiders bring prisoners captured across the border. Intermediaries may obscure or
-    falsify origin, clean provenance or records, and sell captives onward toward West
-    merchants or labor sites, works, and pits associated with Zul-Rath/Center. Its
-    underground markets include slaves, contraband, and illicit cross-border trade. Not
-    every resident is criminal. No named gangs or complete criminal hierarchy are
-    established.
+    Khar-Dune lies relatively near the West frontier and Chained Bay region at a strategic
+    West–Center crossing. It developed around a watering point for mercenary caravans; military
+    encampments, growing permanent defenses and the commerce serving soldiers and caravans turned it
+    into a settlement surrounded by thick lime/mud-brick walls, and it grew in importance as
+    unofficial West–Center conflict intensified. Compared with West's fortress-city across the frontier it is more caravan-oriented,
+    mercenary-heavy and commercially rough, and more porous between legal and illicit commerce, with
+    a desert Center character; it is still a functioning fortified settlement, not a lawless one.
+    Desert raiders bring prisoners captured across the border. Intermediaries may obscure or falsify
+    origin, clean provenance or records, and sell captives onward toward West merchants or labor
+    sites, works, and pits associated with Zul-Rath/Center. Its underground markets include slaves,
+    contraband, and illicit cross-border trade. Not every resident is criminal. No named gangs or
+    complete criminal hierarchy are established.
   tags: [geography]
-  search_context: ""
+  search_context: "Khar-Dune frontier caravan city of Center, desert guides, mercenaries, cross-border trade, smugglers, falsified papers, contraband."
   knowledge:
     visibility:
       narrator: true
@@ -32,5 +35,26 @@ entity:
     - name: "underground slave and contraband markets"
       description: "Major illicit cross-border trade with intermediaries who may falsify captives' provenance before onward sale."
   connections: []
-chunks: []
-
+chunks:
+  - id: khar_dune.caravan_economy
+    entity_id: khar_dune
+    section: caravan_economy
+    summary: Khar-Dune's caravan, mercenary and frontier economy, its legitimate trade and its illicit overlap.
+    search_context: Khar-Dune economy, caravan guards, desert guides, mercenaries, pack animals, water and provisions, trade brokers, smugglers, contraband.
+    content: >-
+      Khar-Dune lives as a caravan hub, frontier fortress, mercenary center, cross-border exchange
+      point, contraband hub and transit point for captives. Its legitimate economy covers caravan
+      provisioning, animal care, water, food, weapons and repair, lodging, guards, guides, desert
+      travel supplies and trade brokerage. Its illicit economy covers smuggling, falsified captive
+      origins, contraband, illegal cross-border commerce and hidden markets for captives. Center spices and
+      textiles moving toward West, West manufactured goods moving toward Center, captives,
+      contraband and caravan supplies all pass through it, along no single universal route. It is one
+      of the main places where legitimate and illicit West–Center commerce overlap.
+    tags:
+      - economy
+      - trade
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []

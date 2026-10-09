@@ -5,7 +5,7 @@ import { dataSchema, freezeSnapshot, validateId } from "../campaign/validation.j
 import { requireCurrentSnapshotVersion, validateCampaignSnapshot } from "../campaign/snapshot-validation.js";
 import { CampaignSaveError, saveError } from "./errors.js";
 import { MAX_SAVE_BYTES, parseSaveJson } from "./strict-json.js";
-import { migrateSave, migrateSnapshot4to5, CURRENT_SAVE_VERSION } from "./save-migrations.js";
+import { migrateSave, migrateSnapshot4to5, migrateSnapshot5to6, CURRENT_SAVE_VERSION } from "./save-migrations.js";
 import { defaultPlayerCharacters } from "../campaign/player-character.js";
 import { assessCanonCompatibility, canonReferences, type CanonCompatibilityReport, type CanonReference } from "./canon-compatibility.js";
 import { parseCampaignSnapshot } from "../campaign/validation.js";
@@ -98,8 +98,11 @@ export function validateSaveFileWithReport(input: unknown, world: WorldStore, ex
     if (!/^sha256:[a-f0-9]{64}$/.test(file.canonical_dataset_id)) throw new CampaignSaveError("invalid_save");
     if (expectedCampaignId !== undefined && file.campaign_id !== expectedCampaignId) throw new CampaignSaveError("invalid_save");
     // Snapshot-level migration inside the current envelope (Player Character Profile V1: snapshot 4 -> 5, world-aware).
-    const snapshotFrom = (file.snapshot as { schema_version?: unknown } | undefined)?.schema_version === 4 ? 4 : undefined;
+    // Item Domain V1: snapshot 5 -> 6 (item ID allocator), chained after 4 -> 5.
+    const rawSnapshotVersion = (file.snapshot as { schema_version?: unknown } | undefined)?.schema_version;
+    const snapshotFrom = rawSnapshotVersion === 4 || rawSnapshotVersion === 5 ? rawSnapshotVersion : undefined;
     if (snapshotFrom === 4) { try { file.snapshot = migrateSnapshot4to5(file.snapshot, () => defaultPlayerCharacters(world)) as unknown as CampaignSnapshot; } catch { throw new CampaignSaveError("migration_failed"); } }
+    if (snapshotFrom !== undefined) { try { file.snapshot = migrateSnapshot5to6(file.snapshot) as unknown as CampaignSnapshot; } catch { throw new CampaignSaveError("migration_failed"); } }
     requireCurrentSnapshotVersion(file.snapshot);
     const parsed = parseCampaignSnapshot(file.snapshot);
     if (parsed.campaign_id !== file.campaign_id || parsed.dataset_id !== file.canonical_dataset_id) throw new CampaignSaveError("invalid_save");

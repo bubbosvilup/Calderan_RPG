@@ -2,23 +2,25 @@ schema_version: 1
 entity:
   id: continent
   type: location
-  name: "Known Continent"
-  display_name: "Known Continent"
+  name: "Aureth"
+  display_name: "Aureth"
   parent: null
-  aliases: []
+  aliases: ["Known Continent"]
   summary: >-
-    An enormous known continent comprises West, Center, and East, arranged from west to
-    east.
+    Aureth, the enormous known continent, comprises West, Center, and East, arranged from
+    west to east.
   content: >-
-    The continent is conceptually comparable to Eurasia in scale, without exact dimensions
+    Aureth is conceptually comparable to Eurasia in scale, without exact dimensions
     or travel times. West occupies the western portion, Center the central portion, and East
     the eastern portion. West borders Center, and Center borders East; West and East share
     no direct land border. Mist Sea lies broadly north, Sorrow Sea west, and The Silent
     Ocean east. Chained Bay is a large southwestern inlet especially associated with West's
-    maritime region. The Dragon's Teeth Mountains span the northern interior around the
-    Center–East transition. The named major cities are not an exhaustive settlement census.
+    maritime region. The Dragon's Teeth Mountains form a major spine across the northern and
+    eastern side, from near the forest north of Calderan to the Center–East transition. An
+    old creation myth names the land after the legendary golden dragon Aureth. The named
+    major cities are not an exhaustive settlement census.
   tags: [geography]
-  search_context: "Known continent; geographic parent of the three nations."
+  search_context: "Aureth, the known continent; geographic parent of the three nations West, Center and East; also the name of a legendary dragon in its creation myth."
   knowledge:
     visibility:
       narrator: true

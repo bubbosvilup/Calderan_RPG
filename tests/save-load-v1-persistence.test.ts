@@ -28,7 +28,7 @@ const clock = (start = Date.parse(now)) => { let t = start; return { now: () => 
 test("format 5 carries display name, scenario, save reason, engine version and bounded non-authoritative continuity", () => {
   const { world, campaign } = richCampaign(), snap = campaign.exportSnapshot();
   const file = createSaveFile(snap, world, now, now, { metadata: { display_name: "Nicco in Calderan", scenario_id: "caldrevan.slave_market.v1", save_reason: "manual", engine_version: "0.1.0" }, continuity: continuity(snap.revision) });
-  assert.equal(file.schema_version, 5); assert.equal(file.snapshot.schema_version, 5);
+  assert.equal(file.schema_version, 5); assert.equal(file.snapshot.schema_version, 6);
   assert.deepEqual(file.metadata, { saved_at: now, created_at: now, display_name: "Nicco in Calderan", scenario_id: "caldrevan.slave_market.v1", save_reason: "manual", engine_version: "0.1.0" });
   assert.ok(file.canon_references!.every(r => typeof r.kind === "string"), "format-5 references record the entity kind");
   const text = serializeSave(file, world), decoded = decodeSaveWithReport(text, world);
@@ -48,7 +48,7 @@ test("format 5 carries display name, scenario, save reason, engine version and b
 test("explicit 4 -> 5 migration is version-only and lossless; v4 files carrying v5 fields fail; future versions are refused clearly; load never rewrites", async () => {
   const { world, campaign } = richCampaign(), snap = campaign.exportSnapshot();
   const v5 = JSON.parse(serializeSave(createSaveFile(snap, world, now), world));
-  const { player_characters: _pc, ...s4 } = v5.snapshot;
+  const { player_characters: _pc, next_item_sequence: _seq, ...s4 } = v5.snapshot;
   const v4 = { ...v5, schema_version: 4, snapshot: { ...s4, schema_version: 3 }, canon_references: v5.canon_references.map(({ kind: _k, ...r }: { kind: string }) => r) };
   const decoded = decodeSaveWithReport(JSON.stringify(v4), world);
   assert.equal(decoded.migrated_from, 4); assert.equal(decoded.file.schema_version, 5);
@@ -56,7 +56,7 @@ test("explicit 4 -> 5 migration is version-only and lossless; v4 files carrying 
   for (const smuggle of [(f: any) => { f.metadata.display_name = "x"; }, (f: any) => { f.continuity = continuity(snap.revision); }, (f: any) => { f.snapshot.schema_version = 4; }]) {
     const f = structuredClone(v4); smuggle(f); assert.throws(() => decodeSaveWithReport(JSON.stringify(f), world), { code: "migration_failed" });
   }
-  for (const future of [{ ...v5, schema_version: 6 }, { ...v5, snapshot: { ...v5.snapshot, schema_version: 6 } }]) assert.throws(() => decodeSaveWithReport(JSON.stringify(future), world), { code: "unsupported_version" });
+  for (const future of [{ ...v5, schema_version: 6 }, { ...v5, snapshot: { ...v5.snapshot, schema_version: 7 } }]) assert.throws(() => decodeSaveWithReport(JSON.stringify(future), world), { code: "unsupported_version" });
   // On disk: loading the v4 file migrates in memory only.
   const root = await temp(), dir = join(root, snap.campaign_id); await fs.mkdir(dir, { recursive: true });
   const bytes = JSON.stringify(v4); await fs.writeFile(join(dir, "save.json"), bytes);

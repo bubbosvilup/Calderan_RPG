@@ -1,4 +1,7 @@
 import type { WorldStore } from "../world/world-store.js";
+import type { WorldEntity as RawEntity } from "../types/entities.js";
+import type { DeepReadonly } from "../types/readonly.js";
+type WorldEntity = DeepReadonly<RawEntity>;
 import { compareIds } from "../world/provenance.js";
 
 /**
@@ -12,7 +15,9 @@ import { compareIds } from "../world/provenance.js";
  *
  * `public` (A ∩ B) feeds `canonical_awareness`. `restricted` (B on narrator-visible, player-invisible canon) feeds the
  * NPC-private knowledge projection: before H3 it was unreachable (retrieval filters secret records, and canonical_awareness
- * required player visibility). Narrator-invisible canon is never indexed.
+ * required player visibility). Narrator-invisible canon is never indexed, with ONE exception: sealed `holder_only` canon (tier 2,
+ * manual secret) is indexed as restricted for its explicit known_by holders, which is its only path to the narrator. `author_only`
+ * canon (tier 3) is never indexed (validation also forbids it any holder).
  */
 export interface PrivateCanonGrant { readonly id: string; readonly kind: "entity" | "chunk"; readonly label: string; readonly summary: string }
 export interface KnowledgeGrantIndex {
@@ -27,8 +32,9 @@ const push = <T>(map: Map<string, T[]>, key: string, value: T) => { const list =
 export function knowledgeGrants(world: WorldStore): KnowledgeGrantIndex {
   const cached = cache.get(world); if (cached) return cached;
   const pub = new Map<string, string[]>(), restricted = new Map<string, PrivateCanonGrant[]>();
+  const indexed = (k: WorldEntity["knowledge"]): k is NonNullable<WorldEntity["knowledge"]> => !!k && (k.visibility.narrator || k.secrecy === "holder_only");
   for (const e of world.listEntities()) {
-    const k = e.knowledge; if (!k?.visibility.narrator) continue;
+    const k = e.knowledge; if (!indexed(k)) continue;
     for (const id of k.known_by) {
       if (k.visibility.player) push(pub, id, e.id);
       else push(restricted, id, { id: e.id, kind: "entity", label: e.display_name, summary: e.summary });
@@ -36,7 +42,7 @@ export function knowledgeGrants(world: WorldStore): KnowledgeGrantIndex {
   }
   // Only chunks with their OWN policy: a chunk inheriting its owner's policy is already covered by the owner's grant.
   for (const c of world.listChunks()) {
-    const k = c.knowledge; if (!k?.visibility.narrator || k.visibility.player) continue;
+    const k = c.knowledge; if (!indexed(k) || k.visibility.player) continue;
     const owner = world.getEntity(c.entity_id);
     for (const id of k.known_by) push(restricted, id, { id: c.id, kind: "chunk", label: `${owner?.display_name ?? c.entity_id} (${c.section.replace(/_/g, " ")})`, summary: c.summary });
   }

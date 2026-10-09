@@ -31,7 +31,7 @@ entity:
     calibrated by the canonical weighted travel graph."
   tags:
     - geography
-  search_context: Calderan capital and main campaign city of West.
+  search_context: Calderan capital and main campaign city of West; artisans, armour, bows, markets and slave market.
   knowledge:
     visibility:
       narrator: true
@@ -51,4 +51,62 @@ entity:
       description: Calderan and Davenport share principal institutional monopoly/control over West's legal slave market.
   connections: []
   entrance: imperial_gate
-chunks: []
+chunks:
+  - id: calderan.economy_and_trade
+    entity_id: calderan
+    section: economy_and_trade
+    summary: Calderan's economy of high-skill manufacturing, its raw-material and food sources, imports, exports, trade partners, slave market, war economics and inequality.
+    search_context: Calderan economy, Calderan artisans, Calderan armour and weapons, Calderan metal, dwarven smiths, Calderan bows, fine woodcraft, textiles and fashion, imports and exports, Dragon's Teeth iron, Woodsong timber, farms and granaries, salt and spices, slave market.
+    content: >-
+      Calderan is West's principal political, financial, artisanal and institutional center and is
+      not primarily a raw-material extraction city. Its strength is transformation and high-skill
+      manufacturing: exceptionally fine metalworking, armour, weapons, precision metal components and
+      clockwork, fine woodworking and bows, luxury and precision craft, and textiles and fashion,
+      including high-end clothing and noble goods. Its metalworking reputation grew partly because
+      Dukes historically encouraged and financed skilled dwarven artisans from the Dragon's Teeth
+      Mountains to settle and work in the city, creating a permanent dwarven artisan population
+      valued for metalworking, armour, weapons and precise, durable craft; not every Calderan smith is
+      a dwarf, not every dwarf is a smith, and no magical forging is established. Calderan is famous
+      for armour combining high durability, comparatively good flexibility and mobility, and
+      excellent craftsmanship, rooted in the strong, light alloy tradition preserved by dwarven
+      workshops such as the Iron Hands; people informally speak of "Calderan metal" for this
+      tradition, not a separate natural material. Calderan armour and high-grade metalwork and
+      Calderan bows are its iconic goods. Elven woodworking connected to Woodsong Forest also
+      benefits the city: scarce Woodsong timber and Woodsinger craft contribute to premium bows, fine
+      woodcraft and luxury wooden goods. Calderan has little meaningful mineral extraction. Iron, stone
+      and other raw materials come largely from the Dragon's Teeth region for processing; premium
+      timber comes from Woodsong Forest; ordinary timber, construction wood and charcoal come from
+      surrounding woodland, lower-value wood and woodworking residue, since Woodsong timber is far too
+      valuable to burn. Farms, fields and granaries in the surrounding countryside give the city a
+      meaningful local food base; it imports sea fish, exotic and luxury foods for nobles and
+      specialty goods, so its food supply is mixed, and surrounding agriculture, granaries and Grey
+      Brook make it reasonably resilient in ordinary conditions without being self-sufficient. Major
+      imports include raw materials from the Dragon's Teeth region, Woodsong timber, ordinary
+      materials from the rest of West, sea fish, luxury and exotic foods, slaves and captives, fine
+      textiles and materials from Zul-Rath, salt and spices through Center and Zul-Rath-linked trade,
+      and luxury fashion inputs. Calderan exports finished goods rather than raw materials: armour,
+      weapons, precision metalwork, clockwork and precision devices, high-quality metal goods, bows,
+      fine woodcraft, textiles, clothing, luxury fashion and other high-skill manufactures. It trades
+      broadly across Aureth, especially with the rest of West, Davenport, Ironbound, Center and
+      Zul-Rath, and Vaelrost and East; political rivalry with Center does not stop ordinary commerce,
+      and exact quantities and treaties are not established. Slavery is legal, bureaucratically
+      regulated and normalised in Calderan society, and the city has one of the largest and most
+      important slave markets in Aureth, with licensed and ordinary market trade, the taboo Back
+      Alleys, the deeper criminal Back-Back Alleys and illegal or unregistered trafficking remaining
+      distinct. Calderan is politically involved in the continuing West–Center rivalry and frontier
+      skirmishes, whose deep origin is undefined: powerful nobles generally prefer not to suffer from
+      the conflict personally, elites can profit indirectly from instability, the conflict produces
+      displaced people and captives that slavery networks may exploit, and it raises demand for
+      weapons and armour. Wealth is sharply unequal across the city: nobility, money, high-value
+      commerce and institutions concentrate in the central and wealthier areas, while poorer
+      peripheral areas carry poverty, degradation, crime, hunger and people living on the street.
+    tags:
+      - economy
+      - trade
+      - industry
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []
+      awareness: public

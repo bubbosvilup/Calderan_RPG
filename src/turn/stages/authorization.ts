@@ -91,7 +91,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const departureProposals = [...new Set(departures.map(d => d.character_id))].filter(id => !controllerProposal.some(c => c.kind === "leave_scene" && c.character_id === id)).map(character_id => ({ kind: "leave_scene" as const, character_id }));
   const proposal = [...controllerProposal, ...derived, ...departureProposals];
   // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).
-  const diagnostics = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode);
+  const diagnostics = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode, i.world);
   // Controller Reliability Pass 1 (debug only, never events): normalized outputs, and deterministic candidates with verified
   // narration evidence that the controller did not propose. Nothing is synthesized; this only measures omissions.
   if (i.sink) {

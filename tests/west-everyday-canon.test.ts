@@ -38,7 +38,7 @@ const NPC_PASS_3_NPCS=["brunna_keld","garran_holt","halden_cross","lysandra_vell
 test("Exactly seven everyday owners use existing locations with no family, faction or relationship inventions",()=>{
  const prior=["bartolomhew","blackthorn","brother_aven","captain_doran_hale","dren","korvin","mistress_elara","pellan","sister_mereth"];
  assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),[...prior,...anchors.map(a=>a[0]),...FOUR_DISTRICT_NPCS,...NPC_PASS_2_NPCS,...NPC_PASS_3_NPCS].sort());
- assert.equal(world.getEntitiesByType("location").length,96); // 50 + 23 Four-District anchors + The Bent Bough (NPC Pass 2)
+ assert.equal(world.getEntitiesByType("location").length,98); // 50 + 23 Four-District anchors + The Bent Bough (NPC Pass 2) + 2 Aureth POIs
  for(const [id,name,location] of anchors){
   const e=npc(id);assert.equal(e.name,name);assert.equal(e.base_location,location);assert.equal(e.work_location,location);assert.equal(e.home_location,null);
   assert.equal(e.species,id==="hadrik_voss"?"Dwarf":"Human");
@@ -91,7 +91,7 @@ const portrayal:Record<string,RegExp[]>={
  bram_kessel:[/sociable/,/dependable/,/Supply failure/,/Generous with food but stingy with money/,/falsify weights/],
  hadrik_voss:[/meticulous/,/repairs that work/,/life depends/,/Sells weapons but prefers repairs/,/structural damage/],
  mira_thorne:[/skeptical/,/expertise she lacks/,/beyond her competence/,/intensely curious/,/unidentified ingredients/],
- livia_marr:[/quick-witted/,/affordable/,/mass goods from East/,/little respect for fashion/,/damaged fabric/],
+ livia_marr:[/quick-witted/,/affordable/,/mass goods from the East District/,/little respect for fashion/,/damaged fabric/],
  jessa_rook:[/composed/,/boring/,/criminal-haunt reputation/,/does not particularly like strangers/i,/intimidation of staff/],
  orla_fen:[/dependable/,/lack the labor/,/fire and contaminated water/,/dislikes gossip/,/burial clothing/],
  niles_vanner:[/analytical/,/loan sharks/,/stolen valuables/,/Dislikes exploiting desperation/,/vulnerable customers/],

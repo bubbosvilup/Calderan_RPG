@@ -281,7 +281,7 @@ export interface ReadOptions {
 export function readScene(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, options: ReadOptions = {}): SceneReading {
   const scene = sceneExchanges(recent, context.primary.scene.player_location?.id);
   const people = presentPeople(context);
-  const places = new Set(world.listEntities().filter(e => e.type !== "character").flatMap(e => (e.name ?? "").toLowerCase().split(/\s+/)));
+  const places = new Set(world.listEntities().filter(e => e.type !== "character" && !e.knowledge?.secrecy).flatMap(e => (e.name ?? "").toLowerCase().split(/\s+/)));
   const known = new Set(people.flatMap(p => p.names.map(n => n.toLowerCase())));
   // Canon names (each full name with its tokens). Names are not unique, so a canon token is not a global key; see the check below.
   const canon = world.listEntities().filter(e => e.type === "character" && e.name).map(e => ({ full: e.name!, tokens: words(e.name!).map(t => t.toLowerCase()) }));
@@ -379,12 +379,16 @@ const CONDITION: readonly (readonly [RegExp, string])[] = [
   [/\bdying\b/i, "dying"], [/\b(?:chained|shackled|manacled|restrained)\b/i, "restrained"], [/\bcough(?:s|ing)\b/i, "coughing"],
 ];
 const SPECIES = /\b(human|elf|elven|dwarf|dwarven|halfling|orc|orcish|beastfolk|half-elf|half-orc|gnome|goblin)\b/i;
-const BACKGROUND = /\b(?:debt|auction|forfeit\w*|captured|taken from|sold (?:for|by|to|off)|was an? [a-z]+|worked (?:in|at|as)|came in|brought in|picked (?:her|him|them) (?:off|up)|born|from the [a-z]+ (?:court|pits?|mines?|road))\b/i;
+const BACKGROUND = /\b(?:debt|auction|forfeit\w*|captured|taken from|sold (?:for|by|to|off)|was an? [a-z]+|worked (?:in|at|as)|came in|brought in|picked (?:her|him|them) (?:off|up)|born|from the [a-z]+ (?:court|pits?|mines?|road)|(?:i'?m|i am|she'?s|he'?s|they'?re|comes?|came|hails?) from|grew up|raised (?:in|on|near|by))\b/i;
 
 /**
  * Facts established about a person in the scene narration, and nothing else. `sellerKey` marks statements attributed to a seller.
  */
-export function establishedFacts(person: NarratedPerson, sellerKey: string | undefined, nameOf: (id: string) => string): { established: CharacterOriginSnapshot["established"]; evidence: string[] } {
+/**
+ * `keepClaim` (Ephemeral Background Grounding V1): a background sentence it rejects (an unverified named place/culture/faction) is not
+ * an established fact. Verbatim `evidence` remains raw provenance and is never projected to the narrator as background.
+ */
+export function establishedFacts(person: NarratedPerson, sellerKey: string | undefined, nameOf: (id: string) => string, keepClaim?: (text: string) => boolean): { established: CharacterOriginSnapshot["established"]; evidence: string[] } {
   const own = person.keys, units = person.units;
   // Physical facts only from sentences ABOUT them: their own narration sentences, their introduction, or (unnamed) the sentences
   // describing them by their noun. A sentence that merely mentions them ("Brenna's grey eyes find Maren") describes someone else.
@@ -418,7 +422,7 @@ export function establishedFacts(person: NarratedPerson, sellerKey: string | und
   // Background: sentences with a background marker, kept with who said them. Narration only when unhedged.
   const background: EstablishedClaim[] = [];
   for (const u of units) for (const s of sentencesOf(u.text)) {
-    if (!BACKGROUND.test(s) || HEDGE.test(s) || background.length >= 6) continue;
+    if (!BACKGROUND.test(s) || HEDGE.test(s) || background.length >= 6 || (keepClaim && !keepClaim(s))) continue;
     const source: EstablishedClaim["source"] = !u.quoted ? "narration" : u.speaker === sellerKey ? "seller" : own.includes(u.speaker ?? "") ? "self" : "other";
     const by = u.quoted && u.speaker && !u.speaker.startsWith("other:") ? nameOf(u.speaker) : undefined;
     if (!background.some(b => b.text === s)) background.push({ text: s.slice(0, 200), source, ...(by ? { by } : {}) });

@@ -17,10 +17,14 @@ entity:
     socially inferior. This is West social prejudice, not biological truth. Beastfolk there
     are disproportionately found among enslaved populations, agricultural labor, hard manual
     work, combat-related exploitation, and vulnerable social classes. Not every Beastfolk is
-    enslaved. This social pattern is not universal across the world; Center, East, and future
-    continents may have different relationships with Beastfolk, presently undefined.
+    enslaved. This social pattern is not universal across the world. In Center, Beastfolk are
+    politically and culturally central and form most of the traditional upper class, including its
+    nobility; Center is also a major source of Beastfolk slaves through its own slave economy, so
+    Beastfolk are neither synonymous with slavery nor with rule. Beastfolk, as currently
+    understood, cannot use magic. East and future continents may have different relationships
+    with Beastfolk, presently undefined.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   category: "races"
-  related_entities: ["west_slavery"]
+  related_entities: ["west_slavery","center","zul_rath"]
 chunks: []
 

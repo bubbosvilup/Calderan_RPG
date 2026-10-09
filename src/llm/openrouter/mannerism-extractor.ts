@@ -1,8 +1,11 @@
 import { OpenRouterClient } from "./client.js";
 import { ProviderError } from "../errors.js";
 import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTION_SCHEMA, type MannerismExtractor, type MannerismExtractionRequest } from "../../turn/mannerism-extraction.js";
-/** Independently validated on the frozen D-10 Pass 2B extraction matrix. */
-export const DEFAULT_MANNERISM_EXTRACTOR_MODEL = "qwen/qwen3.8-flash";
+/**
+ * Production default (2026-10-08): GPT-6 Luna, replacing qwen/qwen3.8-flash (validated on the D-10 Pass 2B matrix; retired for
+ * Alibaba shared-pool 429s). Same request contract; single model, no fallback; failure skips extraction.
+ */
+export const DEFAULT_MANNERISM_EXTRACTOR_MODEL = "openai/gpt-6-luna";
 export class OpenRouterMannerismExtractor implements MannerismExtractor {
   constructor(private readonly client = new OpenRouterClient(), private readonly config: { model?: string; timeout_ms?: number } = {}) {}
   async extract(request: MannerismExtractionRequest) {

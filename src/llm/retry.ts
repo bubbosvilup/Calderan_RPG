@@ -68,6 +68,8 @@ export interface ProviderAttemptRecord {
   attempts: number; retry_reasons: string[]; recovered: boolean;
   failure_classes?: import("./errors.js").ProviderFailureClass[];
   logical_request_id?:string;
+  /** Safe OpenRouter classification per failed attempt that carried one (status, error_type, provider, limit_source, Retry-After, gen id, requested models). */
+  http_failures?: (import("./errors.js").ProviderHttpDiagnostic & { readonly attempt: number })[];
   /** Cumulative wall time of all attempts (excludes backoff). */
   provider_ms: number;
   /** "success" or the final failure code (ProviderErrorCode, or a local code such as narrator_failed / cancelled / stale_turn). */
@@ -89,7 +91,7 @@ const codeOf = (error: unknown): string => error instanceof ProviderError ? erro
 export async function withProviderRetry<T>(i: RetryRun<T>): Promise<T> {
   const max = Math.min(3, Math.max(1, Math.trunc(i.policy.max_attempts) || 1));
   const rec: ProviderAttemptRecord = { attempts: 0, retry_reasons: [], recovered: false, provider_ms: 0, final_outcome: "pending" };
-  const publish = () => i.record({ ...rec, retry_reasons: [...rec.retry_reasons] });
+  const publish = () => i.record({ ...rec, retry_reasons: [...rec.retry_reasons], ...(rec.http_failures ? { http_failures: [...rec.http_failures] } : {}) });
   let previous: string | undefined;
   for (let attempt = 1; ; attempt++) {
     try { i.checkpoint(); } catch (error) { rec.final_outcome = codeOf(error); publish(); throw error; }
@@ -106,6 +108,7 @@ export async function withProviderRetry<T>(i: RetryRun<T>): Promise<T> {
     } catch (error) {
       rec.provider_ms += i.policy.now() - started;
       if(error instanceof ProviderError)(rec.failure_classes??=[]).push(normalizeProviderFailure(error));
+      if(error instanceof ProviderError&&error.http)(rec.http_failures??=[]).push({...error.http,attempt});
       const reason = i.signal.aborted ? undefined : (i.reason ?? providerRetryReason)(error);
       const delay = Math.min(i.policy.max_backoff_ms, i.policy.backoff_ms + i.policy.random() * Math.max(0, i.policy.max_backoff_ms - i.policy.backoff_ms));
       if (!reason || attempt >= max || i.budget.remaining() - delay < i.policy.min_retry_window_ms) { rec.final_outcome = codeOf(error); publish(); throw error; }

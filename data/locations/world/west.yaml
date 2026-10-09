@@ -18,9 +18,11 @@ entity:
     involves skirmishes, raids, territorial incidents, feuds, localized clashes, and
     unofficial violence, not permanent formally declared total war. Blackwater is
     geographically within West but outside effective normal direct control. Calderan and
-    Davenport hold the principal institutional control over West's legal slave market.
+    Davenport hold the principal institutional control over West's legal slave market. Its economic
+    anchors are Calderan's high-skill manufacturing and markets, Davenport's maritime trade,
+    shipyards and pearls, Ironbound's military frontier economy, and Blackwater's largely illicit maritime trade.
   tags: [geography]
-  search_context: "West nation on the known continent, distinct from Calderan's West District."
+  search_context: "West nation on Aureth, the known continent, distinct from Calderan's West District."
   knowledge:
     visibility:
       narrator: true

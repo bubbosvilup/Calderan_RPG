@@ -1,0 +1,2552 @@
+{
+ "analyzed_at": "2026-10-08T15:38:01.361Z",
+ "cases": 101,
+ "runs": [
+  1,
+  2
+ ],
+ "models": [
+  "anthropic/claude-haiku-5.5",
+  "deepseek/deepseek-v4-pro",
+  "openai/gpt-6-luna",
+  "qwen/qwen3.8-flash"
+ ],
+ "note": "Rate-limit details aggregated; disagreements exclude per-model entries whose call failed (e.g. Qwen 429s). Raw cells: saves/controller-benchmark/bakeoff-1 (git-ignored).",
+ "results": [
+  {
+   "model": "anthropic/claude-haiku-5.5",
+   "cells": 202,
+   "calls_ok": 202,
+   "full_case_success": 189,
+   "full_case_accuracy_pct": 93.6,
+   "accuracy_given_output_pct": 93.6,
+   "expected_mutations": 104,
+   "accepted_tp": 89,
+   "recall_pct": 85.6,
+   "proposed": 160,
+   "proposed_tp": 89,
+   "precision_pct": 56.3,
+   "false_positives": 69,
+   "accepted_false_positives": 0,
+   "false_negatives": 15,
+   "cases_with_fp": 45,
+   "cases_with_fn": 13,
+   "authorization_rejections": 69,
+   "authorization_rejection_rate_pct": 43.1,
+   "json_valid": 202,
+   "schema_valid": 202,
+   "legacy_shape": 0,
+   "normalization_used": 0,
+   "structured_failures": 0,
+   "finish_length_failures": 0,
+   "rate_limited_calls": 0,
+   "http_attempts": 202,
+   "http_200": 202,
+   "http_429": 0,
+   "http_5xx": 0,
+   "http_other_error": 0,
+   "in_band_errors": 0,
+   "transport_errors": 0,
+   "timeouts": 0,
+   "retries": 0,
+   "providers": {
+    "Azure": 202
+   },
+   "response_models": [
+    "anthropic/claude-haiku-5.5"
+   ],
+   "latency_attempt_ms": {
+    "n": 202,
+    "min": 1342,
+    "p50": 1802,
+    "p90": 2127,
+    "p95": 2318,
+    "max": 2790
+   },
+   "latency_headers_ms": {
+    "n": 202,
+    "min": 1080,
+    "p50": 1446,
+    "p90": 1620,
+    "p95": 1674,
+    "max": 2113
+   },
+   "latency_logical_ms": {
+    "n": 202,
+    "min": 1342,
+    "p50": 1802,
+    "p90": 2128,
+    "p95": 2320,
+    "max": 2790
+   },
+   "prompt_tokens": 1528544,
+   "completion_tokens": 17214,
+   "reasoning_tokens": 0,
+   "cost_usd": 0.161461,
+   "cost_reported_attempts": 202,
+   "cost_per_successful_case_usd": 0.0007993,
+   "cost_per_100_turns_usd": 0.0799,
+   "per_run": {
+    "1": {
+     "cells": 101,
+     "full_case_accuracy_pct": 93.1,
+     "recall_pct": 84.6,
+     "precision_pct": 56.4,
+     "false_positives": 34,
+     "accepted_false_positives": 0,
+     "http_429": 0
+    },
+    "2": {
+     "cells": 101,
+     "full_case_accuracy_pct": 94.1,
+     "recall_pct": 86.5,
+     "precision_pct": 56.3,
+     "false_positives": 35,
+     "accepted_false_positives": 0,
+     "http_429": 0
+    }
+   },
+   "groups": {
+    "items": {
+     "cells": 38,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 34,
+     "fn": 0
+    },
+    "ownership": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 4,
+     "fn": 0
+    },
+    "economy": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": null,
+     "fp": 1,
+     "fn": 0
+    },
+    "relationships": {
+     "cells": 20,
+     "accuracy_pct": 75,
+     "recall_pct": 64.3,
+     "fp": 0,
+     "fn": 5
+    },
+    "knowledge": {
+     "cells": 46,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 17,
+     "fn": 0
+    },
+    "conditions": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 0,
+     "fn": 0
+    },
+    "movement_time": {
+     "cells": 22,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 2,
+     "fn": 0
+    },
+    "household_legal": {
+     "cells": 12,
+     "accuracy_pct": 83.3,
+     "recall_pct": 75,
+     "fp": 0,
+     "fn": 2
+    },
+    "ambiguous_language": {
+     "cells": 12,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 11,
+     "fn": 0
+    },
+    "multi_mutation": {
+     "cells": 18,
+     "accuracy_pct": 66.7,
+     "recall_pct": 78.9,
+     "fp": 0,
+     "fn": 8
+    },
+    "no_op": {
+     "cells": 10,
+     "accuracy_pct": 100,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "adult_prose": {
+    "cells": 6,
+    "full_case_accuracy_pct": 100,
+    "false_positives": 0,
+    "structured_failures": 0
+   },
+   "unstable_cases": [
+    "n_rel_flinch"
+   ],
+   "rate_limit_summary": [],
+   "failed_call_count": 0
+  },
+  {
+   "model": "deepseek/deepseek-v4-pro",
+   "cells": 202,
+   "calls_ok": 191,
+   "full_case_success": 139,
+   "full_case_accuracy_pct": 68.8,
+   "accuracy_given_output_pct": 72.8,
+   "expected_mutations": 92,
+   "accepted_tp": 23,
+   "recall_pct": 25,
+   "proposed": 73,
+   "proposed_tp": 23,
+   "precision_pct": 31.5,
+   "false_positives": 50,
+   "accepted_false_positives": 1,
+   "false_negatives": 69,
+   "cases_with_fp": 39,
+   "cases_with_fn": 52,
+   "authorization_rejections": 49,
+   "authorization_rejection_rate_pct": 67.1,
+   "json_valid": 191,
+   "schema_valid": 191,
+   "legacy_shape": 0,
+   "normalization_used": 0,
+   "structured_failures": 7,
+   "finish_length_failures": 4,
+   "rate_limited_calls": 0,
+   "http_attempts": 203,
+   "http_200": 203,
+   "http_429": 0,
+   "http_5xx": 0,
+   "http_other_error": 0,
+   "in_band_errors": 0,
+   "transport_errors": 0,
+   "timeouts": 1,
+   "retries": 1,
+   "providers": {
+    "StreamLake": 135,
+    "Reka": 17,
+    "Baidu": 5,
+    "Alibaba": 17,
+    "Parasail": 4,
+    "Cloudflare": 11,
+    "Venice": 3,
+    "AtlasCloud": 5,
+    "DeepInfra": 5
+   },
+   "response_models": [
+    "deepseek/deepseek-v4-pro"
+   ],
+   "latency_attempt_ms": {
+    "n": 202,
+    "min": 879,
+    "p50": 3457,
+    "p90": 11141,
+    "p95": 13831,
+    "max": 19401
+   },
+   "latency_headers_ms": {
+    "n": 202,
+    "min": 305,
+    "p50": 2493,
+    "p90": 8614,
+    "p95": 11459,
+    "max": 17878
+   },
+   "latency_logical_ms": {
+    "n": 191,
+    "min": 880,
+    "p50": 3345,
+    "p90": 11141,
+    "p95": 13860,
+    "max": 23462
+   },
+   "prompt_tokens": 559450,
+   "completion_tokens": 11008,
+   "reasoning_tokens": 0,
+   "cost_usd": 0.198012,
+   "cost_reported_attempts": 202,
+   "cost_per_successful_case_usd": 0.0010367,
+   "cost_per_100_turns_usd": 0.1037,
+   "per_run": {
+    "1": {
+     "cells": 101,
+     "full_case_accuracy_pct": 66.3,
+     "recall_pct": 25,
+     "precision_pct": 38.7,
+     "false_positives": 19,
+     "accepted_false_positives": 1,
+     "http_429": 0
+    },
+    "2": {
+     "cells": 101,
+     "full_case_accuracy_pct": 71.3,
+     "recall_pct": 25,
+     "precision_pct": 26.2,
+     "false_positives": 31,
+     "accepted_false_positives": 0,
+     "http_429": 0
+    }
+   },
+   "groups": {
+    "items": {
+     "cells": 38,
+     "accuracy_pct": 81.6,
+     "recall_pct": 0,
+     "fp": 9,
+     "fn": 5
+    },
+    "ownership": {
+     "cells": 8,
+     "accuracy_pct": 62.5,
+     "recall_pct": 0,
+     "fp": 5,
+     "fn": 2
+    },
+    "economy": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    },
+    "relationships": {
+     "cells": 20,
+     "accuracy_pct": 45,
+     "recall_pct": 21.4,
+     "fp": 3,
+     "fn": 11
+    },
+    "knowledge": {
+     "cells": 46,
+     "accuracy_pct": 84.8,
+     "recall_pct": 61.1,
+     "fp": 2,
+     "fn": 7
+    },
+    "conditions": {
+     "cells": 8,
+     "accuracy_pct": 50,
+     "recall_pct": 0,
+     "fp": 2,
+     "fn": 3
+    },
+    "movement_time": {
+     "cells": 22,
+     "accuracy_pct": 81.8,
+     "recall_pct": 0,
+     "fp": 6,
+     "fn": 4
+    },
+    "household_legal": {
+     "cells": 12,
+     "accuracy_pct": 58.3,
+     "recall_pct": 16.7,
+     "fp": 3,
+     "fn": 5
+    },
+    "ambiguous_language": {
+     "cells": 12,
+     "accuracy_pct": 25,
+     "recall_pct": 0,
+     "fp": 7,
+     "fn": 10
+    },
+    "multi_mutation": {
+     "cells": 18,
+     "accuracy_pct": 27.8,
+     "recall_pct": 26.7,
+     "fp": 13,
+     "fn": 22
+    },
+    "no_op": {
+     "cells": 10,
+     "accuracy_pct": 100,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "adult_prose": {
+    "cells": 6,
+    "full_case_accuracy_pct": 50,
+    "false_positives": 1,
+    "structured_failures": 0
+   },
+   "unstable_cases": [
+    "r2_k04_pronoun",
+    "r2_k05_one_recipient",
+    "corpus_kp06",
+    "n_household_leave",
+    "n_rel_shield",
+    "n_rel_flinch",
+    "n_adult_embrace"
+   ],
+   "rate_limit_summary": [],
+   "failed_call_count": 11
+  },
+  {
+   "model": "openai/gpt-6-luna",
+   "cells": 202,
+   "calls_ok": 202,
+   "full_case_success": 191,
+   "full_case_accuracy_pct": 94.6,
+   "accuracy_given_output_pct": 94.6,
+   "expected_mutations": 104,
+   "accepted_tp": 88,
+   "recall_pct": 84.6,
+   "proposed": 116,
+   "proposed_tp": 90,
+   "precision_pct": 78.9,
+   "false_positives": 24,
+   "accepted_false_positives": 0,
+   "false_negatives": 16,
+   "cases_with_fp": 16,
+   "cases_with_fn": 11,
+   "authorization_rejections": 26,
+   "authorization_rejection_rate_pct": 22.4,
+   "json_valid": 202,
+   "schema_valid": 202,
+   "legacy_shape": 0,
+   "normalization_used": 0,
+   "structured_failures": 0,
+   "finish_length_failures": 0,
+   "rate_limited_calls": 0,
+   "http_attempts": 202,
+   "http_200": 202,
+   "http_429": 0,
+   "http_5xx": 0,
+   "http_other_error": 0,
+   "in_band_errors": 0,
+   "transport_errors": 0,
+   "timeouts": 0,
+   "retries": 0,
+   "providers": {
+    "OpenAI": 202
+   },
+   "response_models": [
+    "openai/gpt-6-luna"
+   ],
+   "latency_attempt_ms": {
+    "n": 202,
+    "min": 1147,
+    "p50": 1632,
+    "p90": 2249,
+    "p95": 2349,
+    "max": 4246
+   },
+   "latency_headers_ms": {
+    "n": 202,
+    "min": 452,
+    "p50": 567,
+    "p90": 721,
+    "p95": 899,
+    "max": 1455
+   },
+   "latency_logical_ms": {
+    "n": 202,
+    "min": 1147,
+    "p50": 1632,
+    "p90": 2249,
+    "p95": 2350,
+    "max": 4247
+   },
+   "prompt_tokens": 607498,
+   "completion_tokens": 9531,
+   "reasoning_tokens": 0,
+   "cost_usd": 0.040795,
+   "cost_reported_attempts": 202,
+   "cost_per_successful_case_usd": 0.000202,
+   "cost_per_100_turns_usd": 0.0202,
+   "per_run": {
+    "1": {
+     "cells": 101,
+     "full_case_accuracy_pct": 94.1,
+     "recall_pct": 84.6,
+     "precision_pct": 77.6,
+     "false_positives": 13,
+     "accepted_false_positives": 0,
+     "http_429": 0
+    },
+    "2": {
+     "cells": 101,
+     "full_case_accuracy_pct": 95,
+     "recall_pct": 84.6,
+     "precision_pct": 80.4,
+     "false_positives": 11,
+     "accepted_false_positives": 0,
+     "http_429": 0
+    }
+   },
+   "groups": {
+    "items": {
+     "cells": 38,
+     "accuracy_pct": 94.7,
+     "recall_pct": 66.7,
+     "fp": 10,
+     "fn": 2
+    },
+    "ownership": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 1,
+     "fn": 0
+    },
+    "economy": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    },
+    "relationships": {
+     "cells": 20,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 0,
+     "fn": 0
+    },
+    "knowledge": {
+     "cells": 46,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 2,
+     "fn": 0
+    },
+    "conditions": {
+     "cells": 8,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 1,
+     "fn": 0
+    },
+    "movement_time": {
+     "cells": 22,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 2,
+     "fn": 0
+    },
+    "household_legal": {
+     "cells": 12,
+     "accuracy_pct": 58.3,
+     "recall_pct": 25,
+     "fp": 0,
+     "fn": 6
+    },
+    "ambiguous_language": {
+     "cells": 12,
+     "accuracy_pct": 100,
+     "recall_pct": 100,
+     "fp": 8,
+     "fn": 0
+    },
+    "multi_mutation": {
+     "cells": 18,
+     "accuracy_pct": 77.8,
+     "recall_pct": 78.9,
+     "fp": 0,
+     "fn": 8
+    },
+    "no_op": {
+     "cells": 10,
+     "accuracy_pct": 100,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "adult_prose": {
+    "cells": 6,
+    "full_case_accuracy_pct": 100,
+    "false_positives": 0,
+    "structured_failures": 0
+   },
+   "unstable_cases": [
+    "n_household_leave"
+   ],
+   "rate_limit_summary": [],
+   "failed_call_count": 0
+  },
+  {
+   "model": "qwen/qwen3.8-flash",
+   "cells": 202,
+   "calls_ok": 67,
+   "full_case_success": 67,
+   "full_case_accuracy_pct": 33.2,
+   "accuracy_given_output_pct": 100,
+   "expected_mutations": 33,
+   "accepted_tp": 33,
+   "recall_pct": 100,
+   "proposed": 47,
+   "proposed_tp": 33,
+   "precision_pct": 71.7,
+   "false_positives": 13,
+   "accepted_false_positives": 0,
+   "false_negatives": 0,
+   "cases_with_fp": 8,
+   "cases_with_fn": 0,
+   "authorization_rejections": 13,
+   "authorization_rejection_rate_pct": 27.7,
+   "json_valid": 67,
+   "schema_valid": 67,
+   "legacy_shape": 0,
+   "normalization_used": 0,
+   "structured_failures": 0,
+   "finish_length_failures": 0,
+   "rate_limited_calls": 135,
+   "http_attempts": 372,
+   "http_200": 67,
+   "http_429": 305,
+   "http_5xx": 0,
+   "http_other_error": 0,
+   "in_band_errors": 0,
+   "transport_errors": 0,
+   "timeouts": 0,
+   "retries": 170,
+   "providers": {
+    "Alibaba": 67
+   },
+   "response_models": [
+    "qwen/qwen3.8-flash"
+   ],
+   "latency_attempt_ms": {
+    "n": 67,
+    "min": 754,
+    "p50": 4825,
+    "p90": 7210,
+    "p95": 8231,
+    "max": 10183
+   },
+   "latency_headers_ms": {
+    "n": 67,
+    "min": 608,
+    "p50": 3757,
+    "p90": 5904,
+    "p95": 5940,
+    "max": 6341
+   },
+   "latency_logical_ms": {
+    "n": 67,
+    "min": 811,
+    "p50": 7080,
+    "p90": 12603,
+    "p95": 13290,
+    "max": 14696
+   },
+   "prompt_tokens": 148503,
+   "completion_tokens": 4191,
+   "reasoning_tokens": 0,
+   "cost_usd": 0.008843,
+   "cost_reported_attempts": 67,
+   "cost_per_successful_case_usd": 0.000132,
+   "cost_per_100_turns_usd": 0.0132,
+   "per_run": {
+    "1": {
+     "cells": 101,
+     "full_case_accuracy_pct": 33.7,
+     "recall_pct": 100,
+     "precision_pct": 72,
+     "false_positives": 7,
+     "accepted_false_positives": 0,
+     "http_429": 150
+    },
+    "2": {
+     "cells": 101,
+     "full_case_accuracy_pct": 32.7,
+     "recall_pct": 100,
+     "precision_pct": 71.4,
+     "false_positives": 6,
+     "accepted_false_positives": 0,
+     "http_429": 155
+    }
+   },
+   "groups": {
+    "items": {
+     "cells": 38,
+     "accuracy_pct": 42.1,
+     "recall_pct": 100,
+     "fp": 7,
+     "fn": 0
+    },
+    "ownership": {
+     "cells": 8,
+     "accuracy_pct": 0,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    },
+    "economy": {
+     "cells": 8,
+     "accuracy_pct": 0,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    },
+    "relationships": {
+     "cells": 20,
+     "accuracy_pct": 45,
+     "recall_pct": 100,
+     "fp": 0,
+     "fn": 0
+    },
+    "knowledge": {
+     "cells": 46,
+     "accuracy_pct": 41.3,
+     "recall_pct": 100,
+     "fp": 4,
+     "fn": 0
+    },
+    "conditions": {
+     "cells": 8,
+     "accuracy_pct": 37.5,
+     "recall_pct": 100,
+     "fp": 0,
+     "fn": 0
+    },
+    "movement_time": {
+     "cells": 22,
+     "accuracy_pct": 31.8,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    },
+    "household_legal": {
+     "cells": 12,
+     "accuracy_pct": 0,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    },
+    "ambiguous_language": {
+     "cells": 12,
+     "accuracy_pct": 33.3,
+     "recall_pct": 100,
+     "fp": 2,
+     "fn": 0
+    },
+    "multi_mutation": {
+     "cells": 18,
+     "accuracy_pct": 33.3,
+     "recall_pct": 100,
+     "fp": 0,
+     "fn": 0
+    },
+    "no_op": {
+     "cells": 10,
+     "accuracy_pct": 30,
+     "recall_pct": null,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "adult_prose": {
+    "cells": 6,
+    "full_case_accuracy_pct": 0,
+    "false_positives": 0,
+    "structured_failures": 0
+   },
+   "unstable_cases": [],
+   "rate_limit_summary": [
+    {
+     "code": 429,
+     "limit_source": "upstream_provider_shared_pool",
+     "provider_name": "Alibaba",
+     "count": 305
+    }
+   ],
+   "failed_call_count": 135
+  }
+ ],
+ "disagreements": [
+  {
+   "case_id": "r2_k02_repeated",
+   "group": "knowledge",
+   "expected": [
+    {
+     "kind": "set_knowledge",
+     "knowledge": {
+      "character_id": "brenna",
+      "fact_id": "campaign_fact_bridge_closed",
+      "status": "knows",
+      "provenance": {
+       "source_character_id": "nicco",
+       "acquisition_kind": "told"
+      }
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "r2_k04_pronoun",
+   "group": "knowledge",
+   "expected": [
+    {
+     "kind": "set_knowledge",
+     "knowledge": {
+      "character_id": "brenna",
+      "fact_id": "campaign_fact_bridge_closed",
+      "status": "knows",
+      "provenance": {
+       "source_character_id": "nicco",
+       "acquisition_kind": "told"
+      }
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "r2_k05_one_recipient",
+   "group": "knowledge",
+   "expected": [
+    {
+     "kind": "set_knowledge",
+     "knowledge": {
+      "character_id": "brenna",
+      "fact_id": "campaign_fact_bridge_closed",
+      "status": "knows",
+      "provenance": {
+       "source_character_id": "nicco",
+       "acquisition_kind": "told"
+      }
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "r2_r01_affection",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "affection",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "r2_r02_trust",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "trust",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"trust\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"trust\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "r2_m03_temporary_exit",
+   "group": "movement_time",
+   "expected": [
+    {
+     "kind": "leave_scene",
+     "character_id": "campaign_character_eval_dell_harrow"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "r2_x04_subset_items",
+   "group": "multi_mutation",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "boots",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"maren\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}} | REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "r2_d02_repeated_item",
+   "group": "items",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "ring",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}} | REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "r2_d03_repeated_embrace",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "affection",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "corpus_kp05",
+   "group": "knowledge",
+   "expected": [
+    {
+     "kind": "set_knowledge",
+     "knowledge": {
+      "character_id": "brenna",
+      "fact_id": "campaign_fact_bridge_closed",
+      "status": "knows",
+      "provenance": {
+       "source_character_id": "nicco",
+       "acquisition_kind": "told"
+      }
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "corpus_kp06",
+   "group": "knowledge",
+   "expected": [
+    {
+     "kind": "set_knowledge",
+     "knowledge": {
+      "character_id": "brenna",
+      "fact_id": "campaign_fact_bridge_closed",
+      "status": "knows",
+      "provenance": {
+       "source_character_id": "nicco",
+       "acquisition_kind": "told"
+      }
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(no_completed_departure) {\"kind\":\"leave_scene\",\"character_id\":\"brenna\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "corpus_tp01",
+   "group": "multi_mutation",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_cotton",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_fluffy",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_shorts",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"guard\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "corpus_tp05",
+   "group": "multi_mutation",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_cotton",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_fluffy",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_shorts",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "corpus_tp04",
+   "group": "ambiguous_language",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_cotton",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_fluffy",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "transfer_item",
+     "item_id": "pink_shorts",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_cotton\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_fluffy\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"pink_shorts\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "corpus_tp07",
+   "group": "items",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "boots",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(no_receipt_act_in_quote) {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_item_fronted",
+   "group": "ambiguous_language",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "boots",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_not_in_context) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"fact_brenna_has_boots\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}} | REJECTED(fact_not_in_context) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"fact_nicco_gave_boots\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(quote_length) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "n_item_take_from_npc",
+   "group": "ownership",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "brenna_boots",
+     "owner_id": "nicco",
+     "position": {
+      "kind": "carried",
+      "character_id": "nicco"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"brenna_boots\",\"owner_id\":\"nicco\",\"position\":{\"kind\":\"carried\",\"character_id\":\"nicco\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"brenna_boots\",\"owner_id\":\"nicco\",\"position\":{\"kind\":\"carried\",\"character_id\":\"nicco\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"brenna_boots\",\"owner_id\":\"nicco\",\"position\":{\"kind\":\"carried\",\"character_id\":\"nicco\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"brenna_boots\",\"owner_id\":\"nicco\",\"position\":{\"kind\":\"carried\",\"character_id\":\"nicco\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_household_rule",
+   "group": "household_legal",
+   "expected": [
+    {
+     "kind": "add_household_rule",
+     "household_id": "campaign_household_home",
+     "text": "nobody lies to family"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"add_household_rule\",\"household_id\":\"campaign_household_home\",\"text\":\"nobody lies to family\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"add_household_rule\",\"household_id\":\"campaign_household_home\",\"text\":\"nobody lies to family\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_household_leave",
+   "group": "household_legal",
+   "expected": [
+    {
+     "kind": "leave_household",
+     "household_id": "campaign_household_home",
+     "character_id": "maren"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_household\",\"household_id\":\"campaign_household_home\",\"character_id\":\"maren\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_household\",\"household_id\":\"campaign_household_home\",\"character_id\":\"maren\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_household\",\"household_id\":\"campaign_household_home\",\"character_id\":\"maren\"}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_household\",\"household_id\":\"campaign_household_home\",\"character_id\":\"maren\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_rel_shield",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "maren",
+     "dimension": "protectiveness",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"maren\",\"dimension\":\"protectiveness\",\"direction\":\"raise\"}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "n_rel_flinch",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "wariness",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"wariness\",\"direction\":\"raise\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"wariness\",\"direction\":\"raise\"}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"wariness\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"wariness\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"wariness\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"wariness\",\"direction\":\"raise\"}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "n_rel_gift_not_affection",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "ring",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}} | REJECTED(quote_not_verbatim) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"maren\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "n_cond_punch",
+   "group": "conditions",
+   "expected": [
+    {
+     "kind": "set_condition",
+     "character_id": "korvin",
+     "conditions": [
+      "minor_injury"
+     ]
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_nicco_light_mage\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     }
+    ],
+    "qwen/qwen3.8-flash": [
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     }
+    ]
+   }
+  },
+  {
+   "case_id": "n_cond_knockdown",
+   "group": "conditions",
+   "expected": [
+    {
+     "kind": "set_condition",
+     "character_id": "korvin",
+     "conditions": [
+      "knocked_down",
+      "winded"
+     ]
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"knocked_down\",\"winded\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"knocked_down\",\"winded\"]}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"korvin\",\"fact_id\":\"campaign_fact_nicco_light_mage\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"knocked_down\",\"winded\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"knocked_down\",\"winded\"]}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_first_name",
+   "group": "ambiguous_language",
+   "expected": [
+    {
+     "kind": "leave_scene",
+     "character_id": "campaign_character_eval_dell_harrow"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"leave_scene\",\"character_id\":\"campaign_character_eval_dell_harrow\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_schedule",
+   "group": "movement_time",
+   "expected": [
+    {
+     "kind": "schedule_event",
+     "id": "campaign_event_hall_meeting",
+     "title": "Meeting in the main hall",
+     "scheduled_world_minute": 400,
+     "participants": [
+      "brenna",
+      "nicco"
+     ]
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"schedule_event\",\"id\":\"campaign_event_hall_meeting\",\"title\":\"Meeting in the main hall\",\"scheduled_world_minute\":400,\"participants\":[\"brenna\",\"nicco\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"schedule_event\",\"id\":\"campaign_event_hall_meeting\",\"title\":\"Meeting in the main hall\",\"scheduled_world_minute\":400,\"participants\":[\"brenna\",\"nicco\"]}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"authority\",\"acquisition_kind\":\"told\"}}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_not_in_context) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_event_hall_meeting\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}} | REJECTED(fact_not_in_context) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"nicco\",\"fact_id\":\"campaign_event_hall_meeting\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"brenna\",\"acquisition_kind\":\"told\"}}} | REJECTED(fact_not_in_context) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_event_hall_meeting\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"schedule_event\",\"id\":\"campaign_event_hall_meeting\",\"title\":\"Meeting in the main hall\",\"scheduled_world_minute\":400,\"participants\":[\"brenna\",\"nicco\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"schedule_event\",\"id\":\"campaign_event_hall_meeting\",\"title\":\"Meeting in the main hall\",\"scheduled_world_minute\":400,\"participants\":[\"brenna\",\"nicco\"]}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_multi_three",
+   "group": "multi_mutation",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "boots",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    },
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "trust",
+     "direction": "raise"
+    },
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "affection",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"branna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"branna\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"trust\",\"direction\":\"raise\"} | ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"boots\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}} | ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"trust\",\"direction\":\"raise\"} | ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_multi_cond_hostility",
+   "group": "multi_mutation",
+   "expected": [
+    {
+     "kind": "set_condition",
+     "character_id": "korvin",
+     "conditions": [
+      "minor_injury"
+     ]
+    },
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "korvin",
+     "to_character_id": "nicco",
+     "dimension": "hostility",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]} | ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"korvin\",\"to_character_id\":\"nicco\",\"dimension\":\"hostility\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"set_condition\",\"character_id\":\"korvin\",\"conditions\":[\"minor_injury\"]} | ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"korvin\",\"to_character_id\":\"nicco\",\"dimension\":\"hostility\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_adult_embrace",
+   "group": "relationships",
+   "expected": [
+    {
+     "kind": "adjust_relationship",
+     "from_character_id": "brenna",
+     "to_character_id": "nicco",
+     "dimension": "affection",
+     "direction": "raise"
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "no commands"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"adjust_relationship\",\"from_character_id\":\"brenna\",\"to_character_id\":\"nicco\",\"dimension\":\"affection\",\"direction\":\"raise\"}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  },
+  {
+   "case_id": "n_adult_item",
+   "group": "items",
+   "expected": [
+    {
+     "kind": "transfer_item",
+     "item_id": "ring",
+     "owner_id": "brenna",
+     "position": {
+      "kind": "carried",
+      "character_id": "brenna"
+     }
+    }
+   ],
+   "optional": [],
+   "per_model": {
+    "anthropic/claude-haiku-5.5": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "deepseek/deepseek-v4-pro": [
+     {
+      "run": 1,
+      "state_match": false,
+      "result": "no commands"
+     },
+     {
+      "run": 2,
+      "state_match": false,
+      "result": "REJECTED(fact_content_missing) {\"kind\":\"set_knowledge\",\"knowledge\":{\"character_id\":\"brenna\",\"fact_id\":\"campaign_fact_bridge_closed\",\"status\":\"knows\",\"provenance\":{\"source_character_id\":\"nicco\",\"acquisition_kind\":\"told\"}}}"
+     }
+    ],
+    "openai/gpt-6-luna": [
+     {
+      "run": 1,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     },
+     {
+      "run": 2,
+      "state_match": true,
+      "result": "ACCEPTED {\"kind\":\"transfer_item\",\"item_id\":\"ring\",\"owner_id\":\"brenna\",\"position\":{\"kind\":\"carried\",\"character_id\":\"brenna\"}}"
+     }
+    ],
+    "qwen/qwen3.8-flash": []
+   }
+  }
+ ]
+}

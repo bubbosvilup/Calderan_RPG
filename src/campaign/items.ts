@@ -25,10 +25,34 @@ function place(item: CampaignItem, next: ItemPosition, context: PreparationConte
   }
   item.position = next;
 }
+/**
+ * Item Domain V1 identity. `campaign_item_` + 8 digits (the existing created-record prefix) is the engine-owned namespace: only create_item allocates it, from the campaign's
+ * next_item_sequence, inside the same draft that persists the item (one atomic transition). Nothing else may register such an ID.
+ */
+export const ENGINE_ITEM_ID = /^campaign_item_(\d{8})$/;
+export const formatItemId = (sequence: number): string => `campaign_item_${String(sequence).padStart(8, "0")}`;
+export const engineItemSequence = (id: string): number | undefined => { const m = ENGINE_ITEM_ID.exec(id); return m ? Number(m[1]) : undefined; };
 export function prepareItemCommand(context: PreparationContext, command: CampaignCommand): boolean {
   switch (command.kind) {
+    case "create_item": {
+      // V1 positions only: carried, or lying at a location. Equipment and unknown positions are not creatable (see ITEM_DOMAIN.md).
+      if (command.position.kind !== "carried" && command.position.kind !== "stored") fail("position", "create_item supports carried or stored (at location) only");
+      if (!command.name.trim()) fail("name", "created item requires a name");
+      const sequence = context.draft.next_item_sequence;
+      if (!Number.isSafeInteger(sequence) || sequence < 1 || sequence > 99_999_999) fail("next_item_sequence", "item ID space exhausted");
+      const item: CampaignItem = { id: formatItemId(sequence), origin: { kind: "created" }, name: command.name.trim(), ...(command.description ? { description: command.description } : {}),
+        ...(command.category ? { category: command.category } : {}), ...(command.owner_id !== undefined ? { owner_id: command.owner_id } : {}),
+        position: { kind: "unknown" }, created_revision: context.draft.revision + 1 };
+      context.refs.registration(item.id, item.origin, "item");
+      if (item.owner_id != null) context.refs.character(item.owner_id);
+      context.draft.items.push(item); place(item, command.position, context);
+      context.draft.next_item_sequence = sequence + 1;
+      return true;
+    }
     case "register_item": {
       const item = command.item; context.refs.registration(item.id, item.origin, "item");
+      if (ENGINE_ITEM_ID.test(item.id)) fail("item.id", "campaign_item_NNNNNNNN IDs are allocated by the engine (create_item) only");
+      if (item.created_revision !== undefined) fail("item.created_revision", "set only by create_item");
       if (item.origin.kind === "created" && !item.name) fail("item.name", "created item requires a name");
       // Canonical ownership is not evidence of being carried or equipped.
       if (item.origin.kind === "canonical" && item.owner_id === undefined) {

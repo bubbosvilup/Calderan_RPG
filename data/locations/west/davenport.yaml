@@ -7,22 +7,27 @@ entity:
   parent: west
   aliases: ["The Port of Chains"]
   summary: >-
-    Davenport, The Port of Chains, is West's principal economic and maritime city, a major
-    port farther south near Chained Bay.
+    Davenport, The Port of Chains, is West's principal port, primary shipbuilding city and main
+    maritime gateway, farther south near Chained Bay, famous for its ships and pearls.
   content: >-
     Davenport has an elaborate, wealthy urban presentation, substantial stone docks, and
-    major warehouse infrastructure. It is fundamental to West's maritime economy, with
-    prosperity deeply tied to legal/institutional slave trade. Calderan and Davenport
-    together hold principal institutional monopoly/control over West's legal slave market;
-    detailed law remains undefined. Traffic arrives through frontier markets, Ironbound,
-    Khar-Dune-related networks, and other legally processed sources. Large storage
-    facilities in its warehouse system form part of the logistics chain before auctions or
-    onward transport. Merchant vessels may carry enslaved people toward inland plantations,
-    colonies, or other destinations in West's economic sphere. Plantations and colonies
-    exist somewhere in that broader system, but their locations, sizes, ownership, crops,
-    and political status remain undefined.
+    major warehouse infrastructure. It is West's primary gateway for legal maritime commerce and
+    contains West's largest and most important shipyards, which build civilian, merchant, fishing
+    and military vessels and produce the great bulk of West's naval fleet. Its prosperity is also
+    deeply tied to legal/institutional slave trade. Calderan and Davenport together hold principal
+    institutional monopoly/control over West's legal slave market; detailed law remains undefined.
+    Traffic arrives through frontier markets, Ironbound, Khar-Dune-related networks, and other
+    legally processed sources, and maritime slave traffic reaching West commonly passes through
+    Davenport, legally or illegally. Large storage facilities in its warehouse system form part of
+    the logistics chain before auctions or onward transport. Merchant vessels may carry enslaved
+    people toward inland plantations, colonies, or other destinations in West's economic sphere.
+    Plantations and colonies exist somewhere in that broader system, but their locations, sizes,
+    ownership, crops, and political status remain undefined. Davenport is strategically vital: it
+    is West's primary maritime gateway, produces much of West's fleet and protects maritime access
+    toward the interior, and losing it would severely damage West's naval capacity. Its port areas
+    are rougher and more criminal than the wealthy districts; not every district is degraded.
   tags: [geography]
-  search_context: ""
+  search_context: "Davenport port city, Port of Chains, West's main harbour, shipyards and shipbuilding, naval fleet, sailors, dockworkers, fishers, pearl divers, Davenport pearls, maritime trade, smuggling, Chained Bay."
   knowledge:
     visibility:
       narrator: true
@@ -36,6 +41,49 @@ entity:
       description: "Substantial stone docks and major warehouses, including large facilities in slave-trade logistics before auctions or onward transport."
     - name: "legal slave-market control"
       description: "Davenport and Calderan share principal institutional monopoly/control over West's legal slave market."
+    - name: "West's principal shipyards"
+      description: "The largest and most important shipyards in West, building civilian, merchant, fishing and military vessels and most of West's fleet."
+    - name: "renowned pearls"
+      description: "Davenport pearls are regarded among the finest available in Aureth's trade."
   connections: []
-chunks: []
-
+chunks:
+  - id: davenport.economy_and_port
+    entity_id: davenport
+    section: economy_and_port
+    summary: Davenport's maritime economy, iconic ships and pearls, imports, exports, trade partners, smuggling, maritime conflicts and port life.
+    search_context: Davenport economy, fish and marine food, pearls, marine oils, ships, shipyards, sailors, dockworkers, fishermen, fruit, smuggling, Blackwater, Sandspear, river trade with Calderan, brothels, port crime.
+    content: >-
+      Davenport's great natural resource is the sea. It produces large quantities of fish and marine
+      food, exceptionally fine pearls, rare marine-derived materials and marine oils or substances
+      valued by specialist crafts and magic, some taken from unusual sea creatures that are not
+      individually established. The mild coastal surroundings grow fruit, and nearby woodland supplies
+      ordinary ship timber, not Woodsong timber. Shipbuilding, maritime labour and skilled heavy
+      labour are central. Davenport exports fish, marine food, pearls, rare marine materials, marine
+      oils, fruit, ships and shipbuilding services, maritime labour, goods passing through its port
+      and slaves transported by sea. It imports vegetables and inland farm produce from Calderan's
+      wider agricultural region, iron, stone, textiles, spices, specialised finished goods and other
+      materials for shipbuilding and city life, including from Calderan and from Center/Zul-Rath
+      trade. It trades with Calderan, the wider West, Center ports, Skardgard and East, and other
+      maritime partners across Aureth. A river reaches the sea at Davenport, and river transport can
+      carry cargo inland from Davenport toward the Calderan region; whether that river is Grey Brook's
+      lower course, and where cargo is transferred to land, are not established, and boats do not
+      enter Calderan through its walls. Most commerce is legal, but smuggling is significant:
+      alcohol, contraband, undeclared cargo and trafficked people or illegal slaves, helped by
+      Blackwater's proximity and its networks. Smugglers moving illegal captives toward Calderan
+      may try routes through Davenport; no single route is established. Davenport has recurring
+      maritime tension with Sandspear and Center corsair interests and with Blackwater pirates:
+      raids, interceptions and incidents rather than formal total war. Port life is
+      hard-working, direct and practical: sailors, dockworkers, shipbuilders, labourers, fishers,
+      merchants, smugglers, substantial sex work including legal establishments, and organised crime
+      around parts of the port. This describes the port's texture, not the character of every
+      resident.
+    tags:
+      - economy
+      - trade
+      - maritime
+    knowledge:
+      visibility:
+        narrator: true
+        player: true
+      known_by: []
+      awareness: public

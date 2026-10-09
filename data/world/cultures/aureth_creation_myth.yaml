@@ -1,0 +1,39 @@
+schema_version: 1
+entity:
+  id: aureth_creation_myth
+  type: world_lore
+  name: The Myth of Aureth
+  display_name: The Myth of Aureth
+  parent: null
+  aliases: []
+  summary: An old ancestral creation myth, older than the Church, names the continent after Aureth, a legendary
+    ancient golden dragon said to have shaped the land and entrusted it to three draconic children associated with
+    West, Center and East.
+  tags:
+    - myth
+  search_context: Aureth creation myth, ancestral religion, old folklore, legendary golden dragon, origin of the continent's name, three draconic children, green dragon of West, red dragon of Center, dragon of East.
+  content: In the oldest ancestral creation tradition of the continent, older than the Church of the Sun Emperor,
+    Aureth is a legendary ancient golden dragon who created or shaped the land that now bears his name. The myth
+    says Aureth entrusted the three great regions to three draconic children, each associated with one of the broad
+    regions that later became West, Center and East. West is associated with a verdant, green draconic image and
+    Center with a red one; public tradition gives the East's draconic child no settled colour or form. The
+    Church of the Sun Emperor arose much later and has absorbed, reinterpreted or overwritten much of this older
+    tradition within its own doctrine, so the dragon tale survives mainly as folklore, ancestral custom, old
+    stories and the continent's name. In public knowledge this is mythology, not established fact. Whether
+    Aureth or the children ever existed, whether the land was literally made this way, what became of them, the
+    children's names, any worship, cult, temples or relics, powers, dates and any political claims based on the
+    myth remain unestablished.
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+    awareness: public
+  category: cultures
+  related_entities:
+    - continent
+    - west
+    - center
+    - east
+    - church_doctrine
+chunks: []
