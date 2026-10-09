@@ -1,4 +1,7 @@
 import type { NarratorRequest } from "../llm/types.js";
+import type { SpriteQualityReviewer } from "../llm/sprite-quality.js";
+import { ItemSpriteJobs } from "./item-sprite-jobs.js";
+import { inventoryVisualView } from "./item-visual-view.js";
 import { ContextBudgetManager, type ContextPolicy } from "../turn/context-budget.js";
 import { unavailableCompactor, type ContextCompactionService, type CompactionReason, type CompactionResult } from "./context-compaction.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
@@ -60,6 +63,7 @@ export interface SessionDeps {
   /** Developer-only: keep draft text, controller proposal and authorization evidence in traces and allow exporting them. */
   readonly unsafe_trace?: boolean;
   /** Portrait image generation: the provider-neutral image seam and the local portrait asset store (both optional; absent = feature off). */
+  readonly item_sprite_reviewer?: SpriteQualityReviewer;
   readonly portrait_generator?: PortraitImageGenerator;
   /** Prompt trigger, per-kind sizes and price per billable unit (default: the v1 Raena stack). No provider request shapes. */
   readonly portrait_stack?: Pick<PortraitImageStack, "trigger" | "avatar_size" | "fullbody_size" | "price_usd_per_billable_unit">;
@@ -124,8 +128,8 @@ export type PortraitOutcome = { readonly ok: true; readonly changed: boolean; re
   | { readonly ok: false; readonly error: AppError; readonly view: SessionView };
 /**
  * Portrait batch outcome. `cost_usd` is the sum of costs derived from what the provider actually returned for the successful images
- * (reported cost, or billable units × the configured unit price; absent when nothing was returned; never estimated). `failed` includes
- * `refused` (content refusals that survived their one reseed). `provider_calls` ≤ 2 × requested. Provider bodies are never included.
+ * (reported cost, or billable units Ã— the configured unit price; absent when nothing was returned; never estimated). `failed` includes
+ * `refused` (content refusals that survived their one reseed). `provider_calls` â‰¤ 2 Ã— requested. Provider bodies are never included.
  */
 export type PortraitBatchOutcome = { readonly ok: true; readonly changed: true; readonly kind: PortraitKind; readonly requested: number; readonly succeeded: number; readonly failed: number;
     readonly refused: number; readonly provider_calls: number; readonly avatar_auto_selected: boolean; readonly message: string; readonly cost_usd?: number; readonly view: SessionView }
@@ -158,6 +162,7 @@ const APPLICATION_COMMAND = /^\s*\/(?:save|load|new|quit|exit|status|help|debug|
 const STUB_STATUS: ProviderStatus = { mode: "stub", configured: true };
 
 export class GameSession {
+  readonly #itemSprites: ItemSpriteJobs;
   readonly #mannerisms: MannerismMaintenance | undefined;
   readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent">>;
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
@@ -172,6 +177,9 @@ export class GameSession {
   #saveError: AppError["code"] | undefined; #pendingDeletions = new Set<string>(); #suspended = false;
   private constructor(deps: SessionDeps, session: CampaignSession, init: SessionInit = {}) {
     this.#deps = deps; this.#session = session; this.#openingText = init.opening_text;
+    this.#itemSprites = new ItemSpriteJobs(session.campaign, { generator: deps.portrait_generator, store: deps.portrait_store, reviewer: deps.item_sprite_reviewer,
+      can_commit: () => this.#status === "idle" && !this.#suspended,
+      changed: () => this.#autosave?.notify(), trigger: deps.portrait_stack?.trigger });
     this.#mannerisms = deps.mannerism_extractor ? new MannerismMaintenance(deps.world, deps.mannerism_extractor) : undefined;
     // The scenario opening is given to the narrator while no exchange has been finalized (fresh campaigns and never-played loads).
     const opening = init.opening_text;
@@ -249,6 +257,7 @@ export class GameSession {
       missing_assets: assets?.missing.length ?? 0, orphan_assets: assets?.orphans.length ?? 0, temporary_participants_reset: true as const, ...(recovered ? { recovered_from: recovered } : {}),
       warnings: Object.freeze(warnings) });
     // Reconciliation is an authoritative change: the session starts dirty and autosave picks it up.
+    session.#itemSprites.resumeInterrupted();
     session.#autosave?.notify();
     return { ok: true, session, load_report };
   }
@@ -274,7 +283,7 @@ export class GameSession {
   #setStatus(status: SessionStatus, emit?: (e: SessionEvent) => void): void {
     if (this.#status !== status) { this.#status = status; emit?.({ type: "status_changed", status }); }
     if (status === "idle" || status === "closed") for (const wake of this.#idleWaiters.splice(0)) wake();
-    if (status === "idle") this.#autosave?.notify();
+    if (status === "idle") { this.#itemSprites.flush(); this.#autosave?.notify(); }
   }
   #reject(error: AppError): TurnOutcome { this.#lastError = error; return { ok: false, error, view: this.getView() }; }
   /** Explicit administrative correction, never a model command or simulated journey. */
@@ -298,7 +307,7 @@ export class GameSession {
       campaign.commit(receipt);
       this.#coordinator.resetSceneContinuity(campaign);
       this.#lastError = undefined; this.#autosave?.notify();
-      return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} → ${target.display_name} (${target.id}). Time unchanged.`, view: this.getView() };
+      return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} â†’ ${target.display_name} (${target.id}). Time unchanged.`, view: this.getView() };
     } catch { return reject("campaign_validation_failed"); }
   }
 
@@ -369,15 +378,15 @@ export class GameSession {
 
   /**
    * Image generation v1 (Portrait Gallery V2 batches). One explicit player action = one batch of exactly PORTRAIT_BATCH_SIZE (3)
-   * independent images of ONE kind (avatar 992×992 bust-up, or fullbody 800×1200 head-to-feet) and ONE curated pose, run concurrently.
+   * independent images of ONE kind (avatar 992Ã—992 bust-up, or fullbody 800Ã—1200 head-to-feet) and ONE curated pose, run concurrently.
    * The browser supplies only the opaque ref, the revision it saw, the kind and a pose id; prompt, sizes, seeds, model and paths are
    * server-side. Each slot gets its own explicit seed (distinct within the batch, recorded for traceability) and at most ONE recovery:
    * a content refusal is retried once with a NEW seed and the modest-wording reinforcement (same character, kind and pose); a 429,
    * 5xx, timeout or network failure is retried once with the SAME seed after a short wait; auth, credits, invalid request and malformed
    * output are not retried. So a batch makes at most 6 provider calls. Sequence: validate (revision, eligibility, adult, lock, kind/pose,
-   * 3 free Gallery slots) → 3 slots (allSettled) → stage each success → wait for any turn to finish → re-check eligibility and that
-   * the appearance is unchanged → finalize the successful files → ONE metadata commit carrying every successful version (plus, on the
-   * first AVATAR batch while no Avatar exists, one uniformly random Avatar among this batch's successes) → expose. Partial success keeps
+   * 3 free Gallery slots) â†’ 3 slots (allSettled) â†’ stage each success â†’ wait for any turn to finish â†’ re-check eligibility and that
+   * the appearance is unchanged â†’ finalize the successful files â†’ ONE metadata commit carrying every successful version (plus, on the
+   * first AVATAR batch while no Avatar exists, one uniformly random Avatar among this batch's successes) â†’ expose. Partial success keeps
    * the successes; 0 successes changes nothing. Full Body is never selected here. A failed commit removes every finalized file of the
    * batch. The stored reference image is NOT sent (v1 text-to-image has no reference input). Images never change appearance.
    */
@@ -464,7 +473,7 @@ export class GameSession {
       const created_at = new Date().toISOString();
       const versions: CharacterPortraitVersion[] = staged.map(({ slot: { image, seed, prompt }, ext }) => {
         const version_id = `portrait_${randomBytes(6).toString("hex")}`;
-        // Cost only from what the provider returned: its reported cost, else its billable units × the configured unit price.
+        // Cost only from what the provider returned: its reported cost, else its billable units Ã— the configured unit price.
         const cost = image.cost_usd ?? (image.billable_units !== undefined ? Math.round(image.billable_units * stack.price_usd_per_billable_unit * 1e6) / 1e6 : undefined);
         return { version_id, prompt_version: PORTRAIT_PROMPT_VERSION, prompt_fingerprint: fingerprint, model: image.model, created_at, media_type: image.media_type, asset_file: `${version_id}.${ext}`,
           ...(cost !== undefined ? { cost_usd: cost } : {}), kind, pose, prompt, seed, ...(image.provider_seed !== undefined ? { provider_seed: image.provider_seed } : {}), provider: image.provider,
@@ -553,8 +562,8 @@ export class GameSession {
     return this.#commitPortrait(target.campaign, { kind: "set_portrait_full_body", character_id: target.id, version_id: target.version.version_id }, "The Full Body image could not be changed.");
   }
   /**
-   * Portrait Gallery V2: delete one unassigned Gallery image; an image holding the Avatar or Full Body role is refused. Order: validate →
-   * commit the metadata removal → deferred file deletion (Save/Load v1): the file is removed only once no retained state (live campaign,
+   * Portrait Gallery V2: delete one unassigned Gallery image; an image holding the Avatar or Full Body role is refused. Order: validate â†’
+   * commit the metadata removal â†’ deferred file deletion (Save/Load v1): the file is removed only once no retained state (live campaign,
    * save.json, save.previous.json, kept backups) references it, so recovering an older save never finds a missing file. A file that
    * cannot be removed stays as a detectable orphan (logged); the delete still succeeds.
    */
@@ -686,6 +695,9 @@ export class GameSession {
       }
       const after = campaign.exportSnapshot();
       if (completed) {
+        // Creation only: movement/transfer of an existing identity never schedules art.
+        const previousItems = new Set(before.items.map(i => i.id));
+        for (const item of after.items) if (!previousItems.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id);
         const trace = this.#record(buildTrace({ sequence, campaign_id: before.campaign_id, dataset_id: before.dataset_id, player_input: input, revision_before: before.revision, revision_after: after.revision,
           outcome: "completed", result: completed.result, ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}), movement: movementOf(before, after), ...(this.#deps.unsafe_trace ? { unsafe: true } : {}) }));
         // History only (never canonical): recorded with the revision the turn committed, written to transcript.jsonl after a save.
@@ -762,7 +774,7 @@ export class GameSession {
     await this.#collectDeletions();
     return { ok: true, saved, ...(transcriptOk ? {} : { transcript_error: true as const }), view: this.getView() };
   }
-  /** Bounded, non-authoritative recent conversation for the save (≤ 12 finalized exchanges; oversized ones and the oldest are dropped). */
+  /** Bounded, non-authoritative recent conversation for the save (â‰¤ 12 finalized exchanges; oversized ones and the oldest are dropped). */
   exportContinuity(): SaveContinuity | undefined {
     const recent = this.#coordinator.recent?.(this.#session.campaign);
     if (!recent) return undefined;
@@ -815,7 +827,26 @@ export class GameSession {
   /** Rename (presentation only; the ID never changes). Written by the next save; autosave picks it up only with a later mutation. */
   setDisplayName(name: string): void { this.#session.setDisplayName(name); }
   /** Anything in flight that a campaign swap must not interrupt: a turn, post-turn step, compaction, portrait batch or save. */
-  get busy(): boolean { return this.#status !== "idle" || !!this.#portraitBusy || this.#session.saving || this.#autosave?.state === "saving"; }
+  get busy(): boolean { return this.#status !== "idle" || !!this.#portraitBusy || this.#itemSprites.busy || this.#session.saving || this.#autosave?.state === "saving"; }
+  /** Same read model and sprite pipeline for player, campaign NPCs and NPC+. */
+  getInventoryVisuals(characterId: string) { return inventoryVisualView(this.#session.campaign.exportSnapshot(), characterId, this.#deps.world); }
+  /** Player-safe Inventory UI V1: possession only, no visual prose or storage filenames. */
+  getPlayerInventoryView() {
+    return { campaign_id: this.campaignId, revision: this.#session.campaign.revision, items: this.getInventoryVisuals("nicco").map(({ sprite_asset_ref: _asset, ...item }) => ({
+      ...item, ...(item.sprite_status === "ready" ? { sprite_url: `/api/inventory/sprite/${this.campaignId}/${item.id}` } : {}),
+    })) };
+  }
+  requestItemSprite(itemId: string): boolean { return this.#status !== "closed" && this.#itemSprites.request(itemId); }
+  async itemSpritesSettled(): Promise<void> { await this.#itemSprites.settled(); }
+  /** Safe future image-serving seam: resolve a canonical item reference, never a caller-supplied file path. */
+  async readItemSprite(itemId: string): Promise<{ readonly bytes: Buffer; readonly media_type: string } | undefined> {
+    const snapshot = this.#session.campaign.exportSnapshot(), item = snapshot.items.find(i => i.id === itemId);
+    if (item?.sprite?.status !== "ready" || !this.#deps.portrait_store) return undefined;
+    const bytes = await this.#deps.portrait_store.read(snapshot.campaign_id, item.id, item.sprite.asset_ref);
+    if (!bytes) return undefined;
+    const extension = item.sprite.asset_ref.split(".").at(-1);
+    return { bytes, media_type: extension === "png" ? "image/png" : extension === "jpg" ? "image/jpeg" : "image/webp" };
+  }
   saveStatus(): SaveStatus {
     const state = this.#autosave?.state;
     return { saving: this.#session.saving, ...(this.#saveError ? { error: this.#saveError } : {}), autosave: !this.#autosave ? "off" : state === "stopped" ? "stopped" : "on", ...(this.#transcriptError ? { transcript_error: true as const } : {}) };
@@ -825,7 +856,7 @@ export class GameSession {
   async autosaveSettled(): Promise<void> { await this.#autosave?.idle(); }
   /** Host seam: no autosave while a campaign load/swap is coordinated. */
   suspendAutosave(): void { this.#suspended = true; }
-  resumeAutosave(): void { this.#suspended = false; this.#autosave?.notify(); }
+  resumeAutosave(): void { this.#suspended = false; this.#itemSprites.flush(); this.#autosave?.notify(); }
   /** Orphan detection (never destructive): files no retained state references, and live references whose file is missing. */
   async portraitAssetReport(): Promise<PortraitAssetReport | undefined> {
     const store = this.#deps.portrait_store, repository = this.#deps.repository as HistoryRepository;
@@ -859,6 +890,7 @@ export class GameSession {
     await this.#inflight?.catch(() => undefined);
     // A portrait batch cannot be cancelled mid-provider-call; wait for it so its files are committed or cleaned up, never stranded.
     await this.#portraitDone;
+    this.#itemSprites.flush(); await this.#itemSprites.settled();
     await this.#autosave?.stop();
     // Graceful quit (Save/Load v1): save a dirty campaign before closing. A failed quit save keeps the session open unless discarding.
     if (options.save_reason === "quit" && (this.hasUnsavedChanges || this.#historyPending()) && this.#status === "idle") {

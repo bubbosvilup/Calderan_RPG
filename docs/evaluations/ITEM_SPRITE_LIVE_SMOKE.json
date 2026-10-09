@@ -1,0 +1,36 @@
+{
+  "credential_exists": true,
+  "calls": 2,
+  "retries": 0,
+  "provider": "fal-ai",
+  "model": "Qwen/Qwen-Image",
+  "style": "Raelina/Raena-Qwen-Image",
+  "items": [
+    {
+      "name": "Ivory Figurine",
+      "id": "campaign_item_00000001",
+      "queued": true,
+      "immediate_status": "pending",
+      "sprite": {
+        "status": "ready",
+        "asset_ref": "portrait_item_c0131a811cc9d6b6.png",
+        "generated_from_visual_description": "Small hand-sized ivory figurine depicting a kneeling woman, aged cream-coloured ivory, fine carved facial details, slightly worn rectangular base, no paint."
+      },
+      "asset_persisted": true,
+      "visual_review": "Recognizable ivory figurine; isolated, fully visible, neutral background. Provider adds ornate carving/clothing details beyond the supplied description."
+    },
+    {
+      "name": "Silver Knife",
+      "id": "campaign_item_00000002",
+      "queued": true,
+      "immediate_status": "pending",
+      "sprite": {
+        "status": "ready",
+        "asset_ref": "portrait_item_acd3edbdaecc8d8b.png",
+        "generated_from_visual_description": "Small silver knife with a straight narrow blade and a simple smooth silver handle, softly polished metal, no ornament."
+      },
+      "asset_persisted": true,
+      "visual_review": "Readable isolated knife; fully visible. Provider adds ornate guard/handle and a decorative border despite no-ornament/no-frame instructions. Art-direction compliance is partial."
+    }
+  ]
+}

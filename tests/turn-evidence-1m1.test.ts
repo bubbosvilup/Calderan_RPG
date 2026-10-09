@@ -4,7 +4,7 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import { setup, collect } from "./turn-fixtures.js";
 
 // Phase 1M.1: forms observed in Phase 1M Stage B traces, plus the mandated negative controls.
-const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", item_id, owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }));
+const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: "brenna" } }));
 const offer = "*gives her the two pink shirt, one fluffy and thick one made of probably cotton, the shorts are also pink and should be alright for her narrow waist*";
 async function handover(narration: string, proposal: readonly CampaignCommand[] = garments) {
   const s = setup(narration, proposal, true), before = s.campaign.exportSnapshot();

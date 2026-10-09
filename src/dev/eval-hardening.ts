@@ -18,7 +18,7 @@ const corpus = JSON.parse(await readFile("tests/playthrough/curated.json", "utf8
 const defaultRows = [3, 11, 25, 35, 39, 43, 47, 53, 115, 169, 173, 509];
 const countFlag = process.argv.indexOf("--count"), count = countFlag < 0 ? 12 : Number(process.argv[countFlag + 1]);
 if (!Number.isSafeInteger(count) || count < 1 || count > corpus.fixtures.length) throw new Error("Explicit count must be 1..24; full source corpus replay is unsupported");
-const handover: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+const handover: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
 const knowledge: CampaignCommand = { kind: "set_knowledge", knowledge: { character_id: "brenna", fact_id: "campaign_fact_bridge_closed", status: "knows", provenance: { source_character_id: "nicco", acquisition_kind: "told" } } };
 type EvalCase = { id: string; input: string; expected: readonly CampaignCommand[]; source_row?: number };
 const cases: EvalCase[] = smoke ? [

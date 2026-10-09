@@ -17,8 +17,8 @@ import { metadata } from "./turn-fixtures.js";
  * Hardening H2: the extracted stages are directly testable with deterministic fixtures, and none of them can mutate CampaignState.
  * (End-to-end order and byte-identity are pinned by turn-pipeline-golden; this file tests the stage contracts in isolation.)
  */
-const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
-const ring: CampaignCommand = { kind: "transfer_item", item_id: "ring", owner_id: "gerome", position: { kind: "carried", character_id: "gerome" } };
+const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
+const ring: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "ring",  position: { kind: "carried", character_id: "gerome" } };
 
 /** Runs the stages up to final preparation for a fixture handover; returns everything the audit stage needs. */
 function staged(input: string, draft: string, proposal: readonly CampaignCommand[]) {

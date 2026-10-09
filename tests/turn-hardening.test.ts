@@ -7,7 +7,7 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import { withHistoricalContext } from "../src/dev/historical-context.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { mockNarrator, metadata } from "./turn-fixtures.js";
-const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", item_id, owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }));
+const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: "brenna" } }));
 const input = "I give Brenna the two pink shirts and the shorts.";
 for (const narration of ["She snatches all three pieces at once, bundling them against her chest.", "Brenna takes them.", "Brenna accepts the clothes.", "She gathers all three into her arms.", "Brenna receives the garments.", "Brenna takes those clothes.", "Brenna picks up the shirts and shorts."]) test(`collective grounded acceptance: ${narration}`, async () => {
   const s = setup(narration, garments, true), revision = s.campaign.revision;

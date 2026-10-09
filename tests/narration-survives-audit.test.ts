@@ -42,18 +42,18 @@ async function run(setup: { world: typeof world; campaign: CampaignState }, step
   return result!;
 }
 const DELL = "campaign_character_dell", M = "campaign_character_maren", BRENNA = "campaign_character_brenna";
-const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
 
 interface Case { readonly id: string; readonly setup: () => { world: typeof world; campaign: CampaignState }; readonly prelude?: readonly { input: string; narration: string; proposals?: readonly CampaignCommand[] }[];
   readonly input: string; readonly narration: string; readonly proposals?: readonly CampaignCommand[]; readonly evidence?: readonly string[]; readonly check?: (c: CampaignState, r: TurnResult) => void }
 const CORPUS: readonly Case[] = [
   // ---- item handover
   { id: "handover_plain", setup: () => turnFixture(), input: "I give boots to Brenna.", narration: "Brenna accepts boots from Nicco.", proposals: [transfer],
-    check: c => assert.equal(c.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna") },
+    check: c => assert.equal(c.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco") },
   { id: "handover_no_hesitation", setup: () => turnFixture(), input: "I give boots to Brenna.", narration: "Brenna takes the boots from Nicco, no hesitation.", proposals: [transfer],
-    check: c => assert.equal(c.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna") },
+    check: c => assert.equal(c.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco") },
   { id: "handover_without_hesitation", setup: () => turnFixture(), input: "I give boots to Brenna.", narration: "Brenna takes the boots from Nicco without hesitation.", proposals: [transfer],
-    check: c => assert.equal(c.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna") },
+    check: c => assert.equal(c.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco") },
   // ---- ordinary dialogue, questions, quoted speech, observation
   { id: "dialogue_question", setup: () => turnFixture(), input: "Hello, Brenna. How are you feeling?", narration: 'Brenna looks up from her chair. "Better than yesterday," she says. "Why do you ask?"' },
   { id: "quoted_speech_with_action_words", setup: () => turnFixture(), input: "Do you want these boots?", narration: '"Leave them by the door," Brenna says. "I\'ll take them when I can stand."' },
@@ -169,7 +169,7 @@ test("a fronted adverbial before the recipient still confirms the receipt (forme
   for (const narration of ["Without hesitation, Brenna takes the boots from Nicco.", "Carefully, Brenna accepts the boots from Nicco."]) {
     const s = turnFixture();
     assert.equal(await deliveredAs(s, "I give boots to Brenna.", narration, [transfer]), "draft", narration);
-    assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna", narration);
+    assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco", narration);
   }
 });
 test("fronted adverbials never authorize what the turn does not: no intent, a wrong recipient, or a hedge", async () => {

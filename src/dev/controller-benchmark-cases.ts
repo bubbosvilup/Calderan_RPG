@@ -39,7 +39,7 @@ const tell: CampaignCommand = { kind: "set_knowledge", knowledge: { character_id
 const rel = (from: string, to: string, dimension: "trust" | "wariness" | "affection" | "protectiveness" | "respect" | "fear" | "hostility" | "romance", direction: "raise" | "lower" = "raise"): CampaignCommand =>
   ({ kind: "adjust_relationship", from_character_id: from, to_character_id: to, dimension, direction });
 const affection = rel("brenna", "nicco", "affection"), trust = rel("brenna", "nicco", "trust");
-const transfer = (item_id: string, owner = "brenna"): CampaignCommand => ({ kind: "transfer_item", item_id, owner_id: owner, position: { kind: "carried", character_id: owner } });
+const transfer = (item_id: string, owner = "brenna"): CampaignCommand => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: owner } });
 const garments = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(id => transfer(id));
 const HH: BenchmarkFixture = { kind: "household" }, GARMENTS: BenchmarkFixture = { kind: "household", garments: true };
 const RETURN_MOVE: CampaignCommand = { kind: "move_character", character_id: "maren", location_id: "test_room" };

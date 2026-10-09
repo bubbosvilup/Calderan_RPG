@@ -58,9 +58,9 @@ const distinct = (parser: Parser): Parser => (input, path) => {
   const values = list(parser)(input, path) as unknown[];
   if (new Set(values).size !== values.length) fail(path, "duplicate value"); return values;
 };
-const tagged = (variants: Record<string, Parser>): Parser => (input, path) => {
+const tagged = (variants: Record<string, Parser>, discriminant = "kind"): Parser => (input, path) => {
   if (!input || typeof input !== "object") fail(path, "expected tagged data object");
-  const d = Object.getOwnPropertyDescriptor(input, "kind");
+  const d = Object.getOwnPropertyDescriptor(input, discriminant);
   if (!d || !("value" in d) || typeof d.value !== "string" || !Object.hasOwn(variants, d.value)) fail(path, "invalid kind");
   return variants[d.value]!(input, path);
 };
@@ -113,7 +113,10 @@ const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: c
   evidence: list(text, 12) });
 const characterRecord = object({ id, origin, profile, current, origin_snapshot: optional(originSnapshot) });
 const itemCategory = choice("weapon", "armor", "clothing", "tool", "consumable", "document", "valuable", "material", "miscellaneous");
-const itemRecord = object({ id, origin, name: optional(text), description: optional(text), owner_id: optional(nullable(id)), position, acquisition: optional(acquisition),
+const sprite = tagged({ none: object({ status: choice("none") }), pending: object({ status: choice("pending") }),
+  failed: object({ status: choice("failed"), error_code: text }),
+  ready: object({ status: choice("ready"), asset_ref: text, generated_from_visual_description: text }) }, "status");
+const itemRecord = object({ id, origin, name: optional(text), description: optional(text), visual_description: optional(text), sprite: optional(sprite), owner_id: optional(nullable(id)), position, acquisition: optional(acquisition),
   category: optional(itemCategory), created_revision: optional(integer(1)) });
 const membershipRecord = object({ character_id: id, status: choice("guest", "member", "former_member"), joined_at: optional(integer()), role: optional(text) });
 const factRecord = object({ id, content: tagged({ campaign: object({ kind: choice("campaign"), statement: text, truth: choice("true", "false", "unknown") }), canonical: object({ kind: choice("canonical"), entity_id: id, chunk_id: optional(text) }) }) });
@@ -214,9 +217,11 @@ command("leave_scene", { character_id: id });
 command("set_slot_knowledge", { character_id: id, slot: id, state: choice("empty", "unknown") });
 command("register_item", { item: itemRecord });
 // Item Domain V1: no id field exists, so a proposer cannot choose one (unknown keys are rejected).
-command("create_item", { name: text, description: optional(text), category: optional(itemCategory), owner_id: optional(nullable(id)), position });
+command("create_item", { name: text, description: text, visual_description: text, category: optional(itemCategory), owner_id: optional(nullable(id)), position });
+command("enrich_item_visual", { item_id: id, visual_description: text });
+command("set_item_sprite", { item_id: id, sprite });
 command("place_item", { item_id: id, position });
-command("transfer_item", { item_id: id, owner_id: nullable(id), position, acquisition: optional(acquisition) });
+command("transfer_item", { item_id: id, mode: choice("gift", "handoff", "lend", "return", "steal", "reclaim", "take"), position, acquisition: optional(acquisition) });
 command("create_household", { id, name: optional(text) });
 command("set_membership", { household_id: id, membership: membershipRecord });
 command("create_fact", { fact: factRecord });

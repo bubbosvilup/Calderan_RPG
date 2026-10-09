@@ -1,0 +1,316 @@
+{
+  "authentication": "passed",
+  "calls": 4,
+  "retries": 0,
+  "cases": [
+    {
+      "name": "put down",
+      "proposal": [
+        {
+          "kind": "place_item",
+          "item_id": "campaign_item_00000001",
+          "position": {
+            "kind": "stored",
+            "location_id": "shop"
+          }
+        }
+      ],
+      "fallback": false,
+      "response_model": "openai/gpt-6-luna",
+      "engine": [
+        {
+          "id": "campaign_item_00000001",
+          "origin": {
+            "kind": "created"
+          },
+          "name": "Silver Knife",
+          "description": "A silver knife.",
+          "visual_description": "Small plain silver knife with a straight blade and simple handle.",
+          "owner_id": "nicco",
+          "position": {
+            "kind": "stored",
+            "location_id": "shop"
+          },
+          "category": "weapon",
+          "created_revision": 1
+        }
+      ],
+      "structural": "passed",
+      "grade": "PASS",
+      "authorization": [
+        {
+          "command": {
+            "kind": "place_item",
+            "item_id": "campaign_item_00000001",
+            "position": {
+              "kind": "stored",
+              "location_id": "shop"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Nicco lays the silver knife on the desk and leaves it there.",
+            "verified": true,
+            "check": "placed_item_named"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "authorization_rejected": [],
+      "turn_failures": [],
+      "parsing_failed": false,
+      "created_item_descriptions": []
+    },
+    {
+      "name": "pick back up",
+      "proposal": [
+        {
+          "kind": "place_item",
+          "item_id": "campaign_item_00000001",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          }
+        }
+      ],
+      "fallback": false,
+      "response_model": "openai/gpt-6-luna",
+      "engine": [
+        {
+          "id": "campaign_item_00000001",
+          "origin": {
+            "kind": "created"
+          },
+          "name": "Silver Knife",
+          "description": "A silver knife.",
+          "visual_description": "Small plain silver knife with a straight blade and simple handle.",
+          "owner_id": "nicco",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          },
+          "category": "weapon",
+          "created_revision": 1
+        }
+      ],
+      "structural": "passed",
+      "grade": "PASS",
+      "authorization": [
+        {
+          "command": {
+            "kind": "place_item",
+            "item_id": "campaign_item_00000001",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Nicco picks the silver knife back up and carries it.",
+            "verified": true,
+            "check": "placed_item_named"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "authorization_rejected": [],
+      "turn_failures": [],
+      "parsing_failed": false,
+      "created_item_descriptions": []
+    },
+    {
+      "name": "absent owner",
+      "proposal": [
+        {
+          "kind": "create_item",
+          "name": "Pellan's signet ring",
+          "description": "A signet ring belonging to Lord Pellan.",
+          "visual_description": "A plain signet ring with a flat signet face.",
+          "category": "valuable",
+          "owner_id": "pellan",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          }
+        }
+      ],
+      "fallback": false,
+      "response_model": "openai/gpt-6-luna",
+      "grounded": [
+        {
+          "id": "pellan",
+          "name": "Lord Pellan"
+        }
+      ],
+      "engine": [
+        {
+          "id": "campaign_item_00000001",
+          "origin": {
+            "kind": "created"
+          },
+          "name": "Silver Knife",
+          "description": "A silver knife.",
+          "visual_description": "Small plain silver knife with a straight blade and simple handle.",
+          "owner_id": "nicco",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          },
+          "category": "weapon",
+          "created_revision": 1
+        },
+        {
+          "id": "campaign_item_00000002",
+          "origin": {
+            "kind": "created"
+          },
+          "name": "Pellan's signet ring",
+          "description": "A signet ring belonging to Lord Pellan.",
+          "visual_description": "A plain signet ring with a flat signet face.",
+          "owner_id": "pellan",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          },
+          "category": "valuable",
+          "created_revision": 4
+        }
+      ],
+      "structural": "passed",
+      "grade": "PASS",
+      "authorization": [
+        {
+          "command": {
+            "kind": "create_item",
+            "name": "Pellan's signet ring",
+            "description": "A signet ring belonging to Lord Pellan.",
+            "visual_description": "A plain signet ring with a flat signet face.",
+            "category": "valuable",
+            "owner_id": "pellan",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Nicco takes Pellan's signet ring and pockets it.",
+            "verified": true,
+            "check": "materialized_object_named_absent_owner_named"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "authorization_rejected": [],
+      "turn_failures": [],
+      "parsing_failed": false,
+      "created_item_descriptions": [
+        {
+          "description_present": true,
+          "visual_description_present": true
+        }
+      ]
+    },
+    {
+      "name": "existing reuse",
+      "proposal": [
+        {
+          "kind": "place_item",
+          "item_id": "campaign_item_00000001",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          }
+        }
+      ],
+      "fallback": false,
+      "response_model": "openai/gpt-6-luna",
+      "engine": [
+        {
+          "id": "campaign_item_00000001",
+          "origin": {
+            "kind": "created"
+          },
+          "name": "Silver Knife",
+          "description": "A silver knife.",
+          "visual_description": "Small plain silver knife with a straight blade and simple handle.",
+          "owner_id": "nicco",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          },
+          "category": "weapon",
+          "created_revision": 1
+        },
+        {
+          "id": "campaign_item_00000002",
+          "origin": {
+            "kind": "created"
+          },
+          "name": "Pellan's signet ring",
+          "description": "A signet ring belonging to Lord Pellan.",
+          "visual_description": "A plain signet ring with a flat signet face.",
+          "owner_id": "pellan",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          },
+          "category": "valuable",
+          "created_revision": 4
+        }
+      ],
+      "structural": "passed",
+      "grade": "PASS",
+      "authorization": [
+        {
+          "command": {
+            "kind": "place_item",
+            "item_id": "campaign_item_00000001",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Nicco takes the silver knife from the desk and carries it.",
+            "verified": true,
+            "check": "placed_item_named"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "authorization_rejected": [],
+      "turn_failures": [],
+      "parsing_failed": false,
+      "created_item_descriptions": []
+    }
+  ],
+  "key_exists": true,
+  "client_initialized": true,
+  "primary": "openai/gpt-6-luna",
+  "fallback": [
+    "anthropic/claude-haiku-5.5"
+  ]
+}

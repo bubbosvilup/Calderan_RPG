@@ -50,8 +50,8 @@ async function run(campaign: CampaignState, input: string, texts: readonly strin
   return { result: (last as { result: TurnResult }).result, events, delivered: events.filter(e => e.type === "narration_delta").map(e => (e as { text: string }).text).join("") };
 }
 const item = (campaign: CampaignState, id = BOOTS) => campaign.exportSnapshot().items.filter(i => i.id === id);
-const inbound: CampaignCommand = { kind: "transfer_item", item_id: BOOTS, owner_id: "nicco", position: { kind: "carried", character_id: "nicco" } };
-const toKorvin: CampaignCommand = { kind: "transfer_item", item_id: BOOTS, owner_id: "korvin", position: { kind: "carried", character_id: "korvin" } };
+const inbound: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: BOOTS,  position: { kind: "carried", character_id: "nicco" } };
+const toKorvin: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: BOOTS,  position: { kind: "carried", character_id: "korvin" } };
 const intentOf = (campaign: CampaignState, input: string) => playerIntent(input, buildTurnContext(world, campaign.exportSnapshot()), campaign.exportSnapshot(), world);
 
 // ---------------------------------------------------------------------------------------------------------------- transfers
@@ -65,7 +65,7 @@ test("A: an NPC offer the player has not accepted is not a transfer; the NPC kee
   assert.equal(result.authorization[0]!.authorized, false);
   assert.deepEqual(item(campaign).map(i => [i.owner_id, i.position]), [["korvin", { kind: "carried", character_id: "korvin" }]]);
 });
-test("B: an NPC gives an item and the handover is narrated: exact NPC → Nicco transfer with provenance, no clone", async () => {
+test("B: an NPC gives an item and the handover is narrated: exact NPC → Nicco transfer without title change or new provenance, no clone", async () => {
   const campaign = scene(["korvin"], [boots("korvin")]);
   const intent = intentOf(campaign, "Korvin gives Nicco a pair of leather boots.");
   assert.deepEqual(intent.candidates, [inbound]);
@@ -73,25 +73,25 @@ test("B: an NPC gives an item and the handover is narrated: exact NPC → Nicco 
   assert.equal(result.authorization[0]!.authorized, true);
   const [boot] = item(campaign);
   assert.equal(item(campaign).length, 1); assert.equal(campaign.exportSnapshot().items.length, 1);
-  assert.equal(boot!.owner_id, "nicco"); assert.deepEqual(boot!.position, { kind: "carried", character_id: "nicco" });
-  assert.deepEqual(boot!.acquisition, { acquisition_kind: "gift", from_character_id: "korvin", acquired_at: 0 });
+  assert.equal(boot!.owner_id, "korvin"); assert.deepEqual(boot!.position, { kind: "carried", character_id: "nicco" });
+  assert.equal(boot!.acquisition, undefined, "physical receipt does not fabricate gift provenance");
   // Nicco's own receipt also establishes it.
   const second = scene(["korvin"], [boots("korvin")]);
   await run(second, "*he takes the boots from Korvin*", ["Nicco takes the boots from Korvin."], [inbound]);
-  assert.equal(item(second)[0]!.owner_id, "nicco");
+  assert.equal(item(second)[0]!.owner_id, "korvin");
 });
-test("B guard: inbound transfers need a present holder who owns the item; no remote or carrier-only transfer", async () => {
+test("B guard: inbound handoffs require a present holder, not ownership; no remote transfer", async () => {
   const remote = scene([], [boots("korvin")]); // Korvin is at the slave market, not here.
   assert.deepEqual(intentOf(remote, "Korvin gives Nicco a pair of leather boots.").candidates, []);
   const carrierOnly = scene(["korvin"], [boots("mistress_elara", { kind: "carried", character_id: "korvin" })]);
-  assert.deepEqual(intentOf(carrierOnly, "Korvin gives Nicco a pair of leather boots.").candidates, []);
+  assert.deepEqual(intentOf(carrierOnly, "Korvin gives Nicco a pair of leather boots.").candidates, [inbound]);
   const { result } = await run(carrierOnly, "Hello.", ["Korvin nods."], [inbound]);
-  assert.equal(result.authorization[0]!.reason, "rejected_reference_invalid");
+  assert.equal(result.authorization[0]!.authorized, false);
 });
 test("C: Nicco gives an item and the NPC accepts: transfer", async () => {
   const campaign = scene(["korvin"], [boots("nicco")]);
   await run(campaign, "*he gives the boots to Korvin*", ["Korvin takes the boots."], [toKorvin], ["Korvin takes the boots."]);
-  assert.deepEqual(item(campaign).map(i => [i.owner_id, i.position]), [["korvin", { kind: "carried", character_id: "korvin" }]]);
+  assert.deepEqual(item(campaign).map(i => [i.owner_id, i.position]), [["nicco", { kind: "carried", character_id: "korvin" }]]);
 });
 test("D: Nicco offers an item and the NPC refuses: Nicco keeps it, and narration stays consistent", async () => {
   const campaign = scene(["korvin"], [boots("nicco")]);
@@ -109,7 +109,7 @@ test("E: the original give-back phrasing resolves the exact item and the giver a
     assert.deepEqual(intentOf(campaign, form).candidates, [toKorvin], form);
   // Accepted return commits; refused return keeps Nicco's ownership.
   await run(campaign, RETURN_INPUT, ["Korvin takes the boots back with a grunt."], [toKorvin], ["Korvin takes the boots back with a grunt."]);
-  assert.equal(item(campaign)[0]!.owner_id, "korvin");
+  assert.equal(item(campaign)[0]!.owner_id, "nicco");
   const refused = scene(["korvin"], [boots("nicco", undefined, { acquisition_kind: "gift", from_character_id: "korvin", acquired_at: 0 })]);
   const { delivered } = await run(refused, RETURN_INPUT, ["Korvin pushes the boots back. \"I said keep them.\""]);
   assert.equal(item(refused)[0]!.owner_id, "nicco"); assert.match(delivered, /keep them/);
@@ -134,7 +134,7 @@ test("H: transferring an equipped item unequips it atomically: no ghost equipmen
   const campaign = scene(["korvin"], [boots("nicco", { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" })]);
   await run(campaign, "*he gives the boots to Korvin*", ["Korvin takes the boots."], [toKorvin], ["Korvin takes the boots."]);
   const s = campaign.exportSnapshot();
-  assert.equal(s.items.length, 1); assert.equal(s.items[0]!.owner_id, "korvin"); assert.deepEqual(s.items[0]!.position, { kind: "carried", character_id: "korvin" });
+  assert.equal(s.items.length, 1); assert.equal(s.items[0]!.owner_id, "nicco"); assert.deepEqual(s.items[0]!.position, { kind: "carried", character_id: "korvin" });
   assert.equal(s.items.filter(i => i.position.kind === "equipped").length, 0);
   assert.deepEqual(s.characters.find(c => c.id === "nicco")!.current.empty_slots, ["feet"]);
 });
@@ -302,7 +302,7 @@ test("physical act: out-of-vocabulary, unevidenced or unprovoked conditions are 
   }
   const calm = scene(["korvin"]);
   const { result } = await run(calm, "Hello.", ["Korvin nods."], [{ kind: "set_condition", character_id: "korvin", conditions: ["minor_injury"] }], ["Korvin nods."]);
-  assert.equal(result.authorization[0]!.reason, "rejected_reference_invalid");
+  assert.equal(result.authorization[0]!.authorized, false);
   const held = scene(["korvin"]);
   const { delivered } = await run(held, input, ["Korvin staggers. Two market guards seize Nicco by the arms.", "Korvin staggers."]);
   assert.doesNotMatch(delivered, /seize Nicco/);

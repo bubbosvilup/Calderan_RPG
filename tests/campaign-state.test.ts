@@ -16,7 +16,7 @@ function setup(minute = 100) {
   const world = new WorldStore(fixtures());
   return { world, campaign: new CampaignState(world, "test_campaign", { player_location: room, world_time: { world_minute: minute } }, { current: 50, max: 100 }) };
 }
-function created(id = ada): CampaignCharacter { return { id, origin: { kind: "created" }, profile: { name: id === ada ? "Ada" : "Ben" }, current: {} }; }
+function created(id = ada): CampaignCharacter { return { id, origin: { kind: "created" }, profile: { name: id === ada ? "Ada" : "Ben" }, current: { current_location: room } }; }
 function apply(campaign: CampaignState, ...commands: CampaignCommand[]) { return campaign.apply({ expected_revision: campaign.revision, commands }); }
 function register(campaign: CampaignState) { apply(campaign, { kind: "register_character", character: created() }, { kind: "register_character", character: created(ben) }); }
 function item(position: ItemPosition = { kind: "stored", location_id: room }): CampaignCommand {
@@ -105,7 +105,7 @@ test("owns boots does not imply wearing, carrying or holding; removal retains ow
 
 test("gift transfers owner and placement atomically; borrowing permits distinct owner/holder", () => {
   const { campaign, world } = setup(); register(campaign); apply(campaign, item({ kind: "equipped", character_id: ada, slot: "feet", mode: "worn" }));
-  apply(campaign, { kind: "transfer_item", item_id: boots, owner_id: ben, position: { kind: "carried", character_id: ben }, acquisition: { acquired_at: 100, acquisition_kind: "gift", from_character_id: ada } });
+  apply(campaign, { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "carried", character_id: ben }, acquisition: { acquired_at: 100, acquisition_kind: "gift", from_character_id: ada } });
   const s = campaign.exportSnapshot(); assert.equal(s.items[0]!.owner_id, ben); assert.equal(s.items[0]!.acquisition?.from_character_id, ada);
   assert.equal(characterPossessions(s, world, ada).owned.length, 0); assert.equal(characterPossessions(s, world, ben).carried.length, 1);
   assert.equal(equipmentSlot(s, world, ada, "feet").state, "empty");
@@ -120,7 +120,7 @@ test("slot conflicts and contradictory placements reject without partial transfe
   assert.throws(() => apply(campaign, { kind: "register_item", item: { id: campaignId("item", "other"), origin: { kind: "created" }, name: "Other boots", position: { kind: "equipped", character_id: ada, slot: "feet", mode: "worn" } } }), /occupied/);
   assert.throws(() => apply(campaign, { kind: "set_slot_knowledge", character_id: ada, slot: "feet", state: "empty" }), /occupied/);
   assert.throws(() => campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "place_item", item_id: boots, position: { kind: "carried", character_id: ada, location_id: room } }] }), /unknown field/);
-  assert.throws(() => apply(campaign, { kind: "transfer_item", item_id: boots, owner_id: ben, position: { kind: "carried", character_id: "missing" } }), /unknown character/);
+  assert.throws(() => apply(campaign, { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "carried", character_id: "missing" } }), /unknown character/);
   assert.equal(campaign.exportSnapshot(), before);
 });
 
@@ -236,12 +236,11 @@ test("past schedules, explicit event transitions and terminal reschedule rejecti
 });
 
 test("compound changes stage purely and commit exactly one revision", () => {
-  const { campaign, world } = setup(); register(campaign); apply(campaign, item(), fact());
+  const { campaign, world } = setup(); register(campaign); apply(campaign, item({ kind: "carried", character_id: ada }), fact());
   const before = campaign.exportSnapshot(), canonicalBefore = structuredClone(world.listEntities());
   const commands: CampaignCommand[] = [
-    { kind: "move_character", character_id: ada, location_id: garden },
     { kind: "move_character", character_id: "brenna", location_id: garden },
-    { kind: "transfer_item", item_id: boots, owner_id: ben, position: { kind: "carried", character_id: ben } },
+    { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "carried", character_id: ben } },
     { kind: "set_knowledge", knowledge: { character_id: ada, fact_id: secret, status: "knows" } },
     { kind: "seed_relationship", relationship: { from_character_id: ada, to_character_id: ben, trust: 10 } }, event(),
     { kind: "runtime_delta", delta: { time_advance_minutes: 5, mana_delta: -5 } },
@@ -254,11 +253,11 @@ test("compound changes stage purely and commit exactly one revision", () => {
 });
 
 test("late cross-domain failure rolls back clock, mana, moves, items and knowledge", () => {
-  const { campaign } = setup(); register(campaign); apply(campaign, item(), fact()); const before = campaign.exportSnapshot();
+  const { campaign } = setup(); register(campaign); apply(campaign, item({ kind: "carried", character_id: ada }), fact()); const before = campaign.exportSnapshot();
   assert.throws(() => apply(campaign,
     { kind: "runtime_delta", delta: { time_advance_minutes: WORLD_DAY_MINUTES, mana_delta: -10 } },
     { kind: "move_character", character_id: "brenna", location_id: garden },
-    { kind: "transfer_item", item_id: boots, owner_id: ben, position: { kind: "carried", character_id: ben } },
+    { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "carried", character_id: ben } },
     { kind: "set_knowledge", knowledge: { character_id: ada, fact_id: secret, status: "knows" } },
     { kind: "schedule_event", id: raid, title: "Invalid participant", scheduled_world_minute: 9000, participants: ["missing"] }), /unknown character/);
   assert.equal(campaign.exportSnapshot(), before);
@@ -352,10 +351,10 @@ test("all reference-bearing domains validate identities and provenance", () => {
   const bad: CampaignCommand[] = [
     { kind: "move_character", character_id: ada, location_id: "brenna" },
     { kind: "place_item", item_id: boots, position: { kind: "stored", location_id: "missing" } },
-    { kind: "transfer_item", item_id: boots, owner_id: "missing", position: { kind: "unknown" } },
-    { kind: "transfer_item", item_id: boots, owner_id: ada, position: { kind: "unknown" }, acquisition: { from_character_id: "missing" } },
-    { kind: "transfer_item", item_id: boots, owner_id: ada, position: { kind: "unknown" }, acquisition: { event_id: "missing" } },
-    { kind: "transfer_item", item_id: boots, owner_id: ada, position: { kind: "unknown" }, acquisition: { acquired_at: 101 } },
+    { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "unknown" } },
+    { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "unknown" }, acquisition: { from_character_id: "missing" } },
+    { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "unknown" }, acquisition: { event_id: "missing" } },
+    { kind: "transfer_item", mode: "gift", item_id: boots,  position: { kind: "unknown" }, acquisition: { acquired_at: 101 } },
     { kind: "set_membership", household_id: house, membership: { character_id: ada, status: "member", joined_at: 101 } },
     { kind: "set_membership", household_id: house, membership: { character_id: ben, status: "former_member" } },
     { kind: "set_knowledge", knowledge: { character_id: "missing", fact_id: secret, status: "knows" } },
@@ -386,7 +385,7 @@ test("production canon and current narrative projection remain unchanged", async
   const runtime = new RuntimeState(world, { player_location: "heartstone_lr", world_time: { world_minute: 0 } });
   const before = buildNarrativeContext(world, runtime);
   const campaign = new CampaignState(world, "synthetic_campaign", { player_location: "heartstone_lr", world_time: { world_minute: 0 } });
-  apply(campaign, { kind: "register_character", character: created() }, { kind: "move_character", character_id: ada, location_id: "heartstone_f1" },
+  apply(campaign, { kind: "register_character", character: { ...created(), current: { current_location: "heartstone_lr" } } }, { kind: "move_character", character_id: ada, location_id: "heartstone_f1" },
     { kind: "runtime_delta", delta: { time_advance_minutes: WORLD_DAY_MINUTES, player_location: "calderan" } });
   assert.deepEqual(world.listEntities(), canonical); assert.deepEqual(buildNarrativeContext(world, runtime), before);
   assert.equal(world.getEntity(ada), undefined);

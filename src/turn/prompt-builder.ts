@@ -1,3 +1,4 @@
+import { transferRecipient } from "../campaign/item-transfer.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { temporalGrounding, TEMPORAL_GROUNDING_RULE } from "./temporal-grounding.js";
 import { canonicalNameDisclosure } from "./canonical-name-disclosure.js";
@@ -240,13 +241,13 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   const mode = options.recent_context ?? "dialogue_focused";
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? context.items.find(i => i.id === id)?.name ?? id;
   const actions = [...intent.candidates, ...intent.runtime].map(c => {
-    if (c.kind === "transfer_item" && c.owner_id === "nicco") {
+    if (c.kind === "transfer_item" && transferRecipient(c) === "nicco") {
       const item = context.items.find(i => i.id === c.item_id), giver = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? name(item.position.character_id) : "its holder";
       // The player authored a completed gift ("gives Nicco"): Nicco's acceptance is player-authored, so narrating it is not
       // inventing a player action. Only the NPC's side remains open. An NPC *offer* never reaches this line (no candidate).
       return `Player-directed completed handover: ${giver} gives ${name(c.item_id)} to Nicco, and Nicco's acceptance is already authored by the player. Narrate ${giver} handing it over and Nicco taking it in one plain sentence (for example "${giver} hands the ${name(c.item_id).replace(/^(?:a|an|the) /i, "")} to Nicco, and he takes ${/s$/.test(name(c.item_id)) ? "them" : "it"}."), unless ${giver}, in character, refuses to part with it. Do not leave it suspended mid-offer. Receipt means carried, not worn.`;
     }
-    if (c.kind === "transfer_item") return `Nicco offers to give ${name(c.item_id)} to ${name(c.owner_id!)} to carry. Acceptance and putting it on are separate actions; ${name(c.owner_id!)} may accept or refuse, and a refusal leaves it with Nicco.`;
+    if (c.kind === "transfer_item") return `Nicco offers to give ${name(c.item_id)} to ${name(transferRecipient(c)!)} to carry. Acceptance and putting it on are separate actions; ${name(transferRecipient(c)!)} may accept or refuse, and a refusal leaves it with Nicco.`;
     if (c.kind === "set_knowledge") return `Nicco explicitly tells ${name(c.knowledge.character_id)} this established fact: ${context.facts.find(f => f.id === c.knowledge.fact_id)?.statement}`;
     if (c.kind === "place_item" && c.position.kind === "carried" && c.position.character_id === "nicco") return `Nicco has taken off ${name(c.item_id)} (player action, already applied): he now carries it and no longer wears it.`;
     if (c.kind === "place_item" && c.position.kind === "equipped") return `Nicco asks that ${name(c.position.character_id)} equip ${name(c.item_id)} in ${c.position.slot}, ${c.position.mode}.`;

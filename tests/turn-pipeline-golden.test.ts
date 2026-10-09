@@ -62,7 +62,7 @@ const normalize = (value: unknown): unknown => JSON.parse(JSON.stringify(value, 
 const SQUARE = OPENING_LOCATION, M = "campaign_character_maren", T = "campaign_character_tomas";
 const person = (id: string, name: string, location: string, sex = "female"): CampaignCommand =>
   ({ kind: "register_character", character: { id, origin: { kind: "created" }, profile: { name, sex }, current: { current_location: location, status: "active" } } });
-const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
 
 const SCENARIOS: Readonly<Record<string, () => Promise<unknown>>> = {
   /** Authorized handover + an uncommitted second handover in the draft -> audit -> reconciliation -> revision delivered -> one changed commit. */

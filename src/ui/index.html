@@ -6,7 +6,7 @@
 <header class="top-bar">
  <h1><span aria-hidden="true">&#9674;</span> Caldrevan</h1>
  <div class="clock"><span id="daypart">&mdash;</span><span id="day"></span></div>
- <nav aria-label="Main navigation"><button id="player-nav" type="button" aria-pressed="false" disabled>Nicco</button><button id="household-nav" type="button" aria-pressed="false">Household</button><button disabled>World</button><button disabled>Debug</button><button id="campaigns-nav" type="button" hidden>Campaigns</button><button id="save-button" type="button" aria-label="Save campaign" title="Save campaign" hidden>&#128190;</button><span id="save-status" class="save-status" role="status" hidden></span></nav>
+ <nav aria-label="Main navigation"><button id="player-nav" type="button" aria-pressed="false" disabled>Nicco</button><button id="inventory-nav" type="button" aria-pressed="false">Inventory</button><button id="household-nav" type="button" aria-pressed="false">Household</button><button disabled>World</button><button disabled>Debug</button><button id="campaigns-nav" type="button" hidden>Campaigns</button><button id="save-button" type="button" aria-label="Save campaign" title="Save campaign" hidden>&#128190;</button><span id="save-status" class="save-status" role="status" hidden></span></nav>
 </header>
 <section id="campaign-screen" class="campaign-screen" aria-labelledby="campaign-screen-title" hidden>
  <div class="campaign-panel">
@@ -36,6 +36,12 @@
   <section class="location-card" aria-label="Current location and gold"><div class="place"><h2>You are in</h2><strong id="location">Caldrevan</strong><code id="location-id"></code></div><div class="purse"><h2>Gold</h2><strong id="gold">Not tracked</strong></div></section>
  </aside>
 </div>
+<section id="inventory-view" class="inventory-view" aria-labelledby="inventory-title" hidden>
+ <header class="inventory-heading"><div><p class="inventory-eyebrow">Nicco</p><h2 id="inventory-title">Inventory</h2><p id="inventory-count" role="status"></p></div><button id="inventory-back" type="button">&lsaquo; Back to Play</button></header>
+ <div class="inventory-toolbar"><div class="inventory-filters" role="group" aria-label="Filter inventory"><button id="inventory-all" type="button" aria-pressed="true">All</button><button id="inventory-carried" type="button" aria-pressed="false">Carried</button><button id="inventory-equipped" type="button" aria-pressed="false">Equipped</button></div><label class="inventory-search">Find an item<input id="inventory-search" type="search" placeholder="Search items" maxlength="120" autocomplete="off"></label></div>
+ <p class="inventory-note">Items carried or equipped by Nicco.</p><p id="inventory-error" class="editor-error" role="status" hidden></p>
+ <div id="inventory-items" class="inventory-grid"></div>
+</section>
 <section id="household-view" class="household-view" aria-labelledby="household-title" hidden>
  <header class="household-heading"><div><h2 id="household-title">Household</h2><p id="household-totals"></p></div><div class="household-filters" role="group" aria-label="Filter household"><button id="filter-all" type="button" aria-pressed="true">All</button><button id="filter-here" type="button" aria-pressed="false">Here</button><button id="filter-elsewhere" type="button" aria-pressed="false">Elsewhere</button></div><button id="household-close" type="button" aria-label="Back to Play">&times;</button></header>
  <div id="household-cards" class="household-grid"></div>

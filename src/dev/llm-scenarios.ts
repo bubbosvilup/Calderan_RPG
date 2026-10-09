@@ -7,7 +7,7 @@ const state = JSON.stringify({ characters: ["test_player", "test_mara"], world_m
 export const LLM_SCENARIOS: readonly LlmScenario[] = [
   { name: "dialogue", action: "I greet Mara. Let her reply briefly; no durable change.", state, narration: 'Mara smiles. "Good evening."', expected: [] },
   { name: "equipment", action: "I accept ownership of test_lantern from test_mara and hold it equipped in my right_hand slot. Describe the completed handover.", state,
-    narration: "Mara gives test_lantern to test_player, who now owns it and holds it equipped in right_hand.", expected: [{ kind: "transfer_item", item_id: "test_lantern", owner_id: "test_player", position: { kind: "equipped", character_id: "test_player", slot: "right_hand", mode: "held" } }] },
+    narration: "Mara gives test_lantern to test_player, who now carries it while ownership remains unchanged.", expected: [{ kind: "transfer_item", mode: "handoff", item_id: "test_lantern",  position: { kind: "carried", character_id: "test_player" } }] },
   { name: "scheduled_event", action: 'Arrange an event test_meeting titled "Bridge meeting" with test_player and test_mara at absolute world minute 160. Confirm the agreed plan.', state,
     narration: 'They agree to the Bridge meeting (test_meeting), at absolute world minute 160, with test_player and test_mara.',
     expected: [{ kind: "schedule_event", id: "test_meeting", title: "Bridge meeting", scheduled_world_minute: 160, participants: ["test_player", "test_mara"] }] },

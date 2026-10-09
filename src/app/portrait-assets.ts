@@ -14,6 +14,7 @@ import type { PortraitAssetStore } from "./portrait-store.js";
  */
 export function liveAssetReferences(snapshot: DeepReadonly<CampaignSnapshot>): Set<string> {
   const refs = new Set<string>();
+  for (const item of snapshot.items) if (item.sprite?.status === "ready") refs.add(assetKey(item.id, item.sprite.asset_ref));
   for (const record of snapshot.portraits ?? []) {
     for (const v of record.versions) refs.add(assetKey(record.character_id, v.asset_file));
     if (record.reference) refs.add(assetKey(record.character_id, record.reference.asset_file));

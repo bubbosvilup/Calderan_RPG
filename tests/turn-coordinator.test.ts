@@ -14,7 +14,7 @@ test("lifecycle (Repair 1): narration is delivered only after authorization, the
   const s = setup("Brenna accepts boots from Nicco.", [transfer]); const base = s.campaign.revision;
   const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "I give boots to Brenna." }));
   assert.deepEqual(events.map(e => e.type), ["turn_started", "controller_started", "state_proposed", "narration_delta", "narration_completed", "state_committed", "turn_completed"]);
-  assert.equal(s.campaign.revision, base + 1); assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna");
+  assert.equal(s.campaign.revision, base + 1); assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco");
   assert.equal(s.coordinator.recent(s.campaign).entries()[0]!.status, "finalized");
 });
 test("no-op dialogue retains revision, telemetry and no retrieval", async () => {
@@ -23,7 +23,7 @@ test("no-op dialogue retains revision, telemetry and no retrieval", async () => 
   const last = events.at(-1)!; assert.equal(last.type, "turn_completed");
   if (last.type === "turn_completed") { assert.equal(last.result.final_revision, base); assert.equal(last.result.retrieval.operations, 0); assert.equal(last.result.narrator.usage.total_tokens, 15); }
 });
-for (const text of ["Brenna looks at the boots.", "Brenna considers accepting boots from Nicco.", "Brenna does not accept boots from Nicco.", 'Brenna says "Brenna accepts boots from Nicco."', "Brenna accepts boots from Nicco. Actually, ownership is unchanged.", "An inscription reads: Brenna accepts boots from Nicco."]) test(`unsupported handover: ${text}`, async () => {
+for (const text of ["Brenna looks at the boots.", "Brenna considers accepting boots from Nicco.", "Brenna does not accept boots from Nicco.", 'Brenna says "Brenna accepts boots from Nicco."', "An inscription reads: Brenna accepts boots from Nicco."]) test(`unsupported handover: ${text}`, async () => {
   const s = setup(text, [transfer]), before = s.campaign.exportSnapshot();
   const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "I give boots to Brenna." }));
   assert.equal(s.campaign.exportSnapshot(), before); const last = events.at(-1)!;
@@ -59,16 +59,18 @@ test("stale proposal rejected without rebasing", async () => {
   assert.equal(coordinator.recent(s.campaign).entries()[0]!.status, "state_failed"); assert.deepEqual(coordinator.recent(s.campaign).forPrompt(), []);
 });
 test("late invalid equipment slot makes transfer + equip atomic", async () => {
-  const equip: CampaignCommand = { kind: "place_item", item_id: "boots", position: { kind: "equipped", character_id: "brenna", slot: "feet", mode: "worn" } };
-  const s = setup("Brenna accepts boots from Nicco. Brenna equips boots in feet.", [transfer, equip]), before = s.campaign.exportSnapshot();
-  const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "/give boots to brenna\n/equip boots for brenna feet worn" }));
+  const equip: CampaignCommand = { kind: "place_item", item_id: "ring", position: { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" } };
+  const s = setup("Brenna accepts boots from Nicco. Nicco equips ring in feet.", [transfer, equip]), beforeSetup = s.campaign.exportSnapshot();
+  s.campaign.apply({ expected_revision: beforeSetup.revision, commands: [{ kind: "place_item", item_id: "pink_cotton", position: { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" } }] });
+  const before = s.campaign.exportSnapshot();
+  const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "/give boots to brenna\n/equip ring for nicco feet worn" }));
   const last = events.at(-1)!; assert.equal(last.type, "turn_failed"); if (last.type === "turn_failed") assert.equal(last.code, "campaign_validation_failed");
   assert.equal(s.campaign.exportSnapshot(), before);
 });
 test("valid transfer + equip increments revision once", async () => {
-  const equip: CampaignCommand = { kind: "place_item", item_id: "boots", position: { kind: "equipped", character_id: "brenna", slot: "hands", mode: "held" } };
-  const s = setup("Brenna accepts boots from Nicco. Brenna equips boots in hands.", [transfer, equip]), base = s.campaign.revision;
-  await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "/give boots to brenna\n/equip boots for brenna hands held" })); assert.equal(s.campaign.revision, base + 1);
+  const equip: CampaignCommand = { kind: "place_item", item_id: "ring", position: { kind: "equipped", character_id: "nicco", slot: "hands", mode: "held" } };
+  const s = setup("Brenna accepts boots from Nicco. Nicco equips ring in hands.", [transfer, equip]), base = s.campaign.revision;
+  await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "/give boots to brenna\n/equip ring for nicco hands held" })); assert.equal(s.campaign.revision, base + 1);
 });
 for (const when of ["narrator", "controller", "before_commit"] as const) test(`cancellation ${when}: no commit`, async () => {
   const s = setup(), before = s.campaign.exportSnapshot(), abort = new AbortController(); let calls = 0;
@@ -157,7 +159,7 @@ test("code-fenced confirmation cannot authorize a narrative state change", async
   await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "I give boots to Brenna." })); assert.equal(s.campaign.exportSnapshot(), before);
 });
 test("unknown item reference is rejected without failing an otherwise complete turn", async () => {
-  const s = setup("Brenna accepts absent from Nicco.", [{ kind: "transfer_item", item_id: "absent", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }]);
+  const s = setup("Brenna accepts absent from Nicco.", [{ kind: "transfer_item", mode: "handoff", item_id: "absent",  position: { kind: "carried", character_id: "brenna" } }]);
   const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "I give absent to Brenna." }));
   const last = events.at(-1)!; if (last.type === "turn_completed") assert.equal(last.result.authorization[0]!.reason, "rejected_reference_invalid"); else assert.fail();
 });

@@ -62,7 +62,7 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   const npcs = new Set(world.getEntitiesByType("character").filter(c => c.role === "npc").map(c => c.id));
   if (world.getEntitiesByType("character").some(c => c.role === "player" && c.id !== "nicco")) fail("runtime", "unsupported player");
   unique(s.runtime.npc_locations, n => n.character_id, "npc_locations");
-  // Save/Load v1 (D2): a canonical NPC may have NO runtime entry — authored after the campaign was saved and not yet placed by play.
+  // Save/Load v1 (D2): a canonical NPC may have NO runtime entry â€” authored after the campaign was saved and not yet placed by play.
   // Loading never materializes it; a later gameplay operation that places it does so through a normal committed change.
   for (const n of s.runtime.npc_locations) { if (!npcs.has(n.character_id)) fail("npc_locations", "not a canonical NPC"); 
     // One domain, two shapes: LOCATED(current_location) xor OFF_SCENE(last_known_location, since_revision). Never both, never neither.
@@ -72,6 +72,10 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   }
   const occupied = new Set<string>();
   for (const item of s.items) {
+    if (item.sprite?.status === "ready") {
+      if (!/^portrait_[a-z0-9_]{1,80}\.(?:png|jpg|webp)$/.test(item.sprite.asset_ref)) fail("sprite.asset_ref", "invalid asset reference");
+      if (!item.visual_description || item.sprite.generated_from_visual_description !== item.visual_description) fail("sprite", "sprite does not match visual identity");
+    }
     registration.registration(item.id, item.origin, "item");
     if (item.origin.kind === "created" && !item.name) fail("item.name", "created item requires a name");
     // Item Domain V1: an engine-namespace ID was allocated by create_item, so it is created, below the allocator, and carries its
@@ -129,7 +133,7 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
   }
   for (const x of s.transactions) {
     for (const id of [x.subject_id, x.from_holder_id, x.to_holder_id, x.payer_id, x.payee_id]) if (id !== undefined) refs.character(id);
-    // Pass 1.2: exactly one seller side — a campaign character, or an anonymous counterparty snapshot (sales only).
+    // Pass 1.2: exactly one seller side â€” a campaign character, or an anonymous counterparty snapshot (sales only).
     if ((x.from_holder_id === undefined) === (x.from_counterparty === undefined)) fail("transactions.from_holder_id", "a transaction has exactly one seller side");
     if (x.from_counterparty) { if (x.kind !== "sale") fail("transactions.from_counterparty", "an anonymous counterparty can only sell"); refs.location(x.from_counterparty.location_id); }
     historical(x.world_minute, "transactions.world_minute"); if (x.revision > s.revision) fail("transactions.revision", "future transaction");

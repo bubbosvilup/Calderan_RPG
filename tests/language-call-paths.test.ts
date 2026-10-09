@@ -60,7 +60,7 @@ test("bare-no fix / grounding path: an unhedged fabricated agreement with 'no he
 test("bare-no fix / authorization path: 'no hesitation' and 'without hesitation' confirm a handover", () => {
   const { world: w, campaign } = turnFixture(); const snapshot = campaign.exportSnapshot(), context = buildTurnContext(w, snapshot);
   const intents = playerIntent("I give boots to Brenna.", context, snapshot, w).candidates;
-  const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+  const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
   for (const n of ["Brenna takes the boots, no hesitation.", "Brenna takes the boots without hesitation."]) assert.equal(verifyEvidence(transfer, n, n, context, intents).verified, true, n);
   assert.equal(verifyEvidence(transfer, "Brenna hesitates, then takes the boots.", "Brenna hesitates, then takes the boots.", context, intents).verified, false);
 });
@@ -96,7 +96,7 @@ test("numbers / transaction path: 'for fourteen gold' pays fourteen (previously 
 });
 
 // ------------------------------------------------------------------------------------------- firewall adversarial suite
-const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
 function authorize(narration: string, quote = narration) {
   const { world: w, campaign } = turnFixture(); const snapshot = campaign.exportSnapshot(), context = buildTurnContext(w, snapshot);
   const intent = playerIntent("I give boots to Brenna.", context, snapshot, w);

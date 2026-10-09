@@ -325,6 +325,14 @@ export class FileCampaignRepository implements CampaignSaveRepository {
   async retainedAssetReferences(campaignId: string): Promise<RetainedAssets> {
     const references = new Set<string>(); let complete = true;
     const collect = (value: unknown) => {
+      const items = (value as { snapshot?: { items?: unknown } } | undefined)?.snapshot?.items;
+      if (items !== undefined && !Array.isArray(items)) complete = false;
+      if (Array.isArray(items)) for (const item of items) {
+        if (item?.sprite?.status === "ready") {
+          if (typeof item.id === "string" && typeof item.sprite.asset_ref === "string") references.add(assetKey(item.id, item.sprite.asset_ref));
+          else complete = false;
+        }
+      }
       const portraits = (value as { snapshot?: { portraits?: unknown } } | undefined)?.snapshot?.portraits;
       if (portraits === undefined) return;
       if (!Array.isArray(portraits)) { complete = false; return; }

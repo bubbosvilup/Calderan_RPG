@@ -46,7 +46,7 @@ test("narrator model override leaves controller model, policy, evidence and comm
   assert.deepEqual(a.last.result.authorization, b.last.result.authorization);
   assert.deepEqual(a.last.result.turn_evidence, b.last.result.turn_evidence);
   assert.deepEqual(a.snapshot, b.snapshot);
-  assert.equal(a.snapshot.items.find(i => i.id === "boots")!.owner_id, "brenna");
+  assert.equal(a.snapshot.items.find(i => i.id === "boots")!.owner_id, "nicco");
 });
 test("production default narrator is GLM 5.2 pinned to Z.AI without fallbacks, reasoning disabled; controller request unchanged", async () => {
   const saved = process.env.OPENROUTER_NARRATOR_MODEL;

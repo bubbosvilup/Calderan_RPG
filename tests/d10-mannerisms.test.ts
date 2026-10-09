@@ -74,7 +74,7 @@ test("D10 object prerequisites: missing item, wrong owner and inaccessible posse
   const d = { canonical_key: "ring_turn_while_waiting", text: "Turns their ring with a thumb while waiting.", requires_item_id: "ring" };
   assert.throws(() => add(f.campaign, { ...d, requires_item_id: "campaign_item_missing" }), /unavailable/);
   assert.throws(() => add(f.campaign, d), /unavailable/); assert.equal(f.campaign.exportSnapshot(), before);
-  f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "transfer_item", item_id: "ring", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }] });
+  f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "transfer_item", mode: "gift", item_id: "ring",  position: { kind: "carried", character_id: "brenna" } }] });
   add(f.campaign, d); assert.equal(rows(f.campaign).at(-1)!.requires_item_id, "ring");
   assert.throws(() => add(f.campaign, { canonical_key: "doll_clutch", text: "Clutches their doll with both hands.", requires_item_id: "ring" }), /unavailable/);
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "place_item", item_id: "ring", position: { kind: "stored", location_id: "test_room" } }] });

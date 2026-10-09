@@ -2,6 +2,7 @@ import type { CampaignCommand, CampaignItem, ItemAcquisition, ItemPosition } fro
 import type { PreparationContext } from "./preparation.js";
 import { characterForUpdate, findRequired, historicalMinute } from "./preparation.js";
 import { fail } from "./validation.js";
+import { itemHolder, transferCharacterPresent, validTransferMode } from "./item-transfer.js";
 
 function provenance(value: ItemAcquisition | undefined, context: PreparationContext): void {
   if (!value) return;
@@ -40,7 +41,7 @@ export function prepareItemCommand(context: PreparationContext, command: Campaig
       if (!command.name.trim()) fail("name", "created item requires a name");
       const sequence = context.draft.next_item_sequence;
       if (!Number.isSafeInteger(sequence) || sequence < 1 || sequence > 99_999_999) fail("next_item_sequence", "item ID space exhausted");
-      const item: CampaignItem = { id: formatItemId(sequence), origin: { kind: "created" }, name: command.name.trim(), ...(command.description ? { description: command.description } : {}),
+      const item: CampaignItem = { id: formatItemId(sequence), origin: { kind: "created" }, name: command.name.trim(), description: command.description, visual_description: command.visual_description,
         ...(command.category ? { category: command.category } : {}), ...(command.owner_id !== undefined ? { owner_id: command.owner_id } : {}),
         position: { kind: "unknown" }, created_revision: context.draft.revision + 1 };
       context.refs.registration(item.id, item.origin, "item");
@@ -64,13 +65,35 @@ export function prepareItemCommand(context: PreparationContext, command: Campaig
       const next = item.position; item.position = { kind: "unknown" };
       context.draft.items.push(item); place(item, next, context); return true;
     }
+    case "enrich_item_visual": {
+      const item = findRequired(context.draft.items, command.item_id, "item_id");
+      if (item.visual_description !== undefined) fail("visual_description", "visual identity is already established");
+      item.visual_description = command.visual_description; return true;
+    }
+    case "set_item_sprite": {
+      const item = findRequired(context.draft.items, command.item_id, "item_id");
+      const previous = item.sprite?.status ?? "none", next = command.sprite.status;
+      if (!((previous === "none" || previous === "failed") && next === "pending" || previous === "pending" && (next === "ready" || next === "failed"))) fail("sprite.status", "invalid sprite transition");
+      if (next === "ready" && (!item.visual_description || command.sprite.generated_from_visual_description !== item.visual_description)) fail("sprite", "sprite must match stable visual identity");
+      item.sprite = command.sprite; return true;
+    }
     case "place_item": place(findRequired(context.draft.items, command.item_id, "item_id"), command.position, context); return true;
     case "transfer_item": {
       const item = findRequired(context.draft.items, command.item_id, "item_id");
-      if (command.owner_id !== null) context.refs.character(command.owner_id);
+      if (command.position.kind !== "carried") fail("position", "transfer recipient must receive the item carried");
+      const recipient = command.position.character_id, source = itemHolder(item);
+      context.refs.character(recipient);
+      if (!source) fail("position", "transfer source must carry or equip the item; stored pickup uses place_item");
+      context.refs.character(source);
+      if (!transferCharacterPresent(context.draft, source) || !transferCharacterPresent(context.draft, recipient)) fail("position", "transfer source and recipient must be present");
+      if (!validTransferMode(item, recipient, command.mode)) fail("mode", "invalid transfer source, recipient or ownership authority");
+      if (command.acquisition && command.mode !== "gift") fail("acquisition", "only existing gift provenance is supported; other transfers preserve provenance");
       provenance(command.acquisition, context);
-      place(item, command.position, context); item.owner_id = command.owner_id;
-      if (command.acquisition === undefined) delete item.acquisition; else item.acquisition = command.acquisition;
+      place(item, command.position, context);
+      if (command.mode === "gift") {
+        item.owner_id = recipient;
+        if (command.acquisition === undefined) delete item.acquisition; else item.acquisition = command.acquisition;
+      }
       return true;
     }
     default: return false;

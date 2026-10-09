@@ -11,14 +11,15 @@ const position: Schema = { anyOf: [object({ kind: choice("carried"), character_i
 // Item Domain V1: a materialized item starts carried by a character or lying at a location; the engine allocates its ID (none here).
 const createPosition: Schema = { anyOf: [object({ kind: choice("carried"), character_id: string }), object({ kind: choice("stored"), location_id: string })] };
 const category = choice("weapon", "armor", "clothing", "tool", "consumable", "document", "valuable", "material", "miscellaneous");
-const createItem = { kind: choice("create_item"), name: string, description: string, category, position: createPosition };
+const createItem = { kind: choice("create_item"), name: string, description: string, visual_description: string, category, position: createPosition };
 /** Deliberately small Phase 1K vocabulary. Relationship and arbitrary runtime edits are excluded. */
 export const CONTROLLER_SCHEMA = object({ commands: { type: "array", maxItems: 8, items: { anyOf: [
   // Owner unknown: the variant without owner_id (never guessed). Owner known: owner_id names that character.
   object(createItem),
   object({ ...createItem, owner_id: string }),
-  object({ kind: choice("place_item"), item_id: string, position }),
-  object({ kind: choice("transfer_item"), item_id: string, owner_id: string, position }),
+  // Permanent Inventory V1: place_item may also put an existing item down at a location (the existing `stored` position).
+  object({ kind: choice("place_item"), item_id: string, position: { anyOf: [...position.anyOf!, object({ kind: choice("stored"), location_id: string })] } }),
+  object({ kind: choice("transfer_item"), item_id: string, mode: choice("gift", "handoff", "lend", "return", "steal", "reclaim", "take"), position: object({ kind: choice("carried"), character_id: string }) }),
   object({ kind: choice("schedule_event"), id: string, title: string, scheduled_world_minute: integer, participants: { type: "array", items: string, maxItems: 16 } }),
   object({ kind: choice("set_knowledge"), knowledge: object({ character_id: string, fact_id: string, status: choice("knows", "believes", "suspects", "heard_rumor"),
     provenance: object({ source_character_id: string, acquisition_kind: choice("told") }) }) }),

@@ -1,0 +1,1750 @@
+{
+  "timestamp": "2026-10-09T23:05:55.455Z",
+  "authentication": "passed",
+  "calls": 8,
+  "retries": 0,
+  "image_calls": 0,
+  "cases": [
+    {
+      "name": "Gift",
+      "input": "I give Brenna the silver knife as a gift. It's hers now.",
+      "narration": "Brenna accepts the silver knife from Nicco as a permanent gift. The silver knife is now hers.",
+      "expected": {
+        "mode": "gift",
+        "owner": "brenna",
+        "carrier": "brenna",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Silver Knife",
+              "description": "A plain silver knife.",
+              "visual_description": "Small plain silver knife with a straight undecorated blade and simple dark wooden handle.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Small plain silver knife with a straight undecorated blade and simple dark wooden handle."
+              },
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": [
+          {
+            "kind": "transfer_item",
+            "mode": "gift",
+            "item_id": "campaign_item_00000001",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ]
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "gift",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "evidence": [
+        "Brenna accepts the silver knife from Nicco as a permanent gift."
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "gift",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Brenna accepts the silver knife from Nicco as a permanent gift.",
+            "verified": true,
+            "check": "receipt_of_named_item"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "brenna",
+        "position": {
+          "kind": "carried",
+          "character_id": "brenna"
+        },
+        "revision_delta": 1,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    },
+    {
+      "name": "Temporary handoff",
+      "input": "I hand Brenna the letter so she can read it.",
+      "narration": "Brenna takes the letter from Nicco to read it, holding it temporarily for him.",
+      "expected": {
+        "mode": "handoff",
+        "owner": "nicco",
+        "carrier": "brenna",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Letter",
+              "description": "A plain letter.",
+              "visual_description": "Folded cream paper letter with an unbroken red wax seal.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Folded cream paper letter with an unbroken red wax seal."
+              },
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": [
+          {
+            "kind": "transfer_item",
+            "mode": "handoff",
+            "item_id": "campaign_item_00000001",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          }
+        ]
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "handoff",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "evidence": [
+        "Brenna takes the letter from Nicco to read it"
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "handoff",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Brenna takes the letter from Nicco to read it",
+            "verified": true,
+            "check": "receipt_of_named_item"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "nicco",
+        "position": {
+          "kind": "carried",
+          "character_id": "brenna"
+        },
+        "revision_delta": 1,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    },
+    {
+      "name": "Loan",
+      "input": "I lend Brenna my sword.",
+      "narration": "Brenna accepts Nicco's sword on loan and carries the sword. Nicco remains the owner.",
+      "expected": {
+        "mode": "lend",
+        "owner": "nicco",
+        "carrier": "brenna",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Sword",
+              "description": "A plain sword.",
+              "visual_description": "Plain straight steel sword with a simple brown leather grip.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Plain straight steel sword with a simple brown leather grip."
+              },
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": []
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "lend",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "evidence": [
+        "Brenna accepts Nicco's sword on loan and carries the sword."
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "lend",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Brenna accepts Nicco's sword on loan and carries the sword.",
+            "verified": true,
+            "check": "receipt_of_named_item"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "nicco",
+        "position": {
+          "kind": "carried",
+          "character_id": "brenna"
+        },
+        "revision_delta": 1,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    },
+    {
+      "name": "Return",
+      "input": "I accept my sword back from Brenna.",
+      "narration": "Brenna returns Nicco's sword to Nicco. Nicco takes the sword back from Brenna and carries it.",
+      "expected": {
+        "mode": "return",
+        "owner": "nicco",
+        "carrier": "nicco",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Sword",
+              "description": "A plain sword.",
+              "visual_description": "Plain straight steel sword with a simple brown leather grip.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Plain straight steel sword with a simple brown leather grip."
+              },
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": []
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "return",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          }
+        }
+      ],
+      "evidence": [
+        "Brenna returns Nicco's sword to Nicco."
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "return",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Brenna returns Nicco's sword to Nicco.",
+            "verified": false,
+            "check": "no_handover_or_receipt"
+          },
+          "authorized": false,
+          "reason": "rejected_insufficient_confirmation",
+          "source": "rejected"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "nicco",
+        "position": {
+          "kind": "carried",
+          "character_id": "brenna"
+        },
+        "revision_delta": 0,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": false,
+        "owner": true,
+        "authorization": false,
+        "engine": false,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "FAIL",
+      "failure_class": "authorization"
+    },
+    {
+      "name": "Successful theft",
+      "input": "I steal Brenna's signet ring.",
+      "narration": "Nicco successfully steals Brenna's signet ring from Brenna and pockets the signet ring. The ring remains Brenna's property.",
+      "expected": {
+        "mode": "steal",
+        "owner": "brenna",
+        "carrier": "nicco",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Signet Ring",
+              "description": "A plain signet ring.",
+              "visual_description": "Small silver signet ring with a plain oval face.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Small silver signet ring with a plain oval face."
+              },
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "brenna"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": []
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "steal",
+          "position": {
+            "kind": "carried",
+            "character_id": "nicco"
+          }
+        }
+      ],
+      "evidence": [
+        "Nicco successfully steals Brenna's signet ring from Brenna and pockets the signet ring."
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "steal",
+            "position": {
+              "kind": "carried",
+              "character_id": "nicco"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Nicco successfully steals Brenna's signet ring from Brenna and pockets the signet ring.",
+            "verified": true,
+            "check": "receipt_by_nicco"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "brenna",
+        "position": {
+          "kind": "carried",
+          "character_id": "nicco"
+        },
+        "revision_delta": 1,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    },
+    {
+      "name": "Reclaim",
+      "input": "I let Brenna take her signet ring back.",
+      "narration": "Brenna reclaims her signet ring from Nicco and carries the signet ring herself.",
+      "expected": {
+        "mode": "reclaim",
+        "owner": "brenna",
+        "carrier": "brenna",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Signet Ring",
+              "description": "A plain signet ring.",
+              "visual_description": "Small silver signet ring with a plain oval face.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Small silver signet ring with a plain oval face."
+              },
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": []
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "reclaim",
+          "position": {
+            "kind": "carried",
+            "character_id": "brenna"
+          }
+        }
+      ],
+      "evidence": [
+        "Brenna reclaims her signet ring from Nicco and carries the signet ring herself."
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "reclaim",
+            "position": {
+              "kind": "carried",
+              "character_id": "brenna"
+            }
+          },
+          "grammar": {
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation"
+          },
+          "evidence": {
+            "quote": "Brenna reclaims her signet ring from Nicco and carries the signet ring herself.",
+            "verified": true,
+            "check": "receipt_of_named_item"
+          },
+          "authorized": true,
+          "reason": "authorized_controller_evidence",
+          "source": "evidence"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "brenna",
+        "position": {
+          "kind": "carried",
+          "character_id": "brenna"
+        },
+        "revision_delta": 1,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    },
+    {
+      "name": "Refused gift",
+      "input": "I offer Brenna the silver knife as a gift.",
+      "narration": "Brenna refuses the silver knife. Nicco keeps the silver knife in his hands; no handover occurs.",
+      "expected": {
+        "mode": null,
+        "owner": "nicco",
+        "carrier": "nicco",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Silver Knife",
+              "description": "A plain silver knife.",
+              "visual_description": "Small plain silver knife with a straight undecorated blade and simple dark wooden handle.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Small plain silver knife with a straight undecorated blade and simple dark wooden handle."
+              },
+              "owner_id": "nicco",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": []
+      },
+      "proposal": [],
+      "evidence": [],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "nicco",
+        "position": {
+          "kind": "carried",
+          "character_id": "nicco"
+        },
+        "revision_delta": 0,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    },
+    {
+      "name": "Stolen-item attempted regift",
+      "input": "I give Maren the signet ring as a present.",
+      "narration": "Maren accepts the signet ring from Nicco and carries it. Nicco is giving away something he stole: the signet ring remains Brenna's property, although Maren now physically holds it.",
+      "expected": {
+        "mode": "handoff",
+        "owner": "brenna",
+        "carrier": "maren",
+        "id": "campaign_item_00000001"
+      },
+      "prior": {
+        "base_revision": 3,
+        "context": {
+          "primary": {
+            "runtime_revision": 3,
+            "scene": {
+              "player_location": {
+                "id": "shop",
+                "name": "Shop",
+                "display_name": "Shop",
+                "summary": "Shop",
+                "secret": false,
+                "content": "Shop",
+                "features": []
+              },
+              "location_ancestry": [],
+              "world_time": {
+                "world_minute": 600
+              },
+              "player_resources": {
+                "mana": {
+                  "current": 100,
+                  "max": 100
+                }
+              },
+              "present_characters": [
+                {
+                  "id": "brenna",
+                  "name": "Brenna",
+                  "display_name": "Brenna",
+                  "summary": "Brenna",
+                  "secret": false,
+                  "content": "Brenna",
+                  "traits": []
+                },
+                {
+                  "id": "maren",
+                  "name": "Maren",
+                  "display_name": "Maren",
+                  "summary": "Maren",
+                  "secret": false,
+                  "content": "Maren",
+                  "traits": []
+                }
+              ]
+            }
+          },
+          "characters": [
+            {
+              "id": "nicco",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "nicco"
+              },
+              "profile": {
+                "name": "Nicco",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [],
+              "canonical_awareness": []
+            },
+            {
+              "id": "brenna",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "brenna"
+              },
+              "profile": {
+                "name": "Brenna",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            },
+            {
+              "id": "maren",
+              "origin": {
+                "kind": "canonical",
+                "canonical_entity_id": "maren"
+              },
+              "profile": {
+                "name": "Maren",
+                "aliases": []
+              },
+              "current": {
+                "current_location": "shop"
+              },
+              "locality": [
+                "shop"
+              ],
+              "canonical_awareness": []
+            }
+          ],
+          "items": [
+            {
+              "id": "campaign_item_00000001",
+              "origin": {
+                "kind": "created"
+              },
+              "name": "Signet Ring",
+              "description": "A plain signet ring.",
+              "visual_description": "Small silver signet ring with a plain oval face.",
+              "sprite": {
+                "status": "ready",
+                "asset_ref": "portrait_item_fixture.png",
+                "generated_from_visual_description": "Small silver signet ring with a plain oval face."
+              },
+              "owner_id": "brenna",
+              "position": {
+                "kind": "carried",
+                "character_id": "nicco"
+              },
+              "created_revision": 2
+            }
+          ],
+          "facts": [],
+          "knowledge": [],
+          "scheduled_events": [],
+          "player_profile": {
+            "name": "Nicco",
+            "households": []
+          },
+          "social": {
+            "nicco_gold": null,
+            "legal": [],
+            "households": [],
+            "relationships": []
+          }
+        },
+        "explicit_intent": [
+          {
+            "kind": "transfer_item",
+            "mode": "handoff",
+            "item_id": "campaign_item_00000001",
+            "position": {
+              "kind": "carried",
+              "character_id": "maren"
+            }
+          }
+        ]
+      },
+      "proposal": [
+        {
+          "kind": "transfer_item",
+          "item_id": "campaign_item_00000001",
+          "mode": "handoff",
+          "position": {
+            "kind": "carried",
+            "character_id": "maren"
+          }
+        }
+      ],
+      "evidence": [
+        "Maren accepts the signet ring from Nicco and carries it."
+      ],
+      "response_model": "openai/gpt-6-luna",
+      "fallback": false,
+      "authorization": [
+        {
+          "command": {
+            "kind": "transfer_item",
+            "item_id": "campaign_item_00000001",
+            "mode": "handoff",
+            "position": {
+              "kind": "carried",
+              "character_id": "maren"
+            }
+          },
+          "grammar": {
+            "authorized": true,
+            "reason": "authorized_narrative_confirmation"
+          },
+          "evidence": {
+            "quote": "Maren accepts the signet ring from Nicco and carries it.",
+            "verified": true,
+            "check": "receipt_of_named_item"
+          },
+          "authorized": true,
+          "reason": "authorized_narrative_confirmation",
+          "source": "both"
+        }
+      ],
+      "turn_status": "turn_completed",
+      "engine": {
+        "id": "campaign_item_00000001",
+        "owner": "brenna",
+        "position": {
+          "kind": "carried",
+          "character_id": "maren"
+        },
+        "revision_delta": 1,
+        "duplicate_created": false,
+        "visual_identity_unchanged": true
+      },
+      "grade": {
+        "mode": true,
+        "id_reuse": true,
+        "carrier": true,
+        "owner": true,
+        "authorization": true,
+        "engine": true,
+        "no_duplicate": true,
+        "visual_identity": true
+      },
+      "overall": "PASS"
+    }
+  ],
+  "key_exists": true,
+  "primary": "openai/gpt-6-luna",
+  "fallback": [
+    "anthropic/claude-haiku-5.5"
+  ],
+  "fallback_occurred": false,
+  "parsing_failed": false,
+  "authorization_rejected": true,
+  "passed": 7,
+  "validation": {
+    "transfer_domain": {
+      "passed": 37,
+      "total": 37
+    },
+    "focused": {
+      "passed": 378,
+      "total": 378
+    },
+    "full_suite": {
+      "passed": 2791,
+      "total": 2791
+    },
+    "typecheck": "PASS",
+    "build": "PASS",
+    "commit": false
+  },
+  "post_live_correction": {
+    "classification": "authorization",
+    "change": "Recognize completed giver-led return/lend evidence; distinguish possessive object from direct recipient.",
+    "exact_live_quote_regression": "PASS",
+    "negative_return_regressions": "PASS",
+    "live_retested": false,
+    "original_live_grade_unchanged": true
+  }
+}

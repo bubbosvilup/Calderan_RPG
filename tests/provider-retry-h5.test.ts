@@ -60,7 +60,7 @@ for (const code of TRANSIENT) test(`narrator ${code} once → one retry, recover
   const r = rig(failOnce(code), ["ok"]), base = r.campaign.revision;
   const events = await collect(r.co.runTurn({ campaign: r.campaign, player_input: INPUT }));
   assert.equal(last(events).type, "turn_completed"); assert.equal(events.filter(e => e.type === "state_committed").length, 1);
-  assert.equal(r.campaign.revision, base + 1); assert.equal(owner(r.campaign), "brenna");
+  assert.equal(r.campaign.revision, base + 1); assert.equal(owner(r.campaign), "nicco");
   assert.equal(r.narrator.calls(), 2); assert.equal(r.ctl.calls(), 1); assert.deepEqual(r.retry.sleeps, [300]);
   const a = r.records[0]!.provider_attempts!.narrator!; assert.deepEqual([a.attempts, a.recovered, a.retry_reasons, a.final_outcome], [2, true, [code], "success"]);
   assert.deepEqual(r.narrator.requests[1]!.messages, r.narrator.requests[0]!.messages, "the retry is the same request");

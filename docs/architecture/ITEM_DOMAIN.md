@@ -10,7 +10,7 @@ Item Domain V1 extends the existing campaign item domain (`CampaignItem`, `regis
 
 **Owner ≠ physical position.** `owner_id` is who is socially or legally recognized as owning the item; `position` is where it physically is.
 - When Nicco steals a merchant's figurine, the owner stays the merchant and the position becomes carried by Nicco.
-- Moving an item never transfers ownership. There is no `stolen` flag: the mismatch itself is the state.
+- Placement and ownership-preserving transfers do not change ownership. A valid explicit gift can change owner through [Transfer Domain V1](TRANSFER_DOMAIN_V1.md). There is no `stolen` flag: the mismatch itself is the state.
 - An omitted `owner_id` means unknown, and is never guessed. `null` means explicitly unowned.
 - Owners are characters only in V1. Faction, household and institutional ownership is future work.
 
@@ -50,11 +50,55 @@ Snapshot schema 5 → 6 (`migrateSnapshot5to6`, chained after 4 → 5) adds `nex
 - A schema-5 file already carrying the field is malformed.
 - Round-trips preserve IDs, owners, positions and the allocator exactly.
 
+## Permanent Inventory V1: inventory is derived state
+
+**Permanent inventory is derived state.** `CampaignItem` (identity, owner, one physical position) remains the only source of truth. No per-character inventory array exists or may become authoritative, and saves carry no inventory field: the round-trip reproduces every inventory from item positions.
+
+- **Inventory ≠ ownership.** A character's inventory is what is physically on them: `carried` or `equipped`. Owned items elsewhere are not inventory.
+- **Has ≠ owns.** A stolen ring on Nicco: he *has* it, the merchant *owns* it.
+- **Carried/equipped ≠ stored.** A stored item lies at a location and is in nobody's inventory.
+
+### Queries and predicates
+
+The queries live in `src/campaign/inventory.ts`, which is domain level, for quests, transactions, UI, authorization and NPC logic. They are pure, ordered by item ID, and work the same for the player, campaign NPCs, NPC+ and authored NPCs (one character-ID query layer, no per-class code).
+
+- **Lists:** `carriedItems`, `equippedItems`, `inventoryItems` (carried + equipped), `ownedItems` (any position), `itemsAtLocation`.
+- **`hasItem`:** carried or equipped by the character. Never ownership.
+- **`carriesItem`:** carried only.
+- **`equipsItem`:** equipped only.
+- **`ownsItem`:** `owner_id` is the character. Unknown or `null` owners belong to nobody.
+- **`itemAt`:** stored at exactly that location.
+
+`inventoryLines` (in `src/turn/item-projection.ts`) is the human-readable projection, e.g. "Ivory figurine (owned by Brenna)" or "Iron sword [equipped]". It never contains IDs and is not injected into narrator turns by itself.
+
+### Item identity continuity
+
+**Existing item identity must be reused.** An item the controller can see, either on a present person or lying at the current location (`items_here`), is moved, never re-materialized. The authorizer refuses a same-named `create_item` there.
+
+The controller's `place_item` now accepts the existing `stored` position: putting an item down at, or picking it up from, the current location.
+- The holder or new carrier must be present, and the location must be the current one.
+- Ownership never changes.
+- There is no grammar path: a verified quote naming the item completes it.
+- Furniture ("on the table") stays prose; V1 stores at the structured location.
+
+### Absent-character grounding (controller only)
+
+`referenced_known_characters` (`src/turn/referenced-characters.ts`) lists known characters who are not present but are named in this turn's player input or narration, as `{id, name}` only.
+- **Candidates:** authored NPCs visible to narrator and player, plus named campaign characters. Narrator-only identities never resolve.
+- **Matching:** a full name or alias, or a distinctive single name token (titles excluded). A phrase fitting more than one character maps to none.
+- **Scope:** absent from the envelope when empty, and never in narrator context.
+
+This is ID grounding, not knowledge injection: no biography, location, relationships, inventory or secrets. It lets the controller name an absent owner ("Lord Pellan's signet ring"), which evidence authorization still requires the narration to state.
+
+### Assumptions
+
+There is no character-deletion command, so a carrier or owner cannot vanish during play. Persisted state with an unknown carrier or owner is rejected at load.
+
 ## Deliberately not in V1 (extension seams)
 
 - **Containers:** add a `contained{item_id}` position variant. This keeps one position per item.
 - **Equipment, slots and hand occupancy:** the existing `equipped` variant; this is Permanent Inventory work.
 - **Archetypes and templates:** an optional `archetype_id` on the instance. This also covers merchant stock and pricing.
 - **Stackables:** a quantity on archetype-backed instances. V1 treats every object as one instance.
-- **Ownership transfer domain:** give, sell, steal, lend and return, with a ledger. `transfer_item` and `place_item` remain the minimal primitives.
+- **Economy and transaction history:** buying, selling and durable transfer/loan records remain future work. [Transfer Domain V1](TRANSFER_DOMAIN_V1.md) now covers current-state gift, handoff, lend, return, steal, reclaim and take semantics using the existing `transfer_item`.
 - **Institutional or household ownership, and quest predicates over items.**

@@ -6,7 +6,7 @@ import { prepareCase, replay, scoreCell, sameCommand, percentiles, staleRevision
 import { DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/state-controller.js";
 
 /** Offline checks for the State Controller benchmark harness (no network; live runs use `npm run benchmark:controller`). */
-const transfer = (item_id: string): CampaignCommand => ({ kind: "transfer_item", item_id, owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } });
+const transfer = (item_id: string): CampaignCommand => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: "brenna" } });
 
 test("benchmark set: ≥60 unique cases across every scoring group, with adult prose only as a small robustness subset", () => {
   assert.ok(BENCHMARK_CASES.length >= 60);

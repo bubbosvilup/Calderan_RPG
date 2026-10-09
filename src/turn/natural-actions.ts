@@ -1,3 +1,4 @@
+import { EXPLICIT_GIFT } from "../campaign/item-transfer.js";
 import { reachable } from "./travel-resolution.js";
 import { resolvePlayerTravel } from "./player-travel.js";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
@@ -160,16 +161,16 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
   const npcs = context.characters.filter(c => c.id !== "nicco");
   const nameOf = (id: string) => npcs.find(c => c.id === id)?.profile.name ?? id;
   const holderOf = (i: Item) => i.position.kind === "carried" || i.position.kind === "equipped" ? i.position.character_id : undefined;
-  const niccoCarried = () => context.items.filter(i => i.owner_id === "nicco" && holderOf(i) === "nicco");
+  const niccoCarried = () => context.items.filter(i => holderOf(i) === "nicco");
   /** Items a present character both owns and holds: the only items an inbound gift can move. */
-  const heldBy = (id: string) => context.items.filter(i => i.owner_id === id && holderOf(i) === id);
+  const heldBy = (id: string) => context.items.filter(i => holderOf(i) === id);
   const PRONOUN = /^(?:it|them|those|these|the pair|that|this)$/i, PERSON_PRONOUN = /^(?:him|her|them)$/i;
   const personFor = (phrase: string) => {
     const noun = words(phrase).at(-1) ?? "";
     const found = npcs.filter(c => words(c.profile.name ?? c.id).includes(noun) || (c.profile.aliases ?? []).some(a => words(a).includes(noun)));
     return found.length === 1 ? found[0]!.id : undefined;
   };
-  const inbound = (item: Item) => ({ kind: "transfer_item" as const, item_id: item.id, owner_id: "nicco", position: { kind: "carried" as const, character_id: "nicco" } });
+  const inbound = (item: Item) => ({ kind: "transfer_item" as const, mode: "handoff" as const, item_id: item.id,  position: { kind: "carried" as const, character_id: "nicco" } });
   /**
    * Give-back target resolution from bounded context only. A pronoun recipient is the item's acquisition source when present,
    * else the single present character. A pronoun item is the segment's last item, else the single carried item from that
@@ -230,7 +231,7 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
         const found = resolveGiveBack(itemPhrase.trim(), recipientPhrase?.trim(), lastItem);
         if (found.item && found.recipient) {
           lastItem = found.item;
-          candidates.push({ kind: "transfer_item", item_id: found.item.id, owner_id: found.recipient, position: { kind: "carried", character_id: found.recipient } });
+          candidates.push({ kind: "transfer_item", mode: found.item.owner_id === found.recipient ? "return" : "handoff", item_id: found.item.id,  position: { kind: "carried", character_id: found.recipient } });
           actions.push({ clause, kind: "offer", status: "outcome_dependent", detail: { item_id: found.item.id, recipient: found.recipient, form: "give_back", attempt: !!attempt } });
         } else {
           // Repair 1.1 return premise: if Nicco holds no matching item but exactly one present person holds it, the narrator is told
@@ -247,7 +248,7 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
       }
       if ((m = clause.match(OFFER))) {
         const itemPhrase = m[1]!.trim(), recipientPhrase = m[2]!.trim();
-        const carried = context.items.filter(i => i.owner_id === "nicco" && (i.position.kind === "carried" || i.position.kind === "equipped") && i.position.character_id === "nicco");
+        const carried = context.items.filter(i => (i.position.kind === "carried" || i.position.kind === "equipped") && i.position.character_id === "nicco");
         const item = /^(?:it|them|those|these)$/i.test(itemPhrase) ? lastItem : itemFor(itemPhrase, carried);
         const noun = words(recipientPhrase).at(-1) ?? "";
         const persistent = context.characters.filter(c => c.id !== "nicco" && words(c.profile.name ?? c.id).includes(noun));
@@ -255,7 +256,7 @@ export function resolveNaturalActions(input: string, context: TurnContext, snaps
         if (!item) { actions.push({ clause, kind: "offer", status: "unresolved", detail: { itemPhrase, recipientPhrase, reason: "no_item" } }); continue; }
         if (persistent.length === 1) {
           const to = persistent[0]!.id;
-          candidates.push({ kind: "transfer_item", item_id: item.id, owner_id: to, position: { kind: "carried", character_id: to } });
+          candidates.push({ kind: "transfer_item", mode: EXPLICIT_GIFT.test(input) && item.owner_id === "nicco" ? "gift" : "handoff", item_id: item.id, position: { kind: "carried", character_id: to } });
           actions.push({ clause, kind: "offer", status: "outcome_dependent", detail: { item_id: item.id, recipient: to } });
         } else if (ephemeral) {
           actions.push({ clause, kind: "offer", status: "unsupported_durable_recipient", detail: { item_id: item.id, recipient: ephemeral.id, ref: ephemeral.ref } });

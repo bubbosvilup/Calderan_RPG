@@ -19,7 +19,7 @@ for(const category of ["malformed_envelope","finish_reason_length","empty_output
  const f=setup(),retry=fakeRetry(),requests:string[]=[];let n=0;
  const controller={async propose(r:Parameters<ReturnType<typeof scriptedController>["propose"]>[0]){requests.push(JSON.stringify(r));if(n++===0)throw new ProviderError("structured_output_invalid",undefined,undefined,category);return{commands:[transfer],...metadata};}};
  const co=new TurnCoordinator(f.world,mockNarrator(text),controller,f.retrieval,{provider_retry:retry.policy,reliability_contract:true}),base=f.campaign.revision;
- const events=await collect(co.runTurn({campaign:f.campaign,player_input:input}));assert.equal(events.at(-1)!.type,"turn_completed");assert.equal(f.campaign.revision,base+1);assert.equal(events.filter(e=>e.type==="state_committed").length,1);assert.equal(requests.length,2);assert.equal(requests[0],requests[1]);assert.equal(f.campaign.exportSnapshot().items.find(i=>i.id==="boots")!.owner_id,"brenna");
+ const events=await collect(co.runTurn({campaign:f.campaign,player_input:input}));assert.equal(events.at(-1)!.type,"turn_completed");assert.equal(f.campaign.revision,base+1);assert.equal(events.filter(e=>e.type==="state_committed").length,1);assert.equal(requests.length,2);assert.equal(requests[0],requests[1]);assert.equal(f.campaign.exportSnapshot().items.find(i=>i.id==="boots")!.owner_id,"nicco");
 });
 for(const fault of ["timeout","malformed","length"]as const)test(`narrator ${fault} then success buffers invalid attempt; publishes after commit`,async()=>{
  const f=setup(),base=f.campaign.revision,retry=fakeRetry();let calls=0;const bodies:string[]=[];

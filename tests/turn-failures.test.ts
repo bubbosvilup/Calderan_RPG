@@ -48,7 +48,7 @@ async function expectFailure(code: TurnFailure, s: Pick<Setup, "world" | "campai
     const done = (await collect(retry.runTurn({ campaign: s.campaign, player_input: "I give boots to Brenna." }))).at(-1)!;
     assert.equal(done.type, "turn_completed", "retry with working providers succeeds");
     assert.equal(s.campaign.revision, revision + 1, "and commits exactly once");
-    assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "brenna");
+    assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco");
   }
   return failed;
 }
@@ -151,10 +151,11 @@ test("controller_failed: a controller provider error fails the turn; the deliver
   }
 });
 test("campaign_validation_failed: an authorized batch that fails final validation commits nothing, atomically", async () => {
-  const equip: CampaignCommand = { kind: "place_item", item_id: "boots", position: { kind: "equipped", character_id: "brenna", slot: "feet", mode: "worn" } };
+  const equip: CampaignCommand = { kind: "place_item", item_id: "ring", position: { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" } };
   const s = setup();
-  const coordinator = new TurnCoordinator(s.world, mockNarrator("Brenna accepts boots from Nicco. Brenna equips boots in feet."), mockController([transfer, equip]), s.retrieval);
-  await expectFailure("campaign_validation_failed", s, coordinator, "/give boots to brenna\n/equip boots for brenna feet worn", { retry: true });
+  s.campaign.apply({ expected_revision: s.campaign.revision, commands: [{ kind: "place_item", item_id: "pink_cotton", position: { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" } }] });
+  const coordinator = new TurnCoordinator(s.world, mockNarrator("Brenna accepts boots from Nicco. Nicco equips ring in feet."), mockController([transfer, equip]), s.retrieval);
+  await expectFailure("campaign_validation_failed", s, coordinator, "/give boots to brenna\n/equip ring for nicco feet worn", { retry: true });
 });
 test("coverage: every TurnFailure code has a direct test above", () => {
   assert.deepEqual([...covered].sort(), [...ALL_CODES].sort());

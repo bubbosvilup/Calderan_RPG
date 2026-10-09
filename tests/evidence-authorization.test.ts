@@ -19,7 +19,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { collect, metadata } from "./turn-fixtures.js";
 
 const tell: CampaignCommand = { kind: "set_knowledge", knowledge: { character_id: "brenna", fact_id: "campaign_fact_bridge_closed", status: "knows", provenance: { source_character_id: "nicco", acquisition_kind: "told" } } };
-const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", item_id, owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }));
+const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: "brenna" } }));
 
 function prepare(c: Pick<EvidenceCase, "input" | "narration" | "ground_garments" | "brenna_knows">) {
   const { world, campaign } = turnFixture(!!c.ground_garments, c.brenna_knows ? { brennaKnowsBridge: true } : {});

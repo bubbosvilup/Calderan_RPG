@@ -42,6 +42,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       scene: { location: view.scene.location.name, location_id: view.scene.location.id, time_of_day: view.scene.time.time_of_day },
       play,
       player_character: session.getPlayerProfileView(),
+      inventory: session.getPlayerInventoryView(),
       household: play.household.map(h => ({ members: h.members.map(m => ({ name: m.name_known ? m.name : "Unfamiliar household member", presence: m.presence, ...(m.known_location ? { location: m.known_location } : {}) })) })) };
   };
   return createServer(async (req, res) => {
@@ -57,6 +58,17 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
     }
     try {
       if (req.method === "GET" && req.url === "/api/session") { json(200, state()); return; }
+      if (req.method === "GET" && req.url === "/api/inventory") {
+        const session = current(); json(200, session ? session.getPlayerInventoryView() : { campaign_id: null, items: [] }); return;
+      }
+      const itemAsset = req.method === "GET" ? /^\/api\/inventory\/sprite\/([a-z][a-z0-9_]{0,119})\/([a-z][a-z0-9_]{0,119})$/.exec(req.url ?? "") : undefined;
+      if (itemAsset) {
+        const session = current();
+        if (!session || session.campaignId !== itemAsset[1] || !session.getInventoryVisuals("nicco").some(i => i.id === itemAsset[2])) { json(404, { error: "Not found." }); return; }
+        const file = await session.readItemSprite(itemAsset[2]!);
+        if (!file) { json(404, { error: "Not found." }); return; }
+        res.writeHead(200, { "Content-Type": file.media_type, "Content-Length": String(file.bytes.length) }); res.end(file.bytes); return;
+      }
       if (req.method === "GET" && req.url === "/api/save-status") {
         // Cheap poll for the header indicator (autosave runs in the background): no view or context derivation.
         const session = host?.active;

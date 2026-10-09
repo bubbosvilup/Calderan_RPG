@@ -50,7 +50,7 @@ test("1.2 controller: a strict-parse failure keeps raw output, metadata, expecte
   assert.throws(() => parseControllerProposal(MALFORMED)); // still rejected
   const diagnose = async (text: string) => { try { await controllerReturning(text).propose({ player_action: "", prior_state: "", final_narration: "" }); } catch (e) { return (e as ProviderError).diagnostic!.parse_error; } return "parsed"; };
   assert.match(await diagnose("{not json"), /^json_parse_error/);
-  assert.match(await diagnose('{"commands":[{"command":{"kind":"transfer_item","item_id":"bad id!","owner_id":"nicco","position":{"kind":"carried","character_id":"nicco"}},"evidence_quote":"x"}]}'), /^campaign_validation_error/);
+  assert.match(await diagnose("{\"commands\":[{\"command\":{\"kind\":\"transfer_item\",\"item_id\":\"bad id!\",\"position\":{\"kind\":\"carried\",\"character_id\":\"nicco\"},\"mode\":\"handoff\"},\"evidence_quote\":\"x\"}]}"), /^campaign_validation_error/);
 });
 test("1.2 controller: the diagnostic reaches only the debug sink, never player-facing events", async () => {
   const c = scene("mira_thorne", [boots("mira_thorne")]), records: TurnDebugRecord[] = [];

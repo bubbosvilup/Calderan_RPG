@@ -119,7 +119,7 @@ test("compound removal then gift to a persistent NPC: ordered runtime removal + 
   const fixture = turnFixture(true); fixture.campaign.apply({ expected_revision: fixture.campaign.revision, commands: [{ kind: "place_item", item_id: "boots", position: { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" } }] });
   const s = fixture.campaign.exportSnapshot(), intent = playerIntent("*he takes off his boots and gives them to Brenna*", buildTurnContext(fixture.world, s), s, fixture.world);
   assert.deepEqual(intent.runtime, [{ kind: "place_item", item_id: "boots", position: { kind: "carried", character_id: "nicco" } }]);
-  assert.deepEqual(intent.candidates, [{ kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }]);
+  assert.deepEqual(intent.candidates, [{ kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } }]);
   const transfer = intent.candidates[0]!, service = new RetrievalService(fixture.world), seen: GenerationRequest[] = [];
   const c = new TurnCoordinator(fixture.world, scripted(["Nicco takes off his boots and offers them. Brenna takes the boots and tucks them under her arm."], seen), controller([[transfer]]), { service, search: new HybridSearch(service) });
   const result = await turn(c, fixture.campaign, "*he takes off his boots and gives them to Brenna*");

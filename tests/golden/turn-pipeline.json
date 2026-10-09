@@ -295,8 +295,8 @@
      "explicit_intent": [
       {
        "kind": "transfer_item",
+       "mode": "handoff",
        "item_id": "boots",
-       "owner_id": "brenna",
        "position": {
         "kind": "carried",
         "character_id": "brenna"
@@ -332,7 +332,7 @@
      },
      {
       "role": "user",
-      "content": "[REVISION REQUIRED - AUTHORITATIVE OUTCOME]\nThe turn has been resolved. This outcome is final; the narration must match it:\n- COMMITTED: Brenna now owns and carries boots.\n- NOT COMMITTED: ring did not change hands; it stays with Nicco.\n- RECORDED CONDITIONS: none. No lasting injury, bleeding, knockdown or dazing happened this turn.\n- NOT RECORDABLE: restraint, removal from a place, detention, arrest and bans did not happen; they may only be threatened or demanded.\n\n[PROBLEMS IN THE DRAFT]\n- ring did NOT change hands: it stays with Nicco. Gerome does not take or keep it; narrate the moment without the handover completing. (Draft sentence: \"Gerome takes the ring from Nicco.\")\n\n[TASK]\nRewrite the complete narration for the same player action (one to three short paragraphs) so it matches the authoritative outcome and fixes every problem. Keep everything else that was fine: voices, tone, observable detail. Do not mention rules, state, records or corrections."
+      "content": "[REVISION REQUIRED - AUTHORITATIVE OUTCOME]\nThe turn has been resolved. This outcome is final; the narration must match it:\n- COMMITTED: Brenna now carries boots; ownership is unchanged.\n- NOT COMMITTED: ring did not change hands; it stays with Nicco.\n- RECORDED CONDITIONS: none. No lasting injury, bleeding, knockdown or dazing happened this turn.\n- NOT RECORDABLE: restraint, removal from a place, detention, arrest and bans did not happen; they may only be threatened or demanded.\n\n[PROBLEMS IN THE DRAFT]\n- ring did NOT change hands: it stays with Nicco. Gerome does not take or keep it; narrate the moment without the handover completing. (Draft sentence: \"Gerome takes the ring from Nicco.\")\n\n[TASK]\nRewrite the complete narration for the same player action (one to three short paragraphs) so it matches the authoritative outcome and fixes every problem. Keep everything else that was fine: voices, tone, observable detail. Do not mention rules, state, records or corrections."
      }
     ]
    },
@@ -373,7 +373,7 @@
       "command": {
        "kind": "transfer_item",
        "item_id": "boots",
-       "owner_id": "brenna",
+       "mode": "handoff",
        "position": {
         "kind": "carried",
         "character_id": "brenna"
@@ -417,7 +417,7 @@
       {
        "kind": "transfer_item",
        "item_id": "boots",
-       "owner_id": "brenna",
+       "mode": "handoff",
        "position": {
         "kind": "carried",
         "character_id": "brenna"
@@ -428,7 +428,7 @@
       {
        "kind": "transfer_item",
        "item_id": "boots",
-       "owner_id": "brenna",
+       "mode": "handoff",
        "position": {
         "kind": "carried",
         "character_id": "brenna"
@@ -440,7 +440,7 @@
        "command": {
         "kind": "transfer_item",
         "item_id": "boots",
-        "owner_id": "brenna",
+        "mode": "handoff",
         "position": {
          "kind": "carried",
          "character_id": "brenna"
@@ -471,8 +471,8 @@
       "player_intents": [
        {
         "kind": "transfer_item",
+        "mode": "handoff",
         "item_id": "boots",
-        "owner_id": "brenna",
         "position": {
          "kind": "carried",
          "character_id": "brenna"
@@ -560,7 +560,7 @@
       "recent_conversation": 2,
       "knowledge_access": 1178,
       "retrieval": 30,
-      "controller_evidence": 4194
+      "controller_evidence": 4191
      },
      "scene_participants": {
       "plan": {
@@ -1911,8 +1911,8 @@
      "explicit_intent": [
       {
        "kind": "transfer_item",
+       "mode": "handoff",
        "item_id": "boots",
-       "owner_id": "brenna",
        "position": {
         "kind": "carried",
         "character_id": "brenna"
@@ -2251,8 +2251,8 @@
      "explicit_intent": [
       {
        "kind": "transfer_item",
+       "mode": "handoff",
        "item_id": "boots",
-       "owner_id": "brenna",
        "position": {
         "kind": "carried",
         "character_id": "brenna"
@@ -2288,7 +2288,7 @@
      },
      {
       "role": "user",
-      "content": "[REVISION REQUIRED - AUTHORITATIVE OUTCOME]\nThe turn has been resolved. This outcome is final; the narration must match it:\n- COMMITTED: Brenna now owns and carries boots.\n- NOT COMMITTED: ring did not change hands; it stays with Nicco.\n- RECORDED CONDITIONS: none. No lasting injury, bleeding, knockdown or dazing happened this turn.\n- NOT RECORDABLE: restraint, removal from a place, detention, arrest and bans did not happen; they may only be threatened or demanded.\n\n[PROBLEMS IN THE DRAFT]\n- ring did NOT change hands: it stays with Nicco. Gerome does not take or keep it; narrate the moment without the handover completing. (Draft sentence: \"Gerome takes the ring from Nicco.\")\n\n[TASK]\nRewrite the complete narration for the same player action (one to three short paragraphs) so it matches the authoritative outcome and fixes every problem. Keep everything else that was fine: voices, tone, observable detail. Do not mention rules, state, records or corrections."
+      "content": "[REVISION REQUIRED - AUTHORITATIVE OUTCOME]\nThe turn has been resolved. This outcome is final; the narration must match it:\n- COMMITTED: Brenna now carries boots; ownership is unchanged.\n- NOT COMMITTED: ring did not change hands; it stays with Nicco.\n- RECORDED CONDITIONS: none. No lasting injury, bleeding, knockdown or dazing happened this turn.\n- NOT RECORDABLE: restraint, removal from a place, detention, arrest and bans did not happen; they may only be threatened or demanded.\n\n[PROBLEMS IN THE DRAFT]\n- ring did NOT change hands: it stays with Nicco. Gerome does not take or keep it; narrate the moment without the handover completing. (Draft sentence: \"Gerome takes the ring from Nicco.\")\n\n[TASK]\nRewrite the complete narration for the same player action (one to three short paragraphs) so it matches the authoritative outcome and fixes every problem. Keep everything else that was fine: voices, tone, observable detail. Do not mention rules, state, records or corrections."
      }
     ]
    },
@@ -2324,7 +2324,7 @@
       "command": {
        "kind": "transfer_item",
        "item_id": "boots",
-       "owner_id": "brenna",
+       "mode": "handoff",
        "position": {
         "kind": "carried",
         "character_id": "brenna"

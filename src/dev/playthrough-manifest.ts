@@ -17,7 +17,7 @@ export const CURATED_LABELS: readonly CuratedLabel[] = [
   label(65, "ambiguous_time", "A couple of hours is contradicted by old response's three hours.", "No exact conversion; reject prose-derived timing."),
   label(87, "household", "Ask for a shopping list.", "No household policy, dynamic items or task domain added."),
   label(111, "movement", "Goes upstairs, destination not specified by canonical ID.", "Do not treat historical floors as current canonical routes."),
-  label(115, "ownership", "Three established pink garments are handed to Brenna, not equipped.", "Agent-mapped fixture IDs; original pronoun-rich player input retained. Measures conservative false negatives.", ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", item_id, owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } }))),
+  label(115, "ownership", "Three established pink garments are handed to Brenna, not equipped.", "Agent-mapped fixture IDs; original pronoun-rich player input retained. Measures conservative false negatives.", ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: "brenna" } }))),
   label(117, "equipment", "Brenna dresses in layered shirts and shorts.", "Layered slot allocation is unresolved; no guessed equipment slots."),
   label(169, "household", "Household rules expressed in dialogue.", "No household membership or automatic removal of existing footwear."),
   label(171, "knowledge", "Mentions secrets without revealing their contents.", "Reject new knowledge/trust edges."),

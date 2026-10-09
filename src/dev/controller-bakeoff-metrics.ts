@@ -1,3 +1,4 @@
+import { transferRecipient } from "../campaign/item-transfer.js";
 import { isDeepStrictEqual as equal } from "node:util";
 import type { CampaignCommand } from "../campaign/types.js";
 
@@ -24,7 +25,7 @@ export function falseProposalSeverity(command: CampaignCommand, knownIds: Readon
   walk(command);
   if (ids.some(id => !knownIds.has(id))) return "severe";
   if (duplicate || alreadyEstablished) return "moderate";
-  const subject = (c: CampaignCommand): string | undefined => c.kind === "adjust_relationship" ? `${c.from_character_id}:${c.to_character_id}` : c.kind === "set_knowledge" ? c.knowledge.character_id : "character_id" in c ? c.character_id : c.kind === "transfer_item" ? `${c.item_id}:${c.owner_id}` : undefined;
+  const subject = (c: CampaignCommand): string | undefined => c.kind === "adjust_relationship" ? `${c.from_character_id}:${c.to_character_id}` : c.kind === "set_knowledge" ? c.knowledge.character_id : "character_id" in c ? c.character_id : c.kind === "transfer_item" ? `${c.item_id}:${transferRecipient(c)}` : undefined;
   const sameKind = expected.filter(e => e.kind === command.kind);
   if (sameKind.length && subject(command) && sameKind.every(e => subject(e) !== subject(command))) return "severe";
   if (command.kind === "set_knowledge") return "severe";

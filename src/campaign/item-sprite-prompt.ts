@@ -1,0 +1,15 @@
+import { RAENA_IMAGE_STACK } from "../app/image-stack.js";
+import type { ItemCategory } from "./types.js";
+
+export interface ItemSpriteIdentity { readonly name: string; readonly category?: ItemCategory | undefined; readonly visual_description: string }
+/** Item-only exclusions; explicitly described object features remain authoritative in the positive prompt. */
+export const ITEM_SPRITE_NEGATIVE_PROMPT = "text, captions, labels, letters, words, typography, watermark, UI chrome, decorative frame, border, presentation sheet, catalog layout, hands holding the object, extra person, scene, environment, extra objects, presentation pedestal, floating particles, unrequested glow, unsupported ornament, unrequested symbols, unrequested gems";
+/** Pure projection: never accepts campaign, owner, position, biography or transcript. */
+export function itemSpritePrompt(item: ItemSpriteIdentity, trigger = RAENA_IMAGE_STACK.trigger): string {
+  return `${trigger} a clean inventory object illustration.\n\nObject:\n${item.name.trim()}\n\nCategory:\n${item.category ?? "miscellaneous"}\n\nExact appearance:\n${item.visual_description}\n\nInstructions:\nDepict exactly the described object. Render the object literally and conservatively as a simple isolated object study. The exact appearance description is the visual authority; object name and category are labels, not permission to add details. Preserve the stated shape, materials, colours and simplicity. If described as plain or simple, keep it plain or simple. Do not embellish.\nDo not add any visible feature unsupported by the exact appearance description. Do not add symbols, gems, engravings, ornament, magical effects, straps or cloth unless explicitly described. Do not redesign the object into a more fantasy version. Do not infer rank, ownership, culture or lore.\nSingle object only. Centered. Fully visible. Readable silhouette. No hands holding it. No person or human model; a figure explicitly forming part of the described object is allowed. No scene. No environment. No text, label or watermark. No border, frame or UI chrome. No presentation pedestal or elements around the object; a base explicitly belonging to the described object is allowed. No decorative background. No floating particles. No glow unless explicitly described. No symbols or ornament unless explicitly described.\nPlain neutral background.`;
+}
+
+/** Clean regeneration, without rejected pixels or campaign context. */
+export function itemSpriteRetryPrompt(item: ItemSpriteIdentity, trigger = RAENA_IMAGE_STACK.trigger): string {
+  return `${trigger} one isolated inventory object on a plain neutral background. ${item.visual_description}\nPrevious rendering was rejected. Render only the described object, literally and conservatively. Preserve the exact materials, shape and simplicity. Absolutely no text, pseudo-lettering, labels, captions, watermark, decorative borders or presentation graphics. No extra details beyond the appearance description. No person, hands, environment or unrelated objects. Fully visible, centered. Symbols or ornament only if explicitly described.`;
+}

@@ -23,13 +23,73 @@ function switchView(view) {
   activeView = view;
   closeCharacter();
   if (view !== "editor") closeLightbox();
-  for (const [key, id] of [["play", "play-view"], ["household", "household-view"], ["editor", "member-editor"], ["player", "player-view"]]) if (ui(id)) ui(id).hidden = key !== view;
+  for (const [key, id] of [["play", "play-view"], ["inventory", "inventory-view"], ["household", "household-view"], ["editor", "member-editor"], ["player", "player-view"]]) if (ui(id)) ui(id).hidden = key !== view;
+  ui("inventory-nav")?.setAttribute("aria-pressed", String(view === "inventory"));
+  if (view !== "inventory") clearTimeout(inventoryPoll);
   ui("household-nav")?.setAttribute("aria-pressed", String(view === "household" || view === "editor"));
   ui("player-nav")?.setAttribute("aria-pressed", String(view === "player"));
   if (view === "household") ui("household-close")?.focus();
   else if (view === "player") ui("player-back")?.focus();
+  else if (view === "inventory") ui("inventory-back")?.focus();
   else if (view === "play") ui("household-nav")?.focus();
 }
+// Inventory UI V1 is a projection of committed possession, never client-owned item state.
+let inventoryData = null, inventoryFilter = "all", inventoryQuery = "", inventoryPoll, inventoryRequest = 0;
+const inventoryCategory = category => (category ?? "miscellaneous").replaceAll("_", " ");
+function renderInventory() {
+  const container = ui("inventory-items"); if (!container) return;
+  const all = inventoryData?.items ?? [];
+  const equipped = all.filter(i => i.position.kind === "equipped").length;
+  if (ui("inventory-count")) ui("inventory-count").textContent = `${all.length} ${all.length === 1 ? "item" : "items"} · ${all.length - equipped} carried · ${equipped} equipped`;
+  for (const filter of ["all", "carried", "equipped"]) ui(`inventory-${filter}`)?.setAttribute("aria-pressed", String(inventoryFilter === filter));
+  const items = all.filter(i => (inventoryFilter === "all" || i.position.kind === inventoryFilter) && `${i.name} ${i.description ?? ""} ${i.category ?? ""}`.toLowerCase().includes(inventoryQuery));
+  container.replaceChildren();
+  if (!items.length) {
+    const empty = document.createElement("p"); empty.className = "inventory-empty";
+    empty.textContent = !all.length ? "Your inventory is empty. Items you take or equip will appear here." : "No items match this filter or search.";
+    container.append(empty);
+  }
+  for (const item of items) {
+    const card = document.createElement("article"); card.className = "inventory-item";
+    const art = document.createElement("div"); art.className = "inventory-art";
+    const placeholder = document.createElement("span"); placeholder.className = "inventory-placeholder";
+    placeholder.textContent = item.sprite_status === "pending" ? "Illustration on its way" : item.sprite_status === "failed" ? "Illustration unavailable" : "No illustration yet";
+    art.append(placeholder);
+    if (item.sprite_status === "ready" && item.sprite_url) {
+      const image = document.createElement("img"); image.alt = item.name; image.loading = "lazy"; image.src = item.sprite_url;
+      placeholder.hidden = true;
+      image.addEventListener("error", () => { image.hidden = true; placeholder.hidden = false; placeholder.textContent = "Illustration unavailable"; }, { once: true });
+      art.append(image);
+    }
+    const content = document.createElement("div"); content.className = "inventory-item-content";
+    const tag = document.createElement("span"); tag.className = "inventory-category"; tag.textContent = inventoryCategory(item.category);
+    const name = document.createElement("h3"); name.textContent = item.name;
+    const description = document.createElement("p"); description.className = "inventory-description"; description.textContent = item.description || "No description available.";
+    const position = document.createElement("span"); position.className = "inventory-position";
+    position.textContent = item.position.kind === "equipped" ? `Equipped · ${item.position.slot.replaceAll("_", " ")} · ${item.position.mode === "worn" ? "worn" : "held"}` : "Carried";
+    content.append(tag, name, description, position); card.append(art, content); container.append(card);
+  }
+  clearTimeout(inventoryPoll);
+  if (activeView === "inventory" && all.some(i => i.sprite_status === "pending")) inventoryPoll = setTimeout(refreshInventory, 2000);
+}
+async function refreshInventory() {
+  const request = ++inventoryRequest, campaign = inventoryData?.campaign_id;
+  try {
+    const response = await fetch("/api/inventory"); if (!response.ok) throw new Error("inventory refresh");
+    const data = await response.json();
+    if (request !== inventoryRequest || activeView !== "inventory" || campaign !== inventoryData?.campaign_id) return;
+    if (data.campaign_id !== campaign) { await load(); return; }
+    inventoryData = data; if (ui("inventory-error")) ui("inventory-error").hidden = true; renderInventory();
+  } catch {
+    if (activeView !== "inventory" || request !== inventoryRequest) return;
+    if (ui("inventory-error")) { ui("inventory-error").hidden = false; ui("inventory-error").textContent = "Inventory could not refresh. Trying again shortly."; }
+    clearTimeout(inventoryPoll); inventoryPoll = setTimeout(refreshInventory, 4000);
+  }
+}
+ui("inventory-nav")?.addEventListener("click", () => { inventoryRequest++; switchView("inventory"); renderInventory(); refreshInventory(); });
+ui("inventory-back")?.addEventListener("click", () => { inventoryRequest++; switchView("play"); ui("inventory-nav")?.focus(); });
+for (const filter of ["all", "carried", "equipped"]) ui(`inventory-${filter}`)?.addEventListener("click", () => { inventoryFilter = filter; renderInventory(); });
+ui("inventory-search")?.addEventListener("input", event => { inventoryQuery = event.target.value.trim().toLowerCase(); renderInventory(); });
 // Permanent Appearance V1 editor. Inputs show only stored campaign overrides; inherited/baseline values are notes, never prefilled,
 // so saving never copies them into the profile. Inputs are filled on open and after a committed save only (a state refresh keeps
 // unsaved edits). Empty input on a stored override = explicit clear (null); empty input without one = unchanged.
@@ -617,6 +677,12 @@ function showError(text) {
 function render(data) {
   // Save/Load v1: host mode sends `campaign` (null = start screen); the disposable playtest mode sends none.
   renderCampaign(data);
+  if ("inventory" in data || data.campaign === null) {
+    const incoming = data.campaign === null ? null : data.inventory;
+    if (incoming?.campaign_id !== inventoryData?.campaign_id) { inventoryRequest++; inventoryFilter = "all"; inventoryQuery = ""; if (ui("inventory-search")) ui("inventory-search").value = ""; }
+    inventoryData = incoming; renderInventory();
+    if (ui("inventory-nav")) ui("inventory-nav").disabled = !incoming;
+  }
   if (data.campaign === null) { clearTimeout(poll); ready = false; input.disabled = send.disabled = true; status.textContent = "Choose or create a campaign."; playerProfile = null; playerEditing = false; renderPlayer(); return; }
   currentRevision = data.revision;
   if ("player_character" in data) playerProfile = data.player_character ?? null;

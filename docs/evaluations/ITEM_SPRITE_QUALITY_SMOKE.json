@@ -1,0 +1,180 @@
+{
+  "image_calls": 5,
+  "qa_calls": 5,
+  "fallback": false,
+  "image_provider": "fal-ai",
+  "image_model": "Qwen/Qwen-Image",
+  "style": "Raelina/Raena-Qwen-Image",
+  "qa_provider": "OpenRouter",
+  "qa_model": "anthropic/claude-haiku-5.5",
+  "comparison": {
+    "current": "Anime illustration of",
+    "reduced": "Illustration of",
+    "reduced_clearly_better": false,
+    "selected": "current"
+  },
+  "items": [
+    {
+      "name": "Silver Knife",
+      "visual_description": "Small plain silver knife with a straight undecorated blade and simple dark wooden handle.",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "prompt": "Anime illustration of a clean inventory object illustration.\n\nObject:\nSilver Knife\n\nCategory:\nweapon\n\nExact appearance:\nSmall plain silver knife with a straight undecorated blade and simple dark wooden handle.\n\nInstructions:\nDepict exactly the described object. Render the object literally and conservatively as a simple isolated object study. The exact appearance description is the visual authority; object name and category are labels, not permission to add details. Preserve the stated shape, materials, colours and simplicity. If described as plain or simple, keep it plain or simple. Do not embellish.\nDo not add any visible feature unsupported by the exact appearance description. Do not add symbols, gems, engravings, ornament, magical effects, straps or cloth unless explicitly described. Do not redesign the object into a more fantasy version. Do not infer rank, ownership, culture or lore.\nSingle object only. Centered. Fully visible. Readable silhouette. No hands holding it. No person or human model; a figure explicitly forming part of the described object is allowed. No scene. No environment. No text, label or watermark. No border, frame or UI chrome. No presentation pedestal or elements around the object; a base explicitly belonging to the described object is allowed. No decorative background. No floating particles. No glow unless explicitly described. No symbols or ornament unless explicitly described.\nPlain neutral background.",
+            "negative_prompt": "text, captions, labels, letters, words, typography, watermark, UI chrome, decorative frame, border, presentation sheet, catalog layout, hands holding the object, extra person, scene, environment, extra objects, presentation pedestal, floating particles, unrequested glow, unsupported ornament, unrequested symbols, unrequested gems",
+            "width": 992,
+            "height": 992,
+            "seed": 104911
+          },
+          "debug_asset": "docs\\evaluations\\item-sprite-quality-assets\\debug_1.png",
+          "style_mode": "current",
+          "purpose": "paired_style_comparison",
+          "qa": {
+            "accepted": false,
+            "reasons": [
+              "text_leakage"
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "request": {
+            "prompt": "Illustration of a clean inventory object illustration.\n\nObject:\nSilver Knife\n\nCategory:\nweapon\n\nExact appearance:\nSmall plain silver knife with a straight undecorated blade and simple dark wooden handle.\n\nInstructions:\nDepict exactly the described object. Render the object literally and conservatively as a simple isolated object study. The exact appearance description is the visual authority; object name and category are labels, not permission to add details. Preserve the stated shape, materials, colours and simplicity. If described as plain or simple, keep it plain or simple. Do not embellish.\nDo not add any visible feature unsupported by the exact appearance description. Do not add symbols, gems, engravings, ornament, magical effects, straps or cloth unless explicitly described. Do not redesign the object into a more fantasy version. Do not infer rank, ownership, culture or lore.\nSingle object only. Centered. Fully visible. Readable silhouette. No hands holding it. No person or human model; a figure explicitly forming part of the described object is allowed. No scene. No environment. No text, label or watermark. No border, frame or UI chrome. No presentation pedestal or elements around the object; a base explicitly belonging to the described object is allowed. No decorative background. No floating particles. No glow unless explicitly described. No symbols or ornament unless explicitly described.\nPlain neutral background.",
+            "negative_prompt": "text, captions, labels, letters, words, typography, watermark, UI chrome, decorative frame, border, presentation sheet, catalog layout, hands holding the object, extra person, scene, environment, extra objects, presentation pedestal, floating particles, unrequested glow, unsupported ornament, unrequested symbols, unrequested gems",
+            "width": 992,
+            "height": 992,
+            "seed": 104911
+          },
+          "debug_asset": "docs\\evaluations\\item-sprite-quality-assets\\debug_2.png",
+          "style_mode": "reduced",
+          "purpose": "paired_style_comparison",
+          "qa": {
+            "accepted": false,
+            "reasons": [
+              "text_leakage",
+              "decorative_frame"
+            ]
+          }
+        }
+      ],
+      "id": "campaign_item_00000001",
+      "sprite": {
+        "status": "failed",
+        "error_code": "quality_rejected"
+      },
+      "gameplay_unchanged": true
+    },
+    {
+      "name": "Signet Ring",
+      "visual_description": "Simple plain silver signet ring with a flat oval face and no engraving or gemstone.",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "prompt": "Anime illustration of a clean inventory object illustration.\n\nObject:\nSignet Ring\n\nCategory:\nvaluable\n\nExact appearance:\nSimple plain silver signet ring with a flat oval face and no engraving or gemstone.\n\nInstructions:\nDepict exactly the described object. Render the object literally and conservatively as a simple isolated object study. The exact appearance description is the visual authority; object name and category are labels, not permission to add details. Preserve the stated shape, materials, colours and simplicity. If described as plain or simple, keep it plain or simple. Do not embellish.\nDo not add any visible feature unsupported by the exact appearance description. Do not add symbols, gems, engravings, ornament, magical effects, straps or cloth unless explicitly described. Do not redesign the object into a more fantasy version. Do not infer rank, ownership, culture or lore.\nSingle object only. Centered. Fully visible. Readable silhouette. No hands holding it. No person or human model; a figure explicitly forming part of the described object is allowed. No scene. No environment. No text, label or watermark. No border, frame or UI chrome. No presentation pedestal or elements around the object; a base explicitly belonging to the described object is allowed. No decorative background. No floating particles. No glow unless explicitly described. No symbols or ornament unless explicitly described.\nPlain neutral background.",
+            "negative_prompt": "text, captions, labels, letters, words, typography, watermark, UI chrome, decorative frame, border, presentation sheet, catalog layout, hands holding the object, extra person, scene, environment, extra objects, presentation pedestal, floating particles, unrequested glow, unsupported ornament, unrequested symbols, unrequested gems",
+            "width": 992,
+            "height": 992,
+            "seed": 104913
+          },
+          "debug_asset": "docs\\evaluations\\item-sprite-quality-assets\\debug_3.png",
+          "qa": {
+            "accepted": true,
+            "reasons": []
+          }
+        }
+      ],
+      "id": "campaign_item_00000002",
+      "accepted_attempt": 1,
+      "sprite": {
+        "status": "ready",
+        "asset_ref": "portrait_item_f55b99656158778a.png",
+        "generated_from_visual_description": "Simple plain silver signet ring with a flat oval face and no engraving or gemstone."
+      },
+      "gameplay_unchanged": true,
+      "final_asset": "docs\\evaluations\\item-sprite-quality-assets\\turn_fixture\\portraits\\8da9745030a430c898ddf6e5\\portrait_item_f55b99656158778a.png"
+    },
+    {
+      "name": "Sealed Letter",
+      "visual_description": "Folded off-white paper letter sealed with a small plain dark red wax seal, no visible writing.",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "prompt": "Anime illustration of a clean inventory object illustration.\n\nObject:\nSealed Letter\n\nCategory:\ndocument\n\nExact appearance:\nFolded off-white paper letter sealed with a small plain dark red wax seal, no visible writing.\n\nInstructions:\nDepict exactly the described object. Render the object literally and conservatively as a simple isolated object study. The exact appearance description is the visual authority; object name and category are labels, not permission to add details. Preserve the stated shape, materials, colours and simplicity. If described as plain or simple, keep it plain or simple. Do not embellish.\nDo not add any visible feature unsupported by the exact appearance description. Do not add symbols, gems, engravings, ornament, magical effects, straps or cloth unless explicitly described. Do not redesign the object into a more fantasy version. Do not infer rank, ownership, culture or lore.\nSingle object only. Centered. Fully visible. Readable silhouette. No hands holding it. No person or human model; a figure explicitly forming part of the described object is allowed. No scene. No environment. No text, label or watermark. No border, frame or UI chrome. No presentation pedestal or elements around the object; a base explicitly belonging to the described object is allowed. No decorative background. No floating particles. No glow unless explicitly described. No symbols or ornament unless explicitly described.\nPlain neutral background.",
+            "negative_prompt": "text, captions, labels, letters, words, typography, watermark, UI chrome, decorative frame, border, presentation sheet, catalog layout, hands holding the object, extra person, scene, environment, extra objects, presentation pedestal, floating particles, unrequested glow, unsupported ornament, unrequested symbols, unrequested gems",
+            "width": 992,
+            "height": 992,
+            "seed": 104914
+          },
+          "debug_asset": "docs\\evaluations\\item-sprite-quality-assets\\debug_4.png",
+          "qa": {
+            "accepted": true,
+            "reasons": []
+          }
+        }
+      ],
+      "id": "campaign_item_00000003",
+      "accepted_attempt": 1,
+      "sprite": {
+        "status": "ready",
+        "asset_ref": "portrait_item_d932c3bdaf055271.png",
+        "generated_from_visual_description": "Folded off-white paper letter sealed with a small plain dark red wax seal, no visible writing."
+      },
+      "gameplay_unchanged": true,
+      "final_asset": "docs\\evaluations\\item-sprite-quality-assets\\turn_fixture\\portraits\\648231d89146f281e0b1c841\\portrait_item_d932c3bdaf055271.png"
+    },
+    {
+      "name": "Simple Key",
+      "visual_description": "Small plain dark iron key with a simple rectangular bow and worn teeth, no engraving.",
+      "attempts": [
+        {
+          "number": 1,
+          "request": {
+            "prompt": "Anime illustration of a clean inventory object illustration.\n\nObject:\nSimple Key\n\nCategory:\ntool\n\nExact appearance:\nSmall plain dark iron key with a simple rectangular bow and worn teeth, no engraving.\n\nInstructions:\nDepict exactly the described object. Render the object literally and conservatively as a simple isolated object study. The exact appearance description is the visual authority; object name and category are labels, not permission to add details. Preserve the stated shape, materials, colours and simplicity. If described as plain or simple, keep it plain or simple. Do not embellish.\nDo not add any visible feature unsupported by the exact appearance description. Do not add symbols, gems, engravings, ornament, magical effects, straps or cloth unless explicitly described. Do not redesign the object into a more fantasy version. Do not infer rank, ownership, culture or lore.\nSingle object only. Centered. Fully visible. Readable silhouette. No hands holding it. No person or human model; a figure explicitly forming part of the described object is allowed. No scene. No environment. No text, label or watermark. No border, frame or UI chrome. No presentation pedestal or elements around the object; a base explicitly belonging to the described object is allowed. No decorative background. No floating particles. No glow unless explicitly described. No symbols or ornament unless explicitly described.\nPlain neutral background.",
+            "negative_prompt": "text, captions, labels, letters, words, typography, watermark, UI chrome, decorative frame, border, presentation sheet, catalog layout, hands holding the object, extra person, scene, environment, extra objects, presentation pedestal, floating particles, unrequested glow, unsupported ornament, unrequested symbols, unrequested gems",
+            "width": 992,
+            "height": 992,
+            "seed": 104915
+          },
+          "debug_asset": "docs\\evaluations\\item-sprite-quality-assets\\debug_5.png",
+          "qa": {
+            "accepted": true,
+            "reasons": []
+          }
+        }
+      ],
+      "id": "campaign_item_00000004",
+      "accepted_attempt": 1,
+      "sprite": {
+        "status": "ready",
+        "asset_ref": "portrait_item_5a9c64f9d75c9429.png",
+        "generated_from_visual_description": "Small plain dark iron key with a simple rectangular bow and worn teeth, no engraving."
+      },
+      "gameplay_unchanged": true,
+      "final_asset": "docs\\evaluations\\item-sprite-quality-assets\\turn_fixture\\portraits\\c6a06d314d37356391094967\\portrait_item_5a9c64f9d75c9429.png"
+    }
+  ],
+  "hf_credential_present": true,
+  "qa_credential_present": true,
+  "authentication": {
+    "valid": true,
+    "status": 200
+  },
+  "manual_inspection": {
+    "accepted_images_inspected": 3,
+    "obvious_labels_or_captions": false,
+    "decorative_frames": false,
+    "major_visual_contradictions": false,
+    "minor_fidelity_note": "Small wax-seal flourish on letter; tolerated by practical policy."
+  },
+  "success_threshold": {
+    "ready": 3,
+    "total": 4,
+    "met": true,
+    "gameplay_unchanged": true,
+    "live_strict_regeneration_exercised": false
+  },
+  "provider_migration_recommendation": "MAYBE"
+}

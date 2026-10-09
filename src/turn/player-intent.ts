@@ -46,7 +46,7 @@ export function playerIntent(input: string, context: TurnContext, snapshot: Deep
   const people = context.characters.map(c => ({ id: c.id, name: c.profile.name }));
   const transfer = resolveTransferIntent(input, context);
   if (transfer) return {
-    candidates: transfer.recipient && transfer.items ? transfer.items.ids.map(item_id => ({ kind: "transfer_item", item_id, owner_id: transfer.recipient!.ids[0]!, position: { kind: "carried", character_id: transfer.recipient!.ids[0]! } })) : [], runtime,
+    candidates: transfer.recipient && transfer.items ? transfer.items.ids.map(item_id => ({ kind: "transfer_item", mode: transfer.mode === "gift" && snapshot.items.find(i => i.id === item_id)?.owner_id === "nicco" ? "gift" : "handoff", item_id,  position: { kind: "carried", character_id: transfer.recipient!.ids[0]! } })) : [], runtime,
     resolved_references: [transfer.recipient, transfer.items].filter((r): r is ResolvedReference => !!r), ambiguous_reference: transfer.unresolved,
   };
   let m: RegExpMatchArray | null;

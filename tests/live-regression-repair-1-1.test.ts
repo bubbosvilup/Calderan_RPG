@@ -29,7 +29,7 @@ function scene(npc: string, extra: readonly CampaignCommand[]) {
   campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "runtime_delta", delta: { character_movements: [{ character_id: npc, current_location: "heartstone_square" }] } }, ...extra] });
   return campaign;
 }
-const inbound: CampaignCommand = { kind: "transfer_item", item_id: BOOTS, owner_id: "nicco", position: { kind: "carried", character_id: "nicco" } };
+const inbound: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: BOOTS,  position: { kind: "carried", character_id: "nicco" } };
 const contextOf = (c: CampaignState) => buildTurnContext(world, c.exportSnapshot());
 const verify = (c: CampaignState, narration: string, quote: string) => verifyEvidence(inbound, quote, narration, contextOf(c), [inbound]);
 const grammar = (c: CampaignState, input: string, narration: string) => deriveTurnEvidence(playerIntent(input, contextOf(c), c.exportSnapshot(), world), narration, contextOf(c));

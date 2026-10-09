@@ -4,6 +4,7 @@ import { ContextBudgetManager } from "../turn/context-budget.js";
 import { OpenRouterLosslessCompressor } from "../llm/openrouter/lossless-compressor.js";
 import { DEFAULT_CONTEXT_POLICY, type ContextPolicy } from "../turn/context-budget.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
+import { OpenRouterSpriteQualityReviewer } from "../llm/openrouter/sprite-quality-reviewer.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { OpenRouterReflectionProvider, DEFAULT_REFLECTION_MODEL } from "../llm/openrouter/reflection-provider.js";
 import { OpenRouterMannerismExtractor } from "../llm/openrouter/mannerism-extractor.js";
@@ -91,6 +92,7 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
     ...(persistent ? { autosave: {} } : {}), ...(typeof engine_version === "string" && /^[0-9A-Za-z.+_-]{1,40}$/.test(engine_version) ? { engine_version } : {}),
     // Image generation v1: the Raena stack via the Hugging Face router (fal-ai pinned, HF_TOKEN read per request); portrait files live
     // inside each campaign folder (persistent mode) or beside the saves (legacy), never inside a save file. Diagnostics carry a code, HTTP status and retry kind only (never bodies, prompts or tokens).
+    item_sprite_reviewer: new OpenRouterSpriteQualityReviewer(),
     portrait_generator: new FalImageClient(RAENA_IMAGE_STACK, { api_key: () => process.env.HF_TOKEN }), portrait_stack: RAENA_IMAGE_STACK, portrait_store: persistent ? new PortraitAssetStore(campaignsRoot, { layout: "campaign" }) : new PortraitAssetStore(join(saveDir, "portraits")),
     portrait_log: entry => console.warn(`[portrait] generation failed: ${entry.code}${entry.status ? ` (HTTP ${entry.status})` : ""}${entry.recovery ? `; retrying once (${entry.recovery === "reseed" ? "new seed" : "same seed"})` : ""}`),
     ...(options.enable_emergent_mannerisms !== false ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),

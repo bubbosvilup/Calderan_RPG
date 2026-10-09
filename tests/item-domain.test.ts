@@ -8,7 +8,7 @@ import { ENGINE_ITEM_ID, formatItemId } from "../src/campaign/items.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { authorizeCommands } from "../src/turn/command-authorizer.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
-import { narratorCarriedLines, narratorItemView } from "../src/turn/item-projection.js";
+import { inventoryLines, narratorItemView } from "../src/turn/item-projection.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
@@ -23,7 +23,7 @@ import { collect, metadata } from "./turn-fixtures.js";
  * discriminated position, atomic allocation, save/load + migration, controller materialization through evidence authorization.
  */
 const create = (fields: Partial<Extract<CampaignCommand, { kind: "create_item" }>> = {}): CampaignCommand =>
-  ({ kind: "create_item", name: "Silver knife", position: { kind: "carried", character_id: "nicco" }, ...fields }) as CampaignCommand;
+  ({ kind: "create_item", name: "Silver knife", description: "A silver knife.", visual_description: "Small plain silver knife with a straight blade.", position: { kind: "carried", character_id: "nicco" }, ...fields }) as CampaignCommand;
 const apply = (c: CampaignState, ...commands: CampaignCommand[]) => c.apply({ expected_revision: c.revision, commands });
 const engineItems = (c: CampaignState) => c.exportSnapshot().items.filter(i => ENGINE_ITEM_ID.test(i.id));
 const frozen = (c: CampaignState) => JSON.stringify(c.exportSnapshot());
@@ -38,7 +38,7 @@ test("C/D/L: the engine allocates sequential IDs; the proposal cannot name one; 
   assert.deepEqual([a!.id, b!.id], ["campaign_item_00000001", "campaign_item_00000002"]); assert.equal(formatItemId(41), "campaign_item_00000041");
   assert.equal(campaign.exportSnapshot().next_item_sequence, 3);
   assert.deepEqual([a!.created_revision, b!.created_revision], [r0 + 1, r0 + 2]);
-  assert.deepEqual(a, { id: "campaign_item_00000001", origin: { kind: "created" }, name: "Silver knife", position: { kind: "carried", character_id: "nicco" }, created_revision: r0 + 1 });
+  assert.deepEqual(a, { id: "campaign_item_00000001", origin: { kind: "created" }, name: "Silver knife", description: "A silver knife.", visual_description: "Small plain silver knife with a straight blade.", position: { kind: "carried", character_id: "nicco" }, created_revision: r0 + 1 });
   assert.equal(Object.hasOwn(a!, "owner_id"), false, "unknown ownership is omitted, never guessed");
   // C: there is no id field in the command vocabulary, so a proposer cannot choose the ID (unknown key) ...
   assert.throws(() => parseCampaignProposal({ expected_revision: 0, commands: [{ ...create(), id: "campaign_item_00000099" }] }));
@@ -123,7 +123,7 @@ test("M/N: the controller sees stable item IDs for relevant items; the narrator 
   const view = narratorItemView(context.items.find(i => i.id === "campaign_item_00000001")!);
   assert.equal("id" in view, false); assert.equal("created_revision" in view, false); assert.equal(view.name, "Ivory figurine");
   assert.equal("id" in narratorItemView(context.items.find(i => i.id === "boots")!), true, "authored/legacy item IDs render unchanged");
-  assert.deepEqual(narratorCarriedLines(campaign.exportSnapshot().items, "nicco", id => id === "brenna" ? "Brenna" : id).filter(l => /figurine/.test(l)), ["Ivory figurine (owned by Brenna)"]);
+  assert.deepEqual(inventoryLines(campaign.exportSnapshot(), world, "nicco", id => id === "brenna" ? "Brenna" : id).filter(l => /figurine/.test(l)), ["Ivory figurine (owned by Brenna)"]);
   const fresh = turnFixture();
   assert.equal(buildTurnContext(fresh.world, fresh.campaign.exportSnapshot()).items_here, undefined, "no items here: context unchanged");
 });
@@ -221,8 +221,8 @@ test("OWNER ≠ PRESENCE A-G: ownership resolves to a known character, present o
 });
 
 test("controller contract: create_item is in the schema without an ID field; policy states the materialization rule", () => {
-  const parsed = parseControllerProposal(JSON.stringify({ commands: [{ kind: "create_item", name: "Rusted sword", description: "An abandoned rusted sword.", category: "weapon", position: { kind: "carried", character_id: "nicco" } }] }));
-  assert.deepEqual(parsed, [{ kind: "create_item", name: "Rusted sword", description: "An abandoned rusted sword.", category: "weapon", position: { kind: "carried", character_id: "nicco" } }]);
+  const parsed = parseControllerProposal(JSON.stringify({ commands: [{ kind: "create_item", name: "Rusted sword", description: "An abandoned rusted sword.", visual_description: "A plain rusted iron sword.", category: "weapon", position: { kind: "carried", character_id: "nicco" } }] }));
+  assert.deepEqual(parsed, [{ kind: "create_item", name: "Rusted sword", description: "An abandoned rusted sword.", visual_description: "A plain rusted iron sword.", category: "weapon", position: { kind: "carried", character_id: "nicco" } }]);
   assert.throws(() => parseControllerProposal(JSON.stringify({ commands: [{ kind: "create_item", name: "x", description: "d", category: "gizmo", position: { kind: "carried", character_id: "nicco" } }] })));
   assert.match(CONTROLLER_POLICY, /Materialize an object with create_item only when/); assert.match(CONTROLLER_POLICY, /Never materialize incidental scene dressing/);
   assert.match(CONTROLLER_POLICY, /Never supply an item ID/);

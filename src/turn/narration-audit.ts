@@ -1,3 +1,4 @@
+import { transferRecipient } from "../campaign/item-transfer.js";
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
@@ -168,7 +169,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
   const itemName = (id: string) => context.items.find(i => i.id === id)?.name ?? id;
   const holder = (id: string) => { const i = prepared.items.find(x => x.id === id); return i && (i.position.kind === "carried" || i.position.kind === "equipped") ? i.position.character_id : undefined; };
-  const isCommitted = (c: CampaignCommand) => committed.some(x => isDeepStrictEqual(x.kind === "transfer_item" ? { ...x, acquisition: undefined } : x, c.kind === "transfer_item" ? { ...c, acquisition: undefined } : c) || x.kind === "transfer_item" && c.kind === "transfer_item" && x.item_id === c.item_id && x.owner_id === c.owner_id);
+  const isCommitted = (c: CampaignCommand) => committed.some(x => isDeepStrictEqual(x.kind === "transfer_item" ? { ...x, acquisition: undefined } : x, c.kind === "transfer_item" ? { ...c, acquisition: undefined } : c) || x.kind === "transfer_item" && c.kind === "transfer_item" && x.item_id === c.item_id && transferRecipient(x) === transferRecipient(c));
 
   // 1. Durable transfers: narration must not confirm a transfer that did not commit, nor refuse one that did.
   // Beyond intents and proposals, every possible handover between present people is checked (an NPC offer, or a gift narrated
@@ -176,13 +177,13 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const present = context.characters.filter(c => c.id !== "nicco").map(c => c.id);
   const possible: CampaignCommand[] = context.items.flatMap(it => {
     const h = it.position.kind === "carried" || it.position.kind === "equipped" ? it.position.character_id : undefined;
-    if (h === "nicco") return present.map(to => ({ kind: "transfer_item" as const, item_id: it.id, owner_id: to, position: { kind: "carried" as const, character_id: to } }));
-    return h && it.owner_id === h ? [{ kind: "transfer_item" as const, item_id: it.id, owner_id: "nicco", position: { kind: "carried" as const, character_id: "nicco" } }] : [];
+    if (h === "nicco") return present.map(to => ({ kind: "transfer_item" as const, mode: "handoff" as const, item_id: it.id,  position: { kind: "carried" as const, character_id: to } }));
+    return h ? [{ kind: "transfer_item" as const, mode: "handoff" as const, item_id: it.id,  position: { kind: "carried" as const, character_id: "nicco" } }] : [];
   });
   const transfers = [...evidence.player_intents.map((c, i) => ({ c, i })), ...diagnostics.filter(d => !d.authorized).map(d => ({ c: d.command, i: -1, d })), ...possible.map(c => ({ c, i: -2 }))].filter(x => x.c.kind === "transfer_item");
   const seen = new Set<string>();
   for (const { c, i, d } of transfers as { c: Extract<CampaignCommand, { kind: "transfer_item" }>; i: number; d?: AuthorizationDiagnostic }[]) {
-    const key = `${c.item_id}>${c.owner_id}`; if (seen.has(key)) continue; seen.add(key);
+    const key = `${c.item_id}>${transferRecipient(c)}`; if (seen.has(key)) continue; seen.add(key);
     const confirmation = i >= 0 ? evidence.narrator_confirmations.find(x => x.command_indexes.includes(i)) : undefined;
     // Any narration span that the evidence verifier would accept as a handover/receipt counts as an assertion.
     const spans = sentences.flatMap(s => s.length <= 240 ? [s] : s.split(/(?<=[,;:])\s+/));
@@ -190,10 +191,10 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     const verified = isCommitted(c) ? undefined : spans.find(s => verifyEvidence(c, s, narration, context, intents).verified);
     const assertedBy = confirmation?.source_sentence ?? verified ?? (d?.evidence?.verified && narration.includes(d.evidence.quote ?? "\u0000") ? d.evidence.quote ?? undefined : undefined);
     const now = holder(c.item_id);
-    if (!isCommitted(c) && assertedBy) issues.push({ kind: "asserts_uncommitted_transfer", item_id: c.item_id, sentence: sentenceWith(assertedBy), correction: `${itemName(c.item_id)} did NOT change hands: it stays with ${now ? name(now) : "its holder"}. ${c.owner_id === "nicco" ? "Nicco does not receive it" : `${name(c.owner_id!)} does not take or keep it`}; narrate the moment without the handover completing.` });
+    if (!isCommitted(c) && assertedBy) issues.push({ kind: "asserts_uncommitted_transfer", item_id: c.item_id, sentence: sentenceWith(assertedBy), correction: `${itemName(c.item_id)} did NOT change hands: it stays with ${now ? name(now) : "its holder"}. ${transferRecipient(c) === "nicco" ? "Nicco does not receive it" : `${name(transferRecipient(c)!)} does not take or keep it`}; narrate the moment without the handover completing.` });
     if (isCommitted(c) && i >= 0) {
       const refusal = evidence.narrator_refusals.find(r => r.command_indexes.includes(i));
-      if (refusal) issues.push({ kind: "contradicts_committed_transfer", sentence: sentenceWith(refusal.source_sentence), correction: `${itemName(c.item_id)} DID change hands: ${name(c.owner_id!)} now carries it. Do not narrate it being refused, kept back or returned.` });
+      if (refusal) issues.push({ kind: "contradicts_committed_transfer", sentence: sentenceWith(refusal.source_sentence), correction: `${itemName(c.item_id)} DID change hands: ${name(transferRecipient(c)!)} now carries it. Do not narrate it being refused, kept back or returned.` });
     }
   }
 
@@ -389,7 +390,7 @@ export function outcomeLines(context: TurnContext, evidence: TurnEvidence, diagn
   const authored = player_input === undefined ? [] : playerAuthoredEvents(player_input, context).filter(e => !e.negated);
   for (const quote of new Set(authored.map(e => e.evidence_quote))) revision.push(`PLAYER-AUTHORED (happened exactly as written; keep it, neither soften nor escalate it): "${quote}"`);
   for (const c of committed) {
-    if (c.kind === "transfer_item") { seen.add(c.item_id); revision.push(`COMMITTED: ${name(c.owner_id!)} now owns and carries ${itemName(c.item_id)}.`); }
+    if (c.kind === "transfer_item") { seen.add(c.item_id); revision.push(`COMMITTED: ${name(transferRecipient(c)!)} now carries ${itemName(c.item_id)}; ownership ${c.mode === "gift" ? "passes to the recipient" : "is unchanged"}.`); }
     if (c.kind === "set_condition") revision.push(`RECORDED: ${name(c.character_id)} has ${c.conditions.join(", ").replace(/_/g, " ")}.`);
     if (c.kind === "leave_scene") revision.push(`COMMITTED: ${name(c.character_id)} has left the scene and is no longer present.`);
     // Pass 10: the draft's narrated follow/move was authorized and commits; a revision that does not know it can drop it (state moved, narration silent).
@@ -534,7 +535,7 @@ function premiseIssues(input: NarrationAuditInput, sentences: readonly string[])
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
   const notNiccos = context.items.filter(i => { const pre = holderOf(i), post = prepared.items.find(x => x.id === i.id); return pre && pre !== "nicco" && (!post || holderOf(post) !== "nicco"); });
   const niccoHolds = context.items.filter(i => holderOf(i) === "nicco");
-  const giveBack = /\b(?:back|return\w*)\b/i.test(input.player_input ?? "") && !evidence.player_intents.some(c => c.kind === "transfer_item" && c.owner_id !== "nicco");
+  const giveBack = /\b(?:back|return\w*)\b/i.test(input.player_input ?? "") && !evidence.player_intents.some(c => c.kind === "transfer_item" && transferRecipient(c) !== "nicco");
   for (const it of notNiccos) {
     const terms = itemTerms(it, context.items);
     if (niccoHolds.some(n => new RegExp(`\\b(?:${terms})\\b`, "i").test(`${n.name ?? n.id}`))) continue; // Nicco has his own such item
@@ -587,7 +588,7 @@ function agencyIssues(input: NarrationAuditInput, sentences: readonly string[]):
   // 2. Unauthored decisions or acts in Nicco-led sentences.
   const terms = context.items.map(i => itemTerms(i, context.items)).join("|") || "(?!)";
   const object = `(?:\\s+[\\w']+){0,3}?\\s+(?:the\\s+)?(?:${terms}|them|it|gift|offer)\\b`;
-  const inbound = evidence.player_intents.some(c => c.kind === "transfer_item" && c.owner_id === "nicco");
+  const inbound = evidence.player_intents.some(c => c.kind === "transfer_item" && transferRecipient(c) === "nicco");
   const families: readonly (readonly [string, RegExp, boolean])[] = [
     ["accept the gift", new RegExp(`\\b(?:accepts?|accepted|takes?|took|receives?|received|pockets?|pocketed)${object}`, "i"), inbound || /\b(?:accept\w*|takes?|took|receiv\w*|pocket\w*)\b/.test(said)],
     ["refuse or decline", /\b(?:refus\w*|declin\w*|reject\w*)\b|\b(?:pushes|pushed|hands|handed|gives|gave)\b(?:\s+[\w']+){0,3}?\s+back\b/i, /\b(?:refus\w*|declin\w*|reject\w*|back|return\w*|no thanks|keep them|keep it|more than me)\b/.test(said)],

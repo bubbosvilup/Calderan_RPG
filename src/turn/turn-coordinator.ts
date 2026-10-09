@@ -24,6 +24,7 @@ import { backgroundGroundingOption } from "./background-grounding.js";
 import { projectTurnIntent, resolveTurnIntent, type IntentStageInput } from "./stages/intent.js";
 import { composeTurnPrompt, createDraftGenerator } from "./stages/narration.js";
 import { requestControllerProposal } from "./stages/controller.js";
+import { referencedCharacters } from "./referenced-characters.js";
 import { assembleTurnCommands, authorizeTurn } from "./stages/authorization.js";
 import { createNarrationAuditor, deliverDraft, reconcileNarration } from "./stages/audit.js";
 import { prepareCommit } from "./stages/commit-preparation.js";
@@ -142,7 +143,7 @@ export class TurnCoordinator {
       // ControllerStage: a PROPOSAL only — not authorization, not state, not truth.
       checkpoint(); stage = "controller_failed";
       const proposed = await measureAsync("controller", () => requestControllerProposal({ controller: this.controller, signal: network.signal, base_revision, context, intent, movable, projected, player_input, draft,
-        retry: { technical_contract:!!this.promptOptions.reliability_contract,policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
+        referenced: referencedCharacters(this.world, projected, context.characters.map(c => c.id), player_input, draft), retry: { technical_contract:!!this.promptOptions.reliability_contract,policy: retryPolicy, budget, checkpoint, record: attempts("controller") } }), true);
       if (observer) observer.record.controller = { ...controllerModelDiagnostics(proposed.result), usage: proposed.result.usage, latency_ms: proposed.result.latency.elapsed_total_ms,
         parse_success: false, proposed_count: proposed.result.commands.length, command_kinds: proposed.result.commands.map(c => c.kind), normalization_used: !!proposed.result.normalization };
       checkpoint();

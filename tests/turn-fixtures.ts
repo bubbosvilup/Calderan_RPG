@@ -7,7 +7,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 export const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 2, completed_at: "2026-01-01T00:00:01Z", elapsed_total_ms: 3 } };
-export const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+export const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
 export function mockNarrator(text: string, inspect?: (request: GenerationRequest) => void): NarratorProvider {
   return { async generate(request) { inspect?.(request); return { text, ...metadata }; }, async *stream(request) { inspect?.(request); yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } }; } };
 }

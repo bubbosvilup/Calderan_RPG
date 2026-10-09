@@ -72,14 +72,24 @@ export interface ItemAcquisition {
 }
 /** Item Domain V1: broad, optional, descriptive only (no gameplay effect yet). */
 export type ItemCategory = "weapon" | "armor" | "clothing" | "tool" | "consumable" | "document" | "valuable" | "material" | "miscellaneous";
+export type ItemTransferMode = "gift" | "handoff" | "lend" | "return" | "steal" | "reclaim" | "take";
 export interface CampaignItem {
   id: string; origin: CampaignOrigin; name?: string; description?: string;
+  /** Stable internal appearance identity; absent on legacy/authored items. */
+  visual_description?: string;
+  sprite?: ItemSprite;
   /** Omission: unknown. null: explicitly unowned. Independent of position. */
   owner_id?: string | null; position: ItemPosition; acquisition?: ItemAcquisition;
   category?: ItemCategory;
   /** Item Domain V1: set only on engine-materialized items (create_item); the revision that created them. */
   created_revision?: number;
 }
+/** Non-authoritative media enrichment. Bytes live in the existing campaign asset store. */
+export type ItemSprite =
+  | { status: "none" }
+  | { status: "pending" }
+  | { status: "failed"; error_code: string }
+  | { status: "ready"; asset_ref: string; generated_from_visual_description: string };
 export interface HouseholdMembership { character_id: string; status: "guest" | "member" | "former_member"; joined_at?: number; role?: string }
 /** Household Pass 1: a campaign-authored household rule. Runtime fact, never authored canon. */
 export interface HouseholdRule { id: string; text: string; created_revision: number; active: boolean }
@@ -309,9 +319,12 @@ export type CampaignCommand =
    * Item Domain V1: materialize a persistent item instance. The proposer supplies data only; the engine allocates the ID
    * (campaign_item_NNNNNNNN from next_item_sequence) during atomic preparation. V1 positions: carried by a character or lying at a location.
    */
-  | { kind: "create_item"; name: string; description?: string; category?: ItemCategory; owner_id?: string | null; position: ItemPosition }
+  | { kind: "create_item"; name: string; description: string; visual_description: string; category?: ItemCategory; owner_id?: string | null; position: ItemPosition }
+  /** Application-only visual enrichment; deliberately absent from Controller vocabulary. */
+  | { kind: "enrich_item_visual"; item_id: string; visual_description: string }
+  | { kind: "set_item_sprite"; item_id: string; sprite: ItemSprite }
   | { kind: "place_item"; item_id: string; position: ItemPosition }
-  | { kind: "transfer_item"; item_id: string; owner_id: string | null; position: ItemPosition; acquisition?: ItemAcquisition }
+  | { kind: "transfer_item"; item_id: string; mode: ItemTransferMode; position: ItemPosition; acquisition?: ItemAcquisition }
   | { kind: "create_household"; id: string; name?: string }
   | { kind: "set_membership"; household_id: string; membership: HouseholdMembership }
   | { kind: "create_fact"; fact: CampaignFact }

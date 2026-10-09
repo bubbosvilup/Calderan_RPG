@@ -36,6 +36,7 @@ export function projectNarratorFocus(context: TurnContext, input: string, recent
     if (command.kind === "schedule_event") for (const id of command.participants ?? []) foreground.add(id);
     if (command.kind === "runtime_delta") for (const m of command.delta.character_movements ?? []) foreground.add(m.character_id);
     if (command.kind === "transfer_item") {
+      if (command.position.kind === "carried" || command.position.kind === "equipped") foreground.add(command.position.character_id);
       const item = context.items.find(i => i.id === command.item_id);
       if (item && (item.position.kind === "carried" || item.position.kind === "equipped")) foreground.add(item.position.character_id);
     }

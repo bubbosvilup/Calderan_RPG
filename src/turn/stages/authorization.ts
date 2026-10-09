@@ -1,3 +1,4 @@
+import { transferRecipient } from "../../campaign/item-transfer.js";
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
@@ -99,7 +100,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
     if (i.controller.normalization) sink({ kind: "controller_normalized", ...base, normalization: i.controller.normalization });
     const spans = sentencesOf(i.draft).flatMap(s => s.length <= 240 ? [s] : s.split(/(?<=[,;:])\s+/));
     i.intent.candidates.forEach((candidate, index) => {
-      const proposed = proposal.some(p => isDeepStrictEqual(p, candidate) || p.kind === "transfer_item" && candidate.kind === "transfer_item" && p.item_id === candidate.item_id && p.owner_id === candidate.owner_id);
+      const proposed = proposal.some(p => isDeepStrictEqual(p, candidate) || p.kind === "transfer_item" && candidate.kind === "transfer_item" && p.item_id === candidate.item_id && transferRecipient(p) === transferRecipient(candidate));
       if (proposed) return;
       const evidenceSentence = turn_evidence.narrator_confirmations.find(c => c.command_indexes.includes(index))?.source_sentence ?? spans.find(s => verifyEvidence(candidate, s, i.draft, i.context, turn_evidence.player_intents).verified);
       if (evidenceSentence) sink({ kind: "controller_omission_candidate", ...base, candidate, evidence: evidenceSentence, proposal_size: proposal.length });
@@ -120,7 +121,7 @@ export function assembleTurnCommands(i: { readonly diagnostics: readonly Authori
   const minute = i.projected.runtime.scene.world_time.world_minute;
   const authorized = i.diagnostics.filter(d => d.authorized).map(d => {
     const c = d.command;
-    if (c.kind !== "transfer_item" || c.owner_id !== "nicco" || c.acquisition) return c;
+    if (c.kind !== "transfer_item" || c.mode !== "gift" || transferRecipient(c) !== "nicco" || c.acquisition) return c;
     const item = i.projected.items.find(it => it.id === c.item_id);
     const from = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? item.position.character_id : undefined;
     return from ? { ...c, acquisition: { acquisition_kind: "gift" as const, from_character_id: from, acquired_at: minute } } : c;

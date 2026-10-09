@@ -1,3 +1,4 @@
+import { transferRecipient } from "../campaign/item-transfer.js";
 import type { CharacterMovement } from "./character-movement.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import { freezeSnapshot } from "../campaign/validation.js";
@@ -74,7 +75,7 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
   const names = (id: string) => [...new Set([id, context.characters.find(c => c.id === id)?.profile.name].filter((x): x is string => !!x).map(clean))];
   const mention = (sentence: string, id: string) => names(id).some(n => new RegExp(`(?:^|\\W)${escape(n)}(?:$|\\W)`, "i").test(sentence));
   const leads = (sentence: string, id: string) => names(id).some(n => clean(sentence).startsWith(`${n} `) || clean(sentence).startsWith(`${n}, `));
-  const recipientFor = (c: CampaignCommand): string | undefined => c.kind === "transfer_item" ? c.owner_id ?? undefined : c.kind === "place_item" && c.position.kind === "equipped" ? c.position.character_id : c.kind === "set_knowledge" ? c.knowledge.character_id : undefined;
+  const recipientFor = (c: CampaignCommand): string | undefined => c.kind === "transfer_item" ? transferRecipient(c) ?? undefined : c.kind === "place_item" && c.position.kind === "equipped" ? c.position.character_id : c.kind === "set_knowledge" ? c.knowledge.character_id : undefined;
   // "her worn boots" names an item a present NPC already owns (state ownership), not some other offered/unoffered item.
   const ownedNouns = new Set(context.items.filter(i => i.owner_id !== "nicco" && people.some(p => p.id === i.owner_id)).map(i => clean(i.name ?? i.id).split(" ").at(-1)!));
   const withoutOwnPossessions = (s: string) => s.replace(/\b(?:her|his) (?:(?:own|old|worn|battered|cracked) )*(\w+)\b/g, (m, noun: string) => ownedNouns.has(noun) ? " " : m);
@@ -105,7 +106,7 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
   };
   // Repair 1 inbound gifts (present character → Nicco). The giver's handover or Nicco's receipt confirms; the giver keeping,
   // withholding or refusing vetoes. Kept separate from the outbound grammar, whose actor is always the recipient NPC.
-  const inboundIndexes = intent.candidates.flatMap((c, i) => c.kind === "transfer_item" && c.owner_id === "nicco" ? [i] : []);
+  const inboundIndexes = intent.candidates.flatMap((c, i) => c.kind === "transfer_item" && transferRecipient(c) === "nicco" ? [i] : []);
   const holderOf = (id: string) => { const it = item(id); return it && (it.position.kind === "carried" || it.position.kind === "equipped") ? it.position.character_id : undefined; };
   // Repair 1.1: head noun or a category word unique to this item in the scene ("footwear" for the only pair of boots).
   const terms = (id: string) => { const it = item(id); return it ? itemTerms(it, context.items) : escape(clean(id)); };
@@ -140,7 +141,9 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     if (context.items.some(i => !offeredIds.includes(i.id) && [i.id, i.name].some(n => n && new RegExp(`\\b${escape(clean(n))}\\b`).test(distraction)))) groupDistracted = true;
     const refusing = refusal.test(sentence.replace(notRefusal, " ").replace(idiom, " ")) && !(temporalHedge.test(sentence) && !/\b(refus\w*|declin\w*|reject\w*|back)\b/i.test(sentence.replace(notRefusal, " ")));
     // "does not put anything on" after receipt is the requested carried-not-equipped narration, not doubt about the transfer.
-    const hedged = !refusing && uncertain.test(sentence.replace(notRefusal, " ").replace(idiom, " ").replace(equipIntent ? /$^/ : notEquipping, " ").replace(priorIgnorance, " "));
+    const ownershipPreserved = intent.candidates.some(c => c.kind === "transfer_item") && intent.candidates.filter(c => c.kind === "transfer_item").every(c => c.mode !== "gift");
+    const hedgeSentence = ownershipPreserved ? sentence.replace(/\bownership (?:is |remains? )?unchanged\b/gi, " ") : sentence;
+    const hedged = !refusing && uncertain.test(hedgeSentence.replace(notRefusal, " ").replace(idiom, " ").replace(equipIntent ? /$^/ : notEquipping, " ").replace(priorIgnorance, " "));
     // Veto-only pronoun fallback (Phase 1O): "Nicco tells Brenna X. She does not hear him." A leading she/he may resolve to the
     // single character named in the previous sentence, but only to attach refusals/doubt, never confirmations.
     const vetoActor = actor ?? (subject && /^(she|he)$/i.test(subject[1]!) ? previousMentioned : undefined);

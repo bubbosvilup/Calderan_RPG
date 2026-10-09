@@ -247,29 +247,29 @@
         {
           "kind": "transfer_item",
           "item_id": "pink_cotton",
-          "owner_id": "brenna",
           "position": {
             "kind": "carried",
             "character_id": "brenna"
-          }
+          },
+          "mode": "handoff"
         },
         {
           "kind": "transfer_item",
           "item_id": "pink_fluffy",
-          "owner_id": "brenna",
           "position": {
             "kind": "carried",
             "character_id": "brenna"
-          }
+          },
+          "mode": "handoff"
         },
         {
           "kind": "transfer_item",
           "item_id": "pink_shorts",
-          "owner_id": "brenna",
           "position": {
             "kind": "carried",
             "character_id": "brenna"
-          }
+          },
+          "mode": "handoff"
         }
       ],
       "review_status": "agent_authored_pending_human_review",

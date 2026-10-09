@@ -1,3 +1,4 @@
+import { EXPLICIT_GIFT, itemHolder, transferRecipient } from "../campaign/item-transfer.js";
 import type { EvidenceCheck } from "./evidence-check.js";
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
@@ -7,7 +8,7 @@ import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
 import type { TurnContext } from "./context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
-import { authorizeCommands } from "./command-authorizer.js";
+import { authorizeCommands, isLocationPlacement } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
 import { narratedDepartures } from "./scene-departure.js";
@@ -31,7 +32,7 @@ const HONORIFIC = new Set(["lord", "lady", "sir", "dame", "duke", "duchess", "ma
 // Repair 1: a bare "back" no longer disqualifies ("takes the boots back", "accepts them back" are receipts). Retreats, handing an
 // item back, instructions to someone else ("tells him to take them") and "instead" still do.
 const DISQUALIFY = GATES.disqualify;
-const RECEIPT = "takes?|took|taking|accepts?|accepted|accepting|receives?|received|receiving|gathers?|gathered|gathering|collects?|collected|collecting|picks? up|picked up|picking up|snatches?|snatched";
+const RECEIPT = "takes?|took|taking|accepts?|accepted|accepting|receives?|received|receiving|gathers?|gathered|gathering|collects?|collected|collecting|picks? up|picked up|picking up|snatches?|snatched|steals?|stole|stolen|filches?|filched|reclaims?|reclaimed";
 const COMMUNICATE = "tells?|told|telling|says?|said|saying|informs?|informed|informing|explains?|explained|explaining|states?|stated|stating|mentions?|mentioned|speaks?|spoke|speaking|reports?|reported|adds|added|replies|replied";
 const STOP = new Set(["the", "a", "an", "is", "are", "was", "were", "of", "to", "and", "in", "on", "at", "it", "its", "that", "this", "has", "have", "been", "be"]);
 const words = (s: string) => s.toLowerCase().replace(/[^a-z0-9\s']/g, " ").split(/\s+/).filter(w => w && !STOP.has(w));
@@ -71,7 +72,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   const sentenceText = blankQuotes(narration.slice(sStart, sEnd)).replace(/\b(?:does not|doesn't|did not|didn't|never|not)\s+(?:quite\s+|fully\s+|ever\s+)?reach(?:es|ed)?\s+(?:her|his|their|the)\s+eyes\b/gi, " ");
   const negatedSentence = DISQUALIFY.test(sentenceText);
   // Inbound receipts scope negation to their own clause (below): "She doesn't wait for thanks as Nicco takes the boots."
-  if (negatedSentence && !(command.kind === "transfer_item" && command.owner_id === "nicco")) return { verified: false, check: "sentence_hedged_negated_or_hypothetical" };
+  if (negatedSentence && !(command.kind === "transfer_item" && transferRecipient(command) === "nicco")) return { verified: false, check: "sentence_hedged_negated_or_hypothetical" };
   const people = context.characters.filter(c => c.id !== "nicco");
   // Multi-word names ("Sister Mereth") contribute each token, so their own words are never "another person".
   const names = (id: string) => [id, context.characters.find(c => c.id === id)?.profile.name].filter((n): n is string => !!n).map(n => n.toLowerCase()).flatMap(n => [n, ...n.split(/[\s_]+/).filter(t => t.length > 2)]);
@@ -80,6 +81,11 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   // head: containing sentence from its start to the end of the quote, dialogue blanked, for subject resolution.
   const head = blankQuotes(narration.slice(sStart, at + q.length));
   const qOutside = blankQuotes(q);
+  if (command.kind === "transfer_item" && /\b(?:fails?|failed|unsuccessful|attempts? to|attempted to|tries? to|tried to)\b/i.test(sentenceText))
+    return { verified: false, check: "transfer_not_completed" };
+  if (command.kind === "transfer_item" && command.mode === "gift"
+    && !intents.some(i => i.kind === "transfer_item" && i.mode === "gift" && i.item_id === command.item_id && transferRecipient(i) === transferRecipient(command))
+    && !EXPLICIT_GIFT.test(q)) return { verified: false, check: "gift_permanence_not_established" };
   /**
    * Does `subject` lead `verb` in head with no other named person in between? Any capitalized name in the gap other than the
    * allowed ones (recipient, Nicco) could be the real actor, present or not ("Brenna watches Maren take…"), so it disqualifies.
@@ -138,7 +144,21 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     return { verified: true, check: "nicco_communicates_fact" };
   }
 
-  if (command.kind === "transfer_item" && command.owner_id === "nicco") {
+  if (command.kind === "transfer_item" && transferRecipient(command) !== "nicco") {
+    const held = context.items.find(i => i.id === command.item_id), giver = held && itemHolder(held), recipient = transferRecipient(command);
+    if (held && giver && giver !== "nicco" && recipient) {
+      // NPC-to-NPC uses the same physical act: no per-character-class transfer implementation.
+      const noun = itemTerms(held, context.items);
+      if (!new RegExp(`\\b(?:${noun})\\b`, "i").test(qOutside)) return { verified: false, check: "offered_item_not_referenced" };
+      const give = "gives?|gave|hands?|handed|passes?|passed|lends?|lent|returns?|returned";
+      const receipt = leads(names(recipient), RECEIPT, [giver, recipient]);
+      const handover = leads(names(giver), give, [giver, recipient]);
+      const toRecipient = names(recipient).some(n => new RegExp(`\\b(?:to|into) (?:${esc(n)})(?:'s)?\\b`, "i").test(qOutside))
+        || names(recipient).some(n => new RegExp(`\\b(?:${give}) ${esc(n)}\\b`, "i").test(qOutside));
+      return receipt || handover && toRecipient ? { verified: true, check: "character_to_character_receipt" } : { verified: false, check: "no_handover_or_receipt" };
+    }
+  }
+  if (command.kind === "transfer_item" && transferRecipient(command) === "nicco") {
     // Repair 1 inbound: the holder hands the item to Nicco, or Nicco takes/accepts it. Nobody else may be named in the quote.
     const held = context.items.find(i => i.id === command.item_id);
     const giver = held && (held.position.kind === "carried" || held.position.kind === "equipped") ? held.position.character_id : undefined;
@@ -147,7 +167,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     // Repair 1.1: the item's head noun, or a category word unique to it among items in the scene ("footwear").
     const noun = itemTerms(held!, context.items);
     if (!new RegExp(`\\b(?:${noun}|them|it|the pair)\\b`, "i").test(qOutside)) return { verified: false, check: "offered_item_not_referenced" };
-    const give = "gives?|gave|giving|hands?|handed|handing|passes?|passed|passing|presses?|pressed|pressing|shoves?|shoved|shoving|tosses?|tossed|tossing|places?|placed|placing|puts?|putting|drops?|dropped|dropping|slides?|slid|sliding|thrusts?|thrusting";
+    const give = "gives?|gave|giving|hands?|handed|handing|passes?|passed|passing|presses?|pressed|pressing|shoves?|shoved|shoving|tosses?|tossed|tossing|places?|placed|placing|puts?|putting|drops?|dropped|dropping|slides?|slid|sliding|thrusts?|thrusting|returns?|returned|returning|lends?|lent|lending";
     // Negation is scoped to the clause carrying the act when the sentence negates something else; any refusal word still vetoes.
     const clauseClean = (absolute: number) => {
       if (!negatedSentence) return true;
@@ -162,7 +182,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     const byGiver = leads([...names(giver), "she", "he"], give, [giver]);
     // A completed handover reaches Nicco ("to Nicco", "into his hands", "hands them over", "gives him the boots"); "toward Nicco" does not.
     const after = head.slice(byGiver ? byGiver.end - sStart : 0);
-    if (byGiver && clauseClean(byGiver.end - 1) && (!["she", "he"].includes(byGiver.subject) || names(giver).includes(pronounRefersTo(byGiver.at) ?? "")) && (/\b(?:to (?:nicco|him)\b|into (?:nicco's|nicco|his) (?:hands?|arms|grasp|grip|palms?)|(?:nicco's|his) (?:hands?|grasp|grip)\b|over\b)/i.test(after) || /^\s*(?:nicco|him)\b/i.test(after))) return { verified: true, check: "handover_to_nicco" };
+    if (byGiver && clauseClean(byGiver.end - 1) && (!["she", "he"].includes(byGiver.subject) || names(giver).includes(pronounRefersTo(byGiver.at) ?? "")) && (/\b(?:to (?:nicco|him)\b|into (?:nicco's|nicco|his) (?:hands?|arms|grasp|grip|palms?)|(?:nicco's|his) (?:hands?|grasp|grip)\b|over\b)/i.test(after) || /^\s*(?:nicco(?!['\u2019]s\b)|him)\b/i.test(after))) return { verified: true, check: "handover_to_nicco" };
     // Item-subject handover: "The boots pass into Nicco's hands."
     const passes = new RegExp(`\\b(?:${noun}|pair|them)\\b (?:(?:are|is|were|was|get|gets|got) )?(?:pass(?:es)?|passed|go|goes|went|change hands|changed hands|transfers?|transferred)\\b[^,;]*\\b(?:to|into) (?:nicco|nicco's|his)\\b`, "i").exec(qOutside);
     if (passes && clauseClean(at + passes.index)) return { verified: true, check: "item_passes_to_nicco" };
@@ -187,6 +207,13 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     return { verified: true, check: "physical_condition_narrated" };
   }
 
+  if (command.kind === "place_item" && (command.position.kind === "stored" || context.items_here?.some(i => i.id === command.item_id))) {
+    // Permanent Inventory V1: putting an existing item down here / picking it up. The verbatim, unhedged quote must name that item
+    // (one distinctive word of its name). Whether the act happened is the controller's semantic reading; no verb grammar here.
+    const target = [...context.items, ...(context.items_here ?? [])].find(i => i.id === command.item_id);
+    const nameWords = words(target?.name ?? "").filter(w => w.length >= 3);
+    return nameWords.some(w => new RegExp(`\\b${esc(w)}(?:e?s)?\\b`, "i").test(q)) ? { verified: true, check: "placed_item_named" } : { verified: false, check: "placed_item_not_named" };
+  }
   if (command.kind === "create_item") {
     // Item Domain V1: the verbatim, unhedged quote must name the object (one distinctive word of the proposed name). Whether the
     // object needs persistent identity is the controller's semantic decision; there is deliberately no verb grammar here.
@@ -216,10 +243,10 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   }
 
   if (command.kind === "transfer_item") {
-    const recipient = command.owner_id;
+    const recipient = transferRecipient(command);
     if (!recipient) return { verified: false, check: "no_recipient" };
     if (strangerIn(q, recipient) || people.some(p => p.id !== recipient && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
-    const offered = intents.flatMap(i => i.kind === "transfer_item" && i.owner_id === recipient ? [i.item_id] : []);
+    const offered = intents.flatMap(i => i.kind === "transfer_item" && transferRecipient(i) === recipient ? [i.item_id] : []);
     const itemName = (id: string) => (context.items.find(i => i.id === id)?.name ?? id).toLowerCase();
     // Receipt is narrated, never spoken: the act and the item reference are read with dialogue blanked.
     const act = `${RECEIPT}|(?:extends?|extended|holds? out|held out|reach(?:es|ed|ing)? out(?: and)?)(?:[\\s,]+[a-z']+){0,3}?[\\s,]+(?:to )?(?:take|takes|took|accept|accepts|accepted)`;
@@ -280,7 +307,7 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
     const base = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
     if (g.authorized) return { ...base, authorized: true, reason: g.reason, source: ev.verified ? "both" : "grammar" };
     // Repair 1: conditions have no grammar path. Validity was already checked by authorizeCommands; verified evidence completes it.
-    if (command.kind === "create_item" || command.kind === "set_condition" || command.kind === "leave_scene" || command.kind === "adjust_relationship" || command.kind === "join_household" || command.kind === "leave_household") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
+    if (command.kind === "transfer_item" || command.kind === "create_item" || isLocationPlacement(command, snapshot) || command.kind === "set_condition" || command.kind === "leave_scene" || command.kind === "adjust_relationship" || command.kind === "join_household" || command.kind === "leave_household") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };
     if (mode === "hybrid" && ev.verified && MISSING_CONFIRMATION.has(g.reason)) {
       const index = evidence.player_intents.findIndex(c => isDeepStrictEqual(c, command));
       const kind = command.kind === "set_knowledge" ? "was_told_fact" as const : "accepted_transfer" as const;
@@ -294,10 +321,10 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
   // Atomic offered group: evidence may not produce a partial commit of one offer. If the evidence path authorized part of a
   // multi-item offer to one recipient but not all of it, the evidence-sourced part is withdrawn (grammar-sourced decisions stand).
   const groups = new Map<string, CampaignCommand[]>();
-  for (const c of evidence.player_intents) if (c.kind === "transfer_item" && c.owner_id) groups.set(c.owner_id, [...(groups.get(c.owner_id) ?? []), c]);
+  for (const c of evidence.player_intents) if (c.kind === "transfer_item" && transferRecipient(c)) groups.set(transferRecipient(c)!, [...(groups.get(transferRecipient(c)!) ?? []), c]);
   const atomic = decided.map(d => {
-    if (d.source !== "evidence" || d.command.kind !== "transfer_item" || !d.command.owner_id) return d;
-    const members = groups.get(d.command.owner_id) ?? [];
+    if (d.source !== "evidence" || d.command.kind !== "transfer_item" || !transferRecipient(d.command)) return d;
+    const members = groups.get(transferRecipient(d.command)!) ?? [];
     if (members.length < 2 || members.every(m => decided.some(x => x.authorized && isDeepStrictEqual(x.command, m)))) return d;
     return { ...d, authorized: false, reason: "rejected_evidence_partial_group" as const, source: "rejected" as const };
   });
@@ -305,8 +332,8 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
   // whole offer, or verified group evidence) but the controller proposed only part of it. Proposal-first forbids adding the missing
   // commands, so the group is withheld rather than committed partially. Partial acceptances narrated as partial are unaffected.
   return atomic.map(d => {
-    if (!d.authorized || d.command.kind !== "transfer_item" || !d.command.owner_id) return d;
-    const members = groups.get(d.command.owner_id) ?? [];
+    if (!d.authorized || d.command.kind !== "transfer_item" || !transferRecipient(d.command)) return d;
+    const members = groups.get(transferRecipient(d.command)!) ?? [];
     if (members.length < 2) return d;
     const indexes = members.map(m => evidence.player_intents.findIndex(c => isDeepStrictEqual(c, m)));
     const whole = evidence.narrator_confirmations.some(c => indexes.every(i => c.command_indexes.includes(i))) || atomic.some(x => x.evidence?.verified && x.evidence.check === "receipt_of_offered_group" && members.some(m => isDeepStrictEqual(m, x.command)));

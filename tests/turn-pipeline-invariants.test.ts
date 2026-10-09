@@ -17,7 +17,7 @@ import { metadata } from "./turn-fixtures.js";
  * cancellation and staleness at every phase, and RecentConversation finalized only after commit. Offline; no LLM is called.
  */
 const world = await loadWorld("data");
-const transfer: CampaignCommand = { kind: "transfer_item", item_id: "boots", owner_id: "brenna", position: { kind: "carried", character_id: "brenna" } };
+const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };
 const SQUARE = OPENING_LOCATION, M = "campaign_character_maren";
 
 interface Hooks { narrations?: readonly string[]; commands?: readonly CampaignCommand[]; onNarrator?: (call: number, phase: "start" | "after_completed") => void;

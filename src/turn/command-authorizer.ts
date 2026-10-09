@@ -1,3 +1,4 @@
+import { transferRecipient, itemHolder, transferCharacterPresent, validTransferMode } from "../campaign/item-transfer.js";
 import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
@@ -12,6 +13,12 @@ import { ruleMatchesDeclaration } from "./household-evidence.js";
 export function knownCharacter(id: string, snapshot: DeepReadonly<CampaignSnapshot>, world?: WorldStore): boolean {
   return snapshot.characters.some(c => c.id === id) || (world ? world.getEntity(id)?.type === "character" : snapshot.runtime.npc_locations.some(n => n.character_id === id));
 }
+/** Permanent Inventory V1: a place_item that puts an existing item down at a location, or picks a stored item up. */
+export function isLocationPlacement(command: CampaignCommand, snapshot: DeepReadonly<CampaignSnapshot>): command is Extract<CampaignCommand, { kind: "place_item" }> {
+  if (command.kind !== "place_item") return false;
+  const item = snapshot.items.find(i => i.id === command.item_id);
+  return !!item && (command.position.kind === "stored" || item.position.kind === "stored" && command.position.kind === "carried");
+}
 /** Policy consumes resolved same-turn evidence, never searches arbitrary narration. */
 export function authorizeCommands(proposal: readonly CampaignCommand[], evidence: TurnEvidence, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world?: WorldStore): readonly AuthorizationDiagnostic[] {
   const present = new Set(context.characters.map(c => c.id));
@@ -21,13 +28,9 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
     switch (command.kind) {
       case "transfer_item": {
         const item = snapshot.items.find(i => i.id === command.item_id);
-        const holder = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? item.position.character_id : undefined;
-        // Outbound: Nicco owns and holds the item and gives it to a present character.
-        const outbound = !!item && item.owner_id === "nicco" && holder === "nicco" && !!command.owner_id && command.owner_id !== "nicco" && present.has(command.owner_id);
-        // Inbound (Repair 1): a present character who both owns and holds the exact item gives it to Nicco, who carries it.
-        // No remote transfer, no transfer from a mere carrier or owner, never directly into an equipment slot.
-        const inbound = !!item && !!holder && holder !== "nicco" && item.owner_id === holder && present.has(holder) && command.owner_id === "nicco" && command.position.kind === "carried" && command.position.character_id === "nicco";
-        valid = outbound || inbound;
+        const holder = item && itemHolder(item), target = command.position.kind === "carried" ? command.position.character_id : undefined;
+        valid = !!item && !!holder && !!target && present.has(holder) && present.has(target)
+          && transferCharacterPresent(snapshot, holder) && transferCharacterPresent(snapshot, target) && validTransferMode(item, target, command.mode);
         break;
       }
       case "create_item": {
@@ -41,8 +44,10 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const owner = command.owner_id === undefined || command.owner_id === null || present.has(command.owner_id) || knownCharacter(command.owner_id, snapshot, world);
         if (!placed || !owner || !command.name.trim()) return reject("rejected_reference_invalid");
         const norm = (s: string | undefined) => (s ?? "").trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
-        const samePlace = (q: DeepReadonly<CampaignSnapshot>["items"][number]["position"]) => p.kind === "carried" ? (q.kind === "carried" || q.kind === "equipped") && q.character_id === p.character_id : q.kind === "stored" && p.kind === "stored" && q.location_id === p.location_id;
-        if (snapshot.items.some(i => norm(i.name) === norm(command.name) && samePlace(i.position))) return reject("rejected_already_established");
+        // Identity continuity (Permanent Inventory V1): an item the controller can already see (on a present person, or lying here)
+        // is moved with place_item, never materialized again, whatever position the duplicate proposes.
+        const visible = (q: DeepReadonly<CampaignSnapshot>["items"][number]["position"]) => (q.kind === "carried" || q.kind === "equipped") && present.has(q.character_id) || q.kind === "stored" && q.location_id === here;
+        if (snapshot.items.some(i => norm(i.name) === norm(command.name) && visible(i.position))) return reject("rejected_already_established");
         return reject("rejected_insufficient_confirmation");
       }
       case "set_condition": {
@@ -103,6 +108,19 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
       }
       case "place_item": {
         const item = snapshot.items.find(i => i.id === command.item_id);
+        const holder = item && itemHolder(item);
+        if (holder && (command.position.kind === "carried" || command.position.kind === "equipped") && command.position.character_id !== holder)
+          return reject("rejected_command_not_allowed"); // Character-to-character movement requires explicit transfer mode.
+        if (isLocationPlacement(command, snapshot)) {
+          // Permanent Inventory V1: put an existing item down at, or pick it up from, the CURRENT scene location. Physical rules only:
+          // the holder/new carrier is present and the location is here; ownership never changes. Same item ID, never re-created.
+          // There is no grammar path: only a verified narration quote naming the item completes it (hybrid evidence).
+          const here = snapshot.runtime.scene.player_location, from = item!.position, to = command.position;
+          const putDown = to.kind === "stored" && to.location_id === here && (from.kind === "carried" || from.kind === "equipped") && present.has(from.character_id);
+          const pickUp = to.kind === "carried" && present.has(to.character_id) && from.kind === "stored" && from.location_id === here;
+          if (isDeepStrictEqual(from, to)) return reject("rejected_already_established");
+          return putDown || pickUp ? reject("rejected_insufficient_confirmation") : reject("rejected_reference_invalid");
+        }
         valid = !!item && item.owner_id === "nicco" && (item.position.kind === "carried" || item.position.kind === "equipped") && item.position.character_id === "nicco";
         break;
       }
@@ -113,12 +131,17 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
     if (!valid) return reject("rejected_reference_invalid");
     // Phase 1O: re-telling a fact the recipient already knows is a no-op; it must not overwrite the original provenance.
     if (command.kind === "set_knowledge" && snapshot.knowledge.some(k => k.character_id === command.knowledge.character_id && k.fact_id === command.knowledge.fact_id && k.status === "knows")) return reject("rejected_already_established");
+    // A semantic mode choice cannot bypass a refusal of the same physical handover.
+    if (command.kind === "transfer_item") {
+      const related = evidence.player_intents.flatMap((c, i) => c.kind === "transfer_item" && c.item_id === command.item_id && transferRecipient(c) === transferRecipient(command) ? [i] : []);
+      if (evidence.narrator_refusals.some(r => r.command_indexes.some(i => related.includes(i)))) return reject("rejected_recipient_refused");
+    }
     const index = evidence.player_intents.findIndex(c => isDeepStrictEqual(c, command));
     if (index < 0) {
       if (evidence.ambiguous_reference) return reject("rejected_ambiguous_reference");
       if (command.kind === "transfer_item" && command.position.kind === "equipped") return reject("rejected_equipment_not_established");
       if (command.kind === "schedule_event") return reject("rejected_time_not_exact");
-      return reject("rejected_controller_mismatch");
+      return reject(command.kind === "transfer_item" ? "rejected_insufficient_confirmation" : "rejected_controller_mismatch");
     }
     if (evidence.narrator_refusals.some(r => r.command_indexes.includes(index))) return reject("rejected_recipient_refused");
     const confirmation = evidence.narrator_confirmations.find(c => c.command_indexes.includes(index));
