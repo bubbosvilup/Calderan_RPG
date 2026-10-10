@@ -7,14 +7,18 @@ entity:
   parent: null
   aliases: []
   summary: >-
-    One enormous known continent, Aureth, contains the major geopolitical regions/nations West,
-    Center, and East.
+    One enormous known continent, Helion, comprises four great divisions: the nations West, Center
+    and East, and the South Continent to their south.
   tags: ["fundamentals"]
   search_context: ""
   content: >-
-    The known continent is conceptually Eurasia-scale, with no exact dimensions, area, or
-    travel times. West, Center, and East occupy its western, central, and eastern portions.
+    The known continent, Helion, is conceptually Eurasia-scale, with no exact dimensions, area, or
+    travel times. West, Center, and East occupy its western, central, and eastern portions, and
+    the South Continent, the fourth great division, lies to the south of all three; its borders,
+    extent and character are not established, and it is not described here beyond that.
     West borders Center; Center borders East; West and East share no direct land border.
+    This section describes West, Center and East, whose character is established; nothing below is
+    said of the South Continent.
     West is broadly mild, temperate, and greener; Center arid and desert-dominated; East cold
     and snowy with severe winters. These are regional tendencies. Their capitals are
     Calderan, Zul-Rath, and Vaelrost respectively. Mist Sea lies north, Sorrow Sea west,
@@ -28,9 +32,9 @@ entity:
     its ruler is chosen every five years by a martial tournament, with details undefined. East enforces armed neutrality against spillover from that conflict,
     notably through Frostspire. East is a resource-rich, pragmatic, climate-constrained land of
     mining, cold seas and durable craft. East's internal government, religion, peoples, internal
-    factions, and foreign policy beyond this stance remain undefined. No other continent
-    is established.
+    factions, and foreign policy beyond this stance remain undefined. No other landmass than
+    the four great divisions is established.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   category: "fundamentals"
-  related_entities: ["continent","west","center","east","mist_sea","sorrow_sea","silent_ocean","chained_bay","dragons_teeth_mountains","west_governance","west_slavery","main_city_structure","calderan_northern_forest","central_oasis_settlement","aureth_creation_myth","aureth_trade"]
+  related_entities: ["continent","west","center","east","mist_sea","sorrow_sea","silent_ocean","chained_bay","dragons_teeth_mountains","west_governance","west_slavery","main_city_structure","calderan_northern_forest","central_oasis_settlement","aureth_creation_myth","aureth_trade","south_continent","the_four"]
 chunks: []

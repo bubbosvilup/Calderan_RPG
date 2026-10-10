@@ -2,27 +2,26 @@ schema_version: 1
 entity:
   id: aureth_creation_myth
   type: world_lore
-  name: The Myth of Aureth
-  display_name: The Myth of Aureth
+  name: The Creation Myth of Helion
+  display_name: The Creation Myth of Helion
   parent: null
-  aliases: []
-  summary: An old ancestral creation myth, older than the Church, names the continent after Aureth, a legendary
-    ancient golden dragon said to have shaped the land and entrusted it to three draconic children associated with
-    West, Center and East.
+  aliases: ["Myth of Aureth", "Aureth creation myth"]
+  summary: The creation myth taught across Helion tells that the world arose from primordial powers, that Aureth, the Sun
+    Emperor, brought sacred Light, order and guidance to humanity, and that the Four were ordered and blessed under his
+    reign; Shadow is the corruption that opposes that order.
   tags:
     - myth
-  search_context: Aureth creation myth, ancestral religion, old folklore, legendary golden dragon, origin of the continent's name, three draconic children, green dragon of West, red dragon of Center, dragon of East.
-  content: In the oldest ancestral creation tradition of the continent, older than the Church of the Sun Emperor,
-    Aureth is a legendary ancient golden dragon who created or shaped the land that now bears his name. The myth
-    says Aureth entrusted the three great regions to three draconic children, each associated with one of the broad
-    regions that later became West, Center and East. West is associated with a verdant, green draconic image and
-    Center with a red one; public tradition gives the East's draconic child no settled colour or form. The
-    Church of the Sun Emperor arose much later and has absorbed, reinterpreted or overwritten much of this older
-    tradition within its own doctrine, so the dragon tale survives mainly as folklore, ancestral custom, old
-    stories and the continent's name. In public knowledge this is mythology, not established fact. Whether
-    Aureth or the children ever existed, whether the land was literally made this way, what became of them, the
-    children's names, any worship, cult, temples or relics, powers, dates and any political claims based on the
-    myth remain unestablished.
+  search_context: Creation myth of Helion, Aureth and the Sun Emperor, sacred Light, origin of the world, primordial powers, the Four, old folklore, dragons in folk art, golden dragon image, ancestral custom.
+  content: In the creation myth as the Church teaches it, the world emerged from primordial powers. Aureth, the
+    Sun Emperor, brought sacred Light, order and guidance to humanity, and the Four, the great elemental figures
+    associated with West, Center, East and the South Continent, were brought into harmony and blessed under his
+    reign. Shadow is presented as corruption, danger and the absence of the sacred order, opposed to Light. Older
+    ancestral and folk traditions tell the tale differently and more richly, and they survive as folklore, custom and
+    old stories; in folk art Aureth is sometimes drawn as a golden dragon, and the Four as dragons, which is
+    traditional iconography, not an established account of what they are. The Church has absorbed, reinterpreted or
+    overwritten much of the older tradition within its own doctrine. In public knowledge this is mythology, not
+    established fact. Whether the world was literally made this way, the origin and nature of the Four, any older
+    worship, cult, temples or relics, powers, dates and any political claims based on the myth remain unestablished.
   knowledge:
     visibility:
       narrator: true
@@ -35,5 +34,7 @@ entity:
     - west
     - center
     - east
+    - south_continent
+    - the_four
     - church_doctrine
 chunks: []

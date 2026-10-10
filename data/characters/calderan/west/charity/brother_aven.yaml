@@ -71,7 +71,7 @@ entity:
     - target: sister_mereth
       kind: charity_contact
       description: Contact with Saint Orra's House and its administrator in local charitable work.
-  private_notes: Knows Bartolomhew's clerical past, without a complete established account of the
+  private_notes: A sincere believer who holds public Church doctrine only. Knows Bartolomhew's clerical past, without a complete established account of the
     expulsion. No confidential admissions or exact expulsion reason are supplied; do not invent
     them.
 chunks:

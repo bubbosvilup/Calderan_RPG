@@ -12,6 +12,8 @@ import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evi
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import { sentencesOf } from "../language/text.js";
+const itemKey = (name: string) => name.trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
+const EXACT_REPEAT_KINDS: ReadonlySet<CampaignCommand["kind"]> = new Set(["transfer_item", "place_item", "set_knowledge", "set_condition", "schedule_event", "leave_scene", "join_household", "leave_household", "add_household_rule"]);
 import type { AuthorizationDiagnostic, TurnDebugSink } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";
 
@@ -40,9 +42,16 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const parsed = parseControllerProposal(JSON.stringify({ commands: i.controller.commands }));
   // D-14: an identical (mover, destination) pair proposed twice is one proposal. First occurrence wins (stable order); the controller's
   // per-index evidence quotes are filtered with the same indexes, so each kept command keeps its own quote.
+  // Pass B: an exact repeat of a state-describing command is the same proposal, not a second effect. Authorization validates every command against
+  // the same pre-turn state, so a repeated transfer_item would pass twice and then fail the sequential preparation, failing the whole turn.
+  // adjust_relationship and create_item are excluded: repeating them could be two distinct steps/objects, never silently merged.
   const seenMoves = new Map<string, Set<string>>(), keep: number[] = [];
   parsed.forEach((c, k) => {
     if (c.kind === "move_character") { const to = seenMoves.get(c.character_id) ?? new Set<string>(); if (to.has(c.location_id)) return; to.add(c.location_id); seenMoves.set(c.character_id, to); }
+    else if (EXACT_REPEAT_KINDS.has(c.kind) && keep.some(j => isDeepStrictEqual(parsed[j], c))) return;
+    // Pass C: the same object materialized twice in one proposal (same normalized name, same position) is one object. The authorizer
+    // checks each create_item against the pre-turn state, so a repeat would otherwise create two items. Distinct names stay distinct.
+    else if (c.kind === "create_item" && keep.some(j => { const o = parsed[j]!; return o.kind === "create_item" && itemKey(o.name) === itemKey(c.name) && isDeepStrictEqual(o.position, c.position); })) return;
     keep.push(k);
   });
   const controllerProposal = keep.map(k => parsed[k]!), duplicates_removed = parsed.length - keep.length;

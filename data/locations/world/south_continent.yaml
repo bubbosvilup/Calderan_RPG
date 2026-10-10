@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: south_continent
+  type: location
+  name: "South Continent"
+  display_name: "South Continent"
+  parent: continent
+  aliases: []
+  summary: >-
+    The South Continent is the fourth great division of Helion, lying to the south of West, Center
+    and East.
+  content: >-
+    The South Continent is one of the four great divisions of Helion, together with West, Center
+    and East, and lies to the south of the other three. Like them it is traditionally associated
+    with one of the Four of sacred tradition. "South Continent" is a descriptive designation, not a
+    proper name. Its borders and extent, peoples, cities, government, economy, religion and culture
+    are not established, and it has no capital in current canon.
+  tags: [geography]
+  search_context: "South Continent, the fourth great division of Helion, south of West, Center and East; no proper name, cities or culture established."
+  knowledge:
+    visibility:
+      narrator: true
+      player: true
+    known_by: []
+  features:
+    - name: "fourth great division"
+      description: "One of Helion's four great divisions, lying south of West, Center and East."
+  connections: []
+chunks: []

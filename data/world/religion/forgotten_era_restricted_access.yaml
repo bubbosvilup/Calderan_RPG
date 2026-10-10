@@ -1,0 +1,34 @@
+schema_version: 1
+entity:
+  id: forgotten_era_restricted_access
+  type: world_lore
+  name: Restricted Access to Pre-Year-0 Records
+  display_name: Restricted Access to Pre-Year-0 Records
+  parent: null
+  aliases: []
+  summary: "Restricted: the Church deliberately bars access to pre-Year-0 records as spiritually dangerous, and its senior clergy and inquisitors enforce the bar."
+  tags:
+    - secret
+    - religion
+  search_context: Restricted Church policy
+  content: >-
+    By Church order, records and texts from before Year 0 are kept sealed, controlled or destroyed, and access is
+    granted only to those whom the Church authorizes. Senior clergy and the Inquisition enforce this sincerely, as
+    protection against records they regard as spiritually dangerous and unreliable. Exact procedures, archives,
+    penalties and the extent of what survives are not established. This is a restricted fact of Church policy, not
+    public doctrine; the Church's public teaching states only that these records are restricted.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by:
+      - cassian_valerius
+      - helbrecht
+      - severan_krauss
+    awareness: private
+  category: religion
+  related_entities:
+    - forgotten_era
+    - church_doctrine
+    - inquisition
+chunks: []

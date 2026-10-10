@@ -7,15 +7,15 @@ entity:
   parent: continent
   aliases: []
   summary: >-
-    A major mountainous spine across Aureth's northern and eastern side, from near the forest
+    A major mountainous spine across Helion's northern and eastern side, from near the forest
     north of Calderan to the Center–East transition near Frostspire; the ancestral homeland
-    of Aureth's dwarves.
+    of Helion's dwarves.
   content: >-
     The range extends broadly across the northern and eastern side of the continent rather
     than forming one isolated peak. Its broad western end approaches the region where the
     forest north of Calderan begins; farther east it separates or complicates passage
     between portions of Center and East and lies near Frostspire. The range is the ancestral
-    homeland and principal historic origin of Aureth's dwarves; dwarf communities and clans
+    homeland and principal historic origin of Helion's dwarves; dwarf communities and clans
     originate there. Dwarves are highly regarded for metalworking and skilled craftsmanship,
     and over time many have dispersed into cities across West, Center and East, where city
     authorities, nobles, merchants or institutions may recruit or employ dwarf artisans for
@@ -26,7 +26,7 @@ entity:
     settlements, and the origin of its name remain unspecified. Its name does not establish
     dragons or a dragon history.
   tags: [geography]
-  search_context: "Dragon's Teeth Mountains, northern and eastern mountain range of Aureth; ancestral homeland and origin of the dwarves; dwarf clans, dwarven smiths, metalworking and craftsmanship; mountain dwarves later dispersed into cities."
+  search_context: "Dragon's Teeth Mountains, northern and eastern mountain range of Helion; ancestral homeland and origin of the dwarves; dwarf clans, dwarven smiths, metalworking and craftsmanship; mountain dwarves later dispersed into cities."
   knowledge:
     visibility:
       narrator: true
@@ -36,7 +36,7 @@ entity:
     - name: "northern geographic barrier"
       description: "The extended mountain chain complicates passage across portions of the Center–East transition."
     - name: "ancestral dwarven homeland"
-      description: "Principal historic origin of Aureth's dwarves and their clans; no single dwarf kingdom is established."
+      description: "Principal historic origin of Helion's dwarves and their clans; no single dwarf kingdom is established."
   connections: []
 chunks: []
 

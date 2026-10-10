@@ -141,7 +141,10 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
       if (evidence.ambiguous_reference) return reject("rejected_ambiguous_reference");
       if (command.kind === "transfer_item" && command.position.kind === "equipped") return reject("rejected_equipment_not_established");
       if (command.kind === "schedule_event") return reject("rejected_time_not_exact");
-      return reject(command.kind === "transfer_item" ? "rejected_insufficient_confirmation" : "rejected_controller_mismatch");
+      // Pass C: a resolved explicit player transfer binds the item, recipient and mode; narration may decide whether that transfer completed,
+      // never redirect it. With no transfer intent at all, autonomous NPC transfers keep their evidence path ("insufficient confirmation").
+      if (command.kind === "transfer_item") return reject(evidence.player_intents.some(c => c.kind === "transfer_item") ? "rejected_controller_mismatch" : "rejected_insufficient_confirmation");
+      return reject("rejected_controller_mismatch");
     }
     if (evidence.narrator_refusals.some(r => r.command_indexes.includes(index))) return reject("rejected_recipient_refused");
     const confirmation = evidence.narrator_confirmations.find(c => c.command_indexes.includes(index));

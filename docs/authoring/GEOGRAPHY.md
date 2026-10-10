@@ -17,13 +17,15 @@ Future coordinates and travel graphs may be layered on without rewriting stable 
 
 ## Geographic hierarchy
 
-All entries here are proper location entities. `Known Continent` is a descriptive
-label, not an invented proper name for the landmass. Existing `continental_structure`
+All entries here are proper location entities. The continent is named **Helion** (its ancient,
+pre-Year-0 name, Eldaven, lives only in restricted canon); `Known Continent` is a descriptive
+alias. The former name "Aureth" is retired: Aureth is now a person (the Sun Emperor). The
+stable ID `continent` is a legacy identifier kept unchanged so saves and references stay valid. Existing `continental_structure`
 remains the lore overview; `continent` provides the physical parent required by the
 location schema, rather than replacing that permanent lore ID.
 
 ```text
-continent (Known Continent)
+continent (Helion; alias Known Continent)
 ├── west (West)
 │   ├── calderan (Calderan, capital)
 │   ├── ironbound (Ironbound)
@@ -37,8 +39,12 @@ continent (Known Continent)
 │   ├── vaelrost (Vaelrost, capital)
 │   ├── frostspire (Frostspire)
 │   └── skardgard (Skardgard)
+├── south_continent (South Continent, fourth great division; descriptive name only)
 └── dragons_teeth_mountains (The Dragon's Teeth Mountains)
 ```
+
+The South Continent lies south of West, Center and East. It has no proper name, borders, cities,
+capital, people or culture in canon; do not add them without a deliberate authoring pass.
 
 Surrounding waters have `parent: null`: `mist_sea` (north), `sorrow_sea` (west),
 `silent_ocean` (east), and `chained_bay` (southwest). They are not wholly contained

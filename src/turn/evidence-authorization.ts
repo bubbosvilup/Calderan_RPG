@@ -49,7 +49,7 @@ function sentenceBounds(narration: string, at: number, length: number): [number,
 }
 /** Lower-cased first word of the nearest preceding sentence (within 300 chars) that starts with one of the candidate names. */
 function precedingNamedSubject(narration: string, at: number, candidates: readonly string[]): string | undefined {
-  const before = narration.slice(Math.max(0, at - 300), at).split(/(?<=[.!?]["”]?)\s+|\n+/).map(x => x.trim().replace(/^["“(]/, "")).filter(Boolean).reverse();
+  const before = narration.slice(Math.max(0, at - 300), at).split(/(?<=[.!?]["”]?)\s+|\n+/).map(x => x.trim().replace(/^[*_"“(\s]+/, "")).filter(Boolean).reverse(); // Pass B: the narrator wraps action prose in *italic* markers
   for (const sentence of before) {
     const first = sentence.match(/^([A-Z][a-z]+)\b/)?.[1]?.toLowerCase();
     if (first && candidates.includes(first)) return first;
@@ -100,10 +100,15 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   /** A pronoun resolves to the named subject of the nearest sentence before the pronoun's own sentence. */
   const pronounRefersTo = (position: number) => precedingNamedSubject(narration, sentenceBounds(narration, position, 1)[0], allNames);
   /** Capitalized words in the quote that are not sentence-initial and not the recipient or Nicco: possibly another person. */
-  const strangerIn = (text: string, recipient: string) => {
+  const strangerIn = (text: string, recipient: string, object?: ReadonlySet<string>) => {
     const ok = new Set(["nicco", ...names(recipient)]);
-    return [...text.matchAll(/\b[A-Z][a-z]+\b/g)].some(w => !ok.has(w[0].toLowerCase()) && !/(?:^|[.!?]["”]?\s+|["“(]\s*)$/.test(text.slice(0, w.index)));
+    return [...text.matchAll(/\b[A-Z][a-z]+\b/g)].some(w => !ok.has(w[0].toLowerCase()) && !object?.has(w[0].toLowerCase()) && !/(?:^|[.!?]["”]?\s+|["“(]\s*)$/.test(text.slice(0, w.index)));
   };
+  /**
+   * Pass B: a capitalized word that is part of the NAME of the item under evidence ("Sword", "Cellar key") is the object, not a possible
+   * actor. Never exempts a word that is also a present character's name; named people are still caught by the name checks below.
+   */
+  const objectWords = (itemId: string): ReadonlySet<string> => new Set(words([...context.items, ...(context.items_here ?? [])].find(i => i.id === itemId)?.name ?? "").filter(w => w.length >= 3 && !allNames.includes(w)));
 
   if (command.kind === "set_knowledge") {
     const recipient = command.knowledge.character_id, fact = context.facts.find(f => f.id === command.knowledge.fact_id);
@@ -163,7 +168,7 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     const held = context.items.find(i => i.id === command.item_id);
     const giver = held && (held.position.kind === "carried" || held.position.kind === "equipped") ? held.position.character_id : undefined;
     if (!giver || giver === "nicco") return { verified: false, check: "no_giver" };
-    if (strangerIn(q, giver) || people.some(p => p.id !== giver && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
+    if (strangerIn(q, giver, objectWords(command.item_id)) || people.some(p => p.id !== giver && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
     // Repair 1.1: the item's head noun, or a category word unique to it among items in the scene ("footwear").
     const noun = itemTerms(held!, context.items);
     if (!new RegExp(`\\b(?:${noun}|them|it|the pair)\\b`, "i").test(qOutside)) return { verified: false, check: "offered_item_not_referenced" };
@@ -245,11 +250,16 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   if (command.kind === "transfer_item") {
     const recipient = transferRecipient(command);
     if (!recipient) return { verified: false, check: "no_recipient" };
-    if (strangerIn(q, recipient) || people.some(p => p.id !== recipient && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
+    if (strangerIn(q, recipient, objectWords(command.item_id)) || people.some(p => p.id !== recipient && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
     const offered = intents.flatMap(i => i.kind === "transfer_item" && transferRecipient(i) === recipient ? [i.item_id] : []);
     const itemName = (id: string) => (context.items.find(i => i.id === id)?.name ?? id).toLowerCase();
+    // Pass C receipt corpus: two bounded constructions that establish a change of possession only when Nicco is the current holder. Bare
+    // "grips"/"touches"/"fingers close around the hilt" stay unproven (already-held or merely touching); see docs/evaluations/EXISTING_SUBSYSTEM_HARDENING.md.
+    const heldItem = context.items.find(i => i.id === command.item_id), holds = heldItem?.position.kind === "carried" && heldItem.position.character_id === "nicco";
+    const NICCO_SOURCED = "(?:lifts?|lifted|plucks?|plucked|pulls?|pulled|draws?|drew)(?=[^.!?;]{0,60}?\\bfrom (?:nicco's|his)\\s+(?:hand|hands|grasp|grip|fingers|palm)\\b)"
+      + "|(?:closes?|closed|curls?|curled|wraps?|wrapped)\\s+(?:her|his|their)\\s+(?:fingers|hands?)\\s+(?:around|over)(?=[^.!?;]{0,80}?\\b(?:offered|extended|held out|proffered)\\s+(?:by|from)\\s+(?:nicco|him)\\b)";
     // Receipt is narrated, never spoken: the act and the item reference are read with dialogue blanked.
-    const act = `${RECEIPT}|(?:extends?|extended|holds? out|held out|reach(?:es|ed|ing)? out(?: and)?)(?:[\\s,]+[a-z']+){0,3}?[\\s,]+(?:to )?(?:take|takes|took|accept|accepts|accepted)`;
+    const act = `${RECEIPT}|(?:extends?|extended|holds? out|held out|reach(?:es|ed|ing)? out(?: and)?)(?:[\\s,]+[a-z']+){0,3}?[\\s,]+(?:to )?(?:take|takes|took|accept|accepts|accepted)` + (holds ? `|${NICCO_SOURCED}` : "");
     const listWords = new Set(["the", "a", "an", "then", "and", "finally", "next", "first", "last", "one", "also", ...offered.flatMap(id => itemName(id).split(/[^a-z']+/))]);
     const listOnly = (text: string) => text.toLowerCase().replace(/[^a-z'\s]/g, " ").split(/\s+/).filter(Boolean).every(w => listWords.has(w));
     let evidenceText = qOutside;

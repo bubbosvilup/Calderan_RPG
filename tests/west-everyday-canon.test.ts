@@ -38,7 +38,7 @@ const NPC_PASS_3_NPCS=["brunna_keld","garran_holt","halden_cross","lysandra_vell
 test("Exactly seven everyday owners use existing locations with no family, faction or relationship inventions",()=>{
  const prior=["bartolomhew","blackthorn","brother_aven","captain_doran_hale","dren","korvin","mistress_elara","pellan","sister_mereth"];
  assert.deepEqual(world.getEntitiesByType("character").filter(c=>c.role==="npc").map(c=>c.id),[...prior,...anchors.map(a=>a[0]),...FOUR_DISTRICT_NPCS,...NPC_PASS_2_NPCS,...NPC_PASS_3_NPCS].sort());
- assert.equal(world.getEntitiesByType("location").length,98); // 50 + 23 Four-District anchors + The Bent Bough (NPC Pass 2) + 2 Aureth POIs
+ assert.equal(world.getEntitiesByType("location").length,99); // +1 South Continent (canon migration); 50 + 23 Four-District anchors + The Bent Bough (NPC Pass 2) + 2 Aureth POIs
  for(const [id,name,location] of anchors){
   const e=npc(id);assert.equal(e.name,name);assert.equal(e.base_location,location);assert.equal(e.work_location,location);assert.equal(e.home_location,null);
   assert.equal(e.species,id==="hadrik_voss"?"Dwarf":"Human");

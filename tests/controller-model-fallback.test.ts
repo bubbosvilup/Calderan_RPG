@@ -216,7 +216,7 @@ test("mannerism defaults to Luna, reflection to Haiku 5.5 (both single-model, no
   } finally { for (const [k, v] of [["OPENROUTER_CONTROLLER_MODEL", saved.c], ["OPENROUTER_REFLECTION_MODEL", saved.r]] as const) if (v === undefined) delete process.env[k]; else process.env[k] = v; }
   const h = (v: unknown) => createHash("sha256").update(typeof v === "string" ? v : JSON.stringify(v)).digest("hex");
   assert.deepEqual({ policy: h(CONTROLLER_POLICY), schema: h(CONTROLLER_EVIDENCE_SCHEMA), m_system: h(MANNERISM_EXTRACTOR_SYSTEM), m_task: h(MANNERISM_EXTRACTOR_TASK), m_schema: h(MANNERISM_EXTRACTION_SCHEMA), r_system: h(E1_SYSTEM), r_schema: h(E1_SCHEMA) }, {
-    policy: "fe8edd52722def953c55b73e0360db6c6277d657503eaf7aea1cb45a563f24b1", schema: "80673964b00c963df8402b4907ed65cfc236ea17a45aa35824054456cc4a9ca4", // Transfer Domain V1 explicit modes; other provider prompts/models remain frozen
+    policy: "1f55b50c3ff993c2c7305b486ae9126d394e49a48e8d0e4ee20be0548e94448d", schema: "80673964b00c963df8402b4907ed65cfc236ea17a45aa35824054456cc4a9ca4", // Pass C: explicit-intent transfer binding sentence added deliberately; other provider prompts/models remain frozen
     m_system: "b4a5ec309fc1ab8d09d8a4c53e0cc416492ef74e9aabba8b0bab3a8bbc41ec32", m_task: "51f5a734eb644f3c592f1d5b5b776cce1deca34aa7e62871c6ac5f68b0d1ac04", m_schema: "301a552e4b04f7668e5f571431d00afdb3ec5a4e7d93fb8fa7872ce0d5c4dc9f",
     r_system: "fc6fbaaae4a85f8eeb85d952a8f99cbdf6fda9701b087eb5e27d7e34352472f4", r_schema: "a2dec6b343d8b8c97cdf33eed0ad9523ae62701cf98c702d60c4f48f6d328efe" });
 });

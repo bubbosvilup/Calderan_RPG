@@ -8,7 +8,7 @@ entity:
   aliases: []
   summary: >-
     Zul-Rath is Center's capital and its political and economic center, a Beastfolk-led city famous
-    for the finest spices and silk in Aureth and a major hub of slave export.
+    for the finest spices and silk in Helion and a major hub of slave export.
   content: >-
     Zul-Rath lies in Center's northern/central interior and is its political and economic center,
     culturally led by Beastfolk. Center's tournament-chosen ruler governs from here for five years,
@@ -34,7 +34,7 @@ entity:
     - name: "capital of Center"
       description: "Center's major national political center."
     - name: "spices and silk"
-      description: "Source of Aureth's most prized spices and silk and fine textiles."
+      description: "Source of Helion's most prized spices and silk and fine textiles."
     - name: "reliable oasis water"
       description: "A reliable freshwater supply and an oasis or water feature within or associated with the city."
   connections: []
@@ -46,7 +46,7 @@ chunks:
     search_context: Zul-Rath economy, spice traders, spice trade, silk weavers, silk workers, fine textiles, luxury fabrics, human merchants, Beastfolk merchants, timber imports, irrigated farms, captives exported west.
     content: >-
       Zul-Rath's most famous products are spices and fine textiles, above all silk, among the
-      highest-quality luxury goods in Aureth. Center and Zul-Rath are the continent's dominant source
+      highest-quality luxury goods in Helion. Center and Zul-Rath are the continent's dominant source
       of most culinary spices and of high-value spice trade; salt is not exclusive to Center and is
       also found elsewhere, including West. Zul-Rath silk and luxury textiles are expensive,
       prestigious and widely exported. Local resources include sand, stone, limited woodland and

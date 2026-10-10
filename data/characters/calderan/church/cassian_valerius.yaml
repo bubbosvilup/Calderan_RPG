@@ -63,7 +63,10 @@ entity:
       kind: professional
       description: Professional relationship with the High Inquisitor of the West. No personal friendship
         or hostility is established.
-  private_notes: One of the tiny inner circle who know the Church's most restricted truth about the
-    Sun Emperor's Light (recorded in the restricted Sun Emperor lore); he never speaks of it outside
-    that circle. He does not share it with the Duke or with ordinary nobles or clergy.
+  private_notes: One of the tiny inner circle who know the Church's most restricted account of the
+    Sun Emperor's Light (recorded in the restricted Sun Emperor lore) and that official history is
+    curated; he never speaks of these outside that circle. He does not share them with the Duke or with
+    ordinary nobles or clergy. He is a sincere believer in the Sun Emperor, Aureth, and in Light; his
+    restricted knowledge is limited to what the restricted records state, and he holds no
+    cosmological explanation beyond public doctrine and those records.
 chunks: []

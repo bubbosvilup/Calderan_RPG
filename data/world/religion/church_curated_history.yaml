@@ -1,0 +1,31 @@
+schema_version: 1
+entity:
+  id: church_curated_history
+  type: world_lore
+  name: The Church's Curated History
+  display_name: The Church's Curated History
+  parent: null
+  aliases: []
+  summary: "Restricted: the Church's highest leadership knows that official doctrine and history are curated, with matters selected, edited and left out."
+  tags:
+    - secret
+    - religion
+  search_context: Restricted Church knowledge
+  content: >-
+    The highest levels of the Church know that its official doctrine and history are curated: some matters are
+    selected, shaped or left out, and the Church keeps secrets. This knowledge does not say which matters, who
+    began the practice or why, and it does not by itself overturn the faith of those who hold it. Ordinary clergy,
+    nobles, scholars, Guard and citizens do not know it. This is a restricted fact, not public doctrine.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by:
+      - cassian_valerius
+      - helbrecht
+    awareness: private
+  category: religion
+  related_entities:
+    - church_doctrine
+    - forgotten_era
+chunks: []

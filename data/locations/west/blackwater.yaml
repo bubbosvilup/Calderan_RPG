@@ -51,7 +51,7 @@ entity:
     - name: "harbour stair and elevated town"
       description: "The harbour lies below the town, reached by a long stone stair and steep approach; the elevated settlement is naturally defensible and hard to assault."
     - name: "Blackwater Fire"
-      description: "A famous locally produced rum, exported and smuggled throughout Aureth."
+      description: "A famous locally produced rum, exported and smuggled throughout Helion."
   connections: []
 chunks:
   - id: blackwater.illicit_economy
@@ -63,9 +63,9 @@ chunks:
       Most of Blackwater's economy is illegal or semi-legal: smuggling, fencing stolen goods, black
       markets, piracy, illicit trafficking and contraband. Common contraband
       includes alcohol, stolen goods, exotic fruit, illegal captives, undeclared cargo and rare
-      foreign goods. Its warmer local climate allows fruit unusual elsewhere in Aureth, such as
+      foreign goods. Its warmer local climate allows fruit unusual elsewhere in Helion, such as
       bananas and kiwi, to be grown or traded; no plantations are established. Blackwater Fire, a
-      rum produced locally, is exported and smuggled throughout Aureth and is widely regarded as one
+      rum produced locally, is exported and smuggled throughout Helion and is widely regarded as one
       of the continent's finest and most famous strong drinks, a common reference point when people
       speak of exceptional liquor; nothing magical about it is established. Blackwater is heavily
       involved in illegal slave trafficking, distinct from West's legal regulated trade: kidnapped

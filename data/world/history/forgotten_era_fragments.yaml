@@ -1,0 +1,33 @@
+schema_version: 1
+entity:
+  id: forgotten_era_fragments
+  type: world_lore
+  name: Fragments of the Forgotten Era
+  display_name: Fragments of the Forgotten Era
+  parent: null
+  aliases: []
+  summary: "Restricted: a few surviving pre-Year-0 fragments name the ancient continent Eldaven, suggest that the Four predate Church doctrine and contain contradictions about the disappearance; they are incomplete."
+  tags:
+    - secret
+    - history
+  search_context: Restricted scholarly and archival knowledge
+  content: >-
+    A few surviving pre-Year-0 fragments are held in sealed archives and scattered private hands. Some call the
+    continent Eldaven, its ancient name. Some suggest that the Four existed before Church doctrine and before
+    Year 0. Some accounts of the Sun Emperor's disappearance contradict each other and the official account.
+    The fragments are partial and their interpretation is uncertain; none establishes the whole truth, and no
+    fragment is established to say more than this. Who holds them, and how many survive, are not established.
+    This is restricted knowledge, not public doctrine.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by: []
+    awareness: specialized
+  category: history
+  related_entities:
+    - forgotten_era
+    - the_four
+    - continent
+    - modern_reckoning
+chunks: []

@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: the_four
+  type: world_lore
+  name: The Four
+  display_name: The Four
+  parent: null
+  aliases: ["the Four Guardians", "the four sacred figures"]
+  summary: >-
+    The Four are the sacred elemental figures of tradition, one associated with each of Helion's four
+    great divisions: West, Center, East and the South Continent. Their nature is understood in many ways.
+  tags: ["myth", "religion"]
+  search_context: "The Four, four sacred elemental figures, guardians of the four regions, West Center East South Continent, sacred beasts, old iconography, dragons in folk art."
+  content: >-
+    In the traditions of Helion there are Four sacred elemental figures, each associated with one of the
+    four great divisions: West, Center, East and the South Continent. Traditions interpret them as
+    guardians, divine servants, primordial beasts or sacred elemental figures, and no single account is
+    settled; Church teaching holds that Aureth, the Sun Emperor, ordered and blessed them under his
+    reign. In folk art and old stories they are often drawn as dragons, and so is the Sun Emperor in some
+    images; this is traditional iconography, not an established account of what they are. Whether they
+    still stir, what they are in truth and what the traditions have lost are not publicly established.
+    Their names, forms, powers and the elements they correspond to are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: cultures
+  related_entities: ["continent","west","center","east","south_continent","aureth_creation_myth","church_doctrine"]
+chunks: []

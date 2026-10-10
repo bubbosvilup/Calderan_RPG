@@ -1,0 +1,25 @@
+schema_version: 1
+entity:
+  id: forgotten_era
+  type: world_lore
+  name: The Forgotten Era
+  display_name: The Forgotten Era
+  parent: null
+  aliases: ["pre-Year-0 history", "the age before Year 0"]
+  summary: >-
+    Everything before Year 0 is commonly called the Forgotten Era; its records are scarce, and access
+    to them is restricted and controlled by the Church.
+  tags: ["history", "restricted_records"]
+  search_context: "Forgotten Era, before Year 0, pre-Year-0 history, forbidden history, restricted records, sealed archives, old books, Church censorship of the past."
+  content: >-
+    Everything before Year 0 is commonly grouped as the Forgotten Era. Ordinary people know that a
+    past before Year 0 existed, but detailed records are scarce, forbidden, sealed or controlled by
+    institutions, above all the Church, which heavily restricts access to them; the Church teaches
+    that the pre-Year-0 age was spiritually dangerous, confused and unreliable. Surviving fragments
+    are rare and incomplete, and nothing is established about what they contain. Possession or study
+    of forbidden pre-Year-0 texts can bring trouble with the Church or the Inquisition; exact laws and
+    penalties are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: history
+  related_entities: ["modern_reckoning","church_doctrine","inquisition"]
+chunks: []

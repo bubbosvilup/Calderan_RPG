@@ -11,10 +11,12 @@ entity:
     spiritual-political institution separate from the three national guilds, with comparable or
     greater influence. Its symbol is the Bladed Sun.
   tags: ["politics", "religion"]
-  search_context: "Church, Church of the Sun Emperor, Bladed Sun, High Archon of the West, Vicars, Auditors, Zealot Priests, Flagellants, Cathedral of the Bladed Sun, clergy, tithes"
+  search_context: "Church, Church of the Sun Emperor, Aureth, Year 491 anniversary, Bladed Sun, High Archon of the West, Vicars, Auditors, Zealot Priests, Flagellants, Cathedral of the Bladed Sun, clergy, tithes"
   content: >-
-    The Church of the Sun Emperor teaches that the Sun Emperor is West's divine and immortal
-    sovereign and the bearer of purifying divine Light. It is not a guild and not one of the three
+    The Church of the Sun Emperor sincerely worships Aureth, the Sun Emperor, West's divine and immortal
+    sovereign, as the bearer of purifying divine Light, and reveres Light itself and the ideals attributed
+    to him. The present year, 1191, is the seven-hundredth anniversary of his disappearance in Year 491, a
+    date the Church recognizes as significant. It is not a guild and not one of the three
     civic guilds (Merchants, Artisans, Learned Arts); it is a separate spiritual-political institution with
     comparable or greater influence. Its character is authoritarian, bureaucratic and theocratic:
     ritualized obedience, institutional paranoia, purification doctrine, social control, sacrifice,
@@ -55,7 +57,9 @@ chunks:
       institutional discipline. Zealot Priests: ordinary local clergy who preach, hear confession,
       conduct funerals, do community religious work, collect tithes and report locally. Flagellants:
       novices and low-ranking religious servants performing menial religious duties, penance and
-      ritual service. The current High Archon of the West is Cassian Valerius.
+      ritual service. The current High Archon of the West is Cassian Valerius; High Archons succeed one another over
+      the centuries through ordinary institutional succession, and Church leadership has changed hands many
+      times since Year 0.
     tags: ["hierarchy"]
   - id: "church.local_sites_and_charity"
     entity_id: "church"

@@ -44,7 +44,7 @@ entity:
     - name: "West's principal shipyards"
       description: "The largest and most important shipyards in West, building civilian, merchant, fishing and military vessels and most of West's fleet."
     - name: "renowned pearls"
-      description: "Davenport pearls are regarded among the finest available in Aureth's trade."
+      description: "Davenport pearls are regarded among the finest available in Helion's trade."
   connections: []
 chunks:
   - id: davenport.economy_and_port
@@ -64,7 +64,7 @@ chunks:
       wider agricultural region, iron, stone, textiles, spices, specialised finished goods and other
       materials for shipbuilding and city life, including from Calderan and from Center/Zul-Rath
       trade. It trades with Calderan, the wider West, Center ports, Skardgard and East, and other
-      maritime partners across Aureth. A river reaches the sea at Davenport, and river transport can
+      maritime partners across Helion. A river reaches the sea at Davenport, and river transport can
       carry cargo inland from Davenport toward the Calderan region; whether that river is Grey Brook's
       lower course, and where cargo is transferred to land, are not established, and boats do not
       enter Calderan through its walls. Most commerce is legal, but smuggling is significant:

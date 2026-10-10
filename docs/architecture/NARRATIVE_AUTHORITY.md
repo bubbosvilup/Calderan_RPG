@@ -234,7 +234,7 @@ is established in play and verified**; WorldStore remains world truth.
   clothing or injury questions do not trigger it. The question classes are a small auditable pattern table.
 - **What the narrator receives.** A separate `[BACKGROUND GROUNDING ? <topics>]` block, built deterministically from structured canon
   (not from player-text retrieval ranking): already-established background first, as authority; the scene's own slave-source
-  categories and West slavery canon; every named settlement/region on Aureth (names only, provisional placeholders described, never
+  categories and West slavery canon; every named settlement/region on Helion (names only, provisional placeholders described, never
   offered as proper names); one-line notes for canonical slave-flow places; peoples canon for species in play, with homelands framed as
   possibilities never assumed for an individual. It assigns nothing to anyone. Ordinary turns carry no block and are unchanged.
 - **Narrator creativity.** Individual life details, unnamed villages, farms, households and jobs remain the narrator's to invent.

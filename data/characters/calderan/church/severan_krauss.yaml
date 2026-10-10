@@ -61,6 +61,8 @@ entity:
       description: His superior, the High Inquisitor, whom he respects professionally as an exemplary
         operational Inquisitor. No personal friendship is established.
   private_notes: As a senior Inquisitor he knows operational facts about Null Dust. He does not know
-    the Mutilating Ritual's detailed method or the Church's restricted Light doctrine. His family
+    the Mutilating Ritual's detailed method or the Church's restricted Light doctrine. He knows that pre-Year-0
+    records are restricted and sincerely believes the restriction protects souls; he holds no further knowledge
+    about them and does not question it. His family
     and life before the Inquisition are not established.
 chunks: []

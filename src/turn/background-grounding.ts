@@ -48,6 +48,8 @@ const provisional = (e: Pick<WorldEntity, "display_name">) => /provisional/i.tes
 /** How a place may be named: provisional placeholders are described, never offered as proper names. */
 const placeLabel = (e: WorldEntity) => provisional(e) ? `${e.name.toLowerCase()} (descriptive label; proper name not established)` : e.name;
 
+/** Helion's four great divisions (canon migration: the South Continent joined West, Center and East). */
+const GREAT_DIVISIONS: readonly string[] = ["west", "center", "east", "south_continent"];
 export interface BackgroundGrounding { readonly topics: readonly BackgroundTopic[]; readonly block: string; readonly entity_ids: readonly string[] }
 /**
  * Deterministic background canon for this turn, or undefined when no background fact is being asked for. Sources: the scene's own
@@ -65,16 +67,17 @@ export function backgroundGrounding(world: WorldStore, context: TurnContext, inp
   if (established.length) lines.push("Already established (authoritative; never offer alternatives to these):", ...established);
   // 2. Scene: the nation the scene is in and the location's own source canon (e.g. the slave market's possible sources).
   const ancestry = context.primary.scene.location_ancestry.map(a => a.id), here = context.primary.scene.player_location?.id;
-  const nation = ancestry.find(id => ["west", "center", "east"].includes(id));
+  const nation = ancestry.find(id => GREAT_DIVISIONS.includes(id));
   const sourceSentence = [here, ...ancestry].flatMap(id => id ? sentencesMatching(get(id)?.content ?? "", /\bsources? (?:may )?include\b/i, 1) : []).at(0);
   if (sourceSentence) lines.push(`Possible sources of enslaved people here (no dominant origin): ${sourceSentence.replace(/^No dominant origin or percentages:\s*/i, "")}`);
   const slavery = topics.some(t => t === "enslavement" || t === "origin") || scene?.participants.some(p => p.role === "slave") ? get("west_slavery") : undefined;
   if (slavery) lines.push(`Slavery canon: ${firstSentence(slavery.summary)} ${sentencesMatching(slavery.content, /\b(?:frontier raids|not every enslaved|kidnapping)\b/i, 3).join(" ")}`);
   // 3. Named places that exist (names only, grouped by nation; provisional names are described, not named).
   const continent = get("continent");
-  const nations = ["west", "center", "east"].map(get).filter((e): e is WorldEntity => !!e);
-  const placeList = nations.map(n => `${n.name}: ${world.getChildren(n.id).filter(c => c.type === "location" && isPublic(c)).map(c => { ids.add(c.id); return placeLabel(c); }).join(", ")}`);
-  const regions = world.getChildren("continent").filter(c => c.type === "location" && isPublic(c) && !["west", "center", "east"].includes(c.id)).map(c => { ids.add(c.id); return placeLabel(c); });
+  const nations = GREAT_DIVISIONS.map(get).filter((e): e is WorldEntity => !!e);
+  // A great division with no named settlements (the South Continent) is listed by name only; nothing is invented for it.
+  const placeList = nations.map(n => { const named = world.getChildren(n.id).filter(c => c.type === "location" && isPublic(c)).map(c => { ids.add(c.id); return placeLabel(c); }); return named.length ? `${n.name}: ${named.join(", ")}` : n.name; });
+  const regions = world.getChildren("continent").filter(c => c.type === "location" && isPublic(c) && !GREAT_DIVISIONS.includes(c.id)).map(c => { ids.add(c.id); return placeLabel(c); });
   lines.push(`Named places that exist on ${continent?.name ?? "the continent"} (the only valid named origins; otherwise stay unnamed or vague): ${placeList.join("; ")}; regions: ${regions.join(", ")}.`);
   // 4. One-line notes for canonical slave-flow places outside the scene ancestry (already in the prompt). Context, not picks.
   const noteIds = (slavery && "related_entities" in slavery ? slavery.related_entities : []).filter(id => world.getEntity(id)?.type === "location" && !ancestry.includes(id) && id !== here);

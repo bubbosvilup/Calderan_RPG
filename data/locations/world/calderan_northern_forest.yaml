@@ -8,13 +8,13 @@ entity:
   aliases: ["Northern Forest"]
   summary: >-
     Woodsong Forest is a large, dense, lush forest broadly north of Calderan, home of the Woodsinger
-    elves and one of the major traditional population centers of Aureth's elves, and the source of
+    elves and one of the major traditional population centers of Helion's elves, and the source of
     scarce premium timber.
   content: >-
     Woodsong Forest lies broadly north of Calderan; exact borders are not established. It is large,
     dense, and lush, and human traffic there is relatively limited compared with the populated areas
     around Calderan. Elves are significantly present: it is one of the major traditional population
-    centers of elves in Aureth, though not the exclusive homeland of all elves, and elves also live
+    centers of elves in Helion, though not the exclusive homeland of all elves, and elves also live
     elsewhere. Its principal traditional elven population is the Woodsingers, a relatively isolated
     forest-elven culture of defenders, archers and wood craftsmen. The western end of the Dragon's
     Teeth Mountains approaches the region where the forest begins. The forest holds unusual and rare
@@ -36,7 +36,7 @@ entity:
     - name: "dense lush forest"
       description: "Large, dense, and lush, broadly north of Calderan; exact borders unestablished."
     - name: "major elven population center"
-      description: "One of the major traditional population centers of elves in Aureth, chiefly the Woodsingers; not the exclusive homeland of all elves."
+      description: "One of the major traditional population centers of elves in Helion, chiefly the Woodsingers; not the exclusive homeland of all elves."
     - name: "limited human traffic"
       description: "Human traffic is relatively limited compared with the populated areas around Calderan."
     - name: "scarce premium timber"

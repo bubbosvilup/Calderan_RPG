@@ -22,7 +22,7 @@ entity:
     anchors are Calderan's high-skill manufacturing and markets, Davenport's maritime trade,
     shipyards and pearls, Ironbound's military frontier economy, and Blackwater's largely illicit maritime trade.
   tags: [geography]
-  search_context: "West nation on Aureth, the known continent, distinct from Calderan's West District."
+  search_context: "West nation on Helion, the known continent, distinct from Calderan's West District."
   knowledge:
     visibility:
       narrator: true

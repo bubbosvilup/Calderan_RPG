@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: modern_reckoning
+  type: world_lore
+  name: The Modern Reckoning
+  display_name: The Modern Reckoning
+  parent: null
+  aliases: ["Year 0", "Reckoning of years", "the current year"]
+  summary: >-
+    The modern reckoning of years begins at Year 0, when the Sun Emperor Aureth revealed himself to
+    the world; he disappeared in Year 491, and the present year is 1191, the seven-hundredth
+    anniversary of the disappearance.
+  tags: ["history", "chronology"]
+  search_context: "Year 0, the modern reckoning, current year 1191, year 491, disappearance of the Sun Emperor, seven hundredth anniversary, Aureth reveals himself, dating of years, history of the Sun Emperor."
+  content: >-
+    The modern reckoning of years begins at Year 0, when Aureth, the Sun Emperor, revealed himself
+    publicly to the world. Year 0 marks that revelation; it is not presented as his birth, and what he
+    was or did before it is not part of ordinary public knowledge. In Year 491 the Sun Emperor
+    disappeared; the Church does not teach that he died. The present year is 1191, so the current
+    year is the seven-hundredth anniversary of the disappearance, a date of religious and political
+    weight that the Church recognizes and that the Church and the realm may mark in ways not yet
+    established. Everything before Year 0 is commonly called the Forgotten Era. The calendar's
+    months, weekdays and festivals are not established here.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: history
+  related_entities: ["sun_emperor","church_doctrine","forgotten_era","continent"]
+chunks: []

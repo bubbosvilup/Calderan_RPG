@@ -4,28 +4,29 @@ import { loadWorld } from "../src/world/loader.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 
-/** Aureth world-content pass: continent name, myth, northern forest, central oasis, Dragon's Teeth dwarf homeland. */
+/** World-content pass (continent migrated Aureth -> Helion in the canon migration): continent name, myth, northern forest, central oasis, Dragon's Teeth dwarf homeland. */
 const world = await loadWorld("data");
 const search = new HybridSearch(new RetrievalService(world));
 const top = async (query: string, n = 3) => (await search.search({ query, limit: n }, "narrator", "lexical")).candidates.map(c => c.entity_id);
 
-test("the single continent entity keeps its ID and resolves as Aureth; nations are unchanged", () => {
+test("the single continent entity keeps its legacy ID and resolves as Helion; the four divisions hang under it", () => {
   const continent = world.getEntity("continent")!;
-  assert.deepEqual([continent.name, continent.display_name, continent.parent], ["Aureth", "Aureth", null]);
-  assert.ok(continent.aliases.includes("Known Continent"));
+  assert.deepEqual([continent.name, continent.display_name, continent.parent], ["Helion", "Helion", null]);
+  assert.ok(continent.aliases.includes("Known Continent")); assert.ok(!continent.aliases.some(a => /aureth/i.test(a)));
   const roots = world.getEntitiesByType("location").filter(e => e.parent === null && !["mist_sea", "sorrow_sea", "silent_ocean", "chained_bay"].includes(e.id));
   assert.deepEqual(roots.map(e => e.id), ["continent"]);
-  for (const [id, name] of [["west", "West"], ["center", "Center"], ["east", "East"]] as const) {
+  for (const [id, name] of [["west", "West"], ["center", "Center"], ["east", "East"], ["south_continent", "South Continent"]] as const) {
     assert.equal(world.getEntity(id)!.name, name); assert.equal(world.getEntity(id)!.parent, "continent");
   }
 });
-test("Aureth is retrievable by name and the creation myth is recorded as mythology", async () => {
-  assert.equal((await top("Aureth"))[0], "continent");
+test("Helion is retrievable by name; Aureth now resolves to the Sun Emperor; the creation myth is recorded as mythology", async () => {
+  assert.equal((await top("Helion"))[0], "continent");
+  assert.equal((await top("Aureth"))[0], "sun_emperor");
   const myth = world.getEntity("aureth_creation_myth")!;
   assert.equal(myth.type, "world_lore");
   assert.ok("category" in myth && myth.category === "cultures");
-  assert.match(myth.content, /myth/i); assert.match(myth.content, /not established fact/i);
-  assert.ok((await top("golden dragon creation myth")).includes("aureth_creation_myth"));
+  assert.match(myth.content, /myth/i); assert.match(myth.content, /not\s+established fact/i);
+  assert.ok((await top("golden dragon creation myth")).some(id => id === "aureth_creation_myth" || id === "the_four"));
 });
 test("the forest north of Calderan resolves under its canonical name Woodsong Forest and carries the elven population-center lore", async () => {
   const forest = world.getEntity("calderan_northern_forest")!;

@@ -5,24 +5,26 @@ entity:
   name: "The Sun Emperor"
   display_name: "The Sun Emperor"
   parent: null
-  aliases: ["Sun Emperor"]
+  aliases: ["Sun Emperor", "Aureth"]
   summary: >-
-    The Sun Emperor is the sovereign of West in law and doctrine, functionally immortal and, in the
+    The Sun Emperor, Aureth, is the sovereign of West in law and doctrine, functionally immortal and, in the
     doctrine of the Church of the Sun Emperor, a divine founder bearing purifying divine Light. He
-    disappeared from the world long ago; West is still governed in his name.
+    revealed himself to the world in Year 0 and disappeared in Year 491; West is still governed in his name.
   tags: ["sovereign","religion"]
-  search_context: "The Sun Emperor, sovereign of West, divine sovereign, immortal emperor, absent emperor, disappeared founder, the Crown, divine Light"
+  search_context: "The Sun Emperor, Aureth, sovereign of West, Year 0 revelation, disappeared in Year 491, divine sovereign, immortal emperor, absent emperor, disappeared founder, the Crown, divine Light"
   content: >-
     The Sun Emperor is the lawful sovereign of West and the supreme source of its legitimacy,
     and the realm is still governed in his name. He is functionally immortal. Church doctrine
     proclaims him a divine sovereign, founder and protector of the ordered world, immortal, the
     source or bearer of purifying divine Light and protector of humanity and order against
-    corruption and Shadow. He disappeared long ago and has not been publicly seen since; his
-    present condition and whereabouts are unknown. Believers variously regard him as hidden,
+    corruption and Shadow. He is known by the name Aureth. He revealed himself publicly in Year 0, which
+    began the modern reckoning of years, and he disappeared in Year 491, seven hundred years before the
+    present year 1191; he has not been publicly seen since, and his present condition and whereabouts
+    are unknown. Believers variously regard him as hidden,
     withdrawn into divine transcendence or awaiting his return, and the Church does not teach that
     he is dead. He does not live in Calderan, where Duke Uther Calderan governs in his name. His age,
-    appearance, personal name, the date and circumstances of his disappearance and his history are
-    not established.
+    appearance, his life before Year 0, the circumstances of his disappearance and the rest of his
+    history are not established.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   role: npc
   species: null
@@ -46,8 +48,9 @@ chunks:
     search_context: Restricted state secret
     content: >-
       A major state and theological secret known only within the inner Church and the Inquisition:
-      the Sun Emperor is a real Light mage, and his functional immortality derives from Light magic.
-      The Church publicly frames his Light as divine miracle, never as mortal magic. Independent Light
+      the Sun Emperor's Light is real, wielded power, and his functional immortality derives from
+      Light. The inner Church holds this as a restricted account, no more; it does not publicly
+      teach it and frames his Light as divine miracle, never as mortal magic. Independent Light
       users therefore threaten both the Church's theological monopoly and the political legitimacy
       built on it, so the inner Church and the Inquisition capture, silence, torture, mutilate or kill
       them. Ordinary clergy, nobles, scholars, Guard and citizens do not know this. How his immortality

@@ -2,33 +2,35 @@ schema_version: 1
 entity:
   id: continent
   type: location
-  name: "Aureth"
-  display_name: "Aureth"
+  name: "Helion"
+  display_name: "Helion"
   parent: null
   aliases: ["Known Continent"]
   summary: >-
-    Aureth, the enormous known continent, comprises West, Center, and East, arranged from
-    west to east.
+    Helion, the enormous known continent, comprises four great divisions: West, Center and East,
+    arranged from west to east, and the South Continent to their south.
   content: >-
-    Aureth is conceptually comparable to Eurasia in scale, without exact dimensions
-    or travel times. West occupies the western portion, Center the central portion, and East
-    the eastern portion. West borders Center, and Center borders East; West and East share
-    no direct land border. Mist Sea lies broadly north, Sorrow Sea west, and The Silent
-    Ocean east. Chained Bay is a large southwestern inlet especially associated with West's
-    maritime region. The Dragon's Teeth Mountains form a major spine across the northern and
-    eastern side, from near the forest north of Calderan to the Center–East transition. An
-    old creation myth names the land after the legendary golden dragon Aureth. The named
-    major cities are not an exhaustive settlement census.
+    Helion is the modern name of the continent, in use since Year 0, the beginning of the modern reckoning. It is
+    conceptually comparable to Eurasia in scale, without exact dimensions or travel times. West
+    occupies the western portion, Center the central portion, and East the eastern portion. West
+    borders Center, and Center borders East; West and East share no direct land border. The South
+    Continent, the fourth great division of Helion, lies to the south of West, Center and East; its
+    borders, extent and character are not established. Mist Sea lies broadly north, Sorrow Sea
+    west, and The Silent Ocean east. Chained Bay is a large southwestern inlet especially associated
+    with West's maritime region. The Dragon's Teeth Mountains form a major spine across the northern
+    and eastern side, from near the forest north of Calderan to the Center–East transition. Each of
+    the four divisions is traditionally associated with one of the Four of sacred tradition. What
+    the continent was called before Year 0 is a matter of the Forgotten Era, whose records are
+    restricted. The named major cities are not an exhaustive settlement census.
   tags: [geography]
-  search_context: "Aureth, the known continent; geographic parent of the three nations West, Center and East; also the name of a legendary dragon in its creation myth."
+  search_context: "Helion, the known continent; geographic parent of the four great divisions West, Center, East and the South Continent; modern name of the continent since Year 0."
   knowledge:
     visibility:
       narrator: true
       player: true
     known_by: []
   features:
-    - name: "continental nations"
-      description: "West, Center, East"
+    - name: "great divisions"
+      description: "West, Center, East and the South Continent"
   connections: []
 chunks: []
-

@@ -9,9 +9,10 @@ const memberships = {
   center: ["zul_rath", "khar_dune", "sandspear", "central_oasis_settlement"],
   east: ["vaelrost", "frostspire", "skardgard"],
 };
-const geography = ["continent", ...Object.keys(memberships), ...Object.values(memberships).flat(), "mist_sea", "sorrow_sea", "silent_ocean", "chained_bay", "dragons_teeth_mountains", "calderan_northern_forest"];
+const geography = ["continent", ...Object.keys(memberships), ...Object.values(memberships).flat(), "mist_sea", "sorrow_sea", "silent_ocean", "chained_bay", "dragons_teeth_mountains", "calderan_northern_forest", "south_continent"];
 const expectedFeatures: Record<string, string[]> = {
-  continent: ["continental nations"],
+  continent: ["great divisions"],
+  south_continent: ["fourth great division"],
   west: ["national capital", "land border with Center", "temperate regional climate"],
   center: ["national capital", "land border with West", "land border with East", "arid regional climate", "magic prohibited", "tournament rulership"],
   east: ["national capital", "land border with Center", "armed neutrality", "cold regional climate"],
@@ -31,7 +32,7 @@ const expectedFeatures: Record<string, string[]> = {
   skardgard: ["principal coastal city", "fjord-like coast and dark stone fortifications", "whaling, shipbuilding, and high-seas fishing"],
 };
 
-test("geography loads as 21 locations with explicit identity, containment, and classification", async () => {
+test("geography loads as 22 locations with explicit identity, containment, and classification", async () => {
   const world = await loadWorld("data");
   const locations = world.getEntitiesByType("location");
   // City-internal locations (Heartstone, the square outside it, the slave market) sit below Calderan and are not national geography.
@@ -45,7 +46,7 @@ test("geography loads as 21 locations with explicit identity, containment, and c
     assert(Object.isFrozen(entity));
   }
   assert.equal(world.getEntity("continent")!.parent, null);
-  assert.deepEqual(world.getChildren("continent").map(e => e.id).sort(), ["calderan_northern_forest", "center", "dragons_teeth_mountains", "east", "west"]);
+  assert.deepEqual(world.getChildren("continent").map(e => e.id).sort(), ["calderan_northern_forest", "center", "dragons_teeth_mountains", "east", "south_continent", "west"]);
   for (const [nation, cities] of Object.entries(memberships)) {
     assert.equal(world.getEntity(nation)!.parent, "continent");
     assert.deepEqual(world.getChildren(nation).map(e => e.id).sort(), [...cities].sort());

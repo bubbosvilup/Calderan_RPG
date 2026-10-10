@@ -24,7 +24,7 @@ entity:
     porous. Zul-Rath may employ or tolerate Sandspear corsairs when useful. Center's religion
     remains undefined.
   tags: [geography]
-  search_context: "Center nation on Aureth, the known continent, distinct from Calderan's Center District; Beastfolk-led desert nation, spices, silk, honour and martial culture, magic forbidden, five-year ruler tournament."
+  search_context: "Center nation on Helion, the known continent, distinct from Calderan's Center District; Beastfolk-led desert nation, spices, silk, honour and martial culture, magic forbidden, five-year ruler tournament."
   knowledge:
     visibility:
       narrator: true
