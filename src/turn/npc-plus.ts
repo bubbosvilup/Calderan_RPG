@@ -246,6 +246,22 @@ export function deduplicateRecovered(npc: NpcPlusContext, retrieved: unknown): {
 }
 /** Narrator section (absent when no active NPC+). Authority stays in the state blocks above it. */
 export const MANNERISM_NARRATOR_RULE = "Mannerisms are optional local cues: use occasionally and naturally, never in every scene or as caricature, only when their stated condition occurs. Recurrence: emergent establishes no prior occurrence; observed records an occurrence, not a habit; established supports recurrence, not universal frequency. Characters recognize a habit only if listed in recognized_by. Do not infer history, personality, psychology, motivation, consent or internal state from cue presence. Never invent objects, prerequisites or facts to perform a cue.";
+/**
+ * Narrator-side de-duplication of CURRENT relationship state: when [CURRENT SCENE] already states a character's relationship toward Nicco, the NPC+
+ * line does not repeat it (`toward Nicco: ...` in Tier B, `N{...}` in Tier C). Portrayal, household role and development history stay. The
+ * Controller's NPC+ context is untouched; `stated` maps character id -> the name the line starts with.
+ */
+export function withoutStatedRelationship(npc: NpcPlusContext, stated: ReadonlyMap<string, string>): NpcPlusContext {
+  if (!stated.size) return npc;
+  const lines = npc.lines.map(line => {
+    for (const [id, name] of stated) {
+      if (line.startsWith(`NPC+ ${name} (${id}) `)) return line.replace(/ \| toward Nicco: .*?(?= \| recent \()/, "");
+      if (line.startsWith(`${name}: core=`)) return line.replace(/; N\{[^}]*\}/, "");
+    }
+    return line;
+  });
+  return Object.freeze({ ...npc, lines: Object.freeze(lines) });
+}
 export function renderNpcPlus(npc: NpcPlusContext): string {
   return [`[NPC+ HOUSEHOLD CHARACTERS] Premium continuity for household members (portrayal guidance, not public knowledge). Authoritative state above wins on any conflict. Compact keys: core=personality traits, role=household role, N{…}=their relationship toward Nicco (0 none, L low, M moderate, H high; trust, wary=wariness, aff=affection, prot=protectiveness, resp=respect, fear, host=hostility, rom=romance), recent=latest household event, away=not in this scene, deep=[…]=recoverable background not shown.`,
     ...(npc.lines.some(line => line.includes("\nMannerisms:\n")) ? [MANNERISM_NARRATOR_RULE] : []), ...npc.lines].join("\n");

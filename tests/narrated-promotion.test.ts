@@ -227,7 +227,7 @@ test("end to end: no pre-registered Brenna → promoted when her name is establi
   assert.doesNotMatch(p, /debt auction in Ashford/);
   assert.match(p, /"sex":"female"/); assert.match(p, /"years":32/);
   assert.match(p, /Brenna: legally enslaved; legal holder Nicco; transfer papers documented/);
-  assert.match(p, /Present but NOT household members: [^\n]*Brenna/);
+  assert.match(p, /Present, not members: [^\n]*Brenna/);
   assert.doesNotMatch(p, /\[SCENE PARTICIPANTS\][\s\S]*Brenna/);
   // Debug inspect distinguishes origin; the player view does not expose the origin snapshot.
   const debug = formatCampaignStatus(c.exportSnapshot(), world, "debug");

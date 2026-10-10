@@ -13,8 +13,20 @@ import type { SceneEvent, SceneKnowledgeEntry } from "./scene-state-projection.j
  */
 export const SCENE_BLOCK_HEADER = "[CURRENT SCENE]";
 export const SCENE_RENDER_LIMITS = Object.freeze({ max_chars: 6_000, description_chars: 160, event_description_chars: 120, ancestor_summaries: 2 });
+/**
+ * Per-section SOFT budgets (characters of section body lines). They keep one subsystem from consuming the block: optional entries of a section
+ * over its budget are dropped (lowest score first) before the global bound is considered. `required` entries (engaged people, worn / held /
+ * referenced items, legal status, shown households) may exceed their section's budget, and the global `max_chars` stays the final hard bound.
+ * Values were chosen from the measured rich / large fixtures (docs/evaluations/SCENE_PROJECTION_PROMPT_DEBT_CLEANUP.md, section 11).
+ */
+export const SCENE_SECTION_SOFT_BUDGETS: Readonly<Record<"state" | "items" | "knowledge" | "social" | "scheduled" | "developments", number>> =
+  Object.freeze({ state: 300, items: 700, knowledge: 700, social: 900, scheduled: 450, developments: 300 });
 export const SCENE_GUIDANCE = "Authoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.";
-export interface RenderedScene { readonly text: string; readonly chars: number; readonly sections: readonly string[]; readonly dropped: Readonly<Record<string, number>> }
+export interface RenderedScene { readonly text: string; readonly chars: number; readonly sections: readonly string[]; readonly dropped: Readonly<Record<string, number>>;
+  /** Display names ("from → to") of the relationship lines that survived rendering, so another prompt block can avoid restating the same edge. */
+  readonly relationships: readonly { readonly from: string; readonly to: string }[];
+  /** Display names of the characters whose recorded state line survived rendering. */
+  readonly states: readonly string[] }
 
 /**
  * The only condition tags with an established meaning are the closed physical vocabulary (physical-interaction.ts); they get a fixed
@@ -71,24 +83,24 @@ function eventLine(e: SceneEvent, now: number): string {
   const detail = describe(e.description, SCENE_RENDER_LIMITS.event_description_chars);
   return `- ${e.title}: ${when}${e.participants.length ? `; with ${e.participants.join(", ")}` : ""}${detail ? `. ${detail}` : ""}.`;
 }
-interface Entry { readonly section: string; readonly text: string; readonly score: number; readonly required: boolean }
+interface Entry { readonly section: string; readonly text: string; readonly score: number; readonly required: boolean; readonly relationship?: { readonly from: string; readonly to: string }; readonly state_of?: string }
 
 /** Stage 3: render the focused projection. Pure; deterministic for equal input. */
 export function renderSceneStateProjection(focused: FocusedSceneState, options: { readonly max_chars?: number } = {}): RenderedScene {
   const max = options.max_chars ?? SCENE_RENDER_LIMITS.max_chars;
   const entries: Entry[] = [];
   const add = <T>(section: string, ranked: readonly Ranked<T>[], line: (v: T) => string) => { for (const r of ranked) entries.push({ section, text: line(r.value), score: r.score, required: r.required }); };
-  add("state", focused.character_state, s => `- ${s.name} ${[...(s.status ? [`has the recorded status ${s.status}`] : []), ...s.conditions.map(conditionClause), ...(s.presentation ? [`presentation: ${s.presentation}`] : [])].join("; ")}.`);
+  for (const r of focused.character_state) { const s = r.value; entries.push({ section: "state", state_of: s.name, score: r.score, required: r.required, text: `- ${s.name} ${[...(s.status ? [`has the recorded status ${s.status}`] : []), ...s.conditions.map(conditionClause), ...(s.presentation ? [`presentation: ${s.presentation}`] : [])].join("; ")}.` }); }
   for (const f of focused.items) entries.push({ section: "items", text: itemLine(f), score: f.score, required: f.required });
   add("knowledge", focused.knowledge, knowledgeLine);
   add("social", focused.social.legal, l => `- ${l.name}: legally ${l.status}${l.holder ? `; legal holder ${l.holder}` : ""}${l.papers ? `; transfer papers ${l.papers === "documented" ? "documented" : l.papers === "undocumented" ? "NONE (unpapered transfer)" : "not established"}` : ""}${l.provenance ? ` (${l.provenance})` : ""}.`);
   add("social", focused.social.households, h => {
     const lines = [`- Household ${h.name}: keeper ${h.keepers.join(", ") || "none"}; members: ${h.members.map(m => `${m.name}${m.present ? "" : " (away)"}`).join(", ") || "none besides the keeper"}.`];
-    if (h.present_non_members.length) lines.push(`  Present but NOT household members: ${h.present_non_members.map(p => p.name).join(", ")}. Living or staying somewhere is not membership.`);
+    if (h.present_non_members.length) lines.push(`  Present, not members: ${h.present_non_members.map(p => p.name).join(", ")}.`);
     if (h.rules.length) lines.push(`  Active household rules: ${h.rules.map(r => `"${r}"`).join("; ")}.`);
     return lines.join("\n");
   });
-  add("social", focused.social.relationships, r => `- ${r.from} → ${r.to}: ${r.headline} (${r.dimensions}).`);
+  for (const r of focused.social.relationships) entries.push({ section: "social", text: `- ${r.value.from} → ${r.value.to}: ${r.value.headline} (${r.value.dimensions}).`, score: r.score, required: r.required, relationship: { from: r.value.from, to: r.value.to } });
   add("scheduled", focused.scheduled, e => eventLine(e, focused.now));
   add("developments", focused.developments, d => `- ${d.text} (${durationText(focused.now - d.world_minute)} ago).`);
 
@@ -114,26 +126,36 @@ export function renderSceneStateProjection(focused: FocusedSceneState, options: 
     sections.push("time");
     out.push(`Time: ${focused.time.actual_time} — ${focused.time.time_of_day}`);
     sections.push("present");
-    out.push("Present:", ...focused.present.map(p => `- ${p.name}${p.confidential ? " (confidential encounter: identity, role and affiliations are not public)" : ""}`));
-    block("state", "Character state:", sectionBody("state"));
-    const itemNotes = [...(focused.carried_not_listed ? [`- ${focused.carried_not_listed} further carried item${focused.carried_not_listed === 1 ? "" : "s"} not listed.`] : []),
+    // Secrecy is enforced by the identity gate (the name is already the neutral observable descriptor); no permission wording belongs in scene reality.
+    out.push("Present:", ...focused.present.map(p => `- ${p.name}`));
+    const omitted = (section: string, noun: string) => droppedIn(section) ? [`- ${droppedIn(section)} more ${noun} not listed for space.`] : [];
+    block("state", "Character state:", sectionBody("state", omitted("state", droppedIn("state") === 1 ? "character state" : "character states")));
+    const itemNotes = [...(focused.carried_not_listed ? [`- ${focused.carried_not_listed} further carried or worn item${focused.carried_not_listed === 1 ? "" : "s"} not listed.`] : []),
       ...(focused.stored_not_listed ? [`- ${focused.stored_not_listed} further item${focused.stored_not_listed === 1 ? " is" : "s are"} stored here, not listed.`] : []),
       ...(droppedIn("items") ? [`- ${droppedIn("items")} more item${droppedIn("items") === 1 ? "" : "s"} not listed for space.`] : [])];
     block("items", "Items:", sectionBody("items", itemNotes));
     sections.push("player");
     out.push("Player:", `- Mana: ${focused.player.mana.current}/${focused.player.mana.max}`, `- Money: ${focused.player.gold === null ? "not tracked" : `${focused.player.gold} Gold`}`);
-    block("knowledge", "Knowledge (recorded entries only; having no entry is not proof a person is ignorant):", sectionBody("knowledge"));
-    block("social", "Social (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):", sectionBody("social"));
-    block("scheduled", "Scheduled:", sectionBody("scheduled"));
+    block("knowledge", "Knowledge (recorded entries only; having no entry is not proof a person is ignorant):", sectionBody("knowledge", omitted("knowledge", droppedIn("knowledge") === 1 ? "recorded fact" : "recorded facts")));
+    block("social", "Social (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed here, never inferred from being present or living somewhere):", sectionBody("social", omitted("social", droppedIn("social") === 1 ? "social entry" : "social entries")));
+    block("scheduled", "Scheduled:", sectionBody("scheduled", omitted("scheduled", droppedIn("scheduled") === 1 ? "event" : "events")));
     block("developments", "Recent recorded developments (history; current state above wins):", sectionBody("developments"));
     return { text: out.join("\n"), sections };
   };
   let result = assemble();
-  // Budget: drop whole entries, lowest-priority section first, lowest score first, latest first on ties. Required entries never drop.
+  // Section soft budgets: one subsystem cannot take most of the block. Optional entries only, lowest score first, latest first on ties.
+  for (const section of Object.keys(SCENE_SECTION_SOFT_BUDGETS) as (keyof typeof SCENE_SECTION_SOFT_BUDGETS)[]) {
+    const size = () => entries.reduce((n, e, i) => n + (e.section === section && !dropped.has(i) ? e.text.length + 1 : 0), 0);
+    const optional = entries.map((e, i) => ({ e, i })).filter(x => x.e.section === section && !x.e.required).sort((a, b) => a.e.score - b.e.score || b.i - a.i);
+    for (const x of optional) { if (size() <= SCENE_SECTION_SOFT_BUDGETS[section]) break; dropped.add(x.i); }
+  }
+  result = assemble();
+  // Global budget: drop whole entries, lowest-priority section first, lowest score first, latest first on ties. Required entries never drop.
   const candidates = entries.map((e, i) => ({ e, i })).filter(x => !x.e.required)
     .sort((a, b) => (SECTION_PRIORITY[b.e.section]! - SECTION_PRIORITY[a.e.section]!) || a.e.score - b.e.score || b.i - a.i);
-  for (const c of candidates) { if (result.text.length <= max) break; dropped.add(c.i); result = assemble(); }
+  for (const c of candidates) { if (result.text.length <= max) break; if (dropped.has(c.i)) continue; dropped.add(c.i); result = assemble(); }
   const counts: Record<string, number> = {};
   for (const i of dropped) counts[entries[i]!.section] = (counts[entries[i]!.section] ?? 0) + 1;
-  return Object.freeze({ text: result.text, chars: result.text.length, sections: result.sections, dropped: Object.freeze(counts) });
+  const relationships = entries.flatMap((e, i) => e.relationship && !dropped.has(i) ? [e.relationship] : []);
+  return Object.freeze({ text: result.text, chars: result.text.length, sections: result.sections, dropped: Object.freeze(counts), relationships: Object.freeze(relationships), states: Object.freeze(entries.flatMap((e, i) => e.state_of && !dropped.has(i) ? [e.state_of] : [])) });
 }

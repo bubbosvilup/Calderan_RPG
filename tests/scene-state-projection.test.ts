@@ -108,7 +108,8 @@ test("knowledge scopes: knows / believes / suspects / rumor are distinct and a m
   assert.match(block, /\[the claim is false\]/);
   assert.doesNotMatch(block, /does not know|doesn't know|is unaware|ignorant of|cannot know/i);
   const ideal = scene(idealScene(), "Brenna, tell me about the West Gate incident.");
-  assert.match(ideal, /no recorded knowledge entry for/);
+  assert.doesNotMatch(ideal, /no recorded knowledge entry for/, "Maren is not named by this turn, so she is not listed");
+  assert.match(scene(idealScene(), "Brenna and Maren, what do you each know about the West Gate incident?"), /known by Nicco, Brenna; no recorded knowledge entry for Maren\./);
   assert.match(ideal, /not proof a person is ignorant/);
 });
 
@@ -223,12 +224,12 @@ test("scheduled events: near or present-participant events show; far ones do not
 });
 
 test("recent developments: validated NPC+ developments are shown only while still true in the current state", () => {
-  const f = scenarios()[5]!;
-  const block = sceneBlock(promptFor(f.world, f.campaign, f.input).text);
+  const f = scenarios()[5]!, input = "Maren, how is your head?";
+  const block = sceneBlock(promptFor(f.world, f.campaign, input).text);
   assert.match(block, /Recent recorded developments \(history; current state above wins\)/);
   assert.match(block, /Maren gained the condition "dazed"/);
   apply(f.campaign, { kind: "set_condition", character_id: "maren", conditions: [] });
-  assert.doesNotMatch(sceneBlock(promptFor(f.world, f.campaign, f.input).text), /Maren gained the condition "dazed"/, "a development already undone by current state is not shown");
+  assert.doesNotMatch(sceneBlock(promptFor(f.world, f.campaign, input).text), /Maren gained the condition "dazed"/, "a development already undone by current state is not shown");
 });
 
 test("prompt regression: one scene block, the old blocks are gone, other sections stay separate", () => {

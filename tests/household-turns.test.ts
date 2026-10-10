@@ -162,7 +162,7 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   const care = await step("Rest. You're safe here.", ["Brenna, now part of the household, sits on the edge of the bed.", "Brenna sits on the edge of the bed and keeps her distance, saying nothing."]);
   assert.equal(care.narration_reconciliation?.delivered, "revision");
   assert.ok(care.narration_reconciliation!.issues.some(i => i.kind === "uncommitted_household"));
-  assert.match(prompt(), /Present but NOT household members: Brenna/);
+  assert.match(prompt(), /Present, not members: Brenna/);
   assert.match(prompt(), /- Money: 495 Gold/); assert.deepEqual(members(c), []);
   // 4. Her own voluntary oath: the controller proposes, the chooser's words confirm; protectiveness rises one step, trust does not.
   const oath = 'Brenna rests her palm on the warm stone. "I, Brenna, decide to stay and become a resident. I swear to protect the hearthstone and Nicco, the keeper."';
@@ -174,7 +174,7 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   assert.deepEqual(c.exportSnapshot().relationships.find(e => e.from_character_id === BRENNA)!.dimensions, { protectiveness: "low" });
   // 5. After the join the narrator sees her as a member; money was never touched again; status comes from runtime only.
   await step("Welcome home.", ["Brenna nods once."]);
-  assert.match(prompt(), /members: Brenna/); assert.doesNotMatch(prompt(), /Present but NOT household members: Brenna/);
+  assert.match(prompt(), /members: Brenna/); assert.doesNotMatch(prompt(), /Present, not members: Brenna/);
   assert.equal(gold(c), 495);
   assert.match(formatCampaignStatus(c.exportSnapshot(), world), /Money: 495 gold[\s\S]*Heartstone Household: 1 — Brenna/);
 });

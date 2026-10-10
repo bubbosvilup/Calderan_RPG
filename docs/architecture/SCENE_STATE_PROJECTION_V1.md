@@ -101,3 +101,8 @@ and the existing character JSON. The old `socialBlock`, `temporalGrounding` and 
   `tests/golden/scene-state-ideal.txt`).
 - Fixtures: `src/dev/scene-state-fixtures.ts` (synthetic, public).
 - `npm run inspect:scene` prints the offline scenarios A–F; `src/dev/scene-state-live-smoke.ts` is the optional live narrator smoke.
+
+## Consolidation Pass A (prompt debt cleanup)
+
+After certification the focus and rendering stages were tightened without changing the architecture: knowledge names a person with no recorded edge only when the turn is about them, households open only for engaged people / explicit reference / rules (no complement-set lists), ordinary carried inventory of non-engaged people is omitted, framework wording is gone from `Present:`, developments follow value rules, and each section has a soft budget under the unchanged 6,000-char bound.
+The narrator-side `[CURRENT AUTHORITATIVE CHARACTERS]`, player profile and NPC+ no longer restate state this block owns. See `docs/evaluations/SCENE_PROJECTION_PROMPT_DEBT_CLEANUP.md`.

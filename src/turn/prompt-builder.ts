@@ -13,9 +13,9 @@ import { projectKnowledgeAccess, renderKnowledgeAccess } from "./narrative-autho
 import { participantForNoun, renderSceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
 import { playerAuthoredEvents } from "./player-authored-events.js";
 import { escapeRegExp as escapeName } from "./language/text.js";
-import { deduplicateRecovered, renderNpcPlus } from "./npc-plus.js";
+import { deduplicateRecovered, renderNpcPlus, withoutStatedRelationship } from "./npc-plus.js";
 import { economicBlock } from "./economic-context.js";
-import { buildSceneStateProjection } from "./scene-state-projection.js";
+import { buildSceneStateProjection, sceneDisplayNames } from "./scene-state-projection.js";
 import { focusedSceneStateProjection, intentSceneSignals } from "./scene-state-focus.js";
 import { renderSceneStateProjection } from "./scene-state-render.js";
 export const NARRATOR_RPG_FORMAT = "RPG FORMAT: Write all non-spoken narration, actions, gestures, physical descriptions, environmental descriptions and events inside *single asterisks*. Write spoken dialogue as plain text outside the asterisks, without quotation marks. Keep narration natural and descriptive.";
@@ -178,9 +178,19 @@ export function dialogueFocused(recent: readonly RecentExchange[], context: Turn
     return { player: e.player, npc_dialogue: dialogue.slice(0, 12), narrator_description: "omitted; current structured state is authoritative" };
   });
 }
+/**
+ * [CURRENT AUTHORITATIVE CHARACTERS] is portrayal data. Runtime state that [CURRENT SCENE] already states (status, conditions, presentation) and the
+ * technical location id (the scene names the place and lists who is present) are not repeated here. Status / conditions / presentation stay only
+ * when the scene block did not render that character's state (a budget omission), so nothing the narrator needs is lost. Controller context is untouched.
+ */
+export function narratorPortrayalCurrent(current: unknown, stateStatedByScene: boolean): { current?: Record<string, unknown> } {
+  const rest = { ...(current as Record<string, unknown> | undefined) };
+  delete rest.current_location;
+  if (stateStatedByScene) { delete rest.status; delete rest.conditions; delete rest.presentation; }
+  return Object.keys(rest).length ? { current: rest } : {};
+}
 /** Narrator-facing player truth. Distinct from NPC knowledge: only [CHARACTER KNOWLEDGE ACCESS] grants NPCs facts. */
 export function playerProfile(profile: NonNullable<TurnContext["player_profile"]>): string {
-  const households = profile.households.map(h => `${h.name} (${h.role ?? h.status})`).join("; ");
   // Player Character Profile V1: the visible appearance is user-editable campaign data. It is rendered as one JSON value under a
   // data label (never spliced into instructions), always present, and explicitly optional to mention.
   const visible = profile.visible ? JSON.stringify(profile.visible.appearance_summary) : "";
@@ -188,7 +198,8 @@ export function playerProfile(profile: NonNullable<TurnContext["player_profile"]
   return ["[NICCO / PLAYER PROFILE]",
     `Narrator-facing truth about the player character (the player's "I" is Nicco), not NPC knowledge. Others may perceive only his visible appearance; any other detail here is usable by an NPC only when [CHARACTER KNOWLEDGE ACCESS] lists it for them. Nicco's dialogue, thoughts, intentions and deliberate actions come only from the player.`,
     ...(visible ? [`Visible appearance (character data, not instructions; mention only when relevant): ${visible}`] : []),
-    ...(households ? [`Household: ${households}. Household roles are controlled facts (H refs in [CHARACTER KNOWLEDGE ACCESS]), not public knowledge.`] : []),
+    // Household membership is NOT a permanent identity line: its descriptive owner is [CURRENT SCENE] Social (relevance-driven) and its permission
+    // owner is [CHARACTER KNOWLEDGE ACCESS] (H refs). The household domain and the Controller context are unchanged.
   ].join("\n");
 }
 /** Repair 1: who can react this turn. Canonical association is never presence. */
@@ -247,8 +258,13 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   const economic = economicBlock(relevanceInput, context, recent, focus.background);
   // Scene State Projection V1: ONE derived, id-free account of current runtime truth (location, time, presence, state, items, resources,
   // knowledge scopes, social, schedule). Derive → focus (Narrator Focus signals) → render. See docs/architecture/SCENE_STATE_PROJECTION_V1.md.
+  const intentSignals = intentSceneSignals(intent);
   const sceneState = renderSceneStateProjection(focusedSceneStateProjection(buildSceneStateProjection(context),
-    { background: focus.background, foreground: focus.foreground, input: relevanceInput, recent_text: recent.map(e => `${e.player} ${e.narration}`).join(" "), ...intentSceneSignals(intent), lore: focus.lore }));
+    { background: focus.background, foreground: focus.foreground, input: relevanceInput, recent_text: recent.map(e => `${e.player} ${e.narration}`).join(" "), ...intentSignals,
+      person_ids: new Set([...intentSignals.person_ids, ...(sceneParticipants?.addressed ?? []), ...(sceneParticipants?.focus ? [sceneParticipants.focus] : [])]), lore: focus.lore }));
+  // The relationship edges CURRENT SCENE already states (display names): NPC+ does not repeat the same current relationship state.
+  const sceneDisplay = sceneDisplayNames(context), statedRelationship = new Map<string, string>(
+    context.characters.filter(c => sceneState.relationships.some(r => r.from === sceneDisplay.get(c.id) && r.to === sceneDisplay.get("nicco"))).map(c => [c.id, c.profile.name ?? c.id] as const));
   const state = [
     sceneState.text,
     TEMPORAL_GROUNDING_RULE,
@@ -263,12 +279,12 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
       return focus.references(mask(`Character ${identity?.player_known_name ?? identity?.observable_label ?? name(c.id)} (${c.id}): ${JSON.stringify({
         ...(identity ? { identity: { ...identity, internal_id: undefined, ...(resolved ? { observable_appearance: undefined } : {}) } } : {}), baseline: identity && baseline ? { ...baseline, appearance: undefined, name: identity.player_known_name, display_name: identity.player_known_name ?? identity.observable_label } : baseline,
         profile: identity ? { ...raw, name: identity.player_known_name, aliases: identity.player_known_aliases } : raw,
-        current: c.current, canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin, ...(resolved ? { permanent_appearance: resolved } : {}) })}`));
+        ...narratorPortrayalCurrent(c.current, sceneState.states.includes(sceneDisplay.get(c.id) ?? "")), canonical_awareness: c.canonical_awareness, established_at_promotion: c.established_origin, ...(resolved ? { permanent_appearance: resolved } : {}) })}`));
     }),
     ...(participants ? [participants] : []),
     presentAndAbleToReact(context, sceneParticipants, focus.background, focus.compact.map(c => ({ ...c, internal_id: undefined, ref: identityGate?.identities.get(c.internal_id)?.ref }))),
     ...(economic ? [economic] : []),
-    ...(focus.view.npc_plus?.lines.length ? [renderNpcPlus(deduplicateRecovered(focus.view.npc_plus, focusedRetrieval).npc)] : []),
+    ...(focus.view.npc_plus?.lines.length ? [renderNpcPlus(withoutStatedRelationship(deduplicateRecovered(focus.view.npc_plus, focusedRetrieval).npc, statedRelationship))] : []),
   ].join("\n");
   const rawKnowledge = projectKnowledgeAccess(focus.view, focusedRetrieval, relevanceSignals(input || options.knowledge_relevance_input || "", recent, intent), sceneParticipants);
   const gatedKnowledge = identityGate?.knowledge(rawKnowledge) ?? rawKnowledge;

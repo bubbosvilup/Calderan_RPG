@@ -18,4 +18,4 @@ Player:
 - Mana: 80/100
 - Money: 4 Gold
 Knowledge (recorded entries only; having no entry is not proof a person is ignorant):
-- "The West Gate incident left two guards dead.": known by Nicco, Brenna; no recorded knowledge entry for Maren.
+- "The West Gate incident left two guards dead.": known by Nicco, Brenna.

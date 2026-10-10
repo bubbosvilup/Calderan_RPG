@@ -111,7 +111,7 @@ test("integration: ONE rich scene is correct across location, time, people, stat
   assert.doesNotMatch(block, MIXED);                                                                    // 7
   assert.match(block, /- Nicco wears Wool cloak \(back\)\./);                                          // 8
   assert.ok((block.match(/Nicco carries /g) ?? []).length < 14, "ordinary carried inventory compacts");   // 10
-  assert.match(block, /further carried items not listed/);
+  assert.match(block, /further carried or worn items not listed/);
   assert.match(block, /- Letter is stored here; owner: Nicco\./);                                      // 11
   assert.doesNotMatch(block, /Cellar key/);                                                             // 12
   assert.match(block, /Mana: 80\/100/); assert.match(block, /Money: 4 Gold/);                          // 13-14
@@ -129,7 +129,8 @@ test("integration: ONE rich scene is correct across location, time, people, stat
 
 test("integration: knowledge scopes stay distinct and a missing edge is not ignorance (rich scene, knowledge query)", () => {
   const block = scene(richScene(), "Brenna, what do you make of the grain tax, the bridge and the West Gate?");
-  assert.match(block, /"The West Gate incident left two guards dead\.": known by Nicco, Brenna; no recorded knowledge entry for Gerome, Maren/);
+  assert.match(block, /"The West Gate incident left two guards dead\.": known by Nicco, Brenna\.\n/);
+  assert.doesNotMatch(block, /no recorded knowledge entry for Gerome/, "people the turn is not about are not listed as having no entry");
   assert.match(block, /"The eastern bridge is closed\." \[the claim is false\]: known by Nicco; believed by Maren/);
   assert.match(block, /"The grain tax will double at harvest\." \[truth unestablished\]: known by Nicco; heard only as a rumor by Brenna/);
   assert.doesNotMatch(block, /does not know|doesn't know|is unaware|ignorant of|cannot know/i);
@@ -297,7 +298,7 @@ test("knowledge access: CURRENT SCENE lists facts as scene truth but the hard Ch
   const text = `${pf.request.system_prompt}\n${pf.text}`;
   const access = text.slice(text.indexOf("\n[CHARACTER KNOWLEDGE ACCESS]\n"));
   assert.ok(text.includes("[CHARACTER KNOWLEDGE ACCESS]"));
-  assert.match(sceneBlock(text), /West Gate incident left two guards dead.*no recorded knowledge entry for Gerome, Maren/);
+  assert.match(sceneBlock(text), /West Gate incident left two guards dead[^\n]*known by Nicco, Brenna; no recorded knowledge entry for Maren\./);
   assert.match(text, /a fact elsewhere in context is not usable by a character merely because it is present/);
   assert.ok(text.indexOf("[CURRENT SCENE]") < text.indexOf("\n[CHARACTER KNOWLEDGE ACCESS]\n"));
   // The access section remains the only place that grants usability: Maren has no usable West Gate entry there.

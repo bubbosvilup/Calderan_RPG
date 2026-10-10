@@ -59,7 +59,8 @@ export interface SceneHousehold { readonly id: string; readonly name: string; re
 export interface SceneRelationship { readonly from: string; readonly to: string; readonly headline: string; readonly dimensions: string }
 export interface SceneSocial { readonly legal: readonly SceneLegal[]; readonly households: readonly SceneHousehold[]; readonly relationships: readonly SceneRelationship[] }
 export interface SceneEvent { readonly event_id: string; readonly title: string; readonly description?: string; readonly world_minute: number; readonly participant_ids: readonly string[]; readonly participants: readonly string[] }
-export interface SceneDevelopment { readonly character_id: string; readonly name: string; readonly text: string; readonly revision: number; readonly world_minute: number; readonly source: string }
+export type SceneDevelopmentKind = "condition_added" | "condition_removed" | "relationship_changed" | "legal_status_changed" | "person_transaction";
+export interface SceneDevelopment { readonly character_id: string; readonly name: string; readonly kind: SceneDevelopmentKind; readonly text: string; readonly revision: number; readonly world_minute: number; readonly source: string }
 export interface SceneStateProjection {
   readonly location: SceneLocation;
   readonly time: SceneTime;
@@ -134,21 +135,21 @@ function recentDevelopments(world: WorldStore, snapshot: Snapshot, present: read
     const kept: Omit<SceneDevelopment, "name">[] = [];
     for (const e of [...premium.dynamic.recent_developments].reverse()) {
       if (e.world_minute < now - DEVELOPMENT_WINDOW_MINUTES) continue;
-      let text: string | undefined;
+      let text: string | undefined, kind: SceneDevelopmentKind | undefined;
       switch (e.kind) {
-        case "condition_added": if (conditions.includes(e.condition)) text = `${nameOf(id)} gained the condition "${e.condition}"`; break;
-        case "condition_removed": if (!conditions.includes(e.condition)) text = `${nameOf(id)} no longer has the condition "${e.condition}"`; break;
+        case "condition_added": if (conditions.includes(e.condition)) { kind = e.kind; text = `${nameOf(id)} gained the condition "${e.condition}"`; } break;
+        case "condition_removed": if (!conditions.includes(e.condition)) { kind = e.kind; text = `${nameOf(id)} no longer has the condition "${e.condition}"`; } break;
         case "relationship_changed": {
           const edge = snapshot.relationships.find(r => r.from_character_id === e.actor_id && r.to_character_id === e.other_id)?.dimensions?.[e.dimension];
-          if (edge === e.to) text = `${nameOf(e.actor_id)} toward ${nameOf(e.other_id)}: ${e.dimension} moved from ${level(e.from)} to ${level(e.to)}`;
+          if (edge === e.to) kind = e.kind, text = `${nameOf(e.actor_id)} toward ${nameOf(e.other_id)}: ${e.dimension} moved from ${level(e.from)} to ${level(e.to)}`;
           break;
         }
         // Household membership has its own authoritative block ([Social]); a join/leave is never repeated here.
-        case "legal_status_changed": if (snapshot.legal_statuses.find(l => l.character_id === id)?.status === e.to) text = `${nameOf(id)}'s recorded legal status changed from ${e.from} to ${e.to}`; break;
-        case "person_transaction": text = `A recorded ${e.transaction_kind.replace("manumission", "manumission (freeing)")} concerned ${nameOf(id)}`; break;
+        case "legal_status_changed": if (snapshot.legal_statuses.find(l => l.character_id === id)?.status === e.to) { kind = e.kind; text = `${nameOf(id)}'s recorded legal status changed from ${e.from} to ${e.to}`; } break;
+        case "person_transaction": kind = e.kind; text = `A recorded ${e.transaction_kind.replace("manumission", "manumission (freeing)")} concerned ${nameOf(id)}`; break;
         default: break; // moved / rules / contracts / migration: current state or other blocks own these
       }
-      if (text) kept.push({ character_id: id, text, revision: e.revision, world_minute: e.world_minute, source: `npc_plus.history:${id}:r${e.revision}` });
+      if (text && kind) kept.push({ character_id: id, kind, text, revision: e.revision, world_minute: e.world_minute, source: `npc_plus.history:${id}:r${e.revision}` });
       if (kept.length >= DEVELOPMENTS_PER_CHARACTER) break;
     }
     out.push(...kept);
