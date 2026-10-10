@@ -48,7 +48,7 @@ export function requestBreakdown(artifact: Artifact, units?: readonly KnowledgeU
   const currentPack = units ? narratorPackOf(request)! : pack;
   const content = request.messages[0]!.content;
   const escapedBytes = (s: string) => Buffer.byteLength(JSON.stringify(s).slice(1,-1), "utf8");
-  const scene = content.indexOf("[CURRENT AUTHORITATIVE SCENE]");
+  const scene = content.indexOf("[CURRENT SCENE]");
   const knowledge = currentPack.knowledge_start, knowledgeEnd = knowledge + currentPack.knowledge_block.length;
   const retrieval = content.indexOf("[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]", knowledgeEnd);
   const retrievalEnd = content.indexOf("[UNESTABLISHED DETAILS]", retrieval);

@@ -50,7 +50,7 @@ test("geography: Heartstone and the square outside it are contained in Calderan;
   const { world, context } = await opening();
   for (const id of ["heartstone", "heartstone_square"]) assert.equal(world.getEntity(id)!.parent, "calderan_west");
   assert.deepEqual(context.primary.scene.location_ancestry.map(e => e.id), ["calderan_west", "calderan", "west", "continent"]);
-  assert.match(buildNarratorPrompt("Hello.", context, [], {}, { candidates: [], runtime: [] }).messages[0]!.content, /"display_name":"Calderan"/);
+  assert.match(buildNarratorPrompt("Hello.", context, [], {}, { candidates: [], runtime: [] }).messages[0]!.content, /Within: Calderan West District ← Calderan ←/);
 });
 test("canon has distinct official market and criminal fringe in Calderan West", async () => {
   const world = await loadWorld("data");

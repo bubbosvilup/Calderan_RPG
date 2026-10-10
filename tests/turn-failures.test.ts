@@ -68,7 +68,7 @@ test("context_too_large: never-drop scene state that cannot fit even after proje
   // H3: count caps no longer fail a turn (17 events now project to the soonest 16); only state that may not be dropped can overflow.
   // Items carried by a present person are never dropped, so enough of them genuinely exceeds the serialized budget.
   const s = setup();
-  for (let batch = 0; batch < 3; batch++) s.campaign.apply({ expected_revision: s.campaign.revision, commands: Array.from({ length: 100 }, (_, k): CampaignCommand => {
+  for (let batch = 0; batch < 8; batch++) s.campaign.apply({ expected_revision: s.campaign.revision, commands: Array.from({ length: 100 }, (_, k): CampaignCommand => {
     const n = batch * 100 + k;
     return { kind: "register_item", item: { id: campaignId("item", `h3_load_${n}`), origin: { kind: "created" }, name: `Heavy ledger number ${n}`, description: "A ledger bound in cracked leather.",
       owner_id: "nicco", position: { kind: "carried", character_id: "nicco" } } };

@@ -44,7 +44,7 @@ test("P9 event-directed wait is a no-op, explicit bounded numeric wait can advan
   campaign.apply({ expected_revision: campaign.revision, commands: [...intent.runtime] });
   assert.equal(campaign.exportSnapshot().runtime.scene.world_time.world_minute, 610);
   assert.equal(campaign.exportSnapshot().runtime.scene.player_location, before.runtime.scene.player_location);
-  assert.ok(buildNarratorPrompt("", buildTurnContext(world, campaign.exportSnapshot()), [], {}, intent).messages[0]!.content.includes("World minute: 610"));
+  assert.ok(buildNarratorPrompt("", buildTurnContext(world, campaign.exportSnapshot()), [], {}, intent).messages[0]!.content.includes("Time: 10:10 — Late Morning"));
 });
 
 test("P9 scheduled events do not auto-trigger when time passes their due minute; auction opening has no authored event", () => {

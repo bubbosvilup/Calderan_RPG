@@ -36,13 +36,13 @@ test("P11 prompt/compaction grounding stays stable across conversation and chang
   const campaign = market(), before = campaign.exportSnapshot();
   const first = prompt(campaign, "Hello."), next = prompt(campaign, "What do you sell?");
   for (const request of [first, next, renderCandidateRequest(narratorPackOf(next)!, [])]) {
-    assert.match(request.messages[0]!.content, /"time_of_day":"Late Morning"/);
+    assert.match(request.messages[0]!.content, /^Time: 10:00 — Late Morning$/m);
     assert.ok(!request.messages[0]!.content.includes('"actual_time"'));
     assert.match(request.messages[0]!.content, /unchanged clock means unchanged time of day/);
   }
   assert.deepEqual(campaign.exportSnapshot(), before);
   campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "runtime_delta", delta: { time_advance_minutes: 480 } }] });
-  assert.match(prompt(campaign, "Hello.").messages[0]!.content, /"time_of_day":"Late Afternoon"/);
+  assert.match(prompt(campaign, "Hello.").messages[0]!.content, /^Time: 18:00 — Late Afternoon$/m);
 });
 test("P3.3 unknown identities retain correlation but explicitly forbid opaque ref rendering", () => {
   const campaign = market(), request = prompt(campaign, "I speak to the short compact man."), gate = narratorIdentityGate(buildTurnContext(world, campaign.exportSnapshot()))!;

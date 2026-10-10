@@ -150,7 +150,7 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
 
   // 1. Inspect and negotiate: nothing changes, and the narrator knows the purse and Brenna's legal status.
   await step("*checks the cages* Korvin, what about her?", [OFFER.narration]);
-  assert.match(prompt(), /Nicco's money: 500 gold/); assert.match(prompt(), /Brenna: legally enslaved; legal holder Korvin/);
+  assert.match(prompt(), /- Money: 500 Gold/); assert.match(prompt(), /Brenna: legally enslaved; legal holder Korvin/);
   assert.deepEqual([gold(c), members(c)], [500, []]);
   // 2. Accept: the engine resolves and validates the sale BEFORE narration; the narrator is told the outcome.
   const bought = await step("Done. *pays him*", ["Korvin pockets the coins and hands over the key and the papers. Brenna watches the exchange with flat, wary eyes."]);
@@ -163,7 +163,7 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   assert.equal(care.narration_reconciliation?.delivered, "revision");
   assert.ok(care.narration_reconciliation!.issues.some(i => i.kind === "uncommitted_household"));
   assert.match(prompt(), /Present but NOT household members: Brenna/);
-  assert.match(prompt(), /Nicco's money: 495 gold/); assert.deepEqual(members(c), []);
+  assert.match(prompt(), /- Money: 495 Gold/); assert.deepEqual(members(c), []);
   // 4. Her own voluntary oath: the controller proposes, the chooser's words confirm; protectiveness rises one step, trust does not.
   const oath = 'Brenna rests her palm on the warm stone. "I, Brenna, decide to stay and become a resident. I swear to protect the hearthstone and Nicco, the keeper."';
   const joined = await step("*explains the Heartstone and waits*", [oath],

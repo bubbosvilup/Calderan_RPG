@@ -133,7 +133,7 @@ test("retrieval under load: supplemental canon never crowds out runtime truth (l
   const service = new RetrievalService(world), r = await retrieveForTurn(input, context, world, { service, search: new HybridSearch(service) });
   assert.ok(r.diagnostics.operations > 0, "retrieval ran");
   const prompt = buildNarratorPrompt(input, context, [], r.data, { candidates: [], runtime: [] }).messages[0]!.content;
-  assert.match(prompt, /\[CURRENT AUTHORITATIVE SCENE\]/);
+  assert.match(prompt, /\[CURRENT SCENE\]/);
   for (const k of [0, 7, 29]) assert.ok(prompt.includes(`Person${pad(k)}`), `present person ${k} in the prompt`);
   assert.match(prompt, /campaign_character_s007/);
   assert.ok(prompt.length < 100_000, `narrator request stays within the transport bound (${prompt.length})`);

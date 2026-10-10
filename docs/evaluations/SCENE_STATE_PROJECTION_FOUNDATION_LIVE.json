@@ -1,0 +1,383 @@
+{
+ "config": {
+  "narrator": "z-ai/glm-5.2",
+  "narrator_default": "z-ai/glm-5.2",
+  "narrator_route": {
+   "order": [
+    "z-ai/fp8"
+   ],
+   "allow_fallbacks": false
+  },
+  "narrator_max_output_tokens": 512,
+  "narrator_reasoning": "disabled",
+  "controller": "openai/gpt-6-luna",
+  "controller_default": "openai/gpt-6-luna",
+  "controller_fallbacks": [
+   "anthropic/claude-haiku-5.5"
+  ],
+  "date": "2026-10-10T10:44:56.789Z"
+ },
+ "narrator_only": [
+  {
+   "case": "L1 multi-system scene",
+   "input": "Brenna, are you alright? And why are you carrying my sword?",
+   "recent": [],
+   "retrieval_in_prompt": false,
+   "scene_block": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\nCharacter state:\n- Brenna is winded.\n- Maren has a minor injury.\nItems:\n- Brenna carries Sword; owner: Nicco. Description: A plain iron sword.\n- Nicco wears Wool cloak (back).\n- Nicco carries Brass compass.\n- Nicco carries Trinket0.\n- Nicco carries Trinket1.\n- Nicco carries Trinket2.\n- Nicco carries Trinket3.\n- Nicco carries Trinket4.\n- Nicco carries Trinket5.\n- Nicco carries Trinket6.\n- Letter is stored here; owner: Nicco.\n- 5 further carried items not listed.\nPlayer:\n- Mana: 80/100\n- Money: 4 Gold\nKnowledge (recorded entries only; having no entry is not proof a person is ignorant):\n- \"The grain tax will double at harvest.\" [truth unestablished]: known by Nicco; heard only as a rumor by Brenna; no recorded knowledge entry for Gerome, Maren.\n- \"The West Gate incident left two guards dead.\": known by Nicco, Brenna; no recorded knowledge entry for Gerome, Maren.\nSocial (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):\n- Household Heartstone: keeper Nicco; members: Brenna, Maren.\n  Present but NOT household members: Gerome. Living or staying somewhere is not membership.\n- Brenna → Nicco: NEUTRAL (trust low).\nScheduled:\n- Supper with the household: in 1h 18m (21:00, today); with Brenna, Nicco.\nRecent recorded developments (history; current state above wins):\n- Brenna toward Nicco: trust moved from none to low (0m ago).\n- Maren no longer has the condition \"dazed\" (0m ago).",
+   "prompt_chars": 21208,
+   "response": "*Brenna's chest still rises and falls a beat too fast. She stands a few paces from the hearth, the plain iron sword held at her side, not quite in a grip but not resting either. At the sound of her name she turns, and the blade's tip dips toward the floorboards.*\n\nI'm fine. Winded. That's all.\n\n*She lifts the sword an inch, angling one shoulder toward Nicco as she holds it there.*\n\nThis — I grabbed it. There was a commotion outside, and Maren took a knock. I didn't know what was coming through the door, so I took it off the rack.\n\n*Her gaze flicks toward Maren, then back. She holds the sword out, hilt-first, the motion deliberate.*\n\nIt's yours. I wasn't going to use it unless I had to.",
+   "usage": {
+    "prompt_tokens": 4523,
+    "completion_tokens": 177,
+    "total_tokens": 4700
+   },
+   "model": "z-ai/glm-5.2",
+   "grade": {
+    "result": "PARTIAL",
+    "notes": "Winded state, carrier/owner distinction and 'It's yours' are correct; no borrowed/stolen wording; no household/event dump; no ids. Invented durable-ish detail: the sword was 'taken off the rack' during a 'commotion outside' (rack, commotion not in state).",
+    "failure_class": "H"
+   }
+  },
+  {
+   "case": "L2 stored item + current location",
+   "input": "Where did I leave the letter?",
+   "recent": [],
+   "retrieval_in_prompt": false,
+   "scene_block": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\nCharacter state:\n- Brenna is winded.\n- Maren has a minor injury.\nItems:\n- Brenna carries Sword; owner: Nicco.\n- Nicco wears Wool cloak (back).\n- Nicco carries Brass compass.\n- Nicco carries Trinket0.\n- Nicco carries Trinket1.\n- Nicco carries Trinket2.\n- Nicco carries Trinket3.\n- Nicco carries Trinket4.\n- Nicco carries Trinket5.\n- Nicco carries Trinket6.\n- Letter is stored here; owner: Nicco. Description: A sealed letter.\n- 5 further carried items not listed.\nPlayer:\n- Mana: 80/100\n- Money: 4 Gold\nSocial (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):\n- Household Heartstone: keeper Nicco; members: Brenna, Maren.\n  Present but NOT household members: Gerome. Living or staying somewhere is not membership.\n- Brenna → Nicco: NEUTRAL (trust low).\nScheduled:\n- Supper with the household: in 1h 18m (21:00, today); with Brenna, Nicco.\nRecent recorded developments (history; current state above wins):\n- Maren no longer has the condition \"dazed\" (0m ago).\n- Brenna toward Nicco: trust moved from none to low (0m ago).",
+   "prompt_chars": 18855,
+   "response": "*The broad living floor of Heartstone catches the last of the evening light through its walls, the hearth unlit for now. The sealed letter sits on a surface near the room's edge where Nicco left it, undisturbed.*\n\n*Brenna leans against the stone of the hearth, still breathing harder than usual, Nicco's sword in her hands. Maren sits nearby, favoring one side where the minor injury pulls, her attention following Nicco's searching gaze across the room. Gerome occupies space further along the floor, still and watchful.*\n\n*After a moment Maren lifts her chin slightly toward the letter's resting place, having tracked where Nicco's eyes are going.*",
+   "usage": {
+    "prompt_tokens": 3964,
+    "completion_tokens": 143,
+    "total_tokens": 4107
+   },
+   "model": "z-ai/glm-5.2",
+   "grade": {
+    "result": "PARTIAL",
+    "notes": "Letter correctly placed in the current room, not confused with the cellar key; but it 'sits on a surface near the room's edge' (an invented surface) and the hearth is described unlit (not state; L3 has it burning).",
+    "failure_class": "H"
+   }
+  },
+  {
+   "case": "L3 knowledge scopes",
+   "input": "Brenna, Maren, what do you two know about the West Gate incident, the eastern bridge and the grain tax?",
+   "recent": [],
+   "retrieval_in_prompt": false,
+   "scene_block": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\nCharacter state:\n- Brenna is winded.\n- Maren has a minor injury.\nItems:\n- Brenna carries Sword; owner: Nicco.\n- Nicco wears Wool cloak (back).\n- Nicco carries Brass compass.\n- Nicco carries Trinket0.\n- Nicco carries Trinket1.\n- Nicco carries Trinket2.\n- Nicco carries Trinket3.\n- Nicco carries Trinket4.\n- Nicco carries Trinket5.\n- Nicco carries Trinket6.\n- Letter is stored here; owner: Nicco.\n- 5 further carried items not listed.\nPlayer:\n- Mana: 80/100\n- Money: 4 Gold\nKnowledge (recorded entries only; having no entry is not proof a person is ignorant):\n- \"The West Gate incident left two guards dead.\": known by Nicco, Brenna; no recorded knowledge entry for Gerome, Maren.\n- \"The eastern bridge is closed.\" [the claim is false]: known by Nicco; believed by Maren; no recorded knowledge entry for Brenna, Gerome.\n- \"The grain tax will double at harvest.\" [truth unestablished]: known by Nicco; heard only as a rumor by Brenna; no recorded knowledge entry for Gerome, Maren.\nSocial (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):\n- Household Heartstone: keeper Nicco; members: Brenna, Maren.\n  Present but NOT household members: Gerome. Living or staying somewhere is not membership.\n- Brenna → Nicco: NEUTRAL (trust low).\nScheduled:\n- Supper with the household: in 1h 18m (21:00, today); with Brenna, Nicco.\nRecent recorded developments (history; current state above wins):\n- Maren no longer has the condition \"dazed\" (0m ago).\n- Brenna toward Nicco: trust moved from none to low (0m ago).",
+   "prompt_chars": 22463,
+   "response": "*Brenna is still catching her breath, one hand braced against her knee, but straightens a fraction when addressed. She glances at Maren before answering.*\n\nTwo guards dead at the West Gate. That much I know.\n\n*She pauses, choosing her words carefully.*\n\nThe grain tax — I've heard talk it'll double come harvest. Talk, not certainty. Could be true, could be someone stirring fear. And the bridge, I can't say. Haven't heard anything about it.\n\n*Maren shifts where she sits, favoring one side where the minor injury pulls. She speaks up, the first word coming a little slower than the rest.*\n\nThe bridge — eastern bridge, that's closed. I'm sure of that.\n\n*She shakes her head at the rest.*\n\nThe West Gate, the tax — I don't know either. Wasn't near the gate, and nobody's said anything to me about grain.\n\n*The fire in the hearth pops softly. Gerome remains where he is, silent, not offering anything.*",
+   "usage": {
+    "prompt_tokens": 4831,
+    "completion_tokens": 211,
+    "total_tokens": 5042
+   },
+   "model": "z-ai/glm-5.2",
+   "grade": {
+    "result": "PASS",
+    "notes": "Brenna: West Gate known, grain tax only as talk (rumor, qualified), bridge unknown (matches the hard access gate). Maren: states the bridge as closed with confidence (a held belief; no leak), disclaims West Gate and tax. No forbidden knowledge.",
+    "failure_class": "-"
+   }
+  },
+  {
+   "case": "L4 stale transcript conflict",
+   "input": "Brenna, how do you feel? And what time of day is it?",
+   "recent": [
+    {
+     "player": "Good morning, Brenna.",
+     "narration": "*Bright morning light fills the room. Brenna, rested and cheerful, holds Nicco's sword and Maren sits unhurt.*",
+     "status": "finalized"
+    }
+   ],
+   "retrieval_in_prompt": false,
+   "scene_block": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\nCharacter state:\n- Brenna is winded.\n- Maren has a minor injury.\nItems:\n- Nicco carries Sword.\n- Nicco wears Wool cloak (back).\n- Nicco carries Brass compass.\n- Nicco carries Trinket0.\n- Nicco carries Trinket1.\n- Nicco carries Trinket2.\n- Nicco carries Trinket3.\n- Nicco carries Trinket4.\n- Nicco carries Trinket5.\n- Letter is stored here; owner: Nicco.\n- 6 further carried items not listed.\nPlayer:\n- Mana: 80/100\n- Money: 4 Gold\nKnowledge (recorded entries only; having no entry is not proof a person is ignorant):\n- \"The grain tax will double at harvest.\" [truth unestablished]: known by Nicco; heard only as a rumor by Brenna; no recorded knowledge entry for Gerome, Maren.\n- \"The West Gate incident left two guards dead.\": known by Nicco, Brenna; no recorded knowledge entry for Gerome, Maren.\nSocial (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):\n- Household Heartstone: keeper Nicco; members: Brenna, Maren.\n  Present but NOT household members: Gerome. Living or staying somewhere is not membership.\n- Brenna → Nicco: NEUTRAL (trust low).\nScheduled:\n- Supper with the household: in 1h 18m (21:00, today); with Brenna, Nicco.\nRecent recorded developments (history; current state above wins):\n- Brenna toward Nicco: trust moved from none to low (0m ago).\n- Maren no longer has the condition \"dazed\" (0m ago).",
+   "prompt_chars": 22068,
+   "response": "*Brenna is still catching her breath, one hand braced against the edge of the hearth. The firelight catches the sheen of sweat along her hairline. She straightens partway when Nicco speaks, though her ribs don't quite allow the full motion.*\n\nLike I ran farther than I meant to.\n\n*She presses her palm flat against her side and exhales slowly.*\n\nIt's evening. Nearly twenty by now, I'd say — the light's going.\n\n*She glances toward the window, where the last dim blue holds above the rooftops, then back. Her breathing is evening out, but she doesn't move away from the hearth yet.*",
+   "usage": {
+    "prompt_tokens": 4709,
+    "completion_tokens": 137,
+    "total_tokens": 4846
+   },
+   "model": "z-ai/glm-5.2",
+   "grade": {
+    "result": "PASS",
+    "notes": "Transcript said bright morning, rested Brenna holding the sword. Narrator followed current state: evening ('nearly twenty'), Brenna winded, no sword in her hands.",
+    "failure_class": "-"
+   }
+  },
+  {
+   "case": "L5 large bounded scene",
+   "input": "Brenna, are you alright? Look around the room.",
+   "recent": [],
+   "retrieval_in_prompt": false,
+   "scene_block": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\n- the unfamiliar person (confidential encounter: identity, role and affiliations are not public)\n- Crowd0\n- Crowd1\n- Crowd10\n- Crowd11\n- Crowd12\n- Crowd13\n- Crowd14\n- Crowd15\n- Crowd16\n- Crowd17\n- Crowd18\n- Crowd19\n- Crowd2\n- Crowd3\n- Crowd4\n- Crowd5\n- Crowd6\n- Crowd7\n- Crowd8\n- Crowd9\nCharacter state:\n- Brenna is winded.\n- Maren has a minor injury.\n- Crowd0 is winded.\n- Crowd10 is winded.\n- Crowd12 is winded.\n- Crowd14 is winded.\n- Crowd16 is winded.\n- Crowd18 is winded.\n- Crowd2 is winded.\n- Crowd4 is winded.\n- Crowd6 is winded.\n- Crowd8 is winded.\nItems:\n- Brenna carries Sword; owner: Nicco.\n- Nicco wears Wool cloak (back).\n- Nicco carries Brass compass.\n- Nicco carries Trinket0.\n- Nicco carries Trinket1.\n- Nicco carries Trinket2.\n- Nicco carries Trinket3.\n- Nicco carries Trinket4.\n- Nicco carries Trinket5.\n- Nicco carries Trinket6.\n- Crowd0 carries Bundle0.\n- Crowd1 carries Bundle1.\n- Crowd2 carries Bundle2.\n- Crowd3 carries Bundle3.\n- Crowd4 carries Bundle4.\n- Crowd5 carries Bundle5.\n- Crowd6 carries Bundle6.\n- Crowd7 carries Bundle7.\n- Crowd8 carries Bundle8.\n- Crowd9 carries Bundle9.\n- Crowd10 carries Bundle10.\n- Crowd11 carries Bundle11.\n- Crowd12 carries Bundle12.\n- Crowd13 carries Bundle13.\n- Crowd14 carries Bundle14.\n- Crowd15 carries Bundle15.\n- Crowd16 carries Bundle16.\n- Crowd17 carries Bundle17.\n- Crowd18 carries Bundle18.\n- Crowd19 carries Bundle19.\n- Letter is stored here; owner: Nicco.\n- Crate0 is stored here.\n- Crate1 is stored here.\n- Crate2 is stored here.\n- Crate3 is stored here.\n- Crate4 is stored here.\n- 35 further carried items not listed.\n- 35 further items are stored here, not listed.\nPlayer:\n- Mana: 80/100\n- Money: 4 Gold\nKnowledge (recorded entries only; having no entry is not proof a person is ignorant):\n- \"Public rumor number 0 circulates.\": known by Nicco; heard only as a rumor by Crowd0; no recorded knowledge entry for Brenna, Gerome, Maren, the unfamiliar person, Crowd1, Crowd10, Crowd11, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9.\n- \"Public rumor number 1 circulates.\": known by Nicco; heard only as a rumor by Crowd1; no recorded knowledge entry for Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd10, Crowd11, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9.\n- \"Public rumor number 10 circulates.\": known by Nicco; heard only as a rumor by Crowd10; no recorded knowledge entry for Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd1, Crowd11, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9.\n- \"Public rumor number 11 circulates.\": known by Nicco; heard only as a rumor by Crowd11; no recorded knowledge entry for Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd1, Crowd10, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9.\n- \"Public rumor number 12 circulates.\": known by Nicco; heard only as a rumor by Crowd12; no recorded knowledge entry for Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd1, Crowd10, Crowd11, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9.\nSocial (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):\n- Household Heartstone: keeper Nicco; members: Brenna, Maren.\n  Present but NOT household members: Gerome, the unfamiliar person, Crowd0, Crowd1, Crowd10, Crowd11, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9. Living or staying somewhere is not membership.\n- Household House0: keeper Nicco; members: Crowd0, Crowd1, Crowd2, Crowd3, Crowd4.\n  Present but NOT household members: Brenna, Gerome, Maren, the unfamiliar person, Crowd10, Crowd11, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9. Living or staying somewhere is not membership.\n- Household House1: keeper Nicco; members: Crowd5, Crowd6, Crowd7, Crowd8, Crowd9.\n  Present but NOT household members: Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd1, Crowd10, Crowd11, Crowd12, Crowd13, Crowd14, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4. Living or staying somewhere is not membership.\n- Household House2: keeper Nicco; members: Crowd10, Crowd11, Crowd12, Crowd13, Crowd14.\n  Present but NOT household members: Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd1, Crowd15, Crowd16, Crowd17, Crowd18, Crowd19, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9. Living or staying somewhere is not membership.\n- Household House3: keeper Nicco; members: Crowd15, Crowd16, Crowd17, Crowd18, Crowd19.\n  Present but NOT household members: Brenna, Gerome, Maren, the unfamiliar person, Crowd0, Crowd1, Crowd10, Crowd11, Crowd12, Crowd13, Crowd14, Crowd2, Crowd3, Crowd4, Crowd5, Crowd6, Crowd7, Crowd8, Crowd9. Living or staying somewhere is not membership.\n- Brenna → Nicco: NEUTRAL (trust low).\n- Crowd0 → Nicco: NEUTRAL (trust low).\n- Crowd1 → Nicco: NEUTRAL (trust low).",
+   "prompt_chars": 30233,
+   "response": "*Brenna is still catching her breath, one hand braced against her knee, the other holding Nicco's sword low at her side. She lifts her head at the question and draws a slow, uneven breath before answering.*\n\nI'm fine. Winded, not hurt.\n\n*She straightens halfway, rolls her shoulder once, then lets her gaze move across the room as Nicco asked. The open floor is thick with people — some bent over their own breathing, some standing in loose clusters with bundled belongings held close against their chests. The hearth throws long orange light across the stone, picking out tired faces and the edges of the crates stacked against the far wall. A few of the crowd shift restlessly near the edges of the room, glancing toward Nicco and then away again. Brenna's eyes track the movement, settle briefly on Maren, then come back.*\n\nMaren's got something. Not bad, I think.\n\n*She pauses, scanning once more — past Gerome's still figure, past the unfamiliar person standing apart — and her grip tightens fractionally on the sword's grip before she looks back to Nicco, waiting.*",
+   "usage": {
+    "prompt_tokens": 7234,
+    "completion_tokens": 235,
+    "total_tokens": 7469
+   },
+   "model": "z-ai/glm-5.2",
+   "grade": {
+    "result": "PASS",
+    "notes": "Coherent; uses winded NPCs, bundles, stored crates, Brenna carrying Nicco's sword, the unfamiliar person without a name; no ids, no recital.",
+    "failure_class": "-"
+   }
+  },
+  {
+   "case": "L6 retrieval + current state",
+   "input": "What does the household tradition say about the sword and the hearth, and where is the sword right now?",
+   "recent": [],
+   "retrieval_in_prompt": true,
+   "scene_block": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\nCharacter state:\n- Brenna is winded.\n- Maren has a minor injury.\nItems:\n- Brenna carries Sword; owner: Nicco. Description: A plain iron sword.\n- Nicco wears Wool cloak (back).\n- Nicco carries Brass compass.\n- Nicco carries Trinket0.\n- Nicco carries Trinket1.\n- Nicco carries Trinket2.\n- Nicco carries Trinket3.\n- Nicco carries Trinket4.\n- Nicco carries Trinket5.\n- Nicco carries Trinket6.\n- Letter is stored here; owner: Nicco.\n- 5 further carried items not listed.\nPlayer:\n- Mana: 80/100\n- Money: 4 Gold\nSocial (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed):\n- Household Heartstone: keeper Nicco; members: Brenna, Maren.\n  Present but NOT household members: Gerome. Living or staying somewhere is not membership.\n  Active household rules: \"No weapons at the table.\".\n- Brenna → Nicco: NEUTRAL (trust low).\nScheduled:\n- Supper with the household: in 1h 18m (21:00, today); with Brenna, Nicco.\nRecent recorded developments (history; current state above wins):\n- Maren no longer has the condition \"dazed\" (0m ago).\n- Brenna toward Nicco: trust moved from none to low (0m ago).",
+   "prompt_chars": 21198,
+   "response": "*The hearth fire casts a low warm glow across the open floor, well past sunset now. The stone hearth itself stands broad and solid along the far wall, its mantel bare — no sword hanging above it.*\n\n*The tradition of this household is clear enough: the household sword always hangs above the great hearth, and the hearth is never left without a watcher after nightfall. Tonight the sword is not where it belongs. It is across the room, carried by Brenna — who is still winded, the plain iron blade in her hands belonging to Nicco.*\n\n*Brenna stands apart, catching her breath. Near the hearth, no one keeps watch.*",
+   "usage": {
+    "prompt_tokens": 4596,
+    "completion_tokens": 138,
+    "total_tokens": 4734
+   },
+   "model": "z-ai/glm-5.2",
+   "grade": {
+    "result": "PARTIAL",
+    "notes": "Retrieved tradition used and current runtime wins (sword is with Brenna, not above the hearth). But the narration mechanically explains the contrast ('Tonight the sword is not where it belongs... carried by Brenna, still winded, the blade belonging to Nicco') and invents a bare mantel and an unwatched hearth.",
+    "failure_class": "H"
+   }
+  }
+ ],
+ "end_to_end": [
+  {
+   "id": "E2E1 item handover",
+   "turns": [
+    {
+     "input": "*hands Brenna the sword*",
+     "scene_before": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Maren\nItems:\n- Nicco carries Sword.\nPlayer:\n- Mana: 100/100\n- Money: 4 Gold",
+     "scene_after": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Maren\nItems:\n- Nicco carries Sword. Description: A plain iron sword.\nPlayer:\n- Mana: 100/100\n- Money: 4 Gold",
+     "narration": "*Brenna looks at the sword, then at Nicco. Her hand comes up but stops short of the hilt.*\n\nWhat's this for?\n\n*She doesn't take it yet, her fingers hovering near the crossguard. The firelight catches the plain iron edge. After a beat she wraps her hand around the grip and lifts it from his hold, turning it once to check the balance.*\n\nAll right. I'll hold onto it.\n\n*She sets it against her hip, finding a comfortable carry angle, and glances back at him with a look that lingers a half-second too long — not quite a question, not quite suspicion. Something in between.*",
+     "committed": {
+      "revision": 2
+     },
+     "revision": [
+      2,
+      2
+     ],
+     "provider_requests": [
+      {
+       "url": "https://openrouter.ai/api/v1/chat/completions",
+       "model": "z-ai/glm-5.2",
+       "status": 200,
+       "kind": "stream"
+      },
+      {
+       "url": "https://openrouter.ai/api/v1/chat/completions",
+       "model": [
+        "openai/gpt-6-luna",
+        "anthropic/claude-haiku-5.5"
+       ],
+       "status": 200,
+       "kind": "json"
+      }
+     ]
+    }
+   ],
+   "grade": {
+    "result": "PARTIAL",
+    "notes": "Narrator and Controller ran (2 requests). The narrated handover was NOT committed (revision 2->2, sword still carried by Nicco). Scene before/after is consistent with committed truth. Deterministic replay with a correct mock proposal and no evidence quote is rejected as 'rejected_insufficient_confirmation'; whether the live Controller omitted the proposal or the evidence check rejected it is not determinable without another paid turn. Not a Scene State Projection defect.",
+    "failure_class": "I/J"
+   }
+  },
+  {
+   "id": "E2E2 condition continuity",
+   "turns": [
+    {
+     "input": "*punches Maren hard in the stomach*",
+     "scene_before": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Maren\nPlayer:\n- Mana: 100/100\n- Money: 4 Gold",
+     "scene_after": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Maren\nPlayer:\n- Mana: 100/100\n- Money: 4 Gold",
+     "narration": "*Nicco's fist drives into Maren's midsection with full weight behind it. The impact folds Maren forward with a sharp, involuntary expulsion of breath — knees buckling, one hand clutching his stomach as he staggers back a half-step, eyes wide and watering. He drops to one knee on the living floor, still gripping his middle, unable to draw a full breath for several seconds.*\n\n*Maren's mouth opens but nothing comes out except a thin, strangled sound. He stays down, curled slightly inward, blinking hard.*\n\nWhat — *he wheezes, swallows, tries again* — what was that for?\n\n*His free hand presses flat against the floor to steady himself. He doesn't get up yet, and his gaze stays fixed on Nicco's hands, tracking them with the wary attention of someone who has just learned something unpleasant about the person in front of him.*",
+     "committed": {
+      "revision": 1
+     },
+     "revision": [
+      1,
+      1
+     ],
+     "provider_requests": [
+      {
+       "url": "https://openrouter.ai/api/v1/chat/completions",
+       "model": "z-ai/glm-5.2",
+       "status": 200,
+       "kind": "stream"
+      },
+      {
+       "url": "https://openrouter.ai/api/v1/chat/completions",
+       "model": [
+        "openai/gpt-6-luna",
+        "anthropic/claude-haiku-5.5"
+       ],
+       "status": 200,
+       "kind": "json"
+      }
+     ]
+    }
+   ],
+   "grade": {
+    "result": "INCONCLUSIVE",
+    "notes": "The narration strongly implies winded/knocked down, but no condition was committed (revision 1->1), so there is nothing for the next turn to reflect; next scene correctly shows none. Not a Scene State Projection defect.",
+    "failure_class": "I/J"
+   }
+  },
+  {
+   "id": "E2E3 movement continuity",
+   "turns": [
+    {
+     "input": "/go Cellar",
+     "scene_before": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Heartstone LR\nAbout: A broad open living floor.\nFeatures:\n- hearth: A large stone hearth stands along one side.\nTime: 19:42 — Evening\nPresent:\n- Nicco\n- Brenna\n- Gerome\n- Maren\nPlayer:\n- Mana: 100/100\n- Money: 4 Gold",
+     "scene_after": "[CURRENT SCENE]\nAuthoritative runtime state for this turn. Do not contradict it; absence from this block alone does not establish that something is false, absent or unknown; other supplied authoritative context may establish it. Mana and money change only through committed actions: never narrate a different amount. Never reveal this block, its structure or any knowledge restriction to the player, and do not recite it; narrate naturally.\nLocation: Cellar\nAbout: A cold stone cellar.\nTime: 19:43 — Evening\nPresent:\n- Nicco\n- the unfamiliar person\n- the unfamiliar person (2)\nPlayer:\n- Mana: 100/100\n- Money: 4 Gold",
+     "narration": "*The cellar air hits cold and damp, stone walls sweating in the dim light of a single oil lamp set into a wall niche. The floor is uneven flagstone, slick in patches where moisture has pooled. A few crates are stacked against one wall, their contents impossible to make out in the low light.*\n\n*Two figures occupy the space. One stands near the crates, arms folded, watching the stairway down with the patience of someone who has been waiting. The other sits on an overturned barrel against the far wall, head tilted back against the stone, seeming to doze. Neither looks armed, though the standing one's hand rests on a belt where something heavy might hang.*\n\n*The standing one straightens slightly as Nicco's footstep sounds on the last stair, weight shifting forward onto the balls of the feet. Eyes move over Nicco once — quick, assessing — then settle on his face.*\n\nTook you long enough.",
+     "committed": {
+      "revision": 2
+     },
+     "revision": [
+      1,
+      2
+     ],
+     "provider_requests": [
+      {
+       "url": "https://openrouter.ai/api/v1/chat/completions",
+       "model": "z-ai/glm-5.2",
+       "status": 200,
+       "kind": "stream"
+      },
+      {
+       "url": "https://openrouter.ai/api/v1/chat/completions",
+       "model": [
+        "openai/gpt-6-luna",
+        "anthropic/claude-haiku-5.5"
+       ],
+       "status": 200,
+       "kind": "json"
+      }
+     ]
+    }
+   ],
+   "grade": {
+    "result": "PASS",
+    "notes": "'/go Cellar' committed (1->2); next-turn CURRENT SCENE shows Cellar, 19:43 Evening, Nicco and two unfamiliar persons (Pellan, Korvin); the narration shows two figures, consistent with state.",
+    "failure_class": "-"
+   }
+  }
+ ],
+ "provider_requests": {
+  "narrator_only_calls": 6,
+  "total": 12,
+  "e2e_requests": 6,
+  "requests": [
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": [
+     "openai/gpt-6-luna",
+     "anthropic/claude-haiku-5.5"
+    ],
+    "status": 200,
+    "kind": "json"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": [
+     "openai/gpt-6-luna",
+     "anthropic/claude-haiku-5.5"
+    ],
+    "status": 200,
+    "kind": "json"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": "z-ai/glm-5.2",
+    "status": 200,
+    "kind": "stream"
+   },
+   {
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "model": [
+     "openai/gpt-6-luna",
+     "anthropic/claude-haiku-5.5"
+    ],
+    "status": 200,
+    "kind": "json"
+   }
+  ]
+ },
+ "final_state": {
+  "sword_holder": [
+   {
+    "name": "Sword",
+    "position": {
+     "kind": "carried",
+     "character_id": "nicco"
+    },
+    "owner": "nicco"
+   }
+  ],
+  "maren_conditions": [],
+  "player_location": "test_cellar"
+ },
+ "grading_notes": "Graded by the validating engineer, not by a model. Failure classes follow the certification taxonomy (H narrator model semantic, I controller semantic, J authorization/commit).",
+ "provider_call_summary": {
+  "narrator_only": 6,
+  "e2e_narrator": 3,
+  "e2e_controller": 3,
+  "total_http_requests": 12,
+  "retries": 0,
+  "revision_narrations": 0,
+  "turn_failures": 0,
+  "fallback_model_usage": "not captured by this harness"
+ }
+}

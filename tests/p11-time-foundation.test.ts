@@ -21,11 +21,12 @@ const fresh = (minute = 600) => new CampaignState(world, "p11_foundation", { pla
 const prompt = (campaign: CampaignState) => buildNarratorPrompt("Hello.", buildTurnContext(world, campaign.exportSnapshot()), [], {}, { candidates: [], runtime: [] });
 function grounding(request: GenerationRequest) {
   const content = request.messages[0]!.content;
-  const block = content.match(/\[AUTHORITATIVE TIME\]\n([^\n]+)/);
-  assert.ok(block, "semantic time block survives prompt construction");
-  assert.ok(!block[1]!.includes("actual_time"));
-  assert.ok(!/\d{2}:\d{2}/.test(block[1]!));
-  return JSON.parse(block[1]!) as { day: number; time_of_day: string };
+  // Scene State Projection V1 deliberately reverses P11's "label only" prompt: the narrator now receives the already-derived clock
+  // time with the label ("Time: 19:42 — Evening"), never the raw world minute, a calendar or a day counter.
+  const block = content.match(/^Time: (\d{2}:\d{2}) — ([A-Za-z ]+)$/m);
+  assert.ok(block, "semantic time line survives prompt construction");
+  assert.ok(!content.includes("actual_time") && !content.includes("World minute") && !content.includes('"day"'));
+  return { time: block[1]!, time_of_day: block[2]! };
 }
 const boundaries = [
   [0, "Midnight"], [59, "Midnight"], [60, "Deep Hours"], [299, "Deep Hours"],
@@ -95,10 +96,10 @@ test("P11 real UI start, dialogue and numeric wait expose only semantic time", a
     assert.equal(session.getView().scene.time.world_minute, 600);
     assert.equal((await session.submitPlayerInput("Hello.")).ok, true);
     assert.equal(session.getView().scene.time.world_minute, 600);
-    assert.deepEqual(grounding(requests.at(-1)!), { day: 0, time_of_day: "Late Morning" });
+    assert.deepEqual(grounding(requests.at(-1)!), { time: "10:00", time_of_day: "Late Morning" });
     assert.equal((await session.submitPlayerInput("wait 2 hours")).ok, true);
     assert.equal(session.getView().scene.time.world_minute, 720);
-    assert.deepEqual(grounding(requests.at(-1)!), { day: 0, time_of_day: "Early Afternoon" });
+    assert.deepEqual(grounding(requests.at(-1)!), { time: "12:00", time_of_day: "Early Afternoon" });
   } finally { await session.shutdown({ discard_unsaved: true }); }
 });
 for (const [start, label] of [[600, "Late Morning"], [700, "Early Afternoon"]] as const) {
@@ -108,7 +109,7 @@ for (const [start, label] of [[600, "Late Morning"], [700, "Early Afternoon"]] a
     assert.equal(events.at(-1)!.type, "turn_completed");
     assert.equal(campaign.exportSnapshot().runtime.scene.player_location, "heartstone_square");
     assert.equal(campaign.exportSnapshot().runtime.scene.world_time.world_minute, start + 20);
-    assert.deepEqual(grounding(requests.at(-1)!), { day: 0, time_of_day: label });
+    assert.deepEqual(grounding(requests.at(-1)!), { time: start === 600 ? "10:20" : "12:00", time_of_day: label });
   });
 }
 test("P11 save/reload derives label from exact restored clock without persisted daypart", () => {
@@ -119,7 +120,7 @@ test("P11 save/reload derives label from exact restored clock without persisted 
   const restored = CampaignState.restore(world, decoded.snapshot);
   assert.deepEqual(restored.exportSnapshot(), campaign.exportSnapshot());
   assert.equal(temporalGrounding(restored.exportSnapshot().runtime.scene.world_time.world_minute).time_of_day, "Early Afternoon");
-  assert.deepEqual(grounding(prompt(restored)), { day: 1, time_of_day: "Early Afternoon" });
+  assert.deepEqual(grounding(prompt(restored)), { time: "12:00", time_of_day: "Early Afternoon" });
 });
 test("P11 failed provider turn does not commit new numeric-wait time", async () => {
   const campaign = fresh(), before = campaign.exportSnapshot(), service = new RetrievalService(world);

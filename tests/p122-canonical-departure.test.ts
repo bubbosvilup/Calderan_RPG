@@ -59,7 +59,8 @@ for (const narration of [
   assert.ok(prompt.includes("[RECENT SCENE NARRATION]"));
   assert.ok(prompt.includes(narration));
   assert.equal(prompt.includes("Character Korvin"), false);
-  assert.equal(prompt.slice(prompt.indexOf("[PRESENT AND ABLE TO REACT]"), prompt.indexOf("[CURRENT EQUIPMENT]")).includes("Korvin"), false);
+  assert.equal(prompt.slice(prompt.indexOf("[PRESENT AND ABLE TO REACT]"), prompt.indexOf("[CHARACTER KNOWLEDGE ACCESS]")).includes("Korvin"), false);
+  assert.equal(prompt.slice(prompt.indexOf("[CURRENT SCENE]"), prompt.indexOf("TEMPORAL GROUNDING:")).includes("Korvin"), false, "a departed person is nowhere in the scene projection");
   const restored = CampaignState.restore(world, JSON.parse(JSON.stringify(after)));
   assert.deepEqual(restored.exportSnapshot(), after);
 });

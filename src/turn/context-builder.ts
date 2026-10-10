@@ -15,6 +15,7 @@ import { knowledgeGrants } from "./knowledge-grants.js";
 import { activePlayerCharacterId, derivePlayerCharacterContext } from "../campaign/player-character.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
 import { economy, generatePriceIndex } from "../economy/economy.js";
+import { registerSceneExtras } from "./scene-state-projection.js";
 
 /**
  * Hardening H3 — context projection order: RAW AUTHORITATIVE STATE → deterministic relevance selection → size validation.
@@ -176,6 +177,10 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   relevance.inspect_serialized?.(JSON.stringify(result));
   if (serializedCharacters > CONTEXT_LIMITS.serialized_characters) throw new TurnError("context_too_large");
   registerNarratorIdentities(result, world, snapshot);
+  // Scene State Projection V1: names of absent item owners / event participants and validated recent developments, kept beside the
+  // context (never inside it), so the Controller envelope and its measured size are unchanged.
+  registerSceneExtras(result, world, snapshot, present, [...new Set([...items, ...here_items].flatMap(i => typeof i.owner_id === "string" ? [i.owner_id] : []).concat(events.flatMap(e => e.participants ?? [])))],
+    new Map(facts.flatMap(f => { const truth = narratorFactTruth(f); return truth ? [[f.id, truth] as const] : []; })), [...items, ...here_items].map(i => i.id));
   serializedSizes.set(result, serializedCharacters);
   return result;
 }

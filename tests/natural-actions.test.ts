@@ -77,7 +77,7 @@ test("TEST 1 exact: stopping a passerby creates P1; take-out-then-gift removes t
   const second = await turn(c, campaign, T1B);
   assert.deepEqual(second.action_resolution!.actions.map(a => [a.kind, a.status]), [["equipment_removal", "resolved"], ["offer", "unsupported_durable_recipient"]]);
   const prompt = seen[1]!.messages[0]!.content;
-  assert.match(prompt, /"campaign_item_leather_boots"[^\]]*"position":\{"kind":"carried","character_id":"nicco"\}/, "the narrator sees the projected equipment");
+  assert.match(prompt, /- Nicco carries pair of leather boots\./, "the narrator sees the projected equipment"); assert.doesNotMatch(prompt, /campaign_item_leather_boots/, "item identity stays out of the scene projection");
   assert.match(prompt, /Nicco has taken off pair of leather boots/); assert.match(prompt, /A temporary person cannot keep items/);
   assert.equal(second.scene_participants!.plan.focus, "scene_npc_1");
   assert.deepEqual(boots(campaign), { ...boots(campaign), owner_id: "nicco", position: { kind: "carried", character_id: "nicco" } });
@@ -88,7 +88,7 @@ test("TEST 1B exact (hard regression): a spoken barefoot claim never unequips wo
   const result = await turn(coordinator(world, ["\"You are wearing boots,\" the passerby says."], seen), campaign, T1_BAREFOOT);
   assert.deepEqual([result.authorized_commands, result.final_revision - result.base_revision], [[], 0]);
   assert.equal(boots(campaign).position.kind, "equipped");
-  assert.match(seen[0]!.messages[0]!.content, /"position":\{"kind":"equipped","character_id":"nicco","slot":"feet","mode":"worn"\}/);
+  assert.match(seen[0]!.messages[0]!.content, /- Nicco wears pair of leather boots \(feet\)\./);
 });
 test("TEST 2 exact: movement to the pens follows the canonical city route; a guard participant exists; intention has no effect", async () => {
   const { world, campaign } = await opening(false), seen: GenerationRequest[] = [];
@@ -107,7 +107,7 @@ test("resolved natural movement commits at finalization; the narrator already se
   const { world, campaign } = await opening(false), seen: GenerationRequest[] = [];
   const result = await turn(coordinator(world, ["Nicco steps inside."], seen), campaign, "*he goes back inside Heartstone*");
   assert.equal(campaign.exportSnapshot().runtime.scene.player_location, "heartstone_lr"); assert.equal(result.final_revision, result.base_revision + 1);
-  assert.match(seen[0]!.messages[0]!.content, /Location: Heartstone LR\./);
+  assert.match(seen[0]!.messages[0]!.content, /Location: Heartstone LR\n/);
 });
 test("atomicity: a failed turn leaves player-controlled effects uncommitted", async () => {
   const { world, campaign } = await opening(), seen: GenerationRequest[] = [], before = campaign.exportSnapshot();

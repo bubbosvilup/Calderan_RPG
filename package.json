@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit false --outDir .build",
     "test": "npm run build && node --test .build/tests/*.test.js",
+    "inspect:scene": "npm run build --silent && node .build/src/dev/inspect-scene-state.js",
     "inspect:context": "npm run build --silent && node .build/src/dev/inspect-context.js",
     "inspect:search": "npm run build --silent && node .build/src/dev/inspect-search.js",
     "eval:retrieval": "npm run build --silent && node .build/tests/retrieval-eval/evaluate.js",

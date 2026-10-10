@@ -115,8 +115,10 @@ test("provider failures: no partial commit, readable error, session stays usable
 
 test("context_too_large is clean at the application layer: no commit, stable code, not retryable, campaign unchanged", async () => {
   const f = turnFixture(), { repository } = await tempRepo(f.world);
-  for (let batch = 0; batch < 3; batch++) f.campaign.apply({ expected_revision: f.campaign.revision, commands: Array.from({ length: 100 }, (_, k): CampaignCommand => ({ kind: "register_item",
-    item: { id: `campaign_item_load_${batch * 100 + k}`, origin: { kind: "created" }, name: `Heavy ledger ${batch * 100 + k}`, description: "A ledger bound in cracked leather.", owner_id: "nicco", position: { kind: "carried", character_id: "nicco" } } })) });
+  // Scene State Projection V1 bounds the narrator's item view (carried items are listed per holder with a not-listed count), so the
+  // never-drop load is people: every present person keeps their own character block, uncapped.
+  for (let batch = 0; batch < 2; batch++) f.campaign.apply({ expected_revision: f.campaign.revision, commands: Array.from({ length: 80 }, (_, k): CampaignCommand => ({ kind: "register_character",
+    character: { id: `campaign_character_crowd_${batch * 80 + k}`, origin: { kind: "created" }, profile: { name: `Crowd member ${batch * 80 + k}`, age: { kind: "approximate", description: "a grown adult with a weathered face and a patient manner" } }, current: { current_location: "test_room", status: "active" } } })) });
   const session = GameSession.fromCampaign(depsFor(f.world, repository, mockNarrator(story)), f.campaign), before = f.campaign.exportSnapshot();
   const r = await session.submitPlayerInput("Hello.");
   assert.ok(!r.ok); assert.equal(r.error.code, "context_too_large"); assert.equal(r.error.retryable, false); assert.equal(r.error.turn_state_changed, false);

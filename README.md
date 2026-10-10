@@ -2,11 +2,11 @@
 
 A deterministic engine for long-running, AI-narrated roleplay. The model writes the prose; the engine owns the truth: world canon, who is where, who owns what, what each character knows, and every change to any of it.
 
-**Status:** the engine is frozen and ready for UI work, with documented non-blocking debt, and the movement/follow subsystem is frozen too. The next phase is the UI, built on one seam, `src/app` (`GameSession`). Verified: 1,731 tests (0 fail, 4 accepted todo), a 25-turn offline playthrough, and earlier live runs against the real providers (the final movement closure is verified offline; its live probe is prepared).
+**Status:** the engine is frozen and ready for UI work, with documented non-blocking debt, and the movement/follow subsystem is frozen too. The next phase is the UI, built on one seam, `src/app` (`GameSession`). Verified: 2,849 tests (0 fail, 0 skipped, 0 todo) after the Scene State Projection work, a 25-turn offline playthrough, and earlier live runs against the real providers (the final movement closure is verified offline; its live probe is prepared).
 
 ## How a turn works
 
-1. **Context.** Canon, campaign state and recent turns are projected into a bounded, visibility-checked context. The narrator never sees the whole database or anything the player character could not know.
+1. **Context.** Canon, campaign state and recent turns are projected into a bounded, visibility-checked context. The narrator never sees the whole database or anything the player character could not know. A derived, never-saved **Scene State Projection** turns current runtime truth (location, time, who is present and in what state, who carries and who owns what, mana and gold, knowledge scopes, relevant household and schedule) into one id-free `[CURRENT SCENE]` block, selected by deterministic relevance.
 2. **Narration.** The narrator streams prose.
 3. **Control.** A second model proposes state changes (moves, items, household, relationships, knowledge). Proposals are only proposals.
 4. **Authorization.** Each change needs evidence: the player's own words or completed events in the narration. Nothing moves, transfers or joins on a request, a plan or a hint.
@@ -38,6 +38,7 @@ npm ci
 npm run typecheck
 npm test                  # compiles and runs everything offline
 npm run test:playthrough  # the 25-turn offline playthrough
+npm run inspect:scene     # prints the offline [CURRENT SCENE] scenarios (synthetic data, no network)
 npm run play              # developer CLI (needs OPENROUTER_API_KEY; Voyage is optional)
 npm run play:ui           # immersive disposable playtest at http://127.0.0.1:3000 (Ctrl+C to stop)
 ```
@@ -50,6 +51,7 @@ The UI starts a disposable Slave Pens campaign with an authored opening. Set `OP
 
 - [UI engine contract](docs/UI_ENGINE_CONTRACT.md) and [engine freeze rules](docs/ENGINE_FREEZE_PRE_UI.md): start here for the UI.
 - [Engine capabilities before UI](docs/ENGINE_CAPABILITIES_PRE_UI.md)
+- [Scene State Projection](docs/architecture/SCENE_STATE_PROJECTION_V1.md) and its [foundation certification](docs/evaluations/SCENE_STATE_PROJECTION_FOUNDATION_CERTIFICATION.md): the narrator-facing integration layer new domains plug into (see its integration contract).
 - [Turn coordinator](docs/architecture/TURN_COORDINATOR.md), [LLM providers](docs/architecture/LLM_PROVIDER.md), [campaign state](docs/architecture/CAMPAIGN_STATE.md), [persistence](docs/architecture/PERSISTENCE.md)
 - [Authoring guide](docs/authoring/AUTHORING_GUIDE.md) and [entity schema](docs/schemas/ENTITY_SCHEMA.md)
 - [Debt register](docs/evaluations/CALDREVAN_DEBT_REGISTER_AFTER_PASS_10.md) the [movement and follow debt closure](docs/evaluations/CALDREVAN_MOVEMENT_FOLLOW_DEBT_CLOSURE.md) and the latest [final movement debt closure](docs/evaluations/CALDREVAN_FINAL_MOVEMENT_DEBT_CLOSURE.md)
@@ -59,3 +61,4 @@ The UI starts a disposable Slave Pens campaign with an authored opening. Set `OP
 - Every persistent character has one authoritative location, independent of Nicco: a known place, or off-scene after a narrated departure with no destination. The scene is only who shares Nicco's place. A UI must read this from state, never from narration.
 - Pronoun and ornate follow phrasings that the grammar does not recognise fail closed: the follow is not recorded and the audit may remove it.
 - Retrieval is lexical by default; semantic search needs a Voyage key.
+- The `[CURRENT SCENE]` block shows only facts Nicco knows and is relevance-filtered: omission never means a detail is false. Character Knowledge Access remains the hard permission gate. Some earlier prompt blocks still repeat a few descriptive lines (see the certification, section 18).

@@ -105,7 +105,7 @@ test("recent context: state_last places earlier conversation before the authorit
   const { context } = ctx(), recent = [{ player: "Hi", narration: "Brenna smiles.", status: "finalized" as const }];
   const last = buildNarratorPrompt("Yes.", context, recent, {}, { candidates: [], runtime: [] }, { recent_context: "state_last" }).messages[0]!.content;
   assert.ok(last.indexOf("[EARLIER CONVERSATION") < last.indexOf("[STATE PRECEDENCE]"));
-  assert.ok(last.indexOf("[CURRENT AUTHORITATIVE SCENE]") < last.indexOf("[PLAYER ACTION"));
+  assert.ok(last.indexOf("[CURRENT SCENE]") < last.indexOf("[PLAYER ACTION"));
   const full = buildNarratorPrompt("Yes.", context, recent, {}, { candidates: [], runtime: [] }, { recent_context: "full_prose" }).messages[0]!.content;
   const production = buildNarratorPrompt("Yes.", context, recent, {}, { candidates: [], runtime: [] }).messages[0]!.content;
   assert.match(production, /DIALOGUE ONLY/);
