@@ -18,10 +18,13 @@ entity:
     was or did before it is not part of ordinary public knowledge. In Year 491 the Sun Emperor
     disappeared; the Church does not teach that he died. The present year is 1191, so the current
     year is the seven-hundredth anniversary of the disappearance, a date of religious and political
-    weight that the Church recognizes and that the Church and the realm may mark in ways not yet
-    established. Everything before Year 0 is commonly called the Forgotten Era. The calendar's
-    months, weekdays and festivals are not established here.
+    weight that the Church recognizes and that the Church and the realm mark through the
+    centennial observances. Everything before Year 0 is commonly called the Forgotten Era. Every hundredth year after the
+    disappearance is marked across the continent with the Great Illumination, and the seven-hundredth is held to be
+    exceptionally significant. An ordinary year has twelve months of thirty days plus five intercalary days, 365 in
+    all; every fourth year is a leap year with six, 366 in all, and the year 1191 is a leap year. The months, week and
+    festivals are described in the calendar records; the Great Illumination is an elevated form of the Suns, not a separate day.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   category: history
-  related_entities: ["sun_emperor","church_doctrine","forgotten_era","continent"]
+  related_entities: ["sun_emperor","church_doctrine","forgotten_era","continent","helion_calendar"]
 chunks: []

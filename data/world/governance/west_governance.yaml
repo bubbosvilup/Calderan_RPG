@@ -7,15 +7,15 @@ entity:
   parent: null
   aliases: []
   summary: >-
-    West is a realm ruled by the Sun Emperor, its divine and functionally immortal sovereign, with
-    Dukes governing major cities and their surrounding territories in his name.
+    West is a realm still governed in the name of the Sun Emperor, its divine and functionally immortal
+    sovereign, with Dukes governing major cities and their surrounding territories in his name.
   tags: ["fundamentals"]
-  search_context: "Sun Emperor, sovereign of West, Crown, Dukes, ducal councils, guilds, Church"
+  search_context: "Sun Emperor, sovereign of Helion, governed in his name, Crown, Dukes, ducal councils, guilds, Church"
   content: >-
-    The Sun Emperor is the reigning sovereign of West and the supreme source of legitimacy. Church
-    doctrine holds him to be a divine and immortal sovereign; he is functionally immortal. He
-    disappeared long ago and has not been publicly seen since, but West is still governed in his
-    name; his present condition and whereabouts are unknown, and he does not reside in Calderan. "The Crown" refers to his sovereign
+    The Sun Emperor was the sovereign of all Helion, and in West he remains the supreme source of
+    legitimacy. Church doctrine holds him to be a divine and immortal sovereign; he is functionally
+    immortal. He disappeared long ago and has not been publicly seen since, and his empire broke into
+    regional powers, but West is still governed in his name; his present condition and whereabouts are unknown, and he does not reside in Calderan. "The Crown" refers to his sovereign
     authority; no royal family, succession law or named heir is established. Each Duke is the
     primary temporal authority of a major city and its territory beneath the Sun Emperor, supported
     by a local council; Calderan's council has a fixed nine-seat form, while other cities' councils

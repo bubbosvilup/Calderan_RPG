@@ -122,7 +122,7 @@ test("geography uses only location schema fields and adds no traversal edges or 
   const world = await loadWorld("data");
   const fields = ["id", "type", "name", "display_name", "parent", "aliases", "summary", "content", "tags", "search_context", "knowledge", "features", "connections"].sort();
   for (const entity of world.getEntitiesByType("location").filter(e => geography.includes(e.id))) {
-    assert.deepEqual(Object.keys(entity).sort(), [...fields, ...(entity.id === "calderan" ? ["entrance"] : [])].sort());
+    assert.deepEqual(Object.keys(entity).sort(), [...fields, ...(entity.id === "calderan" ? ["entrance"] : []), ...(["west", "center", "east", "south_continent", "calderan_northern_forest", "dragons_teeth_mountains", "chained_bay", "sorrow_sea", "silent_ocean"].includes(entity.id) ? ["climate_profile"] : [])].sort());
     assert.deepEqual(entity.connections, []);
     // Structural guard only: this does not prove arbitrary prose contains no invented facts.
     assert(!Object.values(entity).some(value => typeof value === "number"));

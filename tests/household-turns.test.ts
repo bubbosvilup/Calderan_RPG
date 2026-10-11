@@ -79,7 +79,7 @@ test("manumission evals: legal freeing of a person Nicco holds resolves; chains,
 test("household evals: only the chooser's own unhedged words establish a join; welcomes, care and ownership never do", () => {
   const c = market();
   const context = buildTurnContext(world, c.exportSnapshot());
-  for (const narration of ['Brenna rests her palm on the stone. "I, Brenna, decide to stay and become a resident. I swear to protect the hearthstone."', 'Brenna looks around the room. "I want to stay here. This is my home."'])
+  for (const narration of ['Brenna rests her palm on the stone. "I, Brenna, choose to stay and become a member of the Heartstone. I swear to protect the hearthstone."', 'Brenna looks around the room. "I want to stay here. This is my home."'])
     assert.deepEqual(detectHouseholdChoices(narration, context).map(x => [x.character_id, x.choice]), [[BRENNA, "join"]], narration);
   for (const narration of ['"You can stay here tonight," Nicco says.', '"I\'ll take care of you," Nicco says.', '"Welcome," Nicco says.', '"I bought you," Nicco says.', '"You are safe here," Nicco says.',
     'Brenna frowns. "Maybe I\'ll stay for now."', 'Brenna shrugs. "I could become a member, if you asked."', 'Brenna sits by the fire and says nothing.'])
@@ -165,11 +165,11 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   assert.match(prompt(), /Present, not members: Brenna/);
   assert.match(prompt(), /- Money: 495 Gold/); assert.deepEqual(members(c), []);
   // 4. Her own voluntary oath: the controller proposes, the chooser's words confirm; protectiveness rises one step, trust does not.
-  const oath = 'Brenna rests her palm on the warm stone. "I, Brenna, decide to stay and become a resident. I swear to protect the hearthstone and Nicco, the keeper."';
+  const oath = 'Brenna stands barefoot, her bare feet flat on the warm stone of the floor. "I, Brenna, choose to stay and become a member of the Heartstone. I swear to be loyal to and protect my family, and to stand faithfully beside the Keeper." She looks at Nicco. "I swear it, Nicco: I will protect you and this family."\n\nNicco accepts her oath. "I accept you as a member of the Heartstone."';
   const joined = await step("*explains the Heartstone and waits*", [oath],
     [{ kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: BRENNA }, { kind: "adjust_relationship", from_character_id: BRENNA, to_character_id: "nicco", dimension: "protectiveness", direction: "raise" }],
-    ["I, Brenna, decide to stay and become a resident.", "I swear to protect the hearthstone and Nicco, the keeper."]);
-  assert.deepEqual(joined.authorization.map(a => [a.command.kind, a.authorized]), [["join_household", true], ["adjust_relationship", true]]);
+    ["I, Brenna, choose to stay and become a member of the Heartstone.", "I swear it, Nicco: I will protect you and this family."]);
+  assert.deepEqual(joined.authorization.map(a => [a.command.kind, a.authorized]), [["join_household", true], ["adjust_relationship", true]], JSON.stringify(joined.authorization));
   assert.deepEqual(members(c), [BRENNA]);
   assert.deepEqual(c.exportSnapshot().relationships.find(e => e.from_character_id === BRENNA)!.dimensions, { protectiveness: "low" });
   // 5. After the join the narrator sees her as a member; money was never touched again; status comes from runtime only.

@@ -23,7 +23,7 @@ test("basic scene: location, human time, present people, player resources and no
   const block = scene(idealScene());
   assert.ok(block.startsWith(SCENE_BLOCK_HEADER));
   assert.match(block, /Location: Heartstone LR/);
-  assert.match(block, /Time: 19:42 — Evening/);
+  assert.match(block, /Time: (?:[^\n]* — )?19:42 — Evening/);
   assert.match(block, /Present:\n- Nicco\n- Brenna\n- Maren/);
   assert.match(block, /Mana: 80\/100/);
   assert.match(block, /Money: 4 Gold/);

@@ -88,32 +88,32 @@ test("reliability: a normalized proposal still needs evidence, ownership, presen
   const good = await turn(ok, handover, MERETH);
   assert.equal(good.last.type, "turn_completed");
   assert.equal((good.last as { result: TurnResult }).result.authorization[0]!.authorized, true);
-  assert.equal(ok.exportSnapshot().items[0]!.owner_id, "sister_mereth");
+  assert.equal(ok.exportSnapshot().items.find(i => i.id === ITEM)!.owner_id, "sister_mereth");
   assert.ok(good.records.some(r => r.kind === "controller_normalized"));
   assert.ok(!JSON.stringify(good.events).includes("controller_normalized"), "normalization diagnostics are never in player-facing events");
   // No handover narrated → not authorized, nothing committed (and the draft cannot claim it).
   const noEvidence = scene(["sister_mereth"]);
   const a = await turn(noEvidence, "Sister Mereth holds the boots out toward Nicco.", MERETH);
-  assert.equal((a.last as { result: TurnResult }).result.authorization[0]!.authorized, false); assert.equal(noEvidence.exportSnapshot().items[0]!.owner_id, "sister_mereth");
+  assert.equal((a.last as { result: TurnResult }).result.authorization[0]!.authorized, false); assert.equal(noEvidence.exportSnapshot().items.find(i => i.id === ITEM)!.owner_id, "sister_mereth");
   // Ownership: Mereth carries boots Elara owns → rejected.
   const notOwner = scene(["sister_mereth"], "mistress_elara", "sister_mereth");
   const b = await turn(notOwner, handover, MERETH);
-  assert.equal((b.last as { result: TurnResult }).result.authorization[0]!.authorized, true); assert.equal(notOwner.exportSnapshot().items[0]!.owner_id, "mistress_elara");
+  assert.equal((b.last as { result: TurnResult }).result.authorization[0]!.authorized, true); assert.equal(notOwner.exportSnapshot().items.find(i => i.id === ITEM)!.owner_id, "mistress_elara");
   // Presence: Mereth is not in the scene → rejected.
   const absent = scene([]);
   const c = await turn(absent, handover, MERETH);
-  assert.equal((c.last as { result: TurnResult }).result.authorization[0]!.reason, "rejected_reference_invalid"); assert.equal(absent.exportSnapshot().items[0]!.owner_id, "sister_mereth");
+  assert.equal((c.last as { result: TurnResult }).result.authorization[0]!.reason, "rejected_reference_invalid"); assert.equal(absent.exportSnapshot().items.find(i => i.id === ITEM)!.owner_id, "sister_mereth");
   // Revision: state changes while the controller runs → stale turn, no commit.
   const stale = scene(["sister_mereth"]);
   const d = await turn(stale, handover, MERETH, () => stale.apply({ expected_revision: stale.revision, commands: [{ kind: "runtime_delta", delta: { time_advance_minutes: 1 } }] }));
-  assert.equal(d.last.type, "turn_failed"); assert.equal((d.last as { code: string }).code, "stale_turn"); assert.equal(stale.exportSnapshot().items[0]!.owner_id, "sister_mereth");
+  assert.equal(d.last.type, "turn_failed"); assert.equal((d.last as { code: string }).code, "stale_turn"); assert.equal(stale.exportSnapshot().items.find(i => i.id === ITEM)!.owner_id, "sister_mereth");
 });
 
 // ----------------------------------------------------------------------------------------------- omission diagnostic
 test("reliability: an empty proposal beside a verified narrated candidate is recorded as an omission, never synthesized", async () => {
   const c = scene(["sister_mereth"]);
   const r = await turn(c, "Sister Mereth hands the boots to Nicco. Nicco takes the boots from her.", '{"commands":[]}');
-  assert.equal(c.exportSnapshot().items[0]!.owner_id, "sister_mereth", "no command is synthesized");
+  assert.equal(c.exportSnapshot().items.find(i => i.id === ITEM)!.owner_id, "sister_mereth", "no command is synthesized");
   const omission = r.records.filter(x => x.kind === "controller_omission_candidate");
   assert.equal(omission.length, 1);
   assert.deepEqual((omission[0] as Extract<TurnDebugRecord, { kind: "controller_omission_candidate" }>).candidate, TRANSFER);

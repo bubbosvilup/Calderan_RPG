@@ -13,6 +13,7 @@ entity:
     supernatural property or explanation; exact maritime boundaries remain undefined.
   tags: [geography]
   search_context: ""
+  climate_profile: east_cold_continental
   knowledge:
     visibility:
       narrator: true

@@ -42,4 +42,5 @@ entity:
     - name: "scarce premium timber"
       description: "Genuine Woodsong timber comes only from wood the Woodsingers allow to be taken, so it is scarce, expensive and highly valued."
   connections: []
+  climate_profile: west_cool_maritime
 chunks: []

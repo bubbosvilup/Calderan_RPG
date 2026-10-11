@@ -40,12 +40,30 @@ export type MutationFailureCode =
   | "campaign_validation_failure"
   /** Two commands of one proposal contradict each other (same item handed off and lent, two recipients, two positions). Observability only: if prepare rejects the batch the whole turn fails; if every command is authorized they apply in proposal order. */
   | "conflicting_commands"
+  /** Two authorized commands left one item in different positions: every command on that item is rejected before commit (no revision). */
+  | "conflicting_item_mutations"
+  /** Two authorized commands were identical in effect on one item: the later was dropped, nothing applied twice. Benign. */
+  | "duplicate_command_deduped"
+  /** The item reference (player intent or alias) matches several tracked items and no authoritative qualifier chooses one. */
+  | "ambiguous_item"
+  /** The item the player's action names is not tracked where it would have to be (for example not lying here). */
+  | "item_not_present"
+  /** The Controller targeted a different item than the one the player's explicit action bound. */
+  | "controller_item_mismatch"
+  /** A created item's owner is not established by the narration, so the owner was left unset (the item itself is still created). */
+  | "ownership_not_evidenced"
+  /** A household join into the Heartstone household lacked part of the rite (barefoot, stone contact, Keeper acceptance, inside Heartstone). Nothing committed. */
+  | "rite_incomplete"
+  /** The rite shows coercion, an unconscious or non-agreeing candidate: a promotion needs explicit voluntary participation. Nothing committed. */
+  | "rite_not_voluntary"
   | "turn_failed_other";
 export type MutationStage = "controller" | "authorization" | "prepare" | "commit" | "committed" | "none";
 export interface MutationCommandOutcome {
   readonly command: CampaignCommand; readonly authorized: boolean; readonly reason: AuthorizationDiagnostic["reason"];
   readonly code?: MutationFailureCode; readonly detail: string; readonly source?: AuthorizationDiagnostic["source"];
-  readonly evidence?: { readonly quote: string | null; readonly verified: boolean; readonly check: string };
+  /** Machine-readable observations about how the decision was reached (for example `recovered_narrator_receipt`). Diagnostics only. */
+  readonly signals?: readonly string[];
+  readonly evidence?: { readonly quote: string | null; readonly verified: boolean; readonly check: string; readonly source?: "controller_quote" | "recovered_narrator_receipt"; readonly original_quote?: string | null; readonly original_check?: string };
 }
 export interface MutationDiagnostic {
   /** The stage that decided the outcome. */
@@ -105,6 +123,8 @@ const CODE_BY_REASON: Readonly<Partial<Record<AuthorizationDiagnostic["reason"],
 const HEDGE_CHECKS: ReadonlySet<string> = new Set(["sentence_hedged_negated_or_hypothetical", "transfer_not_completed", "quoted_statement_hedged_or_question"]);
 function describe(d: AuthorizationDiagnostic, intended: readonly CampaignCommand[], physical?: readonly unknown[], narration = ""): string {
   const c = d.command, check = d.evidence?.check;
+  if (d.signals?.some(x => x.startsWith("rite_missing:"))) return `Heartstone rite incomplete: missing ${d.signals.filter(x => x.startsWith("rite_missing:")).map(x => x.slice(13)).join(", ")}; no household membership and no NPC+ promotion were committed`;
+  if (d.reason === "rejected_conflicting_mutations") return `item ${"item_id" in c ? c.item_id : "?"} was given incompatible end positions by several authorized commands; none applied`;
   if (d.authorized) return `authorized via ${d.source ?? "grammar"}${check ? ` (evidence: ${check})` : ""}`;
   // Sub-reasons that the coarse authorization reason hides. All derived from the same data the authorizer saw.
   if (c.kind === "transfer_item") {
@@ -149,9 +169,9 @@ export function diagnoseMutation(i: MutationDiagnosticInput): MutationDiagnostic
   const intended = r.turn_evidence.player_intents, proposed = r.controller_proposal;
   const outcomes = r.authorization.map((d): MutationCommandOutcome => {
     const hedged = !d.authorized && d.reason === "rejected_insufficient_confirmation" && !!d.evidence?.quote && HEDGE_CHECKS.has(d.evidence.check);
-    const code = hedged ? "ambiguous_evidence" as const : CODE_BY_REASON[d.reason];
+    const code = hedged ? "ambiguous_evidence" as const : (d.code as MutationFailureCode | undefined) ?? CODE_BY_REASON[d.reason];
     return { command: d.command, authorized: d.authorized, reason: d.reason, ...(d.authorized || !code ? {} : { code }), detail: describe(d, intended, r.turn_evidence.physical_interactions, r.narration_reconciliation?.draft ?? r.narration),
-      ...(d.source ? { source: d.source } : {}), ...(d.evidence ? { evidence: d.evidence } : {}) };
+      ...(d.source ? { source: d.source } : {}), ...(d.evidence ? { evidence: { ...d.evidence, source: d.evidence.source ?? "controller_quote" } } : {}), ...(d.signals?.length ? { signals: d.signals } : {}) };
   });
   const accepted = outcomes.filter(o => o.authorized), rejected = outcomes.filter(o => !o.authorized);
   const conflicts = conflictingCommands(proposed);
@@ -178,7 +198,7 @@ export function diagnoseMutation(i: MutationDiagnosticInput): MutationDiagnostic
   }
   if (r.final_revision > r.base_revision && accepted.some(a => a.reason !== "rejected_already_established")) return { stage: "committed", verdict: "committed", ...base };
   if (rejected.length) {
-    const primary = rejected.find(o => o.code && o.code !== "already_established") ?? rejected[0]!;
+    const primary = rejected.find(o => o.code && o.code !== "already_established" && o.code !== "duplicate_command_deduped") ?? rejected[0]!;
     return { stage: "authorization", verdict: "rejected", ...(primary.code ? { code: primary.code } : {}), ...base };
   }
   return { stage: "none", verdict: "no_change", ...base };

@@ -1,0 +1,24 @@
+schema_version: 1
+entity:
+  id: church_origins
+  type: world_lore
+  name: "The Origins of the Church"
+  display_name: "The Origins of the Church"
+  parent: null
+  aliases: []
+  summary: >-
+    The Church of the Sun Emperor teaches that it began in Year 0 with the Sun Emperor's revelation, as a
+    devoted and charitable body that organized worship, charity and order beneath his rule.
+  tags: ["religion","history"]
+  search_context: "origins of the Church, founding of the Church, Church in Year 0, early Church, Church before the disappearance, Church under the Sun Emperor, charity, administration, how the Church began, Church history"
+  content: >-
+    The Church teaches that it began in Year 0, when the Sun Emperor revealed himself and the first
+    communities of believers gathered around him. In that age it organized worship, charity, relief of the poor,
+    social order and much of the administration of his continental rule, and by the accounts that survive it
+    was sincerely devoted and generous. The Church holds that its watch against Shadow descends unbroken
+    from the Founder's own charge. How its structure, offices and powers changed in the centuries after his
+    disappearance is not part of ordinary public teaching.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: religion
+  related_entities: ["church","church_doctrine","sun_emperor","modern_reckoning","inquisition"]
+chunks: []

@@ -76,6 +76,17 @@ export interface ProposedCommandWithEvidence { readonly command: CampaignCommand
  * missing field, rejects the whole output. Nothing is inferred, defaulted or repaired; the result still goes through the strict parser.
  */
 export const NORMALIZATION_RULE = "R1_FLAT_COMMAND_WITH_EVIDENCE";
+/**
+ * Debt Zero rule R2_NULL_OPTIONAL_OWNER: `owner_id: null` on a create_item means "no owner", which is exactly the variant without the key.
+ * Only that literal null on that one optional field is dropped (flat or nested); a null anywhere else, or a non-null non-string, still fails.
+ */
+export const NULL_OWNER_RULE = "R2_NULL_OPTIONAL_OWNER";
+const dropNullOwner = (c: unknown): { value: unknown; changed: boolean } => {
+  if (c && typeof c === "object" && !Array.isArray(c) && (c as { kind?: unknown }).kind === "create_item" && (c as { owner_id?: unknown }).owner_id === null) {
+    const { owner_id: _omit, ...rest } = c as Record<string, unknown>; return { value: rest, changed: true };
+  }
+  return { value: c, changed: false };
+};
 const EVIDENCE_KEYS = ["evidence_quote", "evidence"] as const;
 export interface ControllerNormalization { readonly attempted: boolean; readonly raw_shape: string; readonly rule: string | null; readonly normalized_json: string | null; readonly reason: string }
 export function normalizeControllerOutput(text: string): ControllerNormalization {
@@ -86,8 +97,14 @@ export function normalizeControllerOutput(text: string): ControllerNormalization
     return { attempted: false, raw_shape: "not_a_commands_array", rule: null, normalized_json: null, reason: "top_level_shape" };
   const commandSchemas = CONTROLLER_SCHEMA.properties!.commands!.items!.anyOf!;
   const shapes: string[] = [], out: unknown[] = [];
-  let changed = false, failure: string | null = null;
-  for (const entry of obj.commands as unknown[]) {
+  let changed = false, failure: string | null = null, nulledOwner = false, flattened = false;
+  for (const entry0 of obj.commands as unknown[]) {
+    let entry = entry0;
+    if (entry0 && typeof entry0 === "object" && !Array.isArray(entry0)) {
+      const e0 = entry0 as Record<string, unknown>;
+      if ("command" in e0) { const r = dropNullOwner(e0.command); if (r.changed) { entry = { ...e0, command: r.value }; nulledOwner = true; changed = true; } }
+      else { const r = dropNullOwner(e0); if (r.changed) { entry = r.value; nulledOwner = true; changed = true; } }
+    }
     if (!entry || typeof entry !== "object" || Array.isArray(entry)) { shapes.push("non_object"); failure ??= "entry_not_object"; continue; }
     const e = entry as Record<string, unknown>, keys = Object.keys(e);
     if ("command" in e) {
@@ -102,12 +119,12 @@ export function normalizeControllerOutput(text: string): ControllerNormalization
     const command = Object.fromEntries(Object.entries(e).filter(([k]) => k !== key));
     const mapped = commandSchemas.filter(s => matches(command, s));
     if (mapped.length !== 1) { shapes.push("flat_command_invalid"); failure ??= mapped.length ? "multiple_mappings" : "command_does_not_match_schema"; continue; }
-    shapes.push(`flat_with_${key}`); out.push({ command, evidence_quote: quote }); changed = true;
+    shapes.push(`flat_with_${key}`); out.push({ command, evidence_quote: quote }); changed = true; flattened = true;
   }
   const raw_shape = `commands[${shapes.join(",")}]`;
   if (failure) return { attempted: true, raw_shape, rule: null, normalized_json: null, reason: failure };
   if (!changed) return { attempted: true, raw_shape, rule: null, normalized_json: null, reason: "nothing_to_normalize" };
-  return { attempted: true, raw_shape, rule: NORMALIZATION_RULE, normalized_json: JSON.stringify({ commands: out }), reason: "normalized" };
+  return { attempted: true, raw_shape, rule: [flattened ? NORMALIZATION_RULE : "", nulledOwner ? NULL_OWNER_RULE : ""].filter(Boolean).join("+"), normalized_json: JSON.stringify({ commands: out }), reason: "normalized" };
 }
 /** Repair 1.2: why a controller output failed strict parsing (diagnostics only; parsing itself is unchanged). */
 export function diagnoseControllerOutput(text: string): string {

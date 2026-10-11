@@ -44,6 +44,7 @@ entity:
     - name: "tournament rulership"
       description: "The ruler is chosen every five years by a martial tournament; a former winner may not compete again."
   connections: []
+  climate_profile: center_hot_arid
 chunks:
   - id: center.society_and_law
     entity_id: center

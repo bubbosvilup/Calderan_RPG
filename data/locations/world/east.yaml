@@ -44,4 +44,5 @@ entity:
     - name: "cold regional climate"
       description: "Broadly cold and snowy with severe winters; not uniform everywhere."
   connections: []
+  climate_profile: east_cold_continental
 chunks: []

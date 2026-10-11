@@ -14,6 +14,7 @@ entity:
     supernatural properties are established.
   tags: [geography]
   search_context: ""
+  climate_profile: west_cool_maritime
   knowledge:
     visibility:
       narrator: true

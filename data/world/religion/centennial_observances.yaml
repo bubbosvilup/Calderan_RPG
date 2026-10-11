@@ -1,0 +1,30 @@
+schema_version: 1
+entity:
+  id: centennial_observances
+  type: world_lore
+  name: "The Centennial Observances"
+  display_name: "The Centennial Observances"
+  parent: null
+  aliases: []
+  summary: >-
+    Every hundredth year since the disappearance of the Sun Emperor is marked across Helion with public prayer,
+    illumination and great Church ceremonies; the seven-hundredth, in the present year 1191, is exceptional.
+  tags: ["religion","tradition"]
+  search_context: "centennial observances, hundredth year after the disappearance, Great Illumination, seven hundredth anniversary, Year 1191, illumination, lamps, public prayer, vigil, celebration, soul fragment belief, rumor of Aureth's return, return of the Sun Emperor"
+  content: >-
+    Every hundredth year after the Sun Emperor's disappearance is observed across the whole continent as the Great
+    Illumination, held through the Five or Six Suns at the turn of the year,
+    including lands that no longer acknowledge any crown. Observance includes public prayer, the illumination
+    of cities and temples with artificial and sacred light, expanded Church ceremonies, the participation of
+    civic rulers, and a celebration that is always mixed with solemnity. The seven-hundredth anniversary, in
+    the present year 1191, is held to be exceptionally significant, and its preparations weigh on the Church
+    and on the courts. A widespread religious and folk belief holds that after seven centuries a fragment or
+    echo of Aureth's soul or Light may return into the world in a living person. The Church tolerates this
+    belief and in places encourages it. It is belief and rumor, not an established fact; no one is known to
+    be the person it speaks of, and nothing in public knowledge says what, if anything, will happen. The
+    Great Illumination is not a separate day but an elevated form of the Suns themselves; the form of each local
+    ceremony is not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: religion
+  related_entities: ["modern_reckoning","church_doctrine","sun_emperor","sun_emperor_prayer","church","five_suns"]
+chunks: []

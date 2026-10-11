@@ -1,3 +1,4 @@
+import { mentionsItem, referenceWords } from "./item-resolution.js";
 import { EXPLICIT_GIFT, itemHolder, transferRecipient } from "../campaign/item-transfer.js";
 import type { EvidenceCheck } from "./evidence-check.js";
 import { isDeepStrictEqual } from "node:util";
@@ -14,7 +15,7 @@ import { itemTerms } from "./item-reference.js";
 import { narratedDepartures } from "./scene-departure.js";
 import { detectHouseholdChoices, verifyRelationshipEvidence } from "./household-evidence.js";
 import { GATES } from "./language/gates.js";
-import { blankQuotes, escapeRegExp as esc, quotedSpans } from "./language/text.js";
+import { blankQuotes, escapeRegExp as esc, quotedSpans, sentencesOf } from "./language/text.js";
 import { numberWordValue } from "./language/numbers.js";
 
 /**
@@ -33,6 +34,15 @@ const HONORIFIC = new Set(["lord", "lady", "sir", "dame", "duke", "duchess", "ma
 // item back, instructions to someone else ("tells him to take them") and "instead" still do.
 const DISQUALIFY = GATES.disqualify;
 const RECEIPT = "takes?|took|taking|accepts?|accepted|accepting|receives?|received|receiving|gathers?|gathered|gathering|collects?|collected|collecting|picks? up|picked up|picking up|snatches?|snatched|steals?|stole|stolen|filches?|filched|reclaims?|reclaimed";
+// Item lifecycle vocabularies. Pickup: a completed act of lifting an item off the ground into the carrier's possession. "takes" is excluded
+// when it is an idiom (a step, a breath, a seat, a look). Put-down: a completed act of leaving the item at this location.
+const PICKUP_ACT = "picks?\\b(?=[^.!?;]{0,50}?\\bup\\b)|picked\\b(?=[^.!?;]{0,50}?\\bup\\b)|picking\\b(?=[^.!?;]{0,50}?\\bup\\b)|(?:takes?|took|taking)(?!\\s+(?:a|an|one|two|three)?\\s*(?:steps?|breaths?|seats?|looks?|moments?|pauses?|stocks?|cares?|aims?|turns?|stands?|sips?|drinks?))|grabs?|grabbed|grabbing|lifts?|lifted|lifting|retrieves?|retrieved|retrieving|snatches?|snatched|scoops?|scooped|pockets?|pocketed|gathers?|gathered|collects?|collected|seizes?|seized|plucks?|plucked|recovers?|recovered|hefts?|hefted|sheathes?|sheathed";
+const PUTDOWN_ACT = "(?:puts?|put|sets?|set|lays?|laid|places?|placed|rests?|rested|stands?|stood|leans?|leaned)\\b(?=[^.!?;]{0,60}?\\b(?:down|aside|on|onto|against|beside|upon|there|here|in)\\b)|drops?|dropped|dropping|leaves?|left|abandons?|abandoned|discards?|discarded|tosses?|tossed|deposits?|deposited|sets? down";
+// Anything that makes the act an attempt, a refusal, an approach or an intention rather than a completed act.
+const PLACEMENT_NOT_COMPLETED = /\b(?:fails?|failed|unable|cannot|can't|couldn't|could not|won't|will not|tries|try|tried|trying|attempts?|attempted|prevented|prevents|stops?|stopped|stopping|about to|reaches? (?:for|toward|towards)|reaching (?:for|toward|towards)|considers?|considered|considering|thinks? (?:about|of)|decides? (?:against|not)|decided (?:against|not)|slips? (?:away|from|out)|slipped (?:away|from|out)|before (?:he|she|they|nicco) (?:can|could)|instead|refuses?|refused|rather than|would|might|may|should|wants? to|wanted to|looks? at|looked at|gazes? at|stares? at|touches?|touched|brushes?|brushed|nudges?|nudged|kicks?|kicked|steps? over|steps? around|walks? (?:past|around))\b/i;
+// A put-down narrated from the item's side: "The blade meets the stone", "the sword settles against the floor".
+const LANDING = "meets?|hits?|strikes?|clatters?|clangs?|thuds?|lands?|settles?|rests?|lies|falls?|touches";
+const SURFACE = "floor|floorboards?|ground|stone|flagstones?|table|boards|planks|dirt|shelf|hearth|rug|grass|earth";
 const COMMUNICATE = "tells?|told|telling|says?|said|saying|informs?|informed|informing|explains?|explained|explaining|states?|stated|stating|mentions?|mentioned|speaks?|spoke|speaking|reports?|reported|adds|added|replies|replied";
 const STOP = new Set(["the", "a", "an", "is", "are", "was", "were", "of", "to", "and", "in", "on", "at", "it", "its", "that", "this", "has", "have", "been", "be"]);
 const words = (s: string) => s.toLowerCase().replace(/[^a-z0-9\s']/g, " ").split(/\s+/).filter(w => w && !STOP.has(w));
@@ -90,9 +100,9 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
    * Does `subject` lead `verb` in head with no other named person in between? Any capitalized name in the gap other than the
    * allowed ones (recipient, Nicco) could be the real actor, present or not ("Brenna watches Maren take…"), so it disqualifies.
    */
-  const leads = (subjects: readonly string[], verb: string, allowed: readonly string[]): { subject: string; at: number; end: number } | undefined => {
+  const leads = (subjects: readonly string[], verb: string, allowed: readonly string[], text: string = head): { subject: string; at: number; end: number } | undefined => {
     const ok = new Set(["nicco", ...allowed.flatMap(names), ...allowed.flatMap(a => context.characters.find(c => c.id === a)?.profile.name?.split(/\s+/) ?? []).map(t => t.toLowerCase())]);
-    for (const m of head.matchAll(new RegExp(`\\b(${subjects.map(esc).join("|")})\\b([^.!?;]{0,160}?)\\b(?:${verb})\\b`, "gi"))) {
+    for (const m of text.matchAll(new RegExp(`\\b(${subjects.map(esc).join("|")})\\b([^.!?;]{0,160}?)\\b(?:${verb})\\b`, "gi"))) {
       if (![...m[2]!.matchAll(/\b[A-Z][a-z]+\b/g)].some(w => !ok.has(w[0].toLowerCase()))) return { subject: m[1]!.toLowerCase(), at: sStart + m.index, end: sStart + m.index + m[0].length };
     }
     return undefined;
@@ -213,11 +223,52 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   }
 
   if (command.kind === "place_item" && (command.position.kind === "stored" || context.items_here?.some(i => i.id === command.item_id))) {
-    // Permanent Inventory V1: putting an existing item down here / picking it up. The verbatim, unhedged quote must name that item
-    // (one distinctive word of its name). Whether the act happened is the controller's semantic reading; no verb grammar here.
+    // Item lifecycle: picking an existing item up from here / putting it down here. The quote must narrate a COMPLETED physical act by the
+    // new carrier (pickup) or the current holder (drop) on that item: a bounded verb vocabulary, the item named (or "it" resolving to an item
+    // named just before), no attempt, refusal, glance or approach, and nobody else in the act. Whether the act happened stays the narration's.
     const target = [...context.items, ...(context.items_here ?? [])].find(i => i.id === command.item_id);
-    const nameWords = words(target?.name ?? "").filter(w => w.length >= 3);
-    return nameWords.some(w => new RegExp(`\\b${esc(w)}(?:e?s)?\\b`, "i").test(q)) ? { verified: true, check: "placed_item_named" } : { verified: false, check: "placed_item_not_named" };
+    const destination = command.position, held = target?.position;
+    const pickingUp = destination.kind === "carried" || destination.kind === "equipped";
+    const actor = destination.kind === "carried" || destination.kind === "equipped" ? destination.character_id : held?.kind === "carried" || held?.kind === "equipped" ? held.character_id : undefined;
+    const nameWords = target ? referenceWords(target) : [];
+    const itemNamed = (text: string) => nameWords.some(w => new RegExp(`\\b${esc(w)}(?:e?s)?\\b`, "i").test(text));
+    // Two items of the same pool (lying here for a pickup, held by the actor for a put-down) that the quote does not tell apart are ambiguous.
+    const pool = [...context.items, ...(context.items_here ?? [])].filter(i => i.id !== target?.id && (pickingUp ? i.position.kind === "stored" : (i.position.kind === "carried" || i.position.kind === "equipped") && i.position.character_id === actor));
+    const poolWords = (i: { name?: string; category?: string }) => referenceWords(i);
+    const unique = nameWords.filter(w => !pool.some(i => poolWords(i).includes(w)));
+    const clash = (text: string) => pool.some(i => poolWords(i).some(w => nameWords.includes(w) && new RegExp(`\\b${esc(w)}(?:e?s)?\\b`, "i").test(text))) && !unique.some(w => new RegExp(`\\b${esc(w)}(?:e?s)?\\b`, "i").test(text));
+    if (!target || !actor || !nameWords.length) return { verified: false, check: "placed_item_not_named" };
+    if (PLACEMENT_NOT_COMPLETED.test(sentenceText)) return { verified: false, check: "placement_not_completed" };
+    const actorNames = actor === "nicco" ? ["nicco"] : names(actor);
+    if (strangerIn(q, actor, new Set([...nameWords, ...allNames.filter(n => actorNames.includes(n))])) || people.some(p => p.id !== actor && names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(q)))) return { verified: false, check: "other_character_in_quote" };
+    const verb = pickingUp ? PICKUP_ACT : PUTDOWN_ACT;
+    const actBy = (text: string) => leads(actorNames, verb, [actor], text) ?? (() => {
+      const pronoun = leads(["he", "she", "they"], verb, [actor], text), who = pronoun ? pronounRefersTo(pronoun.at) ?? (actor === "nicco" ? "nicco" : "") : "";
+      return pronoun && actorNames.includes(who) ? pronoun : undefined;
+    })();
+    // The act is read in the quoted sentence; a quote that only opens it ("Nicco's hand closes around the grip") may be completed by the
+    // very next sentence ("... as he lifts it"), under the same not-completed gate. Nothing further away counts.
+    const nextEnd = sEnd < narration.length ? sentenceBounds(narration, sEnd, 1)[1] : sEnd;
+    const windowText = blankQuotes(narration.slice(sStart, nextEnd));
+    let subject = actBy(head);
+    if (!subject && nextEnd > sEnd && itemNamed(q) && !PLACEMENT_NOT_COMPLETED.test(windowText)) subject = actBy(windowText);
+    if (!subject && !pickingUp && itemNamed(q)) {
+      // The put-down narrated from the item's side, in the quote's sentence or its two neighbours, with nobody else named in that sentence.
+      const prevStart = sStart > 0 ? sentenceBounds(narration, sStart - 1, 1)[0] : sStart;
+      const span = blankQuotes(narration.slice(prevStart, nextEnd));
+      const landed = span.split(/(?<=[.!?])\s+/).some(sentence => new RegExp(`\\b(?:${nameWords.map(esc).join("|")})\\b[^.!?;]{0,40}?\\b(?:${LANDING})\\b[^.!?;]{0,60}?\\b(?:${SURFACE})\\b`, "i").test(sentence)
+        && !people.some(p => names(p.id).some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(sentence))) && !PLACEMENT_NOT_COMPLETED.test(sentence) && !new RegExp(`\\b(?:${PICKUP_ACT})\\b`, "i").test(sentence));
+      if (landed && !clash(span)) return { verified: true, check: "putdown_narrated" };
+    }
+    if (!subject) return { verified: false, check: "no_completed_placement_act" };
+    // Object: the item's name after the subject, or an object pronoun that resolves to the item named just before and to no other item.
+    const tail = blankQuotes(narration.slice(subject.at, nextEnd));
+    const others = [...context.items, ...(context.items_here ?? [])].filter(i => i.id !== target.id).flatMap(i => words(i.name ?? "").filter(w => w.length >= 3));
+    const before = narration.slice(Math.max(0, subject.at - 300), subject.at);
+    if (itemNamed(tail) && clash(tail)) return { verified: false, check: "ambiguous_item" };
+    const named = itemNamed(tail) || (/\b(?:it|them)\b/i.test(tail) && itemNamed(before) && !clash(before) && !others.some(w => new RegExp(`\\b${esc(w)}\\b`, "i").test(before) && !nameWords.includes(w)));
+    if (!named) return { verified: false, check: "placed_item_not_named" };
+    return { verified: true, check: pickingUp ? "pickup_narrated" : "putdown_narrated" };
   }
   if (command.kind === "create_item") {
     // Item Domain V1: the verbatim, unhedged quote must name the object (one distinctive word of the proposed name). Whether the
@@ -299,6 +350,48 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   return { verified: false, check: "evidence_path_not_supported_for_command" };
 }
 
+/** Narrower than PLACEMENT_NOT_COMPLETED: only outcomes that CONTRADICT a placement (a look or a touch is neutral background). */
+const OUTCOME_CONTRADICTS = /\b(?:fails?|failed|unable|cannot|can't|couldn't|could not|won't|will not|prevented|prevents|refuses?|refused|slips? (?:away|from|out)|slipped (?:away|from|out)|before (?:he|she|they|nicco) (?:can|could)|decides? (?:against|not)|decided (?:against|not)|tries|tried|trying|attempts?|attempted|instead)\b/i;
+const ITEM_LOST = /\b(?:crumbles?|crumbled|shatters?|shattered|dissolves?|dissolved|vanish(?:es|ed)?|disappears?|disappeared|melts?|melted|burns? (?:away|up)|turns? (?:to|into) (?:dust|ash|smoke))\b/i;
+const FALLS_AWAY = /\b(?:slips?|slipped|falls?|fell|tumbles?|tumbled|clatters?|clattered)\b/i;
+export type PlacementRecovery = { readonly status: "recovered"; readonly quote: string; readonly check: string } | { readonly status: "rejected"; readonly check: string };
+/**
+ * Bounded deterministic evidence recovery for place_item (pickup/put-down). When the Controller's quote is missing or fails, the CURRENT
+ * narrator draft (and nothing else) is scanned sentence by sentence with the very same receipt verifier. Recovery succeeds only when the
+ * whole draft is free of contradiction (a failed or refused attempt, another actor taking the item, a reversal, the item falling away) and
+ * exactly one act survives (adjacent supporting sentences are the same act). It never invents a command: it supplies a quote for one
+ * the Controller or the bound player intent already put forward.
+ */
+export function recoverPlacementReceipt(command: Extract<CampaignCommand, { kind: "place_item" }>, narration: string, context: TurnContext, intents: readonly CampaignCommand[], ownerNames?: (id: string) => readonly string[]): PlacementRecovery {
+  const sentences = sentencesOf(narration.replace(/\s+/g, " ")).slice(0, 60).flatMap(x => x.length <= 300 ? [x] : x.split(/(?<=[,;:])\s+/)).filter(x => x.length >= QUOTE_MIN);
+  const target = [...context.items, ...(context.items_here ?? [])].find(i => i.id === command.item_id);
+  const destination = command.position, held = target?.position;
+  const pickingUp = destination.kind === "carried" || destination.kind === "equipped";
+  const actor = destination.kind === "carried" || destination.kind === "equipped" ? destination.character_id : held?.kind === "carried" || held?.kind === "equipped" ? held.character_id : undefined;
+  if (!target || !actor) return { status: "rejected", check: "recovery_item_unknown" };
+  const verified = sentences.flatMap((x, n) => verifyEvidence(command, x, narration, context, intents, ownerNames).verified ? [n] : []);
+  if (!verified.length) return { status: "rejected", check: "recovery_no_receipt" };
+  const first = verified[0]!;
+  const act = new RegExp(`\\b(?:${pickingUp ? PICKUP_ACT : PUTDOWN_ACT})\\b`, "i"), opposite = new RegExp(`\\b(?:${pickingUp ? PUTDOWN_ACT : PICKUP_ACT})\\b`, "i");
+  const people = context.characters.filter(c => c.id !== actor).flatMap(c => [c.id, c.profile.name].filter((n): n is string => !!n).flatMap(n => [n, ...n.split(/[\s_]+/).filter(t => t.length > 2)]));
+  for (const [n, raw] of sentences.entries()) {
+    const text = blankQuotes(raw), about = mentionsItem(text, target), pronounLed = /^[*_\s]*(?:he|she|they|it)\b/i.test(text);
+    if (about && OUTCOME_CONTRADICTS.test(text)) return { status: "rejected", check: "recovery_contradictory_outcome" };
+    // The same sentence may complete the act and then undo it ("picks up the sword and then drops it", "...which crumbles to dust"): whatever FOLLOWS the first act decides.
+    if (about) { const at = act.exec(text); if (at && (opposite.test(text.slice(at.index + at[0].length)) || FALLS_AWAY.test(text.slice(at.index + at[0].length)) || ITEM_LOST.test(text.slice(at.index + at[0].length)))) return { status: "rejected", check: "recovery_contradictory_outcome" }; }
+    if (n > first && about && ITEM_LOST.test(text)) return { status: "rejected", check: "recovery_contradictory_outcome" };
+    if (about) for (const other of people) {
+      const m = new RegExp(`\\b${esc(other)}\\b([^.!?;]{0,80}?)\\b(?:${pickingUp ? PICKUP_ACT : PUTDOWN_ACT})\\b`, "i").exec(text);
+      if (m && !/\b[A-Z][a-z]+\b|\b(?:him|her|them)\b/.test(m[1]!)) return { status: "rejected", check: "recovery_another_actor" };
+    }
+    if (n > first && (about || pronounLed) && (opposite.test(text) || FALLS_AWAY.test(text)) && !(act.test(text))) return { status: "rejected", check: "recovery_contradictory_outcome" };
+  }
+  // Supporting sentences of ONE act are adjacent (the opening sentence and its completion); a second, separate act is ambiguous.
+  const clusters = verified.reduce<number[][]>((acc, n) => { const last = acc.at(-1); if (last && n - last.at(-1)! <= 1) last.push(n); else acc.push([n]); return acc; }, []);
+  if (clusters.length > 1) return { status: "rejected", check: "recovery_ambiguous_evidence" };
+  return { status: "recovered", quote: sentences[first]!, check: pickingUp ? "recovered_pickup_narrated" : "recovered_putdown_narrated" };
+}
+
 const MISSING_CONFIRMATION = new Set(["rejected_insufficient_confirmation", "rejected_fact_not_communicated"]);
 /**
  * Hybrid policy: authorized if TurnEvidence confirms, OR (hybrid mode) a verified controller quote confirms a command the grammar
@@ -313,8 +406,17 @@ export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quot
     return [...(e?.type === "character" ? [e.name, ...e.aliases] : []), ...(c?.profile.name ? [c.profile.name] : []), ...(world ? [] : [id])]; };
   const decided = grammar.map((g, i): AuthorizationDiagnostic => {
     const command = proposal[i]!, quote = quotes?.[i];
-    const ev = verifyEvidence(command, quote, narration, context, evidence.player_intents, ownerNames);
-    const base = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
+    let ev = verifyEvidence(command, quote, narration, context, evidence.player_intents, ownerNames);
+    let base: Omit<AuthorizationDiagnostic, "authorized" | "reason"> = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
+    // Bounded evidence recovery (place_item only): the Controller's quote is missing, weak, unrelated or negated, but the same draft holds exactly
+    // one unambiguous completed act and no contradiction. The very same receipt verifier decides; the command itself is unchanged.
+    if (!g.authorized && !ev.verified && mode === "hybrid" && command.kind === "place_item" && isLocationPlacement(command, snapshot) && g.reason === "rejected_insufficient_confirmation") {
+      const rec = recoverPlacementReceipt(command, narration, context, evidence.player_intents, ownerNames);
+      if (rec.status === "recovered") {
+        ev = { verified: true, check: rec.check };
+        base = { ...base, evidence: { quote: rec.quote, verified: true, check: rec.check, source: "recovered_narrator_receipt", original_quote: quote ?? null, original_check: base.evidence!.check }, signals: ["weak_controller_quote", "recovered_narrator_receipt"] };
+      } else if (/^recovery_(?:contradictory|another|ambiguous)/.test(rec.check)) base = { ...base, evidence: { ...base.evidence!, check: rec.check, original_check: base.evidence!.check } };
+    }
     if (g.authorized) return { ...base, authorized: true, reason: g.reason, source: ev.verified ? "both" : "grammar" };
     // Repair 1: conditions have no grammar path. Validity was already checked by authorizeCommands; verified evidence completes it.
     if (command.kind === "transfer_item" || command.kind === "create_item" || isLocationPlacement(command, snapshot) || command.kind === "set_condition" || command.kind === "leave_scene" || command.kind === "adjust_relationship" || command.kind === "join_household" || command.kind === "leave_household") return mode === "hybrid" && ev.verified && g.reason === "rejected_insufficient_confirmation" ? { ...base, authorized: true, reason: "authorized_controller_evidence", source: "evidence" } : { ...base, authorized: false, reason: g.reason, source: "rejected" };

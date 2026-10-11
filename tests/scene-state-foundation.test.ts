@@ -103,7 +103,7 @@ test("integration: ONE rich scene is correct across location, time, people, stat
   const f = richScene();
   const block = scene(f, "Brenna, are you alright? And why are you carrying my sword?");
   assert.match(block, /Location: Heartstone LR/);                                                       // 1
-  assert.match(block, /Time: 19:42 — Evening/);                                                        // 2
+  assert.match(block, /Time: (?:[^\n]* — )?19:42 — Evening/);                                                        // 2
   assert.match(block, /Present:\n- Nicco\n- Brenna\n- Gerome\n- Maren/);                              // 3
   assert.doesNotMatch(block, /Pellan|Korvin/);
   assert.match(block, /- Brenna is winded\./); assert.match(block, /- Maren has a minor injury\./);   // 4
@@ -170,7 +170,7 @@ test("conflict B: a development about a condition that was removed does not reas
 
 test("conflict C: a transcript saying it is morning does not change the runtime clock in CURRENT SCENE", () => {
   const block = scene(richScene(), "Good evening.", [ex("Good morning.", "*Morning light fills the room and the household is waking.*")]);
-  assert.match(block, /Time: 19:42 — Evening/);
+  assert.match(block, /Time: (?:[^\n]* — )?19:42 — Evening/);
   assert.doesNotMatch(block, /morning/i);
 });
 
@@ -224,7 +224,7 @@ test("budget stress: large combined scene is deterministic, bounded, whole-lined
   assert.equal(pa.text, pb.text, "deterministic");
   const block = sceneBlock(pa.text);
   assert.ok(block.length <= 6_000, `bounded (${block.length})`);
-  assert.match(block, /Location: Heartstone LR/); assert.match(block, /Time: 19:42 — Evening/);
+  assert.match(block, /Location: Heartstone LR/); assert.match(block, /Time: (?:[^\n]* — )?19:42 — Evening/);
   assert.match(block, /Mana: 80\/100/); assert.match(block, /Money: 4 Gold/);
   assert.match(block, /- Brenna carries Sword; owner: Nicco\./);
   assert.match(block, /- Brenna is winded\./);
@@ -284,7 +284,7 @@ test("duplication audit: every descriptive truth appears once in CURRENT SCENE; 
   const count = (re: RegExp) => (text.match(re) ?? []).length;
   assert.equal(count(/Mana: 80\/100/g), 1);
   assert.equal(count(/Money: 4 Gold/g), 1);
-  assert.equal(count(/Time: 19:42/g), 1);
+  assert.equal(count(/ — 19:42 — /g), 1);
   assert.equal(count(/Supper with the household/g), 1);
   assert.equal(count(/Household Heartstone/g), 1);
   assert.equal(count(/Brenna → Nicco/g), 1);

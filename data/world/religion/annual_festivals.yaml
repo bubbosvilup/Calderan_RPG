@@ -1,0 +1,23 @@
+schema_version: 1
+entity:
+  id: annual_festivals
+  type: world_lore
+  name: "Greenwake, Highsun and Harvest"
+  display_name: "Greenwake, Highsun and Harvest"
+  parent: null
+  aliases: ["Greenwake", "Highsun", "Harvest"]
+  summary: >-
+    Three ordinary public festivals mark the year: Greenwake on Aurel Med 1, Highsun on Sol Med 15 and Harvest on Vesp Med 30.
+  tags: ["culture","festival"]
+  search_context: "Greenwake, Highsun, Harvest, spring festival, summer festival, harvest festival, markets and feasts, public holidays, festival dates, planting, thanksgiving, preserving supplies"
+  content: >-
+    Greenwake falls on Aurel Med 1 and celebrates the renewal of spring: greenery and flowers, planting, outdoor markets and
+    the return of growth; it is not a heavily religious day. Highsun falls on Sol Med 15 and marks the height of summer with
+    markets, food and drink, music, games and long evenings outdoors. Harvest falls on Vesp Med 30 and marks the gathering of the
+    crops and the preparation for winter: food, markets, preserving and storing supplies, thanksgiving and communal meals; in poor
+    years and poor regions it carries anxiety as much as celebration. Winter has no festival of this kind, since the Five Suns
+    fill that place at the turn of the year. How each city keeps these days is not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: cultures
+  related_entities: ["helion_calendar","five_suns","helion_climate"]
+chunks: []

@@ -7,20 +7,21 @@ entity:
   parent: null
   aliases: ["the Four Guardians", "the four sacred figures"]
   summary: >-
-    The Four are the sacred elemental figures of tradition, one associated with each of Helion's four
-    great divisions: West, Center, East and the South Continent. Their nature is understood in many ways.
+    The Four are the sacred elemental figures of tradition, each tied to one of Helion's four great divisions
+    and to one element: Earth with West, Fire with Center, Water with East and Air with the South Continent.
+    Their nature is understood in many ways.
   tags: ["myth", "religion"]
-  search_context: "The Four, four sacred elemental figures, guardians of the four regions, West Center East South Continent, sacred beasts, old iconography, dragons in folk art."
+  search_context: "The Four, four sacred elemental figures, guardians of the four regions, West Center East South Continent, Earth Fire Water Air, elemental correspondences, sacred figures, old iconography, folk tradition."
   content: >-
     In the traditions of Helion there are Four sacred elemental figures, each associated with one of the
-    four great divisions: West, Center, East and the South Continent. Traditions interpret them as
-    guardians, divine servants, primordial beasts or sacred elemental figures, and no single account is
-    settled; Church teaching holds that Aureth, the Sun Emperor, ordered and blessed them under his
-    reign. In folk art and old stories they are often drawn as dragons, and so is the Sun Emperor in some
-    images; this is traditional iconography, not an established account of what they are. Whether they
-    still stir, what they are in truth and what the traditions have lost are not publicly established.
-    Their names, forms, powers and the elements they correspond to are not established.
+    four great divisions and with one of the four elements of magic: Earth with West, Fire with Center, Water
+    with East and Air with the South Continent. The correspondence is an old and widely repeated tradition,
+    not a statement about the character of any people; the peoples of each division are as varied as people
+    anywhere. Traditions interpret the Four as guardians, divine servants, primordial figures or sacred
+    elemental presences, and no single account is settled; Church teaching holds that Aureth, the Sun Emperor,
+    ordered and blessed them under his reign. Whether they still stir, what they are in truth and what the
+    traditions have lost are not publicly established. Their names, forms and powers are not established.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   category: cultures
-  related_entities: ["continent","west","center","east","south_continent","aureth_creation_myth","church_doctrine"]
+  related_entities: ["continent","west","center","east","south_continent","aureth_creation_myth","church_doctrine","elemental_magic"]
 chunks: []

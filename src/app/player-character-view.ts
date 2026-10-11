@@ -12,6 +12,7 @@ import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
 import { appearanceFingerprint, composePortraitPrompt, portraitDetails, portraitPoseOptions, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";
 import { ageStatus } from "../campaign/age.js";
+import { characterCapabilities, type CharacterCapabilities } from "./character-capabilities.js";
 import { RAENA_IMAGE_STACK } from "./image-stack.js";
 import { avatarPortrait, fullBodyPortrait, MAX_PORTRAIT_VERSIONS, PORTRAIT_BATCH_SIZE, portraitAssetToken, portraitItemToken, portraitRecord } from "../campaign/portraits.js";
 import { appearanceLabel, appearanceLines, PERMANENT_APPEARANCE_FIELDS, resolvePermanentAppearance, type PermanentAppearanceField } from "../campaign/permanent-appearance.js";
@@ -25,6 +26,8 @@ export interface PlayerCharacterView {
   readonly npc_plus: boolean;
   /** Management eligibility for the Household appearance editor; grants no private-data access. */
   readonly appearance_editor_eligible: boolean;
+  /** Derived tier + visual capabilities (never persisted). The UI renders controls from these and never re-derives tier. */
+  readonly character_capabilities: CharacterCapabilities;
   /** Permanent Appearance V1: the bounded editor projection, present only when eligible. */
   readonly appearance_editor: AppearanceEditorView | null;
   /** Portrait Gallery V2: the Avatar image URL (opaque token route) for compact surfaces, else null. Never the Full Body. */
@@ -152,8 +155,9 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     const isMember = memberIds.has(id), npcPlus = snapshot.premium_characters.some(p => p.character_id === id);
     const accessible = canonical && publicAccess(canonical.knowledge) && (here || named || isMember);
     const profile = accessible ? Object.fromEntries(Object.entries(characterPublicProfile(canonical)).map(([k, v]) => [k, v === null ? null : text(v)])) : {};
-    const editable = id !== "nicco" && view.current.status !== "inactive" && view.current.status !== "dead" && snapshot.premium_characters.some(p => p.character_id === id && p.metadata.active_household_member)
-      && household.some(h => h.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner") && h.members.some(m => m.character_id === id && m.status === "member" && m.role !== "owner"));
+    // Editing follows PROMOTION (the premium record), not household membership or the active behavior gate: a promoted NPC+ who left the
+    // household stays an NPC+ and stays editable. Only a character who is no longer active (inactive/dead) is not.
+    const editable = id !== "nicco" && npcPlus && view.current.status !== "inactive" && view.current.status !== "dead";
     // Permanent appearance: public canonical prose and established origin observations; campaign profile values only for a managed
     // member, whose appearance Nicco authors in the editor. Elsewhere profile values stay unproven and hidden.
     const permanent = resolvePermanentAppearance(world, snapshot, id, { canonical: !!accessible, overrides: editable });
@@ -208,6 +212,7 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),
       household: isMember, npc_plus: npcPlus, presence: here ? "present" : "away",
       appearance_editor_eligible: editable,
+      character_capabilities: characterCapabilities({ promoted: npcPlus && id !== "nicco", has_campaign_record: !!record, editable, ...(view.current.status ? { status: view.current.status } : {}), generation_blocked: ageStatus(world, snapshot, id) === "minor" ? "Portrait generation is only available for adult characters." : null }),
       appearance_editor: editable ? {
         identity: ([["Species", permanent.identity.species], ["Sex", permanent.identity.sex], ["Age", permanent.identity.age]] as const).flatMap(([label, value]) => value ? [{ label, value: text(value) }] : []),
         fields: PERMANENT_APPEARANCE_FIELDS.map(key => {

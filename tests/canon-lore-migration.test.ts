@@ -42,7 +42,7 @@ test("3 Aureth's objective identity is the incarnation of Light, not a golden dr
   const t = corpus("aureth_true_identity");
   assert.match(t, /current incarnation of Light/); assert.match(t, /sealed him/); assert.match(t, /not killed or destroyed/);
   assert.doesNotMatch(t, /is an ancient golden dragon|true creator|three draconic children|green dragon|red dragon|supreme Light mage/i);
-  assert.match(t, /not a golden dragon/); assert.match(t, /did not create the world, the Four or dragons/);
+  assert.match(t, /not a dragon/); assert.match(t, /did not create the world or the Four/);
   assert.equal(world.hasEntity("shadow_adversary"), false); assert.equal(world.hasEntity("beastfolk_origin_truth"), false);
 });
 test("4 public Aureth canon (Sun Emperor, doctrine, myth, reckoning) never reveals incarnation, sealing or the six forces", () => {
@@ -75,8 +75,8 @@ test("7 ordinary Church NPCs hold public doctrine only and receive no migrated r
 });
 test("8 senior NPCs receive exactly the intended partial fragments; nobody gets the deep truth", () => {
   const grants = knowledgeGrants(world), ids = (who: string) => (grants.restricted.get(who) ?? []).map(g => g.id).filter(id => id !== "mutilating_ritual");
-  assert.deepEqual(ids("cassian_valerius"), ["church_curated_history", "first_voice_hidden_authority", "forgotten_era_restricted_access", "sun_emperor.light_secret"]);
-  assert.deepEqual(ids("helbrecht"), ["church_curated_history", "forgotten_era_restricted_access", "sun_emperor.light_secret"]);
+  assert.deepEqual(ids("cassian_valerius"), ["church_curated_history", "church_post_491_history", "first_voice_hidden_authority", "forgotten_era_restricted_access", "sun_emperor.light_secret"]);
+  assert.deepEqual(ids("helbrecht"), ["church_curated_history", "church_post_491_history", "forgotten_era_restricted_access", "sun_emperor.light_secret"]);
   assert.deepEqual(ids("severan_krauss"), ["forgotten_era_restricted_access"]);
   for (const id of ["aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control"]) assert.deepEqual(world.getEntity(id)!.knowledge!.known_by, [], id);
   const cassian = (grants.restricted.get("cassian_valerius") ?? []).find(g => g.id === "first_voice_hidden_authority")!;
@@ -85,16 +85,15 @@ test("8 senior NPCs receive exactly the intended partial fragments; nobody gets 
 test("9 the Four are four, tied to the four great divisions, with no species or parentage", () => {
   const t = corpus("the_four");
   for (const place of ["West", "Center", "East", "South Continent"]) assert.match(t, new RegExp(place));
-  assert.match(t, /Four sacred elemental figures/); assert.doesNotMatch(t, /\bthree\b|children|father|created by/i);
-  assert.match(t, /not an established account of what they are/);
-  assert.match(corpus("primordial_cosmology"), /not created by Aureth and are not his children, and are not required to be\s+dragons/);
+  assert.match(t, /Four sacred elemental figures/); assert.doesNotMatch(t, /\bthree\b|children|father|created by|dragon/i);
+  assert.match(corpus("primordial_cosmology"), /were not created by Aureth and are not his children/); assert.match(corpus("primordial_cosmology"), /not dragons and have never been dragons/);
   assert.ok(!/three|children/i.test(corpus("aureth_creation_myth")));
 });
 test("10 South Continent sits under Helion as the fourth division", () => {
   const south = world.getEntity("south_continent")!;
   assert.deepEqual([south.type, south.parent, south.name], ["location", "continent", "South Continent"]);
   assert.deepEqual(world.getChildren("continent").map(e => e.id).sort(), ["calderan_northern_forest", "center", "dragons_teeth_mountains", "east", "south_continent", "west"]);
-  assert.match(corpus("continent"), /South\s+Continent, the fourth great division of Helion, lies to the south of West, Center and East/);
+  assert.match(corpus("continent"), /South\s+Continent, the fourth great division of Helion, lies to the south, beneath Center and East, and\s+does not border West/);
 });
 test("11 South Continent carries no invented capital, city, people, ruler or proper name", () => {
   const south = world.getEntity("south_continent")!;
@@ -113,11 +112,12 @@ test("13 old sleeper hooks survive as tier 2 secrets about one of the Four, with
   for (const [id, place] of [["world_tree_sleeper", /World Tree of\s+Woodsong Forest/], ["oasis_sleeper", /Central Oasis/]] as const) {
     const e = world.getEntity(id)!, t = corpus(id);
     assert.equal(e.knowledge!.secrecy, "holder_only"); assert.deepEqual(e.knowledge!.known_by, []);
-    assert.match(t, place); assert.match(t, /one of the Four/); assert.doesNotMatch(t, /dragon|green|red dragon|eldest|twin|female|male dragon/i);
+    assert.match(t, place); assert.match(t, /one\s+of the Four/); assert.doesNotMatch(t, /green|red dragon|eldest|twin|female|male dragon/i);
+    assert.match(t, id === "world_tree_sleeper" ? /Earth child/ : /Fire child/);
   }
   assert.match(corpus("oasis_sleeper"), /red reflections/);
   assert.equal(ALL.filter(e => /sleeper/i.test(e.id)).length, 2); // no East or South sleeper was invented
-  assert.match(corpus("primordial_cosmology"), /places of East's and South's are not established/);
+  assert.match(corpus("primordial_cosmology"), /neither place is established/);
 });
 test("14 no deep truth leaks through retrieval for any audience on migration-specific queries", () => {
   const queries = ["Aureth", "Helion", "Eldaven", "the Four", "South Continent", "Year 491", "Year 1191", "seven hundredth anniversary", "Forgotten Era", "Sun Emperor disappeared", "Light and Shadow", "sealed", "primordial", "incarnation", "who rules the Church", "dormant", "elemental forces", "reincarnation"];

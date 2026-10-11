@@ -16,6 +16,7 @@ entity:
     authored navigation graph. The bay's name has no established supernatural meaning.
   tags: [geography]
   search_context: ""
+  climate_profile: west_cool_maritime
   knowledge:
     visibility:
       narrator: true

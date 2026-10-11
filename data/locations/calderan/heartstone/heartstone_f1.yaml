@@ -23,6 +23,7 @@ entity:
     cabinets, also initially empty. Their intended future use is storing medicines, dressings, instruments,
     and ordinary medical supplies. The furnishings remain sparse; no current patients or medical inventory are
     specified.
+  environment_exposure: indoor
   knowledge:
     visibility:
       narrator: true

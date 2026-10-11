@@ -14,8 +14,8 @@ entity:
   tags: ["religion","doctrine"]
   search_context: "Church doctrine, Sun Emperor, Aureth, divine Light, purification, Shadow, obedience, duty, sacrifice, suffering, afterlife, cremation, slavery doctrine"
   content: >-
-    The Church of the Sun Emperor teaches that the Sun Emperor, Aureth, is West's divine sovereign,
-    founder and protector, immortal, the source or bearer of purifying divine Light, and the
+    The Church of the Sun Emperor teaches that the Sun Emperor, Aureth, is the divine sovereign of all
+    Helion, founder and protector, immortal, the source or bearer of purifying divine Light, and the
     protector of humanity and order against corruption and Shadow. Its core virtues are
     obedience, duty, labor, sacrifice, endurance and social order. Suffering is not worshipped
     for its own sake; suffering endured in service, discipline or purification may have
@@ -32,24 +32,41 @@ chunks:
   - id: church_doctrine.founder_and_shadow
     entity_id: church_doctrine
     section: founder_and_shadow
-    summary: "Church teaching on the Sun Emperor as founder and protector of the ordered world, his long absence, the prohibition of Shadow, and the older dragon myth."
+    summary: "Church teaching on the Sun Emperor as founder and protector of the ordered world, his long absence, the prohibition of Shadow, and the older ancestral traditions."
     search_context: "Sun Emperor founder, Aureth, creation, protector of the world, absent emperor, disappearance in Year 491, seven hundredth anniversary, awaited return, the Four, Forgotten Era, why Shadow magic is forbidden, Shadow heresy, Church and the old creation myth, ancestral folklore"
     content: >-
       The Church teaches that Aureth, the Sun Emperor, revealed himself to the world in Year 0, founded
       and protects the divinely ordered world and that his Light sustains that order. He disappeared in
       Year 491; the Church does not teach how or why, does not declare him dead, and believers variously
       regard him as hidden, withdrawn into divine transcendence or awaiting the hour of his return, while
-      West remains governed in his name. The present year, 1191, is the seven-hundredth anniversary of
+      many lands, West above all, are still governed in his name. The present year, 1191, is the seven-hundredth anniversary of
       the disappearance, a date the Church treats as significant. The Church teaches that the Four, the
       great elemental figures of the four regions, were ordered and blessed under the Sun Emperor's reign,
       and that the age before Year 0, the Forgotten Era, was spiritually dangerous and unreliable, so
       that its records are restricted. The Church holds that its prohibition of Shadow rests on the Sun Emperor's own teaching:
       Shadow is forbidden, corruptive and hostile to the divine order and to creation, and Shadow magic
-      is absolute heresy. The older ancestral traditions, which draw Aureth and the Four as dragons, predate
+      is absolute heresy. The older ancestral traditions predate
       the Church, which absorbed, reinterpreted or overwrote much of them within its own account and
-      treats the dragon imagery itself as folklore. These are doctrinal beliefs, not proven cosmology; the details of
+      treats their stories as folklore. These are doctrinal beliefs, not proven cosmology; the details of
       the founder's teaching and of any expected return are not established.
     tags: ["shadow","founder"]
+    knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  - id: church_doctrine.light_and_shadow
+    entity_id: church_doctrine
+    section: light_and_shadow
+    summary: "Church doctrine on Light and Shadow: the Sun Emperor's Light is sacred and uniquely legitimate; an independent mortal Light is a sacrilege and Shadow is heresy."
+    search_context: "Church doctrine on Light magic, mortal Light mage, false prophet, blasphemy, stolen Light, sacrilege, Sun Emperor's Light given to the world, Shadow heresy, why Light mages are forbidden, Light mage danger"
+    content: >-
+      The Church teaches that the Sun Emperor's Light is sacred and uniquely legitimate: "The Sun's Light is
+      given to the world through the Sun Emperor; no mortal may claim the Sun for themselves." A mortal who
+      wields Light of their own is held to carry an illicit fragment or stolen echo of the divine Light, to
+      claim falsely a divine prerogative and to be a potential false prophet or blasphemer; such a person is
+      taught to be spiritually dangerous, however gently they use it. Shadow, by contrast, is taught as
+      heresy and corruption. Light is therefore sacred in Aureth and forbidden in ordinary mortals; the
+      Church does not regard this as a contradiction, and many believers feel it is not one. Scholars and
+      mages may treat Light and Shadow as magical categories rather than as virtue and vice, but the Church's
+      teaching is the law of the Church's lands. This is doctrine, not demonstrated cosmology.
+    tags: ["light","shadow","doctrine"]
     knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
   - id: church_doctrine.afterlife_and_funerary
     entity_id: church_doctrine

@@ -83,7 +83,7 @@ test("institutions keep their separations: council seats, houses versus guilds, 
   assert.match(duke.content, /does not control Church doctrine/);
   assert.equal(world.getEntity("inquisition")!.parent, "church");
   assert.match(world.getEntity("church")!.content, /not a guild/);
-  assert.match(world.getEntity("west_governance")!.content, /Sun Emperor is the reigning sovereign/);
+  assert.match(world.getEntity("west_governance")!.content, /Sun Emperor was the sovereign of all Helion/);
   assert.doesNotMatch(world.getEntity("west_governance")!.content, /King, Queen/);
 });
 

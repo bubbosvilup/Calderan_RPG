@@ -133,13 +133,18 @@ test("I-L + pipeline 1/2/5: put down here, pick back up, same ID, no duplicate; 
     { commands: [{ kind: "create_item", name: "Silver knife", description: "d", visual_description: "Small silver knife.", category: "tool", position: { kind: "carried", character_id: "nicco" } }], evidence: ["Nicco picks up the silver knife."] });
   assert.equal(dup.campaign.exportSnapshot().items.length, 1);
   // L: no placement at an unrelated location, and none without a verified quote naming the item.
+  // The wrong location is refused outright.
+  const wrongPlace = await turn(knife, "There is a table nearby, scarred and old. Nicco lays the silver knife on the table.", "I look at the table.",
+    { commands: [{ kind: "place_item", item_id: KNIFE, position: { kind: "stored", location_id: "heartstone_lr" } }], evidence: ["Nicco lays the silver knife on the table."] });
+  assert.ok(carriesItem(wrongPlace.campaign.exportSnapshot(), "nicco", KNIFE));
+  // Debt Zero: a Controller quote (or none) that misses the narrated act no longer loses it when the draft holds exactly one unambiguous receipt;
+  // the recovered placement is still bound to the proposed item and location, never to anything else.
   for (const proposal of [
-    { commands: [{ kind: "place_item", item_id: KNIFE, position: { kind: "stored", location_id: "heartstone_lr" } }], evidence: ["Nicco lays the silver knife on the table."] },
     { commands: [{ kind: "place_item", item_id: KNIFE, position: { kind: "stored", location_id: "shop" } }], evidence: ["There is a table nearby, scarred and old."] },
     { commands: [{ kind: "place_item", item_id: KNIFE, position: { kind: "stored", location_id: "shop" } }] },
   ] as { commands: CampaignCommand[]; evidence?: string[] }[]) {
     const r = await turn(knife, "There is a table nearby, scarred and old. Nicco lays the silver knife on the table.", "I look at the table.", proposal);
-    assert.ok(carriesItem(r.campaign.exportSnapshot(), "nicco", KNIFE), JSON.stringify(proposal));
+    assert.ok(itemAt(r.campaign.exportSnapshot(), KNIFE, "shop"), JSON.stringify(proposal));
   }
   // The schema exposes the existing stored position on place_item only.
   assert.deepEqual(parseControllerProposal(JSON.stringify({ commands: [{ kind: "place_item", item_id: KNIFE, position: { kind: "stored", location_id: "shop" } }] })),

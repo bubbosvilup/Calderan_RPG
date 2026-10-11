@@ -1,3 +1,4 @@
+import { carriedItems } from "../campaign/inventory.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
@@ -5,6 +6,9 @@ import { characterView } from "../campaign/projections.js";
 import { relationshipHeadline } from "../campaign/relationship-summary.js";
 import { temporalGrounding, type TimeOfDay } from "../turn/temporal-grounding.js";
 import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
+import { isNpcPlus } from "../campaign/premium-characters.js";
+import { describeWeather, environmentAt, weatherWords, type WeatherStatus } from "../world/environment.js";
+import { formatCalendarDate, isGreatIlluminationYear, isLeapYear } from "../world/calendar.js";
 
 /**
  * Read-only UI view model. Derived on demand from the authoritative snapshot and the authored canon; it owns no state, is plain
@@ -24,6 +28,8 @@ export interface ViewHouseholdMember {
   readonly relationship_to_player?: string; readonly conditions: readonly string[]; readonly presentation?: string;
   readonly legal?: { readonly status: "free" | "enslaved"; readonly holder_name?: string };
   readonly equipment: readonly ViewEquipped[];
+  /** Household membership and NPC+ promotion are distinct facts: the Heartstone rite sets both, only membership can later end. */
+  readonly household_member: true; readonly npc_plus: boolean;
 }
 export interface SessionView {
   readonly context_budget?: import("../turn/context-budget.js").ContextBudgetSnapshot;
@@ -36,10 +42,21 @@ export interface SessionView {
     readonly location: { readonly id: string; readonly name: string; readonly summary: string; readonly parent_name?: string };
     readonly exits: readonly { readonly target_id: string; readonly name: string; readonly minutes: number; readonly description: string; readonly kind?: string }[];
     readonly time: { readonly world_minute: number; readonly day: number; readonly minute_of_day: number; readonly time_of_day: TimeOfDay };
+    /** Calendar, season, observances and outside weather derived from world_minute (read model for a future calendar/weather UI; display strings only). */
+    readonly environment: {
+      readonly date_text: string; readonly kind: "regular" | "intercalary"; readonly year: number; readonly is_leap_year: boolean; readonly great_illumination: boolean;
+      readonly month_name?: string; readonly day_of_month?: number; readonly weekday_name?: string; readonly season_name?: string; readonly intercalary_name?: string;
+      readonly observances: readonly string[];
+      /** Authored exposure of this place (not inherited): `outdoor` weather applies here directly; otherwise it is the weather OUTSIDE. */
+      readonly exposure: "indoor" | "outdoor" | "sheltered" | "unknown";
+      readonly weather: { readonly status: WeatherStatus; readonly summary?: string; readonly condition?: string; readonly temperature?: string; readonly note?: string };
+    };
     readonly present: readonly { readonly id: string; readonly name: string }[];
   };
   readonly player: { readonly id: "nicco"; readonly name: string; readonly mana: { readonly current: number; readonly max: number }; readonly gold: number | null;
     readonly equipment: readonly ViewEquipped[]; readonly inventory: readonly ViewItem[] };
+  /** Every promoted (NPC+) character, whether or not they still live in the household (promotion is not undone by leaving). Display names only. */
+  readonly promoted: readonly { readonly name: string; readonly household_member: boolean }[];
   readonly household: readonly { readonly id: string; readonly name: string; readonly members: readonly ViewHouseholdMember[]; readonly rules: readonly { readonly id: string; readonly text: string }[] }[];
 }
 export interface ViewContext { readonly status: SessionStatus; readonly last_saved_revision: number | null; readonly provider: ProviderStatus;
@@ -83,15 +100,26 @@ export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<Camp
       return { id: m.character_id, name: name(m.character_id), display_name: safeName(m.character_id), ...(m.role ? { role: m.role } : {}), presence: here ? "present" : "away",
         ...(here ? { location: { id: location, name: place?.display_name ?? location } } : {}), ...(edge ? { relationship_to_player: relationshipHeadline(edge) } : {}),
         conditions: [...(state.conditions ?? [])], ...(state.presentation ? { presentation: state.presentation } : {}),
-        ...(legal ? { legal: { status: legal.status, ...(legal.holder_id ? { holder_name: name(legal.holder_id) } : {}) } } : {}), equipment: equipmentOf(m.character_id) };
+        ...(legal ? { legal: { status: legal.status, ...(legal.holder_id ? { holder_name: name(legal.holder_id) } : {}) } } : {}), equipment: equipmentOf(m.character_id), household_member: true, npc_plus: isNpcPlus(snapshot, m.character_id) };
     }),
     rules: (h.rules ?? []).filter(r => r.active).map(r => ({ id: r.id, text: r.text })),
   }));
-  const carried = snapshot.items.filter(i => i.position.kind === "carried" && i.position.character_id === "nicco" || i.owner_id === "nicco" && i.position.kind === "stored").map(i => itemName(i.id));
+  // Item lifecycle: inventory = what the character physically carries (authoritative item position, via the one derived query layer).
+  // Ownership and ground placement never put an item here; equipped items are listed under `equipment`.
+  const carried = carriedItems(snapshot, "nicco").map(i => itemName(i.id));
   return structuredClone({ session: { campaign_id: snapshot.campaign_id, revision: snapshot.revision, status: context.status, dataset_id: snapshot.dataset_id,
       save: { state: context.last_saved_revision === snapshot.revision ? "saved" as const : "unsaved" as const, last_saved_revision: context.last_saved_revision, ...(context.save_status ?? {}) }, provider: context.provider },
     scene: { location: { id: location, name: place?.display_name ?? location, summary: place?.summary ?? "", ...(parent ? { parent_name: parent.display_name } : {}) }, exits,
-      time: { world_minute: minute, day, minute_of_day, time_of_day }, present },
+      time: { world_minute: minute, day, minute_of_day, time_of_day }, environment: viewEnvironment(world, snapshot, minute, location), present },
     player: { id: "nicco" as const, name: name("nicco"), mana: { current: snapshot.runtime.mana.current, max: snapshot.runtime.mana.max }, gold, equipment: equipmentOf("nicco"), inventory: carried },
+    promoted: snapshot.premium_characters.map(p => ({ name: safeName(p.character_id), household_member: snapshot.households.some(h => h.members.some(m => m.character_id === p.character_id && m.status === "member")) })),
     household: households });
+}
+
+function viewEnvironment(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, minute: number, location: string): SessionView["scene"]["environment"] {
+  const e = environmentAt(world, snapshot.campaign_id, minute, location), c = e.calendar;
+  const weather = e.weather ? { status: e.weather_status, summary: describeWeather(e.weather), condition: weatherWords.condition[e.weather.condition], temperature: weatherWords.temperature[e.weather.temperature] } : { status: e.weather_status, ...(e.weather_status === "needs_climate_zone" ? { note: "Climate zone unresolved" } : e.weather_status === "no_climate" ? { note: "No climate authored for this place" } : {}) };
+  return { date_text: formatCalendarDate(c), kind: c.kind, year: c.year, is_leap_year: isLeapYear(c.year), great_illumination: c.kind === "intercalary" && isGreatIlluminationYear(c.year),
+    ...(c.kind === "regular" ? { month_name: c.month_name, day_of_month: c.day_of_month, weekday_name: c.weekday_name, season_name: c.season_name } : { intercalary_name: c.intercalary_name }),
+    observances: e.observances.map(o => o.name), exposure: e.exposure, weather };
 }

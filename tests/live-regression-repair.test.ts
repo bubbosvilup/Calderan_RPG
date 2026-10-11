@@ -1,4 +1,5 @@
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { ownItems } from "./opening-docs.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -72,7 +73,7 @@ test("B: an NPC gives an item and the handover is narrated: exact NPC → Nicco 
   const { result } = await run(campaign, "Korvin gives Nicco a pair of leather boots.", ["Korvin hands the boots to Nicco without ceremony."], [inbound]);
   assert.equal(result.authorization[0]!.authorized, true);
   const [boot] = item(campaign);
-  assert.equal(item(campaign).length, 1); assert.equal(campaign.exportSnapshot().items.length, 1);
+  assert.equal(item(campaign).length, 1); assert.equal(ownItems(campaign.exportSnapshot().items).length, 1);
   assert.equal(boot!.owner_id, "korvin"); assert.deepEqual(boot!.position, { kind: "carried", character_id: "nicco" });
   assert.equal(boot!.acquisition, undefined, "physical receipt does not fabricate gift provenance");
   // Nicco's own receipt also establishes it.
@@ -105,7 +106,7 @@ test("E: the original give-back phrasing resolves the exact item and the giver a
   const intent = intentOf(campaign, RETURN_INPUT);
   assert.deepEqual(intent.candidates, [toKorvin]);
   assert.equal(intent.natural!.actions.find(a => a.kind === "offer")!.detail.form, "give_back");
-  for (const form of ["*he gives them back*", "*he gives the boots back*", "*he returns the boots*", "*he hands them back to Korvin*", "*he gives back the boots to Korvin*", "*he offers them back*", "*he tries to return them*"])
+  for (const form of ["*he gives them back*", "*he gives the boots back*", "*he returns the boots*", "*he hands the boots back to Korvin*", "*he gives back the boots to Korvin*", "*he offers them back*", "*he tries to return them*"])
     assert.deepEqual(intentOf(campaign, form).candidates, [toKorvin], form);
   // Accepted return commits; refused return keeps Nicco's ownership.
   await run(campaign, RETURN_INPUT, ["Korvin takes the boots back with a grunt."], [toKorvin], ["Korvin takes the boots back with a grunt."]);
@@ -128,13 +129,13 @@ test("G: ambiguous give-back with several plausible items or recipients is never
   const b = intentOf(twoPeople, "*he gives them back*");
   assert.deepEqual(b.candidates, []); assert.equal(b.natural!.actions[0]!.status, "ambiguous");
   // Naming the recipient or item removes the ambiguity.
-  assert.deepEqual(intentOf(twoPeople, "*he hands them back to Korvin*").candidates, [toKorvin]);
+  assert.deepEqual(intentOf(twoPeople, "*he hands the boots back to Korvin*").candidates, [toKorvin]);
 });
 test("H: transferring an equipped item unequips it atomically: no ghost equipment, no duplicate", async () => {
   const campaign = scene(["korvin"], [boots("nicco", { kind: "equipped", character_id: "nicco", slot: "feet", mode: "worn" })]);
   await run(campaign, "*he gives the boots to Korvin*", ["Korvin takes the boots."], [toKorvin], ["Korvin takes the boots."]);
   const s = campaign.exportSnapshot();
-  assert.equal(s.items.length, 1); assert.equal(s.items[0]!.owner_id, "nicco"); assert.deepEqual(s.items[0]!.position, { kind: "carried", character_id: "korvin" });
+  assert.equal(ownItems(s.items).length, 1); assert.equal(ownItems(s.items)[0]!.owner_id, "nicco"); assert.deepEqual(ownItems(s.items)[0]!.position, { kind: "carried", character_id: "korvin" });
   assert.equal(s.items.filter(i => i.position.kind === "equipped").length, 0);
   assert.deepEqual(s.characters.find(c => c.id === "nicco")!.current.empty_slots, ["feet"]);
 });

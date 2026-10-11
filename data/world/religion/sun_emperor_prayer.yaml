@@ -1,0 +1,38 @@
+schema_version: 1
+entity:
+  id: sun_emperor_prayer
+  type: world_lore
+  name: "The Canticle of the Watchful Sun"
+  display_name: "The Canticle of the Watchful Sun"
+  parent: null
+  aliases: []
+  summary: >-
+    The Canticle of the Watchful Sun is a well-known prayer attributed to the Sun Emperor himself, sung and
+    spoken in Church worship as a devotional warning against darkness, pride and false voices.
+  tags: ["religion","liturgy"]
+  search_context: "Canticle of the Watchful Sun, prayer of the Sun Emperor, liturgy, hymn, warning against darkness, false voices, pride, vigil, text of the prayer, Aureth's prayer"
+  content: >-
+    The Canticle of the Watchful Sun is among the oldest prayers of the Church, attributed by tradition to the
+    Sun Emperor himself, and it is known by heart to many believers across Helion. Its text runs:
+
+
+    "Keep me in the Light, and the Light in my keeping.
+
+    Let no voice sweeter than the dawn lead me from the dawn.
+
+    Where pride wears the colors of humility, let me look twice.
+
+    Where the dark is kind to me, let me ask what it costs.
+
+    What is hidden from the Sun is not hidden from the Sun's watch;
+
+    let the faithful keep the vigil until the morning returns."
+
+
+    The Church teaches it as a devotional warning against darkness, pride, false voices, corruption and
+    separation from the Light, and recites it in vigils and at the centennial observances. Readers have
+    always found it a gentle prayer; no gloss is established beyond the Church's own.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: religion
+  related_entities: ["church_doctrine","sun_emperor","centennial_observances","light_and_shadow"]
+chunks: []

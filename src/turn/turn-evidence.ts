@@ -8,7 +8,7 @@ import { normalizeReference, type ResolvedReference } from "./reference-resoluti
 import type { PhysicalInteraction } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
 import { narratedDepartures, type DepartureEvidence } from "./scene-departure.js";
-import { detectHouseholdChoices, type HouseholdChoice } from "./household-evidence.js";
+import { detectHouseholdChoices, detectHouseholdRite, type HouseholdChoice, type HouseholdRite } from "./household-evidence.js";
 import { escapeRegExp as escape } from "./language/text.js";
 
 export type ConfirmationKind = "accepted_transfer" | "equipped_item" | "heard_fact" | "was_told_fact" | "agreed_event";
@@ -29,6 +29,8 @@ export interface TurnEvidence {
   readonly departures?: readonly DepartureEvidence[];
   /** Household Pass 1: voluntary household choices voiced by the chooser, and the player's explicit rule declarations. */
   readonly household_choices?: readonly HouseholdChoice[];
+  /** Heartstone rite receipts per joining candidate (complete or the missing parts). Evidence only. */
+  readonly household_rites?: readonly HouseholdRite[];
   readonly rule_declarations?: readonly string[];
 }
 const uncertain = /\b(not|never|no longer|maybe|perhaps|might|could|would|almost|pretend\w*|imagin\w*|consider\w*|unchanged|instead|inscription|quoted|hypothetical|if|unless)\b/i;
@@ -265,7 +267,7 @@ function departuresOf(narration: string, context: TurnContext): { departures?: D
   const found = narratedDepartures(narration, context);
   return found.length ? { departures: structuredClone([...found]) } : {};
 }
-function householdOf(intent: PlayerIntent, narration: string, context: TurnContext): { household_choices?: HouseholdChoice[]; rule_declarations?: string[] } {
-  const choices = detectHouseholdChoices(narration, context), rules = intent.rule_declarations ?? [];
-  return { ...(choices.length ? { household_choices: structuredClone([...choices]) } : {}), ...(rules.length ? { rule_declarations: [...rules] } : {}) };
+function householdOf(intent: PlayerIntent, narration: string, context: TurnContext): { household_choices?: HouseholdChoice[]; household_rites?: HouseholdRite[]; rule_declarations?: string[] } {
+  const choices = detectHouseholdChoices(narration, context), rules = intent.rule_declarations ?? [], rites = detectHouseholdRite(narration, context, choices);
+  return { ...(choices.length ? { household_choices: structuredClone([...choices]) } : {}), ...(rites.length ? { household_rites: structuredClone([...rites]) } : {}), ...(rules.length ? { rule_declarations: [...rules] } : {}) };
 }

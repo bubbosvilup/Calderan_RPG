@@ -1,4 +1,5 @@
 import test from "node:test";
+import { ownItems } from "./opening-docs.js";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
@@ -110,7 +111,7 @@ test("1.1 premise: narration may not return, hold or take back an item Nicco nev
   // End to end: the false premise never reaches the player; state is untouched.
   const r = await run(c, RETURN_INPUT, ["Livia Marr tilts her head. She takes the boots back without comment."]);
   assert.doesNotMatch(r.narration, /takes the boots back/); assert.match(r.narration, /stays with Livia Marr/);
-  assert.equal(c.exportSnapshot().items[0]!.owner_id, "livia_marr");
+  assert.equal(ownItems(c.exportSnapshot().items)[0]!.owner_id, "livia_marr");
 });
 
 // ---------------------------------------------------------------------------------------------------- 3. player agency

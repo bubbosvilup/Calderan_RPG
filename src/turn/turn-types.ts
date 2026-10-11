@@ -16,8 +16,12 @@ export interface TurnRequest { readonly campaign: CampaignState; readonly player
 export interface AuthorizationDiagnostic { readonly command: CampaignCommand; readonly authorized: boolean;
   /** Phase 1O: which path authorized it, the grammar-only result, and the controller evidence check (diagnostic only). */
   readonly source?: "grammar" | "evidence" | "both" | "rejected"; readonly grammar?: { readonly authorized: boolean; readonly reason: string };
-  readonly evidence?: { readonly quote: string | null; readonly verified: boolean; readonly check: string };
-  readonly reason: "authorized_controller_evidence" | "rejected_already_established" | "rejected_evidence_partial_group" | "rejected_incomplete_group_proposal" | "authorized_narrative_confirmation" | "authorized_collective_acceptance" | "authorized_explicit_information_transfer" | "rejected_insufficient_confirmation" | "rejected_reference_invalid" | "rejected_command_not_allowed" | "rejected_recipient_refused" | "rejected_ambiguous_reference" | "rejected_equipment_not_established" | "rejected_fact_not_communicated" | "rejected_time_not_exact" | "rejected_controller_mismatch" }
+  readonly evidence?: { readonly quote: string | null; readonly verified: boolean; readonly check: string;
+    /** Where the verified receipt came from: the Controller's quote, or a receipt recovered deterministically from the current narrator draft. */
+    readonly source?: "controller_quote" | "recovered_narrator_receipt"; readonly original_quote?: string | null; readonly original_check?: string };
+  /** Pre-Property Debt Zero: a precise machine code for item/placement decisions (ambiguous_item, item_not_present, controller_item_mismatch, conflicting_item_mutations, ownership_not_evidenced, ...). Diagnostic only. */
+  readonly code?: string; readonly signals?: readonly string[];
+  readonly reason: "authorized_controller_evidence" | "rejected_already_established" | "rejected_evidence_partial_group" | "rejected_incomplete_group_proposal" | "authorized_narrative_confirmation" | "authorized_collective_acceptance" | "authorized_explicit_information_transfer" | "rejected_insufficient_confirmation" | "rejected_reference_invalid" | "rejected_command_not_allowed" | "rejected_recipient_refused" | "rejected_ambiguous_reference" | "rejected_equipment_not_established" | "rejected_fact_not_communicated" | "rejected_time_not_exact" | "rejected_controller_mismatch" | "rejected_conflicting_mutations" }
 export interface RetrievalDiagnostic { readonly operations: number; readonly mode: "none" | "lexical" | "hybrid"; readonly ids: readonly string[]; readonly elapsed_ms: number; readonly outcome: "not_needed" | "found" | "unknown";
   /** Phase 1R: cleaned query, intent and named-entity tiers (2 explicit, 1 near/deictic) used for ranking. */
   readonly query?: string; readonly intent?: string | null; readonly mentions?: Readonly<Record<string, number>> }

@@ -74,7 +74,7 @@ const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color"
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label",
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
     "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
@@ -461,7 +461,8 @@ const editorView = (overrides: Record<string, string | null> = { build: "lean" }
   portrait_details: `Build: ${overrides.build ?? "unset"}.`,
   portrait: { avatar: null, full_body: null, gallery: [], gallery_limit: 64, batch_size: 3, can_generate_batch: true, generation_blocked: null, poses: POSES, reference_attached: false, reference_url: null } });
 const POSES = { avatar: [{ id: "neutral", label: "Neutral" }, { id: "wink", label: "Wink" }], fullbody: [{ id: "neutral", label: "Neutral" }, { id: "kneeling", label: "Kneeling" }] };
-const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable, appearance_editor: editable ? editorView() : null,
+const capsFor = (npcPlus: boolean) => ({ tier: npcPlus ? "npc_plus" : "campaign_npc", portrait_display: true, portrait_editable: npcPlus, can_upload_avatar: false, can_generate_avatar: npcPlus, can_show_full_body: npcPlus, can_manage_full_body: npcPlus, can_show_gallery: npcPlus, can_manage_gallery: npcPlus, can_edit_npc_plus: npcPlus, can_edit_appearance: npcPlus, edit_unavailable_reason: null, generate_unavailable_reason: null });
+const householdCard = (ref: string, here = true, editable = true) => ({ ref, name: `Member ${ref}`, name_known: true, category: "Household", household: true, npc_plus: editable, appearance_editor_eligible: editable, character_capabilities: capsFor(editable), appearance_editor: editable ? editorView() : null,
   presence: here ? "present" : "away", known_location: here ? "Front hall" : null, role: "Known porter", relationship: "Known colleague", state: here ? "winded" : "Not recorded", appearance: "An established appearance.", where: here ? "Here, in Front hall" : "Whereabouts not known", affiliations: [], public_profile: { age_band: "Adult" } });
 const householdOpening = () => {
   const cards = [householdCard("alpha"), householdCard("beta", false), { ...householdCard("gamma", true, false), name: "Unfamiliar person", name_known: false, role: "Not known", relationship: "Not recorded", state: "Not recorded" }];
@@ -787,4 +788,55 @@ test("portrait V2 Gallery limit disables generation before any request", async (
   assert.equal(c.node("portrait-generate-avatar").disabled, true); assert.equal(c.node("portrait-generate-fullbody").disabled, true);
   assert.equal(c.node("portrait-status").textContent, "Gallery is full. Delete some unused portraits first.");
   await c.node("portrait-generate-avatar").handlers.get("click")!({}); await c.node("portrait-generate-fullbody").handlers.get("click")!({}); assert.equal(posts.length, 0);
+});
+
+// ---------------------------------------------------------------------------------------------- NPC visual capability / UI tier cleanup
+const tierCaps = (tier: "world_canon" | "campaign_npc" | "npc_plus", over: Record<string, unknown> = {}) => { const p = tier === "npc_plus";
+  return { tier, portrait_display: true, portrait_editable: p, can_upload_avatar: false, can_generate_avatar: p, can_show_full_body: p, can_manage_full_body: p, can_show_gallery: p, can_manage_gallery: p, can_edit_npc_plus: p, can_edit_appearance: p, edit_unavailable_reason: null, generate_unavailable_reason: null, ...over }; };
+const tierCard = (ref: string, tier: "world_canon" | "campaign_npc" | "npc_plus", over: Record<string, unknown> = {}, caps: Record<string, unknown> = {}) => ({ ...householdCard(ref, true, tier === "npc_plus"), category: tier === "npc_plus" ? "NPC+" : "Canonical NPC", household: false, npc_plus: tier === "npc_plus", character_capabilities: tierCaps(tier, caps), ...over });
+async function drawerOf(card: any) {
+  const data = { ...opening, revision: 3, play: { household_title: "Household", participants: [{ ...card, card }], household: [{ members: [] }] } };
+  const c = await client(async () => ({ ok: true, json: async () => data }));
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  return c;
+}
+const labels = (c: Awaited<ReturnType<typeof client>>) => [...c.node("character-portrait-actions").children, ...c.node("character-footer-actions").children].map(b => b.textContent);
+test("U1-U6: a world/canon NPC shows a passive placeholder and no Upload, Generate, Edit NPC+, Full Body or Gallery controls", async () => {
+  const c = await drawerOf(tierCard("canon", "world_canon"));
+  assert.equal(c.node("character-name").textContent, "Member canon"); assert.equal(c.node("character-portrait-label").hidden, false, "passive placeholder");
+  assert.deepEqual(labels(c), []); assert.equal(c.node("character-portrait-actions").hidden, true);
+  assert.doesNotMatch(c.node("character-overlay").textContent, /Upload|Generate|Edit NPC\+|Full Body|Gallery/);
+  const html = await readFile("src/ui/index.html", "utf8");
+  assert.doesNotMatch(html, /<button disabled>(?:Upload|Generate|Edit NPC\+)<\/button>/, "no static disabled tier controls remain");
+});
+test("U7/U8: a campaign NPC has no NPC+ controls and keeps its read-only runtime information", async () => {
+  const c = await drawerOf(tierCard("camp", "campaign_npc", { state: "winded", role: "Known porter" }));
+  assert.deepEqual(labels(c), []); assert.equal(c.node("character-state").textContent, "winded"); assert.equal(c.node("character-role").textContent, "Known porter");
+  assert.equal(c.node("character-where").textContent, "Here, in Front hall");
+});
+test("U9-U13/U20: a promoted NPC+ shows Edit NPC+, Generate (the editor holds Full Body and Gallery) enabled, and no unsupported Upload", async () => {
+  const c = await drawerOf(tierCard("plus", "npc_plus"));
+  assert.deepEqual(labels(c), ["Generate", "Edit NPC+"]);
+  for (const b of [...c.node("character-portrait-actions").children, ...c.node("character-footer-actions").children]) assert.equal(b.disabled, false);
+  assert.equal(c.node("character-portrait-actions").hidden, false);
+});
+test("U17: a promoted NPC+ who is not a household member keeps Edit NPC+ and opens the editor", async () => {
+  const card = tierCard("former", "npc_plus"), data = { ...opening, revision: 3, play: { household_title: "Household", participants: [{ ...card, card }], household: [{ members: [] }] } };
+  const c = await client(async () => ({ ok: true, json: async () => data }));
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  c.node("character-footer-actions").children[0]!.handlers.get("click")!({});
+  assert.equal(c.node("character-overlay").hidden, true); assert.equal(c.node("member-editor").hidden, false); assert.equal(c.node("editor-name").textContent, "Member former");
+});
+test("U18: household membership alone, without NPC+ capability, renders no NPC+ controls", async () => {
+  const c = await drawerOf(tierCard("member", "campaign_npc", { household: true, category: "Household" }));
+  assert.deepEqual(labels(c), []);
+});
+test("an NPC+ that is no longer active shows Edit NPC+ disabled with its real reason, never silently", async () => {
+  const c = await drawerOf(tierCard("gone", "npc_plus", {}, { can_edit_npc_plus: false, can_edit_appearance: false, can_generate_avatar: false, portrait_editable: false, edit_unavailable_reason: "This character is no longer active." }));
+  const edit = c.node("character-footer-actions").children[0]!; assert.equal(edit.textContent, "Edit NPC+"); assert.equal(edit.disabled, true);
+  assert.equal(edit.attributes.get("title"), "This character is no longer active."); assert.deepEqual([...c.node("character-portrait-actions").children], []);
+});
+test("a blocked generation is the one legitimate disabled Generate, with its reason", async () => {
+  const c = await drawerOf(tierCard("minor", "npc_plus", {}, { generate_unavailable_reason: "Portrait generation is only available for adult characters." }));
+  const generate = c.node("character-portrait-actions").children[0]!; assert.equal(generate.disabled, true); assert.match(generate.attributes.get("title")!, /adult/);
 });

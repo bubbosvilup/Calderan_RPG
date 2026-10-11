@@ -21,6 +21,7 @@ entity:
     near or against the tower. The courtyard also includes a woodshed/firewood storage area, a clothesline,
     and a rainwater collection barrel. The baseline specifies these physical facilities rather than current
     tools, laundry, stored quantities, or campaign-specific planting.
+  environment_exposure: outdoor
   knowledge:
     visibility:
       narrator: true

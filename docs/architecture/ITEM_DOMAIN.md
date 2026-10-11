@@ -94,6 +94,42 @@ This is ID grounding, not knowledge injection: no biography, location, relations
 
 There is no character-deletion command, so a carrier or owner cannot vanish during play. Persisted state with an unknown carrier or owner is rejected at load.
 
+## Placement lifecycle (pickup, drop, handoff)
+
+The only authoritative placement fact is `CampaignItem.position` (`unknown | carried | equipped | stored`). Owner (`owner_id`) is a separate fact. There is no per-character inventory array: every inventory view (`inventoryItems`, the UI inventory, `SessionView.player.inventory` and `equipment`, the Scene State Projection, the Controller's `items` / `items_here`) is derived from `position`.
+
+- **One position, so no double placement.** An item cannot be both lying at a location and carried; setting one replaces the other. Ground items have no carrier, carried items have no location.
+- **Pickup** is `place_item` with `carried(actor)` from `stored(here)`. **Drop** is `place_item` with `stored(here)` from `carried`/`equipped`. **Handoff** is `transfer_item` between present characters. All three change the position only. Pickup and drop never change the owner (picking up Brenna's sword leaves Brenna the owner; owner differing from carrier proves no theft, loan or permission).
+- **Inventory** = carried or equipped by the character. Ownership and lying on the ground never put an item in an inventory. `SessionView.player.inventory` lists carried items, `equipment` the equipped ones.
+- **Existing items** keep their ID. A tracked item is moved with `place_item`, never created again (a duplicate `create_item` for a lying item is refused as already established).
+- **Evidence** (`verifyEvidence`, place_item branch): the Controller's verbatim quote must name the item (or a sentence-local alias: sword/blade/knife/dagger), narrate a completed act by the new carrier (pickup) or the holder (drop) from a bounded vocabulary, and contain no attempt, refusal, approach, glance or touch. A quote that only opens the act ("his hand closes around the grip") may be completed by the very next sentence. A put-down narrated from the item's side ("the blade meets the stone") counts only when the quote names the item and nobody else is named in that sentence. Two same-pool items that the quote does not tell apart are `ambiguous_item`.
+- **No-ops** (already carried, already lying there) collapse at authorization (`rejected_already_established`), so no revision is spent.
+- **Extension:** containers and property storage add a position variant (see below); the pickup/drop/handoff model does not change.
+
+## Intent binding, evidence recovery and item facts (Pre-Property Debt Zero)
+
+Everything below is deterministic and derived per turn; nothing here is persisted and the save schema is unchanged.
+
+**Explicit item intent** (`src/turn/item-intent.ts`). The player's own words are read clause by clause (markdown stars removed, a leading "I"/"Nicco"/"he" and light adverbs dropped).
+`pickup := (pick up | pick <obj> up | take | grab | lift | retrieve | snatch | pocket | scoop | collect | gather) <obj>`;
+`drop := (put | set | lay | place) <obj> down | ... down <obj> | (drop | discard | toss) <obj> | leave <obj> here | (put | set | lay | place) <obj> on the floor`;
+`<obj>` is a noun phrase or the pronoun it/them (resolved only when exactly one candidate exists). "take <obj> from <person>" is a transfer and is ignored here.
+Try / reach for / look at / touch / think about / can I / would / refuse / about to are an `attempt` (never a completed intent). Questions are ignored. More than one item action in one input binds nothing.
+The pickup pool is the items lying HERE; the drop pool is what the actor carries. An intent is `bound` (one item), `ambiguous` (several), `absent` (matches nothing) or `attempt`.
+An intent NEVER mutates state and never proves success: narration decides the outcome, the Controller proposes, authorization decides.
+
+**The triangle.** A bound intent whose item the Controller's `place_item` does not name is rejected `controller_item_mismatch`; an ambiguous intent rejects any Controller placement `ambiguous_item`; a Controller that proposed no matching placement gets the bound command proposed as a derived command, which authorization still decides on a verified receipt. Without an item intent (autonomous NPC actions) nothing changes.
+
+**Bounded evidence recovery** (`recoverPlacementReceipt`). When a `place_item` fails only for a missing, weak, unrelated or negated Controller quote, the CURRENT narrator draft (nothing else) is scanned with the same receipt verifier. Recovery needs exactly one completed act and a draft with no contradiction (failed attempt, refusal, another actor taking the item, reversal, the item falling away or being destroyed). Diagnostics carry `evidence.source: controller_quote | recovered_narrator_receipt`, the original quote/check and the signal `recovered_narrator_receipt`.
+
+**Aliases** (`src/turn/item-resolution.ts`): exact normalized name, significant name tokens, authored category word, then the small validated category registry in `item-reference.ts` (footwear, clothing, weapon/blade, jewelry). No LLM. "satchel" never becomes "bag" without category data. Same-name items resolve only by authoritative qualifiers (a distinguishing name word, owner possessive "Brenna's" / "my", held); otherwise `ambiguous_item` and no mutation.
+
+**Conflicts.** After authorization and before commit, authorized `place_item`/`transfer_item` commands on ONE item must agree on its end position (and transfer mode). Identical effects collapse (the later is `duplicate_command_deduped`); anything else rejects EVERY command on that item with `conflicting_item_mutations` (no revision). Unrelated authorized commands in the same batch are unaffected.
+
+**create_item facts.** Multiplicity: identical creates are deduplicated unless the narration establishes several ("two iron cups", "a pair of daggers"; capped at five). Ownership is independent of existence and placement: `owner_id` is kept only when a sentence naming the item also names the owner (possessive, belongs to, owned by, gift for, sold to, a lender's own "his/her ...", or the player's "my/mine"); otherwise the item is created WITHOUT an owner (signal `ownership_not_evidenced`). `owner_id: null` from the Controller is normalized to "absent" (rule `R2_NULL_OPTIONAL_OWNER`) and affects nothing else.
+
+`stored(location_id)` means "physically at that location" (on the floor, a table, a shelf); it never means "floor" specifically. A future Property/container position is a new variant beside it, not a reinterpretation.
+
 ## Deliberately not in V1 (extension seams)
 
 - **Containers:** add a `contained{item_id}` position variant. This keeps one position per item.

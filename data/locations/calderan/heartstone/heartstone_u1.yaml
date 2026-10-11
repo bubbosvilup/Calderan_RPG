@@ -22,6 +22,7 @@ entity:
     without fixed inventories or an assumption that every shelf is full. Its full extent is not completely
     understood or explored. A separate old door in the underground masonry opens onto additional stairs
     descending farther below U1. Those lower stairs remain unexplored, and what lies beyond is unknown.
+  environment_exposure: indoor
   knowledge:
     visibility:
       narrator: true

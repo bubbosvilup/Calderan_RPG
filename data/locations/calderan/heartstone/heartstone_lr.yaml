@@ -22,6 +22,7 @@ entity:
     doorway/opening along LR's perimeter, away from the center, and rises toward F1 and onward through the
     upper floors to F6. Broad wall shelving occupies part of the perimeter near this stair side. Normal
     illumination comes from daylight through exactly three windows, candles, and the hearth when lit.
+  environment_exposure: indoor
   knowledge:
     visibility:
       narrator: true

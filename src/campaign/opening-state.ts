@@ -1,5 +1,6 @@
 import type { WorldStore } from "../world/world-store.js";
 import { CampaignState } from "./campaign-state.js";
+import { HEARTSTONE_HOUSEHOLD_RULES, OPENING_DOCUMENTS } from "./heartstone-charter.js";
 import { economy, generatePriceIndex } from "../economy/economy.js";
 
 /**
@@ -26,6 +27,11 @@ export function createOpeningCampaign(world: WorldStore, campaignId: string): Ca
   campaign.apply({ expected_revision: 0, commands: [
     { kind: "create_household", id: OPENING_HOUSEHOLD, name: "Heartstone" },
     { kind: "set_membership", household_id: OPENING_HOUSEHOLD, membership: { character_id: "nicco", status: "member", role: "owner" } },
+    // The three canonical household rules, accepted by the Keeper (social principles, not magic), and the charter that records them.
+    ...HEARTSTONE_HOUSEHOLD_RULES.map(text => ({ kind: "add_household_rule" as const, household_id: OPENING_HOUSEHOLD, text })),
+    // Opening-state authored documents: real CampaignItems carried and owned by Nicco before turn 1 (same item model as every other object).
+    ...OPENING_DOCUMENTS.map(d => ({ kind: "register_item" as const, item: { id: d.id, origin: { kind: "created" as const }, name: d.name, description: d.description,
+      visual_description: d.visual_description, category: "document" as const, owner_id: "nicco", position: { kind: "carried" as const, character_id: "nicco" } } })),
     { kind: "set_funds", character_id: "nicco", gold: OPENING_FUNDS },
     ...openingPriceIndices(world, campaignId),
     ...OPENING_FACTS.flatMap(f => [

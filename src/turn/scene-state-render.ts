@@ -85,6 +85,9 @@ function eventLine(e: SceneEvent, now: number): string {
 }
 interface Entry { readonly section: string; readonly text: string; readonly score: number; readonly required: boolean; readonly relationship?: { readonly from: string; readonly to: string }; readonly state_of?: string }
 
+/** Compact Heartstone stone-recognition lore (full text: the retrievable heartstone_stone_recognition record). Names no one: who is recognized is the Social block. */
+export const HEARTSTONE_STONE_LINE = "Heartstone stone: to the Keeper (Nicco) and active household members, direct bare-skin contact with the interior stone feels gently, pleasantly warm (not hot, not healing, no sentience); to anyone else it is ordinary stone at its real temperature. Shoes block it; entering alone does not.";
+
 /** Stage 3: render the focused projection. Pure; deterministic for equal input. */
 export function renderSceneStateProjection(focused: FocusedSceneState, options: { readonly max_chars?: number } = {}): RenderedScene {
   const max = options.max_chars ?? SCENE_RENDER_LIMITS.max_chars;
@@ -123,8 +126,13 @@ export function renderSceneStateProjection(focused: FocusedSceneState, options: 
     }
     const features = loc.features.flatMap(f => { const description = withoutTechnicalIds(f.description); return description ? [`- ${f.name}: ${description}`] : []; });
     if (features.length) out.push("Features:", ...features);
+    if (loc.heartstone_interior) out.push(HEARTSTONE_STONE_LINE);
     sections.push("time");
-    out.push(`Time: ${focused.time.actual_time} — ${focused.time.time_of_day}`);
+    const env = focused.time.environment;
+    out.push(env ? `Time: ${env.date}${env.season ? ` (${env.season})` : ""} — ${focused.time.actual_time} — ${focused.time.time_of_day}` : `Time: ${focused.time.actual_time} — ${focused.time.time_of_day}`);
+    if (env && !env.season) out.push("Season: —");
+    if (env?.observance) out.push(`Observance: ${env.observance}.`);
+    if (env?.weather) out.push(`${env.exposure === "outdoor" ? "Weather" : "Outside weather"}: ${env.weather}`);
     sections.push("present");
     // Secrecy is enforced by the identity gate (the name is already the neutral observable descriptor); no permission wording belongs in scene reality.
     out.push("Present:", ...focused.present.map(p => `- ${p.name}`));

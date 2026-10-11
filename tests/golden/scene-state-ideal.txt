@@ -4,7 +4,7 @@ Location: Heartstone LR
 About: A broad open living floor.
 Features:
 - hearth: A large stone hearth stands along one side.
-Time: 19:42 — Evening
+Time: Vesp Alpha 1, Stonewake (Autumn) — 19:42 — Evening
 Present:
 - Nicco
 - Brenna

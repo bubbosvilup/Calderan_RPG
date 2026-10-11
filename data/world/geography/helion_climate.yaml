@@ -1,0 +1,28 @@
+schema_version: 1
+entity:
+  id: helion_climate
+  type: world_lore
+  name: "Seasons and Climate"
+  display_name: "Seasons and Climate"
+  parent: null
+  aliases: ["climate of Helion", "the weather of Helion", "seasons of Helion"]
+  summary: >-
+    Season is the same across Helion, but climate is regional: West is cool northern maritime, Center hot and arid, East cold
+    continental, and the South Continent is hot in its western half and cold in its eastern half.
+  tags: ["geography","climate"]
+  search_context: "climate, weather, seasons, cold, hot, rain, snow, frost, winter in West, summer in Center, cold East, climate of West, cool maritime, desert heat, subarctic, South Continent climate, hot west cold east, what is the weather like"
+  content: >-
+    Season belongs to the calendar and is the same everywhere in Helion at the same date; climate belongs to the region; and
+    weather is the condition of one place at one time. West has a cool northern maritime climate: cool, changeable springs, mild
+    rather than hot summers with some storms, cool wet autumns that grow colder with wind and first frosts, and cold winters with
+    common snow, sleet and the occasional blizzard; it stays cooler than a warm southern land all year. Center is hot and arid:
+    warm springs, very hot dry summers, warm autumns and mild winter days with cooler nights; rain is rare and so are storms.
+    East is cold and continental: a thawing, muddy spring with late snow, a short cool summer, rapidly cooling autumns, and long
+    winters of heavy snow, hard frost and blizzards, the harshest of the known regions. The South Continent lies beneath Center
+    and East and its climate is mixed: the western half, nearer Center, is hot; the eastern half, nearer East, is cold. These are
+    tendencies, not guarantees; a particular year or place can differ, and the slow fading of the age has made the world harsher
+    than it was.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: fundamentals
+  related_entities: ["continent","west","center","east","south_continent","helion_calendar","modern_world_decline"]
+chunks: []

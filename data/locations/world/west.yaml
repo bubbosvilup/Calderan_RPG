@@ -36,5 +36,6 @@ entity:
     - name: "temperate regional climate"
       description: "Broadly mild, temperate, and greener; local variation remains possible."
   connections: []
+  climate_profile: west_cool_maritime
 chunks: []
 

@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: helion_calendar
+  type: world_lore
+  name: "The Calendar of Helion"
+  display_name: "The Calendar of Helion"
+  parent: null
+  aliases: ["the calendar", "Helion calendar", "the reckoning of days"]
+  summary: >-
+    The year has twelve months of thirty days in four seasons of three months each, then five intercalary days, six in a
+    leap year, called the Five Suns and the Six Suns; every leap year falls every fourth year, and 1191 is one.
+  tags: ["history","chronology"]
+  search_context: "calendar, months, month names, Aurel Vesp Sol Hiem, Alpha Med X, seasons, spring summer autumn winter, days of the year, year length, leap year, intercalary days, what day is it, what month is it, how long is a year"
+  content: >-
+    The year of Helion has twelve months of thirty days, 360 regular days, followed by five intercalary days; in a leap
+    year there are six. Leap years come every fourth year, and the present year 1191 is a leap year. The months are named
+    for the four seasons, each with three phases: Alpha is the opening, Med the height and X the ending of the season.
+    Spring is Aurel Alpha, Aurel Med and Aurel X; summer is Sol Alpha, Sol Med and Sol X; autumn is Vesp Alpha, Vesp Med and
+    Vesp X; winter is Hiem Alpha, Hiem Med and Hiem X. The year begins on Aurel Alpha 1 and the regular days end with Hiem X
+    30. The intercalary days follow it, before the next year begins; they belong to no month, no week and no season, and the
+    weekday count does not pass through them. Years are counted from Year 0, the year Aureth revealed himself, and Year 0 is an
+    ordinary year of the count. Date and season are the same everywhere in Helion; weather is not, since each region has its
+    own climate. How a person tells the date, local calendars and any older reckoning are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: history
+  related_entities: ["modern_reckoning","helion_week","five_suns","helion_climate","annual_festivals"]
+chunks: []

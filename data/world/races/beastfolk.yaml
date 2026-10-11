@@ -21,7 +21,10 @@ entity:
     politically and culturally central and form most of the traditional upper class, including its
     nobility; Center is also a major source of Beastfolk slaves through its own slave economy, so
     Beastfolk are neither synonymous with slavery nor with rule. Beastfolk, as currently
-    understood, cannot use magic. East and future continents may have different relationships
+    understood, cannot use magic. They are also widely said to resist hostile magic: ordinary offensive
+    spells and magical attempts to confuse or corrupt the mind are held to take little hold on them. This is
+    a common belief, not a guarantee against every supernatural danger, indirect harm from a spell's
+    physical effects, environmental hazards or beneficial magic. East and future continents may have different relationships
     with Beastfolk, presently undefined.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   category: "races"

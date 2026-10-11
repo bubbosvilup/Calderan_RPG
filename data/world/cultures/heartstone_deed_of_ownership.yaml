@@ -1,0 +1,22 @@
+schema_version: 1
+entity:
+  id: heartstone_deed_of_ownership
+  type: world_lore
+  name: "Deed of Ownership — Heartstone Tower"
+  display_name: "Deed of Ownership — Heartstone Tower"
+  parent: null
+  aliases: ["Heartstone deed", "the deed", "deed of ownership", "Heartstone property deed", "title deed"]
+  summary: >-
+    The genuine legal deed that names Nicco as lawful owner and holder of Heartstone Tower, its residence and its enclosed courtyard.
+  tags: ["property","deed","heartstone"]
+  search_context: "Deed of Ownership Heartstone Tower, property deed, title, lawful owner, registry, residence and courtyard, civil registry, ownership document, read the deed"
+  content: >-
+    This is a genuine legal property deed recognized by the ordinary civil and property registry. It identifies Nicco as the
+    lawful owner and holder of Heartstone Tower, including the residence and the enclosed courtyard. The title is valid unless
+    it is challenged through ordinary law. The paper does not say who arranged the ownership and does not say why Nicco received
+    it. It does not make Nicco noble, sovereign or legally immune. The deed is a physical paper like any other: carrying,
+    reading, dropping, storing or handing it to someone changes who holds the paper, not who owns Heartstone Tower.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"private"}
+  category: cultures
+  related_entities: ["heartstone","heartstone_square","heartstone_cy"]
+chunks: []

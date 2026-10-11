@@ -119,7 +119,7 @@ test("NPC+ delivered self-description quotes are known accounts, not private inf
   assert.doesNotMatch(JSON.stringify(card), /PRIVATE_CONTRACT_INTERPRETATION|contract_evidence|revision|premium_/);
 });
 
-test("appearance shell eligibility requires active NPC+ membership in a household Nicco owns", () => {
+test("appearance shell eligibility follows promotion (premium record), not household ownership or the active behavior gate", () => {
   const f = fixture();
   assert.equal(f.project().appearance_editor_eligible, false);
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [
@@ -137,5 +137,5 @@ test("appearance shell eligibility requires active NPC+ membership in a househol
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [
     { kind: "set_membership", household_id: "campaign_household_editor", membership: { character_id: "nicco", status: "member", role: "member" } },
   ] });
-  assert.equal(f.project().appearance_editor_eligible, false);
+  assert.equal(f.project().appearance_editor_eligible, true, "promotion persists; Nicco's household role does not demote or lock the NPC+");
 });

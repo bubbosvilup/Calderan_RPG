@@ -8,13 +8,17 @@ entity:
   aliases: []
   summary: >-
     Fire, Water, Earth, and Air are the four common foundational magical elements and
-    principal known elemental traditions.
+    principal known elemental traditions. Learned tradition pairs Earth with West, Fire with Center, Water
+    with East and Air with the South Continent.
   tags: ["magic"]
   search_context: ""
   content: >-
     Elemental interactions can involve affinities, natural advantages, disadvantages,
     opposition, and situational strengths. Their relationships are contextual rather than a
-    universal deterministic cycle or combat chart.
+    universal deterministic cycle or combat chart. The regional pairing is a tradition of learning and
+    sacred lore, not a rule of who can learn what: mages of any element may be found anywhere. Over the
+    centuries elemental mages have been growing weaker and rarer, and feats recorded in old accounts are
+    harder today; no end date or rate is established.
   knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[]}
   category: "magic"
   related_entities: ["magic_overview","magic_subschools"]

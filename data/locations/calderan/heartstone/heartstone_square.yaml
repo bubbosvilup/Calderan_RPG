@@ -22,6 +22,7 @@ entity:
     major commercial concentration. Night safety is mediocre. The low-end, disreputable tavern The Coined Lie
     faces or directly adjoins the square. The White Basin is a laundry near Heartstone, without an established
     position directly on the square.
+  environment_exposure: outdoor
   knowledge:
     visibility:
       narrator: true

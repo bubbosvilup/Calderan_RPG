@@ -19,6 +19,11 @@ const ui = id => document.querySelector(`#${id}`);
 let selectedCharacter, returnFocus;
 let activeView = "play", householdFilter = "all", editorRef, householdLoaded = false;
 const householdCharacters = new Map();
+// Every projected character the UI can open an editor for (household members AND editable NPC+ who are no longer members).
+const editableCharacters = new Map();
+// Tier capabilities are derived server-side (character_capabilities); the client only renders them. A control that the tier does not have is never rendered.
+const capsOf = card => card?.character_capabilities ?? {};
+const editorCard = ref => editableCharacters.get(ref);
 function switchView(view) {
   activeView = view;
   closeCharacter();
@@ -95,8 +100,8 @@ ui("inventory-search")?.addEventListener("input", event => { inventoryQuery = ev
 // unsaved edits). Empty input on a stored override = explicit clear (null); empty input without one = unchanged.
 let editorRevision, editorFields = [], editorSaving = false;
 function openEditor(ref) {
-  const card = householdCharacters.get(ref);
-  if (!card?.appearance_editor_eligible || !card.npc_plus || !card.household) return;
+  const card = editorCard(ref);
+  if (!card?.appearance_editor_eligible || !capsOf(card).can_edit_npc_plus) return;
   editorRef = ref;
   switchView("editor");
   renderEditor(card, true);
@@ -177,7 +182,7 @@ async function saveEditor() {
     editorSaving = false;
     if (data?.messages) render(data);
     if (data?.ok) {
-      const card = householdCharacters.get(editorRef);
+      const card = editorCard(editorRef);
       if (card && activeView === "editor") renderEditor(card, true);
       showEditorError("");
     } else showEditorError(data?.error?.message ?? "The appearance was not saved.");
@@ -193,7 +198,7 @@ let portraitBusy = false, portraitAction = "", portraitKind = "", portraitResult
 const KIND_LABELS = { avatar: "Avatar image", fullbody: "Full-body image", legacy: "Earlier image" };
 function showPortraitError(text) { const el = ui("portrait-error"); if (el) { el.textContent = text; el.hidden = !text; } }
 function showLightboxError(text) { const el = ui("lightbox-error"); if (el) { el.textContent = text; el.hidden = !text; } }
-function editorPortrait() { return householdCharacters.get(editorRef)?.appearance_editor?.portrait; }
+function editorPortrait() { return editorCard(editorRef)?.appearance_editor?.portrait; }
 function showImage(image, url) {
   if (!image) return;
   if (url) { if (image.getAttribute?.("src") !== url) image.setAttribute("src", url); image.hidden = false; }
@@ -330,7 +335,7 @@ async function portraitRequest(url, body, action) {
   if (action === "generate" && editorPortrait() && !editorPortrait().can_generate_batch) return;
   portraitBusy = true; portraitAction = action; portraitKind = action === "generate" ? body.kind : ""; showPortraitError(""); showLightboxError("");
   if (action === "generate") portraitResult = "";
-  renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
+  renderPortrait(editorCard(editorRef)?.appearance_editor);
   const inViewer = !!lightboxToken && (action === "role" || action === "delete" || action === "full-body-clear");
   try {
     const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, ...body }) });
@@ -347,7 +352,7 @@ async function portraitRequest(url, body, action) {
     portraitBusy = false; portraitAction = "";
     (inViewer ? showLightboxError : showPortraitError)("The portrait request failed. Check the connection and try again.");
   }
-  renderPortrait(householdCharacters.get(editorRef)?.appearance_editor);
+  renderPortrait(editorCard(editorRef)?.appearance_editor);
 }
 for (const kind of ["avatar", "fullbody"]) ui(`portrait-generate-${kind}`)?.addEventListener("click", () => portraitRequest("/api/portrait/generate", { kind, pose: ui(`portrait-${kind}-pose`)?.value || "neutral" }, "generate"));
 ui("portrait-full-body-clear")?.addEventListener("click", () => portraitRequest("/api/portrait/full-body", { item: null }, "full-body-clear"));
@@ -419,7 +424,7 @@ function renderHousehold() {
     body.addEventListener("click", () => openCharacter({ ref: card.ref, name: card.name, name_known: card.name_known, card }, body));
     if (selectedCharacter === card.ref && returnFocus?.className === "household-card-body") returnFocus = body;
     article.append(body);
-    if (card.appearance_editor_eligible && card.npc_plus && card.household) {
+    if (capsOf(card).can_edit_npc_plus) {
       const edit = document.createElement("button"); edit.className = "member-edit"; edit.setAttribute("type", "button"); edit.setAttribute("aria-label", `Edit ${card.name}`); edit.textContent = "Edit";
       edit.addEventListener("click", () => openEditor(card.ref)); article.append(edit);
     }
@@ -550,8 +555,24 @@ function openCharacter(person, trigger) {
   for (const label of [card.household ? "Household" : "", card.npc_plus ? "NPC+" : ""].filter(Boolean)) {
     const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = label; ui("character-badges").append(badge);
   }
+  renderCharacterActions(card);
   ui("character-overlay").hidden = false;
   if (trigger) ui("character-close").focus();
+}
+// Tier-based absence: Upload / Generate / Edit NPC+ exist only for a character whose tier has them. A control that exists may still be
+// disabled for a real, stated reason (generation blocked, character no longer active); a lower tier never gets a disabled placeholder.
+function renderCharacterActions(card) {
+  const caps = capsOf(card), portraitActions = ui("character-portrait-actions"), footer = ui("character-footer-actions");
+  const make = (label, reason, onClick) => { const b = document.createElement("button"); b.setAttribute("type", "button"); b.textContent = label; if (reason) { b.disabled = true; b.setAttribute("title", reason); } else b.addEventListener("click", onClick); return b; };
+  const open = () => { closeCharacter(); openEditor(card.ref); };
+  const portrait = [];
+  if (caps.can_upload_avatar) portrait.push(make("Upload", null, open));
+  if (caps.can_generate_avatar) portrait.push(make("Generate", caps.generate_unavailable_reason, open));
+  if (portraitActions) { portraitActions.replaceChildren(...portrait); portraitActions.hidden = !portrait.length; }
+  const footerButtons = [];
+  if (caps.can_edit_npc_plus) footerButtons.push(make("Edit NPC+", null, open));
+  else if (caps.tier === "npc_plus" && caps.edit_unavailable_reason) footerButtons.push(make("Edit NPC+", caps.edit_unavailable_reason, open));
+  if (footer) footer.replaceChildren(...footerButtons);
 }
 ui("character-close")?.addEventListener("click", closeCharacter);
 ui("character-backdrop")?.addEventListener("click", closeCharacter);
@@ -611,14 +632,15 @@ function preview(event) {
   renderRpg(pending.narrator.text, pending.buffer); follow(wasNear);
 }
 function renderScene(data) {
-  householdCharacters.clear();
+  householdCharacters.clear(); editableCharacters.clear();
   householdLoaded = Array.isArray(data.play?.household);
-  for (const card of data.play?.household?.flatMap(g => g.members) ?? []) householdCharacters.set(card.ref, card);
+  for (const card of data.play?.household?.flatMap(g => g.members) ?? []) { householdCharacters.set(card.ref, card); editableCharacters.set(card.ref, card); }
+  for (const person of data.play?.participants ?? []) if (person.card && capsOf(person.card).can_edit_npc_plus && !editableCharacters.has(person.card.ref)) editableCharacters.set(person.card.ref, person.card);
   if (ui("household-title")) ui("household-title").textContent = data.play?.household_title ?? "Household";
   renderHousehold();
   if (activeView === "editor") {
-    const card = householdCharacters.get(editorRef);
-    if (card?.appearance_editor_eligible && card.npc_plus && card.household) renderEditor(card, false);
+    const card = editorCard(editorRef);
+    if (card?.appearance_editor_eligible && capsOf(card).can_edit_npc_plus) renderEditor(card, false);
     else { editorRef = undefined; switchView("household"); }
   }
   locationLabel.textContent = data.scene?.location ?? "Caldrevan";

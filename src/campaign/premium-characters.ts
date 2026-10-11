@@ -36,6 +36,14 @@ export function activeNpcPlus(s: DeepReadonly<Pick<CampaignSnapshot, "premium_ch
   return new Set(s.premium_characters.filter(p => p.metadata.active_household_member).map(p => p.character_id));
 }
 
+/**
+ * Promotion milestone (Heartstone rite): a character IS NPC+ from the revision the rite commits, permanently. The premium record is the single
+ * authoritative promotion state (never recomputed from prose); leaving the household neither deletes it nor demotes. `activeNpcPlus` is the
+ * narrower question "is this promoted character currently an active household member", which gates household-bound behaviours.
+ */
+export function isNpcPlus(s: DeepReadonly<Pick<CampaignSnapshot, "premium_characters">>, characterId: string): boolean {
+  return s.premium_characters.some(p => p.character_id === characterId);
+}
 // ------------------------------------------------------------------------------------------------ contracts (NPC+ Pass 2)
 const FIELD = { personality: "personality_contract", voice: "voice_contract", social_style: "baseline_social_style" } as const;
 /** Set-once contract fields; a moral boundary accumulates (distinct). Contracts never change silently: no rewrite, no deletion. */

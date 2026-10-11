@@ -1,5 +1,6 @@
 import type { EntityType, WorldEntity } from "../types/entities.js";
 import type { WorldDocument } from "../types/knowledge.js";
+import { CLIMATE_PROFILE_IDS } from "./climate.js";
 
 export interface WorldSource { source: string; document: unknown }
 export interface ValidatedWorldSource { source: string; document: WorldDocument }
@@ -20,7 +21,7 @@ const idPattern = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/;
 const types = ["location", "character", "event", "faction", "item", "concept", "world_lore"] as const;
 const common = ["id", "type", "name", "display_name", "parent", "aliases", "summary", "tags", "search_context", "content", "lifecycle", "knowledge"];
 const subtypeFields: Record<EntityType, string[]> = {
-  location: ["features", "connections", "entrance"],
+  location: ["features", "connections", "entrance", "climate_profile", "environment_exposure"],
   character: ["role", "location", "traits", "relationships", "base_location", "work_location", "home_location", "species", "sex", "age_band", "appearance", "occupation", "purpose", "morality", "private_notes", "affiliations"],
   event: ["location", "related_locations", "characters", "participants", "time", "importance"],
   faction: ["members", "territory", "relations"],
@@ -164,6 +165,8 @@ function validateShape(input: WorldSource): ValidatedWorldSource {
       });
       c.edges(e.connections, "entity.connections", false);
       if ("entrance" in e) c.id(e.entrance, "entity.entrance");
+      if ("climate_profile" in e) c.choice(e.climate_profile, CLIMATE_PROFILE_IDS, "entity.climate_profile");
+      if ("environment_exposure" in e) c.choice(e.environment_exposure, ["indoor", "outdoor", "sheltered", "unknown"], "entity.environment_exposure");
       break;
     case "character":
       c.choice(e.role, ["player", "npc"], "entity.role");

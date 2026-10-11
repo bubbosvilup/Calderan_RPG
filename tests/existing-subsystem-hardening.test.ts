@@ -60,13 +60,13 @@ test("G conflicts: handoff+lend, two recipients, two positions, transfer+place a
 });
 const SWORD = "campaign_item_sword";
 const reg = (f: F, owner: string, carrier: string) => { apply(f.campaign, { kind: "register_item", item: { id: SWORD, origin: { kind: "created" }, name: "Sword", owner_id: owner, position: { kind: "carried", character_id: carrier } } } as CampaignCommand); };
-test("G a conflicting proposal (two recipients, no player intent) surfaces `conflicts` and records that the later authorized command wins", async () => {
+test("G a conflicting proposal (two recipients, no player intent) surfaces `conflicts` and is rejected before commit (Debt Zero: no later-wins)", async () => {
   const r = await run({ input: "*looks at Brenna*", setup: f => reg(f, "nicco", "nicco"),
     narration: "Brenna takes the sword and weighs it. Maren takes the sword from her.",
     controller: cmds([tr("handoff", "brenna", SWORD), tr("handoff", "maren", SWORD)], ["Brenna takes the sword and weighs it.", "Maren takes the sword from her."]) });
   assert.ok(r.diagnostic.conflicts?.length === 1, JSON.stringify(r.diagnostic.notes)); assert.match(r.diagnostic.conflicts![0]!.detail, /two recipients/);
-  // Finding (H): both receipts were verified, so both commands are authorized and apply in proposal order; the later command wins. Observable, not blocked.
-  assert.equal(r.diagnostic.accepted.length, 2);
+  // Debt Zero: one item cannot end a turn with two recipients. Both receipts verified, yet NEITHER applies and no revision is made.
+  assert.equal(r.diagnostic.accepted.length, 0); assert.equal(r.diagnostic.code, "conflicting_item_mutations"); assert.equal(r.diagnostic.revision_after, r.diagnostic.revision_before);
   assert.ok(r.diagnostic.notes.some(n => /conflicting commands/.test(n)));
 });
 
@@ -131,8 +131,10 @@ test("D8 an item already tracked (lying here) is picked up with place_item, neve
   const id = itemId(f.campaign, "Rusty sword"), q = "Nicco picks up the rusty sword.";
   const dup = await run({ fixture, input: "*picks up the rusty sword*", narration: `*${q}*`, controller: cmds([rusty()], [q]) });
   assert.equal(dup.result!.authorization[0]!.reason, "rejected_already_established"); assert.equal(nSwords(f), 1);
-  const move = await run({ fixture, input: "*picks up the rusty sword*", narration: `*${q}*`, controller: cmds([{ kind: "place_item", item_id: id, position: { kind: "carried", character_id: "nicco" } } as CampaignCommand], [q]) });
-  assert.equal(move.diagnostic.verdict, "committed"); assert.equal(nSwords(f), 1); assert.deepEqual(swords(f)[0]!.position, { kind: "carried", character_id: "nicco" });
+  // Debt Zero: the refused create_item does not lose the real pickup; the explicit intent + unambiguous receipt move the SAME item.
+  assert.equal(dup.diagnostic.verdict, "committed"); assert.deepEqual(swords(f)[0]!.position, { kind: "carried", character_id: "nicco" });
+  const again = await run({ fixture, input: "*picks up the rusty sword*", narration: `*${q}*`, controller: cmds([{ kind: "place_item", item_id: id, position: { kind: "carried", character_id: "nicco" } } as CampaignCommand], [q]) });
+  assert.equal(again.diagnostic.revision_after, again.diagnostic.revision_before); assert.equal(nSwords(f), 1);
 });
 test("D9 the Controller schema carries no embellishment fields (strict envelope rejects extras)", async () => {
   const { f, fixture } = shared("d9");

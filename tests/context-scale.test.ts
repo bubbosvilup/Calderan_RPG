@@ -90,7 +90,7 @@ test("social: present household members, all active rules and Nicco's relationsh
   apply(c, Array.from({ length: 9 }, (_, k): CampaignCommand => ({ kind: "seed_relationship", relationship: { from_character_id: `campaign_character_s${pad(k)}`, to_character_id: `campaign_character_s${pad(k + 1)}`, dimensions: { wariness: "low" } } })));
   const context = buildTurnContext(world, c.exportSnapshot()), h = context.social.households.find(x => x.id === OPENING_HOUSEHOLD)!;
   assert.equal(h.members.filter(m => m.present).length, 10, "every present member is listed");
-  assert.equal(h.rules.length, 14, "active rules are never cut");
+  assert.equal(h.rules.length, 14 + 3, "active rules are never cut");
   assert.equal(context.social.relationships.filter(r => r.to === "Nicco" || r.from === "Nicco").length, 10, "Nicco's relationships survive");
   assert.deepEqual(context.projection?.household_members_not_present, { omitted: 15 }, "20 absent members, 5 selectable slots left after the 10 present");
   assert.deepEqual(context.projection?.relationships, { total: 19, shown: 12 });
@@ -110,7 +110,7 @@ test("mixed high-load scene: 30 people, 64 facts, 32 events, 40 items — builds
   apply(c, [{ kind: "set_legal_status", character_id: "campaign_character_s003", status: "enslaved", holder_id: "nicco" }]);
   const context = buildTurnContext(world, c.exportSnapshot(), { input: "Hello." });
   assert.equal(context.characters.length, 31 + context.primary.scene.present_characters.length, "Nicco + 30 created + authored NPCs present");
-  assert.equal(context.items.length, 40, "items are never dropped");
+  assert.equal(context.items.length, 40 + 2, "items are never dropped");
   assert.ok(context.social.legal.some(l => l.character_id === "campaign_character_s003"), "legal state of a present person survives");
   assert.equal(context.primary.scene.player_location?.id, "heartstone_square");
   assert.ok(JSON.stringify(context).length <= CONTEXT_LIMITS.serialized_characters);

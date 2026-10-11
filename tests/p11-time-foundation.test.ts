@@ -23,7 +23,7 @@ function grounding(request: GenerationRequest) {
   const content = request.messages[0]!.content;
   // Scene State Projection V1 deliberately reverses P11's "label only" prompt: the narrator now receives the already-derived clock
   // time with the label ("Time: 19:42 — Evening"), never the raw world minute, a calendar or a day counter.
-  const block = content.match(/^Time: (\d{2}:\d{2}) — ([A-Za-z ]+)$/m);
+  const block = content.match(/^Time: (?:.* — )?(\d{2}:\d{2}) — ([A-Za-z ]+)$/m);
   assert.ok(block, "semantic time line survives prompt construction");
   assert.ok(!content.includes("actual_time") && !content.includes("World minute") && !content.includes('"day"'));
   return { time: block[1]!, time_of_day: block[2]! };

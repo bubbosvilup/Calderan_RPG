@@ -7,14 +7,18 @@ entity:
   parent: null
   aliases: ["Sun Emperor", "Aureth"]
   summary: >-
-    The Sun Emperor, Aureth, is the sovereign of West in law and doctrine, functionally immortal and, in the
-    doctrine of the Church of the Sun Emperor, a divine founder bearing purifying divine Light. He
-    revealed himself to the world in Year 0 and disappeared in Year 491; West is still governed in his name.
+    The Sun Emperor, Aureth, was the sovereign of all Helion, functionally immortal and, in the doctrine of
+    the Church of the Sun Emperor, a divine founder bearing purifying divine Light. He revealed himself to
+    the world in Year 0 and disappeared in Year 491; since then no central authority has replaced him, and
+    West's Dukes still govern in his name.
   tags: ["sovereign","religion"]
-  search_context: "The Sun Emperor, Aureth, sovereign of West, Year 0 revelation, disappeared in Year 491, divine sovereign, immortal emperor, absent emperor, disappeared founder, the Crown, divine Light"
+  search_context: "The Sun Emperor, Aureth, sovereign of Helion, continental empire, Year 0 revelation, disappeared in Year 491, divine sovereign, immortal emperor, absent emperor, disappeared founder, the Crown, divine Light"
   content: >-
-    The Sun Emperor is the lawful sovereign of West and the supreme source of its legitimacy,
-    and the realm is still governed in his name. He is functionally immortal. Church doctrine
+    The Sun Emperor was the lawful sovereign of the whole of Helion, ruling a continent-wide empire in which
+    local authorities kept their own offices beneath him. After his disappearance in Year 491 no central
+    authority remained and the empire fragmented into dukedoms, noble holdings, regional rulers and competing
+    states; in West, however, the Dukes still govern in his name, and he remains the supreme source of
+    legitimacy there. He is functionally immortal. Church doctrine
     proclaims him a divine sovereign, founder and protector of the ordered world, immortal, the
     source or bearer of purifying divine Light and protector of humanity and order against
     corruption and Shadow. He is known by the name Aureth. He revealed himself publicly in Year 0, which
@@ -31,7 +35,7 @@ entity:
   sex: male
   age_band: null
   appearance: null
-  occupation: "Sovereign of West"
+  occupation: "Sovereign of Helion (absent)"
   base_location: null
   work_location: null
   home_location: null
@@ -44,7 +48,7 @@ chunks:
   - id: sun_emperor.light_secret
     entity_id: sun_emperor
     section: light_secret
-    summary: Restricted state and theological secret about the source of the Sun Emperor's divinity and the suppression of Light users.
+    summary: Restricted state and theological secret about the source of the Sun Emperor's divinity and the Church's treatment of mortal Light users.
     search_context: Restricted state secret
     content: >-
       A major state and theological secret known only within the inner Church and the Inquisition:
@@ -52,8 +56,10 @@ chunks:
       Light. The inner Church holds this as a restricted account, no more; it does not publicly
       teach it and frames his Light as divine miracle, never as mortal magic. Independent Light
       users therefore threaten both the Church's theological monopoly and the political legitimacy
-      built on it, so the inner Church and the Inquisition capture, silence, torture, mutilate or kill
-      them. Ordinary clergy, nobles, scholars, Guard and citizens do not know this. How his immortality
+      built on it, and the inner Church and the Inquisition treat them as the highest-priority threat. A
+      confirmed Light user is captured, investigated, condemned and executed, and survival after confirmed
+      discovery by the Church is extremely unlikely; there is no single universal procedure and no spell
+      summons the Inquisition automatically. Ordinary clergy, nobles, scholars, Guard and citizens do not know this. How his immortality
       works, and any specific case or victim, is not established.
     tags: ["secret", "light"]
     knowledge: {"visibility":{"narrator":true,"player":false},"known_by":["cassian_valerius","helbrecht"],"awareness":"private"}

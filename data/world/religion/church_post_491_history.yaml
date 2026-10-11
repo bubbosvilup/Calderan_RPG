@@ -1,0 +1,37 @@
+schema_version: 1
+entity:
+  id: church_post_491_history
+  type: world_lore
+  name: The Church's Hardening After Year 491
+  display_name: The Church's Hardening After Year 491
+  parent: null
+  aliases: []
+  summary: "Restricted: the highest Church leadership knows that the Inquisition did not exist under the Sun Emperor and that authority, censorship and doctrine hardened in the centuries after his disappearance."
+  tags:
+    - secret
+    - religion
+  search_context: Restricted Church historical record
+  content: >-
+    The Church's own institutional records, held at the highest levels, show that the Inquisition did not exist
+    in the Sun Emperor's reign and was established by Church authority in the centuries after his disappearance;
+    that in those centuries Church authority became more centralized, censorship stricter, doctrine firmer, the
+    persecution of magic wider and the Church's political influence greater; and that pre-Year-0 records were
+    restricted during the same period. Official teaching presents these as continuous with the Founder's will.
+    The records do not say who guided the changes or why, and those who hold this history take it as the Church's
+    ordinary growth under the pressures of a leaderless age. This is a restricted fact, not public doctrine;
+    ordinary clergy, nobles, scholars, Guard and citizens do not know it.
+  knowledge:
+    visibility:
+      narrator: true
+      player: false
+    known_by:
+      - cassian_valerius
+      - helbrecht
+    awareness: private
+  category: religion
+  related_entities:
+    - church
+    - inquisition
+    - church_curated_history
+    - church_origins
+chunks: []

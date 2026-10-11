@@ -7,22 +7,25 @@ import { document, location } from "./fixtures.js";
 
 const newIds = ["magic_overview","mana","elemental_magic","light_and_shadow","magic_subschools","races_overview","humans","elves","dwarves","beastfolk","mixed_ancestry","continental_structure","west_governance","west_slavery","main_city_structure","merchants_guild","artisans_guild","learned_arts_guild","church","inquisition","city_guard","city_magistracy"];
 /** Four-District + Institutional Authoring Pass 1 lore/concept/faction records. */
-const SEALED_IDS = ["world_tree_sleeper", "oasis_sleeper", "first_voice_hidden_authority", "aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control"];
+const SEALED_IDS = ["world_tree_sleeper", "oasis_sleeper", "first_voice_hidden_authority", "aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control", "first_voice_operations", "hidden_persecution_truth", "beastfolk_origin"];
+/** Canon gap closure: new public (tier 0) records. */
+const GAP_PUBLIC = ["helion_empire", "sun_emperor_prayer", "centennial_observances", "church_origins", "modern_world_decline", "helion_calendar", "helion_week", "five_suns", "annual_festivals", "helion_climate"];
 /** Canon migration: new restricted (tier 1) Church/history records and their authored holders. */
 const NEW_RESTRICTED: Record<string, { known_by: string[]; awareness: string }> = {
   forgotten_era_restricted_access: { known_by: ["cassian_valerius", "helbrecht", "severan_krauss"], awareness: "private" },
   church_curated_history: { known_by: ["cassian_valerius", "helbrecht"], awareness: "private" },
   forgotten_era_fragments: { known_by: [], awareness: "specialized" },
+  church_post_491_history: { known_by: ["cassian_valerius", "helbrecht"], awareness: "private" },
 };
-const MYTHOLOGY_IDS = ["sun_emperor_shadow_warnings", ...SEALED_IDS, ...Object.keys(NEW_RESTRICTED), "forgotten_era", "the_four", "modern_reckoning"];
+const MYTHOLOGY_IDS = ["sun_emperor_shadow_warnings", ...SEALED_IDS, ...Object.keys(NEW_RESTRICTED), "forgotten_era", "the_four", "modern_reckoning", ...GAP_PUBLIC];
 const fourDistrictIds = ["house_vael","house_melakor","house_dravendark","house_morvath","ducal_council_of_calderan","church_doctrine","mage_registration","null_dust","mutilating_ritual","calderan_entry_writs","iron_hands","woodsigner"];
 const factionIds = ["artisans_guild", "carrion_dogs", "church", "city_guard", "house_dravendark", "house_melakor", "house_morvath", "house_vael", "inquisition", "iron_hands", "learned_arts_guild", "merchants_guild", "woodsigner"];
 
 test("Phase 1E's 22 records and West's two lore additions have explicit policies and valid references", async () => {
   const world = await loadWorld("data");
   const records = ["world_lore", "concept", "faction"].flatMap(type => world.getEntitiesByType(type as "world_lore" | "concept" | "faction"));
-  assert.deepEqual(records.map(e => e.id).sort(), [...newIds, "grey_brook", "calderan_west_daily_life", "carrion_dogs", "aureth_creation_myth", "woodsingers", "world_tree", "west_trade_network", "aureth_trade", ...MYTHOLOGY_IDS, ...fourDistrictIds].sort());
-  assert.equal(world.getEntitiesByType("world_lore").length, 37);
+  assert.deepEqual(records.map(e => e.id).sort(), [...newIds, "grey_brook", "calderan_west_daily_life", "carrion_dogs", "aureth_creation_myth", "woodsingers", "world_tree", "west_trade_network", "aureth_trade", "heartstone_deed_of_ownership", "heartstone_household_charter", "heartstone_stone_recognition", ...MYTHOLOGY_IDS, ...fourDistrictIds].sort());
+  assert.equal(world.getEntitiesByType("world_lore").length, 54);
   assert.equal(world.getEntitiesByType("concept").length, 6);
   const aliases = new Set<string>();
   for (const entity of records) {
@@ -30,9 +33,9 @@ test("Phase 1E's 22 records and West's two lore additions have explicit policies
     // Phase 1P ordinary-awareness annotations are the only additions (deliberately minimal migration).
     const awareness = ({ magic_subschools: "specialized", light_and_shadow: "public", inquisition: "public", learned_arts_guild: "local:west", main_city_structure: "local:calderan", grey_brook: "local:calderan", calderan_west_daily_life: "local:calderan", carrion_dogs: "specialized",
       // Four-District pass: explicit awareness on revised institutions and the new records.
-      west_governance: "public", church: "public", merchants_guild: "public", artisans_guild: "public", church_doctrine: "public",
+      west_governance: "public", heartstone_deed_of_ownership: "private", heartstone_household_charter: "private", heartstone_stone_recognition: "private", church: "public", merchants_guild: "public", artisans_guild: "public", church_doctrine: "public",
       house_vael: "local:calderan", house_melakor: "local:calderan", house_dravendark: "local:calderan", house_morvath: "local:calderan", ducal_council_of_calderan: "local:calderan",
-      mage_registration: "local:west", calderan_entry_writs: "local:west", west_trade_network: "public", aureth_trade: "public", aureth_creation_myth: "public", forgotten_era: "public", the_four: "public", modern_reckoning: "public", null_dust: "specialized", iron_hands: "local:calderan", woodsigner: "local:calderan" } as Record<string, string>)[entity.id];
+      mage_registration: "local:west", calderan_entry_writs: "local:west", west_trade_network: "public", aureth_trade: "public", aureth_creation_myth: "public", forgotten_era: "public", the_four: "public", modern_reckoning: "public", helion_empire: "public", sun_emperor_prayer: "public", centennial_observances: "public", church_origins: "public", modern_world_decline: "public", helion_calendar: "public", helion_week: "public", five_suns: "public", annual_festivals: "public", helion_climate: "public", null_dust: "specialized", iron_hands: "local:calderan", woodsigner: "local:calderan" } as Record<string, string>)[entity.id];
     // The Mutilating Ritual is restricted canon: public knowledge is only that the Inquisition can break a mage.
     // West economy pass: the World Tree is restricted Woodsinger knowledge with no authored NPC holder yet.
     // Mythology pass: one restricted Church record and five sealed records (tier 2 holder_only, tier 3 author_only), none with a holder.

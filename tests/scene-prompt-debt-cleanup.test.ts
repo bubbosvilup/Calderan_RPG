@@ -295,7 +295,7 @@ test("contract: absence from CURRENT SCENE alone still proves nothing (guidance 
   const f = richScene(), { text } = promptFor(f.world, f.campaign, "Brenna, are you alright?");
   assert.match(sceneBlock(text), /absence from this block alone does not establish that something is false, absent or unknown/);
   assert.match(text, /\[UNESTABLISHED DETAILS\]\nAccessories, extra possessions and permanent scene details absent from ALL the authoritative context above/);
-  assert.match(sceneBlock(text), /Time: 19:42 — Evening/);
+  assert.match(sceneBlock(text), /Time: (?:[^\n]* — )?19:42 — Evening/);
 });
 
 test("regression: a created bystander handing over an item the player names is engaged through the intent, not dropped as background", () => {

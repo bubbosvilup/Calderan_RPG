@@ -25,8 +25,8 @@ import { FixtureEmbeddingProvider } from "./retrieval-eval/fixture-embedding-pro
 const world = await loadWorld("data");
 const service = new RetrievalService(world);
 const lexical = new LexicalSearch(service);
-const SEALED = ["world_tree_sleeper", "oasis_sleeper", "first_voice_hidden_authority", "aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control"];
-const TIER3 = ["aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control"];
+const SEALED = ["world_tree_sleeper", "oasis_sleeper", "first_voice_hidden_authority", "aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control", "first_voice_operations", "hidden_persecution_truth", "beastfolk_origin"];
+const TIER3 = ["aureth_true_identity", "the_first_voice", "primordial_cosmology", "church_hidden_control", "first_voice_operations", "hidden_persecution_truth", "beastfolk_origin"];
 /** The one sealed record with an authored holder (canon migration): High Archon Cassian Valerius. */
 const HOLDERS: Record<string, string[]> = { first_voice_hidden_authority: ["cassian_valerius"] };
 /** Phrases that only sealed canon states. None may appear in any narrator-facing or player-facing payload. */
@@ -41,10 +41,10 @@ const top = (query: string, who: "narrator" | "player" = "player") => ids(lexica
 test("MYTH 1-4, 21: one public creation myth, retrievable; no deep truth; the Four are four; dragons only as iconography", () => {
   const myth = world.getEntity("aureth_creation_myth")!;
   assert.deepEqual(myth.knowledge, { visibility: { narrator: true, player: true }, known_by: [], awareness: "public" });
-  for (const q of ["Aureth creation myth", "golden dragon image in folk art", "the Four sacred figures of West, Center, East and the South Continent"]) assert.ok(top(q).some(id => id === "aureth_creation_myth" || id === "the_four"), q);
+  for (const q of ["Aureth creation myth", "old folk tales of creation", "the Four sacred figures of West, Center, East and the South Continent"]) assert.ok(top(q).some(id => id === "aureth_creation_myth" || id === "the_four"), q);
   const t = text("aureth_creation_myth");
   assert.match(t, /Aureth, the\s+Sun Emperor, brought sacred Light, order and guidance to humanity/); assert.match(t, /ordered and blessed|brought into harmony and blessed/);
-  assert.match(t, /traditional iconography, not an established account/); assert.match(t, /In public knowledge this is mythology, not established fact/);
+  assert.doesNotMatch(t, /dragon/i); assert.match(t, /In public knowledge this is mythology, not established fact/);
   assert.doesNotMatch(t, /three|children|father|created the Four|created (?:the )?dragons|Center with a red one|green/i);
   assertNoSecrets(JSON.stringify(myth), "myth");
   // 21: no duplicate myth/secret entities by alias or name; no transcription variants.
@@ -67,7 +67,7 @@ test("CHURCH 5-8: public doctrine, absence and Shadow taboo retrievable; Light-m
   const secret = world.getChunk("sun_emperor.light_secret")!;
   assert.deepEqual(secret.knowledge, { visibility: { narrator: true, player: false }, known_by: ["cassian_valerius", "helbrecht"], awareness: "private" });
   const publicText = (id: string) => [world.getEntity(id)!.summary, world.getEntity(id)!.content, ...world.listChunks().filter(c => c.entity_id === id && (c.knowledge ?? world.getEntity(id)!.knowledge)!.visibility.player).map(c => c.content)].join(" ");
-  for (const id of ["sun_emperor", "church_doctrine", "church", "light_and_shadow", "west_governance"]) assert.doesNotMatch(publicText(id), /Light mage|real Light/i, id);
+  for (const id of ["sun_emperor", "church_doctrine", "church", "light_and_shadow", "west_governance"]) assert.doesNotMatch(publicText(id), /real,? wielded|real Light|immortality derives/i, id);
   // Restricted Church reading of the Shadow warnings: tier 1, no holder.
   assert.deepEqual(world.getEntity("sun_emperor_shadow_warnings")!.knowledge, { visibility: { narrator: true, player: false }, known_by: [], awareness: "private" });
   assert.ok(!top("Sun Emperor warnings against Shadow").includes("sun_emperor_shadow_warnings"));
@@ -87,7 +87,7 @@ test("WORLD TREE 9-11 / OASIS 12-14: public and restricted layers work; sleeping
     assert.deepEqual([k.visibility, k.known_by, k.awareness], [{ narrator: false, player: false }, HOLDERS[id] ?? [], undefined], id);
     for (const who of ["narrator", "player"] as const) assert.equal(service.get({ entity_id: id }, who).kind, "not_visible", `${id}/${who}`);
   }
-  assert.deepEqual(SEALED.map(id => world.getEntity(id)!.knowledge!.secrecy), ["holder_only", "holder_only", "holder_only", "author_only", "author_only", "author_only", "author_only"]);
+  assert.deepEqual(SEALED.map(id => world.getEntity(id)!.knowledge!.secrecy), ["holder_only", "holder_only", "holder_only", "author_only", "author_only", "author_only", "author_only", "author_only", "author_only", "author_only"]);
   const queries = ["dragon inside World Tree", "primordial power sleeping in the World Tree", "Aureth true identity", "is the Sun Emperor Aureth the incarnation of Light", "the First Voice",
     "who sealed the Sun Emperor in Year 491", "primordial elemental power dormant under the oasis", "why is the oasis water red", "who controls the Church", "incarnation of Shadow", "Manual Secret Sleeper", "Sealed Truth"];
   const provider = new FixtureEmbeddingProvider();
@@ -107,14 +107,14 @@ test("WORLD TREE 9-11 / OASIS 12-14: public and restricted layers work; sleeping
 
 test("DEEPEST 15-17: tier 3 has no holder by validation and no index path; grants index only holder_only holders", () => {
   for (const id of TIER3) assert.deepEqual(world.getEntity(id)!.knowledge, { visibility: { narrator: false, player: false }, known_by: [], secrecy: "author_only" }, id);
-  assert.match(text("aureth_true_identity"), /current incarnation of Light/); assert.match(text("aureth_true_identity"), /not a golden dragon/);
+  assert.match(text("aureth_true_identity"), /current incarnation of Light/); assert.match(text("aureth_true_identity"), /not a dragon/);
   assert.match(text("the_first_voice"), /It is not the hidden cause of every evil/);
   const grants = knowledgeGrants(world);
   // Only the one authored tier 2 holder reaches a sealed record, and only as that holder's NPC-private grant.
   for (const [holder, list] of grants.restricted) for (const g of list) assert.ok(!SEALED.includes(g.id) || HOLDERS[g.id]?.includes(holder), `${holder}:${g.id}`);
   const grantIds = (who: string) => (grants.restricted.get(who) ?? []).map(g => g.id);
-  assert.deepEqual(grantIds("cassian_valerius"), ["church_curated_history", "first_voice_hidden_authority", "forgotten_era_restricted_access", "sun_emperor.light_secret"]);
-  assert.deepEqual(grantIds("helbrecht"), ["church_curated_history", "forgotten_era_restricted_access", "mutilating_ritual", "sun_emperor.light_secret"]);
+  assert.deepEqual(grantIds("cassian_valerius"), ["church_curated_history", "church_post_491_history", "first_voice_hidden_authority", "forgotten_era_restricted_access", "sun_emperor.light_secret"]);
+  assert.deepEqual(grantIds("helbrecht"), ["church_curated_history", "church_post_491_history", "forgotten_era_restricted_access", "mutilating_ritual", "sun_emperor.light_secret"]);
   assert.deepEqual(grantIds("severan_krauss"), ["forgotten_era_restricted_access"]);
   assert.deepEqual(grantIds("sister_veyra"), []);
   // Brother Aven holds only his own pre-existing Bartolomhew knowledge: no migrated Church fact reaches ordinary clergy.

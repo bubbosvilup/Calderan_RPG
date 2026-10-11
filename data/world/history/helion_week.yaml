@@ -1,0 +1,26 @@
+schema_version: 1
+entity:
+  id: helion_week
+  type: world_lore
+  name: "The Week and Veilday"
+  display_name: "The Week and Veilday"
+  parent: null
+  aliases: ["the six-day week", "Stonewake", "Emberday", "Gustday", "Tideday", "Radiantday", "Veilday"]
+  summary: >-
+    The week has six days, Stonewake, Emberday, Gustday, Tideday, Radiantday and Veilday, and every month holds exactly five
+    weeks. Veilday is the day of penance and confession.
+  tags: ["history","religion"]
+  search_context: "week, six-day week, weekdays, Stonewake Emberday Gustday Tideday Radiantday Veilday, Veilday penance confession atonement, days of the week, what day of the week, old associations of the days"
+  content: >-
+    The week has six days in a fixed order: Stonewake, Emberday, Gustday, Tideday, Radiantday and Veilday. A month of thirty
+    days holds exactly five weeks, so every ordinary month begins on Stonewake and ends on Veilday; the year's regular days begin on Stonewake
+    and end on Veilday, since the intercalary days do not count in the week. By very old custom the days keep associations whose reasons few remember:
+    earth, fire, air, water, light and shadow, in that order. The Church teaches its own meanings and ordinary people do not
+    treat the names as a doctrine. Veilday, the last day of the week, is the day of penance: confession, reflection, making
+    amends and attending Church, a day to face one's own faults. The Church does not teach that shadow is good; it teaches that
+    every person carries flaws and temptation that must be acknowledged and disciplined. How strictly Veilday is kept varies
+    by place and by person.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: history
+  related_entities: ["helion_calendar","church_doctrine","church","five_suns"]
+chunks: []

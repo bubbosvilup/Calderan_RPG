@@ -116,12 +116,12 @@ test("stale_revision: a state change during the controller call fails the turn a
   assert.equal(fixture!.campaign.exportSnapshot().items.find(i => i.id === SWORD)!.position.kind, "carried");
   assert.deepEqual(fixture!.campaign.exportSnapshot().items.find(i => i.id === SWORD)!.position, { kind: "carried", character_id: "nicco" });
 });
-test("prepare_failure: two authorized, individually valid commands whose sequence is impossible fail the WHOLE turn atomically", async () => {
+test("conflicting item mutations: two authorized commands that disagree on one item are rejected BEFORE commit, with no revision (Debt Zero; formerly a prepare failure)", async () => {
   let fixture: F | undefined;
   const r = await run(one({ input: "*looks at Brenna*", narration: "Nicco offers the hilt. Brenna takes the sword and keeps it, as Brenna takes the sword.", setup: f => { fixture = f; sword()(f); },
     controller: { kind: "commands", commands: [to("brenna"), to("brenna", "lend")], evidence: ["Brenna takes the sword and keeps it", "Brenna takes the sword and keeps it"] } }));
-  assert.equal(r.failed?.code, "campaign_validation_failed"); assert.equal(r.diagnostic.code, "prepare_failure"); assert.equal(r.diagnostic.stage, "prepare");
-  assert.deepEqual(fixture!.campaign.exportSnapshot().items.find(i => i.id === SWORD)!.position, { kind: "carried", character_id: "nicco" }, "atomic: neither command applied");
+  assert.equal(r.diagnostic.verdict, "rejected"); assert.equal(r.diagnostic.code, "conflicting_item_mutations"); assert.equal(r.diagnostic.stage, "authorization");
+  assert.deepEqual(fixture!.campaign.exportSnapshot().items.find(i => i.id === SWORD)!.position, { kind: "carried", character_id: "nicco" }, "neither command applied");
   assert.equal(fixture!.campaign.revision, r.diagnostic.revision_before);
 });
 test("failure-code mapping is total for the turn failures the coordinator can emit (commit_failure and campaign_validation_failure by phase)", () => {
@@ -309,16 +309,16 @@ test("relationship and household: Controller proposals need the chooser's own vo
   const world = await loadWorld("data");
   const BRENNA = "campaign_character_brenna";
   const fixture = () => { const c = createOpeningCampaign(world, "pass_b_household");
-    c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: { id: BRENNA, origin: { kind: "created" }, profile: { name: "Brenna", age: { kind: "exact", years: 29 } }, current: { current_location: c.exportSnapshot().runtime.scene.player_location, status: "active" } } }] });
+    c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: { id: BRENNA, origin: { kind: "created" }, profile: { name: "Brenna", age: { kind: "exact", years: 29 } }, current: { current_location: "heartstone_lr", status: "active" } } }, { kind: "runtime_delta", delta: { player_location: "heartstone_lr" } }] });
     return { world, campaign: c } as unknown as F; };
   const join: CampaignCommand = { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: BRENNA };
   const raise: CampaignCommand = { kind: "adjust_relationship", from_character_id: BRENNA, to_character_id: "nicco", dimension: "protectiveness", direction: "raise" };
-  const oath = 'Brenna rests her palm on the warm stone. "I, Brenna, decide to stay and become a resident. I swear to protect the hearthstone and Nicco, the keeper."';
-  const ok = await run({ id: "h", title: "h", input: "*explains the Heartstone and waits*", narration: oath, fixture, controller: { kind: "commands", commands: [join, raise], evidence: ["I, Brenna, decide to stay and become a resident.", "I swear to protect the hearthstone and Nicco, the keeper."] } });
+  const oath = 'Brenna stands barefoot, her bare feet flat on the warm stone of the floor. "I, Brenna, choose to stay and become a member of the Heartstone. I swear to be loyal to and protect my family, and to stand faithfully beside the Keeper." She looks at Nicco. "I swear it, Nicco: I will protect you and this family."\n\nNicco accepts her oath. "I accept you as a member of the Heartstone."';
+  const ok = await run({ id: "h", title: "h", input: "*explains the Heartstone and waits*", narration: oath, fixture, controller: { kind: "commands", commands: [join, raise], evidence: ["I, Brenna, choose to stay and become a member of the Heartstone.", "I swear it, Nicco: I will protect you and this family."] } });
   assert.deepEqual(ok.diagnostic.accepted.map(a => a.command.kind), ["join_household", "adjust_relationship"]); assert.equal(ok.diagnostic.verdict, "committed");
   const unvoiced = await run({ id: "h", title: "h", input: "*explains the Heartstone and waits*", narration: "Brenna nods once and keeps her distance.", fixture, controller: { kind: "commands", commands: [join, raise], evidence: ["Brenna nods once and keeps her distance.", "Brenna nods once and keeps her distance."] } });
-  assert.equal(unvoiced.diagnostic.verdict, "rejected"); assert.ok(codes(unvoiced).every(c => c === "insufficient_confirmation"), JSON.stringify(codes(unvoiced)));
-  const ghost = await run({ id: "h", title: "h", input: "*waits*", narration: oath, fixture, controller: { kind: "commands", commands: [{ ...join, household_id: "no_such_household" }], evidence: ["I, Brenna, decide to stay and become a resident."] } });
+  assert.equal(unvoiced.diagnostic.verdict, "rejected"); assert.deepEqual(codes(unvoiced), ["controller_invalid_command", "insufficient_confirmation"], "the join needs the full rite; the relationship needs the chooser's words");
+  const ghost = await run({ id: "h", title: "h", input: "*waits*", narration: oath, fixture, controller: { kind: "commands", commands: [{ ...join, household_id: "no_such_household" }], evidence: ["I, Brenna, choose to stay and become a member of the Heartstone."] } });
   assert.deepEqual(codes(ghost), ["controller_invalid_command"]);
 });
 
@@ -346,9 +346,9 @@ test("atomicity: two valid commands for different items commit together or not a
   const part = await run(sc("Brenna looks over the offer. She took the pink cotton shirt next. She set the others aside.", "She took the pink cotton shirt next."));
   assert.equal(part.diagnostic.accepted.length, 0); assert.equal(part.diagnostic.revision_after, part.diagnostic.revision_before);
 });
-test("atomicity: a sequence that is valid step by step (hand to Brenna, Brenna hands to Maren) commits in order when no player transfer intent binds it", async () => {
+test("atomicity: a chained sequence on ONE item (hand to Brenna, Brenna hands to Maren) is a conflict and is rejected whole: one item, one end position per turn", async () => {
   const r = await run(one({ input: "*looks at Brenna*",  narration: "Brenna takes the sword and weighs it. Maren takes the sword from her.", controller: { kind: "commands", commands: [to("brenna"), to("maren")], evidence: ["Brenna takes the sword and weighs it.", "Maren takes the sword from her."] } }));
-  assert.equal(r.diagnostic.verdict, "committed"); assert.equal(r.diagnostic.accepted.length, 2); assert.equal(r.diagnostic.revision_after, r.diagnostic.revision_before + 1);
+  assert.equal(r.diagnostic.verdict, "rejected"); assert.equal(r.diagnostic.code, "conflicting_item_mutations"); assert.equal(r.diagnostic.revision_after, r.diagnostic.revision_before);
 });
 test("shadow mode never authorizes from a quote alone, and says so", async () => {
   const r = await run(one({ evidence_authorization: "shadow", narration: "As Nicco extends the blade, Brenna, grave and silent, accepts the sword with both hands.", controller: { kind: "commands", commands: [to("brenna")], evidence: ["Brenna, grave and silent, accepts the sword with both hands."] } }));

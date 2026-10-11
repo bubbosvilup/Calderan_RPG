@@ -57,6 +57,10 @@ export interface LocationEntity extends BaseEntity {
   connections: Array<{ target: EntityId; description: string; minutes: number; kind?: "street" | "road" | "door" | "stairs" | "gate" | "bridge" | "square_access" }>;
   /** Explicit arrival node for a structural container; never inferred from parent. */
   entrance?: EntityId;
+  /** Authored climate profile id (see world/climate.ts); inherited from the nearest ancestor that declares one. */
+  climate_profile?: string;
+  /** Whether the place lies in the open (`outdoor`), under a roof/walls (`indoor`), or partly covered (`sheltered`). Authored per place and NEVER inherited; absent means `unknown`. */
+  environment_exposure?: string;
 }
 
 export interface CharacterEntity extends BaseEntity {

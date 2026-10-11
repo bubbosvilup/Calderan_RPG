@@ -1,0 +1,29 @@
+schema_version: 1
+entity:
+  id: five_suns
+  type: world_lore
+  name: "The Five Suns and the Six Suns"
+  display_name: "The Five Suns and the Six Suns"
+  parent: null
+  aliases: ["the Five Suns", "the Six Suns", "First Sun", "Second Sun", "Third Sun", "Fourth Sun", "Fifth Sun", "Sixth Sun", "Great Illumination"]
+  summary: >-
+    The five intercalary days at the end of the year are the Five Suns, and the Six Suns in a leap year, a festival of
+    revelation, unity, charity, remembrance and vigil. Every hundredth year after the disappearance holds the Great Illumination.
+  tags: ["religion","calendar","festival"]
+  search_context: "Five Suns, Six Suns, First Sun, Second Sun, Third Sun, Fourth Sun, Fifth Sun, Sixth Sun, intercalary festival, year end festival, vigil night, illumination, Great Illumination, lights, New Year festival"
+  content: >-
+    The five days between the end of the old year and the beginning of the new are the Five Suns, a festival season outside
+    the months and the week; in a leap year there is a sixth day, and the whole is called the Six Suns. The First Sun is the
+    day of revelation, recalling Aureth's public revelation in Year 0, with the first lights, opening prayers and civic gathering.
+    The Second Sun is the day of unity, recalling Helion under the Sun Emperor's rule, with oaths and reconciliation; it
+    remembers a unity that has been lost. The Third Sun is the day of charity: food shared, hospitality and care for the poor,
+    in the spirit of the early Church. The Fourth Sun is the day of remembrance of the dead, of ancestors and of those lost in the
+    year. The Fifth Sun is the day of vigil: cities and homes keep lights burning into the night, waiting, praying and hoping for
+    Aureth's return as the year passes; it is the great night of illumination. The Sixth Sun, which comes only in a leap year, is
+    kept as extra time granted to the world. Every hundredth year after the disappearance the Five or Six Suns are the Great
+    Illumination: cities gather in prayer, streets and civic buildings are lit and rulers take part. Year 1191, seven hundred
+    years after Year 491 and a leap year, holds the Great Illumination across all six days.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: religion
+  related_entities: ["helion_calendar","centennial_observances","sun_emperor","sun_emperor_prayer","church"]
+chunks: []

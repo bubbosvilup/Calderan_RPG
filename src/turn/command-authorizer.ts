@@ -19,6 +19,19 @@ export function isLocationPlacement(command: CampaignCommand, snapshot: DeepRead
   const item = snapshot.items.find(i => i.id === command.item_id);
   return !!item && (command.position.kind === "stored" || item.position.kind === "stored" && command.position.kind === "carried");
 }
+const FOOT_SLOT = /\b(?:feet|foot|boots?|shoes?|sandals?)\b/i;
+/** Parts of the Heartstone rite still missing for a candidate: narration receipt plus state facts (inside Heartstone, no worn footwear, active). */
+export function riteMissing(characterId: string, evidence: TurnEvidence, snapshot: DeepReadonly<CampaignSnapshot>, world?: WorldStore): readonly string[] {
+  const rite = (evidence.household_rites ?? []).find(r => r.character_id === characterId);
+  const missing = [...(rite ? rite.missing : ["oath"])];
+  const where = snapshot.runtime.scene.player_location, entity = world?.getEntity(where);
+  const inside = !!world && [where, ...world.getAncestors(where).map(a => a.id)].includes("heartstone") && !(entity?.type === "location" && entity.environment_exposure === "outdoor");
+  if (!inside) missing.push("inside_heartstone");
+  if (snapshot.items.some(i => i.position.kind === "equipped" && i.position.character_id === characterId && FOOT_SLOT.test(i.position.slot))) missing.push("worn_footwear");
+  const status = snapshot.characters.find(c => c.id === characterId)?.current?.status;
+  if (status === "inactive" || status === "dead") missing.push("voluntary");
+  return missing;
+}
 /** Policy consumes resolved same-turn evidence, never searches arbitrary narration. */
 export function authorizeCommands(proposal: readonly CampaignCommand[], evidence: TurnEvidence, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, world?: WorldStore): readonly AuthorizationDiagnostic[] {
   const present = new Set(context.characters.map(c => c.id));
@@ -93,6 +106,14 @@ export function authorizeCommands(proposal: readonly CampaignCommand[], evidence
         const ok = !!h && present.has(command.character_id) && command.character_id !== "nicco" && (command.kind === "join_household" ? member?.status !== "member" : member?.status === "member" && member.role !== "owner");
         if (!ok) return reject(command.kind === "join_household" && member?.status === "member" ? "rejected_already_established" : "rejected_reference_invalid");
         const choice = command.kind === "join_household" ? "join" : "leave";
+        // The Heartstone rite: a join into a household Nicco keeps is a promotion event and needs the COMPLETE rite (see household-evidence.ts), the
+        // candidate inside Heartstone, and no worn footwear. It replaces the casual voiced-choice path for that household: no quote or lone declaration
+        // can complete it, and a failed rite is a distinct rejection that commits neither membership nor promotion.
+        if (command.kind === "join_household" && h!.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner")) {
+          const missing = riteMissing(command.character_id, evidence, snapshot, world);
+          if (missing.length) return { command, authorized: false, reason: "rejected_reference_invalid", code: missing.some(x => x === "voluntary" || x.startsWith("oath")) && missing.includes("voluntary") ? "rite_not_voluntary" : "rite_incomplete", signals: missing.map(x => `rite_missing:${x}`) };
+          return { command, authorized: true, reason: "authorized_narrative_confirmation" };
+        }
         return (evidence.household_choices ?? []).some(c => c.character_id === command.character_id && c.choice === choice) ? { command, authorized: true, reason: "authorized_narrative_confirmation" } : reject("rejected_insufficient_confirmation");
       }
       case "add_household_rule": {

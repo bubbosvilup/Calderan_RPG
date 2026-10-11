@@ -152,7 +152,11 @@ test("A/B + replay 1-4: incidental objects are not materialized; a taken object 
   assert.deepEqual(engineItems(look.campaign), []);
   const steal = await turn("While Brenna looks away, Nicco slips the ivory figurine into his coat.", "I slip the figurine into my coat.",
     { commands: [create({ name: "Ivory figurine", description: "A carved ivory figurine.", category: "valuable", owner_id: "brenna" })], evidence: ["Nicco slips the ivory figurine into his coat."] });
-  assert.deepEqual(engineItems(steal.campaign).map(i => [i.name, i.owner_id, i.position]), [["Ivory figurine", "brenna", { kind: "carried", character_id: "nicco" }]]);
+  // Debt Zero: this narration never says whose figurine it is ("Brenna looks away" is a mention, not ownership), so the item exists with no owner.
+  assert.deepEqual(engineItems(steal.campaign).map(i => [i.name, i.owner_id ?? null, i.position]), [["Ivory figurine", null, { kind: "carried", character_id: "nicco" }]]);
+  const owned = await turn("While Brenna looks away, Nicco slips Brenna's ivory figurine into his coat.", "I slip the figurine into my coat.",
+    { commands: [create({ name: "Ivory figurine", description: "A carved ivory figurine.", category: "valuable", owner_id: "brenna" })], evidence: ["Nicco slips Brenna's ivory figurine into his coat."] });
+  assert.deepEqual(engineItems(owned.campaign).map(i => [i.name, i.owner_id, i.position]), [["Ivory figurine", "brenna", { kind: "carried", character_id: "nicco" }]]);
   // Already materialized: the controller sees it with its ID and a re-materialization is refused.
   const again = await turn("Nicco pats the ivory figurine in his coat.", "I check the figurine.",
     { commands: [create({ name: "Ivory figurine", description: "d", category: "valuable", owner_id: "brenna" })], evidence: ["Nicco pats the ivory figurine in his coat."] },

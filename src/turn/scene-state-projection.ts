@@ -1,3 +1,4 @@
+import { insideHeartstoneInterior } from "../campaign/heartstone-recognition.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import { characterView } from "../campaign/projections.js";
 import type { DeepReadonly } from "../types/readonly.js";
@@ -5,6 +6,8 @@ import type { WorldStore } from "../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { temporalGrounding } from "./temporal-grounding.js";
+import { describeWeather, environmentAt } from "../world/environment.js";
+import { formatCalendarDate } from "../world/calendar.js";
 
 /**
  * Scene State Projection V1 — DERIVATION (see docs/architecture/SCENE_STATE_PROJECTION_V1.md).
@@ -23,9 +26,24 @@ export interface SceneLocation {
   /** Nearest parent first. */
   readonly within: readonly { readonly name: string; readonly summary: string }[];
   readonly features: readonly { readonly name: string; readonly description: string }[];
+  /** True inside Heartstone's interior: the stone-recognition lore line applies (derived each turn, never saved). */
+  readonly heartstone_interior?: boolean;
   readonly source: string;
 }
-export interface SceneTime { readonly world_minute: number; readonly day: number; readonly actual_time: string; readonly time_of_day: string }
+/** Narrator-safe environment text, derived from world_minute + campaign id + location (calendar, season, observance, outside weather). Never saved. */
+export interface SceneEnvironment {
+  /** "Vesp Alpha 1, Stonewake" or "First Sun, Year 1191". */
+  readonly date: string;
+  /** "Autumn"; null on an intercalary day, which belongs to no season. */
+  readonly season: string | null;
+  /** "Greenwake" or "Great Illumination — First Sun"; null when the date is not an observance. */
+  readonly observance: string | null;
+  /** "Cool, light rain." for the OUTDOORS; null when no climate is authored for the location (or the zone is undecided). */
+  readonly weather: string | null;
+  /** Authored exposure of the player's place; decides whether the weather line reads "Weather:" (outdoor) or "Outside weather:" (anything else). */
+  readonly exposure?: "indoor" | "outdoor" | "sheltered" | "unknown";
+}
+export interface SceneTime { readonly world_minute: number; readonly day: number; readonly actual_time: string; readonly time_of_day: string; readonly environment?: SceneEnvironment }
 export interface ScenePresence { readonly id: string; readonly name: string; readonly player: boolean; readonly confidential: boolean; readonly source: string }
 export interface SceneCharacterState { readonly character_id: string; readonly name: string; readonly status?: "inactive" | "dead"; readonly conditions: readonly string[]; readonly presentation?: string; readonly source: string }
 export type SceneItemPlacement = "carried" | "worn" | "held" | "stored_here";
@@ -83,7 +101,11 @@ export interface SceneStateProjection {
 export interface ScenePerson { readonly name: string; readonly kind: "player" | "created" | "authored" }
 export interface SceneExtras { readonly people: ReadonlyMap<string, ScenePerson>; readonly developments: readonly Omit<SceneDevelopment, "name">[]; /** Narrator fact truth, captured by the context builder (it owns that metadata). */ readonly fact_truth: ReadonlyMap<string, "true" | "false" | "unknown">;
   /** Item id -> authoritative human-readable label, ONLY where the existing item/canonical data holds one that is not a machine handle. */
-  readonly item_labels: ReadonlyMap<string, string> }
+  readonly item_labels: ReadonlyMap<string, string>
+  /** Calendar, season and outside weather for the scene (derived; absent only for hand-built contexts). */
+  readonly environment?: SceneEnvironment;
+  /** The player stands inside Heartstone's interior (derived from the place). */
+  readonly heartstone_interior?: boolean }
 /**
  * Runtime-attached derived metadata, scoped to the identity of the TurnContext object: not serialized, and cloning a TurnContext alone
  * does NOT carry it over. It exists so the Controller context stays byte-identical; a future NarratorContext may replace this pattern.
@@ -118,7 +140,13 @@ export function registerSceneExtras(context: object, world: WorldStore, snapshot
   }
   const item_labels = new Map<string, string>();
   for (const id of item_ids) { const label = itemLabel(world, snapshot, id); if (label) item_labels.set(id, label); }
-  extras.set(context, { people, developments: recentDevelopments(world, snapshot, present), fact_truth, item_labels });
+  const env = environmentAt(world, snapshot.campaign_id, snapshot.runtime.scene.world_time.world_minute, snapshot.runtime.scene.player_location);
+  const day = env.observances.find(o => o.kind !== "great_illumination"), illumination = env.observances.some(o => o.kind === "great_illumination");
+  const dayText = day ? `${day.name} (${day.theme})` : null;
+  const observance = illumination ? `Great Illumination${dayText ? ` — ${dayText}` : ""}` : dayText;
+  const environment: SceneEnvironment = { date: formatCalendarDate(env.calendar), season: env.calendar.kind === "regular" ? env.calendar.season_name : null, observance, weather: env.weather ? describeWeather(env.weather) : null, exposure: env.exposure };
+  const heartstone_interior = insideHeartstoneInterior(world, snapshot.runtime.scene.player_location);
+  extras.set(context, { people, developments: recentDevelopments(world, snapshot, present), fact_truth, item_labels, environment, ...(heartstone_interior ? { heartstone_interior } : {}) });
 }
 /**
  * Structured NPC+ developments of PRESENT characters, filtered to those still consistent with current authoritative state
@@ -189,11 +217,13 @@ function deriveLocation(context: TurnContext): SceneLocation {
   return { name: place ? place.display_name : null, about: place ? clean(place.content) : "",
     within: scene.location_ancestry.map(a => ({ name: a.display_name, summary: clean(a.summary) })),
     features: (place?.features ?? []).map(f => ({ name: clean(f.name), description: clean(f.description) })),
+    ...(sceneExtrasOf(context)?.heartstone_interior ? { heartstone_interior: true } : {}),
     source: `runtime.player_location:${place?.id ?? "unestablished"}` };
 }
 function deriveTime(context: TurnContext): SceneTime {
   const t = temporalGrounding(context.primary.scene.world_time.world_minute);
-  return { world_minute: t.world_minute, day: t.day, actual_time: t.actual_time, time_of_day: t.time_of_day };
+  const environment = sceneExtrasOf(context)?.environment;
+  return { world_minute: t.world_minute, day: t.day, actual_time: t.actual_time, time_of_day: t.time_of_day, ...(environment ? { environment } : {}) };
 }
 function derivePresence(context: TurnContext, names: ReadonlyMap<string, string>): ScenePresence[] {
   const confidential = new Set(context.primary.scene.present_characters.filter(p => "confidential_encounter" in p).map(p => p.id));

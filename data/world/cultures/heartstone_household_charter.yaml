@@ -1,0 +1,34 @@
+schema_version: 1
+entity:
+  id: heartstone_household_charter
+  type: world_lore
+  name: "Heartstone Household Charter"
+  display_name: "Heartstone Household Charter"
+  parent: null
+  aliases: ["Heartstone charter", "household charter", "the charter", "household rite", "Heartstone household rules", "Heartstone household oath"]
+  summary: >-
+    The charter Nicco found at the start: the three household rules of Heartstone, the physical
+    conditions and canonical oath of the household rite, and the Keeper's acceptance.
+  tags: ["household","heartstone","charter","rite"]
+  search_context: "Heartstone Household Charter, household rules, household rite, oath, Keeper acceptance, barefoot inside shoes outside, no lies or secrets within the family, protect the family, bare skin contact with stone, member of the Heartstone, recognition, join the household, become a member"
+  content: >-
+    THE THREE HOUSEHOLD RULES. 1. No lies or secrets within the family. 2. Protect the family. 3. Barefoot inside. Shoes outside.
+    Social principles accepted by the Keeper (Nicco), not supernatural commands: breaking them brings no magical punishment,
+    no automatic loss of membership and no forced confession. Rule 1: honesty among members; Heartstone detects no lies.
+    Rule 2: a mutual duty to protect the family when able; it removes no one's agency. Rule 3: the custom of removing footwear.
+    THE HOUSEHOLD RITE. Conditions: the candidate is physically inside Heartstone; is barefoot; has direct bare-skin contact with
+    Heartstone stone (bare feet on the floor, a hand or bare foot on a wall; no single pose); speaks the oath voluntarily; and the Keeper explicitly accepts them. The
+    canonical core oath is: "I, [name], choose to stay and become a member of the Heartstone. I swear to be loyal to and protect
+    my family, and to stand faithfully beside the Keeper." The candidate's own name replaces [name]. Natural variation is
+    acceptable if the candidate voluntarily and explicitly states all the essential meanings: a personal choice, to stay and
+    join Heartstone, acceptance of family membership, a commitment to protect the family, and a commitment to stand
+    faithfully beside the Keeper. Vague words ("I like it here", "I may stay", "you are like family", "I'll help you") are not
+    the oath. The Keeper must explicitly accept the candidate, for example: "I accept you as a member of the Heartstone."
+    Silence is not acceptance. The rite only counts when the candidate takes part willingly: recitation while unconscious,
+    words spoken for them, coercion, threats, magical compulsion, an ambiguous nod, consent inferred from affection, or the
+    Keeper declaring someone family alone do not qualify.
+    The rite creates no love, obedience or loyalty and prevents neither betrayal nor leaving; the oath is a voluntary promise.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"private"}
+  category: cultures
+  related_entities: ["heartstone","heartstone_lr"]
+chunks: []

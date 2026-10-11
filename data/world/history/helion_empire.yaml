@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: helion_empire
+  type: world_lore
+  name: "The Empire of the Sun Emperor"
+  display_name: "The Empire of the Sun Emperor"
+  parent: null
+  aliases: []
+  summary: >-
+    Until Year 491 the whole of Helion stood under the Sun Emperor's rule as one continent-wide empire with
+    local authorities beneath him; when he disappeared the central authority vanished and the continent
+    fragmented.
+  tags: ["history","politics"]
+  search_context: "Empire of the Sun Emperor, Helion under one rule, continental empire, local authorities, fragmentation after Year 491, dukes, nobles, regional rulers, competing states, wars, who rules Helion, Center and East independence"
+  content: >-
+    From Year 0 until Year 491 the Sun Emperor, Aureth, was the acknowledged sovereign of all of Helion, a
+    continent-wide empire in which local lords, cities and regional authorities kept their own offices and
+    customs beneath his crown. When he disappeared in Year 491 no central authority remained. Over the
+    following centuries Helion fragmented into dukedoms, noble holdings, regional rulers and competing states,
+    with rivalries and wars among them. This fragmentation did not erase the memory of the empire: West's
+    Dukes still govern in the Sun Emperor's name, while other lands came to rule themselves, in Center under a
+    tournament-chosen ruler and in East under its own arrangements. Which powers kept which claims, the
+    course of the wars and the dates of the separations are not established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: history
+  related_entities: ["sun_emperor","continent","west_governance","modern_reckoning","west","center","east","south_continent"]
+chunks: []

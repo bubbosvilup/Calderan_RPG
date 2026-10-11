@@ -8,19 +8,25 @@ entity:
   aliases: ["Light magic", "Shadow magic"]
   summary: >-
     Light and Shadow are exceptionally rare magical classifications, not moral alignments. Church
-    doctrine treats true Light as divine and Shadow magic as absolute heresy.
+    doctrine treats the Sun Emperor's Light as sacred, independent mortal Light as sacrilege and Shadow
+    magic as absolute heresy.
   tags: ["magic"]
-  search_context: "Light magic, Shadow magic, Light and Shadow mages"
+  search_context: "Light magic, Shadow magic, Light and Shadow mages, how rare is a Light mage, Light mage once a century, Shadow users, persecution of Shadow mages, heretics, mortal Light forbidden"
   content: >-
     Light is not inherently good; Shadow is not inherently evil. Both are nearly legendary in
     ordinary experience, known more through stories, records, rumor, and rare cases than
-    everyday observation. They may have unusual interactions or opposition with one another;
+    everyday observation. Light is the rarer by far, and it is thought to have grown weaker and rarer
+    still over the centuries: a Light mage is thought to appear perhaps once in a century, a figure of tradition
+    and not a rule. Shadow manifestations, though still very rare, are
+    somewhat more common than Light. They may have unusual interactions or opposition with one another;
     no full combat matrix is established. Publicly, the Church of the Sun Emperor teaches that the
-    Sun Emperor bears divine Light and that true Light is a miracle or divine manifestation; mortal
-    Light magic is not accepted as a normal magical school. In learned and arcane circles only
-    fragmented accounts of Light users exist, usually read as legend, religious metaphor or an
-    extinct phenomenon. Shadow magic is extremely rare, absolute heresy in Church doctrine and
-    actively hunted. Clearly identifiable public use of either may attract major attention:
+    Sun Emperor bears divine Light and that true Light is a miracle or divine manifestation; a mortal
+    with Light of their own is held to carry an illicit echo of it, a false claimant and a possible
+    blasphemer, and is treated as dangerous. In learned and arcane circles only fragmented accounts of
+    Light users exist, usually read as legend, religious metaphor or an extinct phenomenon, and scholars
+    and mages may treat Light and Shadow as categories of magic, neither virtue nor vice. Shadow magic is
+    extremely rare, absolute heresy in Church doctrine, and actively hunted: Shadow users are imprisoned,
+    interrogated, tortured and publicly condemned as heretics. Clearly identifiable public use of either may attract major attention:
     surprise, fear, distrust, rumor, withdrawal, institutional interest, reports to authorities, or
     investigation by Church/Inquisition-related actors. Responses depend on context; no spell
     automatically summons the Inquisition. No Light hero, Shadow villain, or required conflict is

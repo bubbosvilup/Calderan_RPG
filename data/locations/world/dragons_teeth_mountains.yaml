@@ -23,10 +23,13 @@ entity:
     Calderan for processing. No single unified dwarf kingdom, clan names, political structure, specific
     mines or resources, or supernatural forging abilities are established, and not every
     dwarf is a craftsman. Exact elevations, length, peaks, passes, mountain
-    settlements, and the origin of its name remain unspecified. Its name does not establish
-    dragons or a dragon history.
+    settlements and the true origin of its name remain unspecified. Folk legend holds that the jagged peaks
+    are the teeth of some vast beast of long-vanished stories, an easy tale for a serrated skyline; there
+    are no known dragons, remains or records of one, and the name is mountain-shape folklore, not
+    evidence of any creature or dragon history.
   tags: [geography]
   search_context: "Dragon's Teeth Mountains, northern and eastern mountain range of Helion; ancestral homeland and origin of the dwarves; dwarf clans, dwarven smiths, metalworking and craftsmanship; mountain dwarves later dispersed into cities."
+  climate_profile: east_cold_continental
   knowledge:
     visibility:
       narrator: true

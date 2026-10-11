@@ -1,0 +1,28 @@
+schema_version: 1
+entity:
+  id: heartstone_stone_recognition
+  type: world_lore
+  name: "Heartstone Stone Warmth"
+  display_name: "Heartstone Stone Warmth"
+  parent: null
+  aliases: ["Heartstone stone warmth", "warm stone", "Heartstone recognition", "stone recognition", "warm Heartstone floor"]
+  summary: >-
+    Heartstone's interior stone feels gently, pleasantly warm through bare skin to the Keeper and to active household
+    members; to anyone else it is ordinary stone at its real temperature.
+  tags: ["household","heartstone","stone","recognition"]
+  search_context: "Heartstone stone warmth, warm floor, bare feet on stone, bare skin contact, recognized by Heartstone, Keeper, household member, cold stone, ordinary stone, barefoot inside, shoes, rite effect, recognition enchantment, pulse in the stone"
+  content: >-
+    RECOGNITION. Heartstone's interior stone recognizes the Keeper (Nicco) and active household members. Direct bare-skin
+    contact with that stone (bare feet on the floor, a hand or bare foot on a wall; no single pose) feels gently, pleasantly
+    warm to a recognized person: mild comfort, never hot, never painful, not healing, not a combat or magical buff. People
+    Heartstone does not recognize feel ordinary stone at its real temperature, which depends on weather, season, time of day
+    and the room; it is not canonically cold or hostile to them. The warmth is a recognition effect of the property, derived
+    from who is touching the stone now. It is not a stored state: it begins once the rite is complete, requires skin contact
+    (shoes or boots block it; they are not magically removed or punished), and ends when membership is no longer active.
+    This is the practical meaning of "Barefoot inside". It implies no sentience, affection, judgment or awareness; subtle
+    signs after a completed rite (one pulse through the stone, a brief hum, the hearth flaring) are the enchantment
+    responding, not a mind. Entering Heartstone, or merely being welcomed or friendly, grants no warmth.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"private"}
+  category: cultures
+  related_entities: ["heartstone","heartstone_lr","heartstone_household_charter"]
+chunks: []

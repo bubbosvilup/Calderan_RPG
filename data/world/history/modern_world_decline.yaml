@@ -1,0 +1,27 @@
+schema_version: 1
+entity:
+  id: modern_world_decline
+  type: world_lore
+  name: "The Fading of the Age"
+  display_name: "The Fading of the Age"
+  parent: null
+  aliases: []
+  summary: >-
+    Learned and common opinion holds that the world has been growing harder over the centuries since the Sun
+    Emperor's disappearance: magic fading, land less fertile and conflict more frequent, though not
+    everywhere.
+  tags: ["history","world"]
+  search_context: "fading of magic, magic weaker than before, elemental mages rarer, old feats harder, worse harvests, famine, disease, dim harsh world, decline since Year 491, resource competition, wars, healthy beautiful places"
+  content: >-
+    Scholars, healers, farmers and old soldiers alike say that the world is not what it was. Over the centuries
+    since the Sun Emperor's disappearance, magic is thought to be slowly fading: elemental mages are weaker and
+    rarer, the rarest gifts are fading fastest of all, and feats described in old accounts are harder to perform today.
+    No end date and no rate are established. The land is said to have grown harsher in many regions, with a
+    dimmer feel to the air, thinner soil, failed harvests, periodic famine, disease, competition for resources,
+    political tension and more frequent conflict. This is a tendency across many regions and generations, not
+    a universal law: healthy and beautiful places remain, and good years still come. People explain the
+    change in many ways; no public explanation is established.
+  knowledge: {"visibility":{"narrator":true,"player":true},"known_by":[],"awareness":"public"}
+  category: history
+  related_entities: ["modern_reckoning","elemental_magic","helion_empire"]
+chunks: []

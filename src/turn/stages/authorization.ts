@@ -12,6 +12,8 @@ import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evi
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import { sentencesOf } from "../language/text.js";
+import { establishedCount, ownerEvidenced } from "../item-ownership.js";
+import { resolveItemIntent, type ItemIntent } from "../item-intent.js";
 const itemKey = (name: string) => name.trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
 const EXACT_REPEAT_KINDS: ReadonlySet<CampaignCommand["kind"]> = new Set(["transfer_item", "place_item", "set_knowledge", "set_condition", "schedule_event", "leave_scene", "join_household", "leave_household", "add_household_rule"]);
 import type { AuthorizationDiagnostic, TurnDebugSink } from "../turn-types.js";
@@ -51,7 +53,8 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
     else if (EXACT_REPEAT_KINDS.has(c.kind) && keep.some(j => isDeepStrictEqual(parsed[j], c))) return;
     // Pass C: the same object materialized twice in one proposal (same normalized name, same position) is one object. The authorizer
     // checks each create_item against the pre-turn state, so a repeat would otherwise create two items. Distinct names stay distinct.
-    else if (c.kind === "create_item" && keep.some(j => { const o = parsed[j]!; return o.kind === "create_item" && itemKey(o.name) === itemKey(c.name) && isDeepStrictEqual(o.position, c.position); })) return;
+    // Debt Zero: unless the narration explicitly establishes several identical copies ("two identical iron cups"), up to that many are kept.
+    else if (c.kind === "create_item" && keep.filter(j => { const o = parsed[j]!; return o.kind === "create_item" && itemKey(o.name) === itemKey(c.name) && isDeepStrictEqual(o.position, c.position); }).length >= establishedCount(c.name, i.draft)) return;
     keep.push(k);
   });
   const controllerProposal = keep.map(k => parsed[k]!), duplicates_removed = parsed.length - keep.length;
@@ -99,9 +102,18 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const departures = [...npcDepartures, ...canonicalDepartures];
   const evidenceWithDepartures: TurnEvidence = departures.length ? { ...turn_evidence, departures: [...(turn_evidence.departures ?? []), ...departures] } : turn_evidence;
   const departureProposals = [...new Set(departures.map(d => d.character_id))].filter(id => !controllerProposal.some(c => c.kind === "leave_scene" && c.character_id === id)).map(character_id => ({ kind: "leave_scene" as const, character_id }));
-  const proposal = [...controllerProposal, ...derived, ...departureProposals];
+  // Explicit item intent (pickup / put-down of ONE tracked item). It binds item and placement; it never proves success. A Controller that
+  // omitted the bound command gets it proposed here as a DERIVED proposal, which authorization still decides on a verified receipt.
+  const itemIntent = resolveItemIntent(i.debug_base.player_input, i.context);
+  const isIntentKind = (c: CampaignCommand): c is Extract<CampaignCommand, { kind: "place_item" }> => c.kind === "place_item" && !!itemIntent && (itemIntent.kind === "pickup" ? c.position.kind === "carried" && c.position.character_id === "nicco" : c.position.kind === "stored");
+  const itemDerived: CampaignCommand[] = itemIntent?.status === "bound" && !controllerProposal.some(isIntentKind) ? [itemIntent.command] : [];
+  const proposal = [...controllerProposal, ...derived, ...departureProposals, ...itemDerived];
   // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).
-  const diagnostics = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode, i.world);
+  const decided = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode, i.world);
+  const ownerNames = (id: string): readonly string[] => { const e = i.world.getEntity(id); const c = i.projected.characters.find(x => x.id === id);
+    return [id, ...(e?.type === "character" ? [e.name, ...e.aliases] : []), ...(c?.profile.name ? [c.profile.name] : [])]; };
+  const diagnostics = rejectConflictingItemMutations(enforceItemTriangle(decided, itemIntent, isIntentKind)).map(d => d.authorized && d.command.kind === "create_item" && typeof d.command.owner_id === "string" && !ownerEvidenced(d.command, i.draft, i.debug_base.player_input, ownerNames(d.command.owner_id))
+    ? { ...d, command: (({ owner_id: _o, ...rest }) => rest)(d.command) as CampaignCommand, signals: [...(d.signals ?? []), "ownership_not_evidenced"] } : d);
   // Controller Reliability Pass 1 (debug only, never events): normalized outputs, and deterministic candidates with verified
   // narration evidence that the controller did not propose. Nothing is synthesized; this only measures omissions.
   if (i.sink) {
@@ -136,4 +148,43 @@ export function assembleTurnCommands(i: { readonly diagnostics: readonly Authori
     return from ? { ...c, acquisition: { acquisition_kind: "gift" as const, from_character_id: from, acquired_at: minute } } : c;
   });
   return { authorized, commands: [...i.intent.runtime, ...authorized] };
+}
+
+/**
+ * The intent / receipt / proposal triangle for an explicit item action. INTENT says which tracked item the player meant; the receipt (checked by
+ * authorization) says what happened; the Controller's proposal must name that same item. A proposal for another item, or any proposal when the
+ * player's phrase was ambiguous or matched nothing, is rejected with a precise code and mutates nothing. Without an item intent nothing changes
+ * (autonomous NPC pickups keep their evidence path).
+ */
+function enforceItemTriangle(decided: readonly AuthorizationDiagnostic[], intent: ItemIntent | undefined, isIntentKind: (c: CampaignCommand) => boolean): readonly AuthorizationDiagnostic[] {
+  // An attempt authorizes nothing by itself, and a phrase that matches no tracked item here binds nothing: neither is evidence about which item the Controller meant.
+  if (!intent || intent.status === "attempt" || intent.status === "absent") return decided;
+  return decided.map(d => {
+    if (!isIntentKind(d.command) || d.command.kind !== "place_item") return d;
+    if (intent.status === "bound" && d.command.item_id === intent.item_id) return d;
+    const code = intent.status === "ambiguous" ? "ambiguous_item" : "controller_item_mismatch";
+    const reason = intent.status === "ambiguous" ? "rejected_ambiguous_reference" as const : "rejected_controller_mismatch" as const;
+    return d.authorized ? { ...d, authorized: false, reason, source: "rejected" as const, code } : { ...d, code };
+  });
+}
+/** The position a placement-like command leaves its item in (a transfer leaves it carried by the recipient). */
+const resultingPosition = (c: CampaignCommand) => c.kind === "place_item" ? { position: c.position } : c.kind === "transfer_item" ? { mode: c.mode, position: c.position } : undefined;
+/**
+ * One item can end an atomic proposal in only ONE position. Among AUTHORIZED placement-like commands on the same item: identical resulting
+ * positions are one command (a harmless duplicate: the later one is dropped, never applied twice); different resulting positions are a
+ * contradiction, so EVERY command on that item is rejected before commit and the item stays exactly as it was. Unrelated authorized commands
+ * are independent (each was validated against the same pre-turn state and CampaignState prepares the batch atomically), so they still commit.
+ */
+function rejectConflictingItemMutations(decided: readonly AuthorizationDiagnostic[]): readonly AuthorizationDiagnostic[] {
+  const byItem = new Map<string, number[]>();
+  decided.forEach((d, n) => { const c = d.command; if (d.authorized && (c.kind === "place_item" || c.kind === "transfer_item")) byItem.set(c.item_id, [...(byItem.get(c.item_id) ?? []), n]); });
+  const out = [...decided];
+  for (const [, indexes] of byItem) {
+    if (indexes.length < 2) continue;
+    const results = indexes.map(n => resultingPosition(decided[n]!.command));
+    if (results.every(r => isDeepStrictEqual(r, results[0]))) {
+      for (const n of indexes.slice(1)) out[n] = { ...decided[n]!, authorized: false, reason: "rejected_already_established", source: "rejected", code: "duplicate_command_deduped", signals: ["duplicate_command_deduped"] };
+    } else for (const n of indexes) out[n] = { ...decided[n]!, authorized: false, reason: "rejected_conflicting_mutations", source: "rejected", code: "conflicting_item_mutations" };
+  }
+  return out;
 }
