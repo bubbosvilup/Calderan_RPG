@@ -95,6 +95,10 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 > refused (`campaign_locked`). The holder refreshes the lock's modification time every 30 s; a lock is held only while its PID runs
 > AND its heartbeat is younger than 90 s, so a crashed holder frees it at once and a reused PID (seen live on Windows) within 90 s.
 
+## Trade offers (Actual Offer V1)
+
+The optional additive snapshot field `trade_offers` stores `TradeOffer` records (active, accepted, superseded, withdrawn, invalidated). **No schema bump and no migration**: snapshot schema stays 6, save schema 5, and an absent field means no offers. A still-valid active offer survives save/load; accepted and closed offers cannot be re-accepted after reload. See [Actual Offer](ACTUAL_OFFER.md).
+
 ## Manual-save policy and ownership
 
 **Phase 1J did not autosave** (HISTORICAL, superseded by Save/Load v1 above for the Play UI; CLI and tests still save only explicitly). CampaignState is the authoritative in-memory

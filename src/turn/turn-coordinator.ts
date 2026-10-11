@@ -65,6 +65,8 @@ export class TurnCoordinator {
   /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly reliability_contract?:boolean; readonly context_policy?: ContextPolicy; readonly context_compaction?: ContextCompactionService; readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
+  /** Actual Offer V1: a narrated captive promoted outside a turn (by accepting an offer) leaves the temporary registry. */
+  retireParticipants(campaign: CampaignState, ids: readonly string[]): void { this.participants(campaign).retire(ids); }
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
   /** Explicit application correction only; no campaign history or state is rewritten. */
   resetSceneContinuity(campaign: CampaignState): void {

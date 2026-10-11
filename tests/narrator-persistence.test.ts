@@ -6,7 +6,8 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { narratorEphemeralCharacters } from "../src/campaign/promotion.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
+import { asPlan, readOffer } from "./offer-fixtures.js";
+import { activeTradeOffer } from "../src/campaign/trade.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
@@ -125,7 +126,7 @@ function homeWithBrenna(): CampaignState {
 }
 test("historical Maren: an unnamed girl bought from an ANONYMOUS whittler — one character, no seller character, seller provenance kept", () => {
   const c = homeWithBrenna(), charactersBefore = c.exportSnapshot().characters.length;
-  const r = resolvePersonTransactions("*pays him and takes the key to free her*", buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), WHITTLER, c.revision, { world });
+  const r = asPlan(readOffer(world, c.exportSnapshot(), "*pays him and takes the key to free her*", WHITTLER, c.revision));
   assert.deepEqual(r.commands.map(x => x.kind), ["register_character", "transfer_person"]); // no seller registration, no pre-sale holder
   assert.deepEqual([r.diagnostics[0]!.detail.seller, r.diagnostics[0]!.detail.seller_kind], ["the whittler", "anonymous"]);
   c.apply({ expected_revision: c.revision, commands: r.commands as CampaignCommand[] });
@@ -149,11 +150,17 @@ test("historical Maren: an unnamed girl bought from an ANONYMOUS whittler — on
   assert.doesNotMatch(debug, /Promoted characters:[\s\S]*whittler \(campaign_character/);
 });
 
+/** Actual Offer V1: the player's explicit accept action on the standing offer, as GameSession does it (settlement, then the promoted scene participant retires). */
+function acceptAsPlayer(co: TurnCoordinator, c: CampaignState) {
+  const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands");
+  c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
+  if (offer.subject.kind === "person") co.retireParticipants(c, offer.subject.plan.flatMap(x => x.kind === "register_character" && x.character.origin_snapshot?.ephemeral_ref?.startsWith("scene_npc_") ? [x.character.origin_snapshot.ephemeral_ref] : []));
+}
 test("late naming: the purchased unnamed girl says her name — the SAME character gets it; nothing else changes", async () => {
   const c = homeWithBrenna(), seen: GenerationRequest[] = [];
-  const co = coordinator([WHITTLER[0]!.narration, WHITTLER[1]!.narration, "The whittler pockets the coins and unlocks the cage.", 'The girl lifts her head from the straw. "My name is Maren."', "Maren closes her eyes."], seen);
+  const co = coordinator([WHITTLER[0]!.narration, WHITTLER[1]!.narration, 'The girl lifts her head from the straw. "My name is Maren."', "Maren closes her eyes."], seen);
   await run(co, c, "*looks around*"); await run(co, c, "How much for the girl?");
-  await run(co, c, "*pays him and takes the key to free her*");
+  acceptAsPlayer(co, c);
   const [girl] = promoted(c); assert.ok(girl);
   const snapshotBefore = c.exportSnapshot();
   const legalBefore = snapshotBefore.legal_statuses.find(l => l.character_id === girl.id), originBefore = girl.origin_snapshot;
@@ -173,11 +180,11 @@ test("late naming: the purchased unnamed girl says her name — the SAME charact
 test("historical Maren, named first: her name promotes her before the sale; the anonymous whittler sells her; no duplicate", async () => {
   const c = homeWithBrenna();
   const co = coordinator(["The whittler waves Nicco toward the back of his lot. Behind the bars a thin girl named Maren lies curled on the straw, burning with fever.",
-    'The whittler scratches his neck. "Three gold for Maren. No papers, no listing."', "The whittler pockets the coins and unlocks the cage."]);
+    'The whittler scratches his neck. "Three gold for Maren. No papers, no listing."']);
   const first = await run(co, c, "*looks around*");
   assert.deepEqual(first.identity?.promoted.map(p => p.name), ["Maren"]);
   await run(co, c, "How much for her?");
-  await run(co, c, "*pays him*");
+  acceptAsPlayer(co, c);
   const all = promoted(c); assert.equal(all.length, 1);
   const s = c.exportSnapshot(), legal = s.legal_statuses.find(l => l.character_id === all[0]!.id)!;
   assert.deepEqual([all[0]!.profile.name, all[0]!.origin_snapshot!.trigger, legal.holder_id, legal.transfer!.documentation, s.transactions[0]!.from_counterparty?.label, gold(c), members(c)],
@@ -188,7 +195,7 @@ test("historical Maren, named first: her name promotes her before the sale; the 
 test("a named narrator-created seller becomes a campaign character by the ordinary name rule; the sale is from that character", () => {
   const c = campaign(MARKET);
   const scene = [at('A lean man leans on the cage. "Name\'s Oswin. Three gold for the girl." A girl lies chained behind the bars.', "How much?")];
-  const r = resolvePersonTransactions("Done. *pays him*", buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), scene, c.revision, { world });
+  const r = asPlan(readOffer(world, c.exportSnapshot(), "Done. *pays him*", scene, c.revision));
   assert.deepEqual([r.commands.map(x => x.kind), r.diagnostics[0]!.detail.seller_kind], [["register_character", "register_character", "set_legal_status", "transfer_person"], "named"]);
   c.apply({ expected_revision: c.revision, commands: r.commands as CampaignCommand[] });
   const oswin = promoted(c).find(x => x.profile.name === "Oswin")!;
@@ -197,7 +204,7 @@ test("a named narrator-created seller becomes a campaign character by the ordina
 });
 test("anonymous seller authority must come from their own offer; bystanders never sell; two offering sellers block", () => {
   const c = campaign(MARKET);
-  const resolve = (scene: readonly RecentExchange[], input = "Done. *pays him*") => resolvePersonTransactions(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), scene, c.revision, { world });
+  const resolve = (scene: readonly RecentExchange[], input = "Done. *pays him*") => asPlan(readOffer(world, c.exportSnapshot(), input, scene, c.revision));
   const bystander = resolve([at('A girl lies chained behind the bars. A porter glances over. "She came in yesterday."', "Who is she?")], "I'll take her for three gold. *pays*");
   assert.deepEqual([bystander.commands, bystander.diagnostics[0]!.detail.reason], [[], "seller_authority_unestablished"]);
   const two = resolve([at('A girl lies chained behind the bars. The whittler spits. "Three gold for her." The handler snorts. "She\'s mine. Four gold for her."', "How much?")]);
@@ -236,7 +243,7 @@ test("historical-transcript regressions: word fragments are not names; mentions 
   // A deal about goods, or "I'll pay a visit", never reaches back to a captive narrated earlier in the scene: no purchase, no note.
   const scene = [at("A girl lies chained behind the bars of the whittler's pen."), at('The smith hefts the halberd. "Fifteen, and I throw in the oil."', "15g for the halberd?")];
   for (const input of ["U got a deal, merchant.", "I'll pay a visit to the back alleys then."]) {
-    const t = resolvePersonTransactions(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), scene, c.revision, { world });
+    const t = asPlan(readOffer(world, c.exportSnapshot(), input, scene, c.revision));
     assert.deepEqual([t.commands, t.notes], [[], []], input);
   }
 });

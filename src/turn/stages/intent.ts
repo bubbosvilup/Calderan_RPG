@@ -4,13 +4,14 @@ import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext, type TurnContext } from "../context-builder.js";
 import { playerIntent, type PlayerIntent } from "../player-intent.js";
-import { resolvePersonTransactions, type TradeResolution } from "../person-transactions.js";
+import { resolveManumission } from "../person-transactions.js";
 import { characterLocation, movableCharacters, resolvePlayerCarry, type MovableCharacter } from "../character-movement.js";
 import { extractRuleDeclarations } from "../household-evidence.js";
 import { invitedFollowers, leftBehindNotes } from "../follow-invitation.js";
 import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
+import { tradeStateNotes } from "../trade-notes.js";
 
 /**
  * Hardening H2 — IntentResolutionStage. Everything the PLAYER authors this turn, resolved deterministically before any provider call.
@@ -39,8 +40,6 @@ export interface ResolvedIntent {
   readonly base_context: TurnContext;
   readonly base_plan: SceneParticipantPlan;
   readonly intent: TurnIntent;
-  /** Promotion Pass 1.1: the narrated captive a prevalidated purchase promotes, if any. */
-  readonly promotion: TradeResolution["promotion"];
 }
 
 /**
@@ -60,18 +59,16 @@ export function resolveTurnIntent(i: IntentStageInput): ResolvedIntent {
   const carried = resolvePlayerCarry(i.player_input, i.snapshot, base_context, i.world, spoken.runtime);
   const carry = carried.runtime.length && !prevalidates(i, [...spoken.runtime, ...carried.runtime]) ? { runtime: [], notes: [] } : carried;
   const natural = [...spoken.runtime, ...carry.runtime];
-  // Household Pass 1: player-authored person transactions (purchase, manumission) are resolved deterministically and prevalidated
-  // against the real preparation before narration; a rejected transaction is dropped and the narrator is told nothing changed.
-  // Promotion Pass 1.1: a narrator-invented captive of this scene may be the subject; promotion, initial legal state and sale form
-  // one proposal, prevalidated here as a whole, so the narrator is never told of a purchase that promotion would make fail.
-  const trade = resolvePersonTransactions(i.player_input, base_context, i.snapshot, i.finalized, i.base_revision, { world: i.world, participants: base_plan.participants });
+  // Household Pass 1: the player-authored act of freeing a person is resolved deterministically and prevalidated against the real preparation before
+  // narration; a rejected one is dropped and the narrator is told nothing changed. Actual Offer V1: purchases are NOT resolved here. A purchase or sale is
+  // an explicit trade offer the player accepts in the interface; the pending/settled offer state reaches the narrator as authoritative notes.
+  const trade = resolveManumission(i.player_input, base_context, i.snapshot, i.base_revision);
   const tradeValid = !trade.commands.length || prevalidates(i, [...natural, ...trade.commands]);
   const tradeCommands = tradeValid ? trade.commands : [];
-  const tradeNotes = tradeValid ? trade.notes : ["The attempted transaction is not valid under current ownership or funds: nothing is paid and no legal status changes this turn."];
-  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...tradeNotes], rule_declarations: extractRuleDeclarations(i.player_input),
-    ...(trade.diagnostics.length ? { transactions: trade.diagnostics.map(d => ({ kind: d.kind, status: tradeValid ? d.status : "blocked" as const, ...(tradeValid ? (typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}) : { reason: "prevalidation_rejected" }),
-      ...(typeof d.detail.seller === "string" ? { seller: d.detail.seller } : {}), ...(typeof d.detail.price === "number" ? { price: d.detail.price } : {}) })) } : {}) };
-  return { base_context, base_plan, intent, promotion: tradeValid ? trade.promotion : undefined };
+  const tradeNotes = tradeValid ? trade.notes : ["The attempted legal act is not valid under current ownership: no legal status changes this turn."];
+  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...tradeNotes, ...tradeStateNotes(i.snapshot, i.world)], rule_declarations: extractRuleDeclarations(i.player_input),
+    ...(trade.diagnostics.length ? { transactions: trade.diagnostics.map(d => ({ kind: d.kind, status: tradeValid ? d.status : "blocked" as const, ...(tradeValid ? (typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}) : { reason: "prevalidation_rejected" }) })) } : {}) };
+  return { base_context, base_plan, intent };
 }
 function prevalidates(i: IntentStageInput, commands: readonly unknown[]): boolean {
   try { i.prepare({ expected_revision: i.base_revision, commands }); return true; } catch { return false; }
@@ -107,7 +104,7 @@ function knownNamesIn(input: string, world: WorldStore, snapshot: IntentStageInp
  * commands are prepared together from the base revision.
  */
 export function projectTurnIntent(i: IntentStageInput, resolved: ResolvedIntent): ProjectedTurn {
-  const { intent, base_context, base_plan, promotion } = resolved;
+  const { intent, base_context, base_plan } = resolved;
   const projected = intent.runtime.length ? i.prepare({ expected_revision: i.base_revision, commands: intent.runtime }).snapshot : i.snapshot;
   const context = projected === i.snapshot ? base_context : buildTurnContext(i.world, projected, contextRelevance(i.player_input, i.finalized));
   const origin = i.snapshot.runtime.scene.player_location, arrival = projected.runtime.scene.player_location;
@@ -119,7 +116,6 @@ export function projectTurnIntent(i: IntentStageInput, resolved: ResolvedIntent)
     knownNamesIn(i.player_input, i.world, projected, eligible.map(m => m.id)));
   const prompt_intent: TurnIntent = leftBehind.length ? { ...intent, notes: [...intent.notes, ...leftBehindNotes(leftBehind, invited, i.world.getEntity(origin)?.display_name ?? origin, i.world.getEntity(arrival)?.display_name ?? arrival)] } : intent;
   const planned = context.primary.scene.player_location?.id === base_context.primary.scene.player_location?.id ? base_plan : i.plan(i.player_input, context);
-  // A promoted person is now persistent: the temporary participant they were is retired, so nobody appears twice.
-  const scene = promotion?.participant_id ? Object.freeze({ ...planned, participants: planned.participants.filter(p => p.id !== promotion.participant_id), focus: planned.focus === promotion.participant_id ? null : planned.focus }) : planned;
+  const scene = planned;
   return { projected, context, origin, arrival, movable, prompt_intent, scene };
 }

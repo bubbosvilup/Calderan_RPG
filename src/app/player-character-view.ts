@@ -253,5 +253,5 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     const freeze = (value: unknown): void => { if (value && typeof value === "object") { for (const child of Object.values(value)) freeze(child); Object.freeze(value); } };
     freeze(dto); cache.set(id, dto); return dto;
   };
-  return { project };
+  return { project, text };
 }

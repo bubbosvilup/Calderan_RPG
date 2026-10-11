@@ -14,7 +14,7 @@ import { narratedDepartures } from "../src/turn/scene-departure.js";
 import { groundingIssues } from "../src/turn/grounding-audit.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
 import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
-import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
+import { asPlan, readOffer } from "./offer-fixtures.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 
 /**
@@ -85,14 +85,13 @@ function market(): CampaignState {
   return c;
 }
 const OFFER: RecentExchange = { player: "Name your price again, Korvin.", narration: 'Korvin studies the woman in the cage, then Nicco. "Five." He taps the ledger. "Papers included."', status: "finalized" };
-test("numbers / transaction path: 'for fourteen gold' pays fourteen (previously unparsed, silently fell back to the offer of five)", () => {
-  const paid = (input: string) => { const c = market(); const cmd = resolvePersonTransactions(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), [OFFER], c.revision).commands[0];
+test("numbers / transaction path: the seller's multi-word quote is the offer's price; the player's own number never is", () => {
+  const paid = (input: string, quote = OFFER) => { const c = market(); const cmd = asPlan(readOffer(world, c.exportSnapshot(), input, [quote], c.revision)).commands[0];
     return cmd?.kind === "transfer_person" ? cmd.payment?.gold : undefined; };
-  assert.equal(paid("I'll take her for fourteen gold."), 14);
-  assert.equal(paid("I'll take her for thirteen gold."), 13);
-  assert.equal(paid("I'll take her for 14 gold."), 14);
-  assert.equal(paid("I'll take her for twelve gold."), 12, "unchanged");
-  assert.equal(paid("Done."), 5, "no stated amount: the seller's established offer");
+  const seller = (line: string): RecentExchange => ({ ...OFFER, narration: `Korvin studies the woman in the cage, then Nicco. "${line}" He taps the ledger. "Papers included."` });
+  for (const input of ["I'll take her for fourteen gold.", "I'll take her for 14 gold.", "Done."]) assert.equal(paid(input), 5, input);
+  assert.equal(paid("Done.", seller("Fourteen gold.")), 14);
+  assert.equal(paid("Done.", seller("Twelve.")), 12);
 });
 
 // ------------------------------------------------------------------------------------------- firewall adversarial suite

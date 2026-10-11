@@ -12,6 +12,7 @@ const position: Schema = { anyOf: [object({ kind: choice("carried"), character_i
 const createPosition: Schema = { anyOf: [object({ kind: choice("carried"), character_id: string }), object({ kind: choice("stored"), location_id: string })] };
 const category = choice("weapon", "armor", "clothing", "tool", "consumable", "document", "valuable", "material", "miscellaneous");
 const createItem = { kind: choice("create_item"), name: string, description: string, visual_description: string, category, position: createPosition };
+const tradeCounterparty: Schema = { anyOf: [object({ kind: choice("character"), character_id: string }), object({ kind: choice("anonymous"), label: string })] };
 /** Deliberately small Phase 1K vocabulary. Relationship and arbitrary runtime edits are excluded. */
 export const CONTROLLER_SCHEMA = object({ commands: { type: "array", maxItems: 8, items: { anyOf: [
   // Owner unknown: the variant without owner_id (never guessed). Owner known: owner_id names that character.
@@ -34,6 +35,13 @@ export const CONTROLLER_SCHEMA = object({ commands: { type: "array", maxItems: 8
   object({ kind: choice("join_household"), household_id: string, character_id: string }),
   object({ kind: choice("leave_household"), household_id: string, character_id: string }),
   object({ kind: choice("add_household_rule"), household_id: string, text: string }),
+  // Actual Offer V1: the Controller proposes, never settles. Buying: concrete goods lines at a whole-gold price. Selling: existing item IDs from prior_state only.
+  // Person offers are the engine's own scene reading, and acceptance is the player's explicit action: neither is in this vocabulary.
+  object({ kind: choice("propose_trade_offer"), direction: choice("buy"), price_gold: integer, counterparty: tradeCounterparty,
+    subject: object({ kind: choice("goods"), lines: { type: "array", items: object({ name: string, description: string, visual_description: string }), maxItems: 8 } }) }),
+  object({ kind: choice("propose_trade_offer"), direction: choice("sell"), price_gold: integer, counterparty: tradeCounterparty,
+    subject: object({ kind: choice("items"), item_ids: { type: "array", items: string, maxItems: 8 } }) }),
+  object({ kind: choice("withdraw_trade_offer"), offer_id: string }),
   object({ kind: choice("adjust_relationship"), from_character_id: string, to_character_id: string,
     dimension: choice("trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance"), direction: choice("raise", "lower") }),
 ] } } });

@@ -10,7 +10,7 @@ import { buildTurnContext } from "../src/turn/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { resolvePlayerCarry, characterLocation } from "../src/turn/character-movement.js";
 import { narratedDepartures } from "../src/turn/scene-departure.js";
-import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
+import { asPlan, readOffer } from "./offer-fixtures.js";
 import { refersTo, readScene } from "../src/turn/narrated-captives.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
@@ -229,7 +229,7 @@ const marketCampaign = (extra: readonly CampaignCommand[] = [], brennaSex?: stri
   return c;
 };
 const ex = (narration: string, player: string): RecentExchange => ({ player, narration, status: "finalized", location_id: MARKET });
-const buy = (c: CampaignState, input: string, recent: readonly RecentExchange[]) => resolvePersonTransactions(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), recent, c.revision, { world });
+const buy = (c: CampaignState, input: string, recent: readonly RecentExchange[]) => asPlan(readOffer(world, c.exportSnapshot(), input, recent, c.revision));
 const subjectOf = (r: ReturnType<typeof buy>) => r.commands.find((x): x is Extract<CampaignCommand, { kind: "transfer_person" }> => x.kind === "transfer_person")?.character_id;
 
 /** Exact H5 soak-run H_late_naming #6 narration (docs/evaluations/h5-live/soak.jsonl), turns 0 and 1, as recorded. */

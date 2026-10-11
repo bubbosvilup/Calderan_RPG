@@ -152,3 +152,6 @@ Test fixture/schema/ownership migrations: `tests/{campaign-state,controller-benc
 ## 27. Remaining gaps before economy / transaction records
 
 The return evidence repair is deterministic-validated but has not been rerun live because the eight-call budget is exhausted. The bounded original live validation therefore remains 7/8, not complete 8/8 certification. Semantic mode labels other than permanent gift depend on Controller interpretation of the narration; the engine validates current-state consequences and authority. Return/reclaim require an established owner; no historical claim inference exists. Institutional ownership, buying/selling, currency, consent persistence, crime, transfer history, loan records and UI transfer controls remain future milestones. The V1 implementation and deterministic validation are complete; no migration, additional provider test or paid retry was performed.
+
+## Update: person sales via TradeOffer
+A person sale no longer settles from player prose; it is stored as a trade-offer plan and executed by `accept_trade_offer` on an explicit UI click (see [Actual Offer](ACTUAL_OFFER.md)), which then runs the usual `transfer_person` settlement.

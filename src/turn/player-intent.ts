@@ -9,7 +9,7 @@ import { playerDestination } from "./player-travel.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { MAX_TEMPORAL_ADVANCE_MINUTES, parseTemporalAction, type TemporalAction } from "./temporal-action.js";
 
-export interface TransactionDiagnostic { readonly kind: "purchase" | "manumission"; readonly status: "resolved" | "blocked" | "ambiguous" | "no_offer"; readonly reason?: string; readonly seller?: string; readonly price?: number }
+export interface TransactionDiagnostic { readonly kind: "purchase" | "manumission" | "offer"; readonly status: "resolved" | "blocked" | "ambiguous" | "no_offer"; readonly reason?: string; readonly seller?: string; readonly price?: number }
 export interface PlayerIntent { readonly candidates: readonly CampaignCommand[]; readonly runtime: readonly CampaignCommand[]; readonly resolved_references?: readonly ResolvedReference[]; readonly ambiguous_reference?: boolean;
   /** Phase 1S natural action resolution (diagnostics and narrator action lines); absent for command-grammar turns. */
   readonly natural?: NaturalActionResolution;

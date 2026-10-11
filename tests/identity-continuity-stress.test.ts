@@ -1,3 +1,4 @@
+import { activeTradeOffer } from "../src/campaign/trade.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
@@ -36,12 +37,20 @@ function harness(c: CampaignState, sink?: (r: TurnDebugRecord) => void) {
   const service = new RetrievalService(world);
   const co = new TurnCoordinator(world, { async generate() { throw new Error("unused"); }, async *stream() { const text = texts.length > 1 ? texts.shift()! : texts[0]!; yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } }; } },
     { async propose() { return { commands: [...commands], ...metadata }; } }, { service, search: new HybridSearch(service) }, sink ? { debug_sink: sink } : {});
-  return async (input: string, narration: string, proposals: CampaignCommand[] = []): Promise<TurnResult> => {
+  const step = async (input: string, narration: string, proposals: CampaignCommand[] = []): Promise<TurnResult> => {
     texts = [narration]; commands = proposals;
     const last = (await collect(co.runTurn({ campaign: c, player_input: input }))).at(-1)!;
     assert.equal(last.type, "turn_completed", `${input}: ${JSON.stringify(last).slice(0, 300)}`);
     return (last as { result: TurnResult }).result;
   };
+  /** Actual Offer V1: the player's explicit accept action on the standing offer, as GameSession performs it (settle, then the promoted scene participant retires). */
+  const accept = () => {
+    const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands");
+    c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
+    if (offer.subject.kind === "person") co.retireParticipants(c, offer.subject.plan.flatMap(x => x.kind === "register_character" && x.character.origin_snapshot?.ephemeral_ref?.startsWith("scene_npc_") ? [x.character.origin_snapshot.ephemeral_ref] : []));
+    return offer;
+  };
+  return Object.assign(step, { accept });
 }
 
 // ------------------------------------------------------------------------------------------------ naming vs movement
@@ -79,8 +88,8 @@ test("unnamed purchased person names herself after a scene change: same ID, lega
   await step("/go calderan_slave_market", "Nicco walks to the Slave Market.");
   await step("*approaches the cages*", "A lean slaver leans against a post. Behind the bars a thin girl lies curled on the straw, burning with fever.");
   await step("How much for the girl?", 'The slaver shrugs. "Three gold for the girl. No papers."');
-  const bought = await step("Done. *pays him*", "The slaver pockets the coins and unlocks the cage.");
-  const id = bought.authorized_commands.find((x): x is Extract<CampaignCommand, { kind: "transfer_person" }> => x.kind === "transfer_person")?.character_id;
+  const offer = step.accept();
+  const id = offer.subject.kind === "person" ? offer.subject.subject_character_id : undefined;
   assert.ok(id, "purchase promoted the unnamed girl");
   assert.equal(c.exportSnapshot().characters.find(x => x.id === id)!.profile.name, undefined);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: id }] }); // fixture state, not inferred

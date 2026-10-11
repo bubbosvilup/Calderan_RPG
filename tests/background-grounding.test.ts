@@ -6,7 +6,7 @@ import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { narratorEphemeralCharacters } from "../src/campaign/promotion.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
+import { asPlan, readOffer } from "./offer-fixtures.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
@@ -105,7 +105,7 @@ test("E-G. proper-name guardrail: canon places verify, invented named places do 
 const OFFER = at('Korvin taps his ledger. "Five. She\'s a burden I paid four for." He holds the pen over the page. "Papers included. Clean transfer, debt-forfeiture chain, no liens. You walk her out that gate, she\'s yours."\nIlsa does not look up.', "Name your price, Korvin.");
 const intro = (origin: string) => at(`Korvin leads Nicco past the canvas partition to the last cage.\n"Ilsa. Twenty-four. ${origin}," Korvin says.\nIlsa sits behind the bars with tired grey eyes and does not lift her head.`, "*checks the cages*");
 const buy = (recent: readonly RecentExchange[]) => {
-  const c = market(), r = resolvePersonTransactions("Done. *pays him*", buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), recent, c.revision, { world });
+  const c = market(), r = asPlan(readOffer(world, c.exportSnapshot(), "Done. *pays him*", recent, c.revision));
   c.apply({ expected_revision: c.revision, commands: r.commands as CampaignCommand[] });
   return { c, ilsa: narratorEphemeralCharacters(c.exportSnapshot()).find(x => x.profile.name === "Ilsa")! };
 };

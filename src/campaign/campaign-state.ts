@@ -3,7 +3,7 @@ import { RuntimeState } from "../world/runtime-state.js";
 import { prepareRuntimeDelta, type RuntimeDomainSnapshot } from "../world/runtime-domain.js";
 import type { SceneState, PlayerMana } from "../types/scene.js";
 import type { DeepReadonly } from "../types/readonly.js";
-import type { CampaignSnapshot } from "./types.js";
+import type { CampaignCommand, CampaignSnapshot } from "./types.js";
 import { CampaignIdentityResolver } from "./identity.js";
 import { fail, parseCampaignProposal, validateId } from "./validation.js";
 import { prepareCharacterCommand } from "./characters.js";
@@ -12,6 +12,7 @@ import { prepareSocialCommand } from "./social.js";
 import { prepareAgendaCommand } from "./agenda.js";
 import { prepareLegalCommand } from "./legal.js";
 import { preparePortraitCommand } from "./portraits.js";
+import { invalidateStaleOffers, prepareTradeCommand } from "./trade.js";
 import { defaultPlayerCharacters, preparePlayerCharacterCommand } from "./player-character.js";
 import { compareIds } from "../world/provenance.js";
 import { validateCampaignSnapshot } from "./snapshot-validation.js";
@@ -36,6 +37,7 @@ function orderDomains(draft: CampaignSnapshot): void {
   draft.funds.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.price_indices?.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.portraits?.sort((a, b) => compareIds(a.character_id, b.character_id));
+  draft.trade_offers?.sort((a, b) => compareIds(a.id, b.id));
   draft.player_characters.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.legal_statuses.sort((a, b) => compareIds(a.character_id, b.character_id));
   draft.premium_characters.sort((a, b) => compareIds(a.character_id, b.character_id));
@@ -54,10 +56,17 @@ export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, worl
   if (proposal.expected_revision !== base.revision) fail("expected_revision", "stale campaign proposal");
   const draft = structuredClone(base) as CampaignSnapshot;
   const context = { draft, refs: new CampaignIdentityResolver(world, draft) };
-  for (const command of proposal.commands) {
+  // One dispatcher, also handed to trade settlement so an accepted offer reuses the ordinary item and person-transaction commands.
+  const apply = (command: CampaignCommand): void => {
     if (command.kind === "runtime_delta") draft.runtime = structuredClone(prepareRuntimeDelta(draft.runtime, command.delta, world, base.revision).snapshot) as RuntimeDomainSnapshot;
-    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command) && !preparePortraitCommand(context, command) && !preparePlayerCharacterCommand(context, command)) fail("command", "unsupported command");
+    else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command) && !preparePortraitCommand(context, command) && !preparePlayerCharacterCommand(context, command) && !prepareTradeCommand(context, command, apply)) fail("command", "unsupported command");
+  };
+  for (const command of proposal.commands) {
+    // A settlement plan holds only promotion, legal status and transfer commands; trade commands never nest.
+    apply(command);
   }
+  // Actual Offer V1: an active offer that this change made unsettleable (scene change, item gone, person gone) is invalidated in the same revision.
+  invalidateStaleOffers(draft);
   // NPC+ Pass 1: premium state follows membership changes made by this proposal, atomically, in the same revision.
   syncPremiumCharacters(draft, base, world);
   return finishPreparation(base, draft, world);

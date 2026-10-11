@@ -1,4 +1,5 @@
 import test from "node:test";
+import { activeTradeOffer } from "../src/campaign/trade.js";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../src/campaign/opening-state.js";
@@ -40,7 +41,7 @@ function harness(c: CampaignState) {
   const co = new TurnCoordinator(world, { async generate() { throw new Error("unused"); }, async *stream(request) { seen.push(request); const text = texts.shift()!; yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } }; } },
     { async propose() { return { commands: [...commands], ...metadata }; } }, { service, search: new HybridSearch(service) });
   const step = async (input: string, narration: string, proposals: CampaignCommand[] = []): Promise<TurnResult> => {
-    texts = [narration]; commands = proposals;
+    texts = [narration, "The scene continues quietly."]; commands = proposals; // a second text serves a reconciliation revision, if the first draft needs one
     const events = await collect(co.runTurn({ campaign: c, player_input: input }));
     const last = events.at(-1)!; assert.equal(last.type, "turn_completed", `${input}: ${JSON.stringify(last)}`);
     return (last as { result: TurnResult }).result;
@@ -65,7 +66,8 @@ test("Maren regression: named slaver and Maren promoted at the market; purchase 
   assert.equal(where(c, maren.id), MARKET);
   // 5–6. Offer and purchase: ownership changes, location does not.
   await step("How much for Maren?", 'Oswin scratches his neck. "Three gold for Maren. No papers."');
-  await step("Done. *pays him*", "Oswin pockets the coins and unlocks the cage.");
+  const accept = () => { const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands"); c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] })); };
+  accept(); // Actual Offer V1: the player's explicit accept action settles; ownership changes, location does not
   const legal = () => c.exportSnapshot().legal_statuses.find(l => l.character_id === maren.id);
   assert.deepEqual([legal()?.holder_id, legal()?.transfer?.from_holder_id, where(c, maren.id), members(c)], ["nicco", oswin.id, MARKET, []]);
   // Canonical city route, no mutation: pickup and carrying resolve through the real turn pipeline.
@@ -158,14 +160,24 @@ test("controller path: a narrated follow is authorized from evidence; walking ho
   assert.deepEqual([where(c, "nicco"), where(c, M)], [LR, CY]);
 });
 
-test("same turn: a purchase and carrying the bought person home commit atomically; the seller stays", async () => {
+test("same scene: the purchase settles on the player's accept action, then carrying the bought person home moves only her; leaving with an open offer lapses it", async () => {
   const M = "campaign_character_maren", S = "campaign_character_oswin";
-  const c = campaign(SQUARE, [person(M, "Maren", SQUARE), person(S, "Oswin", SQUARE, "male"), { kind: "set_legal_status", character_id: M, status: "enslaved", holder_id: S }]);
-  const { step, prompt } = harness(c);
+  const fresh = () => campaign(SQUARE, [person(M, "Maren", SQUARE), person(S, "Oswin", SQUARE, "male"), { kind: "set_legal_status", character_id: M, status: "enslaved", holder_id: S }]);
+  const accept = (c: CampaignState) => { const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands"); c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] })); };
+  const c = fresh(), { step, prompt } = harness(c);
   await step("How much for Maren, Oswin?", 'Oswin shrugs. "Three gold for her. No papers."');
-  const r = await step("Done. *pays him and carries Maren into Heartstone*", "Nicco pays, lifts Maren and carries her through the heavy door into the tower.");
-  assert.match(prompt(), /Purchase completes now/);
-  assert.equal(r.final_revision, r.base_revision + 1); // one atomic revision
-  const legal = c.exportSnapshot().legal_statuses.find(l => l.character_id === M)!;
-  assert.deepEqual([legal.holder_id, where(c, "nicco"), where(c, M), where(c, S), members(c)], ["nicco", LR, LR, SQUARE, []]);
+  const talk = await step("Done. *pays him*", "Oswin pockets the coins and hands over the key.");
+  assert.match(prompt(), /TRADE OFFER PENDING/);
+  assert.equal(c.exportSnapshot().legal_statuses.find(l => l.character_id === M)!.holder_id, S, "spoken payment settles nothing");
+  assert.ok(talk.final_revision >= talk.base_revision);
+  accept(c);
+  assert.equal(c.exportSnapshot().legal_statuses.find(l => l.character_id === M)!.holder_id, "nicco");
+  await step("*carries Maren into Heartstone*", "Nicco lifts Maren and carries her through the heavy door into the tower.");
+  assert.deepEqual([where(c, "nicco"), where(c, M), where(c, S), members(c)], [LR, LR, SQUARE, []]);
+  // Leaving with the offer still open lapses it deterministically: nothing is paid and nobody changes hands.
+  const d = fresh(), other = harness(d);
+  await other.step("How much for Maren, Oswin?", 'Oswin shrugs. "Three gold for her. No papers."');
+  await other.step("*walks back into Heartstone alone*", "Nicco walks back into the tower alone.");
+  assert.equal(activeTradeOffer(d.exportSnapshot().trade_offers), undefined);
+  assert.deepEqual([d.exportSnapshot().legal_statuses.find(l => l.character_id === M)!.holder_id, d.exportSnapshot().funds.find(f => f.character_id === "nicco")!.gold], [S, 500]);
 });

@@ -48,6 +48,21 @@ Contractual order (from the coordinator): input → intent/projection → retrie
 
 Evidence rule: a change needs the player's own words or a completed event in the narration. Requests, plans, hints, hedges and refusals authorize nothing. Where the evidence layer cannot be sure it fails closed (a false negative is preferred to a false commit).
 
+## 2b. Player-authorized state transitions
+
+The governing model above is unchanged. Some **high-impact** transitions add one step between proposal and commit:
+
+fiction / LLM interpretation → structured pending action → **player confirmation** → engine validation → atomic commit
+
+Low-impact state (most ordinary facts, movement, item handoffs) is still inferred and proposed automatically. Explicit confirmation is preferred only where the change is high-impact, irreversible or expensive, semantically ambiguous, and easy to understand in a compact UI surface. It is **not** "everything gets a button". The UI exposes the action and is never independent truth: the client sends only a ref and `expected_revision`, and `GameSession` resolves the authoritative payload. Two cases today:
+
+| Transition | Fiction | Confirmation | Authority |
+| --- | --- | --- | --- |
+| Heartstone rite / NPC+ promotion | the player roleplays the ceremony; prose is never read as completion | the ↑ "Promote to NPC+" action | `GameSession.completeHeartstoneRite` → eligibility → join Heartstone household → sync NPC+ promotion → one revision; Controller `join_household` into Nicco's Heartstone is rejected ([Heartstone](HEARTSTONE.md)) |
+| Trade | goods offers are structured by the Controller, person offers are read from narration | Accept on the Actual Offer card | `GameSession.acceptTradeOffer` → `accept_trade_offer` → atomic settlement ([Actual Offer](architecture/ACTUAL_OFFER.md)) |
+
+A `TradeOffer` is a pending proposal; a transaction is committed state; acceptance is the boundary. Settlement stays domain-specific (goods are items, people go through the legal-transfer system). The trade card is also a human-verification surface and uses player-visible identity only (hidden names, ids and avatars never reach it). This is a documented pattern, not a code superclass.
+
 ## 3. What each model sees
 
 Three separate channels are built from authoritative state. Nothing sends the whole campaign or the whole transcript every turn.
@@ -57,7 +72,7 @@ Three separate channels are built from authoritative state. Nothing sends the wh
 - **Controller-facing context**: structured and actionable. It does carry ids and the mutation-relevant state it needs (items, positions, household, knowledge scopes). It receives **no** calendar or weather and no UI state.
 - **Retrieval / background grounding** (`src/retrieval`, `background-grounding.ts`): a separate supplementary channel of canon chunks selected by explicit policy. Informational only.
 
-**Identity requests and person transactions (replay fidelity pass 2).** Objective identity is the engine's; the label the player knows is a separate fact. A name request ("who am I talking with?", `src/turn/identity-request.ts`) resolves an unfamiliar actor to the canonical person only through name-request-scoped exclusive matching (`EXCLUSIVE_TRAITS` in `canonical-interaction-targets.ts`: exactly one eligible canonical actor fits and every other matches no trait); generic weak casting is unchanged. Person purchases read the recent narration through `narrated-captives.ts` (plain RPG speech counts as speech; a name presented as "This is X." / "That's X." / "X, the man says" binds to the one woman or man described; a pronoun in speech follows the last person mentioned) and the persisted conversation partner (`#focus`, kept across deal turns, bound to descriptor speakers). All of it only reads authoritative narration; commits still go through `transfer_person` and the usual authorization.
+**Identity requests and person trades (replay fidelity pass 2; settlement since superseded by [Actual Offer](architecture/ACTUAL_OFFER.md): a person sale is a pending offer settled only by the player's Accept, not by prose).** Objective identity is the engine's; the label the player knows is a separate fact. A name request ("who am I talking with?", `src/turn/identity-request.ts`) resolves an unfamiliar actor to the canonical person only through name-request-scoped exclusive matching (`EXCLUSIVE_TRAITS` in `canonical-interaction-targets.ts`: exactly one eligible canonical actor fits and every other matches no trait); generic weak casting is unchanged. Person purchases read the recent narration through `narrated-captives.ts` (plain RPG speech counts as speech; a name presented as "This is X." / "That's X." / "X, the man says" binds to the one woman or man described; a pronoun in speech follows the last person mentioned) and the persisted conversation partner (`#focus`, kept across deal turns, bound to descriptor speakers). All of it only reads authoritative narration; commits still go through `transfer_person` and the usual authorization.
 
 **Player-authorized state changes (Heartstone rite).** Not every authority is an LLM proposal checked by evidence. The Heartstone household rite is player-authored fiction: the Narrator may roleplay it, but only the player's explicit UI confirmation (`completeHeartstoneRite`, validated against `heartstoneRiteEligibility` and the revision the card was rendered at) commits it, as one `join_household` whose NPC+ promotion derives inside the same preparation (one revision or nothing). Authorization rejects any Controller-proposed join into the household Nicco keeps, and nothing infers a rite from prose. See [Heartstone](HEARTSTONE.md).
 
@@ -85,7 +100,8 @@ Three separate channels are built from authoritative state. Nothing sends the wh
 | Inventory selection, filters, search | browser state | no | n/a | no | no | yes |
 | Equipment presentation (4 slots) | projection of item **category** (`inventory-ui-view.ts`) | no | yes | no | no | yes |
 | Item icon/detail artwork | `item-visuals.ts` resolver (sprite > template > category glyph > placeholder) | sprite metadata only (non-authoritative) | yes | no | no | yes |
-| Money | `snapshot.funds` | yes | no | SSP (gold) | yes | shown in Inventory header |
+| Money | `snapshot.funds` (whole-number gold) | yes | no | SSP (gold) | yes | shown in Inventory header |
+| Trade offers | `snapshot.trade_offers` (optional field; at most one active) | yes | no | authoritative note (pending/completed) | no (proposes create/update/withdraw only) | masked card (`trade-offer-view.ts`) |
 | Relationships, knowledge, facts | `CampaignState` | yes | no | scoped | scoped | no |
 | Retrieval index | derived from canon | no | yes | chunks only | grounding only | no |
 
@@ -110,4 +126,4 @@ tests/             offline unit, domain, matrix, replay, UI and save/load tests
 
 ## 6. Related documents
 
-[Current state](CURRENT_STATE.md) · [Configuration](CONFIGURATION.md) · [Image system](IMAGE_SYSTEM.md) · [Heartstone](HEARTSTONE.md) · [UI](UI.md) · [Testing](TESTING.md) · [Roadmap](ROADMAP.md) · [Documentation index](README.md)
+[Current state](CURRENT_STATE.md) · [Configuration](CONFIGURATION.md) · [Image system](IMAGE_SYSTEM.md) · [Heartstone](HEARTSTONE.md) · [Actual Offer](architecture/ACTUAL_OFFER.md) · [UI](UI.md) · [Testing](TESTING.md) · [Roadmap](ROADMAP.md) · [Documentation index](README.md)

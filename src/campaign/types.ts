@@ -118,6 +118,33 @@ export interface PersonTransaction {
   id: string; kind: PersonTransactionKind; subject_id: string; from_holder_id?: string; from_counterparty?: CounterpartySnapshot; to_holder_id?: string;
   payer_id?: string; payee_id?: string; gold?: number; documentation: TransferDocumentation; world_minute: number; revision: number;
 }
+/**
+ * Actual Offer V1: ONE explicit, player-visible, authoritative trade offer for goods or people. An offer is not a transaction: creating it moves
+ * no gold, goods, ownership or legal status. Only `accept_trade_offer` (issued by the player's UI click, never by prose or the Controller)
+ * settles it, atomically, inside one revision. A newer concrete offer supersedes the active one; at most one offer is active.
+ */
+export type TradeDirection = "buy" | "sell";
+export type TradeOfferStatus = "active" | "accepted" | "superseded" | "withdrawn" | "invalidated";
+/** The other side: a campaign/authored character, or an anonymous narrator-voiced party ("the whittler"), which never becomes a character. */
+export type TradeCounterparty = { kind: "character"; character_id: string } | { kind: "anonymous"; label: string };
+export interface TradeGoodsLine { name: string; description: string; visual_description: string; category?: ItemCategory }
+/**
+ * `goods`: BUY lines the engine materializes as separate items on settlement. `items`: SELL, existing authoritative item IDs only. `person`: a person
+ * trade; `plan` is the exact deterministic command list (promotion, legal status, transfer_person) computed when the offer was made and re-prepared
+ * atomically at acceptance, so the existing person-transaction settlement stays the single settlement path.
+ */
+export type TradeSubject = { kind: "goods"; lines: TradeGoodsLine[] } | { kind: "items"; item_ids: string[] } | { kind: "person"; subject_character_id: string; plan: CampaignCommand[] };
+export type TradeInvalidReason = "scene_changed" | "counterparty_gone" | "item_unavailable" | "person_unavailable" | "offer_unavailable";
+export interface TradeSettlement { gold: number; revision: number; world_minute: number; created_item_ids?: string[]; removed_item_ids?: string[]; removed_item_names?: string[]; transaction_id?: string }
+export interface TradeOfferRecord {
+  /** `trade_offer_NNNNNNNN`, allocated by the engine. */
+  id: string; direction: TradeDirection; status: TradeOfferStatus; price_gold: number;
+  counterparty: TradeCounterparty; subject: TradeSubject; location_id: string;
+  created_revision: number; created_minute: number;
+  /** Verbatim narrated excerpt that established the offer (goods; bounded). */
+  evidence?: string;
+  resolved_revision?: number; invalid_reason?: TradeInvalidReason; settlement?: TradeSettlement;
+}
 /** Household Pass 1: bounded qualitative relationship dimensions. "romance" requires two established adults. */
 export const RELATIONSHIP_DIMENSIONS = ["trust", "wariness", "affection", "protectiveness", "respect", "fear", "hostility", "romance"] as const;
 export type RelationshipDimension = (typeof RELATIONSHIP_DIMENSIONS)[number];
@@ -266,6 +293,8 @@ export interface CampaignSnapshot extends CampaignDomains {
   price_indices?: PriceIndexRecord[];
   /** Portrait Image Generation V1: derived-media metadata (optional additive extension; absent on older saves). Never appearance truth. */
   portraits?: CharacterPortraitRecord[];
+  /** Actual Offer V1: the trade-offer ledger (optional additive extension; absent on older saves and until the first offer). Accepted offers are the settlement ledger. */
+  trade_offers?: TradeOfferRecord[];
 }
 export type PortraitMediaType = "image/png" | "image/jpeg" | "image/webp";
 /**
@@ -357,6 +386,13 @@ export type CampaignCommand =
   | { kind: "transfer_person"; transaction_id: string; transaction_kind: "sale" | "gift" | "assignment"; character_id: string; from_holder_id?: string; from_counterparty?: CounterpartySnapshot; to_holder_id: string;
       payment?: { payer_id: string; payee_id?: string; gold: number }; documentation: TransferDocumentation; note?: string }
   | { kind: "manumit"; transaction_id: string; character_id: string; by_holder_id: string; documentation: TransferDocumentation; note?: string }
+  /** Actual Offer V1. Propose: supersedes any active offer. Creates no transfer. Goods subjects only from the Controller; person subjects only from the engine's scene reader. */
+  | { kind: "propose_trade_offer"; direction: TradeDirection; price_gold: number; counterparty: TradeCounterparty; subject: TradeSubject; evidence?: string }
+  | { kind: "withdraw_trade_offer"; offer_id: string }
+  /** Engine-derived (never proposed): an active offer that can no longer be settled. */
+  | { kind: "invalidate_trade_offer"; offer_id: string; reason: TradeInvalidReason }
+  /** The single settlement authority. Issued only by the player's explicit accept action. */
+  | { kind: "accept_trade_offer"; offer_id: string }
   | { kind: "join_household"; household_id: string; character_id: string }
   | { kind: "leave_household"; household_id: string; character_id: string }
   | { kind: "add_household_rule"; household_id: string; text: string }

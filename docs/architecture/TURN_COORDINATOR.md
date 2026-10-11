@@ -235,7 +235,7 @@ See [the repair report](../evaluations/archive/RUNTIME_CONTINUITY_REPAIR_1.md).
 
 See [the pass report](../evaluations/archive/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_RUNTIME_PASS_1.md).
 
-- **Person transactions (purchase, manumission)** are player-authored runtime actions, resolved by `src/turn/person-transactions.ts`. A purchase needs three things: an explicit acceptance or payment, one exact present subject held by a present seller, and one established price. The resolver prevalidates the transaction against a real `campaign.prepare` *before narration*. The narrator receives the authoritative outcome as a note (completed, or blocked with the reason), and the transaction commits atomically with the turn's other commands. The LLM controller cannot propose purchases, so a retry can never double-charge.
+- **Person trades (Actual Offer V1)** no longer settle from player prose. A person sale is read from the delivered narration (`src/turn/person-offers.ts`) as a *TradeOffer* whose settlement plan (`register_character` / `set_legal_status` / `transfer_person`) is stored, not executed. It settles only when the player clicks Accept (`GameSession.acceptTradeOffer`), which re-stamps the promotion and commits atomically. Typing "deal" or narrated payment never settles; narrated payment is reconciled as `asserts_uncommitted_purchase`. `src/turn/person-transactions.ts` keeps only identity, seller binding and legal-transfer helpers. See [ACTUAL_OFFER_V1](../evaluations/ACTUAL_OFFER_V1.md).
 - **Household membership, household rules and relationship steps** are controller proposals, each confirmed by its own evidence:
   - a join or departure needs the chooser's own voiced words (`src/turn/household-evidence.ts`);
   - a rule needs the player's explicit rule declaration;
@@ -252,11 +252,11 @@ See [the pass report](../evaluations/archive/NARRATOR_EPHEMERAL_CHARACTER_PROMOT
   - The scene is the trailing exchanges at the player's location; `RecentExchange.location_id` is now recorded, but never rendered into prompts.
   - A named captive needs its name introduced as a name. An unnamed captive is a person noun in a sentence with a captivity marker.
   - Each quote and sentence gets a speaker or subject attribution.
-- **Purchase.** `resolvePersonTransactions` may now choose such a captive as the one exact subject. The subject resolves in this order: the player's reference, then the latest price talk, then the only candidate, then the only one mentioned in the latest narration.
+- **Purchase (superseded by Actual Offer V1: the subject and seller reading below now builds a pending person offer, settled only by the player's Accept).** `resolvePersonTransactions` may now choose such a captive as the one exact subject. The subject resolves in this order: the player's reference, then the latest price talk, then the only candidate, then the only one mentioned in the latest narration.
 - **Seller authority.** It must come from the seller's own statement: an ownership claim, or an explicit offer or price in reply to a price request. Presence or description never counts.
-- **One proposal.** The purchase emits `register_character` (with an immutable `origin_snapshot`), then `set_legal_status` (enslaved under the seller), then the ordinary `transfer_person` sale. The coordinator prevalidates all of it before narration, and a failure anywhere drops everything. It commits in one revision.
+- **One proposal (now the stored offer plan, executed at acceptance).** The purchase emits `register_character` (with an immutable `origin_snapshot`), then `set_legal_status` (enslaved under the seller), then the ordinary `transfer_person` sale. The coordinator prevalidates all of it before narration, and a failure anywhere drops everything. It commits in one revision.
 - **After promotion.** The projected context already shows the persistent character, and a linked temporary scene participant is retired, so nobody appears twice.
-- **Promotion primitive.** `src/campaign/promotion.ts` holds the generic primitive: established facts only, collision-safe revision-scoped IDs, and the query hook `narratorEphemeralCharacters`. Only purchase is production-wired.
+- **Promotion primitive.** `src/campaign/promotion.ts` holds the generic primitive: established facts only, collision-safe revision-scoped IDs, and the query hook `narratorEphemeralCharacters`. Only person trade settlement is production-wired (via accepted person offers).
 
 
 ## Narrator Character Persistence Pass 1.2

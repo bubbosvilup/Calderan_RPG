@@ -802,6 +802,68 @@ function renderScene(data) {
   }
 }
 
+// Actual Offer V1: one compact inline card for the single standing trade offer (never a shop, a modal or a counteroffer form). BUY and SELL differ by
+// text and icon, not by colour alone; a person offer carries its own marker. The browser holds only the opaque offer ref; accepting sends the ref and the
+// revision it rendered, nothing else. Names arrive already masked by the server.
+let tradeBusy = false, tradeError = "", tradeErrorRef = "", tradeReceipts = [];
+function tradeRegion() {
+  let region = ui("trade-region");
+  if (!region) { region = document.createElement("div"); region.id = "trade-region"; region.className = "trade-region"; }
+  return region;
+}
+function renderTrade(data) {
+  const region = tradeRegion(), trade = data.trade ?? { offer: null, notice: null, receipt: null };
+  if (trade.receipt && !tradeReceipts.some(r => r.ref === trade.receipt.ref)) tradeReceipts.push(trade.receipt);
+  const children = [];
+  for (const receipt of tradeReceipts.slice(-3)) {
+    const done = document.createElement("p"); done.className = "trade-receipt"; done.dataset.tradeReceipt = receipt.ref;
+    done.textContent = `\u2713 ${receipt.summary}.`; children.push(done);
+  }
+  if (trade.notice && !trade.offer) { const note = document.createElement("p"); note.className = "trade-notice"; note.textContent = trade.notice.text; children.push(note); }
+  const offer = trade.offer;
+  if (offer) {
+    const card = document.createElement("section"); card.className = `trade-card trade-${offer.direction}`; card.dataset.tradeRef = offer.ref;
+    card.setAttribute("aria-label", `${offer.direction === "buy" ? "Buy" : "Sell"} offer`);
+    const head = document.createElement("div"); head.className = "trade-head";
+    const label = document.createElement("span"); label.className = "trade-label"; label.textContent = "ACTUAL OFFER"; head.append(label);
+    const kind = document.createElement("strong"); kind.className = "trade-kind";
+    kind.textContent = offer.direction === "buy" ? "\u25BC BUY" : "\u25B2 SELL"; head.append(kind);
+    if (offer.kind === "person") { const mark = document.createElement("span"); mark.className = "trade-person"; mark.textContent = "\u265F Person"; head.append(mark); }
+    const price = document.createElement("span"); price.className = "trade-price"; price.textContent = `${offer.price_gold} gold`; head.append(price);
+    const who = document.createElement("p"); who.className = "trade-party"; who.textContent = offer.direction === "buy" ? `${offer.counterparty} offers to sell` : `${offer.counterparty} offers to buy`;
+    const list = document.createElement("ul"); list.className = "trade-lines";
+    for (const line of offer.lines) { const li = document.createElement("li"); li.textContent = line; list.append(li); }
+    const foot = document.createElement("div"); foot.className = "trade-foot";
+    const accept = document.createElement("button"); accept.type = "button"; accept.className = "trade-accept"; accept.textContent = "Accept offer";
+    accept.setAttribute("aria-label", `Accept offer: ${offer.summary}`);
+    const blocked = offer.affordable === false;
+    accept.disabled = tradeBusy || blocked || !(data.status === undefined ? ready : data.status === "idle");
+    foot.append(accept);
+    if (offer.gold !== null) { const purse = document.createElement("span"); purse.className = "trade-purse"; purse.textContent = blocked ? `Not enough gold (you have ${offer.gold}).` : `You have ${offer.gold} gold.`; foot.append(purse); }
+    const problem = document.createElement("p"); problem.className = "trade-error"; problem.setAttribute("role", "alert"); const showProblem = !!tradeError && tradeErrorRef === offer.ref; problem.hidden = !showProblem; problem.textContent = showProblem ? tradeError : "";
+    accept.addEventListener("click", () => acceptTrade(offer.ref));
+    card.append(head, who, list, foot, problem); children.push(card);
+  }
+  region.replaceChildren(...children);
+  region.hidden = !children.length;
+  // Present in the conversation only while there is something to show (and always last, right after the newest Narrator response).
+  if (children.length) conversation.append(region); else region.remove();
+}
+async function acceptTrade(ref) {
+  if (tradeBusy) return;
+  tradeBusy = true; tradeError = ""; tradeErrorRef = ref;
+  for (const button of document.querySelectorAll(".trade-accept")) button.disabled = true;
+  try {
+    const response = await fetch("/api/trade/accept", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref, expected_revision: currentRevision }) });
+    const data = await response.json();
+    tradeBusy = false;
+    if (!data?.ok) tradeError = data?.error?.message ?? "The trade was not completed.";
+    else if (data.receipt && !tradeReceipts.some(r => r.ref === data.receipt.ref)) tradeReceipts.push(data.receipt);
+    if (data?.messages) render(data); else renderTrade({ trade: undefined });
+  } catch {
+    tradeBusy = false; tradeError = "The request failed. Check the connection and try again."; load();
+  }
+}
 function showError(text) {
   error.textContent = text;
   error.hidden = !text;
@@ -872,6 +934,7 @@ function render(data) {
       if (view.feedback.textContent !== "Generating alternative…") showAlternatives(view.alternatives, message.alternatives ?? []);
     }
   }
+  renderTrade(data);
   follow(wasNear);
   shown = data.messages.length;
   ready = data.status === "idle";
@@ -986,7 +1049,7 @@ async function readStream(response) {
 let campaignMode = false, activeCampaign, saveRequest = false, savePoll;
 const SAVE_LABELS = { saving: "Saving…", failed: "Save failed", unsaved: "Unsaved changes", saved: "Saved" };
 function resetConversation() {
-  ui("conversation")?.replaceChildren(); shown = 0; pending = undefined; comparisonViews.clear();
+  ui("conversation")?.replaceChildren(); shown = 0; pending = undefined; comparisonViews.clear(); tradeReceipts = []; tradeError = ""; tradeErrorRef = "";
 }
 function renderSaveStatus(save) {
   const el = ui("save-status"), button = ui("save-button");

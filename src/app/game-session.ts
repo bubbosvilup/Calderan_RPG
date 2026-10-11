@@ -41,6 +41,9 @@ import { derivePlayUiView } from "./play-ui-view.js";
 import { playerCharacterProjection } from "./player-character-view.js";
 import { playerVisualView, type PlayerVisualView } from "./player-visual-view.js";
 import { inventoryUiView } from "./inventory-ui-view.js";
+import { deriveTradeView, tradeOfferRef, TRADE_MESSAGES, type TradeReceipt, type TradeView } from "./trade-offer-view.js";
+import { CampaignValidationError } from "../campaign/validation.js";
+import { TRADE_FIELD } from "../campaign/trade.js";
 import { buildTrace, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**
@@ -54,7 +57,7 @@ export interface SessionHooks {
 export interface SessionDeps {
   readonly world: WorldStore; readonly repository: CampaignSaveRepository;
   /** Receives the session's diagnostics hook so per-turn diagnostics can be captured; a stub coordinator may ignore it. */
-  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent">>;
+  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent" | "retireParticipants">>;
   readonly context_policy?: ContextPolicy;
   readonly compaction_service?: ContextCompactionService;
   readonly reflection_provider?: ReflectionProvider | undefined;
@@ -162,6 +165,12 @@ type PortraitSlot = { readonly ok: true; readonly image: GeneratedImage; readonl
  */
 export type RiteOutcome = { readonly ok: true; readonly changed: true; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly reason?: RiteBlock; readonly view: SessionView };
+/**
+ * Actual Offer V1: the player's explicit acceptance of the single standing trade offer. `reason` is a player-safe machine code (never an id).
+ * Success carries the masked receipt line; a refusal changes nothing (the offer stays exactly as it was).
+ */
+export type TradeAcceptOutcome = { readonly ok: true; readonly changed: true; readonly receipt: TradeReceipt | null; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly reason?: string; readonly view: SessionView };
 /** Permanent Appearance V1 editor save. `field` names the rejected patch field, when one was. */
 export type AppearanceOutcome = { readonly ok: true; readonly changed: boolean; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly field?: string; readonly view: SessionView };
@@ -173,7 +182,7 @@ const STUB_STATUS: ProviderStatus = { mode: "stub", configured: true };
 export class GameSession {
   readonly #itemSprites: ItemSpriteJobs;
   readonly #mannerisms: MannerismMaintenance | undefined;
-  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent">>;
+  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent" | "retireParticipants">>;
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
   #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
@@ -345,6 +354,41 @@ export class GameSession {
       this.#lastError = undefined; this.#autosave?.notify();
       return { ok: true, changed: true, view: this.getView() };
     } catch { return reject("campaign_validation_failed", "The rite could not be completed. The campaign is unchanged."); }
+  }
+
+  /** Read-only, masked trade-offer projection (card, closing notice, latest receipt). */
+  getTradeView(): TradeView { return deriveTradeView(this.#deps.world, this.#session.campaign.exportSnapshot()); }
+  /**
+   * Actual Offer V1: the ONLY settlement entry point. The browser sends the opaque offer ref and the revision it rendered; nothing else (no price,
+   * item, person, character ID or amount) is accepted. The engine revalidates everything, then settles atomically in one revision through the single
+   * `accept_trade_offer` command: funds, items, ledger and the offer's own status together or not at all. No narrator or Controller is involved, and
+   * typing "deal" or "*pays*" never reaches this method. Any refusal changes nothing and leaves the offer as it was.
+   */
+  acceptTradeOffer(request: { readonly ref: unknown; readonly expected_revision: unknown }): TradeAcceptOutcome {
+    const reject = (code: AppError["code"], message: string, reason?: string): TradeAcceptOutcome => ({ ok: false, error: appError(code, { message }), ...(reason ? { reason } : {}), view: this.getView() });
+    if (this.#status === "closed") return reject("session_closed", "The session is closed.");
+    if (this.#status !== "idle" || this.#portraitBusy) return reject("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
+    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+      return reject("stale_turn", "The campaign changed since this offer was shown. Check the current offer and try again.", "stale");
+    if (typeof request.ref !== "string" || !/^[0-9a-f]{24}$/.test(request.ref)) return reject("invalid_input", "Unknown offer.", "offer_not_found");
+    const offer = (snapshot.trade_offers ?? []).find(o => tradeOfferRef(snapshot.campaign_id, o.id) === request.ref);
+    if (!offer) return reject("invalid_input", "Unknown offer.", "offer_not_found");
+    if (offer.status !== "active") return reject("invalid_input", TRADE_MESSAGES[`offer_${offer.status}`] ?? TRADE_MESSAGES.default!, `offer_${offer.status}`);
+    const before = new Set(snapshot.items.map(i => i.id));
+    try {
+      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
+    } catch (error) {
+      const reason = error instanceof CampaignValidationError && error.field === TRADE_FIELD ? error.message.slice(TRADE_FIELD.length + 2) : undefined;
+      return reject("campaign_validation_failed", (reason && TRADE_MESSAGES[reason]) || TRADE_MESSAGES.default!, reason ?? "trade_failed");
+    }
+    const after = campaign.exportSnapshot(), view = deriveTradeView(this.#deps.world, after);
+    // A narrated captive promoted by this settlement leaves the temporary participant registry, so nobody appears twice.
+    const subject = offer.subject;
+    if (subject.kind === "person") this.#coordinator.retireParticipants?.(campaign, subject.plan.flatMap(c => c.kind === "register_character" && c.character.origin_snapshot?.ephemeral_ref?.startsWith("scene_npc_") ? [c.character.origin_snapshot.ephemeral_ref] : []));
+    for (const item of after.items) if (!before.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id);
+    this.#lastError = undefined; this.#autosave?.notify(); this.#itemSprites.flush();
+    return { ok: true, changed: true, receipt: view.receipt, view: this.getView() };
   }
 
   /**

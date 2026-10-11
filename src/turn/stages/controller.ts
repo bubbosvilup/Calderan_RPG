@@ -8,6 +8,7 @@ import type { TurnIntent } from "./intent.js";
 import { withProviderRetry, type ProviderAttemptRecord, type ProviderBudget, type ProviderRetryPolicy } from "../../llm/retry.js";
 import {technicalRetryReason} from "../../llm/reliability.js";
 import type { ReferencedCharacter } from "../referenced-characters.js";
+import { activeTradeOffer } from "../../campaign/trade.js";
 
 /**
  * Hardening H2 — ControllerStage. The controller reads the player's action, bounded prior state and the finalized narration DRAFT, and
@@ -35,8 +36,11 @@ export async function requestControllerProposal(i: { readonly controller: StateC
   // Player Character Profile V1: the player's visible appearance is narrator-only description, never controller input.
   const { npc_private_canon: _private, npc_plus: _npcPlus, ...shared } = i.context;
   const context = shared.player_profile ? { ...shared, player_profile: (({ visible: _visible, ...p }) => p)(shared.player_profile) } : shared;
+  const standing = activeTradeOffer(i.projected.trade_offers);
   const prior_state = JSON.stringify({ base_revision: i.base_revision, context, explicit_intent: i.intent.candidates,
     ...(i.movable.length ? { movable_characters: i.movable.map(m => ({ id: m.id, name: m.names[0], location_id: i.projected.characters.find(c => c.id === m.id)?.current.current_location })) } : {}),
+    ...(standing ? { trade_offer: { offer_id: standing.id, direction: standing.direction, price_gold: standing.price_gold, counterparty: standing.counterparty,
+      subject: standing.subject.kind === "goods" ? { goods: standing.subject.lines.map(l => l.name) } : standing.subject.kind === "items" ? { item_ids: standing.subject.item_ids } : { person: true } } } : {}),
     ...(i.referenced?.length ? { referenced_known_characters: i.referenced.map(r => ({ id: r.id, name: r.name })) } : {}) });
   const request = { player_action: i.player_input, prior_state, final_narration: i.draft, signal: i.signal };
   const once=async(timeout_ms?:number)=>{const result=await i.controller.propose(timeout_ms===undefined?request:{...request,timeout_ms});if(i.retry?.technical_contract&&result.normalization)throw new ProviderError("structured_output_invalid",undefined,undefined,"schema_invalid");return result;};

@@ -16,6 +16,9 @@ Status: Current. Last reconciled: 2026-10-11. Source of truth: the code and test
 | Canon NPC avatars; player visuals and appearance editing | |
 | Item sprite generation for engine-created items | non-authoritative |
 | Persistent campaigns (manual save, autosave, recovery) | schema 6 / save 5 |
+| Explicit NPC+ / Heartstone promotion (semantic rite cleanup) | player action only; see [Heartstone](HEARTSTONE.md) |
+| Actual Offer V1 (goods and person trade, player-accepted) | see [Actual Offer](architecture/ACTUAL_OFFER.md) |
+
 
 ## Partial / foundation only
 
@@ -32,9 +35,11 @@ Full Property system (generic property entity, containers and property storage, 
 
 ## Next
 
-Weather UI, then Property/Heartstone property work, then the systems above as prioritized by the author.
+Weather UI, then Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
 
 ## Known limitations
+
+- Actual Offer V1: whole-number gold only; no vendor inventory, Auction House or person SELL; sold goods leave the tracked scope; person offers are read from narration, not Controller-proposed; legacy internal `premium` naming remains (`premium_characters[]`; product term is NPC+).
 
 - No Property system and no containers (items are `unknown`, `carried`, `equipped` or `stored(location_id)` only; `inventory.ts` states "no containers in V1").
 - An `equipped` item position exists (free-form slot string plus worn/held mode, e.g. initial equipment), but there is no equipment slot domain or slot validation, and the model cannot equip by itself (`transfer_item` to `equipped` without established evidence is rejected). The UI's four slots are a read-only projection by item category; Head and Boots stay empty because the domain has no `headwear`/`footwear` categories (categories: weapon, armor, clothing, tool, consumable, document, valuable, material, miscellaneous).

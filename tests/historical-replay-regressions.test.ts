@@ -6,7 +6,7 @@ import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
+import { asPlan, readOffer } from "./offer-fixtures.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { NUMBER_PHRASE_SOURCE, numberPhraseValue } from "../src/turn/language/numbers.js";
 
@@ -26,7 +26,7 @@ function market(): CampaignState {
   return c;
 }
 const offer = (line: string): RecentExchange => ({ player: "Name your price again, Korvin.", narration: `Korvin studies the woman in the cage, then Nicco. "${line}" He taps the ledger.`, status: "finalized" });
-const resolve = (c: CampaignState, input: string, recent: readonly RecentExchange[]) => resolvePersonTransactions(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), recent, c.revision);
+const resolve = (c: CampaignState, input: string, recent: readonly RecentExchange[]) => asPlan(readOffer(world, c.exportSnapshot(), input, recent, c.revision));
 const paid = (r: ReturnType<typeof resolve>) => { const cmd = r.commands.find(x => x.kind === "transfer_person"); return cmd && cmd.kind === "transfer_person" ? cmd.payment?.gold : undefined; };
 
 test("number phrases keep their full value: hundreds, thousands, 'a hundred', digit groups, never the trailing word", () => {
@@ -48,14 +48,12 @@ test("a seller's multi-word gold price is the price Nicco pays, not its last wor
   }
 });
 
-test("a player's stated multi-word amount is exact, and an unaffordable amount blocks instead of shrinking to a smaller number", () => {
+test("the player's stated amount never sets the price; an unaffordable seller price is still a pending offer (funds are checked when the player accepts)", () => {
   const c = market();
-  assert.equal(paid(resolve(c, "I'll take her for four hundred gold.", [offer("Five hundred gold. Papers included.")])), 400, "the player's own stated amount");
+  assert.equal(paid(resolve(c, "I'll take her for four hundred gold.", [offer("Five hundred gold. Papers included.")])), 500, "only the seller's stated amount counts");
   const poor = resolve(c, "Done. *pays up*", [offer("Seven hundred gold. Papers included.")]);
-  assert.equal(paid(poor), undefined, "700 exceeds the 500 gold purse: no payment and no sale");
-  assert.equal(poor.commands.length, 0);
-  assert.ok(poor.diagnostics.some(d => d.status === "blocked" && (d.detail as { reason?: string }).reason === "insufficient_funds"), JSON.stringify(poor.diagnostics));
-  assert.match(poor.notes.join(" "), /700 gold/);
+  assert.equal(paid(poor), 700, "700 exceeds the 500 gold purse, but an offer is only a proposal");
+  assert.equal(poor.commands.length, 1);
 });
 
 test("a household rule that restates an active charter rule in other words is rejected; a genuinely new rule is accepted", () => {

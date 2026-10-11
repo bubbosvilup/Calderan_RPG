@@ -114,6 +114,13 @@ A reflection failure is **never** an error: the turn stays committed and `trace.
 - `character_capabilities` gains `can_promote_to_npc_plus` and `promotion_unavailable_reason`; the client renders the arrow from the flag only.
 - HTTP: `POST /api/npc-plus/promote {ref, expected_revision}` returns 200 / 409 (stale, busy) / 422 (refused), each with the refreshed session state.
 
+## 7d. Trade offers (Actual Offer V1)
+
+- The view state carries `trade: { offer, notice, receipt }`: masked, player-visible labels only, with an opaque `ref` (never an internal id). `trade.offer` also carries `direction`, `kind` (`goods` | `person`), `price_gold`, `lines`, `affordable`.
+- `session.acceptTradeOffer({ref, expected_revision})`; HTTP `POST /api/trade/accept {ref, expected_revision}` returns 200 / 409 (stale, busy) / 422 (refused), each with the refreshed state and a safe message.
+- **Client/server boundary** (same for NPC+ promotion, `POST /api/npc-plus/promote {ref, expected_revision}`): the client sends only a ref and the revision it rendered. It never authors price, subject, buyer, seller, item or person payloads; the server loads them from the authoritative offer and validates. The Controller never settles; only this route does.
+- A stale or superseded offer is refused with no mutation and no revision. A settled offer cannot settle again. Offers persist through save/load.
+
 ## 8. Inventory and equipment
 
 UI V1 uses `members[].display_name` for player-facing labels: unknown canonical names are masked using committed Nicco name knowledge, and missing labels never fall back to opaque IDs. The loopback adapter transmits only `{members: [{name, presence, location?}]}`; it excludes the legacy IDs, raw names, private fields and household identifiers. `scene.time.time_of_day` comes directly from the centralized P11 `temporalGrounding` projection; the UI receives the location label and daypart, with no exact game clock or frontend bucket mapping.

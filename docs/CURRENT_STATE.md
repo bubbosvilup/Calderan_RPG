@@ -73,6 +73,14 @@ Hugging Face-routed `fal-ai` text-to-image with the Raena anime LoRA. Avatar (99
 
 One position per item (`unknown`, `carried`, `equipped`, `stored(location_id)`); the owner is a separate field (owner ≠ carrier). Inventory is derived from positions. Conflicting authorized mutations for one item are rejected for that item while unrelated valid commands still commit; exact duplicates are deduplicated. The Inventory screen is a compact icon grid with All/Carried/Equipped filters, search, a local detail panel, Gold from authoritative funds, and a read-only four-slot equipment presentation (Head, Chest, Weapon, Boots) mapped by item category only. Details: [Item domain](architecture/ITEM_DOMAIN.md), [Inventory UI](architecture/INVENTORY_UI_V1.md), [UI](UI.md).
 
+## 8b. Trade (Actual Offer V1) and player-authorized actions
+- **Implemented:** goods BUY and SELL and person BUY as `TradeOffer`s ([Actual Offer](architecture/ACTUAL_OFFER.md)). An offer is a pending proposal; only the player's Accept settles it (`POST /api/trade/accept`, ref + `expected_revision`), atomically and at most once. One active offer; a new offer supersedes the old; counteroffers happen in chat; persists through save/load (optional `trade_offers` field, schemas 6/5 unchanged). Card is masked (unknown enslaved people show "Slave" / "<descriptor> Slave").
+- **Currency:** whole-number gold only (no silver, decimals or exchange).
+- **Not supported (intentionally):** Auction House, vendor inventories/wallets/stock/shops, person SELL. Sold goods leave the tracked scope (V1).
+- **Heartstone:** explicit promotion works (↑ action, `completeHeartstoneRite`); there is no semantic rite inference and Narrator prose cannot promote ([Heartstone](HEARTSTONE.md)).
+- **NPC+:** the product term; the persisted record is still named `premium_characters[]` (legacy internal naming, not renamed).
+- **Pattern:** high-impact transitions are player-authorized ([Architecture §2b](ARCHITECTURE.md)); ordinary state is still inferred.
+
 ## 9. Time and environment
 
 `world_minute` is the only stored clock. Calendar, seasons, observances, climate and weather are derived. Epoch: `world_minute 0` = Year 1191, Vesp Alpha 1, 00:00, Stonewake, first day of autumn. Twelve 30-day months (Aurel, Sol, Vesp, Hiem × Alpha/Med/X), six-day week, five intercalary Suns (six in leap years), six-hour weather blocks with a bounded sliding continuity window, per-place `environment_exposure`. No weather UI yet. Details: [Time and environment](architecture/TIME_AND_ENVIRONMENT.md).

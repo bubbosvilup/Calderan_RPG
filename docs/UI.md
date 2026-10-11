@@ -21,3 +21,6 @@ Nicco, Inventory, Household, World (disabled placeholder), Debug (disabled place
 ## Rules
 
 Capabilities are derived per projection and never persisted. Tier-inappropriate controls are omitted. Images are display only. Details: [Inventory UI](architecture/INVENTORY_UI_V1.md), [Image system](IMAGE_SYSTEM.md), [Player character](architecture/PLAYER_CHARACTER.md).
+
+## Actual Offer card (trade)
+A compact card sits inline after the newest Narrator response while an offer is active: an `ACTUAL OFFER` label, `▼ BUY` or `▲ SELL` (text and icon, not colour alone), a `♟ Person` marker for people, the price in gold, the player-safe subject lines, and one **Accept offer** button. There is no Counteroffer button (negotiate in chat), no shop and no modal. Labels are player-visible only: an unknown enslaved person is "Slave" or "<descriptor> Slave", and the same card shows the name after a legitimate reveal. Accept sends only the offer ref and the rendered revision. An unaffordable BUY disables Accept and says so; a stale, superseded or lapsed offer shows a safe inline message (role=alert) and the card refreshes; withdrawal or lapse leaves a short notice and a settled offer leaves a receipt. See [Actual Offer](architecture/ACTUAL_OFFER.md).

@@ -140,3 +140,6 @@ An intent NEVER mutates state and never proves success: narration decides the ou
 - **Stackables:** a quantity on archetype-backed instances. V1 treats every object as one instance.
 - **Economy and transaction history:** buying, selling and durable transfer/loan records remain future work. [Transfer Domain V1](TRANSFER_DOMAIN_V1.md) now covers current-state gift, handoff, lend, return, steal, reclaim and take semantics using the existing `transfer_item`.
 - **Institutional or household ownership, and quest predicates over items.**
+
+## Trade settlement (Actual Offer V1)
+Goods BUY accepted by the player creates separate items (bundles supported), owner player, carried, conservative category (miscellaneous fallback), never auto-equipped. Goods SELL requires an existing authoritative item; on acceptance the item is removed and gold credited (V1: the item leaves the tracked campaign scope; this does not mean it ceases to exist in the fiction; no merchant inventory). Normative design: [Actual Offer](ACTUAL_OFFER.md). A `TradeOffer` is a pending proposal, a transaction is committed state. See `docs/evaluations/ACTUAL_OFFER_V1.md`.

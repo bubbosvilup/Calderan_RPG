@@ -7,7 +7,9 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/openin
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { resolvePersonTransactions } from "../src/turn/person-transactions.js";
+import { resolveManumission } from "../src/turn/person-transactions.js";
+import { resolvePersonOffers } from "../src/turn/person-offers.js";
+import { activeTradeOffer } from "../src/campaign/trade.js";
 import { detectHouseholdChoices, extractRuleDeclarations, verifyRelationshipEvidence } from "../src/turn/household-evidence.js";
 import { authorizeWithEvidence } from "../src/turn/evidence-authorization.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
@@ -36,38 +38,40 @@ function market(extra: readonly CampaignCommand[] = []): CampaignState {
 }
 const OFFER: RecentExchange = { player: "Name your price again, Korvin.", narration: 'Korvin studies the woman in the cage, then Nicco. "Five." He taps the ledger. "Papers included. Clean transfer, debt-forfeiture chain, no liens."', status: "finalized" };
 const UNPAPERED: RecentExchange = { player: "What about the girl?", narration: '"Ten gold was for three," Brenna says. The whittler shrugs. "Three gold. She\'s a write-off. No papers, no listing, no—"', status: "finalized" };
-const resolve = (c: CampaignState, input: string, recent: readonly RecentExchange[] = [OFFER]) => resolvePersonTransactions(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), recent, c.revision);
+const resolve = (c: CampaignState, input: string, recent: readonly RecentExchange[] = [OFFER]) => resolveManumission(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), c.revision);
+/** Actual Offer V1: `recent` ends with the exchange whose delivered narration states the price; the player's words never matter. */
+const offer = (c: CampaignState, input: string, recent: readonly RecentExchange[] = [OFFER]) => resolvePersonOffers(input, buildTurnContext(world, c.exportSnapshot()), c.exportSnapshot(), recent, c.revision, { world });
+const planOf = (cmd: CampaignCommand | undefined) => { assert.ok(cmd?.kind === "propose_trade_offer" && cmd.subject.kind === "person"); return (cmd as Extract<CampaignCommand, { kind: "propose_trade_offer" }>).subject as Extract<Extract<CampaignCommand, { kind: "propose_trade_offer" }>["subject"], { kind: "person" }>; };
 
-// ------------------------------------------------------------------------------------------------ controller evals: purchase
-test("purchase evals: explicit acceptance or payment of the established offer resolves one exact sale; questions and hedges never do", () => {
+// ------------------------------------------------------------------------------------------------ controller evals: person offers
+test("offer evals: the seller's stated price becomes one structured offer; the player's words never accept, never price and never block it", () => {
   const c = market();
-  for (const input of ["Done. Five.", "*pays him and takes the key*", "mmh alright *pays up* i will bring her myself, she can't walk for sure", "Done."]) {
-    const r = resolve(c, input);
+  for (const input of ["Done. Five.", "*pays him and takes the key*", "How much?", "Maybe.", "Would you take four?", "I'll take her for three gold."]) {
+    const r = offer(c, input);
     assert.equal(r.commands.length, 1, input);
-    const cmd = r.commands[0]!; assert.ok(cmd.kind === "transfer_person");
-    if (cmd.kind !== "transfer_person") continue;
-    assert.deepEqual([cmd.character_id, cmd.from_holder_id, cmd.to_holder_id, cmd.payment!.gold, cmd.documentation], [BRENNA, "korvin", "nicco", 5, "documented"], input);
-    assert.match(cmd.note ?? "", /debt-forfeiture chain/);
+    const cmd = r.commands[0]!; assert.ok(cmd.kind === "propose_trade_offer" && cmd.direction === "buy");
+    if (cmd.kind !== "propose_trade_offer") continue;
+    assert.equal(cmd.price_gold, 5, `${input}: only the seller's price counts`);
+    const plan = planOf(cmd).plan[0]!; assert.ok(plan.kind === "transfer_person");
+    if (plan.kind !== "transfer_person") continue;
+    assert.deepEqual([plan.character_id, plan.from_holder_id, plan.to_holder_id, plan.payment!.gold, plan.documentation], [BRENNA, "korvin", "nicco", 5, "documented"], input);
+    assert.match(plan.note ?? "", /debt-forfeiture chain/);
   }
-  const three = resolve(c, "I'll take her for three gold.").commands[0]!;
-  assert.ok(three.kind === "transfer_person" && three.payment!.gold === 3); // the player's own stated amount
-  for (const input of ["How much?", "Let me look at her.", "Maybe.", "We should save her.", "If she's dying I'll buy her.", "Would you take four?"])
-    assert.deepEqual(resolve(c, input).commands, [], input);
+  assert.deepEqual([c.exportSnapshot().funds.find(f => f.character_id === "nicco")!.gold, c.exportSnapshot().legal_statuses[0]!.holder_id], [500, "korvin"], "reading an offer changes nothing");
 });
-test("purchase evals: unpapered offers stay unpapered, ambiguity and unaffordable deals resolve nothing, and the narrator is told", () => {
+test("offer evals: unpapered offers stay unpapered, ambiguity resolves nothing, an unaffordable offer is still just an offer", () => {
   const c = market();
-  const r = resolve(c, "*pays him and take the key to free her*", [UNPAPERED]);
-  const cmd = r.commands[0]!; assert.ok(cmd.kind === "transfer_person");
-  assert.deepEqual(cmd.kind === "transfer_person" ? [cmd.payment!.gold, cmd.documentation] : [], [3, "undocumented"]); // "Ten gold was for three" is not the price
+  const r = offer(c, "*pays him and take the key to free her*", [UNPAPERED]);
+  const plan = planOf(r.commands[0]).plan[0]!; assert.ok(plan.kind === "transfer_person");
+  assert.deepEqual(plan.kind === "transfer_person" ? [plan.payment!.gold, plan.documentation] : [], [3, "undocumented"]); // "Ten gold was for three" is not the price
   assert.ok(!r.commands.some(x => x.kind === "manumit")); // unchaining is not manumission
-  const none = resolve(c, "Done.", [{ player: "Hello.", narration: "Korvin shrugs.", status: "finalized" }]);
-  assert.deepEqual([none.commands, none.diagnostics[0]!.status], [[], "no_offer"]);
+  const none = offer(c, "Done.", [{ player: "Hello.", narration: "Korvin shrugs.", status: "finalized" }]);
+  assert.deepEqual([none.commands, none.diagnostics], [[], []]);
   const two = market([person(MAREN, "Maren", 15), { kind: "set_legal_status", character_id: MAREN, status: "enslaved", holder_id: "korvin" }]);
-  assert.deepEqual([resolve(two, "Done.").commands, resolve(two, "Done.").diagnostics[0]!.status], [[], "ambiguous"]); // never "take all nearby"
-  assert.equal(resolve(two, "Done, I'll take Maren.").commands[0]!.kind === "transfer_person" && (resolve(two, "Done, I'll take Maren.").commands[0] as { character_id: string }).character_id, MAREN);
+  assert.deepEqual([offer(two, "Done.").commands, offer(two, "Done.").diagnostics[0]!.status], [[], "ambiguous"]); // never "take all nearby"
+  assert.equal(planOf(offer(two, "How much for Maren?").commands[0]).subject_character_id, MAREN);
   const poor = market([{ kind: "set_funds", character_id: "nicco", gold: 2 }]);
-  const blocked = resolve(poor, "Done.");
-  assert.deepEqual(blocked.commands, []); assert.match(blocked.notes[0]!, /has only 2: the purchase cannot complete/);
+  assert.equal(offer(poor, "Done.").commands.length, 1, "funds are checked only when the player accepts");
 });
 test("manumission evals: legal freeing of a person Nicco holds resolves; chains, permission to leave and hedges do not", () => {
   const c = market();
@@ -149,14 +153,17 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   const step = async (input: string, narration: readonly string[], cmds: CampaignCommand[] = [], ev?: string[]) => { texts = [...narration]; commands = cmds; evidence = ev; return turn(c, input, [], [], undefined, seen, coordinator); };
   const prompt = () => seen.at(-1)!.messages[0]!.content;
 
-  // 1. Inspect and negotiate: nothing changes, and the narrator knows the purse and Brenna's legal status.
+  // 1. Inspect and negotiate: the seller's quote becomes ONE pending offer; no money or ownership moves, and the narrator knows the purse and Brenna's legal status.
   await step("*checks the cages* Korvin, what about her?", [OFFER.narration]);
   assert.match(prompt(), /- Money: 500 Gold/); assert.match(prompt(), /Brenna: legally enslaved; legal holder Korvin/);
   assert.deepEqual([gold(c), members(c)], [500, []]);
-  // 2. Accept: the engine resolves and validates the sale BEFORE narration; the narrator is told the outcome.
-  const bought = await step("Done. *pays him*", ["Korvin pockets the coins and hands over the key and the papers. Brenna watches the exchange with flat, wary eyes."]);
-  assert.match(prompt(), /Purchase completes now \(already validated, authoritative\): Nicco pays Korvin 5 gold/);
-  assert.equal(bought.narration_reconciliation?.delivered, "draft");
+  const pending = activeTradeOffer(c.exportSnapshot().trade_offers)!; assert.ok(pending && pending.price_gold === 5);
+  // 2. Spoken or narrated payment is NOT acceptance: the offer stays pending and nothing settles; only the explicit accept action does (the UI click).
+  const paid = await step("Done. *pays him*", ["Korvin pockets the coins and hands over the key and the papers. Brenna watches the exchange with flat, wary eyes.", "Korvin names the price again and keeps the key on his belt. Brenna watches the exchange with flat, wary eyes."]);
+  assert.ok(paid.narration_reconciliation!.issues.some(i => i.kind === "asserts_uncommitted_purchase"), "a narrated payment is reconciled, never committed");
+  assert.match(prompt(), /TRADE OFFER PENDING \(authoritative\)/);
+  assert.deepEqual([gold(c), c.exportSnapshot().legal_statuses[0]!.holder_id, members(c)], [500, "korvin", []]);
+  c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: activeTradeOffer(c.exportSnapshot().trade_offers)!.id }] }));
   assert.deepEqual([gold(c), c.exportSnapshot().legal_statuses[0]!.holder_id, members(c)], [495, "nicco", []]);
   // 3. Home: Brenna stays at Heartstone, still not household. A draft calling her household is reconciled, not committed.
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: "heartstone_lr" } }, { kind: "move_character", character_id: BRENNA, location_id: "heartstone_lr" }] });
@@ -183,13 +190,15 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   assert.equal(gold(c), 495);
   assert.match(formatCampaignStatus(c.exportSnapshot(), world), /Money: 495 gold[\s\S]*Heartstone Household: 1 — Brenna/);
 });
-test("end to end: an unaffordable purchase is blocked before narration; narrated payment is reconciled; nothing changes", async () => {
+test("end to end: an unaffordable offer stays pending; accepting it is refused atomically; spoken payment settles nothing", async () => {
   const c = market([{ kind: "set_funds", character_id: "nicco", gold: 2 }]), seen: GenerationRequest[] = [];
   const coordinator = new TurnCoordinator(world, scripted([OFFER.narration, "Korvin pockets the coins and hands over the key.", "Korvin shakes his head and keeps the key on his belt."], seen),
     { async propose() { return { commands: [], ...metadata }; } }, { service: new RetrievalService(world), search: new HybridSearch(new RetrievalService(world)) });
   await turn(c, "Korvin, what about her?", [], [], undefined, seen, coordinator);
-  const r = await turn(c, "Done. *pays him*", [], [], undefined, seen, coordinator);
-  assert.match(seen.at(-2)!.messages[0]!.content, /has only 2: the purchase cannot complete/);
-  assert.ok(r.narration_reconciliation!.issues.some(i => i.kind === "asserts_uncommitted_purchase"));
+  await turn(c, "Done. *pays him*", [], [], undefined, seen, coordinator);
+  const id = activeTradeOffer(c.exportSnapshot().trade_offers)!.id, before = c.revision;
+  assert.throws(() => c.prepare({ expected_revision: before, commands: [{ kind: "accept_trade_offer", offer_id: id }] }), /insufficient_funds/);
+  assert.equal(c.revision, before);
   assert.deepEqual([gold(c), c.exportSnapshot().legal_statuses[0]!.holder_id, c.exportSnapshot().transactions], [2, "korvin", []]);
+  assert.equal(activeTradeOffer(c.exportSnapshot().trade_offers)!.id, id, "the offer stays active");
 });

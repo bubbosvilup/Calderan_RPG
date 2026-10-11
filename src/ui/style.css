@@ -587,3 +587,21 @@ img[data-missing]{visibility:hidden}
 .promote-confirm p{margin:6px 0}
 .promote-confirm [role="alert"]{color:#ff8a8a}
 .promote-actions{display:flex;gap:8px;margin-top:6px}
+
+/* Actual Offer V1: the inline trade card. BUY / SELL / Person are told apart by text and icon, never by colour alone. */
+.trade-region { display: grid; gap: .5rem; margin: .75rem 0 .25rem; }
+.trade-region[hidden] { display: none; }
+.trade-card { border: 1px solid var(--line, #3a3a48); border-left-width: 4px; border-radius: 8px; padding: .65rem .8rem; background: var(--panel, rgba(255,255,255,.04)); max-width: 34rem; }
+.trade-head { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.trade-label { font-size: .7rem; letter-spacing: .08em; opacity: .7; }
+.trade-kind { letter-spacing: .06em; font-size: .85rem; }
+.trade-person { font-size: .8rem; border: 1px solid currentColor; border-radius: 999px; padding: 0 .5rem; }
+.trade-price { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+.trade-party { margin: .35rem 0 .2rem; opacity: .85; font-size: .9rem; }
+.trade-lines { margin: 0 0 .5rem 1.1rem; padding: 0; }
+.trade-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.trade-accept { cursor: pointer; }
+.trade-accept:disabled { cursor: not-allowed; opacity: .6; }
+.trade-purse { font-size: .85rem; opacity: .8; }
+.trade-error { margin: .4rem 0 0; font-size: .85rem; color: var(--danger, #e07a7a); }
+.trade-receipt, .trade-notice { margin: 0; font-size: .85rem; opacity: .8; font-style: italic; }

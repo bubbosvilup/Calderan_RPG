@@ -14,6 +14,7 @@ import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import { sentencesOf } from "../language/text.js";
 import { establishedCount, ownerEvidenced } from "../item-ownership.js";
 import { resolveItemIntent, type ItemIntent } from "../item-intent.js";
+import { authorizeTradeProposals, isTradeProposal, vetoSettlementThroughItems } from "../trade-authorization.js";
 const itemKey = (name: string) => name.trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
 const EXACT_REPEAT_KINDS: ReadonlySet<CampaignCommand["kind"]> = new Set(["transfer_item", "place_item", "set_knowledge", "set_condition", "schedule_event", "leave_scene", "join_household", "leave_household", "add_household_rule"]);
 import type { AuthorizationDiagnostic, TurnDebugSink } from "../turn-types.js";
@@ -109,7 +110,14 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const itemDerived: CampaignCommand[] = itemIntent?.status === "bound" && !controllerProposal.some(isIntentKind) ? [itemIntent.command] : [];
   const proposal = [...controllerProposal, ...derived, ...departureProposals, ...itemDerived];
   // Derived proposals are appended after the controller's, so the controller's per-index evidence quotes stay aligned (derived: none).
-  const decided = authorizeWithEvidence(proposal, quotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode, i.world);
+  // Actual Offer V1: trade proposals take their own evidence path; the ordinary grammar knows nothing about them. A purchase or sale is settled by
+  // its offer alone, so ordinary item commands for the same goods are withdrawn.
+  const isTrade = proposal.map(isTradeProposal), ordinary = proposal.filter((_, k) => !isTrade[k]);
+  const ordinaryQuotes = quotes ? quotes.filter((_, k) => !isTrade[k]) : quotes;
+  const tradeDecided = authorizeTradeProposals(proposal.flatMap((command, k) => isTrade[k] ? [{ command, quote: quotes?.[k] }] : []), i.draft, i.context, i.projected, i.world);
+  const ordinaryDecided = authorizeWithEvidence(ordinary, ordinaryQuotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode, i.world);
+  let tradeAt = 0, ordinaryAt = 0;
+  const decided = vetoSettlementThroughItems(proposal.map((_, k) => isTrade[k] ? tradeDecided[tradeAt++]! : ordinaryDecided[ordinaryAt++]!), i.projected);
   const ownerNames = (id: string): readonly string[] => { const e = i.world.getEntity(id); const c = i.projected.characters.find(x => x.id === id);
     return [id, ...(e?.type === "character" ? [e.name, ...e.aliases] : []), ...(c?.profile.name ? [c.profile.name] : [])]; };
   const diagnostics = rejectConflictingItemMutations(enforceItemTriangle(decided, itemIntent, isIntentKind)).map(d => d.authorized && d.command.kind === "create_item" && typeof d.command.owner_id === "string" && !ownerEvidenced(d.command, i.draft, i.debug_base.player_input, ownerNames(d.command.owner_id))

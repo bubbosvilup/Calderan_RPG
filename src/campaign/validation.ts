@@ -207,6 +207,25 @@ const mannerismCandidate = object({ id, character_id: id, canonical_key: id, tex
 const mannerismLearning = object({ sequence: integer(1), processed_sequence: integer(0), last_turn_id: text,
   journal: list(object({ sequence: integer(1), revision: integer(0), event_id: text, narration_hash: text, narration_length: integer(1, 20000), character_ids: distinct(id),
     available_items: list(object({ character_id: id, item_id: id, worn: boolean }), 256) }), 16), candidates: list(mannerismCandidate, 800000) });
+// Actual Offer V1: trade offers. The person plan is the deterministic settlement command list (promotion, legal status, transfer), parsed with the very
+// same command schemas and restricted to those kinds, so an offer can never carry an arbitrary command.
+const shortText: Parser = (input, path) => { if (typeof input !== "string" || !input.trim() || input.length > 160) fail(path, "expected nonempty text, at most 160 characters"); return input; };
+const tradeCounterparty = tagged({ character: object({ kind: choice("character"), character_id: id }), anonymous: object({ kind: choice("anonymous"), label: shortText }) });
+const goodsLine = object({ name: shortText, description: text, visual_description: text, category: optional(itemCategory) });
+export const PERSON_PLAN_KINDS: readonly string[] = ["register_character", "set_legal_status", "transfer_person"];
+const personPlan: Parser = (input, path) => {
+  const plan = list((value, field) => tagged(variants)(value, field), 8)(input, path) as { kind: string }[];
+  if (!plan.length || plan.some(c => !PERSON_PLAN_KINDS.includes(c.kind))) fail(path, "a person plan holds only promotion, legal status and transfer commands");
+  return plan;
+};
+const tradeSubject = tagged({ goods: object({ kind: choice("goods"), lines: list(goodsLine, 8) }), items: object({ kind: choice("items"), item_ids: distinct(id) }),
+  person: object({ kind: choice("person"), subject_character_id: id, plan: personPlan }) });
+const tradeReason = choice("scene_changed", "counterparty_gone", "item_unavailable", "person_unavailable", "offer_unavailable");
+const tradeSettlement = object({ gold, revision: integer(0), world_minute: integer(), created_item_ids: optional(distinct(id)), removed_item_ids: optional(distinct(id)), removed_item_names: optional(list(shortText, 8)), transaction_id: optional(id) });
+const tradePrice = integer(1, 1_000_000);
+const tradeOfferRecord = object({ id, direction: choice("buy", "sell"), status: choice("active", "accepted", "superseded", "withdrawn", "invalidated"), price_gold: tradePrice,
+  counterparty: tradeCounterparty, subject: tradeSubject, location_id: id, created_revision: integer(0), created_minute: integer(), evidence: optional(shortText),
+  resolved_revision: optional(integer(0)), invalid_reason: optional(tradeReason), settlement: optional(tradeSettlement) });
 const variants: Record<string, Parser> = {};
 function command(kind: string, fields: Record<string, Rule>) { variants[kind] = object({ kind: choice(kind), ...fields }); }
 command("register_character", { character: characterRecord });
@@ -246,6 +265,10 @@ command("set_player_character_profile", { profile: playerProfile });
 command("set_legal_status", { character_id: id, status: choice("free", "enslaved"), holder_id: optional(id), documentation: optional(documentation), note: optional(text) });
 command("transfer_person", { transaction_id: id, transaction_kind: choice("sale", "gift", "assignment"), character_id: id, from_holder_id: optional(id), from_counterparty: optional(counterparty), to_holder_id: id, payment: optional(object({ payer_id: id, payee_id: optional(id), gold })), documentation, note: optional(text) });
 command("manumit", { transaction_id: id, character_id: id, by_holder_id: id, documentation, note: optional(text) });
+command("propose_trade_offer", { direction: choice("buy", "sell"), price_gold: tradePrice, counterparty: tradeCounterparty, subject: tradeSubject, evidence: optional(shortText) });
+command("withdraw_trade_offer", { offer_id: id });
+command("invalidate_trade_offer", { offer_id: id, reason: tradeReason });
+command("accept_trade_offer", { offer_id: id });
 command("join_household", { household_id: id, character_id: id });
 command("leave_household", { household_id: id, character_id: id });
 command("add_household_rule", { household_id: id, text });
@@ -261,6 +284,7 @@ const snapshot = object({ schema_version: integer(6, 6), campaign_id: id, datase
   player_characters: list(playerProfile, 8),
   price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
   portraits: optional(list(portraitRecord, 100000)),
+  trade_offers: optional(list(tradeOfferRecord, 5000)),
   runtime: object({ scene: object({ player_location: id, world_time: object({ world_minute: integer() }) }),
     npc_locations: list(object({ character_id: id, current_location: optional(id), off_scene: optional(object({ last_known_location: id, since_revision: integer(0) })) }), 100000), mana: object({ current: integer(0), max: integer(0) }) }),
   characters: list(characterRecord, 100000), items: list(itemRecord, 100000),

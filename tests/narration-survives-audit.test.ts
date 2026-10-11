@@ -78,10 +78,10 @@ const CORPUS: readonly Case[] = [
   { id: "naming", setup: () => real(MARKET), prelude: [{ input: "*approaches the slaver*", narration: "A lean slaver leans against a post by the back cages." }],
     input: "What's your name?", narration: '"Oswin," the slaver says, spitting into the dirt.', check: (_c, r) => assert.deepEqual(r.identity?.promoted.map(p => p.name), ["Oswin"]) },
   // ---- purchase
-  { id: "purchase", setup: () => real(MARKET, [{ kind: "register_character", character: { id: BRENNA, origin: { kind: "created" }, profile: { name: "Brenna", age: { kind: "exact", years: 29 } }, current: { current_location: MARKET, status: "active" } } }, { kind: "set_legal_status", character_id: BRENNA, status: "enslaved", holder_id: "korvin" }]),
-    prelude: [{ input: "Name your price again, Korvin.", narration: 'Korvin studies the woman in the cage, then Nicco. "Five." He taps the ledger. "Papers included."' }],
-    input: "Done. *pays him*", narration: "Korvin pockets the coins and hands over the key and the papers. Brenna watches the exchange with flat, wary eyes.",
-    check: c => assert.equal(c.exportSnapshot().legal_statuses.find(l => l.character_id === BRENNA)?.holder_id, "nicco") },
+  // Actual Offer V1: a sale is first an OFFER; the quote turn is valid narration, and the offer is recorded without paying or transferring anything.
+  { id: "purchase_offer", setup: () => real(MARKET, [{ kind: "register_character", character: { id: BRENNA, origin: { kind: "created" }, profile: { name: "Brenna", age: { kind: "exact", years: 29 } }, current: { current_location: MARKET, status: "active" } } }, { kind: "set_legal_status", character_id: BRENNA, status: "enslaved", holder_id: "korvin" }]),
+    input: "Name your price again, Korvin.", narration: 'Korvin studies the woman in the cage, then Nicco. "Five." He taps the ledger. "Papers included."',
+    check: c => { assert.equal(c.exportSnapshot().legal_statuses.find(l => l.character_id === BRENNA)?.holder_id, "korvin"); assert.equal(c.exportSnapshot().trade_offers?.filter(o => o.status === "active").length, 1); } },
   // ---- household declaration (player-authored rule)
   { id: "household_rule", setup: () => real(LR), input: "House rule: nobody goes down to the cellar alone.", narration: "Nicco's words settle over the quiet living floor. The hearth crackles." },
 ];

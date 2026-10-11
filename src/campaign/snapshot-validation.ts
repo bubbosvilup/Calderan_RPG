@@ -10,6 +10,7 @@ import { validateMannerismLearning } from "./mannerism-learning.js";
 import { validatePortraitRecords } from "./portraits.js";
 import { validatePlayerCharacters } from "./player-character.js";
 import { engineItemSequence } from "./items.js";
+import { tradeOfferSequence } from "./trade.js";
 
 export class SnapshotValidationError extends CampaignValidationError {
   constructor(readonly code: "invalid_save" | "reference_invalid" | "unsupported_version", field: string) { super(field, code); this.name = "SnapshotValidationError"; }
@@ -137,6 +138,20 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
     if ((x.from_holder_id === undefined) === (x.from_counterparty === undefined)) fail("transactions.from_holder_id", "a transaction has exactly one seller side");
     if (x.from_counterparty) { if (x.kind !== "sale") fail("transactions.from_counterparty", "an anonymous counterparty can only sell"); refs.location(x.from_counterparty.location_id); }
     historical(x.world_minute, "transactions.world_minute"); if (x.revision > s.revision) fail("transactions.revision", "future transaction");
+  }
+  // Actual Offer V1: the trade-offer ledger. At most one active offer; accepted offers carry their settlement; every reference resolves.
+  unique(s.trade_offers ?? [], o => o.id, "trade_offers");
+  if ((s.trade_offers ?? []).filter(o => o.status === "active").length > 1) fail("trade_offers", "at most one active offer");
+  for (const o of s.trade_offers ?? []) {
+    if (tradeOfferSequence(o.id) === undefined) fail("trade_offers.id", "invalid trade offer ID");
+    if (o.created_revision > s.revision || (o.resolved_revision ?? 0) > s.revision) fail("trade_offers.revision", "future trade offer");
+    historical(o.created_minute, "trade_offers.created_minute");
+    refs.location(o.location_id);
+    if (o.counterparty.kind === "character") refs.character(o.counterparty.character_id);
+    if ((o.status === "accepted") !== (o.settlement !== undefined)) fail("trade_offers.settlement", "only an accepted offer carries a settlement");
+    if ((o.status === "invalidated") !== (o.invalid_reason !== undefined)) fail("trade_offers.invalid_reason", "only an invalidated offer carries a reason");
+    if ((o.status === "active") === (o.resolved_revision !== undefined)) fail("trade_offers.resolved_revision", "resolved exactly when not active");
+    if (o.subject.kind === "items" ? o.direction !== "sell" : o.direction !== "buy") fail("trade_offers.direction", "direction does not match the subject");
   }
   for (const g of s.goals) { refs.character(g.character_id); historical(g.created_at, "created_at"); if (g.target) refs.target(g.target); }
   for (const e of s.scheduled_events) e.participants?.forEach(id => refs.character(id));
