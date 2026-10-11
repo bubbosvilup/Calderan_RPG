@@ -109,6 +109,20 @@ export class SessionHost {
     this.#active = undefined;
     return { ok: true };
   }
+  /**
+   * Delete a campaign (soft delete: the repository moves its whole folder to the deleted root, so nothing is destroyed outright).
+   * Only an inactive campaign can be deleted; the lock check in the repository also refuses one open in another process.
+   */
+  async deleteCampaign(request: { readonly campaign_id: unknown }): Promise<HostOutcome> {
+    if (typeof request.campaign_id !== "string") return { ok: false, error: appError("invalid_input", { message: "Choose a campaign." }) };
+    const busy = this.#guard();
+    if (busy) return { ok: false, error: busy };
+    if (this.#active?.session.campaignId === request.campaign_id) return { ok: false, error: appError("invalid_input", { message: "Close the campaign before deleting it." }) };
+    this.#swapping = true;
+    try { await this.#deps.repository.deleteCampaign(request.campaign_id); return { ok: true }; }
+    catch (error) { return { ok: false, error: toAppError(error) }; }
+    finally { this.#swapping = false; }
+  }
   /** Back to the start screen. */
   async closeCampaign(): Promise<HostOutcome> {
     const busy = this.#guard();

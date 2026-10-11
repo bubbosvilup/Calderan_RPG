@@ -1126,6 +1126,18 @@ async function loadCampaignList() {
       if (c.previous_valid) actions.append(button("Load previous save", "previous"));
       if (c.backups?.length) actions.append(button("Load latest backup", `backup:${c.backups[0]}`));
     }
+    const remove = document.createElement("button"); remove.setAttribute("type", "button"); remove.className = "campaign-delete"; remove.textContent = "Delete"; remove.disabled = c.locked;
+    remove.setAttribute("aria-label", `Delete campaign ${c.display_name}`);
+    remove.addEventListener("click", () => {
+      // Lightweight confirm step: Delete turns into Cancel / Delete permanently before anything is sent.
+      const confirm = document.createElement("button"); confirm.setAttribute("type", "button"); confirm.className = "campaign-delete"; confirm.textContent = "Confirm delete";
+      const cancel = document.createElement("button"); cancel.setAttribute("type", "button"); cancel.textContent = "Cancel";
+      const note = document.createElement("small"); note.className = "campaign-delete-note"; note.textContent = "Delete this campaign and its saves?";
+      actions.replaceChildren(note, cancel, confirm);
+      cancel.addEventListener("click", () => void loadCampaignList());
+      confirm.addEventListener("click", async () => { confirm.disabled = cancel.disabled = true; await campaignRequest("/api/campaigns/delete", { campaign_id: c.campaign_id }); void loadCampaignList(); });
+    });
+    actions.append(remove);
     row.append(info, actions); list.append(row);
   }
 }

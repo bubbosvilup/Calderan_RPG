@@ -552,6 +552,8 @@ dd{margin-bottom:8px}
 .campaign-info{display:grid;gap:4px;min-width:0}.campaign-info small{color:var(--muted);overflow-wrap:anywhere}
 .campaign-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .campaign-actions button,#campaign-create{border:1px solid var(--pink);color:var(--pink);background:transparent;border-radius:8px;padding:7px 14px;cursor:pointer}
+.campaign-actions .campaign-delete{border-color:#c0504d;color:#e0807d}
+.campaign-delete-note{align-self:center;opacity:.85}
 .campaign-actions button:disabled{opacity:.5;cursor:not-allowed}
 .campaign-empty,.campaign-note{color:var(--muted);font-size:13px;margin:0}
 .campaign-new{display:grid;gap:8px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}

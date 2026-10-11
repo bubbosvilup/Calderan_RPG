@@ -52,8 +52,8 @@ test("startup with no campaign shows the start screen (list + new campaign) and 
   assert.equal(c.node("campaign-screen").hidden, false); assert.equal(c.node("save-button").hidden, true); assert.equal(c.node("input").disabled, true);
   const rows = c.node("campaign-list").children;
   assert.equal(rows.length, 2); assert.match(rows[0]!.textContent, /First run.*Market · Day 1, 01:00 · 1 in household/);
-  assert.deepEqual(rows[0]!.children[1]!.children.map(b => b.textContent), ["Load"]);
-  assert.deepEqual(rows[1]!.children[1]!.children.map(b => b.textContent), ["Load previous save", "Load latest backup"]);
+  assert.deepEqual(rows[0]!.children[1]!.children.map(b => b.textContent), ["Load", "Delete"]);
+  assert.deepEqual(rows[1]!.children[1]!.children.map(b => b.textContent), ["Load previous save", "Load latest backup", "Delete"]);
   assert.match(rows[1]!.textContent, /cannot be read/);
   assert.deepEqual(c.node("campaign-scenario").children.map(o => o.textContent), ["Arrival at the Calderan slave market"]);
 });

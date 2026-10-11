@@ -11,7 +11,7 @@ import { ALTERNATE_NARRATOR_MODELS, type NarratorAlternatives } from "../app/nar
 /** Portrait Gallery V2: batch generation, role assignment, Gallery delete and the reference upload. */
 const PORTRAIT_ROUTES = new Set(["/api/portrait/generate", "/api/portrait/avatar", "/api/portrait/full-body", "/api/portrait/delete", "/api/portrait/reference"]);
 /** Save/Load v1 campaign lifecycle (host mode only). */
-const CAMPAIGN_ROUTES = new Set(["/api/campaigns/create", "/api/campaigns/load", "/api/campaigns/close", "/api/save"]);
+const CAMPAIGN_ROUTES = new Set(["/api/campaigns/create", "/api/campaigns/load", "/api/campaigns/close", "/api/campaigns/delete", "/api/save"]);
 interface Message { readonly comparison_id?: string; readonly role: "player" | "narrator" | "system"; readonly text: string }
 const assets = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
@@ -125,7 +125,8 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
             json(outcome.ok ? 200 : outcome.error.code === "turn_in_progress" || outcome.error.code === "save_in_progress" ? 409 : 500, { ...result, ...state() }); return;
           }
           const outcome = req.url === "/api/campaigns/create" ? await host.createCampaign({ display_name: fields.display_name, scenario_id: fields.scenario_id })
-            : req.url === "/api/campaigns/load" ? await host.loadCampaign({ campaign_id: fields.campaign_id, slot: fields.slot }) : await host.closeCampaign();
+            : req.url === "/api/campaigns/load" ? await host.loadCampaign({ campaign_id: fields.campaign_id, slot: fields.slot })
+            : req.url === "/api/campaigns/delete" ? await host.deleteCampaign({ campaign_id: fields.campaign_id }) : await host.closeCampaign();
           if (outcome.ok) comparable.clear();
           json(outcome.ok ? 200 : outcome.error.code === "turn_in_progress" || outcome.error.code === "campaign_locked" ? 409 : 422, { ...outcome, ...state() }); return;
         }

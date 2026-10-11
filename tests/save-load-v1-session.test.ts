@@ -391,5 +391,14 @@ test("HTTP host mode: start screen, create, save, load, close; save state in the
     assert.equal((await post("/api/campaigns/load", { campaign_id: "../escape" })).status, 422);
     const closed = await (await post("/api/campaigns/close", {})).json();
     assert.equal(closed.ok, true); assert.equal(closed.campaign, null);
+    // Delete: only the chosen campaign goes (soft delete); the other one stays listed.
+    const before = (await (await fetch(`${url}/api/campaigns`)).json()).campaigns.length;
+    assert.ok(before >= 2);
+    assert.equal((await post("/api/campaigns/delete", { campaign_id: "../escape" })).status, 422);
+    assert.equal((await post("/api/campaigns/delete", {})).status, 422);
+    const deleted = await (await post("/api/campaigns/delete", { campaign_id: id })).json();
+    assert.equal(deleted.ok, true);
+    const after = (await (await fetch(`${url}/api/campaigns`)).json()).campaigns;
+    assert.equal(after.length, before - 1); assert.ok(!after.some((c: { campaign_id: string }) => c.campaign_id === id));
   } finally { server.close(); await host.shutdown(); }
 });
