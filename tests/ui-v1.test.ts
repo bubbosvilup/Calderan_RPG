@@ -36,36 +36,47 @@ class Element {
   focus() { this.focused = true; }
   requestSubmit() { return this.handlers.get("submit")!({ preventDefault() {} }); }
 }
-test("inventory client shows safe cards, filters possession, searches and renders pending/failed/missing art", async () => {
+const visual = (kind: string, url?: string) => ({ kind, icon: { source: url ? "item" : "category", url: url ?? `/api/item-glyph/${kind}` }, detail: { source: url ? "item" : "category", url: url ?? `/api/item-glyph/${kind}` } });
+const slots = (equipped: string[] = []) => ["head", "chest", "weapon", "boots"].map(id => ({ id, label: id, item_ids: id === "boots" ? equipped : [], conflict: false }));
+const gridView = (campaign_id: string, items: any[], extra: any = {}) => ({ campaign_id, revision: 1, gold: 12, counts: { total: items.length, carried: items.filter(i => !i.equipped).length, equipped: items.filter(i => i.equipped).length }, items,
+  equipment: { slots: slots(items.filter(i => i.equipped).map(i => i.id)), unclassified_equipped: [], full_body_url: null, silhouette_url: "/api/item-glyph/silhouette" }, ...extra });
+test("inventory client shows a safe icon grid, filters possession, searches, selects into a detail panel and renders pending/failed/missing art", async () => {
   const items = [
-    { id: "one", name: "Silver Knife", description: "<script>alert('x')</script>", category: "weapon", sprite_status: "ready", sprite_url: "/api/inventory/sprite/first/one", position: { kind: "carried" } },
-    { id: "two", name: "Letter", description: "Sealed paper.", category: "document", sprite_status: "pending", position: { kind: "carried" } },
-    { id: "three", name: "Boots", sprite_status: "failed", position: { kind: "equipped", slot: "feet", mode: "worn" } },
+    { id: "one", name: "Silver Knife", description: "<script>alert('x')</script>", category: "weapon", category_label: "weapon", sprite_status: "ready", sprite_url: "/api/inventory/sprite/first/one", equipped: false, state_label: "Carried", position: { kind: "carried" }, visual: visual("weapon", "/api/inventory/sprite/first/one") },
+    { id: "two", name: "Letter", description: "Sealed paper.", category: "document", category_label: "document", sprite_status: "pending", equipped: false, state_label: "Carried", position: { kind: "carried" }, visual: visual("document") },
+    { id: "three", name: "Boots", sprite_status: "failed", category_label: "miscellaneous", equipped: true, state_label: "Equipped · feet · worn", position: { kind: "equipped", slot: "feet", mode: "worn" }, visual: visual("misc") },
   ];
-  const inventory = { campaign_id: "first", items }, data = { ...opening, inventory };
+  const inventory = gridView("first", items), data = { ...opening, inventory };
   const c = await client(async (url: string) => ({ ok: true, json: async () => url === "/api/inventory" ? inventory : data }));
   assert.equal(c.node("inventory-items").children.length, 3);
-  assert.match(c.node("inventory-items").textContent, /<script>/, "untrusted prose stays inert text");
-  assert.match(c.node("inventory-items").textContent, /Illustration on its way/); assert.match(c.node("inventory-items").textContent, /Illustration unavailable/);
-  const image = c.node("inventory-items").children[0]!.children[0]!.children[1]!;
-  image.handlers.get("error")!({}); assert.equal(image.hidden, true); assert.match(c.node("inventory-items").textContent, /Illustration unavailable/);
+  assert.equal(c.node("inventory-count").textContent, "3 items · 2 carried · 1 equipped"); assert.equal(c.node("inventory-gold").textContent, "12");
+  assert.doesNotMatch(c.node("inventory-items").textContent, /<script>/, "descriptions are detail-only, not grid text");
+  const cell = (i: number) => c.node("inventory-items").children[i]!;
+  assert.equal(cell(0).children[0]!.attributes.get("src"), "/api/inventory/sprite/first/one", "a ready sprite is the specific item visual");
+  assert.equal(cell(1).children[0]!.attributes.get("src"), "/api/item-glyph/document", "no sprite: the category fallback icon");
+  const image = cell(0).children[0]!; image.handlers.get("error")!({}); assert.equal(image.attributes.get("src"), "/api/item-glyph/weapon", "a broken image falls back to the category glyph");
+  assert.equal(c.node("inventory-detail-body").hidden, true);
+  cell(0).handlers.get("click")!({}); assert.equal(c.node("inventory-detail-body").hidden, false);
+  assert.equal(c.node("inventory-detail-name").textContent, "Silver Knife"); assert.match(c.node("inventory-detail-description").textContent, /<script>/, "untrusted prose stays inert text");
   c.node("inventory-nav").handlers.get("click")!({}); await tick(); assert.equal(c.node("inventory-view").hidden, false);
-  c.node("inventory-equipped").handlers.get("click")!({}); assert.equal(c.node("inventory-items").children.length, 1); assert.match(c.node("inventory-items").textContent, /Equipped.*feet.*worn/);
+  c.node("inventory-equipped").handlers.get("click")!({}); assert.equal(c.node("inventory-items").children.length, 1); assert.equal(c.node("inventory-items").children[0]!.attributes.get("data-item"), "three");
+  assert.match(c.node("equip-slot-boots-body").children[0]!.attributes.get("aria-label")!, /Boots/);
   c.node("inventory-search").handlers.get("input")!({ target: { value: "no match" } }); assert.match(c.node("inventory-items").textContent, /No items match/);
-  c.render({ ...opening, inventory: { campaign_id: "second", items: [] } });
-  assert.equal(c.node("inventory-search").value, ""); assert.match(c.node("inventory-items").textContent, /inventory is empty/);
+  c.render({ ...opening, inventory: gridView("second", []) });
+  assert.equal(c.node("inventory-search").value, ""); assert.match(c.node("inventory-items").textContent, /inventory is empty/); assert.equal(c.node("inventory-detail-body").hidden, true, "selection resets with the campaign");
   c.node("inventory-back").handlers.get("click")!({}); assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("inventory-nav").focused, true);
 });
 test("inventory refresh updates pending art and rejects stale campaign responses", async () => {
-  let response = { campaign_id: "first", items: [{ id: "one", name: "Knife", sprite_status: "pending", position: { kind: "carried" } }] };
+  const pending = { id: "one", name: "Knife", sprite_status: "pending", category_label: "weapon", equipped: false, state_label: "Carried", position: { kind: "carried" }, visual: visual("weapon") };
+  let response = gridView("first", [pending]);
   let resolve!: (data: any) => void;
   const c = await client(async (url: string) => ({ ok: true, json: async () => url === "/api/inventory" ? new Promise(r => { resolve = r; }) : { ...opening, inventory: response } }));
   c.node("inventory-nav").handlers.get("click")!({}); await tick();
-  resolve({ campaign_id: "first", items: [{ ...response.items[0], sprite_status: "ready", sprite_url: "/api/inventory/sprite/first/one" }] }); await tick();
-  assert.equal(c.node("inventory-items").children[0]!.children[0]!.children.length, 2);
+  resolve(gridView("first", [{ ...pending, sprite_status: "ready", sprite_url: "/api/inventory/sprite/first/one", visual: visual("weapon", "/api/inventory/sprite/first/one") }])); await tick();
+  assert.equal(c.node("inventory-items").children[0]!.children[0]!.attributes.get("src"), "/api/inventory/sprite/first/one");
   c.node("inventory-nav").handlers.get("click")!({}); await tick();
-  c.render({ ...opening, inventory: { campaign_id: "second", items: [] } });
-  resolve({ campaign_id: "first", items: response.items }); await tick();
+  c.render({ ...opening, inventory: gridView("second", []) });
+  resolve(gridView("first", response.items)); await tick();
   assert.match(c.node("inventory-items").textContent, /inventory is empty/);
   c.node("inventory-back").handlers.get("click")!({});
 });
@@ -74,7 +85,7 @@ const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color"
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
+  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-gold", "inventory-detail-empty", "inventory-detail-body", "inventory-detail-art", "inventory-detail-name", "inventory-detail-category", "inventory-detail-description", "inventory-detail-state", "inventory-detail-owner", "equipment-figure", "equipment-note", "equip-slot-head", "equip-slot-head-body", "equip-slot-chest", "equip-slot-chest-body", "equip-slot-weapon", "equip-slot-weapon-body", "equip-slot-boots", "equip-slot-boots-body", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
     "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
@@ -839,4 +850,16 @@ test("an NPC+ that is no longer active shows Edit NPC+ disabled with its real re
 test("a blocked generation is the one legitimate disabled Generate, with its reason", async () => {
   const c = await drawerOf(tierCard("minor", "npc_plus", {}, { generate_unavailable_reason: "Portrait generation is only available for adult characters." }));
   const generate = c.node("character-portrait-actions").children[0]!; assert.equal(generate.disabled, true); assert.match(generate.attributes.get("title")!, /adult/);
+});
+
+test("A7/A8/A16 (client): a canonical avatar fills the drawer portrait and the round scene portrait from one URL, and hides the placeholder", async () => {
+  const url = "/api/canon-avatar/korvin", card = { ...tierCard("korvin", "world_canon"), avatar_url: url };
+  const data = { ...opening, revision: 3, play: { household_title: "Household", participants: [{ ...card, card }], household: [{ members: [] }] } };
+  const c = await client(async () => ({ ok: true, json: async () => data }));
+  const round = c.node("scene-participants").children[0]!.children[0]!.children[0]!;
+  assert.equal(round.attributes.get("src"), url, "round portrait");
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  assert.equal(c.node("character-avatar-image").attributes.get("src"), url, "drawer, same asset"); assert.equal(c.node("character-avatar-image").hidden, false);
+  assert.equal(c.node("portrait-initial").hidden, true); assert.equal(c.node("character-portrait-label").hidden, true);
+  assert.deepEqual([...c.node("character-portrait-actions").children, ...c.node("character-footer-actions").children], [], "still read-only");
 });

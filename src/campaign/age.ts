@@ -9,7 +9,7 @@ import type { CampaignDomains } from "./types.js";
  */
 export type AgeStatus = "adult" | "minor" | "unknown";
 const MINOR_WORDS = /\b(?:child|children|minor|underage|girl of \d|boy of \d|infant|toddler|adolescent|teen(?:ager|age)?|juvenile)\b/i;
-function fromText(text: string): AgeStatus {
+export function ageStatusFromText(text: string): AgeStatus {
   if (MINOR_WORDS.test(text)) return "minor";
   const numbers = [...text.matchAll(/\b(\d{1,3})\b/g)].map(m => Number(m[1]));
   if (numbers.length) return numbers.every(n => n >= 18) ? "adult" : "minor";
@@ -19,10 +19,10 @@ function fromText(text: string): AgeStatus {
 export function ageStatus(world: WorldStore, domains: DeepReadonly<Pick<CampaignDomains, "characters">>, id: string): AgeStatus {
   const age = domains.characters.find(c => c.id === id)?.profile.age;
   if (age?.kind === "exact") return age.years >= 18 ? "adult" : "minor";
-  if (age?.kind === "approximate") { const s = fromText(age.description); if (s !== "unknown") return s; }
+  if (age?.kind === "approximate") { const s = ageStatusFromText(age.description); if (s !== "unknown") return s; }
   const entity = world.getEntity(id);
   if (entity?.type !== "character") return "unknown";
-  if ("age_band" in entity && entity.age_band) { const s = fromText(entity.age_band); if (s !== "unknown") return s; }
+  if ("age_band" in entity && entity.age_band) { const s = ageStatusFromText(entity.age_band); if (s !== "unknown") return s; }
   const stated = `${entity.summary} ${entity.content}`.match(/\b(\d{1,3})-year-old\b/);
   return stated ? (Number(stated[1]) >= 18 ? "adult" : "minor") : "unknown";
 }

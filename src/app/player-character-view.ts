@@ -11,8 +11,9 @@ import { isPhysicalCondition } from "../turn/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
 import { appearanceFingerprint, composePortraitPrompt, portraitDetails, portraitPoseOptions, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";
-import { ageStatus } from "../campaign/age.js";
+import { ageStatus, type AgeStatus } from "../campaign/age.js";
 import { characterCapabilities, type CharacterCapabilities } from "./character-capabilities.js";
+import { canonAvatarUrl } from "./canon-avatars.js";
 import { RAENA_IMAGE_STACK } from "./image-stack.js";
 import { avatarPortrait, fullBodyPortrait, MAX_PORTRAIT_VERSIONS, PORTRAIT_BATCH_SIZE, portraitAssetToken, portraitItemToken, portraitRecord } from "../campaign/portraits.js";
 import { appearanceLabel, appearanceLines, PERMANENT_APPEARANCE_FIELDS, resolvePermanentAppearance, type PermanentAppearanceField } from "../campaign/permanent-appearance.js";
@@ -107,8 +108,30 @@ const EDITOR_GROUPS: Readonly<Record<PermanentAppearanceField, AppearanceEditorV
 /** Matches the existing player-visible canonical grant boundary, not narrator-only access. */
 const publicAccess = (p: DeepReadonly<KnowledgeAccess> | undefined) => isVisible(p, "player") && isVisible(p, "narrator");
 
+/** Opaque same-origin URL of one stored portrait file. */
+export const portraitAssetUrl = (campaignId: string, characterId: string, file: string) => `/api/portrait/asset/${portraitAssetToken(campaignId, characterId, file)}`;
+/** The two server-built prompt previews (committed appearance only; nothing client-side resolves them). */
+export const portraitPromptPreviews = (details: string) => ({ avatar: composePortraitPrompt({ details, kind: "avatar", pose: "neutral", trigger: RAENA_IMAGE_STACK.trigger }), fullbody: composePortraitPrompt({ details, kind: "fullbody", pose: "neutral", trigger: RAENA_IMAGE_STACK.trigger }) });
+/**
+ * The shared Avatar / Full Body / Gallery projection used by BOTH the NPC+ editor and the Player Character page (one pipeline, one
+ * model). Only SELECTED images (never a canonical fallback) appear as the selected Avatar / Full Body here.
+ */
+export function portraitEditorView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, id: string, details: string, age: AgeStatus = ageStatus(world, snapshot, id)): PortraitEditorView {
+  const assetUrl = (file: string) => portraitAssetUrl(snapshot.campaign_id, id, file);
+  const record = portraitRecord(snapshot, id), avatar = avatarPortrait(snapshot, id), fullBody = fullBodyPortrait(snapshot, id), current = appearanceFingerprint(details);
+  const versions = record?.versions ?? [], blocked = age === "minor" ? "Portrait generation is only available for adult characters." : null;
+  const poseLabel = (kind: PortraitKind, pose: string | undefined) => pose ? portraitPoseOptions(kind).find(p => p.id === pose)?.label ?? null : null;
+  return { avatar: avatar ? { url: assetUrl(avatar.asset_file), stale: avatar.prompt_fingerprint !== current } : null,
+    full_body: fullBody ? { url: assetUrl(fullBody.asset_file), stale: fullBody.prompt_fingerprint !== current } : null,
+    gallery: versions.map(v => ({ token: portraitItemToken(snapshot.campaign_id, id, v.version_id), url: assetUrl(v.asset_file), is_avatar: v.version_id === record!.avatar_version_id,
+      is_full_body: v.version_id === record!.full_body_version_id, stale: v.prompt_fingerprint !== current, generated_at: v.created_at, model_label: v.style_id ?? v.model,
+      reference_used: v.reference_used === true, kind: v.kind ?? "legacy", pose_label: v.kind ? poseLabel(v.kind, v.pose) : null, can_be_avatar: v.kind === "avatar", can_be_full_body: v.kind === "fullbody" })),
+    gallery_limit: MAX_PORTRAIT_VERSIONS, batch_size: PORTRAIT_BATCH_SIZE, can_generate_batch: !blocked && versions.length + PORTRAIT_BATCH_SIZE <= MAX_PORTRAIT_VERSIONS,
+    generation_blocked: blocked, poses: { avatar: portraitPoseOptions("avatar"), fullbody: portraitPoseOptions("fullbody") },
+    reference_attached: !!record?.reference, reference_url: record?.reference ? assetUrl(record.reference.asset_file) : null };
+}
 /** One detached projection for scene, household and future people views; never mutates or infers campaign truth. */
-export function playerCharacterProjection(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>) {
+export function playerCharacterProjection(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, options: { readonly canon_avatar_dir?: string } = {}) {
   const learned = new Map(snapshot.knowledge.filter(k => k.character_id === "nicco").map(k => [k.fact_id, k]));
   const knownNames = new Set(snapshot.facts.filter(f => isIdentityNameFact(f) && learned.get(f.id)?.status === "knows").flatMap(f => f.content.kind === "canonical" ? [f.content.entity_id] : []));
   const household = snapshot.households.filter(h => h.members.some(m => m.character_id === "nicco" && m.status === "member"));
@@ -192,21 +215,13 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     // as the session sends them). Pre-v1 images carry a whole-prompt fingerprint and therefore show as stale.
     const details = editable ? text(portraitDetails(permanent)) : "";
     const preview = (kind: PortraitKind) => composePortraitPrompt({ details, kind, pose: "neutral", trigger: RAENA_IMAGE_STACK.trigger });
-    const assetUrl = (file: string) => `/api/portrait/asset/${portraitAssetToken(snapshot.campaign_id, id, file)}`;
-    const avatar = avatarPortrait(snapshot, id), avatarUrl = avatar ? assetUrl(avatar.asset_file) : null;
-    const portraitView = (): PortraitEditorView => {
-      const record = portraitRecord(snapshot, id), fullBody = fullBodyPortrait(snapshot, id), current = appearanceFingerprint(details);
-      const versions = record?.versions ?? [], blocked = ageStatus(world, snapshot, id) === "minor" ? "Portrait generation is only available for adult characters." : null;
-      const poseLabel = (kind: PortraitKind, pose: string | undefined) => pose ? portraitPoseOptions(kind).find(p => p.id === pose)?.label ?? null : null;
-      return { avatar: avatar ? { url: avatarUrl!, stale: avatar.prompt_fingerprint !== current } : null,
-        full_body: fullBody ? { url: assetUrl(fullBody.asset_file), stale: fullBody.prompt_fingerprint !== current } : null,
-        gallery: versions.map(v => ({ token: portraitItemToken(snapshot.campaign_id, id, v.version_id), url: assetUrl(v.asset_file), is_avatar: v.version_id === record!.avatar_version_id,
-          is_full_body: v.version_id === record!.full_body_version_id, stale: v.prompt_fingerprint !== current, generated_at: v.created_at, model_label: v.style_id ?? v.model,
-          reference_used: v.reference_used === true, kind: v.kind ?? "legacy", pose_label: v.kind ? poseLabel(v.kind, v.pose) : null, can_be_avatar: v.kind === "avatar", can_be_full_body: v.kind === "fullbody" })),
-        gallery_limit: MAX_PORTRAIT_VERSIONS, batch_size: PORTRAIT_BATCH_SIZE, can_generate_batch: !blocked && versions.length + PORTRAIT_BATCH_SIZE <= MAX_PORTRAIT_VERSIONS,
-        generation_blocked: blocked, poses: { avatar: portraitPoseOptions("avatar"), fullbody: portraitPoseOptions("fullbody") },
-        reference_attached: !!record?.reference, reference_url: record?.reference ? assetUrl(record.reference.asset_file) : null };
-    };
+    const assetUrl = (file: string) => portraitAssetUrl(snapshot.campaign_id, id, file);
+    const avatar = avatarPortrait(snapshot, id);
+    // Portrait precedence (one deterministic order): a selected NPC+ Avatar, else the authored canonical avatar (registry by stable canonical id,
+    // not for created characters), else null (passive placeholder). The authored image never replaces a selected Avatar and grants no capability.
+    const authoredAvatar = canonical && record?.origin.kind !== "created" && (named || here) ? canonAvatarUrl(canonicalId, options.canon_avatar_dir) : null;
+    const avatarUrl = avatar ? assetUrl(avatar.asset_file) : authoredAvatar;
+    const portraitView = (): PortraitEditorView => portraitEditorView(world, snapshot, id, details);
     const dto: PlayerCharacterView = {
       ref: createHash("sha256").update(`${snapshot.campaign_id}:${id}`).digest("hex").slice(0, 24), name, name_known: named,
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),

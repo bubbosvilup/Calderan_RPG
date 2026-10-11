@@ -356,7 +356,7 @@ async function client(fetchMock: (url: string, options?: any) => any) {
   return { node, click: (id: string) => node(id).handlers.get("click")!({}) };
 }
 const playerView = (s: GameSession) => s.getPlayerProfileView();
-test("client: NICCO / Player Character view, edit fills from the committed profile, Save posts only changes, Cancel discards", async () => {
+test("client: NICCO / Player Character page (shared editor in player mode), fields fill from the committed profile, Save posts only changes, Cancel discards", async () => {
   const root = await temp(), { s, host } = await created(root);
   const state = (session: GameSession) => ({ messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true, revision: rev(session),
     scene: { location: "Market", time_of_day: "Morning" }, household: [], player_character: playerView(session) });
@@ -369,42 +369,43 @@ test("client: NICCO / Player Character view, edit fills from the committed profi
   });
   assert.equal(c.node("player-nav").disabled, false);
   c.click("player-nav");
-  assert.equal(c.node("player-view").hidden, false); assert.equal(c.node("play-view").hidden, true);
+  assert.equal(c.node("member-editor").hidden, false); assert.equal(c.node("play-view").hidden, true);
   assert.equal(c.node("player-nav").attributes.get("aria-pressed"), "true");
-  assert.equal(c.node("player-name").textContent, "NICCO"); assert.equal(c.node("player-role").textContent, "Player Character");
-  assert.equal(c.node("player-narrator-summary").textContent, playerView(s)!.narrator_summary, "the preview is the server projection");
-  assert.match(c.node("player-details").textContent, /tall · overweight/);
-  assert.equal(c.node("player-form").hidden, true); assert.equal(c.node("player-save").hidden, true);
-  // Edit -> change -> Cancel: nothing is sent, nothing changes.
-  c.click("player-edit");
-  assert.equal(c.node("player-form").hidden, false); assert.equal(c.node("player-details").hidden, true);
-  const input = (key: string) => c.node("player-form").children.find(l => l.children[0]!.attributes.get("aria-label") === playerView(s)!.fields.concat(playerView(s)!.identity as never).find(f => f.key === key)!.label)!.children[0]!;
-  assert.equal(input("distinctive_traits").value, nicco.traits!.join("\n"), "the form is filled from the committed profile");
-  assert.equal(c.node("player-save").disabled, true, "nothing to save yet");
-  input("eyes").value = "zircon-blue left eye"; input("eyes").handlers.get("input")!({});
-  assert.equal(c.node("player-save").disabled, false);
-  c.click("player-cancel");
-  assert.equal(posts.length, 0); assert.equal(c.node("player-form").hidden, true); assert.equal(c.node("player-form").children.length, 0);
-  assert.ok(!c.node("player-details").textContent.includes("zircon"));
-  // Edit -> change -> Save: only the changed keys are posted with the revision the editor opened with.
+  assert.equal(c.node("editor-name").textContent, "NICCO"); assert.equal(c.node("editor-context").textContent, "Player Character");
+  assert.equal(c.node("editor-back").textContent, "\u2039 Back to Play");
+  assert.equal(c.node("editor-appearance").textContent, playerView(s)!.narrator_summary, "the preview is the server projection");
+  assert.equal(c.node("editor-player-identity").hidden, false, "player identity is editable on this page");
+  assert.doesNotMatch(c.node("editor-context").textContent, /NPC\+|Household/);
+  assert.equal(c.node("appearance-distinctive_traits").value, nicco.traits!.join("\n"), "the form is filled from the committed profile");
+  assert.equal(c.node("editor-save").disabled, true, "nothing to save yet");
+  // Change -> Cancel: nothing is sent, nothing changes.
+  c.node("appearance-eyes").value = "zircon-blue left eye"; c.node("appearance-eyes").handlers.get("input")!({});
+  assert.equal(c.node("editor-save").disabled, false);
+  c.click("editor-cancel");
+  assert.equal(posts.length, 0); assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
+  // Reopen -> change -> Save: only the changed keys are posted with the revision the editor opened with.
   const r0 = rev(s);
-  c.click("player-edit");
-  input("eyes").value = "zircon-blue left eye"; input("eyes").handlers.get("input")!({});
-  input("height_cm").value = "abc"; input("height_cm").handlers.get("input")!({});
-  assert.equal(c.node("player-save").disabled, true, "an invalid number blocks saving");
-  input("height_cm").value = ""; input("height_cm").handlers.get("input")!({});
-  await c.click("player-save"); await tick();
+  c.click("player-nav");
+  assert.equal(c.node("appearance-eyes").value, "", "unsaved edits were discarded");
+  c.node("appearance-eyes").value = "zircon-blue left eye"; c.node("appearance-eyes").handlers.get("input")!({});
+  c.node("appearance-height_cm").value = "abc"; c.node("appearance-height_cm").handlers.get("input")!({});
+  assert.equal(c.node("editor-save").disabled, true, "an invalid number blocks saving");
+  c.node("appearance-height_cm").value = ""; c.node("appearance-height_cm").handlers.get("input")!({});
+  await c.click("editor-save"); await tick();
   assert.deepEqual(posts, [{ url: "/api/player-character", body: { expected_revision: r0, patch: { eyes: "zircon-blue left eye" } } }]);
   assert.equal(rev(s), r0 + 1);
-  assert.equal(c.node("player-form").hidden, true, "back to view mode after a committed save");
-  assert.match(c.node("player-details").textContent, /zircon-blue left eye/);
-  assert.match(c.node("player-narrator-summary").textContent, /eyes zircon-blue left eye/);
+  assert.match(c.node("editor-appearance").textContent, /eyes zircon-blue left eye/);
+  assert.equal(c.node("editor-save").disabled, true, "saved: nothing pending");
+  // An identity edit uses the same endpoint.
+  c.node("appearance-species").value = "Half-elf"; c.node("appearance-species").handlers.get("input")!({});
+  await c.click("editor-save"); await tick();
+  assert.deepEqual(posts[1]!.body.patch, { species: "Half-elf" });
   // A refused save keeps the form and shows the server's message.
-  c.click("player-edit");
-  input("description").value = "x".repeat(1001); input("description").handlers.get("input")!({});
-  await c.click("player-save"); await tick();
-  assert.equal(c.node("player-error").hidden, false); assert.match(c.node("player-error").textContent, /1000 characters/);
-  assert.equal(c.node("player-form").hidden, false); assert.equal(rev(s), r0 + 1);
-  c.click("player-back"); assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("player-view").hidden, true);
+  c.node("appearance-description").value = "x".repeat(1001); c.node("appearance-description").handlers.get("input")!({});
+  await c.click("editor-save"); await tick();
+  assert.equal(c.node("editor-error").hidden, false); assert.match(c.node("editor-error").textContent, /1000 characters/);
+  assert.equal(c.node("member-editor").hidden, false);
+  c.click("editor-back"); assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
+  assert.equal(c.node("player-nav").attributes.get("aria-pressed"), "false");
   await host.shutdown();
 });

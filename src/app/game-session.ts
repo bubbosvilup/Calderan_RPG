@@ -38,6 +38,8 @@ import { appError, toAppError, type AppError } from "./app-errors.js";
 import { deriveSessionView, type ProviderStatus, type SessionStatus, type SessionView } from "./session-view.js";
 import { derivePlayUiView } from "./play-ui-view.js";
 import { playerCharacterProjection } from "./player-character-view.js";
+import { playerVisualView, type PlayerVisualView } from "./player-visual-view.js";
+import { inventoryUiView } from "./inventory-ui-view.js";
 import { buildTrace, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**
@@ -342,7 +344,10 @@ export class GameSession {
   }
 
   /** Player Character Profile V1: the active player character's profile view (read-only; never dirties the campaign). */
-  getPlayerProfileView(): PlayerProfileView | null { return playerProfileView(this.#deps.world, this.#session.campaign.exportSnapshot()); }
+  getPlayerProfileView(): (PlayerProfileView & { readonly visual: PlayerVisualView | null }) | null {
+    const snapshot = this.#session.campaign.exportSnapshot(), view = playerProfileView(this.#deps.world, snapshot);
+    return view ? { ...view, visual: playerVisualView(this.#deps.world, snapshot) } : null;
+  }
   /**
    * Player Character Profile V1: the player's only profile write. Checks the revision the editor opened with, applies the bounded
    * patch to the ACTIVE player character's profile and commits one set_player_character_profile atomically. Unchanged = no commit.
@@ -370,10 +375,14 @@ export class GameSession {
   /** Eligible managed NPC+ target for an opaque ref, with its committed editor projection (or an error message). */
   #managedTarget(ref: unknown) {
     if (typeof ref !== "string" || !/^[0-9a-f]{24}$/.test(ref)) return undefined;
-    const snapshot = this.#session.campaign.exportSnapshot(), characters = playerCharacterProjection(this.#deps.world, snapshot);
+    const snapshot = this.#session.campaign.exportSnapshot();
+    // The player character shares the pipeline but is not an NPC+: its target comes from the player visual view, never from a character record.
+    const player = playerVisualView(this.#deps.world, snapshot);
+    if (player && player.ref === ref) return { id: activePlayerCharacter(snapshot)!.character_id, editor: player.editor, snapshot };
+    const characters = playerCharacterProjection(this.#deps.world, snapshot);
     const record = snapshot.characters.find(c => characters.project(c.id)?.ref === ref);
     const card = record ? characters.project(record.id) : undefined;
-    return record && card?.appearance_editor_eligible && card.appearance_editor ? { id: record.id, card, editor: card.appearance_editor, snapshot } : undefined;
+    return record && card?.appearance_editor_eligible && card.appearance_editor ? { id: record.id, editor: card.appearance_editor, snapshot } : undefined;
   }
 
   /**
@@ -830,11 +839,11 @@ export class GameSession {
   get busy(): boolean { return this.#status !== "idle" || !!this.#portraitBusy || this.#itemSprites.busy || this.#session.saving || this.#autosave?.state === "saving"; }
   /** Same read model and sprite pipeline for player, campaign NPCs and NPC+. */
   getInventoryVisuals(characterId: string) { return inventoryVisualView(this.#session.campaign.exportSnapshot(), characterId, this.#deps.world); }
-  /** Player-safe Inventory UI V1: possession only, no visual prose or storage filenames. */
+  /** Player-safe Inventory UI: possession, equipment presentation and visuals only; no storage filenames or technical fields. */
   getPlayerInventoryView() {
-    return { campaign_id: this.campaignId, revision: this.#session.campaign.revision, items: this.getInventoryVisuals("nicco").map(({ sprite_asset_ref: _asset, ...item }) => ({
-      ...item, ...(item.sprite_status === "ready" ? { sprite_url: `/api/inventory/sprite/${this.campaignId}/${item.id}` } : {}),
-    })) };
+    const snapshot = this.#session.campaign.exportSnapshot(), campaignId = snapshot.campaign_id;
+    const view = inventoryUiView(this.#deps.world, snapshot, { full_body_url: playerVisualView(this.#deps.world, snapshot)?.full_body_url ?? null, sprite_url: id => `/api/inventory/sprite/${campaignId}/${id}` });
+    return { ...view, revision: this.#session.campaign.revision };
   }
   requestItemSprite(itemId: string): boolean { return this.#status !== "closed" && this.#itemSprites.request(itemId); }
   async itemSpritesSettled(): Promise<void> { await this.#itemSprites.settled(); }

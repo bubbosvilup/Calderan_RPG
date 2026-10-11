@@ -1,7 +1,9 @@
 import { createServer, type ServerResponse } from "node:http";
 import { readFile } from "node:fs/promises";
+import { ITEM_GLYPHS, isItemGlyphName } from "../app/item-visuals.js";
 import { resolve } from "node:path";
 import { GameSession, SessionHost } from "../app/index.js";
+import { CANON_AVATAR_DIR, readCanonAvatar } from "../app/canon-avatars.js";
 import { UI_PLAYTEST_OPENING } from "../app/ui-playtest.js";
 
 import { ALTERNATE_NARRATOR_MODELS, type NarratorAlternatives } from "../app/narrator-alternatives.js";
@@ -23,7 +25,7 @@ const assets = new Map([
  *   - Given a SessionHost (Save/Load v1 persistent campaigns): the host's active session (or none: start screen), the session-owned
  *     transcript, and the campaign create/load/close/save routes.
  */
-export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives) {
+export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR) {
   const host = target instanceof SessionHost ? target : undefined;
   const fixed = target instanceof GameSession ? target : undefined;
   const legacyMessages: Message[] = [{ role: "narrator", text: UI_PLAYTEST_OPENING }];
@@ -61,6 +63,12 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       if (req.method === "GET" && req.url === "/api/inventory") {
         const session = current(); json(200, session ? session.getPlayerInventoryView() : { campaign_id: null, items: [] }); return;
       }
+      const glyph = req.method === "GET" ? /^\/api\/item-glyph\/([a-z]{3,12})$/.exec(req.url ?? "")?.[1] : undefined;
+      if (glyph) {
+        // Static category fallback glyphs (closed name set; nothing campaign-specific, no path is built from the request).
+        if (!isItemGlyphName(glyph)) { json(404, { error: "Not found." }); return; }
+        reply(res, 200, "image/svg+xml", ITEM_GLYPHS[glyph]); return;
+      }
       const itemAsset = req.method === "GET" ? /^\/api\/inventory\/sprite\/([a-z][a-z0-9_]{0,119})\/([a-z][a-z0-9_]{0,119})$/.exec(req.url ?? "") : undefined;
       if (itemAsset) {
         const session = current();
@@ -77,6 +85,13 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       if (req.method === "GET" && req.url === "/api/campaigns") {
         if (!host) { json(404, { error: "Not found." }); return; }
         json(200, { campaigns: await host.listCampaigns(), scenarios: host.scenarios, active_campaign_id: host.active?.campaignId ?? null }); return;
+      }
+      // Authored canonical avatars: registered opaque tokens only (no path, name or other text is ever joined into a file path).
+      const canonId = req.method === "GET" ? /^\/api\/canon-avatar\/([0-9a-f]{24})$/.exec(req.url ?? "")?.[1] : undefined;
+      if (canonId) {
+        const bytes = await readCanonAvatar(canonId, canonAvatarDir);
+        if (!bytes) { json(404, { error: "Not found." }); return; }
+        res.writeHead(200, { "Content-Type": "image/png", "Content-Length": String(bytes.length), "Cache-Control": "no-cache" }); res.end(bytes); return;
       }
       // Portrait Image Generation V1: stored portrait/reference bytes by opaque token only (no path, ID or name is accepted).
       const assetToken = req.method === "GET" ? /^\/api\/portrait\/asset\/([0-9a-f]{32})$/.exec(req.url ?? "")?.[1] : undefined;

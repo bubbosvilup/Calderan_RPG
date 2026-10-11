@@ -7,7 +7,7 @@
  *  - campaign_npc: persistent campaign character that is not promoted; read-only visuals.
  *  - npc_plus    : promoted (an authoritative premium record exists). Promotion, not household membership or the active behavior gate.
  */
-export type CharacterTier = "world_canon" | "campaign_npc" | "npc_plus";
+export type CharacterTier = "world_canon" | "campaign_npc" | "npc_plus" | "player";
 /** No Avatar upload pipeline exists (only the deferred reference image), so no tier is offered an Upload control. */
 export const AVATAR_UPLOAD_SUPPORTED = false;
 export interface CharacterCapabilities {
@@ -34,4 +34,14 @@ export function characterCapabilities(input: { readonly promoted: boolean; reado
     can_show_full_body: manage, can_manage_full_body: manage, can_show_gallery: manage, can_manage_gallery: manage, can_edit_npc_plus: manage, can_edit_appearance: manage,
     edit_unavailable_reason: npcPlus && !input.editable ? input.status === "dead" ? "This character is dead." : "This character is no longer active." : null,
     generate_unavailable_reason: manage ? input.generation_blocked ?? null : null };
+}
+
+/**
+ * The player character (Nicco) is not an NPC+: no premium record, promotion or household authority (`can_edit_npc_plus` is always false),
+ * but it shares the same visual pipeline (Avatar, Full Body, Gallery, generation, permanent appearance) with the NPC+ editor.
+ */
+export function playerCapabilities(input: { readonly generation_blocked?: string | null }): CharacterCapabilities {
+  return { tier: "player", portrait_display: true, portrait_editable: true, can_upload_avatar: AVATAR_UPLOAD_SUPPORTED, can_generate_avatar: true,
+    can_show_full_body: true, can_manage_full_body: true, can_show_gallery: true, can_manage_gallery: true, can_edit_npc_plus: false, can_edit_appearance: true,
+    edit_unavailable_reason: null, generate_unavailable_reason: input.generation_blocked ?? null };
 }

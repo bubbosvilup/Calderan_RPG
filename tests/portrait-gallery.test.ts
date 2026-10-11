@@ -618,7 +618,8 @@ test("stale revision, bad refs and ineligible targets never call the provider; o
     const r = await session.generateNpcPortraitBatch({ ref: bad, expected_revision: now, kind: "avatar" }); assert.ok(!r.ok); assert.equal(r.error.code, "invalid_input");
   }
   const p = playerCharacterProjection(world, (await deps.repository.loadCampaign(id)).campaign.exportSnapshot());
-  for (const cid of ["nicco", plain]) { const r = await session.generateNpcPortraitBatch({ ref: p.project(cid)!.ref, expected_revision: now, kind: "avatar" }); assert.ok(!r.ok); assert.equal(r.error.code, "invalid_input"); }
+  // Nicco is no longer ineligible: the player character shares the portrait pipeline (see player-visuals-inventory.test.ts); a plain campaign NPC still is not.
+  for (const cid of [plain]) { const r = await session.generateNpcPortraitBatch({ ref: p.project(cid)!.ref, expected_revision: now, kind: "avatar" }); assert.ok(!r.ok); assert.equal(r.error.code, "invalid_input"); }
   assert.equal(generator.calls.length, calls, "no provider call for any rejected request");
   let open!: () => void; generator.gate = new Promise<void>(resolve => { open = resolve; });
   const running = session.generateNpcPortraitBatch({ ref, expected_revision: now, kind: "avatar" });

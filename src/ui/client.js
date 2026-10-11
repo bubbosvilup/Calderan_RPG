@@ -23,30 +23,84 @@ const householdCharacters = new Map();
 const editableCharacters = new Map();
 // Tier capabilities are derived server-side (character_capabilities); the client only renders them. A control that the tier does not have is never rendered.
 const capsOf = card => card?.character_capabilities ?? {};
-const editorCard = ref => editableCharacters.get(ref);
+// The player character shares the NPC+ editor surface in "player" mode (one portrait pipeline); its card is built from the server's player projection.
+let editorMode = "npc", playerProfile = null;
+const playerCard = () => {
+  const p = playerProfile, v = p?.visual;
+  return v ? { ref: v.ref, name: p.name, name_known: true, appearance: p.narrator_summary || "No visible appearance set.", appearance_editor: v.editor, appearance_editor_eligible: true, character_capabilities: v.capabilities, avatar_url: v.avatar_url, full_body_url: v.full_body_url } : undefined;
+};
+const editorCard = ref => { const player = playerCard(); return player && player.ref === ref ? player : editableCharacters.get(ref); };
+// One visual resolver per role: the selected Player Avatar / Full Body (never a path built in the DOM code).
+const resolveCharacterAvatar = card => card?.avatar_url ?? card?.appearance_editor?.portrait?.avatar?.url ?? null;
+const resolveCharacterFullBody = card => card?.full_body_url ?? card?.appearance_editor?.portrait?.full_body?.url ?? null;
 function switchView(view) {
   activeView = view;
   closeCharacter();
   if (view !== "editor") closeLightbox();
-  for (const [key, id] of [["play", "play-view"], ["inventory", "inventory-view"], ["household", "household-view"], ["editor", "member-editor"], ["player", "player-view"]]) if (ui(id)) ui(id).hidden = key !== view;
+  for (const [key, id] of [["play", "play-view"], ["inventory", "inventory-view"], ["household", "household-view"], ["editor", "member-editor"]]) if (ui(id)) ui(id).hidden = key !== view;
   ui("inventory-nav")?.setAttribute("aria-pressed", String(view === "inventory"));
   if (view !== "inventory") clearTimeout(inventoryPoll);
-  ui("household-nav")?.setAttribute("aria-pressed", String(view === "household" || view === "editor"));
-  ui("player-nav")?.setAttribute("aria-pressed", String(view === "player"));
+  ui("household-nav")?.setAttribute("aria-pressed", String(view === "household" || (view === "editor" && editorMode !== "player")));
+  ui("player-nav")?.setAttribute("aria-pressed", String(view === "editor" && editorMode === "player"));
   if (view === "household") ui("household-close")?.focus();
   else if (view === "player") ui("player-back")?.focus();
   else if (view === "inventory") ui("inventory-back")?.focus();
   else if (view === "play") ui("household-nav")?.focus();
 }
 // Inventory UI V1 is a projection of committed possession, never client-owned item state.
-let inventoryData = null, inventoryFilter = "all", inventoryQuery = "", inventoryPoll, inventoryRequest = 0;
-const inventoryCategory = category => (category ?? "miscellaneous").replaceAll("_", " ");
+let inventoryData = null, inventoryFilter = "all", inventoryQuery = "", inventoryPoll, inventoryRequest = 0, selectedItemId;
+// Item visuals: the server resolves icon / detail artwork per role (specific > template > category > placeholder); the DOM code only
+// reads those resolved URLs and never builds a path. Icons are small and always shown; the detail image loads for the selected item only.
+const resolveItemIcon = item => item.visual?.icon?.url ?? null;
+const resolveItemDetailArtwork = item => item.visual?.detail?.url ?? null;
+const itemGlyphFallback = item => `/api/item-glyph/${item.visual?.kind ?? "misc"}`;
+function itemImage(item, url, className) {
+  const image = document.createElement("img"); image.className = className; image.alt = ""; image.loading = "lazy";
+  image.addEventListener("error", () => { const glyph = itemGlyphFallback(item); if (image.getAttribute?.("src") !== glyph) image.setAttribute("src", glyph); }, { once: true });
+  image.setAttribute("src", url); return image;
+}
+function selectItem(id) { selectedItemId = id; renderInventory(); }
+function renderEquipment(data) {
+  const equipment = data?.equipment, items = new Map((data?.items ?? []).map(i => [i.id, i]));
+  const figure = ui("equipment-figure");
+  if (figure) { figure.setAttribute("src", equipment?.full_body_url ?? equipment?.silhouette_url ?? "/api/item-glyph/silhouette"); figure.className = equipment?.full_body_url ? "doll-image" : "doll-image silhouette"; }
+  for (const slot of equipment?.slots ?? []) {
+    const body = ui(`equip-slot-${slot.id}-body`), box = ui(`equip-slot-${slot.id}`);
+    if (!body) continue;
+    body.replaceChildren();
+    box?.setAttribute("data-state", slot.conflict ? "conflict" : slot.item_ids.length ? "filled" : "empty");
+    if (!slot.item_ids.length) { const empty = document.createElement("span"); empty.className = "slot-empty"; empty.textContent = "Empty"; body.append(empty); continue; }
+    if (slot.conflict) { const warn = document.createElement("span"); warn.className = "slot-warning"; warn.textContent = "Multiple equipped items"; body.append(warn); }
+    for (const id of slot.item_ids) {
+      const item = items.get(id); if (!item) continue;
+      const chip = document.createElement("button"); chip.className = "slot-item"; chip.setAttribute("type", "button"); chip.setAttribute("title", item.name); chip.setAttribute("aria-label", `${slot.label}: ${item.name}`);
+      chip.append(itemImage(item, resolveItemIcon(item), "slot-icon")); chip.addEventListener("click", () => selectItem(id)); body.append(chip);
+      const label = document.createElement("span"); label.className = "slot-name"; label.textContent = item.name; body.append(label);
+    }
+  }
+  const loose = equipment?.unclassified_equipped?.length ?? 0;
+  if (ui("equipment-note")) ui("equipment-note").textContent = loose ? `${loose} equipped ${loose === 1 ? "item has" : "items have"} no slot classification.` : "";
+}
+function renderDetail(item) {
+  if (ui("inventory-detail-empty")) ui("inventory-detail-empty").hidden = !!item;
+  if (ui("inventory-detail-body")) ui("inventory-detail-body").hidden = !item;
+  if (!item) return;
+  const art = ui("inventory-detail-art");
+  if (art) { art.hidden = false; art.setAttribute("alt", item.name); art.onerror = () => { art.setAttribute("src", itemGlyphFallback(item)); }; const url = resolveItemDetailArtwork(item); if (art.getAttribute?.("src") !== url) art.setAttribute("src", url); }
+  if (ui("inventory-detail-name")) ui("inventory-detail-name").textContent = item.name;
+  if (ui("inventory-detail-category")) ui("inventory-detail-category").textContent = item.category_label;
+  if (ui("inventory-detail-description")) ui("inventory-detail-description").textContent = item.description || "No description available.";
+  if (ui("inventory-detail-state")) ui("inventory-detail-state").textContent = item.state_label;
+  if (ui("inventory-detail-owner")) { ui("inventory-detail-owner").hidden = !item.held_for_other; ui("inventory-detail-owner").textContent = item.held_for_other ? "Belongs to someone else." : ""; }
+}
 function renderInventory() {
   const container = ui("inventory-items"); if (!container) return;
   const all = inventoryData?.items ?? [];
-  const equipped = all.filter(i => i.position.kind === "equipped").length;
-  if (ui("inventory-count")) ui("inventory-count").textContent = `${all.length} ${all.length === 1 ? "item" : "items"} · ${all.length - equipped} carried · ${equipped} equipped`;
+  const counts = inventoryData?.counts ?? { total: all.length, carried: all.length, equipped: 0 };
+  if (ui("inventory-count")) ui("inventory-count").textContent = `${counts.total} ${counts.total === 1 ? "item" : "items"} · ${counts.carried} carried · ${counts.equipped} equipped`;
+  if (ui("inventory-gold")) ui("inventory-gold").textContent = typeof inventoryData?.gold === "number" ? String(inventoryData.gold) : "Not tracked";
   for (const filter of ["all", "carried", "equipped"]) ui(`inventory-${filter}`)?.setAttribute("aria-pressed", String(inventoryFilter === filter));
+  renderEquipment(inventoryData);
   const items = all.filter(i => (inventoryFilter === "all" || i.position.kind === inventoryFilter) && `${i.name} ${i.description ?? ""} ${i.category ?? ""}`.toLowerCase().includes(inventoryQuery));
   container.replaceChildren();
   if (!items.length) {
@@ -55,25 +109,17 @@ function renderInventory() {
     container.append(empty);
   }
   for (const item of items) {
-    const card = document.createElement("article"); card.className = "inventory-item";
-    const art = document.createElement("div"); art.className = "inventory-art";
-    const placeholder = document.createElement("span"); placeholder.className = "inventory-placeholder";
-    placeholder.textContent = item.sprite_status === "pending" ? "Illustration on its way" : item.sprite_status === "failed" ? "Illustration unavailable" : "No illustration yet";
-    art.append(placeholder);
-    if (item.sprite_status === "ready" && item.sprite_url) {
-      const image = document.createElement("img"); image.alt = item.name; image.loading = "lazy"; image.src = item.sprite_url;
-      placeholder.hidden = true;
-      image.addEventListener("error", () => { image.hidden = true; placeholder.hidden = false; placeholder.textContent = "Illustration unavailable"; }, { once: true });
-      art.append(image);
-    }
-    const content = document.createElement("div"); content.className = "inventory-item-content";
-    const tag = document.createElement("span"); tag.className = "inventory-category"; tag.textContent = inventoryCategory(item.category);
-    const name = document.createElement("h3"); name.textContent = item.name;
-    const description = document.createElement("p"); description.className = "inventory-description"; description.textContent = item.description || "No description available.";
-    const position = document.createElement("span"); position.className = "inventory-position";
-    position.textContent = item.position.kind === "equipped" ? `Equipped · ${item.position.slot.replaceAll("_", " ")} · ${item.position.mode === "worn" ? "worn" : "held"}` : "Carried";
-    content.append(tag, name, description, position); card.append(art, content); container.append(card);
+    const cell = document.createElement("button"); cell.className = `inventory-cell${item.equipped ? " is-equipped" : ""}${item.id === selectedItemId ? " is-selected" : ""}`;
+    cell.setAttribute("type", "button"); cell.setAttribute("role", "listitem"); cell.setAttribute("data-item", item.id); cell.setAttribute("title", item.name);
+    cell.setAttribute("aria-pressed", String(item.id === selectedItemId)); cell.setAttribute("aria-label", `${item.name}, ${item.state_label}`);
+    cell.append(itemImage(item, resolveItemIcon(item), "cell-icon"));
+    if (item.equipped) { const mark = document.createElement("span"); mark.className = "cell-equipped"; mark.setAttribute("aria-hidden", "true"); mark.textContent = "E"; cell.append(mark); }
+    if (item.sprite_status === "pending") { const pending = document.createElement("span"); pending.className = "cell-pending"; pending.setAttribute("title", "Illustration on its way"); cell.append(pending); }
+    cell.addEventListener("click", () => selectItem(item.id));
+    container.append(cell);
   }
+  if (selectedItemId && !all.some(i => i.id === selectedItemId)) selectedItemId = undefined;
+  renderDetail(all.find(i => i.id === selectedItemId));
   clearTimeout(inventoryPoll);
   if (activeView === "inventory" && all.some(i => i.sprite_status === "pending")) inventoryPoll = setTimeout(refreshInventory, 2000);
 }
@@ -102,6 +148,7 @@ let editorRevision, editorFields = [], editorSaving = false;
 function openEditor(ref) {
   const card = editorCard(ref);
   if (!card?.appearance_editor_eligible || !capsOf(card).can_edit_npc_plus) return;
+  editorMode = "npc";
   editorRef = ref;
   switchView("editor");
   renderEditor(card, true);
@@ -144,9 +191,20 @@ function updateEditorSave() {
   }
   if (ui("editor-save")) ui("editor-save").disabled = editorSaving || !valid || !Object.keys(patch).length;
 }
+function applyEditorMode(player) {
+  const set = (id, hidden) => { if (ui(id)) ui(id).hidden = hidden; };
+  set("editor-player-identity", !player); set("editor-identity-row", player); set("editor-untracked", player); set("editor-appearance-note", !player);
+  if (ui("editor-back")) ui("editor-back").textContent = player ? "\u2039 Back to Play" : "\u2039 Back to Household";
+  if (ui("editor-context")) ui("editor-context").textContent = player ? "Player Character" : "Household \u00b7 NPC+";
+  if (ui("editor-intro")) ui("editor-intro").textContent = player ? "Visible appearance only \u2014 what anyone present can see. Clothing comes from what Nicco is wearing; background and private history are not part of this profile. The name is fixed."
+    : "Permanent appearance only \u2014 not current wounds, illness, clothing or mood. Fields hold saved values; inherited text beneath a field is reference only and is never copied when you save.";
+  if (ui("editor-appearance-heading")) ui("editor-appearance-heading").textContent = player ? "Narrator sees" : "Resolved permanent appearance";
+}
 function renderEditor(card, fill = false) {
   if (!ui("editor-name")) return;
-  ui("editor-name").textContent = card.name;
+  const player = editorMode === "player";
+  applyEditorMode(player);
+  ui("editor-name").textContent = player ? card.name.toUpperCase() : card.name;
   ui("editor-initial").textContent = card.name_known ? card.name.slice(0, 1) : "?";
   ui("editor-appearance").textContent = card.appearance;
   const editor = card.appearance_editor;
@@ -161,7 +219,7 @@ function renderEditor(card, fill = false) {
   if (ui("editor-identity")) ui("editor-identity").textContent = editor?.identity?.length ? editor.identity.map(i => `${i.label}: ${i.value}`).join(" · ") : "No established species, sex or age.";
   if (fill) {
     editorRevision = currentRevision;
-    editorFields = editor?.fields ?? [];
+    editorFields = [...(editorMode === "player" ? (playerProfile?.identity ?? []).map(f => ({ key: f.key, label: f.label, kind: "text", override: f.value })) : []), ...(editor?.fields ?? [])];
     if (ui("editor-error")) { ui("editor-error").textContent = ""; ui("editor-error").hidden = true; }
     for (const field of editorFields) {
       const input = ui(`appearance-${field.key}`), note = ui(`appearance-${field.key}-note`);
@@ -177,7 +235,8 @@ async function saveEditor() {
   editorSaving = true; updateEditorSave();
   const showEditorError = text => { const el = ui("editor-error"); if (el) { el.textContent = text; el.hidden = !text; if (text) el.scrollIntoView?.({ block: "center" }); } };
   try {
-    const response = await fetch("/api/appearance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, patch }) });
+    const response = await fetch(editorMode === "player" ? "/api/player-character" : "/api/appearance", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editorMode === "player" ? { expected_revision: editorRevision, patch } : { ref: editorRef, expected_revision: editorRevision, patch }) });
     const data = await response.json();
     editorSaving = false;
     if (data?.messages) render(data);
@@ -380,7 +439,7 @@ ui("lightbox-dialog")?.addEventListener("keydown", event => {
 // Reference images are deferred in image generation v1 (text-to-image has no reference input): no upload control; an existing
 // reference can still be removed.
 ui("portrait-reference-remove")?.addEventListener("click", () => portraitRequest("/api/portrait/reference", { image: null }, "reference"));
-for (const key of ["height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"])
+for (const key of ["sex", "species", "apparent_age", "height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"])
   ui(`appearance-${key}`)?.addEventListener("input", () => updateEditorSave());
 function renderHousehold() {
   if (!ui("household-cards")) return;
@@ -431,93 +490,32 @@ function renderHousehold() {
     ui("household-cards").append(article);
   }
 }
-ui("household-nav")?.addEventListener("click", () => { editorRef = undefined; switchView("household"); renderHousehold(); });
+ui("household-nav")?.addEventListener("click", () => { editorRef = undefined; editorMode = "npc"; switchView("household"); renderHousehold(); });
 ui("household-close")?.addEventListener("click", () => switchView("play"));
 for (const key of ["all", "here", "elsewhere"]) ui(`filter-${key}`)?.addEventListener("click", () => { householdFilter = key; renderHousehold(); });
-for (const id of ["editor-back", "editor-cancel"]) ui(id)?.addEventListener("click", () => { editorRef = undefined; switchView("household"); });
-// Player Character Profile V1: the active player character's visible appearance. View mode lists saved values; Edit fills the form
-// from the committed profile and remembers the revision it opened with; Cancel discards; Save sends only changed keys (empty =
-// clear). "Narrator sees" is the server's projection, exactly what the narrator receives, never a client-side rendering.
-let playerProfile = null, playerEditing = false, playerRevision, playerSaving = false;
-const playerInputs = new Map();
-const playerFields = () => [...(playerProfile?.identity ?? []).map(f => ({ ...f, kind: "text" })), ...(playerProfile?.fields ?? [])];
-function showPlayerError(text) { const el = ui("player-error"); if (el) { el.textContent = text; el.hidden = !text; } }
-function playerPatch() {
-  const patch = {}, invalid = [];
-  for (const field of playerFields()) {
-    const input = playerInputs.get(field.key);
-    if (!input) continue;
-    const next = editorValue(field, input.value), stored = field.value === null ? null : editorValue(field, field.value);
-    const empty = Array.isArray(next) ? !next.length : next === "", range = NUMBER_RANGES[field.key];
-    if (field.kind === "number" && !empty && (!Number.isInteger(next) || (range && (next < range[0] || next > range[1])))) { invalid.push(field.key); continue; }
-    if (empty) { if (stored !== null) patch[field.key] = null; continue; }
-    if (JSON.stringify(next) !== JSON.stringify(stored)) patch[field.key] = next;
-  }
-  return { patch, valid: !invalid.length, invalid };
-}
-function updatePlayerSave() {
-  const { patch, valid, invalid } = playerPatch();
-  for (const [key, input] of playerInputs) if (invalid.includes(key)) input.setAttribute("aria-invalid", "true"); else input.removeAttribute?.("aria-invalid");
-  if (ui("player-save")) ui("player-save").disabled = playerSaving || !valid || !Object.keys(patch).length;
-}
-function buildPlayerForm() {
-  const form = ui("player-form");
-  if (!form) return;
-  playerInputs.clear();
-  form.replaceChildren(...playerFields().map(field => {
-    const label = document.createElement("label"), input = document.createElement(field.kind === "lines" || field.key === "description" ? "textarea" : "input");
-    label.textContent = field.kind === "lines" ? `${field.label} (one per line)` : field.unit ? `${field.label} (${field.unit})` : field.label;
-    if (field.kind === "number") { input.setAttribute("type", "number"); input.setAttribute("step", "1"); }
-    else input.setAttribute("maxlength", String(field.key === "description" ? 1000 : field.key in { sex: 1, species: 1, apparent_age: 1 } ? 60 : 200));
-    if (field.kind === "lines" || field.key === "description") input.setAttribute("rows", field.key === "description" ? "4" : "3");
-    input.setAttribute("aria-label", field.label); input.setAttribute("placeholder", "Not set");
-    input.value = field.value ?? "";
-    input.addEventListener("input", () => updatePlayerSave());
-    playerInputs.set(field.key, input); label.append(input); return label;
-  }));
-}
+for (const id of ["editor-back", "editor-cancel"]) ui(id)?.addEventListener("click", () => { const player = editorMode === "player"; editorRef = undefined; editorMode = "npc"; switchView(player ? "play" : "household"); });
+// Player Character page: the shared editor in "player" mode (Avatar, Full Body, Gallery, appearance, prompts). The profile and its visual
+// projection are the server's; "Narrator sees" is exactly what the narrator receives, never a client-side rendering. Nicco is not an NPC+.
 function renderPlayer() {
-  const p = playerProfile;
+  const p = playerProfile, card = playerCard();
   if (ui("player-nav")) ui("player-nav").disabled = !p;
-  if (!p) { if (activeView === "player") switchView("play"); return; }
-  if (ui("player-name")) ui("player-name").textContent = p.name.toUpperCase();
-  if (ui("player-role")) ui("player-role").textContent = p.role_label;
-  if (ui("player-narrator-summary")) ui("player-narrator-summary").textContent = p.narrator_summary || "No visible appearance set.";
-  const details = ui("player-details");
-  if (details) details.replaceChildren(...playerFields().filter(f => f.value !== null).flatMap(f => {
-    const dt = document.createElement("dt"), dd = document.createElement("dd");
-    dt.textContent = f.unit ? `${f.label} (${f.unit})` : f.label; dd.textContent = f.kind === "lines" ? f.value.split("\n").join(" · ") : f.value; return [dt, dd];
-  }));
-  if (details && !details.children.length) { const empty = document.createElement("dd"); empty.textContent = "No visible appearance set."; details.append(empty); }
-  for (const [id, hidden] of [["player-details", playerEditing], ["player-form", !playerEditing], ["player-edit", playerEditing], ["player-cancel", !playerEditing], ["player-save", !playerEditing]]) if (ui(id)) ui(id).hidden = hidden;
-  if (ui("player-edit")) ui("player-edit").disabled = !ready;
-  updatePlayerSave();
+  const avatar = resolveCharacterAvatar(card);
+  showImage(ui("player-nav-avatar"), avatar);
+  if (ui("player-nav-initial")) ui("player-nav-initial").hidden = !!avatar;
+  if (editorMode === "player" && activeView === "editor") {
+    if (!card) { editorRef = undefined; editorMode = "npc"; switchView("play"); return; }
+    editorRef = card.ref; renderEditor(card, false);
+  }
 }
-function setPlayerEditing(editing) {
-  playerEditing = editing; showPlayerError("");
-  if (editing) { playerRevision = currentRevision; buildPlayerForm(); } else { playerInputs.clear(); ui("player-form")?.replaceChildren(); }
-  renderPlayer();
-  (editing ? [...playerInputs.values()][0] : ui("player-edit"))?.focus();
+function openPlayer() {
+  const card = playerCard();
+  if (!card) return;
+  editorMode = "player"; editorRef = card.ref;
+  switchView("editor");
+  renderEditor(card, true);
+  ui("editor-back")?.focus();
 }
-async function savePlayer() {
-  const { patch, valid } = playerPatch();
-  if (!playerEditing || playerSaving || !valid || !Object.keys(patch).length) return;
-  playerSaving = true; updatePlayerSave();
-  try {
-    const response = await fetch("/api/player-character", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ expected_revision: playerRevision, patch }) });
-    const data = await response.json();
-    playerSaving = false;
-    if (data?.messages) render(data);
-    if (data?.ok) setPlayerEditing(false);
-    else showPlayerError(data?.error?.message ?? "The profile was not saved.");
-  } catch { playerSaving = false; showPlayerError("The profile was not saved. Check the connection and try again."); }
-  updatePlayerSave();
-}
-ui("player-nav")?.addEventListener("click", () => { if (!playerProfile) return; playerEditing = false; playerInputs.clear(); switchView("player"); renderPlayer(); });
-ui("player-back")?.addEventListener("click", () => { playerEditing = false; playerInputs.clear(); switchView("play"); });
-ui("player-edit")?.addEventListener("click", () => { if (playerProfile && ready) setPlayerEditing(true); });
-ui("player-cancel")?.addEventListener("click", () => setPlayerEditing(false));
-ui("player-save")?.addEventListener("click", () => savePlayer());
+ui("player-nav")?.addEventListener("click", () => openPlayer());
 function characterTab(tab) {
   for (const key of ["appearance", "story"]) {
     ui(`${key}-tab`)?.setAttribute("aria-selected", String(key === tab));
@@ -638,7 +636,8 @@ function renderScene(data) {
   for (const person of data.play?.participants ?? []) if (person.card && capsOf(person.card).can_edit_npc_plus && !editableCharacters.has(person.card.ref)) editableCharacters.set(person.card.ref, person.card);
   if (ui("household-title")) ui("household-title").textContent = data.play?.household_title ?? "Household";
   renderHousehold();
-  if (activeView === "editor") {
+  if (activeView === "editor" && editorMode === "player") { /* refreshed by renderPlayer */ }
+  else if (activeView === "editor") {
     const card = editorCard(editorRef);
     if (card?.appearance_editor_eligible && capsOf(card).can_edit_npc_plus) renderEditor(card, false);
     else { editorRef = undefined; switchView("household"); }
@@ -701,11 +700,11 @@ function render(data) {
   renderCampaign(data);
   if ("inventory" in data || data.campaign === null) {
     const incoming = data.campaign === null ? null : data.inventory;
-    if (incoming?.campaign_id !== inventoryData?.campaign_id) { inventoryRequest++; inventoryFilter = "all"; inventoryQuery = ""; if (ui("inventory-search")) ui("inventory-search").value = ""; }
+    if (incoming?.campaign_id !== inventoryData?.campaign_id) { inventoryRequest++; inventoryFilter = "all"; inventoryQuery = ""; selectedItemId = undefined; if (ui("inventory-search")) ui("inventory-search").value = ""; }
     inventoryData = incoming; renderInventory();
     if (ui("inventory-nav")) ui("inventory-nav").disabled = !incoming;
   }
-  if (data.campaign === null) { clearTimeout(poll); ready = false; input.disabled = send.disabled = true; status.textContent = "Choose or create a campaign."; playerProfile = null; playerEditing = false; renderPlayer(); return; }
+  if (data.campaign === null) { clearTimeout(poll); ready = false; input.disabled = send.disabled = true; status.textContent = "Choose or create a campaign."; playerProfile = null; renderPlayer(); return; }
   currentRevision = data.revision;
   if ("player_character" in data) playerProfile = data.player_character ?? null;
   const wasNear = nearBottom();

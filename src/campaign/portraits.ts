@@ -5,7 +5,7 @@ import type { PreparationContext } from "./preparation.js";
 import { fail } from "./validation.js";
 
 /**
- * Portrait Gallery V2: derived-media metadata only. A generated portrait is downstream of the permanent appearance and never feeds
+ * Portrait Gallery V2: derived-media metadata only (a record may belong to a campaign character or to the player character; the player has no character record and no NPC+ state). A generated portrait is downstream of the permanent appearance and never feeds
  * back into it; these commands touch nothing but the `portraits` extension. Bytes live in the local asset store.
  *
  * The Gallery is `versions`. Avatar and Full Body are roles naming Gallery versions of the same record; one version may hold both.
@@ -23,7 +23,7 @@ export function preparePortraitCommand(context: PreparationContext, command: Cam
   const { draft, refs } = context;
   const recordFor = (characterId: string, create = true): CharacterPortraitRecord => {
     refs.character(characterId);
-    if (!draft.characters.some(c => c.id === characterId)) fail("character_id", "portraits belong to a campaign character record");
+    if (!draft.characters.some(c => c.id === characterId) && !draft.player_characters.some(p => p.character_id === characterId)) fail("character_id", "portraits belong to a campaign character record or the player character");
     const records = draft.portraits ??= [];
     let record = records.find(r => r.character_id === characterId);
     if (!record) {
@@ -96,11 +96,11 @@ export function preparePortraitCommand(context: PreparationContext, command: Cam
  * Whole-snapshot integrity: unique versions and files per record; both roles name a version of the same record. Deliberately NOT
  * kind-checked, so legacy role assignments (pre-v1 versions without a kind) keep loading; the kind rule applies to new assignments.
  */
-export function validatePortraitRecords(snapshot: DeepReadonly<Pick<CampaignSnapshot, "portraits" | "characters">>): void {
+export function validatePortraitRecords(snapshot: DeepReadonly<Pick<CampaignSnapshot, "portraits" | "characters" | "player_characters">>): void {
   const seen = new Set<string>();
   for (const record of snapshot.portraits ?? []) {
     if (seen.has(record.character_id)) fail("portraits", "duplicate portrait record"); seen.add(record.character_id);
-    if (!snapshot.characters.some(c => c.id === record.character_id)) fail("portraits.character_id", "portraits belong to a campaign character record");
+    if (!snapshot.characters.some(c => c.id === record.character_id) && !snapshot.player_characters.some(p => p.character_id === record.character_id)) fail("portraits.character_id", "portraits belong to a campaign character record or the player character");
     const ids = new Set(record.versions.map(v => v.version_id)), files = new Set(record.versions.map(v => v.asset_file));
     if (ids.size !== record.versions.length || files.size !== record.versions.length) fail("portraits.versions", "duplicate portrait version");
     if (record.avatar_version_id !== undefined && !ids.has(record.avatar_version_id)) fail("portraits.avatar_version_id", "avatar must name a gallery version");
