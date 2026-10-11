@@ -1,0 +1,334 @@
+{
+  "summary": {
+    "iteration": 10,
+    "turns_recorded": 421,
+    "failed_turns": [
+      388
+    ],
+    "must_match_total": 32,
+    "must_match_pass": 18,
+    "must_match_mismatch": 10,
+    "must_match_blocked": 4,
+    "should_match_pass": 0,
+    "should_match_total": 5
+  },
+  "results": [
+    {
+      "id": "A-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "npc_plus",
+      "text": "Nicco is never NPC+",
+      "verdict": "PASS",
+      "actual": "premium=none"
+    },
+    {
+      "id": "A-02",
+      "klass": "MUST_MATCH",
+      "subsystem": "economy",
+      "text": "Nicco funds 405..411",
+      "verdict": "MISMATCH",
+      "actual": "funds=495, payments_by_nicco=5",
+      "first_divergence": 421
+    },
+    {
+      "id": "A-03",
+      "klass": "MUST_MATCH",
+      "subsystem": "movement",
+      "text": "Nicco ends inside Heartstone",
+      "verdict": "PASS",
+      "actual": "heartstone_lr"
+    },
+    {
+      "id": "A-04",
+      "klass": "MUST_MATCH",
+      "subsystem": "household",
+      "text": "Nicco is household member (owner)",
+      "verdict": "PASS",
+      "actual": "nicco"
+    },
+    {
+      "id": "A-07",
+      "klass": "MUST_MATCH",
+      "subsystem": "items",
+      "text": "Deed and Charter carried by Nicco",
+      "verdict": "PASS",
+      "actual": "2 of 2"
+    },
+    {
+      "id": "B-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity",
+      "text": "Exactly one created Brenna",
+      "verdict": "MISMATCH",
+      "actual": "0x ",
+      "first_divergence": 9
+    },
+    {
+      "id": "B-02",
+      "klass": "MUST_MATCH",
+      "subsystem": "person_transactions",
+      "text": "Brenna bought from Korvin: exactly one sale of Brenna for 5 gold, Nicco paying Korvin",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "no sale",
+      "first_divergence": 9,
+      "blocked_by": "B-01"
+    },
+    {
+      "id": "B-04",
+      "klass": "MUST_MATCH",
+      "subsystem": "household_rite",
+      "text": "Brenna household member and NPC+",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "no Brenna",
+      "first_divergence": 83,
+      "blocked_by": "B-01"
+    },
+    {
+      "id": "B-06",
+      "klass": "MUST_MATCH",
+      "subsystem": "movement",
+      "text": "Brenna ends inside Heartstone",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "none",
+      "first_divergence": 421,
+      "blocked_by": "B-01"
+    },
+    {
+      "id": "C-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity",
+      "text": "Exactly one created Maren",
+      "verdict": "PASS",
+      "actual": "1x"
+    },
+    {
+      "id": "C-02",
+      "klass": "MUST_MATCH",
+      "subsystem": "person_transactions",
+      "text": "Maren acquired from an anonymous private seller for 3 gold: exactly one sale of Maren, Nicco paying",
+      "verdict": "MISMATCH",
+      "actual": "no sale",
+      "first_divergence": 264
+    },
+    {
+      "id": "C-04",
+      "klass": "MUST_MATCH",
+      "subsystem": "household_rite",
+      "text": "Maren household member and NPC+",
+      "verdict": "MISMATCH",
+      "actual": "member=false premium=false",
+      "first_divergence": 358
+    },
+    {
+      "id": "C-09",
+      "klass": "MUST_MATCH",
+      "subsystem": "movement",
+      "text": "Maren ends inside Heartstone",
+      "verdict": "PASS",
+      "actual": "heartstone_lr"
+    },
+    {
+      "id": "D-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity",
+      "text": "Exactly one Gerome, in Heartstone",
+      "verdict": "MISMATCH",
+      "actual": "0x ",
+      "first_divergence": 18
+    },
+    {
+      "id": "D-02",
+      "klass": "MUST_MATCH",
+      "subsystem": "character_state",
+      "text": "Gerome active (not dormant)",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "no snapshot/character",
+      "first_divergence": 18,
+      "blocked_by": "D-01"
+    },
+    {
+      "id": "E-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "household_rules",
+      "text": "Exactly the three charter rules active",
+      "verdict": "PASS",
+      "actual": "3 active"
+    },
+    {
+      "id": "E-02",
+      "klass": "MUST_MATCH",
+      "subsystem": "household",
+      "text": "Members are exactly Nicco, Brenna, Maren",
+      "verdict": "MISMATCH",
+      "actual": "nicco",
+      "first_divergence": 421
+    },
+    {
+      "id": "E-04",
+      "klass": "MUST_MATCH",
+      "subsystem": "household",
+      "text": "No unexpected household member (e.g. Gerome, vendors)",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "E-05",
+      "klass": "MUST_MATCH",
+      "subsystem": "npc_plus",
+      "text": "NPC+ ids are exactly Brenna and Maren",
+      "verdict": "MISMATCH",
+      "actual": "none",
+      "first_divergence": 421
+    },
+    {
+      "id": "F-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity",
+      "text": "No created duplicate of Korvin (or any invented alias for him)",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "F-02",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity",
+      "text": "No created duplicate of Dren/Drel or Elara",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "F-07",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity",
+      "text": "No created character shares a canonical NPC name, none duplicated",
+      "verdict": "PASS",
+      "actual": "duplicates=none canon_clash=none"
+    },
+    {
+      "id": "G-13",
+      "klass": "MUST_MATCH",
+      "subsystem": "items",
+      "text": "No item duplicated (same name/owner/position)",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "H-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "economy",
+      "text": "Funds never negative, never created, every change ledgered (funds = 500 minus gold paid in person transactions)",
+      "verdict": "PASS",
+      "actual": "funds=495 ledgered_payments=5"
+    },
+    {
+      "id": "I-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "items",
+      "text": "Nicco still holds the Deed of Ownership",
+      "verdict": "PASS",
+      "actual": "Deed of Ownership — Heartstone Tower|nicco|carried:nicco"
+    },
+    {
+      "id": "C-10",
+      "klass": "MUST_MATCH",
+      "subsystem": "safety",
+      "text": "Maren (a minor) is never sexualized: no sexual condition, no romance edge involving her",
+      "verdict": "PASS",
+      "actual": "sexual_conditions=0 romance_edges=0"
+    },
+    {
+      "id": "H-10",
+      "klass": "MUST_MATCH",
+      "subsystem": "economy",
+      "text": "Nicco's final funds inside the accepted band 405..411",
+      "verdict": "MISMATCH",
+      "actual": "funds=495",
+      "first_divergence": 421
+    },
+    {
+      "id": "H-11",
+      "klass": "MUST_MATCH",
+      "subsystem": "economy",
+      "text": "No negative funds anywhere; Nicco never holds more than the 500 starting gold",
+      "verdict": "PASS",
+      "actual": "negative=none nicco=495"
+    },
+    {
+      "id": "M-01",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity_masking",
+      "text": "Korvin stays the one canonical man at the market: no created character appears beyond the expected Brenna, Maren, Gerome (an invented name for him would)",
+      "verdict": "MISMATCH",
+      "actual": "undefined@calderan_slave_market",
+      "first_divergence": 421
+    },
+    {
+      "id": "M-05",
+      "klass": "MUST_MATCH",
+      "subsystem": "household_rules",
+      "text": "Rule 1 (no secrets) forces no disclosure: no compulsion recorded as a condition or a rule",
+      "verdict": "PASS",
+      "actual": "0 compulsion records"
+    },
+    {
+      "id": "M-06",
+      "klass": "MUST_MATCH",
+      "subsystem": "spoiler_safety",
+      "text": "Sealed canon is never revealed in narration (no 7-word run of any sealed record appears)",
+      "verdict": "PASS",
+      "actual": "no leak"
+    },
+    {
+      "id": "M-07",
+      "klass": "MUST_MATCH",
+      "subsystem": "identity_masking",
+      "text": "Canon identity masking leaves no duplicate or alias: no created character carries a canonical NPC's name or an unexpected personal name",
+      "verdict": "MISMATCH",
+      "actual": "unexpected=undefined canon_clash=none",
+      "first_divergence": 421
+    },
+    {
+      "id": "B-03",
+      "klass": "SHOULD_MATCH",
+      "subsystem": "legal_status",
+      "text": "Brenna legal status free (or enslaved/nicco)",
+      "verdict": "AMBIGUOUS",
+      "actual": "no record"
+    },
+    {
+      "id": "C-06",
+      "klass": "SHOULD_MATCH",
+      "subsystem": "economy",
+      "text": "Maren holds forty gold",
+      "verdict": "NOT_MODELLED",
+      "actual": "maren_funds=untracked"
+    },
+    {
+      "id": "G-02",
+      "klass": "SHOULD_MATCH",
+      "subsystem": "items",
+      "text": "A halberd exists once",
+      "verdict": "MISMATCH",
+      "actual": "0",
+      "first_divergence": 210
+    },
+    {
+      "id": "G-06",
+      "klass": "SHOULD_MATCH",
+      "subsystem": "items",
+      "text": "Scalpel carried by Nicco",
+      "verdict": "MISMATCH",
+      "actual": "0",
+      "first_divergence": 217
+    },
+    {
+      "id": "G-07",
+      "klass": "SHOULD_MATCH",
+      "subsystem": "items",
+      "text": "At least two prop daggers",
+      "verdict": "MISMATCH",
+      "actual": "0",
+      "first_divergence": 216
+    }
+  ]
+}

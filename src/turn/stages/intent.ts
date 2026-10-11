@@ -68,7 +68,9 @@ export function resolveTurnIntent(i: IntentStageInput): ResolvedIntent {
   const tradeValid = !trade.commands.length || prevalidates(i, [...natural, ...trade.commands]);
   const tradeCommands = tradeValid ? trade.commands : [];
   const tradeNotes = tradeValid ? trade.notes : ["The attempted transaction is not valid under current ownership or funds: nothing is paid and no legal status changes this turn."];
-  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...tradeNotes], rule_declarations: extractRuleDeclarations(i.player_input) };
+  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...tradeNotes], rule_declarations: extractRuleDeclarations(i.player_input),
+    ...(trade.diagnostics.length ? { transactions: trade.diagnostics.map(d => ({ kind: d.kind, status: tradeValid ? d.status : "blocked" as const, ...(tradeValid ? (typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}) : { reason: "prevalidation_rejected" }),
+      ...(typeof d.detail.seller === "string" ? { seller: d.detail.seller } : {}), ...(typeof d.detail.price === "number" ? { price: d.detail.price } : {}) })) } : {}) };
   return { base_context, base_plan, intent, promotion: tradeValid ? trade.promotion : undefined };
 }
 function prevalidates(i: IntentStageInput, commands: readonly unknown[]): boolean {

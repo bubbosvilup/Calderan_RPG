@@ -628,7 +628,56 @@ function renderCharacterActions(card) {
   if (caps.can_edit_npc_plus) footerButtons.push(make("Edit NPC+", null, open));
   else if (caps.tier === "npc_plus" && caps.edit_unavailable_reason) footerButtons.push(make("Edit NPC+", caps.edit_unavailable_reason, open));
   if (footer) footer.replaceChildren(...footerButtons);
+  renderPromotion(card);
 }
+// Heartstone rite confirmation (explicit NPC+ promotion). The arrow exists only when the server-derived capability says so; the first click
+// only opens an inline confirmation, and only "Promote" sends the one request. Success re-renders the card from the returned state.
+let promotingRef, promoting = false, drawerCard;
+function renderPromotion(card) {
+  const row = ui("character-promote"); if (!row) return;
+  drawerCard = card;
+  const can = !!capsOf(card).can_promote_to_npc_plus;
+  row.hidden = !can; if (!can) { promotingRef = undefined; return; }
+  const open = promotingRef === card.ref, confirm = ui("character-promote-confirm");
+  confirm.hidden = !open;
+  ui("character-promote-title").textContent = `Promote ${card.name} to NPC+?`;
+  ui("character-promote-body").textContent = `Confirm that ${card.name} has completed the Heartstone household rite. This will add them to the household and permanently unlock NPC+ capabilities.`;
+  ui("character-promote-button").setAttribute("aria-label", `Promote ${card.name} to NPC+`);
+  ui("character-promote-button").setAttribute("title", "Promote to NPC+");
+  ui("character-promote-button").hidden = open;
+  for (const id of ["character-promote-cancel", "character-promote-confirm-button"]) ui(id).disabled = promoting;
+}
+ui("character-promote-button")?.addEventListener("click", () => {
+  if (!selectedCharacter || promoting) return;
+  promotingRef = selectedCharacter; ui("character-promote-error").hidden = true;
+  if (drawerCard) renderPromotion(drawerCard);
+  ui("character-promote-cancel")?.focus();
+});
+ui("character-promote-cancel")?.addEventListener("click", () => {
+  if (promoting) return;
+  promotingRef = undefined; ui("character-promote-confirm").hidden = true; ui("character-promote-button").hidden = false; ui("character-promote-error").hidden = true;
+  ui("character-promote-button").focus();
+});
+ui("character-promote-confirm-button")?.addEventListener("click", async () => {
+  if (!promotingRef || promoting) return;
+  promoting = true; ui("character-promote-error").hidden = true;
+  for (const id of ["character-promote-cancel", "character-promote-confirm-button"]) ui(id).disabled = true;
+  try {
+    const response = await fetch("/api/npc-plus/promote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: promotingRef, expected_revision: currentRevision }) });
+    const data = await response.json();
+    promoting = false;
+    if (data?.ok) promotingRef = undefined;
+    if (data?.messages) render(data);
+    if (!data?.ok) {
+      for (const id of ["character-promote-cancel", "character-promote-confirm-button"]) ui(id).disabled = false;
+      ui("character-promote-error").textContent = data?.error?.message ?? "The promotion was not saved."; ui("character-promote-error").hidden = false;
+    }
+  } catch {
+    promoting = false;
+    for (const id of ["character-promote-cancel", "character-promote-confirm-button"]) ui(id).disabled = false;
+    ui("character-promote-error").textContent = "The promotion request failed. Check the connection and try again."; ui("character-promote-error").hidden = false;
+  }
+});
 ui("character-close")?.addEventListener("click", closeCharacter);
 ui("character-backdrop")?.addEventListener("click", closeCharacter);
 ui("character-drawer")?.addEventListener("keydown", event => {
@@ -713,7 +762,10 @@ function renderScene(data) {
       const unknown = person.name_known === false || person.category === "Name unknown";
       const avatar = document.createElement("span"); avatar.className = `avatar ${person.ref === "player" ? "player-avatar" : unknown ? "unknown-avatar" : ""}`;
       avatar.textContent = unknown ? "?" : person.name.slice(0, 1);
-      if (person.card?.avatar_url) { const image = document.createElement("img"); image.className = "avatar-image"; image.setAttribute("alt", ""); image.setAttribute("src", person.card.avatar_url); avatar.replaceChildren(image); avatar.className += " has-image"; }
+      // The player's own entry carries no card; its portrait comes from the same central resolver as the Player page and nav avatar
+      // (the selected Player Avatar from the server's player projection, else the initial placeholder).
+      const avatarUrl = person.ref === "player" ? resolveCharacterAvatar(playerCard()) : person.card?.avatar_url;
+      if (avatarUrl) { const image = document.createElement("img"); image.className = "avatar-image"; image.setAttribute("alt", ""); image.setAttribute("src", avatarUrl); avatar.replaceChildren(image); avatar.className += " has-image"; }
       const detail = document.createElement("span"), name = document.createElement("strong"), category = document.createElement("small");
       name.textContent = person.name; category.textContent = person.category;
       detail.append(name, category); entry.append(avatar, detail);

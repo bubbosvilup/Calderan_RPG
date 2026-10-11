@@ -1,0 +1,89 @@
+{
+  "iteration": "pass2-anchored-f",
+  "save_load_round_trip": true,
+  "revision_after_reload": 15,
+  "revision": 15,
+  "location": "heartstone_lr",
+  "world_minute": 660,
+  "funds": [
+    {
+      "id": "nicco",
+      "gold": 495
+    }
+  ],
+  "characters": [
+    {
+      "id": "campaign_character_r15_maren",
+      "name": "Maren",
+      "origin": "created",
+      "location": "heartstone_lr",
+      "status": "active",
+      "conditions": []
+    },
+    {
+      "id": "campaign_character_r3_man",
+      "origin": "created",
+      "location": "calderan_slave_market",
+      "status": "active",
+      "conditions": []
+    }
+  ],
+  "households": [
+    {
+      "id": "campaign_household_heartstone",
+      "name": "Heartstone",
+      "members": [
+        {
+          "id": "nicco",
+          "status": "member",
+          "role": "owner"
+        }
+      ],
+      "rules": [
+        "No lies or secrets within the family.",
+        "Protect the family.",
+        "Barefoot inside. Shoes outside."
+      ]
+    }
+  ],
+  "premium": [],
+  "items": [
+    {
+      "id": "campaign_item_heartstone_deed_of_ownership",
+      "name": "Deed of Ownership — Heartstone Tower",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_household_charter",
+      "name": "Heartstone Household Charter",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    }
+  ],
+  "legal": [
+    {
+      "character_id": "campaign_character_r3_man",
+      "status": "free",
+      "transfer": {
+        "documentation": "unestablished",
+        "from_holder_id": "nicco",
+        "transaction_id": "campaign_transaction_r11_r3_man"
+      }
+    }
+  ],
+  "npc_locations": 32,
+  "facts": 2,
+  "knowledge": 2,
+  "relationships": 0,
+  "goals": 0,
+  "transactions": 2
+}

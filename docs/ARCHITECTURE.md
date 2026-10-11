@@ -57,6 +57,10 @@ Three separate channels are built from authoritative state. Nothing sends the wh
 - **Controller-facing context**: structured and actionable. It does carry ids and the mutation-relevant state it needs (items, positions, household, knowledge scopes). It receives **no** calendar or weather and no UI state.
 - **Retrieval / background grounding** (`src/retrieval`, `background-grounding.ts`): a separate supplementary channel of canon chunks selected by explicit policy. Informational only.
 
+**Identity requests and person transactions (replay fidelity pass 2).** Objective identity is the engine's; the label the player knows is a separate fact. A name request ("who am I talking with?", `src/turn/identity-request.ts`) resolves an unfamiliar actor to the canonical person only through name-request-scoped exclusive matching (`EXCLUSIVE_TRAITS` in `canonical-interaction-targets.ts`: exactly one eligible canonical actor fits and every other matches no trait); generic weak casting is unchanged. Person purchases read the recent narration through `narrated-captives.ts` (plain RPG speech counts as speech; a name presented as "This is X." / "That's X." / "X, the man says" binds to the one woman or man described; a pronoun in speech follows the last person mentioned) and the persisted conversation partner (`#focus`, kept across deal turns, bound to descriptor speakers). All of it only reads authoritative narration; commits still go through `transfer_person` and the usual authorization.
+
+**Player-authorized state changes (Heartstone rite).** Not every authority is an LLM proposal checked by evidence. The Heartstone household rite is player-authored fiction: the Narrator may roleplay it, but only the player's explicit UI confirmation (`completeHeartstoneRite`, validated against `heartstoneRiteEligibility` and the revision the card was rendered at) commits it, as one `join_household` whose NPC+ promotion derives inside the same preparation (one revision or nothing). Authorization rejects any Controller-proposed join into the household Nicco keeps, and nothing infers a rite from prose. See [Heartstone](HEARTSTONE.md).
+
 ## 4. Authority table (who owns each truth)
 
 | Domain | Authoritative source | Persisted | Derived | Narrator-visible | Controller-visible | UI-only |
@@ -68,7 +72,7 @@ Three separate channels are built from authoritative state. Nothing sends the wh
 | Item physical position | one `position` per item: `unknown`, `carried`, `equipped`, `stored(location_id)` | yes | no | SSP | yes | no |
 | Inventory | derived from item positions (`src/campaign/inventory.ts`); no second array | no | yes | via SSP | via item state | no |
 | Household membership | `CampaignState.households` | yes | no | SSP when relevant | yes | no |
-| NPC+ promotion | the `premium_characters[]` record (`isNpcPlus`) | yes | no | indirectly (richer portrayal) | yes (NPC+ gating) | no |
+| NPC+ promotion | the `premium_characters[]` record (`isNpcPlus`); created only by the player's explicit Heartstone rite confirmation (`GameSession.completeHeartstoneRite`), never from narration | yes | no | indirectly (richer portrayal) | yes (NPC+ gating) | no |
 | `activeNpcPlus` (behavior gate) | derived from promotion + lifecycle/household conditions | no | yes | n/a | n/a | no |
 | Player appearance | `player_characters[0]` profile | yes | no | one compact visible-appearance line | no | no |
 | Portrait assets (avatar/full body/gallery) | `portraits[]` records + the asset store | metadata yes (bytes in the store) | no | **never** | **never** | selected role display |

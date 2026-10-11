@@ -76,7 +76,7 @@ const FEMALE_NOUNS = new Set(["woman", "girl", "lass"]), MALE_NOUNS = new Set(["
  * Captivity markers (Pass 1.2: being HELD, not the mere presence of a cage). "leans on the cage" or "gestures at the cages" is not
  * captivity; "behind the bars", "in the last cage", "chained", "enslaved", "from a debt auction" is. See heldReferences for whom.
  */
-export const CAPTIVE = /\b(?:(?:in|inside|behind|within|against|through|from) (?:the |a |an |her |his |its |their |this |that )?(?:[a-z-]+ ){0,2}?(?:cages?|bars|pens?|iron|irons|cell)|caged|in chains|in irons|chained|shackled|manacled|collared|fettered|enslaved|for sale|debt[- ](?:auction|forfeiture|bond)|auction(?:ed)?|write-offs?)\b/i;
+export const CAPTIVE = /\b(?:(?:in|inside|behind|within|against|through|from) (?:the |a |an |her |his |its |their |this |that )?(?:[a-z-]+ ){0,2}?(?:cages?|bars|pens?|iron|irons|cell)|caged|in chains|in irons|chained|shackled|manacled|collared|fettered|enslaved|for sale|debt[- ](?:auction|forfeiture|bond)|auctioned|(?:up )?for auction|(?:on|from) the (?:auction )?block|auction block|write-offs?)\b/i;
 const CAPTIVE_G = new RegExp(CAPTIVE.source, "gi");
 const HELD_PRONOUN = /^(?:she|he|her|him)$/i;
 /**
@@ -84,11 +84,14 @@ const HELD_PRONOUN = /^(?:she|he|her|him)$/i;
  * References: a person noun phrase (`noun:<noun>`), a known or introduced name (character ID or `other:<Name>`), or — in narration
  * only — she/he/her/him, resolved to the unit's subject. Quoted pronouns are not resolved (they rarely mean the speaker).
  */
-function heldReferences(u: NarrationUnit, nameKey: (token: string) => string | undefined): string[] {
+function heldReferences(u: NarrationUnit, nameKey: (token: string) => string | undefined, topic?: (pronoun: string) => string | undefined): string[] {
   const refs = [...u.text.matchAll(new RegExp(`\\b(?:the|a|an|one|that|this|another)\\s+(?:[a-z'-]+\\s+){0,3}?(${SPEAKER_NOUNS})\\b|\\b(she|he|her|him)\\b|\\b([A-Za-z][a-z]{2,})(?:'s|’s)?\\b`, "gi"))]
-    .map(m => ({ index: m.index!, key: m[1] ? `noun:${m[1].toLowerCase()}` : m[2] ? (HELD_PRONOUN.test(m[2]) && !u.quoted ? u.speaker : undefined) : /^[A-Z]/.test(m[3]!) ? nameKey(m[3]!) : undefined }))
+    .filter(m => !(m[1] && new RegExp(`^\\s+(?:${SPEECH})\\b`).test(u.text.slice(m.index! + m[0].length))))
+    .map(m => ({ index: m.index!, key: m[1] ? `noun:${m[1].toLowerCase()}` : m[2] ? (HELD_PRONOUN.test(m[2]) ? (u.quoted ? topic?.(m[2]) : u.speaker) : undefined) : /^[A-Z]/.test(m[3]!) ? nameKey(m[3]!) : undefined }))
     .filter((r): r is { index: number; key: string } => !!r.key);
-  return [...u.text.matchAll(CAPTIVE_G)].flatMap(m => { const r = refs.filter(x => x.index < m.index!).at(-1) ?? refs.find(x => x.index > m.index!); return r ? [r.key] : []; });
+  // "from the pens" after a gaze or movement ("eyes shift from the pens to Nicco") is where someone looks or walks from, not captivity.
+  const ORIGIN = /\b(?:eyes?|gaze|head|glances?|looks?|shifts?|turns?|steps?|comes?|came|emerges?|walks?|moves?|drifts?|swings?|snaps?|darts?|lifts?|pushes? off)\b[^.!?]{0,40}$/i;
+  return [...u.text.matchAll(CAPTIVE_G)].filter(m => !(/^from\b/i.test(m[0]) && ORIGIN.test(u.text.slice(0, m.index!)))).flatMap(m => { const end = m.index! + m[0].length, r = refs.filter(x => x.index < m.index!).at(-1) ?? refs.find(x => x.index > m.index! && !/[;—–.!?]|\bbut\b/i.test(u.text.slice(end, x.index))); return r ? [r.key] : []; });
 }
 const HEDGE = GATES.captive_fact_hedge;
 /** Capitalized words that are never names (sentence starters, numbers, pronouns, states, common narration words). */
@@ -154,6 +157,8 @@ function candidateNames(texts: readonly string[], ok: (n: string) => boolean): s
  * Sentences and quotes of one narration, each with its attributed speaker (quotes) or subject (sentences). Pronouns resolve to the
  * most recent subject of a compatible established sex ("He swallows" skips a woman who spoke last); unknown sex is compatible.
  */
+/** Bodily-action cues of a narrated beat written without asterisks. */
+const PLAIN_BEAT = /\b(?:(?:his|her|their)\s+(?:hands?|eyes?|face|jaw|crouch|head|shoulders?|arms?|knees?|lips|breath|weight|thumbs?|fingers?|nose|belt)|(?:watches|studies|reads|shifts|glances|looks|nods|shrugs|scratches|rubs|turns|steps|crouches|stands|leans|exhales|sighs|grunts|pauses|waits|hasn't moved|has not moved))\b/i;
 export function narrationUnits(narration: string, exchange: number, people: readonly Person[], others: readonly string[] = [],
   options: { readonly rpg?: boolean; readonly carry?: readonly string[] } = {}): NarrationUnit[] {
   const out: NarrationUnit[] = [];
@@ -231,8 +236,13 @@ export function narrationUnits(narration: string, exchange: number, people: read
       if (block.starred) { beat = undefined; block.text.split(/\n+/).forEach(paragraph); continue; }
       for (const line of block.text.split(/\r?\n/).map(s => s.trim()).filter(s => /[A-Za-z]{2}/.test(s) && s.length <= 400)) {
         if (/["“”]/.test(line) && !/^["“][^"“”]*["”]$/.test(line)) { paragraph(line); continue; } // legacy attributed quote
+        // A plain line that is really narration (a person-noun or name subject doing a bodily action, no first/second person) that the
+        // narrator forgot to star is a beat, not speech: it must neither be attributed to the previous beat's subject nor hide its own.
+        if (!/^(?:he|she|they|his|her|their)\b/i.test(line) && !/\b(?:i|i'm|i've|i'll|i'd|you|you're|you'll|your|my|me|we|us|let's)\b/i.test(line) && PLAIN_BEAT.test(line) && subjectOf(line)) { paragraph(line); continue; }
         // Plain speech belongs to the subject of the immediately preceding narration beat; with none, it is unattributed.
-        out.push({ text: line.replace(/^["“]([\s\S]*)["”]$/, "$1").trim(), quoted: true, exchange, rpg: true, ...(beat ? { speaker: beat } : {}) });
+        // A speaker does not talk about themself in the third person: speech using she/her (he/him) is not the beat subject's when that subject is female (male).
+        const aboutBeat = !!beat && ((sexOf(beat) === "female" && /\b(?:she|her|hers|herself)\b/i.test(line)) || (sexOf(beat) === "male" && /\b(?:he|him|his|himself)\b/i.test(line)));
+        out.push({ text: line.replace(/^["“]([\s\S]*)["”]$/, "$1").trim(), quoted: true, exchange, rpg: true, ...(beat && !aboutBeat ? { speaker: beat } : {}) });
       }
     }
     return out;
@@ -242,6 +252,8 @@ export function narrationUnits(narration: string, exchange: number, people: read
 }
 
 /** Name introductions found in attributed units. */
+/** A speech line that opens with a bare name: "Brenna. Thirty-two." or, with the narrator's tag, "Brenna, the short man says, …". */
+const weakName = () => new RegExp(`^${NAME}(?:\\.\\s+\\S|,\\s+(?:the|a|an)\\s+(?:[a-z'-]+\\s+){0,3}?(?:${SPEAKER_NOUNS})\\s+(?:${SPEECH})\\b)`);
 function introductions(units: readonly NarrationUnit[], scene: readonly RecentExchange[], ok: (n: string) => boolean): NameIntroduction[] {
   const out: NameIntroduction[] = [];
   const add = (i: NameIntroduction) => { if (ok(i.name) && !out.some(o => o.name === i.name && o.exchange === i.exchange && o.kind === i.kind && o.speaker === i.speaker)) out.push(i); };
@@ -249,14 +261,18 @@ function introductions(units: readonly NarrationUnit[], scene: readonly RecentEx
     const base = { exchange: u.exchange, narration_voice: !u.quoted, evidence: u.text.slice(0, 240), ...(u.quoted && u.speaker ? { speaker: u.speaker } : {}) };
     for (const m of u.text.matchAll(new RegExp(`\\b(?:a|an|the)\\s+(?:[a-z'-]+\\s+){0,3}?(${PERSON_NOUNS})\\s+(?:named|called)\\s+${NAME}\\b`, "g"))) add({ ...base, name: m[2]!, kind: "pattern", noun: m[1]!.toLowerCase() });
     for (const m of u.text.matchAll(new RegExp(`\\b${NAME},\\s+(?:a|an)\\s+(?:[a-z'-]+\\s+){0,3}?(${PERSON_NOUNS})\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern", noun: m[2]!.toLowerCase() });
+    for (const m of u.text.matchAll(new RegExp(`(?:^|[.!?]\\s+)(?:[Tt]hat's|[Tt]hat is|[Tt]his is)\\s+(?:her|him)[.:,]?\\s+${NAME}\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern" });
     // Third-person naming of someone else ("That's Brenna", "Her name is Maren"); "my name" is a self-introduction below.
     for (const m of u.text.matchAll(new RegExp(`\\b(?:named|called|(?:[Hh]er|[Hh]is|[Tt]heir|[Tt]he (?:girl|boy|woman|man)'s) name(?:'s|’s| is| was)|(?:[Tt]his|[Tt]hat)(?: one)?(?:'s|’s| is))\\s+${NAME}\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern" });
-    if (!u.quoted || (u.rpg && !u.speaker)) continue; // unattributed plain RPG speech is nobody's self-introduction
+    // Unattributed plain RPG speech is nobody's self-introduction, but a speech line that opens with a bare name is still a weak
+    // presentation ("Brenna. Thirty-two."); weak names are accepted only when narration also treats the name as a person (readScene).
+    if (u.quoted && u.rpg && !u.speaker) { const w = u.text.match(weakName()); if (w) add({ ...base, name: w[1]!, kind: "weak" }); continue; }
+    if (!u.quoted) continue;
     const self = u.text.match(new RegExp(`\\b(?:[Mm]y name(?:'s|’s| is)|[Cc]all me|[Tt]hey call me)\\s+${NAME}\\b`)) ?? u.text.match(new RegExp(`(?:^|[.!?,;]\\s+)(?:I'm|I’m|I am)\\s+${NAME}\\b`))
       ?? u.text.match(new RegExp(`^Name(?:'s|’s)\\s+${NAME}\\b`))
       ?? (asksName(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null);
     if (self) add({ ...base, name: self[1]!, kind: "self" });
-    const weak = u.text.match(new RegExp(`^${NAME}\\.\\s+\\S`));
+    const weak = u.text.match(weakName());
     if (weak) add({ ...base, name: weak[1]!, kind: "weak" });
   }
   return out;
@@ -277,6 +293,20 @@ export interface ReadOptions {
    */
   readonly rpg_speech?: boolean;
 }
+/**
+ * Partner continuity. The narrator renders an unfamiliar canonical person by description ("the short man", "the seller"); the exchange
+ * recorded who the player was talking with. When exactly ONE descriptor speaker of a compatible sex appears in that exchange, that
+ * descriptor is the recorded present partner, so a price or an ownership claim voiced by "the man" is that person's, not an anonymous
+ * counterparty's. Two competing descriptors, an absent partner or an incompatible sex bind nothing (fail closed).
+ */
+function bindPartnerSpeaker(units: NarrationUnit[], partnerId: string | undefined, people: readonly Person[]): NarrationUnit[] {
+  const partner = partnerId && partnerId !== "nicco" ? people.find(p => p.id === partnerId) : undefined;
+  if (!partner) return units;
+  const compatible = (key: string) => { const noun = key.slice(6).toLowerCase(); return !(partner.sex === "male" && FEMALE_NOUNS.has(noun)) && !(partner.sex === "female" && MALE_NOUNS.has(noun)); };
+  const keys = [...new Set(units.flatMap(u => u.speaker && /^other:[a-z-]+$/.test(u.speaker) && new RegExp(`^other:(?:${SPEAKER_NOUNS})$`).test(u.speaker) && compatible(u.speaker) ? [u.speaker] : []))];
+  if (keys.length !== 1) return units;
+  return units.map(u => u.speaker === keys[0] ? { ...u, speaker: partner.id } : u);
+}
 /** Narrated people of the current scene who are not present persistent characters, plus present unheld captives and late namings. */
 export function readScene(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, options: ReadOptions = {}): SceneReading {
   const scene = sceneExchanges(recent, context.primary.scene.player_location?.id);
@@ -289,7 +319,14 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
   const others = candidateNames(scene.map(x => x.narration), ok);
   // With rpg_speech, pronouns opening an RPG beat may also continue the scene's single earlier subject of that sex.
   const units: NarrationUnit[] = [];
-  for (const [i, e] of scene.entries()) units.push(...narrationUnits(e.narration, i, people, others, options.rpg_speech ? { rpg: true, carry: units.filter(u => !u.quoted && u.speaker).map(u => u.speaker!) } : {}));
+  // The conversation partner persists until replaced: a turn that addressed nobody ("let's see the northerner first") does not end the seller's presence.
+  let partner: string | undefined;
+  const partnerAt = new Map<number, string>();
+  for (const [i, e] of scene.entries()) {
+    partner = e.conversation_partner_id ?? partner;
+    if (partner) partnerAt.set(i, partner);
+    units.push(...bindPartnerSpeaker(narrationUnits(e.narration, i, people, others, options.rpg_speech ? { rpg: true, carry: units.filter(u => !u.quoted && u.speaker).map(u => u.speaker!) } : {}), partner, people));
+  }
   const latest = scene.length - 1;
   const intros = introductions(units, scene, ok);
   const allText = scene.map(e => e.narration).join("\n");
@@ -299,7 +336,45 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
   const nounPhrase = (noun: string) => new RegExp(`\\b(?:a|an|the|that|this|one|another)\\s+(?:[a-z'-]+\\s+){0,3}?${esc(noun)}\\b`, "i");
   // Who each captivity marker is about (Pass 1.2): being held is attached to the nearest person reference, not to the sentence.
   const introNames = new Set(intros.map(i => i.name));
-  const held = new Map(units.map(u => [u, heldReferences(u, t => people.find(p => p.names.includes(t))?.id ?? (introNames.has(t) ? `other:${t}` : undefined))] as const));
+  // A quoted she/he/her/him ("Picked her up at a debt auction", "She's a write-off") continues the person that exchange presented: one named by a
+  // speech line, else the exchange's single narrated girl/woman (boy/man) other than the speaker.
+  const topics = new Map<number, string>();
+  // Anaphora: the pronoun refers to the girl/woman (boy/man) narration mentioned last before the speech line, other than the speaker.
+  const described = (index: number, sex: Sex, except: string | undefined): string | undefined => {
+    const exchange = units[index]!.exchange, nouns = (sex === "female" ? [...FEMALE_NOUNS] : [...MALE_NOUNS]).join("|");
+    for (let i = index - 1; i >= 0 && units[i]!.exchange === exchange; i--) {
+      if (units[i]!.quoted) continue;
+      const text = units[i]!.text;
+      const found = [...text.matchAll(new RegExp(`\\b(?:the|a|an|one|that|this)\\s+(?:[a-z'-]+\\s+){0,3}?(${nouns})\\b`, "gi"))].filter(m => `other:${m[1]!.toLowerCase()}` !== except).map(m => ({ at: m.index!, key: `noun:${m[1]!.toLowerCase()}` })).at(-1);
+      const byName = [...text.matchAll(/\b([A-Z][a-z]{2,})(?:'s|’s)?\b/g)].filter(m => introNames.has(m[1]!)).map(m => ({ at: m.index!, key: `name:${m[1]}` })).at(-1);
+      const best = [found, byName].filter((x): x is { at: number; key: string } => !!x).sort((a, b) => b.at - a.at)[0];
+      if (best) return best.key;
+    }
+    return undefined;
+  };
+  // The one girl/woman (boy/man) narration describes before an introduction unit in its exchange; none or several describe nobody.
+  const soleNoun = (intro: NameIntroduction): string | undefined => {
+    const index = units.findIndex(x => x.exchange === intro.exchange && x.text.slice(0, 240) === intro.evidence);
+    if (index < 0) return undefined;
+    const found = (nouns: ReadonlySet<string>) => new Set(units.slice(0, index).filter(x => x.exchange === intro.exchange && !x.quoted)
+      .flatMap(x => [...x.text.matchAll(new RegExp(`\\b(?:the|a|an|one|that|this)\\s+(?:[a-z'-]+\\s+){0,3}?(${[...nouns].join("|")})\\b`, "gi"))].map(m => m[1]!.toLowerCase())));
+    // The presenting speaker is not the person presented: their own descriptor ("the short man") does not count.
+    const speaker = units[index]!.speaker ?? partnerAt.get(intro.exchange), speakerSex = !speaker ? undefined : speaker.startsWith("other:") ? (FEMALE_NOUNS.has(speaker.slice(6).toLowerCase()) ? "female" : MALE_NOUNS.has(speaker.slice(6).toLowerCase()) ? "male" : undefined) : people.find(p => p.id === speaker)?.sex;
+    const women = speakerSex === "female" ? new Set<string>() : found(FEMALE_NOUNS), men = speakerSex === "male" ? new Set<string>() : found(MALE_NOUNS);
+    return women.size === 1 && !men.size ? [...women][0] : men.size === 1 && !women.size ? [...men][0] : undefined;
+  };
+  const held = new Map(units.map((u, index) => {
+    const presented = intros.find(i => i.exchange === u.exchange && i.kind !== "self" && i.evidence === u.text.slice(0, 240));
+    if (presented) topics.set(u.exchange, presented.name);
+    const named = u.quoted ? topics.get(u.exchange) : undefined;
+    const topic = (pronoun: string): string | undefined => {
+      if (named) return people.find(p => p.names.includes(named))?.id ?? (introNames.has(named) ? `other:${named}` : undefined);
+      const sex: Sex = /^(?:she|her)$/i.test(pronoun) ? "female" : "male";
+      const found = described(index, sex, u.speaker);
+      return found?.startsWith("name:") ? (people.find(p => p.names.includes(found.slice(5)))?.id ?? `other:${found.slice(5)}`) : found;
+    };
+    return [u, heldReferences(u, t => people.find(p => p.names.includes(t))?.id ?? (introNames.has(t) ? `other:${t}` : undefined), u.quoted ? topic : undefined)] as const;
+  }));
   const persons: NarratedPerson[] = [], namings: LateNaming[] = [];
   for (const name of [...new Set(intros.map(i => i.name))]) {
     const mine = intros.filter(i => i.name === name);
@@ -323,24 +398,32 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
       if (exact || referenced || !bound) continue;
     }
     const weakOnly = mine.every(i => i.kind === "weak");
-    // A weak quote-opening name ("Brenna. Thirty-two.") counts only if narration also uses it as an acting person ("Brenna coughs…"):
+    // A weak quote-opening name ("Brenna. Thirty-two.") counts only if narration also uses it as a person ("Brenna coughs…", "glances down at Brenna"):
     // "Soft. Like it's something to be proud of." is a word, not a name. It never matches an existing campaign character (vocative).
-    if (weakOnly && (!units.some(u => !u.quoted && new RegExp(`^${esc(name)}(?:'s|’s)?\\s+[a-z]`).test(u.text)) || allText.split(mention(name)).length <= 2 || options.campaign_names?.has(name.toLowerCase()))) continue;
+    if (weakOnly && (!units.some(u => !u.quoted && (new RegExp(`^${esc(name)}(?:'s|’s)?\\s+[a-z]`).test(u.text) || new RegExp(`[a-z,]\\s+${esc(name)}(?:'s|’s)?(?![A-Za-z])`).test(u.text))) || allText.split(mention(name)).length <= 2 || options.campaign_names?.has(name.toLowerCase()))) continue;
     const selfNoun = selfSpeakers[0]?.startsWith("other:") && new RegExp(`^(?:${SPEAKER_NOUNS})$`, "i").test(selfSpeakers[0].slice(6)) ? selfSpeakers[0].slice(6).toLowerCase() : undefined;
-    const noun = mine.find(i => i.noun)?.noun ?? selfNoun;
-    const keys = [`other:${name}`, ...(selfNoun ? [`other:${selfNoun}`] : [])];
-    const about = units.filter(u => mention(name).test(u.text) || keys.includes(u.speaker ?? "") || (!!selfNoun && nounPhrase(selfNoun).test(u.text)));
-    const present = mine.some(i => i.narration_voice || i.kind === "self") || about.some(u => keys.includes(u.speaker ?? ""));
+    // A name presented ("That's Brenna.") in an exchange whose narration so far describes exactly one woman (man) names that person: the
+    // description and the name are one identity, not a named person plus an unnamed stand-in.
+    const bound = selfNoun ?? (mine.every(i => i.kind !== "self") ? soleNoun(mine[0]!) : undefined);
+    const noun = mine.find(i => i.noun)?.noun ?? bound;
+    const keys = [`other:${name}`, ...(bound ? [`other:${bound}`] : [])];
+    const about = units.filter(u => mention(name).test(u.text) || keys.includes(u.speaker ?? "") || (!!bound && nounPhrase(bound).test(u.text)));
+    const midSentence = new RegExp(`[a-z,]\\s+${esc(name)}(?:'s|’s)?(?![A-Za-z])`);
+    // A weakly introduced name is present when the latest narration itself refers to her mid-sentence ("glances down at Brenna").
+    const present = mine.some(i => i.narration_voice || i.kind === "self") || about.some(u => keys.includes(u.speaker ?? "")) || (mine.every(i => i.kind !== "self") && about.some(u => !u.quoted && u.exchange === latest && (midSentence.test(u.text) || (!!bound && !selfNoun && nounPhrase(bound).test(u.text)))));
     persons.push({ ref: `narrated:${name.toLowerCase()}`, name, ...(noun ? { noun } : {}), label: name, units: about, in_latest: about.some(u => u.exchange === latest),
-      captive: about.some(u => { const h = held.get(u)!; return keys.some(k => h.includes(k)) || (!!noun && h.includes(`noun:${noun}`) && mention(name).test(u.text)) || (!!selfNoun && h.includes(`noun:${selfNoun}`)); }),
+      captive: units.some(u => keys.some(k => held.get(u)!.includes(k))) || about.some(u => { const h = held.get(u)!; return (!!noun && h.includes(`noun:${noun}`) && mention(name).test(u.text)) || (!!bound && h.includes(`noun:${bound}`)); }),
       present, introductions: mine, keys });
   }
   // Present persistent characters with no legal record yet, narrated as captives (e.g. promoted by name before any sale).
   for (const p of people) {
     if (!options.unheld?.has(p.id)) continue;
-    const about = units.filter(u => u.speaker === p.id || p.names.some(n => mention(n).test(u.text)));
+    // The person noun narration attached to them when they were promoted ("woman"): later descriptions ("the big woman") are the same person.
+    const dn = context.characters.find(c => c.id === p.id)?.established_origin?.descriptor?.toLowerCase();
+    const descriptor = dn && new RegExp(`^(?:${PERSON_NOUNS})$`).test(dn) && !persons.some(x => x.keys.includes(`other:${dn}`)) ? dn : undefined;
+    const about = units.filter(u => u.speaker === p.id || p.names.some(n => mention(n).test(u.text)) || (!!descriptor && (u.speaker === `other:${descriptor}` || nounPhrase(descriptor).test(u.text))));
     // `unheld` is already restricted by the caller to people promoted while narrated as captives: no new marker is required.
-    persons.push({ ref: p.id, name: p.names[0]!, label: p.names[0]!, units: about, in_latest: about.some(u => u.exchange === latest), captive: true, present: true, character_id: p.id, introductions: [], keys: [p.id] });
+    persons.push({ ref: p.id, name: p.names[0]!, label: p.names[0]!, units: about, in_latest: about.some(u => u.exchange === latest), captive: true, present: true, character_id: p.id, introductions: [], keys: [p.id, ...(descriptor ? [`other:${descriptor}`] : [])] });
   }
   // Unnamed captives: "a/the <adjectives> <person noun>" in a sentence with a captivity marker. Used for ambiguity and descriptions.
   const labels = new Set(people.map(p => p.names[0]!.toLowerCase().replace(/^(?:the|a|an)\s+/, "")));

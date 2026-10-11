@@ -1,0 +1,11 @@
+{
+  "iteration": "pass2-segment-1-84",
+  "duration_ms": 655343,
+  "turns_run": 84,
+  "failed_turns": 1,
+  "approx_provider_calls": {
+    "narrator": 84,
+    "controller": 84
+  },
+  "note": "narrator+controller call counts are lower bounds (one narrator and one controller attempt per submitted turn; revision/fallback calls are not separately counted here)"
+}

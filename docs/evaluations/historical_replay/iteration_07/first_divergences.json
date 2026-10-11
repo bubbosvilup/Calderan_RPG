@@ -1,0 +1,146 @@
+[
+  {
+    "id": "B-01",
+    "subsystem": "identity",
+    "turn": 9,
+    "text": "Exactly one created Brenna",
+    "actual": "0x ",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "B-02",
+    "subsystem": "person_transactions",
+    "turn": 9,
+    "text": "Brenna bought from Korvin: exactly one sale of Brenna for 5 gold, Nicco paying Korvin",
+    "actual": "no sale",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "D-01",
+    "subsystem": "identity",
+    "turn": 18,
+    "text": "Exactly one Gerome, in Heartstone",
+    "actual": "0x ",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "D-02",
+    "subsystem": "character_state",
+    "turn": 18,
+    "text": "Gerome active (not dormant)",
+    "actual": "no snapshot/character",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "B-04",
+    "subsystem": "household_rite",
+    "turn": 83,
+    "text": "Brenna household member and NPC+",
+    "actual": "no Brenna",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "G-02",
+    "subsystem": "items",
+    "turn": 210,
+    "text": "A halberd exists once",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-07",
+    "subsystem": "items",
+    "turn": 216,
+    "text": "At least two prop daggers",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-06",
+    "subsystem": "items",
+    "turn": 217,
+    "text": "Scalpel carried by Nicco",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-01",
+    "subsystem": "identity",
+    "turn": 264,
+    "text": "Exactly one created Maren",
+    "actual": "0x",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-02",
+    "subsystem": "person_transactions",
+    "turn": 264,
+    "text": "Maren acquired from an anonymous private seller for 3 gold: exactly one sale of Maren, Nicco paying",
+    "actual": "no sale",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "C-10",
+    "subsystem": "safety",
+    "turn": 264,
+    "text": "Maren (a minor) is never sexualized: no sexual condition, no romance edge involving her",
+    "actual": "no Maren or no snapshot: not evaluable",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "C-04",
+    "subsystem": "household_rite",
+    "turn": 358,
+    "text": "Maren household member and NPC+",
+    "actual": "no Maren",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "A-02",
+    "subsystem": "economy",
+    "turn": 421,
+    "text": "Nicco funds 405..411",
+    "actual": "funds=500, payments_by_nicco=0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "B-06",
+    "subsystem": "movement",
+    "turn": 421,
+    "text": "Brenna ends inside Heartstone",
+    "actual": "none",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "C-09",
+    "subsystem": "movement",
+    "turn": 421,
+    "text": "Maren ends inside Heartstone",
+    "actual": "none",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "E-02",
+    "subsystem": "household",
+    "turn": 421,
+    "text": "Members are exactly Nicco, Brenna, Maren",
+    "actual": "nicco",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "E-05",
+    "subsystem": "npc_plus",
+    "turn": 421,
+    "text": "NPC+ ids are exactly Brenna and Maren",
+    "actual": "none",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "H-10",
+    "subsystem": "economy",
+    "turn": 421,
+    "text": "Nicco's final funds inside the accepted band 405..411",
+    "actual": "funds=500",
+    "verdict": "MISMATCH"
+  }
+]

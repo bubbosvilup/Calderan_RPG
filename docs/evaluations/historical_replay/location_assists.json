@@ -1,0 +1,14 @@
+{
+  "_doc": "Replay continuity policy (harness only). The historical player moved between places with wording the current strict travel contract deliberately does not accept (e.g. 'starts walking to the tower'; 'walk to tower' is a tested negative). A human player in the Play UI uses the official manual location correction (GameSession.overridePlayerLocation, time unchanged). The assisted replay applies exactly that, only at these historical place changes, only when the engine is not already inside the target, and logs every use. No other state is injected.",
+  "assists": {
+    "9": "heartstone_lr",
+    "46": "main_market_square",
+    "54": "heartstone_lr",
+    "198": "calderan_slave_market",
+    "202": "blackiron_repairs_and_arms",
+    "225": "open_hand_chapel",
+    "237": "calderan_slave_market",
+    "254": "slave_market_back_alleys",
+    "261": "heartstone_lr"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "summary": {
+    "iteration": 0,
+    "turns_recorded": 4,
+    "failed_turns": [],
+    "must_match_total": 25,
+    "must_match_pass": 11,
+    "must_match_mismatch": 7,
+    "must_match_blocked": 7,
+    "should_match_pass": 0,
+    "should_match_total": 5
+  },
+  "results": [
+    {
+      "id": "A-01",
+      "klass": "MUST_MATCH",
+      "text": "Nicco is never NPC+",
+      "verdict": "PASS",
+      "actual": "premium=none"
+    },
+    {
+      "id": "A-02",
+      "klass": "MUST_MATCH",
+      "text": "Nicco funds 405..411",
+      "verdict": "MISMATCH",
+      "actual": "funds=500, payments_by_nicco=0"
+    },
+    {
+      "id": "A-03",
+      "klass": "MUST_MATCH",
+      "text": "Nicco ends inside Heartstone",
+      "verdict": "MISMATCH",
+      "actual": "calderan_slave_market"
+    },
+    {
+      "id": "A-04",
+      "klass": "MUST_MATCH",
+      "text": "Nicco is household member (owner)",
+      "verdict": "PASS",
+      "actual": "nicco"
+    },
+    {
+      "id": "A-07",
+      "klass": "MUST_MATCH",
+      "text": "Deed and Charter carried by Nicco",
+      "verdict": "PASS",
+      "actual": "2 of 2"
+    },
+    {
+      "id": "B-01",
+      "klass": "MUST_MATCH",
+      "text": "Exactly one created Brenna",
+      "verdict": "MISMATCH",
+      "actual": "0x "
+    },
+    {
+      "id": "B-02",
+      "klass": "MUST_MATCH",
+      "text": "Brenna bought from Korvin: one sale transaction",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "sales=0",
+      "blocked_by": "B-01"
+    },
+    {
+      "id": "B-04",
+      "klass": "MUST_MATCH",
+      "text": "Brenna household member and NPC+",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "no Brenna",
+      "blocked_by": "B-01"
+    },
+    {
+      "id": "B-06",
+      "klass": "MUST_MATCH",
+      "text": "Brenna ends inside Heartstone",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "none",
+      "blocked_by": "B-01"
+    },
+    {
+      "id": "C-01",
+      "klass": "MUST_MATCH",
+      "text": "Exactly one created Maren",
+      "verdict": "MISMATCH",
+      "actual": "0x"
+    },
+    {
+      "id": "C-02",
+      "klass": "MUST_MATCH",
+      "text": "Maren acquired by a sale (second sale transaction)",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "sales=0",
+      "blocked_by": "C-01"
+    },
+    {
+      "id": "C-04",
+      "klass": "MUST_MATCH",
+      "text": "Maren household member and NPC+",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "no Maren",
+      "blocked_by": "C-01"
+    },
+    {
+      "id": "C-09",
+      "klass": "MUST_MATCH",
+      "text": "Maren ends inside Heartstone",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "none",
+      "blocked_by": "C-01"
+    },
+    {
+      "id": "D-01",
+      "klass": "MUST_MATCH",
+      "text": "Exactly one Gerome, in Heartstone",
+      "verdict": "MISMATCH",
+      "actual": "0x "
+    },
+    {
+      "id": "D-02",
+      "klass": "MUST_MATCH",
+      "text": "Gerome active (not dormant)",
+      "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE",
+      "actual": "no snapshot/character",
+      "blocked_by": "D-01"
+    },
+    {
+      "id": "E-01",
+      "klass": "MUST_MATCH",
+      "text": "Exactly the three charter rules active",
+      "verdict": "PASS",
+      "actual": "3 active"
+    },
+    {
+      "id": "E-02",
+      "klass": "MUST_MATCH",
+      "text": "Members are exactly Nicco, Brenna, Maren",
+      "verdict": "MISMATCH",
+      "actual": "nicco"
+    },
+    {
+      "id": "E-04",
+      "klass": "MUST_MATCH",
+      "text": "No unexpected household member (e.g. Gerome, vendors)",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "E-05",
+      "klass": "MUST_MATCH",
+      "text": "NPC+ ids are exactly Brenna and Maren",
+      "verdict": "MISMATCH",
+      "actual": "none"
+    },
+    {
+      "id": "F-01",
+      "klass": "MUST_MATCH",
+      "text": "No created duplicate of Korvin (or any invented alias for him)",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "F-02",
+      "klass": "MUST_MATCH",
+      "text": "No created duplicate of Dren/Drel or Elara",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "F-07",
+      "klass": "MUST_MATCH",
+      "text": "No created character shares a canonical NPC name, none duplicated",
+      "verdict": "PASS",
+      "actual": "duplicates=none canon_clash=none"
+    },
+    {
+      "id": "G-13",
+      "klass": "MUST_MATCH",
+      "text": "No item duplicated (same name/owner/position)",
+      "verdict": "PASS",
+      "actual": "none"
+    },
+    {
+      "id": "H-01",
+      "klass": "MUST_MATCH",
+      "text": "Funds never negative, never created, every change ledgered (funds = 500 minus gold paid in person transactions)",
+      "verdict": "PASS",
+      "actual": "funds=500 ledgered_payments=0"
+    },
+    {
+      "id": "I-01",
+      "klass": "MUST_MATCH",
+      "text": "Nicco still holds the Deed of Ownership",
+      "verdict": "PASS",
+      "actual": "Deed of Ownership — Heartstone Tower|nicco|carried:nicco"
+    },
+    {
+      "id": "B-03",
+      "klass": "SHOULD_MATCH",
+      "text": "Brenna legal status free (or enslaved/nicco)",
+      "verdict": "AMBIGUOUS",
+      "actual": "no record"
+    },
+    {
+      "id": "C-06",
+      "klass": "SHOULD_MATCH",
+      "text": "Maren holds forty gold",
+      "verdict": "NOT_MODELLED",
+      "actual": "maren_funds=untracked"
+    },
+    {
+      "id": "G-02",
+      "klass": "SHOULD_MATCH",
+      "text": "A halberd exists once",
+      "verdict": "MISMATCH",
+      "actual": "0"
+    },
+    {
+      "id": "G-06",
+      "klass": "SHOULD_MATCH",
+      "text": "Scalpel carried by Nicco",
+      "verdict": "MISMATCH",
+      "actual": "0"
+    },
+    {
+      "id": "G-07",
+      "klass": "SHOULD_MATCH",
+      "text": "At least two prop daggers",
+      "verdict": "MISMATCH",
+      "actual": "0"
+    }
+  ]
+}

@@ -315,9 +315,11 @@ test("relationship and household: Controller proposals need the chooser's own vo
   const raise: CampaignCommand = { kind: "adjust_relationship", from_character_id: BRENNA, to_character_id: "nicco", dimension: "protectiveness", direction: "raise" };
   const oath = 'Brenna stands barefoot, her bare feet flat on the warm stone of the floor. "I, Brenna, choose to stay and become a member of the Heartstone. I swear to be loyal to and protect my family, and to stand faithfully beside the Keeper." She looks at Nicco. "I swear it, Nicco: I will protect you and this family."\n\nNicco accepts her oath. "I accept you as a member of the Heartstone."';
   const ok = await run({ id: "h", title: "h", input: "*explains the Heartstone and waits*", narration: oath, fixture, controller: { kind: "commands", commands: [join, raise], evidence: ["I, Brenna, choose to stay and become a member of the Heartstone.", "I swear it, Nicco: I will protect you and this family."] } });
-  assert.deepEqual(ok.diagnostic.accepted.map(a => a.command.kind), ["join_household", "adjust_relationship"]); assert.equal(ok.diagnostic.verdict, "committed");
+  // The join is never a Controller matter: the Heartstone rite completes only through the player's explicit action. A perfect oath still commits the relationship.
+  assert.deepEqual(ok.diagnostic.accepted.map(a => a.command.kind), ["adjust_relationship"]); assert.equal(ok.diagnostic.verdict, "committed");
+  assert.deepEqual(ok.diagnostic.rejected.map(r => [r.command.kind, r.reason]), [["join_household", "rejected_command_not_allowed"]]);
   const unvoiced = await run({ id: "h", title: "h", input: "*explains the Heartstone and waits*", narration: "Brenna nods once and keeps her distance.", fixture, controller: { kind: "commands", commands: [join, raise], evidence: ["Brenna nods once and keeps her distance.", "Brenna nods once and keeps her distance."] } });
-  assert.equal(unvoiced.diagnostic.verdict, "rejected"); assert.deepEqual(codes(unvoiced), ["controller_invalid_command", "insufficient_confirmation"], "the join needs the full rite; the relationship needs the chooser's words");
+  assert.equal(unvoiced.diagnostic.verdict, "rejected"); assert.deepEqual(codes(unvoiced), ["unauthorized_mutation", "insufficient_confirmation"], "the join is the player's explicit action, never a proposal; the relationship needs the chooser's words");
   const ghost = await run({ id: "h", title: "h", input: "*waits*", narration: oath, fixture, controller: { kind: "commands", commands: [{ ...join, household_id: "no_such_household" }], evidence: ["I, Brenna, choose to stay and become a member of the Heartstone."] } });
   assert.deepEqual(codes(ghost), ["controller_invalid_command"]);
 });

@@ -21,6 +21,8 @@ export interface TurnTrace {
   readonly audit_issue_kinds: readonly string[]; readonly revision_issue_kinds: readonly string[];
   readonly committed_command_kinds: readonly string[]; readonly rejected_command_kinds: readonly string[];
   readonly movement?: { readonly location_before: string; readonly location_after: string; readonly minutes_elapsed: number; readonly characters_moved: readonly string[] };
+  /** Person-transaction outcome (kind/status/reason only): why a purchase did or did not commit. */
+  readonly person_transactions?: readonly { readonly kind: string; readonly status: string; readonly reason?: string }[];
   readonly retrieval_ids: readonly string[]; readonly retrieval_mode?: string; readonly context_chars?: number;
   readonly models?: { readonly narrator?: string; readonly controller?: string };
   readonly usage?: { readonly narrator?: DeepReadonly<{ prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }>; readonly controller?: DeepReadonly<{ prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }> };
@@ -59,6 +61,7 @@ export function buildTrace(i: TraceInput): TurnTrace {
     revision_issue_kinds: [...new Set(r?.narration_reconciliation?.revision_issues?.map(x => x.kind) ?? d?.audit?.revision_issue_kinds ?? [])],
     committed_command_kinds: r ? r.authorized_commands.map(c => c.kind) : [], rejected_command_kinds: rejected,
     ...(i.movement ? { movement: i.movement } : {}),
+    ...(r?.person_transactions?.length ? { person_transactions: r.person_transactions.map(t => ({ kind: t.kind, status: t.status, ...(t.reason ? { reason: t.reason } : {}) })) } : {}),
     retrieval_ids: [...(r?.retrieval.ids ?? d?.retrieval?.ids ?? [])], ...(retrievalMode ? { retrieval_mode: retrievalMode } : {}),
     ...(d?.context ? { context_chars: d.context.serialized_characters } : {}),
     ...(narratorModel || controllerModel ? { models: { ...(narratorModel ? { narrator: narratorModel } : {}), ...(controllerModel ? { controller: controllerModel } : {}) } } : {}),

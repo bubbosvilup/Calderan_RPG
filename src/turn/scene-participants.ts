@@ -1,6 +1,8 @@
 import type { TurnContext } from "./context-builder.js";
 import { escapeRegExp } from "./language/text.js";
 import { canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
+import { isIdentityRequest } from "./identity-request.js";
+import { continuesTransaction } from "./transaction-acts.js";
 import type { RecentExchange } from "./recent-conversation.js";
 
 /**
@@ -148,7 +150,7 @@ export class SceneParticipants {
       // Casting fix: judge the whole reference clause ("walks up to the woman with the fan"), not just "walks up to the woman".
       const clause = input.slice(m.index).split(/[*.!?\n]/)[0]!;
       if (!["another", "some", "one"].includes(article) && canonicalTargets.size === 1
-        && canonicalInteractionTargets(context, clause, casting).size === 1) continue;
+        && canonicalInteractionTargets(context, clause, { ...casting, identity_request: isIdentityRequest(input) }).size === 1) continue;
       if (["the", "that", "this", "same"].includes(article) && covered.has(noun)) continue;
       if (["the", "that", "this", "same"].includes(article) && carried.some(p => addressed.has(p.id) && nounsOf(p).some(n => new RegExp(`^(?:${n})$`, "i").test(noun)))) continue;
       const id = `scene_npc_${this.#next}`;
@@ -160,9 +162,12 @@ export class SceneParticipants {
     const explicitPerson = [...input.matchAll(INTRO), ...input.matchAll(NPC_SUBJECT)].length > 0;
     const shifted = /\b(?:walk\w*|go(?:es|ing)?|move\w*|return\w*|join\w*|turn\w*|look\w*|focus\w*|wait\w*)\b/i.test(input);
     const canonicalPartner = this.#focusLocation === location && context.characters.some(c => c.id === this.#focus);
-    if (!created && !addressed.size && !namesPersistent && !explicitPerson && !shifted && this.#focus
+    // Partner continuity: a turn that names nobody else keeps the current conversation partner when it speaks to them, or when it continues
+    // a deal with them ("pays up", "how much"): dealing with the counterpart is an interaction, never a departure ("walk" in "she can't walk").
+    const dealing = continuesTransaction(input);
+    if (!created && !addressed.size && !namesPersistent && !explicitPerson && (!shifted || dealing) && this.#focus
       && (canonicalPartner || carried.some(p => p.id === this.#focus))
-      && (/["“]/.test(input) || /\b(?:you|your)\b/i.test(input) || /who am i (?:speaking|talking) (?:with|to)/i.test(input))) addressed.add(this.#focus);
+      && (/["“]/.test(input) || /\b(?:you|your)\b/i.test(input) || /who am i (?:speaking|talking) (?:with|to)/i.test(input) || dealing)) addressed.add(this.#focus);
     let kept = carried.filter(p => {
       if (addressed.has(p.id)) return true;
       if (p.departed || turn - p.last_addressed_turn >= INACTIVE_EXPIRY_TURNS) { expired.push(p.id); return false; }

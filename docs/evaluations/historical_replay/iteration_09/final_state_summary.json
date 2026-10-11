@@ -1,0 +1,132 @@
+{
+  "iteration": "pass2-anchored-e",
+  "save_load_round_trip": true,
+  "revision_after_reload": 35,
+  "revision": 35,
+  "location": "heartstone_lr",
+  "world_minute": 660,
+  "funds": [
+    {
+      "id": "nicco",
+      "gold": 495
+    }
+  ],
+  "characters": [
+    {
+      "id": "campaign_character_r3_brenna",
+      "name": "Brenna",
+      "origin": "created",
+      "location": "heartstone_lr",
+      "status": "active",
+      "conditions": [
+        "feverish"
+      ]
+    },
+    {
+      "id": "campaign_character_r6_gerome",
+      "name": "Gerome",
+      "origin": "created",
+      "location": "heartstone_lr",
+      "status": "active",
+      "conditions": []
+    }
+  ],
+  "households": [
+    {
+      "id": "campaign_household_heartstone",
+      "name": "Heartstone",
+      "members": [
+        {
+          "id": "nicco",
+          "status": "member",
+          "role": "owner"
+        }
+      ],
+      "rules": [
+        "No lies or secrets within the family.",
+        "Protect the family.",
+        "Barefoot inside. Shoes outside."
+      ]
+    }
+  ],
+  "premium": [],
+  "items": [
+    {
+      "id": "campaign_item_00000001",
+      "name": "Scrap board with market list",
+      "category": "document",
+      "owner": null,
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_00000002",
+      "name": "Fluffy pink shirt",
+      "category": "clothing",
+      "owner": null,
+      "position": {
+        "kind": "carried",
+        "character_id": "campaign_character_r3_brenna"
+      }
+    },
+    {
+      "id": "campaign_item_00000003",
+      "name": "Small iron key",
+      "category": "miscellaneous",
+      "owner": null,
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_00000004",
+      "name": "Pink shirt",
+      "category": "clothing",
+      "owner": null,
+      "position": {
+        "kind": "carried",
+        "character_id": "campaign_character_r3_brenna"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_deed_of_ownership",
+      "name": "Deed of Ownership — Heartstone Tower",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_household_charter",
+      "name": "Heartstone Household Charter",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    }
+  ],
+  "legal": [
+    {
+      "character_id": "campaign_character_r3_brenna",
+      "status": "free",
+      "transfer": {
+        "documentation": "unestablished",
+        "from_holder_id": "nicco",
+        "transaction_id": "campaign_transaction_r24_r3_brenna"
+      }
+    }
+  ],
+  "npc_locations": 32,
+  "facts": 2,
+  "knowledge": 2,
+  "relationships": 0,
+  "goals": 0,
+  "transactions": 2
+}

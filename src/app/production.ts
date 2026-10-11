@@ -64,6 +64,8 @@ export function readReflectionMode(env: Readonly<Record<string, string | undefin
 export interface ProductionOptions {
   /** Optional session-local playtest capture after prompt preparation; never part of a save. */
   readonly prepared_narrator_observer?: (request: import("../llm/types.js").GenerationRequest) => void;
+  /** EVALUATION ONLY (historical replay harness): wraps the narrator provider, e.g. to append replay scenario grounding. Never set by a player-facing build. */
+  readonly narrator_wrapper?: (provider: import("../llm/narrator-provider.js").NarratorProvider) => import("../llm/narrator-provider.js").NarratorProvider;
   /** Defaults to off; shadow enables synchronous diagnostic post-turn maintenance only. */ readonly reflection_mode?: ReflectionMode; readonly context_policy?: ContextPolicy; readonly compaction_policy?: CompactionPolicy; readonly data_dir?: string; readonly save_dir?: string; /** Enabled by default after D-10 live calibration; explicit false disables extraction. */ readonly enable_emergent_mannerisms?: boolean; /** Optional production embedding provider; omitted means lexical retrieval only. */ readonly embedding_provider?: EmbeddingProvider;
   /**
    * Save/Load v1 persistent campaigns: saves AND portraits under `<save_dir>/campaigns/<campaign_id>/` (portraits/ inside each campaign),
@@ -84,7 +86,8 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
   const indexes = options.embedding_provider ? [await SemanticIndex.build(service.indexSource(), options.embedding_provider, "narrator")] : [];
   // Production narrator requests always disable hidden reasoning (Phase 1M.1); the controller uses the selected model and default retry policy.
   const narrator = new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true });
-  const coordinator = new TurnCoordinator(world, options.prepared_narrator_observer ? observePreparedNarrator(narrator, options.prepared_narrator_observer, NARRATOR_OUTPUT_TOKENS) : narrator,
+  const wrapped = options.narrator_wrapper ? options.narrator_wrapper(narrator) : narrator;
+  const coordinator = new TurnCoordinator(world, options.prepared_narrator_observer ? observePreparedNarrator(wrapped, options.prepared_narrator_observer, NARRATOR_OUTPUT_TOKENS) : wrapped,
     new OpenRouterStateControllerProvider(undefined, { model: status.controller_model!, fallback_models: controllerFallbackModels() }), { service, search: new HybridSearch(service, indexes) }, { context_policy, context_compaction: compaction_service, narrator_request_setup: request => narratorSetup?.(request) ?? request, diagnostics_sink: record => sink?.(record) });
   const saveDir = options.save_dir ?? "saves", campaignsRoot = join(saveDir, "campaigns"), persistent = options.persistent_campaigns === true;
   const engine_version = await readFile("package.json", "utf8").then(text => (JSON.parse(text) as { version?: unknown }).version, () => undefined);

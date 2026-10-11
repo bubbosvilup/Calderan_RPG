@@ -37,6 +37,7 @@ export function assembleTurnResult(i: { readonly world: WorldStore; readonly bas
     ...(i.commit_plan.identity_skipped !== undefined ? { identity_skipped: { reason: i.commit_plan.identity_skipped } } : {}),
     ...(i.origin !== i.arrival ? { travel: findRoute(i.world, i.origin, i.arrival) } : {}),
     ...(i.intent.natural ? { action_resolution: i.intent.natural } : {}),
+    ...(i.intent.transactions?.length ? { person_transactions: i.intent.transactions } : {}),
     latency: { narrator_ttft_ms: narration.latency.time_to_first_token_ms, narrator_total_ms: narration.latency.elapsed_total_ms, controller_total_ms: controller.latency.elapsed_total_ms,
       controller_tail_ms: performance.now() - i.narrator_end, retrieval_ms: i.retrieval.diagnostics.elapsed_ms, coordinator_total_ms: performance.now() - i.start },
   };

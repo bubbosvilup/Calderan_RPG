@@ -8,6 +8,7 @@ import type { CampaignState } from "../campaign/campaign-state.js";
 import { createOpeningCampaign } from "../campaign/opening-state.js";
 import type { CampaignCommand, CampaignSnapshot, CharacterProfile } from "../campaign/types.js";
 import { applyAppearancePatch } from "../campaign/permanent-appearance.js";
+import { heartstoneRiteCommands, type RiteBlock } from "../campaign/heartstone-rite.js";
 import { appearanceFingerprint, composePortraitPrompt, isPortraitKind, isPortraitPose, PORTRAIT_PROMPT_VERSION, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";
 import { portraitAssetToken, portraitItemToken, portraitRecord, MAX_PORTRAIT_VERSIONS, PORTRAIT_BATCH_SIZE } from "../campaign/portraits.js";
 import type { CharacterPortraitVersion } from "../campaign/types.js";
@@ -155,6 +156,12 @@ const PORTRAIT_MESSAGES: Readonly<Record<string, string>> = {
 const KIND_NOUN: Readonly<Record<PortraitKind, string>> = { avatar: "avatar", fullbody: "full-body" };
 /** One batch slot's result: a staged success, or the failure code that ended it after at most one recovery. */
 type PortraitSlot = { readonly ok: true; readonly image: GeneratedImage; readonly seed: number; readonly prompt: string } | { readonly ok: false; readonly code: string };
+/**
+ * Heartstone rite confirmation. `reason` names why an ineligible character was refused (player-safe code, never an id); a stale or busy
+ * request carries the matching AppError instead. `changed` is always true on success: a no-op (already NPC+) is refused, not repeated.
+ */
+export type RiteOutcome = { readonly ok: true; readonly changed: true; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly reason?: RiteBlock; readonly view: SessionView };
 /** Permanent Appearance V1 editor save. `field` names the rejected patch field, when one was. */
 export type AppearanceOutcome = { readonly ok: true; readonly changed: boolean; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly field?: string; readonly view: SessionView };
@@ -311,6 +318,33 @@ export class GameSession {
       this.#lastError = undefined; this.#autosave?.notify();
       return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} â†’ ${target.display_name} (${target.id}). Time unchanged.`, view: this.getView() };
     } catch { return reject("campaign_validation_failed"); }
+  }
+
+  /**
+   * Heartstone rite confirmation: the player's explicit statement that the rite they roleplayed is complete, and the ONLY mechanical
+   * authority for it (narration and the Controller cannot complete it). Resolves the opaque ref among cards the shared projection
+   * exposes, checks the revision the UI rendered, re-validates eligibility on the authoritative state, then commits ONE join into the
+   * household Nicco keeps; NPC+ promotion derives from that membership inside the same preparation, so both land in one revision or
+   * neither does. No model, prose, funds, items or relationships are involved. An ineligible or stale request commits nothing.
+   */
+  completeHeartstoneRite(request: { readonly ref: unknown; readonly expected_revision: unknown }): RiteOutcome {
+    const reject = (code: AppError["code"], message: string, reason?: RiteBlock): RiteOutcome => ({ ok: false, error: appError(code, { message }), ...(reason ? { reason } : {}), view: this.getView() });
+    if (this.#status === "closed") return reject("session_closed", "The session is closed.");
+    if (this.#status !== "idle" || this.#portraitBusy) return reject("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
+    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+      return reject("stale_turn", "The campaign changed since this card was shown. Reopen the character and try again.");
+    if (typeof request.ref !== "string" || !/^[0-9a-f]{24}$/.test(request.ref)) return reject("invalid_input", "Unknown character.", "character_not_found");
+    const characters = playerCharacterProjection(this.#deps.world, snapshot);
+    const target = snapshot.characters.find(c => characters.project(c.id)?.ref === request.ref);
+    if (!target) return reject("invalid_input", "Unknown character.", "character_not_found");
+    const rite = heartstoneRiteCommands(this.#deps.world, snapshot, target.id);
+    if (!rite.ok) return reject("invalid_input", rite.reason, rite.code);
+    try {
+      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [...rite.commands] }));
+      this.#lastError = undefined; this.#autosave?.notify();
+      return { ok: true, changed: true, view: this.getView() };
+    } catch { return reject("campaign_validation_failed", "The rite could not be completed. The campaign is unchanged."); }
   }
 
   /**

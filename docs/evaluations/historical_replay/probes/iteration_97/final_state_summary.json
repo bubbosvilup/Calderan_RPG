@@ -1,0 +1,63 @@
+{
+  "iteration": "probe",
+  "save_load_round_trip": true,
+  "revision_after_reload": 2,
+  "revision": 2,
+  "location": "calderan_slave_market",
+  "world_minute": 600,
+  "funds": [
+    {
+      "id": "nicco",
+      "gold": 500
+    }
+  ],
+  "characters": [],
+  "households": [
+    {
+      "id": "campaign_household_heartstone",
+      "name": "Heartstone",
+      "members": [
+        {
+          "id": "nicco",
+          "status": "member",
+          "role": "owner"
+        }
+      ],
+      "rules": [
+        "No lies or secrets within the family.",
+        "Protect the family.",
+        "Barefoot inside. Shoes outside."
+      ]
+    }
+  ],
+  "premium": [],
+  "items": [
+    {
+      "id": "campaign_item_heartstone_deed_of_ownership",
+      "name": "Deed of Ownership — Heartstone Tower",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_household_charter",
+      "name": "Heartstone Household Charter",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    }
+  ],
+  "legal": [],
+  "npc_locations": 32,
+  "facts": 2,
+  "knowledge": 2,
+  "relationships": 0,
+  "goals": 0,
+  "transactions": 0
+}

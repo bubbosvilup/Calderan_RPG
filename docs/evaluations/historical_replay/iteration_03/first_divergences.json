@@ -1,0 +1,114 @@
+[
+  {
+    "id": "E-01",
+    "turn": 1,
+    "text": "Exactly the three charter rules active",
+    "actual": "4 active",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "B-02",
+    "turn": 9,
+    "text": "Brenna bought from Korvin: one sale transaction",
+    "actual": "sales=0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "D-01",
+    "turn": 18,
+    "text": "Exactly one Gerome, in Heartstone",
+    "actual": "0x ",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "D-02",
+    "turn": 18,
+    "text": "Gerome active (not dormant)",
+    "actual": "no snapshot/character",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "B-04",
+    "turn": 83,
+    "text": "Brenna household member and NPC+",
+    "actual": "member=false premium=false",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-02",
+    "turn": 210,
+    "text": "A halberd exists once",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-07",
+    "turn": 216,
+    "text": "At least two prop daggers",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-06",
+    "turn": 217,
+    "text": "Scalpel carried by Nicco",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-01",
+    "turn": 264,
+    "text": "Exactly one created Maren",
+    "actual": "0x",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-02",
+    "turn": 264,
+    "text": "Maren acquired by a sale (second sale transaction)",
+    "actual": "sales=0",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "C-04",
+    "turn": 358,
+    "text": "Maren household member and NPC+",
+    "actual": "no Maren",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "A-02",
+    "turn": 421,
+    "text": "Nicco funds 405..411",
+    "actual": "funds=500, payments_by_nicco=0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "B-06",
+    "turn": 421,
+    "text": "Brenna ends inside Heartstone",
+    "actual": "slave_market_back_alleys",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-09",
+    "turn": 421,
+    "text": "Maren ends inside Heartstone",
+    "actual": "none",
+    "verdict": "BLOCKED_BY_EARLIER_DIVERGENCE"
+  },
+  {
+    "id": "E-02",
+    "turn": 421,
+    "text": "Members are exactly Nicco, Brenna, Maren",
+    "actual": "nicco",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "E-05",
+    "turn": 421,
+    "text": "NPC+ ids are exactly Brenna and Maren",
+    "actual": "none",
+    "verdict": "MISMATCH"
+  }
+]

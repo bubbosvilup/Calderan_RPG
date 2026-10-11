@@ -1,0 +1,11 @@
+{
+  "iteration": "pass2-anchored-d",
+  "duration_ms": 3500553,
+  "turns_run": 421,
+  "failed_turns": 5,
+  "approx_provider_calls": {
+    "narrator": 421,
+    "controller": 421
+  },
+  "note": "narrator+controller call counts are lower bounds (one narrator and one controller attempt per submitted turn; revision/fallback calls are not separately counted here)"
+}

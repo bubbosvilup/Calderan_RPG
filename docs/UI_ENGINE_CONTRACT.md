@@ -108,6 +108,12 @@ A reflection failure is **never** an error: the turn stays committed and `trace.
 - The name is not editable. Clothing is not in the profile (it is current equipment). There is no biography, background or stats field.
 - HTTP: the session payload carries `player_character` (the view above, or `null`); `POST /api/player-character {expected_revision, patch}` returns 200 / 409 (stale, busy) / 422 (invalid), each with the fresh state.
 
+## 7c. Heartstone rite confirmation (explicit NPC+ promotion)
+
+- `session.completeHeartstoneRite({ref, expected_revision})` → `{ok:true, changed:true, view}` or `{ok:false, error, reason?, view}`. `ref` is the opaque character ref of a card whose `character_capabilities.can_promote_to_npc_plus` is true; `expected_revision` is the revision the card was rendered at (stale → `stale_turn`). It commits one `join_household` into the Heartstone household; NPC+ promotion derives in the same preparation (one revision, or nothing). `reason` is one of `character_not_found`, `not_campaign_npc`, `already_npc_plus`, `not_active`, `not_at_heartstone`, `household_unavailable`, `not_keeper`; messages carry no ids. No model is called.
+- `character_capabilities` gains `can_promote_to_npc_plus` and `promotion_unavailable_reason`; the client renders the arrow from the flag only.
+- HTTP: `POST /api/npc-plus/promote {ref, expected_revision}` returns 200 / 409 (stale, busy) / 422 (refused), each with the refreshed session state.
+
 ## 8. Inventory and equipment
 
 UI V1 uses `members[].display_name` for player-facing labels: unknown canonical names are masked using committed Nicco name knowledge, and missing labels never fall back to opaque IDs. The loopback adapter transmits only `{members: [{name, presence, location?}]}`; it excludes the legacy IDs, raw names, private fields and household identifiers. `scene.time.time_of_day` comes directly from the centralized P11 `temporalGrounding` projection; the UI receives the location label and daypart, with no exact game clock or frontend bucket mapping.

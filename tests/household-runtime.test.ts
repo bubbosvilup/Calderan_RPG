@@ -100,14 +100,14 @@ test("household A–F: acquisition, residence and care never make membership; on
 });
 test("household G: rules persist through save/load with IDs and revisions; identical active rules are rejected", () => {
   const c = market();
-  apply(c, { kind: "add_household_rule", household_id: OPENING_HOUSEHOLD, text: "Household is family: no lies, no secrets among family" });
+  apply(c, { kind: "add_household_rule", household_id: OPENING_HOUSEHOLD, text: "Nobody enters the cellar alone." });
   const created = c.revision;
-  apply(c, { kind: "add_household_rule", household_id: OPENING_HOUSEHOLD, text: "Protect the family, at all costs" });
-  assert.throws(() => apply(c, { kind: "add_household_rule", household_id: OPENING_HOUSEHOLD, text: "protect the family, at all costs" }));
+  apply(c, { kind: "add_household_rule", household_id: OPENING_HOUSEHOLD, text: "Knock before entering any bedroom." });
+  assert.throws(() => apply(c, { kind: "add_household_rule", household_id: OPENING_HOUSEHOLD, text: "knock before entering any bedroom." }));
   apply(c, { kind: "set_household_rule_active", household_id: OPENING_HOUSEHOLD, rule_id: "rule_5", active: false });
   const restored = roundTrip(c).exportSnapshot().households.find(h => h.id === OPENING_HOUSEHOLD)!.rules!;
   assert.deepEqual(restored.map(r => [r.id, r.active, r.created_revision]), [["rule_1", true, 1], ["rule_2", true, 1], ["rule_3", true, 1], ["rule_4", true, created], ["rule_5", false, created + 1]]);
-  assert.deepEqual(buildTurnContext(world, c.exportSnapshot()).social.households[0]!.rules, ["No lies or secrets within the family.", "Protect the family.", "Barefoot inside. Shoes outside.", "Household is family: no lies, no secrets among family"]);
+  assert.deepEqual(buildTurnContext(world, c.exportSnapshot()).social.households[0]!.rules, ["No lies or secrets within the family.", "Protect the family.", "Barefoot inside. Shoes outside.", "Nobody enters the cellar alone."]);
 });
 
 // ------------------------------------------------------------------------------------------------ relationships

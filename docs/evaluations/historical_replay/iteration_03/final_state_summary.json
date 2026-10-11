@@ -1,0 +1,103 @@
+{
+  "iteration": "iteration-03-assisted",
+  "save_load_round_trip": true,
+  "revision_after_reload": 23,
+  "revision": 23,
+  "location": "heartstone_lr",
+  "world_minute": 660,
+  "funds": [
+    {
+      "id": "nicco",
+      "gold": 500
+    }
+  ],
+  "characters": [
+    {
+      "id": "campaign_character_r19_brenna",
+      "name": "Brenna",
+      "origin": "created",
+      "location": "slave_market_back_alleys",
+      "status": "active",
+      "conditions": []
+    }
+  ],
+  "households": [
+    {
+      "id": "campaign_household_heartstone",
+      "name": "Heartstone",
+      "members": [
+        {
+          "id": "nicco",
+          "status": "member",
+          "role": "owner"
+        }
+      ],
+      "rules": [
+        "No lies or secrets within the family.",
+        "Protect the family.",
+        "Barefoot inside. Shoes outside.",
+        "Indoor only barefoot. The household will always be barefoot inside."
+      ]
+    }
+  ],
+  "premium": [],
+  "items": [
+    {
+      "id": "campaign_item_00000001",
+      "name": "Ring",
+      "category": "valuable",
+      "owner": null,
+      "position": {
+        "kind": "stored",
+        "location_id": "heartstone_lr"
+      }
+    },
+    {
+      "id": "campaign_item_00000002",
+      "name": "List",
+      "category": "document",
+      "owner": null,
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_00000003",
+      "name": "Forty gold coins",
+      "category": "valuable",
+      "owner": null,
+      "position": {
+        "kind": "stored",
+        "location_id": "heartstone_lr"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_deed_of_ownership",
+      "name": "Deed of Ownership — Heartstone Tower",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_household_charter",
+      "name": "Heartstone Household Charter",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    }
+  ],
+  "legal": [],
+  "npc_locations": 32,
+  "facts": 2,
+  "knowledge": 2,
+  "relationships": 0,
+  "goals": 0,
+  "transactions": 0
+}

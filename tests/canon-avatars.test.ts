@@ -45,7 +45,7 @@ for (const [label, id, file] of MAPPING) test(`${label}: ${id} resolves its auth
 test("A7/A8/A16: drawer and round portrait read the one card.avatar_url (a single source image per character)", async () => {
   const client = await readFile("src/ui/client.js", "utf8");
   assert.match(client, /showImage\(ui\("character-avatar-image"\), card\.avatar_url\)/, "drawer");
-  assert.match(client, /person\.card\?\.avatar_url[\s\S]{0,200}setAttribute\("src", person\.card\.avatar_url\)/, "scene round portrait");
+  assert.match(client, /person\.card\?\.avatar_url;[\s\S]{0,200}setAttribute\("src", avatarUrl\)/, "scene round portrait (a non-player entry reads its card.avatar_url)");
   assert.match(client, /member\.card\?\.avatar_url[\s\S]{0,200}setAttribute\("src", member\.card\.avatar_url\)/, "household round portrait");
   assert.doesNotMatch(client, /canonNPCAvatar|_avatar\.png|canon-avatar/, "the client derives no path of its own");
 });

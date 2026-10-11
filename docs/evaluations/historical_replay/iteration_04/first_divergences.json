@@ -1,0 +1,90 @@
+[
+  {
+    "id": "B-02",
+    "subsystem": "person_transactions",
+    "turn": 9,
+    "text": "Brenna bought from Korvin: exactly one sale of Brenna for 5 gold, Nicco paying Korvin",
+    "actual": "no sale",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "B-04",
+    "subsystem": "household_rite",
+    "turn": 83,
+    "text": "Brenna household member and NPC+",
+    "actual": "member=false premium=false",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-02",
+    "subsystem": "items",
+    "turn": 210,
+    "text": "A halberd exists once",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-07",
+    "subsystem": "items",
+    "turn": 216,
+    "text": "At least two prop daggers",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "G-06",
+    "subsystem": "items",
+    "turn": 217,
+    "text": "Scalpel carried by Nicco",
+    "actual": "0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-02",
+    "subsystem": "person_transactions",
+    "turn": 264,
+    "text": "Maren acquired from an anonymous private seller for 3 gold: exactly one sale of Maren, Nicco paying",
+    "actual": "no sale",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "C-04",
+    "subsystem": "household_rite",
+    "turn": 358,
+    "text": "Maren household member and NPC+",
+    "actual": "member=false premium=false",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "A-02",
+    "subsystem": "economy",
+    "turn": 421,
+    "text": "Nicco funds 405..411",
+    "actual": "funds=500, payments_by_nicco=0",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "E-02",
+    "subsystem": "household",
+    "turn": 421,
+    "text": "Members are exactly Nicco, Brenna, Maren",
+    "actual": "nicco",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "E-05",
+    "subsystem": "npc_plus",
+    "turn": 421,
+    "text": "NPC+ ids are exactly Brenna and Maren",
+    "actual": "none",
+    "verdict": "MISMATCH"
+  },
+  {
+    "id": "H-10",
+    "subsystem": "economy",
+    "turn": 421,
+    "text": "Nicco's final funds inside the accepted band 405..411",
+    "actual": "funds=500",
+    "verdict": "MISMATCH"
+  }
+]

@@ -5,6 +5,20 @@ import { findRequired, historicalMinute, worldMinute } from "./preparation.js";
 import { fail } from "./validation.js";
 import { compareIds } from "../world/provenance.js";
 
+/** Coarse rule topics: a rule that restates an active rule's topic in other words is a duplicate, not a new rule. */
+function ruleTopics(text: string): Set<string> {
+  const t = text.toLowerCase(), topics = new Set<string>();
+  if (/\bbarefoot\b|\bshoes?\b|\bboots?\b|\bfootwear\b/.test(t) && /\b(inside|indoors?|in the house|within)\b/.test(t)) topics.add("indoor_footwear");
+  if (/\b(lies?|lying|secrets?|honest\w*)\b/.test(t) && /\b(family|household)\b/.test(t)) topics.add("family_honesty");
+  if (/\bprotect\w*\b/.test(t) && /\b(family|household)\b/.test(t)) topics.add("family_protection");
+  return topics;
+}
+function restatesRule(existing: string, proposed: string): boolean {
+  const a = ruleTopics(existing), b = ruleTopics(proposed);
+  for (const topic of b) if (a.has(topic)) return true;
+  return false;
+}
+
 export function prepareSocialCommand(context: PreparationContext, command: CampaignCommand): boolean {
   const { draft, refs } = context;
   switch (command.kind) {
@@ -59,6 +73,7 @@ export function prepareSocialCommand(context: PreparationContext, command: Campa
       const h = findRequired(draft.households, command.household_id, "household_id");
       const rules = h.rules ?? [];
       if (rules.some(r => r.active && r.text.trim().toLowerCase() === command.text.trim().toLowerCase())) fail("rule", "identical active rule already exists");
+      if (rules.some(r => r.active && restatesRule(r.text, command.text))) fail("rule", "an active rule already covers this");
       h.rules = [...rules, { id: `rule_${rules.length + 1}`, text: command.text.trim(), created_revision: draft.revision + 1, active: true }];
       return true;
     }

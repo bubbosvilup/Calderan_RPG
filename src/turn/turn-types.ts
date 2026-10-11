@@ -36,6 +36,8 @@ export interface TurnResult {
   readonly narrator: GenerationMetadata; readonly controller: GenerationMetadata;
   readonly context_characters: Readonly<Record<string, number>>;
   /** Phase 1P: session-local scene participants for this turn (plan) and after narration (continuity capture). Never persisted. */
+  /** Person-transaction diagnostics of this turn (resolved, blocked, ambiguous, no_offer); absent when the turn had none. */
+  readonly person_transactions?: readonly import("./player-intent.js").TransactionDiagnostic[];
   readonly scene_participants?: { readonly plan: SceneParticipantPlan; readonly after: readonly EphemeralSceneParticipant[] };
   /** Persistence Pass 1.2: characters promoted because a proper name was established, and late namings, committed with this turn. */
   readonly identity?: Omit<IdentityResolution, "commands">;

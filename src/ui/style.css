@@ -577,3 +577,11 @@ img[data-missing]{visibility:hidden}
 .gallery-pending-label{font-size:11px;color:var(--muted);text-align:center}
 @keyframes portrait-pulse{50%{opacity:.55}}
 @media(prefers-reduced-motion:reduce){.spinner,.gallery-pending-box{animation:none}}
+
+/* Heartstone rite confirmation: a small level-up arrow in the character card and an inline two-button confirmation (no modal wizard). */
+.promote{margin:6px 0 10px}
+.promote-arrow{font-size:18px;line-height:1;padding:3px 10px;color:var(--cyan)}
+.promote-confirm{margin-top:8px;padding:10px 12px;border:1px solid var(--cyan);border-radius:8px;font-size:14px;line-height:1.45}
+.promote-confirm p{margin:6px 0}
+.promote-confirm [role="alert"]{color:#ff8a8a}
+.promote-actions{display:flex;gap:8px;margin-top:6px}

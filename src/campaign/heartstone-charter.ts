@@ -1,8 +1,9 @@
 /**
  * Heartstone household canon (normative). The three household rules and the canonical rite oath are CANONICAL DISPLAY TEXT: stable strings that
  * authored canon (`data/world/cultures/heartstone_household_charter.yaml`) and the starting item repeat verbatim, and that a test pins to each
- * other. Rite EVIDENCE MATCHING (turn/household-evidence.ts) is separate and semantic: it recognises equivalent voluntary wording by essential meaning,
- * never by byte equality. The rules are social/familial principles accepted by the Keeper, not magical commands; the oath is a voluntary promise.
+ * other. They describe the rite IN-WORLD (lore and roleplay guidance); the engine does not police the performance. The rite completes mechanically
+ * only through the player's explicit confirmation (campaign/heartstone-rite.ts). The rules are social/familial principles accepted by the Keeper,
+ * not magical commands; the oath is a voluntary promise.
  */
 export const HEARTSTONE_HOUSEHOLD_RULES = [
   "No lies or secrets within the family.",

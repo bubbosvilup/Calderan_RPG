@@ -1,3 +1,4 @@
+import { heartstoneRiteCommands } from "../src/campaign/heartstone-rite.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -139,7 +140,7 @@ async function turn(c: CampaignState, input: string, texts: readonly string[], c
 const members = (c: CampaignState) => c.exportSnapshot().households.find(h => h.id === OPENING_HOUSEHOLD)!.members.filter(m => m.status === "member" && m.role !== "owner").map(m => m.character_id);
 const gold = (c: CampaignState) => c.exportSnapshot().funds.find(f => f.character_id === "nicco")!.gold;
 
-test("end to end: market → negotiate → buy → Heartstone → wary care → voluntary join, with state always authoritative", async () => {
+test("end to end: market → negotiate → buy → Heartstone → wary care → oath in the fiction → explicit rite confirmation, with state always authoritative", async () => {
   const c = market(), seen: GenerationRequest[] = [];
   const service = new RetrievalService(world);
   let texts: string[] = [], commands: CampaignCommand[] = [], evidence: string[] | undefined;
@@ -164,12 +165,16 @@ test("end to end: market → negotiate → buy → Heartstone → wary care → 
   assert.ok(care.narration_reconciliation!.issues.some(i => i.kind === "uncommitted_household"));
   assert.match(prompt(), /Present, not members: Brenna/);
   assert.match(prompt(), /- Money: 495 Gold/); assert.deepEqual(members(c), []);
-  // 4. Her own voluntary oath: the controller proposes, the chooser's words confirm; protectiveness rises one step, trust does not.
+  // 4. Her own oath, roleplayed in full: the Controller may propose the join and a relationship step, but the join is never authorized (the rite is the
+  // player's explicit action); protectiveness rises one step on her own words, trust does not. Only the explicit confirmation makes her a member.
   const oath = 'Brenna stands barefoot, her bare feet flat on the warm stone of the floor. "I, Brenna, choose to stay and become a member of the Heartstone. I swear to be loyal to and protect my family, and to stand faithfully beside the Keeper." She looks at Nicco. "I swear it, Nicco: I will protect you and this family."\n\nNicco accepts her oath. "I accept you as a member of the Heartstone."';
   const joined = await step("*explains the Heartstone and waits*", [oath],
     [{ kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: BRENNA }, { kind: "adjust_relationship", from_character_id: BRENNA, to_character_id: "nicco", dimension: "protectiveness", direction: "raise" }],
     ["I, Brenna, choose to stay and become a member of the Heartstone.", "I swear it, Nicco: I will protect you and this family."]);
-  assert.deepEqual(joined.authorization.map(a => [a.command.kind, a.authorized]), [["join_household", true], ["adjust_relationship", true]], JSON.stringify(joined.authorization));
+  assert.deepEqual(joined.authorization.map(a => [a.command.kind, a.authorized]), [["join_household", false], ["adjust_relationship", true]], JSON.stringify(joined.authorization));
+  assert.deepEqual(members(c), [], "a perfect oath in the fiction promotes nobody");
+  const rite = heartstoneRiteCommands(world, c.exportSnapshot(), BRENNA); assert.ok(rite.ok, rite.ok ? "" : rite.reason);
+  c.commit(c.prepare({ expected_revision: c.revision, commands: [...rite.commands] }));
   assert.deepEqual(members(c), [BRENNA]);
   assert.deepEqual(c.exportSnapshot().relationships.find(e => e.from_character_id === BRENNA)!.dimensions, { protectiveness: "low" });
   // 5. After the join the narrator sees her as a member; money was never touched again; status comes from runtime only.

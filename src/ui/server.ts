@@ -101,7 +101,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         if (!file) { json(404, { error: "Not found." }); return; }
         res.writeHead(200, { "Content-Type": file.media_type, "Content-Length": String(file.bytes.length) }); res.end(file.bytes); return;
       }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/player-character" || PORTRAIT_ROUTES.has(req.url ?? "") || CAMPAIGN_ROUTES.has(req.url ?? ""))) {
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/player-character" || req.url === "/api/npc-plus/promote" || PORTRAIT_ROUTES.has(req.url ?? "") || CAMPAIGN_ROUTES.has(req.url ?? ""))) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
         // A reference upload carries one base64 image (at most 4 MB decoded); every other request stays small.
         const limit = req.url === "/api/portrait/reference" ? 6_000_000 : 24000;
@@ -159,6 +159,12 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         if (req.url === "/api/appearance") {
           // Permanent Appearance V1: the Household editor's narrow write; eligibility, revision and patch rules live in GameSession.
           const outcome = session.updateNpcAppearance({ ref: fields.ref, expected_revision: fields.expected_revision, patch: fields.patch });
+          const { view: _view, ...result } = outcome;
+          json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
+        }
+        if (req.url === "/api/npc-plus/promote") {
+          // Heartstone rite confirmation: the browser sends only the opaque ref and the revision it rendered; eligibility lives in GameSession.
+          const outcome = session.completeHeartstoneRite({ ref: fields.ref, expected_revision: fields.expected_revision });
           const { view: _view, ...result } = outcome;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
         }

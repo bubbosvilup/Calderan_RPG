@@ -52,10 +52,6 @@ export type MutationFailureCode =
   | "controller_item_mismatch"
   /** A created item's owner is not established by the narration, so the owner was left unset (the item itself is still created). */
   | "ownership_not_evidenced"
-  /** A household join into the Heartstone household lacked part of the rite (barefoot, stone contact, Keeper acceptance, inside Heartstone). Nothing committed. */
-  | "rite_incomplete"
-  /** The rite shows coercion, an unconscious or non-agreeing candidate: a promotion needs explicit voluntary participation. Nothing committed. */
-  | "rite_not_voluntary"
   | "turn_failed_other";
 export type MutationStage = "controller" | "authorization" | "prepare" | "commit" | "committed" | "none";
 export interface MutationCommandOutcome {
@@ -123,7 +119,6 @@ const CODE_BY_REASON: Readonly<Partial<Record<AuthorizationDiagnostic["reason"],
 const HEDGE_CHECKS: ReadonlySet<string> = new Set(["sentence_hedged_negated_or_hypothetical", "transfer_not_completed", "quoted_statement_hedged_or_question"]);
 function describe(d: AuthorizationDiagnostic, intended: readonly CampaignCommand[], physical?: readonly unknown[], narration = ""): string {
   const c = d.command, check = d.evidence?.check;
-  if (d.signals?.some(x => x.startsWith("rite_missing:"))) return `Heartstone rite incomplete: missing ${d.signals.filter(x => x.startsWith("rite_missing:")).map(x => x.slice(13)).join(", ")}; no household membership and no NPC+ promotion were committed`;
   if (d.reason === "rejected_conflicting_mutations") return `item ${"item_id" in c ? c.item_id : "?"} was given incompatible end positions by several authorized commands; none applied`;
   if (d.authorized) return `authorized via ${d.source ?? "grammar"}${check ? ` (evidence: ${check})` : ""}`;
   // Sub-reasons that the coarse authorization reason hides. All derived from the same data the authorizer saw.

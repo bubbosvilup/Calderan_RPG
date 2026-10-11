@@ -1,0 +1,98 @@
+{
+  "iteration": "iteration-04-assisted",
+  "save_load_round_trip": true,
+  "revision_after_reload": 18,
+  "revision": 18,
+  "location": "heartstone_lr",
+  "world_minute": 660,
+  "funds": [
+    {
+      "id": "nicco",
+      "gold": 500
+    }
+  ],
+  "characters": [
+    {
+      "id": "campaign_character_r17_brenna",
+      "name": "Brenna",
+      "origin": "created",
+      "location": "heartstone_lr",
+      "status": "active",
+      "conditions": []
+    },
+    {
+      "id": "campaign_character_r18_maren",
+      "name": "Maren",
+      "origin": "created",
+      "location": "heartstone_lr",
+      "status": "active",
+      "conditions": []
+    },
+    {
+      "id": "campaign_character_r7_gerome",
+      "name": "Gerome",
+      "origin": "created",
+      "location": "heartstone_lr",
+      "status": "active",
+      "conditions": []
+    }
+  ],
+  "households": [
+    {
+      "id": "campaign_household_heartstone",
+      "name": "Heartstone",
+      "members": [
+        {
+          "id": "nicco",
+          "status": "member",
+          "role": "owner"
+        }
+      ],
+      "rules": [
+        "No lies or secrets within the family.",
+        "Protect the family.",
+        "Barefoot inside. Shoes outside."
+      ]
+    }
+  ],
+  "premium": [],
+  "items": [
+    {
+      "id": "campaign_item_00000001",
+      "name": "Herb sack",
+      "category": "material",
+      "owner": null,
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_deed_of_ownership",
+      "name": "Deed of Ownership — Heartstone Tower",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    },
+    {
+      "id": "campaign_item_heartstone_household_charter",
+      "name": "Heartstone Household Charter",
+      "category": "document",
+      "owner": "nicco",
+      "position": {
+        "kind": "carried",
+        "character_id": "nicco"
+      }
+    }
+  ],
+  "legal": [],
+  "npc_locations": 32,
+  "facts": 2,
+  "knowledge": 2,
+  "relationships": 0,
+  "goals": 0,
+  "transactions": 0
+}

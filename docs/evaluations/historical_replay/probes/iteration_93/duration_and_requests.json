@@ -1,0 +1,11 @@
+{
+  "iteration": "ident-repro-93",
+  "duration_ms": 22128,
+  "turns_run": 3,
+  "failed_turns": 0,
+  "approx_provider_calls": {
+    "narrator": 3,
+    "controller": 3
+  },
+  "note": "narrator+controller call counts are lower bounds (one narrator and one controller attempt per submitted turn; revision/fallback calls are not separately counted here)"
+}

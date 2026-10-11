@@ -1,6 +1,7 @@
 import type { TurnContext } from "./context-builder.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { escapeRegExp } from "./language/text.js";
+import { isIdentityRequest } from "./identity-request.js";
 
 /**
  * Canonical NPC casting (Ephemeral Duplication fix). Evidence for "this engaged person IS an eligible canonical actor" comes only
@@ -9,6 +10,8 @@ import { escapeRegExp } from "./language/text.js";
  * traits ("the blonde woman", "the man with scarred hands") never cast a canonical actor through these paths.
  */
 export const STRONG_TRAITS = 3;
+/** Identity-request casting: the one eligible canonical actor a description fits (at least this many traits) while nobody else fits at all. */
+export const EXCLUSIVE_TRAITS = 2;
 /** Body-part and apparel heads: a trait matches on its distinctive modifier ("hooked"), never on "nose" or "eyes" alone. */
 const GENERIC = new Set(["a", "an", "the", "of", "and", "with", "her", "his", "their", "its", "very", "slightly", "somewhat", "more", "than", "like", "look", "looks",
   "appearance", "approximately", "about", "man", "woman", "person", "hair", "haired", "eyes", "eye", "hands", "hand", "nose", "face", "skin", "clothes", "clothing",
@@ -64,6 +67,19 @@ export function strongCanonicalMatch(context: TurnContext, mention: string, head
   const strong = scored.filter(s => s.n >= STRONG_TRAITS);
   return strong.length === 1 && scored.filter(s => s.n >= 2).length === 1 ? strong[0]!.id : undefined;
 }
+/**
+ * NAME-REQUEST-SCOPED EXCLUSIVE RESOLUTION. Objective identity is not player-known identity: when the player directly asks who a
+ * described person is, a description that fits exactly ONE eligible canonical actor (at least EXCLUSIVE_TRAITS traits, every other
+ * eligible actor matching none) is that actor, so the engine keeps the objective identity and no temporary person is created to
+ * receive an invented personal name. Never used outside an identity request: a weak description alone still casts nobody.
+ */
+export function exclusiveCanonicalMatch(context: TurnContext, mention: string, head = headNoun(mention)): string | undefined {
+  const gate = narratorIdentityGate(context);
+  const scored = context.characters.filter(c => c.id !== "nicco" && gate?.identities.has(c.id) && compatible(context, c.id, head))
+    .map(c => ({ id: c.id, n: traitMatches(gate!.identities.get(c.id)!.observable_appearance ?? "", mention) }));
+  const fits = scored.filter(s => s.n >= EXCLUSIVE_TRAITS);
+  return fits.length === 1 && scored.every(s => s.id === fits[0]!.id || s.n === 0) ? fits[0]!.id : undefined;
+}
 /** The one sentence of `narration` that introduces or names a person with this head noun; several (or none) → undefined. */
 function narratedMention(narration: string, head: string): string | undefined {
   const sentences = narration.replace(/[*_]/g, "").split(/(?<=[.!?])\s+|\n+/)
@@ -75,6 +91,8 @@ export interface CastingOptions {
   readonly narration?: string;
   /** Head nouns already owned by an established temporary participant or promoted person: never re-cast as canonical. */
   readonly owned?: ReadonlySet<string>;
+  /** The whole player turn is a direct identity request even when `text` is only one clause of it (see exclusiveCanonicalMatch). */
+  readonly identity_request?: boolean;
 }
 
 /** Explicit present canonical references only; never inferred from importance or prior conversation. */
@@ -98,10 +116,11 @@ export function canonicalInteractionTargets(context: TurnContext, text: string, 
   }
   // Casting fix: an engaged person described strongly enough by the player, or a definite reference to the one person the
   // previous scene narration described strongly, is that eligible canonical actor rather than a new duplicate.
+  const identityRequest = options.identity_request ?? isIdentityRequest(text);
   for (const m of text.matchAll(ENGAGE)) {
     const article = (m[1] ?? "").toLowerCase(), phrase = m[2]!, head = headNoun(phrase);
     if (!head || ["another", "some", "one"].includes(article)) continue;
-    const direct = strongCanonicalMatch(context, phrase, head);
+    const direct = strongCanonicalMatch(context, phrase, head) ?? (identityRequest && !options.owned?.has(head) ? exclusiveCanonicalMatch(context, phrase, head) : undefined);
     if (direct) { foundTargets.add(direct); continue; }
     if (!["the", "that", "this"].includes(article) || !options.narration || options.owned?.has(head)) continue;
     const mention = narratedMention(options.narration, head);

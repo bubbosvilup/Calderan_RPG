@@ -25,3 +25,30 @@ export function numberWordValue(token: string): number | undefined {
 export function numberValue(token: string): number | undefined {
   return /^\d{1,3}$/.test(token) ? Number(token) : numberWordValue(token);
 }
+
+/**
+ * Money-grade number phrases (Historical Replay certification): "four hundred", "four hundred and fifty", "a hundred", "two thousand
+ * five hundred", "1,200", "thirty-two". The value range is bounded to the whole-gold funds domain. Unlike numberWordValue this
+ * understands "hundred" and "thousand" as multipliers, so a price is never silently read as only its last word ("four hundred gold"
+ * was previously read as 100). One capture-free pattern source; callers wrap it in their own group.
+ */
+const PHRASE_TOKEN = `(?:${CARDINAL_WORD_ALTERNATION}|hundred|thousand)`;
+export const NUMBER_PHRASE_SOURCE = `(?:\\d{1,3}(?:,\\d{3})+|\\d{1,9}|(?:(?:a|an)\\s+(?=hundred|thousand)\\b)?${PHRASE_TOKEN}(?:(?:[\\s-]+and[\\s-]+|[\\s-]+)${PHRASE_TOKEN})*)`;
+/** Value of a number phrase matched by NUMBER_PHRASE_SOURCE; undefined when the words do not form a valid cardinal. */
+export function numberPhraseValue(phrase: string): number | undefined {
+  const text = phrase.trim().toLowerCase();
+  if (/^\d[\d,]*$/.test(text)) return Number(text.replace(/,/g, ""));
+  let total = 0, current = 0, seen = false, last: "unit" | "teen" | "tens" | "hundred" | "thousand" | undefined;
+  for (const token of text.split(/[\s-]+/)) {
+    if (token === "and" || token === "a" || token === "an") continue;
+    if (token === "hundred") { if (last === "hundred") return undefined; current = (current || 1) * 100; last = "hundred"; seen = true; continue; }
+    if (token === "thousand") { if (last === "thousand") return undefined; total += (current || 1) * 1000; current = 0; last = "thousand"; seen = true; continue; }
+    const v = numberWordValue(token);
+    if (v === undefined || v === 0) return undefined;
+    const kind = v < 10 ? "unit" : v < 20 ? "teen" : "tens";
+    // Grammar: a unit or teen may not follow another unit, teen or tens group in the same order ("five five", "twenty ten").
+    if (last === "unit" || last === "teen" || (last === "tens" && kind !== "unit")) return undefined;
+    current += v; last = kind; seen = true;
+  }
+  return seen ? total + current : undefined;
+}

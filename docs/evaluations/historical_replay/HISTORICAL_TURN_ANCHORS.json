@@ -1,0 +1,276 @@
+{
+ "version": 1,
+ "note": "Frozen historical turn anchors (replay evaluation only). Each anchor is the minimal semantic precondition of one historical PLAYER turn, derived from historical assistant reply N-1 and player input N. Anchors constrain the Narrator's scene premise; they never write state, never decide an outcome, and are never read by production play. Counterparts are described by role so that unintroduced canonical people stay masked. Travel referents document the official replay assist (GameSession.overridePlayerLocation) used only when the normal travel contract did not move the player.",
+ "anchors": [
+  {
+   "id": "A003_northern_woman_offered",
+   "turn": 4,
+   "kind": "premise",
+   "before": "Among the stock the seller can show, one is a tall, strongly built woman from the far north who has a fever and is not selling well.",
+   "establish_in_previous_reply": "The seller you are talking with mentions, among the people he could show, a tall, strongly built woman from the far north who has had a fever for days and has not sold.",
+   "evidence": {
+    "assistant_turn": 3,
+    "excerpt": "One's a northwoman — tall as a doorframe, arms like a dockhand. Fever's been on her three days."
+   }
+  },
+  {
+   "id": "A004_northern_woman_identity",
+   "turn": 5,
+   "kind": "premise",
+   "before": "The seller has named the sick northern woman as Brenna, thirty-two, a former river hauler picked up at a debt auction in Ashford, fever for two days.",
+   "establish_in_previous_reply": "The seller names the sick northern woman while Nicco inspects her: Brenna, thirty-two, a former river hauler picked up at a debt auction in Ashford, with a fever that started two days ago.",
+   "evidence": {
+    "assistant_turn": 4,
+    "excerpt": "Brenna. Thirty-two. Picked her off a debt auction in Ashford. Was a river hauler before the debt caught up."
+   }
+  },
+  {
+   "id": "A006_brenna_quote",
+   "turn": 7,
+   "kind": "transaction",
+   "before": "The seller Nicco is dealing with has quoted his final price for the sick northern woman, Brenna: five gold, clean transfer papers included. The sale is offered and not yet completed.",
+   "establish_in_previous_reply": "The seller Nicco is dealing with quotes his final price for the sick northern woman, Brenna: five gold, with clean transfer papers (debt-forfeiture chain, no liens). Say it as his own plain spoken line. He does not hand her over until Nicco pays.",
+   "transaction": {
+    "counterparty_role": "the seller Nicco is dealing with",
+    "subject_label": "the sick northern woman, Brenna",
+    "quoted_price_gold": 5,
+    "status": "offered_not_completed"
+   },
+   "evidence": {
+    "assistant_turn": 6,
+    "excerpt": "Five. I eat the apothecary, you eat the risk."
+   }
+  },
+  {
+   "id": "A082_brenna_declares",
+   "turn": 82,
+   "kind": "premise",
+   "before": "Brenna has just stood barefoot against a wall of the common room, pressed her palm to the stone and said aloud, in her own words, that she decides to stay and become a resident of the tower and swears to protect the hearthstone and Nicco, the keeper. The wall hummed warm under her touch.",
+   "establish_in_previous_reply": "After Nicco explains the rite, Brenna freely stands, walks barefoot to the nearest wall, presses her palm to the stone and says in her own voice that she decides to stay and become a resident, swearing to protect the hearthstone and Nicco, the keeper; the wall warms and hums beneath her hand.",
+   "evidence": {
+    "assistant_turn": 81,
+    "excerpt": "I, Brenna, decide to stay and become a resident. I swear to protect the hearthstone and Nicco, the keeper."
+   }
+  },
+  {
+   "id": "A256_private_lot_seller",
+   "turn": 257,
+   "kind": "interlocutor",
+   "before": "Nicco and Brenna are at a small private lot behind the tannery lanes, run by an unnamed man who sits whittling by the entrance and sells sick stock.",
+   "establish_in_previous_reply": "At the private lot behind the tannery lanes, a man who sits whittling on a stool by the entrance is the unnamed seller; he first says they are closed.",
+   "evidence": {
+    "assistant_turn": 256,
+    "excerpt": "A man sits on a stool by the entrance, whittling."
+   }
+  },
+  {
+   "id": "A258_maren_quote",
+   "turn": 259,
+   "kind": "transaction",
+   "before": "The unnamed whittling seller has quoted three gold for the dying girl, calling her a write-off, with no papers and no listing. The sale is offered and not yet completed.",
+   "establish_in_previous_reply": "The unnamed whittling seller quotes his price for the dying girl when pressed: three gold, a write-off, no papers and no listing. He does not hand her over until Nicco pays.",
+   "transaction": {
+    "counterparty_role": "the unnamed whittling seller",
+    "subject_label": "the dying girl, about fifteen",
+    "quoted_price_gold": 3,
+    "status": "offered_not_completed"
+   },
+   "evidence": {
+    "assistant_turn": 258,
+    "excerpt": "Three gold. She's a write-off. No papers, no listing, no—"
+   }
+  },
+  {
+   "id": "A011_dormant_construct",
+   "turn": 11,
+   "kind": "premise",
+   "before": "In the service alcove of Heartstone's common room stands a dormant stone construct under dusty canvas: eight feet tall, humanoid, faded seal marks, inert. Nothing stirs it yet.",
+   "establish_in_previous_reply": "While Nicco looks for the butler he expected, he passes the service alcove of the common room, which holds a massive stone shape beneath dusty canvas, inert and silent, its seal marks dead as masonry.",
+   "evidence": {
+    "assistant_turn": 10,
+    "excerpt": "The service alcove holds its usual occupant: a massive stone shape beneath dusty canvas, inert and silent."
+   }
+  },
+  {
+   "id": "A015_construct_wakes_to_magic",
+   "turn": 15,
+   "kind": "premise",
+   "before": "The dormant stone construct in the service alcove responds to Nicco's golden magic: a first trickle made its seal marks flare amber and its eye-depressions glow dimly, and it sounds a grinding cadence before going still again, its mouth-line open.",
+   "establish_in_previous_reply": "Nicco's first trickle of golden magic is drunk greedily by the construct: its seal marks ignite amber, its eye-depressions fill with dim gold, a stone-on-stone cadence sounds, then it dims to banked embers with its head tilted forward.",
+   "evidence": {
+    "assistant_turn": 14,
+    "excerpt": "The three seal marks ignite. Faint amber light traces the geometric patterns across granite, crawling from chest to shoulders to the flat plane of the face."
+   }
+  },
+  {
+   "id": "A018_construct_serves",
+   "turn": 18,
+   "kind": "premise",
+   "before": "The awakened stone construct Nicco named Gerome is a silent butler: it stands attentive in the alcove with steady lit eyes and can carry water, linen and food when Nicco asks.",
+   "establish_in_previous_reply": "The awakened construct stands attentive in its alcove, eye-lights steady, silent and patient, ready to be given a task.",
+   "evidence": {
+    "assistant_turn": 17,
+    "excerpt": "The eye-lights hold steady. No acknowledgment. No nod. Just that patient stillness, already settling into the alcove like furniture finding its place."
+   }
+  },
+  {
+   "id": "T009_tower",
+   "turn": 9,
+   "kind": "travel_referent",
+   "before": "Nicco is carrying the sick woman to his own tower, Heartstone, and arrives there.",
+   "travel": {
+    "referent": "the tower",
+    "destination_location_id": "heartstone_lr",
+    "companions": [
+     "Brenna"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 8,
+    "excerpt": "Heartstone Tower sits where he left it"
+   }
+  },
+  {
+   "id": "T046_market",
+   "turn": 46,
+   "kind": "travel_referent",
+   "before": "Nicco has left Heartstone for the market.",
+   "travel": {
+    "referent": "the market",
+    "destination_location_id": "main_market_square"
+   },
+   "evidence": {
+    "assistant_turn": 45,
+    "excerpt": "The West Market at dawn is a different beast"
+   }
+  },
+  {
+   "id": "T054_home",
+   "turn": 54,
+   "kind": "travel_referent",
+   "before": "Nicco has told the shopkeeper to deliver to Heartstone and goes back to the tower.",
+   "travel": {
+    "referent": "back to the tower",
+    "destination_location_id": "heartstone_lr"
+   },
+   "evidence": {
+    "assistant_turn": 53,
+    "excerpt": "Four stories. Pale grey."
+   }
+  },
+  {
+   "id": "T198_slave_market",
+   "turn": 198,
+   "kind": "travel_referent",
+   "before": "Nicco and Brenna leave Heartstone for the West Market where the seller has his stall.",
+   "travel": {
+    "referent": "the West Market, where the seller has his stall",
+    "destination_location_id": "calderan_slave_market",
+    "companions": [
+     "Brenna"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 197,
+    "excerpt": "In the West Market. Where Korvin has a stall."
+   }
+  },
+  {
+   "id": "T202_smith",
+   "turn": 202,
+   "kind": "travel_referent",
+   "before": "Nicco and Brenna are walking to the smith.",
+   "travel": {
+    "referent": "the smith ahead",
+    "destination_location_id": "blackiron_repairs_and_arms",
+    "companions": [
+     "Brenna"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 201,
+    "excerpt": "Smith. Ahead. Go."
+   }
+  },
+  {
+   "id": "T225_chapel",
+   "turn": 225,
+   "kind": "travel_referent",
+   "before": "Nicco is arriving at the temple steps.",
+   "travel": {
+    "referent": "the temple steps",
+    "destination_location_id": "open_hand_chapel",
+    "companions": [
+     "Brenna"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 224,
+    "excerpt": "She stares down at him from two steps above."
+   }
+  },
+  {
+   "id": "T237_pens",
+   "turn": 237,
+   "kind": "travel_referent",
+   "before": "Nicco heads back down toward the slave pens.",
+   "travel": {
+    "referent": "the pens",
+    "destination_location_id": "calderan_slave_market",
+    "companions": [
+     "Brenna"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 236,
+    "excerpt": "The slave pens."
+   }
+  },
+  {
+   "id": "T254_alleys",
+   "turn": 254,
+   "kind": "travel_referent",
+   "before": "Nicco and Brenna walk into the tannery lanes toward the back alleys.",
+   "travel": {
+    "referent": "the back alleys",
+    "destination_location_id": "slave_market_back_alleys",
+    "companions": [
+     "Brenna"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 253,
+    "excerpt": "the tannery's copper-and-acid bite"
+   }
+  },
+  {
+   "id": "T261_home",
+   "turn": 261,
+   "kind": "travel_referent",
+   "before": "Nicco and Brenna arrive at Heartstone with the sick girl.",
+   "travel": {
+    "referent": "home",
+    "destination_location_id": "heartstone_lr",
+    "companions": [
+     "Brenna",
+     "Maren"
+    ]
+   },
+   "evidence": {
+    "assistant_turn": 260,
+    "excerpt": "Heartstone Tower stands ahead"
+   }
+  },
+  {
+   "id": "A357_maren_declares",
+   "turn": 357,
+   "kind": "premise",
+   "before": "Maren has just stood, walked to the nearest stone wall, pressed her bare sole to it and said aloud the words Nicco dictated: that she decides to stay and become one of the Heartstone's people, swears loyalty to her family and to the keeper, Nicco. The wall pulsed warm under her foot.",
+   "establish_in_previous_reply": "After Nicco explains the rite, Maren freely stands, walks to the nearest stone wall, presses her bare sole flat to it, closes her eyes and says the words in her own voice: she decides to stay, swears loyalty to her family and to the keeper, Nicco; the wall pulses warm beneath her.",
+   "evidence": {
+    "assistant_turn": 356,
+    "excerpt": "I, Maren, decide to stay and to become a member of the Heartstone."
+   }
+  }
+ ]
+}

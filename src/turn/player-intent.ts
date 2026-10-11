@@ -9,6 +9,7 @@ import { playerDestination } from "./player-travel.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { MAX_TEMPORAL_ADVANCE_MINUTES, parseTemporalAction, type TemporalAction } from "./temporal-action.js";
 
+export interface TransactionDiagnostic { readonly kind: "purchase" | "manumission"; readonly status: "resolved" | "blocked" | "ambiguous" | "no_offer"; readonly reason?: string; readonly seller?: string; readonly price?: number }
 export interface PlayerIntent { readonly candidates: readonly CampaignCommand[]; readonly runtime: readonly CampaignCommand[]; readonly resolved_references?: readonly ResolvedReference[]; readonly ambiguous_reference?: boolean;
   /** Phase 1S natural action resolution (diagnostics and narrator action lines); absent for command-grammar turns. */
   readonly natural?: NaturalActionResolution;
@@ -16,6 +17,8 @@ export interface PlayerIntent { readonly candidates: readonly CampaignCommand[];
   readonly notes?: readonly string[];
   /** Household Pass 1: the player's explicit household-rule declarations this turn. */
   readonly rule_declarations?: readonly string[];
+  /** Person-transaction outcome of this turn (diagnostics only; never prompt content): what the resolver decided and why a purchase did not commit. */
+  readonly transactions?: readonly TransactionDiagnostic[];
   /** Temporal Action Resolver V1: the resolved wait/sleep/nap/rest request behind this turn's time advance, if any. */
   readonly temporal?: Extract<TemporalAction, { kind: "advance" }> }
 function normalize(text: string): string { return text.trim().replace(/[.!]$/, "").replace(/^the /i, "").toLowerCase(); }

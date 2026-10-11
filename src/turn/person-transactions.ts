@@ -8,7 +8,8 @@ import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
 import { establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type SceneReading } from "./narrated-captives.js";
 import { GATES } from "./language/gates.js";
-import { CARDINAL_WORD_ALTERNATION, numberWordValue } from "./language/numbers.js";
+import { ACCEPT } from "./transaction-acts.js";
+import { NUMBER_PHRASE_SOURCE, numberPhraseValue } from "./language/numbers.js";
 import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
 
 /**
@@ -34,10 +35,9 @@ export interface TradeResolution {
 }
 export interface TradeOptions { readonly world?: WorldStore; readonly participants?: readonly EphemeralSceneParticipant[] }
 const HEDGE = GATES.transaction_hedge;
-const ACCEPT = /\b(?:done|deal|agreed|sold|i'?ll take (?:her|him|them)|i take (?:her|him|them)|i'?ll buy (?:her|him|them)|pays?(?!\s+(?:(?:him|her|them)\s+)?(?:a\s+)?(?:visit|attention|respects?|heed|mind|back|homage|tribute)\b)(?:\s+(?:up|him|her|them|the \w+))?|paid|hands? over the (?:gold|coins?)|gives? (?:him|her|them) the (?:gold|coins?)|counts? out the (?:gold|coins?))\b/i;
-/** H1: cardinals from the canonical table (thirteen, fourteen… were missing here); bare "hundred" is this parser's own extension. */
-const NUM = `(\\d{1,6}|${CARDINAL_WORD_ALTERNATION}|hundred)`;
-const value = (s: string) => /^\d+$/.test(s) ? Number(s) : s.toLowerCase() === "hundred" ? 100 : numberWordValue(s);
+/** Prices are whole-gold number phrases ("five", "four hundred and fifty", "1,200"); "four hundred gold" is 400, never the trailing word alone. */
+const NUM = `(${NUMBER_PHRASE_SOURCE})`;
+const value = (s: string) => numberPhraseValue(s);
 const DOCUMENTED = /\b(?:papers? included|with (?:the |full |clean )?papers|clean transfer|(?:his|her|the seller's|my) seal|no liens|bill of sale|deed of (?:sale|transfer)|transfer papers)\b/i;
 const UNDOCUMENTED = /\b(?:no papers|without (?:any )?papers|no listing|unlisted|unpapered|off the books|papers? (?:are )?(?:missing|lost|burned))\b/i;
 const FREE = /\b(?:i (?:hereby )?(?:free|manumit) you|you(?:'re| are) (?:now )?a free (?:woman|man|person)|you(?:'re| are) no longer (?:a |my )?(?:slave|property)|grants? (?:her|him|them|you|[A-Z][a-z]+) (?:her|his|their|your) freedom|manumi\w+|you(?:'re| are) (?:now )?free(?! to\b)(?!\s+(?:from|of) (?:the |those |these )?(?:chains?|cage|shackles?|irons?)))\b/i;
@@ -63,7 +63,15 @@ export function resolvePersonTransactions(input: string, context: TurnContext, s
     // compete with Pass 1 candidates for the one subject.
     // Only narrator-created people promoted while narrated as captives; never canon or other characters without a legal record.
     const unheld = new Set(context.characters.filter(c => c.id !== "nicco" && !legal(c.id) && /\bcaptive\b/.test(c.established_origin?.role ?? "")).map(c => c.id));
-    const reading = options.world ? readScene(recent, context, options.world, { unheld, campaign_names: new Set(snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])) }) : undefined;
+    const readingOptions = { campaign_names: new Set(snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true };
+    let reading = options.world ? readScene(recent, context, options.world, { unheld, ...readingOptions }) : undefined;
+    if (reading && options.world) {
+      // A person promoted by name before the narration showed them held ("Brenna. Thirty-two." while "a woman sits against the post") has
+      // no captive role; when the scene now narrates a captive under the very noun the narrator attached to them, they are that captive.
+      const nouns = new Set(reading.persons.filter(p => p.captive && !p.name && !p.character_id && p.noun).map(p => p.noun!));
+      const late = context.characters.filter(c => c.id !== "nicco" && !unheld.has(c.id) && !legal(c.id) && c.established_origin?.descriptor && nouns.has(c.established_origin.descriptor.toLowerCase())).map(c => c.id);
+      if (late.length) reading = readScene(recent, context, options.world, { unheld: new Set([...unheld, ...late]), ...readingOptions });
+    }
     const target = reading ? resolveTarget(input, candidates, reading, named, latestOf(recent)) : undefined;
     const subject = target ? (target.kind === "persistent" ? target.id : undefined) : pick(candidates);
     if (target?.kind === "narrated" && reading) {
@@ -254,7 +262,9 @@ function purchaseNarrated(subjectPerson: NarratedPerson, reading: SceneReading, 
     const offerUnits = latestUnits.filter(u => by(u) && !otherCaptive(u.text) && amounts(u.text).length);
     const offered = offerUnits.flatMap(u => amounts(u.text));
     const claim = own.filter(u => AUTHORITY.test(u.text)).at(-1); // the most recent claim is the basis recorded
-    const offerForSubject = offered.length > 0 && (priceRequest || latestUnits.some(u => by(u) && refersTo(subjectPerson, u.text)));
+    // A price voiced about "she"/"her" refers to the scene's only captive ("She's a write-off. Three gold."); with several captives a pronoun names no one.
+    const onlyCaptive = reading.captives.length === 1 && reading.captives[0]!.ref === subjectPerson.ref;
+    const offerForSubject = offered.length > 0 && (priceRequest || latestUnits.some(u => by(u) && (refersTo(subjectPerson, u.text) || (onlyCaptive && /\b(?:she|her|he|him|them)\b/i.test(u.text)))));
     return claim || offerForSubject ? [{ seller, offered, basis: claim ? claim.text.slice(0, 200) : "sale offer in reply to a price request", offer: offerUnits.at(-1)?.text.slice(0, 200) }] : [];
   });
   if (authorities.length !== 1) return block("blocked", authorities.length ? "seller_ambiguous" : "seller_authority_unestablished",

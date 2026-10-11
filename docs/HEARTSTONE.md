@@ -1,6 +1,6 @@
 # Heartstone: current implemented state
 
-Status: Current. Last reconciled: 2026-10-11. Source of truth: `src/campaign/heartstone-charter.ts`, `heartstone-recognition.ts`, `opening-state.ts`, `src/turn/household-evidence.ts`, `command-authorizer.ts`, `data/locations/calderan/heartstone/`, `data/world/cultures/heartstone_*.yaml`. Build report (historical): [HEARTSTONE_HOUSEHOLD_RITE](evaluations/HEARTSTONE_HOUSEHOLD_RITE.md).
+Status: Current. Last reconciled: 2026-10-11 (rite authority replaced by the explicit player action the same day). Source of truth: `src/campaign/heartstone-charter.ts`, `heartstone-rite.ts`, `heartstone-recognition.ts`, `opening-state.ts`, `src/app/game-session.ts` (`completeHeartstoneRite`), `src/turn/command-authorizer.ts`, `data/locations/calderan/heartstone/`, `data/world/cultures/heartstone_*.yaml`. Build report (historical, describes the superseded semantic rite detection): [HEARTSTONE_HOUSEHOLD_RITE](evaluations/HEARTSTONE_HOUSEHOLD_RITE.md). Simplification report: [EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION](evaluations/EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION.md).
 
 ## Scope
 
@@ -29,24 +29,24 @@ They are seeded as household rules at opening. They are household rules, **not m
 
 ## The household rite
 
-Canonical core oath (display text; the candidate's own name replaces `[name]`):
+**Canon (in-world).** The rite is a voluntary ceremony: the candidate is inside Heartstone, barefoot, with bare-skin contact with the stone, speaks the oath, and the Keeper accepts them. The charter and the canon files keep this wording as lore and roleplay guidance. Canonical core oath (display text; the candidate's own name replaces `[name]`):
 
 > I, [name], choose to stay and become a member of the Heartstone.
 > I swear to be loyal to and protect my family,
 > and to stand faithfully beside the Keeper.
 
-Runtime evidence matching is **semantic, not byte-for-byte** (`detectHouseholdRite`): equivalent voluntary wording passes when the essential elements are present. A successful rite requires:
+**Engine (mechanical authority).** The rite is **player-authored fiction**. The player narrates and roleplays it in the story, exactly as they like (no exact wording, no required pose). When the player considers the ceremony complete, they confirm it with an explicit action in the UI (the small up-arrow "Promote to NPC+" in the character card, with a short confirmation). That action is the one and only mechanical signal that the rite is complete. This is an intentional product decision, not a workaround: the engine no longer tries to infer ritual completion from Narrator wording.
 
-- the correct candidate, physically inside Heartstone and **barefoot**;
-- direct **bare-skin contact** with Heartstone stone;
-- a **voluntary** declaration containing all required semantic elements;
-- **explicit Keeper acceptance** (a spoken acceptance may follow its attribution in the next sentence).
+- The Narrator may roleplay the ceremony freely and never completes it. The Controller is told never to propose `join_household` for the household Nicco keeps; if a proposal arrives anyway, authorization rejects it (`rejected_command_not_allowed`) however perfect the scene was.
+- The action is `GameSession.completeHeartstoneRite({ ref, expected_revision })` (route `POST /api/npc-plus/promote`). It uses the opaque character `ref` and the revision the card was rendered at (stale requests are refused with the normal conflict semantics) and calls no model.
+- **Eligibility** (`heartstoneRiteEligibility`, deliberately simple, never reads prose): the character exists in the campaign; is a persistent campaign character that is not the Player Character (a canonical NPC with a campaign record qualifies, one without does not); is not already NPC+; is active (not inactive or dead); is currently inside Heartstone (its own location, via the Heartstone interior rule); the Heartstone household exists and Nicco is its Keeper. Refusals are player-safe sentences with no ids.
+- The read model carries the same answer as `character_capabilities.can_promote_to_npc_plus` (plus `promotion_unavailable_reason`); the UI renders the arrow only from it and never infers tier.
 
-It does **not** work through coercion, unconscious recitation, words spoken for the candidate, ambiguous silence, mere affection, being called family, merely entering Heartstone or merely removing shoes. The Narrator establishes events, the Controller proposes `join_household`, and authorization (`riteMissing`) verifies both the receipt and the state (inside Heartstone, no worn footwear, active candidate). A rejected rite uses `rejected_reference_invalid`, so no verified quote can complete it; diagnostics include `rite_incomplete` and `rite_not_voluntary`. The evidence layer is deliberately conservative (it prefers false negatives); for example "will" in the quoted sentence is treated as a hedge ("I will stay" fails, "I have decided to stay" passes).
+Future campaign certification scenarios (and any replay benchmark) must trigger the promotion explicitly at the intended point, for example by calling `completeHeartstoneRite`; a natural-language transcript alone no longer promotes anyone. The frozen historical oracle and the historical replay reports are untouched and still describe the old expectation.
 
 ## Rite = household membership + NPC+ promotion
 
-A successful rite is an authoritative campaign event that establishes, **atomically in one revision**, (A) active household membership and (B) NPC+ promotion (the `premium_characters[]` record, created by `syncPremiumCharacters` inside preparation). There is no partial state. Promotion stays conceptually distinct from membership and is **persistent**: leaving the household changes membership and `activeNpcPlus` but neither deletes the premium record nor demotes. No automatic demotion system exists. See [Character tiers](CURRENT_STATE.md#5-character-tiers).
+The explicit action establishes, **atomically in one revision**, (A) active household membership and (B) NPC+ promotion (the `premium_characters[]` record, created by `syncPremiumCharacters` inside the same preparation). The action is one `join_household` into the Heartstone household; no new command kind, no rite state and no save field exist (the resulting membership and premium record are the completion; snapshot schema stays 6). There is no partial state, and a refused request commits nothing. The action changes no relationship, fund, item or consent, and promotion preserves the same character record, appearance, location, items and authored avatar fallback. Promotion stays conceptually distinct from membership and is **persistent**: leaving the household changes membership and `activeNpcPlus` but neither deletes the premium record nor demotes. No automatic demotion system exists. See [Character tiers](CURRENT_STATE.md#5-character-tiers).
 
 ## Recognition warmth
 

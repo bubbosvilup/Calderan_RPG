@@ -46,4 +46,5 @@ Weather UI, then Property/Heartstone property work, then the systems above as pr
 - Weather has no temperature physics, wind, humidity or survival effects; South has no named settlements.
 - Evidence authorization is conservative: ambiguous narration may fail to commit a change (false negatives preferred).
 - World and Debug navigation entries are disabled placeholders; the NPC+ Personality and Relations tabs are placeholders.
-- The `premium-characters.ts` header comment says household membership is the only promotion trigger; this is still true (the rite is `join_household`).
+- The `premium-characters.ts` header comment says household membership is the only promotion trigger; this is still true (the rite is `join_household`, now issued only by the player's explicit promotion action).
+- The promotion UI is a single arrow with an inline confirmation; a richer promotion screen (roles, appearance check, portrait step) is optional future polish. Certification scenarios and replay benchmarks must trigger the promotion explicitly; transcript replay alone cannot.

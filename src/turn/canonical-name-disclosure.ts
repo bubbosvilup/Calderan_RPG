@@ -10,9 +10,7 @@ import { rpgDialogue } from "./rpg-dialogue.js";
 import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
 import { SPEAKER_NOUNS } from "./narrated-captives.js";
 import { participatesInScene } from "./scene-participation.js";
-
-const NAME_REQUEST = /\b(?:who am i (?:speaking|talking) (?:with|to)|who are you|your name|introduce yourself|what (?:are you called|should i call you)|(?:u|you) said you are named)\b/i;
-const SELF_INTRODUCTION = /\b(?:my name(?:['’]s| is)|(?:name['’]s|i(?:['’]m| am))\s+Nicco)\b/i;
+import { NAME_REQUEST, SELF_INTRODUCTION } from "./identity-request.js";
 
 /** Reuse existing address/reference/focus projection; never pick an arbitrary member of a candidate set. */
 function disclosureTarget(context: TurnContext, input: string, recent: readonly RecentExchange[], foreground: ReadonlySet<string>, intent?: PlayerIntent, scene?: SceneParticipantPlan) {

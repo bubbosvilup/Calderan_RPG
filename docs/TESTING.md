@@ -10,7 +10,7 @@ Status: Current. Last reconciled: 2026-10-11. Source of truth: `package.json`, `
 | `npm run build` | compile to `.build/` | no |
 | `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
 
-Latest recorded result for this reconciliation: **3138 tests, 0 failed** (re-run recorded in the [reconciliation report](evaluations/DOCUMENTATION_RECONCILIATION_CURRENT_STATE.md)). Do not hardcode counts elsewhere; historical reports keep their own.
+Latest recorded result for this reconciliation: **3205 tests, 0 failed** (after the explicit NPC+ promotion pass, see [report](evaluations/EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
 
 ## Layers
 
@@ -28,3 +28,7 @@ Anything needing `OPENROUTER_API_KEY` or `HF_TOKEN`: `inspect:narrator`, `inspec
 ## Browser QA
 
 There is no automated browser test suite in the repo; UI behavior is covered by server/read-model tests. Browser checks (screenshots in `docs/ui-screenshots/`) were manual or ad hoc.
+
+## Historical replay harness (dev, live, not part of `npm test`)
+
+`src/dev/historical-replay.ts` replays the 421 historical player messages through the real engine from a fresh campaign (live Narrator and Controller; run with `OPENROUTER_API_KEY=proxy-injected NODE_USE_ENV_PROXY=1` inside the sandbox, and `npm test` WITHOUT that variable). `src/dev/historical-replay-compare.ts` scores the result against the frozen oracle (`evaluations/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md`) with all 32 MUST_MATCH checks; a unit test asserts the check count. `--anchors <file>` adds the frozen replay-only turn anchors (`evaluations/historical_replay/HISTORICAL_TURN_ANCHORS.json`, hash-pinned) to the Narrator's last user message through `ProductionOptions.narrator_wrapper`; anchors never write state, and production source outside `src/dev` must not reference them (tested). Reports: [pass 1](evaluations/HISTORICAL_CAMPAIGN_REPLAY_CERTIFICATION.md), [pass 2](evaluations/HISTORICAL_REPLAY_FIDELITY_PASS2.md).

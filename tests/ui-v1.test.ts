@@ -85,7 +85,7 @@ const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color"
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-gold", "inventory-detail-empty", "inventory-detail-body", "inventory-detail-art", "inventory-detail-name", "inventory-detail-category", "inventory-detail-description", "inventory-detail-state", "inventory-detail-owner", "equipment-figure", "equipment-note", "equip-slot-head", "equip-slot-head-body", "equip-slot-chest", "equip-slot-chest-body", "equip-slot-weapon", "equip-slot-weapon-body", "equip-slot-boots", "equip-slot-boots-body", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
+  const nodes = new Map(["character-promote", "character-promote-button", "character-promote-confirm", "character-promote-title", "character-promote-body", "character-promote-error", "character-promote-cancel", "character-promote-confirm-button", "conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-gold", "inventory-detail-empty", "inventory-detail-body", "inventory-detail-art", "inventory-detail-name", "inventory-detail-category", "inventory-detail-description", "inventory-detail-state", "inventory-detail-owner", "equipment-figure", "equipment-note", "equip-slot-head", "equip-slot-head-body", "equip-slot-chest", "equip-slot-chest-body", "equip-slot-weapon", "equip-slot-weapon-body", "equip-slot-boots", "equip-slot-boots-body", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
     "portrait-progress", "portrait-progress-title", "portrait-progress-stage", "portrait-progress-hint", "portrait-progress-elapsed", "player-nav", "player-nav-avatar", "player-nav-initial", "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
@@ -852,6 +852,56 @@ test("a blocked generation is the one legitimate disabled Generate, with its rea
   const generate = c.node("character-portrait-actions").children[0]!; assert.equal(generate.disabled, true); assert.match(generate.attributes.get("title")!, /adult/);
 });
 
+// ---------------------------------------------------------------------------------------------- explicit NPC+ promotion (Heartstone rite confirmation)
+const promotable = (ref: string, over: Record<string, unknown> = {}) => tierCard(ref, "campaign_npc", over, { can_promote_to_npc_plus: true, promotion_unavailable_reason: null });
+test("promotion arrow: shown only from the server capability; the first click opens a confirmation and sends nothing; Cancel sends nothing", async () => {
+  const requests: any[] = [], card = promotable("pro"), data = { ...opening, revision: 3, play: { household_title: "Household", participants: [{ ...card, card }], household: [{ members: [] }] } };
+  const c = await client(async (url: string, options?: any) => { if (options) requests.push([url, options]); return { ok: true, json: async () => data }; });
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  assert.equal(c.node("character-promote").hidden, false);
+  assert.equal(c.node("character-promote-button").attributes.get("aria-label"), "Promote Member pro to NPC+");
+  assert.equal(c.node("character-promote-button").attributes.get("title"), "Promote to NPC+");
+  assert.equal(c.node("character-promote-confirm").hidden, true, "no confirmation before the click");
+  c.node("character-promote-button").handlers.get("click")!({});
+  assert.equal(c.node("character-promote-confirm").hidden, false);
+  assert.equal(c.node("character-promote-title").textContent, "Promote Member pro to NPC+?");
+  assert.match(c.node("character-promote-body").textContent, /Confirm that Member pro has completed the Heartstone household rite\..*permanently unlock NPC\+ capabilities/);
+  assert.equal(requests.length, 0, "opening the confirmation mutates nothing");
+  c.node("character-promote-cancel").handlers.get("click")!({});
+  assert.equal(c.node("character-promote-confirm").hidden, true); assert.equal(c.node("character-promote-button").hidden, false);
+  assert.equal(requests.length, 0, "cancel sends no request");
+});
+test("promotion confirm: exactly one request carrying only the opaque ref and the rendered revision; success re-renders the card as NPC+ without a reload", async () => {
+  const requests: any[] = [], card = promotable("pro"), plus = { ...tierCard("pro", "npc_plus"), name: card.name, ref: card.ref };
+  let promoted = false;
+  const state = () => { const shown = promoted ? plus : card; return { ...opening, revision: promoted ? 4 : 3, ok: true, play: { household_title: "Household", participants: [{ ...shown, card: shown }], household: [{ members: [] }] } }; };
+  const c = await client(async (url: string, options?: any) => { if (options) { requests.push([url, JSON.parse(options.body)]); promoted = true; } return { ok: true, json: async () => state() }; });
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  c.node("character-promote-button").handlers.get("click")!({});
+  await c.node("character-promote-confirm-button").handlers.get("click")!({}); await tick();
+  assert.deepEqual(requests, [["/api/npc-plus/promote", { ref: card.ref, expected_revision: 3 }]]);
+  assert.equal(c.node("character-promote").hidden, true, "the arrow disappears once NPC+");
+  assert.deepEqual(labels(c), ["Generate", "Edit NPC+"], "the NPC+ tools are available from the same drawer");
+  assert.match(c.node("character-badges").textContent, /NPC\+/);
+});
+test("promotion confirm: a refusal keeps the card as it was and shows the server message inline", async () => {
+  const card = promotable("pro"), data = { ...opening, revision: 3, play: { household_title: "Household", participants: [{ ...card, card }], household: [{ members: [] }] } };
+  const c = await client(async (_url: string, options?: any) => options ? { ok: true, json: async () => ({ ok: false, error: { code: "stale_turn", message: "The campaign changed since this card was shown." } }) } : { ok: true, json: async () => data });
+  c.node("scene-participants").children[0]!.handlers.get("click")!({});
+  c.node("character-promote-button").handlers.get("click")!({});
+  await c.node("character-promote-confirm-button").handlers.get("click")!({}); await tick();
+  assert.equal(c.node("character-promote-error").hidden, false); assert.equal(c.node("character-promote-error").textContent, "The campaign changed since this card was shown.");
+  assert.equal(c.node("character-promote-confirm-button").disabled, false, "the player can retry or cancel");
+});
+test("promotion arrow: absent for world/canon, ineligible campaign NPCs, existing NPC+ and the player (never inferred from the DOM)", async () => {
+  for (const card of [tierCard("canon", "world_canon"), tierCard("camp", "campaign_npc", {}, { can_promote_to_npc_plus: false, promotion_unavailable_reason: "The character must be inside Heartstone to complete the rite." }), tierCard("plus", "npc_plus")]) {
+    const c = await drawerOf(card);
+    assert.equal(c.node("character-promote").hidden, true, card.category);
+  }
+  const html = await readFile("src/ui/index.html", "utf8");
+  assert.match(html, /id="character-promote-button"[^>]*aria-label="Promote to NPC\+"/);
+});
+
 test("A7/A8/A16 (client): a canonical avatar fills the drawer portrait and the round scene portrait from one URL, and hides the placeholder", async () => {
   const url = "/api/canon-avatar/korvin", card = { ...tierCard("korvin", "world_canon"), avatar_url: url };
   const data = { ...opening, revision: 3, play: { household_title: "Household", participants: [{ ...card, card }], household: [{ members: [] }] } };
@@ -862,6 +912,22 @@ test("A7/A8/A16 (client): a canonical avatar fills the drawer portrait and the r
   assert.equal(c.node("character-avatar-image").attributes.get("src"), url, "drawer, same asset"); assert.equal(c.node("character-avatar-image").hidden, false);
   assert.equal(c.node("portrait-initial").hidden, true); assert.equal(c.node("character-portrait-label").hidden, true);
   assert.deepEqual([...c.node("character-portrait-actions").children, ...c.node("character-footer-actions").children], [], "still read-only");
+});
+
+test("the main play screen shows the selected Player Avatar for Nicco through the same resolver as the nav avatar, a placeholder otherwise", async () => {
+  const withPlayer = (avatar: string | null) => async () => {
+    const server = galleryServer(), s = server.state(), editor = (s.play.household[0]!.members[0] as any).appearance_editor;
+    return { ok: true, json: async () => ({ ...s, play: { ...s.play, participants: [{ ref: "player", name: "Nicco", category: "You", household: false, npc_plus: false, card: null }, ...s.play.participants] },
+      player_character: { name: "Nicco", narrator_summary: "A man.", identity: [], fields: [], visual: { ref: "nicco", capabilities: { ...capsFor(true), tier: "player" }, editor, avatar_url: avatar, full_body_url: null } } }) };
+  };
+  const none = await client(withPlayer(null));
+  const bare = none.node("scene-participants").children[0]!.children[0]!;
+  assert.equal(bare.textContent, "N"); assert.doesNotMatch(bare.className, /has-image/); assert.equal(none.node("player-nav-avatar").hidden, true);
+  const url = asset(7), c = await client(withPlayer(url));
+  const player = c.node("scene-participants").children[0]!.children[0]!;
+  assert.match(player.className, /player-avatar/); assert.match(player.className, /has-image/);
+  assert.equal(player.children[0]!.attributes.get("src"), url, "the play screen uses the selected Player Avatar asset, not a derived path");
+  assert.equal(c.node("player-nav-avatar").attributes.get("src"), url, "same single truth as the navigation avatar");
 });
 
 // ---------------------------------------------------------------------------------------------- image generation lifecycle UX (player + NPC+)

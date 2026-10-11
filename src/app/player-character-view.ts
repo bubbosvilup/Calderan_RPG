@@ -13,6 +13,7 @@ import { isVisible } from "../retrieval/policy.js";
 import { appearanceFingerprint, composePortraitPrompt, portraitDetails, portraitPoseOptions, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";
 import { ageStatus, type AgeStatus } from "../campaign/age.js";
 import { characterCapabilities, type CharacterCapabilities } from "./character-capabilities.js";
+import { heartstoneRiteEligibility } from "../campaign/heartstone-rite.js";
 import { canonAvatarUrl } from "./canon-avatars.js";
 import { RAENA_IMAGE_STACK } from "./image-stack.js";
 import { avatarPortrait, fullBodyPortrait, MAX_PORTRAIT_VERSIONS, PORTRAIT_BATCH_SIZE, portraitAssetToken, portraitItemToken, portraitRecord } from "../campaign/portraits.js";
@@ -227,7 +228,8 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),
       household: isMember, npc_plus: npcPlus, presence: here ? "present" : "away",
       appearance_editor_eligible: editable,
-      character_capabilities: characterCapabilities({ promoted: npcPlus && id !== "nicco", has_campaign_record: !!record, editable, ...(view.current.status ? { status: view.current.status } : {}), generation_blocked: ageStatus(world, snapshot, id) === "minor" ? "Portrait generation is only available for adult characters." : null }),
+      character_capabilities: characterCapabilities({ promoted: npcPlus && id !== "nicco", has_campaign_record: !!record, editable, ...(view.current.status ? { status: view.current.status } : {}), generation_blocked: ageStatus(world, snapshot, id) === "minor" ? "Portrait generation is only available for adult characters." : null,
+        ...(record && !npcPlus ? { promotion: heartstoneRiteEligibility(world, snapshot, id) } : {}) }),
       appearance_editor: editable ? {
         identity: ([["Species", permanent.identity.species], ["Sex", permanent.identity.sex], ["Age", permanent.identity.age]] as const).flatMap(([label, value]) => value ? [{ label, value: text(value) }] : []),
         fields: PERMANENT_APPEARANCE_FIELDS.map(key => {

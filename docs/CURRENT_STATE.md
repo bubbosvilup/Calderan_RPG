@@ -25,7 +25,7 @@ Player input → `GameSession` → `TurnCoordinator` → Narrator (draft) → St
 | Major canon lore migration and canon gap closure | Complete |
 | Calendar V1, Season V1, Weather V1, environment exposure | Complete (engine and read model); no weather UI yet |
 | Foundation re-certification and Pre-Property Debt Zero | Complete |
-| Heartstone: opening documents, household rules, household rite, rite → NPC+ promotion, recognition warmth | Complete (see [Heartstone](HEARTSTONE.md)) |
+| Heartstone: opening documents, household rules, household rite, rite → NPC+ promotion, recognition warmth | Complete; the rite is player-authored fiction completed by an explicit UI promotion action (see [Heartstone](HEARTSTONE.md)) |
 | NPC tiers and derived UI capabilities | Complete |
 | Canonical NPC authored avatars | Complete (six characters) |
 | Player character visuals: Avatar, Full Body, Gallery, generation, appearance editing | Complete |
@@ -53,7 +53,7 @@ Configuration and environment variables: [Configuration](CONFIGURATION.md). Earl
 | Tier | Meaning | UI |
 | --- | --- | --- |
 | World / canon NPC | Authored world character with no campaign record | read-only drawer; may show an authored canonical avatar; no NPC+ tooling |
-| Campaign NPC | Persistent runtime character (campaign record) that is not promoted | read-only presentation; no image workflow |
+| Campaign NPC | Persistent runtime character (campaign record) that is not promoted | read-only presentation; no image workflow; an eligible one (active, inside Heartstone, Nicco the Keeper) shows the small up-arrow "Promote to NPC+" (`can_promote_to_npc_plus`) |
 | NPC+ | Promoted: an authoritative `premium_characters[]` record exists | Avatar, Full Body, Gallery, generation, editable permanent appearance |
 | Player character | Separate semantic type (`player_characters[0]`); Nicco is **not** NPC+ | same visual editor infrastructure; no premium record is ever created for Nicco |
 
@@ -63,7 +63,7 @@ Capabilities are **derived** in the read model on every projection (`src/app/cha
 
 ## 6. Heartstone (summary)
 
-Nicco starts as lawful owner and holder of the Heartstone Tower, recognized by the normal civil and property registry. He carries two real items, `Deed of Ownership — Heartstone Tower` and `Heartstone Household Charter`. Three household rules are seeded. The household rite atomically establishes active household membership and NPC+ promotion. Recognized people feel gentle supernatural warmth through bare skin on the interior stone; others feel ordinary stone. The Heartstone is not sentient. Full detail: [Heartstone](HEARTSTONE.md). The full Property system is **not** implemented.
+Nicco starts as lawful owner and holder of the Heartstone Tower, recognized by the normal civil and property registry. He carries two real items, `Deed of Ownership — Heartstone Tower` and `Heartstone Household Charter`. Three household rules are seeded. The household rite is roleplayed in fiction; the player explicitly confirms completion through the UI promotion action (`completeHeartstoneRite`), which atomically establishes active household membership and NPC+ promotion. The engine no longer infers the rite from narration. Recognized people feel gentle supernatural warmth through bare skin on the interior stone; others feel ordinary stone. The Heartstone is not sentient. Full detail: [Heartstone](HEARTSTONE.md). The full Property system is **not** implemented.
 
 ## 7. Images
 
@@ -87,7 +87,7 @@ Snapshot schema **6**; save file schema **5** (older save schemas migrate on loa
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run for this reconciliation: **3138 tests, 0 failed** (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run for this reconciliation: **3205 tests, 0 failed** (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 ## 13. Major known limitations
 
