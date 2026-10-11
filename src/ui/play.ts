@@ -19,7 +19,7 @@ const deps = playtest
   : await createProductionDeps({ save_dir: "saves", persistent_campaigns: true, reflection_mode: "off", prepared_narrator_observer: comparisons.capture });
 const host = playtest ? undefined : new SessionHost(deps);
 const session = playtest ? createUIPlaytestSession(deps) : undefined;
-const server = createPlaytestServer(host ?? session!, undefined, comparisons);
+const server = createPlaytestServer(host ?? session!, undefined, comparisons, undefined, { log: line => console.log(`[${new Date().toISOString()}] ${line}`) });
 server.on("error", () => { console.error(`Cannot start UI on port ${port}. Stop the process using that port and retry.`); process.exitCode = 1; });
 server.listen(port, "127.0.0.1", () => {
   console.log(playtest ? `Caldrevan playtest: http://127.0.0.1:${port} — Ctrl+C to stop. Disposable campaign; no saves.`

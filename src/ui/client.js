@@ -253,6 +253,10 @@ ui("editor-save")?.addEventListener("click", () => saveEditor());
 // options of one kind (avatar or full body) in one curated pose; the browser sends only the opaque ref, the revision the editor opened
 // with, the kind and a pose id from the server's list and, for role/delete actions, an opaque Gallery item token. What is shown is
 // always the committed projection: nothing optimistic, nothing on open. The Full Body slot never falls back to the Avatar.
+// Generation lifecycle (shared by the player editor and the NPC+ editor, which use this one path): one synchronous POST that resolves
+// when the whole batch is saved (typically 30-90 s). The client shows a live progress block and 3 placeholder tiles meanwhile.
+const PORTRAIT_SLOW_MS = 90_000, PORTRAIT_CLIENT_TIMEOUT_MS = 360_000;
+let portraitProgress = null;
 let portraitBusy = false, portraitAction = "", portraitKind = "", portraitResult = "", lightboxToken, lightboxConfirm = false, lightboxReturn;
 const KIND_LABELS = { avatar: "Avatar image", fullbody: "Full-body image", legacy: "Earlier image" };
 function showPortraitError(text) { const el = ui("portrait-error"); if (el) { el.textContent = text; el.hidden = !text; } }
@@ -282,6 +286,31 @@ function deleteBlock(item) {
   if (item.is_full_body) return "Choose another Full Body image or clear Full Body first.";
   return "";
 }
+function portraitStage(elapsed) {
+  return elapsed < 1000 ? "Request sent" : elapsed >= PORTRAIT_SLOW_MS ? "Taking longer than usual. The request is still running." : "Generating…";
+}
+function renderPortraitProgress() {
+  const box = ui("portrait-progress");
+  if (!box) return;
+  const live = portraitBusy && portraitAction === "generate" && portraitProgress;
+  box.hidden = !live;
+  if (!live) return;
+  const elapsed = Date.now() - portraitProgress.startedAt, noun = portraitKind === "avatar" ? "avatar" : "full-body";
+  if (ui("portrait-progress-title")) ui("portrait-progress-title").textContent = `Generating 3 ${noun} images`;
+  if (ui("portrait-progress-stage")) ui("portrait-progress-stage").textContent = portraitStage(elapsed);
+  if (ui("portrait-progress-hint")) ui("portrait-progress-hint").textContent = "Image generation can take up to about a minute. You can keep editing; only the portrait controls wait.";
+  if (ui("portrait-progress-elapsed")) ui("portrait-progress-elapsed").textContent = `${Math.floor(elapsed / 1000)} s`;
+}
+function startPortraitProgress() {
+  stopPortraitProgress();
+  portraitProgress = { startedAt: Date.now(), timer: null };
+  const tick = () => { if (!portraitProgress) return; renderPortraitProgress(); portraitProgress.timer = setTimeout(tick, 1000); portraitProgress.timer?.unref?.(); };
+  tick();
+}
+function stopPortraitProgress() {
+  if (portraitProgress?.timer) clearTimeout(portraitProgress.timer);
+  portraitProgress = null; renderPortraitProgress();
+}
 function renderPortrait(editor) {
   const portrait = editor?.portrait, gallery = portrait?.gallery ?? [], generating = portraitBusy && portraitAction === "generate";
   showImage(ui("editor-avatar-image"), portrait?.avatar?.url);
@@ -306,7 +335,8 @@ function renderPortrait(editor) {
   if (ui("portrait-reference-remove")) ui("portrait-reference-remove").hidden = !portrait?.reference_attached || portraitBusy;
   if (ui("portrait-meta")) ui("portrait-meta").textContent = portrait?.reference_attached ? "A reference image is attached (not used)." : "";
   if (ui("portrait-gallery-count")) ui("portrait-gallery-count").textContent = gallery.length ? `${gallery.length} of ${portrait.gallery_limit}` : "";
-  renderGallery(gallery);
+  renderPortraitProgress();
+  renderGallery(gallery, generating ? portraitKind : "");
   renderLightbox();
 }
 function galleryChip(label, aria, held, onClick, wrongKind = false) {
@@ -316,11 +346,20 @@ function galleryChip(label, aria, held, onClick, wrongKind = false) {
   if (wrongKind) chip.setAttribute("title", label === "Avatar" ? "Only avatar images can be the Avatar." : "Only full-body images can be the Full Body.");
   chip.disabled = portraitBusy || held || wrongKind; chip.addEventListener("click", onClick); return chip;
 }
-function renderGallery(gallery) {
+function pendingTile(label) {
+  const tile = document.createElement("div"); tile.className = "gallery-item gallery-pending"; tile.setAttribute("aria-hidden", "true");
+  const box = document.createElement("div"); box.className = "gallery-pending-box";
+  const spin = document.createElement("span"); spin.className = "spinner";
+  const text = document.createElement("span"); text.className = "gallery-pending-label"; text.textContent = label;
+  box.append(spin, text); tile.append(box); return tile;
+}
+function renderGallery(gallery, generatingKind = "") {
   const grid = ui("portrait-gallery");
   if (!grid) return;
   grid.replaceChildren();
-  if (!gallery.length) {
+  // Three placeholders stand for the incoming batch; they disappear when the real images arrive or the request fails.
+  if (generatingKind) for (let i = 1; i <= 3; i++) grid.append(pendingTile(`${generatingKind === "avatar" ? "Avatar" : "Full body"} ${i} of 3…`));
+  if (!gallery.length && !generatingKind) {
     const empty = document.createElement("p"); empty.className = "gallery-empty"; empty.textContent = "No portraits yet. Generate 3 avatars or 3 full-body images to start the Gallery."; grid.append(empty); return;
   }
   gallery.forEach((item, index) => {
@@ -389,27 +428,45 @@ function requestDelete(item, trigger) {
   if (lightboxToken === item.token) { lightboxConfirm = true; showLightboxError(""); renderLightbox(); ui("lightbox-confirm-cancel")?.focus(); }
   else openLightbox(item.token, trigger, true);
 }
+function portraitLog(event, fields) {
+  // Development diagnostics only (browser console): kind and the opaque editor ref, never a prompt, seed or character id.
+  if (typeof console !== "undefined" && console.debug) console.debug(`[portrait] ${event}`, fields);
+}
 async function portraitRequest(url, body, action) {
   if (!editorRef || portraitBusy) return;
   if (action === "generate" && editorPortrait() && !editorPortrait().can_generate_batch) return;
   portraitBusy = true; portraitAction = action; portraitKind = action === "generate" ? body.kind : ""; showPortraitError(""); showLightboxError("");
-  if (action === "generate") portraitResult = "";
+  if (action === "generate") { portraitResult = ""; startPortraitProgress(); }
   renderPortrait(editorCard(editorRef)?.appearance_editor);
   const inViewer = !!lightboxToken && (action === "role" || action === "delete" || action === "full-body-clear");
+  const startedAt = Date.now(), target = editorRef, kind = portraitKind;
+  const controller = typeof AbortController === "function" ? new AbortController() : null;
+  const abortTimer = controller && action === "generate" ? setTimeout(() => controller.abort(), PORTRAIT_CLIENT_TIMEOUT_MS) : null;
+  abortTimer?.unref?.();
+  if (action === "generate") portraitLog("request started", { kind, target });
+  const finish = () => { portraitBusy = false; portraitAction = ""; if (abortTimer) clearTimeout(abortTimer); stopPortraitProgress(); };
   try {
-    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, ...body }) });
+    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref: editorRef, expected_revision: editorRevision, ...body }), ...(controller ? { signal: controller.signal } : {}) });
     const data = await response.json();
-    portraitBusy = false; portraitAction = "";
+    finish();
     if (data?.messages) render(data);
     // Portrait media never touches appearance: unsaved form edits stay valid at the new revision.
     if (data?.ok) {
       if (data.changed) editorRevision = currentRevision;
       if (action === "generate") portraitResult = data.message ?? "";
       if (action === "delete") closeLightbox(); else lightboxConfirm = false;
-    } else (inViewer ? showLightboxError : showPortraitError)(data?.error?.message ?? (action === "generate" ? "Portrait generation failed." : "The portrait change was not saved."));
+      if (action === "generate") portraitLog("request completed", { kind, target, duration_ms: Date.now() - startedAt });
+    } else {
+      (inViewer ? showLightboxError : showPortraitError)(data?.error?.message ?? (action === "generate" ? "Portrait generation failed." : "The portrait change was not saved."));
+      if (action === "generate") portraitLog("request failed", { kind, target, duration_ms: Date.now() - startedAt, code: data?.error?.code });
+    }
   } catch {
-    portraitBusy = false; portraitAction = "";
-    (inViewer ? showLightboxError : showPortraitError)("The portrait request failed. Check the connection and try again.");
+    const timedOut = !!controller?.signal.aborted;
+    finish();
+    (inViewer ? showLightboxError : showPortraitError)(timedOut
+      ? "No response after 6 minutes. The images may still have been saved: check the Gallery, then try again if it is empty."
+      : "The portrait request failed. Check the connection and try again.");
+    if (action === "generate") portraitLog("request failed", { kind, target, duration_ms: Date.now() - startedAt, code: timedOut ? "client_timeout" : "network" });
   }
   renderPortrait(editorCard(editorRef)?.appearance_editor);
 }

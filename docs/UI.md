@@ -16,6 +16,8 @@ Nicco, Inventory, Household, World (disabled placeholder), Debug (disabled place
 - **Household:** active members and promoted NPC+ presentation.
 - **Inventory:** compact icon grid with All / Carried / Equipped filters, search, local detail panel (selection is browser state), Gold from `snapshot.funds` (otherwise "Not tracked"), and a read-only four-slot equipment figure (Head, Chest, Weapon, Boots) with the player's Full Body or a silhouette. Items are mapped to slots by **category only** (weapon, armor, headwear, footwear); the domain has no headwear or footwear categories yet, so Head and Boots stay empty. More than one item per slot shows a conflict marker; equipped items without a slot appear separately. There is no equip/unequip action, drag and drop, or encumbrance.
 
+**Generation lifecycle (player and NPC+ editors share it):** one synchronous request (typically 30 to 90 s). The editor shows a sticky progress block (kind, stage, elapsed seconds, latency hint), three placeholder gallery tiles and scoped disabling of only the portrait controls; completion refreshes the gallery, failures show an inline error with retry, and the browser gives up after 6 minutes. See [the hardening report](evaluations/PLAYER_IMAGE_GENERATION_UX_HARDENING.md).
+
 ## Rules
 
 Capabilities are derived per projection and never persisted. Tier-inappropriate controls are omitted. Images are display only. Details: [Inventory UI](architecture/INVENTORY_UI_V1.md), [Image system](IMAGE_SYSTEM.md), [Player character](architecture/PLAYER_CHARACTER.md).

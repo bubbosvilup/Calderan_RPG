@@ -86,7 +86,7 @@ const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" 
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
 async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
   const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-gold", "inventory-detail-empty", "inventory-detail-body", "inventory-detail-art", "inventory-detail-name", "inventory-detail-category", "inventory-detail-description", "inventory-detail-state", "inventory-detail-owner", "equipment-figure", "equipment-note", "equip-slot-head", "equip-slot-head-body", "equip-slot-chest", "equip-slot-chest-body", "equip-slot-weapon", "equip-slot-weapon-body", "equip-slot-boots", "equip-slot-boots-body", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
-    "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
+    "portrait-progress", "portrait-progress-title", "portrait-progress-stage", "portrait-progress-hint", "portrait-progress-elapsed", "player-nav", "player-nav-avatar", "player-nav-initial", "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
   const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
@@ -862,4 +862,79 @@ test("A7/A8/A16 (client): a canonical avatar fills the drawer portrait and the r
   assert.equal(c.node("character-avatar-image").attributes.get("src"), url, "drawer, same asset"); assert.equal(c.node("character-avatar-image").hidden, false);
   assert.equal(c.node("portrait-initial").hidden, true); assert.equal(c.node("character-portrait-label").hidden, true);
   assert.deepEqual([...c.node("character-portrait-actions").children, ...c.node("character-footer-actions").children], [], "still read-only");
+});
+
+// ---------------------------------------------------------------------------------------------- image generation lifecycle UX (player + NPC+)
+// One shared client path: both editors post to /api/portrait/generate and render the same progress block and placeholders.
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+type Mode = "npc" | "player";
+async function lifecycleClient(mode: Mode, behaviour: { fail?: "error" | "network"; hold?: boolean } = {}) {
+  const server = galleryServer(), hold: { release?: () => void } = {}, posts: { url: string; body: any }[] = [];
+  let mine = behaviour;
+  const playerState = () => { const s = server.state(), editor = (s.play.household[0]!.members[0] as any).appearance_editor;
+    return { ...s, player_character: { name: "Nicco", narrator_summary: "A man.", identity: [], fields: [], visual: { ref: "alpha", capabilities: { ...capsFor(true), tier: "player" }, editor, avatar_url: null, full_body_url: null } } }; };
+  const state = () => mode === "player" ? playerState() : server.state();
+  const c = await client(async (url: string, options?: any) => {
+    if (!options) return { ok: true, json: async () => state() };
+    const body = JSON.parse(options.body); posts.push({ url, body });
+    if (mine.fail === "network") throw new Error("offline");
+    if (mine.fail === "error") return { ok: false, json: async () => ({ ...state(), ok: false, error: { code: "portrait_generation_failed", message: "Portrait generation failed. The image provider failed. Nothing was saved." } }) };
+    const answer = () => { const out = server.batch(3, 0, body.kind); return mode === "player" ? { ...out, ...playerState() } : out; };
+    if (mine.hold) return { ok: true, json: () => new Promise(resolve => { hold.release = () => resolve(answer()); }) };
+    return { ok: true, json: async () => answer() };
+  });
+  if (mode === "player") c.node("player-nav").handlers.get("click")!({}); else c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
+  return { c, posts, hold, set: (b: typeof behaviour) => { mine = b; } };
+}
+const placeholders = (c: Awaited<ReturnType<typeof client>>) => c.node("portrait-gallery").children.filter(e => e.className === "gallery-item gallery-pending");
+for (const mode of ["npc", "player"] as const) for (const [kind, noun, label] of [["avatar", "avatar", "Generating 3 avatars…"], ["fullbody", "full-body", "Generating 3 full body…"]] as const) {
+  test(`generation lifecycle (${mode}, ${kind}): immediate progress block, placeholders, scoped disabling, completion refresh in the right bucket`, async () => {
+    const { c, posts, hold } = await lifecycleClient(mode, { hold: true });
+    assert.equal(c.node("portrait-progress").hidden, true, "no progress before any click");
+    const done = c.node(`portrait-generate-${kind}`).handlers.get("click")!({}); await tick();
+    // G1-G4: immediate, kind-specific feedback in the panel, not only on the button.
+    assert.equal(c.node("portrait-progress").hidden, false); assert.equal(c.node("portrait-progress-title").textContent, `Generating 3 ${noun} images`);
+    assert.equal(c.node("portrait-progress-stage").textContent, "Request sent"); assert.match(c.node("portrait-progress-hint").textContent, /up to about a minute/);
+    assert.equal(c.node(`portrait-generate-${kind}`).textContent, label); assert.equal(placeholders(c).length, 3, "three placeholder tiles for the incoming batch");
+    assert.doesNotMatch(c.node("portrait-gallery").textContent, /No portraits yet/);
+    // G9/G10: only the portrait controls wait; appearance fields stay usable.
+    for (const id of ["portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose"]) assert.equal(c.node(id).disabled, true, id);
+    assert.equal(c.node("appearance-build").disabled, false, "unrelated editor fields remain usable");
+    // G13: the request is exactly the existing narrow contract.
+    assert.deepEqual(Object.keys(posts[0]!.body).sort(), ["expected_revision", "kind", "pose", "ref"]); assert.equal(posts[0]!.url, "/api/portrait/generate");
+    // G14: a long request keeps a live elapsed indicator.
+    await wait(1150); assert.match(c.node("portrait-progress-stage").textContent, /^Generating…$/); assert.match(c.node("portrait-progress-elapsed").textContent, /^[1-9] s$/);
+    hold.release!(); await done;
+    // G5/G6/G15: loading cleared, results visible, correct kind, controls usable again.
+    assert.equal(c.node("portrait-progress").hidden, true); assert.equal(placeholders(c).length, 0); assert.equal(thumbs(c).length, 3);
+    assert.ok(thumbs(c).every(t => t.children[0]!.className.includes(`kind-${kind}`)), "images land in the right bucket");
+    assert.equal(c.node("portrait-status").textContent, `3 ${noun} options generated.`);
+    for (const id of ["portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose"]) assert.equal(c.node(id).disabled, false, id);
+    assert.equal(c.node(`portrait-generate-${kind}`).textContent, kind === "avatar" ? "Generate 3 avatars" : "Generate 3 full body");
+  });
+  for (const fail of ["error", "network"] as const) test(`generation lifecycle (${mode}, ${kind}): ${fail} failure clears loading, shows an inline error and allows a retry`, async () => {
+    const { c, posts, set } = await lifecycleClient(mode, { fail });
+    await c.node(`portrait-generate-${kind}`).handlers.get("click")!({});
+    // G7/G8: visible error, no placeholders, no dead disabled state.
+    assert.equal(c.node("portrait-progress").hidden, true); assert.equal(placeholders(c).length, 0); assert.equal(c.node("portrait-error").hidden, false);
+    assert.match(c.node("portrait-error").textContent, fail === "error" ? /Nothing was saved/ : /request failed/);
+    assert.equal(c.node(`portrait-generate-${kind}`).disabled, false); assert.equal(c.node("portrait-avatar-pose").disabled, false);
+    set({}); await c.node(`portrait-generate-${kind}`).handlers.get("click")!({});
+    assert.equal(posts.length, 2, "retry sends a fresh request"); assert.equal(c.node("portrait-error").hidden, true); assert.equal(thumbs(c).length, 3);
+  });
+}
+test("generation lifecycle: slow requests say so without cancelling, and player and NPC+ render the same lifecycle", async () => {
+  const seen: Record<string, string[]> = {};
+  for (const mode of ["npc", "player"] as const) {
+    const { c, hold } = await lifecycleClient(mode, { hold: true }), steps: string[] = [];
+    const done = c.node("portrait-generate-avatar").handlers.get("click")!({}); await tick();
+    steps.push(c.node("portrait-progress-stage").textContent, c.node("portrait-generate-avatar").textContent, String(placeholders(c).length));
+    hold.release!(); await done; steps.push(String(c.node("portrait-progress").hidden), c.node("portrait-status").textContent);
+    seen[mode] = steps;
+  }
+  assert.deepEqual(seen.player, seen.npc, "G11: identical lifecycle for player and NPC+");
+});
+test("generation lifecycle: no schema or context change (static guards)", async () => {
+  const types = await readFile("src/campaign/types.ts", "utf8"), format = await readFile("src/persistence/save-format.ts", "utf8");
+  assert.match(types, /schema_version: 6;/); assert.match(format, /schema_version: 5;/);
 });

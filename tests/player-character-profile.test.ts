@@ -293,6 +293,22 @@ test("server: state carries player_character; POST /api/player-character commits
   } finally { server.close(); await host.shutdown(); }
 });
 
+test("server: player portrait generation logs started/failed with kind, opaque ref and duration, and surfaces the failure (shared route with NPC+)", async () => {
+  const root = await temp(), { host, s } = await created(root), lines: string[] = [];
+  const server = createPlaytestServer(host, undefined, undefined, undefined, { log: line => lines.push(line) }); server.listen(0, "127.0.0.1"); await once(server, "listening");
+  const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+  try {
+    const state = await (await fetch(`${base}/api/session`)).json(), ref = state.player_character.visual.ref;
+    const res = await fetch(`${base}/api/portrait/generate`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref, expected_revision: state.revision, kind: "avatar", pose: "neutral" }) });
+    const body = await res.json();
+    assert.equal(res.status, 502); assert.equal(body.ok, false); assert.match(body.error.message, /generation failed|Nothing was saved|not available/i);
+    assert.equal(lines.length, 2); assert.equal(lines[0], `portrait generate started kind=avatar target=${ref}`);
+    assert.match(lines[1]!, new RegExp(`^portrait generate failed code=portrait_generation_failed kind=avatar target=${ref} duration_ms=\\d+$`));
+    assert.ok(!lines.join("\n").includes("nicco"), "no internal character id in the log");
+  } finally { server.close(); await host.shutdown(); }
+  void s;
+});
+
 // ------------------------------------------------------------------------------------------------ private authored background
 /** Fragments of Nicco's authored `content` prose that are background/history or private narrator-only detail. */
 const PRIVATE_PROSE = ["35-year-old", "approximately one day before", "lawful owner/holder", "healing and sacrifice", "transported into this world", "no automatic knowledge of spells", "no prior lived knowledge"];

@@ -25,7 +25,8 @@ const assets = new Map([
  *   - Given a SessionHost (Save/Load v1 persistent campaigns): the host's active session (or none: start screen), the session-owned
  *     transcript, and the campaign create/load/close/save routes.
  */
-export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR) {
+export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR, options: { readonly log?: (line: string) => void } = {}) {
+  const log = options.log ?? (() => undefined);
   const host = target instanceof SessionHost ? target : undefined;
   const fixed = target instanceof GameSession ? target : undefined;
   const legacyMessages: Message[] = [{ role: "narrator", text: UI_PLAYTEST_OPENING }];
@@ -143,11 +144,15 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
           // server's enums), an opaque Gallery item token (roles, delete) or the reference image itself: never a prompt, model, seed, size,
           // batch size, path, file name, version ID or character ID. The server builds the prompt from committed appearance.
           const base = { ref: fields.ref, expected_revision: fields.expected_revision };
+          // Development diagnostics: kind, the opaque ref the browser already holds and the duration; never a prompt, seed or character id.
+          const generating = req.url === "/api/portrait/generate", startedAt = Date.now();
+          if (generating) log(`portrait generate started kind=${String(fields.kind)} target=${String(fields.ref)}`);
           const outcome = req.url === "/api/portrait/generate" ? await session.generateNpcPortraitBatch({ ...base, kind: fields.kind, pose: fields.pose })
             : req.url === "/api/portrait/avatar" ? session.setNpcPortraitAvatar({ ...base, item: fields.item })
             : req.url === "/api/portrait/full-body" ? session.setNpcPortraitFullBody({ ...base, item: fields.item })
             : req.url === "/api/portrait/delete" ? await session.deleteNpcPortrait({ ...base, item: fields.item })
             : await session.setNpcPortraitReference({ ...base, image: fields.image });
+          if (generating) log(`portrait generate ${outcome.ok ? "completed" : `failed code=${outcome.error.code}`} kind=${String(fields.kind)} target=${String(fields.ref)} duration_ms=${Date.now() - startedAt}`);
           const { view: _view, ...result } = outcome;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : outcome.error.code === "portrait_generation_failed" ? 502 : 422, { ...result, ...state() }); return;
         }
