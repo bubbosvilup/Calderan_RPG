@@ -144,7 +144,7 @@ for (const ending of ["final", "failed", "cancelled", "interrupted"] as const) t
   c.node("latest").handlers.get("click")!({}); assert.equal(c.node("conversation").scrollTop, 1000);
   const finalText = '*Korvin remains beside Nicco.*\n\n"All is well — truly."';
   const result = ending === "final" ? { ...opening, type: "result", ok: true, messages: [...opening.messages, { role: "player", text: "*looks around*" }, { role: "narrator", text: finalText }],
-    scene: { location: "Observation room", time_of_day: "Early Afternoon" }, household: [{ members: [{ name: "Maren", presence: "present", location: "Observation room" }, { name: "Unfamiliar household member", presence: "away" }] }] } :
+    scene: { location: "Observation room", time_of_day: "Early Afternoon", date_text: "Year 1191, Vesp Alpha 1, Stonewake" }, household: [{ members: [{ name: "Maren", presence: "present", location: "Observation room" }, { name: "Unfamiliar household member", presence: "away" }] }] } :
     { ...opening, type: "result", ok: false, error: { message: ending === "cancelled" ? "Cancelled." : "Provider unavailable.", turn_state_changed: false } };
   if (ending !== "interrupted") {
     const bytes = new TextEncoder().encode(JSON.stringify(result) + "\n");
@@ -157,7 +157,7 @@ for (const ending of ["final", "failed", "cancelled", "interrupted"] as const) t
     assert.equal(c.node("conversation").children.length, 3); assert.equal(c.node("conversation").children[2], bubble);
     assert.equal(bubble.className, "narrator"); assert.equal(bubble.attributes.get("aria-busy"), "false");
     assert.equal(bubble.children[1]!.textContent, 'Korvin remains beside Nicco.\n\n"All is well — truly."');
-    assert.equal(c.node("daypart").textContent, "Early Afternoon");
+    assert.equal(c.node("daypart").textContent, "Year 1191, Vesp Alpha 1, Stonewake");
     assert.equal(c.node("household-members").children.length, 2);
     assert.match(c.node("household-members").textContent, /MarenPresent · Observation roomUnfamiliar household memberAway/);
     assert.equal(c.node("input").value, "");
@@ -387,7 +387,7 @@ test("scene entries open a safe character drawer by reference and close through 
   const person = { ref: "opaque", name: "Known person", category: "Household \u00b7 NPC+", card: { name: "Known person", household: true, npc_plus: true, role: "Cook", relationship: "Not recorded", state: "Not recorded", where: "Here", appearance: "An established appearance.", affiliations: [] } };
   const data = { ...opening, scene: { ...opening.scene, location_id: "real_location" }, play: { day: 6, gold: 37, participants: [person] } };
   const c = await client(async () => ({ ok: true, json: async () => data }));
-  assert.equal(c.node("location-id").textContent, "real_location"); assert.equal(c.node("gold").textContent, "37"); assert.equal(c.node("day").textContent, " \u00b7 Day 6");
+  assert.equal(c.node("location-id").textContent, "real_location"); assert.equal(c.node("gold").textContent, "37"); assert.equal(c.node("day").textContent, "");
   assert.equal(c.node("present-count").textContent, "1 present");
   const entry = c.node("scene-participants").children[0]!;
   for (const close of ["character-close", "character-backdrop", "escape"]) {
@@ -413,7 +413,7 @@ test("streaming draft cannot change location ID, gold, day or participants; fina
   assert.equal(c.node("location-id").textContent, "initial"); assert.equal(c.node("gold").textContent, "11");
   emit({ ...initial, type: "result", ok: true, scene: { location: "Destination", location_id: "destination", time_of_day: "Evening" }, play: { day: 1, gold: 9, participants: [] }, messages: [...initial.messages, { role: "player", text: "Walk." }, { role: "narrator", text: "Arrival" }] });
   stream.close(); await submitted;
-  assert.equal(c.node("location-id").textContent, "destination"); assert.equal(c.node("gold").textContent, "9"); assert.equal(c.node("day").textContent, " \u00b7 Day 1");
+  assert.equal(c.node("location-id").textContent, "destination"); assert.equal(c.node("gold").textContent, "9"); assert.equal(c.node("day").textContent, "");
 });
 
 test("character whitelist uses public appearance, actual NPC+ membership and hides secret conditions/affiliations", () => {

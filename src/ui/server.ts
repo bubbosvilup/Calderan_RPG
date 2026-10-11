@@ -42,7 +42,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
     return { messages: messages(session).map(message => message.comparison_id ? { ...message, comparison_available: comparisons?.has(message.comparison_id) ?? false, alternatives: comparisons?.results(message.comparison_id) ?? [] } : message), ...(comparisons ? { alternate_models: ALTERNATE_NARRATOR_MODELS } : {}), status: session.status, configured: view.session.provider.configured,
       revision: view.session.revision,
       ...(host ? { campaign: { id: session.campaignId, display_name: session.campaignMeta.display_name ?? session.campaignId, save: view.session.save } } : {}),
-      scene: { location: view.scene.location.name, location_id: view.scene.location.id, time_of_day: view.scene.time.time_of_day },
+      scene: { location: view.scene.location.name, location_id: view.scene.location.id, time_of_day: view.scene.time.time_of_day, date_text: view.scene.environment.date_text },
       play,
       player_character: session.getPlayerProfileView(),
       inventory: session.getPlayerInventoryView(),

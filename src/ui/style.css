@@ -124,6 +124,8 @@ article{display:grid;
   font-size:21px;
   line-height:1.75}
 .rpg-narration{font-style:italic}
+.narrator .rpg-narration{color:#97aed6}
+.narrator .rpg-dialogue{color:#f1dfb6}
 .player .speaker{color:var(--pink)}
 .player>.message-text{color:#edb0d0;
   background:var(--raised);

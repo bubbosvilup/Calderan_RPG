@@ -749,8 +749,10 @@ function renderScene(data) {
     else { editorRef = undefined; switchView("household"); }
   }
   locationLabel.textContent = data.scene?.location ?? "Caldrevan";
-  daypart.textContent = data.scene?.time_of_day ?? "—";
-  if (ui("day")) ui("day").textContent = Number.isInteger(data.play?.day) ? ` · Day ${data.play.day}` : "";
+  // The calendar date (year, month, day, weekday) replaces the old "Late Morning · Day N" label; the time of day stays as a tooltip.
+  daypart.textContent = data.scene?.date_text ?? data.scene?.time_of_day ?? "—";
+  daypart.title = data.scene?.time_of_day ?? "";
+  if (ui("day")) ui("day").textContent = "";
   if (ui("location-id")) ui("location-id").textContent = data.scene?.location_id ?? "";
   if (ui("gold")) ui("gold").textContent = typeof data.play?.gold === "number" ? String(data.play.gold) : "Not tracked";
   const people = data.play?.participants ?? [];
