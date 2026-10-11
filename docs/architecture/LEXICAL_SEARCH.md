@@ -1,5 +1,7 @@
 # Phase 1G: Lexical Search Foundation & Evaluation
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/retrieval`. Overall status: [Current state](../CURRENT_STATE.md).
+
 Phase 1H now adds [optional semantic retrieval and hybrid fusion](SEMANTIC_SEARCH.md).
 The Phase 1G tokenizer, weights, benchmark cases, exact fetch, and synchronous
 lexical APIs remain unchanged. Lexical is still the developer default while real

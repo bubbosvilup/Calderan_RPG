@@ -1,5 +1,7 @@
 # Transfer Domain V1
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/campaign/`, `src/turn/`. Overall status: [Current state](../CURRENT_STATE.md).
+
 Possession != ownership. This extends the existing campaign item domain and its `transfer_item` command. Inventory remains derived, and schema 6 remains unchanged.
 
 ## 1. Pre-pass transfer audit

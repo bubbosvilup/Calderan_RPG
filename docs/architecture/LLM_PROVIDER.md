@@ -1,5 +1,7 @@
 # Phase 1K: OpenRouter Dual-Model Provider Foundation
 
+Status: ACTIVE for the provider contract (adapters, JSON Schema protocol, timeouts); individual Phase 1K model selections below are HISTORICAL. Current models: [Current state](../CURRENT_STATE.md#4-current-model-topology-verified-in-code). Last reconciled: 2026-10-11.
+
 ## Architecture and contracts
 
 The additive `src/llm/` boundary separates transport from two responsibilities:
@@ -14,11 +16,13 @@ Neither provider imports CampaignState, WorldStore, retrieval services or persis
 
 ## Selected models and configuration
 
+**Current production Narrator (as of 2026-10-11): `z-ai/glm-5.2`** with a fixed provider route (`z-ai/fp8`, `allow_fallbacks: false`).
+
 **Current production State Controller (as of 2026-10-08): GPT-6 Luna primary (`openai/gpt-6-luna`), Claude Haiku 5.5 fallback (`anthropic/claude-haiku-5.5`), via OpenRouter** native model fallback: the request sends `models: ["openai/gpt-6-luna", "anthropic/claude-haiku-5.5"]` with `provider: {require_parameters: true, allow_fallbacks: true}`. Selected by the [Round 3 controller bakeoff](../evaluations/CALDREVAN_CONTROLLER_MODEL_BAKEOFF_ROUND_3.md). `OPENROUTER_CONTROLLER_MODEL` overrides the primary; `OPENROUTER_CONTROLLER_FALLBACK_MODELS` overrides the fallback list (comma list, or `none` to disable). Controller diagnostics record `requested_models`, `response_model`, `model_fallback`, `generation_id`, the upstream provider and, per failed attempt, status/error_type/provider_name/limit_source/Retry-After. History: `qwen/qwen3.8-flash` was the default from 2026-10-03 ([Round 2 bakeoff](../evaluations/CALDREVAN_CONTROLLER_MODEL_BAKEOFF_ROUND_2.md)) and was retired after Alibaba shared-pool 429s. `OpenRouterStateControllerProvider` is the canonical adapter; the former DeepSeek class name is a compatibility export. **Current model map (as of 2026-10-08), all via OpenRouter:** Narrator unchanged (`z-ai/glm-5.2`, pinned `z-ai/fp8`); State Controller GPT-6 Luna → Claude Haiku 5.5 fallback (above); Mannerism extractor GPT-6 Luna (`openai/gpt-6-luna`, single model, `provider: {require_parameters: true}`, override `MANNERISM_EXTRACTOR_MODEL`; D-10 calibration replay 8/8, zero false positives, matching the earlier Qwen result); Reflection Claude Haiku 5.5 (`anthropic/claude-haiku-5.5`, single model, `provider: {require_parameters: true}`, only constructed in `CALDREVAN_REFLECTION_MODE=shadow`). Reflection cannot use Luna: its unchanged strict wire schema uses string `minLength`/`maxLength`, which OpenAI strict outputs reject (HTTP 400); Haiku accepted it. Mannerism extraction and reflection previously used `qwen/qwen3.8-flash` (reflection pinned to Alibaba); that pin was removed. Neither maintenance subsystem has a model fallback; failures skip the maintenance step and never fail a turn. Narrator selection is unchanged. The remaining Phase 1K descriptions below are historical foundation details.
 
 | Setting | Narrator | Controller |
 | --- | --- | --- |
-| Default requested model | `minimax/minimax-m2-her` (Phase 1K; see narrator docs for the current default) | `openai/gpt-6-luna` → fallback `anthropic/claude-haiku-5.5` |
+| Default requested model | `z-ai/glm-5.2` (fixed provider route `z-ai/fp8`, no fallbacks; Phase 1K default was `minimax/minimax-m2-her`) | `openai/gpt-6-luna` → fallback `anthropic/claude-haiku-5.5` |
 | Default output token budget | 512 | 512 |
 | Output ceiling | 2,048 (configurable for another model) | 1,024 |
 | Total request timeout | 60 seconds | 20 seconds |
@@ -26,9 +30,9 @@ Neither provider imports CampaignState, WorldStore, retrieval services or persis
 
 Both adapters accept model, timeout and output budget configuration. Narrator requests can override the output budget. The developer CLI additionally reads `OPENROUTER_NARRATOR_MODEL` and `OPENROUTER_CONTROLLER_MODEL`. Compatible controller models use the same JSON Schema protocol; no GLM-specific adapter exists. DeepSeek versus GLM was **not compared**.
 
-MiniMax is selected for roleplay prose; DeepSeek is selected for compact structured interpretation. [M2-her documentation](https://openrouter.ai/minimax/minimax-m2-her) describes a 65,536-token context, a 2,048-token completion limit, and optional roleplay roles. It does not support enforced JSON output. Ordinary messages remain portable; optional `roleplay_context` in the MiniMax adapter supports `user_system`, `group`, `sample_message_user`, and `sample_message_ai`. These optional roles were inspected in documentation and tested offline, not exercised in the live benchmark.
+HISTORICAL (Phase 1K): MiniMax was selected for roleplay prose and DeepSeek for compact structured interpretation; both were later replaced (see the production lines above and [Configuration](../CONFIGURATION.md)). [M2-her documentation](https://openrouter.ai/minimax/minimax-m2-her) describes a 65,536-token context, a 2,048-token completion limit, and optional roleplay roles. It does not support enforced JSON output. Ordinary messages remain portable; optional `roleplay_context` in the MiniMax adapter supports `user_system`, `group`, `sample_message_user`, and `sample_message_ai`. These optional roles were inspected in documentation and tested offline, not exercised in the live benchmark.
 
-The controller uses the selected [DeepSeek model](https://openrouter.ai/deepseek/deepseek-v4-flash-0731). [Nitro routing](https://openrouter.ai/docs/guides/routing/model-variants/nitro) prioritizes throughput; this is not a guarantee of lowest first-token latency. Diagnostics record the exact requested slug, including `:nitro`. Current diagnostics also retain the upstream provider when OpenRouter supplies it; engine logic does not use it.
+HISTORICAL: the Phase 1K controller used the selected [DeepSeek model](https://openrouter.ai/deepseek/deepseek-v4-flash-0731). [Nitro routing](https://openrouter.ai/docs/guides/routing/model-variants/nitro) prioritizes throughput; this is not a guarantee of lowest first-token latency. Diagnostics record the exact requested slug, including `:nitro`. Current diagnostics also retain the upstream provider when OpenRouter supplies it; engine logic does not use it.
 
 ## Streaming, completion and errors
 

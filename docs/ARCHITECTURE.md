@@ -1,0 +1,109 @@
+# Caldrevan architecture
+
+Status: Current. Last reconciled: 2026-10-11. Source of truth: the current main working tree (code first, then tests, then authored data).
+
+Caldrevan is a deterministic engine for long-running, AI-narrated roleplay. **The LLM interprets and proposes. The engine owns truth.** Nothing a model writes becomes campaign state until the engine has validated it, authorized it with evidence and committed it atomically.
+
+## 1. Governing model
+
+| Part | Role | What it may not do |
+| --- | --- | --- |
+| **Narrator** (LLM) | Writes the prose of a turn. | Mutate campaign truth. Prose is provisional until the audit passes. |
+| **State Controller** (LLM) | Reads the finalized narration plus bounded state evidence and *proposes* structured changes. | Mutate state. A proposal is only a proposal and has no semantic veto over the engine. |
+| **Engine** (`src/campaign`, `src/turn`) | Parses, validates, authorizes with evidence, prepares and commits. | n/a: it is the only writer. |
+| **CampaignState** | Authoritative runtime truth of one campaign (revision-guarded, atomic). | Hold UI state, prose or derived data. |
+| **Authored canon** (`data/`, `WorldStore`) | Immutable baseline world truth. | Change at runtime. |
+| **Retrieval** | Informational support for the narrator (lexical by default, semantic optional). | Act as authority for any fact. |
+| **Scene State Projection** (SSP) | Derived, deterministic, read-only, never persisted candidate "current truth" for narration. | Be saved, or be authority itself. |
+| **Save** | The authoritative persistent form of one campaign. | Contain derived data (calendar, weather, capabilities, visuals metadata). |
+| **UI** | Reads read models (`SessionView`, play/player/inventory views). | Become a second gameplay authority. |
+
+## 2. Mutation path
+
+```text
+Player input
+  ↓
+GameSession                       src/app/game-session.ts  (one facade for any UI; SessionHost owns campaign lifecycle)
+  ↓
+TurnCoordinator                   src/turn/turn-coordinator.ts  (orchestrates typed stages in src/turn/stages/)
+  ↓ intent + projection → retrieval → context
+Narrator (draft prose, streamed)  src/llm/openrouter/minimax-narrator.ts  (provider class name is historical)
+  ↓
+State Controller (proposal)       src/llm/openrouter/state-controller.ts
+  ↓
+Schema validation  →  Evidence authorization   (controller-schema, evidence-authorization, command-authorizer, item/household evidence)
+  ↓
+Narration audit (revise once, then redact)     what the player reads always matches what is committed
+  ↓
+expected_revision check → CampaignState.prepare (validation capability, never a mutation)
+  ↓
+ONE atomic CampaignState.commit               the only mutation of a turn
+  ↓
+Derived read models + SSP                     recomputed from state; nothing derived is stored
+  ↓
+UI + next turn context
+```
+
+Contractual order (from the coordinator): input → intent/projection → retrieval → narration (draft) → controller (proposal) → authorization → final preparation → audit/reconciliation → commit preparation → checkpoint → one commit → publication. Stages never mutate `CampaignState`; `campaign.prepare` is only a validation capability. A stale revision after any await rejects the turn (`stale_turn`); there is no rebase or replay. Controller failure never commits.
+
+Evidence rule: a change needs the player's own words or a completed event in the narration. Requests, plans, hints, hedges and refusals authorize nothing. Where the evidence layer cannot be sure it fails closed (a false negative is preferred to a false commit).
+
+## 3. What each model sees
+
+Three separate channels are built from authoritative state. Nothing sends the whole campaign or the whole transcript every turn.
+
+- **Narrator-facing context** (`src/turn/prompt-builder.ts`, `narrator-pack.ts`, `context-builder.ts`): compact, human-readable, narration-safe, free of technical ids, visibility-checked (the narrator never receives what the player character could not know). It carries a stable policy, the player's compact visible-appearance line, the `[CURRENT SCENE]` block, a bounded recent-scene narration window, and any retrieved background grounding.
+- **Scene State Projection** (`src/turn/scene-state-projection.ts`, `scene-state-focus.ts`, `scene-state-render.ts`): location, date/time/season/observance, outside weather, who is present and in what state, who carries and who owns what, mana and gold, knowledge scopes, relevant household and schedule. Derived, deterministic, read-only, not persisted, selected by relevance. It states only what Nicco knows; omission never means a detail is false. See [Scene State Projection V1](architecture/SCENE_STATE_PROJECTION_V1.md).
+- **Controller-facing context**: structured and actionable. It does carry ids and the mutation-relevant state it needs (items, positions, household, knowledge scopes). It receives **no** calendar or weather and no UI state.
+- **Retrieval / background grounding** (`src/retrieval`, `background-grounding.ts`): a separate supplementary channel of canon chunks selected by explicit policy. Informational only.
+
+## 4. Authority table (who owns each truth)
+
+| Domain | Authoritative source | Persisted | Derived | Narrator-visible | Controller-visible | UI-only |
+| --- | --- | --- | --- | --- | --- | --- |
+| Canon lore | `data/` YAML via `WorldStore` | in the repo, not in saves (saves record a dataset id and canon references) | no | yes, through retrieval and visibility rules; restricted tiers withheld | selected grounding only | no |
+| Campaign runtime state | `CampaignState` | yes (snapshot) | no | through SSP and context | bounded evidence | no |
+| Items (identity, owner, category, description) | `CampaignState.items` | yes | no | SSP item labels (no ids) | yes, with ids | no |
+| Item ownership | `owner_id` on the item | yes | no | SSP ("who owns what") | yes | no |
+| Item physical position | one `position` per item: `unknown`, `carried`, `equipped`, `stored(location_id)` | yes | no | SSP | yes | no |
+| Inventory | derived from item positions (`src/campaign/inventory.ts`); no second array | no | yes | via SSP | via item state | no |
+| Household membership | `CampaignState.households` | yes | no | SSP when relevant | yes | no |
+| NPC+ promotion | the `premium_characters[]` record (`isNpcPlus`) | yes | no | indirectly (richer portrayal) | yes (NPC+ gating) | no |
+| `activeNpcPlus` (behavior gate) | derived from promotion + lifecycle/household conditions | no | yes | n/a | n/a | no |
+| Player appearance | `player_characters[0]` profile | yes | no | one compact visible-appearance line | no | no |
+| Portrait assets (avatar/full body/gallery) | `portraits[]` records + the asset store | metadata yes (bytes in the store) | no | **never** | **never** | selected role display |
+| Canonical authored avatars | `data/canonNPCAvatar/` + registry (`src/app/canon-avatars.ts`) | no | no | never | never | display only |
+| Calendar, season, observances | derived from `world_minute` (`src/world/calendar.ts`) | only `world_minute` | yes | yes (SSP line) | **no** | read model |
+| Weather | derived from campaign id, climate profile, block (`src/world/weather.ts`) | no | yes | yes (SSP line) | **no** | read model |
+| Environment exposure | authored per location (`environment_exposure`) | no (canon) | no | wording of the weather line | no | no |
+| Heartstone recognition warmth | derived from membership/Keeper state (`heartstone-recognition.ts`) | no | yes | one compact line inside Heartstone | no | no |
+| UI character capabilities | derived per projection (`character-capabilities.ts`) | no | yes | no | no | yes |
+| Inventory selection, filters, search | browser state | no | n/a | no | no | yes |
+| Equipment presentation (4 slots) | projection of item **category** (`inventory-ui-view.ts`) | no | yes | no | no | yes |
+| Item icon/detail artwork | `item-visuals.ts` resolver (sprite > template > category glyph > placeholder) | sprite metadata only (non-authoritative) | yes | no | no | yes |
+| Money | `snapshot.funds` | yes | no | SSP (gold) | yes | shown in Inventory header |
+| Relationships, knowledge, facts | `CampaignState` | yes | no | scoped | scoped | no |
+| Retrieval index | derived from canon | no | yes | chunks only | grounding only | no |
+
+## 5. Source map
+
+```text
+data/              authored canon (YAML): world lore, locations, characters, factions, concepts, canon NPC avatars
+src/world          canon loader, validation, WorldStore, calendar, climate, weather, environment, travel, runtime scene state
+src/campaign       CampaignState and domains: characters, items, inventory, households, knowledge, relationships, funds,
+                   NPC+ (premium), player character, portraits, Heartstone charter and recognition, opening state
+src/retrieval      exact, lexical, semantic and hybrid search (audience-safe)
+src/turn           coordinator and stages, intent grammar, evidence and authorization, item/household evidence,
+                   SSP, prompt builder, audit, movement/follow, reflection (shadow only), compaction
+src/llm            OpenRouter narrator/controller/extractor/reflection/compressor providers; Hugging Face fal-ai image client
+src/persistence    save format, migrations, campaign repository, recovery
+src/app            GameSession, SessionHost, SessionView, read models (play, player, inventory, item visuals, canon avatars,
+                   character capabilities), production wiring, autosave, item sprite jobs
+src/ui             local playtest server (server.ts) and the vanilla client (index.html, client.js, style.css)
+src/dev            developer CLIs and evaluation tools (never imported by production)
+tests/             offline unit, domain, matrix, replay, UI and save/load tests
+```
+
+## 6. Related documents
+
+[Current state](CURRENT_STATE.md) · [Configuration](CONFIGURATION.md) · [Image system](IMAGE_SYSTEM.md) · [Heartstone](HEARTSTONE.md) · [UI](UI.md) · [Testing](TESTING.md) · [Roadmap](ROADMAP.md) · [Documentation index](README.md)

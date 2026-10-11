@@ -1,5 +1,7 @@
 # Player Character Profile V1
 
+Status: ACTIVE. Last reconciled: 2026-10-11 (portraits section and schema note updated). Source of truth: `src/campaign/player-character.ts`, `src/app/player-character-view.ts`, `player-visual-view.ts`, `src/campaign/portraits.ts`.
+
 The narrator always receives a reliable, compact and structured description of what the player character looks like. It never
 comes from retrieval, conversation memory or duplicated prose. v1 has exactly one player character: Nicco.
 
@@ -7,7 +9,7 @@ comes from retrieval, conversation memory or duplicated prose. v1 has exactly on
 
 ```text
 authored canon (data/characters/player/nicco.yaml: sex, species, age_band, traits)   initial values only
-  → CampaignSnapshot.player_characters[]           campaign-authoritative, editable, persisted (snapshot 5)
+  → CampaignSnapshot.player_characters[]           campaign-authoritative, editable, persisted (snapshot schema 6 today)
   → derivePlayerCharacterContext(world, snapshot)  the ONE projection
       → TurnContext.player_profile.visible → narrator prompt, [NICCO / PLAYER PROFILE] block
       → PlayerProfileView.narrator_summary → UI "Narrator sees" preview (same string)
@@ -108,7 +110,7 @@ literal and never appear elsewhere in the prompt.
 
 ## UI
 
-The "Nicco" navigation button opens **NICCO / Player Character**:
+The "Nicco" navigation button opens **NICCO / Player Character** (appearance fields plus the visual editor described below):
 
 - view mode lists the saved fields;
 - **Edit** fills the form from the committed profile and remembers the revision it opened with;
@@ -119,11 +121,7 @@ The "Nicco" navigation button opens **NICCO / Player Character**:
 
 ## Portraits
 
-Player portraits are deferred. The portrait gallery and image generation are keyed to a campaign character record with NPC+
-editor eligibility. Nicco is the canonical entity, not a campaign character record. Reusing that pipeline cleanly would need
-either a player portrait owner in the portrait domain or a second Nicco record, and the second option is explicitly out of scope.
-Follow-up: generalize portrait ownership to `{kind: "npc" | "player", id}`, then build the prompt from
-`derivePlayerCharacterContext`.
+Nicco has visuals. A portrait record may belong to a campaign character record **or to the player character** (`portraits.ts` validates both owners), so Nicco uses the same Avatar, Full Body, Gallery, generation and appearance-fingerprint infrastructure as NPC+ (see [Image system](../IMAGE_SYSTEM.md)) while remaining a separate semantic type: he is **not** NPC+ and no premium record is ever created for him. The generation prompt is built from `derivePlayerCharacterContext`. Surfaces: the Nicco page editor and the navigation portrait; his selected Full Body is also the figure in the Inventory screen. Visuals never reach the narrator or the controller. Upload is not available.
 
 ## Future multi-PC seam
 

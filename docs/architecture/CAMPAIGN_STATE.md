@@ -1,15 +1,17 @@
 # Phase 1I: Campaign State Model
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/campaign/`. Overall status: [Current state](../CURRENT_STATE.md).
+
 Phase 1J now adds [manual save/load persistence](PERSISTENCE.md) and validated
 `CampaignState.restore(world, snapshot)` without replay. Session dirty tracking
 stays outside campaign truth. The historical Phase 1I scope below predates that
-implementation; persistence remains manual and is never part of command commits.
+implementation. Persistence is never part of command commits; saves are written by the application layer (manual save plus autosave in persistent campaigns, see [Persistence](PERSISTENCE.md)).
 
-Status: **READY FOR PERSISTENCE FOUNDATION**. This phase implements deterministic
+Phase 1I status (HISTORICAL): ready for persistence foundation. This phase implements deterministic
 in-memory domains and atomic preparation/commit. It does not implement save/load,
 a filesystem repository, database, narrator integration, or campaign retrieval.
 
-Player Character Profile V1 adds the campaign-owned `player_characters[]` domain (snapshot 5): the active player
+Player Character Profile V1 adds the campaign-owned `player_characters[]` domain (introduced in snapshot 5; the current snapshot schema is 6): the active player
 character's bounded, structured visible appearance. It is seeded from canon and never overwritten by it, it is edited only through
 `set_player_character_profile`, and it is never NPC knowledge. See [PLAYER_CHARACTER.md](PLAYER_CHARACTER.md).
 

@@ -1,5 +1,7 @@
 # Phase 1E.1: Canonical continental map and major cities
 
+Status: ACTIVE reference for the continental topology (the Phase 1E.1 title is historical). Last reconciled: 2026-10-11. The continent is named Helion; the `Merovar` mention in the naming section below is a historical Phase 1E note (no such place exists in canon). Public canon summary: [Canon overview](../world/CANON_OVERVIEW.md).
+
 The user's illustrated continental map is the current canonical cartographic
 reference. Geography remains semantic/topological, not GIS. The Phase 1E.1 text
 confirms nation placement, national borders, major cities, capitals, waters,

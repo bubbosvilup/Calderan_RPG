@@ -1,5 +1,7 @@
 # Caldrevan image system: audit (read-only)
 
+Status: HISTORICAL (SUPERSEDED). A read-only audit of 2026-10-08 that predates the Hugging Face / fal-ai image stack, player visuals, canon avatars and item sprites. Superseded by: [Image system](IMAGE_SYSTEM.md). Provider, model and "Upload" statements below are no longer current.
+
 **Date:** 2026-10-08. **Repo state:** `3123656` (latest commit).
 
 **Scope.** This document describes what exists today, before the decided v1 stack is integrated: Raena-Qwen-Image via Hugging Face Inference Providers, `fal-ai` pinned. **No code was changed for this audit.**

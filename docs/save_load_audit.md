@@ -1,5 +1,7 @@
 # Save/load audit
 
+Status: HISTORICAL (SUPERSEDED). Pre-implementation audit of 2026-10-08. Persistent campaigns, autosave and recovery now exist. Superseded by: [Persistence](architecture/PERSISTENCE.md).
+
 **Baseline:** working tree after image generation v1 (repo `3123656` plus the uncommitted image v1 work), audited 2026-10-08. **Mode:** read, trace and document only. No code, save folders or assets were changed.
 
 The companion design is `docs/save_load_v1_design.md`.

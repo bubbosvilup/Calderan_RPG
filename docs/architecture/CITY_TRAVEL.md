@@ -1,5 +1,7 @@
 # Deterministic city travel
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/world/travel.ts`. Overall status: [Current state](../CURRENT_STATE.md).
+
 `src/world/travel.ts` implements positive-integer weighted Dijkstra traversal over
 location `connections`. An edge requires `target`, `description`, `minutes` and may
 have `kind` (`street`, `road`, `door`, `stairs`, `gate`, `bridge`, `square_access`).

@@ -1,5 +1,7 @@
 # Calderan canonical spatial reference
 
+Status: ACTIVE. Last reconciled: 2026-10-11. Weather and climate exist as derived systems ([Time and environment](../architecture/TIME_AND_ENVIRONMENT.md)); they do not change travel costs.
+
 Effective 2026-10-01. Authoritative visual source:
 `C:\Users\be_fr\CaldrevanRPG\city_map\city_map.png` (`city_map/city_map.png`).
 The image is an authoring source, not a runtime dependency. YAML locations, explicit
@@ -83,7 +85,7 @@ the complete inventory, routes and metrics.
 
 Costs are positive whole minutes for ordinary walking, calibrated from visible
 relative path lengths and existing lore, not pixel conversion. Local doors and
-square accesses cost 1–3 minutes; road segments are longer. No traffic, weather,
+square accesses cost 1–3 minutes; road segments are longer. No traffic, weather effect on travel time,
 curfew, locks or permission simulation is added. Existing entry-control lore remains
 descriptive. There are no coordinate, collision or raster navigation systems.
 

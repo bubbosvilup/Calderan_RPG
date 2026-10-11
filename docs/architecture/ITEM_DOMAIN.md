@@ -1,5 +1,7 @@
 # Item Domain V1
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/campaign/` item modules. Overall status: [Current state](../CURRENT_STATE.md).
+
 Item Domain V1 extends the existing campaign item domain (`CampaignItem`, `register_item` / `place_item` / `transfer_item`, `src/campaign/items.ts`). It does not add a second item system. What it adds is engine-allocated identity for objects that become persistent during play.
 
 ## Principles

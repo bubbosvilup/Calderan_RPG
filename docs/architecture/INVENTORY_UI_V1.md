@@ -1,61 +1,34 @@
-# Inventory UI V1
+# Inventory UI
 
-Implemented 2026-10-10. No commit. Inventory UI comes now; Sprite Quality V2 remains the next milestone.
+Status: ACTIVE (rewritten 2026-10-11; replaces the 2026-10-10 card-based Inventory UI V1 report, which described a UI that no longer exists). Source of truth: `src/app/inventory-ui-view.ts`, `item-visuals.ts`, `item-visual-view.ts`, `src/ui/server.ts`, `src/ui/client.js`, `tests/inventory-ui.test.ts`.
 
-## Player behavior
+## What the player sees
 
-The main navigation now includes **Inventory**. Nicco's screen presents responsive item cards with an illustration, name, narrative description, category and carried/equipped badge. Equipped items show their slot and worn/held state. It includes counts, All/Carried/Equipped filters, case-insensitive search and a Back to Play control that returns keyboard focus to Inventory navigation.
+The Inventory screen is a compact **icon grid** of what Nicco physically carries or has equipped, with:
 
-Only items physically carried or equipped by Nicco appear, using existing `inventoryItems()` semantics. Ownership is not used as a filter: borrowed or stolen items held by Nicco appear, while Nicco-owned items stored elsewhere do not. The UI remains read-only; gameplay actions continue through normal player turns. No equip/unequip, move, give, sell, merchant, transaction or sprite-generation buttons were introduced.
+- an **All / Carried / Equipped** filter, case-insensitive **search**, and counts;
+- a local **detail panel** for the selected item (selection, filters and search are browser state and never persisted): name, description, category, state ("Carried" or "Equipped · slot · worn/held"), and a "held for someone else" marker when Nicco holds an item owned by another (the owner is not named);
+- **Gold** from authoritative funds (`snapshot.funds` for Nicco), or "Not tracked" when there is no tracked purse;
+- a **read-only four-slot equipment presentation** (Head, Chest, Weapon, Boots) around Nicco's selected Full Body, or a silhouette when none exists.
 
-Missing metadata, pending generation, failed generation and missing image files all have useful placeholders. A failed/missing illustration never hides the item's name/description. Ready images use contain sizing rather than cropping. Pending sprites refresh every two seconds while Inventory is open without refreshing the story; polling stops when the view closes or no pending sprites remain. Refresh failures retain the last cards and retry the read after four seconds. This is HTTP refresh only, never image-generation retry.
+The screen is read-only: there is no equip, unequip, drop, use or drag-and-drop, and no encumbrance. Gameplay continues through normal turns.
 
-Campaign changes clear filters, search and stale cards. Late inventory responses cannot replace a newer campaign's view. Dynamic item prose is rendered as inert text nodes; no model-authored HTML is inserted.
+## Possession and ownership
 
-## Existing architecture reused
+Only items carried or equipped by Nicco appear (the engine's derived inventory). Ownership is not a filter: a borrowed or stolen item Nicco holds appears; a Nicco-owned item stored elsewhere does not. Ownership and possession are different fields ([Item domain](ITEM_DOMAIN.md)).
 
-`GameSession.getPlayerInventoryView()` projects the existing `getInventoryVisuals("nicco")` read model, removing storage filenames and replacing ready references with campaign-scoped sprite URLs. It adds no campaign state or inventory array to saves. `visual_description`, sprite error codes and provider prompts are not sent to the UI. Snapshot schema remains 6.
+## Equipment presentation
 
-The HTTP server exposes:
+Items map to slots by **authoritative category only**, never by name, description or slot string: `weapon` to Weapon, `armor` to Chest, `headwear` to Head, `footwear` to Boots. The domain's categories are weapon, armor, clothing, tool, consumable, document, valuable, material, miscellaneous, so **no item can currently fill Head or Boots**. Several items in one slot show a conflict marker; equipped items with no slot appear as unclassified. This is a projection, not an equipment system.
 
-- `GET /api/inventory`: current campaign, revision and player-safe item cards, or an empty list when no campaign is active.
-- `GET /api/inventory/sprite/:campaignId/:itemId`: resolves a ready image through the existing `readItemSprite()` application seam. The campaign must be active and the item must currently be in Nicco's inventory. Missing files and foreign/stored/NPC items return 404. Filenames and paths are never accepted from the browser.
-- Existing `/api/session` responses include the same inventory projection for initial and post-turn rendering.
+## Item visuals
 
-Loopback, same-origin write protection, CSP, no-store and existing file validation are preserved. There are no new write routes, provider calls or state mutations from opening the screen. Player, NPC and NPC+ items still share the same CampaignItem/inventory/visual pipeline; V1 exposes the player inventory only, not arbitrary NPC possessions.
+Two roles, icon (grid) and detail. Precedence: the item's ready generated **sprite**, then the authored **template registry** (served only from `/assets/items/`), then a **category glyph** (`/api/item-glyph/<kind>`, a closed set of static SVGs), then a placeholder. A missing or failed image never hides the name or description. Pending sprites refresh while Inventory is open. Dynamic prose is rendered as inert text nodes. See [Image system](../IMAGE_SYSTEM.md).
 
-## Files
+## HTTP surface
 
-Modified:
+`GET /api/inventory` returns the player-safe view (also embedded in `/api/session`); sprite reads go through a campaign-scoped route that serves only ready sprites of items in Nicco's inventory; glyphs are static. There are no write routes and no provider calls from opening the screen. Loopback-only access, same-origin write protection, CSP and no-store headers apply.
 
-- `src/app/game-session.ts`: player-safe Inventory UI projection.
-- `src/ui/server.ts`: inventory JSON and scoped asset reads.
-- `src/ui/index.html`: navigation, screen, filters, search and empty/card container.
-- `src/ui/client.js`: safe card rendering, filters/search, placeholders, pending reads and campaign-change handling.
-- `src/ui/style.css`: responsive cards and wrapping navigation; item cards override conversation-specific article styling.
-- `tests/ui-v1.test.ts`: inventory client regressions and navigation expectation.
+## Not saved
 
-Created:
-
-- `tests/inventory-ui.test.ts`: HTTP integration, state/persistence/security and zero-generation regression.
-- `docs/architecture/INVENTORY_UI_V1.md`: this report and milestone order.
-
-All pre-existing uncommitted item/inventory/visual milestone work is preserved. No changes to Controller policy, item identity, sprite quality prompts, provider/model or retry lifecycle were made in this UI pass.
-
-## Validation
-
-Focused tests: **77 passed, zero failures**, covering Inventory UI, existing UI/HTTP/campaign behavior, item visual identity and permanent inventory. Full `npm test`: **2,746 passed, zero failures/skips**. Typecheck passed. The final keyboard-focus return was additionally checked in the client tests after the full run.
-
-Coverage includes carried/equipped counts, owned-but-stored exclusion, held-but-not-owned inclusion, four sprite statuses, safe ready-image reads, foreign campaign and NPC/stored item denial, missing files, unchanged save schema, save/load projection roundtrip, zero generation on UI reads, inert prose/XSS handling, filter/search/empty states, pending completion, late-response campaign isolation and keyboard focus.
-
-Browser skill was used to attempt visual validation. Runtime discovery returned **no available browsers** after its supported troubleshooting checks. Therefore desktop/mobile visual and interactive browser QA was not performed; responsive CSS and client/HTTP behavior were validated by inspection and deterministic tests. A connected browser is still needed for visual acceptance.
-
-## Next: Sprite Quality V2
-
-The agreed order is Inventory UI V1 first, then a separate Sprite Quality V2 pass:
-
-1. Address text leakage in generated sprites, including the presentation-sheet labels seen in the knife sample.
-2. Decide whether a rejection/regeneration strategy is warranted and define a bounded policy before implementation.
-3. If needed, evaluate a different style trigger or a second rendering pass without assuming a provider migration.
-
-None of those quality changes are included here. Existing images are displayed as supplied; current rendering defects are not hidden or automatically regenerated. No paid/live image or LLM calls, and no commit.
+The view, equipment slots, icon metadata and capabilities are derived on every projection and never written to a save.

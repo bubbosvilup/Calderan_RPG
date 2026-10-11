@@ -1,5 +1,7 @@
 # Item Visual Identity / Sprite Generation V1
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/app/item-sprite-jobs.ts`, `item-visuals.ts`. Overall status: [Current state](../CURRENT_STATE.md).
+
 Implemented 2026-10-09. No commit. Existing Item Domain and Permanent Inventory work remains intact. CampaignItem is authoritative for identity, ownership and physical position; inventory remains derived. Snapshot schema remains **6**.
 
 ## 1. Luna smoke re-run

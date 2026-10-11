@@ -1,5 +1,7 @@
 # Engine capabilities before UI
 
+Status: HISTORICAL (SUPERSEDED). A snapshot of engine capabilities on 2026-10-02, before the app facade grew, persistent campaigns, calendar/weather, Heartstone and the visuals/inventory work. Superseded by: [Current state](CURRENT_STATE.md) and [Roadmap](ROADMAP.md). Rows such as "no calendar or dates", "primitive minutes only" and one-opening/empty-household assumptions are no longer true. Kept for the original verification record.
+
 READY = usable through `GameSession` and verified by a test. PARTIAL = works with stated limits. NOT IMPLEMENTED = do not build UI promises on it. "Application API" is the `GameSession` entry point (or `view.*` field) that exposes it. No live provider was called in this pass; narrator and controller quality was measured in earlier live passes (see the hardening and NPC+ reports).
 
 | Feature | Status | Application API | Authoritative domain | Persisted | UI ready | Known limitation |

@@ -1,5 +1,7 @@
 # Scene State Projection V1
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/turn/scene-state-*.ts`. Overall status: [Current state](../CURRENT_STATE.md).
+
 ## Purpose
 
 Four layers, kept apart:

@@ -1,5 +1,7 @@
 # Phase 1C: Narrative Context Foundation
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/turn/context-builder.ts`, `prompt-builder.ts`. Overall status: [Current state](../CURRENT_STATE.md).
+
 `NarrativeContext` is the explicit data boundary between the deterministic engine
 and a future narrator. It is not a prompt, a player-facing response, or a serialized
 WorldStore. [Types](../../src/types/narrative.ts) and the

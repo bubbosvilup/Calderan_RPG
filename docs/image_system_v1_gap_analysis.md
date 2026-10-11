@@ -1,5 +1,7 @@
 # Image system: v1 gap analysis
 
+Status: HISTORICAL (SUPERSEDED). Gap analysis for image generation v1 (2026-10-08). Superseded by: [Image system](IMAGE_SYSTEM.md). Gaps listed here, including player portraits, have since been closed; avatar Upload was never built.
+
 **Baseline:** repo `3123656`. **Decided v1:** `Raelina/Raena-Qwen-Image` via Hugging Face Inference Providers, `fal-ai` pinned, `HF_TOKEN`.
 
 The details behind each row are in `docs/image_system_audit.md`.

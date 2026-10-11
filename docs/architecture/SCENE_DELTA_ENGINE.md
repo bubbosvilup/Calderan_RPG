@@ -1,5 +1,7 @@
 # Phase 1B: Scene Delta Engine
 
+Status: HISTORICAL. This is Phase 1B scene deltas. Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Phase 1I's [CampaignState](CAMPAIGN_STATE.md) can stage an existing SceneDelta as a
 `runtime_delta` command alongside typed campaign-domain commands, then commit one
 campaign revision. SceneDelta itself has not been expanded. Standalone RuntimeState

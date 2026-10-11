@@ -1,5 +1,7 @@
 # Phase 1G retrieval evaluation
 
+Status: HISTORICAL. This is a lexical search evaluation. Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Dataset: `sha256:db7dbdb9b095977ced0514c1d25f232b3f732676f8b5a7ce482f0780d22de9bf`
 
 44 cases. Top-1: 30/34. Micro recall@5: 87.2%. MRR@5: 0.927. Multi-answer recall@5: 53.8%.

@@ -1,5 +1,7 @@
 # Phase 1F: Retrieval Foundation
 
+Status: HISTORICAL. This is Phase 1F retrieval foundation; current reference: [Retrieval](RETRIEVAL.md). Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Implemented deterministic, read-only retrieval over loaded canon. Phase 1G now
 builds [weighted lexical search](LEXICAL_SEARCH.md) on this foundation; Phase 1H
 adds [optional semantic indexing and hybrid fusion](SEMANTIC_SEARCH.md). The Phase 1F

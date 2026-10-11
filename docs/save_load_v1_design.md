@@ -1,5 +1,7 @@
 # Save/load v1 design: persistent campaigns
 
+Status: HISTORICAL (IMPLEMENTED). This design was implemented as Save/Load v1 (persistent campaigns, autosave, recovery, snapshot 6 / save 5 today). The text below still says "proposal, not implemented" because it is preserved as written. Current reference: [Persistence](architecture/PERSISTENCE.md).
+
 **Status:** proposal, not implemented. **Based on:** `docs/save_load_audit.md`.
 
 **Principle:** reuse the existing, hardened persistence engine (`src/persistence/`). Add only what the Play UI and the image store are missing. The snapshot stays the single authority, and nothing derived is saved.

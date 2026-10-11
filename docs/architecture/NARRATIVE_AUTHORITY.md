@@ -1,5 +1,7 @@
 # Narrative authority
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/turn/`. Overall status: [Current state](../CURRENT_STATE.md).
+
 Phase 1N. This document defines who owns truth when a narrator turn is built, and how the narrator is told which character may use which fact. Everything described here is **deterministic**, **derived per turn from the captured snapshot**, and **not persisted**.
 
 ## 1. Ownership of truth

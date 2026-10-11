@@ -1,5 +1,7 @@
 # Sprite Quality V2
 
+Status: HISTORICAL. This is a sprite quality evaluation (2026-10-10); current reference: [Image system](../IMAGE_SYSTEM.md). Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Evaluation date: 2026-10-10. No commit. Existing uncommitted milestones preserved.
 
 1. **Current quality pipeline audit.** ItemSpriteJobs is a session-local async queue; metadata commits wait for gameplay idle. It shares the portrait generator and asset store, but has its own lifecycle. The image contract returns bounded PNG/JPEG/WebP bytes and optional provider/seed/billing diagnostics. Production remains HF router → fal-ai → Qwen/Qwen-Image + Raelina/Raena-Qwen-Image LoRA. The current Raena trigger is `Anime illustration of`. The provider supports the item-only `negative_prompt` field. Before V2, valid bytes went straight to stage/finalize and ready; there was no image reviewer, OCR or local analysis seam. Queue/running/completed state was ephemeral; persisted sprite metadata was only status, ready asset reference and exact source appearance, or safe failure code. Portrait metadata is richer but is not copied into items.

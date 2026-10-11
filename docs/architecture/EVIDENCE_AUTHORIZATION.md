@@ -1,5 +1,7 @@
 # Evidence-backed authorization and epistemic continuity
 
+Status: ACTIVE (rules); the controller model named in historical evaluation notes is no longer the default. Last reconciled: 2026-10-11. Source of truth: `src/turn/evidence-authorization.ts`, `command-authorizer.ts`, `item-evidence.ts`, `household-evidence.ts`.
+
 Phase 1O. It answers two questions:
 - **Did X become true?** Acquisition: evidence-backed authorization.
 - **Does X stay true?** Persistence: CampaignState plus the per-turn knowledge projection.
@@ -8,8 +10,8 @@ Phase 1O. It answers two questions:
 
 ```
 Player input → resolved player intent (deterministic)
-→ Narrator (Kimi) → finalized narration
-→ DeepSeek controller: { commands: [{ command, evidence_quote }] }   ← same single call
+→ Narrator → finalized narration
+→ State Controller: { commands: [{ command, evidence_quote }] }   ← same single call
 → TurnEvidence grammar (deterministic)
 → hybrid authorization (deterministic) → CampaignState.prepare → commit (one revision)
 ```
@@ -78,7 +80,7 @@ AND in either case the unchanged authorizer passes: exact player-intent match, v
 
 - **Refusal and retraction win.** "Takes them… then hands them back" stays rejected even with a perfect quote, because TurnEvidence refusals are re-applied.
 - **The existing safe path is never failed by evidence.** Grammar yes plus invalid evidence stays authorized, with source `grammar`.
-- **DeepSeek has no semantic veto.** It cannot override intent, ownership, knowledge, revision, item identity or explicit refusal. Evidence only adds recall.
+- **The State Controller has no semantic veto.** It cannot override intent, ownership, knowledge, revision, item identity or explicit refusal. Evidence only adds recall.
 - **Atomic offered group.** For a multi-item offer to one recipient, evidence may not produce a partial commit. If the evidence path authorized part of the offer but not all of it, the evidence-sourced part is withdrawn (`rejected_evidence_partial_group`); grammar-sourced decisions stand. Everything authorized in a turn commits in one `prepare`/`commit`, so the revision increments once.
 - **Provenance guard.** Re-telling a fact the recipient already `knows` is rejected as `rejected_already_established`, so the original status and provenance are never overwritten. Upgrading a rumor or belief through an explicit tell remains possible.
 - **Mode.** `evidence_authorization: "hybrid"` is the production default since Phase 1O (after the gates below). `"shadow"` exists only for evaluation: it records evidence checks but authorizes exactly as the grammar.
@@ -91,7 +93,7 @@ AND in either case the unchanged authorizer passes: exact player-intent match, v
 
 **Enablement gates** (both met before the default switch):
 1. **Offline maximally adversarial controller.** For 44 negative cases (final corpus: 44 negative, 17 positive), every contiguous word window of the narration is tried as the quote for every intended command, individually and shared: 0 commits.
-2. **Real DeepSeek.** 0 false positives in all eight evaluation runs. The final run had 110 items and 52 non-events.
+2. **Real controller (DeepSeek at the time of that run).** 0 false positives in all eight evaluation runs. The final run had 110 items and 52 non-events.
 
 **Quoted `/tell` action-beat convention** (added after it recurred in live Kimi output): `Nicco leans toward Brenna. "The eastern bridge is closed."`. It is accepted only when all of these hold:
 - the quoted statement is a sentence of its own with no attribution text;

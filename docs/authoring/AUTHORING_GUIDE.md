@@ -1,5 +1,7 @@
 # Caldrevan canon authoring guide
 
+Status: ACTIVE. Last reconciled: 2026-10-11. Location environment fields (`climate_profile`, `environment_exposure`) are documented in the [entity schema](../schemas/ENTITY_SCHEMA.md#location-environment-fields). Public canon summary: [Canon overview](../world/CANON_OVERVIEW.md).
+
 This is the authoritative human-authoring discipline for canonical world data.
 The [entity schema](../schemas/ENTITY_SCHEMA.md),
 [chunk schema](../schemas/KNOWLEDGE_CHUNKS.md), and runtime validator specify the

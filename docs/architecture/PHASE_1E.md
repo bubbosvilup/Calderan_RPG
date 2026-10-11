@@ -1,5 +1,7 @@
 # Phase 1E: World Canon Foundation + Mana Runtime
 
+Status: HISTORICAL. This is World Canon Foundation (Phase 1E), now in [Architecture](../ARCHITECTURE.md). Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Phase 1E adds compact world canon and player-only mana. No entity schema changes,
 dependencies, retrieval implementation, UI, spell system, or plot were introduced.
 The five existing Heartstone locations retain their identities and physical canon.

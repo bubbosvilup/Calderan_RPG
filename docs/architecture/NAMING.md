@@ -1,5 +1,7 @@
 # Naming conventions
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/`. Overall status: [Current state](../CURRENT_STATE.md).
+
 Entity IDs match `^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$`: lowercase snake_case,
 no spaces, readable, globally unique across all entity types. File names are
 `<entity_id>.yaml`; folder names are organizational and do not form identity.

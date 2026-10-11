@@ -84,6 +84,15 @@ fantasy calendars are derived and need not be defined for numeric comparisons.
 Event importance is editorial: minor for local detail, significant for consequential
 changes, major for defining history. It is a ranking hint, not a truth score.
 
+## Location environment fields
+
+Optional, for `location` entities; derived-only (no runtime state):
+
+- `climate_profile`: one of `west_cool_maritime`, `center_hot_arid`, `east_cold_continental`, `south_hot`, `south_cold`, `south_mixed`. Inherited from the nearest ancestor that declares one; a child overrides. Places with no resolvable profile have no weather.
+- `environment_exposure`: `indoor`, `outdoor`, `sheltered` or `unknown` (default when absent). **Never inherited**: a room inside an outdoor district is not outdoors.
+
+See [Time and environment](../architecture/TIME_AND_ENVIRONMENT.md).
+
 ## Event anchors versus participants
 
 An event involving Nicco, Brenna, and Maren can record:

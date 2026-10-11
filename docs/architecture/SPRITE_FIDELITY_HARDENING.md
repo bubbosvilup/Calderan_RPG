@@ -1,5 +1,7 @@
 # Sprite fidelity hardening
 
+Status: HISTORICAL. This is a sprite hardening pass; current reference: [Image system](../IMAGE_SYSTEM.md). Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 2026-10-09. Narrow prompt-only pass. No commit. No Controller, item-domain, inventory, state/schema, provider/model/LoRA configuration, UI or generation-lifecycle redesign. No Luna calls in this pass.
 
 ## 1. Current prompt drift cause

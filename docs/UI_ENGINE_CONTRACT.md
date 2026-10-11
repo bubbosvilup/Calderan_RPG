@@ -1,5 +1,7 @@
 # UI ↔ engine contract
 
+Status: ACTIVE. Last reconciled: 2026-10-11. Source of truth: `src/app/game-session.ts`, `session-view.ts` and the read-model modules. Companion: [UI](UI.md).
+
 Read this first. The UI talks to **one object**, `GameSession` (`src/app/game-session.ts`, re-exported from `src/app/index.ts`). It must not import `TurnCoordinator`, `CampaignState`, `CampaignSnapshot`, the OpenRouter classes, the save codecs, retrieval or reflection. Everything below is verified by `tests/application-closure.test.ts`.
 
 **Save/Load v1:** the Play UI uses `SessionHost` (`src/app/session-host.ts`) for persistent campaigns (section 1b). The disposable V0 mode remains behind `npm run play:ui -- --playtest`: it uses the application-owned `createUIPlaytestSession` adapter (`src/app/ui-playtest.ts`) to wrap the existing canonical opening at `calderan_slave_market`, minute 600, as disposable `ui_playtest`. This arrival override is playtest-only; it changes no authored records or normal opening. The adapter returns a `GameSession`; subsequent gameplay uses only `submitPlayerInput`. The deterministic opening is presentation text, never parsed into state. V0 forces reflection off, writes no saves, and discards the session on shutdown.
@@ -68,7 +70,7 @@ Events (`SessionEvent`), in order for a successful turn: `status_changed(running
 | `player` | `name`, `mana {current,max}`, `gold` (**null = money not tracked**, not zero), `equipment[{id,name,slot,mode}]`, `inventory[{id,name,description?}]` |
 | `household[]` | per household Nicco belongs to: `members[]`, `rules[]` |
 
-Time retains the primitive world clock (`world_minute`, `day`, `minute_of_day`) and adds P11's centralized derived `time_of_day` label. There is no calendar, season or named date; do not invent one.
+Time retains the primitive world clock (`world_minute`, `day`, `minute_of_day`) and adds P11's centralized derived `time_of_day` label. Calendar, season, observances and weather are derived and exposed in `SessionView.scene.environment` (see [Time and environment](architecture/TIME_AND_ENVIRONMENT.md)); read them from there, never compute or invent them in the UI. There is no weather UI yet.
 
 ## 5. Save, load, shutdown
 
@@ -102,12 +104,15 @@ A reflection failure is **never** an error: the turn stays committed and `trace.
 
 - `session.getPlayerProfileView()` → `{name, role_label: "Player Character", identity[{key: sex|species|apparent_age, label, value|null}], fields[{key, label, group, kind: number|text|lines, unit?, value|null}], narrator_summary}`, or `null`. It is read-only and never dirties. `narrator_summary` is exactly the visible-appearance string the narrator receives each turn (`derivePlayerCharacterContext`). It is not a UI rendering.
 - `session.updatePlayerProfile({expected_revision, patch})` → `{ok, changed, view}` or `{ok:false, error, field?}`. This is the player's only profile write. `patch` keys are the identity keys plus the NPC+ permanent-appearance keys (`height_cm weight_kg build skin hair_color hair_texture hair_description eyes scars distinguishing_marks distinctive_traits description`): omitted = unchanged, `null` = clear, a value = set. Errors: unknown keys (including `name`, `background`), control characters, over-limit values (identity 60, text 200, description 1000, 12 list items) → `invalid_input`; a revision other than the current one → `stale_turn`; busy → `turn_in_progress`. A refused edit changes nothing. A changed edit commits one `set_player_character_profile` (revision + 1, unsaved, autosave). An unchanged patch does not commit.
+- `getPlayerProfileView()` also carries `visual` (the player visual view: selected Avatar and Full Body, gallery, generation state), so Nicco uses the same portrait infrastructure as NPC+ (see [Image system](IMAGE_SYSTEM.md)). Nicco is never NPC+.
 - The name is not editable. Clothing is not in the profile (it is current equipment). There is no biography, background or stats field.
 - HTTP: the session payload carries `player_character` (the view above, or `null`); `POST /api/player-character {expected_revision, patch}` returns 200 / 409 (stale, busy) / 422 (invalid), each with the fresh state.
 
 ## 8. Inventory and equipment
 
 UI V1 uses `members[].display_name` for player-facing labels: unknown canonical names are masked using committed Nicco name knowledge, and missing labels never fall back to opaque IDs. The loopback adapter transmits only `{members: [{name, presence, location?}]}`; it excludes the legacy IDs, raw names, private fields and household identifiers. `scene.time.time_of_day` comes directly from the centralized P11 `temporalGrounding` projection; the UI receives the location label and daypart, with no exact game clock or frontend bucket mapping.
+
+**Inventory screen:** `session.getPlayerInventoryView()` (HTTP `GET /api/inventory`) returns the derived Inventory/Equipment read model: items (carried or equipped), counts, authoritative `gold` (`null` = not tracked), item `visual` metadata, and a read-only four-slot equipment projection mapped by item category only. It is display-only and never saved; see [Inventory UI](architecture/INVENTORY_UI_V1.md).
 
 Supported now: Nicco's carried and stored-owned items, Nicco's equipped items by free-form slot (`slot`, `mode: worn|held`), and each household member's equipped items. Not in the view: items merely carried by household members, quantities, weight, durability, containers, shops. See `ENGINE_CAPABILITIES_PRE_UI.md`. Do not promise more.
 

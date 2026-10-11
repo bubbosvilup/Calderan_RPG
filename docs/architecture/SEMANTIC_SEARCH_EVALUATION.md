@@ -1,5 +1,7 @@
 # Phase 1H.1: Voyage real semantic evaluation
 
+Status: HISTORICAL. This is a semantic search evaluation. Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Measured 2026-09-27 against the unchanged 44-case Phase 1G benchmark. The additional four semantic diagnostics are reported separately; no expectations or canon were changed.
 
 ## Metrics

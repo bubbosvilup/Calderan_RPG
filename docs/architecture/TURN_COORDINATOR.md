@@ -1,5 +1,7 @@
 # Phase 1L: Turn Coordinator & First Playable Loop
 
+Status: ACTIVE for the turn lifecycle and ordering; model names in this Phase 1L text are HISTORICAL. Current stage order and models: [Architecture](../ARCHITECTURE.md), [Current state](../CURRENT_STATE.md). Last reconciled: 2026-10-11.
+
 ## Authority and lifecycle
 
 `src/turn/turn-coordinator.ts` is the sole new layer spanning the turn. It accepts `{ campaign, player_input, signal? }`; a CampaignSession caller passes `session.campaign`. Models remain providers, without world, retrieval, save repository or mutable campaign access.
@@ -13,7 +15,7 @@ turn_started (capture base revision and immutable snapshot)
 narration_delta (immediate, provider-neutral)
 narration_completed
 controller_started
-  → finalized narration + bounded base-state evidence to DeepSeek
+  → finalized narration + bounded base-state evidence to the State Controller
   → strict local proposal validation
   → conservative semantic authorization
 state_proposed (frozen diagnostics)
@@ -42,7 +44,7 @@ The final result contains narration, base/final revisions, controller proposals,
 | `recent-conversation.ts` | Ephemeral bounded exchanges and failure status |
 | `turn-coordinator.ts` | Revision capture, orchestration, authorization and atomic commit |
 
-The Phase 1K models remain `minimax/minimax-m2-her` and `deepseek/deepseek-v4-flash-0731:nitro`, configurable through their existing settings/environment overrides. The play/evaluation narrator budget is 384 output tokens; provider defaults otherwise remain unchanged. No model comparison or default switch occurred.
+The Phase 1K models were `minimax/minimax-m2-her` and `deepseek/deepseek-v4-flash-0731:nitro` (historical; current defaults are in [Configuration](../CONFIGURATION.md)), configurable through their existing settings/environment overrides. The play/evaluation narrator budget is 384 output tokens; provider defaults otherwise remain unchanged. No model comparison or default switch occurred.
 
 ## Context, knowledge and prompt bounds
 
@@ -136,7 +138,7 @@ Online evaluation defaults to **12 curated pairs**, with explicit expansion capp
 
 Offline final checks with OPENROUTER_API_KEY absent: **480/480 tests pass**, zero skipped, `npm run typecheck` passes, and the separate playthrough harness passes 25/25. Tests cover orchestration order, no-op revision, stale mutations at controller and publication boundaries, frozen diagnostics, atomic multi-command failure/success, cancellation, early iterator exit, both provider failure paths, manual dirty status, directed travel, trust rejection, invalid references, bounded retrieval, hidden-fact filtering, physical/equipment continuity, recent-memory limits and actual production-canon projection.
 
-Paid online evaluations ran 2026-09-28 on Node 22.23.2 / Windows using the unchanged MiniMax and DeepSeek Nitro defaults. The original smoke, final smoke and historical reports are retained. No automatic retries or state rebases occurred. Additional actual CLI execution is recorded separately. These are small observed samples, not stable provider performance estimates.
+Paid online evaluations ran 2026-09-28 on Node 22.23.2 / Windows using the then-current MiniMax and DeepSeek Nitro defaults. The original smoke, final smoke and historical reports are retained. No automatic retries or state rebases occurred. Additional actual CLI execution is recorded separately. These are small observed samples, not stable provider performance estimates.
 
 | Final sample | Cases | Finalized | TP / FP / FN commands | Precision | Recall |
 | --- | ---: | ---: | --- | ---: | ---: |

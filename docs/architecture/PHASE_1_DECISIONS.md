@@ -1,9 +1,9 @@
 # Accepted Phase 1 decisions
 
-Status: accepted architectural decisions. **Phase 1A: World Runtime Foundation**
+Status: HISTORICAL record of accepted early architectural decisions (still informative; the current picture is [Architecture](../ARCHITECTURE.md)). **Phase 1A: World Runtime Foundation**
 and **Phase 1B: Scene Delta Engine**, plus **Phase 1C: Narrative Context Foundation**,
 have been explicitly authorized and implemented
-within these boundaries. See [runtime foundation](RUNTIME_FOUNDATION.md) and
+within these boundaries. See runtime foundation (document no longer in the repository) and
 [scene deltas](SCENE_DELTA_ENGINE.md) and [narrative context](NARRATIVE_CONTEXT.md).
 Phase 1D now adds the [canon authoring foundation](../authoring/AUTHORING_GUIDE.md)
 and the supplied Heartstone root/LR/CY/U1 records, followed by the authorized LR

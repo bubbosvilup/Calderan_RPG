@@ -1,5 +1,7 @@
 # Engine freeze register (pre-UI)
 
+Status: HISTORICAL (SUPERSEDED). The pre-UI freeze register of 2026-10-02. The UI exists and the engine has since gained many systems. Superseded by: [Architecture](ARCHITECTURE.md) and [Current state](CURRENT_STATE.md). The unfreeze rules remain a useful record of why the movement/follow grammar was stabilized.
+
 Date: 2026-10-02. Basis: `docs/evaluations/CALDREVAN_ENGINE_CLOSURE_PRE_UI.md`. Verdict: ENGINE_READY_FOR_UI_WITH_NON_BLOCKING_DEBT.
 
 ## Frozen subsystems

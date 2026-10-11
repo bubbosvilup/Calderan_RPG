@@ -1,5 +1,7 @@
 # Phase 1E.2 — Architecture, Scope & Canon Audit
 
+Status: HISTORICAL. This is a Phase 1E.2 audit. Kept as a record of the decision or evaluation; it does not describe the current implementation. See [Current state](../CURRENT_STATE.md).
+
 Date: 2026-09-27. Engineering conclusion after the corrective changes: **GO** for
 the next explicitly authorized foundation phase, not for live persistent gameplay.
 

@@ -1,5 +1,7 @@
 # Retrieval and turn context
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/retrieval`. Overall status: [Current state](../CURRENT_STATE.md).
+
 The world corpus is never loaded wholesale into the model. A future context builder
 assembles core instructions, player persona, visibility-checked NarrativeContext,
 bounded recent conversation/scene continuity, and selected retrieved passages.

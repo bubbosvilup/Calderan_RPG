@@ -1,4 +1,6 @@
-# Phase 1J: Manual Persistence & Restore Foundation
+# Persistence (Save/Load v1; originally Phase 1J)
+
+Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-11. **Current versions: save file schema 5, snapshot schema 6** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
 
 > ## Save/Load v1 (current): persistent campaigns
 >
@@ -10,7 +12,7 @@
 >
 > ```text
 > saves/campaigns/<campaign_id>/
->   save.json              current slot (save format 5, snapshot 5)
+>   save.json              current slot (save format 5, snapshot 6)
 >   save.previous.json     the preceding successful save (rotated by every save)
 >   backups/               up to 5 rolling checkpoints r<revision>-<timestamp>.json (save JSON only: no images, no transcript)
 >   transcript.jsonl       campaign history (narrative, never canonical)
@@ -22,7 +24,7 @@
 > Campaign IDs are engine-generated (`campaign_<yyyymmdd>_<6 hex>`), immutable and never derived from the display name. The
 > disposable playtest mode (`npm run play:ui -- --playtest`) keeps the old layout under `saves/ui_playtest/` and never saves.
 >
-> **Versions (current).** Save format **5**, snapshot **5**. Readers accept older files only through the migration steps below.
+> **Versions (current).** Save format **5**, snapshot **6** (snapshot 5 to 6, Item Domain V1, adds the campaign item ID allocator `next_item_sequence`; `migrateSnapshot5to6`). Readers accept older files only through the migration steps below.
 > Snapshot 5 (Player Character Profile V1) is described in its own paragraph below.
 >
 > *History of the format-5 step (Save/Load v1, at which time the snapshot was 4):* format 5 adds optional
@@ -95,7 +97,7 @@
 
 ## Manual-save policy and ownership
 
-**Phase 1J did not autosave** (superseded by Save/Load v1 above for the Play UI; CLI and tests still save only explicitly). CampaignState is the authoritative in-memory
+**Phase 1J did not autosave** (HISTORICAL, superseded by Save/Load v1 above for the Play UI; CLI and tests still save only explicitly). CampaignState is the authoritative in-memory
 truth between saves. Unsaved changes may be lost when the process exits. No
 timers, per-command/per-turn saves, exit handlers or implicit save-before-load
 exist. Saving is an explicit engine operation for a future Save button.

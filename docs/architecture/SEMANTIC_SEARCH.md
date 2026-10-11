@@ -1,5 +1,7 @@
 # Phase 1H: Semantic Retrieval Foundation + Hybrid Search
 
+Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/retrieval`. Overall status: [Current state](../CURRENT_STATE.md).
+
 ## Phase 1H.1 update
 
 The production `VoyageEmbeddingProvider` now uses native Node fetch and
