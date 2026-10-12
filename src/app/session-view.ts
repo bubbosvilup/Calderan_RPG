@@ -64,7 +64,11 @@ export interface ViewContext { readonly status: SessionStatus; readonly last_sav
 
 const playerVisible = (entity: DeepReadonly<{ knowledge?: { visibility: { player: boolean } } }> | undefined) => entity?.knowledge?.visibility.player !== false;
 export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, context: ViewContext): SessionView {
-  const name = (id: string): string => { try { return characterView(snapshot, world, id).profile.name ?? snapshot.characters.find(c => c.id === id)?.origin_snapshot?.label ?? id; } catch { return id; } };
+  const name = (id: string): string => { try {
+    const record = snapshot.characters.find(c => c.id === id), known = characterView(snapshot, world, id).profile.name;
+    // An unnamed person held as a slave is "Slave" until a legitimate introduction gives the name (same entity, same id).
+    return known ?? (record?.origin.kind === "created" && snapshot.legal_statuses.some(l => l.character_id === id && l.status === "enslaved") ? "Slave" : record?.origin_snapshot?.label ?? id);
+  } catch { return id; } };
   const itemName = (id: string): ViewItem => {
     const item = snapshot.items.find(i => i.id === id)!;
     const canonical = item.origin.kind === "canonical" ? world.getEntity(item.origin.canonical_entity_id) : undefined;

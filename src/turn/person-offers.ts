@@ -6,8 +6,8 @@ import type { WorldStore } from "../world/world-store.js";
 import { classifyBackgroundClaim } from "./background-grounding.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
-import { establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type SceneReading } from "./narrated-captives.js";
-import { NUMBER_PHRASE_SOURCE, numberPhraseValue } from "./language/numbers.js";
+import { CAPTIVE, establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type NarrationUnit, type SceneReading } from "./narrated-captives.js";
+import { NUMBER_PHRASE_SOURCE, numberPhraseValue, numberWordValue } from "./language/numbers.js";
 import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
 
 /**
@@ -27,12 +27,19 @@ export interface PersonOfferResolution {
 }
 export interface OfferOptions { readonly world: WorldStore; readonly participants?: readonly EphemeralSceneParticipant[] }
 const NUM = `(${NUMBER_PHRASE_SOURCE})`;
-const value = (s: string) => numberPhraseValue(s);
+/** Spoken hundreds shorthand: "two-sixty" is 260, "three fifty" 350 (a unit digit then a tens/teen compound). Only the offer reader uses it. */
+function shorthandValue(phrase: string): number | undefined {
+  const [unit, ...rest] = phrase.trim().toLowerCase().split(/[\s-]+/);
+  const hundreds = unit ? numberWordValue(unit) : undefined;
+  const tail = rest.length ? numberPhraseValue(rest.join(" ")) : undefined;
+  return hundreds !== undefined && hundreds > 0 && hundreds < 10 && tail !== undefined && tail >= 10 && tail < 100 ? hundreds * 100 + tail : undefined;
+}
+const value = (s: string) => numberPhraseValue(s) ?? shorthandValue(s);
 const DOCUMENTED = /\b(?:papers? included|with (?:the |full |clean )?papers|clean transfer|(?:his|her|the seller's|my) seal|no liens|bill of sale|deed of (?:sale|transfer)|transfer papers)\b/i;
 const UNDOCUMENTED = /\b(?:no papers|without (?:any )?papers|no listing|unlisted|unpapered|off the books|papers? (?:are )?(?:missing|lost|burned))\b/i;
 function sentences(text: string): string[] { return text.split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean); }
 /** Non-gold money in a sentence that states a person's price: no actionable offer. */
-const NON_GOLD = /\b(?:silvers?|coppers?|bronze|platinum|marks?|pennies|penny|farthings?|shillings?)\b/i;
+const NON_GOLD = /\b(?:silvers?|coppers?|bronze|platinum|pennies|penny|farthings?|shillings?)\b|\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand)\s+marks?\b/i;
 /** Auction wording: bids and lots belong to a different system. */
 const AUCTION = /\b(?:auctions?|auctioneers?|bids?|bidding|bidders?|gavel|hammer price|going once|going twice)\b/i;
 
@@ -59,6 +66,9 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const nouns = new Set(reading.persons.filter(p => p.captive && !p.name && !p.character_id && p.noun).map(p => p.noun!));
   const late = context.characters.filter(c => c.id !== "nicco" && !unheld.has(c.id) && !legal(c.id) && c.established_origin?.descriptor && nouns.has(c.established_origin.descriptor.toLowerCase())).map(c => c.id);
   if (late.length) reading = readScene(recent, context, options.world, { unheld: new Set([...unheld, ...late]), ...readingOptions });
+  // The seller points at someone the narration only showed as part of a group ("Two women sit inside…", "Three hundred for her."): that person is the subject.
+  const pointed = reading.captives.length ? undefined : pointedCaptive(reading, input);
+  if (pointed) reading = { ...reading, persons: [...reading.persons, pointed], captives: [pointed] };
   const target = resolveTarget(input, candidates, reading, named, latestExchange);
   if (target?.kind === "narrated") { offerNarrated(target.person, reading, { input, context, snapshot, baseRevision, participants: options.participants ?? [], latest: latestExchange, commands, diagnostics, name, txId,
     keepClaim: (text: string) => classifyBackgroundClaim(text, options.world).status !== "unverified" }); return { commands, diagnostics }; }
@@ -92,15 +102,86 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   diagnostics.push({ status: "offered", detail: { subject: chosen, seller: sellerId, price, papers } });
   return { commands, diagnostics };
 }
-/** Whole-gold amounts a seller's sentence states: "five gold", "5 gold", or a quote that is only a number ("Five."). */
-function amountsIn(text: string): number[] {
-  return [...text.matchAll(new RegExp(`\\b${NUM}\\s+gold\\b|["“]\\s*${NUM}\\s*(?:gold)?\\s*[.!]?\\s*["”]|["“]\\s*${NUM}\\s*\\.`, "gi"))].map(m => value(m[1] ?? m[2] ?? m[3]!)).filter((n): n is number => n !== undefined);
+/**
+ * Whole-gold amounts a seller's sentence states: "five gold", "5 gold", a quote that is only a number ("Five."), and the spoken forms a
+ * seller actually uses while bargaining: "Three hundred for her.", "I'll go two-sixty.", "Make it two-sixty.", "Done, then. Two-sixty.".
+ * A bare number sentence that the next sentence turns down ("Two hundred. You're a full third off.") repeats the buyer's figure and is no offer.
+ */
+const REJECTS = /\b(?:off|too (?:low|little|cheap)|no\b|not (?:a|going|enough)|never|insult\w*|won'?t|can'?t|nowhere near|laughable)\b/i;
+const BARGAIN = `(?:(?:i'?ll|i will|we'?ll|i can|i could)\\s+(?:go|do|take|say|sell (?:her|him|them) (?:for|at)|let (?:her|him|them) go (?:for|at))|make it|let'?s say|call it|say|down to|settle (?:on|for|at)|(?:i'?d|i would) (?:take|do|settle for)|how about|lowest i'?ll go is|best i can do is)`;
+function priceMatches(sentence: string, next?: string): number[] {
+  const forms = [`\\b${NUM}\\s+gold\\b`, `["“]\\s*${NUM}\\s*(?:gold)?\\s*[.!]?\\s*["”]`, `["“]\\s*${NUM}\\s*\\.`,
+    `\\b${NUM}\\s+(?:gold\\s+)?(?:for|apiece)\\s+(?:her|him|them|that one|this one|the (?:woman|girl|man|boy|lad|lass|slave|captive))\\b`,
+    `\\b${BARGAIN}\\s+(?:to |for |at )?${NUM}\\b`,
+    `\\b${NUM}(?:'s|’s|\\s+is)\\s+(?:the |my |her |his )?(?:number|price|figure|asking(?: price)?|offer)\\b`];
+  const found = forms.flatMap(f => [...sentence.matchAll(new RegExp(f, "gi"))].map(m => value(m[1] ?? m[2] ?? m[3]!))).filter((n): n is number => n !== undefined);
+  if (found.length) return found;
+  const bare = sentence.match(new RegExp(`^\\s*${NUM}\\s*(?:gold)?\\s*[.,!]?\\s*$`, "i"));
+  const lead = sentence.match(new RegExp(`^\\s*${NUM}\\s*(?:gold)?\\s*[.!]\\s*$`, "i"));
+  const standalone = (bare ?? lead) ? value((bare ?? lead)![1]!) : undefined;
+  return standalone !== undefined && !(next && REJECTS.test(next)) ? [standalone] : [];
 }
+/** Prices a block of narration states, sentence by sentence. */
+export const pricesOf = (text: string): number[] => { const parts = sentences(text); return parts.flatMap((t, i) => priceMatches(t, parts[i + 1])); };
+const amountsIn = pricesOf;
 /** Sentences of the latest narration that state a price and are about this person (their name, or the only held person by pronoun/noun), excluding past costs and group prices. */
 function pricedSentences(latest: string, id: string, candidates: readonly string[], named: (text: string, id: string) => boolean, input: string): string[] {
   const only = candidates.length === 1;
   const request = /\b(?:price|how much|sell|buy)\b/i.test(input) && named(input, id);
   return sentences(latest).filter(t => !NOT_AN_OFFER.test(t) && amountsIn(t).length && (named(t, id) || (only && /\b(?:she|her|he|him|them|the (?:girl|woman|man|boy|lass|lad|slave|captive))\b/i.test(t)) || request));
+}
+
+/**
+ * A person the seller prices by pointing, not by naming: the seller's latest speech states a price "for her/him" (or "that one"), the recent scene
+ * narration shows held people (a captivity marker, or a group of captives) and no singular described captive exists. The subject is then the one
+ * person of that sex the narration described after the introduction ("The other is broader…", "She sits…"). Nothing here settles or promotes anybody:
+ * the offer stores the plan and the player's Accept applies it.
+ */
+const PERSON_ONE = /\b(?:the|that|this) [a-z-]+(?: [a-z-]+)? one\b|\bgot (?:one|another)\b|\bone right here\b|\b(?:young|younger|old|older|other) one\b/i;
+const PERSON_FACTS = /\b(?:twenty|thirty|forty|fifteen|sixteen|seventeen|eighteen|nineteen)[- a-z]*\b|\b\d{2}\b|\bcan read\b|\bhealthy\b|\bsturdy\b|\bknows (?:her|his) work\b|\bdebt[- ]settlement\b|\bno marks\b|\bgood health\b|\bfollow orders\b|\bdoes(?:n't| not) (?:give|cause) trouble\b|\bstrong back\b|\btrade skills\b|\bhaul(?:ing)?\b|\bsound working\b/i;
+function pointedCaptive(reading: SceneReading, input: string): NarratedPerson | undefined {
+  const priced = reading.units.filter(u => u.exchange === reading.latest && u.quoted && !!u.speaker && !u.speaker.startsWith("other:") && pricesOf(u.text).length && !NOT_AN_OFFER.test(u.text));
+  const refs = priced.map(u => u.text.match(/\b(?:for|to take|take) (her|him)\b|\b(she|he)(?:'s| is)\b|\b(her|him)\b/i)).filter((m): m is RegExpMatchArray => !!m);
+  const sexes = new Set(refs.map(m => /^(?:her|she)$/i.test((m[1] ?? m[2] ?? m[3])!) ? "woman" : "man"));
+  // The player's own purchase/price request names the sex ("Sell her to me"); it beats a narration pronoun ("he's" is usually the seller).
+  const requestSex = (): "woman" | "man" | undefined => {
+    if (!/\b(?:sell|buy|price|how much|cost|take|want)\b/i.test(input)) return undefined;
+    const wn = /\b(?:woman|girl|lass|her)\b/i.test(input), mn = /\b(?:man|boy|lad|him)\b/i.test(input);
+    return wn !== mn ? (wn ? "woman" : "man") : undefined;
+  };
+  { const r = requestSex(); if (r && priced.length && !reading.persons.some(p => !!p.name && (p.captive || !!p.character_id))) { sexes.clear(); sexes.add(r); } }
+  // No pronoun ("The debt-settlement one. Can read, write some. Twenty-two. Healthy. Twelve hundred gold."): a "the <descriptor> one" pitch of a person
+  // (age or skill facts), whose sex is the one the player asked for (their own words, never the narrator's).
+  const spoken = reading.units.filter(u => u.exchange === reading.latest && u.quoted && !!u.speaker && !u.speaker.startsWith("other:")).map(u => u.text).join(" ");
+  if (!sexes.size && priced.length && (PERSON_ONE.test(spoken) || /\b(?:she|her)\b/i.test(spoken)) && PERSON_FACTS.test(spoken)) {
+    const asked = reading.exchanges.slice(-3).map(e => e.player).join(" ");
+    // Sex nouns first, else the object pronoun of the request ("sell her to me"); a subject pronoun ("he has") is the seller.
+    const nouns = (re: RegExp) => re.test(asked), wn = nouns(/\b(?:woman|women|girl|girls|lass)\b/i), mn = nouns(/\b(?:man|men|boy|boys|lad)\b/i);
+    const w = wn || (!mn && /\b(?:her)\b/i.test(asked)), m = mn || (!wn && /\b(?:him)\b/i.test(asked));
+    if (w !== m) sexes.add(w ? "woman" : "man");
+  }
+  // The player's own request is a purchase/price request for a person ("Sell her to me, price?", "how much for the woman"): the seller's reply price is for her.
+  // ...but only for an anonymous person: a narrated NAMED person (already promoted, e.g. Maren) is never re-pointed at.
+  if (!sexes.size && priced.length && !reading.persons.some(p => !!p.name && (p.captive || !!p.character_id))) {
+    const ask = input;
+    if (/\b(?:sell|buy|price|how much|cost|take|want)\b/i.test(ask)) {
+      const wn = /\b(?:woman|girl|lass|her)\b/i.test(ask), mn = /\b(?:man|boy|lad|him)\b/i.test(ask);
+      if (wn !== mn) sexes.add(wn ? "woman" : "man");
+    }
+  }
+  if (sexes.size !== 1) return undefined;
+  const noun = [...sexes][0]!;
+  const recent = reading.units.filter(u => !u.quoted && u.exchange >= reading.latest - 2);
+  // Held evidence: a captivity marker or a plural captive noun in the narration, or the seller's own slave-trade pitch for "the young one" ("fieldwork, kitchen").
+  const pitch = /\b(?:young(?:er)?|old(?:er)?|other) one\b|\bfield-?work\b|\bkitchen\b|\blabou?r\b|\bhousework\b|\bno marks\b|\bdebt[- ]settlement\b|\bhousework\b|\bgood health\b|\bfollow orders\b|\bdoes(?:n't| not) (?:give|cause) trouble\b|\bstrong back\b|\btrade skills\b|\bhaul(?:ing)?\b/i.test(reading.units.filter(u => u.quoted && u.exchange >= reading.latest - 2).map(u => u.text).join(" ") + " " + spoken);
+  const held = pitch || recent.some(u => CAPTIVE.test(u.text) || /\b(?:two|three|four|several|some|a few)\s+(?:women|men|people|captives|slaves|prisoners|girls|boys)\b/i.test(u.text));
+  if (!held) return undefined;
+  const mine = noun === "woman" ? /^(?:the other\b|she\b|her\b)|\bthe woman\b|\bthat one\b/i : /^(?:the other\b|he\b|his\b)|\bthe man\b|\bthat one\b/i;
+  // The seller's own descriptor ("the young one", "the older one") chooses which narrated person the facts come from.
+  const said = priced.map(u => u.text).join(" "), younger = /\byoung(?:er)? one\b/i.test(said), older = /\b(?:old(?:er)?|other) one\b/i.test(said);
+  const byDescriptor = younger !== older ? recent.filter(u => younger ? /^one is\b/i.test(u.text.trim()) || /\b(?:young|younger|twenties|teens)\b/i.test(u.text) : /^the other\b/i.test(u.text.trim()) || /\bolder\b/i.test(u.text)) : [];
+  const units: NarrationUnit[] = byDescriptor.length ? byDescriptor.filter(u => !/\b(?:passes over|passed over)\b/i.test(u.text)) : recent.filter(u => mine.test(u.text.trim()) && !/^one is\b/i.test(u.text.trim()) && !/\b(?:passes over|passed over)\b/i.test(u.text));
+  return { ref: `narrated:${noun}`, noun, label: `the ${noun}`, units, in_latest: true, captive: true, present: true, introductions: [], keys: [`other:${noun}`] };
 }
 
 // ------------------------------------------------------------------------------------------------ Narrated subjects (Pass 1.1/1.2)
@@ -228,7 +309,7 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   ];
   const latestUnits = reading.units.filter(u => u.exchange === reading.latest);
   // Per sentence: "Five. She's a burden I paid four for." offers five; the past cost in the next sentence is not an offer.
-  const amounts = (text: string) => sentences(text).filter(t => !NOT_AN_OFFER.test(t)).flatMap(t => [...t.matchAll(new RegExp(`\\b${NUM}\\s+gold\\b|^\\s*${NUM}\\s*(?:gold)?\\s*[.,!]`, "gi"))].map(m => value(m[1] ?? m[2]!))).filter((n): n is number => n !== undefined);
+  const amounts = (text: string) => { const parts = sentences(text); return parts.flatMap((t, i) => NOT_AN_OFFER.test(t) ? [] : priceMatches(t, parts[i + 1])); };
   const otherCaptive = (text: string) => reading.captives.some(c => c.ref !== subjectPerson.ref && c.name && refersTo(c, text));
   const priceRequest = /\b(?:price|how much|sell)\b/i.test(s.latest?.player ?? "") || latestUnits.some(u => /\b(?:price|how much)\b/i.test(u.text) && refersTo(subjectPerson, u.text));
   const authorities = sellers.flatMap(seller => {
@@ -263,8 +344,14 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
     const facts = establishedFacts(subjectPerson, seller.key, s.name, s.keepClaim);
     const character = buildPromotedCharacter({ label, established: { ...facts.established, role: `enslaved; offered for sale by ${seller.label}` }, evidence: facts.evidence, location_id: location,
       trigger: subjectPerson.name ? "name_established" : "purchase_unnamed_subject", promoted_revision: s.baseRevision + 1, world_minute: minute, ephemeral_ref: participant?.id ?? subjectPerson.ref });
-    s.commands.push({ kind: "register_character", character });
-    subjectId = character.id;
+    // One captive, one identity across a negotiation: a later offer for the same narrated person (a counteroffer) reuses the id the earlier,
+    // unsettled offer already planned, so supersession never forks the subject.
+    const ref = participant?.id ?? subjectPerson.ref, location_id = location;
+    const prior = (snapshot.trade_offers ?? []).filter(o => o.status !== "accepted" && o.location_id === location_id && o.subject.kind === "person")
+      .flatMap(o => o.subject.kind === "person" ? o.subject.plan : []).find(c => c.kind === "register_character" && c.character.origin_snapshot?.ephemeral_ref === ref);
+    const planned = prior?.kind === "register_character" && !snapshot.characters.some(c => c.id === prior.character.id) ? { ...character, id: prior.character.id } : character;
+    s.commands.push({ kind: "register_character", character: planned });
+    subjectId = planned.id;
   }
   const sale = { kind: "transfer_person" as const, transaction_id: s.txId(subjectId), transaction_kind: "sale" as const, character_id: subjectId, to_holder_id: "nicco", documentation: papers, ...(provenance ? { note: provenance } : {}) };
   if (seller.kind === "anonymous") {

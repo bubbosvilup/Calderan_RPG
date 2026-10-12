@@ -39,6 +39,8 @@ export interface NameIntroduction {
   readonly name: string; readonly exchange: number;
   /** pattern: introduced as a name; self: the speaker's own name; weak: a quote opening with the name. */
   readonly kind: "pattern" | "self" | "weak";
+  /** A speech line that is only a name, answering a direct name question. */
+  readonly bare?: boolean;
   /** The attributed speaker of the quote it came from (self: the person themself; pattern: whoever introduced them). */
   readonly noun?: string; readonly speaker?: string; readonly narration_voice: boolean; readonly evidence: string;
 }
@@ -272,12 +274,21 @@ function introductions(units: readonly NarrationUnit[], scene: readonly RecentEx
     for (const m of u.text.matchAll(new RegExp(`\\b(?:named|called|(?:[Hh]er|[Hh]is|[Tt]heir|[Tt]he (?:girl|boy|woman|man)'s) name(?:'s|’s| is| was)|(?:[Tt]his|[Tt]hat)(?: one)?(?:'s|’s| is))\\s+${NAME}\\b`, "g"))) add({ ...base, name: m[1]!, kind: "pattern" });
     // Unattributed plain RPG speech is nobody's self-introduction, but a speech line that opens with a bare name is still a weak
     // presentation ("Brenna. Thirty-two."); weak names are accepted only when narration also treats the name as a person (readScene).
-    if (u.quoted && u.rpg && !u.speaker) { const w = u.text.match(weakName()); if (w) add({ ...base, name: w[1]!, kind: "weak" }); continue; }
+    if (u.quoted && u.rpg && !u.speaker) {
+      // Answering a direct name question, a speech line that is only a name ("Lira.") is the asked person's self-introduction.
+      const bare = asksName(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null;
+      if (bare) add({ ...base, bare: true, name: bare[1]!, kind: "weak" });
+      const w = u.text.match(weakName()); if (w) add({ ...base, name: w[1]!, kind: "weak" }); continue;
+    }
     if (!u.quoted) continue;
     const self = u.text.match(new RegExp(`\\b(?:[Mm]y name(?:'s|’s| is)|[Cc]all me|[Tt]hey call me)\\s+${NAME}\\b`)) ?? u.text.match(new RegExp(`(?:^|[.!?,;]\\s+)(?:I'm|I’m|I am)\\s+${NAME}\\b`))
       ?? u.text.match(new RegExp(`^Name(?:'s|’s)\\s+${NAME}\\b`))
-      ?? (asksName(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null);
-    if (self) add({ ...base, name: self[1]!, kind: "self" });
+      ?? (asksName(scene[u.exchange]?.player ?? "") ? u.text.match(new RegExp(`^${NAME}[.,!]?$`)) : null)
+      // Answering a direct name question, an ATTRIBUTED line may open with the name as its first sentence ("Maren. If it doesn't matter.").
+      ?? (asksName(scene[u.exchange]?.player ?? "") && u.speaker ? u.text.match(new RegExp(`^${NAME}[.!]\\s+\\S`)) : null);
+    // A line that is only a name, answering a name question: flagged so readScene can bind it to the scene's one unnamed person.
+    const bareOnly = asksName(scene[u.exchange]?.player ?? "") && new RegExp(`^${NAME}[.,!]?$`).test(u.text);
+    if (self) add({ ...base, ...(bareOnly ? { bare: true } : {}), name: self[1]!, kind: "self" });
     const weak = u.text.match(weakName());
     if (weak) add({ ...base, name: weak[1]!, kind: "weak" });
   }
@@ -386,8 +397,12 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
     const selfSpeakers = [...new Set(mine.filter(i => i.kind === "self" && i.speaker).map(i => i.speaker!))];
     // A present persistent character with no name introducing themselves: late naming of that same character. Checked first: names
     // are not unique, so another Maren elsewhere (or even here) does not stop the girl from being Maren.
-    const late = selfSpeakers.filter(s => people.some(p => p.id === s && p.unnamed));
-    if (late.length) { if (late.length === 1 && selfSpeakers.length === 1) { const i = mine.find(x => x.speaker === late[0])!; namings.push({ character_id: late[0]!, name, exchange: i.exchange, evidence: i.evidence }); } continue; }
+    // An unattributed bare-name answer to a direct name question ("Lira.") names the scene's one present unnamed persistent person.
+    const soleUnnamed = people.filter(p => p.unnamed);
+    const sameSex = (s: string) => !s.startsWith("other:") || !soleUnnamed[0]?.sex || !(soleUnnamed[0]!.sex === "female" ? MALE_NOUNS : FEMALE_NOUNS).has(s.slice(6).toLowerCase());
+    const bareAnswer = selfSpeakers.every(sameSex) && mine.some(i => i.bare) && soleUnnamed.length === 1 && !known.has(name.toLowerCase());
+    const late = bareAnswer ? [soleUnnamed[0]!.id] : selfSpeakers.filter(s => people.some(p => p.id === s && p.unnamed));
+    if (late.length) { if (late.length === 1 && (bareAnswer || selfSpeakers.length === 1)) { const i = bareAnswer ? mine.find(x => x.bare)! : mine.find(x => x.speaker === late[0])!; namings.push({ character_id: late[0]!, name, exchange: i.exchange, evidence: i.evidence }); } continue; }
     if (known.has(name.toLowerCase())) continue; // a present persistent person: never a new one
     if (selfSpeakers.some(s => people.some(p => p.id === s))) continue; // a named persistent person cannot claim another name
     if (selfSpeakers.length > 1) continue; // two different speakers claim the name: unresolved

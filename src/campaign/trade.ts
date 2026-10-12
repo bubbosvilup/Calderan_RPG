@@ -75,7 +75,7 @@ export function tradeOfferInvalidReason(s: DeepReadonly<CampaignSnapshot>, offer
       const ref = registers.character.origin_snapshot?.ephemeral_ref;
       if (existing || (ref !== undefined && s.characters.some(c => c.origin_snapshot?.ephemeral_ref === ref))) return "person_unavailable";
     } else {
-      if (!existing || !transferCharacterPresent(s, subject.subject_character_id)) return "person_unavailable";
+      if ((!existing && !s.runtime.npc_locations.some(n => n.character_id === subject.subject_character_id)) || !transferCharacterPresent(s, subject.subject_character_id)) return "person_unavailable";
       const legal = s.legal_statuses.find(l => l.character_id === subject.subject_character_id);
       const sets = subject.plan.find(c => c.kind === "set_legal_status");
       const transfer = subject.plan.find(c => c.kind === "transfer_person");

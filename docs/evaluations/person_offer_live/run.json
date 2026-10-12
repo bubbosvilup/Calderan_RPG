@@ -1,0 +1,352 @@
+{
+  "summary": {
+    "first_card": null,
+    "price_trail": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "card_before_accept": [
+      "Woman Slave"
+    ],
+    "gold_before": 2000,
+    "gold_after": 900,
+    "accept": {
+      "ok": true,
+      "receipt": {
+        "ref": "508f425e2bd491f60f9425ea",
+        "direction": "buy",
+        "kind": "person",
+        "gold": 1100,
+        "summary": "Bought Woman Slave for 1100 gold"
+      }
+    },
+    "slave_in_sidebar": [
+      {
+        "id": "campaign_character_r4_woman",
+        "name": "Slave"
+      }
+    ],
+    "after_name": [
+      {
+        "id": "campaign_character_r4_woman",
+        "name": "Lira",
+        "same_id_as_slave": true
+      }
+    ],
+    "narrator_calls": 9,
+    "controller_calls": 8
+  },
+  "log": [
+    {
+      "input": "looks for private licensed sellers",
+      "ok": true,
+      "narration": "*Nicco moves away from the public auction area, picking his way through the churned earth past a cluster of handlers coaxing a mule-drawn cart toward the loading ground. Rain speckles the gravel in fitful bursts. Beyond the auction block and its ring of raised voices, the square narrows into a loose row of setups — poles strung with canvas tarps, rough tables, sellers standing near their stock with the patient posture of people who expect to wait.*\n\n*The private sellers' area is less crowded but not quiet. A few buyers move between stations, speaking low. Some sellers have one or two people standing beside them; others have none at the moment and watch the foot traffic with unhurried attention. Paperwork sits on the tables — ledgers, inkpots, quills — alongside the understanding that whoever buys, the papers will be sorted on the spot.*\n\n*Near the closest occupied station, a compact man with a laborer's build and large, scarred-knuckled hands sits on a stool beside an empty table, watching Nicco's approach with small, quick eyes that track him the way someone watches livestock they're sizing up — or a customer they're sizing up. Hard to tell which. He doesn't stand, but he shifts forward on the stool, elbows on knees.*\n\nLooking for something specific, or just browsing?",
+      "error": null,
+      "card": null,
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 4810,
+          "completion_tokens": 278,
+          "total_tokens": 5088
+        },
+        "controller": {
+          "prompt_tokens": 6772,
+          "completion_tokens": 16,
+          "total_tokens": 6788
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "input": "asks Korvin whether he has a woman for sale, and how much",
+      "ok": true,
+      "narration": "*The man doesn't answer right away. His eyes move over Nicco — not the careful assessment of a tailor or a servant, but the quick inventory of someone who sells bodies and wants to know what kind of buyer he's dealing with. He scratches the back of one broad hand with the thumbnail of the other, then tilts his head toward the row of canvas-draped setups behind him.*\n\nWoman. Might have. What do you want her for — work, house, bed, all three?\n\n*He says it the way someone asks about cuts of meat. No leering, no embarrassment. His gaze stays flat and measuring, waiting to sort Nicco into the right category before he names a price or pulls anyone out.*",
+      "error": null,
+      "card": null,
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6038,
+          "completion_tokens": 148,
+          "total_tokens": 6186
+        },
+        "controller": {
+          "prompt_tokens": 6653,
+          "completion_tokens": 16,
+          "total_tokens": 6669
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "input": "I want the younger one. Sell her to me, price?",
+      "ok": true,
+      "narration": "*The man's eyes narrow a fraction — not suspicion, exactly, but the slight sharpening of someone recalculating. He looks Nicco over once more, then pushes off the stool and stands, boots scraping gravel.*\n\nYounger one. Right.\n\n*He jerks his chin toward the row of setups behind him and starts walking, not checking whether Nicco follows. A few paces along, near a canvas lean-to lashed between two poles, a woman stands with her hands bound loosely in front of her. Mid-twenties, perhaps — brown hair cut short, thin build, a bruise along one cheekbone that's turning the color of overripe fruit. She wears a plain shift, feet bare on the packed earth. She doesn't look at the man. Her eyes find Nicco and stay there, flat and careful, the way someone watches a door they can't control.*\n\n*The man stops a step short of her and turns back to Nicco, rubbing one scarred palm against the other.*\n\nTwelve hundred gold. She's young, she's healthy, she'll work. That's the price.\n\n*He says it the way he might state the weight of a sack of grain. No flourish, no warmth. Behind him, the woman's gaze drops to the ground.*",
+      "error": null,
+      "card": {
+        "lines": [
+          "Woman Slave"
+        ],
+        "ref_present": true
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6238,
+          "completion_tokens": 264,
+          "total_tokens": 6502
+        },
+        "controller": {
+          "prompt_tokens": 6769,
+          "completion_tokens": 16,
+          "total_tokens": 6785
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "input": "Too much. Two hundred sixty for the younger one, take it or leave it.",
+      "ok": true,
+      "narration": "*The man's hands stop moving. He looks at Nicco the way a butcher looks at someone who's just offered a single silver for a side of beef — not angry, just done with the conversation.*\n\nTwo hundred sixty. You think I'm selling firewood?\n\n*He snorts through his nose and turns halfway toward the woman, then back, as if deciding whether to even keep talking. One scarred hand comes up, palm out.*\n\nShe's young. She's healthy. She'll give you years of work. I've got feed costs, handling, the paperwork on top. Twelve hundred's fair. I'll come down to eleven hundred — that's me being generous — but two-sixty isn't a number. That's you wasting my morning.\n\n*The woman hasn't moved. Her eyes stay on the ground, expression flat, giving nothing.*",
+      "error": null,
+      "card": {
+        "lines": [
+          "Woman Slave"
+        ],
+        "ref_present": true
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6192,
+          "completion_tokens": 173,
+          "total_tokens": 6365
+        },
+        "controller": {
+          "prompt_tokens": 6722,
+          "completion_tokens": 16,
+          "total_tokens": 6738
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "input": "Meet me at four hundred and I pay on the spot.",
+      "ok": true,
+      "narration": "*The man's jaw works sideways, the way someone chews over a number they don't like. He glances at the woman — not at her face, just a quick inventory check, the way you'd look at a crate you're pricing — then back to Nicco. His scarred fingers drum once against his thigh.*\n\nFour hundred. You're still wasting my breath.\n\n*He lets that sit, reading Nicco's face the way he probably reads a lot of buyers — looking for the number behind the number. The rain has picked up just enough to dark the canvas above the woman's head in patches. She hasn't moved. A drop runs down the bruise on her cheekbone and she doesn't wipe it.*\n\nI'll do nine. That's my floor. You're getting her for work, not for decoration — I can see that — so let's not pretend you need a beauty. Nine hundred, coin on the barrel, papers signed. That's where I stop.",
+      "error": null,
+      "card": {
+        "lines": [
+          "Woman Slave"
+        ],
+        "ref_present": true
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6255,
+          "completion_tokens": 201,
+          "total_tokens": 6456
+        },
+        "controller": {
+          "prompt_tokens": 6741,
+          "completion_tokens": 114,
+          "total_tokens": 6855
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "input": "Seven hundred, final. I pay now.",
+      "ok": true,
+      "narration": "*The man's eyes narrow. Not the slow deliberation of before — something quicker, the calculation of someone who's counted enough coin to know when a number has teeth. His tongue pushes the inside of his cheek out, holds there, then releases.*\n\nSeven hundred. Now.\n\n*He doesn't answer right away. His gaze drops to Nicco's hands — not searching for a purse exactly, just checking whether the money is real, whether this is a man who carries seven hundred gold and means it. The rain taps steadily on the canvas overhead. Somewhere behind them a cart wheel grinds through mud and a mule protests with a low bray. The woman stands exactly where she stood before, rain-dark hair stuck flat against one side of her neck, her breathing shallow but even.*\n\n*The man scratches the side of his jaw with a thumbnail, looking past Nicco's shoulder at the market traffic for a moment — not at anyone in particular, just the way someone does when they're running numbers against time and feed and how many buyers come through on a rainy morning. Then back.*\n\nEight hundred. That's me bleeding. You pay now, papers now, she walks with you. I'm not going lower than eight — not today, not in this weather, not to anyone. Seven's an insult and you know it. Eight's where I live.",
+      "error": null,
+      "card": {
+        "lines": [
+          "Woman Slave"
+        ],
+        "ref_present": true
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5412,
+          "completion_tokens": 276,
+          "total_tokens": 5688
+        },
+        "controller": {
+          "prompt_tokens": 6821,
+          "completion_tokens": 129,
+          "total_tokens": 6950
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "input": "Done, it's a deal.",
+      "ok": true,
+      "narration": "*The man's eyes stay on Nicco a beat longer. Then his tongue pushes the inside of his cheek out again, holds it, and releases with a slow exhale through his nose.*\n\nEleven hundred. I said eight, you said seven. I'll split it. Eleven.\n\n*He holds up one scarred hand before Nicco can answer.*\n\nThat's not eight and it's not seven. That's me giving up a hundred gold I don't have to because I'd rather close this now than stand in the rain another quarter-hour haggling over fifty. Eleven hundred, coin now, papers now. She walks with you.\n\n*His other hand hooks a thumb toward the woman behind him. She hasn't moved. A strand of rain-dark hair crosses her collarbone and she doesn't push it away. Her eyes are on the ground between her feet — not downcast the way someone performs meekness, just fixed on nothing, the way a person stands when they've stopped expecting to be asked anything.*\n\n*The man waits. His fingers are still spread from the raised hand, slightly curled, the posture of someone holding open a door he's already decided he won't hold much longer.*",
+      "error": null,
+      "card": {
+        "lines": [
+          "Woman Slave"
+        ],
+        "ref_present": true
+      },
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5618,
+          "completion_tokens": 244,
+          "total_tokens": 5862
+        },
+        "controller": {
+          "prompt_tokens": 6783,
+          "completion_tokens": 16,
+          "total_tokens": 6799
+        }
+      },
+      "created": [],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    },
+    {
+      "verbal_deal_gold_unchanged": true
+    },
+    {
+      "input": "asks the woman: what is your name?",
+      "ok": true,
+      "narration": "*The woman's eyes lift from the ground. Not quickly — the way someone looks up when they've heard a sound they weren't sure was meant for them. Her gaze finds Nicco and stays there, but her mouth doesn't open right away. Behind her, the compact man has turned to a leather satchel on a nearby crate, already pulling out folded papers, his attention elsewhere.*\n\n*She swallows once. Rain has darkened her hair flat against her skull and neck, and a faint tremor runs through her shoulders that might be cold or might be something else. When she speaks, her voice is low and rougher than her age would suggest, scraped thin at the edges.*\n\nLira.\n\n*A pause. Her eyes flick once toward the man at the crate — just a glance, there and gone — then back to Nicco. She doesn't add anything. Doesn't ask why. The name sits between them like something she handed over and now can't take back, and she waits, hands loose at her sides, for whatever comes after.*",
+      "error": null,
+      "card": null,
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5892,
+          "completion_tokens": 215,
+          "total_tokens": 6107
+        },
+        "controller": {
+          "prompt_tokens": 6894,
+          "completion_tokens": 16,
+          "total_tokens": 6910
+        }
+      },
+      "created": [
+        {
+          "id": "campaign_character_r4_woman",
+          "name": "Lira"
+        }
+      ],
+      "present": [
+        {
+          "id": "bartolomhew",
+          "name": "Bartolomhew"
+        },
+        {
+          "id": "campaign_character_r4_woman",
+          "name": "Lira"
+        },
+        {
+          "id": "korvin",
+          "name": "Korvin"
+        },
+        {
+          "id": "mistress_elara",
+          "name": "Mistress Elara"
+        }
+      ]
+    }
+  ]
+}

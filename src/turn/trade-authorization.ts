@@ -29,6 +29,7 @@ const squash = (s: string) => s.replace(/\s+/g, " ").trim();
 const wordsOf = (s: string) => s.toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length > 2 && !STOP.has(w));
 
 /** Whole-gold amounts the sentence states: "five gold", "5 gold", "for five", "five." (a quoted bare number). */
+const PERSON_GOODS = /\b(?:ones?|woman|women|girls?|men|man|boys?|slaves?|captives?|prisoners?|laundress|workers?|child|children|persons?|people|lass|lad|maid|servants?)\b/i;
 export function statedGold(sentence: string): number[] {
   const out: number[] = [];
   const re = new RegExp(`\\b(${NUMBER_PHRASE_SOURCE})\\s*(?:gold(?:\\s+(?:pieces?|coins?|crowns?))?|gp)\\b|\\bfor\\s+(${NUMBER_PHRASE_SOURCE})\\b|["“]\\s*(${NUMBER_PHRASE_SOURCE})\\s*[.!,]`, "gi");
@@ -79,6 +80,8 @@ export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], n
     // The goods or items must be in the scene's narration around the quote, never invented by the proposal.
     const window = text.slice(Math.max(0, at - 400), at + q.length + 400).toLowerCase();
     const mentions = (name: string) => wordsOf(name).some(w => new RegExp(`\\b${esc(w)}`, "i").test(window));
+    // A person is never goods: a "line" that is a person ("The debt-settlement one", "the laundress") is the engine's person offer or nothing.
+    if (command.subject.kind === "goods" && command.subject.lines.some(l => PERSON_GOODS.test(l.name))) return no("goods_is_a_person", "person_offer_not_controller");
     if (command.subject.kind === "goods") { if (!command.subject.lines.every(l => mentions(l.name))) return no("goods_not_in_scene", "goods_not_in_narration"); }
     else if (command.subject.kind === "items") {
       for (const id of command.subject.item_ids) {

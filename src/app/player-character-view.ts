@@ -148,8 +148,11 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     if (entity.type === "character" && entity.display_name !== entity.name) substitutions.set(entity.display_name, label);
     if (!named || entity.type !== "character" && !publicAccess(entity.knowledge)) for (const name of [entity.name, entity.display_name]) substitutions.set(name, label);
   }
+  // A person held as a slave whose name Nicco has not learned is shown as "Slave" (the provisional label), never by the narrator's description of them.
+  const enslaved = new Set(snapshot.legal_statuses.filter(l => l.status === "enslaved").map(l => l.character_id));
+  const provisional = (c: DeepReadonly<{ id: string; origin_snapshot?: { label: string } }>) => enslaved.has(c.id) ? "Slave" : c.origin_snapshot?.label ?? "Unfamiliar person";
   for (const c of snapshot.characters) {
-    const label = c.origin.kind === "created" ? knownCreatedName(c) ?? c.origin_snapshot?.label ?? "Unfamiliar person" : knownNames.has(c.origin.canonical_entity_id) ? world.getEntity(c.origin.canonical_entity_id)?.name ?? "Unfamiliar person" : "Unfamiliar person";
+    const label = c.origin.kind === "created" ? knownCreatedName(c) ?? provisional(c) : knownNames.has(c.origin.canonical_entity_id) ? world.getEntity(c.origin.canonical_entity_id)?.name ?? "Unfamiliar person" : "Unfamiliar person";
     substitutions.set(c.id, label);
     const establishedName = c.origin.kind === "canonical" ? world.getEntity(c.origin.canonical_entity_id)?.name : knownCreatedName(c);
     if (c.profile.name && (c.origin.kind === "canonical" || c.origin_snapshot) && c.profile.name !== establishedName) substitutions.set(c.profile.name, label);
@@ -174,7 +177,7 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
     const created = record?.origin.kind === "created";
     const createdName = created ? knownCreatedName(record) : undefined;
     const named = id === "nicco" || (created ? !!createdName : knownNames.has(canonicalId));
-    const name = text(named ? created ? createdName! : canonical!.name : origin?.label ?? "Unfamiliar person");
+    const name = text(named ? created ? createdName! : canonical!.name : created && record ? provisional(record) : origin?.label ?? "Unfamiliar person");
     const here = view.current.current_location === snapshot.runtime.scene.player_location && view.current.status !== "inactive" && view.current.status !== "dead";
     const isMember = memberIds.has(id), npcPlus = snapshot.premium_characters.some(p => p.character_id === id);
     const accessible = canonical && publicAccess(canonical.knowledge) && (here || named || isMember);
