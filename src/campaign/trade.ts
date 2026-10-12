@@ -66,7 +66,7 @@ export function tradeOfferInvalidReason(s: DeepReadonly<CampaignSnapshot>, offer
   if (offer.counterparty.kind === "character" && !transferCharacterPresent(s, offer.counterparty.character_id)) return "counterparty_gone";
   const subject = offer.subject;
   if (subject.kind === "items") {
-    for (const id of subject.item_ids) { const item = s.items.find(i => i.id === id); if (!item || itemHolder(item) !== who || itemReferenced(s, id)) return "item_unavailable"; }
+    for (const id of subject.item_ids) { const item = s.items.find(i => i.id === id); if (!item || itemHolder(item) !== who || itemReferenced(s, id)) return "item_unavailable"; if (item.owner_id !== who) return "item_not_owned"; }
   } else if (subject.kind === "person") {
     const registers = subject.plan.find(c => c.kind === "register_character");
     const existing = s.characters.find(c => c.id === subject.subject_character_id);
@@ -121,6 +121,8 @@ export function prepareTradeCommand(context: PreparationContext, command: Campai
           const item = draft.items.find(i => i.id === id);
           if (!item) fail(TRADE_FIELD, "unknown_item");
           if (itemHolder(item) !== who) fail(TRADE_FIELD, "item_not_held_by_player");
+          // TRD-1: holding is not owning. A sale needs the seller to be the item's recorded owner (unknown or other owners cannot be sold).
+          if (item.owner_id !== who) fail(TRADE_FIELD, "item_not_owned");
           if (itemReferenced(draft, id)) fail(TRADE_FIELD, "item_unavailable");
         }
       } else {
@@ -180,6 +182,7 @@ export function prepareTradeCommand(context: PreparationContext, command: Campai
         for (const id of subject.item_ids) {
           const item = draft.items.find(i => i.id === id);
           if (!item || itemHolder(item) !== who) fail(TRADE_FIELD, "offer_invalid_item_unavailable");
+          if (item.owner_id !== who) fail(TRADE_FIELD, "offer_invalid_item_not_owned");
           if (item.position.kind === "equipped") {
             const c = draft.characters.find(x => x.id === who);
             if (c) c.current.empty_slots = [...new Set([...(c.current.empty_slots ?? []), item.position.slot])].sort();

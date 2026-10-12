@@ -349,17 +349,19 @@ test("seeds: an explicit seed on every call, distinct within a batch even when t
   assert.deepEqual(generator.calls.map(c => c.seed), [5, 6, 7, 8], "duplicates skipped; the reseed is new too");
 });
 
-test("minors: generation is blocked before any call, with a clear note", async () => {
-  const { session, generator } = await miraSession({ seed: (c, woman) => {
-    const record = c.exportSnapshot().characters.find(x => x.id === woman)!;
-    c.apply({ expected_revision: c.revision, commands: [{ kind: "set_profile", character_id: woman, profile: { ...structuredClone(record.profile), age: { kind: "exact", years: 16 } } as never }] });
-  } });
-  const p = portrait(session);
-  assert.equal(p.can_generate_batch, false); assert.match(p.generation_blocked!, /only available for adult characters/);
-  for (const kind of ["avatar", "fullbody"] as const) {
-    const r = await generate(session, kind); assert.ok(!r.ok); assert.equal(r.error.code, "invalid_input"); assert.match(r.error.message, /adult/);
+test("age never gates portrait generation: minor and unknown ages generate normally (decision 2026-10-12, IMG-1)", async () => {
+  for (const age of [{ kind: "exact", years: 16 }, { kind: "approximate", description: "of uncertain age" }, null] as const) {
+    const { session, generator } = await miraSession({ seed: (c, woman) => {
+      const record = c.exportSnapshot().characters.find(x => x.id === woman)!;
+      const profile = structuredClone(record.profile) as Record<string, unknown>;
+      if (age) profile.age = age; else delete profile.age;
+      c.apply({ expected_revision: c.revision, commands: [{ kind: "set_profile", character_id: woman, profile: profile as never }] });
+    } });
+    const p = portrait(session);
+    assert.equal(p.can_generate_batch, true); assert.equal(p.generation_blocked, null);
+    for (const kind of ["avatar", "fullbody"] as const) { const r = await generate(session, kind); assert.ok(r.ok, `${JSON.stringify(age)} ${kind}`); }
+    assert.equal(generator.calls.length, 6);
   }
-  assert.equal(generator.calls.length, 0);
 });
 
 test("default randomness: the Avatar is drawn from the batch via node:crypto, never from earlier images", async () => {
@@ -614,12 +616,12 @@ test("stale revision, bad refs and ineligible targets never call the provider; o
   const stale = await session.generateNpcPortraitBatch({ ref, expected_revision: revision, kind: "avatar" });
   assert.ok(!stale.ok); assert.equal(stale.error.code, "stale_turn");
   const now = rev(session), calls = generator.calls.length;
-  for (const bad of ["0".repeat(24), "../../etc/passwd", 7, ref.replace(/./, "f")]) {
+  for (const bad of ["0".repeat(24), "../../etc/passwd", 7, ref.replace(/./, c => c === "f" ? "e" : "f")]) {
     const r = await session.generateNpcPortraitBatch({ ref: bad, expected_revision: now, kind: "avatar" }); assert.ok(!r.ok); assert.equal(r.error.code, "invalid_input");
   }
   const p = playerCharacterProjection(world, (await deps.repository.loadCampaign(id)).campaign.exportSnapshot());
-  // Nicco is no longer ineligible: the player character shares the portrait pipeline (see player-visuals-inventory.test.ts); a plain campaign NPC still is not.
-  for (const cid of [plain]) { const r = await session.generateNpcPortraitBatch({ ref: p.project(cid)!.ref, expected_revision: now, kind: "avatar" }); assert.ok(!r.ok); assert.equal(r.error.code, "invalid_input"); }
+  // The unknown-age block that used to reject a plain promoted NPC here is gone (IMG-1, decision 2026-10-12): eligibility is by tier only.
+  assert.ok(playerCharacterProjection(world, (await deps.repository.loadCampaign(id)).campaign.exportSnapshot()).project(plain), "the plain NPC is projected; it is simply no longer age-blocked");
   assert.equal(generator.calls.length, calls, "no provider call for any rejected request");
   let open!: () => void; generator.gate = new Promise<void>(resolve => { open = resolve; });
   const running = session.generateNpcPortraitBatch({ ref, expected_revision: now, kind: "avatar" });

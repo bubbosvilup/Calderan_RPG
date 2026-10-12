@@ -11,7 +11,6 @@ import { isPhysicalCondition } from "../turn/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
 import { appearanceFingerprint, composePortraitPrompt, portraitDetails, portraitPoseOptions, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";
-import { ageStatus, type AgeStatus } from "../campaign/age.js";
 import { characterCapabilities, type CharacterCapabilities } from "./character-capabilities.js";
 import { heartstoneRiteEligibility } from "../campaign/heartstone-rite.js";
 import { canonAvatarUrl } from "./canon-avatars.js";
@@ -117,10 +116,10 @@ export const portraitPromptPreviews = (details: string) => ({ avatar: composePor
  * The shared Avatar / Full Body / Gallery projection used by BOTH the NPC+ editor and the Player Character page (one pipeline, one
  * model). Only SELECTED images (never a canonical fallback) appear as the selected Avatar / Full Body here.
  */
-export function portraitEditorView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, id: string, details: string, age: AgeStatus = ageStatus(world, snapshot, id)): PortraitEditorView {
+export function portraitEditorView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, id: string, details: string): PortraitEditorView {
   const assetUrl = (file: string) => portraitAssetUrl(snapshot.campaign_id, id, file);
   const record = portraitRecord(snapshot, id), avatar = avatarPortrait(snapshot, id), fullBody = fullBodyPortrait(snapshot, id), current = appearanceFingerprint(details);
-  const versions = record?.versions ?? [], blocked = age === "minor" ? "Portrait generation is only available for adult characters." : null;
+  const versions = record?.versions ?? [], blocked: string | null = null; // Age never gates portrait generation (decision 2026-10-12); the field stays for non-age reasons.
   const poseLabel = (kind: PortraitKind, pose: string | undefined) => pose ? portraitPoseOptions(kind).find(p => p.id === pose)?.label ?? null : null;
   return { avatar: avatar ? { url: assetUrl(avatar.asset_file), stale: avatar.prompt_fingerprint !== current } : null,
     full_body: fullBody ? { url: assetUrl(fullBody.asset_file), stale: fullBody.prompt_fingerprint !== current } : null,
@@ -231,7 +230,7 @@ export function playerCharacterProjection(world: WorldStore, snapshot: DeepReado
       category: !named ? created ? "Met this campaign · name unknown" : "Name unknown" : [isMember ? "Household" : created ? "Met this campaign" : "Canonical NPC", npcPlus ? "NPC+" : ""].filter(Boolean).join(" · "),
       household: isMember, npc_plus: npcPlus, presence: here ? "present" : "away",
       appearance_editor_eligible: editable,
-      character_capabilities: characterCapabilities({ promoted: npcPlus && id !== "nicco", has_campaign_record: !!record, editable, ...(view.current.status ? { status: view.current.status } : {}), generation_blocked: ageStatus(world, snapshot, id) === "minor" ? "Portrait generation is only available for adult characters." : null,
+      character_capabilities: characterCapabilities({ promoted: npcPlus && id !== "nicco", has_campaign_record: !!record, editable, ...(view.current.status ? { status: view.current.status } : {}),
         ...(record && !npcPlus ? { promotion: heartstoneRiteEligibility(world, snapshot, id) } : {}) }),
       appearance_editor: editable ? {
         identity: ([["Species", permanent.identity.species], ["Sex", permanent.identity.sex], ["Age", permanent.identity.age]] as const).flatMap(([label, value]) => value ? [{ label, value: text(value) }] : []),

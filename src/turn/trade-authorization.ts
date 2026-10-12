@@ -87,6 +87,7 @@ export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], n
       for (const id of command.subject.item_ids) {
         const item = projected.items.find(i => i.id === id);
         if (!item || itemHolder(item) !== who) return no("item_not_held", "item_not_held_by_player");
+        if (item.owner_id !== who) return no("item_not_owned", "item_not_owned");
         if (!mentions(item.name ?? "")) return no("item_not_in_scene", "goods_not_in_narration");
       }
     }

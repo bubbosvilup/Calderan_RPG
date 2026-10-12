@@ -1,5 +1,9 @@
 import type { PreparedCampaignChange } from "../../campaign/campaign-state.js";
-import type { CampaignCommand } from "../../campaign/types.js";
+import { isDeepStrictEqual } from "node:util";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { AuthorizationDiagnostic } from "../turn-types.js";
+import { authorizeTradeProposals } from "../trade-authorization.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext } from "../context-builder.js";
 import { contextRelevance } from "./intent.js";
@@ -34,10 +38,34 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
   readonly commands: readonly CampaignCommand[]; readonly finalized: readonly RecentExchange[]; readonly player_input: string; readonly delivered: string;
   readonly scene: SceneParticipantPlan; readonly base_revision: number;
   readonly disclosure_intent?: PlayerIntent;
+  /** TRD-2: the authorization diagnostics and pre-turn snapshot, so goods/item offers are re-checked against the DELIVERED text. */
+  readonly trade_recheck?: { readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly projected: DeepReadonly<CampaignSnapshot> };
   /** Hardening H1: a turn in which Nicco changed location never promotes a newly named person (`location_changed`). */
   readonly location_changed: boolean;
   readonly on_skip: (reason: string) => void }): CommitPlan {
   const offerDiagnostics: TransactionDiagnostic[] = [];
+  // TRD-2: authorization read the DRAFT. Audit/reconciliation/redaction may have removed or changed the quoted sentence, and a card whose
+  // quote is gone from what the player actually reads must not exist. Each goods/items offer is re-decided (same validator, same Controller
+  // quote) against the delivered narration; a failure drops that offer and the batch is re-prepared. Only the offer is dropped, never the turn.
+  let commands = i.commands, prepared = i.prepared;
+  const recheck = i.trade_recheck;
+  if (recheck) {
+    const inputs = commands.filter(c => c.kind === "propose_trade_offer" && c.subject.kind !== "person").map(command => ({ command,
+      quote: recheck.diagnostics.find(d => d.authorized && isDeepStrictEqual(d.command, command))?.evidence?.quote ?? undefined }));
+    if (inputs.length) {
+      try {
+        const context = buildTurnContext(i.world, recheck.projected, contextRelevance(i.player_input, i.finalized));
+        const decided = authorizeTradeProposals(inputs, i.delivered, context, recheck.projected, i.world);
+        const dropped = new Set(inputs.filter((_, k) => !decided[k]!.authorized).map((x): CampaignCommand => x.command));
+        if (dropped.size) {
+          offerDiagnostics.push(...decided.filter(d => !d.authorized).map((): TransactionDiagnostic => ({ kind: "offer", status: "blocked", reason: "quote_not_in_delivered_text" })));
+          commands = commands.filter(c => !dropped.has(c));
+          prepared = i.prepare({ expected_revision: i.base_revision, commands });
+        }
+      } catch (error) { i.on_skip(`trade_recheck: ${error instanceof Error ? error.message : String(error)}`); commands = i.commands; prepared = i.prepared; }
+    }
+  }
+  i = { ...i, commands, prepared };
   try {
     const context = buildTurnContext(i.world, i.prepared.snapshot, contextRelevance(i.player_input, i.finalized));
     const partner_conflict = i.location_changed ? undefined : partnerNameConflict({ context, world: i.world, snapshot: i.prepared.snapshot, finalized: i.finalized, player_input: i.player_input, delivered: i.delivered, scene: i.scene });

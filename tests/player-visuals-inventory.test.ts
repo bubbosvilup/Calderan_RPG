@@ -112,8 +112,9 @@ test("P5/P6/P11: appearance stays narrator-visible; asset metadata never reaches
   for (const text of [narrator, controller]) { assert.doesNotMatch(text, /portrait_|\/api\/portrait|\/api\/item-glyph|avatar_url|full_body_url|gallery|asset_file/i); assert.ok(!text.includes(token)); }
   assert.equal(visual(s).editor.identity.some(i => /npc/i.test(i.value)), false);
   const minor = s.updatePlayerProfile({ expected_revision: rev(s), patch: { apparent_age: "15" } }); assert.ok(minor.ok);
-  assert.match(visual(s).editor.portrait.generation_blocked ?? "", /adult/); assert.equal(visual(s).editor.portrait.can_generate_batch, false);
-  const refused = await generate(s, "avatar"); assert.equal(refused.ok, false);
+  // Age never gates portrait generation (decision 2026-10-12, IMG-1): a stated minor age is not blocked.
+  assert.equal(visual(s).editor.portrait.generation_blocked, null); assert.equal(visual(s).editor.portrait.can_generate_batch, true);
+  const allowed = await generate(s, "avatar"); assert.equal(allowed.ok, true);
 });
 
 test("P7: the selected Avatar and Full Body persist through the existing save and survive a reload", async () => {

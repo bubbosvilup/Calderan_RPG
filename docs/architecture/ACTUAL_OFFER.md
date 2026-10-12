@@ -29,7 +29,7 @@ There is no counteroffer UI. The player negotiates in chat, the Narrator answers
 
 ## 6. Goods (V1)
 - **BUY:** subtract player gold; create the purchased `CampaignItem`(s) (bundles supported; one item per unit, conservative category with `miscellaneous` fallback); owner = player; position = `carried(player)`; never auto-equipped; record the transaction; close the offer.
-- **SELL:** the referenced item must already exist authoritatively and be held by the player; add player gold; remove the item from tracked campaign state; record the transaction; close the offer. Removal means the item *leaves the tracked scope*, not that it ceases to exist in the fiction. The Narrator is told the item was sold.
+- **SELL:** the referenced item must already exist authoritatively, be held by the player AND be owned by the player (`owner_id === player`; unknown, null or foreign owner → `item_not_owned`, checked at proposal, in Controller authorization and again at Accept, so a change of owner between the two invalidates the offer with no partial mutation); add player gold; remove the item from tracked campaign state; record the transaction; close the offer. Removal means the item *leaves the tracked scope*, not that it ceases to exist in the fiction. The Narrator is told the item was sold.
 - No merchant inventory, wallet, stock, restock, catalog, shop UI or supply/demand. Any valid counterparty may trade; no `NPC_vendor` type exists. These may be layered on top later.
 
 ## 7. People (V1)
@@ -62,3 +62,7 @@ Actual Offer V1 is a 1:1 negotiated offer. An Auction House needs a different fu
 
 ## 14. Retired logic
 Semantic "the player paid, therefore the transaction is complete" detection and the player's stated amount setting the price are removed. Kept: identity establishment, seller binding, legal transfer, `transfer_person` settlement and the `asserts_uncommitted_purchase` audit (narrated payment with no committed settlement). `transaction-acts` ACCEPT is continuity-only.
+
+## Delivered-text recheck (TRD-2)
+
+Controller goods/item offers are first authorized on the Narrator draft. After audit, reconciliation and redaction, `prepareCommit` re-runs the same validator (`authorizeTradeProposals`) with the same Controller quote against the DELIVERED narration. A card whose quote is no longer verbatim in the delivered text (price removed, price or subject changed) is dropped and the batch re-prepared; only the offer is lost, never the turn. A `TransactionDiagnostic` (`kind: "offer"`, `status: "blocked"`, `reason: "quote_not_in_delivered_text"`) records it. Withdrawals are not re-verified against the delivered text (residual). Tests: `tests/consolidation-block1.test.ts`.

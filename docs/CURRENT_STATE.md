@@ -61,7 +61,7 @@ Configuration and environment variables: [Configuration](CONFIGURATION.md). Earl
 | NPC+ | Promoted: an authoritative `premium_characters[]` record exists | Avatar, Full Body, Gallery, generation, editable permanent appearance |
 | Player character | Separate semantic type (`player_characters[0]`); Nicco is **not** NPC+ | same visual editor infrastructure; no premium record is ever created for Nicco |
 
-Capabilities are **derived** in the read model on every projection (`src/app/character-capabilities.ts`) and never persisted. Tier-inappropriate controls are omitted rather than shown disabled; an NPC+ action may still be disabled for a runtime reason (inactive or dead character, adult-only image rule, provider not configured).
+Capabilities are **derived** in the read model on every projection (`src/app/character-capabilities.ts`) and never persisted. Tier-inappropriate controls are omitted rather than shown disabled; an NPC+ action may still be disabled for a runtime reason (inactive or dead character, provider not configured).
 
 **Promoted NPC+ versus `activeNpcPlus`.** *Promoted* (`isNpcPlus`) is the persistent promotion milestone: the premium record. `activeNpcPlus` is the narrower behavior gate: promoted **and** currently an active household member. A promoted character does not stop being NPC+ when they leave the household; UI editing follows promotion (subject to inactive/dead restrictions), not household presence. There is no automatic demotion.
 
@@ -100,11 +100,11 @@ Snapshot schema **6**; save file schema **5** (older save schemas migrate on loa
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run: **3278 tests, 0 failed** at `c0608a6` ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run: **3287 tests, 0 failed** on top of `878acd3` (consolidation block 1: IMG-1, TRD-1, TRD-2 fixed; previously 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 ## 13. Major known limitations
 
-See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals.
+See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals. Open trade debts: TRD-1b (SELL deletes the item instead of transferring it to the counterparty), TRD-3/TRD-4 (two disagreeing price parsers; currency filter rejects material words). Fixed 2026-10-12 (offline): IMG-1 (age never gates portraits), TRD-1 (SELL needs ownership, `item_not_owned`), TRD-2 (goods offers rechecked on the delivered text); see [debt register](MASTER_DEBT_REGISTER.md).
 
 ## 14. Next major systems
 

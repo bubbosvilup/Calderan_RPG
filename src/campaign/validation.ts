@@ -220,7 +220,7 @@ const personPlan: Parser = (input, path) => {
 };
 const tradeSubject = tagged({ goods: object({ kind: choice("goods"), lines: list(goodsLine, 8) }), items: object({ kind: choice("items"), item_ids: distinct(id) }),
   person: object({ kind: choice("person"), subject_character_id: id, plan: personPlan }) });
-const tradeReason = choice("scene_changed", "counterparty_gone", "item_unavailable", "person_unavailable", "offer_unavailable");
+const tradeReason = choice("scene_changed", "counterparty_gone", "item_unavailable", "item_not_owned", "person_unavailable", "offer_unavailable");
 const tradeSettlement = object({ gold, revision: integer(0), world_minute: integer(), created_item_ids: optional(distinct(id)), removed_item_ids: optional(distinct(id)), removed_item_names: optional(list(shortText, 8)), transaction_id: optional(id) });
 const tradePrice = integer(1, 1_000_000);
 const tradeOfferRecord = object({ id, direction: choice("buy", "sell"), status: choice("active", "accepted", "superseded", "withdrawn", "invalidated"), price_gold: tradePrice,

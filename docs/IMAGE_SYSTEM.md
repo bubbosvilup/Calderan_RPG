@@ -12,7 +12,7 @@ Images are **presentation only**. They never become narrative truth and never re
 - Avatar 992 × 992, Full Body 800 × 1200.
 - Each click produces a batch of three with unique seeds. Gallery limit 64 per character. One Avatar and one Full Body are selected per character.
 - Appearance fingerprint: images made from an older appearance are marked stale.
-- **Adult characters only**; one recovery attempt after a content refusal; no automatic provider retries otherwise.
+- Age never gates portrait generation (decision 2026-10-12, IMG-1): minor, unknown or missing age generate normally; `generation_blocked` stays for non-age reasons only. The romance gate is a separate rule and is unchanged. One recovery attempt after a content refusal; no automatic provider retries otherwise.
 - Reference images are not used for generation (text-to-image has no reference input); a reference attached earlier is kept, unused.
 
 ## Who can have visuals

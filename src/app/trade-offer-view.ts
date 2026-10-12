@@ -113,6 +113,8 @@ export const TRADE_MESSAGES: Readonly<Record<string, string>> = Object.freeze({
   offer_invalid_scene_changed: "The scene has changed; the offer lapsed.",
   offer_invalid_counterparty_gone: "The other party is no longer here; the offer lapsed.",
   offer_invalid_item_unavailable: "The item is no longer available; the offer lapsed.",
+  offer_invalid_item_not_owned: "You do not own that item; the offer lapsed.",
+  item_not_owned: "You do not own that item, so you cannot sell it.",
   offer_invalid_person_unavailable: "The person is no longer available; the offer lapsed.",
   default: "The trade could not be completed. Nothing changed.",
 });

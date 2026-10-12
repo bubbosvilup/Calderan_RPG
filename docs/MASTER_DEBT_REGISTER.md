@@ -40,14 +40,14 @@ Structural themes: six or more independent regex readers interpret the same narr
 | 2 | PIPE-1 | P1 | Unaudited draft streamed to the player | S-M |
 | 3 | TRD-1 | P1 | SELL ignores `owner_id` and deletes the item | S-M |
 | 4 | AUTH-1 | P1 | Manumission applied from regex on raw input, no confirmation | M |
-| 5 | IMG-1 | P1 | Portrait minor gate fail-open for unknown age | S |
+| 5 | IMG-1 | P1 | Portrait minor gate fail-open for unknown age | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — IMG-1 (age no longer gates portraits, user decision 2026-10-12). Live certification still to do. Audit text above kept as historical.]**
 | 6 | IMG-2 | P1 | Image batches uncancellable; abort mapped to a retryable error | M |
 | 7 | AUTH-2 | P1 | Character registration/naming from narration is permanent (no retire/merge) | M |
 | 8 | ID-1 | P1 | Movement divergence can fork a person into two records | M (with MOV-1) |
 | 9 | ECO-1 | P2 | Gold-only settlement vs silver-denominated narrator anchors | M-L |
-| 10 | TRD-2 | P2 | Goods offers authorized on the undelivered draft | S |
+| 10 | TRD-2 | P2 | Goods offers authorized on the undelivered draft | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — TRD-2 (offers rechecked on delivered text). Live certification still to do. Audit text above kept as historical.]**
 | 11 | PIPE-2 | P2 | Post-commit publication can throw after the commit | S |
-| 12 | TRD-3 | P2 | Two disagreeing price parsers; ages parsed as prices | M |
+| 12 | TRD-3 | P2 | Two disagreeing price parsers; ages parsed as prices | M | **[Status 2026-10-12: still OPEN; deferred to a later consolidation block.]**
 | 13 | PER-1 | P2 | 16 MB save cap makes autosave permanently fatal | M |
 | 14 | REV-1 | P2 | Media/maintenance commits bump revision; clicks go stale | M-L |
 | 15 | REV-2 | P2 | `/api/turn` has no idempotency key | M |
@@ -104,11 +104,11 @@ Audit A domains 3 and 4. Behaviour verified: one active offer; supersession; wit
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
-| TRD-1 | P1 | SELL checks `itemHolder === player` but not `owner_id` (`trade.ts:120-125,182`). Lent or stolen items can be sold and permanently deleted. | Require ownership; produce `item_not_owned`. | S |
-| TRD-1b | P1 | SELL deletes the item rather than transferring it (`trade.ts:178-193`); with no counterparty wallet it is a gold faucet and the item cannot be re-bought or stolen back. | Transfer to the counterparty or a merchant-stock location; credit the purse when one exists. | M |
+| TRD-1 | P1 | SELL checks `itemHolder === player` but not `owner_id` (`trade.ts:120-125,182`). Lent or stolen items can be sold and permanently deleted. | Require ownership; produce `item_not_owned`. | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — TRD-1 (SELL requires ownership, `item_not_owned`). Live certification still to do. Audit text above kept as historical.]**
+| TRD-1b | P1 | SELL deletes the item rather than transferring it (`trade.ts:178-193`); with no counterparty wallet it is a gold faucet and the item cannot be re-bought or stolen back. | Transfer to the counterparty or a merchant-stock location; credit the purse when one exists. | M | **[Status 2026-10-12: still OPEN; deferred to a later consolidation block.]**
 | TRD-2 | P2 | Goods offers are authorized against the undelivered draft (`trade-authorization.ts:46`); the audit may then rewrite the narration and nothing re-checks the quote. A card can show a price the player never read. | Re-run goods authorization against the delivered text. | S |
 | TRD-3 | P2 | Two independent price parsers disagree (`statedGold` vs `pricesOf`). A bare "Twenty-two." (an age) can become 22 gold (`person-offers.ts:94,119-122`); "for ten minutes" parses as a price; "four-fifty" is rejected. | One shared `extractGoldPrice()`, explicit unit required for prose prices, corpus tests. | M |
-| TRD-4 | P2 | Currency filter rejects material words (`silver`, `copper`, `bronze`, `marks`, `crowns`; `trade-authorization.ts:21`); "silver locket for ten gold" and "silver-haired" (`person-offers.ts:42`) are falsely rejected; "gold crowns" passes `statedGold` but fails `NON_GOLD`. | Detect currency by number+unit patterns. | S-M |
+| TRD-4 | P2 | Currency filter rejects material words (`silver`, `copper`, `bronze`, `marks`, `crowns`; `trade-authorization.ts:21`); "silver locket for ten gold" and "silver-haired" (`person-offers.ts:42`) are falsely rejected; "gold crowns" passes `statedGold` but fails `NON_GOLD`. | Detect currency by number+unit patterns. | S-M | **[Status 2026-10-12: still OPEN; deferred to a later consolidation block.]**
 | TRD-5 | P2 | `sameOffer` compares controller-generated descriptions (`trade.ts:95-99`); a repeated quote supersedes an unchanged offer and the card's ref goes dead. | Offer terms digest (direction, price, normalized subject). | S |
 | TRD-6 | P2 | Goods name check passes if any one word is near the quote (`trade-authorization.ts:81-85`). Category resolution is first-match on name only and ignores the controller category (`trade.ts:36-49,168`). | Require all significant words; honour the controller category with validation. | S |
 | TRD-7 | P2 | Auction exclusion uses venue-name and word heuristics; the real auction venue `calderan_slave_market` has no "auction" in its name; "bid" the verb false-blocks. Person and goods paths use different lists. | Canon flag `auction_house` plus scene state; unify lists. | M |
