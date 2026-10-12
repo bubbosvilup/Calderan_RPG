@@ -7,7 +7,8 @@ import type { PlayerIntent } from "./player-intent.js";
 import { normalizeReference, type ResolvedReference } from "./reference-resolution.js";
 import type { PhysicalInteraction } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
-import { narratedDepartures, type DepartureEvidence } from "./scene-departure.js";
+import { departuresFromFacts, type DepartureEvidence } from "./movement-evidence.js";
+import { extractNarrationFacts, type NarrationFacts } from "./narration-facts/index.js";
 import { detectHouseholdChoices, type HouseholdChoice } from "./household-evidence.js";
 import { escapeRegExp as escape } from "./language/text.js";
 
@@ -66,7 +67,7 @@ function groupPhrase(object: string, offeredCount: number, allClothes: boolean):
   return false;
 }
 /** A small same-turn grammar. It never searches for unrelated events or invents references. */
-export function deriveTurnEvidence(intent: PlayerIntent, narration: string, context: TurnContext): TurnEvidence {
+export function deriveTurnEvidence(intent: PlayerIntent, narration: string, context: TurnContext, facts?: NarrationFacts): TurnEvidence {
   const confirmations: NarratorConfirmation[] = [], refusals: NarratorRefusal[] = [];
   const nonactualFrame = /(?:^|[.!?\n])\s*(?:imagine\b|hypothetically\b|if\b|suppose\b|an? (?:inscription|story|example)\b)/i.test(narration.replace(/\*/g, ""));
   // Parenthetical stage directions ("(accepts the stack) Thanks.") are their own clauses.
@@ -259,11 +260,11 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     });
     for (const c of confirmations) for (const i of c.command_indexes) confirmed.add(i);
   }
-  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context), ...householdOf(intent, narration, context) }) as TurnEvidence;
+  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context, facts), ...householdOf(intent, narration, context) }) as TurnEvidence;
 }
-function departuresOf(narration: string, context: TurnContext): { departures?: DepartureEvidence[] } {
-  const found = narratedDepartures(narration, context);
-  return found.length ? { departures: structuredClone([...found]) } : {};
+function departuresOf(narration: string, context: TurnContext, facts?: NarrationFacts): { departures?: DepartureEvidence[] } {
+  const found = departuresFromFacts(facts ?? extractNarrationFacts(narration, { movers: [], context }), context).map(d => ({ character_id: d.character_id, source_sentence: d.source_sentence }));
+  return found.length ? { departures: structuredClone(found) } : {};
 }
 function householdOf(intent: PlayerIntent, narration: string, context: TurnContext): { household_choices?: HouseholdChoice[]; rule_declarations?: string[] } {
   const choices = detectHouseholdChoices(narration, context), rules = intent.rule_declarations ?? [];

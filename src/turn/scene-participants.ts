@@ -1,3 +1,4 @@
+import { ephemeralDepartureFacts, frameOf } from "./narration-facts/index.js";
 import type { TurnContext } from "./context-builder.js";
 import { escapeRegExp } from "./language/text.js";
 import { canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
@@ -88,7 +89,7 @@ const INTRO = new RegExp(`\\b${VERB}\\s+(an?|one|another|some|the|that|this|same
 export function stripParticipantIntroductions(text: string): string { return text.replace(INTRO, " ").replace(NPC_SUBJECT, " "); }
 const DEFINITE = (noun: string) => new RegExp(`\\b(?:the|that|this|same)\\s+(?:[a-z][a-z'-]*\\s+){0,2}?${noun}\\b`, "i");
 const PERSON_NOUN = "woman|man|girl|boy|youth|lad|lass|elder|matron|crone|dwarf|elf|human";
-const DEPART = /\b(?:hurr(?:y|ies|ied)|walk(?:s|ed)?|mov(?:es|ed)|continu(?:es|ed)|go(?:es)?|went|head(?:s|ed)|slip(?:s|ped)?|strides?|strode|steps?|stepped|turn(?:s|ed)?)\b[^.!?]{0,50}?\b(?:away|off|past|onward|on (?:her|his|their) (?:way|path)|down the|into the crowd|out of sight|around the corner|gone)\b|\b(?:leaves|left|departs|departed|disappears|disappeared|vanishes|vanished|is gone)\b/i;
+
 
 const specFor = (noun: string) => ROLES.find(r => new RegExp(`^(?:${r.pattern})$`, "i").test(noun))!;
 const capital = (s: string) => s[0]!.toUpperCase() + s.slice(1);
@@ -204,8 +205,7 @@ export class SceneParticipants {
       if (p.id !== plan.focus) return p;
       const role = nounsOf(p)[0]!;
       const appositive = p.descriptor ? undefined : narration.match(new RegExp(`\\b(?:the|a|an)\\s+(?:${role})\\s*(?:,|—|–|\\s-\\s)\\s*(?:a|an)\\s+((?:[a-z][a-z'-]*,?\\s+){0,2}?(?:${PERSON_NOUN}))\\b`, "i"))?.[1]?.replace(/,/g, "").replace(/\s+/g, " ").toLowerCase();
-      const subject = `(?:she|he|they|the\\s+(?:${nounsOf(p).join("|")}))`;
-      const departed = narration.split(/(?<=[.!?])\s+/).some(s => DEPART.test(s) && new RegExp(`\\b${subject}\\b`, "i").test(s.slice(0, s.search(DEPART) + 1)));
+      const departed = ephemeralDepartureFacts(frameOf(narration), [{ id: p.id, nouns: nounsOf(p) }]).some(f => f.modality === "completed");
       const standing = appositive && FOREIGN.test(appositive) ? "foreign" : p.standing;
       return Object.freeze({ ...p, ...(appositive ? { descriptor: appositive } : {}), standing, departed });
     });

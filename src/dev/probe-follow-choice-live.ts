@@ -6,7 +6,9 @@ import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { buildTurnContext } from "../turn/context-builder.js";
-import { movableCharacters, narratedMovements } from "../turn/character-movement.js";
+import { movableCharacters } from "../turn/character-movement.js";
+import { characterMovementsFromFacts } from "../turn/movement-evidence.js";
+import { extractNarrationFacts } from "../turn/narration-facts/index.js";
 import { activeNpcPlus } from "../campaign/premium-characters.js";
 import { MiniMaxNarratorProvider } from "../llm/openrouter/minimax-narrator.js";
 import { narratorConfig, selectedModels } from "./turn-services.js";
@@ -79,7 +81,8 @@ const hash = (r: GenerationRequest) => createHash("sha256").update(JSON.stringif
 /** The production movement grammar on the projected arrival (Nicco in the Main hall): a completed follow of `id` to the arrival? */
 function grammarFollow(narration: string, id: string): boolean {
   const f = fresh([{ kind: "runtime_delta", delta: { player_location: "test_hall", time_advance_minutes: 1 } }]), s = f.campaign.exportSnapshot();
-  return narratedMovements(narration, movableCharacters(s, ["test_room", "test_hall"], f.world), { origin: "test_room", arrival: "test_hall" }, buildTurnContext(f.world, s), f.world, activeNpcPlus(s))
+  const movable = movableCharacters(s, ["test_room", "test_hall"], f.world), context = buildTurnContext(f.world, s);
+  return characterMovementsFromFacts(extractNarrationFacts(narration, { movers: movable, context }), movable, { origin: "test_room", arrival: "test_hall" }, context, f.world, activeNpcPlus(s))
     .some(m => m.character_id === id && m.location_id === "test_hall");
 }
 // Deterministic first-pass classification (human review follows for ABSENCE_CONTRADICTION, AMBIGUOUS and OTHER).

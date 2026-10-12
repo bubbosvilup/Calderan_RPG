@@ -33,6 +33,8 @@ import { prepareCommit } from "./stages/commit-preparation.js";
 import { assembleTurnResult } from "./stages/result.js";
 import { TurnError, type PublicationStep, type TurnDebugRecord, type TurnEvent, type TurnFailure, type TurnRequest } from "./turn-types.js";
 import { TurnDiagnosticObserver, controllerModelDiagnostics, type DiagnosticPhase, type TurnDiagnosticsSink } from "./turn-diagnostics.js";
+import { createFactSource } from "./narration-facts/index.js";
+import { movementFactScope } from "./movement-scope.js";
 export type { TurnDebugRecord } from "./turn-types.js";
 
 /**
@@ -255,7 +257,9 @@ export class TurnCoordinator {
       // AuthorizationStage: proposal → per-command decision against deterministic evidence (still detached from state).
       const debugSink = this.promptOptions.debug_sink;
       const sink = debugSink ? (record: TurnDebugRecord) => { try { debugSink(record); } catch { /* Optional debug emission. */ } } : undefined;
-      const authorization = measure("authorization", () => authorizeTurn({ controller: proposed.result, intent, draft, context, projected, movable, origin, arrival, world: this.world,
+      // NarrationFacts: ONE extraction of the draft, read by authorization and by the audit below.
+      const factSource = createFactSource(movementFactScope(projected, this.world, context, [origin, arrival]));
+      const authorization = measure("authorization", () => authorizeTurn({ controller: proposed.result, intent, draft, context, projected, movable, origin, arrival, world: this.world, facts: factSource,
         mode: this.promptOptions.evidence_authorization ?? "hybrid", sink, debug_base: { campaign_id: snapshot.campaign_id, base_revision, player_input } }));
       observer?.authorization(authorization.diagnostics, authorization.duplicates_removed);
       if (observer?.record.controller) observer.record.controller.parse_success = true;
@@ -272,7 +276,7 @@ export class TurnCoordinator {
 
       // AuditStage: the draft must not contradict the prepared candidate. One bounded revision, then deterministic redaction.
       // It only chooses the delivered text; state is never changed here.
-      const auditor = measure("audit", () => createNarrationAuditor({ base_revision, context, world: this.world, retrieved: retrieved.data, player_input, recent, finalized: this.recent(campaign).finalized(), intent, scene,
+      const auditor = measure("audit", () => createNarrationAuditor({ facts: factSource, before: snapshot, base_revision, context, world: this.world, retrieved: retrieved.data, player_input, recent, finalized: this.recent(campaign).finalized(), intent, scene,
         turn_evidence: authorization.turn_evidence, diagnostics: authorization.diagnostics, authorized, prepared: prepared.snapshot, origin, elapsed_minutes: prepared.snapshot.runtime.scene.world_time.world_minute - snapshot.runtime.scene.world_time.world_minute }));
       const issues = measure("audit", () => auditor.check(draft, authorization.turn_evidence));
       if (observer) observer.record.audit = { issue_count: issues.length, issue_kinds: issues.map(i => i.kind), reconciliation_attempted: issues.length > 0,

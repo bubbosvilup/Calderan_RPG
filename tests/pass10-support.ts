@@ -35,7 +35,8 @@ export async function play(narration: string, input = "I go down to the main hal
 }
 
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { movableCharacters, narratedMovements } from "../src/turn/character-movement.js";
+import { movableCharacters } from "../src/turn/character-movement.js";
+import { narratedMovements } from "./movement-readers.js";
 import { activeNpcPlus } from "../src/campaign/premium-characters.js";
 export interface GrammarSetting { members?: readonly string[]; niccoMoves?: boolean; marenAtHall?: boolean }
 /** Pure follow-grammar probe: the exact `narratedMovements` call the authorization stage makes, on the projected arrival context. */

@@ -9,7 +9,7 @@ import type { WorldStore } from "../src/world/world-store.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { resolvePlayerCarry, characterLocation } from "../src/turn/character-movement.js";
-import { narratedDepartures } from "../src/turn/scene-departure.js";
+import { narratedDepartures } from "./movement-readers.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
 import { refersTo, readScene } from "../src/turn/narrated-captives.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";

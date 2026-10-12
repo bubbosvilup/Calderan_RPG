@@ -12,7 +12,8 @@ import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { authorizeCommands, isLocationPlacement } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
 import { itemTerms } from "./item-reference.js";
-import { narratedDepartures } from "./scene-departure.js";
+import { departuresFromFacts } from "./movement-evidence.js";
+import { extractNarrationFacts, type NarrationFacts } from "./narration-facts/index.js";
 import { detectHouseholdChoices, verifyRelationshipEvidence } from "./household-evidence.js";
 import { GATES } from "./language/gates.js";
 import { blankQuotes, escapeRegExp as esc, quotedSpans, sentencesOf } from "./language/text.js";
@@ -68,7 +69,7 @@ function precedingNamedSubject(narration: string, at: number, candidates: readon
 }
 
 /** Deterministic, act-level verification of one controller evidence quote against the finalized narration. */
-export function verifyEvidence(command: CampaignCommand, quote: string | undefined, rawNarration: string, context: TurnContext, intents: readonly CampaignCommand[], ownerNames?: (id: string) => readonly string[]): EvidenceCheck {
+export function verifyEvidence(command: CampaignCommand, quote: string | undefined, rawNarration: string, context: TurnContext, intents: readonly CampaignCommand[], ownerNames?: (id: string) => readonly string[], facts?: NarrationFacts): EvidenceCheck {
   if (quote === undefined) return { verified: false, check: "no_quote" };
   // Typographic whitespace only (paragraph breaks vs spaces): demonstrated necessary in the Phase 1O DeepSeek run. No semantic normalization.
   const narration = rawNarration.replace(/\s+/g, " ");
@@ -294,7 +295,9 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
   }
   if (command.kind === "leave_scene") {
     // The quote must lie within a sentence the deterministic departure grammar reads as this character's completed exit.
-    const departed = narratedDepartures(narration.slice(sStart, sEnd), context, "persistent").some(d => d.character_id === command.character_id) || narratedDepartures(narration, context, "persistent").some(d => d.character_id === command.character_id && d.source_sentence.replace(/\s+/g, " ").includes(q));
+    const slice = narration.slice(sStart, sEnd), tidy = (x: string) => x.replace(/\s+/g, " ");
+    const departed = departuresFromFacts(facts ?? extractNarrationFacts(rawNarration, { movers: [], context }), context, "persistent")
+      .some(d => d.character_id === command.character_id && (slice.includes(tidy(d.source_sentence)) || tidy(d.source_sentence).includes(q)));
     return departed ? { verified: true, check: "departure_narrated" } : { verified: false, check: "no_completed_departure" };
   }
 
@@ -399,14 +402,14 @@ const MISSING_CONFIRMATION = new Set(["rejected_insufficient_confirmation", "rej
  * reject through the unchanged authorizer. Shadow mode records evidence checks but authorizes exactly as the grammar does.
  */
 export function authorizeWithEvidence(proposal: readonly CampaignCommand[], quotes: readonly string[] | undefined, evidence: TurnEvidence, narration: string,
-  context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, mode: EvidenceMode, world?: WorldStore): readonly AuthorizationDiagnostic[] {
+  context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, mode: EvidenceMode, world?: WorldStore, facts?: NarrationFacts): readonly AuthorizationDiagnostic[] {
   const grammar = authorizeCommands(proposal, evidence, context, snapshot, world);
   // Item Domain V1: display names of a possibly absent owner (authored canon, or a campaign character's established name).
   const ownerNames = (id: string): readonly string[] => { const e = world?.getEntity(id); const c = snapshot.characters.find(x => x.id === id);
     return [...(e?.type === "character" ? [e.name, ...e.aliases] : []), ...(c?.profile.name ? [c.profile.name] : []), ...(world ? [] : [id])]; };
   const decided = grammar.map((g, i): AuthorizationDiagnostic => {
     const command = proposal[i]!, quote = quotes?.[i];
-    let ev = verifyEvidence(command, quote, narration, context, evidence.player_intents, ownerNames);
+    let ev = verifyEvidence(command, quote, narration, context, evidence.player_intents, ownerNames, facts);
     let base: Omit<AuthorizationDiagnostic, "authorized" | "reason"> = { command, grammar: { authorized: g.authorized, reason: g.reason }, evidence: { quote: quote ?? null, verified: ev.verified, check: ev.check } };
     // Bounded evidence recovery (place_item only): the Controller's quote is missing, weak, unrelated or negated, but the same draft holds exactly
     // one unambiguous completed act and no contradiction. The very same receipt verifier decides; the command itself is unchanged.

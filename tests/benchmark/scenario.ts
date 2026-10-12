@@ -58,6 +58,10 @@ export interface Observables {
   inventory: string[];
   /** Persons the player holds as enslaved (legal status enslaved, holder nicco). */
   held_by_player: number;
+  /** Distinct audit issue kinds raised for the last turn's draft, sorted. */
+  audit_kinds: string[];
+  /** True per named phrase when the narration the player was shown (last turn) contains it. */
+  delivered_contains: Record<string, boolean>;
   /** Titles of the PendingConfirmation cards currently offered. */
   confirmations: string[];
   /** NPC+ (premium) character ids. */
@@ -152,6 +156,8 @@ export async function observe(rig: Rig, want: Expect, start: number, recent: rea
       case "confirmations": out[key] = rig.session.getConfirmationView().cards.map(c => c.title); break;
       case "npc_plus": out[key] = snap.premium_characters.map(p => p.character_id).sort(); break;
       case "household": out[key] = snap.households.flatMap(h => h.members.filter(m => m.status === "member" && m.role !== "owner").map(m => m.character_id)).sort(); break;
+      case "audit_kinds": out[key] = [...new Set(rig.last.audit)].sort(); break;
+      case "delivered_contains": out[key] = Object.fromEntries(Object.keys(want.delivered_contains!).map(k => [k, rig.last.narration.includes(k)])); break;
       case "calls": out[key] = rig.calls(); break;
       case "save_state": out[key] = rig.session.getView().session.save.state; break;
       case "reflection_notes": out[key] = snap.premium_reflections.reduce((n, r) => n + r.notes.length, 0); break;

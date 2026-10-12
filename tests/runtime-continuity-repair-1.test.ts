@@ -11,7 +11,7 @@ import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import { authorizeCommands } from "../src/turn/command-authorizer.js";
-import { narratedDepartures } from "../src/turn/scene-departure.js";
+import { narratedDepartures } from "./movement-readers.js";
 import { playerAuthoredEvents } from "../src/turn/player-authored-events.js";
 import { RecentConversation, RECENT_CONVERSATION_TURNS, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

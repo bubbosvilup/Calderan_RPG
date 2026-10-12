@@ -34,6 +34,8 @@ export interface Rig {
   say(player: string, narration: string, controller?: readonly CampaignCommand[], options?: TurnOptions): Promise<{ ok: boolean; error?: string }>;
   /** Provider calls made so far (the benchmark never reaches a network provider: these are the scripted fixtures). */
   calls(): { narrator: number; controller: number };
+  /** The last submitted turn: the narration the player was shown and the audit issue kinds raised for the draft. */
+  readonly last: { narration: string; audit: readonly string[] };
   /** Saves, then replaces the session with a fresh one loaded from disk (everything not persisted is gone, like a real restart). */
   reload(): Promise<void>;
   release(): Promise<void>;
@@ -58,7 +60,7 @@ export async function makeRig(spec: RigSpec, id: string): Promise<Rig> {
     if (prop === "loadCampaign") return async (...args: Parameters<FileCampaignRepository["loadCampaign"]>) => { const loaded = await target.loadCampaign(...args); lastLoaded = loaded.campaign; return loaded; };
     const value = Reflect.get(target, prop, target); return typeof value === "function" ? value.bind(target) : value; } });
   let narration = "", proposals: readonly CampaignCommand[] = [], evidence: readonly string[] = [];
-  const count = { narrator: 0, controller: 0 };
+  const count = { narrator: 0, controller: 0 }, last = { narration: "", audit: [] as readonly string[] };
   const narrator: NarratorProvider = { async generate() { throw new Error("unused"); }, async *stream() { count.narrator++; yield { type: "text_delta", text: narration }; yield { type: "completed", result: { text: narration, ...metadata } }; } };
   const service = new RetrievalService(world);
   const coordinator = new TurnCoordinator(world, narrator, { async propose() { count.controller++; return { commands: [...proposals], ...(evidence.length ? { evidence: [...evidence] } : {}), ...metadata }; } }, { service, search: new HybridSearch(service) }, { provider_retry: false });
@@ -67,8 +69,8 @@ export async function makeRig(spec: RigSpec, id: string): Promise<Rig> {
   if (spec.gold !== undefined) campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "set_funds", character_id: "nicco", gold: spec.gold }] });
   const rig: Rig = { kind: spec.world, world, coordinator, dir, deps,
     get campaign() { return campaign; }, get session() { return session; },
-    calls: () => ({ ...count }),
-    async say(player, text, controller = [], options = {}) { narration = text; proposals = controller; evidence = options.evidence ?? []; const { evidence: _evidence, ...submit } = options; const r = await session.submitPlayerInput(player, submit); return r.ok ? { ok: true } : { ok: false, error: JSON.stringify((r as { error?: unknown }).error) }; },
+    calls: () => ({ ...count }), last,
+    async say(player, text, controller = [], options = {}) { narration = text; proposals = controller; evidence = options.evidence ?? []; const { evidence: _evidence, ...submit } = options; const r = await session.submitPlayerInput(player, submit); last.narration = r.ok ? r.narration : ""; last.audit = r.ok ? r.trace?.audit_issue_kinds ?? [] : []; return r.ok ? { ok: true } : { ok: false, error: JSON.stringify((r as { error?: unknown }).error) }; },
     async reload() {
       const saved = await session.save(); if (!saved.ok) throw new Error(`save failed: ${JSON.stringify(saved)}`);
       const loaded = await GameSession.loadCampaign(deps, campaign.exportSnapshot().campaign_id); if (!loaded.ok) throw new Error(`load failed: ${JSON.stringify(loaded)}`);

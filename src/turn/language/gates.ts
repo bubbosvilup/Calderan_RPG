@@ -32,7 +32,7 @@ export const GATES = Object.freeze({
   movement_not_done: cueGate({ cues: [could, would, should, might, may, can, will, N.wont, shall, I.plans, I.planning, I.planned, I.intends, I.wants, I.wanted, I.goingTo,
     I.aboutTo, I.readyTo, I.triesTo, I.triedTo, T.later, T.someday, E.maybe, E.perhaps, C.if, C.unless, C.whether, O.toward, O.towards, O.looks, O.looked, O.looking,
     O.glances, O.glanced, O.stares, E.imagines, I.thinks, I.promises, I.saysHell, not, never, noLonger], contraction: true, question: true }),
-  /** scene-departure.ts — completed exits: threats, starts, orientation and instruction-to-leave are not departures. */
+  /** narration-facts departure forms (formerly scene-departure.ts) — completed exits: threats, starts, orientation and instruction-to-leave are not departures. */
   departure_not_done: cueGate({ cues: [not, never, no, nor, N.wont, will, would, could, should, might, may, can, cannot, C.if, C.unless, C.until, C.whether, I.threaten,
     I.aboutTo, I.goingTo, I.readyTo, I.startsTo, I.startedTo, I.beginsTo, I.beganTo, I.triesTo, I.triedTo, I.wantsTo, I.wantedTo, I.meansTo, I.intendsTo, I.almost,
     I.nearly, O.toward, O.towards, O.forTheDoor, O.toGo, E.asIf, E.asThough], contraction: true, question: true }),

@@ -220,7 +220,7 @@ Audit B domain 2. **Do not fix tonight; this is the full finding for the roadmap
 
 Current architecture:
 - Player movement is engine-only: `resolvePlayerTravel` (`player-travel.ts:34-73`) turns "let's go home" into a `runtime_delta` (home = `heartstone`). `with <name>` is parsed and discarded ("group wording grants no NPC authority"). The Controller has no `runtime_delta`; `move_character` for Nicco is rejected (`command-authorizer.ts:62-70`).
-- NPC movement: (1) player-authored carry (`resolvePlayerCarry`), (2) narrated completed movement as evidence (`narratedMovements`, `character-movement.ts:307-356`), (3) departures (`leave_scene`, `scene-departure.ts`), (4) Controller `move_character` proposals, authorized only against narration evidence.
+- NPC movement: (1) player-authored carry (`resolvePlayerCarry`), (2) narrated completed movement as evidence (`narratedMovements`, `character-movement.ts:307-356`), (3) departures (`leave_scene`, `scene-departure.ts`), (4) Controller `move_character` proposals, authorized only against narration evidence. **Block 9 update:** (2) and (3) now read ONE shared fact set (`src/turn/narration-facts/`); only the player-input readers (1) remain separate.
 - There is **no party, follower or companion model** (`character-movement.ts:14-16`). Presence is location equality. Narration can propose multi-actor movement, one entry per character.
 - Interaction participants stay behind by default at three layers: state, narrator note ("X stays there", `follow-invitation.ts`, `stages/intent.ts:113-117`), and foreground binding dropped on location change.
 

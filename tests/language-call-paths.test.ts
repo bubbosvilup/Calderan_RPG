@@ -10,7 +10,7 @@ import { buildTurnContext } from "../src/turn/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import { authorizeWithEvidence, verifyEvidence } from "../src/turn/evidence-authorization.js";
-import { narratedDepartures } from "../src/turn/scene-departure.js";
+import { narratedDepartures } from "./movement-readers.js";
 import { groundingIssues } from "../src/turn/grounding-audit.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
 import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";

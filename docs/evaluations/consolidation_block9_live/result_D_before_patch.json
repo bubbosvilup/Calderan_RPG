@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-10-12T22:34:58.711Z",
+  "results": [
+    {
+      "id": "D",
+      "turns": [
+        {
+          "before": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        },
+        {
+          "input": "*Nicco takes the woman by the wrist, and she follows him out of the market, through the West District and in through the door of Heartstone.*",
+          "ok": true,
+          "error": null,
+          "narration": "*The door closes behind them, cutting off the damp autumn air. The square's noise fades to a muffled hum, then nothing. Inside, Heartstone smells of old stone and stillness — cool, dry, quiet in a way the market never was. Rain taps faintly against windows somewhere above.*\n\n*The woman stands where Nicco released her wrist. She hasn't moved further into the room, hasn't looked around. Her hands hang at her sides. She is watching the door he brought her through, as though waiting for it to explain what happens next.*",
+          "audit": [],
+          "committed": [],
+          "rejected": [
+            "move_character"
+          ],
+          "revision_delta": 0,
+          "after": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        },
+        {
+          "input": "She looks up at me and says: \"My name is Lira.\"",
+          "ok": true,
+          "error": null,
+          "narration": "*She says it quietly, not quite meeting his eyes — a glance up, then back to the middle distance near his chest. Her voice is steadier than her hands, which have curled slightly inward against her skirts. The name sits between them in the stillness of the room. Outside, rain keeps its faint rhythm against the stone.*\n\n*She is twenty-four, or near enough. Slim beneath the market's rough cloth. Whatever the pen and the platform made of her, standing here in dry quiet with the door closed behind her is clearly not something she has a shape for yet. Her weight shifts once, barely, from one foot to the other, and then she is still again — waiting, the way someone waits who has learned that moving first is usually wrong.*",
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "revision_delta": 0,
+          "after": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

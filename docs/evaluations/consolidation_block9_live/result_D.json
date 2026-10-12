@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-10-12T22:51:18.051Z",
+  "results": [
+    {
+      "id": "D",
+      "turns": [
+        {
+          "before": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        },
+        {
+          "input": "*Nicco takes the woman by the wrist, and she follows him out of the market, through the West District and in through the door of Heartstone.*",
+          "ok": true,
+          "error": null,
+          "narration": "*The door closes behind them, and the market noise cuts to a murmur. Heartstone's stone walls hold a different kind of quiet — cooler, older, still. Whatever rain there was outside is reduced here to a faint, intermittent tapping against the upper windows. The entrance hall smells of dust and undisturbed air.*\n\n*The woman stands where Nicco's grip released her. Her gaze moves across the stone walls, the height of the ceiling, the dimensions of the space — measuring it the way someone measures a place they have no reason to trust yet. Her hands settle at her sides. She says nothing, and her face gives away nothing either, but her weight shifts toward the door once before she catches herself and goes still again.*\n\n*Beyond the entrance, the tower's interior stretches upward into shadow. Whatever light there is reaches only the first few feet of the ground floor. The rest waits.*",
+          "audit": [],
+          "committed": [],
+          "rejected": [
+            "move_character"
+          ],
+          "revision_delta": 0,
+          "after": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          },
+          "revision_issue_kinds": [],
+          "delivered_facts": []
+        },
+        {
+          "input": "She looks up at me and says: \"My name is Lira.\"",
+          "ok": true,
+          "error": null,
+          "narration": "*She holds the look for a moment after saying it — not defiant, not inviting, just holding it, the way someone stands still after setting something down to see whether it will be picked up or kicked aside. Her hands stay at her sides. The name sits between them in the dusty air of the entrance hall, and she offers nothing past it: no lineage, no origin, no explanation for the expensive clothing or the poise that doesn't match where Nicco found her.*\n\n*Rain taps once against a high window, then stops. Somewhere deeper in the tower, a faint draft moves through stonework that hasn't been lived in for some time. The light from the door catches only the near wall and the first edges of the floor; everything beyond that is shape and shadow and the sense of a tall, hollow space waiting to be filled or ignored.*\n\n*She watches Nicco's face. Whatever she reads there, she doesn't react to. She simply waits, her weight balanced and even, neither leaning toward the door nor away from it anymore.*",
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "revision_delta": 0,
+          "after": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          },
+          "revision_issue_kinds": [],
+          "delivered_facts": [
+            {
+              "kind": "entity_stayed",
+              "form": "stay_verb",
+              "modality": "completed",
+              "subject": "mistress_elara",
+              "ambiguity": "none",
+              "text": "She simply waits"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

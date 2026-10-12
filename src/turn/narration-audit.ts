@@ -17,14 +17,16 @@ import { GATES } from "./language/gates.js";
 import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf } from "./language/text.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
-import { narratedDepartures, canonicalDepartureClaims, canonicalPresenceClaims } from "./scene-departure.js";
+import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, locationClaimsFromFacts, presenceClaimsFromFacts } from "./movement-evidence.js";
+import { createFactSource, type EntityArrivedFact, type NarrationFactSource, type NarrationFacts } from "./narration-facts/index.js";
+import { movementFactScope } from "./movement-scope.js";
 import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { readScene } from "./narrated-captives.js";
 import { partnerNameConflict } from "./partner-identity-guard.js";
 import { resolveDestination } from "./natural-actions.js";
 import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
-import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
+import { characterLocation, persistentCharactersAt } from "./character-movement.js";
 import { followCandidates, followerIds } from "./follow-candidates.js";
 import { temporalGrounding } from "./temporal-grounding.js";
 import { pendingClaims } from "./pending-audit.js";
@@ -35,7 +37,7 @@ import { pendingClaims } from "./pending-audit.js";
  * structured fact the engine holds. An issue does not change state; it triggers the coordinator's bounded revision, then a
  * deterministic fallback. See docs/architecture/TURN_COORDINATOR.md (Repair 1).
  */
-export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
+export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "contradicts_committed_movement" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
   | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase" | "uncommitted_movement"
   | "uncommitted_elapsed_time" | "canonical_name_conflict" | "uncommitted_pending_confirmation";
 /** H5.1: `location` is the authoritative place of the character an uncommitted_movement issue is about (display name). */
@@ -66,6 +68,10 @@ export interface NarrationAuditInput {
   readonly temporal_request?: boolean;
   /** Block 5A: proposals awaiting the player's explicit confirmation. Narration may not present them as completed. */
   readonly pending?: readonly import("./pending-proposals.js").PendingProposal[];
+  /** The turn's shared NarrationFacts source (authorization read the same one). Omitted: one is built from the prepared state. */
+  readonly facts?: NarrationFactSource;
+  /** The state before this turn: who the engine actually moved is the difference to `prepared`. Omitted: only committed move_character commands count. */
+  readonly before?: DeepReadonly<CampaignSnapshot>;
 }
 
 const ELAPSED_NUMBER = "\\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|an?|several|a few|a couple of|many|some";
@@ -171,6 +177,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const { narration, context, world, access, evidence, diagnostics, committed, prepared, scene } = input;
   const issues: AuditIssue[] = [];
   const sentences = sentencesOf(narration);
+  const facts = (input.facts ?? createFactSource(movementFactScope(prepared, world, context, [...new Set([input.origin ?? prepared.runtime.scene.player_location, prepared.runtime.scene.player_location])]))).of(narration);
   const sentenceWith = (fragment: string) => sentences.find(s => s.includes(fragment)) ?? fragment;
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
   const itemName = (id: string) => context.items.find(i => i.id === id)?.name ?? id;
@@ -281,7 +288,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   for (const e of world.getEntitiesByType("character")) {
     // NPC+ Pass 1: an authored NPC+ whose narrated movement into this scene was authorized this turn is present in prepared state.
     if (e.role !== "npc" || presentIds.has(e.id) || e.name.length < 4 || prepared.runtime.npc_locations.some(n => n.character_id === e.id && n.current_location === prepared.runtime.scene.player_location)) continue;
-    for (const claim of canonicalDepartureClaims(narration, context, [{ id: e.id, name: e.name }]).filter(d => d.character_id === e.id)) {
+    for (const claim of departureClaimsFromFacts(facts, e.id)) {
       issues.push({ kind: "absent_participant", character: e.name, sentence: claim.source_sentence, correction: `${e.name} is already absent; do not narrate another current-scene departure.` });
     }
     // NPC+ Pass 4: only PARTICIPATION by the absent character (acting, speaking, present), never a mere reference to them.
@@ -363,10 +370,10 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   // off-scene representation, so a destination-less exit is never narrated as done unless a committed move_character moved them elsewhere.
   const left = new Set(committed.flatMap(c => c.kind === "leave_scene" ? [c.character_id] : []));
   for (const id of left) if (context.characters.some(c => c.id === id && c.origin.kind === "canonical")) {
-    for (const sentence of canonicalPresenceClaims(narration, context, id)) issues.push({ kind: "absent_participant", character: name(id), sentence, correction: `${name(id)} has left this scene. Do not invent a return or continued indoor presence.` });
+    for (const sentence of presenceClaimsFromFacts(facts, id)) issues.push({ kind: "absent_participant", character: name(id), sentence, correction: `${name(id)} has left this scene. Do not invent a return or continued indoor presence.` });
   }
   const relocated = new Set(committed.flatMap(c => c.kind === "move_character" && c.location_id !== prepared.runtime.scene.player_location ? [c.character_id] : []));
-  for (const d of [...narratedDepartures(narration, context, "persistent", { every: true, broad: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location }), ...canonicalDepartureClaims(narration, context)]) {
+  for (const d of [...departuresFromFacts(facts, context, "persistent", { every: true, broad: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location }), ...departureClaimsFromFacts(facts, undefined, presentIds)]) {
     const created = context.characters.find(c => c.id === d.character_id)?.origin.kind === "created";
     if (left.has(d.character_id) || relocated.has(d.character_id) || (created && authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id))) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
@@ -382,7 +389,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     const subjects = input.pending.flatMap(p => { const who = context.characters.find(c => c.id === p.subject_id); return who ? [{ kind: p.kind, name: who.profile.name ?? who.id }] : []; });
     for (const claim of pendingClaims(sentences, subjects)) issues.push({ kind: "uncommitted_pending_confirmation", character: claim.subject, sentence: claim.sentence, correction: claim.correction });
   }
-  issues.push(...movementIssues(input, sentences));
+  issues.push(...movementIssues(input, sentences, facts));
   if (input.elapsed_minutes !== undefined) issues.push(...elapsedTimeIssues(sentences, input.elapsed_minutes, !!input.temporal_request, prepared.runtime.scene.world_time.world_minute));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
   // Foreground canonical identity: the bound canonical conversation partner is one fixed person. If, asked who they are, they give another
@@ -452,46 +459,42 @@ export function redactNarration(narration: string, issues: readonly AuditIssue[]
  * location, quoted speech ignored, hedged/modal/planned/looking clauses ignored (GATES.movement_not_done). It only flags: the movement
  * command is never created here; state stays authoritative.
  */
-const NICCO_GO = /\bNicco\s+(?:\w+ly\s+)?(?:descends|descended|climbs|climbed|goes|went|walks|walked|heads|headed|steps|stepped|returns|returned|hurries|hurried|makes his way|made his way|comes|came|moves|moved|crosses|crossed|wanders|wandered|strides|strode)\b[^.;]*?\b(?:to|into|onto)\s+([^.;,]+)/i;
-const NICCO_ARRIVE = /\bNicco\s+(?:\w+ly\s+)?(?:reaches|reached|enters|entered|arrives (?:at|in)|arrived (?:at|in))\s+([^.;,]+)/i;
-const NICCO_LEAVE = /\bNicco\s+(?:\w+ly\s+)?(?:leaves|left|exits|exited)\s+([^.;,]+)/i;
 const PLAYER_GO = /\bI\s+(?:\w+ly\s+)?(?:go|walk|head|set (?:off|out)|run|hurry|hasten|make my way|travel|ride|leave)\b[^.;!?]*?\b(?:to|toward|towards|for|into)\s+([^.;,!?]+)/i;
 const PLACE_END = /\s+(?:with|while|as|and|where|before|after|still|alone|together|behind|below|above|without)\b.*$/i;
-function movementIssues(input: NarrationAuditInput, sentences: readonly string[]): AuditIssue[] {
-  const { context, world, prepared } = input;
+function movementIssues(input: NarrationAuditInput, sentences: readonly string[], facts: NarrationFacts): AuditIssue[] {
+  const { context, world, prepared, committed } = input;
   const here = prepared.runtime.scene.player_location, origin = input.origin ?? here;
   const display = (id: string | undefined) => id ? world.getEntity(id)?.display_name ?? id : "an unestablished place";
   const within = (place: string, at: string | undefined) => !!at && (place === at || world.getAncestors(at).some(a => a.id === place));
   const issues: AuditIssue[] = [], niccoDidNotGo: string[] = [];
   const playerFrame = (input.player_travel_frame ?? (!!input.player_input && resolvePlayerTravel(input.player_input, origin, context, world).actions.length > 0))
     || /\b(?:we are home|opens? the door and enters?)\b/i.test(input.player_input ?? "");
-  for (const sentence of sentences) {
-    const plainArrival = outside(sentence).trim().replace(/^\*|\*$/g, "").trim();
+  for (const [at, sentence] of sentences.entries()) {
     // Contextual player-relative claims only. Remote lore, dialogue and NPC subjects do not match.
-    const relative = playerFrame && plainArrival.match(/^(?:(?:He|They|We)\s+(?:enters?|entered|reach(?:es)?|reached|arrives? (?:at|in)|arrived (?:at|in))\s+(.+?)|The journey ends at\s+(.+?)|The door opens into\s+(.+?))[.!]*$/i);
-    if (relative && !GATES.player_movement_not_done.test(plainArrival) && !/\b(?:yesterday|ago|last night|earlier|according to|describes?|remembers?|recalls?)\b/i.test(plainArrival)) {
-      let phrase = (relative[1] ?? relative[2] ?? relative[3]!).replace(PLACE_END, "").replace(/['’]s\s+(?:(?:massive|wooden)\s+)*door[.!]*$/i, "").replace(/[.!]+$/, "").trim();
-      const place = playerDestination(phrase, world);
+    const relative = playerFrame ? facts.movement.find((f): f is EntityArrivedFact => f.kind === "entity_arrived" && f.form === "player_relative_arrival" && f.span.sentence_index === at && f.modality === "completed") : undefined;
+    if (relative) {
+      const place = playerDestination(relative.destination!.phrase, world);
       if (place && !within(place, here)) issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: `Nicco is at ${display(here)}, not ${display(place)}. Remove the uncommitted current-scene arrival.` });
     }
-    for (const clause of outside(sentence).split(/;|,\s*(?:but|while|though|although)\s+|\s+but\s+/)) {
-      for (const [re, leaving] of [[NICCO_GO, false], [NICCO_ARRIVE, false], [NICCO_LEAVE, true]] as const) {
-        const m = clause.match(re);
-        if (!m || GATES.movement_not_done.test(clause.slice(0, m.index! + m[0].length))) continue;
-        const place = playerDestination(m[1]!.replace(PLACE_END, "").trim(), world) ?? resolveDestination(m[1]!.replace(PLACE_END, "").trim(), context, world);
-        // "home" has no canonical alias or typed doorway target. Do not turn an
-        // unsupported player phrase into an authoritative arrival in narration.
-        if (!place && /^(?:his |the |your )?home[.!?]*$/i.test(m[1]!.replace(PLACE_END, "").trim())) {
-          issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: `Home does not resolve to a canonical destination. Nicco is at ${display(here)}; describe that location without claiming an unrecorded home entry.` });
-        }
-        if (!place) continue;
-        const contradicts = leaving ? place === here && origin === here : !within(place, here);
-        if (contradicts && !leaving && !niccoDidNotGo.includes(place)) niccoDidNotGo.push(place);
-        if (contradicts && !issues.some(i => i.sentence === sentence && !i.character))
-          issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: leaving
-            ? `Nicco has NOT left ${display(here)}: no movement was recorded this turn. Keep him there; do not narrate him leaving or arriving anywhere else.`
-            : `Nicco did NOT go to ${display(place)}: no such movement was recorded this turn. He is at ${display(here)}; describe him there.` });
+    // The player's own narrated movement: "Nicco goes to X", "Nicco reaches X", "Nicco leaves X" (completed, in narrator prose).
+    for (const f of facts.movement) {
+      if (f.span.sentence_index !== at || f.modality !== "completed" || f.subject.resolution !== "player") continue;
+      const leaving = f.kind === "entity_departed";
+      if (!(f.kind === "entity_moved" || f.kind === "entity_arrived" || leaving) || !f.destination) continue;
+      const phrase = f.destination.phrase;
+      const place = playerDestination(phrase, world) ?? resolveDestination(phrase, context, world);
+      // "home" has no canonical alias or typed doorway target. Do not turn an
+      // unsupported player phrase into an authoritative arrival in narration.
+      if (!place && /^(?:his |the |your )?home[.!?]*$/i.test(phrase)) {
+        issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: `Home does not resolve to a canonical destination. Nicco is at ${display(here)}; describe that location without claiming an unrecorded home entry.` });
       }
+      if (!place) continue;
+      const contradicts = leaving ? place === here && origin === here : !within(place, here);
+      if (contradicts && !leaving && !niccoDidNotGo.includes(place)) niccoDidNotGo.push(place);
+      if (contradicts && !issues.some(i => i.sentence === sentence && !i.character))
+        issues.push({ kind: "uncommitted_movement", sentence, location: display(here), correction: leaving
+          ? `Nicco has NOT left ${display(here)}: no movement was recorded this turn. Keep him there; do not narrate him leaving or arriving anywhere else.`
+          : `Nicco did NOT go to ${display(place)}: no such movement was recorded this turn. He is at ${display(here)}; describe him there.` });
     }
   }
   // D-24 (bare-pronoun form): the PLAYER asked for an inter-location move to a known place and the state did not take him there. Dependent
@@ -506,16 +509,15 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
   const followers = followerIds(followCandidates(prepared, movers, String(input.player_input ?? "")));
   // D-24: Nicco's own narrated movement was NOT committed, so nothing that depends on it can have happened. A same-turn follow that carries
   // someone to where the narration says he went ("Maren follows him there", "came down after him") would survive the redaction of his own
-  // sentence and tell the player a follower arrived somewhere he never reached. Only the follow grammar's dependent forms are read here
-  // (explicit or implicit destination); a local "follows him over to the table" has no inter-location destination and never reaches this.
-  for (const place of niccoDidNotGo) for (const m of narratedMovements(input.narration, movers, { origin: here, arrival: place, hypothetical: true }, context, world, followers)) {
+  // sentence and tell the player a follower arrived somewhere he never reached. Only the follow forms' dependent readings are used here.
+  for (const place of niccoDidNotGo) for (const m of characterMovementsFromFacts(facts, movers, { origin: here, arrival: place, hypothetical: true }, context, world, followers)) {
     if (issues.some(i => i.sentence === m.source_sentence && i.character)) continue;
     const who = movers.find(x => x.id === m.character_id)!.names[0]!;
     issues.push({ kind: "uncommitted_movement", character: who, sentence: m.source_sentence, location: display(characterLocation(prepared, world, m.character_id)),
       correction: `Nicco did NOT go to ${display(place)}: no movement was recorded. ${who} therefore did not follow him there and is still at ${display(characterLocation(prepared, world, m.character_id))}. Do not narrate ${who} following, arriving or being brought anywhere.` });
   }
   // NPC+ Pass 9: an implicit-destination follow by an active NPC+ is held to the same standard — unrecorded, it is flagged.
-  for (const m of narratedMovements(input.narration, movers, { origin, arrival: here, locate: id => characterLocation(prepared, world, id) }, context, world, followers)) {
+  for (const m of characterMovementsFromFacts(facts, movers, { origin, arrival: here, locate: id => characterLocation(prepared, world, id) }, context, world, followers)) {
     const now = characterLocation(prepared, world, m.character_id);
     if (now === m.location_id) continue;
     const who = movers.find(x => x.id === m.character_id)!.names[0]!;
@@ -525,24 +527,48 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
   // Follow-recognition closure: a pronoun-led ARRIVAL ("She reaches the hall floor") right after a sentence led by exactly one active NPC+
   // Nicco left behind, when that NPC+ did not move. absent_participant covers name-led acts; this closes only the pronoun continuation.
   if (origin !== here) {
-    const behind = movers.filter(m => followers.has(m.id) && characterLocation(prepared, world, m.id) !== here);
-    const others = [...movers.filter(m => !behind.includes(m)).flatMap(m => m.names), ...context.characters.filter(c => c.id !== "nicco").map(c => c.profile.name ?? c.id)];
-    const leads = (plain: string, names: readonly string[]) => names.some(n => new RegExp(`^\\W*${esc(n)}(?:'s)?\\b`, "i").test(plain));
-    let previous: MovableCharacter | undefined;
-    for (const sentence of sentences) {
-      const plain = outside(sentence).trim(), pronoun = /^\W*(?:she|he|it)\b/i.test(plain);
-      const subject = pronoun ? previous : undefined;
-      if (subject && ARRIVAL.test(plain) && !GATES.movement_not_done.test(plain) && !issues.some(i => i.sentence === sentence))
-        issues.push({ kind: "uncommitted_movement", character: subject.names[0]!, sentence, location: display(characterLocation(prepared, world, subject.id)),
+    const behind = new Map(movers.filter(m => followers.has(m.id) && characterLocation(prepared, world, m.id) !== here).map(m => [m.id, m] as const));
+    for (const f of facts.movement) {
+      if (f.kind !== "entity_arrived" || f.form !== "arrival_verb" || f.modality !== "completed") continue;
+      const subject = f.subject.entity_id ? behind.get(f.subject.entity_id) : undefined;
+      if (subject && !issues.some(i => i.sentence === f.sentence))
+        issues.push({ kind: "uncommitted_movement", character: subject.names[0]!, sentence: f.sentence, location: display(characterLocation(prepared, world, subject.id)),
           correction: `${subject.names[0]!} did NOT arrive in ${display(here)}: no movement was recorded for them. They are still at ${display(characterLocation(prepared, world, subject.id))}; do not narrate them reaching or entering ${display(here)}.` });
-      // The antecedent must be unique: it leads the sentence and no other person (left behind or not) is named in it.
-      const lead = behind.filter(m => leads(plain, m.names)), mentioned = behind.filter(m => m.names.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(plain)));
-      previous = pronoun ? previous : lead.length === 1 && mentioned.length === 1 && !others.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(plain)) ? lead[0] : undefined;
     }
+  }
+  // The engine moved this person with the player (an escort or an authorized follow): the prose must not leave them behind.
+  if (origin !== here) {
+    const went = new Set([...committed.flatMap(c => c.kind === "move_character" && c.location_id === here ? [c.character_id] : []),
+      ...(input.before ? movers.filter(m => characterLocation(prepared, world, m.id) === here && characterLocation(input.before!, world, m.id) !== here).map(m => m.id) : [])]);
+    for (const f of facts.movement) {
+      const id = f.subject.entity_id;
+      if (f.kind !== "entity_stayed" || f.modality !== "completed" || !id || !went.has(id) || issues.some(i => i.sentence === f.sentence)) continue;
+      if (facts.movement.some(g => g.sentence === f.sentence && g.subject.entity_id === id && g.modality === "completed" && (g.kind === "entity_followed" || g.kind === "entity_arrived" || g.kind === "entity_moved" || g.kind === "entity_moved_with_player"))) continue;
+      const who = movers.find(m => m.id === id)?.names[0] ?? id;
+      issues.push({ kind: "contradicts_committed_movement", character: who, sentence: f.sentence, location: display(here),
+        correction: `${who} DID go with Nicco to ${display(here)}: that movement was recorded. Do not narrate ${who} staying behind or waiting where they were.` });
+    }
+  }
+  // Location-claim invariant: prose that puts a known entity in a concrete known place (no motion verb needed) must agree with the state
+  // this turn ends in. The place the entity started the turn in is allowed (an exit may be narrated from where it began). Unresolved or
+  // ambiguous claims are never facts here: nothing is guessed. Same facts as authorization; this only flags, state stays authoritative.
+  const consistent = (place: string, at: string) => place === at || world.getAncestors(at).some(a => a.id === place) || world.getAncestors(place).some(a => a.id === at);
+  for (const c of locationClaimsFromFacts(facts)) {
+    if (issues.some(i => i.sentence === c.source_sentence)) continue;
+    if (c.character_id === "nicco") {
+      if (consistent(c.location_id, here) || consistent(c.location_id, origin)) continue;
+      issues.push({ kind: "uncommitted_movement", sentence: c.source_sentence, location: display(here),
+        correction: `Nicco is at ${display(here)}, not ${display(c.location_id)}: no movement there was recorded this turn. Describe the scene at ${display(here)}; do not place Nicco, or anyone with him, at ${display(c.location_id)}.` });
+      continue;
+    }
+    const now = characterLocation(prepared, world, c.character_id), was = input.before ? characterLocation(input.before, world, c.character_id) : undefined;
+    if (!now || consistent(c.location_id, now) || (was && consistent(c.location_id, was))) continue;
+    const who = prepared.characters.find(x => x.id === c.character_id)?.profile.name ?? context.characters.find(x => x.id === c.character_id)?.profile.name ?? c.character_id;
+    issues.push({ kind: "uncommitted_movement", character: who, sentence: c.source_sentence, location: display(now),
+      correction: `${who} is at ${display(now)}, not ${display(c.location_id)}: no movement there was recorded for them. Do not place ${who} at ${display(c.location_id)}.` });
   }
   return issues;
 }
-const ARRIVAL = /\b(?:reach(?:es|ed)(?!\s+(?:for|out|toward|towards|across|over|up|down|into|back|behind|past)\b)|arriv(?:es|ed)|enters?|entered|steps? (?:into|onto|down into)|stepped (?:into|onto|down into)|catch(?:es)? up|caught up|joins? him|joined him)\b/i;
 
 const holderOf = (i: { readonly position: { readonly kind: string; readonly character_id?: string } }) => i.position.kind === "carried" || i.position.kind === "equipped" ? i.position.character_id : undefined;
 /**

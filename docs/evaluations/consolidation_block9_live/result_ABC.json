@@ -1,0 +1,115 @@
+{
+  "generated_at": "2026-10-12T22:34:12.148Z",
+  "results": [
+    {
+      "id": "A",
+      "turns": [
+        {
+          "before": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        },
+        {
+          "input": "Lira, come, let's go together to Heartstone.",
+          "ok": true,
+          "error": null,
+          "narration": "*The words leave Nicco's mouth and meet only the cool, still air of the late morning. No answer comes. No footsteps but his own, no second breathing in the room.*\n\n*Daylight falls through the three arched windows onto the aged wooden floor of Heartstone's living floor — the kitchen side, the entrance side, the one left of the hearth — each casting its own pale rectangle across the boards. The hearth is unlit. The broad space, the large sofa and armchair before the stone fireplace, the long table near the kitchen, the shelving along the stair-side wall, all of it stands as it was. Quiet. Empty of anyone but him.*\n\n*The entrance shoe rack and equipment bench sit near the massive main door. The courtyard door on the kitchen side is where it always is. The spiral staircase opening along the perimeter waits, leading up. The hatch to U1 sits flush in the floor near the kitchen. Everything in its place. No one to come with him, because no one else is here.*",
+          "audit": [],
+          "committed": [
+            "runtime_delta"
+          ],
+          "rejected": [],
+          "revision_delta": 1,
+          "after": {
+            "player": "heartstone_lr",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        },
+        {
+          "input": "She looks at me and says quietly: \"My name is Lira.\"",
+          "ok": true,
+          "error": null,
+          "narration": "*The words settle into the still air of Heartstone's living floor and find nothing to answer them. No voice, no breath, no presence. Daylight from the three arched windows continues its slow marking of the aged boards. The hearth stays unlit and cold. The large sofa, the armchair, the long table, the shelving — all stand where they have stood, quiet and undisturbed.*\n\n*The name spoken aloud lands and disperses like any other sound in an empty room. Nicco stands alone in the broad circular space, his own voice the only one to have broken the late-morning silence. The massive main door, the courtyard door, the stairwell opening, the kitchen-side hatch — all where they were, none of them opened or moved by another hand.*",
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "revision_delta": 0,
+          "after": {
+            "player": "heartstone_lr",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "turns": [
+        {
+          "before": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        },
+        {
+          "input": "I tell the woman to stay here at the market and wait, then I go to Heartstone alone.",
+          "ok": true,
+          "error": null,
+          "narration": "*Nicco speaks to the woman. She looks back at him — twenty-four, maybe, with nothing in her face that tells him what she makes of the instruction. She does not move from where she stands at the edge of the auction traffic, and she does not answer. Whether that is obedience or something else is not clear.*\n\n*The walk to Heartstone takes him away from the square's noise and into the quieter streets of the West District. The fog sits low between buildings, damp against the stone. In roughly twenty minutes the tower is ahead — old, solid, its narrow arched windows dark against the pale air. The courtyard wall keeps it apart from the neighboring structures. Everything is as it was left.*",
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "revision_delta": 0,
+          "after": {
+            "player": "calderan_slave_market",
+            "woman": "calderan_slave_market",
+            "created": [
+              "campaign_character_woman_one:(unnamed)"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "turns": [
+        {
+          "before": {
+            "player": "heartstone_lr",
+            "woman": null,
+            "created": []
+          }
+        },
+        {
+          "input": "*he goes back to the slave market*",
+          "ok": true,
+          "error": null,
+          "narration": "*The market fills back in around Nicco as he returns — the noise, the smell of packed earth churned damp by morning fog and foot traffic, the low murmur of commerce that never quite stops. A clerk near the auction platform waves a piece of paper at a buyer who waves one back. Handlers move a line of captives toward the pens. Somewhere a wagon wheel catches in a rut and a driver curses.*\n\n*The fog sits low over the square, softening the edges of everything beyond thirty paces. It's thick enough to taste, cool enough to notice. The auction crowd is thinner than midday will bring but steady — a handful of serious buyers with sharp eyes, a few spectators hanging at the margins, guards walking a circuit that takes them past the pens and back.*\n\n*No one pays Nicco particular attention. He's one body among many on the packed ground between the auction area and the holding pens, where the traffic funnels and people step around each other with the practiced indifference of a place that does this all day, every day.*",
+          "audit": [],
+          "committed": [
+            "runtime_delta"
+          ],
+          "rejected": [],
+          "revision_delta": 1,
+          "after": {
+            "player": "calderan_slave_market",
+            "woman": null,
+            "created": []
+          }
+        }
+      ]
+    }
+  ]
+}

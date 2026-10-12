@@ -12,6 +12,7 @@ import type { SceneParticipantPlan } from "../scene-participants.js";
 import { characterView } from "../../campaign/projections.js";
 import { escapeRegExp } from "../language/text.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
+import type { NarrationFactSource } from "../narration-facts/index.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";
 import type { NarratorRequest } from "./narration.js";
@@ -47,6 +48,8 @@ export interface NarrationAuditor {
   readonly access: NarrativeKnowledgeAccess;
   /** Sync, pure: audit issues for a narration against the prepared candidate. */
   check(narration: string, evidence: TurnEvidence): readonly AuditIssue[];
+  /** The turn's shared NarrationFacts source: authorization read the draft's facts from it, a revision gets its own single extraction. */
+  readonly facts?: NarrationFactSource;
   /** Sync, pure: the authoritative outcome lines for a revision request and for redaction prose. */
   outcome(issues: readonly AuditIssue[]): { readonly revision: readonly string[]; readonly prose: readonly string[] };
   /** D-13: authorized followers who arrived with Nicco this turn (they were not already in the arrival scene): committed state the text must not omit. */
@@ -56,7 +59,7 @@ export interface NarrationAuditor {
 export function createNarrationAuditor(i: { readonly base_revision: number; readonly context: TurnContext; readonly world: WorldStore; readonly retrieved: unknown;
   readonly player_input: string; readonly recent: readonly RecentExchange[]; readonly finalized?: readonly RecentExchange[]; readonly intent: TurnIntent; readonly scene: SceneParticipantPlan;
   readonly turn_evidence: TurnEvidence; readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly authorized: readonly CampaignCommand[];
-  readonly prepared: DeepReadonly<CampaignSnapshot>; readonly origin?: string;
+  readonly prepared: DeepReadonly<CampaignSnapshot>; readonly origin?: string; readonly facts?: NarrationFactSource; readonly before?: DeepReadonly<CampaignSnapshot>;
   /** Temporal Action Resolver V1: authoritative minutes this turn advances (prepared − base). */
   readonly elapsed_minutes?: number }): NarrationAuditor {
   const access = projectKnowledgeAccess(i.context, i.retrieved, relevanceSignals(i.player_input, i.recent, i.intent), i.scene);
@@ -65,7 +68,8 @@ export function createNarrationAuditor(i: { readonly base_revision: number; read
   const economic_reference = !!economicTurn(i.player_input, i.context, i.recent);
   return {
     access,
-    check: (narration, evidence) => auditNarration({ base_revision: i.base_revision, narration, context: i.context, world: i.world, access, evidence, diagnostics: i.diagnostics,
+    ...(i.facts ? { facts: i.facts } : {}),
+    check: (narration, evidence) => auditNarration({ ...(i.facts ? { facts: i.facts } : {}), ...(i.before ? { before: i.before } : {}), base_revision: i.base_revision, narration, context: i.context, world: i.world, access, evidence, diagnostics: i.diagnostics,
       committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, ...(i.finalized ? { finalized: i.finalized } : {}), authoritative_text, economic_reference,
       ...(i.intent.confirmations?.pending.length ? { pending: i.intent.confirmations.pending } : {}),
       player_travel_frame: !!i.intent.natural?.actions.some(a => a.kind === "movement") || i.intent.runtime.some(c => c.kind === "runtime_delta" && !!c.delta.player_location),
@@ -100,7 +104,7 @@ export async function reconcileNarration(i: { readonly auditor: NarrationAuditor
   i.checkpoint();
   const usable = !!drafted && drafted.finish_reason !== "length";
   const revision = usable ? drafted.text : undefined;
-  const revision_issues = revision !== undefined ? i.auditor.check(revision, deriveTurnEvidence(i.intent, revision, i.context)) : i.issues;
+  const revision_issues = revision !== undefined ? i.auditor.check(revision, deriveTurnEvidence(i.intent, revision, i.context, i.auditor.facts?.of(revision))) : i.issues;
   const redacted = revision === undefined || revision_issues.length > 0;
   const text = redacted ? redactNarration(revision ?? i.draft, revision_issues, i.outcome.prose) : revision!;
   // D-13: a committed arrival is state; if the revision or its redaction no longer mentions the mover, say so deterministically (never roll state back).
