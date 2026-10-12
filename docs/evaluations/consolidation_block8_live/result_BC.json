@@ -1,0 +1,269 @@
+{
+  "generated_at": "2026-10-12T21:26:45.147Z",
+  "wire_total": 17,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 9,
+    "undefined": 8
+  },
+  "tokens": 101859,
+  "cost_usd": 0,
+  "accept_completed_in": null,
+  "results": [
+    {
+      "id": "B",
+      "purpose": "seller 100, player 90, seller 95",
+      "verdict": "FAIL",
+      "problems": [
+        "the first seller price is not marked superseded"
+      ],
+      "wire_calls": 9,
+      "subjects": 1,
+      "turns": [
+        {
+          "turn": 1,
+          "numeric": "setup (no number)",
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco makes his way past the public auction area toward the private sellers' section, where the crowd thins and the stalls and roped-off displays replace the central platform. Handlers and clerks move between the spaces, and the noise of the main auction fades to a murmur of haggling and low conversation.*\n\n*Korvin stands near a wooden post at the edge of his selling area, one arm folded across his chest, the other resting at his side. His eyes are already on Nicco before Nicco reaches him \u2014 the quick, measuring look of someone who sizes up every approaching body for what they want and what they can pay. His cheap work clothes and broad, scarred hands make him look more like a man who hauls crates than one who sells people. He says nothing until Nicco is close, then tilts his chin up slightly.*\n\nLooking for something particular, or just browsing?\n\n*His voice is flat and gravel-rough, neither welcoming nor hostile. The question is practical \u2014 a sorting mechanism, deciding how much effort to spend.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12426,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "numeric": "seller 100",
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin doesn't soften or sweeten anything. He turns toward the pens behind him, walks along the rope line for a few paces, and stops at one of the closer enclosures. He looks in, considers whatever he sees there for a moment \u2014 not long, the way a man checks stock he already knows \u2014 then turns back to Nicco and gives a short nod toward the pen.*\n\nThis one's a hundred gold.\n\n*He says it the same way he might quote a price on firewood. No flourish, no pitch. His eyes stay on Nicco's face after the number leaves his mouth, watching for the reaction that tells him whether this is a serious buyer or someone wasting his morning. His thumbs hook into the front of his belt, and he waits.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12481,
+          "cost_usd": 0
+        },
+        {
+          "turn": 3,
+          "numeric": "player 90",
+          "input": "I answer: \"Ninety.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin's mouth pulls sideways, not quite a smile \u2014 more like a man tasting something sour and deciding whether to spit or swallow. He doesn't look back at the pen. His thumbs stay hooked in his belt, and his weight settles a little lower, the way a man plants himself when the number on the table isn't the one he wanted.*\n\nNinety.\n\n*He repeats it without inflection, letting it sit in the air between them. His eyes move across Nicco's face, then down and back up \u2014 a quick, practiced scan of the clothing, the hands, anything that tells him what kind of margin he's working with. One shoulder rolls in a small, deliberate shrug.*\n\nShe's healthy, young enough, no marks on her. Ninety's what I'd take for damaged goods or someone half-starved. You're not buying damaged goods.\n\n*He pauses, watching Nicco's expression the way he watched the pen earlier \u2014 checking something he already knows the shape of. His tone doesn't sharpen or warm; it stays flat, the rough grain of a man who haggles the way other men breathe.*\n\nNinety-five. That's me moving. You meet me there, we're done.",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12821,
+          "cost_usd": 0
+        },
+        {
+          "turn": 4,
+          "numeric": "seller 95",
+          "input": "I hold at ninety. Korvin sighs and says: \"Ninety-five. That's my last word on her.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin's jaw works once after the ninety sits there between them \u2014 the way a man chews over something sour he's already decided to swallow. The air goes out of him through his nose, not dramatic, just the sound of someone done trading.*\n\nNinety-five. That's my last word on her.\n\n*He pulls one thumb free from his belt and opens his hand, palm up \u2014 the gesture of a man showing he's laid everything on the table. His eyes don't waver. Whatever he's reading in Nicco's face, he's made his calculation and he's standing behind it. A handler leads a line of stock toward the auction area somewhere behind him, a clerk with a ledger crosses between pens, but Korvin's attention doesn't drift toward any of it. He waits to see if ninety-five closes the deal or if the whole morning was for nothing.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [
+            "uncommitted_constraint"
+          ],
+          "committed": [],
+          "rejected": [],
+          "card": {
+            "kind": "person",
+            "price_gold": 95,
+            "lines": [
+              "Woman Slave"
+            ]
+          },
+          "offers": [
+            {
+              "id": "trade_offer_00000001",
+              "direction": "buy",
+              "status": "active",
+              "price_gold": 95,
+              "subject": "person",
+              "subject_id": "campaign_character_r4_woman"
+            }
+          ],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12792,
+          "cost_usd": 0
+        }
+      ],
+      "verdict_final": "NOT REACHED",
+      "verdict_note": "Turn 2: Korvin said \"This one's a hundred gold.\" but the narration showed NO person (a nod \"toward the pen\"), so the engine correctly made no person offer. The 100 -> 95 supersede was therefore never exercised. Observed after turn 4: exactly one active offer (buy person 95), card 95, the player's 90 never became an offer, no payment/materialization/transfer. The in-run verdict FAIL was the script rule \"first price must be superseded\"; the rule was then reclassified as NOT REACHED. B was not retried (one bounded attempt)."
+    },
+    {
+      "id": "C",
+      "purpose": "seller 400, player 250, seller 275",
+      "verdict": "PASS",
+      "problems": [],
+      "wire_calls": 8,
+      "subjects": 1,
+      "turns": [
+        {
+          "turn": 1,
+          "numeric": "setup (no number)",
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The private-seller area sits behind the main auction ground, a looser arrangement of roped-off display spaces, ledger tables and covered pens where licensed traders work their own stock away from the clerk-supervised auction block. The rain has turned the gravel to a thin grit underfoot. Nicco passes a cluster of handlers wrestling a crate off a cart bed and finds Korvin standing at the edge of his section, one hip cocked against a post, watching the foot traffic with the idle patience of a man who has spent years waiting for buyers to come to him.*\n\n*Korvin's eyes find Nicco early and stay on him \u2014 a slow, measuring look that takes in his height, his build, his clothes, the way he moves through the market. One of those large, scarred hands rests on the post beside him. He doesn't straighten up or put on a greeting. He waits until Nicco is close enough to hear without raising his voice.*\n\nYou looking to buy, or just looking?\n\n*The question is flat, unhurried. His gaze hasn't finished its assessment. Somewhere behind him, a few figures sit or stand in a roped enclosure \u2014 his current stock, visible but not yet presented. Rain beads on the canvas awning stretched overhead.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12511,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "numeric": "seller 400",
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 400 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin pushes off the post and leads Nicco three steps along the roped enclosure, stopping where a woman sits against the post-rail with her knees drawn up. He looks her over the way a man looks over a horse he's already priced \u2014 quick, practiced, nothing personal in it \u2014 then turns back to Nicco.*\n\nThis one's four hundred gold.\n\n*He lets the number sit between them. His weight settles back on one heel, arms loosely crossed. Behind him the woman doesn't look up. The rain picks up a little against the awning, a dull patter that fills the pause. Korvin's small eyes stay on Nicco's hands, his belt, the way he's standing \u2014 reading the money the way he reads everything else, without apology.*\n\nShe's healthy enough. Young. No trades, nothing special. Kitchen or field work, that's what you're getting. You want a look closer, step up.\n\n*He shifts half a step sideways, not quite an invitation \u2014 more like clearing his own sightline so Nicco can see her plainly. He doesn't uncross his arms.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": {
+            "kind": "person",
+            "price_gold": 400,
+            "lines": [
+              "Woman Slave"
+            ]
+          },
+          "offers": [
+            {
+              "id": "trade_offer_00000001",
+              "direction": "buy",
+              "status": "active",
+              "price_gold": 400,
+              "subject": "person",
+              "subject_id": "campaign_character_r4_woman"
+            }
+          ],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12684,
+          "cost_usd": 0
+        },
+        {
+          "turn": 3,
+          "numeric": "player 250",
+          "input": "I answer: \"Two hundred fifty.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin doesn't move. The number hangs in the wet air between them, and for a beat he just looks at Nicco with those small perceptive eyes \u2014 not angry, not amused, just calculating something behind a face that doesn't give the math away. His tongue works across his teeth once, the way a man does when he's biting back a first response.*\n\nTwo-fifty. For a healthy one.\n\n*He uncrosses his arms and sets one large hand on the rail behind him, fingers drumming once \u2014 a single dull rap on the wood. He doesn't glance back at the woman. His attention stays fixed on Nicco, re-reading him the way he might re-check a scale that gave him a surprising weight.*\n\nI said four hundred. She's young, she's sound, she'll work. That's not a fancy price. You know what you'd pay at the block for the same.\n\n*The drumming stops. He lets the quiet stretch, rain ticking on the awning above them. His head tilts a fraction, and something in his expression shifts \u2014 not softer, just more precise, like he's decided what kind of buyer he's talking to and is fitting his next words to it.*\n\nThree-sixty. That's me moving. You come up to that, we talk.",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": {
+            "kind": "person",
+            "price_gold": 400,
+            "lines": [
+              "Woman Slave"
+            ]
+          },
+          "offers": [
+            {
+              "id": "trade_offer_00000001",
+              "direction": "buy",
+              "status": "active",
+              "price_gold": 400,
+              "subject": "person",
+              "subject_id": "campaign_character_r4_woman"
+            }
+          ],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 13135,
+          "cost_usd": 0
+        },
+        {
+          "turn": 4,
+          "numeric": "seller 275",
+          "input": "I hold at two hundred fifty. Korvin sighs and says: \"Two hundred seventy-five. That's my last word on her.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin's jaw works once, the way it does when he's chewing on a number he doesn't like. He looks at the awning, then at the ground, then back at Nicco \u2014 and the sigh that comes out of him is genuine enough, the kind a man gives when he's deciding whether to close or walk.*\n\nTwo hundred seventy-five. That's my last word on her.\n\n*He doesn't say it like a bluff. His hand stays on the rail, fingers still, and his weight is planted \u2014 a man who's put his final card down and means to leave it there. Behind him the woman hasn't moved, her chin still resting on her drawn-up knees, eyes somewhere in the dirt. The rain drums steadily on the awning, and Korvin waits, watching Nicco's face with those small quick eyes, reading the pause the way he reads everything \u2014 for what it tells him about the money, and the man holding it.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": {
+            "kind": "person",
+            "price_gold": 275,
+            "lines": [
+              "Woman Slave"
+            ]
+          },
+          "offers": [
+            {
+              "id": "trade_offer_00000001",
+              "direction": "buy",
+              "status": "superseded",
+              "price_gold": 400,
+              "subject": "person",
+              "subject_id": "campaign_character_r4_woman"
+            },
+            {
+              "id": "trade_offer_00000002",
+              "direction": "buy",
+              "status": "active",
+              "price_gold": 275,
+              "subject": "person",
+              "subject_id": "campaign_character_r4_woman"
+            }
+          ],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 13009,
+          "cost_usd": 0
+        }
+      ],
+      "verdict_final": "PASS",
+      "verdict_note": ""
+    }
+  ]
+}

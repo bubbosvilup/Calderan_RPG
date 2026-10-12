@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-10-12T21:27:49.025Z",
+  "wire_total": 4,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 2,
+    "undefined": 2
+  },
+  "tokens": 25019,
+  "cost_usd": 0,
+  "accept_completed_in": "A",
+  "results": [
+    {
+      "id": "A",
+      "purpose": "one provisional person, seller says 100",
+      "verdict": "PASS",
+      "problems": [],
+      "wire_calls": 4,
+      "subjects": 1,
+      "turns": [
+        {
+          "turn": 1,
+          "numeric": "setup (no number)",
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco moves through the churned dirt of the square, past the public auction where a clerk's voice drones through the terms of a sale, and toward the cluster of private sellers operating behind and around the main floor. The traffic thins a little here, though wagon wheels still grind over gravel and handlers call to each other across the loads.*\n\n*Korvin stands near a wooden post with a chain run fixed to it, a ledger tucked under one arm and a stub of charcoal behind his ear. He is watching a pair of men unload crates from a cart and does not turn until Nicco's shadow crosses his sightline. Those small perceptive eyes move once over Nicco — taking in build, clothing, hands, the way he carries himself — and arrive at some private conclusion before settling into a squint.*\n\nLooking for labor, or something particular?\n\n*He shifts the ledger to his hip, freeing one of those broad, scar-knuckled hands to gesture vaguely at the pens behind him. His posture says he has asked this question a hundred times today and expects the answer to be ordinary.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12441,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "numeric": "seller 100",
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin doesn't blink at the specificity. One woman, one look — that's simpler than most buyers, who waste his time handling five before they settle on the first. He tucks the ledger tighter against his hip and turns toward the pens, scanning the row with the quick, appraising sweep of someone counting inventory rather than examining people.*\n\n*His gaze stops on one figure near the front of the nearest pen. He studies her a moment — not long, just enough — then faces Nicco again, rubbing the side of his nose with a scarred knuckle.*\n\nThis one's a hundred gold.\n\n*He says it flat, the way a man names the weight of a sack of grain. No inflection, no pitch. Those mobile eyes stay on Nicco's face, watching for the flinch or the reach — whether the number lands as too much, fair, or nothing worth discussing. The charcoal stub behind his ear shifts as he tilts his head a fraction, waiting.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": {
+            "kind": "person",
+            "price_gold": 100,
+            "lines": [
+              "Woman Slave"
+            ]
+          },
+          "offers": [
+            {
+              "id": "trade_offer_00000001",
+              "direction": "buy",
+              "status": "active",
+              "price_gold": 100,
+              "subject": "person",
+              "subject_id": "campaign_character_r4_woman"
+            }
+          ],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12578,
+          "cost_usd": 0
+        }
+      ],
+      "accept": {
+        "scenario": "A",
+        "ok": true,
+        "error": null,
+        "price_deducted": 100,
+        "expected_price": 100,
+        "gold_after": 400,
+        "characters_created": 1,
+        "created_is_the_offer_subject": true,
+        "legal": [
+          "campaign_character_r4_woman:nicco"
+        ],
+        "transactions": 1,
+        "offer_status": "accepted",
+        "settlement": {
+          "gold": 100,
+          "revision": 5,
+          "world_minute": 600,
+          "transaction_id": "campaign_transaction_r3_r4_woman"
+        },
+        "revision_delta": 1
+      }
+    }
+  ]
+}

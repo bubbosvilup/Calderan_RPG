@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-10-12T21:23:03.938Z",
+  "wire_total": 5,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 3,
+    "undefined": 2
+  },
+  "tokens": 25088,
+  "cost_usd": 0,
+  "accept_completed_in": null,
+  "results": [
+    {
+      "id": "A",
+      "purpose": "one provisional person, seller says 100",
+      "verdict": "NOT REACHED",
+      "problems": [],
+      "wire_calls": 5,
+      "subjects": 0,
+      "turns": [
+        {
+          "turn": 1,
+          "numeric": "setup (no number)",
+          "input": "looks for private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco moves away from the public auction area, skirting the edge of the crowd. The auctioneer's voice fades behind him as he picks his way past a handler leading a pair of mules toward the loading area. Beyond the pens and the knot of clerks at their portable desks, the square opens into a looser arrangement of stalls and cordoned-off spaces where individual sellers have set up on their own terms — some with covered wagons, others with roped-off display areas and a chair or two. A few bear handwritten notices. The traffic thins here compared to the auction crowd, but it is still steady: buyers walking between sellers, examining merchandise at a slower pace.*\n\n*One seller — the short, compact man with the large damaged hands and small perceptive eyes — sits on a stool beside a roped enclosure where three people wait. He watches Nicco approach with the unhurried patience of someone accustomed to sizing up whether a passerby is browsing or buying. A sheet of paper tacked to a post behind him marks him as a licensed private seller, though the text is too far to read clearly from where Nicco stands.*\n\n*The woman with platinum-blonde hair and the decorative fan is visible a short distance further along, speaking with a clerk near another seller's wagon. She has not looked toward Nicco.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 11911,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "numeric": "seller 100",
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The man pushes off the stool with one hand and walks to the edge of the rope, not hurrying. He looks over the three in the pen the way someone checks crates for the one a customer asked for, then hooks a thumb toward a woman sitting with her back against the post — young, plain, dark hair pulled back, no obvious marks or injuries but nothing striking about her either. He does not bring her forward or make her stand.*\n\nThis one's a hundred gold.\n\n*He says it the way he'd say the weather, flat, already watching Nicco's face to see what kind of buyer he's dealing with. His hands hang at his sides, fingers resting loose. The price sits well below what an ordinary slave would fetch at auction, and he gives no explanation for it — just waits, those small eyes moving over Nicco's clothes and build and the way he carries himself, reading what he can.*\n\n*Behind him the other two in the pen — a man and an older woman — do not look up. The woman indicated keeps her gaze on the ground.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [
+            "uncommitted_condition"
+          ],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 13177,
+          "cost_usd": 0
+        }
+      ]
+    }
+  ]
+}
