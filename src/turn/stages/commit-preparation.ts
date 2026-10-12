@@ -7,6 +7,7 @@ import { establishNames, type IdentityResolution } from "../name-establishment.j
 import { contractCommands } from "../character-contracts.js";
 import { resolvePersonOffers } from "../person-offers.js";
 import { establishedCanonicalDisclosure } from "../canonical-name-disclosure.js";
+import { partnerNameConflict } from "../partner-identity-guard.js";
 import { learnCanonicalName } from "../../campaign/identity-knowledge.js";
 import type { PlayerIntent, TransactionDiagnostic } from "../player-intent.js";
 import type { RecentExchange } from "../recent-conversation.js";
@@ -39,8 +40,9 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
   const offerDiagnostics: TransactionDiagnostic[] = [];
   try {
     const context = buildTurnContext(i.world, i.prepared.snapshot, contextRelevance(i.player_input, i.finalized));
+    const partner_conflict = i.location_changed ? undefined : partnerNameConflict({ context, world: i.world, snapshot: i.prepared.snapshot, finalized: i.finalized, player_input: i.player_input, delivered: i.delivered, scene: i.scene });
     const resolved = establishNames([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", location_id: i.prepared.snapshot.runtime.scene.player_location }],
-      context, i.world, i.prepared.snapshot, i.scene.participants, i.base_revision, { location_changed: i.location_changed });
+      context, i.world, i.prepared.snapshot, i.scene.participants, i.base_revision, { location_changed: i.location_changed, ...(partner_conflict ? { partner_conflict } : {}) });
     const disclosed = i.location_changed ? undefined : establishedCanonicalDisclosure(context, i.player_input, i.finalized, i.delivered, i.scene, i.disclosure_intent);
     const discovery = disclosed ? learnCanonicalName(i.world, i.prepared.snapshot, disclosed, { acquisition_kind: "told", source_character_id: disclosed, learned_at: i.prepared.snapshot.runtime.scene.world_time.world_minute }) : [];
     const batch = [...i.commands, ...resolved.commands, ...discovery];

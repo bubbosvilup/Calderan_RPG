@@ -105,6 +105,8 @@ for (const [label, output] of [
   ["bare name without a descriptor or narration", "Korvin."],
   ["inline RPG block and bare speech", "*He nods.* Korvin.\n\n*He gestures.* What are you after?"],
   ["multi-line long action paragraph", "*The short, compact man shifts his weight.\nHe studies Nicco.*\n\nKorvin.\n\n*He nods.*\n\nLooking for labor?"],
+  ["name as the first sentence of a longer line (answering a name question)", "*He nods.*\n\nKorvin. Looking for something particular?"],
+  ["name as a whole sentence inside a longer line", "*He nods.*\n\nGood to meet you, Nicco. Korvin. Most people keep it short."],
   ["I am form", "*He nods.*\n\nI am Korvin!\n\n*He gestures.*\n\nWhat are you after?"],
   ["My name is form", "*He nods.*\n\nMy name is Korvin.\n\n*He gestures.*\n\nWhat are you after?"],
 ] as const) test(`P3.5 ${label} learns from the bound canonical actor`, () => {
@@ -114,7 +116,7 @@ for (const [label, output] of [
 
 for (const output of [
   "Korvin owns the stall next door.", "Ask Korvin.", "My brother Korvin works here.", "I know a Korvin.", "Korvin? Never heard of him.",
-  "Korvin?", "Korvin. Looking for something particular?", "I'm Korvin Voss.", "I'm Korvin, also called Hargan.", "I'm not Korvin.",
+  "Korvin?", "I'm Korvin Voss.", "I'm Korvin, also called Hargan.", "I'm not Korvin.",
   "Hargan.", "Pell.", "Harl.", "Korra Vell.", "*Korvin looks away.*", "*He nods.*\n\nKorvin works the far pen.",
 ] as const) test(`P3.5 non-self-name evidence fails closed: ${output}`, () => {
   const f = fixture(); assert.equal(establishedCanonicalDisclosure(f.context, INPUT, f.recent.finalized(), output, f.scene, intent), undefined);

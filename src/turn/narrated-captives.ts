@@ -118,6 +118,12 @@ export function asksName(player: string): boolean {
 const NAME = "([A-Z][a-z]{2,})";
 const words = (s: string) => s.split(/\s+/).filter(t => t.length > 2);
 
+/** Words that can stand as a personal name: not a stop word, a place token or a number. */
+export function nameFilter(world: WorldStore): (name: string) => boolean {
+  const places = new Set(world.listEntities().filter(e => e.type !== "character" && !e.knowledge?.secrecy).flatMap(e => (e.name ?? "").toLowerCase().split(/\s+/)));
+  return n => !STOP.has(n.toLowerCase()) && !places.has(n.toLowerCase()) && numberValue(n) === undefined;
+}
+
 /** Number words up to ninety-nine ("Thirty-two"), or digits: the canonical parser (language/numbers.ts). */
 export { numberValue };
 
@@ -311,11 +317,10 @@ function bindPartnerSpeaker(units: NarrationUnit[], partnerId: string | undefine
 export function readScene(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, options: ReadOptions = {}): SceneReading {
   const scene = sceneExchanges(recent, context.primary.scene.player_location?.id);
   const people = presentPeople(context);
-  const places = new Set(world.listEntities().filter(e => e.type !== "character" && !e.knowledge?.secrecy).flatMap(e => (e.name ?? "").toLowerCase().split(/\s+/)));
   const known = new Set(people.flatMap(p => p.names.map(n => n.toLowerCase())));
   // Canon names (each full name with its tokens). Names are not unique, so a canon token is not a global key; see the check below.
   const canon = world.listEntities().filter(e => e.type === "character" && e.name).map(e => ({ full: e.name!, tokens: words(e.name!).map(t => t.toLowerCase()) }));
-  const ok = (n: string) => !STOP.has(n.toLowerCase()) && !places.has(n.toLowerCase()) && numberValue(n) === undefined;
+  const ok = nameFilter(world);
   const others = candidateNames(scene.map(x => x.narration), ok);
   // With rpg_speech, pronouns opening an RPG beat may also continue the scene's single earlier subject of that sex.
   const units: NarrationUnit[] = [];

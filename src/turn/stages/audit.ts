@@ -54,7 +54,7 @@ export interface NarrationAuditor {
 }
 /** Sync. Failure mapping: the coordinator holds `campaign_validation_failed` (pre-H2 order). */
 export function createNarrationAuditor(i: { readonly base_revision: number; readonly context: TurnContext; readonly world: WorldStore; readonly retrieved: unknown;
-  readonly player_input: string; readonly recent: readonly RecentExchange[]; readonly intent: TurnIntent; readonly scene: SceneParticipantPlan;
+  readonly player_input: string; readonly recent: readonly RecentExchange[]; readonly finalized?: readonly RecentExchange[]; readonly intent: TurnIntent; readonly scene: SceneParticipantPlan;
   readonly turn_evidence: TurnEvidence; readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly authorized: readonly CampaignCommand[];
   readonly prepared: DeepReadonly<CampaignSnapshot>; readonly origin?: string;
   /** Temporal Action Resolver V1: authoritative minutes this turn advances (prepared − base). */
@@ -66,7 +66,7 @@ export function createNarrationAuditor(i: { readonly base_revision: number; read
   return {
     access,
     check: (narration, evidence) => auditNarration({ base_revision: i.base_revision, narration, context: i.context, world: i.world, access, evidence, diagnostics: i.diagnostics,
-      committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, authoritative_text, economic_reference,
+      committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, ...(i.finalized ? { finalized: i.finalized } : {}), authoritative_text, economic_reference,
       player_travel_frame: !!i.intent.natural?.actions.some(a => a.kind === "movement") || i.intent.runtime.some(c => c.kind === "runtime_delta" && !!c.delta.player_location),
       ...(i.origin ? { origin: i.origin } : {}), ...(i.elapsed_minutes !== undefined ? { elapsed_minutes: i.elapsed_minutes, temporal_request: !!i.intent.temporal } : {}) }),
     outcome: issues => outcomeLines(i.context, i.turn_evidence, i.diagnostics, i.authorized, i.prepared, issues, i.player_input,

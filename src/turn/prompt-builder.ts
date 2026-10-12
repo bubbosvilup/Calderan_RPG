@@ -4,6 +4,8 @@ import { TEMPORAL_GROUNDING_RULE } from "./temporal-grounding.js";
 import { canonicalNameDisclosure } from "./canonical-name-disclosure.js";
 import { projectNarratorFocus } from "./narrator-focus.js";
 import { rpgDialogue } from "./rpg-dialogue.js";
+import { NAME_REQUEST, SELF_INTRODUCTION } from "./identity-request.js";
+import { surfacedCanonicals } from "./foreground-binding.js";
 import { recentSceneNarration, RECENT_SCENE_NARRATION_RULE } from "./recent-scene-narration.js";
 import { registerNarratorPack } from "./narrator-pack.js";
 import type { TurnContext } from "./context-builder.js";
@@ -228,6 +230,27 @@ export function questionFocus(retrieval: unknown): string {
 export function relevanceSignals(input: string, recent: readonly RecentExchange[], intent: PlayerIntent) {
   return { input, recent_text: recent.map(e => `${e.player} ${e.narration}`).join(" "), intent_fact_ids: intent.candidates.flatMap(c => c.kind === "set_knowledge" ? [c.knowledge.fact_id] : []) };
 }
+/**
+ * Foreground canonical binding: the Narrator is never deprived of WHO it is portraying merely because the player has not learned the name.
+ * Masking is a player presentation (and input hygiene for background people); the engine's current conversation partner, once bound to a
+ * canonical actor, is stated to the Narrator as an objective fact, with the rule that the name is only that character's to speak.
+ */
+export function interactionPartnerBlock(context: TurnContext, scene?: SceneParticipantPlan, recent: readonly RecentExchange[] = [], input = ""): string | undefined {
+  const gate = narratorIdentityGate(context);
+  const id = scene?.focus;
+  if (!id && gate && !scene?.addressed.length && (NAME_REQUEST.test(input) || SELF_INTRODUCTION.test(input))) {
+    // No explicit choice: the established people the previous narration put in front of the player are the only candidates for whoever answers.
+    const here = context.primary.scene.player_location?.id, last = recent.filter(e => e.status === "finalized").at(-1);
+    const people = last && last.location_id === here ? surfacedCanonicals(context, last.narration).flatMap(c => { const x = gate.identities.get(c); return x && !x.player_known_name ? [{ ref: x.ref, objective_identity: gate.selfDisclosureName(c) ?? "established character whose name is not theirs to give yet", presented_to_player_as: gate.mask(x.observable_label) }] : []; }) : [];
+    return people.length ? `\n[PEOPLE JUST SHOWN TO NICCO — OBJECTIVE IDENTITIES]\n${JSON.stringify({ player_knows_names: false, people })}\nThese are fixed, established characters, the same people you just described. Whoever answers or speaks to Nicco from this group is exactly one of them. Never invent, substitute or imply a different personal name, alias or nickname for any of them: a name is only ever theirs to speak in their own words, and only the one listed as their objective_identity; an entry without a name gives none (they decline, deflect or stay unnamed). Do not use these names in descriptive narration, attribution or labels.` : undefined;
+  }
+  if (!id || !gate || scene.canonical_location_id !== context.primary.scene.player_location?.id) return undefined;
+  const identity = gate.identities.get(id);
+  if (!identity || identity.player_known_name) return undefined;
+  const name = gate.selfDisclosureName(id);
+  const payload = { ref: identity.ref, ...(name ? { objective_identity: name } : { objective_identity: "established character whose name is not theirs to give yet" }), player_knows_name: false, presented_to_player_as: gate.mask(identity.observable_label) };
+  return `\n[CURRENT INTERACTION PARTNER — OBJECTIVE IDENTITY]\n${JSON.stringify(payload)}\nThe person Nicco is dealing with is this fixed, established character, the same person across turns and the same one you described before. Portray exactly them. Never invent, substitute or imply a different personal name, alias or nickname for them${name ? "" : ", and do not give them any personal name: if asked, they decline, deflect or stay unnamed"}. The player has not learned their name: do not use it in descriptive narration, attribution or labels${name ? "; only this character may speak it, in their own words, when asked who they are or when they choose to introduce themselves" : ""}.`;
+}
 export function buildNarratorPrompt(input: string, context: TurnContext, recent: readonly RecentExchange[], retrieval: unknown, intent: PlayerIntent, options: NarratorPromptOptions = {}, sceneParticipants?: SceneParticipantPlan) {
   const identityGate = narratorIdentityGate(context), mask = (text: string) => identityGate?.mask(text) ?? text;
   const focus = projectNarratorFocus(context, input || options.knowledge_relevance_input || "", recent, intent, sceneParticipants);
@@ -298,7 +321,8 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   const sceneNarrationBlock = sceneNarration ? `[RECENT SCENE NARRATION]\n${RECENT_SCENE_NARRATION_RULE}\n${sceneNarration}\n\n` : "";
   const knowledgePrefix = mask(`${mode === "state_last" ? `${recentBlock}\n\n` : ""}${NARRATOR_STATE_PRECEDENCE}\n\n${state}\n\n`);
   const disclosure = canonicalNameDisclosure(context, input, recent, focus.foreground, intent, sceneParticipants);
-  const request = { system_prompt: NARRATOR_SYSTEM + (disclosure ? `\n[CONTROLLED SELF-DISCLOSURE — NOT PLAYER-KNOWN IDENTITY]\n${JSON.stringify({ ref: disclosure.ref, canonical_name_available_for_disclosure: true, player_knows_name: false, canonical_name_for_own_spoken_introduction_only: disclosure.canonical_name })}\nThis currently addressed NPC may choose to introduce themselves truthfully with this exact canonical name. Do not invent an alternative personal name, surname, alias, title or nickname for this NPC. If they give a name, it must be the supplied canonical self-name; otherwise they may decline naturally. Use the name only in their own spoken self-introduction, never in descriptive narration, attribution or metadata, exposition, labels, thoughts, summaries or descriptions. Attribute the speech by their unique observable descriptor. This capability does not grant Nicco knowledge before disclosure, compel an introduction, or disclose aliases, titles, roles, affiliations or private history.` : ""), messages: [{ role: "user" as const, content:
+  const partner = interactionPartnerBlock(context, sceneParticipants, options.recent_scene_source ?? recent, input || options.knowledge_relevance_input || "");
+  const request = { system_prompt: NARRATOR_SYSTEM + (partner ?? "") + (disclosure ? `\n[CONTROLLED SELF-DISCLOSURE — NOT PLAYER-KNOWN IDENTITY]\n${JSON.stringify({ ref: disclosure.ref, canonical_name_available_for_disclosure: true, player_knows_name: false, canonical_name_for_own_spoken_introduction_only: disclosure.canonical_name })}\nThis currently addressed NPC may choose to introduce themselves truthfully with this exact canonical name. Do not invent an alternative personal name, surname, alias, title or nickname for this NPC. If they give a name, it must be the supplied canonical self-name; otherwise they may decline naturally. Use the name only in their own spoken self-introduction, never in descriptive narration, attribution or metadata, exposition, labels, thoughts, summaries or descriptions. Attribute the speech by their unique observable descriptor. This capability does not grant Nicco knowledge before disclosure, compel an introduction, or disclose aliases, titles, roles, affiliations or private history.` : ""), messages: [{ role: "user" as const, content:
     mask(`${knowledgePrefix}${access}\n\n[HARD CHARACTER CONSTRAINTS]\n${focus.references(hardCharacterConstraints(context).join("\n")) || "No additional hard constraints established."}\n\n[RETRIEVED CANON ? AUTHORITATIVE FOR THIS QUERY]\n${JSON.stringify(focusedRetrieval, (k, v) => k === "question_focus" ? undefined : v)}\n\n${questionFocus(retrieval)}[UNESTABLISHED DETAILS]\nAccessories, extra possessions and permanent scene details absent from ALL the authoritative context above (state, [CURRENT SCENE], canon) are unestablished, not factual negatives; absence from [CURRENT SCENE] alone does not make them so.\n\n${options.background_grounding ? `${options.background_grounding}\n\n` : ""}${mode === "state_last" ? "" : `${recentBlock}\n\n`}`) + sceneNarrationBlock + mask(`[PLAYER ACTION ? Nicco]\n${input}\n${actions.filter(Boolean).join("\n") || "No explicit durable action is established."}\n\n[NARRATION TASK]\nContinue this scene in one to three short paragraphs. Respect hard character constraints, current equipment and player agency. Answer lore from supplied relevant canon. Make acceptance or refusal of the entire offered set clear; do not skip offered objects. Receipt alone never requests a clothing change.\n\n${NARRATOR_PERFORMANCE_REMINDER}`) }] };
   return registerNarratorPack(request, knowledge, access, { revision: context.primary.runtime_revision, location: context.primary.scene.player_location?.id, world_time: context.primary.scene.world_time, characters: context.characters.map(c => c.id) }, knowledgePrefix.length);
 }

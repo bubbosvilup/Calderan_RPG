@@ -7,6 +7,7 @@ import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { establishedFacts, linkedParticipant, readScene, type NarratedPerson } from "./narrated-captives.js";
+import type { PartnerNameConflict } from "./partner-identity-guard.js";
 
 /**
  * Persistence Pass 1.2 — name-driven persistence. The character-persistence model is intentionally narrow:
@@ -32,7 +33,7 @@ export interface IdentityResolution {
   readonly commands: readonly CampaignCommand[];
   readonly promoted: readonly { readonly character_id: string; readonly name: string; readonly participant_id?: string }[];
   readonly named: readonly { readonly character_id: string; readonly name: string; readonly evidence: string }[];
-  readonly skipped: readonly { readonly name: string; readonly reason: "not_in_scene" | "duplicate_name" | "location_changed" }[];
+  readonly skipped: readonly { readonly name: string; readonly reason: "not_in_scene" | "duplicate_name" | "location_changed" | "canonical_partner_conflict" }[];
 }
 /**
  * How the promoted person's name was learned, from the introductions that established it: their own self-introduction wins; else
@@ -47,7 +48,7 @@ function nameSource(p: NarratedPerson): NameSource | undefined {
   return undefined;
 }
 export function establishNames(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>,
-  participants: readonly EphemeralSceneParticipant[], baseRevision: number, options: { readonly location_changed?: boolean } = {}): IdentityResolution {
+  participants: readonly EphemeralSceneParticipant[], baseRevision: number, options: { readonly location_changed?: boolean; readonly partner_conflict?: PartnerNameConflict } = {}): IdentityResolution {
   const location = context.primary.scene.player_location?.id;
   if (!location) return { commands: [], promoted: [], named: [], skipped: [] };
   const reading = readScene(recent, context, world, { campaign_names: new Set(snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
@@ -62,6 +63,8 @@ export function establishNames(recent: readonly RecentExchange[], context: TurnC
   }
   const fresh = reading.persons.filter(p => p.name && !p.character_id && p.introductions.some(i => i.exchange === reading.latest));
   for (const p of fresh) {
+    // Foreground canonical binding: the bound canonical partner's own "self-introduction" under another name never creates a person.
+    if (options.partner_conflict?.names.includes(p.name!)) { skipped.push({ name: p.name!, reason: "canonical_partner_conflict" }); continue; }
     if (fresh.filter(x => x.name === p.name).length > 1) { skipped.push({ name: p.name!, reason: "duplicate_name" }); continue; }
     if (!p.present) { skipped.push({ name: p.name!, reason: "not_in_scene" }); continue; }
     if (options.location_changed) { skipped.push({ name: p.name!, reason: "location_changed" }); continue; }

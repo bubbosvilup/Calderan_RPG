@@ -21,6 +21,7 @@ import { narratedDepartures, canonicalDepartureClaims, canonicalPresenceClaims }
 import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { readScene } from "./narrated-captives.js";
+import { partnerNameConflict } from "./partner-identity-guard.js";
 import { resolveDestination } from "./natural-actions.js";
 import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
@@ -35,7 +36,7 @@ import { temporalGrounding } from "./temporal-grounding.js";
  */
 export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
   | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase" | "uncommitted_movement"
-  | "uncommitted_elapsed_time";
+  | "uncommitted_elapsed_time" | "canonical_name_conflict";
 /** H5.1: `location` is the authoritative place of the character an uncommitted_movement issue is about (display name). */
 export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly location?: string; readonly correction: string }
 export interface NarrationAuditInput {
@@ -48,6 +49,8 @@ export interface NarrationAuditInput {
   readonly player_input?: string;
   /** Runtime Continuity Repair 1: delivered recent conversation, the only support for claims about earlier exchanges. */
   readonly recent?: readonly RecentExchange[];
+  /** Foreground canonical binding: finalized exchanges WITH scene location and recorded conversation partner (the bound partner of this turn). */
+  readonly finalized?: readonly RecentExchange[];
   /** Runtime Continuity Repair 1: serialized authoritative context (state + retrieved canon) that may supply prices or procedures. */
   readonly authoritative_text?: string;
   /** H5.1: where Nicco was before this turn (defaults to the prepared location: no movement this turn). */
@@ -374,6 +377,14 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   issues.push(...movementIssues(input, sentences));
   if (input.elapsed_minutes !== undefined) issues.push(...elapsedTimeIssues(sentences, input.elapsed_minutes, !!input.temporal_request, prepared.runtime.scene.world_time.world_minute));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
+  // Foreground canonical identity: the bound canonical conversation partner is one fixed person. If, asked who they are, they give another
+  // personal name, that is an invented replacement identity: ask for one bounded revision (the engine already refuses to create anyone for it).
+  if (input.player_input !== undefined && scene && input.finalized) {
+    const conflict = partnerNameConflict({ context, world, snapshot: prepared, finalized: input.finalized, player_input: input.player_input, delivered: narration, scene });
+    if (conflict) for (const wrong of conflict.names) issues.push({ kind: "canonical_name_conflict", sentence: sentenceWith(wrong), correction: conflict.canonical_name
+      ? `This person is the established character ${conflict.canonical_name}; they are not ${wrong}. If they give a personal name it must be exactly "${conflict.canonical_name}" (or they may decline to give one). Do not invent any other personal name, alias or nickname for them.`
+      : `This person has an established identity whose name is not yet theirs to give. They must not give the invented name "${wrong}" or any other personal name: have them decline, deflect or stay unnamed.` });
+  }
   const unique = new Map<string, AuditIssue>();
   for (const issue of issues) unique.set(`${issue.kind}|${issue.character ?? ""}|${issue.sentence}`, issue);
   return [...unique.values()];

@@ -19,7 +19,8 @@ import type { NarratorPromptOptions } from "./prompt-builder.js";
 import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./retrieval-policy.js";
 import type { EvidenceMode } from "./evidence-authorization.js";
 import { RecentConversation } from "./recent-conversation.js";
-import { SceneParticipants } from "./scene-participants.js";
+import { SceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
+import { narratedForegroundCanonical, narratedSpeakerPartner } from "./foreground-binding.js";
 import { backgroundGroundingOption } from "./background-grounding.js";
 import { projectTurnIntent, resolveTurnIntent, type IntentStageInput } from "./stages/intent.js";
 import { composeTurnPrompt, createDraftGenerator } from "./stages/narration.js";
@@ -57,6 +58,15 @@ function inspectPackedPortrayal(world: WorldStore, projected: DeepReadonly<Campa
   }),()=>{});
 }
 
+/**
+ * Foreground canonical binding: with no explicit selection this turn, the one present canonical actor the delivered narration foregrounded
+ * (strong, exclusive authored-trait evidence) is the objective conversation partner for the next turn. Never across a location change.
+ */
+function narratedPartner(scene: SceneParticipantPlan, context: TurnContext, delivered: string, location: string | undefined, stayed: boolean, previous?: string) {
+  const id = !scene.focus && location && stayed ? narratedForegroundCanonical(context, delivered) ?? narratedSpeakerPartner(context, previous, delivered) : undefined;
+  return id && location ? { character_id: id, location_id: location } : undefined;
+}
+
 export class TurnCoordinator {
   readonly #recent = new WeakMap<CampaignState, RecentConversation>();
   readonly #lastInput = new WeakMap<CampaignState, string>();
@@ -79,6 +89,12 @@ export class TurnCoordinator {
     const input = this.#lastInput.get(campaign) ?? "", recent = this.recent(campaign).forPrompt();
     const context = buildTurnContext(this.world, campaign.exportSnapshot(), { input, recent_text: recent.map(e => `${e.player} ${e.narration}`).join(" ") });
     return buildNarratorPrompt("", context, recent, undefined, { candidates: [], runtime: [] }, { ...this.promptOptions, knowledge_relevance_input: input, recent_scene_source: this.recent(campaign).finalized() });
+  }
+  /** Finalizes the exchange in recent memory and commits scene participants; a narrated canonical foreground person is bound as the partner. */
+  private recordExchange(campaign: CampaignState, i: { readonly player_input: string; readonly scene: SceneParticipantPlan; readonly context: TurnContext; readonly delivered: string; readonly location: string | undefined; readonly stayed: boolean }): void {
+    const narrated = narratedPartner(i.scene, i.context, i.delivered, i.location, i.stayed, this.recent(campaign).finalized().at(-1)?.narration);
+    this.recent(campaign).add({ player: i.player_input, narration: i.delivered, status: "finalized", ...(i.location ? { location_id: i.location } : {}), ...(i.scene.canonical_location_id && i.scene.focus ? { conversation_partner_id: i.scene.focus } : narrated ? { conversation_partner_id: narrated.character_id } : {}) });
+    this.participants(campaign).commit(i.scene, i.delivered, narrated);
   }
   async *runTurn(request: TurnRequest): AsyncGenerator<TurnEvent> {
     const { campaign, player_input, signal } = request;
@@ -170,7 +186,7 @@ export class TurnCoordinator {
 
       // AuditStage: the draft must not contradict the prepared candidate. One bounded revision, then deterministic redaction.
       // It only chooses the delivered text; state is never changed here.
-      const auditor = measure("audit", () => createNarrationAuditor({ base_revision, context, world: this.world, retrieved: retrieved.data, player_input, recent, intent, scene,
+      const auditor = measure("audit", () => createNarrationAuditor({ base_revision, context, world: this.world, retrieved: retrieved.data, player_input, recent, finalized: this.recent(campaign).finalized(), intent, scene,
         turn_evidence: authorization.turn_evidence, diagnostics: authorization.diagnostics, authorized, prepared: prepared.snapshot, origin, elapsed_minutes: prepared.snapshot.runtime.scene.world_time.world_minute - snapshot.runtime.scene.world_time.world_minute }));
       const issues = measure("audit", () => auditor.check(draft, authorization.turn_evidence));
       if (observer) observer.record.audit = { issue_count: issues.length, issue_kinds: issues.map(i => i.kind), reconciliation_attempted: issues.length > 0,
@@ -211,8 +227,7 @@ export class TurnCoordinator {
       if (observer) { observer.elapsed("commit", commitStart, false); observer.record.commit.attempted = true; observer.record.commit.succeeded = true; observer.phase = "publication"; }
       const publicationStart = observer ? performance.now() : 0;
       // Publication: conversation history and scene continuity are updated only after the commit.
-      this.recent(campaign).add({ player: player_input, narration: delivery.text, status: "finalized", location_id: prepared.snapshot.runtime.scene.player_location, ...(scene.canonical_location_id && scene.focus ? { conversation_partner_id: scene.focus } : {}) }); recorded = true;
-      this.participants(campaign).commit(scene, delivery.text);
+      this.recordExchange(campaign, { player_input, scene, context, delivered: delivery.text, location: prepared.snapshot.runtime.scene.player_location, stayed: origin === arrival }); recorded = true;
       const participantsAfter = this.participants(campaign).retire(plan.identity.promoted.flatMap(p => p.participant_id ? [p.participant_id] : []));
       const result = assembleTurnResult({ world: this.world, base_revision, final_revision: committed.revision, player_input, proposal: authorization.proposal, commands,
         diagnostics: authorization.diagnostics, retrieval: retrieved, turn_evidence: authorization.turn_evidence, delivery, narration, controller: proposed.result,

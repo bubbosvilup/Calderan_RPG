@@ -29,7 +29,9 @@ const ROLE_HEADS: Readonly<Record<string, RegExp>> = {
 const HEADS = `${PERSON_HEADS}|${Object.keys(ROLE_HEADS).join("|")}`;
 const LEGACY_VERBS = "look\\w* (?:at|towards?)|inspect\\w*|examin\\w*|approach\\w*|address\\w*|speak\\w* to|talk\\w* to";
 /** The engagement verbs the participant planner already uses to create a person, plus "over to". */
-const ENGAGE_VERBS = `${LEGACY_VERBS}|(?:walk|go|head|wander|stroll)\\w* (?:up|over|across) to|turn\\w*(?: back)? to|call\\w*(?: out)? to|wave\\w* (?:at|to)|point\\w* at|greet\\w*|hail\\w*|ask\\w*|stop\\w*|tap\\w*|nudge\\w*|face\\w*|follow\\w*|flag\\w* down`;
+/** Player-selected movement toward a person ("goes to the tall man", "heads over to the seller"): the selected participant is the foreground. */
+const APPROACH_MOTION = "(?:walk|go|head|wander|stroll|move|step|come|cross)\\w*(?: (?:up|over|across|back|straight|right))* (?:to|toward|towards)";
+const ENGAGE_VERBS = `${LEGACY_VERBS}|${APPROACH_MOTION}|turn\\w*(?: back)? to|call\\w*(?: out)? to|wave\\w* (?:at|to)|point\\w* at|greet\\w*|hail\\w*|ask\\w*|stop\\w*|tap\\w*|nudge\\w*|face\\w*|follow\\w*|flag\\w* down`;
 const ENGAGE = new RegExp(`\\b(?:${ENGAGE_VERBS})\\s+(the|that|this|a|an|another|some|one)?\\s*([^*.!?\\n"“”]{1,120})`, "gi");
 
 const words = (text: string) => (text.toLowerCase().match(/[a-z]+(?:-[a-z]+)*/g) ?? []).flatMap(w => w.includes("-") ? [w, ...w.split("-")] : [w]);
@@ -44,10 +46,10 @@ export function traitMatches(appearance: string, mention: string): number {
   return traits(appearance).filter(t => t.some(w => said.some(s => same(s, w)))).length;
 }
 /** The person head noun a phrase names ("the short, compact seller with…" → seller), or undefined. */
-function headNoun(phrase: string): string | undefined {
+export function headNoun(phrase: string): string | undefined {
   return phrase.toLowerCase().match(new RegExp(`\\b(${HEADS})\\b`))?.[1];
 }
-function compatible(context: TurnContext, id: string, head: string | undefined): boolean {
+export function compatible(context: TurnContext, id: string, head: string | undefined): boolean {
   const c = context.characters.find(x => x.id === id) as { pronoun?: string } | undefined;
   const pronoun = c?.pronoun;
   if (head && FEMALE.test(head) && pronoun !== "she") return false;
@@ -79,6 +81,19 @@ export function exclusiveCanonicalMatch(context: TurnContext, mention: string, h
     .map(c => ({ id: c.id, n: traitMatches(gate!.identities.get(c.id)!.observable_appearance ?? "", mention) }));
   const fits = scored.filter(s => s.n >= EXCLUSIVE_TRAITS);
   return fits.length === 1 && scored.every(s => s.id === fits[0]!.id || s.n === 0) ? fits[0]!.id : undefined;
+}
+/**
+ * SURFACING-SCOPED RESOLUTION. A paraphrased description of a person the Narrator just put on stage ("a man with a hooked nose and battered
+ * hands") that fits exactly ONE sex/role-compatible present canonical actor on at least one distinctive authored trait while every other
+ * eligible actor matches none. Used only to know which established people the player has been shown and who answered a name question; it
+ * never casts a person from the player's words and never grants a name.
+ */
+export function surfacedCanonicalMatch(context: TurnContext, mention: string, head = headNoun(mention)): string | undefined {
+  const gate = narratorIdentityGate(context);
+  const scored = context.characters.filter(c => c.id !== "nicco" && gate?.identities.has(c.id) && compatible(context, c.id, head))
+    .map(c => ({ id: c.id, n: traitMatches(gate!.identities.get(c.id)!.observable_appearance ?? "", mention) }));
+  const fits = scored.filter(s => s.n >= 1);
+  return head && fits.length === 1 ? fits[0]!.id : undefined;
 }
 /** The one sentence of `narration` that introduces or names a person with this head noun; several (or none) → undefined. */
 function narratedMention(narration: string, head: string): string | undefined {

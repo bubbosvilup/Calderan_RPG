@@ -192,7 +192,7 @@ export class SceneParticipants {
     return this.active();
   }
   /** Apply a finalized turn: capture a conservative descriptor and a departure beat for the conversation partner. */
-  commit(plan: SceneParticipantPlan, narration: string): readonly EphemeralSceneParticipant[] {
+  commit(plan: SceneParticipantPlan, narration: string, narrated?: { readonly character_id: string; readonly location_id: string }): readonly EphemeralSceneParticipant[] {
     this.#list = plan.participants.map(p => {
       if (p.id !== plan.focus) return p;
       const role = nounsOf(p)[0]!;
@@ -206,6 +206,9 @@ export class SceneParticipants {
     this.#next = Math.max(this.#next, used);
     this.#turn = plan.turn; this.#focus = plan.focus;
     this.#focusLocation = plan.canonical_location_id ?? plan.participants.find(p => p.id === plan.focus)?.location_id ?? null;
+    // Foreground canonical binding: a turn that selected nobody explicitly still has a conversation partner when its delivered narration
+    // foregrounded exactly one present canonical actor (foreground-binding.ts). The next turn continues with that SAME objective actor.
+    if (!plan.focus && narrated) { this.#focus = narrated.character_id; this.#focusLocation = narrated.location_id; }
     return this.active();
   }
 }
