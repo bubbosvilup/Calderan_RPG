@@ -1,6 +1,6 @@
 # Caldrevan: current state
 
-Status: Current. Last reconciled: 2026-10-11. Source of truth: the current main working tree.
+Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: the current main working tree.
 
 This is the best "where are we now?" document. Details live in the linked documents; historical results live in [evaluation reports](evaluations/), which are never rewritten.
 
@@ -33,6 +33,10 @@ Player input → `GameSession` → `TurnCoordinator` → Narrator (draft) → St
 | Item sprite generation for engine-created items (non-authoritative, queued between turns) | Implemented (see [Image system](IMAGE_SYSTEM.md)) |
 | Persistent campaigns: manual save, autosave, recovery, scenario registry | Complete |
 | Reflection (D-09) | Deferred; opt-in shadow mode only, never exposed to narration |
+| Foreground canonical identity binding (partner binding, conflicting-name guard; `d4e9e22`) | Complete, live-certified (see [Architecture](ARCHITECTURE.md)) |
+| Person Actual Offer end to end (spoken prices, stable subject, Slave NPC on Accept, same-entity rename; `c0608a6`) | Complete |
+| Campaign deletion (soft delete to `saves/.deleted/`, composer command `/location`) | Complete |
+| P8 Economic Baseline V1 (`config/economy.yaml`, selective narrator price anchors) | Complete (anchors only; not a settlement currency) |
 
 ## 4. Current model topology (verified in code)
 
@@ -75,7 +79,8 @@ One position per item (`unknown`, `carried`, `equipped`, `stored(location_id)`);
 
 ## 8b. Trade (Actual Offer V1) and player-authorized actions
 - **Implemented:** goods BUY and SELL and person BUY as `TradeOffer`s ([Actual Offer](architecture/ACTUAL_OFFER.md)). An offer is a pending proposal; only the player's Accept settles it (`POST /api/trade/accept`, ref + `expected_revision`), atomically and at most once. One active offer; a new offer supersedes the old; counteroffers happen in chat; persists through save/load (optional `trade_offers` field, schemas 6/5 unchanged). Card is masked (unknown enslaved people show "Slave" / "<descriptor> Slave").
-- **Currency:** whole-number gold only (no silver, decimals or exchange).
+- **Currency:** settlement is whole-number gold only (no silver, decimals or exchange). The narrator's price anchors (`config/economy.yaml`, P8 Economic Baseline) may be written in silver (10 silver = 1 gold) but never settle; see the [debt register](MASTER_DEBT_REGISTER.md) (ECO-1).
+- **Person Accept:** accepting a person offer always leaves a persistent Campaign NPC (reused, canonical or created from the authoritative subject), shown as "Slave" until the name is learned; a later self-introduction renames the same entity.
 - **Not supported (intentionally):** Auction House, vendor inventories/wallets/stock/shops, person SELL. Sold goods leave the tracked scope (V1).
 - **Heartstone:** explicit promotion works (↑ action, `completeHeartstoneRite`); there is no semantic rite inference and Narrator prose cannot promote ([Heartstone](HEARTSTONE.md)).
 - **NPC+:** the product term; the persisted record is still named `premium_characters[]` (legacy internal naming, not renamed).
@@ -95,7 +100,7 @@ Snapshot schema **6**; save file schema **5** (older save schemas migrate on loa
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run for this reconciliation: **3205 tests, 0 failed** (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run: **3278 tests, 0 failed** at `c0608a6` ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 ## 13. Major known limitations
 

@@ -1,6 +1,6 @@
 # Configuration and environment
 
-Status: Current. Last reconciled: 2026-10-11. Source of truth: `src/app/production.ts`, `src/app/provider-config.ts`, `src/app/image-stack.ts`, `src/ui/play.ts`, `src/llm/openrouter/*`, `src/llm/huggingface/*`. Never put a key in the repo, a doc, a save or a log.
+Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/app/production.ts`, `src/app/provider-config.ts`, `src/app/image-stack.ts`, `src/ui/play.ts`, `src/llm/openrouter/*`, `src/llm/huggingface/*`. Never put a key in the repo, a doc, a save or a log.
 
 ## Environment variables
 
@@ -17,6 +17,10 @@ Status: Current. Last reconciled: 2026-10-11. Source of truth: `src/app/producti
 | `HF_TOKEN` | for images | Hugging Face token with Inference Providers access. Read per request, never logged. Absent: image generation fails with a clear message and the UI reports it. |
 | `VOYAGE_API_KEY`, `CALDREVAN_EMBEDDING_ADAPTER` | no | Only for opt-in semantic retrieval (dev inspection tools). Lexical retrieval is the default and needs no key. |
 | `CALDREVAN_PORTRAIT_MODEL`, `CALDREVAN_PORTRAIT_RESOLUTION`, `CALDREVAN_PORTRAIT_ASPECT_RATIO` | no | Legacy knobs of the superseded OpenRouter image client (`src/llm/openrouter/image-client.ts`). Production no longer uses it; images go through `HF_TOKEN`. |
+
+## Non-environment configuration
+
+`config/economy.yaml` (P8 reference prices, loaded by `src/economy/economy.ts`; anchors may be in silver, settlement is gold only) and the six alternate narrator ids in `src/app/narrator-alternatives.ts` (UI comparison selector only: not defaults, not environment-configurable).
 
 ## Default models
 

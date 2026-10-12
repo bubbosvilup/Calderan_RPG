@@ -1,6 +1,6 @@
 # UI ↔ engine contract
 
-Status: ACTIVE. Last reconciled: 2026-10-11. Source of truth: `src/app/game-session.ts`, `session-view.ts` and the read-model modules. Companion: [UI](UI.md).
+Status: ACTIVE. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/app/game-session.ts`, `session-view.ts` and the read-model modules. Companion: [UI](UI.md).
 
 Read this first. The UI talks to **one object**, `GameSession` (`src/app/game-session.ts`, re-exported from `src/app/index.ts`). It must not import `TurnCoordinator`, `CampaignState`, `CampaignSnapshot`, the OpenRouter classes, the save codecs, retrieval or reflection. Everything below is verified by `tests/application-closure.test.ts`.
 
@@ -21,7 +21,7 @@ await host.closeCampaign(); await host.shutdown();            // both save a dir
 - Swaps (create/load/close) are refused with `turn_in_progress` while the active session is busy (turn, post-turn, compaction, portrait batch, save) or another swap runs. The target is opened and locked before the old session is touched; a failed load keeps the old campaign.
 - `load_report`: `{migrated_from?, canon: {tier, removed_npc_locations, drifted_references, unverified, saved_revision, revision_advanced}, continuity: restored|none|dropped|stale, transcript: available|missing|unreadable|disabled, missing_assets, orphan_assets, recovered_from?, warnings[]}`. Show `warnings` (player-safe sentences); a normal load has none.
 - `session.save({reason?})` is immediate; `view.session.save` adds `{saving, error?, autosave: off|on|stopped, transcript_error?}`. `session.getTranscript()` is the visible history; `session.campaignMeta` the display name and scenario.
-- HTTP (host mode): `GET /api/campaigns`, `POST /api/campaigns/create|load|close`, `POST /api/save`, `GET /api/save-status`. The session payload carries `campaign: null` (start screen) or `{id, display_name, save}`.
+- HTTP (host mode): `GET /api/campaigns`, `POST /api/campaigns/create|load|close|delete` (delete is a soft delete to `saves/.deleted/`, refused for a locked or busy campaign), `POST /api/save`, `GET /api/save-status`. The session payload carries `campaign: null` (start screen) or `{id, display_name, save}`.
 
 ## 1. Start or load a session
 
@@ -36,7 +36,7 @@ const saves = await GameSession.listSaves(deps.repository);                // cu
 - `createCampaign` builds the canonical opening (Heartstone Square, 500 gold, no household members). Nothing is written until `save()`.
 - `loadCampaign` returns `{ok:false, error}` for a missing, corrupt, unsupported or dataset-mismatched save. It never mutates or migrates silently. Offer the `previous` slot explicitly.
 - To switch campaign: `await session.shutdown(...)`, then create/load a new session. One session at a time.
-- Providers are configured by environment only: `OPENROUTER_API_KEY` (required), `OPENROUTER_NARRATOR_MODEL`, `OPENROUTER_CONTROLLER_MODEL`, `OPENROUTER_REFLECTION_MODEL` (defaults to the controller model). `readProviderStatus()` / `view.session.provider` report `{mode, configured, models}`; the key is never exposed. Without a key a turn fails with `narrator_failed` / `provider_code: "configuration_error"` (not retryable): show a "provider not configured" state.
+- Providers are configured by environment only: `OPENROUTER_API_KEY` (required), `OPENROUTER_NARRATOR_MODEL`, `OPENROUTER_CONTROLLER_MODEL`, `OPENROUTER_REFLECTION_MODEL` (the qualified adapter accepts only its default, `anthropic/claude-haiku-5.5`; reflection runs only with `CALDREVAN_REFLECTION_MODE=shadow`). `readProviderStatus()` / `view.session.provider` report `{mode, configured, models}`; the key is never exposed. Without a key a turn fails with `narrator_failed` / `provider_code: "configuration_error"` (not retryable): show a "provider not configured" state.
 
 ## 2. Submit player input
 

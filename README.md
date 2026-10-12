@@ -25,8 +25,12 @@ src/llm       OpenRouter providers; Hugging Face fal-ai image client
 src/persistence save format, migrations, campaign repository, recovery
 src/app       GameSession, SessionHost, read models, production wiring, autosave, sprite jobs
 src/ui        local web UI server and vanilla client
+src/economy   P8 Economic Baseline V1 reference prices (config/economy.yaml), selective narrator injection
+src/types     shared type helpers
 src/dev       developer CLI and evaluation tools (never imported by production)
 tests/        offline unit, matrix, replay and UI tests
+config/       economy.yaml (outside the hashed data/ dataset)
+scripts/      dev, browser-check and live evaluation scripts (some spend credits)
 docs/         documentation (start at docs/README.md)
 ```
 

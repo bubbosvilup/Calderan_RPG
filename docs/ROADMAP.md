@@ -1,6 +1,6 @@
 # Roadmap and known limitations
 
-Status: Current. Last reconciled: 2026-10-11. Source of truth: the code and tests on main; each row below was checked against them.
+Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: the code and tests on main; each row below was checked against them.
 
 ## Complete
 
@@ -18,7 +18,10 @@ Status: Current. Last reconciled: 2026-10-11. Source of truth: the code and test
 | Persistent campaigns (manual save, autosave, recovery) | schema 6 / save 5 |
 | Explicit NPC+ / Heartstone promotion (semantic rite cleanup) | player action only; see [Heartstone](HEARTSTONE.md) |
 | Actual Offer V1 (goods and person trade, player-accepted) | see [Actual Offer](architecture/ACTUAL_OFFER.md) |
+| Foreground canonical identity binding; person Actual Offer end to end; campaign deletion; P8 Economic Baseline V1 | see [Current state](CURRENT_STATE.md) |
 
+
+Planning documents from the 2026-10-12 audit: [Master Technical Debt Register](MASTER_DEBT_REGISTER.md) and [Master Roadmap](MASTER_ROADMAP.md).
 
 ## Partial / foundation only
 

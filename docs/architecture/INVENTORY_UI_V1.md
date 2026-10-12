@@ -23,7 +23,7 @@ Items map to slots by **authoritative category only**, never by name, descriptio
 
 ## Item visuals
 
-Two roles, icon (grid) and detail. Precedence: the item's ready generated **sprite**, then the authored **template registry** (served only from `/assets/items/`), then a **category glyph** (`/api/item-glyph/<kind>`, a closed set of static SVGs), then a placeholder. A missing or failed image never hides the name or description. Pending sprites refresh while Inventory is open. Dynamic prose is rendered as inert text nodes. See [Image system](../IMAGE_SYSTEM.md).
+Two roles, icon (grid) and detail. Precedence: the item's ready generated **sprite**, then the authored **template registry** (currently empty: no `/assets/items/` route or files exist yet), then a **category glyph** (`/api/item-glyph/<kind>`, a closed set of static SVGs), then a placeholder. A missing or failed image never hides the name or description. Pending sprites refresh while Inventory is open. Dynamic prose is rendered as inert text nodes. See [Image system](../IMAGE_SYSTEM.md).
 
 ## HTTP surface
 

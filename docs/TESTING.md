@@ -1,6 +1,6 @@
 # Testing
 
-Status: Current. Last reconciled: 2026-10-11. Source of truth: `package.json`, `tests/`, `scripts/`.
+Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `package.json`, `tests/`, `scripts/`.
 
 ## Commands
 
@@ -10,7 +10,7 @@ Status: Current. Last reconciled: 2026-10-11. Source of truth: `package.json`, `
 | `npm run build` | compile to `.build/` | no |
 | `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
 
-Latest recorded result for this reconciliation: **3205 tests, 0 failed** (after the explicit NPC+ promotion pass, see [report](evaluations/EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
+Latest recorded result: **3278 tests, 0 failed** at `c0608a6` (see [report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
 
 ## Layers
 
@@ -27,7 +27,7 @@ Anything needing `OPENROUTER_API_KEY` or `HF_TOKEN`: `inspect:narrator`, `inspec
 
 ## Browser QA
 
-There is no automated browser test suite in the repo; UI behavior is covered by server/read-model tests. Browser checks (screenshots in `docs/ui-screenshots/`) were manual or ad hoc.
+Browser checks are not part of `npm test`; UI behavior is covered by server/read-model tests. Two scripted Playwright checks exist for development (`scripts/explicit-promotion-browser-check.mjs`, `scripts/actual-offer-browser-check.mjs`; offline, scripted providers, they need the `.build` output and a Playwright install, and their paths are environment-specific). Screenshots in `docs/ui-screenshots/` are older manual captures.
 
 ## Historical replay harness (dev, live, not part of `npm test`)
 
@@ -37,4 +37,5 @@ There is no automated browser test suite in the repo; UI behavior is covered by 
 
 - **Heartstone:** explicit-action tests (`explicit-npc-plus-promotion.test.ts`) replaced the semantic oath-matcher tests; prose never promotes.
 - **Actual Offer** (`actual-offer-v1.test.ts`, `actual-offer-ui.test.ts`): test separately offer interpretation (goods G, negotiation N, person P, negatives for auction/silver/questions/hypotheticals), UI presentation, identity masking (security regression), acceptance settlement and atomicity, idempotency, persistence (save/load) and browser behavior. Offline browser check: `node scripts/actual-offer-browser-check.mjs` (scripted narrator/controller, zero live calls).
+- **Identity:** `foreground-canonical-binding.test.ts`, `person-offer-e2e.test.ts` (spoken price forms, stable subject, Slave NPC on Accept, rename). Live certification harnesses `src/dev/identity-live-cert.ts` and `src/dev/person-offer-live-cert.ts` spend credits and are never run by `npm test`.
 - **Future certification policy.** A transcript-only replay cannot certify player-authorized actions (the frozen 421-turn oracle is historical and is not modified). A future ~100-turn benchmark should be designed against the current architecture with a scripted **action log**: per relevant turn the player input, Narrator response, Controller result, any explicit player action (`accept_trade_offer`, `completeHeartstoneRite`, save/load) and the expected authoritative delta, plus the expected final state. This is a recommendation; it is not built. The historical replay harness (`payment_gap`) still expects in-turn person transfer and needs adapting before it is run again.

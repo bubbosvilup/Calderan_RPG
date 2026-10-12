@@ -1,6 +1,6 @@
 # Image system
 
-Status: Current. Last reconciled: 2026-10-11. Source of truth: `src/app/image-stack.ts`, `src/llm/huggingface/fal-image-client.ts`, `src/app/item-sprite-jobs.ts`, `src/app/canon-avatars.ts`, `src/app/character-capabilities.ts`, `src/app/item-visuals.ts`. Superseded by this document: `docs/image_system_audit.md`, `docs/image_system_v1_gap_analysis.md`.
+Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/app/image-stack.ts`, `src/llm/huggingface/fal-image-client.ts`, `src/app/item-sprite-jobs.ts`, `src/app/canon-avatars.ts`, `src/app/character-capabilities.ts`, `src/app/item-visuals.ts`. Superseded by this document: `docs/image_system_audit.md`, `docs/image_system_v1_gap_analysis.md`.
 
 ## Principles
 
@@ -28,4 +28,4 @@ Capabilities are derived per tier ([Current state §5](CURRENT_STATE.md#5-charac
 
 Engine-created items can receive a generated sprite through the same stack and storage, queued between turns (`ItemSpriteJobs`): metadata commits are synchronous and allowed only between gameplay turns, with no gameplay await and no automatic retries. A quality reviewer (`anthropic/claude-haiku-5.5`) checks results. Sprites are non-authoritative.
 
-Item artwork resolves per role (icon, detail): item sprite > authored template registry (`/assets/items/` only) > category glyph (`/api/item-glyph/<kind>`) > placeholder.
+Item artwork resolves per role (icon, detail): item sprite > authored template registry (currently empty: no `/assets/items/` route or files exist yet; `src/app/item-visuals.ts`) > category glyph (`/api/item-glyph/<kind>`) > placeholder.

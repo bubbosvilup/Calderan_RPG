@@ -1,5 +1,7 @@
 # CALDREVAN — DEBT REGISTER
 
+> **Superseded for current status (2026-10-12).** This register was last updated on 2026-10-06 and its header (production controller `qwen/qwen3.8-flash`, Gold/Silver P8 currency, P11/P12 "live verification pending") no longer matches the code. The current register is [docs/MASTER_DEBT_REGISTER.md](docs/MASTER_DEBT_REGISTER.md) and the long view is [docs/MASTER_ROADMAP.md](docs/MASTER_ROADMAP.md). The D-series IDs below are preserved as history.
+
 **Status:** `READY_WITH_NON_BLOCKING_DEBT`  
 **Blocking debt:** none  
 **Movement/follow state logic:** frozen except the narrow P12.2 canonical departure exception
