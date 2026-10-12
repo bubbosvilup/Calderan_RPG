@@ -96,6 +96,7 @@ for (const name of Object.keys(SCENARIOS)) {
 test("golden pipeline: the contractual stage order holds in the successful reconciled turn", () => {
   const ops = (golden.success_reconciled_handover as { trace: { op: string; type?: string; call?: number }[] }).trace
     .map(t => t.op === "event" ? `event:${t.type}` : t.op === "narrator.stream" ? `narrator#${t.call}` : t.op);
-  assert.deepEqual(ops, ["event:turn_started", "narrator#0", "event:controller_started", "controller.propose", "event:state_proposed", "prepare", "narrator#1",
-    "event:narration_delta", "event:narration_completed", "commit", "event:state_committed", "event:turn_completed"]);
+  // Block 4: neutral progress events replace the raw draft stream; the audited prose is published once, after the commit.
+  assert.deepEqual(ops, ["event:turn_started", "event:turn_progress", "event:turn_progress", "narrator#0", "event:controller_started", "event:turn_progress", "controller.propose", "event:state_proposed", "prepare", "narrator#1",
+    "commit", "event:state_committed", "event:narration_completed", "event:turn_completed"]);
 });

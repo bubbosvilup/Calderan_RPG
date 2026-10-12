@@ -49,8 +49,7 @@ else {
         active = new AbortController();
         await runPlayTurn({ coordinator, world, request: { campaign, player_input: input, signal: active.signal }, ...(reflectionProvider ? { reflection_provider: reflectionProvider } : {}),
           ...(process.argv.includes("--debug") ? { reflection_diagnostics_sink: (record: unknown) => console.log(JSON.stringify({ reflection: record })) } : {}), publish: event => {
-          if (event.type === "narration_delta") process.stdout.write(event.text);
-          else if (event.type === "narration_completed") process.stdout.write("\n");
+          if (event.type === "narration_completed") process.stdout.write(`${event.text}\n`);
           else if (event.type === "turn_failed") console.log(`\nTurn incomplete: ${event.code}. Revision ${event.final_revision}.`);
           else if (event.type === "turn_completed") { console.log(`Finalized. Revision ${event.result.final_revision}; unsaved: ${session.hasUnsavedChanges}.`); if (process.argv.includes("--debug")) console.log(JSON.stringify(event.result, null, 2)); }
         } });

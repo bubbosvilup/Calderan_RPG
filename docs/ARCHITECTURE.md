@@ -27,7 +27,7 @@ GameSession                       src/app/game-session.ts  (one facade for any U
   ↓
 TurnCoordinator                   src/turn/turn-coordinator.ts  (orchestrates typed stages in src/turn/stages/)
   ↓ intent + projection → retrieval → context
-Narrator (draft prose, streamed)  src/llm/openrouter/minimax-narrator.ts  (provider class name is historical)
+Narrator (buffered draft, never shown) src/llm/openrouter/minimax-narrator.ts  (provider class name is historical)
   ↓
 State Controller (proposal)       src/llm/openrouter/state-controller.ts
   ↓
@@ -43,6 +43,16 @@ Derived read models + SSP                     recomputed from state; nothing der
   ↓
 UI + next turn context
 ```
+
+### 2a. Turn reliability contract (block 4)
+
+One player turn is one transactional operation:
+
+- **Nothing unaudited reaches the browser.** The draft is buffered server-side. While the turn runs the client receives neutral `progress` events (`thinking`, `narrating`, `resolving`) and nothing else; the audited, committed narration arrives once, in the final result. No fake streaming.
+- **After the single `CampaignState.commit` the turn succeeded.** The result is assembled before the commit; every later step (history, scene participants, diagnostics, state view, transcript, item visuals) is guarded and becomes a warning in the trace (`publication_warnings`), never a failed turn.
+- **A turn executes at most once per `turn_key`.** `/api/turn` requires `turn_key` and `expected_revision`. Order: join an in-flight turn with the same key (runtime registry) → replay a terminal receipt → busy (`turn_in_progress`, never queued) → application command → stale revision (`stale_turn`, before any provider call). The same key with a different request is `turn_key_conflict`. Terminal results, successes and failures, are kept as bounded (32) idempotency receipts in the save file (schema stays 5; additive `turn_receipts`), written in the same atomic rename as the snapshot and without touching the semantic revision. Not remembered: `cancelled`, `stale_turn`, `turn_in_progress`, `invalid_input`, `session_closed`. A failed turn is retried with a NEW key.
+- **Crash boundary.** Receipts are recorded synchronously before the session returns to idle, and saves need idle, so a durable snapshot at revision N always carries the receipt of the turn that produced it. A commit that was never saved is lost together with its receipt, so the retry after a restart is a legitimate first execution, not a duplicate.
+- **A truncated Narrator answer is never used.** `finish_reason=length` is an incomplete narration: not delivered, not sent to the Controller, not audited, not committed. Exactly one regeneration (cap 1024, same base revision and context, a short recovery instruction, nothing stitched). Budget per turn: at most 2 logical Narrator generations (primary + recovery OR audit revision) and 3 physical provider attempts (infrastructure retries and regeneration share it); the Controller is called at most once and only after a complete narration. A failed recovery is the terminal `narrator_truncated`.
 
 Contractual order (from the coordinator): input → intent/projection → retrieval → narration (draft) → controller (proposal) → authorization → final preparation → audit/reconciliation → commit preparation → checkpoint → one commit → publication. Stages never mutate `CampaignState`; `campaign.prepare` is only a validation capability. A stale revision after any await rejects the turn (`stale_turn`); there is no rebase or replay. Controller failure never commits.
 

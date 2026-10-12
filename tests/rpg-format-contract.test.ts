@@ -28,10 +28,11 @@ test("shared narrator contract persists exactly once across ordinary non-UI turn
 
 test("RPG contract leaves provider, model, route, sampling and wire adapter source bytes unchanged", async () => {
   const expected: Record<string, string> = {
-    "src/app/provider-config.ts": "269faeaeb5b945c69651768a2a64e83f92740e8c60edc4db27d4f0c27de09269",
-    "src/llm/openrouter/minimax-narrator.ts": "5dbfb52558a1bbb186e819cb6b87cc37806d84b326c363bc566d7f27750a777a",
-    // Re-baselined by Controller Reliability Pass 2 (OpenRouter `models` fallback serialization + safe error/response-model diagnostics; narrator wire unchanged).
-    "src/llm/openrouter/client.ts": "aff9e3450953a902302aec81b2b45a33c1988ac8efa3730cf2eb919d1418235c"
+    "src/app/provider-config.ts": "ff7233cf7bd5440bb91040f4ef405fda359895d399f43a7aff305c90db69ef0d",
+    "src/llm/openrouter/minimax-narrator.ts": "ceaa8f634a43cac9e411465d23a1781fab7ec3c86bc747ec50da28f87a8bc75c",
+    // Re-baselined by Consolidation block 4 (narrator cap 768, recovery cap, finish_reason/metadata plumbing, accept_truncated; model, route, reasoning and wire shape unchanged).
+    // Earlier: Controller Reliability Pass 2 (OpenRouter `models` fallback serialization + safe error/response-model diagnostics; narrator wire unchanged).
+    "src/llm/openrouter/client.ts": "40672510c7b5bb4e8e6cf8dca0c4564a6162067342ecd26c81dab84ff0537025"
 };
   for (const [path, digest] of Object.entries(expected)) {
     assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), digest, path);

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { turnJson, nextTurnKey, revisionOf } from "./turn-http.js";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { once } from "node:events";
@@ -71,7 +72,7 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
   const address = server.address(); assert.ok(address && typeof address !== "string");
   const url = `http://127.0.0.1:${address.port}`;
   const get = async () => (await fetch(`${url}/api/session`)).json();
-  const post = (text: string, origin = url) => fetch(`${url}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: JSON.stringify({ text }) });
+  const post = async (text: string, origin = url) => fetch(`${url}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: turnJson(text, (await get()).revision) });
   const opening = await get(); assert.deepEqual(opening.messages, [{ role: "narrator", text: UI_PLAYTEST_OPENING }]);
   assert.equal((await fetch(url)).status, 200);
   const before = session.getView();
@@ -129,9 +130,9 @@ test("browser composer submits once, handles Enter/Shift+Enter, preserves failur
   node("input").value = "I look around.";
   node("input").handlers.get("keydown")!({ key: "Enter", shiftKey: false, preventDefault() { prevented = true; } });
   assert.equal(prevented, true); assert.equal(submits, 1); assert.equal(node("input").disabled, true);
-  assert.equal(node("status").textContent, "Generating…");
+  assert.equal(node("status").textContent, "Generating…"); // generic status until the first progress event; never draft prose
   await node("composer").requestSubmit(); assert.equal(submits, 1);
-  assert.deepEqual(JSON.parse(requestBody), { text: "I look around." });
+  const sent = JSON.parse(requestBody); assert.equal(sent.text, "I look around."); assert.match(sent.turn_key, /^[0-9a-f-]{16,}$/);
   resolvePost({ json: async () => ({ ok: true, ...opening, messages: [...opening.messages, { role: "player", text: "I look around." }, { role: "narrator", text: "<script>plain story text</script>" }] }) });
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(node("input").value, ""); assert.equal(node("input").disabled, false);
@@ -178,7 +179,7 @@ test("alternate HTTP generation uses the original prepared RPG request without c
   t.after(async () => { await session.shutdown({ discard_unsaved: true }); server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())); });
   const address = server.address(); assert.ok(address && typeof address !== "string");
   const url = `http://127.0.0.1:${address.port}`;
-  const post = (path: string, body: unknown, origin = url) => fetch(`${url}${path}`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: JSON.stringify(body) });
+  const post = async (path: string, body: unknown, origin = url) => fetch(`${url}${path}`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: JSON.stringify(path === "/api/turn" ? { ...(body as object), turn_key: nextTurnKey(), expected_revision: await revisionOf(url) } : body) });
   const opening = await (await fetch(`${url}/api/session`)).json();
   assert.equal(opening.messages[0].comparison_id, undefined); assert.equal(opening.alternate_models.length, 6);
   assert.equal((await post("/api/alternative", { message_id: "opening", model: ALTERNATE_NARRATOR_MODELS[0]!.id })).status, 400);

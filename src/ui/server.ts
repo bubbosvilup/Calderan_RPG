@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 import { GameSession, SessionHost } from "../app/index.js";
 import { CANON_AVATAR_DIR, readCanonAvatar } from "../app/canon-avatars.js";
 import { UI_PLAYTEST_OPENING } from "../app/ui-playtest.js";
+import { validTurnKey } from "../app/turn-receipts.js";
 
 import { ALTERNATE_NARRATOR_MODELS, type NarratorAlternatives } from "../app/narrator-alternatives.js";
 
@@ -191,26 +192,45 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         }
         const text = fields.text;
         if (typeof text !== "string" || !text.trim() || text.length > 4000) { json(400, { error: "Enter 1–4000 characters." }); return; }
-        if (session.status === "idle") comparisons?.begin();
+        // REV-2: the request identity is part of the contract. A turn without a valid key and the revision the player saw is malformed (no provider is called).
+        const turnKey = fields.turn_key, expectedRevision = fields.expected_revision;
+        if (!validTurnKey(turnKey) || typeof expectedRevision !== "number" || !Number.isSafeInteger(expectedRevision) || expectedRevision < 0) { json(400, { error: "Malformed turn request: it needs a turn key and the revision shown." }); return; }
+        if (session.status === "idle" && !session.turnKeyKnown(turnKey)) comparisons?.begin();
         const streaming = req.headers.accept === "application/x-ndjson";
         const abort = new AbortController();
         const disconnected = () => { if (!res.writableEnded) abort.abort(); };
         if (streaming) { res.writeHead(200, { "Content-Type": "application/x-ndjson; charset=utf-8" }); res.flushHeaders(); res.on("close", disconnected); }
         const writeEvent = (event: unknown) => { if (!res.destroyed) res.write(JSON.stringify(event) + "\n"); };
-        const outcome = await session.submitPlayerInput(text.trim(), streaming ? { signal: abort.signal, onEvent: event => {
-          if (event.type === "narrator_preview") writeEvent({ type: "draft", action: event.action, phase: event.phase, text: event.text });
-        } } : {});
+        // PIPE-1: while the turn runs the browser receives status words only (`progress`), never narrator prose; the narration arrives once, inside the final `result`.
+        const outcome = await session.submitPlayerInput(text.trim(), { turn_key: turnKey, expected_revision: expectedRevision, ...(streaming ? { signal: abort.signal, onEvent: event => {
+          if (event.type === "turn_progress") writeEvent({ type: "progress", phase: event.phase });
+        } } : {}) });
         res.off("close", disconnected);
         if (outcome.ok) {
-          const comparison = comparisons?.finalize(outcome.turn_id) ? outcome.turn_id : undefined;
-          if (fixed) legacyMessages.push({ role: "player", text: text.trim() }, { role: "narrator", text: outcome.narration, ...(comparison ? { comparison_id: comparison } : {}) });
-          else if (comparison) comparable.add(comparison);
-          if (streaming) { writeEvent({ type: "result", ok: true, ...state() }); res.end(); }
-          else json(200, { ok: true, ...state() });
+          // A duplicate (replayed or joined) executed nothing: it must not touch the transcript mirrors or the comparison capture a second time.
+          if (!outcome.replayed) {
+            try {
+              const comparison = comparisons?.finalize(outcome.turn_id) ? outcome.turn_id : undefined;
+              if (fixed) legacyMessages.push({ role: "player", text: text.trim() }, { role: "narrator", text: outcome.narration, ...(comparison ? { comparison_id: comparison } : {}) });
+              else if (comparison) comparable.add(comparison);
+            } catch { console.error("Playtest turn published with warnings: comparison_capture"); }
+          }
+          // PIPE-2: the turn is committed; a failure while describing the new state must not turn it into an error response.
+          let snapshot: Record<string, unknown>;
+          try { snapshot = state(); } catch {
+            console.error("Playtest turn published with warnings: state_view");
+            snapshot = { messages: [{ role: "player", text: text.trim() }, { role: "narrator", text: outcome.narration }], status: "idle", configured: true, warnings: ["state_view"] };
+          }
+          const warnings = [...new Set([...(outcome.warnings ?? []), ...(Array.isArray(snapshot.warnings) ? snapshot.warnings as string[] : [])])];
+          const { warnings: _w, ...rest } = snapshot;
+          const body = { ok: true, ...rest, ...(warnings.length ? { warnings } : {}), ...(outcome.replayed ? { replayed: true } : {}) };
+          if (streaming) { writeEvent({ type: "result", ...body }); res.end(); }
+          else json(200, body);
         } else {
           console.error(`Playtest turn failed: ${outcome.error.code}${outcome.error.provider_code ? ` (${outcome.error.provider_code})` : ""}`);
-          if (streaming) { writeEvent({ type: "result", ok: false, error: outcome.error, ...state() }); res.end(); }
-          else json(outcome.error.code === "turn_in_progress" ? 409 : 422, { ok: false, error: outcome.error, ...state() });
+          const conflict = outcome.error.code === "turn_in_progress" || outcome.error.code === "stale_turn" || outcome.error.code === "turn_key_conflict";
+          if (streaming) { writeEvent({ type: "result", ok: false, error: outcome.error, ...(outcome.replayed ? { replayed: true } : {}), ...state() }); res.end(); }
+          else json(conflict ? 409 : 422, { ok: false, error: outcome.error, ...(outcome.replayed ? { replayed: true } : {}), ...state() });
         }
         return;
       }

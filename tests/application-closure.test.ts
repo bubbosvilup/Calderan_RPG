@@ -41,8 +41,8 @@ test("smoke: new game → inspect → talk → move → act → save → mutate 
   const events: SessionEvent[] = [];
   const talk = await session.submitPlayerInput("I greet the empty square.", { onEvent: e => events.push(e) });
   assert.ok(talk.ok); assert.equal(talk.narration, story);
-  assert.deepEqual(events.map(e => e.type), ["status_changed", "player_message", "narrator_preview", "narrator_preview", "narration_delta", "turn_completed", "status_changed"]);
-  assert.equal(events.find(e => e.type === "narration_delta")!.type, "narration_delta");
+  assert.deepEqual(events.map(e => e.type), ["status_changed", "player_message", "turn_progress", "turn_progress", "turn_progress", "turn_completed", "status_changed"]);
+  assert.deepEqual(events.filter(e => e.type === "turn_progress").map(e => (e as { phase: string }).phase), ["thinking", "narrating", "resolving"]);
   const move = await session.submitPlayerInput("/go heartstone_lr"); assert.ok(move.ok);
   assert.equal(move.view.scene.location.id, "heartstone_lr"); assert.equal(move.trace.movement?.location_before, "heartstone_square"); assert.ok(move.trace.movement!.minutes_elapsed > 0);
   const wait = await session.submitPlayerInput("/wait 30"); assert.ok(wait.ok);

@@ -5,6 +5,7 @@ import { CampaignState } from "../campaign/campaign-state.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { CampaignSaveError, nodeCode, saveError, type SaveErrorCode } from "./errors.js";
 import { createSaveFile, decodeSaveWithReport, serializeSave, validateSaveId, type CampaignSaveFile, type SaveContinuity, type SaveMetadata, type SaveReason } from "./save-format.js";
+import type { TurnReceipt, TurnReceiptBlock } from "./turn-receipts.js";
 import type { CanonCompatibilityReport } from "./canon-compatibility.js";
 import { nodeSaveFileSystem, type SaveFileInfo, type SaveFileSystem } from "./filesystem.js";
 import { parseSaveJson } from "./strict-json.js";
@@ -18,7 +19,8 @@ export interface SavedCampaign { readonly status: "saved"; readonly campaign_id:
   /** File name the corrupt current slot was moved to before this save (explicit recovery only). */ readonly quarantined?: string }
 export interface LoadedCampaign { readonly status: "loaded"; readonly slot: SaveSlot; readonly campaign: CampaignState; readonly metadata: DeepReadonly<CampaignSaveFile["metadata"]>;
   /** Save/Load v1: non-authoritative recent conversation, when present and well formed. */ readonly continuity?: DeepReadonly<SaveContinuity>;
-  readonly migrated_from?: number; readonly snapshot_migrated_from?: number; readonly canon: CanonCompatibilityReport; readonly continuity_dropped: boolean }
+  readonly migrated_from?: number; readonly snapshot_migrated_from?: number; readonly canon: CanonCompatibilityReport; readonly continuity_dropped: boolean;
+  /** Block 4 (REV-2): the terminal turn receipts saved with this state (idempotency metadata), when present and well formed. */ readonly turn_receipts?: readonly TurnReceipt[] }
 export interface SlotListing { readonly exists: boolean; readonly status: "valid" | SaveErrorCode; readonly revision?: number; readonly saved_at?: string; readonly canonical_dataset_id?: string;
   readonly display_name?: string; readonly created_at?: string; readonly scenario_id?: string; readonly save_reason?: SaveReason;
   /** Safe summary for a campaign list: no character state beyond counts. */
@@ -27,6 +29,8 @@ export interface SaveListing { readonly campaign_id: string; readonly current: S
 export interface SaveCampaignOptions {
   readonly metadata?: Partial<Pick<SaveMetadata, "display_name" | "save_reason" | "scenario_id" | "engine_version">>;
   readonly continuity?: SaveContinuity;
+  /** Block 4 (REV-2): written in the same file as the snapshot, so state and receipts become durable together. */
+  readonly turn_receipts?: TurnReceiptBlock;
   /** Explicit recovery only: move an unreadable current slot to `save.corrupt-<ts>.json` (never deleted) instead of refusing. */
   readonly quarantine_corrupt_current?: boolean;
 }
@@ -132,7 +136,7 @@ export class FileCampaignRepository implements CampaignSaveRepository {
     try {
       // Validate snapshot and metadata before creating directories or touching existing saves.
       const savedAt = this.#now();
-      createSaveFile(snapshot, this.#world, savedAt, savedAt, { metadata: options.metadata ?? {}, ...(options.continuity ? { continuity: options.continuity } : {}) });
+      createSaveFile(snapshot, this.#world, savedAt, savedAt, { metadata: options.metadata ?? {}, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}) });
       await this.directory(directory, true);
       await this.#checkLock(directory);
       const current = this.filename(directory, "current"), previous = this.filename(directory, "previous");
@@ -152,7 +156,7 @@ export class FileCampaignRepository implements CampaignSaveRepository {
       const previousMeta = old?.decoded.file.metadata;
       const metadata = Object.fromEntries(Object.entries({ display_name: previousMeta?.display_name, scenario_id: previousMeta?.scenario_id, engine_version: previousMeta?.engine_version, ...options.metadata })
         .filter(([, v]) => v !== undefined)) as NonNullable<SaveCampaignOptions["metadata"]>;
-      const file = createSaveFile(snapshot, this.#world, savedAt, previousMeta?.created_at ?? savedAt, { metadata, ...(options.continuity ? { continuity: options.continuity } : {}) });
+      const file = createSaveFile(snapshot, this.#world, savedAt, previousMeta?.created_at ?? savedAt, { metadata, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}) });
       const text = serializeSave(file, this.#world);
       const nextTemp = await writeTemp(directory, text);
       if (old) {
@@ -207,7 +211,7 @@ export class FileCampaignRepository implements CampaignSaveRepository {
   async loadCampaign(campaignId: string, slot: SaveSlot = "current"): Promise<LoadedCampaign> {
     try {
       const id = validateSaveId(campaignId), { decoded } = await this.readSlot(this.campaignPath(id), id, slot), file = decoded.file;
-      return Object.freeze({ status: "loaded", slot, campaign: CampaignState.restore(this.#world, file.snapshot), metadata: file.metadata, ...(file.continuity ? { continuity: file.continuity } : {}),
+      return Object.freeze({ status: "loaded", slot, campaign: CampaignState.restore(this.#world, file.snapshot), metadata: file.metadata, ...(file.continuity ? { continuity: file.continuity } : {}), ...(file.turn_receipts ? { turn_receipts: file.turn_receipts.receipts } : {}),
         ...(decoded.migrated_from !== undefined ? { migrated_from: decoded.migrated_from } : {}), ...(decoded.snapshot_migrated_from !== undefined ? { snapshot_migrated_from: decoded.snapshot_migrated_from } : {}),
         canon: decoded.canon, continuity_dropped: decoded.continuity_dropped });
     } catch (error) { throw saveError(error); }

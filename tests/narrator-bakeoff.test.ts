@@ -57,14 +57,14 @@ test("production default narrator is GLM 5.2 pinned to Z.AI without fallbacks, r
     assert.equal(run.narratorBodies[0]!.model, "z-ai/glm-5.2");
     assert.deepEqual(run.narratorBodies[0]!.provider, { order: ["z-ai/fp8"], allow_fallbacks: false });
     assert.equal(run.narratorBodies[0]!.max_tokens, NARRATOR_OUTPUT_TOKENS);
-    assert.equal(run.narratorBodies[0]!.max_tokens, 512); // Runtime Continuity Repair 1.1 production cap
+    assert.equal(run.narratorBodies[0]!.max_tokens, 768); // Consolidation block 4 production cap (was 512)
     assert.deepEqual(run.narratorBodies[0]!.reasoning, { enabled: false });
     assert.equal(run.narratorBodies[0]!.stream, true);
     assert.equal(run.controllerBodies[0]!.model, DEFAULT_CONTROLLER_MODEL);
     assert.equal((run.controllerBodies[0]!.messages as { content: string }[])[0]!.content, CONTROLLER_POLICY);
     assert.deepEqual(run.controllerBodies[0]!.reasoning, { exclude: true, enabled: false });
     // Repair 1 authoritative order: the draft is buffered; audited narration is delivered after authorization and before one commit.
-    assert.deepEqual(run.events.map(e => e.type), ["turn_started", "controller_started", "state_proposed", "narration_delta", "narration_completed", "state_committed", "turn_completed"]);
+    assert.deepEqual(run.events.map(e => e.type), ["turn_started", "turn_progress", "turn_progress", "controller_started", "turn_progress", "state_proposed", "state_committed", "narration_completed", "turn_completed"]);
     const optOut = await fullLoop(undefined, false);
     assert.equal("reasoning" in optOut.narratorBodies[0]!, false);
     const { reasoning: _, ...rest } = run.narratorBodies[0]!;
@@ -95,7 +95,7 @@ test("Runtime Continuity Repair 1: Kimi stays available unpinned; Gemini is a Ve
     }
     // The production pin names exactly one provider and forbids fallbacks.
     assert.deepEqual(NARRATOR_PROVIDER_ROUTING[DEFAULT_NARRATOR_MODEL], { order: ["z-ai/fp8"], allow_fallbacks: false });
-    assert.equal(NARRATOR_OUTPUT_TOKENS, 512); // Runtime Continuity Repair 1.1 (was 384)
+    assert.equal(NARRATOR_OUTPUT_TOKENS, 768); // Consolidation block 4 (was 512)
   } finally { if (saved === undefined) delete process.env.OPENROUTER_NARRATOR_MODEL; else process.env.OPENROUTER_NARRATOR_MODEL = saved; }
 });
 test("Stage A request is byte-identical to the coordinator's narrator request for every case", async () => {

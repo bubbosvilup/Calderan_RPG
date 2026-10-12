@@ -9,6 +9,7 @@ import { migrateSave, migrateSnapshot4to5, migrateSnapshot5to6, CURRENT_SAVE_VER
 import { defaultPlayerCharacters } from "../campaign/player-character.js";
 import { assessCanonCompatibility, canonReferences, type CanonCompatibilityReport, type CanonReference } from "./canon-compatibility.js";
 import { parseCampaignSnapshot } from "../campaign/validation.js";
+import { parseTurnReceipts, type TurnReceipt, type TurnReceiptBlock } from "./turn-receipts.js";
 
 /** Why a save was written (format 5). `create` is the immediate first save of a new campaign. */
 export type SaveReason = "create" | "manual" | "autosave" | "quit";
@@ -36,6 +37,8 @@ export interface CampaignSaveFile {
   canon_compatibility: "strict" | "references";
   canon_references?: readonly CanonReference[];
   continuity?: SaveContinuity;
+  /** Block 4 (REV-2): bounded terminal turn receipts (idempotency metadata), written atomically with the snapshot they belong to. Not campaign truth. */
+  turn_receipts?: TurnReceiptBlock;
 }
 /** Legacy shapes accepted by the migration dispatcher (their snapshots are schema 1, without premium_characters). */
 export type CampaignSaveFileV1 = Omit<CampaignSaveFile, "schema_version" | "canon_compatibility" | "canon_references" | "snapshot"> & { schema_version: 1; snapshot: unknown };
@@ -65,7 +68,7 @@ export const SCENARIO_ID = /^[a-z][a-z0-9_]{0,40}(?:\.[a-z0-9_]{1,40}){0,4}$/;
 const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(5, 5), campaign_id: validateSaveId,
   canonical_dataset_id: text, metadata: object({ saved_at: timestamp, created_at: optional(timestamp), engine_version: optional(bounded(/^[0-9A-Za-z.+_-]{1,40}$/)),
     display_name: optional(displayName), save_reason: optional(choice("create", "manual", "autosave", "quit")), scenario_id: optional(bounded(SCENARIO_ID)) }),
-  snapshot: (input: unknown) => input, canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList), continuity: optional((input: unknown) => input) });
+  snapshot: (input: unknown) => input, canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList), continuity: optional((input: unknown) => input), turn_receipts: optional((input: unknown) => input) });
 /** Structural check of a continuity block; undefined when absent or unusable (the caller reports the drop). */
 export function parseContinuity(input: unknown): SaveContinuity | undefined {
   if (input === undefined) return undefined;
@@ -117,8 +120,9 @@ export function validateSaveFileWithReport(input: unknown, world: WorldStore, ex
       throw e.code === "invalid_save" && file.canonical_dataset_id !== world.datasetId ? new CampaignSaveError("dataset_mismatch") : e;
     }
     const continuity = parseContinuity(file.continuity);
-    const { continuity: _raw, ...rest } = file;
-    const result = freezeSnapshot({ ...rest, canonical_dataset_id: world.datasetId, snapshot: snapshot as CampaignSnapshot, ...(continuity ? { continuity } : {}) }) as DeepReadonly<CampaignSaveFile>;
+    const receipts = parseTurnReceipts(file.turn_receipts, snapshot.revision);
+    const { continuity: _raw, turn_receipts: _receipts, ...rest } = file;
+    const result = freezeSnapshot({ ...rest, canonical_dataset_id: world.datasetId, snapshot: snapshot as CampaignSnapshot, ...(continuity ? { continuity } : {}), ...(receipts ? { turn_receipts: receipts } : {}) }) as DeepReadonly<CampaignSaveFile>;
     return Object.freeze({ file: result, ...(from !== undefined && from !== CURRENT_SAVE_VERSION ? { migrated_from: from } : {}), ...(snapshotFrom !== undefined ? { snapshot_migrated_from: snapshotFrom } : {}), canon: assessed.report,
       continuity_dropped: file.continuity !== undefined && !continuity });
   } catch (error) { throw saveError(error); }
@@ -135,14 +139,16 @@ export function decodeSave(text: string, world: WorldStore, expectedCampaignId?:
 export interface SaveExtras {
   readonly metadata?: Partial<Pick<SaveMetadata, "engine_version" | "display_name" | "save_reason" | "scenario_id">>;
   readonly continuity?: SaveContinuity;
+  readonly turn_receipts?: TurnReceiptBlock;
 }
+export type { TurnReceipt };
 export function createSaveFile(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, savedAt: string, createdAt = savedAt, extras: SaveExtras = {}): DeepReadonly<CampaignSaveFile> {
   // A write may never manufacture compatibility evidence for a campaign bound to another world.
   try { validateCampaignSnapshot(snapshot, world); } catch (error) { throw saveError(error); }
   const metadata = Object.fromEntries(Object.entries({ saved_at: savedAt, created_at: createdAt, ...extras.metadata }).filter(([, v]) => v !== undefined));
   if (extras.continuity && !parseContinuity(extras.continuity)) throw new CampaignSaveError("invalid_save");
   return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 5, campaign_id: snapshot.campaign_id, canonical_dataset_id: snapshot.dataset_id, metadata, snapshot,
-    canon_compatibility: "references", canon_references: canonReferences(snapshot, world), ...(extras.continuity ? { continuity: extras.continuity } : {}) }, world);
+    canon_compatibility: "references", canon_references: canonReferences(snapshot, world), ...(extras.continuity ? { continuity: extras.continuity } : {}), ...(extras.turn_receipts ? { turn_receipts: extras.turn_receipts } : {}) }, world);
 }
 /** Called only after validation; sorts object keys, preserves all array order and missing fields. */
 export function serializeSave(file: DeepReadonly<CampaignSaveFile>, world: WorldStore): string {

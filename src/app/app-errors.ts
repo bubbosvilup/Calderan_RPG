@@ -7,7 +7,7 @@ import type { TurnFailure } from "../turn/turn-types.js";
  * The application error vocabulary is the union of the two taxonomies the engine already owns (TurnFailure, SaveErrorCode) plus
  * three session-level codes. It is a descriptor over those codes, not a new taxonomy.
  */
-export type AppErrorCode = TurnFailure | SaveErrorCode | "session_closed" | "unsaved_changes" | "internal_error" | "portrait_generation_failed";
+export type AppErrorCode = TurnFailure | SaveErrorCode | "session_closed" | "unsaved_changes" | "internal_error" | "portrait_generation_failed" | "turn_key_conflict";
 export interface AppError {
   readonly code: AppErrorCode;
   /** Present when the code is narrator_failed / controller_failed and the provider reported why. */
@@ -29,6 +29,8 @@ const MESSAGES: Record<AppErrorCode, string> = {
   turn_in_progress: "A turn is already running. Wait for it to finish.",
   cancelled: "The turn was cancelled. The campaign is unchanged.",
   narrator_failed: "The narrator could not answer. The turn did not happen.",
+  narrator_truncated: "The narrator's answer was cut off and could not be recovered. The turn did not happen and the campaign is unchanged.",
+  turn_key_conflict: "This turn identifier was already used for a different message. The turn did not happen.",
   controller_failed: "The state controller could not answer. The turn did not happen.",
   campaign_validation_failed: "The turn produced changes that were refused. The campaign is unchanged.",
   not_found: "No such save exists.", invalid_json: "The save file is damaged.", invalid_save: "The save file is invalid.",
@@ -40,7 +42,7 @@ const MESSAGES: Record<AppErrorCode, string> = {
   session_closed: "The session is closed.", unsaved_changes: "There are unsaved changes.", internal_error: "Something went wrong inside the game. The campaign was not changed by this action.",
 };
 /** Errors a user can only fix by changing configuration or input are not worth an automatic retry. */
-const NEVER_RETRY = new Set<AppErrorCode>(["invalid_input", "context_too_large", "context_invalid", "invalid_runtime_intent", "campaign_validation_failed", "session_closed", "unsaved_changes",
+const NEVER_RETRY = new Set<AppErrorCode>(["invalid_input", "turn_key_conflict", "context_too_large", "context_invalid", "invalid_runtime_intent", "campaign_validation_failed", "session_closed", "unsaved_changes",
   "not_found", "invalid_json", "invalid_save", "unsupported_version", "migration_failed", "dataset_mismatch", "reference_invalid", "invalid_id", "unsafe_path"]);
 export function appError(code: AppErrorCode, extra: { provider_code?: ProviderErrorCode | undefined; turn_state_changed?: boolean | undefined; message?: string | undefined } = {}): AppError {
   const provider = extra.provider_code;

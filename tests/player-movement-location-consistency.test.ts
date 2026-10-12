@@ -1,4 +1,5 @@
 import test from "node:test";
+import { turnJson, revisionOf } from "./turn-http.js";
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { loadWorld } from "../src/world/loader.js";
@@ -67,7 +68,7 @@ test("Heartstone return converges runtime, RAM, context, session and final NDJSO
   const server = createPlaytestServer(session); server.listen(0, "127.0.0.1"); await once(server, "listening");
   t.after(async () => { await session.shutdown({ discard_unsaved: true }); server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())); });
   const address = server.address(); assert.ok(address && typeof address !== "string");
-  const response = await fetch(`http://127.0.0.1:${address.port}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: JSON.stringify({ text: "*goes back to Heartstone*" }) });
+  const response = await fetch(`http://127.0.0.1:${address.port}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: turnJson("*goes back to Heartstone*", await revisionOf(`http://127.0.0.1:${address.port}`)) });
   const lines = (await response.text()).trim().split("\n").map(line => JSON.parse(line));
   const final = lines.at(-1); assert.equal(final.ok, true, JSON.stringify(final));
   const snapshot = campaign.exportSnapshot(), runtime = new RuntimeState(world, snapshot.runtime.scene);
@@ -76,7 +77,7 @@ test("Heartstone return converges runtime, RAM, context, session and final NDJSO
   assert.equal(buildNarrativeContext(world, runtime).scene.player_location?.id, "heartstone_lr");
   assert.equal(session.getView().scene.location.id, "heartstone_lr");
   assert.equal(final.scene.location, session.getView().scene.location.name);
-  assert.ok(lines.filter(e => e.type === "draft").every(e => !e.scene));
+  assert.ok(lines.every(e => e.type !== "draft" && e.type !== "narration_delta"), "no draft ever reaches the stream");
 });
 
 test("uncommitted canonical arrival and unsupported home entry cannot survive revision/redaction", async () => {

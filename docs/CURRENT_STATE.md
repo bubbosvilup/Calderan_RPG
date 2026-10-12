@@ -1,6 +1,6 @@
 # Caldrevan: current state
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: the current main working tree.
+Status: Current. Last reconciled: 2026-10-12 (main c0608a6 plus the uncommitted consolidation block 4 working tree). Source of truth: the current main working tree.
 
 This is the best "where are we now?" document. Details live in the linked documents; historical results live in [evaluation reports](evaluations/), which are never rewritten.
 
@@ -19,6 +19,7 @@ Player input → `GameSession` → `TurnCoordinator` → Narrator (draft) → St
 | Authored canon (YAML), `WorldStore`, visibility tiers | Complete for the current canon; restricted tiers withheld from public channels |
 | Campaign state: characters, items, households, knowledge, relationships, funds, schedules | Complete (V1 domains) |
 | Turn pipeline with evidence authorization and narration audit | Complete |
+| Turn reliability (block 4): neutral progress instead of a draft stream, post-commit failures as warnings, `turn_key` idempotency with 32 persisted terminal receipts, Narrator truncation recovery (cap 768, one 1024 regeneration, max 2 logical / 3 physical attempts) | Complete; live-certified on the production model; see [report](evaluations/CONSOLIDATION_BLOCK4_TURN_RELIABILITY.md) |
 | Scene State Projection (`[CURRENT SCENE]`) and prompt cleanup | Complete |
 | Controller authorization and diagnostics hardening | Complete |
 | Item lifecycle (pickup, drop, handoff, placement) with intent binding, bounded narrator-receipt recovery, per-item conflict rejection, evidenced ownership | Complete (supported placement paths only) |

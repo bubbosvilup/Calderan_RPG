@@ -10,7 +10,7 @@ Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `p
 | `npm run build` | compile to `.build/` | no |
 | `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
 
-Latest recorded result: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3: `consolidation-block3.test.ts`, 21 tests, plus the product-path regression in `person-offer-e2e.test.ts`; block 2: `consolidation-block2.test.ts`, 26 tests; block 1 had 3287); earlier recorded run 3278 at `c0608a6` (see [report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
+Latest recorded result: **3377 tests, 0 failed** on the block 4 working tree on top of `a1b83c7` (consolidation block 4: `block4-plumbing`, `block4-pipe2`, `block4-rev2`, `block4-narr1` test files; fixtures in `tests/block4-fixtures.ts`, `tests/turn-http.ts`); previous: 3334 tests on top of `5edcd37` (consolidation block 3: `consolidation-block3.test.ts`, 21 tests, plus the product-path regression in `person-offer-e2e.test.ts`; block 2: `consolidation-block2.test.ts`, 26 tests; block 1 had 3287); earlier recorded run 3278 at `c0608a6` (see [report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
 
 ## Layers
 
@@ -27,7 +27,7 @@ Anything needing `OPENROUTER_API_KEY` or `HF_TOKEN`: `inspect:narrator`, `inspec
 
 ## Browser QA
 
-Browser checks are not part of `npm test`; UI behavior is covered by server/read-model tests. Two scripted Playwright checks exist for development (`scripts/explicit-promotion-browser-check.mjs`, `scripts/actual-offer-browser-check.mjs`; offline, scripted providers, they need the `.build` output and a Playwright install, and their paths are environment-specific). Screenshots in `docs/ui-screenshots/` are older manual captures.
+Browser checks are not part of `npm test`; UI behavior is covered by server/read-model tests. Three scripted Playwright checks exist (`scripts/turn-reliability-browser-check.mjs` asserts in real Chromium that no draft prose is ever visible, the status word is neutral, the final prose appears once and the request carries `turn_key`/`expected_revision`); the earlier two are for development (`scripts/explicit-promotion-browser-check.mjs`, `scripts/actual-offer-browser-check.mjs`; offline, scripted providers, they need the `.build` output and a Playwright install, and their paths are environment-specific). Screenshots in `docs/ui-screenshots/` are older manual captures.
 
 ## Historical replay harness (dev, live, not part of `npm test`)
 
@@ -42,6 +42,7 @@ Browser checks are not part of `npm test`; UI behavior is covered by server/read
 
 ## Planned (not built)
 
-- **Narrator truncation metrics:** per-turn `finish_reason`, truncated calls, recovery attempts and successes, average and p95 output tokens, aborted turns, by model and provider (review section 17).
+- **Narrator truncation metrics:** per-turn `finish_reason` and every Narrator attempt are now recorded in the trace (`narrator_generation`); an aggregate over a long run (rate, p95 output tokens by model) is still to be built.
+- **Block 4 live harness:** `src/dev/consolidation-block4-live.ts` (spends credits; forces truncation on the first Narrator request only).
 - **Disabled-services matrix:** run the scenario suite with each optional service off and assert identical core state and revisions (ARCH-1).
 - **Modern benchmark L1** and a corpus for the NarrationFacts parity migration: see the debt register, section 14, and Wave A (A8, A9).

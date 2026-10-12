@@ -8,13 +8,20 @@ import type { retrieveForTurn } from "./retrieval-policy.js";
 type RetrievalOutcome = Awaited<ReturnType<typeof retrieveForTurn>>;
 import { RETRIEVAL_LIMITS } from "./retrieval-policy.js";
 import type { ProviderAttemptRecord } from "../llm/retry.js";
-import type { AuthorizationDiagnostic, TurnFailure } from "./turn-types.js";
+import type { AuthorizationDiagnostic, PublicationStep, TurnFailure } from "./turn-types.js";
+import type { NarratorGenerationTrace } from "./narrator-ledger.js";
 
 export type DiagnosticPhase = "input_intent" | "projection" | "retrieval" | "prompt_composition" | "narrator" | "reconciliation_narrator" | "controller" | "authorization" | "preparation" | "audit" | "reconciliation" | "reconciliation_audit" | "commit_preparation" | "commit" | "publication";
 export interface TurnDiagnostics {
   provider_reliability?: Readonly<Record<string,number>>;
   mannerism_portrayal?: import("./mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
   context_budget?: import("./context-budget.js").ContextBudgetSnapshot;
+  /** Block 4: the request identity (REV-2), when the caller supplied one. */
+  turn_key?: string;
+  /** Block 4 (NARR-1): every logical Narrator generation and physical provider attempt of this turn, with finish reasons, tokens, model, provider/route and the truncation-recovery result. */
+  narrator_generation?: NarratorGenerationTrace;
+  /** Block 4 (PIPE-2): post-commit publication steps that failed without failing the committed turn. */
+  publication_warnings?: PublicationStep[];
   turn_id: string; base_revision: number; final_revision: number; outcome: "running" | "success" | "failure" | "abandoned";
   failure_code?: TurnFailure; failure_phase?: DiagnosticPhase; provider_code?: string;
   stage_timings: Partial<Record<DiagnosticPhase, { deterministic_ms: number; provider_ms: number }>>;
@@ -26,7 +33,7 @@ export interface TurnDiagnostics {
   /** `model` is the requested primary; `response_model` what OpenRouter reported; `model_fallback` true when a `models` fallback answered. */
   controller?: { model: string; response_model?: string; requested_models?: readonly string[]; model_fallback?: boolean; generation_id?: string; provider?: string; usage: GenerationMetadata["usage"]; latency_ms: number; parse_success: boolean; proposed_count: number; command_kinds: readonly string[]; normalization_used: boolean };
   /** H5: attempts per logical provider call (draft narrator, reconciliation narrator, controller). Counts, reasons and timing only. */
-  provider_attempts?: { narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
+  provider_attempts?: { narrator?: ProviderAttemptRecord; recovery_narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
   authorization?: { duplicates_removed?: number; proposed_count: number; authorized_count: number; rejected_count: number; decisions: readonly { kind: string; authorized: boolean; reason: string; evidence_check?: string }[] };
   audit?: { issue_count: number; issue_kinds: readonly string[]; reconciliation_attempted: boolean; revision_issue_count: number; revision_issue_kinds: readonly string[]; redaction_used: boolean; delivered: string };
   commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_promotion_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };

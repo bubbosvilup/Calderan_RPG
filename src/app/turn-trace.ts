@@ -3,6 +3,7 @@ import type { ProviderAttemptRecord } from "../llm/retry.js";
 import type { ReflectionRun } from "../turn/reflection.js";
 import type { ReflectionDiagnostics } from "../turn/reflection-diagnostics.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import type { NarratorGenerationTrace } from "../turn/narrator-ledger.js";
 import type { TurnEvent, TurnResult } from "../turn/turn-types.js";
 import type { AppError } from "./app-errors.js";
 
@@ -27,8 +28,16 @@ export interface TurnTrace {
   readonly models?: { readonly narrator?: string; readonly controller?: string };
   readonly usage?: { readonly narrator?: DeepReadonly<{ prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }>; readonly controller?: DeepReadonly<{ prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }> };
   readonly latency_ms?: DeepReadonly<TurnResult["latency"]>;
-  readonly provider_attempts?: DeepReadonly<{ narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord }>;
+  readonly provider_attempts?: DeepReadonly<{ narrator?: ProviderAttemptRecord; recovery_narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord }>;
   readonly failure?: { readonly phase?: string; readonly provider_code?: string };
+  /** Block 4: the request identity this turn ran under (REV-2). */
+  readonly turn_key?: string;
+  /** Block 4 (NARR-1): logical Narrator generations, physical provider attempts (finish reason, tokens, model, provider/route per attempt) and the truncation-recovery result. */
+  readonly narrator_generation?: DeepReadonly<NarratorGenerationTrace>;
+  /** Block 4 (PIPE-2): post-commit publication steps that failed without failing the committed turn. */
+  readonly publication_warnings?: readonly string[];
+  /** Block 4 (REV-2): this outcome was replayed from an earlier terminal result of the same turn_key; no provider was called. */
+  readonly replayed?: true;
   readonly reflection: { readonly status: "not_run" | "skipped_not_due" | "attempted" | "failed_nonblocking"; readonly characters: readonly { readonly character_id: string; readonly status: ReflectionRun["status"]; readonly committed_revision?: number }[]; readonly revisions_added: number };
   /** Full draft text, controller proposal and authorization evidence. Present only when the session was created with `unsafe_trace`. */
   readonly unsafe?: unknown;
@@ -45,7 +54,7 @@ export interface TraceInput {
   readonly sequence: number; readonly campaign_id: string; readonly dataset_id: string; readonly player_input: string; readonly revision_before: number;
   readonly outcome: TurnTrace["outcome"]; readonly error?: AppError; readonly revision_after: number;
   readonly result?: DeepReadonly<TurnResult>; readonly failure_event?: Extract<TurnEvent, { type: "turn_failed" }>; readonly diagnostics?: DeepReadonly<TurnDiagnostics>;
-  readonly movement?: TurnTrace["movement"]; readonly unsafe?: boolean;
+  readonly movement?: TurnTrace["movement"]; readonly unsafe?: boolean; readonly turn_key?: string;
 }
 export const turnIdOf = (campaign_id: string, revision_before: number, sequence: number) => `${campaign_id}:r${revision_before}:t${sequence}`;
 export function buildTrace(i: TraceInput): TurnTrace {
@@ -67,6 +76,9 @@ export function buildTrace(i: TraceInput): TurnTrace {
     ...(narratorModel || controllerModel ? { models: { ...(narratorModel ? { narrator: narratorModel } : {}), ...(controllerModel ? { controller: controllerModel } : {}) } } : {}),
     ...(r ? { usage: { narrator: r.narrator.usage, controller: r.controller.usage }, latency_ms: r.latency } : {}),
     ...(d?.provider_attempts ? { provider_attempts: d.provider_attempts } : {}),
+    ...(i.turn_key ?? d?.turn_key ? { turn_key: (i.turn_key ?? d?.turn_key)! } : {}),
+    ...(d?.narrator_generation ? { narrator_generation: d.narrator_generation } : {}),
+    ...(d?.publication_warnings?.length ? { publication_warnings: [...d.publication_warnings] } : {}),
     ...(i.outcome === "failed" ? { failure: { ...(d?.failure_phase ? { phase: d.failure_phase } : {}), ...(i.failure_event?.provider_code ? { provider_code: i.failure_event.provider_code } : {}) } } : {}),
     reflection: emptyReflection(),
     ...(i.unsafe && r ? { unsafe: { draft: r.narration_reconciliation?.draft, revision: r.narration_reconciliation?.revision, controller_proposal: r.controller_proposal, authorization: r.authorization } } : {}),

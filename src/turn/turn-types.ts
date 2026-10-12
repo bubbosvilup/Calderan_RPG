@@ -8,11 +8,16 @@ import type { ControllerParseDiagnostic, ProviderErrorCode } from "../llm/errors
 import type { ControllerResult } from "../llm/state-controller-provider.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuditIssue } from "./narration-audit.js";
-export type TurnFailure = "invalid_input" | "context_invalid" | "context_too_large" | "retrieval_failed" | "invalid_runtime_intent" | "stale_turn" | "turn_in_progress" | "cancelled" | "narrator_failed" | "controller_failed" | "campaign_validation_failed";
-export class TurnError extends Error { constructor(readonly code: TurnFailure) { super(`Turn failed: ${code}`); } }
-/** Visual-only observer; these bytes are not evidence, history or a delivered turn. */
-export interface NarratorPreview { readonly action: "start" | "delta"; readonly phase: "draft" | "revision"; readonly text: string }
-export interface TurnRequest { readonly campaign: CampaignState; readonly player_input: string; readonly signal?: AbortSignal; readonly on_narrator_preview?: (event: NarratorPreview) => void }
+export type TurnFailure = "invalid_input" | "context_invalid" | "context_too_large" | "retrieval_failed" | "invalid_runtime_intent" | "stale_turn" | "turn_in_progress" | "cancelled" | "narrator_failed" | "narrator_truncated" | "controller_failed" | "campaign_validation_failed";
+export class TurnError extends Error { constructor(readonly code: TurnFailure, readonly provider_code?: ProviderErrorCode) { super(`Turn failed: ${code}`); } }
+/**
+ * Block 4 (PIPE-1): the ONLY thing a player sees while a turn runs. A closed vocabulary of status words; it can never carry Narrator prose
+ * (the type has no text field). Narrative prose becomes visible once, after the whole pipeline and the commit.
+ */
+export const TURN_PROGRESS_PHASES = ["thinking", "narrating", "resolving"] as const;
+export type TurnProgressPhase = typeof TURN_PROGRESS_PHASES[number];
+/** `turn_key` and `expected_revision` are the request identity (REV-2): the turn layer checks the revision before any provider call. */
+export interface TurnRequest { readonly campaign: CampaignState; readonly player_input: string; readonly signal?: AbortSignal; readonly turn_key?: string; readonly expected_revision?: number }
 export interface AuthorizationDiagnostic { readonly command: CampaignCommand; readonly authorized: boolean;
   /** Phase 1O: which path authorized it, the grammar-only result, and the controller evidence check (diagnostic only). */
   readonly source?: "grammar" | "evidence" | "both" | "rejected"; readonly grammar?: { readonly authorized: boolean; readonly reason: string };
@@ -47,13 +52,18 @@ export interface TurnResult {
   readonly action_resolution?: NaturalActionResolution;
   readonly latency: { readonly narrator_ttft_ms: number | null; readonly narrator_total_ms: number; readonly controller_total_ms: number; readonly controller_tail_ms: number; readonly retrieval_ms: number; readonly coordinator_total_ms: number };
 }
+/** A post-commit publication step that failed without failing the committed turn (PIPE-2). Names the step only: no text, no error message. */
+export type PublicationStep = "exchange_history" | "scene_participants" | "result_publication" | "diagnostics" | "transcript_history" | "item_visuals" | "post_turn";
 export type TurnEvent =
-  | { readonly type: "turn_started"; readonly base_revision: number }
-  | { readonly type: "narration_delta"; readonly text: string }
+  | { readonly type: "turn_started"; readonly base_revision: number; readonly turn_key?: string }
+  | { readonly type: "turn_progress"; readonly phase: TurnProgressPhase }
+  /** The complete, audited and committed narration, published ONCE (never as chunks, never before the commit). */
   | { readonly type: "narration_completed"; readonly text: string }
   | { readonly type: "controller_started" }
   | { readonly type: "state_proposed"; readonly diagnostics: readonly AuthorizationDiagnostic[] }
-  | { readonly type: "state_committed"; readonly revision: number; readonly changed: boolean }
+  /** The authoritative commit succeeded: from here the turn SUCCEEDED, whatever publication does. Carries the delivered text so a degraded publication can still answer. */
+  | { readonly type: "state_committed"; readonly revision: number; readonly changed: boolean; readonly narration: string }
+  | { readonly type: "publication_warning"; readonly step: PublicationStep }
   | { readonly type: "turn_completed"; readonly result: TurnResult }
   | { readonly type: "turn_failed"; readonly code: TurnFailure; readonly provider_code?: ProviderErrorCode; readonly narration: string; readonly incomplete: true; readonly base_revision: number; readonly final_revision: number };
 

@@ -2,10 +2,11 @@ import type { CampaignState } from "../campaign/campaign-state.js";
 import { CampaignSaveError } from "./errors.js";
 import type { CampaignSaveRepository, LoadedCampaign, SavedCampaign } from "./campaign-repository.js";
 import type { SaveContinuity, SaveReason } from "./save-format.js";
+import type { TurnReceiptBlock } from "./turn-receipts.js";
 
 /** Campaign-level presentation metadata carried by every save (format 5). Never campaign truth. */
 export interface CampaignMeta { readonly display_name?: string; readonly scenario_id?: string; readonly engine_version?: string }
-export interface SessionSaveOptions { readonly reason?: SaveReason; readonly continuity?: SaveContinuity }
+export interface SessionSaveOptions { readonly reason?: SaveReason; readonly continuity?: SaveContinuity; readonly turn_receipts?: TurnReceiptBlock }
 
 /** UI convenience only. Neither dirty tracking nor wall time enters campaign truth. */
 export class CampaignSession {
@@ -40,7 +41,7 @@ export class CampaignSession {
     try {
       const metadata = { ...(this.#meta.display_name ? { display_name: this.#meta.display_name } : {}), ...(this.#meta.scenario_id ? { scenario_id: this.#meta.scenario_id } : {}),
         ...(this.#meta.engine_version ? { engine_version: this.#meta.engine_version } : {}), ...(options.reason ? { save_reason: options.reason } : {}) };
-      const result = await this.repository.saveCampaign(this.campaign, { metadata, ...(options.continuity ? { continuity: options.continuity } : {}), ...(this.#quarantine ? { quarantine_corrupt_current: true } : {}) });
+      const result = await this.repository.saveCampaign(this.campaign, { metadata, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}), ...(this.#quarantine ? { quarantine_corrupt_current: true } : {}) });
       this.#lastSavedRevision = result.revision; this.#quarantine = false; return result;
     } finally { this.#saving = false; }
   }

@@ -51,12 +51,14 @@ const outcome = await session.submitPlayerInput(text, { onEvent, signal });
 
 ## 3. Streaming and final narration
 
-Events (`SessionEvent`), in order for a successful turn: `status_changed(running_turn)`, `player_message`, [`narrator_preview` resets/deltas for generation, retries and revision], `narration_delta`, `turn_completed`, [`status_changed(post_turn)`, `post_turn_completed`], `status_changed(idle)`.
+Events (`SessionEvent`), in order for a successful turn: `status_changed(running_turn)`, `player_message`, `turn_progress` (phases `thinking`, `narrating`, `resolving`, in that order), `turn_completed`, [`status_changed(post_turn)`, `post_turn_completed`], `status_changed(idle)`.
 
-- UI V1 adds true provider-token previews: `narrator_preview` is `{action: "start" | "delta", phase: "draft" | "revision", text, provisional: true}`. Use one ephemeral bubble, clear it on each `start`, append deltas, and label it as a draft. It is neither evidence nor history. Remove it on failure/cancellation and replace it with the final outcome on success. Exceptions in visual observers cannot interrupt the engine.
-- The engine still buffers and audits the whole draft. `narration_delta` carries the whole audited text as one chunk and is marked `provisional: true`. It is not final until `turn_completed`. UI V1's HTTP adapter waits for the successful application outcome before publishing its finalized transcript and projected panels.
+- **Block 4 (PIPE-1): there is no draft stream.** The Narrator draft is buffered and audited server-side; `narrator_preview` and `narration_delta` no longer exist. While a turn runs the UI shows a status word chosen from its own closed table keyed by `phase`; progress events carry no text. The finished narration is published exactly once, in `turn_completed.narration`, after the commit. The HTTP adapter's NDJSON stream carries `{type:"progress", phase}` lines and one final `{type:"result", ...}` line.
+- **Request identity (REV-2).** `submitPlayerInput(text, { turn_key, expected_revision })`. The same `turn_key` never runs twice: an in-flight key is joined, a terminal key is replayed (`outcome.replayed === true`, no provider call, success or failure), the same key with a different request is `turn_key_conflict`. A stale `expected_revision` returns `stale_turn` before any provider call. A different key while busy is `turn_in_progress` (no queue). Retry a failed turn with a NEW key.
+- **Post-commit failures (PIPE-2).** `outcome.ok === true` with `warnings` (and `trace.publication_warnings`) means the turn committed and a later step degraded; never retry it.
+- **Truncation (NARR-1).** A Narrator answer cut by the output cap is regenerated once; if that fails the turn ends as `narrator_truncated` (nothing committed). See [Architecture 2a](ARCHITECTURE.md).
 - The authoritative record is `turn_completed.narration` (equal to `outcome.narration`). It is what was committed with the turn. If the audit rewrote or redacted the draft, `trace.narration_status` says `revision` or `redacted`.
-- On failure the event is `turn_failed` with `uncommitted_narration`. That text may have been shown provisionally but **was not committed**; show it as discarded or hide it. The campaign is unchanged (`error.turn_state_changed` is false).
+- On failure the event is `turn_failed` with `uncommitted_narration`. That text is always empty since block 4 (nothing is shown before the commit); the campaign is unchanged. The campaign is unchanged (`error.turn_state_changed` is false).
 - Render three message kinds: player (`player_message`), narrator (`turn_completed`), system/error (`turn_failed`, `post_turn_completed`, errors from `save`).
 
 ## 4. View state

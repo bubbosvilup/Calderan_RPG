@@ -77,7 +77,7 @@ test("cancellation during narrator streaming and after narration (before the con
     const f = turnFixture(), before = f.campaign.exportSnapshot(), ac = new AbortController();
     const r = await run(f.world, f.campaign, "I give boots to Brenna.", { signal: ac.signal, onNarrator: (_n, p) => { if (p === phase) ac.abort(); } });
     assert.deepEqual([r.code, r.counts.controller, r.counts.commit], ["cancelled", 0, 0], phase); unchanged(f.campaign, before);
-    assert.ok(!r.events.some(e => e.type === "narration_delta"), `${phase}: an unaudited draft is never delivered`);
+    assert.ok(!r.events.some(e => e.type === "narration_completed"), `${phase}: an unaudited draft is never delivered`);
     assert.ok(r.recent.every(e => e.status !== "finalized"));
   }
 });
@@ -92,7 +92,7 @@ test("cancellation immediately before commit (a carry turn): no move, no time, n
     { kind: "set_legal_status", character_id: M, status: "enslaved", holder_id: "nicco" }] });
   const before = c.exportSnapshot(), ac = new AbortController();
   const r = await run(world, c, "*picks Maren up and carries her into Heartstone*", { signal: ac.signal, commands: [],
-    narrations: ["Nicco lifts Maren and carries her through the heavy door into the tower."], onEvent: e => { if (e.type === "narration_completed") ac.abort(); } });
+    narrations: ["Nicco lifts Maren and carries her through the heavy door into the tower."], onEvent: e => { if (e.type === "state_proposed") ac.abort(); } }); // the last event before the commit (prose is published only after it)
   assert.deepEqual([r.code, r.counts.commit], ["cancelled", 0]); unchanged(c, before);
   assert.equal(c.exportSnapshot().runtime.scene.player_location, SQUARE);
   assert.ok(r.recent.every(e => e.status !== "finalized"), "the delivered text is kept only as a state_failed diagnostic");

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { nextTurnKey } from "./turn-http.js";
 import assert from "node:assert/strict";
 import * as fs from "node:fs/promises";
 import { readFileSync } from "node:fs";
@@ -380,7 +381,7 @@ test("HTTP host mode: start screen, create, save, load, close; save state in the
     const created = await (await post("/api/campaigns/create", { display_name: "Fresh", scenario_id: "caldrevan.slave_market.v1" })).json();
     assert.equal(created.ok, true); assert.equal(created.campaign.display_name, "Fresh"); assert.equal(created.campaign.save.state, "saved");
     assert.equal(created.messages[0].text, SLAVE_MARKET_V1.opening_text);
-    const turned = await (await post("/api/turn", { text: "*looks around*" })).json();
+    const turned = await (await post("/api/turn", { text: "*looks around*", turn_key: nextTurnKey(), expected_revision: created.revision })).json();
     assert.equal(turned.messages.length, 3, "opening + player + narrator from the session-owned history");
     const moved = await (await post("/api/location", { target: "mudlarks_herbs", expected_revision: turned.revision })).json();
     assert.equal(moved.campaign.save.state, "unsaved");

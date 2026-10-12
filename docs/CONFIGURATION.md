@@ -18,6 +18,10 @@ Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `s
 | `VOYAGE_API_KEY`, `CALDREVAN_EMBEDDING_ADAPTER` | no | Only for opt-in semantic retrieval (dev inspection tools). Lexical retrieval is the default and needs no key. |
 | `CALDREVAN_PORTRAIT_MODEL`, `CALDREVAN_PORTRAIT_RESOLUTION`, `CALDREVAN_PORTRAIT_ASPECT_RATIO` | no | Legacy knobs of the superseded OpenRouter image client (`src/llm/openrouter/image-client.ts`). Production no longer uses it; images go through `HF_TOKEN`. |
 
+## Narrator output budget
+
+Ordinary cap `NARRATOR_OUTPUT_TOKENS = 768` (`src/app/provider-config.ts`, no env override); the single truncation-recovery regeneration uses 1024 (`NARRATOR_RECOVERY_OUTPUT_TOKENS`). Model, route (`z-ai/fp8`, no fallbacks), reasoning and Controller are unchanged. Hard per-turn bounds: 2 logical Narrator generations, 3 physical provider attempts.
+
 ## Non-environment configuration
 
 `config/economy.yaml` (P8 reference prices, loaded by `src/economy/economy.ts`; anchors may be in silver, settlement is gold only) and the six alternate narrator ids in `src/app/narrator-alternatives.ts` (UI comparison selector only: not defaults, not environment-configurable).

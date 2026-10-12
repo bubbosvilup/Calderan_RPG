@@ -45,6 +45,7 @@ How it was reconstructed: git history on this clone starts on 2026-10-05 (50 com
 - **P0 foreground canonical identity binding** (`d4e9e22`): objective partner identity, conflicting-name guard, live certification (both scenarios pass).
 - **Person Actual Offer end to end** (`c0608a6`): spoken price forms, stable subject across supersession, Slave NPC on Accept, same-entity rename; 3278 tests.
 - **Consolidation blocks 1 to 3** (2026-10-12): block 1 `4b8fdc9` (IMG-1, TRD-1, TRD-2); block 2 `5edcd37` (TRD-1b, TRD-3, TRD-4, TRD-5, TRD-10, live-certified); block 3 `31d82cd` (MOV-1, MOV-3, MOV-4, ID-1, MOV-2 in the narrow escort form, live-certified); 3334 tests. TRD-11 and ECO-1 open by decision.
+- **Consolidation block 4, turn reliability** (2026-10-12, working tree, not committed at writing): PIPE-1 (neutral progress, the audited prose arrives once), PIPE-2 (post-commit steps are warnings), REV-2 (`turn_key` + `expected_revision`, in-flight registry, 32 persisted terminal receipts), NARR-1 (cap 768, one 1024 recovery, never commit incomplete narration); CTX-2 only for the draft-stream leak; 3377 tests; live A/B on the production model. Report: [CONSOLIDATION_BLOCK4_TURN_RELIABILITY](evaluations/CONSOLIDATION_BLOCK4_TURN_RELIABILITY.md).
 
 ### Current capability snapshot
 Playable persistent campaign on a local web UI with autosave; canon-grounded narration on `z-ai/glm-5.2` and a Controller on `openai/gpt-6-luna` (fallback `claude-haiku-5.5`); player-authorized trade and promotion; masked identity; derived calendar and weather; item lifecycle and Gold; player and NPC+ image workflows on Qwen-Image + Raena LoRA; 3278 offline tests (latest recorded run), zero live calls in `npm test`.
@@ -79,7 +80,7 @@ Next product feature in the existing roadmap: calendar and weather in the scene 
 Rejoin via the same UI action (NPC-1); decide behaviour-activity (NPC-2); richer promotion screen (roles, appearance check, portrait step) and visible promote affordance (UI-3); Personality and Relations tabs; avatar Upload pipeline (currently `AVATAR_UPLOAD_SUPPORTED = false`); `premium_*` to `npc_plus` naming migration (NAME-1); decision on automatic demotion (currently none).
 
 ### T-PIPE: pipeline, context, providers
-- **Safety first:** PIPE-1 / CTX-2 draft preview policy and deterministic leak filter; CTX-1 opaque refs and boundary-aware masking; PIPE-2 non-throwing publication; PIPE-8 single delivery order.
+- **Done (block 4):** PIPE-1 (neutral progress, no draft stream), PIPE-2 (non-throwing publication), REV-2 (idempotent turns), NARR-1 (truncation recovery). **Safety next:** CTX-2 deterministic leak check on the final text (the draft-stream leak is closed); CTX-1 opaque refs and boundary-aware masking; PIPE-8 single delivery order.
 - **Performance:** PIPE-4 and PIPE-9 (cached budget, retrieval headroom); PIPE-3 respond before maintenance; PIPE-10 degrade-not-fail retrieval; PIPE-11 name index.
 - **Structure:** `NarrationFacts` claim extractor (PIPE-5/6/7); `TurnFrame`; `ControllerView` with a token budget (CTX-3); tiered context-budget strategy (register §9); `OperationLock` and `GameSession` decomposition (PIPE-12).
 - **Providers:** narrator health counters and optional user-triggered backup route (PRV-1); strict Controller output once normalization is rare (PRV-2); honour `Retry-After` (PRV-3); remove decorative env var (PRV-4); delete dead integrations (PRV-7).
@@ -119,10 +120,10 @@ Evidence/history reorganisation and the `saves/` tracking fix (REPO-1..3, DOC-16
 | --- | --- | --- |
 | A1 | H1 closure (three deferred items, stale-doc fixes) | none |
 | A2 | Narrator truncation hardening: persist `finish_reason`, metrics, cap 768, constrained-regeneration recovery | A6 for the recovery part |
-| A3 | PIPE-1 neutral draft state; CTX-1/CTX-2 leak-filter plan | decision D2 |
+| A3 | ~~PIPE-1 neutral draft state~~ DONE (block 4, D2 decided); CTX-1/CTX-2 leak-filter plan for the final text | none |
 | A4 | Authority classes (A/B/C) policy; explicit manumission (AUTH-1); retire/merge design (AUTH-2) | decision D7 |
 | A5 | Optional-service/core split: flags, remove optional work from the response path, disabled-services test matrix; then side stores for media and learning (REV-1/PER-3) | A6 |
-| A6 | Turn idempotency (REV-2) and non-throwing publication (PIPE-2) | none |
+| A6 | ~~Turn idempotency (REV-2) and non-throwing publication (PIPE-2)~~ DONE (block 4) | none |
 | A8 | Modern benchmark, L1 scripted scenarios (regression net for A9) | none |
 | A9 | Shared `NarrationFacts`: movement/follow/departure/arrival slice, then price/offers, then names | A8 |
 | A10 | Targeted ambiguity verifier (flagged, bounded) | A9 plus a measured ambiguity rate |

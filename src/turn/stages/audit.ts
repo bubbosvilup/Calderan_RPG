@@ -14,7 +14,7 @@ import { escapeRegExp } from "../language/text.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";
-import type { DraftGenerator, NarratorRequest } from "./narration.js";
+import type { NarratorRequest } from "./narration.js";
 
 /**
  * Hardening H2 — AuditStage. Owns narration validation and reconciliation: the delivered narration must not assert what the engine
@@ -87,19 +87,24 @@ export function deliverDraft(draft: string, issues: readonly AuditIssue[]): Turn
 /**
  * Async: one reconciliation narrator call. Failure mapping: the coordinator holds `narrator_failed` for the call, the revision audit and
  * redaction (pre-H2 order). `checkpoint` runs after the revision, so a stale or cancelled turn never delivers it.
+ * Block 4: the revision draws on the turn's Narrator ledger. When it cannot run (budget spent) or comes back truncated (`length`), the
+ * incomplete/absent revision is never used: the COMPLETE original draft is deterministically redacted instead.
  */
-export async function reconcileNarration(i: { readonly auditor: NarrationAuditor; readonly generate: DraftGenerator; readonly checkpoint: () => void;
+export async function reconcileNarration(i: { readonly auditor: NarrationAuditor; readonly generate: (request: NarratorRequest) => Promise<{ readonly text: string; readonly finish_reason?: "stop" | "length" } | undefined>; readonly checkpoint: () => void;
   readonly prompt: NarratorRequest; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly outcome: { readonly revision: readonly string[]; readonly prose: readonly string[] };
   readonly intent: TurnIntent; readonly context: TurnContext }): Promise<TurnDelivery> {
   const revisionPrompt = { ...i.prompt, ...revisionRequest(i.prompt, i.draft, i.outcome.revision, i.issues) };
   const identityGate = narratorIdentityGate(i.context);
-  const revision = (await i.generate(identityGate ? { ...revisionPrompt, messages: revisionPrompt.messages.map(m => ({ ...m, content: identityGate.mask(m.content) })) } : revisionPrompt)).text;
+  const drafted = await i.generate(identityGate ? { ...revisionPrompt, messages: revisionPrompt.messages.map(m => ({ ...m, content: identityGate.mask(m.content) })) } : revisionPrompt);
   i.checkpoint();
-  const revision_issues = i.auditor.check(revision, deriveTurnEvidence(i.intent, revision, i.context));
-  const text = revision_issues.length ? redactNarration(revision, revision_issues, i.outcome.prose) : revision;
+  const usable = !!drafted && drafted.finish_reason !== "length";
+  const revision = usable ? drafted.text : undefined;
+  const revision_issues = revision !== undefined ? i.auditor.check(revision, deriveTurnEvidence(i.intent, revision, i.context)) : i.issues;
+  const redacted = revision === undefined || revision_issues.length > 0;
+  const text = redacted ? redactNarration(revision ?? i.draft, revision_issues, i.outcome.prose) : revision!;
   // D-13: a committed arrival is state; if the revision or its redaction no longer mentions the mover, say so deterministically (never roll state back).
   const omitted = i.auditor.arrivals().filter(a => !new RegExp(`\\b${escapeRegExp(a.name)}\\b`, "i").test(text));
   const repaired_arrivals = omitted.map(a => `${a.name} has followed Nicco to ${a.place}.`);
-  return { draft: i.draft, issues: i.issues, delivered: revision_issues.length ? "redacted" : "revision",
-    text: repaired_arrivals.length ? `${text.trimEnd()} ${repaired_arrivals.join(" ")}`.trim() : text, revision, revision_issues, ...(repaired_arrivals.length ? { repaired_arrivals } : {}) };
+  return { draft: i.draft, issues: i.issues, delivered: redacted ? "redacted" : "revision",
+    text: repaired_arrivals.length ? `${text.trimEnd()} ${repaired_arrivals.join(" ")}`.trim() : text, ...(revision !== undefined ? { revision } : {}), revision_issues: revision !== undefined ? revision_issues : [], ...(repaired_arrivals.length ? { repaired_arrivals } : {}) };
 }

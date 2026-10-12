@@ -23,7 +23,7 @@ Neither provider imports CampaignState, WorldStore, retrieval services or persis
 | Setting | Narrator | Controller |
 | --- | --- | --- |
 | Default requested model | `z-ai/glm-5.2` (fixed provider route `z-ai/fp8`, no fallbacks; Phase 1K default was `minimax/minimax-m2-her`) | `openai/gpt-6-luna` → fallback `anthropic/claude-haiku-5.5` |
-| Default output token budget | 512 | 512 |
+| Default output token budget | 768 (recovery regeneration: 1024) | 512 |
 | Output ceiling | 2,048 (configurable for another model) | 1,024 |
 | Total request timeout | 60 seconds | 20 seconds |
 | Streaming | Yes | No |
@@ -38,7 +38,7 @@ HISTORICAL: the Phase 1K controller used the selected [DeepSeek model](https://o
 
 `stream()` yields `text_delta` immediately. A successful terminal `completed` event includes final text exactly equal to concatenated deltas, usage, model and latency. A terminal `error` event includes partial text, `incomplete: true`, and a typed error. `generate()` collects the same stream and throws on failure; callers needing partial text must use `stream()`.
 
-The SSE parser handles fragmented UTF-8, split event boundaries, multiple events per chunk, LF/CRLF, comments and empty events. It requires a successful `stop` finish plus `[DONE]`. Truncation (`length`), missing completion, malformed data, empty content and failures after partial output do not produce a completed result. Recognizable refusal/content-filter outcomes use `model_refusal`. No replacement prose or model fallback is generated.
+The SSE parser handles fragmented UTF-8, split event boundaries, multiple events per chunk, LF/CRLF, comments and empty events. It requires a successful `stop` finish plus `[DONE]`. Truncation (`length`) is a completed result with `finish_reason: "length"` only when the turn layer asks (`accept_truncated`, block 4: it then runs the single recovery regeneration); for every other caller it stays a non-retryable `invalid_provider_response` (`finish_reason_length`). The result also carries `finish_reason`, `model`, `provider`, `route`, `max_output_tokens`, `generation_id` and `cost_usd` for the trace. Missing completion, malformed data, empty content and failures after partial output do not produce a completed result. Recognizable refusal/content-filter outcomes use `model_refusal`. No replacement prose or model fallback is generated.
 
 There are **no automatic retries**, including 429 and 5xx. A caller may make an explicit new request; a stream is never transparently restarted after visible text. Early iterator exit closes the reader and aborts network work. AbortSignal cancellation is distinct from deadline expiry. Deadlines cover headers and body consumption. The benchmark starts the controller only after receiving narrator completion.
 

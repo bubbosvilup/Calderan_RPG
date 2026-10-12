@@ -97,6 +97,8 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 
 ## Trade offers (Actual Offer V1)
 
+Block 4 adds the optional additive save-file field `turn_receipts` (`{authority:"idempotency_metadata", receipts:[...]}`, at most 32, newest kept): terminal turn results keyed by `turn_key`, written in the same atomic rename as the snapshot, **not** part of `CampaignState` (recording one never changes the semantic revision). Schema stays 5; an absent or malformed block loads as no receipts, and a receipt claiming a revision beyond the saved one is dropped.
+
 The optional additive snapshot field `trade_offers` stores `TradeOffer` records (active, accepted, superseded, withdrawn, invalidated). **No schema bump and no migration**: snapshot schema stays 6, save schema 5, and an absent field means no offers. A still-valid active offer survives save/load; accepted and closed offers cannot be re-accepted after reload. See [Actual Offer](ACTUAL_OFFER.md).
 
 ## Manual-save policy and ownership

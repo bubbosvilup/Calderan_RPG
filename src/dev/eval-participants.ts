@@ -51,7 +51,7 @@ for (const seq of SEQUENCES) {
     for await (const e of coordinator.runTurn({ campaign, player_input: input })) events.push(e);
     const last = events.at(-1)!, result = last.type === "turn_completed" ? last.result : undefined;
     await settle(narratorWire.captures[n]); await settle(controllerWire.captures[c]);
-    const after = campaign.exportSnapshot(), prompt = requests.at(-1)?.messages[0]?.content ?? "", narration = events.filter(e => e.type === "narration_delta").map(e => (e as { text: string }).text).join("");
+    const after = campaign.exportSnapshot(), prompt = requests.at(-1)?.messages[0]?.content ?? "", narration = events.filter(e => e.type === "narration_completed").map(e => (e as { text: string }).text).join("");
     turns.push({ input, runtime_location: before.runtime.scene.player_location, outcome: result ? "success" : (last as { code?: string }).code ?? last.type, narration,
       scene_participants: result?.scene_participants ?? null, scene_participants_block: section(prompt, "SCENE PARTICIPANTS"), player_profile_block: section(prompt, "NICCO / PLAYER PROFILE"),
       knowledge_access: section(prompt, "CHARACTER KNOWLEDGE ACCESS"), recent_conversation: section(prompt, "RECENT CONVERSATION"), retrieved_canon: section(prompt, "RETRIEVED CANON"),

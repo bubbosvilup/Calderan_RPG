@@ -32,7 +32,9 @@ import { reflectAfterTurn, type ReflectionProvider, type ReflectionRun } from ".
 import { MannerismMaintenance, type MannerismExtractor, type MannerismRun } from "../turn/mannerism-extraction.js";
 import type { ReflectionDiagnostics } from "../turn/reflection-diagnostics.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
-import type { TurnEvent } from "../turn/turn-types.js";
+import type { PublicationStep, TurnEvent, TurnProgressPhase } from "../turn/turn-types.js";
+import { TurnReceiptLog, turnFingerprint, validTurnKey } from "./turn-receipts.js";
+import type { TurnReceipt } from "../persistence/turn-receipts.js";
 import type { TurnCoordinator } from "../turn/turn-coordinator.js";
 import type { WorldStore } from "../world/world-store.js";
 import { appError, toAppError, type AppError } from "./app-errors.js";
@@ -44,7 +46,7 @@ import { inventoryUiView } from "./inventory-ui-view.js";
 import { deriveTradeView, tradeOfferRef, TRADE_MESSAGES, type TradeReceipt, type TradeView } from "./trade-offer-view.js";
 import { CampaignValidationError } from "../campaign/validation.js";
 import { TRADE_FIELD } from "../campaign/trade.js";
-import { buildTrace, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
+import { buildTrace, emptyReflection, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**
  * The single application seam a UI talks to (docs/UI_ENGINE_CONTRACT.md). It composes the existing TurnCoordinator,
@@ -88,17 +90,19 @@ export interface SessionDeps {
   readonly engine_version?: string;
 }
 export type SessionEvent =
-  | ({ readonly type: "narrator_preview"; readonly provisional: true } & import("../turn/turn-types.js").NarratorPreview)
   | { readonly type: "context_compaction_completed"; readonly result: CompactionResult; readonly view: SessionView }
   | { readonly type: "player_message"; readonly turn_id: string; readonly text: string }
   | { readonly type: "status_changed"; readonly status: SessionStatus }
-  | { readonly type: "narration_delta"; readonly turn_id: string; readonly text: string; /** Audited text, but not final until `turn_completed`. */ readonly provisional: true }
+  /** Block 4 (PIPE-1): the only thing visible while a turn runs. Status words, never prose. */
+  | { readonly type: "turn_progress"; readonly turn_id: string; readonly phase: TurnProgressPhase }
+  /** The ONE publication of the narration: complete, audited and committed. */
   | { readonly type: "turn_completed"; readonly turn_id: string; readonly narration: string; readonly view: SessionView; readonly trace: TurnTrace }
   | { readonly type: "turn_failed"; readonly turn_id: string; readonly error: AppError; readonly uncommitted_narration: string; readonly view: SessionView }
   | { readonly type: "post_turn_completed"; readonly turn_id: string; readonly view: SessionView; readonly reflection: TurnTrace["reflection"] };
 export type TurnOutcome =
-  | { readonly ok: true; readonly turn_id: string; readonly narration: string; readonly view: SessionView; readonly trace: TurnTrace }
-  | { readonly ok: false; readonly error: AppError; readonly turn_id?: string; readonly uncommitted_narration?: string; readonly view: SessionView };
+  /** `warnings`: post-commit publication steps that failed without failing the turn (PIPE-2). `replayed`: answered from an earlier terminal result of the same turn_key; no provider was called (REV-2). */
+  | { readonly ok: true; readonly turn_id: string; readonly narration: string; readonly view: SessionView; readonly trace: TurnTrace; readonly warnings?: readonly string[]; readonly replayed?: true }
+  | { readonly ok: false; readonly error: AppError; readonly turn_id?: string; readonly uncommitted_narration?: string; readonly view: SessionView; readonly replayed?: true };
 /** `transcript_error`: the canonical save succeeded but the history append did not (retried at the next save). */
 export type SaveOutcome = { readonly ok: true; readonly saved: SavedCampaign; readonly transcript_error?: true; readonly view: SessionView } | { readonly ok: false; readonly error: AppError };
 /**
@@ -122,11 +126,15 @@ export interface LoadReport {
 }
 /** Compact, player-facing save status (view.session.save adds it). */
 export interface SaveStatus { readonly saving: boolean; readonly error?: AppError["code"]; readonly autosave: "off" | "on" | "stopped"; readonly transcript_error?: true }
-interface SessionInit { readonly opening_text?: string; readonly transcript?: { readonly entries: readonly TranscriptEntry[]; readonly next_index: number; readonly rollback_to?: number } }
+interface SessionInit { readonly opening_text?: string; readonly transcript?: { readonly entries: readonly TranscriptEntry[]; readonly next_index: number; readonly rollback_to?: number }; readonly turn_receipts?: readonly TurnReceipt[] }
 const FATAL_SAVE = new Set(["invalid_json", "invalid_save", "unsupported_version", "migration_failed", "dataset_mismatch", "reference_invalid", "unsafe_path", "campaign_locked", "invalid_id", "session_closed"]);
 type HistoryRepository = CampaignSaveRepository & Partial<Pick<FileCampaignRepository, "appendTranscript" | "readTranscript" | "retainedAssetReferences">>;
 export type ShutdownOutcome = { readonly closed: true; readonly discarded_unsaved_changes: boolean } | { readonly closed: false; readonly error: AppError };
-export interface SubmitOptions { readonly onEvent?: (event: SessionEvent) => void; readonly signal?: AbortSignal }
+export interface SubmitOptions { readonly onEvent?: (event: SessionEvent) => void; readonly signal?: AbortSignal;
+  /** REV-2: one client-generated key per player submission. The same key never executes twice; a different request under a used key is rejected. Absent → no idempotency (CLI, tests). */
+  readonly turn_key?: string;
+  /** REV-2: the campaign revision the player's view was built on. A different current revision rejects the request before any provider call. */
+  readonly expected_revision?: number }
 export type LocationOutcome = { readonly ok: true; readonly changed: boolean; readonly confirmation: string; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly candidates?: readonly string[]; readonly view: SessionView };
 /** Portrait reference / role / delete outcome. */
@@ -188,6 +196,11 @@ export class GameSession {
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
   /** Portrait Gallery V2: the character whose batch is being generated (one batch per session at a time). */
   #portraitBusy: string | undefined; #portraitDone: Promise<void> | undefined; #idleWaiters: (() => void)[] = [];
+  /** REV-2: the in-flight registry (runtime memory only) and the bounded window of terminal receipts (persisted with the save). */
+  readonly #running = new Map<string, { readonly fingerprint: string; readonly promise: Promise<TurnOutcome> }>();
+  #receipts = new TurnReceiptLog();
+  /** The last view that was derived successfully: a committed turn is always answered, even if a later derivation fails. */
+  #lastView: SessionView | undefined;
   /** Save/Load v1: scenario opening (narrator context until the first finalized exchange), history, autosave, deferred deletions. */
   readonly #openingText: string | undefined;
   readonly #autosave: AutosaveScheduler | undefined;
@@ -204,10 +217,11 @@ export class GameSession {
     this.#coordinator = deps.createCoordinator({ diagnostics_sink: record => { this.#diagnostics = record; },
       ...(opening ? { narrator_request_setup: (request: NarratorRequest) => this.#coordinator.recent?.(this.#session.campaign).finalized().length
         ? request : { ...request, messages: [{ role: "assistant" as const, content: opening }, ...request.messages] } } : {}) });
+    if (init.turn_receipts) this.#receipts = new TurnReceiptLog(init.turn_receipts);
     if (init.transcript) { this.#transcript = [...init.transcript.entries]; this.#nextTranscript = init.transcript.next_index; this.#rollbackTo = init.transcript.rollback_to; }
     this.#autosave = deps.autosave ? new AutosaveScheduler(deps.autosave, {
       // Canonical changes, or delivered exchanges whose continuity/history is not on disk yet (a dialogue-only turn commits no state).
-      dirty: () => this.#session.hasUnsavedChanges || this.#historyPending(),
+      dirty: () => this.#session.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending,
       ready: () => this.#status === "idle" && !this.#portraitBusy && !this.#session.saving && !this.#suspended,
       save: async () => { const r = await this.#saveNow("autosave"); return r.ok ? { ok: true } : { ok: false, fatal: FATAL_SAVE.has(r.error.code) }; },
     }) : undefined;
@@ -248,6 +262,7 @@ export class GameSession {
     const session = new GameSession(deps, CampaignSession.fromLoaded(loaded, deps.repository, { ...(options.quarantine_corrupt_current ? { quarantine_corrupt_current: true } : {}), ...(deps.engine_version ? { engine_version: deps.engine_version } : {}) }), {
       ...(scenario ? { opening_text: scenario.opening_text } : {}),
       ...(read && read.status === "ok" ? { transcript: { entries: read.entries, next_index: read.next_index, ...(read.max_revision > canon.saved_revision ? { rollback_to: canon.saved_revision } : {}) } } : {}),
+      ...(loaded.turn_receipts ? { turn_receipts: loaded.turn_receipts } : {}),
     });
     // Continuity is context, not commands: added to the conversation window only when it belongs to exactly this saved revision.
     let continuity: LoadReport["continuity"] = loaded.continuity_dropped ? "dropped" : "none";
@@ -728,21 +743,62 @@ export class GameSession {
 
   /**
    * One player turn. Rejects immediately (no mutation) when closed, busy, or when the text is an application command. A turn that
-   * fails before the commit leaves the campaign exactly as it was; the post-turn reflection can never fail a committed turn.
+   * fails before the commit leaves the campaign exactly as it was; after the commit the turn has SUCCEEDED and nothing published
+   * afterwards (history, trace, maintenance, reflection) can change that (PIPE-2).
+   *
+   * REV-2 request identity: `turn_key` + `expected_revision`. Order of checks — all before any provider call or mutation:
+   *   1. malformed identity → invalid_input; 2. the key is in flight → join the running turn (no second pipeline); 3. the key has a terminal
+   *   receipt → replay it (same fingerprint) or reject (different request under the same key); 4. busy → turn_in_progress (a different key never queues);
+   *   5. expected_revision ≠ current → stale_turn.
    */
   submitPlayerInput(input: string, options: SubmitOptions = {}): Promise<TurnOutcome> {
     if (this.#status === "closed") return Promise.resolve(this.#reject(appError("session_closed")));
+    let identity: { readonly key: string; readonly fingerprint: string } | undefined;
+    if (options.turn_key !== undefined || options.expected_revision !== undefined) {
+      if (options.turn_key !== undefined && !validTurnKey(options.turn_key)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "Malformed turn request: the turn key is not valid." })));
+      if (options.expected_revision !== undefined && (!Number.isSafeInteger(options.expected_revision) || options.expected_revision < 0)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "Malformed turn request: the expected revision is not valid." })));
+      if (options.turn_key !== undefined) {
+        identity = { key: options.turn_key, fingerprint: turnFingerprint(input, options.expected_revision) };
+        const conflict = () => Promise.resolve(this.#reject(appError("turn_key_conflict")));
+        const running = this.#running.get(identity.key);
+        if (running) return running.fingerprint === identity.fingerprint ? running.promise.then(outcome => this.#answered(outcome, true)) : conflict();
+        const receipt = this.#receipts.find(identity.key);
+        if (receipt) return receipt.fingerprint === identity.fingerprint ? Promise.resolve(this.#replay(receipt)) : conflict();
+      }
+    }
     if (this.#status !== "idle") return Promise.resolve(this.#reject(appError("turn_in_progress")));
     if (APPLICATION_COMMAND.test(input)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "That is an application command; the interface must call it directly, not send it as a player action." })));
+    if (options.expected_revision !== undefined && options.expected_revision !== this.#session.campaign.revision)
+      return Promise.resolve(this.#reject(appError("stale_turn", { message: "The campaign changed since this view was shown. Nothing was sent; review the story and send it again." })));
     if (this.getView().context_budget?.compaction_required) {
       void this.requestContextCompaction({ reason: "auto", ...(options.onEvent ? { onEvent: options.onEvent } : {}) });
       return Promise.resolve(this.#reject(appError("context_too_large", { message: "Context maintenance is required before another turn; compressor availability is shown in the session view." })));
     }
-    this.#setStatus("running_turn", options.onEvent);
-    const run = this.#runTurn(input, options);
+    this.#setStatus("running_turn", options.onEvent && (e => { try { options.onEvent!(e); } catch { /* A UI callback can never affect the turn. */ } }));
+    const run = this.#runTurn(input, options, identity);
     const tracked: Promise<unknown> = run.finally(() => { if (this.#inflight === tracked) this.#inflight = undefined; });
     this.#inflight = tracked;
-    return run.then(outcome => ({ ...outcome, view: this.getView() }));
+    if (identity) this.#running.set(identity.key, { fingerprint: identity.fingerprint, promise: run });
+    return run.then(outcome => this.#answered(outcome, false));
+  }
+  #view(): SessionView { try { return (this.#lastView = this.getView()); } catch (error) { if (this.#lastView) return this.#lastView; throw error; } }
+  /** The outcome as handed to a caller: always with the current view. `replayed` marks an answer that executed nothing. */
+  #answered(outcome: TurnOutcome, replayed: boolean): TurnOutcome { return { ...outcome, ...(replayed ? { replayed: true as const } : {}), view: this.getView() }; }
+  /** Whether this key is running or has a terminal receipt (the HTTP layer uses it to avoid per-request side effects on a duplicate). */
+  turnKeyKnown(turn_key: string): boolean { return this.#running.has(turn_key) || !!this.#receipts.find(turn_key); }
+  /** REV-2: the stored terminal result of a turn_key, answered without Narrator, Controller, state change or new transcript. */
+  #replay(receipt: TurnReceipt): TurnOutcome {
+    if (receipt.status === "failed") {
+      const e = receipt.error!;
+      const error = appError(e.code as AppError["code"], { ...(e.provider_code ? { provider_code: e.provider_code as NonNullable<AppError["provider_code"]> } : {}), turn_state_changed: e.turn_state_changed });
+      this.#lastError = error;
+      return { ok: false, error, turn_id: receipt.turn_id, uncommitted_narration: "", replayed: true, view: this.getView() };
+    }
+    const snapshot = this.#session.campaign.exportSnapshot();
+    const narration = [...this.#transcript].reverse().find(t => t.role === "narrator" && t.turn_id === receipt.turn_id)?.text ?? "";
+    const trace = this.getTurn(receipt.turn_id) ?? { ...buildTrace({ sequence: 0, campaign_id: snapshot.campaign_id, dataset_id: snapshot.dataset_id, player_input: "", revision_before: receipt.base_revision,
+      revision_after: receipt.committed_revision ?? receipt.base_revision, outcome: "completed", turn_key: receipt.turn_key }), turn_id: receipt.turn_id };
+    return { ok: true, turn_id: receipt.turn_id, narration, trace, replayed: true, view: this.getView() };
   }
   requestContextCompaction(options: { reason: CompactionReason; onEvent?: (event: SessionEvent) => void }): Promise<CompactionResult> {
     if (this.#status !== "idle") return Promise.resolve({ status: "failed", reason: options.reason, detail: "Session is busy or closed." });
@@ -766,49 +822,86 @@ export class GameSession {
     emit({ type: "context_compaction_completed", result: this.#compactionResult, view: this.getView() });
     return this.#compactionResult;
   }
-  async #runTurn(input: string, options: SubmitOptions): Promise<TurnOutcome> {
+  /** Failures that are properties of the REQUEST'S moment (not of the logical turn) are never remembered under the key: a retry may legitimately run. */
+  static readonly #UNREMEMBERED = new Set<string>(["cancelled", "stale_turn", "turn_in_progress", "invalid_input", "session_closed"]);
+  /**
+   * Records the terminal result under the turn_key and leaves the in-flight registry, in ONE synchronous step that runs before the session
+   * becomes idle again. No save can be taken in between (saves need `idle`), so a durable snapshot at the committed revision always carries its receipt.
+   */
+  #settle(identity: { readonly key: string; readonly fingerprint: string } | undefined, base_revision: number, outcome: TurnOutcome, committed_revision?: number): TurnOutcome {
+    if (!identity) return outcome;
+    try {
+      if (outcome.ok) this.#receipts.record({ turn_key: identity.key, fingerprint: identity.fingerprint, base_revision, status: "committed", turn_id: outcome.turn_id, committed_revision: committed_revision ?? outcome.trace.revision_after });
+      else if (!GameSession.#UNREMEMBERED.has(outcome.error.code)) this.#receipts.record({ turn_key: identity.key, fingerprint: identity.fingerprint, base_revision, status: "failed", turn_id: outcome.turn_id ?? turnIdOf(this.campaignId, base_revision, 0),
+        error: { code: outcome.error.code, ...(outcome.error.provider_code ? { provider_code: outcome.error.provider_code } : {}), turn_state_changed: outcome.error.turn_state_changed } });
+    } finally { this.#running.delete(identity.key); }
+    return outcome;
+  }
+  async #runTurn(input: string, options: SubmitOptions, identity?: { readonly key: string; readonly fingerprint: string }): Promise<TurnOutcome> {
     const emit = (event: SessionEvent) => { try { options.onEvent?.(event); } catch { /* A UI callback can never affect the turn. */ } };
     const campaign = this.#session.campaign, before = campaign.exportSnapshot(), sequence = ++this.#sequence, turn_id = turnIdOf(before.campaign_id, before.revision, sequence);
     const controller = new AbortController(); this.#abort = controller;
     const forward = () => controller.abort(); options.signal?.addEventListener("abort", forward, { once: true }); if (options.signal?.aborted) forward();
     this.#diagnostics = undefined; this.#reflectionRecord = undefined; this.#lastError = undefined;
-    let completed: Extract<TurnEvent, { type: "turn_completed" }> | undefined, failed: Extract<TurnEvent, { type: "turn_failed" }> | undefined;
+    let completed: Extract<TurnEvent, { type: "turn_completed" }> | undefined, failed: Extract<TurnEvent, { type: "turn_failed" }> | undefined, committedEvent: Extract<TurnEvent, { type: "state_committed" }> | undefined;
+    const warnings: string[] = [];
+    // Post-commit steps are guarded one by one: each failure is a warning (kept in the trace and logged), never a failed turn.
+    const guard = <T>(step: PublicationStep, action: () => T, fallback: T): T => { try { return action(); } catch { if (!warnings.includes(step)) warnings.push(step); return fallback; } };
     try {
       emit({ type: "player_message", turn_id, text: input });
-      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, on_narrator_preview: preview => emit({ type: "narrator_preview", ...preview, provisional: true }) })) {
-        if (event.type === "narration_delta") emit({ type: "narration_delta", turn_id, text: event.text, provisional: true });
+      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, ...(identity ? { turn_key: identity.key } : {}), ...(options.expected_revision !== undefined ? { expected_revision: options.expected_revision } : {}) })) {
+        if (event.type === "turn_progress") emit({ type: "turn_progress", turn_id, phase: event.phase });
+        else if (event.type === "state_committed") committedEvent = event;
+        else if (event.type === "publication_warning") { if (!warnings.includes(event.step)) warnings.push(event.step); }
         else if (event.type === "turn_completed") completed = event;
         else if (event.type === "turn_failed") failed = event;
       }
       const after = campaign.exportSnapshot();
-      if (completed) {
+      // The authoritative commit is the line between "the turn did not happen" and "the turn happened": past it, only success is reported.
+      if (committedEvent || completed) {
+        const narration = completed?.result.narration ?? committedEvent!.narration;
+        const committed_revision = committedEvent?.revision ?? completed?.result.final_revision ?? after.revision;
         // Creation only: movement/transfer of an existing identity never schedules art.
-        const previousItems = new Set(before.items.map(i => i.id));
-        for (const item of after.items) if (!previousItems.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id);
-        const trace = this.#record(buildTrace({ sequence, campaign_id: before.campaign_id, dataset_id: before.dataset_id, player_input: input, revision_before: before.revision, revision_after: after.revision,
-          outcome: "completed", result: completed.result, ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}), movement: movementOf(before, after), ...(this.#deps.unsafe_trace ? { unsafe: true } : {}) }));
+        guard("item_visuals", () => { const previousItems = new Set(before.items.map(i => i.id)); for (const item of after.items) if (!previousItems.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id); }, undefined);
+        const built = guard("diagnostics", () => buildTrace({ sequence, campaign_id: before.campaign_id, dataset_id: before.dataset_id, player_input: input, revision_before: before.revision, revision_after: after.revision,
+          outcome: "completed", ...(completed ? { result: completed.result } : {}), ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}), movement: movementOf(before, after), ...(this.#deps.unsafe_trace ? { unsafe: true } : {}),
+          ...(identity ? { turn_key: identity.key } : {}) }), undefined);
+        const trace = this.#record(built ?? { turn_id, campaign_id: before.campaign_id, dataset_id: before.dataset_id, sequence, revision_before: before.revision, revision_after: after.revision, player_input: input, outcome: "completed",
+          audit_issue_kinds: [], revision_issue_kinds: [], committed_command_kinds: [], rejected_command_kinds: [], retrieval_ids: [], reflection: emptyReflection() });
         // History only (never canonical): recorded with the revision the turn committed, written to transcript.jsonl after a save.
-        this.#recordHistory([{ role: "player", text: input }, { role: "narrator", text: completed.result.narration }], turn_id);
-        this.#autosave?.notify();
-        const view = this.getView();
-        emit({ type: "turn_completed", turn_id, narration: completed.result.narration, view, trace });
-        await this.#postTurn(turn_id, trace, controller.signal, emit, completed.result);
-        if (this.getView().context_budget?.compaction_required) await this.#compact("auto", emit, true);
-        return { ok: true, turn_id, narration: completed.result.narration, view: this.getView(), trace: this.#traces.find(t => t.turn_id === turn_id) ?? trace };
+        guard("transcript_history", () => this.#recordHistory([{ role: "player", text: input }, { role: "narrator", text: narration }], turn_id), undefined);
+        guard("diagnostics", () => this.#autosave?.notify(), undefined);
+        const settled = this.#settle(identity, before.revision, { ok: true, turn_id, narration, view: this.#view(), trace: warnings.length ? { ...trace, publication_warnings: [...warnings] } : trace, ...(warnings.length ? { warnings: [...warnings] } : {}) }, committed_revision);
+        if (warnings.length) { console.error(`Turn ${turn_id} published with warnings: ${warnings.join(", ")}`); guard("diagnostics", () => { const i = this.#traces.findIndex(t => t.turn_id === turn_id); if (i >= 0) this.#traces[i] = { ...this.#traces[i]!, publication_warnings: [...warnings] }; }, undefined); }
+        emit({ type: "turn_completed", turn_id, narration, view: this.#view(), trace });
+        // Optional maintenance after the commit: awaited so the next input stays busy until it settles, but it can never fail or undo the turn.
+        if (completed) { try { await this.#postTurn(turn_id, trace, controller.signal, emit, completed.result); } catch { console.error(`Turn ${turn_id}: post-turn maintenance failed (the turn is committed)`); } }
+        try { if (this.getView().context_budget?.compaction_required) await this.#compact("auto", emit, true); } catch { /* Optional maintenance. */ }
+        const final = this.#traces.find(t => t.turn_id === turn_id) ?? trace;
+        return { ...settled, ok: true, turn_id, narration, view: this.#view(), trace: final } as TurnOutcome;
       }
       const error = appError(failed?.code ?? "internal_error", { provider_code: failed?.provider_code, turn_state_changed: failed ? failed.final_revision !== failed.base_revision : false });
       this.#lastError = error;
       this.#record(buildTrace({ sequence, campaign_id: before.campaign_id, dataset_id: before.dataset_id, player_input: input, revision_before: before.revision, revision_after: after.revision, outcome: "failed", error,
-        ...(failed ? { failure_event: failed } : {}), ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}) }));
+        ...(failed ? { failure_event: failed } : {}), ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}), ...(identity ? { turn_key: identity.key } : {}) }));
       const uncommitted = failed?.narration ?? "";
       emit({ type: "turn_failed", turn_id, error, uncommitted_narration: uncommitted, view: this.getView() });
-      return { ok: false, error, turn_id, uncommitted_narration: uncommitted, view: this.getView() };
+      return this.#settle(identity, before.revision, { ok: false, error, turn_id, uncommitted_narration: uncommitted, view: this.getView() });
     } catch (thrown) {
+      if (committedEvent) {
+        // PIPE-2: whatever went wrong after the authoritative commit, the turn happened. Answer with the committed result and a warning.
+        if (!warnings.includes("result_publication")) warnings.push("result_publication");
+        console.error(`Turn ${turn_id} published with warnings: ${warnings.join(", ")}`);
+        const trace: TurnTrace = { turn_id, campaign_id: before.campaign_id, dataset_id: before.dataset_id, sequence, revision_before: before.revision, revision_after: committedEvent.revision, player_input: input, outcome: "completed",
+          audit_issue_kinds: [], revision_issue_kinds: [], committed_command_kinds: [], rejected_command_kinds: [], retrieval_ids: [], reflection: emptyReflection(), publication_warnings: [...warnings], ...(identity ? { turn_key: identity.key } : {}) };
+        return this.#settle(identity, before.revision, { ok: true, turn_id, narration: committedEvent.narration, view: this.#view(), trace, warnings: [...warnings] }, committedEvent.revision);
+      }
       const error = toAppError(thrown); this.#lastError = error;
       emit({ type: "turn_failed", turn_id, error, uncommitted_narration: "", view: this.getView() });
-      return { ok: false, error, turn_id, view: this.getView() };
+      return this.#settle(identity, before.revision, { ok: false, error, turn_id, view: this.getView() });
     } finally {
       options.signal?.removeEventListener("abort", forward); this.#abort = undefined; this.#compactionReason = undefined;
+      if (identity) this.#running.delete(identity.key);
       if (this.#status !== "closed") this.#setStatus("idle", emit);
     }
   }
@@ -849,13 +942,15 @@ export class GameSession {
   }
   async #saveNow(reason: SaveReason): Promise<SaveOutcome> {
     let saved: SavedCampaign;
-    try { saved = await this.#session.save({ reason, ...this.#continuityOption() }); }
+    // The snapshot, the continuity block and the receipts are all captured in this same synchronous stretch: one file, one rename, one durable boundary.
+    const receipts = this.#receipts.export();
+    try { saved = await this.#session.save({ reason, ...this.#continuityOption(), ...(receipts.block ? { turn_receipts: receipts.block } : {}) }); }
     catch (error) {
       const e = toAppError(error), err = e.code === "internal_error" ? appError("io_error") : e;
       if (err.code !== "save_in_progress") this.#saveError = err.code;
       return { ok: false, error: err };
     }
-    this.#saveError = undefined;
+    this.#saveError = undefined; this.#receipts.saved(receipts.token);
     // Canonical save is complete; history and file cleanup can only report, never undo it.
     const transcriptOk = await this.#flushTranscript(saved.revision);
     await this.#collectDeletions();
@@ -980,7 +1075,7 @@ export class GameSession {
     this.#itemSprites.flush(); await this.#itemSprites.settled();
     await this.#autosave?.stop();
     // Graceful quit (Save/Load v1): save a dirty campaign before closing. A failed quit save keeps the session open unless discarding.
-    if (options.save_reason === "quit" && (this.hasUnsavedChanges || this.#historyPending()) && this.#status === "idle") {
+    if (options.save_reason === "quit" && (this.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending) && this.#status === "idle") {
       const saved = await this.#saveNow("quit");
       if (!saved.ok && !options.discard_unsaved) { this.#autosave?.resume(); return { closed: false, error: saved.error }; }
     }

@@ -48,7 +48,7 @@ async function run(campaign: CampaignState, input: string, texts: readonly strin
   const events = await collect(coordinator.runTurn({ campaign, player_input: input }));
   const last = events.at(-1)!;
   assert.equal(last.type, "turn_completed", JSON.stringify(last));
-  return { result: (last as { result: TurnResult }).result, events, delivered: events.filter(e => e.type === "narration_delta").map(e => (e as { text: string }).text).join("") };
+  return { result: (last as { result: TurnResult }).result, events, delivered: events.filter(e => e.type === "narration_completed").map(e => (e as { text: string }).text).join("") };
 }
 const item = (campaign: CampaignState, id = BOOTS) => campaign.exportSnapshot().items.filter(i => i.id === id);
 const inbound: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: BOOTS,  position: { kind: "carried", character_id: "nicco" } };
@@ -155,7 +155,7 @@ test("I: a rejected transfer cannot be delivered as successful narration (revisi
   assert.equal(b.result.narration_reconciliation!.delivered, "redacted");
   assert.doesNotMatch(b.delivered, /takes the boots/); assert.match(b.delivered, /Korvin grins\./); assert.match(b.delivered, /stays with Nicco/);
   // The delivered text is the only narration event, and it is released after authorization.
-  assert.deepEqual(b.events.map(e => e.type), ["turn_started", "controller_started", "state_proposed", "narration_delta", "narration_completed", "state_committed", "turn_completed"]);
+  assert.deepEqual(b.events.map(e => e.type), ["turn_started", "turn_progress", "turn_progress", "controller_started", "turn_progress", "state_proposed", "state_committed", "narration_completed", "turn_completed"]);
 });
 test("I: an inbound gift the engine could not commit is never narrated as received", async () => {
   const campaign = scene(["korvin"], [boots("korvin")]);
@@ -170,7 +170,7 @@ test("I: a turn that fails after narration exposes no unaudited draft and commit
   const events = await collect(new TurnCoordinator(world, narrator(["Korvin hands the boots to Nicco."]), failing, { service, search: new HybridSearch(service) }).runTurn({ campaign, player_input: "Korvin gives Nicco a pair of leather boots." }));
   const last = events.at(-1)!;
   assert.equal(last.type, "turn_failed"); assert.equal((last as { narration: string }).narration, "");
-  assert.ok(!events.some(e => e.type === "narration_delta")); assert.equal(campaign.exportSnapshot(), before);
+  assert.ok(!events.some(e => e.type === "narration_completed")); assert.equal(campaign.exportSnapshot(), before);
 });
 
 // ------------------------------------------------------------------------------------------------------- evidence pairs

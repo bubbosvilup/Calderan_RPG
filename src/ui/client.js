@@ -726,14 +726,14 @@ function clearPending() {
   if (!pending) return;
   pending.player.article.remove(); pending.narrator.article.remove(); pending = undefined;
 }
-function preview(event) {
-  if (!pending) return;
-  const wasNear = nearBottom();
-  if (event.action === "start") pending.buffer = "";
-  else pending.buffer += event.text;
-  pending.narrator.label.textContent = event.phase === "revision" ? "Draft · Revising…" : "Draft · Generating…";
-  status.textContent = event.phase === "revision" ? "Revising…" : "Generating…";
-  renderRpg(pending.narrator.text, pending.buffer); follow(wasNear);
+// While a turn runs the player sees status words only. The words come from this closed table, never from the server's text, and no narrator
+// prose exists in the page until the finished, audited and committed narration arrives once inside the final result.
+const PHASE_LABELS = { thinking: "Thinking…", narrating: "Narrating…", resolving: "Resolving…" };
+function progress(event) {
+  const label = PHASE_LABELS[event.phase];
+  if (!pending || !label) return;
+  pending.narrator.text.textContent = label;
+  status.textContent = label;
 }
 function renderScene(data) {
   householdCharacters.clear(); editableCharacters.clear();
@@ -995,19 +995,20 @@ form.addEventListener("submit", async event => {
     return;
   }
   const wasNear = nearBottom();
-  pending = { player: bubble("player", text), narrator: bubble("narrator provisional", ""), buffer: "" };
-  pending.narrator.label.textContent = "Draft · Generating…";
+  pending = { player: bubble("player", text), narrator: bubble("narrator pending", "") };
+  pending.narrator.text.textContent = PHASE_LABELS.thinking;
   pending.narrator.article.setAttribute("aria-busy", "true");
   follow(wasNear);
   try {
-    const response = await fetch("/api/turn", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: JSON.stringify({ text }) });
-    const data = response.headers?.get("content-type")?.startsWith("application/x-ndjson") ? await readStream(response) : await response.json();
+    // One key per submission: a connection that drops after the server accepted the turn is answered from the same turn, never run twice.
+    const data = await sendTurn(JSON.stringify({ text, turn_key: newTurnKey(), expected_revision: currentRevision }));
     if (!Array.isArray(data.messages)) throw new Error();
-    if (data.ok) input.value = "";
+    if (data.ok) { input.value = ""; if (data.warnings?.length) showError("Your turn was saved. Some details could not be refreshed; reload if the story looks out of date."); }
     else {
       clearPending();
       const detail = data.error?.provider_code === "configuration_error" ? "Set OPENROUTER_API_KEY and restart to play." : data.error?.message;
-      showError(data.error?.turn_state_changed ? "Turn failed after state changed. Reload to check the session." : `Turn failed. Your message was not applied.${detail ? ` ${detail}` : ""}`);
+      showError(data.error?.code === "stale_turn" ? "The story changed since you last looked. Your message was not sent; review the story and send it again."
+        : data.error?.turn_state_changed ? "Turn failed after state changed. Reload to check the session." : `Turn failed. Your message was not applied.${detail ? ` ${detail}` : ""}`);
     }
     submitting = false;
     render(data);
@@ -1020,6 +1021,23 @@ form.addEventListener("submit", async event => {
     if (ready) input.focus();
   }
 });
+function newTurnKey() {
+  if (globalThis.crypto?.randomUUID) return crypto.randomUUID();
+  const bytes = new Uint8Array(16);
+  if (globalThis.crypto?.getRandomValues) crypto.getRandomValues(bytes); else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+}
+async function sendTurn(body) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const response = await fetch("/api/turn", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body });
+      return response.headers?.get("content-type")?.startsWith("application/x-ndjson") ? await readStream(response) : await response.json();
+    } catch (error) {
+      if (attempt >= 2) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+    }
+  }
+}
 async function readStream(response) {
   const reader = response.body.getReader(), decoder = new TextDecoder();
   let buffer = "", result;
@@ -1029,7 +1047,7 @@ async function readStream(response) {
       const line = buffer.slice(0, end); buffer = buffer.slice(end + 1);
       if (!line.trim()) continue;
       const event = JSON.parse(line);
-      if (event.type === "draft") preview(event);
+      if (event.type === "progress") progress(event);
       else if (event.type === "result") result = event;
     }
   }

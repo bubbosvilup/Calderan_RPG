@@ -1,4 +1,5 @@
 import test from "node:test";
+import { turnJson, revisionOf } from "./turn-http.js";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { once } from "node:events";
@@ -110,7 +111,7 @@ for (const [source, expected, styles] of [
   assert.ok(target.children.every(c => c.children.length === 0), "all model bytes are inert text nodes");
 });
 
-for (const ending of ["final", "failed", "cancelled", "interrupted"] as const) test(`client live chunks use one bubble, preserve authority and clean up ${ending}`, async () => {
+for (const ending of ["final", "failed", "cancelled", "interrupted"] as const) test(`client progress uses one pending bubble, shows status words only and cleans up ${ending}`, async () => {
   let stream!: ReadableStreamDefaultController<Uint8Array>, submits = 0;
   const body = new ReadableStream<Uint8Array>({ start(controller) { stream = controller; } });
   const c = await client(async (_url: string, options?: any) => {
@@ -124,24 +125,22 @@ for (const ending of ["final", "failed", "cancelled", "interrupted"] as const) t
   const submitted = c.node("composer").requestSubmit(); await tick();
   const articles = c.node("conversation").children, bubble = articles[2]!;
   assert.equal(articles.length, 3); assert.equal(articles[1]!.children[1]!.textContent, "looks around");
-  assert.match(bubble.className, /provisional/); assert.equal(c.node("send").disabled, true);
+  assert.match(bubble.className, /pending/); assert.doesNotMatch(bubble.className, /provisional/); assert.equal(c.node("send").disabled, true);
+  assert.equal(bubble.children[1]!.textContent, "Thinking…", "before any progress the pending bubble shows a status word, not prose");
   await c.node("composer").requestSubmit(); assert.equal(submits, 1);
-  emit({ type: "draft", action: "start", phase: "draft", text: "" });
-  emit({ type: "draft", action: "delta", phase: "draft", text: "*Korvin leaves the ro" }); await tick();
-  assert.equal(bubble.children[1]!.textContent, "Korvin leaves the ro");
-  assert.equal(bubble.children[1]!.children[0]!.className, "rpg-narration");
+  // PIPE-1: only closed-vocabulary progress events exist while the turn runs. A (hostile) text field on them is ignored.
+  emit({ type: "progress", phase: "narrating", text: "*Korvin leaves the ro" }); await tick();
+  assert.equal(bubble.children[1]!.textContent, "Narrating…"); assert.doesNotMatch(c.node("conversation").textContent, /Korvin/);
   assert.equal(c.node("conversation").children[2], bubble);
   const earlier = articles[0]!.children[1]!.children[0];
   c.node("conversation").scrollHeight = 1000; c.node("conversation").scrollTop = 100;
-  emit({ type: "draft", action: "delta", phase: "draft", text: "om.*" }); await tick();
-  assert.equal(c.node("conversation").scrollTop, 100); assert.equal(c.node("latest").hidden, false);
-  assert.equal(articles[0]!.children[1]!.children[0], earlier, "chunks never re-render prior messages");
-  emit({ type: "draft", action: "start", phase: "revision", text: "" });
-  emit({ type: "draft", action: "delta", phase: "revision", text: "*Korvin remains near the doorway.*" }); await tick();
-  assert.equal(bubble.children[1]!.textContent, "Korvin remains near the doorway.");
-  assert.match(bubble.children[0]!.textContent, /Revising/);
-  assert.equal(c.node("household-members").textContent, "No household members yet.", "draft prose never updates household");
-  c.node("latest").handlers.get("click")!({}); assert.equal(c.node("conversation").scrollTop, 1000);
+  emit({ type: "progress", phase: "resolving" }); await tick();
+  assert.equal(bubble.children[1]!.textContent, "Resolving…"); assert.equal(c.node("status").textContent, "Resolving…");
+  emit({ type: "progress", phase: "not-a-phase", text: "Injected label" }); await tick();
+  assert.equal(bubble.children[1]!.textContent, "Resolving…", "an unknown phase is ignored, never rendered");
+  assert.equal(articles[0]!.children[1]!.children[0], earlier, "progress never re-renders prior messages");
+  assert.equal(c.node("household-members").textContent, "No household members yet.", "progress never updates household");
+  c.node("conversation").scrollTop = 1000;
   const finalText = '*Korvin remains beside Nicco.*\n\n"All is well — truly."';
   const result = ending === "final" ? { ...opening, type: "result", ok: true, messages: [...opening.messages, { role: "player", text: "*looks around*" }, { role: "narrator", text: finalText }],
     scene: { location: "Observation room", time_of_day: "Early Afternoon", date_text: "Year 1191, Vesp Alpha 1, Stonewake" }, household: [{ members: [{ name: "Maren", presence: "present", location: "Observation room" }, { name: "Unfamiliar household member", presence: "away" }] }] } :
@@ -183,7 +182,7 @@ test("regeneration UI preserves canonical text and labels safely rendered altern
   assert.equal(select.disabled, false); assert.equal(select.value, "");
 });
 
-test("Heartstone header changes only on final committed result, never provisional arrival prose", async () => {
+test("Heartstone header changes only on final committed result, never progress or provisional arrival prose", async () => {
   let stream!: ReadableStreamDefaultController<Uint8Array>;
   const body = new ReadableStream<Uint8Array>({ start(controller) { stream = controller; } });
   const market = { ...opening, scene: { location: "Slave Market", time_of_day: "Late Morning" } };
@@ -193,8 +192,7 @@ test("Heartstone header changes only on final committed result, never provisiona
   c.node("input").value = "*goes back to Heartstone*";
   const submitted = c.node("composer").requestSubmit(); await tick();
   const emit = (event: object) => stream.enqueue(new TextEncoder().encode(JSON.stringify(event) + "\n"));
-  emit({ type: "draft", action: "start", phase: "draft", text: "" });
-  emit({ type: "draft", action: "delta", phase: "draft", text: "Nicco enters Heartstone Tower." }); await tick();
+  emit({ type: "progress", phase: "narrating" }); await tick();
   assert.equal(c.node("location").textContent, "Slave Market");
   assert.equal(c.node("daypart").textContent, "Late Morning");
   emit({ ...market, type: "result", ok: true, scene: { location: "Heartstone LR", time_of_day: "Early Afternoon" }, messages: [...market.messages, { role: "player", text: "*goes back to Heartstone*" }, { role: "narrator", text: "Nicco enters Heartstone Tower." }] });
@@ -219,44 +217,40 @@ async function host(t: any, f: ReturnType<typeof fixture>) {
   const address = server.address(); assert.ok(address && typeof address !== "string");
   return `http://127.0.0.1:${address.port}`;
 }
-const post = (url: string, signal?: AbortSignal) => fetch(`${url}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: JSON.stringify({ text: "*looks around*" }), ...(signal ? { signal } : {}) });
+const post = async (url: string, signal?: AbortSignal) => fetch(`${url}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: turnJson("*looks around*", await revisionOf(url)), ...(signal ? { signal } : {}) });
 
-test("real coordinator streams provisional departure, revises it, commits only the final audited narration", async t => {
-  let release!: () => void, calls = 0;
-  const waiting = new Promise<void>(resolve => { release = resolve; }); t.after(() => release());
+test("PIPE-1: the browser stream carries status words only; the unaudited draft never leaves the server and the revised narration arrives once", async t => {
+  let calls = 0;
   const draft = "*Korvin leaves, then he stands beside Nicco.*", final = "*Korvin remains beside Nicco.*";
   const narrator: NarratorProvider = { ...mockNarrator(draft), async *stream() {
     const text = ++calls === 1 ? draft : final;
-    yield { type: "text_delta", text: text.slice(0, 15) };
-    if (calls === 1) await waiting;
-    yield { type: "text_delta", text: text.slice(15) }; yield { type: "completed", result: { text, ...metadata } };
+    yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } };
   } };
   const f = fixture(narrator), url = await host(t, f), before = f.campaign.exportSnapshot();
-  const response = await post(url), reader = response.body!.getReader();
-  const first = new TextDecoder().decode((await reader.read()).value);
-  assert.match(first, /"type":"draft"/); assert.match(first, /Korvin leaves/);
-  assert.equal(f.campaign.exportSnapshot(), before); assert.equal(f.coordinator.recent(f.campaign).entries().length, 0);
-  assert.equal((await (await fetch(`${url}/api/session`)).json()).messages.length, 1);
-  release(); let lines = first;
-  for (;;) { const chunk = await reader.read(); if (chunk.done) break; lines += new TextDecoder().decode(chunk.value); }
-  const events = lines.trim().split("\n").map(line => JSON.parse(line)), result = events.at(-1);
-  assert.ok(events.some(e => e.action === "start" && e.phase === "revision")); assert.equal(result.ok, true);
-  assert.equal(calls, 2); assert.equal(result.messages[2].text, final);
+  const raw = await (await post(url)).text();
+  const events = raw.trim().split("\n").map(line => JSON.parse(line)), result = events.at(-1);
+  assert.deepEqual(events.slice(0, -1).map(e => e.type), ["progress", "progress", "progress"]);
+  assert.deepEqual(events.slice(0, -1).map(e => e.phase), ["thinking", "narrating", "resolving"]);
+  for (const e of events.slice(0, -1)) assert.deepEqual(Object.keys(e).sort(), ["phase", "type"], "a progress event has no text field");
+  assert.ok(!raw.includes("Korvin leaves"), "the audited-away phrase was never visible anywhere in the response");
+  assert.equal(result.ok, true); assert.equal(calls, 2); assert.equal(result.messages[2].text, final);
+  assert.equal(raw.split("remains beside Nicco").length - 1, 1, "the final narration is published exactly once");
+  assert.ok(events.every(e => e.type !== "draft" && e.type !== "narration_delta"));
   assert.equal(f.coordinator.recent(f.campaign).finalized()[0]!.narration, final);
   assert.equal(f.campaign.exportSnapshot().runtime.npc_locations.find(n => n.character_id === "korvin")!.current_location, "audit_room");
   assert.deepEqual(f.campaign.exportSnapshot().knowledge, before.knowledge);
   assert.ok(!JSON.stringify(result).includes("system_prompt"));
 });
 
-test("provider failure after a visible draft leaves no committed state, history or finalized HTTP message", async t => {
+test("provider failure after a partial draft leaves no committed state, history or finalized HTTP message, and shows no draft", async t => {
   const f = fixture({ ...mockNarrator(""), async *stream() { yield { type: "text_delta", text: "*Korvin leaves the room.*" }; throw new Error("PRIVATE_ERROR_SENTINEL"); } });
   const url = await host(t, f), before = f.campaign.exportSnapshot(), lines = (await (await post(url)).text()).trim().split("\n").map(line => JSON.parse(line));
-  assert.ok(lines.some(e => e.action === "delta")); assert.equal(lines.at(-1).ok, false);
+  assert.ok(lines.every(e => e.type === "progress" || e.type === "result")); assert.ok(!JSON.stringify(lines).includes("Korvin leaves")); assert.equal(lines.at(-1).ok, false);
   assert.equal(lines.at(-1).messages.length, 1); assert.ok(!JSON.stringify(lines).includes("PRIVATE_ERROR_SENTINEL"));
   assert.equal(f.campaign.exportSnapshot(), before); assert.equal(f.coordinator.recent(f.campaign).entries().length, 0);
 });
 
-test("disconnected provisional HTTP stream cancels generation before commit", async t => {
+test("disconnected HTTP stream cancels generation before commit", async t => {
   let cancelled!: () => void;
   const stopped = new Promise<void>(resolve => { cancelled = resolve; });
   const f = fixture({ ...mockNarrator(""), async *stream(request) {
@@ -271,26 +265,26 @@ test("disconnected provisional HTTP stream cancels generation before commit", as
   assert.equal((await (await fetch(`${url}/api/session`)).json()).messages.length, 1);
 });
 
-test("throwing preview observer cannot interrupt audit, final delivery or commit", async () => {
+test("throwing UI event callback cannot interrupt audit, final delivery or commit", async () => {
   const f = fixture(mockNarrator("*Korvin remains beside Nicco.*"));
-  const events = await collect(f.coordinator.runTurn({ campaign: f.campaign, player_input: "*looks around*", on_narrator_preview: () => { throw new Error("UI callback failed"); } }));
-  assert.equal(events.at(-1)!.type, "turn_completed"); assert.equal(f.coordinator.recent(f.campaign).finalized().length, 1);
+  const outcome = await f.session.submitPlayerInput("*looks around*", { onEvent: () => { throw new Error("UI callback failed"); } });
+  assert.equal(outcome.ok, true); assert.equal(f.coordinator.recent(f.campaign).finalized().length, 1);
   await f.session.shutdown({ discard_unsaved: true });
 });
 
-test("provider retry starts a fresh visual buffer and retains only successful final text in history", async () => {
+test("provider retry drops the failed partial text and retains only successful final text in history", async () => {
   let attempts = 0;
   const final = "*Korvin remains beside Nicco.*";
   const f = fixture(mockNarrator(final));
-  const service = new RetrievalService(world), previews: { action: string; text: string }[] = [];
+  const service = new RetrievalService(world);
   const narrator: NarratorProvider = { ...mockNarrator(final), async *stream() {
     if (++attempts === 1) { yield { type: "text_delta", text: "*Rejected partial draft" }; throw new ProviderError("network_error"); }
     yield { type: "text_delta", text: final }; yield { type: "completed", result: { text: final, ...metadata } };
   } };
   const coordinator = new TurnCoordinator(world, narrator, mockController([]), { service, search: new HybridSearch(service) }, { provider_retry: retryPolicy({ backoff_ms: 0, max_backoff_ms: 0, sleep: async () => {} }) });
-  const events = await collect(coordinator.runTurn({ campaign: f.campaign, player_input: "*looks around*", on_narrator_preview: e => previews.push(e) }));
+  const events = await collect(coordinator.runTurn({ campaign: f.campaign, player_input: "*looks around*" }));
   assert.equal(events.at(-1)!.type, "turn_completed"); assert.equal(attempts, 2);
-  assert.deepEqual(previews.map(e => e.action), ["start", "delta", "start", "delta"]);
+  assert.ok(!JSON.stringify(events).includes("Rejected partial draft"));
   assert.equal(coordinator.recent(f.campaign).finalized()[0]!.narration, final);
   await f.session.shutdown({ discard_unsaved: true });
 });
@@ -402,14 +396,14 @@ test("scene entries open a safe character drawer by reference and close through 
   }
 });
 
-test("streaming draft cannot change location ID, gold, day or participants; final committed result can", async () => {
+test("progress events cannot change location ID, gold, day or participants; final committed result can", async () => {
   let stream!: ReadableStreamDefaultController<Uint8Array>;
   const body = new ReadableStream<Uint8Array>({ start(c) { stream = c; } });
   const initial = { ...opening, scene: { ...opening.scene, location_id: "initial" }, play: { day: 0, gold: 11, participants: [] } };
   const c = await client(async (_url, options) => options ? { ok: true, headers: { get: () => "application/x-ndjson" }, body } : { ok: true, json: async () => initial });
   c.node("input").value = "Walk."; const submitted = c.node("composer").requestSubmit(); await tick();
   const emit = (e: object) => stream.enqueue(new TextEncoder().encode(JSON.stringify(e) + "\n"));
-  emit({ type: "draft", action: "delta", phase: "draft", text: "Arrival", scene: { location_id: "fake" }, play: { gold: 999 } }); await tick();
+  emit({ type: "progress", phase: "narrating", text: "Arrival", scene: { location_id: "fake" }, play: { gold: 999 } }); await tick();
   assert.equal(c.node("location-id").textContent, "initial"); assert.equal(c.node("gold").textContent, "11");
   emit({ ...initial, type: "result", ok: true, scene: { location: "Destination", location_id: "destination", time_of_day: "Evening" }, play: { day: 1, gold: 9, participants: [] }, messages: [...initial.messages, { role: "player", text: "Walk." }, { role: "narrator", text: "Arrival" }] });
   stream.close(); await submitted;

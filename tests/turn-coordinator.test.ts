@@ -13,7 +13,7 @@ import { collect, metadata, mockNarrator, mockController, setup, transfer } from
 test("lifecycle (Repair 1): narration is delivered only after authorization, then one atomic commit", async () => {
   const s = setup("Brenna accepts boots from Nicco.", [transfer]); const base = s.campaign.revision;
   const events = await collect(s.coordinator.runTurn({ campaign: s.campaign, player_input: "I give boots to Brenna." }));
-  assert.deepEqual(events.map(e => e.type), ["turn_started", "controller_started", "state_proposed", "narration_delta", "narration_completed", "state_committed", "turn_completed"]);
+  assert.deepEqual(events.map(e => e.type), ["turn_started", "turn_progress", "turn_progress", "controller_started", "turn_progress", "state_proposed", "state_committed", "narration_completed", "turn_completed"]);
   assert.equal(s.campaign.revision, base + 1); assert.equal(s.campaign.exportSnapshot().items.find(i => i.id === "boots")!.owner_id, "nicco");
   assert.equal(s.coordinator.recent(s.campaign).entries()[0]!.status, "finalized");
 });
@@ -134,7 +134,7 @@ test("early iterator exit aborts provider and never commits", async () => {
   const s = setup(); let signal: AbortSignal | undefined;
   const coordinator = new TurnCoordinator(s.world, mockNarrator("Hi", request => { signal = request.signal; }), mockController([]), s.retrieval);
   const before = s.campaign.exportSnapshot();
-  for await (const event of coordinator.runTurn({ campaign: s.campaign, player_input: "/wait 1" })) if (event.type === "narration_delta") break;
+  for await (const event of coordinator.runTurn({ campaign: s.campaign, player_input: "/wait 1" })) if (event.type === "controller_started") break;
   assert.equal(signal!.aborted, true); assert.equal(s.campaign.exportSnapshot(), before);
 });
 test("mutation at state_proposed yield is stale and published commands are frozen", async () => {

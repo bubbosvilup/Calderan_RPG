@@ -132,7 +132,7 @@ article{display:grid;
   border:1px solid var(--line);
   border-radius:13px;
   padding:13px 20px}
-.provisional{opacity:.65}
+.pending .message-text{opacity:.65;font-style:italic}
 .composer-area{flex-shrink:0;
   border-top:1px solid var(--line);
   padding:10px max(32px,calc((100% - 940px)/2)) 20px}

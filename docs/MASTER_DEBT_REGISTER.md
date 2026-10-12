@@ -1,6 +1,6 @@
 # Caldrevan: Master Technical Debt Register
 
-Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
+Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests) and block 4 turn reliability (working tree, 3377 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
 Companion: [Master Roadmap](MASTER_ROADMAP.md). Detailed evidence (file:line for every finding): [`evaluations/codebase_audit_2026-10-12/`](evaluations/codebase_audit_2026-10-12/) (five area audits, A to E).
 
 This document lists everything the audit found that still needs fixing, cleaning, hardening, redesigning or implementing, ranked and de-duplicated across the five area audits. It is a planning document: nothing listed here was fixed during the audit.
@@ -51,6 +51,11 @@ Columns: **audit finding** (original text, below), **current status**, **fix com
 | MOV-4 audit covers NPC+ only | FIXED (audit parity); residual **P3**: an escorted person narrated as staying behind is not audited | `31d82cd` | inverse audit (state follows the player's act; the Narrator is told) |
 | MOV-2 `with <name>` ignored | CLOSED in the narrow deterministic form only (held person named and led by the player) | `31d82cd` | free people, unnamed, plural and pronoun forms unresolved by design |
 | ID-1 identity fork | FIXED for held persons and household members (`persistent_identity_elsewhere`) | `31d82cd` | look-alike detection for unnamed people not built |
+| PIPE-1 unaudited draft streamed | FIXED, live-certified (the browser receives status words only; the audited, committed narration arrives once, as one block) | block 4 (uncommitted at writing) | none for the stream; see CTX-2 |
+| CTX-2 hidden information protection | PARTIAL: only the draft-stream leak is closed (nothing unaudited leaves the server) | block 4 | output-side deterministic leak check on the final text and prompt-side secrecy still open |
+| PIPE-2 post-commit failure reported as turn failure | FIXED offline (injected faults at every post-commit point; result assembled before the commit; the turn reports success plus warnings) | block 4 | none known |
+| REV-2 no idempotency | FIXED, live-certified for replay (mandatory `turn_key` + `expected_revision`, in-flight registry, 32 bounded persisted terminal receipts in the save file) | block 4 | receipts are bounded (an old key falls off); a crash before the save loses commit and receipt together, which makes re-execution correct; no durable queue |
+| NARR-1 truncation loses the turn | FIXED, live-certified on the production model (cap 768, one 1024 recovery, never commit incomplete narration, max 2 logical / 3 physical attempts) | block 4 | truncation rate still unmeasured over a long run (the trace now records it); `narrator_truncated` after a failed recovery is still a lost turn |
 
 Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO-1** (currency).
 
@@ -58,13 +63,13 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 
 | # | ID | Sev | Item |
 | --- | --- | --- | --- |
-| 1 | PIPE-1 / CTX-2 | P1 | Unaudited Narrator draft streamed to the browser |
+| 1 | PIPE-1 / CTX-2 | P1 | ~~Unaudited Narrator draft streamed to the browser~~ FIXED (block 4); CTX-2 residual: output-side leak check on the final text |
 | 2 | AUTH-1 | P1 | Manumission from regex on raw input, no confirmation |
-| 3 | NARR-1 (new) | P2 high | Narrator 512-token cap: length truncation is a lost, non-retryable turn; `finish_reason` not recorded; rate unmeasured |
+| 3 | NARR-1 (new) | ~~P2 high~~ FIXED (block 4) | Narrator 512-token cap (was): length truncation is a lost, non-retryable turn; `finish_reason` not recorded; rate unmeasured |
 | 4 | AUTH-2 | P1 | Permanent character creation from narration, no retire or merge |
 | 5 | ARCH-1 (new) | P2 high | Optional intelligence coupled to the authoritative core (absorbs REV-1, PIPE-3, REV-3) |
-| 6 | REV-2 | P2 | No turn idempotency key; prerequisite for in-turn recovery |
-| 7 | PIPE-2 | P2 | Post-commit publication can throw after the commit |
+| 6 | REV-2 | ~~P2~~ FIXED (block 4) | Turn idempotency key and expected revision |
+| 7 | PIPE-2 | ~~P2~~ FIXED (block 4) | Post-commit publication can throw after the commit |
 | 8 | ARCH-2 (new) | P2 structural | Regex-per-feature interpretation architecture (absorbs PIPE-5/6/7) |
 | 9 | PER-1 | P2 | 16 MB save cap fatal; drivers include `mannerism_learning` and unpruned `trade_offers` (TRD-12) |
 | 10 | PER-2 / ID-2 | P2 | Scene participants lost on load; ephemeral ref counter restarts |
@@ -342,7 +347,7 @@ Audit C domains 1 and 2. The real order (16 steps) runs: HTTP, `submitPlayerInpu
 | PIPE-11 | P3 | Retrieval trigger scans all entities each turn; linear in canon size. | Precomputed name index. | S |
 | PIPE-12 | P3 | Turns/portraits/saves have no single operation lock; `shutdown` waits up to ~6 minutes for an uncancellable batch. | One `OperationLock` with a compatibility matrix and cancellation tokens. | M |
 | CTX-1 | P2 | Internal IDs reach the Narrator (`prompt-builder.ts:302`, fact ids, item/location ids); masking covers only canonical NPC ids; protection is a prompt rule. ID masking regex has no word boundary (`narrator-identity.ts:48-50`), so an NPC id that is a prefix of another token would corrupt it (not reproduced; verify with a unit test). | Session-scoped opaque refs in the Narrator rendering; boundary-aware regex; output scan for id shapes. | S-M |
-| CTX-2 | P1 (with PIPE-1) | Hidden information is protected for the player only by prompt rules and a post-hoc regex audit (English, exact names). | Output-side deterministic leak check against names/aliases/titles the player has not learned, on every streamed chunk and the final text. | M |
+| CTX-2 | P1 (draft-stream leak FIXED in block 4; the rest stays open) | Hidden information is protected for the player only by prompt rules and a post-hoc regex audit (English, exact names). | Output-side deterministic leak check against names/aliases/titles the player has not learned, on every streamed chunk and the final text. | M |
 | CTX-3 | P2 | The Controller envelope duplicates appearance data (`profile` and `permanent_appearance`), carries full social and every fact, has no token budget and is re-sent verbatim on retries. | Dedicated `ControllerView` with a 6-8k token cap. | M |
 | CTX-4 | P2 | Retrieval is keyed on the player's input only; a follow-up without a named entity returns nothing; English-only regex triggers. | Add entities mentioned in the last 1-2 exchanges; locale-agnostic fallback. | M |
 | CTX-5 | P2 | Context is built from different states in one turn (`base`, `projected`, `prepared`), 4-5 builds plus 6-10 via `getView`; the contract is implicit. | A named `TurnFrame` with lazy single builds. | M |
@@ -537,7 +542,7 @@ One list. **D1 to D10** are the audit decisions with their current status; **D11
 | # | Decision | Status / recommendation |
 | --- | --- | --- |
 | D1 | Companion movement and escort | **ANSWERED.** No persisted party; derived per turn. Narrow held-person escort approved and implemented (block 3). Free-people and unnamed forms stay unresolved by design |
-| D2 | Draft preview (PIPE-1): keep streaming with a leak filter, or neutral state | OPEN. Recommend a neutral "thinking" state until a deterministic leak filter exists |
+| D2 | Draft preview (PIPE-1): keep streaming with a leak filter, or neutral state | DECIDED in block 4 per the recommendation: neutral status words only, no fake streaming; the final audited prose appears once |
 | D3 | Currency unit (ECO-1) | OPEN. Recommend integer silver internally, display G/S (schema 7) |
 | D4 | NPC+ who leaves the household (NPC-1/2) | Direction: **inactive plus rejoin plus badge** (not yet confirmed or implemented) |
 | D5 | Can a canonical NPC become a campaign record / NPC+ (NPC-3, ID-8) | OPEN. Decide before Property |

@@ -75,7 +75,7 @@ for (const seq of sequences) for (let rep = 1; rep <= reps; rep++) {
     const events: TurnEvent[] = [];
     for await (const event of coordinator.runTurn({ campaign, player_input: input })) events.push(event);
     const last = events.at(-1)!, result = last.type === "turn_completed" ? last.result : undefined;
-    const narration = events.filter(e => e.type === "narration_delta").map(e => (e as { text: string }).text).join("");
+    const narration = events.filter(e => e.type === "narration_completed").map(e => (e as { text: string }).text).join("");
     const scripted = index === 0 && !!seq.scripted_first;
     const capture = scripted ? undefined : narratorWire.captures[captured];
     await settle(capture);

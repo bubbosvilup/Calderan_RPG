@@ -1,0 +1,239 @@
+{
+  "verdict": {
+    "A_ok": true,
+    "A_cap_768": true,
+    "A_one_narrator_request": true,
+    "A_neutral_progress_only": true,
+    "A_replay_zero_provider_calls": true,
+    "B_first_request_cap_forced": true,
+    "B_truncation_detected": true,
+    "B_recovery_cap_1024": true,
+    "B_one_recovery_request": true,
+    "B_recovered_and_completed": true,
+    "B_max_physical_3": true,
+    "B_partial_not_delivered": true
+  },
+  "total_provider_requests": 5,
+  "narrator_requests": 3,
+  "total_tokens": 23103,
+  "cost_usd": 0,
+  "A": {
+    "label": "A_normal",
+    "input": "I look around the market and nod politely to the nearest vendor.",
+    "ok": true,
+    "error": null,
+    "turn_key": "block4_a_normal_mv5c9g6t",
+    "revision_before": 2,
+    "revision_after": 2,
+    "state_changed": false,
+    "elapsed_ms": 6722,
+    "neutral_progress": [
+      "thinking",
+      "narrating",
+      "resolving"
+    ],
+    "event_types": [
+      "status_changed",
+      "player_message",
+      "turn_progress",
+      "turn_progress",
+      "turn_progress",
+      "turn_completed",
+      "status_changed",
+      "post_turn_completed",
+      "status_changed"
+    ],
+    "narration": "*Nicco takes in the spread of the square — the churned earth, the holding pens, the clerks at their papers, a caravan being unloaded near the far edge. The auction crowd presses closest around the display area, where a handler holds a captive still while bids volley back and forth.*\n\n*The nearest vendor is a compact man with large, damaged hands and a hooked nose, standing beside a low table strewn with ledgers and binding cord. His small, mobile eyes track Nicco's glance and the polite nod. He gives a brief nod back, unhurried, and lets his gaze settle on Nicco with the patient attention of someone who has learned to wait for the buyer to speak first.*",
+    "narration_chars": 661,
+    "narrator_requests": 1,
+    "non_narrator_requests": 1,
+    "wire": [
+      {
+        "n": 1,
+        "kind": "narrator",
+        "model": "z-ai/glm-5.2",
+        "max_tokens": 768,
+        "system_head": "[ROLE] Narrate Caldrevan in concise ordinary pro",
+        "recovery_notice": false,
+        "status": 200
+      },
+      {
+        "n": 2,
+        "kind": "other",
+        "max_tokens": 512,
+        "system_head": "Interpret explicit durable changes using only th",
+        "recovery_notice": false,
+        "status": 200
+      }
+    ],
+    "narrator_generation": {
+      "logical_generations": 1,
+      "physical_attempts": 1,
+      "max_logical_generations": 2,
+      "max_physical_attempts": 3,
+      "attempts": [
+        {
+          "index": 1,
+          "generation": "primary",
+          "outcome": "stop",
+          "finish_reason": "stop",
+          "completion_tokens": 144,
+          "total_tokens": 4741,
+          "cost_usd": 0.00327548,
+          "model": "z-ai/glm-5.2",
+          "response_model": "z-ai/glm-5.2",
+          "provider": "Z.AI",
+          "generation_id": "gen-1791814790-BItSiSEzk782PpZ35rtP",
+          "max_output_tokens": 768,
+          "route": "z-ai/fp8"
+        }
+      ],
+      "truncation": {
+        "detected": false,
+        "recovery_attempted": false,
+        "recovery_result": "not_needed"
+      }
+    },
+    "publication_warnings": [],
+    "usage": {
+      "narrator": {
+        "prompt_tokens": 4597,
+        "completion_tokens": 144,
+        "total_tokens": 4741
+      },
+      "controller": {
+        "prompt_tokens": 6690,
+        "completion_tokens": 16,
+        "total_tokens": 6706
+      }
+    },
+    "total_tokens": 11447,
+    "cost_usd": 0,
+    "replay": {
+      "ok": true,
+      "replayed": true,
+      "same_narration": true,
+      "same_turn_id": true,
+      "provider_calls": 0,
+      "revision_after_replay": 2
+    }
+  },
+  "B": {
+    "label": "B_forced_truncation",
+    "input": "I look around the market and nod politely to the nearest vendor.",
+    "ok": true,
+    "error": null,
+    "turn_key": "block4_b_forced_truncation_mv5c9lds",
+    "revision_before": 2,
+    "revision_after": 2,
+    "state_changed": false,
+    "elapsed_ms": 9465,
+    "neutral_progress": [
+      "thinking",
+      "narrating",
+      "resolving"
+    ],
+    "event_types": [
+      "status_changed",
+      "player_message",
+      "turn_progress",
+      "turn_progress",
+      "turn_progress",
+      "turn_completed",
+      "status_changed",
+      "post_turn_completed",
+      "status_changed"
+    ],
+    "narration": "*The square stretches wide under overcast sky, packed earth trodden into uneven ruts where wagon wheels have cut their paths. Buyers drift between the auction area and the row of licensed sellers behind it, some leading purchases away by rope or collar, others still weighing their options. A handler near the pens calls out a number, and a clerk scratches something into a ledger without looking up.*\n\n*The nearest vendor — a short, compact man with large, rough-knuckled hands and a hooked nose — stands beside a wooden platform where three people sit on the ground, wrists bound. His small, quick eyes track Nicco's gaze across the display, then back to his face. He lifts his chin slightly at the nod, acknowledging it without enthusiasm, and lets a beat pass before speaking.*\n\nLooking for anything particular, or just browsing?\n\n*His tone is flat and practiced, the question of a man who has asked it a thousand times and expects no interesting answer. Behind him, one of the seated figures — a young woman with mud on her knees and hollow, unfocused eyes — does not look up.*",
+    "narration_chars": 1082,
+    "narrator_requests": 2,
+    "non_narrator_requests": 1,
+    "wire": [
+      {
+        "n": 3,
+        "kind": "narrator",
+        "model": "z-ai/glm-5.2",
+        "max_tokens": 24,
+        "forced_cap": 24,
+        "system_head": "[ROLE] Narrate Caldrevan in concise ordinary pro",
+        "recovery_notice": false,
+        "status": 200
+      },
+      {
+        "n": 4,
+        "kind": "narrator",
+        "model": "z-ai/glm-5.2",
+        "max_tokens": 1024,
+        "system_head": "[ROLE] Narrate Caldrevan in concise ordinary pro",
+        "recovery_notice": true,
+        "status": 200
+      },
+      {
+        "n": 5,
+        "kind": "other",
+        "max_tokens": 512,
+        "system_head": "Interpret explicit durable changes using only th",
+        "recovery_notice": false,
+        "status": 200
+      }
+    ],
+    "narrator_generation": {
+      "logical_generations": 2,
+      "physical_attempts": 2,
+      "max_logical_generations": 2,
+      "max_physical_attempts": 3,
+      "attempts": [
+        {
+          "index": 1,
+          "generation": "primary",
+          "outcome": "length",
+          "finish_reason": "length",
+          "completion_tokens": 24,
+          "total_tokens": 4622,
+          "cost_usd": 0.00136264,
+          "model": "z-ai/glm-5.2",
+          "response_model": "z-ai/glm-5.2",
+          "provider": "Z.AI",
+          "generation_id": "gen-1791814796-NvwyZvWiLtZfUvoM5lBa",
+          "max_output_tokens": 768,
+          "route": "z-ai/fp8"
+        },
+        {
+          "index": 2,
+          "generation": "recovery",
+          "outcome": "stop",
+          "max_output_tokens": 1024,
+          "finish_reason": "stop",
+          "completion_tokens": 224,
+          "total_tokens": 4868,
+          "cost_usd": 0.00223408,
+          "model": "z-ai/glm-5.2",
+          "response_model": "z-ai/glm-5.2",
+          "provider": "Z.AI",
+          "generation_id": "gen-1791814798-orcrl7g6UfBwv4oppskq",
+          "route": "z-ai/fp8"
+        }
+      ],
+      "truncation": {
+        "detected": true,
+        "recovery_attempted": true,
+        "recovery_result": "succeeded"
+      }
+    },
+    "publication_warnings": [],
+    "usage": {
+      "narrator": {
+        "prompt_tokens": 4644,
+        "completion_tokens": 224,
+        "total_tokens": 4868
+      },
+      "controller": {
+        "prompt_tokens": 6772,
+        "completion_tokens": 16,
+        "total_tokens": 6788
+      }
+    },
+    "total_tokens": 11656,
+    "cost_usd": 0
+  }
+}

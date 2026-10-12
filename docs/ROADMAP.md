@@ -18,6 +18,7 @@ Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: th
 | Persistent campaigns (manual save, autosave, recovery) | schema 6 / save 5 |
 | Explicit NPC+ / Heartstone promotion (semantic rite cleanup) | player action only; see [Heartstone](HEARTSTONE.md) |
 | Actual Offer V1 (goods and person trade, player-accepted) | see [Actual Offer](architecture/ACTUAL_OFFER.md) |
+| Turn reliability (consolidation block 4): PIPE-1, PIPE-2, REV-2, NARR-1; CTX-2 draft-stream leak only | see [report](evaluations/CONSOLIDATION_BLOCK4_TURN_RELIABILITY.md) |
 | Foreground canonical identity binding; person Actual Offer end to end; campaign deletion; P8 Economic Baseline V1 | see [Current state](CURRENT_STATE.md) |
 
 

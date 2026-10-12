@@ -118,7 +118,7 @@ async function runFullLoop(c: ReturnType<typeof stageBCases>[number], m: { alias
   for await (const event of coordinator.runTurn({ campaign, player_input: c.input })) events.push(event);
   await settle(narratorWire.captures[0]); await settle(controllerWire.captures[0]);
   const last = events.at(-1)!, result = last.type === "turn_completed" ? last.result : undefined;
-  const narration = events.filter(e => e.type === "narration_delta").map(e => (e as { text: string }).text).join("");
+  const narration = events.filter(e => e.type === "narration_completed").map(e => (e as { text: string }).text).join("");
   const narratorError = last.type === "turn_failed" && last.code === "narrator_failed" ? new ProviderError(last.provider_code ?? "invalid_provider_response") : undefined;
   const diagnosis = diagnoseStageB(c.expected, result, context, before);
   const after = campaign.exportSnapshot();

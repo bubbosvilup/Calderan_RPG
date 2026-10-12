@@ -58,6 +58,10 @@ function validModels(body: TransportRequest): boolean {
   return body.models.length >= 1 && body.models.length <= 3 && body.models[0] === body.model && new Set(body.models).size === body.models.length
     && body.models.every(model => typeof model === "string" && SAFE_TOKEN.test(model) && !model.includes(" "));
 }
+export interface RequestOptions {
+  /** Narrator only: finish_reason "length" completes with `finish_reason: "length"` metadata instead of throwing (the caller must never treat that text as final). */
+  readonly accept_length?: boolean;
+}
 export type TransportEvent = { type: "text_delta"; text: string } | { type: "completed"; metadata: GenerationMetadata };
 function record(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new ProviderError("invalid_provider_response");
@@ -82,11 +86,12 @@ function usage(value: unknown): Usage {
 export class OpenRouterClient {
   readonly #config: ClientConfig;
   constructor(config: ClientConfig = {}) { this.#config = config; }
-  async *request(body: TransportRequest, streaming: boolean, timeout_ms: number, signal?: AbortSignal): AsyncGenerator<TransportEvent> {
+  async *request(body: TransportRequest, streaming: boolean, timeout_ms: number, signal?: AbortSignal, options: RequestOptions = {}): AsyncGenerator<TransportEvent> {
     const key = (this.#config.api_key ?? (() => process.env.OPENROUTER_API_KEY))();
     if (!key?.trim()) throw new ProviderError("configuration_error");
     if (!Number.isSafeInteger(timeout_ms) || timeout_ms <= 0 || timeout_ms > 2_147_483_647 || !Number.isSafeInteger(body.max_tokens) || body.max_tokens <= 0 || !validModels(body)) throw new ProviderError("configuration_error");
     const requested_models = body.models ?? [body.model];
+    const order = (body.provider as { order?: unknown } | undefined)?.order, route = Array.isArray(order) && order.every(o => typeof o === "string") && order.length ? safeToken(order.join(","), 120) : undefined;
     let endpoint: URL;
     try { endpoint = new URL(`${(this.#config.base_url ?? "https://openrouter.ai/api/v1").replace(/\/$/, "")}/chat/completions`); }
     catch { throw new ProviderError("configuration_error"); }
@@ -96,7 +101,7 @@ export class OpenRouterClient {
     const maxCharacters = this.#config.max_request_characters ?? REQUEST_RESOURCE_CHARACTERS;
     if (!Number.isSafeInteger(maxCharacters) || maxCharacters <= 0 || payload.length > maxCharacters) throw new ProviderError("configuration_error");
     const started = performance.now(), request_started_at = new Date().toISOString();
-    let headers_ms: number | null = null, first: number | null = null, tokens: Usage = {}, finished = false, text = "";
+    let headers_ms: number | null = null, first: number | null = null, tokens: Usage = {}, finished = false, text = "", finish_reason: "stop" | "length" | undefined;
     const abort = new AbortController();
     let timedOut = false;
     const cancel = () => abort.abort();
@@ -126,7 +131,9 @@ export class OpenRouterClient {
       const message = record(streaming ? choice.delta : choice.message);
       if (message.refusal || choice.finish_reason === "content_filter") throw new ProviderError("model_refusal");
       if (choice.finish_reason != null) {
-        if (choice.finish_reason !== "stop") throw new ProviderError("invalid_provider_response",undefined,undefined,choice.finish_reason==="length"?"finish_reason_length":"invalid_provider_response");
+        if (choice.finish_reason === "length" && options.accept_length) finish_reason = "length";
+        else if (choice.finish_reason !== "stop") throw new ProviderError("invalid_provider_response",undefined,undefined,choice.finish_reason==="length"?"finish_reason_length":"invalid_provider_response");
+        else finish_reason = "stop";
         finished = true;
       }
       const delta = message.content;
@@ -177,7 +184,7 @@ export class OpenRouterClient {
       }
       if (!streaming) { const delta = consume(parse(buffer)); if (delta) yield { type: "text_delta", text: delta }; }
       if (!finished || !text.trim() || (streaming && !doneMarker)) throw new ProviderError("invalid_provider_response",undefined,undefined,!text.trim()?"empty_output":"invalid_provider_response");
-      yield { type: "completed", metadata: { model: body.model, ...(response_model ? { response_model } : {}), ...(generation_id ? { generation_id } : {}), ...(upstream_provider ? { provider: upstream_provider } : {}), ...(cost_usd === undefined ? {} : { cost_usd }), usage: tokens, latency: {
+      yield { type: "completed", metadata: { model: body.model, ...(response_model ? { response_model } : {}), ...(generation_id ? { generation_id } : {}), ...(upstream_provider ? { provider: upstream_provider } : {}), ...(cost_usd === undefined ? {} : { cost_usd }), ...(finish_reason ? { finish_reason } : {}), max_output_tokens: body.max_tokens, ...(route ? { route } : {}), usage: tokens, latency: {
         request_started_at, headers_ms, time_to_first_token_ms: streaming ? first : null,
         completed_at: new Date().toISOString(), elapsed_total_ms: performance.now() - started,
       } } };

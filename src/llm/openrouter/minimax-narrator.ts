@@ -7,6 +7,8 @@ import { OpenRouterClient } from "./client.js";
  * or NarratorConfig.model; overrides remain for evaluation and manual use.
  */
 export const DEFAULT_NARRATOR_MODEL = "z-ai/glm-5.2";
+/** Block 4: ordinary narration cap (was 512). A truncated answer is regenerated once by the turn layer with a larger cap; this default is only the adapter's fallback. */
+export const DEFAULT_NARRATOR_OUTPUT_TOKENS = 768;
 /** Phase 1M.1–Repair 1.2 default; still supported through configuration. */
 export const KIMI_NARRATOR_MODEL = "moonshotai/kimi-k2.5";
 /** Evaluation/manual alternative (Vertex-pinned). Never an automatic fallback. */
@@ -39,7 +41,7 @@ export class MiniMaxNarratorProvider implements NarratorProvider {
   async *stream(request: GenerationRequest): AsyncGenerator<NarratorStreamEvent> {
     let text = "";
     try {
-      const max_tokens = request.max_output_tokens ?? this.config.max_output_tokens ?? 512;
+      const max_tokens = request.max_output_tokens ?? this.config.max_output_tokens ?? DEFAULT_NARRATOR_OUTPUT_TOKENS;
       if (max_tokens > (this.config.output_ceiling ?? 2048)) throw new ProviderError("configuration_error");
       const model = this.config.model ?? DEFAULT_NARRATOR_MODEL;
       const provider = this.config.provider === undefined ? NARRATOR_PROVIDER_ROUTING[model] : this.config.provider;
@@ -47,7 +49,7 @@ export class MiniMaxNarratorProvider implements NarratorProvider {
         messages: [{ role: "system", content: request.system_prompt }, ...(this.config.roleplay_context ?? []), ...request.messages], max_tokens,
         ...(this.config.disable_reasoning ?? true ? { reasoning: { enabled: false } } : {}),
         ...(provider ? { provider: { order: [...provider.order], allow_fallbacks: provider.allow_fallbacks } } : {}),
-      }, true, Math.min(this.config.timeout_ms ?? 60_000, request.timeout_ms ?? Infinity), request.signal)) {
+      }, true, Math.min(this.config.timeout_ms ?? 60_000, request.timeout_ms ?? Infinity), request.signal, request.accept_truncated ? { accept_length: true } : {})) {
         if (event.type === "text_delta") { text += event.text; yield event; }
         else yield { type: "completed", result: { text, ...event.metadata } };
       }

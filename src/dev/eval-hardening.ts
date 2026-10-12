@@ -50,7 +50,7 @@ for (const fixture of cases) {
   const tp = fixture.expected.filter(e => actual.some(c => isDeepStrictEqual(c, e))).length;
   const fp = actual.filter(c => !fixture.expected.some(e => isDeepStrictEqual(c, e))).length;
   const fn = fixture.expected.filter(e => !actual.some(c => isDeepStrictEqual(c, e))).length;
-  const narration = events.filter(e => e.type === "narration_delta").map(e => e.text).join("");
+  const narration = events.filter(e => e.type === "narration_completed").map(e => e.text).join("");
   const findings = checkNarrative(narration, fixture.input, context, result?.retrieval.ids ?? [], true);
   const correctRejected = result?.authorization.filter(d => !d.authorized && fixture.expected.some(e => isDeepStrictEqual(e, d.command))) ?? [];
   const controllerOmitted = fixture.expected.filter(e => e.kind !== "runtime_delta" && !result?.controller_proposal.some(c => isDeepStrictEqual(c, e)));
@@ -58,7 +58,7 @@ for (const fixture of cases) {
     qualitative_findings: findings, controller_correct_authorizer_rejected: correctRejected, controller_omitted_expected: controllerOmitted,
     controller_incorrect: result?.controller_proposal.filter(c => !fixture.expected.some(e => isDeepStrictEqual(e, c))) ?? [], narration_completed: events.some(e => e.type === "narration_completed"), finalized: !!result,
     controller_proposal_valid: !!result || events.some(e => e.type === "state_proposed"), player_agency: "pending_manual_review", narrative_quality: "pending_manual_review", true_positive_commands: tp, false_positive_commands: fp, false_negative_commands: fn,
-    outcome: last, narration: events.filter(e => e.type === "narration_delta").map(e => e.text).join(""),
+    outcome: last, narration: events.filter(e => e.type === "narration_completed").map(e => e.text).join(""),
     final_state: { revision: campaign.revision, runtime: campaign.exportSnapshot().runtime, items: campaign.exportSnapshot().items.map(i => ({ id: i.id, owner_id: i.owner_id, position: i.position })), knowledge: campaign.exportSnapshot().knowledge.filter(k => k.fact_id !== "campaign_fact_private_secret") } };
   records.push(record);
   console.log(JSON.stringify({ case: fixture.id, finalized: !!result, tp, fp, fn, latency: result?.latency, ...(last.type === "turn_failed" ? { failure: last.code, provider_code: last.provider_code } : {}) }));

@@ -10,6 +10,7 @@ import { renderKnowledgeAccess, type NarrativeKnowledgeAccess } from "../src/tur
 import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { setup, mockNarrator, mockController, collect } from "./turn-fixtures.js";
+const OUTPUT_AND_RESERVE = DEFAULT_CONTEXT_POLICY.output_tokens + 256 + 512; // narrator output cap + overhead + safety (was the literal 1280 at the 512 cap)
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { FakeContextCompressor, exactCandidate } from "./context-compressor-fake.js";
 import { OpenRouterContextCompressor } from "../src/llm/openrouter/context-compressor.js";
@@ -29,7 +30,7 @@ test("small direct requests bypass compressor and hard budget applies to final n
  const f = fixture(), provider = new FakeContextCompressor(), compactor = new NarratorContextCompactor(provider);
  assert.equal(prepareNarratorRequest(f.request, compactor), f.request); assert.equal(provider.calls.length, 0);
  const estimated = new ContextBudgetManager().measure(f.request);
- assert.throws(() => prepareNarratorRequest(f.request, compactor, { ...DEFAULT_CONTEXT_POLICY, request_tokens: estimated.fixed_instructions_tokens + 1280 + 100 }), /context_too_large/);
+ assert.throws(() => prepareNarratorRequest(f.request, compactor, { ...DEFAULT_CONTEXT_POLICY, request_tokens: estimated.fixed_instructions_tokens + OUTPUT_AND_RESERVE + 100 }), /context_too_large/);
 });
 test("manual below auto performs material compaction, all fixed sections unchanged, cache hit avoids calls", async () => {
  const f = fixture(), provider = new FakeContextCompressor(), service = new NarratorContextCompactor(provider);
@@ -44,7 +45,7 @@ test("manual below auto performs material compaction, all fixed sections unchang
 });
 test("auto threshold invokes provider and meets configured target", async () => {
  const f = fixture(1, 40), provider = new FakeContextCompressor(), raw = new ContextBudgetManager().measure(f.request);
- const manager = new ContextBudgetManager({ ...DEFAULT_CONTEXT_POLICY, request_tokens: raw.fixed_instructions_tokens + 1280 + Math.ceil(raw.estimated_tokens / .92) });
+ const manager = new ContextBudgetManager({ ...DEFAULT_CONTEXT_POLICY, request_tokens: raw.fixed_instructions_tokens + OUTPUT_AND_RESERVE + Math.ceil(raw.estimated_tokens / .92) });
  const service = new NarratorContextCompactor(provider, manager);
  assert.ok(manager.measure(f.request).compaction_required);
  const result = await service.compact({ reason: "auto", request: f.request }); assert.equal(result.status, "success");
@@ -100,7 +101,7 @@ test("stale source/revision and failed/timeout-like providers cannot activate", 
  assert.equal((await timeout.compact({reason:"manual",request:f.request})).status,"failed");
 });
 test("bounded stronger attempt and insufficient result are explicit", async () => {
- const f = fixture(1,40), raw = new ContextBudgetManager().measure(f.request), manager = new ContextBudgetManager({ ...DEFAULT_CONTEXT_POLICY, request_tokens:raw.fixed_instructions_tokens+1280+Math.ceil(raw.estimated_tokens/.92) });
+ const f = fixture(1,40), raw = new ContextBudgetManager().measure(f.request), manager = new ContextBudgetManager({ ...DEFAULT_CONTEXT_POLICY, request_tokens:raw.fixed_instructions_tokens+ OUTPUT_AND_RESERVE +Math.ceil(raw.estimated_tokens/.92) });
  const second = new FakeContextCompressor((r,k) => ({ candidate:k===1?{...exactCandidate(r),units:structuredClone(r.source_pack.units)}:exactCandidate(r) }));
  const result = await new NarratorContextCompactor(second,manager).compact({reason:"auto",request:f.request}); assert.equal(result.status,"success"); assert.equal(result.diagnostics?.compression_level,2); assert.equal(second.calls.length,2);
  const bad = new FakeContextCompressor(r => ({candidate:{...exactCandidate(r),units:structuredClone(r.source_pack.units)}}));
@@ -179,7 +180,7 @@ test("knowledge above the historical 6k render ceiling is allowed when the final
 });
 test("post-turn auto real pipeline blocks input until activation and reports ready budget", async () => {
  const f=setup(),low=fixture(),high=fixture(1,40);let crowded=false,release!:()=>void,entered!:()=>void;const gate=new Promise<void>(r=>release=r),started=new Promise<void>(r=>entered=r);
- const raw=new ContextBudgetManager().measure(high.request),manager=new ContextBudgetManager({...DEFAULT_CONTEXT_POLICY,request_tokens:raw.fixed_instructions_tokens+1280+Math.ceil(raw.estimated_tokens/.92)});
+ const raw=new ContextBudgetManager().measure(high.request),manager=new ContextBudgetManager({...DEFAULT_CONTEXT_POLICY,request_tokens:raw.fixed_instructions_tokens+ OUTPUT_AND_RESERVE +Math.ceil(raw.estimated_tokens/.92)});
  const provider=new FakeContextCompressor(async r=>{assert.equal(r.reason,"auto");entered();await gate;return {candidate:exactCandidate(r)};});const service=new NarratorContextCompactor(provider,manager);
  const dir=await mkdtemp(join(tmpdir(),"d04-auto-"));dirs.push(dir);
  const session=GameSession.fromCampaign({world:f.world,repository:new FileCampaignRepository(f.world,dir),context_policy:manager.policy,compaction_service:service,createCoordinator:()=>({contextRequest:()=>crowded?high.request:low.request,async *runTurn(req){for await(const e of f.coordinator.runTurn(req)){if(e.type==="turn_completed")crowded=true;yield e;}}})},f.campaign);

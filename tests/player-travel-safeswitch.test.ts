@@ -1,4 +1,5 @@
 import test from "node:test";
+import { turnJson, revisionOf } from "./turn-http.js";
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { mkdtemp, rm } from "node:fs/promises";
@@ -140,7 +141,7 @@ test("HTTP correction returns final committed ID/revision, keeps transcript, res
     const before = await (await fetch(base + "/api/session")).json();
     const response = await fetch(base + "/api/location", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ target: "heartstone_lr", expected_revision: before.revision }) });
     const data = await response.json(); assert.equal(response.status, 200); assert.equal(data.scene.location_id, "heartstone_lr"); assert.equal(data.revision, before.revision + 1); assert.equal(data.view, undefined); assert.deepEqual(data.messages, before.messages); assert.deepEqual(f.counts(), [0, 0, 0]);
-    const bad = await fetch(base + "/api/turn", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: "/location blackwater" }) }); assert.equal(bad.status, 422); assert.equal(f.campaign.exportSnapshot().runtime.scene.player_location, "heartstone_lr");
+    const bad = await fetch(base + "/api/turn", { method: "POST", headers: { "Content-Type": "application/json" }, body: turnJson("/location blackwater", before.revision) }); assert.equal(bad.status, 422); assert.equal(f.campaign.exportSnapshot().runtime.scene.player_location, "heartstone_lr");
   } finally { await new Promise<void>(resolve => server.close(() => resolve())); }
 });
 
@@ -199,7 +200,7 @@ test("exact historical travel via HTTP publishes Heartstone only in finalized re
     const turns = ["they both walk to the heartstone", "well we are home he opens the door and enters come in, this is the heartstone, our home"];
     for (const [index, text] of turns.entries()) {
       f.setDraft(index ? "*The door opens into Heartstone Living Floor.*" : "*They arrive at Heartstone.*");
-      const response = await fetch(base + "/api/turn", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: JSON.stringify({ text }) });
+      const response = await fetch(base + "/api/turn", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/x-ndjson" }, body: turnJson(text, await revisionOf(base)) });
       const events = (await response.text()).trim().split("\n").map(line => JSON.parse(line));
       for (const e of events.filter(e => e.type === "draft")) assert.equal(e.scene, undefined);
       const final = events.at(-1)!; assert.equal(final.ok, true); assert.equal(final.scene.location_id, "heartstone_lr");
