@@ -48,6 +48,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       player_character: session.getPlayerProfileView(),
       inventory: session.getPlayerInventoryView(),
       trade: session.getTradeView(),
+      confirmations: session.getConfirmationView(),
       household: play.household.map(h => ({ members: h.members.map(m => ({ name: m.name_known ? m.name : "Unfamiliar household member", presence: m.presence, ...(m.known_location ? { location: m.known_location } : {}) })) })) };
   };
   return createServer(async (req, res) => {
@@ -103,7 +104,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         if (!file) { json(404, { error: "Not found." }); return; }
         res.writeHead(200, { "Content-Type": file.media_type, "Content-Length": String(file.bytes.length) }); res.end(file.bytes); return;
       }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/player-character" || req.url === "/api/npc-plus/promote" || req.url === "/api/trade/accept" || PORTRAIT_ROUTES.has(req.url ?? "") || CAMPAIGN_ROUTES.has(req.url ?? ""))) {
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/player-character" || req.url === "/api/npc-plus/promote" || req.url === "/api/trade/accept" || req.url === "/api/confirmation/confirm" || req.url === "/api/confirmation/cancel" || PORTRAIT_ROUTES.has(req.url ?? "") || CAMPAIGN_ROUTES.has(req.url ?? ""))) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
         // A reference upload carries one base64 image (at most 4 MB decoded); every other request stays small.
         const limit = req.url === "/api/portrait/reference" ? 6_000_000 : 24000;
@@ -169,6 +170,15 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
           // Actual Offer V1: the browser sends only the opaque offer ref and the revision it rendered; the engine revalidates and settles atomically.
           const outcome = session.acceptTradeOffer({ ref: fields.ref, expected_revision: fields.expected_revision });
           const { view: _view, ...result } = outcome;
+          json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
+        }
+        if (req.url === "/api/confirmation/confirm" || req.url === "/api/confirmation/cancel") {
+          // Block 5A: the browser sends only the opaque ref and the revision it rendered; the engine resolves, revalidates and (for confirm) commits the deterministic act.
+          const request = { ref: fields.ref, expected_revision: fields.expected_revision };
+          const outcome = req.url === "/api/confirmation/confirm" ? session.confirmPending(request) : session.cancelPending(request);
+          // The session `status` field of the state payload would shadow the outcome's own `status`, so the outcome is reported as `confirmation`.
+          const { view: _view, ...rest } = outcome, result = outcome.ok ? { ...rest, confirmation: outcome.status } : rest;
+          delete (result as { status?: string }).status;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
         }
         if (req.url === "/api/npc-plus/promote") {

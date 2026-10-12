@@ -1,4 +1,5 @@
 import { insideHeartstoneInterior } from "../campaign/heartstone-recognition.js";
+import { proposalNarratorLine } from "./pending-proposals.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import { characterView } from "../campaign/projections.js";
 import type { DeepReadonly } from "../types/readonly.js";
@@ -79,6 +80,8 @@ export interface SceneSocial { readonly legal: readonly SceneLegal[]; readonly h
 export interface SceneEvent { readonly event_id: string; readonly title: string; readonly description?: string; readonly world_minute: number; readonly participant_ids: readonly string[]; readonly participants: readonly string[] }
 export type SceneDevelopmentKind = "condition_added" | "condition_removed" | "relationship_changed" | "legal_status_changed" | "person_transaction";
 export interface SceneDevelopment { readonly character_id: string; readonly name: string; readonly kind: SceneDevelopmentKind; readonly text: string; readonly revision: number; readonly world_minute: number; readonly source: string }
+/** Block 5A: a proposed player act awaiting the player's explicit confirmation. A separate fact from legal status: the real status above is unchanged. */
+export interface ScenePendingProposal { readonly kind: string; readonly subject_id: string; readonly name: string; readonly text: string }
 export interface SceneStateProjection {
   readonly location: SceneLocation;
   readonly time: SceneTime;
@@ -90,6 +93,8 @@ export interface SceneStateProjection {
   readonly social: SceneSocial;
   readonly scheduled: readonly SceneEvent[];
   readonly developments: readonly SceneDevelopment[];
+  /** Proposals awaiting confirmation (typed, never merged into legal status). Empty for almost every turn. */
+  readonly pending: readonly ScenePendingProposal[];
 }
 
 // ------------------------------------------------------------------------------------------------ snapshot-only extras
@@ -285,11 +290,12 @@ function deriveDevelopments(context: TurnContext, names: ReadonlyMap<string, str
 }
 
 /** Stage 1: the raw projection. Pure and total over a TurnContext; every present character and item is a candidate. */
-export function buildSceneStateProjection(context: TurnContext): SceneStateProjection {
+export function buildSceneStateProjection(context: TurnContext, pending: readonly { readonly kind: string; readonly subject_id: string }[] = []): SceneStateProjection {
   const names = sceneDisplayNames(context), resources = context.primary.scene.player_resources.mana;
   return Object.freeze({
     location: deriveLocation(context), time: deriveTime(context), present: derivePresence(context, names), character_state: deriveCharacterState(context, names),
     items: deriveItems(context, names), player: { mana: { current: resources.current, max: resources.max }, gold: context.social.nicco_gold }, knowledge: deriveKnowledge(context, names),
     social: deriveSocial(context, names), scheduled: deriveScheduled(context, names), developments: deriveDevelopments(context, names),
+    pending: pending.flatMap(p => { const name = names.get(p.subject_id); return name ? [{ kind: p.kind, subject_id: p.subject_id, name, text: proposalNarratorLine(p.kind, name) }] : []; }),
   });
 }

@@ -251,7 +251,7 @@ test("migration 4 -> 5: an old campaign gains the deterministic canon default in
   assert.equal(await fs.readFile(path, "utf8"), bytes, "load never rewrites the source");
   assert.ok((await loaded.session.save()).ok);
   const resaved = JSON.parse(await fs.readFile(path, "utf8"));
-  assert.deepEqual([resaved.schema_version, resaved.snapshot.schema_version], [5, 6]);
+  assert.deepEqual([resaved.schema_version, resaved.snapshot.schema_version], [6, 6]);
   await loaded.session.shutdown();
   // A v4 snapshot that already carries v5 fields is not a v4 snapshot.
   const smuggled = { ...save, snapshot: { ...save.snapshot, player_characters: [] } };

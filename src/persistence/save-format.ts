@@ -10,6 +10,7 @@ import { defaultPlayerCharacters } from "../campaign/player-character.js";
 import { assessCanonCompatibility, canonReferences, type CanonCompatibilityReport, type CanonReference } from "./canon-compatibility.js";
 import { parseCampaignSnapshot } from "../campaign/validation.js";
 import { parseTurnReceipts, type TurnReceipt, type TurnReceiptBlock } from "./turn-receipts.js";
+import { parseInteractionMetadata, type InteractionMetadataBlock } from "./pending-confirmations.js";
 
 /** Why a save was written (format 5). `create` is the immediate first save of a new campaign. */
 export type SaveReason = "create" | "manual" | "autosave" | "quit";
@@ -30,7 +31,7 @@ export interface ContinuityExchange { player: string; narration: string; locatio
 export interface SaveContinuity { authority: "non_authoritative"; revision: number; recent: ContinuityExchange[] }
 export const CONTINUITY_LIMITS = Object.freeze({ exchanges: 12, text: 8000, total: 20_000 });
 export interface CampaignSaveFile {
-  format: "caldrevan_campaign_save"; schema_version: 5;
+  format: "caldrevan_campaign_save"; schema_version: 6;
   campaign_id: string; canonical_dataset_id: string;
   metadata: SaveMetadata;
   snapshot: CampaignSnapshot;
@@ -39,6 +40,8 @@ export interface CampaignSaveFile {
   continuity?: SaveContinuity;
   /** Block 4 (REV-2): bounded terminal turn receipts (idempotency metadata), written atomically with the snapshot they belong to. Not campaign truth. */
   turn_receipts?: TurnReceiptBlock;
+  /** Block 5A (schema 6): pending player confirmations (interaction metadata), written atomically with the snapshot they belong to. Not campaign truth. */
+  interaction_metadata?: InteractionMetadataBlock;
 }
 /** Legacy shapes accepted by the migration dispatcher (their snapshots are schema 1, without premium_characters). */
 export type CampaignSaveFileV1 = Omit<CampaignSaveFile, "schema_version" | "canon_compatibility" | "canon_references" | "snapshot"> & { schema_version: 1; snapshot: unknown };
@@ -65,10 +68,10 @@ const displayName = (value: unknown): string => {
 };
 export const SCENARIO_ID = /^[a-z][a-z0-9_]{0,40}(?:\.[a-z0-9_]{1,40}){0,4}$/;
 /** Shape first; snapshot validation has its own schema/version/reference boundary. Continuity is checked separately (tolerant). */
-const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(5, 5), campaign_id: validateSaveId,
+const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(6, 6), campaign_id: validateSaveId,
   canonical_dataset_id: text, metadata: object({ saved_at: timestamp, created_at: optional(timestamp), engine_version: optional(bounded(/^[0-9A-Za-z.+_-]{1,40}$/)),
     display_name: optional(displayName), save_reason: optional(choice("create", "manual", "autosave", "quit")), scenario_id: optional(bounded(SCENARIO_ID)) }),
-  snapshot: (input: unknown) => input, canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList), continuity: optional((input: unknown) => input), turn_receipts: optional((input: unknown) => input) });
+  snapshot: (input: unknown) => input, canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList), continuity: optional((input: unknown) => input), turn_receipts: optional((input: unknown) => input), interaction_metadata: optional((input: unknown) => input) });
 /** Structural check of a continuity block; undefined when absent or unusable (the caller reports the drop). */
 export function parseContinuity(input: unknown): SaveContinuity | undefined {
   if (input === undefined) return undefined;
@@ -121,8 +124,10 @@ export function validateSaveFileWithReport(input: unknown, world: WorldStore, ex
     }
     const continuity = parseContinuity(file.continuity);
     const receipts = parseTurnReceipts(file.turn_receipts, snapshot.revision);
-    const { continuity: _raw, turn_receipts: _receipts, ...rest } = file;
-    const result = freezeSnapshot({ ...rest, canonical_dataset_id: world.datasetId, snapshot: snapshot as CampaignSnapshot, ...(continuity ? { continuity } : {}), ...(receipts ? { turn_receipts: receipts } : {}) }) as DeepReadonly<CampaignSaveFile>;
+    // Structure only: the session decides which kinds it can confirm (an unregistered kind is dropped there, observably).
+    const interaction = parseInteractionMetadata(file.interaction_metadata, snapshot.revision, () => true);
+    const { continuity: _raw, turn_receipts: _receipts, interaction_metadata: _interaction, ...rest } = file;
+    const result = freezeSnapshot({ ...rest, canonical_dataset_id: world.datasetId, snapshot: snapshot as CampaignSnapshot, ...(continuity ? { continuity } : {}), ...(receipts ? { turn_receipts: receipts } : {}), ...(interaction ? { interaction_metadata: interaction } : {}) }) as DeepReadonly<CampaignSaveFile>;
     return Object.freeze({ file: result, ...(from !== undefined && from !== CURRENT_SAVE_VERSION ? { migrated_from: from } : {}), ...(snapshotFrom !== undefined ? { snapshot_migrated_from: snapshotFrom } : {}), canon: assessed.report,
       continuity_dropped: file.continuity !== undefined && !continuity });
   } catch (error) { throw saveError(error); }
@@ -140,6 +145,7 @@ export interface SaveExtras {
   readonly metadata?: Partial<Pick<SaveMetadata, "engine_version" | "display_name" | "save_reason" | "scenario_id">>;
   readonly continuity?: SaveContinuity;
   readonly turn_receipts?: TurnReceiptBlock;
+  readonly interaction_metadata?: InteractionMetadataBlock;
 }
 export type { TurnReceipt };
 export function createSaveFile(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, savedAt: string, createdAt = savedAt, extras: SaveExtras = {}): DeepReadonly<CampaignSaveFile> {
@@ -147,8 +153,8 @@ export function createSaveFile(snapshot: DeepReadonly<CampaignSnapshot>, world: 
   try { validateCampaignSnapshot(snapshot, world); } catch (error) { throw saveError(error); }
   const metadata = Object.fromEntries(Object.entries({ saved_at: savedAt, created_at: createdAt, ...extras.metadata }).filter(([, v]) => v !== undefined));
   if (extras.continuity && !parseContinuity(extras.continuity)) throw new CampaignSaveError("invalid_save");
-  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 5, campaign_id: snapshot.campaign_id, canonical_dataset_id: snapshot.dataset_id, metadata, snapshot,
-    canon_compatibility: "references", canon_references: canonReferences(snapshot, world), ...(extras.continuity ? { continuity: extras.continuity } : {}), ...(extras.turn_receipts ? { turn_receipts: extras.turn_receipts } : {}) }, world);
+  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 6, campaign_id: snapshot.campaign_id, canonical_dataset_id: snapshot.dataset_id, metadata, snapshot,
+    canon_compatibility: "references", canon_references: canonReferences(snapshot, world), ...(extras.continuity ? { continuity: extras.continuity } : {}), ...(extras.turn_receipts ? { turn_receipts: extras.turn_receipts } : {}), ...(extras.interaction_metadata ? { interaction_metadata: extras.interaction_metadata } : {}) }, world);
 }
 /** Called only after validation; sorts object keys, preserves all array order and missing fields. */
 export function serializeSave(file: DeepReadonly<CampaignSaveFile>, world: WorldStore): string {

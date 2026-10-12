@@ -607,3 +607,17 @@ img[data-missing]{visibility:hidden}
 .trade-purse { font-size: .85rem; opacity: .8; }
 .trade-error { margin: .4rem 0 0; font-size: .85rem; color: var(--danger, #e07a7a); }
 .trade-receipt, .trade-notice { margin: 0; font-size: .85rem; opacity: .8; font-style: italic; }
+
+/* Block 5A: the generic pending-confirmation card (a request awaiting the player's explicit decision). Told apart by text, not colour alone. */
+.confirm-region { display: grid; gap: .5rem; margin: .75rem 0 .25rem; }
+.confirm-region[hidden] { display: none; }
+.confirm-card { border: 1px solid var(--line, #3a3a48); border-left-width: 4px; border-radius: 8px; padding: .65rem .8rem; background: var(--panel, rgba(255,255,255,.04)); }
+.confirm-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; }
+.confirm-label { font-size: .7rem; letter-spacing: .08em; opacity: .7; }
+.confirm-title { font-size: .95rem; }
+.confirm-body { margin: .35rem 0 .5rem; font-size: .9rem; opacity: .85; }
+.confirm-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.confirm-accept, .confirm-cancel { cursor: pointer; }
+.confirm-accept:disabled, .confirm-cancel:disabled { cursor: not-allowed; opacity: .6; }
+.confirm-error { margin: .4rem 0 0; font-size: .85rem; color: var(--danger, #e07a7a); }
+.confirm-notice { margin: 0; font-size: .85rem; opacity: .8; font-style: italic; }

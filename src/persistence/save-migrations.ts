@@ -2,7 +2,7 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import { CampaignSaveError } from "./errors.js";
 import { niccoHouseholdMembers } from "../campaign/premium-characters.js";
 
-export const CURRENT_SAVE_VERSION = 5;
+export const CURRENT_SAVE_VERSION = 6;
 export type SaveMigration = (input: Readonly<Record<string, unknown>>) => unknown;
 /** A key n owns exactly n -> n+1. No implicit defaults or unknown-field removal. */
 export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.freeze({
@@ -49,6 +49,15 @@ export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.f
     if (!snapshot || typeof snapshot !== "object" || snapshot.schema_version !== 3 || Object.hasOwn(input, "continuity")) throw new CampaignSaveError("migration_failed");
     if (metadata && typeof metadata === "object" && ["display_name", "save_reason", "scenario_id"].some(key => Object.hasOwn(metadata, key))) throw new CampaignSaveError("migration_failed");
     return { ...input, schema_version: 5, snapshot: { ...snapshot, schema_version: 4 } };
+  },
+  /**
+   * Consolidation block 5A: envelope 5 -> 6 adds the optional top-level `interaction_metadata` block (pending player confirmations). Version-only and
+   * lossless: nothing is added or defaulted (a v5 save simply has no pending confirmations). A version-5 file that already carries the block is
+   * malformed and rejected. An older build refuses a v6 file with `unsupported_version` (it never silently drops the block).
+   */
+  5: input => {
+    if (Object.hasOwn(input, "interaction_metadata")) throw new CampaignSaveError("migration_failed");
+    return { ...input, schema_version: 6 };
   },
 });
 

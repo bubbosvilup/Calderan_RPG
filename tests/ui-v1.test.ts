@@ -996,5 +996,5 @@ test("generation lifecycle: slow requests say so without cancelling, and player 
 });
 test("generation lifecycle: no schema or context change (static guards)", async () => {
   const types = await readFile("src/campaign/types.ts", "utf8"), format = await readFile("src/persistence/save-format.ts", "utf8");
-  assert.match(types, /schema_version: 6;/); assert.match(format, /schema_version: 5;/);
+  assert.match(types, /schema_version: 6;/); assert.match(format, /schema_version: 6;/);
 });

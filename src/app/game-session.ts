@@ -45,6 +45,11 @@ import { playerVisualView, type PlayerVisualView } from "./player-visual-view.js
 import { inventoryUiView } from "./inventory-ui-view.js";
 import { deriveTradeView, tradeOfferRef, TRADE_MESSAGES, type TradeReceipt, type TradeView } from "./trade-offer-view.js";
 import { CampaignValidationError } from "../campaign/validation.js";
+import { PendingConfirmationLog } from "./pending-confirmation-log.js";
+import { PRODUCTION_CONFIRMATION_KINDS, type ConfirmationKinds } from "./confirmation-kinds.js";
+import { CONFIRMATION_MESSAGES, deriveConfirmationView, type ConfirmationView } from "./confirmation-view.js";
+import { PENDING_REF, type PendingConfirmation } from "../persistence/pending-confirmations.js";
+import type { PendingProposal } from "../turn/pending-proposals.js";
 import { TRADE_FIELD } from "../campaign/trade.js";
 import { buildTrace, emptyReflection, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
@@ -88,6 +93,8 @@ export interface SessionDeps {
   readonly autosave?: AutosaveOptions | false;
   /** Informational engine version written into saves. */
   readonly engine_version?: string;
+  /** Block 5A: the kinds of pending player confirmation this session can create and confirm (default: the production kinds). A test seam for a test-only kind. */
+  readonly confirmation_kinds?: ConfirmationKinds;
 }
 export type SessionEvent =
   | { readonly type: "context_compaction_completed"; readonly result: CompactionResult; readonly view: SessionView }
@@ -103,6 +110,14 @@ export type TurnOutcome =
   /** `warnings`: post-commit publication steps that failed without failing the turn (PIPE-2). `replayed`: answered from an earlier terminal result of the same turn_key; no provider was called (REV-2). */
   | { readonly ok: true; readonly turn_id: string; readonly narration: string; readonly view: SessionView; readonly trace: TurnTrace; readonly warnings?: readonly string[]; readonly replayed?: true }
   | { readonly ok: false; readonly error: AppError; readonly turn_id?: string; readonly uncommitted_narration?: string; readonly view: SessionView; readonly replayed?: true };
+/**
+ * Block 5A: the result of confirming or cancelling a pending player confirmation. `reason` is a stable machine word for the UI (never prose from a model).
+ * A repeated confirm of a confirmed request, or a repeated cancel of a cancelled one, is a successful `replayed` answer that changes nothing.
+ */
+export type ConfirmationReason = "unknown_confirmation" | "stale" | "busy" | "already_cancelled" | "already_confirmed" | "invalidated";
+export type ConfirmationOutcome =
+  | { readonly ok: true; readonly status: "confirmed" | "cancelled"; readonly changed: boolean; readonly replayed?: true; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly reason: ConfirmationReason; readonly terminal_reason?: string; readonly view: SessionView };
 /** `transcript_error`: the canonical save succeeded but the history append did not (retried at the next save). */
 export type SaveOutcome = { readonly ok: true; readonly saved: SavedCampaign; readonly transcript_error?: true; readonly view: SessionView } | { readonly ok: false; readonly error: AppError };
 /**
@@ -126,7 +141,7 @@ export interface LoadReport {
 }
 /** Compact, player-facing save status (view.session.save adds it). */
 export interface SaveStatus { readonly saving: boolean; readonly error?: AppError["code"]; readonly autosave: "off" | "on" | "stopped"; readonly transcript_error?: true }
-interface SessionInit { readonly opening_text?: string; readonly transcript?: { readonly entries: readonly TranscriptEntry[]; readonly next_index: number; readonly rollback_to?: number }; readonly turn_receipts?: readonly TurnReceipt[] }
+interface SessionInit { readonly opening_text?: string; readonly transcript?: { readonly entries: readonly TranscriptEntry[]; readonly next_index: number; readonly rollback_to?: number }; readonly turn_receipts?: readonly TurnReceipt[]; readonly pending_confirmations?: readonly PendingConfirmation[] }
 const FATAL_SAVE = new Set(["invalid_json", "invalid_save", "unsupported_version", "migration_failed", "dataset_mismatch", "reference_invalid", "unsafe_path", "campaign_locked", "invalid_id", "session_closed"]);
 type HistoryRepository = CampaignSaveRepository & Partial<Pick<FileCampaignRepository, "appendTranscript" | "readTranscript" | "retainedAssetReferences">>;
 export type ShutdownOutcome = { readonly closed: true; readonly discarded_unsaved_changes: boolean } | { readonly closed: false; readonly error: AppError };
@@ -199,6 +214,9 @@ export class GameSession {
   /** REV-2: the in-flight registry (runtime memory only) and the bounded window of terminal receipts (persisted with the save). */
   readonly #running = new Map<string, { readonly fingerprint: string; readonly promise: Promise<TurnOutcome> }>();
   #receipts = new TurnReceiptLog();
+  /** Block 5A: pending player confirmations (interaction metadata, persisted with the save, never part of CampaignState). */
+  #confirmations = new PendingConfirmationLog();
+  readonly #kinds: ConfirmationKinds;
   /** The last view that was derived successfully: a committed turn is always answered, even if a later derivation fails. */
   #lastView: SessionView | undefined;
   /** Save/Load v1: scenario opening (narrator context until the first finalized exchange), history, autosave, deferred deletions. */
@@ -217,11 +235,14 @@ export class GameSession {
     this.#coordinator = deps.createCoordinator({ diagnostics_sink: record => { this.#diagnostics = record; },
       ...(opening ? { narrator_request_setup: (request: NarratorRequest) => this.#coordinator.recent?.(this.#session.campaign).finalized().length
         ? request : { ...request, messages: [{ role: "assistant" as const, content: opening }, ...request.messages] } } : {}) });
+    this.#kinds = deps.confirmation_kinds ?? PRODUCTION_CONFIRMATION_KINDS;
     if (init.turn_receipts) this.#receipts = new TurnReceiptLog(init.turn_receipts);
+    // A record whose kind this build cannot confirm, or whose payload its handler rejects, is dropped on load (it can never become a command).
+    if (init.pending_confirmations) this.#confirmations = new PendingConfirmationLog(init.pending_confirmations.filter(r => this.#kinds.get(r.kind)?.payload_valid(r.payload) === true));
     if (init.transcript) { this.#transcript = [...init.transcript.entries]; this.#nextTranscript = init.transcript.next_index; this.#rollbackTo = init.transcript.rollback_to; }
     this.#autosave = deps.autosave ? new AutosaveScheduler(deps.autosave, {
       // Canonical changes, or delivered exchanges whose continuity/history is not on disk yet (a dialogue-only turn commits no state).
-      dirty: () => this.#session.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending,
+      dirty: () => this.#session.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending || this.#confirmations.unsaved,
       ready: () => this.#status === "idle" && !this.#portraitBusy && !this.#session.saving && !this.#suspended,
       save: async () => { const r = await this.#saveNow("autosave"); return r.ok ? { ok: true } : { ok: false, fatal: FATAL_SAVE.has(r.error.code) }; },
     }) : undefined;
@@ -263,6 +284,7 @@ export class GameSession {
       ...(scenario ? { opening_text: scenario.opening_text } : {}),
       ...(read && read.status === "ok" ? { transcript: { entries: read.entries, next_index: read.next_index, ...(read.max_revision > canon.saved_revision ? { rollback_to: canon.saved_revision } : {}) } } : {}),
       ...(loaded.turn_receipts ? { turn_receipts: loaded.turn_receipts } : {}),
+      ...(loaded.interaction_metadata ? { pending_confirmations: loaded.interaction_metadata.pending_confirmations } : {}),
     });
     // Continuity is context, not commands: added to the conversation window only when it belongs to exactly this saved revision.
     let continuity: LoadReport["continuity"] = loaded.continuity_dropped ? "dropped" : "none";
@@ -291,6 +313,7 @@ export class GameSession {
       warnings: Object.freeze(warnings) });
     // Reconciliation is an authoritative change: the session starts dirty and autosave picks it up.
     session.#itemSprites.resumeInterrupted();
+    session.#reconcileConfirmations();
     session.#autosave?.notify();
     return { ok: true, session, load_report };
   }
@@ -369,6 +392,103 @@ export class GameSession {
       this.#lastError = undefined; this.#autosave?.notify();
       return { ok: true, changed: true, view: this.getView() };
     } catch { return reject("campaign_validation_failed", "The rite could not be completed. The campaign is unchanged."); }
+  }
+
+  /** Block 5A: read-only, masked projection of the pending player confirmations (cards the player can act on, plus the latest outcomes). */
+  getConfirmationView(): ConfirmationView { return deriveConfirmationView(this.#deps.world, this.#session.campaign.exportSnapshot(), this.#confirmations.list(), this.#kinds); }
+  /** The active, still-valid confirmations as the turn pipeline sees them: proposals, never completed acts. */
+  #activeProposals(): readonly PendingProposal[] {
+    const snapshot = this.#session.campaign.exportSnapshot();
+    return this.#confirmations.active().filter(r => { try { return this.#kinds.get(r.kind)?.invalid_reason(snapshot, r) === undefined; } catch { return false; } })
+      .map(r => ({ kind: r.kind, subject_id: r.subject_id, actor_id: r.actor_id, payload: r.payload }));
+  }
+  /**
+   * Invalidation by REAL preconditions: an active record whose act can no longer be confirmed on the current authoritative state ends as `invalidated`
+   * (with the kind's stable reason). Runs before a turn, before every confirm/cancel, before a save and after a load; it never changes campaign state.
+   */
+  #reconcileConfirmations(): void {
+    const snapshot = this.#session.campaign.exportSnapshot();
+    let changed = false;
+    for (const r of this.#confirmations.active()) {
+      const kind = this.#kinds.get(r.kind);
+      let reason: string | undefined;
+      try { reason = kind ? kind.invalid_reason(snapshot, r) : "unknown_kind"; } catch { reason = "command_rejected"; }
+      if (reason && this.#confirmations.resolve(r.ref, "invalidated", reason)) changed = true;
+    }
+    if (changed) this.#autosave?.notify();
+  }
+  /**
+   * Turns the interpretations a FINALIZED turn recognized into persisted pending confirmations. Revalidated on the post-commit state; an interpretation
+   * that an active record already represents is reused (no duplicate card); a changed payload for the same subject supersedes the older record.
+   */
+  #recordProposals(proposals: readonly PendingProposal[], revision: number, turn_id: string, turn_key: string | undefined): void {
+    if (!proposals.length) return;
+    this.#reconcileConfirmations();
+    const snapshot = this.#session.campaign.exportSnapshot();
+    for (const p of proposals) {
+      const kind = this.#kinds.get(p.kind);
+      if (!kind || !kind.payload_valid(p.payload)) continue;
+      const draft: PendingConfirmation = { ref: "0".repeat(24), kind: p.kind, subject_id: p.subject_id, actor_id: p.actor_id, payload: p.payload, provenance: { source: "player_text" }, created_revision: revision, status: "pending" };
+      if (kind.invalid_reason(snapshot, draft) !== undefined) continue;
+      if (this.#confirmations.findActiveEquivalent(p.kind, p.subject_id, p.payload)) continue;
+      for (const old of this.#confirmations.active()) if (old.kind === p.kind && old.subject_id === p.subject_id) this.#confirmations.resolve(old.ref, "invalidated", "superseded");
+      this.#confirmations.create({ campaign_id: snapshot.campaign_id, kind: p.kind, subject_id: p.subject_id, actor_id: p.actor_id, payload: p.payload,
+        provenance: { source: "player_text", ...(turn_key ? { turn_key } : {}), turn_id }, created_revision: revision });
+    }
+    this.#autosave?.notify();
+  }
+  /**
+   * Block 5A, the generic CONFIRM. The browser sends only the opaque ref and the revision it rendered. Resolves the record server-side, checks it is still
+   * pending, checks the revision, revalidates the real preconditions on the authoritative state, then runs the kind's DETERMINISTIC command in ONE
+   * `prepare/commit` and records the terminal state in the same synchronous step (no await between them, so a save never sees one without the other).
+   * No Narrator, no Controller, no text is read. Any refusal changes nothing. A request for a record that is already confirmed answers `replayed`.
+   */
+  confirmPending(request: { readonly ref: unknown; readonly expected_revision: unknown }): ConfirmationOutcome {
+    const gate = this.#confirmationGate(request.ref);
+    if ("outcome" in gate) return gate.outcome;
+    const found = gate.record;
+    if (found.status === "confirmed") return { ok: true, status: "confirmed", changed: false, replayed: true, view: this.getView() };
+    if (found.status === "cancelled") return this.#confirmationRefusal("invalid_input", "That request was cancelled.", "already_cancelled");
+    if (found.status === "invalidated") return this.#confirmationRefusal("invalid_input", CONFIRMATION_MESSAGES[found.terminal_reason ?? ""] ?? CONFIRMATION_MESSAGES.default!, "invalidated", found.terminal_reason);
+    const campaign = this.#session.campaign;
+    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+      return this.#confirmationRefusal("stale_turn", "The campaign changed since this card was shown. Review the story and try again.", "stale");
+    this.#reconcileConfirmations();
+    const record = this.#confirmations.find(found.ref)!;
+    if (record.status !== "pending") return this.#confirmationRefusal("invalid_input", CONFIRMATION_MESSAGES[record.terminal_reason ?? ""] ?? CONFIRMATION_MESSAGES.default!, "invalidated", record.terminal_reason);
+    try {
+      campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [...this.#kinds.get(record.kind)!.commands(campaign.exportSnapshot(), record)] }));
+    } catch {
+      this.#confirmations.resolve(record.ref, "invalidated", "command_rejected"); this.#autosave?.notify();
+      return this.#confirmationRefusal("campaign_validation_failed", CONFIRMATION_MESSAGES.command_rejected!, "invalidated", "command_rejected");
+    }
+    this.#confirmations.resolve(record.ref, "confirmed", "player_confirmed", campaign.revision);
+    this.#reconcileConfirmations();
+    this.#lastError = undefined; this.#autosave?.notify();
+    return { ok: true, status: "confirmed", changed: true, view: this.getView() };
+  }
+  /** Block 5A, the generic CANCEL: zero campaign mutation (no revision change), only the record's terminal state. Idempotent; cancelling a confirmed request is refused. */
+  cancelPending(request: { readonly ref: unknown; readonly expected_revision: unknown }): ConfirmationOutcome {
+    const gate = this.#confirmationGate(request.ref);
+    if ("outcome" in gate) return gate.outcome;
+    const found = gate.record;
+    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision < 0) return this.#confirmationRefusal("invalid_input", "Malformed request.", "unknown_confirmation");
+    if (found.status === "cancelled") return { ok: true, status: "cancelled", changed: false, replayed: true, view: this.getView() };
+    if (found.status === "confirmed") return this.#confirmationRefusal("invalid_input", "That request was already confirmed and cannot be cancelled.", "already_confirmed");
+    if (found.status === "invalidated") return this.#confirmationRefusal("invalid_input", CONFIRMATION_MESSAGES[found.terminal_reason ?? ""] ?? CONFIRMATION_MESSAGES.default!, "invalidated", found.terminal_reason);
+    this.#confirmations.resolve(found.ref, "cancelled", "player_cancelled");
+    this.#lastError = undefined; this.#autosave?.notify();
+    return { ok: true, status: "cancelled", changed: true, view: this.getView() };
+  }
+  #confirmationRefusal(code: AppError["code"], message: string, reason: ConfirmationReason, terminal_reason?: string): ConfirmationOutcome {
+    return { ok: false, error: appError(code, { message }), reason, ...(terminal_reason ? { terminal_reason } : {}), view: this.getView() };
+  }
+  /** Shared pre-checks of confirm and cancel: open, idle (operation locking: never during a turn, a portrait batch or a save-affecting step), a well-formed known ref. */
+  #confirmationGate(ref: unknown): { readonly record: PendingConfirmation } | { readonly outcome: ConfirmationOutcome } {
+    if (this.#status === "closed") return { outcome: this.#confirmationRefusal("session_closed", "The session is closed.", "busy") };
+    if (this.#status !== "idle" || this.#portraitBusy) return { outcome: this.#confirmationRefusal("turn_in_progress", "Wait for the current turn or portrait generation to finish.", "busy") };
+    const record = typeof ref === "string" && PENDING_REF.test(ref) ? this.#confirmations.find(ref) : undefined;
+    return record ? { record } : { outcome: this.#confirmationRefusal("invalid_input", "Unknown request.", "unknown_confirmation") };
   }
 
   /** Read-only, masked trade-offer projection (card, closing notice, latest receipt). */
@@ -843,13 +963,14 @@ export class GameSession {
     const controller = new AbortController(); this.#abort = controller;
     const forward = () => controller.abort(); options.signal?.addEventListener("abort", forward, { once: true }); if (options.signal?.aborted) forward();
     this.#diagnostics = undefined; this.#reflectionRecord = undefined; this.#lastError = undefined;
+    this.#reconcileConfirmations();
     let completed: Extract<TurnEvent, { type: "turn_completed" }> | undefined, failed: Extract<TurnEvent, { type: "turn_failed" }> | undefined, committedEvent: Extract<TurnEvent, { type: "state_committed" }> | undefined;
     const warnings: string[] = [];
     // Post-commit steps are guarded one by one: each failure is a warning (kept in the trace and logged), never a failed turn.
     const guard = <T>(step: PublicationStep, action: () => T, fallback: T): T => { try { return action(); } catch { if (!warnings.includes(step)) warnings.push(step); return fallback; } };
     try {
       emit({ type: "player_message", turn_id, text: input });
-      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, ...(identity ? { turn_key: identity.key } : {}), ...(options.expected_revision !== undefined ? { expected_revision: options.expected_revision } : {}) })) {
+      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, ...(identity ? { turn_key: identity.key } : {}), ...(options.expected_revision !== undefined ? { expected_revision: options.expected_revision } : {}), pending_confirmations: this.#activeProposals() })) {
         if (event.type === "turn_progress") emit({ type: "turn_progress", turn_id, phase: event.phase });
         else if (event.type === "state_committed") committedEvent = event;
         else if (event.type === "publication_warning") { if (!warnings.includes(event.step)) warnings.push(event.step); }
@@ -863,6 +984,8 @@ export class GameSession {
         const committed_revision = committedEvent?.revision ?? completed?.result.final_revision ?? after.revision;
         // Creation only: movement/transfer of an existing identity never schedules art.
         guard("item_visuals", () => { const previousItems = new Set(before.items.map(i => i.id)); for (const item of after.items) if (!previousItems.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id); }, undefined);
+        // Block 5A: interpretations the finalized turn recognized become pending confirmations (persisted with the next save); nothing was committed for them.
+        guard("pending_confirmations", () => this.#recordProposals(committedEvent?.confirmation_proposals ?? completed?.result.confirmation_proposals ?? [], committed_revision, turn_id, identity?.key), undefined);
         const built = guard("diagnostics", () => buildTrace({ sequence, campaign_id: before.campaign_id, dataset_id: before.dataset_id, player_input: input, revision_before: before.revision, revision_after: after.revision,
           outcome: "completed", ...(completed ? { result: completed.result } : {}), ...(this.#diagnostics ? { diagnostics: this.#diagnostics } : {}), movement: movementOf(before, after), ...(this.#deps.unsafe_trace ? { unsafe: true } : {}),
           ...(identity ? { turn_key: identity.key } : {}) }), undefined);
@@ -891,6 +1014,7 @@ export class GameSession {
       if (committedEvent) {
         // PIPE-2: whatever went wrong after the authoritative commit, the turn happened. Answer with the committed result and a warning.
         if (!warnings.includes("result_publication")) warnings.push("result_publication");
+        try { this.#recordProposals(committedEvent.confirmation_proposals ?? [], committedEvent.revision, turn_id, identity?.key); } catch { if (!warnings.includes("pending_confirmations")) warnings.push("pending_confirmations"); }
         console.error(`Turn ${turn_id} published with warnings: ${warnings.join(", ")}`);
         const trace: TurnTrace = { turn_id, campaign_id: before.campaign_id, dataset_id: before.dataset_id, sequence, revision_before: before.revision, revision_after: committedEvent.revision, player_input: input, outcome: "completed",
           audit_issue_kinds: [], revision_issue_kinds: [], committed_command_kinds: [], rejected_command_kinds: [], retrieval_ids: [], reflection: emptyReflection(), publication_warnings: [...warnings], ...(identity ? { turn_key: identity.key } : {}) };
@@ -943,14 +1067,15 @@ export class GameSession {
   async #saveNow(reason: SaveReason): Promise<SaveOutcome> {
     let saved: SavedCampaign;
     // The snapshot, the continuity block and the receipts are all captured in this same synchronous stretch: one file, one rename, one durable boundary.
-    const receipts = this.#receipts.export();
-    try { saved = await this.#session.save({ reason, ...this.#continuityOption(), ...(receipts.block ? { turn_receipts: receipts.block } : {}) }); }
+    this.#reconcileConfirmations();
+    const receipts = this.#receipts.export(), interaction = this.#confirmations.export();
+    try { saved = await this.#session.save({ reason, ...this.#continuityOption(), ...(receipts.block ? { turn_receipts: receipts.block } : {}), ...(interaction.block ? { interaction_metadata: interaction.block } : {}) }); }
     catch (error) {
       const e = toAppError(error), err = e.code === "internal_error" ? appError("io_error") : e;
       if (err.code !== "save_in_progress") this.#saveError = err.code;
       return { ok: false, error: err };
     }
-    this.#saveError = undefined; this.#receipts.saved(receipts.token);
+    this.#saveError = undefined; this.#receipts.saved(receipts.token); this.#confirmations.saved(interaction.token);
     // Canonical save is complete; history and file cleanup can only report, never undo it.
     const transcriptOk = await this.#flushTranscript(saved.revision);
     await this.#collectDeletions();
@@ -1075,7 +1200,7 @@ export class GameSession {
     this.#itemSprites.flush(); await this.#itemSprites.settled();
     await this.#autosave?.stop();
     // Graceful quit (Save/Load v1): save a dirty campaign before closing. A failed quit save keeps the session open unless discarding.
-    if (options.save_reason === "quit" && (this.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending) && this.#status === "idle") {
+    if (options.save_reason === "quit" && (this.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending || this.#confirmations.unsaved) && this.#status === "idle") {
       const saved = await this.#saveNow("quit");
       if (!saved.ok && !options.discard_unsaved) { this.#autosave?.resume(); return { closed: false, error: saved.error }; }
     }

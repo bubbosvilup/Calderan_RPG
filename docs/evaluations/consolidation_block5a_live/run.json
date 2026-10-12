@@ -1,0 +1,59 @@
+{
+  "verdict": {
+    "turn_ok": true,
+    "card_created": true,
+    "legal_unchanged_after_words": true,
+    "no_manumission_after_words": true,
+    "prose_has_no_completed_claim": true,
+    "confirm_zero_provider_calls": true,
+    "confirm_freed": true,
+    "replay_zero_calls": true,
+    "replay_no_new_card_no_second_manumission": true
+  },
+  "afterTurn": {
+    "ok": true,
+    "error": null,
+    "legal": "enslaved",
+    "manumissions": 0,
+    "cards": 1,
+    "card_title": "Free Maren?",
+    "narration": "*The words leave Nicco's mouth and hang in the market air — swallowed almost immediately by the ongoing noise of the auction, a clerk's call, the shuffle of feet on packed earth. Rain dots the ground in small dark circles, barely felt.*\n\n*Maren goes still. Her lips part but nothing comes out. Her hands, which had been hanging at her sides, draw together in front of her — not quite clasped, not quite fending off. She looks at Nicco's face, then down, then at his face again, as though checking whether the words still stand or have already been taken back. Her breathing is shallow and quick. The market moves around her uncaring: a handler passes behind with a lead rope, a buyer somewhere laughs at something.*\n\n*No clerk has been approached. No papers have been drawn. Whatever legal weight the declaration carries or lacks, none of it has touched parchment yet. Maren's eyes are wet but she does not speak, does not move closer or farther away — just stands there in the light rain, waiting to learn what those words actually mean.*"
+  },
+  "turn_provider_calls": [
+    {
+      "n": 1,
+      "kind": "narrator",
+      "model": "z-ai/glm-5.2",
+      "max_tokens": 768,
+      "status": 200
+    },
+    {
+      "n": 2,
+      "kind": "other",
+      "max_tokens": 512,
+      "status": 200
+    }
+  ],
+  "narrator_requests": 1,
+  "other_requests": 1,
+  "confirm": {
+    "ok": true,
+    "status": "confirmed",
+    "provider_calls": 0,
+    "legal": "free",
+    "holder_cleared": true,
+    "manumissions": 1,
+    "cards_after": 0
+  },
+  "replay": {
+    "ok": true,
+    "replayed": true,
+    "provider_calls": 0,
+    "cards_after": 0,
+    "manumissions": 1,
+    "legal": "free"
+  },
+  "total_provider_requests": 2,
+  "total_tokens": 11998,
+  "cost_usd": 0
+}

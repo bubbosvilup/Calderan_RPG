@@ -146,6 +146,7 @@ export function renderSceneStateProjection(focused: FocusedSceneState, options: 
     out.push("Player:", `- Mana: ${focused.player.mana.current}/${focused.player.mana.max}`, `- Money: ${focused.player.gold === null ? "not tracked" : `${focused.player.gold} Gold`}`);
     block("knowledge", "Knowledge (recorded entries only; having no entry is not proof a person is ignorant):", sectionBody("knowledge", omitted("knowledge", droppedIn("knowledge") === 1 ? "recorded fact" : "recorded facts")));
     block("social", "Social (authoritative; legal ownership is not consent, loyalty or affection; household membership is only what is listed here, never inferred from being present or living somewhere):", sectionBody("social", omitted("social", droppedIn("social") === 1 ? "social entry" : "social entries")));
+    block("pending", "Proposed player actions awaiting the player's explicit confirmation in the interface (NOT completed; the authoritative state above is unchanged until the player confirms):", focused.pending.map(p => `- ${p.text}`));
     block("scheduled", "Scheduled:", sectionBody("scheduled", omitted("scheduled", droppedIn("scheduled") === 1 ? "event" : "events")));
     block("developments", "Recent recorded developments (history; current state above wins):", sectionBody("developments"));
     return { text: out.join("\n"), sections };

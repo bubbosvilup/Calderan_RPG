@@ -49,21 +49,27 @@ export function visibleDescriptor(sources: readonly (string | undefined)[]): str
 }
 export const slaveLabel = (descriptor: string | undefined): string => descriptor ? `${capital(descriptor)} Slave` : "Slave";
 
+/**
+ * The masked, knowledge-aware label of a person (shared by the trade card and the confirmation card): the real name only once it has been
+ * legitimately learned, otherwise a closed-lexicon descriptor ("Young Slave"). Never a hidden name or an ID.
+ */
+export function personLabelOf(snapshot: DeepReadonly<CampaignSnapshot>, characters: ReturnType<typeof playerCharacterProjection>, record: DeepReadonly<CampaignCharacter> | undefined): { label: string; name_known: boolean } {
+  // A person already in the campaign is labelled by the shared knowledge-aware projection; one still to be registered by acceptance only by what narration showed.
+  const projected = record && snapshot.characters.some(c => c.id === record.id) ? characters.project(record.id) : undefined;
+  const name = projected ? (projected.name_known ? projected.name : undefined) : record ? knownCreatedName(record) : undefined;
+  if (name) return { label: characters.text(name), name_known: true };
+  const o = record?.origin_snapshot?.established;
+  // Descriptor sources are limited to what delivered narration established about the person (the promotion origin); canon appearance is never read.
+  return { label: slaveLabel(visibleDescriptor([o?.descriptor, record?.origin_snapshot?.label, ...(o?.appearance ?? [])])), name_known: false };
+}
+
 export function deriveTradeView(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>): TradeView {
   const offers = snapshot.trade_offers ?? [];
   if (!offers.length) return { offer: null, notice: null, receipt: null };
   const characters = playerCharacterProjection(world, snapshot);
   const who = activePlayerCharacterId(snapshot) ?? "nicco";
   const gold = snapshot.funds.find(f => f.character_id === who)?.gold ?? null;
-  const personLabel = (record: DeepReadonly<CampaignCharacter> | undefined): { label: string; name_known: boolean } => {
-    // A person already in the campaign is labelled by the shared knowledge-aware projection; one still to be registered by acceptance only by what narration showed.
-    const projected = record && snapshot.characters.some(c => c.id === record.id) ? characters.project(record.id) : undefined;
-    const name = projected ? (projected.name_known ? projected.name : undefined) : record ? knownCreatedName(record) : undefined;
-    if (name) return { label: characters.text(name), name_known: true };
-    const o = record?.origin_snapshot?.established;
-    // Descriptor sources are limited to what delivered narration established about the person (the promotion origin); canon appearance is never read.
-    return { label: slaveLabel(visibleDescriptor([o?.descriptor, record?.origin_snapshot?.label, ...(o?.appearance ?? [])])), name_known: false };
-  };
+  const personLabel = (record: DeepReadonly<CampaignCharacter> | undefined) => personLabelOf(snapshot, characters, record);
   const partyLabel = (c: DeepReadonly<TradeCounterparty>): string => {
     if (c.kind === "anonymous") return /^(?:the )?[a-z][a-z' -]{1,40}$/i.test(c.label) ? characters.text(capital(c.label)) : "Unfamiliar person";
     const record = snapshot.characters.find(x => x.id === c.character_id);

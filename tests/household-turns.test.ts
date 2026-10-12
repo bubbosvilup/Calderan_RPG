@@ -73,11 +73,11 @@ test("offer evals: unpapered offers stay unpapered, ambiguity resolves nothing, 
   const poor = market([{ kind: "set_funds", character_id: "nicco", gold: 2 }]);
   assert.equal(offer(poor, "Done.").commands.length, 1, "funds are checked only when the player accepts");
 });
-test("manumission evals: legal freeing of a person Nicco holds resolves; chains, permission to leave and hedges do not", () => {
+test("manumission evals: legal freeing of a person Nicco holds is RECOGNIZED as a proposal (AUTH-1: never a command); chains, permission to leave and hedges do not", () => {
   const c = market();
   c.apply({ expected_revision: c.revision, commands: [{ kind: "transfer_person", transaction_id: "campaign_transaction_setup", transaction_kind: "sale", character_id: BRENNA, from_holder_id: "korvin", to_holder_id: "nicco", payment: { payer_id: "nicco", payee_id: "korvin", gold: 5 }, documentation: "documented" }] });
-  for (const input of ["You are free now, Brenna. No one owns you.", "I hereby free you.", "*grants Brenna her freedom*"]) assert.equal(resolve(c, input, []).commands[0]?.kind, "manumit", input);
-  for (const input of ["*frees her from the chains*", "You're free to go outside.", "Maybe one day I'll free you.", "Are you free tomorrow?"]) assert.deepEqual(resolve(c, input, []).commands, [], input);
+  for (const input of ["You are free now, Brenna. No one owns you.", "I hereby free you.", "*grants Brenna her freedom*"]) assert.equal(resolve(c, input, []).proposals[0]?.kind, "manumission", input);
+  for (const input of ["*frees her from the chains*", "You're free to go outside.", "Maybe one day I'll free you.", "Are you free tomorrow?"]) assert.deepEqual(resolve(c, input, []).proposals, [], input);
 });
 
 // ------------------------------------------------------------------------------------------------ controller evals: household

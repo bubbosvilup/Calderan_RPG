@@ -95,6 +95,10 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 > refused (`campaign_locked`). The holder refreshes the lock's modification time every 30 s; a lock is held only while its PID runs
 > AND its heartbeat is younger than 90 s, so a crashed holder frees it at once and a reused PID (seen live on Windows) within 90 s.
 
+## Pending confirmations (block 5A, save file schema 6)
+
+Save file schema is **6** (snapshot schema stays 6). The envelope gains the optional top-level `interaction_metadata` (`{authority:"interaction_metadata", pending_confirmations:[...]}`), written in the same atomic rename as the snapshot and **not** part of `CampaignState`: creating, cancelling or invalidating a record never changes the semantic revision (confirming one commits a normal revision). Record: `ref` (24 hex), `kind`, `subject_id`, `actor_id`, flat bounded `payload`, `provenance` (`source`, `turn_key`, `turn_id`), `created_revision`, `status` (`pending|confirmed|cancelled|invalidated`), `terminal_reason`, `resolved_revision`. Active records are never pruned (parse ceiling 256, creation ceiling 64); only the newest 32 terminal records are kept. Migration 5 → 6 changes only the version and rejects a v5 file that already carries `interaction_metadata`. Load is tolerant: a malformed, duplicate, unknown-kind or impossible record is dropped and never makes the save unloadable; the game session reconciles active records against the loaded state (subject renamed keeps the binding because it is by ID; subject no longer enslaved invalidates). Autosave and quit-save treat unsaved pending changes as dirty.
+
 ## Trade offers (Actual Offer V1)
 
 Block 4 adds the optional additive save-file field `turn_receipts` (`{authority:"idempotency_metadata", receipts:[...]}`, at most 32, newest kept): terminal turn results keyed by `turn_key`, written in the same atomic rename as the snapshot, **not** part of `CampaignState` (recording one never changes the semantic revision). Schema stays 5; an absent or malformed block loads as no receipts, and a receipt claiming a revision beyond the saved one is dropped.

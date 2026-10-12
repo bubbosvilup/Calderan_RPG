@@ -44,6 +44,8 @@ export interface FocusedSceneState {
   readonly social: { readonly legal: Ranked<SceneSocial["legal"][number]>[]; readonly households: Ranked<SceneSocial["households"][number]>[]; readonly relationships: Ranked<SceneSocial["relationships"][number]>[] };
   readonly scheduled: readonly Ranked<SceneEvent>[];
   readonly developments: readonly Ranked<SceneDevelopment>[];
+  /** Pending proposals are never focused away: the Narrator must always know a proposal is not a completed act. */
+  readonly pending: SceneStateProjection["pending"];
 }
 /** Turn signals already computed by the narrator pipeline (Narrator Focus, intent, input); nothing here is new authority. */
 export interface SceneFocusInput {
@@ -210,5 +212,5 @@ export function focusedSceneStateProjection(projection: SceneStateProjection, fo
     .slice(0, L.developments).map(x => ({ value: x.d, score: 20, required: false }));
 
   return { now, location, time: projection.time, present: projection.present, character_state, items: chosen, carried_not_listed: carriedNotListed, stored_not_listed: stored.length - storedKept.size,
-    player: projection.player, knowledge: knowledgeRanked, social: { legal, households, relationships }, scheduled, developments };
+    player: projection.player, knowledge: knowledgeRanked, social: { legal, households, relationships }, scheduled, developments, pending: projection.pending };
 }

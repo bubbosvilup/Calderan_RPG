@@ -5,6 +5,8 @@ import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext, type TurnContext } from "../context-builder.js";
 import { playerIntent, type PlayerIntent } from "../player-intent.js";
 import { resolveManumission } from "../person-transactions.js";
+import { manumissionCommand, manumissionInvalidReason, type PendingProposal } from "../pending-proposals.js";
+import { pendingEquivalenceKey } from "../../types/pending-confirmation.js";
 import { characterLocation, movableCharacters, resolvePlayerCarry, type MovableCharacter } from "../character-movement.js";
 import { extractRuleDeclarations } from "../household-evidence.js";
 import { invitedFollowers, leftBehindNotes } from "../follow-invitation.js";
@@ -33,6 +35,8 @@ export interface IntentStageInput {
   readonly plan: (input: string, context: TurnContext) => SceneParticipantPlan;
   /** Finalized recent exchanges (the seller's latest offer, earlier namings). */
   readonly finalized: readonly RecentExchange[];
+  /** Block 5A: the session's ACTIVE, still-valid pending confirmations (server-owned). */
+  readonly pending_confirmations?: readonly PendingProposal[];
 }
 /** The player's resolved intent with authoritative narrator notes and rule declarations. */
 export type TurnIntent = PlayerIntent & { readonly notes: readonly string[]; readonly rule_declarations: readonly string[] };
@@ -62,16 +66,28 @@ export function resolveTurnIntent(i: IntentStageInput): ResolvedIntent {
   const escorted = resolveHeldEscort(i.player_input, i.snapshot, base_context, i.world, spoken.runtime, carry.runtime.flatMap(c => c.kind === "move_character" ? [c.character_id] : []));
   const escort = escorted.runtime.length && !prevalidates(i, [...spoken.runtime, ...carry.runtime, ...escorted.runtime]) ? { runtime: [], notes: [] } : escorted;
   const natural = [...spoken.runtime, ...carry.runtime, ...escort.runtime];
-  // Household Pass 1: the player-authored act of freeing a person is resolved deterministically and prevalidated against the real preparation before
-  // narration; a rejected one is dropped and the narrator is told nothing changed. Actual Offer V1: purchases are NOT resolved here. A purchase or sale is
-  // an explicit trade offer the player accepts in the interface; the pending/settled offer state reaches the narrator as authoritative notes.
+  // Household Pass 1 / AUTH-1: the player-authored act of freeing a person is only RECOGNIZED here, as a proposal. It is validated at creation against the
+  // real domain prerequisites (and a dry preparation of the deterministic command) so an impossible act produces no card, but it is never a runtime
+  // command: the player confirms it in the interface. Actual Offer V1: purchases are NOT resolved here either (explicit offer, explicit Accept).
   const trade = resolveManumission(i.player_input, base_context, i.snapshot, i.base_revision);
-  const tradeValid = !trade.commands.length || prevalidates(i, [...natural, ...trade.commands]);
-  const tradeCommands = tradeValid ? trade.commands : [];
-  const tradeNotes = tradeValid ? trade.notes : ["The attempted legal act is not valid under current ownership: no legal status changes this turn."];
-  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...escort.notes, ...tradeNotes, ...tradeStateNotes(i.snapshot, i.world)], rule_declarations: extractRuleDeclarations(i.player_input),
-    ...(trade.diagnostics.length ? { transactions: trade.diagnostics.map(d => ({ kind: d.kind, status: tradeValid ? d.status : "blocked" as const, ...(tradeValid ? (typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}) : { reason: "prevalidation_rejected" }) })) } : {}) };
+  const creatable = trade.proposals.filter(p => proposalCreatable(i, p));
+  const blocked = trade.proposals.length > creatable.length;
+  const tradeNotes = blocked ? ["The attempted legal act is not valid under current ownership: no legal status changes this turn."] : trade.notes;
+  const intent: TurnIntent = { ...spoken, runtime: natural, notes: [...carry.notes, ...escort.notes, ...tradeNotes, ...tradeStateNotes(i.snapshot, i.world)], rule_declarations: extractRuleDeclarations(i.player_input),
+    confirmations: { recognized: creatable, pending: pendingFor(i.pending_confirmations ?? [], creatable) },
+    ...(trade.diagnostics.length ? { transactions: trade.diagnostics.map(d => ({ kind: d.kind, status: blocked ? "blocked" as const : d.status, ...(blocked ? { reason: "prevalidation_rejected" } : typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}) })) } : {}) };
   return { base_context, base_plan, intent };
+}
+/** Create-time validation of a proposal: the shared domain prerequisites AND a dry preparation of the deterministic command (never committed). */
+function proposalCreatable(i: IntentStageInput, p: PendingProposal): boolean {
+  if (p.kind !== "manumission") return false;
+  return manumissionInvalidReason(i.snapshot, p.subject_id, p.actor_id, p.payload) === undefined && prevalidates(i, [manumissionCommand("campaign_transaction_probe", p.subject_id, p.payload)]);
+}
+/** Existing active confirmations plus this turn's recognized ones: the same interpretation once; a changed payload for the same subject replaces the old one. */
+function pendingFor(existing: readonly PendingProposal[], recognized: readonly PendingProposal[]): readonly PendingProposal[] {
+  const kept = existing.filter(e => !recognized.some(r => r.kind === e.kind && r.subject_id === e.subject_id));
+  const seen = new Set<string>();
+  return [...kept, ...recognized].filter(p => { const key = pendingEquivalenceKey(p.kind, p.subject_id, p.payload); if (seen.has(key)) return false; seen.add(key); return true; });
 }
 function prevalidates(i: IntentStageInput, commands: readonly unknown[]): boolean {
   try { i.prepare({ expected_revision: i.base_revision, commands }); return true; } catch { return false; }

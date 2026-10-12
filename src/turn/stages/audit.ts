@@ -67,6 +67,7 @@ export function createNarrationAuditor(i: { readonly base_revision: number; read
     access,
     check: (narration, evidence) => auditNarration({ base_revision: i.base_revision, narration, context: i.context, world: i.world, access, evidence, diagnostics: i.diagnostics,
       committed: i.authorized, prepared: i.prepared, scene: i.scene, player_input: i.player_input, recent: i.recent, ...(i.finalized ? { finalized: i.finalized } : {}), authoritative_text, economic_reference,
+      ...(i.intent.confirmations?.pending.length ? { pending: i.intent.confirmations.pending } : {}),
       player_travel_frame: !!i.intent.natural?.actions.some(a => a.kind === "movement") || i.intent.runtime.some(c => c.kind === "runtime_delta" && !!c.delta.player_location),
       ...(i.origin ? { origin: i.origin } : {}), ...(i.elapsed_minutes !== undefined ? { elapsed_minutes: i.elapsed_minutes, temporal_request: !!i.intent.temporal } : {}) }),
     outcome: issues => outcomeLines(i.context, i.turn_evidence, i.diagnostics, i.authorized, i.prepared, issues, i.player_input,

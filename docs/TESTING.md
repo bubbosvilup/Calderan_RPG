@@ -43,6 +43,7 @@ Browser checks are not part of `npm test`; UI behavior is covered by server/read
 ## Planned (not built)
 
 - **Narrator truncation metrics:** per-turn `finish_reason` and every Narrator attempt are now recorded in the trace (`narrator_generation`); an aggregate over a long run (rate, p95 output tokens by model) is still to be built.
+- **Block 5A:** `tests/block5a-*.test.ts` (foundation, AUTH-1 A1–A24, UI); `scripts/confirmation-browser-check.mjs` (real browser, offline); live harness `src/dev/consolidation-block5a-live.ts` (spends credits, one scenario).
 - **Block 4 live harness:** `src/dev/consolidation-block4-live.ts` (spends credits; forces truncation on the first Narrator request only).
 - **Disabled-services matrix:** run the scenario suite with each optional service off and assert identical core state and revisions (ARCH-1).
 - **Modern benchmark L1** and a corpus for the NarrationFacts parity migration: see the debt register, section 14, and Wave A (A8, A9).

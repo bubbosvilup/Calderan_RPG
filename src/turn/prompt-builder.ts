@@ -282,7 +282,7 @@ export function buildNarratorPrompt(input: string, context: TurnContext, recent:
   // Scene State Projection V1: ONE derived, id-free account of current runtime truth (location, time, presence, state, items, resources,
   // knowledge scopes, social, schedule). Derive → focus (Narrator Focus signals) → render. See docs/architecture/SCENE_STATE_PROJECTION_V1.md.
   const intentSignals = intentSceneSignals(intent);
-  const sceneState = renderSceneStateProjection(focusedSceneStateProjection(buildSceneStateProjection(context),
+  const sceneState = renderSceneStateProjection(focusedSceneStateProjection(buildSceneStateProjection(context, intent.confirmations?.pending ?? []),
     { background: focus.background, foreground: focus.foreground, input: relevanceInput, recent_text: recent.map(e => `${e.player} ${e.narration}`).join(" "), ...intentSignals,
       person_ids: new Set([...intentSignals.person_ids, ...(sceneParticipants?.addressed ?? []), ...(sceneParticipants?.focus ? [sceneParticipants.focus] : [])]), lore: focus.lore }));
   // The relationship edges CURRENT SCENE already states (display names): NPC+ does not repeat the same current relationship state.

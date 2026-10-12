@@ -64,7 +64,7 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 | # | ID | Sev | Item |
 | --- | --- | --- | --- |
 | 1 | PIPE-1 / CTX-2 | P1 | ~~Unaudited Narrator draft streamed to the browser~~ FIXED (block 4); CTX-2 residual: output-side leak check on the final text |
-| 2 | AUTH-1 | P1 | Manumission from regex on raw input, no confirmation |
+| 2 | AUTH-1 | P1 | ~~Manumission from regex on raw input, no confirmation~~ FIXED (block 5A): the words create a PendingConfirmation, only the player's Confirm commits |
 | 3 | NARR-1 (new) | ~~P2 high~~ FIXED (block 4) | Narrator 512-token cap (was): length truncation is a lost, non-retryable turn; `finish_reason` not recorded; rate unmeasured |
 | 4 | AUTH-2 | P1 | Permanent character creation from narration, no retire or merge |
 | 5 | ARCH-1 (new) | P2 high | Optional intelligence coupled to the authoritative core (absorbs REV-1, PIPE-3, REV-3) |
@@ -110,7 +110,7 @@ Policy "no new major feature until every H1 item is fixed or explicitly deferred
 
 ### 1C.2 Authority classification (principle, see ARCHITECTURE.md section 2c)
 
-Class A low impact, no confirmation. Class B engine-verifiable, no confirmation if the evidence is strong, safe rejection on ambiguity. Class C irreversible or high impact, explicit player confirmation (trade settlement, NPC+ promotion, manumission, large property transfer, destructive actions). Current gaps: manumission is still regex-driven (AUTH-1) and narration-created characters are permanent (AUTH-2).
+Class A low impact, no confirmation. Class B engine-verifiable, no confirmation if the evidence is strong, safe rejection on ambiguity. Class C irreversible or high impact, explicit player confirmation (trade settlement, NPC+ promotion, manumission, large property transfer, destructive actions). Manumission now follows Class C through a PendingConfirmation (AUTH-1 closed, block 5A). Remaining gap: narration-created characters are permanent (AUTH-2, OPEN, block 5B).
 
 ## 2. Priority summary (top 30): AUDIT SNAPSHOT, historical rank at `c0608a6`
 
@@ -121,7 +121,7 @@ Class A low impact, no confirmation. Class B engine-verifiable, no confirmation 
 | 1 | MOV-1 | P1 | Non-NPC+ companions never follow (known bug); also feeds ID-1 | M | **[Status 2026-10-12, consolidation block 3: FIXED offline — MOV-1 (implicit narrated follow for held persons, household members and named invitees; the known "let's go home" bug); the predicate `followCandidates` in `src/turn/follow-candidates.ts`. Live certification: see docs/evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md. Audit text kept as history.]**
 | 2 | PIPE-1 | P1 | Unaudited draft streamed to the player | S-M |
 | 3 | TRD-1 | P1 | SELL ignores `owner_id` and deletes the item | S-M |
-| 4 | AUTH-1 | P1 | Manumission applied from regex on raw input, no confirmation | M |
+| 4 | AUTH-1 | P1 | ~~Manumission applied from regex on raw input, no confirmation~~ FIXED (block 5A) | M |
 | 5 | IMG-1 | P1 | Portrait minor gate fail-open for unknown age | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — IMG-1 (age no longer gates portraits, user decision 2026-10-12). Live certification still to do. Audit text above kept as historical.]**
 | 6 | IMG-2 | P1 | Image batches uncancellable; abort mapped to a retryable error | M |
 | 7 | AUTH-2 | P1 | Character registration/naming from narration is permanent (no retire/merge) | M |
@@ -166,7 +166,7 @@ Per-action behaviour:
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
-| AUTH-1 | P1 | `manumit` is derived from a regex over raw player input (`person-transactions.ts:23-41`, wired `stages/intent.ts:65`). One-way, joins the turn batch, no confirmation, hedge filter is a short word list; quoted or negated speech can still resolve. | Move to an explicit UI action (Accept/Promote model) or a pending-manumission record the player confirms. | M |
+| AUTH-1 | P1 | ~~`manumit` was derived from a regex over raw player input and joined the turn batch.~~ **FIXED (block 5A).** The regex now only *recognises* an interpretation; the turn creates a `PendingConfirmation` (interaction metadata, save schema 6). The legal state changes only when the player presses Confirm (`POST /api/confirmation/confirm`, ref + `expected_revision`), a commit with zero provider calls. No semantic path (Narrator, Controller, regex, audit, repair) emits `manumit` or `set_legal_status` directly. Residual by design: the FREE grammar is unchanged and does not recognise bare "I free Maren." (no 'you'). | ~~Move to an explicit UI action~~ done | M |
 | AUTH-2 | P1 | `establishNames` registers characters from delivered narration (`name-establishment.ts:42-80`). Characters are never deletable (no remove command), so a false positive is permanent and flows into households and legal state. | Add an engine-only, player-confirmed `retire_character`/merge command and a provisional-name quarantine state. | M |
 | AUTH-3 | P2 | Literal `"nicco"` appears 212 times in 60 non-dev files, including authority code (`item-transfer.ts:20`, `command-authorizer.ts`, `person-offers.ts`, `person-transactions.ts`), against one `activePlayerCharacterId()`. | One `playerId(snapshot)`; lint test forbidding new literals outside canon/opening. | M |
 | REV-1 | P2 | Item-sprite and portrait metadata commits, mannerism bookkeeping and reflection bump the authoritative revision between turns (`item-sprite-jobs.ts`, `game-session.ts:199`). UI clicks rendered earlier go stale; the "TRADE COMPLETED" note keys on a revision-count heuristic (`trade-notes.ts:36`). | Move derived/media state out of the revision stream, or batch it; key the completed-note on the settlement revision plus a consumed flag. | M-L |
@@ -315,7 +315,7 @@ Audit B domain 3. **Confirmed:** the architecture is explicit and player-authori
 
 ## 8. Persistence and schemas
 
-Audit A domain 5. Snapshot schema 6, save file schema 5. Atomic write (temp + fsync + rename + directory fsync, Windows skips directory fsync), `previous` copy, rolling checkpoint backups, lock with heartbeat, 16 MB cap, soft delete.
+Audit A domain 5. Snapshot schema 6, save file schema 6. Atomic write (temp + fsync + rename + directory fsync, Windows skips directory fsync), `previous` copy, rolling checkpoint backups, lock with heartbeat, 16 MB cap, soft delete.
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
@@ -547,7 +547,7 @@ One list. **D1 to D10** are the audit decisions with their current status; **D11
 | D4 | NPC+ who leaves the household (NPC-1/2) | Direction: **inactive plus rejoin plus badge** (not yet confirmed or implemented) |
 | D5 | Can a canonical NPC become a campaign record / NPC+ (NPC-3, ID-8) | OPEN. Decide before Property |
 | D6 | `premium_*` rename (NAME-1) | **Deferred**, to be done as a clean schema migration (symbols now, key at the next schema bump) |
-| D7 | Manumission as an explicit action (AUTH-1) | Direction: **yes, Class C** (not yet implemented) |
+| D7 | Manumission as an explicit action (AUTH-1) | **Implemented (block 5A)**: Class C through a PendingConfirmation card |
 | D8 | Voyage embeddings, semantic index, OpenRouter image client | **Folded into D13**; remove the image client, park the rest |
 | D9 | Reference-image feature (IMG-10) | OPEN. Recommend remove the upload UI until needed |
 | D10 | Repository cleanup depth (REPO-1..3) | OPEN. Do REPO-1 now, the rest with the docs taxonomy |

@@ -72,7 +72,7 @@ test("P1/P8/P9: Nicco is not an NPC+: no premium record, no promotion, no NPC+ l
   assert.ok(!snap.characters.some(c => c.id === "nicco"));
   assert.equal(snap.portraits?.length, 1); assert.equal(snap.portraits![0]!.character_id, "nicco");
   const raw = JSON.parse(await fs.readFile(join(root, "campaigns", s.campaignId, "save.json"), "utf8"));
-  assert.equal(raw.schema_version, 5, "the save file schema is unchanged"); assert.equal(raw.snapshot.schema_version, 6);
+  assert.equal(raw.schema_version, 6, "save schema 6 (block 5A); inventory UI adds no field"); assert.equal(raw.snapshot.schema_version, 6);
 });
 
 test("P2/P3/P4: Avatar, Full Body and Gallery capabilities; generation runs through the existing batch pipeline", async () => {

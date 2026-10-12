@@ -121,21 +121,21 @@ Evidence/history reorganisation and the `saves/` tracking fix (REPO-1..3, DOC-16
 | A1 | H1 closure (three deferred items, stale-doc fixes) | none |
 | A2 | Narrator truncation hardening: persist `finish_reason`, metrics, cap 768, constrained-regeneration recovery | A6 for the recovery part |
 | A3 | ~~PIPE-1 neutral draft state~~ DONE (block 4, D2 decided); CTX-1/CTX-2 leak-filter plan for the final text | none |
-| A4 | Authority classes (A/B/C) policy; explicit manumission (AUTH-1); retire/merge design (AUTH-2) | decision D7 |
+| A4 | Authority classes (A/B/C) policy; explicit manumission (AUTH-1, DONE in block 5A via PendingConfirmation); retire/merge design (AUTH-2, OPEN, block 5B) | decision D7 |
 | A5 | Optional-service/core split: flags, remove optional work from the response path, disabled-services test matrix; then side stores for media and learning (REV-1/PER-3) | A6 |
 | A6 | ~~Turn idempotency (REV-2) and non-throwing publication (PIPE-2)~~ DONE (block 4) | none |
 | A8 | Modern benchmark, L1 scripted scenarios (regression net for A9) | none |
 | A9 | Shared `NarrationFacts`: movement/follow/departure/arrival slice, then price/offers, then names | A8 |
 | A10 | Targeted ambiguity verifier (flagged, bounded) | A9 plus a measured ambiguity rate |
 
-Order: A1; then A6 with A2 and A3; then A4 and A5; then A8, A9, A10. **Next engineering block (Block 4): turn delivery safety and truncation (A6 + A2 + A3).** Property waits for A2, A4, the canonical-NPC policy and the `quantity`/`container_id` and equipment-slot prerequisites, ideally with the first NarrationFacts slice. Quests, combat, medicine, routines and rumor simulation wait for A9 and A5.
+Order: A1; then A6 with A2 and A3; then A4 and A5; then A8, A9, A10. Block 4 (turn delivery safety) and **Block 5A (PendingConfirmation foundation + AUTH-1)** are done. **Next engineering block (Block 5B): character lifecycle + AUTH-2 + suspicious identity-fork scanner.** Property waits for A2, A4, the canonical-NPC policy and the `quantity`/`container_id` and equipment-slot prerequisites, ideally with the first NarrationFacts slice. Quests, combat, medicine, routines and rumor simulation wait for A9 and A5.
 
 ### Earlier wave table (audit-time, superseded where it conflicts with Wave A)
 
 | Wave | Goal | Contents |
 | --- | --- | --- |
 | 0 | Safe, independent fixes (days) | IMG-1, TRD-1, TRD-2, PIPE-2, REV-3, ID-2, UI-1, UI-5, TEST-1, REPO-1, CI-1/CI-2 |
-| 1 | Correctness and secrecy core | MOV-1 + ID-1, PIPE-1 + CTX-1/CTX-2, AUTH-1, TRD-1b, shared price extractor (TRD-3/4), REV-2 |
+| 1 | Correctness and secrecy core | MOV-1 + ID-1, PIPE-1 + CTX-1/CTX-2, AUTH-1 (done, block 5A), TRD-1b, shared price extractor (TRD-3/4), REV-2 |
 | 2 | Durability and responsiveness | PER-1, PER-2, PER-4/PER-5, media side store (REV-1/PER-3), PIPE-3/4/9, UI bundle 1 |
 | 3 | Product features already planned | **Weather UI**, then **Property/Heartstone property** (after canonical-NPC policy, `quantity`/`container_id`, equipment slots) |
 | 4 | Commerce depth | ECO-1 currency decision, funds ledger, merchant wallets and stock, services |

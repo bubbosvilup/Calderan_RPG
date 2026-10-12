@@ -124,7 +124,7 @@ export class TurnCoordinator {
       if(Object.values(observer?.record.provider_attempts??{}).some(r=>r?.recovered))reliability.increment("state_commit_after_retry_count");
       if (observer) { observer.elapsed("commit", c.commitStart, false); observer.record.commit.attempted = true; observer.record.commit.succeeded = true; observer.phase = "publication"; }
     });
-    yield { type: "state_committed", ...committed, narration: c.delivery_text };
+    yield { type: "state_committed", ...committed, narration: c.delivery_text, ...(c.resultDraft.confirmation_proposals ? { confirmation_proposals: c.resultDraft.confirmation_proposals } : {}) };
     const publicationStart = observer ? performance.now() : 0;
     // Publication: conversation history and scene continuity are updated only after the commit.
     try { this.recordExchange(campaign, { player_input, scene, context, delivered: c.delivery_text, location: c.prepared_snapshot.runtime.scene.player_location, stayed: c.stayed }); }
@@ -172,7 +172,7 @@ export class TurnCoordinator {
     return { type: "turn_failed", code, ...(provider_code ? { provider_code } : {}), narration: "", incomplete: true, base_revision, final_revision: campaign.revision };
   }
   async *runTurn(request: TurnRequest): AsyncGenerator<TurnEvent> {
-    const { campaign, player_input, signal, turn_key, expected_revision } = request;
+    const { campaign, player_input, signal, turn_key, expected_revision, pending_confirmations } = request;
     const base_revision = campaign.revision, start = performance.now();
     // Spanning state: only what the failure path and `finally` need. Everything else is an immutable stage output.
     let stage: TurnFailure = "context_invalid", narration: NarratorResult | undefined, recorded = false, owned = false, committedTurn: { readonly revision: number; readonly narration: string } | undefined;
@@ -204,7 +204,7 @@ export class TurnCoordinator {
       checkpoint();
       // IntentResolutionStage: player-authored effects, resolved and prevalidated; the projection is detached (never committed here).
       const intentInput: IntentStageInput = { world: this.world, snapshot, base_revision, player_input, prepare: proposal => campaign.prepare(proposal),
-        plan: (input, context) => this.participants(campaign).plan(input, context, this.recent(campaign).finalized()), finalized: this.recent(campaign).finalized() };
+        plan: (input, context) => this.participants(campaign).plan(input, context, this.recent(campaign).finalized()), finalized: this.recent(campaign).finalized(), pending_confirmations: pending_confirmations ?? [] };
       const resolved = measure("input_intent", () => resolveTurnIntent(intentInput));
       if (resolved.intent.runtime.length) stage = "invalid_runtime_intent";
       const { projected, context, origin, arrival, movable, prompt_intent: promptIntent, scene } = measure("projection", () => projectTurnIntent(intentInput, resolved));

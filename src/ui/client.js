@@ -864,6 +864,57 @@ async function acceptTrade(ref) {
     tradeBusy = false; tradeError = "The request failed. Check the connection and try again."; load();
   }
 }
+// Block 5A: generic pending-confirmation cards. One compact inline card per request awaiting the player's explicit decision ("Free Maren?"). The browser holds
+// only the opaque ref and display strings (the server derives the label from the current view, so a rename or a name reveal re-renders the same card). Confirm and
+// Cancel send the ref and the revision this page rendered, nothing else: no name, ID, payload or amount. Both buttons carry meaningful verbs for assistive tech.
+let confirmBusy = false, confirmError = "", confirmErrorRef = "";
+const shownConfirmations = new Set(), dismissedConfirmations = new Set();
+function confirmationRegion() {
+  let region = ui("confirmation-region");
+  if (!region) { region = document.createElement("div"); region.id = "confirmation-region"; region.className = "confirm-region"; region.setAttribute("aria-live", "polite"); }
+  return region;
+}
+function renderConfirmations(data) {
+  const region = confirmationRegion(), view = data.confirmations ?? { cards: [], recent: [] }, children = [];
+  // Only outcomes of cards this page showed are echoed (a reload does not resurface old history).
+  for (const notice of (view.recent ?? []).filter(n => shownConfirmations.has(n.ref) && !dismissedConfirmations.has(n.ref)).slice(-2)) {
+    const note = document.createElement("p"); note.className = `confirm-notice confirm-${notice.status}`; note.dataset.confirmationNotice = notice.ref;
+    note.textContent = `${notice.status === "confirmed" ? "\u2713" : "\u2022"} ${notice.subject_label}: ${notice.text}`; children.push(note);
+  }
+  for (const item of view.cards ?? []) {
+    shownConfirmations.add(item.ref);
+    const card = document.createElement("section"); card.className = "confirm-card"; card.dataset.confirmationRef = item.ref; card.setAttribute("role", "group"); card.setAttribute("aria-label", `Confirmation needed: ${item.title}`);
+    const head = document.createElement("div"); head.className = "confirm-head";
+    const label = document.createElement("span"); label.className = "confirm-label"; label.textContent = "NEEDS YOUR CONFIRMATION"; head.append(label);
+    const title = document.createElement("strong"); title.className = "confirm-title"; title.textContent = item.title; head.append(title);
+    const body = document.createElement("p"); body.className = "confirm-body"; body.textContent = item.body;
+    const foot = document.createElement("div"); foot.className = "confirm-foot";
+    const blocked = confirmBusy || !(data.status === undefined ? ready : data.status === "idle");
+    const confirm = document.createElement("button"); confirm.type = "button"; confirm.className = "confirm-accept"; confirm.textContent = item.confirm_label; confirm.setAttribute("aria-label", `Confirm: ${item.confirm_label}`); confirm.disabled = blocked;
+    const cancel = document.createElement("button"); cancel.type = "button"; cancel.className = "confirm-cancel"; cancel.textContent = item.cancel_label; cancel.setAttribute("aria-label", `Cancel: ${item.title} ${item.cancel_label}`); cancel.disabled = blocked;
+    confirm.addEventListener("click", () => actOnConfirmation("confirm", item.ref)); cancel.addEventListener("click", () => actOnConfirmation("cancel", item.ref));
+    foot.append(confirm, cancel);
+    const problem = document.createElement("p"); problem.className = "confirm-error"; problem.setAttribute("role", "alert"); const show = !!confirmError && confirmErrorRef === item.ref; problem.hidden = !show; problem.textContent = show ? confirmError : "";
+    card.append(head, body, foot, problem); children.push(card);
+  }
+  region.replaceChildren(...children);
+  region.hidden = !children.length;
+  if (children.length) conversation.append(region); else region.remove();
+}
+async function actOnConfirmation(action, ref) {
+  if (confirmBusy) return;
+  confirmBusy = true; confirmError = ""; confirmErrorRef = ref;
+  for (const button of document.querySelectorAll(".confirm-accept, .confirm-cancel")) button.disabled = true;
+  try {
+    const response = await fetch(`/api/confirmation/${action}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref, expected_revision: currentRevision }) });
+    const data = await response.json();
+    confirmBusy = false;
+    if (!data?.ok) confirmError = data?.error?.message ?? "That could not be completed. Nothing changed.";
+    if (data?.messages) render(data); else renderConfirmations({ confirmations: undefined });
+  } catch {
+    confirmBusy = false; confirmError = "The request failed. Check the connection and try again."; load();
+  }
+}
 function showError(text) {
   error.textContent = text;
   error.hidden = !text;
@@ -935,6 +986,7 @@ function render(data) {
     }
   }
   renderTrade(data);
+  renderConfirmations(data);
   follow(wasNear);
   shown = data.messages.length;
   ready = data.status === "idle";
@@ -1067,7 +1119,7 @@ async function readStream(response) {
 let campaignMode = false, activeCampaign, saveRequest = false, savePoll;
 const SAVE_LABELS = { saving: "Saving…", failed: "Save failed", unsaved: "Unsaved changes", saved: "Saved" };
 function resetConversation() {
-  ui("conversation")?.replaceChildren(); shown = 0; pending = undefined; comparisonViews.clear(); tradeReceipts = []; tradeError = ""; tradeErrorRef = "";
+  ui("conversation")?.replaceChildren(); shown = 0; pending = undefined; comparisonViews.clear(); tradeReceipts = []; tradeError = ""; tradeErrorRef = ""; confirmError = ""; confirmErrorRef = ""; shownConfirmations.clear(); dismissedConfirmations.clear();
 }
 function renderSaveStatus(save) {
   const el = ui("save-status"), button = ui("save-button");

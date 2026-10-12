@@ -27,6 +27,7 @@ import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
 import { followCandidates, followerIds } from "./follow-candidates.js";
 import { temporalGrounding } from "./temporal-grounding.js";
+import { pendingClaims } from "./pending-audit.js";
 
 /**
  * Live NPC Regression Repair 1: deterministic narration audit. Bounded checks over the draft narration against the resolved
@@ -36,7 +37,7 @@ import { temporalGrounding } from "./temporal-grounding.js";
  */
 export type AuditIssueKind = "restricted_canon" | "false_premise" | "player_agency" | "asserts_uncommitted_transfer" | "contradicts_committed_transfer" | "private_player_fact" | "household_claim" | "invented_source" | "unsourced_history" | "absent_participant" | "uncommitted_condition" | "uncommitted_constraint"
   | "uncommitted_departure" | "invented_price" | "fabricated_prior_event" | "invented_procedure" | "uncommitted_household" | "asserts_uncommitted_purchase" | "uncommitted_movement"
-  | "uncommitted_elapsed_time" | "canonical_name_conflict";
+  | "uncommitted_elapsed_time" | "canonical_name_conflict" | "uncommitted_pending_confirmation";
 /** H5.1: `location` is the authoritative place of the character an uncommitted_movement issue is about (display name). */
 export interface AuditIssue { readonly kind: AuditIssueKind; readonly sentence: string; readonly character?: string; readonly item_id?: string; readonly location?: string; readonly correction: string }
 export interface NarrationAuditInput {
@@ -63,6 +64,8 @@ export interface NarrationAuditInput {
   readonly elapsed_minutes?: number;
   /** The advance comes from the player's own wait/sleep/nap/rest request, so an exact narrated duration must match it. */
   readonly temporal_request?: boolean;
+  /** Block 5A: proposals awaiting the player's explicit confirmation. Narration may not present them as completed. */
+  readonly pending?: readonly import("./pending-proposals.js").PendingProposal[];
 }
 
 const ELAPSED_NUMBER = "\\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|an?|several|a few|a couple of|many|some";
@@ -374,6 +377,11 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     || readScene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world).captives.some(c => !c.character_id);
   issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: `${input.authoritative_text ?? ""}\n${(prepared.trade_offers ?? []).filter(o => o.status === "active").map(o => `${o.price_gold} gold.`).join("\n")}`, trade_negotiation: negotiation, economic_reference: !!input.economic_reference }));
   issues.push(...householdIssues(input, sentences, negotiation));
+  if (input.pending?.length) {
+    // AUTH-1: a pending manumission is not a completed act; the subject keeps the legal status the authoritative state records.
+    const subjects = input.pending.flatMap(p => { const who = context.characters.find(c => c.id === p.subject_id); return who ? [{ kind: p.kind, name: who.profile.name ?? who.id }] : []; });
+    for (const claim of pendingClaims(sentences, subjects)) issues.push({ kind: "uncommitted_pending_confirmation", character: claim.subject, sentence: claim.sentence, correction: claim.correction });
+  }
   issues.push(...movementIssues(input, sentences));
   if (input.elapsed_minutes !== undefined) issues.push(...elapsedTimeIssues(sentences, input.elapsed_minutes, !!input.temporal_request, prepared.runtime.scene.world_time.world_minute));
   issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));

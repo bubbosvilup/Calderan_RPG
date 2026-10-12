@@ -63,7 +63,7 @@ test("A10/A11/A12: an authored avatar grants no NPC+ capability, changes no hous
   assert.equal(JSON.stringify(c.exportSnapshot()), before, "projection writes nothing");
   assert.ok(!/canonNPCAvatar|canon-avatar|_avatar\.png/.test(before));
   assert.equal(c.exportSnapshot().premium_characters.length, 0);
-  assert.equal(createSaveFile(c.exportSnapshot(), world, "2026-10-11T00:00:00.000Z").schema_version, 5);
+  assert.equal(createSaveFile(c.exportSnapshot(), world, "2026-10-11T00:00:00.000Z").schema_version, 6);
 });
 test("A13/A14: a promoted canon NPC keeps the authored avatar as fallback and a selected NPC+ avatar supersedes it", async t => {
   const dir = await assets(t), c = learn(campaign(), "korvin");

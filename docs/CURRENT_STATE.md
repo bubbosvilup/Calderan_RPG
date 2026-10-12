@@ -87,6 +87,11 @@ One position per item (`unknown`, `carried`, `equipped`, `stored(location_id)`);
 - **NPC+:** the product term; the persisted record is still named `premium_characters[]` (legacy internal naming, not renamed).
 - **Pattern:** high-impact transitions are player-authorized ([Architecture §2b](ARCHITECTURE.md)); ordinary state is still inferred.
 
+## 8c. Pending confirmations and manumission (block 5A)
+
+- **Implemented:** a generic `PendingConfirmation` mechanism (interaction metadata in the save file, schema 6; confirmation card in the Play page; `POST /api/confirmation/confirm|cancel`). Manumission is its first and only production kind: the player's words ("I hereby free you, Maren.") create a card, nothing changes in the world until the player presses Confirm (zero provider calls, revalidated at that moment). The Narrator sees the act as a proposed action awaiting confirmation, never as a completed one, and the audit rejects prose that claims it as done. See [Architecture](ARCHITECTURE.md) (Class C versus PendingConfirmation) and [Persistence](architecture/PERSISTENCE.md).
+- **Not changed:** Actual Offer Accept and NPC+ Promote keep their own explicit actions. The FREE grammar is unchanged (bare "I free Maren." is not recognised). AUTH-2 (permanent narration-created characters) is OPEN, block 5B.
+
 ## 9. Time and environment
 
 `world_minute` is the only stored clock. Calendar, seasons, observances, climate and weather are derived. Epoch: `world_minute 0` = Year 1191, Vesp Alpha 1, 00:00, Stonewake, first day of autumn. Twelve 30-day months (Aurel, Sol, Vesp, Hiem × Alpha/Med/X), six-day week, five intercalary Suns (six in leap years), six-hour weather blocks with a bounded sliding continuity window, per-place `environment_exposure`. No weather UI yet. Details: [Time and environment](architecture/TIME_AND_ENVIRONMENT.md).
@@ -97,11 +102,11 @@ Play, Nicco (player page), NPC drawer, NPC+ editor, Household, Inventory, Campai
 
 ## 11. Save and schema
 
-Snapshot schema **6**; save file schema **5** (older save schemas migrate on load; the source file is never rewritten by a load). Campaign saves live in `saves/campaigns/<campaign_id>/` with portraits inside the campaign folder. Derived data (calendar, weather, capabilities, equipment slots, item icon metadata) is never saved. See [Persistence](architecture/PERSISTENCE.md).
+Snapshot schema **6**; save file schema **6** (older save schemas migrate on load, v5 → v6 changes only the version; the source file is never rewritten by a load). Campaign saves live in `saves/campaigns/<campaign_id>/` with portraits inside the campaign folder. Derived data (calendar, weather, capabilities, equipment slots, item icon metadata) is never saved. See [Persistence](architecture/PERSISTENCE.md).
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run (uncommitted block 5A on top of `eb05734`): **3425 tests, 0 failed** (3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 Companion movement (block 3): who MAY follow Nicco is derived per turn by `followCandidates` (`src/turn/follow-candidates.ts`: active NPC+, held person, household member, person invited by name this turn); it is never persisted and never moves anyone by itself. A candidate moves only through a completed narrated follow of that same person, or, for a held person the player names and leads ("Alright Maren, ..., let's go home"), through the deterministic escort committed in the same atomic batch as Nicco's travel. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
 

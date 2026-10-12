@@ -53,11 +53,12 @@ export const NARRATION = "Brenna looks up from her work and nods once.";
  * A GameSession over the turn fixture with counted providers. `save_dir` makes it persistent (a real FileCampaignRepository on a temp dir);
  * `wrap` lets a test decorate the real coordinator (fault injection) without touching its private state.
  */
-export function sessionWith(narrator: NarratorProvider, controller: StateControllerProvider = countingController(), options: { save_dir?: string; retry?: ProviderRetryPolicy | false; wrap?: (c: TurnCoordinator) => TurnCoordinator; autosave?: false } = {}) {
+export function sessionWith(narrator: NarratorProvider, controller: StateControllerProvider = countingController(), options: { save_dir?: string; retry?: ProviderRetryPolicy | false; wrap?: (c: TurnCoordinator) => TurnCoordinator; autosave?: false; confirmation_kinds?: SessionDeps["confirmation_kinds"]; setup?: (campaign: ReturnType<typeof turnFixture>["campaign"], world: ReturnType<typeof turnFixture>["world"]) => void } = {}) {
   const fixture = turnFixture(); const service = new RetrievalService(fixture.world); const retrieval = { service, search: new HybridSearch(service) };
   const repository = new FileCampaignRepository(fixture.world, options.save_dir ?? "saves/__unused_block4__");
   const make = (hooks: object) => { const c = new TurnCoordinator(fixture.world, narrator, controller, retrieval, { ...hooks, provider_retry: options.retry === undefined ? fastRetry() : options.retry }); return options.wrap ? options.wrap(c) : c; };
-  const deps: SessionDeps = { world: fixture.world, repository, createCoordinator: make, ...(options.autosave === false ? { autosave: false as const } : {}) };
+  const deps: SessionDeps = { world: fixture.world, repository, createCoordinator: make, ...(options.autosave === false ? { autosave: false as const } : {}), ...(options.confirmation_kinds ? { confirmation_kinds: options.confirmation_kinds } : {}) };
+  options.setup?.(fixture.campaign, fixture.world);
   const session = GameSession.fromCampaign(deps, fixture.campaign);
   return { ...fixture, session, deps, narrator, controller, repository };
 }

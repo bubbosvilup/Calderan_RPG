@@ -15,7 +15,7 @@ Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: th
 | Heartstone: opening documents, household rules, rite, rite = household + NPC+, recognition warmth | see [Heartstone](HEARTSTONE.md) |
 | Canon NPC avatars; player visuals and appearance editing | |
 | Item sprite generation for engine-created items | non-authoritative |
-| Persistent campaigns (manual save, autosave, recovery) | schema 6 / save 5 |
+| Persistent campaigns (manual save, autosave, recovery) | schema 6 / save 6 |
 | Explicit NPC+ / Heartstone promotion (semantic rite cleanup) | player action only; see [Heartstone](HEARTSTONE.md) |
 | Actual Offer V1 (goods and person trade, player-accepted) | see [Actual Offer](architecture/ACTUAL_OFFER.md) |
 | Turn reliability (consolidation block 4): PIPE-1, PIPE-2, REV-2, NARR-1; CTX-2 draft-stream leak only | see [report](evaluations/CONSOLIDATION_BLOCK4_TURN_RELIABILITY.md) |
