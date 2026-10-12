@@ -42,6 +42,8 @@ Weather UI, then Property/Heartstone property work, then the systems above as pr
 
 ## Known limitations
 
+- Companion movement (block 3): who may follow is derived per turn (NPC+, held persons, household members, people invited by name); a held person moves with Nicco only when the player names and leads them; nobody else follows unless narration completes the follow. An escorted person narrated as staying behind is not audited.
+
 - Actual Offer V1: whole-number gold only; no vendor inventory, Auction House or person SELL; sold goods leave the tracked scope; person offers are read from narration, not Controller-proposed; legacy internal `premium` naming remains (`premium_characters[]`; product term is NPC+).
 
 - No Property system and no containers (items are `unknown`, `carried`, `equipped` or `stored(location_id)` only; `inventory.ts` states "no containers in V1").

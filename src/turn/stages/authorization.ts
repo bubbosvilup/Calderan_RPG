@@ -11,6 +11,7 @@ import type { TurnContext } from "../context-builder.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evidence-authorization.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import { activeNpcPlus } from "../../campaign/premium-characters.js";
+import { followCandidates, followerIds } from "../follow-candidates.js";
 import { sentencesOf } from "../language/text.js";
 import { establishedCount, ownerEvidenced } from "../item-ownership.js";
 import { resolveItemIntent, type ItemIntent } from "../item-intent.js";
@@ -60,7 +61,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   });
   const controllerProposal = keep.map(k => parsed[k]!), duplicates_removed = parsed.length - keep.length;
   const kept = new Set(keep), quotes = duplicates_removed ? i.controller.evidence?.filter((_, k) => kept.has(k)) : i.controller.evidence;
-  const grammarMoves = narratedMovements(i.draft, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, activeNpcPlus(i.projected));
+  const grammarMoves = narratedMovements(i.draft, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, followerIds(followCandidates(i.projected, i.movable, i.debug_base.player_input)));
   // Final movement closure: a completed stair exit that states its direction ("crosses to the stairs and descends", "her footsteps fading as she
   // climbed") of an active NPC+ with Nicco, while Nicco stays, goes to the ONE structured neighbour in that direction. No unique neighbour: no
   // movement (the audit withdraws the claim). Same evidence path as any other narrated movement.

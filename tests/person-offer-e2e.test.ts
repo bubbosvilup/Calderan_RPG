@@ -172,16 +172,18 @@ test("P12: a hidden canonical person is reused by Accept (same objective identit
   assert.equal(h.snap().legal_statuses.find(l => l.character_id === "mistress_elara")!.holder_id, NICCO);
   assert.equal(h.gold(), 200);
 });
-test("movement follow-up: after Accept and the name, \"let's go home\" moves Nicco to Heartstone; the purchased person is reported separately", async () => {
+test("movement follow-up (block 3, MOV-1): after Accept and the name, \"let's go home\" moves Nicco AND the purchased person to Heartstone: same id, no duplicate", async () => {
   const h = await toAccept(); assert.ok(h.accept().ok);
   await h.turn(F.ASK_NAME_1); await h.turn(F.ASK_NAME_2);
   const id = h.created()[0]!.id;
+  assert.equal(h.snap().characters.find(c => c.id === id)?.profile.name, "Maren");
   await h.turn(F.GO_HOME);
   const s = h.snap();
   assert.equal(s.runtime.scene.player_location, "heartstone_lr", "Nicco moves home");
-  assert.equal(s.characters.filter(c => c.origin.kind === "created").length, 1, "the purchased person exists authoritatively before and after the move (no duplicate)");
-  // KNOWN SEPARATE BUG (companion/group movement, not trade): the purchased person is not carried along; she stays at the market.
-  assert.equal(s.characters.find(c => c.id === id)?.current.current_location, MARKET);
+  assert.equal(s.characters.filter(c => c.origin.kind === "created").length, 1, "no duplicate: one Campaign character before and after the move");
+  assert.equal(s.characters.find(c => c.id === id)?.current.current_location, "heartstone_lr", "the purchased person arrives with him (same stable id)");
+  assert.equal(s.legal_statuses.find(l => l.character_id === id)?.holder_id, NICCO, "ownership is unchanged");
+  assert.ok(h.session.getView().scene.present.some(p => p.id === id), "the interface shows her at the destination");
 });
 
 test("price forms: bargaining sentences read as offers; a repeated buyer figure or an acceptance echo is not a new offer", async () => {

@@ -33,7 +33,7 @@ export interface IdentityResolution {
   readonly commands: readonly CampaignCommand[];
   readonly promoted: readonly { readonly character_id: string; readonly name: string; readonly participant_id?: string }[];
   readonly named: readonly { readonly character_id: string; readonly name: string; readonly evidence: string }[];
-  readonly skipped: readonly { readonly name: string; readonly reason: "not_in_scene" | "duplicate_name" | "location_changed" | "canonical_partner_conflict" }[];
+  readonly skipped: readonly { readonly name: string; readonly reason: "not_in_scene" | "duplicate_name" | "location_changed" | "canonical_partner_conflict" | "persistent_identity_elsewhere" }[];
 }
 /**
  * How the promoted person's name was learned, from the introductions that established it: their own self-introduction wins; else
@@ -66,6 +66,10 @@ export function establishNames(recent: readonly RecentExchange[], context: TurnC
     // Foreground canonical binding: the bound canonical partner's own "self-introduction" under another name never creates a person.
     if (options.partner_conflict?.names.includes(p.name!)) { skipped.push({ name: p.name!, reason: "canonical_partner_conflict" }); continue; }
     if (fresh.filter(x => x.name === p.name).length > 1) { skipped.push({ name: p.name!, reason: "duplicate_name" }); continue; }
+    // Block 3 (ID-1): a name that already belongs to a living person the player holds, or a household member, who is elsewhere is that person's identity,
+    // never a second record here (the fork). Other same-named people elsewhere stay distinct characters (names are not identity). Nothing is created.
+    const bound = new Set([...snapshot.legal_statuses.filter(l => l.status === "enslaved" && l.holder_id === "nicco").map(l => l.character_id), ...snapshot.households.flatMap(h => h.members.filter(m => m.status === "member").map(m => m.character_id))]);
+    if (snapshot.characters.some(x => x.id !== "nicco" && bound.has(x.id) && x.origin.kind === "created" && x.current.status !== "dead" && x.profile.name?.toLowerCase() === p.name!.toLowerCase() && x.current.current_location !== location)) { skipped.push({ name: p.name!, reason: "persistent_identity_elsewhere" }); continue; }
     if (!p.present) { skipped.push({ name: p.name!, reason: "not_in_scene" }); continue; }
     if (options.location_changed) { skipped.push({ name: p.name!, reason: "location_changed" }); continue; }
     const participant = linkedParticipant(p, participants);

@@ -36,14 +36,14 @@ Structural themes: six or more independent regex readers interpret the same narr
 
 | Rank | ID | Sev | Item | Effort |
 | --- | --- | --- | --- | --- |
-| 1 | MOV-1 | P1 | Non-NPC+ companions never follow (known bug); also feeds ID-1 | M |
+| 1 | MOV-1 | P1 | Non-NPC+ companions never follow (known bug); also feeds ID-1 | M | **[Status 2026-10-12, consolidation block 3: FIXED offline — MOV-1 (implicit narrated follow for held persons, household members and named invitees; the known "let's go home" bug); the predicate `followCandidates` in `src/turn/follow-candidates.ts`. Live certification: see docs/evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md. Audit text kept as history.]**
 | 2 | PIPE-1 | P1 | Unaudited draft streamed to the player | S-M |
 | 3 | TRD-1 | P1 | SELL ignores `owner_id` and deletes the item | S-M |
 | 4 | AUTH-1 | P1 | Manumission applied from regex on raw input, no confirmation | M |
 | 5 | IMG-1 | P1 | Portrait minor gate fail-open for unknown age | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — IMG-1 (age no longer gates portraits, user decision 2026-10-12). Live certification still to do. Audit text above kept as historical.]**
 | 6 | IMG-2 | P1 | Image batches uncancellable; abort mapped to a retryable error | M |
 | 7 | AUTH-2 | P1 | Character registration/naming from narration is permanent (no retire/merge) | M |
-| 8 | ID-1 | P1 | Movement divergence can fork a person into two records | M (with MOV-1) |
+| 8 | ID-1 | P1 | Movement divergence can fork a person into two records | M (with MOV-1) | **[Status 2026-10-12, consolidation block 3: FIXED offline — the movement divergence is closed by MOV-1/MOV-2 and a new guard: a name that already belongs to a living persistent person elsewhere never creates a second record (`persistent_identity_elsewhere`). Audit text kept as history.]**
 | 9 | ECO-1 | P2 | Gold-only settlement vs silver-denominated narrator anchors | M-L |
 | 10 | TRD-2 | P2 | Goods offers authorized on the undelivered draft | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — TRD-2 (offers rechecked on delivered text). Live certification still to do. Audit text above kept as historical.]**
 | 11 | PIPE-2 | P2 | Post-commit publication can throw after the commit | S |
@@ -146,10 +146,10 @@ Current architecture:
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
-| MOV-1 | P1 | Non-NPC+ companions never follow via implicit narrated follow; no audit flag; narrator told to leave them. | Strategy below. | M |
-| MOV-2 | P2 | `with <name>` / "together" ignored; invitations read only for NPC+. | Optional escort step (needs product decision). | M |
-| MOV-3 | P2 | "Follower" expressed as `activeNpcPlus` at about 8 sites; no single predicate. | Extract `followCandidates`. | S |
-| MOV-4 | P2 | Audit pronoun-arrival closure and follow claims cover NPC+ only, so created non-NPC+ people can silently diverge from narration. | Generalize with the predicate. | S |
+| MOV-1 | P1 | Non-NPC+ companions never follow via implicit narrated follow; no audit flag; narrator told to leave them. | Strategy below. | M | **[FIXED offline 2026-10-12, block 3]**
+| MOV-2 | P2 | `with <name>` / "together" ignored; invitations read only for NPC+. | Optional escort step (needs product decision). | M | **[Status 2026-10-12, block 3: CLOSED in the narrow deterministic form only — a held person who is present, NAMED and led by the player's own words moves with Nicco in the same atomic batch (`resolveHeldEscort`). "with <name>" for free people and unnamed/plural/pronoun forms remain unresolved by design.]**
+| MOV-3 | P2 | "Follower" expressed as `activeNpcPlus` at about 8 sites; no single predicate. | Extract `followCandidates`. | S | **[FIXED offline 2026-10-12, block 3: one pure derived predicate shared by intent notes, authorization and audit. Remaining `activeNpcPlus` uses are deliberate: authored NPC+ location authority (`movableCharacters`, `npcPlusEntrants`), stair/door departures, contracts.]**
+| MOV-4 | P2 | Audit pronoun-arrival closure and follow claims cover NPC+ only, so created non-NPC+ people can silently diverge from narration. | Generalize with the predicate. | S | **[FIXED offline 2026-10-12, block 3: audit parity through the same candidate set. Residual: a narration that leaves an escorted person at the origin is not audited (the state follows the player's act and the narrator is told).]**
 | MOV-5 | P3 | Stale invariant text ("no party, follower, companion") in code comments and the Controller prompt. | Update after the design. | S |
 | MOV-6 | P3 | Multi-act player travel is ambiguous-by-design (nobody moves) with no player feedback. | Optional UI note. | S |
 

@@ -100,7 +100,9 @@ Snapshot schema **6**; save file schema **5** (older save schemas migrate on loa
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run: **3313 tests, 0 failed** on top of `4b8fdc9` (consolidation block 2, live-certified; 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+
+Companion movement (block 3): who MAY follow Nicco is derived per turn by `followCandidates` (`src/turn/follow-candidates.ts`: active NPC+, held person, household member, person invited by name this turn); it is never persisted and never moves anyone by itself. A candidate moves only through a completed narrated follow of that same person, or, for a held person the player names and leads ("Alright Maren, ..., let's go home"), through the deterministic escort committed in the same atomic batch as Nicco's travel. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
 
 ## 13. Major known limitations
 

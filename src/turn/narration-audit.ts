@@ -25,7 +25,7 @@ import { partnerNameConflict } from "./partner-identity-guard.js";
 import { resolveDestination } from "./natural-actions.js";
 import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import { characterLocation, narratedMovements, persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
-import { activeNpcPlus } from "../campaign/premium-characters.js";
+import { followCandidates, followerIds } from "./follow-candidates.js";
 import { temporalGrounding } from "./temporal-grounding.js";
 
 /**
@@ -494,18 +494,20 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
     if (place && !within(place, here) && !niccoDidNotGo.includes(place)) niccoDidNotGo.push(place);
   }
   const movers = persistentCharactersAt(prepared, world, [...new Set([origin, here])]);
+  // Block 3: the SAME candidate set the authorization used (derived per turn, never persisted), so the audit and the authorizer agree on who may follow.
+  const followers = followerIds(followCandidates(prepared, movers, String(input.player_input ?? "")));
   // D-24: Nicco's own narrated movement was NOT committed, so nothing that depends on it can have happened. A same-turn follow that carries
   // someone to where the narration says he went ("Maren follows him there", "came down after him") would survive the redaction of his own
   // sentence and tell the player a follower arrived somewhere he never reached. Only the follow grammar's dependent forms are read here
   // (explicit or implicit destination); a local "follows him over to the table" has no inter-location destination and never reaches this.
-  for (const place of niccoDidNotGo) for (const m of narratedMovements(input.narration, movers, { origin: here, arrival: place, hypothetical: true }, context, world, activeNpcPlus(prepared))) {
+  for (const place of niccoDidNotGo) for (const m of narratedMovements(input.narration, movers, { origin: here, arrival: place, hypothetical: true }, context, world, followers)) {
     if (issues.some(i => i.sentence === m.source_sentence && i.character)) continue;
     const who = movers.find(x => x.id === m.character_id)!.names[0]!;
     issues.push({ kind: "uncommitted_movement", character: who, sentence: m.source_sentence, location: display(characterLocation(prepared, world, m.character_id)),
       correction: `Nicco did NOT go to ${display(place)}: no movement was recorded. ${who} therefore did not follow him there and is still at ${display(characterLocation(prepared, world, m.character_id))}. Do not narrate ${who} following, arriving or being brought anywhere.` });
   }
   // NPC+ Pass 9: an implicit-destination follow by an active NPC+ is held to the same standard — unrecorded, it is flagged.
-  for (const m of narratedMovements(input.narration, movers, { origin, arrival: here, locate: id => characterLocation(prepared, world, id) }, context, world, activeNpcPlus(prepared))) {
+  for (const m of narratedMovements(input.narration, movers, { origin, arrival: here, locate: id => characterLocation(prepared, world, id) }, context, world, followers)) {
     const now = characterLocation(prepared, world, m.character_id);
     if (now === m.location_id) continue;
     const who = movers.find(x => x.id === m.character_id)!.names[0]!;
@@ -515,7 +517,7 @@ function movementIssues(input: NarrationAuditInput, sentences: readonly string[]
   // Follow-recognition closure: a pronoun-led ARRIVAL ("She reaches the hall floor") right after a sentence led by exactly one active NPC+
   // Nicco left behind, when that NPC+ did not move. absent_participant covers name-led acts; this closes only the pronoun continuation.
   if (origin !== here) {
-    const npcPlus = activeNpcPlus(prepared), behind = movers.filter(m => npcPlus.has(m.id) && characterLocation(prepared, world, m.id) !== here);
+    const behind = movers.filter(m => followers.has(m.id) && characterLocation(prepared, world, m.id) !== here);
     const others = [...movers.filter(m => !behind.includes(m)).flatMap(m => m.names), ...context.characters.filter(c => c.id !== "nicco").map(c => c.profile.name ?? c.id)];
     const leads = (plain: string, names: readonly string[]) => names.some(n => new RegExp(`^\\W*${esc(n)}(?:'s)?\\b`, "i").test(plain));
     let previous: MovableCharacter | undefined;

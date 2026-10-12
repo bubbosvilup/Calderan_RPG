@@ -32,7 +32,9 @@ function setup(subject: Subject, presence: Presence) {
   if (subject === "inactive_former") f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "leave_household", household_id: "campaign_household_home", character_id: "maren" }] });
   return { f, id, name, place };
 }
-const moveOracle = (s: Subject, p: Presence, n: Narration, niccoMoves: boolean) => niccoMoves && p === "origin" && n === "follow" && (s === "npcplus_authored" || s === "npcplus_created");
+// Block 3: a free created person becomes a follow candidate only when the player invites them BY NAME this turn (direct or consent wording); nothing else changes.
+const invitedByName = (i: Invitation) => i === "direct" || i === "consent";
+const moveOracle = (s: Subject, p: Presence, n: Narration, niccoMoves: boolean, i: Invitation = "none") => niccoMoves && p === "origin" && n === "follow" && (s === "npcplus_authored" || s === "npcplus_created" || (s === "created_non_member" && invitedByName(i)));
 
 for (const subject of SUBJECTS) for (const presence of Object.keys(PLACES) as Presence[]) for (const narration of Object.keys(NARRATIONS) as Narration[]) {
   test(`matrix ${subject} / ${presence} / ${narration}: location follows the oracle for every invitation wording and Nicco movement`, async () => {
@@ -43,11 +45,11 @@ for (const subject of SUBJECTS) for (const presence of Object.keys(PLACES) as Pr
       const movedBefore = f.campaign.exportSnapshot().premium_characters.find(p => p.character_id === id)?.dynamic.recent_developments.filter(e => e.kind === "moved").length ?? 0;
       const r = await play(text, input, { fixture: f });
       assert.ok(r.result, `${subject}/${presence}/${narration}/${invitation}/${niccoMoves}: turn failed`);
-      const expected = moveOracle(subject, presence, narration, niccoMoves) ? "test_hall" : place;
+      const expected = moveOracle(subject, presence, narration, niccoMoves, invitation) ? "test_hall" : place;
       assert.equal(r.where(id), expected, `${subject}/${presence}/${narration}/${invitation}/nicco=${niccoMoves}`);
       // Nobody else ever moves, and a move produces exactly one moved development for the mover.
       for (const other of ["brenna", "gerome", "maren"]) if (other !== id && subject !== "inactive_former") assert.equal(r.where(other), r.snapshot.runtime.npc_locations.find(n => n.character_id === other)?.current_location);
-      assert.equal(r.moved(id).length - movedBefore, moveOracle(subject, presence, narration, niccoMoves) ? 1 : 0, `${subject}/${presence}/${narration}/${invitation}/${niccoMoves}: moved developments`);
+      assert.equal(r.moved(id).length - movedBefore, moveOracle(subject, presence, narration, niccoMoves, invitation) && subject !== "created_non_member" ? 1 : 0, `${subject}/${presence}/${narration}/${invitation}/${niccoMoves}: moved developments`);
     }
   });
 }

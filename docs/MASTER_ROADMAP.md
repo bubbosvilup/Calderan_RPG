@@ -54,8 +54,8 @@ Playable persistent campaign on a local web UI with autosave; canon-grounded nar
 Items reference the debt register. "Roadmap" means new capability; "Debt" means a fix from the register.
 
 ### T-MOVE: companions and group movement
-- **Now (debt):** MOV-1 predicate `followCandidates` (held persons, household members, invitees) with audit parity; ID-1 guard against the fork. Strategy and tests in register §5. **The known bug "let's go home leaves the purchased person at the market" belongs here and is not fixed yet.**
-- **Next (roadmap):** optional deterministic escort for held persons (MOV-2); player feedback for ambiguous multi-act travel (MOV-6); a derived-per-turn "party" view (never persisted) for the UI scene panel; follow state in the benchmark.
+- **Done (consolidation block 3, 2026-10-12):** MOV-1, MOV-3, MOV-4 and ID-1 fixed offline with the derived per-turn predicate `followCandidates` (`src/turn/follow-candidates.ts`; reasons `npc_plus_active`, `held_by_player`, `household_member`, `invited_this_turn`), shared by intent notes, authorization and audit; MOV-2 closed in the narrow form only (a held person named and led by the player moves with Nicco in the same atomic batch). The known bug "let's go home leaves the purchased person at the market" is fixed. No persisted party. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
+- **Next (roadmap):** reverse audit for an escorted person narrated as staying behind; player feedback for ambiguous multi-act travel (MOV-6); a derived-per-turn "party" view (never persisted) for the UI scene panel; follow state in the benchmark.
 - **Later:** NPC routines beyond schedules; travel parties across the city map; pursuit and separation rules (needs combat/threat design).
 
 ### T-IDENT: identity

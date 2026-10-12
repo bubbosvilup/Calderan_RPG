@@ -8,7 +8,7 @@ import { resolveManumission } from "../person-transactions.js";
 import { characterLocation, movableCharacters, resolvePlayerCarry, type MovableCharacter } from "../character-movement.js";
 import { extractRuleDeclarations } from "../household-evidence.js";
 import { invitedFollowers, leftBehindNotes } from "../follow-invitation.js";
-import { activeNpcPlus } from "../../campaign/premium-characters.js";
+import { followCandidates, resolveHeldEscort } from "../follow-candidates.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 import { tradeStateNotes } from "../trade-notes.js";
@@ -58,7 +58,10 @@ export function resolveTurnIntent(i: IntentStageInput): ResolvedIntent {
   // player's own physical act, prevalidated like his movement). Nobody else moves with him.
   const carried = resolvePlayerCarry(i.player_input, i.snapshot, base_context, i.world, spoken.runtime);
   const carry = carried.runtime.length && !prevalidates(i, [...spoken.runtime, ...carried.runtime]) ? { runtime: [], notes: [] } : carried;
-  const natural = [...spoken.runtime, ...carry.runtime];
+  // Consolidation block 3: a person Nicco legally holds, named and led along by the player's own words, moves with him in the same atomic batch.
+  const escorted = resolveHeldEscort(i.player_input, i.snapshot, base_context, i.world, spoken.runtime, carry.runtime.flatMap(c => c.kind === "move_character" ? [c.character_id] : []));
+  const escort = escorted.runtime.length && !prevalidates(i, [...spoken.runtime, ...carry.runtime, ...escorted.runtime]) ? { runtime: [], notes: [] } : escorted;
+  const natural = [...spoken.runtime, ...carry.runtime, ...escort.runtime];
   // Household Pass 1: the player-authored act of freeing a person is resolved deterministically and prevalidated against the real preparation before
   // narration; a rejected one is dropped and the narrator is told nothing changed. Actual Offer V1: purchases are NOT resolved here. A purchase or sale is
   // an explicit trade offer the player accepts in the interface; the pending/settled offer state reaches the narrator as authoritative notes.
@@ -66,7 +69,7 @@ export function resolveTurnIntent(i: IntentStageInput): ResolvedIntent {
   const tradeValid = !trade.commands.length || prevalidates(i, [...natural, ...trade.commands]);
   const tradeCommands = tradeValid ? trade.commands : [];
   const tradeNotes = tradeValid ? trade.notes : ["The attempted legal act is not valid under current ownership: no legal status changes this turn."];
-  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...tradeNotes, ...tradeStateNotes(i.snapshot, i.world)], rule_declarations: extractRuleDeclarations(i.player_input),
+  const intent: TurnIntent = { ...spoken, runtime: [...natural, ...tradeCommands], notes: [...carry.notes, ...escort.notes, ...tradeNotes, ...tradeStateNotes(i.snapshot, i.world)], rule_declarations: extractRuleDeclarations(i.player_input),
     ...(trade.diagnostics.length ? { transactions: trade.diagnostics.map(d => ({ kind: d.kind, status: tradeValid ? d.status : "blocked" as const, ...(tradeValid ? (typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}) : { reason: "prevalidation_rejected" }) })) } : {}) };
   return { base_context, base_plan, intent };
 }
@@ -111,7 +114,7 @@ export function projectTurnIntent(i: IntentStageInput, resolved: ResolvedIntent)
   const movable = movableCharacters(projected, [origin, arrival], i.world);
   const leftBehind = arrival === origin ? [] : movable.filter(m => characterLocation(projected, i.world, m.id) === origin);
   // NPC+ Pass 9: an explicitly invited active NPC+ gets a neutral follow choice; everyone else keeps the conservative stay note.
-  const npcPlus = activeNpcPlus(projected), eligible = leftBehind.filter(m => npcPlus.has(m.id));
+  const candidates = followCandidates(projected, leftBehind, i.player_input), eligible = leftBehind.filter(m => candidates.has(m.id));
   const invited = invitedFollowers(i.player_input, eligible, base_context.characters.filter(c => c.id !== "nicco" && !eligible.some(m => m.id === c.id)).map(c => c.profile.name ?? c.id),
     knownNamesIn(i.player_input, i.world, projected, eligible.map(m => m.id)));
   const prompt_intent: TurnIntent = leftBehind.length ? { ...intent, notes: [...intent.notes, ...leftBehindNotes(leftBehind, invited, i.world.getEntity(origin)?.display_name ?? origin, i.world.getEntity(arrival)?.display_name ?? arrival)] } : intent;
