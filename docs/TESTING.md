@@ -10,7 +10,7 @@ Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `p
 | `npm run build` | compile to `.build/` | no |
 | `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
 
-Latest recorded result: **3460 tests** on the block 5B working tree on top of `63c4347` (the only failure is the known flaky `generation lifecycle (npc|player, fullbody|avatar)` family, rerun once); previous: 3425 at block 5A; 3377 tests, 0 failed on the block 4 working tree on top of `a1b83c7` (consolidation block 4: `block4-plumbing`, `block4-pipe2`, `block4-rev2`, `block4-narr1` test files; fixtures in `tests/block4-fixtures.ts`, `tests/turn-http.ts`); previous: 3334 tests on top of `5edcd37` (consolidation block 3: `consolidation-block3.test.ts`, 21 tests, plus the product-path regression in `person-offer-e2e.test.ts`; block 2: `consolidation-block2.test.ts`, 26 tests; block 1 had 3287); earlier recorded run 3278 at `c0608a6` (see [report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
+Latest recorded result: **3480 tests, 0 failed** on the block 6 working tree on top of `8bb5445` (the known flaky `generation lifecycle (npc|player, fullbody|avatar)` family, when it fails alone, is rerun once).
 
 ## Layers
 
@@ -20,6 +20,10 @@ Latest recorded result: **3460 tests** on the block 5B working tree on top of `6
 4. UI and read-model tests (`ui-*.test.ts`, `inventory-ui.test.ts`, capabilities, item visuals).
 5. Canon and data validation (authored YAML, climate profiles, exposure).
 6. Determinism guards (no `Date`/`Intl`/`Math.random` in the calendar).
+
+## Disabled-services matrix (block 6)
+
+`tests/block6-optional-services.test.ts` (registry, OFF contract, flags never in CampaignState or the save, production composition), `tests/block6-lifecycle.test.ts` (core turn returns while the optional task is pending, next turn runs, provider failure / malformed output never fail the turn, OFF = zero provider calls, Mannerism/Reflection ON vs OFF give identical core state and turn commit, health never bumps a revision, all services OFF) and `tests/block6-sprites-portraits.test.ts` (sprite and portrait OFF, sprite QA OFF, item usable before its sprite, existing sprite untouched). A browser check for the same contract is `scripts/block6-browser-check.mjs` (offline, 15 checks). Text equality between ON and OFF is not required; core state and the turn's own commit are. Total revision divergence after background maintenance is the known block 7 residual.
 
 ## Tools that can spend credits (never run by `npm test`)
 

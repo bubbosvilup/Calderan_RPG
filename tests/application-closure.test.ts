@@ -152,7 +152,7 @@ test("stale revision: a campaign that changes while a turn runs discards the tur
   assert.ok(!r.ok); assert.equal(r.error.code, "stale_turn"); assert.equal(session.getView().player.gold, 7); assert.equal(f.campaign.revision, 2);
 });
 
-test("reflection after a turn is non-blocking: failure leaves the committed turn intact and is surfaced only in the trace; next input waits as busy", async () => {
+test("reflection after a turn is non-blocking: runs after the core turn, never holds the turn lock; its failure leaves the committed turn intact and is surfaced only in the trace and the service health", async () => {
   const f = turnFixture(), { repository } = await tempRepo(f.world);
   const home = "campaign_household_h";
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "create_household", id: home, name: "Home" }, { kind: "set_membership", household_id: home, membership: { character_id: "nicco", status: "member", role: "owner" } }] });
@@ -164,11 +164,14 @@ test("reflection after a turn is non-blocking: failure leaves the committed turn
   const events: SessionEvent[] = [];
   const running = session.submitPlayerInput("Hello.", { onEvent: e => events.push(e) });
   await new Promise(r => setTimeout(r, 20));
-  assert.equal(session.status, "post_turn"); assert.ok(events.some(e => e.type === "turn_completed"), "narration is delivered before reflection settles");
-  const busy = await session.submitPlayerInput("Again."); assert.ok(!busy.ok && busy.error.code === "turn_in_progress");
-  release(); const done = await running;
-  assert.ok(done.ok); assert.equal(done.trace.reflection.status, "failed_nonblocking"); assert.equal(session.status, "idle");
-  assert.ok(!JSON.stringify(done).includes("sk-test-123"), "raw provider exception text never reaches the result");
+  const done = await running;
+  // Block 6: the core turn is COMPLETE and the session idle while the reflection provider call is still pending.
+  assert.ok(done.ok); assert.equal(session.status, "idle"); assert.ok(events.some(e => e.type === "turn_completed"), "narration is delivered before reflection settles");
+  assert.equal(session.getOptionalServices().find(x => x.service === "reflection")!.running, 1);
+  release(); await session.optionalSettled();
+  assert.equal(session.getTurn(done.turn_id)!.reflection.status, "failed_nonblocking");
+  assert.ok(!JSON.stringify([done, session.getTurn(done.turn_id), session.getOptionalServices()]).includes("sk-test-123"), "raw provider exception text never reaches the result, trace or health");
+  assert.equal(session.getOptionalServices().find(x => x.service === "reflection")!.last_error?.code, "provider_failed");
   const post = events.find(e => e.type === "post_turn_completed"); assert.ok(post);
 });
 

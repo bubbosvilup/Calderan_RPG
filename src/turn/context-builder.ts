@@ -170,8 +170,8 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   // Packing uses the smaller of its own quality limit and the old soft headroom (minus JSON reserve). NPC+ flavour
   // therefore degrades toward Tier D and never causes context_too_large by itself; authority is never traded for it.
   const headroom = CONTEXT_LIMITS.npc_plus_soft_characters - JSON.stringify(authority).length - CONTEXT_LIMITS.npc_plus_reserve;
-  // D-09 deferred: omit reflection text and labels before budget selection, including shadow notes.
-  const npc_plus = packNpcPlus(world, snapshot, new Set(present), relevance.input ?? "", Math.max(0, Math.min(NPC_PLUS_LIMITS.budget_characters, Math.floor(headroom / CONTEXT_LIMITS.npc_plus_escape_factor))), { include_reflections: false });
+  // Block 6: validated, persisted Reflection notes are SOFT-PROMOTED narrative enrichment. They reach the Narrator whether or not the Reflection producer is on (OFF stops new production only).
+  const npc_plus = packNpcPlus(world, snapshot, new Set(present), relevance.input ?? "", Math.max(0, Math.min(NPC_PLUS_LIMITS.budget_characters, Math.floor(headroom / CONTEXT_LIMITS.npc_plus_escape_factor))));
   const result = { ...authority, ...(npc_plus ? { npc_plus } : {}) };
   const serializedCharacters = JSON.stringify(result).length;
   relevance.inspect_serialized?.(JSON.stringify(result));

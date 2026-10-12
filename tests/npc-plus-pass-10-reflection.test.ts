@@ -25,7 +25,7 @@ const moveRefs = (f: ReturnType<typeof fixture>) => reflectionEvidence(f.world, 
 const verdict = (f: ReturnType<typeof fixture>, who: "brenna" | "maren", p: ReturnType<typeof P>) => validateProposals([p], reflectionEvidence(f.world, f.snap(), who), { id: who, name: names.get(who)! }, names);
 
 // ------------------------------------------------------------------------------------------------ readiness: organic-like movement sequences
-test("organic moves: each commit appends exactly one `moved` development; due after the trigger; the catalog cites each; a faithful shadow note persists and recovers without narrator exposure", async () => {
+test("organic moves: each commit appends exactly one `moved` development; due after the trigger; the catalog cites each; a faithful shadow note persists, recovers and (soft-promoted) reaches the narrator", async () => {
   const f = fixture();
   assert.equal(reflectionDue(f.snap(), "maren"), false);
   moves(f, 1);
@@ -43,7 +43,7 @@ test("organic moves: each commit appends exactly one `moved` development; due af
   assert.deepEqual(note.evidence_refs, refs);
   assert.equal(reflectionDue(f.snap(), "maren"), false, "reflected evidence is not re-sent");
   const ctx = buildTurnContext(f.world, f.snap(), { input: "Maren, how are you?" });
-  assert.ok(ctx.npc_plus!.lines.every(l => !l.includes(" | reflection:") && !l.includes("; refl=")));
+  assert.ok(ctx.npc_plus!.lines.some(l => l.includes(" | reflection:") || l.includes("; refl=")), "block 6: a validated persisted note is soft-promoted and reaches the Narrator");
   assert.ok(recoverNpcContext(f.world, f.snap(), `npcmem:maren:reflection:${note.id}`));
 });
 test("mixed sequences: movement + relationship + rule, movement + condition + movement, contract + movement all reach the catalog with correct kinds", () => {

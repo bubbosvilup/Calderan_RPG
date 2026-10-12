@@ -26,6 +26,6 @@ Capabilities are derived per tier ([Current state §5](CURRENT_STATE.md#5-charac
 
 ## Item sprites
 
-Engine-created items can receive a generated sprite through the same stack and storage, queued between turns (`ItemSpriteJobs`): metadata commits are synchronous and allowed only between gameplay turns, with no gameplay await and no automatic retries. A quality reviewer (`anthropic/claude-haiku-5.5`) checks results. Sprites are non-authoritative.
+Engine-created items can receive a generated sprite through the same stack and storage, queued between turns (`ItemSpriteJobs`): metadata commits are synchronous and allowed only between gameplay turns, with no gameplay await and no automatic retries. Sprite generation is an optional service (`CALDREVAN_ITEM_SPRITES`, default on): OFF means no automatic job, not even a pending marker; existing sprites keep rendering and items never depend on a sprite. The quality reviewer (`anthropic/claude-haiku-5.5`) is a separate optional service (`CALDREVAN_SPRITE_QA`, default **off**): without it the first valid image is accepted deterministically. Portrait generation is likewise optional; OFF declines the request cleanly and existing portraits keep rendering. Sprites are non-authoritative. See [Optional services](architecture/OPTIONAL_SERVICES.md).
 
 Item artwork resolves per role (icon, detail): item sprite > authored template registry (currently empty: no `/assets/items/` route or files exist yet; `src/app/item-visuals.ts`) > category glyph (`/api/item-glyph/<kind>`) > placeholder.

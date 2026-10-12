@@ -140,24 +140,25 @@ test("D-20 OFF performs no reflection maintenance or wait and allows the next co
   assert.ok((await f.session.save()).ok);
 });
 
-test("D-20 SHADOW remains awaited, serial, validated, persisted once and hidden from narration", async t => {
+test("D-20 SHADOW runs detached after the core turn: serial, validated, persisted once; the validated note is soft-promoted (visible to the Narrator)", async t => {
   let started!:()=>void, release!:()=>void, calls=0;
   const entered=new Promise<void>(resolve=>{started=resolve;}), gate=new Promise<void>(resolve=>{release=resolve;});
   const provider:ReflectionProvider={async reflect(request){calls++;started();await gate;return{text:JSON.stringify({proposals:[testTrajectory(request,"respect")]})};}};
   const f=await sessionFixture(t,provider), events:string[]=[];
-  const pending=f.session.submitPlayerInput("I wait.",{onEvent:event=>events.push(event.type)});
-  await entered;
+  const first=await f.session.submitPlayerInput("I wait.",{onEvent:event=>events.push(event.type)});
+  assert.ok(first.ok); await entered;
   try {
+    // Block 6: the core turn is already complete and the session idle while the provider call is pending; saving is possible.
     assert.equal(events.includes("turn_completed"),true);
-    assert.equal(f.session.getView().session.status,"post_turn");
-    const next=await f.session.submitPlayerInput("I wait.");assert.equal(next.ok,false);
-    assert.equal((await f.session.save()).ok,false);
+    assert.equal(f.session.getView().session.status,"idle");
+    assert.equal(f.session.status,"idle");
+    assert.ok((await f.session.save()).ok);
   } finally {release();}
-  assert.ok((await pending).ok);assert.equal(calls,1);
+  await f.session.optionalSettled(); assert.equal(calls,1);
   const snapshot=f.snapshot();assert.equal(snapshot.premium_reflections[0]!.notes.length,1);
   assert.ok(snapshot.premium_reflections[0]!.notes[0]!.structured);
   assert.equal(reflectionDue(snapshot,"maren"),false);
-  assert.ok(buildTurnContext(f.world,snapshot,{input:"Maren, how are you?"}).npc_plus!.lines.every(l=>!l.includes(" | reflection:")&&!l.includes("; refl=")));
-  assert.ok((await f.session.submitPlayerInput("I wait.")).ok);assert.equal(calls,1);
+  assert.ok(buildTurnContext(f.world,snapshot,{input:"Maren, how are you?"}).npc_plus!.lines.some(l=>l.includes(" | reflection:")||l.includes("; refl=")),"a validated persisted note reaches the Narrator context");
+  assert.ok((await f.session.submitPlayerInput("I wait.")).ok);await f.session.optionalSettled();assert.equal(calls,1);
   assert.ok((await f.session.save()).ok);
 });

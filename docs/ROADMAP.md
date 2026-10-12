@@ -16,6 +16,7 @@ Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: th
 | Canon NPC avatars; player visuals and appearance editing | |
 | Item sprite generation for engine-created items | non-authoritative |
 | Persistent campaigns (manual save, autosave, recovery) | schema 7 / save 7 |
+| Core / optional service split (consolidation block 6, lifecycle only): central registry, optional work detached after `turn_completed`, exact OFF semantics, disabled-services matrix; ARCH-1 phase 1 | see [report](evaluations/CONSOLIDATION_BLOCK6_CORE_OPTIONAL_SPLIT.md) and [Optional services](architecture/OPTIONAL_SERVICES.md) |
 | Character lifecycle and AUTH-2 (consolidation block 5B): provisional vs persistent vs retired, human-reviewed retire/merge, identity-fork scanner | see [report](evaluations/CONSOLIDATION_BLOCK5B_CHARACTER_LIFECYCLE.md) |
 | Explicit NPC+ / Heartstone promotion (semantic rite cleanup) | player action only; see [Heartstone](HEARTSTONE.md) |
 | Actual Offer V1 (goods and person trade, player-accepted) | see [Actual Offer](architecture/ACTUAL_OFFER.md) |

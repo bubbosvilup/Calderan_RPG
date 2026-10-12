@@ -213,7 +213,7 @@ export interface ReflectionRun { readonly attempts?: import("../llm/retry.js").P
  * `max_characters` due NPC+ (stable order), each as its own separate revision; a provider error, malformed output or a newer revision
  * (stale) changes nothing. Even an all-rejected run records `last_reflected_revision`, so the same evidence is not re-sent every turn.
  */
-export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../llm/retry.js").ProviderRetryPolicy;readonly pacing?:import('./reflection-pacing.js').ReflectionPacing } = {}): Promise<readonly ReflectionRun[]> {
+export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../llm/retry.js").ProviderRetryPolicy;readonly pacing?:import('./reflection-pacing.js').ReflectionPacing; /** Block 6: the note write is applied only while this says the session is idle; otherwise it is dropped as stale. */ readonly can_commit?: () => boolean; /** Called right after the note write was applied. */ readonly wrote?: () => void } = {}): Promise<readonly ReflectionRun[]> {
   const {reflectStructuredAfterTurn}=await import('./structured-reflection-maintenance.js');
   return reflectStructuredAfterTurn(campaign,world,provider,options);
 }

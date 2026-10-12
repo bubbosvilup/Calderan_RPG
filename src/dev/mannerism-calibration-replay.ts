@@ -61,7 +61,7 @@ export async function replayCalibratedMannerisms(frozen: CalibratedReplayFixture
   let session = sessionFor(), finalizedTurns = 0;
   const play = async (text: string) => {
     narration = text;
-    const result = await session.submitPlayerInput(`I wait quietly beside ${targetName}.`);
+    const result = await session.submitPlayerInput(`I wait quietly beside ${targetName}.`); await session.optionalSettled();
     assert.ok(result.ok, "fixture narration must actually finalize before extraction");
     assert.equal(result.narration, text); finalizedTurns++;
   };

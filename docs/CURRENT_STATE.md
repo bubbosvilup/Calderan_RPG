@@ -33,7 +33,7 @@ Player input → `GameSession` → `TurnCoordinator` → Narrator (draft) → St
 | Inventory grid, equipment presentation (4 slots, read-only), item icon/detail visual roles, authoritative Gold | Foundation complete |
 | Item sprite generation for engine-created items (non-authoritative, queued between turns) | Implemented (see [Image system](IMAGE_SYSTEM.md)) |
 | Persistent campaigns: manual save, autosave, recovery, scenario registry | Complete |
-| Reflection (D-09) | Deferred; opt-in shadow mode only, never exposed to narration |
+| Reflection (D-09) | Deferred; opt-in shadow mode only. Producer OFF = no calls and no new notes; validated persisted notes are soft-promoted (Narrator-visible) |
 | Foreground canonical identity binding (partner binding, conflicting-name guard; `d4e9e22`) | Complete, live-certified (see [Architecture](ARCHITECTURE.md)) |
 | Person Actual Offer end to end (spoken prices, stable subject, Slave NPC on Accept, same-entity rename; `c0608a6`) | Complete |
 | Campaign deletion (soft delete to `saves/.deleted/`, composer command `/location`) | Complete |
@@ -112,9 +112,13 @@ Play, Nicco (player page), NPC drawer, NPC+ editor, Household, Inventory, Campai
 
 Snapshot schema **6**; save file schema **6** (older save schemas migrate on load, v5 → v6 changes only the version; the source file is never rewritten by a load). Campaign saves live in `saves/campaigns/<campaign_id>/` with portraits inside the campaign folder. Derived data (calendar, weather, capabilities, equipment slots, item icon metadata) is never saved. See [Persistence](architecture/PERSISTENCE.md).
 
+## 11b. Core engine and optional services (block 6)
+
+The core engine (CampaignState, persistence, turn authority, identity, movement, items, trade, legal state, households, PendingConfirmation) is separate from the optional services (Reflection, Mannerism learning, portraits, item sprites, sprite QA, semantic retrieval). Optional work runs detached after `turn_completed` and never blocks, fails or alters a turn; disabling any of it leaves core behavior identical. Defaults: Mannerism, portraits and sprites ON; Reflection, sprite QA and semantic retrieval OFF. Legacy enrichment is still stored in the snapshot and bumps the revision (ARCH-1 phase 2, block 7). See [Optional services](architecture/OPTIONAL_SERVICES.md).
+
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run (uncommitted block 5B on top of `63c4347`): **3460 tests** (3425 at block 5A, 3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run (uncommitted block 6 on top of `8bb5445`): **3480 tests** (3460 at block 5B, 3425 at block 5A, 3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 Companion movement (block 3): who MAY follow Nicco is derived per turn by `followCandidates` (`src/turn/follow-candidates.ts`: active NPC+, held person, household member, person invited by name this turn); it is never persisted and never moves anyone by itself. A candidate moves only through a completed narrated follow of that same person, or, for a held person the player names and leads ("Alright Maren, ..., let's go home"), through the deterministic escort committed in the same atomic batch as Nicco's travel. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
 

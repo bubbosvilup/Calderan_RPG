@@ -46,6 +46,7 @@ import { inventoryUiView } from "./inventory-ui-view.js";
 import { deriveTradeView, tradeOfferRef, TRADE_MESSAGES, type TradeReceipt, type TradeView } from "./trade-offer-view.js";
 import { CampaignValidationError } from "../campaign/validation.js";
 import { mergeConflicts, retireConflicts } from "../campaign/character-repair.js";
+import { effectiveOptionalServices, OptionalServiceMonitor, type OptionalServiceConfig, type OptionalServiceHealth } from "./optional-services.js";
 import { PendingConfirmationLog } from "./pending-confirmation-log.js";
 import { PRODUCTION_CONFIRMATION_KINDS, type ConfirmationKinds } from "./confirmation-kinds.js";
 import { CONFIRMATION_MESSAGES, deriveConfirmationView, type ConfirmationView } from "./confirmation-view.js";
@@ -71,6 +72,8 @@ export interface SessionDeps {
   readonly reflection_provider?: ReflectionProvider | undefined;
   readonly mannerism_extractor?: MannerismExtractor;
   readonly mannerism_diagnostics_sink?: (run: MannerismRun) => unknown;
+  /** Block 6: runtime availability of the optional services (never campaign state). Absent = a service is available when its provider is wired. */
+  readonly optional_services?: OptionalServiceConfig;
   readonly provider_status?: ProviderStatus;
   /** Bounded in-memory trace ring (default 200). */
   readonly trace_capacity?: number;
@@ -220,6 +223,9 @@ export class GameSession {
   #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
   /** Portrait Gallery V2: the character whose batch is being generated (one batch per session at a time). */
+  /** Block 6: optional-service availability (runtime configuration, never campaign state), their health, and the detached post-turn work. */
+  readonly #services: OptionalServiceConfig; readonly #monitor: OptionalServiceMonitor;
+  readonly #background = new Set<Promise<void>>(); readonly #optionalAbort = new AbortController(); #optionalRevisions: number[] = [];
   #portraitBusy: string | undefined; #portraitDone: Promise<void> | undefined; #idleWaiters: (() => void)[] = [];
   /** REV-2: the in-flight registry (runtime memory only) and the bounded window of terminal receipts (persisted with the save). */
   readonly #running = new Map<string, { readonly fingerprint: string; readonly promise: Promise<TurnOutcome> }>();
@@ -236,10 +242,12 @@ export class GameSession {
   #saveError: AppError["code"] | undefined; #pendingDeletions = new Set<string>(); #suspended = false;
   private constructor(deps: SessionDeps, session: CampaignSession, init: SessionInit = {}) {
     this.#deps = deps; this.#session = session; this.#openingText = init.opening_text;
-    this.#itemSprites = new ItemSpriteJobs(session.campaign, { generator: deps.portrait_generator, store: deps.portrait_store, reviewer: deps.item_sprite_reviewer,
-      can_commit: () => this.#status === "idle" && !this.#suspended,
-      changed: () => this.#autosave?.notify(), trigger: deps.portrait_stack?.trigger });
-    this.#mannerisms = deps.mannerism_extractor ? new MannerismMaintenance(deps.world, deps.mannerism_extractor) : undefined;
+    this.#services = effectiveOptionalServices(deps); this.#monitor = new OptionalServiceMonitor(this.#services);
+    // Sprite QA is a separate optional service: without a reviewer the sprite flow accepts its first valid image (deterministic fallback).
+    this.#itemSprites = new ItemSpriteJobs(session.campaign, { generator: deps.portrait_generator, store: deps.portrait_store, reviewer: this.#services.sprite_qa ? deps.item_sprite_reviewer : undefined,
+      enabled: () => this.#services.item_sprite_generation, can_commit: () => this.#status === "idle" && !this.#suspended,
+      changed: before => { this.#noteOptionalWrite(before); this.#autosave?.notify(); }, trigger: deps.portrait_stack?.trigger });
+    this.#mannerisms = deps.mannerism_extractor && this.#services.mannerism_learning ? new MannerismMaintenance(deps.world, deps.mannerism_extractor) : undefined;
     // The scenario opening is given to the narrator while no exchange has been finalized (fresh campaigns and never-played loads).
     const opening = init.opening_text;
     this.#coordinator = deps.createCoordinator({ diagnostics_sink: record => { this.#diagnostics = record; },
@@ -359,7 +367,7 @@ export class GameSession {
     if (this.#status === "closed") return reject("session_closed");
     if (this.#status !== "idle") return reject("turn_in_progress");
     const campaign = this.#session.campaign;
-    if (!Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision) return reject("stale_turn");
+    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn");
     if (typeof request.target !== "string" || !request.target.trim() || request.target.length > 200) return reject("invalid_input");
     const label = request.target.trim().toLowerCase();
     const matches = this.#deps.world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.player && e.knowledge.visibility.narrator
@@ -369,7 +377,7 @@ export class GameSession {
     if (!this.#coordinator.resetSceneContinuity) return reject("internal_error", "Location correction is unavailable in this session.");
     const target = matches[0]!, before = this.getView();
     try {
-      const receipt = campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "runtime_delta", delta: { player_location: target.id } }] });
+      const receipt = campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "runtime_delta", delta: { player_location: target.id } }] });
       campaign.commit(receipt);
       this.#coordinator.resetSceneContinuity(campaign);
       this.#lastError = undefined; this.#autosave?.notify();
@@ -387,9 +395,9 @@ export class GameSession {
   completeHeartstoneRite(request: { readonly ref: unknown; readonly expected_revision: unknown }): RiteOutcome {
     const reject = (code: AppError["code"], message: string, reason?: RiteBlock): RiteOutcome => ({ ok: false, error: appError(code, { message }), ...(reason ? { reason } : {}), view: this.getView() });
     if (this.#status === "closed") return reject("session_closed", "The session is closed.");
-    if (this.#status !== "idle" || this.#portraitBusy) return reject("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    if (this.#status !== "idle") return reject("turn_in_progress", "Wait for the current turn to finish.");
     const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
-    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+    if (!this.#revisionOk(request.expected_revision))
       return reject("stale_turn", "The campaign changed since this card was shown. Reopen the character and try again.");
     if (typeof request.ref !== "string" || !/^[0-9a-f]{24}$/.test(request.ref)) return reject("invalid_input", "Unknown character.", "character_not_found");
     const characters = playerCharacterProjection(this.#deps.world, snapshot);
@@ -398,7 +406,7 @@ export class GameSession {
     const rite = heartstoneRiteCommands(this.#deps.world, snapshot, target.id);
     if (!rite.ok) return reject("invalid_input", rite.reason, rite.code);
     try {
-      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [...rite.commands] }));
+      campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [...rite.commands] }));
       this.#lastError = undefined; this.#autosave?.notify();
       return { ok: true, changed: true, view: this.getView() };
     } catch { return reject("campaign_validation_failed", "The rite could not be completed. The campaign is unchanged."); }
@@ -461,7 +469,7 @@ export class GameSession {
     if (found.status === "cancelled") return this.#confirmationRefusal("invalid_input", "That request was cancelled.", "already_cancelled");
     if (found.status === "invalidated") return this.#confirmationRefusal("invalid_input", CONFIRMATION_MESSAGES[found.terminal_reason ?? ""] ?? CONFIRMATION_MESSAGES.default!, "invalidated", found.terminal_reason);
     const campaign = this.#session.campaign;
-    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+    if (!this.#revisionOk(request.expected_revision))
       return this.#confirmationRefusal("stale_turn", "The campaign changed since this card was shown. Review the story and try again.", "stale");
     this.#reconcileConfirmations();
     const record = this.#confirmations.find(found.ref)!;
@@ -497,9 +505,9 @@ export class GameSession {
   requestRepair(request: { readonly operation: unknown; readonly character_id: unknown; readonly target_id?: unknown; readonly expected_revision: unknown }): RepairProposalOutcome {
     const refuse = (code: AppError["code"], message: string, conflicts: readonly RepairConflictReport[] = []): RepairProposalOutcome => ({ ok: false, error: appError(code, { message }), conflicts, view: this.getView() });
     if (this.#status === "closed") return refuse("session_closed", "The session is closed.");
-    if (this.#status !== "idle" || this.#portraitBusy) return refuse("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    if (this.#status !== "idle") return refuse("turn_in_progress", "Wait for the current turn to finish.");
     const campaign = this.#session.campaign;
-    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision) return refuse("stale_turn", "The campaign changed since this request was prepared.");
+    if (!this.#revisionOk(request.expected_revision)) return refuse("stale_turn", "The campaign changed since this request was prepared.");
     const id = (v: unknown) => typeof v === "string" && /^[a-z0-9][a-z0-9_.:-]{0,119}$/.test(v) ? v : undefined;
     const subject = id(request.character_id), target = id(request.target_id);
     const kind = request.operation === "retire" ? "retire_character" : request.operation === "merge" ? "merge_character" : undefined;
@@ -527,7 +535,7 @@ export class GameSession {
   /** Shared pre-checks of confirm and cancel: open, idle (operation locking: never during a turn, a portrait batch or a save-affecting step), a well-formed known ref. */
   #confirmationGate(ref: unknown): { readonly record: PendingConfirmation } | { readonly outcome: ConfirmationOutcome } {
     if (this.#status === "closed") return { outcome: this.#confirmationRefusal("session_closed", "The session is closed.", "busy") };
-    if (this.#status !== "idle" || this.#portraitBusy) return { outcome: this.#confirmationRefusal("turn_in_progress", "Wait for the current turn or portrait generation to finish.", "busy") };
+    if (this.#status !== "idle") return { outcome: this.#confirmationRefusal("turn_in_progress", "Wait for the current turn to finish.", "busy") };
     const record = typeof ref === "string" && PENDING_REF.test(ref) ? this.#confirmations.find(ref) : undefined;
     return record ? { record } : { outcome: this.#confirmationRefusal("invalid_input", "Unknown request.", "unknown_confirmation") };
   }
@@ -543,9 +551,9 @@ export class GameSession {
   acceptTradeOffer(request: { readonly ref: unknown; readonly expected_revision: unknown }): TradeAcceptOutcome {
     const reject = (code: AppError["code"], message: string, reason?: string): TradeAcceptOutcome => ({ ok: false, error: appError(code, { message }), ...(reason ? { reason } : {}), view: this.getView() });
     if (this.#status === "closed") return reject("session_closed", "The session is closed.");
-    if (this.#status !== "idle" || this.#portraitBusy) return reject("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    if (this.#status !== "idle") return reject("turn_in_progress", "Wait for the current turn to finish.");
     const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
-    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+    if (!this.#revisionOk(request.expected_revision))
       return reject("stale_turn", "The campaign changed since this offer was shown. Check the current offer and try again.", "stale");
     if (typeof request.ref !== "string" || !/^[0-9a-f]{24}$/.test(request.ref)) return reject("invalid_input", "Unknown offer.", "offer_not_found");
     const offer = (snapshot.trade_offers ?? []).find(o => tradeOfferRef(snapshot.campaign_id, o.id) === request.ref);
@@ -553,7 +561,7 @@ export class GameSession {
     if (offer.status !== "active") return reject("invalid_input", TRADE_MESSAGES[`offer_${offer.status}`] ?? TRADE_MESSAGES.default!, `offer_${offer.status}`);
     const before = new Set(snapshot.items.map(i => i.id));
     try {
-      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
+      campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
     } catch (error) {
       const reason = error instanceof CampaignValidationError && error.field === TRADE_FIELD ? error.message.slice(TRADE_FIELD.length + 2) : undefined;
       return reject("campaign_validation_failed", (reason && TRADE_MESSAGES[reason]) || TRADE_MESSAGES.default!, reason ?? "trade_failed");
@@ -578,7 +586,7 @@ export class GameSession {
     if (this.#status === "closed") return reject("session_closed", "The session is closed.");
     if (this.#status !== "idle") return reject("turn_in_progress", "A turn is running. Try saving the appearance again when it finishes.");
     const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
-    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+    if (!this.#revisionOk(request.expected_revision))
       return reject("stale_turn", "The campaign changed since the editor opened. Your edits are kept; reopen the editor to load the current appearance.");
     if (typeof request.ref !== "string" || !/^[0-9a-f]{24}$/.test(request.ref)) return reject("invalid_input", "Unknown character.");
     const characters = playerCharacterProjection(this.#deps.world, snapshot);
@@ -591,7 +599,7 @@ export class GameSession {
     const { appearance: _previous, ...rest } = structuredClone(target.profile) as CharacterProfile;
     const profile: CharacterProfile = { ...rest, ...(patched.appearance ? { appearance: patched.appearance } : {}) };
     try {
-      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "set_profile", character_id: target.id, profile }] }));
+      campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "set_profile", character_id: target.id, profile }] }));
       this.#lastError = undefined; this.#autosave?.notify();
       return { ok: true, changed: true, view: this.getView() };
     } catch { return reject("campaign_validation_failed", "The appearance change was refused. The campaign is unchanged."); }
@@ -611,14 +619,14 @@ export class GameSession {
     if (this.#status === "closed") return reject("session_closed", "The session is closed.");
     if (this.#status !== "idle") return reject("turn_in_progress", "A turn is running. Try saving the profile again when it finishes.");
     const campaign = this.#session.campaign, profile = activePlayerCharacter(campaign.exportSnapshot());
-    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision)
+    if (!this.#revisionOk(request.expected_revision))
       return reject("stale_turn", "The campaign changed since the profile opened. Your edits are kept; reopen the profile to load the current values.");
     if (!profile) return reject("invalid_input", "There is no player character profile.");
     const patched = applyPlayerProfilePatch(profile, request.patch);
     if (!patched.ok) return reject("invalid_input", patched.reason, patched.field);
     if (!patched.changed) return { ok: true, changed: false, view: this.getView() };
     try {
-      campaign.commit(campaign.prepare({ expected_revision: request.expected_revision, commands: [{ kind: "set_player_character_profile", profile: patched.profile }] }));
+      campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "set_player_character_profile", profile: patched.profile }] }));
       this.#lastError = undefined; this.#autosave?.notify();
       return { ok: true, changed: true, view: this.getView() };
     } catch { return reject("campaign_validation_failed", "The profile change was refused. The campaign is unchanged."); }
@@ -663,9 +671,9 @@ export class GameSession {
     const kind: PortraitKind = request.kind, pose = (request.pose ?? "neutral") as PortraitPose;
     if (!isPortraitPose(kind, pose)) return reject("invalid_input", "Choose a pose from the list.");
     const generator = this.#deps.portrait_generator, store = this.#deps.portrait_store;
-    if (!generator || !store) return reject("portrait_generation_failed", "Portrait generation is not available in this session.");
+    if (!generator || !store || !this.#services.portrait_generation) return reject("portrait_generation_failed", "Portrait generation is not available in this session.");
     const campaign = this.#session.campaign;
-    if (typeof request.expected_revision !== "number" || request.expected_revision !== campaign.revision) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor before generating.");
+    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor before generating.");
     const target = this.#managedTarget(request.ref);
     if (!target) return reject("invalid_input", "This character's portrait cannot be generated.");
     if (target.editor.portrait.generation_blocked) return reject("invalid_input", target.editor.portrait.generation_blocked);
@@ -780,7 +788,7 @@ export class GameSession {
     if (this.#status === "closed") return reject("session_closed", "The session is closed.");
     if (this.#status !== "idle" || this.#portraitBusy) return reject("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
     const campaign = this.#session.campaign;
-    if (typeof request.expected_revision !== "number" || request.expected_revision !== campaign.revision) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor and try again.");
+    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor and try again.");
     const target = this.#managedTarget(request.ref);
     if (!target) return reject("invalid_input", "This character's portraits cannot be changed.");
     return { ok: true as const, campaign, id: target.id, campaignId: target.snapshot.campaign_id, record: portraitRecord(target.snapshot, target.id) };
@@ -856,7 +864,7 @@ export class GameSession {
     const store = this.#deps.portrait_store;
     if (!store) return reject("portrait_generation_failed", "Portrait references are not available in this session.");
     const campaign = this.#session.campaign;
-    if (typeof request.expected_revision !== "number" || request.expected_revision !== campaign.revision) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor and try again.");
+    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn", "The campaign changed since the editor opened. Reopen the editor and try again.");
     const target = this.#managedTarget(request.ref);
     if (!target) return reject("invalid_input", "This character's portrait reference cannot be changed.");
     const { id } = target, campaignId = target.snapshot.campaign_id, previous = portraitRecord(target.snapshot, id)?.reference;
@@ -878,7 +886,7 @@ export class GameSession {
     let staged: string | undefined;
     try {
       staged = await store.stage(campaignId, id, image.bytes);
-      if (campaign.revision !== request.expected_revision || this.#now() !== "idle") return reject("stale_turn", "The campaign changed while the reference was uploading. Try again.");
+      if (!this.#revisionOk(request.expected_revision) || this.#now() !== "idle") return reject("stale_turn", "The campaign changed while the reference was uploading. Try again.");
       await store.finalize(staged, campaignId, id, asset_file); staged = undefined;
       try { campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [{ kind: "set_portrait_reference", character_id: id, reference: { media_type: image.media_type, asset_file, uploaded_at: new Date().toISOString() } }] })); }
       catch { await store.remove(campaignId, id, asset_file); return reject("campaign_validation_failed", "The reference could not be recorded."); }
@@ -929,7 +937,7 @@ export class GameSession {
     }
     if (this.#status !== "idle") return Promise.resolve(this.#reject(appError("turn_in_progress")));
     if (APPLICATION_COMMAND.test(input)) return Promise.resolve(this.#reject(appError("invalid_input", { message: "That is an application command; the interface must call it directly, not send it as a player action." })));
-    if (options.expected_revision !== undefined && options.expected_revision !== this.#session.campaign.revision)
+    if (options.expected_revision !== undefined && !this.#revisionOk(options.expected_revision))
       return Promise.resolve(this.#reject(appError("stale_turn", { message: "The campaign changed since this view was shown. Nothing was sent; review the story and send it again." })));
     if (this.getView().context_budget?.compaction_required) {
       void this.requestContextCompaction({ reason: "auto", ...(options.onEvent ? { onEvent: options.onEvent } : {}) });
@@ -942,6 +950,30 @@ export class GameSession {
     if (identity) this.#running.set(identity.key, { fingerprint: identity.fingerprint, promise: run });
     return run.then(outcome => this.#answered(outcome, false));
   }
+  /**
+   * Block 6, core priority. Optional services still write their legacy enrichment through the authoritative CampaignState until block 7, and each such write
+   * bumps the revision. A revision produced ONLY by optional writes must not make the client's view of the core stale, so a request is current when every
+   * revision after the one it carries is a recorded optional write. Anything else (a core commit in between) is a real conflict.
+   */
+  #revisionOk(expected: unknown): expected is number {
+    if (typeof expected !== "number" || !Number.isSafeInteger(expected) || expected < 0) return false;
+    const current = this.#session.campaign.revision;
+    if (expected === current) return true;
+    if (expected > current) return false;
+    const optional = new Set(this.#optionalRevisions);
+    for (let r = expected + 1; r <= current; r++) if (!optional.has(r)) return false;
+    return true;
+  }
+  /** Records the revisions an optional service's legacy write just produced: those after `before` (the revision observed immediately before the write). */
+  #noteOptionalWrite(before: number): void {
+    const revision = this.#session.campaign.revision;
+    for (let r = before + 1; r <= revision; r++) if (!this.#optionalRevisions.includes(r)) this.#optionalRevisions.push(r);
+    if (this.#optionalRevisions.length > 512) this.#optionalRevisions.splice(0, this.#optionalRevisions.length - 512);
+  }
+  /** Runtime service metadata (enabled, running, last success/error). Never campaign state: reading or recording it changes no revision. */
+  getOptionalServices(): readonly OptionalServiceHealth[] { return this.#monitor.snapshot(); }
+  /** Test/host seam: resolves when no detached optional work is pending. */
+  async optionalSettled(): Promise<void> { while (this.#background.size) await Promise.allSettled([...this.#background]); }
   #view(): SessionView { try { return (this.#lastView = this.getView()); } catch (error) { if (this.#lastView) return this.#lastView; throw error; } }
   /** The outcome as handed to a caller: always with the current view. `replayed` marks an answer that executed nothing. */
   #answered(outcome: TurnOutcome, replayed: boolean): TurnOutcome { return { ...outcome, ...(replayed ? { replayed: true as const } : {}), view: this.getView() }; }
@@ -1007,11 +1039,12 @@ export class GameSession {
     this.#reconcileConfirmations();
     let completed: Extract<TurnEvent, { type: "turn_completed" }> | undefined, failed: Extract<TurnEvent, { type: "turn_failed" }> | undefined, committedEvent: Extract<TurnEvent, { type: "state_committed" }> | undefined;
     const warnings: string[] = [];
+    let optionalWork: { readonly turn_id: string; readonly trace: TurnTrace; readonly result: import("../turn/turn-types.js").TurnResult; readonly emit: (e: SessionEvent) => void } | undefined;
     // Post-commit steps are guarded one by one: each failure is a warning (kept in the trace and logged), never a failed turn.
     const guard = <T>(step: PublicationStep, action: () => T, fallback: T): T => { try { return action(); } catch { if (!warnings.includes(step)) warnings.push(step); return fallback; } };
     try {
       emit({ type: "player_message", turn_id, text: input });
-      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, ...(identity ? { turn_key: identity.key } : {}), ...(options.expected_revision !== undefined ? { expected_revision: options.expected_revision } : {}), pending_confirmations: this.#activeProposals() })) {
+      for await (const event of this.#coordinator.runTurn({ campaign, player_input: input, signal: controller.signal, ...(identity ? { turn_key: identity.key } : {}), ...(options.expected_revision !== undefined ? { expected_revision: campaign.revision } : {}), pending_confirmations: this.#activeProposals() })) {
         if (event.type === "turn_progress") emit({ type: "turn_progress", turn_id, phase: event.phase });
         else if (event.type === "state_committed") committedEvent = event;
         else if (event.type === "publication_warning") { if (!warnings.includes(event.step)) warnings.push(event.step); }
@@ -1038,8 +1071,9 @@ export class GameSession {
         const settled = this.#settle(identity, before.revision, { ok: true, turn_id, narration, view: this.#view(), trace: warnings.length ? { ...trace, publication_warnings: [...warnings] } : trace, ...(warnings.length ? { warnings: [...warnings] } : {}) }, committed_revision);
         if (warnings.length) { console.error(`Turn ${turn_id} published with warnings: ${warnings.join(", ")}`); guard("diagnostics", () => { const i = this.#traces.findIndex(t => t.turn_id === turn_id); if (i >= 0) this.#traces[i] = { ...this.#traces[i]!, publication_warnings: [...warnings] }; }, undefined); }
         emit({ type: "turn_completed", turn_id, narration, view: this.#view(), trace });
-        // Optional maintenance after the commit: awaited so the next input stays busy until it settles, but it can never fail or undo the turn.
-        if (completed) { try { await this.#postTurn(turn_id, trace, controller.signal, emit, completed.result); } catch { console.error(`Turn ${turn_id}: post-turn maintenance failed (the turn is committed)`); } }
+        // Block 6: the core turn is COMPLETE here. Optional enrichment (Mannerism, Reflection) is launched detached once the session is idle again; it is never awaited,
+        // never holds the turn lock and can never fail or undo the turn.
+        if (completed) optionalWork = { turn_id, trace, result: completed.result, emit };
         try { if (this.getView().context_budget?.compaction_required) await this.#compact("auto", emit, true); } catch { /* Optional maintenance. */ }
         const final = this.#traces.find(t => t.turn_id === turn_id) ?? trace;
         return { ...settled, ok: true, turn_id, narration, view: this.#view(), trace: final } as TurnOutcome;
@@ -1068,26 +1102,47 @@ export class GameSession {
       options.signal?.removeEventListener("abort", forward); this.#abort = undefined; this.#compactionReason = undefined;
       if (identity) this.#running.delete(identity.key);
       if (this.#status !== "closed") this.#setStatus("idle", emit);
+      if (optionalWork && this.#status === "idle") this.#launchOptional(optionalWork);
     }
   }
-  /** Optional maintenance runs after delivered narration and never fails gameplay; the next input stays busy until it settles. */
-  async #postTurn(turn_id: string, trace: TurnTrace, signal: AbortSignal, emit: (e: SessionEvent) => void, delivered: import("../turn/turn-types.js").TurnResult): Promise<void> {
-    const provider = this.#deps.reflection_provider;
-    if ((!provider && !this.#mannerisms) || signal.aborted) return;
-    this.#setStatus("post_turn", emit);
-    const campaign = this.#session.campaign;
-    if (this.#mannerisms) {
-      try { const run = await this.#mannerisms.afterFinalizedTurn(campaign, turn_id, delivered, signal); try { this.#deps.mannerism_diagnostics_sink?.(run); } catch {} }
-      catch { /* Optional maintenance never fails a delivered, committed player turn. */ }
-    }
-    const revisionBefore = campaign.revision;
-    let runs: readonly ReflectionRun[] = [], failedHard = false;
-    try { if (provider && !signal.aborted) runs = await reflectAfterTurn(campaign, this.#deps.world, provider, { max_characters: 1, diagnostics_sink: record => { this.#reflectionRecord = record; } }); }
-    catch { failedHard = true; }
-    const summary = failedHard ? { status: "failed_nonblocking" as const, characters: [], revisions_added: campaign.revision - revisionBefore } : summarizeReflection(runs, this.#reflectionRecord, campaign.revision - revisionBefore);
-    const index = this.#traces.findIndex(t => t.turn_id === trace.turn_id);
-    if (index >= 0) this.#traces[index] = { ...this.#traces[index]!, revision_after: campaign.revision, reflection: summary };
-    emit({ type: "post_turn_completed", turn_id, view: this.getView(), reflection: summary });
+  /**
+   * Block 6: optional post-turn enrichment, OUTSIDE the correctness boundary. Launched after the turn's result was settled and the session is idle again; the
+   * caller never awaits it and the session status is never `post_turn`. Provider work runs without any lock; every legacy CampaignState write is applied only
+   * while the session is idle (core priority) and is dropped as stale otherwise. A failure is recorded as service health and goes nowhere else.
+   */
+  #launchOptional(work: { readonly turn_id: string; readonly trace: TurnTrace; readonly result: import("../turn/turn-types.js").TurnResult; readonly emit: (e: SessionEvent) => void }): void {
+    const provider = this.#services.reflection ? this.#deps.reflection_provider : undefined;
+    if (!provider && !this.#mannerisms) return;
+    const signal = this.#optionalAbort.signal, canCommit = () => this.#status === "idle" && !this.#suspended && !signal.aborted, mark = { before: 0 }, gate = { can_commit: () => { const ok = canCommit(); if (ok) mark.before = this.#session.campaign.revision; return ok; }, wrote: () => this.#noteOptionalWrite(mark.before) };
+    const task: Promise<void> = (async () => {
+      await Promise.resolve();
+      if (signal.aborted) return;
+      const campaign = this.#session.campaign;
+      if (this.#mannerisms) {
+        this.#monitor.begin("mannerism_learning");
+        try {
+          const run = await this.#mannerisms.afterFinalizedTurn(campaign, work.turn_id, work.result, signal, gate);
+          if (run.status === "provider_failed" || run.status === "malformed") this.#monitor.fail("mannerism_learning", { code: run.status }); else if (run.status === "stale") this.#monitor.discarded("mannerism_learning", "write_deferred_core_priority"); else this.#monitor.succeed("mannerism_learning");
+          try { this.#deps.mannerism_diagnostics_sink?.(run); } catch { /* Diagnostics only. */ }
+        } catch (error) { this.#monitor.fail("mannerism_learning", error); }
+      }
+      if (provider && !signal.aborted) {
+        this.#monitor.begin("reflection");
+        const revisionBefore = campaign.revision;
+        let runs: readonly ReflectionRun[] = [], failedHard = false;
+        let thrown: unknown;
+        try { runs = await reflectAfterTurn(campaign, this.#deps.world, provider, { max_characters: 1, can_commit: gate.can_commit, wrote: gate.wrote, diagnostics_sink: record => { this.#reflectionRecord = record; } }); }
+        catch (error) { failedHard = true; thrown = error; }
+        const summary = failedHard ? { status: "failed_nonblocking" as const, characters: [], revisions_added: campaign.revision - revisionBefore } : summarizeReflection(runs, this.#reflectionRecord, campaign.revision - revisionBefore);
+        if (failedHard) this.#monitor.fail("reflection", thrown); else if (runs.some(r => r.status === "stale")) this.#monitor.discarded("reflection", "write_deferred_core_priority");
+        else if (summary.status === "failed_nonblocking") this.#monitor.fail("reflection", { code: "provider_failed" }); else this.#monitor.succeed("reflection");
+        const index = this.#traces.findIndex(t => t.turn_id === work.trace.turn_id);
+        if (index >= 0) this.#traces[index] = { ...this.#traces[index]!, reflection: summary };
+        try { work.emit({ type: "post_turn_completed", turn_id: work.turn_id, view: this.getView(), reflection: summary }); } catch { /* A closed stream is not an error. */ }
+      }
+      this.#autosave?.notify();
+    })().catch(() => { /* Nothing optional ever escapes into the process. */ }).finally(() => { this.#background.delete(task); });
+    this.#background.add(task);
   }
   #record(trace: TurnTrace): TurnTrace {
     this.#traces.push(trace); const capacity = Math.max(1, this.#deps.trace_capacity ?? 200); while (this.#traces.length > capacity) this.#traces.shift();
@@ -1236,6 +1291,8 @@ export class GameSession {
     if (this.#status === "closed") return { closed: true, discarded_unsaved_changes: false };
     this.#abort?.abort();
     await this.#inflight?.catch(() => undefined);
+    // Block 6: detached optional work is cancelled and awaited so nothing writes after the session closes.
+    this.#optionalAbort.abort(); await this.optionalSettled();
     // A portrait batch cannot be cancelled mid-provider-call; wait for it so its files are committed or cleaned up, never stranded.
     await this.#portraitDone;
     this.#itemSprites.flush(); await this.#itemSprites.settled();

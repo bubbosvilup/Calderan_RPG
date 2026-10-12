@@ -11,7 +11,8 @@ Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `s
 | `OPENROUTER_CONTROLLER_MODEL` | no | Overrides the controller model (default `openai/gpt-6-luna`). |
 | `OPENROUTER_CONTROLLER_FALLBACK_MODELS` | no | Comma list for OpenRouter's native `models` fallback, or `none`. Unset = `anthropic/claude-haiku-5.5`. |
 | `MANNERISM_EXTRACTOR_MODEL` | no | Independent extractor model (default `openai/gpt-6-luna`); never inherits the controller setting. |
-| `CALDREVAN_REFLECTION_MODE` | no | `off` (default) or `shadow`; anything else throws. Notes are never shown to the narrator. |
+| `CALDREVAN_REFLECTION_MODE` | no | `off` (default) or `shadow`; anything else throws. Producer OFF means no calls and no new notes; validated persisted notes stay Narrator-visible (soft-promoted). |
+| `CALDREVAN_MANNERISM_LEARNING`, `CALDREVAN_PORTRAIT_GENERATION`, `CALDREVAN_ITEM_SPRITES`, `CALDREVAN_SPRITE_QA`, `CALDREVAN_SEMANTIC_RETRIEVAL` | no | `on`/`off` switches for the other optional services (defaults: on, on, on, **off**, **off**). Resolved once by `resolveOptionalServices`; an explicit `optional_services` option wins. Never saved. See [Optional services](architecture/OPTIONAL_SERVICES.md). |
 | `OPENROUTER_REFLECTION_MODEL` | no | The qualified reflection adapter accepts only its default (`anthropic/claude-haiku-5.5`). |
 | `CONTEXT_COMPRESSOR_MODEL` | no | Optional model for the context compressor; unset means the lossless compactor only. |
 | `HF_TOKEN` | for images | Hugging Face token with Inference Providers access. Read per request, never logged. Absent: image generation fails with a clear message and the UI reports it. |

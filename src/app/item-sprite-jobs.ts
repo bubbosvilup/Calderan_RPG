@@ -11,9 +11,12 @@ export interface ItemSpriteJobDeps {
   readonly generator?: PortraitImageGenerator | undefined;
   readonly reviewer?: SpriteQualityReviewer | undefined;
   readonly store?: PortraitAssetStore | undefined;
+  /** Block 6: false = the Item sprite service is OFF. No new job, not even a pending marker; existing sprites are untouched. */
+  readonly enabled?: () => boolean;
   /** Metadata commits are synchronous and allowed only between gameplay turns. */
   readonly can_commit?: () => boolean;
-  readonly changed?: () => void;
+  /** Called after each metadata commit with the revision that preceded it. */
+  readonly changed?: (before_revision: number) => void;
   readonly trigger?: string | undefined;
   /** Lazy legacy enrichment, explicitly requested only; no bulk backfill or extra creation LLM call. */
   readonly enrich?: (item: Readonly<CampaignItem>) => Promise<string>;
@@ -26,18 +29,21 @@ export class ItemSpriteJobs {
   constructor(readonly campaign: CampaignState, readonly deps: ItemSpriteJobDeps) {}
   get busy(): boolean { return !!(this.#queued.size || this.#running.size || this.#completed.length); }
   request(itemId: string): boolean {
+    if (this.deps.enabled && !this.deps.enabled()) return false;
     const item = this.campaign.exportSnapshot().items.find(i => i.id === itemId);
     if (!item || item.sprite?.status === "ready" || item.sprite?.status === "pending" || this.#queued.has(itemId) || this.#running.has(itemId)) return false;
     this.#queued.add(itemId); this.flush(); return true;
   }
   /** Only restore interrupted pending work, never requeue a pending job in this process. */
   resumeInterrupted(): void {
+    if (this.deps.enabled && !this.deps.enabled()) return;
     for (const item of this.campaign.exportSnapshot().items) if (item.sprite?.status === "pending" && !this.#running.has(item.id) && !this.#completed.some(r => r.id === item.id)) this.#queued.add(item.id);
     this.flush();
   }
   #commit(commands: CampaignCommand[]): void {
-    this.campaign.apply({ expected_revision: this.campaign.revision, commands });
-    try { this.deps.changed?.(); } catch { /* Observation is non-authoritative. */ }
+    const before = this.campaign.revision;
+    this.campaign.apply({ expected_revision: before, commands });
+    try { this.deps.changed?.(before); } catch { /* Observation is non-authoritative. */ }
   }
   /** Called on session idle and on background completion. Never mutates a running turn. */
   flush(): void {
@@ -74,7 +80,6 @@ export class ItemSpriteJobs {
       if (!visual && this.deps.enrich) visual = await this.deps.enrich(structuredClone(item) as CampaignItem);
       if (!visual?.trim() || visual.length > 8000) throw new Error("missing_visual_description");
       if (!this.deps.generator || !store) throw new ImageGenerationError("configuration_error");
-      if (!this.deps.reviewer) throw new SpriteQualityError("review_failed");
       const identity = { name: item.name ?? "Unnamed item", category: item.category, visual_description: visual };
       let validated: ReturnType<typeof validateImageBytes> | undefined;
       // At most two image requests; transport/reviewer failures never regenerate.
@@ -83,8 +88,10 @@ export class ItemSpriteJobs {
           negative_prompt: ITEM_SPRITE_NEGATIVE_PROMPT,
           width: RAENA_IMAGE_STACK.avatar_size.width, height: RAENA_IMAGE_STACK.avatar_size.height, seed: randomInt(1, 2 ** 31 - 1) });
         const candidate = validateImageBytes(image.bytes, image.media_type);
+        // Sprite QA is a separate optional service: without a reviewer the first valid image is accepted (deterministic fallback, zero reviewer calls).
         let accepted: boolean;
-        try { accepted = validateSpriteQuality(await this.deps.reviewer.review({ ...identity, image: candidate })).accepted; }
+        if (!this.deps.reviewer) accepted = true;
+        else try { accepted = validateSpriteQuality(await this.deps.reviewer.review({ ...identity, image: candidate })).accepted; }
         catch { throw new SpriteQualityError("review_failed"); }
         if (accepted) { validated = candidate; break; }
         // Rejected bytes are released without staging in campaign storage.

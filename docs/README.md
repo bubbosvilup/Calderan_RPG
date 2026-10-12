@@ -18,6 +18,7 @@ Labels: **NORMATIVE** (the maintained description of current behavior), **ACTIVE
 - **NORMATIVE** [Architecture](ARCHITECTURE.md)
 - **NORMATIVE** [Actual Offer V1](architecture/ACTUAL_OFFER.md) (player-authorized trade: lifecycle, settlement, masking, exclusions); report: [ACTUAL_OFFER_V1](evaluations/ACTUAL_OFFER_V1.md) (evaluation, historical)
 - ACTIVE [Turn coordinator](architecture/TURN_COORDINATOR.md), [Evidence authorization](architecture/EVIDENCE_AUTHORIZATION.md), [Narrative authority](architecture/NARRATIVE_AUTHORITY.md), [Physical interaction](architecture/PHYSICAL_INTERACTION.md), [Transfer domain](architecture/TRANSFER_DOMAIN_V1.md)
+- **NORMATIVE** [Optional services](architecture/OPTIONAL_SERVICES.md) (core / optional boundary, OFF semantics, consolidation gate); report: [CONSOLIDATION_BLOCK6](evaluations/CONSOLIDATION_BLOCK6_CORE_OPTIONAL_SPLIT.md)
 - ACTIVE [LLM providers](architecture/LLM_PROVIDER.md) (contract; Phase 1K model choices are historical)
 - ACTIVE [Naming](architecture/NAMING.md)
 

@@ -2,6 +2,8 @@
 
 Status: ACTIVE for the provider contract (adapters, JSON Schema protocol, timeouts); individual Phase 1K model selections below are HISTORICAL. Current models: [Current state](../CURRENT_STATE.md#4-current-model-topology-verified-in-code). Last reconciled: 2026-10-11.
 
+**Block 6:** only the Narrator and the Controller are core model subsystems. The mannerism extractor, reflection provider, sprite reviewer and image stack are *optional services* resolved from `src/app/optional-services.ts`; their providers are constructed only when the service is enabled and they never gate a turn. See [Optional services](OPTIONAL_SERVICES.md).
+
 ## Architecture and contracts
 
 The additive `src/llm/` boundary separates transport from two responsibilities:

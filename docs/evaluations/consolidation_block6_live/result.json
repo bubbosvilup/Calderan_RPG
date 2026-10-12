@@ -1,0 +1,309 @@
+{
+  "generated_at": "2026-10-12T19:52:58.273Z",
+  "wire_total": 19,
+  "verdict": {
+    "A_all_turns_ok": true,
+    "A_idle_at_return": true,
+    "A_extractor_called": true,
+    "A_extractor_started_after_core_completed": true,
+    "A_extractor_end_after_turn_return": true,
+    "B_all_turns_ok": true,
+    "B_zero_extractor_calls": true,
+    "B_service_disabled": true
+  },
+  "A": {
+    "label": "a_mannerism_on",
+    "mannerism": true,
+    "extractor_model": "openai/gpt-6-luna",
+    "turns": [
+      {
+        "n": 1,
+        "ok": true,
+        "error": null,
+        "started_ms": 33,
+        "turn_completed_ms": 7542,
+        "returned_ms": 7554,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 1,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 153,
+            "end_ms": 3785
+          },
+          {
+            "n": 2,
+            "start_ms": 6017,
+            "end_ms": 6710
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "ok": true,
+        "error": null,
+        "started_ms": 7555,
+        "turn_completed_ms": 13747,
+        "returned_ms": 13756,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 3,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 7568,
+            "end_ms": 10538
+          },
+          {
+            "n": 4,
+            "start_ms": 12647,
+            "end_ms": 13141
+          }
+        ]
+      },
+      {
+        "n": 3,
+        "ok": true,
+        "error": null,
+        "started_ms": 13756,
+        "turn_completed_ms": 20342,
+        "returned_ms": 20351,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 5,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 13762,
+            "end_ms": 17465
+          },
+          {
+            "n": 6,
+            "start_ms": 19050,
+            "end_ms": 19611
+          }
+        ]
+      },
+      {
+        "n": 4,
+        "ok": true,
+        "error": null,
+        "started_ms": 20352,
+        "turn_completed_ms": 27681,
+        "returned_ms": 27696,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 7,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 20358,
+            "end_ms": 23425
+          },
+          {
+            "n": 8,
+            "start_ms": 26478,
+            "end_ms": 26998
+          },
+          {
+            "n": 9,
+            "model": "openai/gpt-6-luna",
+            "start_ms": 27691,
+            "end_ms": null
+          }
+        ]
+      }
+    ],
+    "extractor_calls": [
+      {
+        "n": 9,
+        "model": "openai/gpt-6-luna",
+        "start_ms": 27691,
+        "end_ms": 28194,
+        "status": 200
+      }
+    ],
+    "health": [
+      {
+        "service": "reflection",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "mannerism_learning",
+        "enabled": true,
+        "running": 0,
+        "last_success_at": "2026-10-12T19:52:25.456Z"
+      },
+      {
+        "service": "portrait_generation",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "item_sprite_generation",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "sprite_qa",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "semantic_retrieval",
+        "enabled": false,
+        "running": 0
+      }
+    ],
+    "extractor_called_before_settle": 1,
+    "runs_recorded": 4
+  },
+  "B": {
+    "label": "b_mannerism_off",
+    "mannerism": false,
+    "extractor_model": "openai/gpt-6-luna",
+    "turns": [
+      {
+        "n": 1,
+        "ok": true,
+        "error": null,
+        "started_ms": 28813,
+        "turn_completed_ms": 34109,
+        "returned_ms": 34114,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 10,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 28830,
+            "end_ms": 31881
+          },
+          {
+            "n": 11,
+            "start_ms": 32986,
+            "end_ms": 33503
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "ok": true,
+        "error": null,
+        "started_ms": 34114,
+        "turn_completed_ms": 40382,
+        "returned_ms": 40389,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 12,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 34121,
+            "end_ms": 36957
+          },
+          {
+            "n": 13,
+            "start_ms": 39177,
+            "end_ms": 39721
+          }
+        ]
+      },
+      {
+        "n": 3,
+        "ok": true,
+        "error": null,
+        "started_ms": 40389,
+        "turn_completed_ms": 49402,
+        "returned_ms": 49409,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 14,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 40395,
+            "end_ms": 43462
+          },
+          {
+            "n": 15,
+            "start_ms": 44931,
+            "end_ms": 45513
+          },
+          {
+            "n": 16,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 46172,
+            "end_ms": 48714
+          }
+        ]
+      },
+      {
+        "n": 4,
+        "ok": true,
+        "error": null,
+        "started_ms": 49409,
+        "turn_completed_ms": 61607,
+        "returned_ms": 61615,
+        "idle_at_return": true,
+        "core_wire_calls": [
+          {
+            "n": 17,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 49415,
+            "end_ms": 52704
+          },
+          {
+            "n": 18,
+            "start_ms": 55394,
+            "end_ms": 56682
+          },
+          {
+            "n": 19,
+            "model": "z-ai/glm-5.2",
+            "start_ms": 57057,
+            "end_ms": 59566
+          }
+        ]
+      }
+    ],
+    "extractor_calls": [
+      {
+        "n": 9,
+        "model": "openai/gpt-6-luna",
+        "start_ms": 27691,
+        "end_ms": 28194,
+        "status": 200
+      }
+    ],
+    "health": [
+      {
+        "service": "reflection",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "mannerism_learning",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "portrait_generation",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "item_sprite_generation",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "sprite_qa",
+        "enabled": false,
+        "running": 0
+      },
+      {
+        "service": "semantic_retrieval",
+        "enabled": false,
+        "running": 0
+      }
+    ],
+    "extractor_called_before_settle": 1,
+    "runs_recorded": 0
+  }
+}

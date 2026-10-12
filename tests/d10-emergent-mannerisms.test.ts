@@ -209,13 +209,13 @@ test("D10 P2 real finalized coordinator turns promote, pack and suppress feedbac
   const session = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, "saves/d10-offline-never-written"), mannerism_extractor: extractor, mannerism_diagnostics_sink: r => runs.push(r),
     createCoordinator: hooks => new TurnCoordinator(f.world, narrator, { async propose(r) { if (fail) throw new Error("controller failed"); return mockController([]).propose(r); } }, { service, search: new HybridSearch(service) }, { provider_retry: false, diagnostics_sink: hooks.diagnostics_sink }),
   }, f.campaign);
-  for (let i = 0; i < 4; i++) assert.ok((await session.submitPlayerInput("I wait quietly.")).ok);
+  for (let i = 0; i < 4; i++) { assert.ok((await session.submitPlayerInput("I wait quietly.")).ok); await session.optionalSettled(); }
   assert.equal(rows(f).length, 2); const cue = rows(f)[1]!.text;
   assert.ok(packNpcPlus(f.world, f.campaign.exportSnapshot(), new Set(["brenna"]), "Brenna")!.lines.join("\n").includes(cue));
-  for (let i = 0; i < 4; i++) assert.ok((await session.submitPlayerInput("I wait quietly.")).ok);
+  for (let i = 0; i < 4; i++) { assert.ok((await session.submitPlayerInput("I wait quietly.")).ok); await session.optionalSettled(); }
   assert.equal(runs.at(-1)!.metrics.observations_rejected_existing_mannerism, 4); assert.equal(rows(f).length, 2);
   text = "Maren taps two fingers while waiting.";
-  for (let i = 0; i < 4; i++) assert.ok((await session.submitPlayerInput("I wait quietly.")).ok);
+  for (let i = 0; i < 4; i++) { assert.ok((await session.submitPlayerInput("I wait quietly.")).ok); await session.optionalSettled(); }
   assert.equal(runs.at(-1)!.metrics.observations_rejected_global_duplicate, 4); assert.equal(rows(f, "maren").length, 1);
   const before = f.campaign.exportSnapshot().mannerism_learning; fail = true;
   assert.equal((await session.submitPlayerInput("I wait quietly.")).ok, false); assert.deepEqual(f.campaign.exportSnapshot().mannerism_learning, before);

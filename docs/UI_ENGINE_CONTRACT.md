@@ -51,7 +51,7 @@ const outcome = await session.submitPlayerInput(text, { onEvent, signal });
 
 ## 3. Streaming and final narration
 
-Events (`SessionEvent`), in order for a successful turn: `status_changed(running_turn)`, `player_message`, `turn_progress` (phases `thinking`, `narrating`, `resolving`, in that order), `turn_completed`, [`status_changed(post_turn)`, `post_turn_completed`], `status_changed(idle)`.
+Events (`SessionEvent`), in order for a successful turn: `status_changed(running_turn)`, `player_message`, `turn_progress` (phases `thinking`, `narrating`, `resolving`, in that order), `turn_completed`, `status_changed(idle)`. Optional enrichment (Mannerism, Reflection) runs detached after that and may emit a late `post_turn_completed` when Reflection is on; it never changes the status and is never required.
 
 - **Block 4 (PIPE-1): there is no draft stream.** The Narrator draft is buffered and audited server-side; `narrator_preview` and `narration_delta` no longer exist. While a turn runs the UI shows a status word chosen from its own closed table keyed by `phase`; progress events carry no text. The finished narration is published exactly once, in `turn_completed.narration`, after the commit. The HTTP adapter's NDJSON stream carries `{type:"progress", phase}` lines and one final `{type:"result", ...}` line.
 - **Request identity (REV-2).** `submitPlayerInput(text, { turn_key, expected_revision })`. The same `turn_key` never runs twice: an in-flight key is joined, a terminal key is replayed (`outcome.replayed === true`, no provider call, success or failure), the same key with a different request is `turn_key_conflict`. A stale `expected_revision` returns `stale_turn` before any provider call. A different key while busy is `turn_in_progress` (no queue). Retry a failed turn with a NEW key.
@@ -82,7 +82,7 @@ Time retains the primitive world clock (`world_minute`, `day`, `minute_of_day`) 
 
 ## 6. Busy and error state
 
-`session.status`: `idle | running_turn | post_turn | closed`. Input is accepted only in `idle`. `post_turn` is the reflection step after narration was delivered; the next input is rejected as `turn_in_progress` until it settles. `session.lastError` holds the last failure.
+`session.status`: `idle | running_turn | closed` in practice (`post_turn` remains in the type but is no longer entered). Input is accepted only in `idle`. Optional services (Mannerism, Reflection, sprites) never hold the turn lock: a pending optional task does not reject the next input. `GET /api/optional-services` returns per-service `{enabled, running, last_success_at, last_error:{at, code}}` (diagnostic only, never narration, never changes a revision). `session.lastError` holds the last failure.
 
 Every failure is an `AppError`: `{code, provider_code?, message, retryable, turn_state_changed}`. `message` is player-safe (no stack, no provider text).
 

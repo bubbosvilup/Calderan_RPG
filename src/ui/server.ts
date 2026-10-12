@@ -86,6 +86,11 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         const session = host?.active;
         json(host ? 200 : 404, session ? { campaign: { id: session.campaignId, save: { state: session.hasUnsavedChanges ? "unsaved" : "saved", ...session.saveStatus() } } } : { campaign: null }); return;
       }
+      if (req.method === "GET" && req.url === "/api/optional-services") {
+        // Block 6: runtime service health (enabled / running / last success or error code). Diagnostic only: never narration, never a revision bump.
+        const session = current();
+        json(200, { services: session ? session.getOptionalServices() : [] }); return;
+      }
       if (req.method === "GET" && req.url === "/api/campaigns") {
         if (!host) { json(404, { error: "Not found." }); return; }
         json(200, { campaigns: await host.listCampaigns(), scenarios: host.scenarios, active_campaign_id: host.active?.campaignId ?? null }); return;

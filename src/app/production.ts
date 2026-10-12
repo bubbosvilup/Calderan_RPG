@@ -13,6 +13,7 @@ import { MiniMaxNarratorProvider } from "../llm/openrouter/minimax-narrator.js";
 import { OpenRouterStateControllerProvider } from "../llm/openrouter/state-controller.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
+import { resolveOptionalServices, type OptionalServiceConfig } from "./optional-services.js";
 import { SemanticIndex } from "../retrieval/semantic-index.js";
 import type { EmbeddingProvider } from "../retrieval/embedding-provider.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
@@ -72,10 +73,16 @@ export interface ProductionOptions {
    * autosave on, engine version recorded. Off (default) keeps the original layout (`<save_dir>/<id>/`, portraits in `<save_dir>/portraits`).
    */
   readonly persistent_campaigns?: boolean;
+  /** Block 6: explicit optional-service availability. Wins over the environment (CALDREVAN_REFLECTION_MODE, CALDREVAN_MANNERISM_LEARNING, CALDREVAN_PORTRAIT_GENERATION, CALDREVAN_ITEM_SPRITES, CALDREVAN_SPRITE_QA, CALDREVAN_SEMANTIC_RETRIEVAL) and over the legacy `reflection_mode` / `enable_emergent_mannerisms` options. */
+  readonly optional_services?: Partial<OptionalServiceConfig>;
 }
 /** Real wiring for a player-facing build: canonical world, file saves, live OpenRouter providers. No fixture, no dev harness. */
 export async function createProductionDeps(options: ProductionOptions = {}): Promise<SessionDeps & { readonly repository: FileCampaignRepository }> {
-  const reflection_mode = options.reflection_mode ?? readReflectionMode();
+  // Block 6: ONE canonical resolution of the optional services (defaults < environment < legacy options < explicit). Providers below are built from it, so a core domain never reads a feature flag.
+  const legacyReflection = options.reflection_mode ?? (process.env.CALDREVAN_REFLECTION_MODE ? readReflectionMode() : undefined);
+  const optional = resolveOptionalServices({ ...(legacyReflection !== undefined ? { reflection: legacyReflection === "shadow" } : {}), ...(options.enable_emergent_mannerisms !== undefined ? { mannerism_learning: options.enable_emergent_mannerisms } : {}), ...options.optional_services });
+  const semantic = optional.semantic_retrieval && !!options.embedding_provider;
+  const resolved: OptionalServiceConfig = { ...optional, semantic_retrieval: semantic };
   const context_policy = { ...DEFAULT_CONTEXT_POLICY, output_tokens: NARRATOR_OUTPUT_TOKENS, ...options.context_policy };
   const compressor_model = contextCompressorModel();
   const compaction_service = new LosslessContextCompactor(compressor_model ? new OpenRouterLosslessCompressor(compressor_model) : undefined, new ContextBudgetManager(context_policy), options.compaction_policy);
@@ -83,7 +90,7 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
   let narratorSetup: SessionHooks["narrator_request_setup"];
   let sink: ((record: DeepReadonly<TurnDiagnostics>) => unknown) | undefined;
   const status = readProviderStatus(), service = new RetrievalService(world);
-  const indexes = options.embedding_provider ? [await SemanticIndex.build(service.indexSource(), options.embedding_provider, "narrator")] : [];
+  const indexes = semantic && options.embedding_provider ? [await SemanticIndex.build(service.indexSource(), options.embedding_provider, "narrator")] : [];
   // Production narrator requests always disable hidden reasoning (Phase 1M.1); the controller uses the selected model and default retry policy.
   const narrator = new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true });
   const wrapped = options.narrator_wrapper ? options.narrator_wrapper(narrator) : narrator;
@@ -95,11 +102,13 @@ export async function createProductionDeps(options: ProductionOptions = {}): Pro
     ...(persistent ? { autosave: {} } : {}), ...(typeof engine_version === "string" && /^[0-9A-Za-z.+_-]{1,40}$/.test(engine_version) ? { engine_version } : {}),
     // Image generation v1: the Raena stack via the Hugging Face router (fal-ai pinned, HF_TOKEN read per request); portrait files live
     // inside each campaign folder (persistent mode) or beside the saves (legacy), never inside a save file. Diagnostics carry a code, HTTP status and retry kind only (never bodies, prompts or tokens).
-    item_sprite_reviewer: new OpenRouterSpriteQualityReviewer(),
+    optional_services: resolved,
+    // Sprite QA is OFF by default (block 6): the reviewer exists only when the service is on.
+    ...(resolved.sprite_qa ? { item_sprite_reviewer: new OpenRouterSpriteQualityReviewer() } : {}),
     portrait_generator: new FalImageClient(RAENA_IMAGE_STACK, { api_key: () => process.env.HF_TOKEN }), portrait_stack: RAENA_IMAGE_STACK, portrait_store: persistent ? new PortraitAssetStore(campaignsRoot, { layout: "campaign" }) : new PortraitAssetStore(join(saveDir, "portraits")),
     portrait_log: entry => console.warn(`[portrait] generation failed: ${entry.code}${entry.status ? ` (HTTP ${entry.status})` : ""}${entry.recovery ? `; retrying once (${entry.recovery === "reseed" ? "new seed" : "same seed"})` : ""}`),
-    ...(options.enable_emergent_mannerisms !== false ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),
+    ...(resolved.mannerism_learning ? { mannerism_extractor: new OpenRouterMannerismExtractor(new OpenRouterClient(), { model: mannerismExtractorModel() }) } : {}),
     // One coordinator is shared; the live session owns the diagnostics hook. A UI runs one session at a time.
     createCoordinator: hooks => { sink = hooks.diagnostics_sink; narratorSetup = hooks.narrator_request_setup; return coordinator; },
-    ...(reflection_mode === "shadow" ? { reflection_provider: new OpenRouterReflectionProvider(new OpenRouterClient(), { ...(status.reflection_model ? { model: status.reflection_model } : {}) }) } : {}) };
+    ...(resolved.reflection ? { reflection_provider: new OpenRouterReflectionProvider(new OpenRouterClient(), { ...(status.reflection_model ? { model: status.reflection_model } : {}) }) } : {}) };
 }
