@@ -196,7 +196,7 @@ test("non-invention: only established facts survive promotion; names imply nothi
 });
 
 // ------------------------------------------------------------------------------------------------ end to end
-test("end to end: no pre-registered Brenna → promoted when her name is established → bought → exactly one persistent Brenna", async () => {
+test("end to end (AUTH-2): no pre-registered Brenna → named by narration stays provisional → bought → exactly one persistent Brenna", async () => {
   const c = market(), seen: GenerationRequest[] = [];
   c.apply({ expected_revision: c.revision, commands: [...learnCanonicalName(world, c.exportSnapshot(), "korvin")] });
   let texts: string[] = [];
@@ -213,11 +213,12 @@ test("end to end: no pre-registered Brenna → promoted when her name is establi
   // The player addresses "the slave" (a temporary scene participant) before the narrator names her.
   const intro = await step("*approaches the slave in the last cage*", [INTRO.narration]);
   assert.match(prompt(), /P1 Slave/);
-  // Pass 1.2: the narration establishes her name, so she becomes a campaign character at the end of this turn (no purchase yet).
-  assert.deepEqual(intro.identity?.promoted.map(p => [p.name, p.participant_id]), [["Brenna", "scene_npc_1"]]);
-  assert.deepEqual([promoted(c).length, promoted(c)[0]!.origin_snapshot!.trigger, gold(c), c.exportSnapshot().legal_statuses], [1, "name_established", 500, []]);
-  await step("Name your price for the slave, Korvin.", [OFFER.narration]); // "the slave" is Brenna now: no new temporary participant
-  assert.match(prompt(), /Character Brenna \(campaign_character_r\d+_brenna\)/); assert.doesNotMatch(prompt(), /P\d Slave/);
+  // AUTH-2: the narration establishes her name, but that is NOT persistence authority: she stays the same temporary participant, now named.
+  assert.deepEqual(intro.identity?.provisional.map(p => [p.name, p.participant_id]), [["Brenna", "scene_npc_1"]]);
+  assert.deepEqual([promoted(c).length, gold(c), c.exportSnapshot().legal_statuses], [0, 500, []]);
+  await step("Name your price for the slave, Korvin.", [OFFER.narration]); // "the slave" is the SAME provisional person: no new temporary participant
+  assert.match(prompt(), /P1 - Brenna \(Slave\)/); assert.doesNotMatch(prompt(), /P2 /); assert.doesNotMatch(prompt(), /Character Brenna \(/);
+  assert.equal(promoted(c).length, 0, "an offer is a proposal: nothing durable yet");
   const standing = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(standing && standing.price_gold === 5 && standing.subject.kind === "person");
   assert.deepEqual([gold(c), c.exportSnapshot().legal_statuses], [500, []], "the quote is an offer: nothing is paid or set up yet");
   // Spoken or narrated payment is not acceptance: the narrator is told the offer is pending, and a draft that narrates the payment is reconciled.
@@ -258,7 +259,7 @@ test("end to end: no pre-registered Brenna → promoted when her name is establi
   assert.equal(narratorEphemeralCharacters(restored.exportSnapshot()).length, 1);
 });
 
-test("end to end: an unaffordable offer stays pending and the narrator knows the purse falls short; the only promotion is by name, with no legal state", async () => {
+test("end to end: an unaffordable offer stays pending and the narrator knows the purse falls short; nothing is persisted (AUTH-2), no legal state", async () => {
   const c = market([{ kind: "set_funds", character_id: "nicco", gold: 2 }]), seen: GenerationRequest[] = [];
   const texts = [INTRO.narration, OFFER.narration, "Korvin shakes his head and keeps the key on his belt."];
   const service = new RetrievalService(world);
@@ -266,7 +267,8 @@ test("end to end: an unaffordable offer stays pending and the narrator knows the
     { async propose() { return { commands: [], ...metadata }; } }, { service, search: new HybridSearch(service) });
   for (const input of ["*checks the cages*", "Name your price, Korvin.", "Done. *pays him*"]) assert.equal((await collect(coordinator.runTurn({ campaign: c, player_input: input }))).at(-1)!.type, "turn_completed");
   assert.match(seen.at(-1)!.messages[0]!.content, /TRADE OFFER PENDING[\s\S]*Nicco has only 2 gold, which does not cover the 5 gold price/);
-  assert.deepEqual([promoted(c).map(x => x.origin_snapshot!.trigger), gold(c), c.exportSnapshot().legal_statuses, c.exportSnapshot().transactions], [["name_established"], 2, [], []]);
+  assert.deepEqual([promoted(c).map(x => x.origin_snapshot!.trigger), gold(c), c.exportSnapshot().legal_statuses, c.exportSnapshot().transactions], [[], 2, [], []]);
   const standing = activeTradeOffer(c.exportSnapshot().trade_offers)!;
   assert.throws(() => c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: standing.id }] }), /insufficient_funds/);
+  assert.equal(promoted(c).length, 0, "a failed Accept leaves the person non-persistent");
 });

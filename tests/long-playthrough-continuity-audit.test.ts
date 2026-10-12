@@ -1,4 +1,5 @@
 import test from "node:test";
+import { applyAuthorized } from "./provisional-helper.js";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
@@ -33,8 +34,8 @@ function view(campaign: CampaignState) {
 test("audit (fixed): non-colliding quoted self-name answers the reciprocal introduction and promotes a durable scene member once", () => {
   const campaign = fresh(), first = exchange(input1, '"Sovela." the woman says.');
   const resolution = names(campaign, [first]);
-  assert.equal(resolution.promoted[0]?.name, "Sovela");
-  campaign.apply({ expected_revision: campaign.revision, commands: [...resolution.commands] });
+  assert.equal(resolution.provisional[0]?.name, "Sovela");
+  applyAuthorized(campaign, resolution);
   assert.deepEqual(names(campaign, [first, exchange("so your name is Sovela?", '"Sovela." the woman says.')]).commands, []);
   const person = campaign.exportSnapshot().characters.find(c => c.profile.name === "Sovela")!;
   assert.equal(person.current.current_location, "heartstone_lr");
@@ -51,8 +52,8 @@ test("audit (fixed): an absent canonical Mira Thorne no longer blocks a distinct
     const campaign = fresh();
     assert.ok(!buildTurnContext(world, campaign.exportSnapshot()).characters.some(c => c.id === "mira_thorne"));
     const resolution = names(campaign, [exchange(input2, narration)]);
-    assert.deepEqual(resolution.promoted.map(p => p.name), ["Mira"], narration);
-    campaign.apply({ expected_revision: campaign.revision, commands: [...resolution.commands] });
+    assert.deepEqual(resolution.provisional.map(p => p.name), ["Mira"], narration);
+    applyAuthorized(campaign, resolution);
     assert.deepEqual(view(campaign).participants.map(p => p.name).sort(), ["Mira", "Nicco"]);
   }
 });
@@ -60,8 +61,8 @@ test("audit (fixed): an absent canonical Mira Thorne no longer blocks a distinct
 for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name} self-answer promotes on the reciprocal turn; confirmation does not duplicate`, () => {
   const campaign = fresh(), first = exchange(input1, `*The woman looks at Nicco.*\n${name}.`), second = exchange(`so your name is ${name}?`, `*The woman nods.*\n${name}.`);
   const resolution = names(campaign, [first]);
-  assert.deepEqual(resolution.promoted.map(p => p.name), [name]);
-  campaign.apply({ expected_revision: campaign.revision, commands: [...resolution.commands] });
+  assert.deepEqual(resolution.provisional.map(p => p.name), [name]);
+  applyAuthorized(campaign, resolution);
   assert.deepEqual(names(campaign, [first, second]).commands, []);
   assert.deepEqual(view(campaign).participants.map(p => p.name).sort(), [name, "Nicco"].sort());
   const history = new RecentConversation(); [first, second].forEach(e => history.add(e));
@@ -70,7 +71,7 @@ for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name}
 
 test("audit (fixed): promotion keeps attributed evidence and narrator context keeps the self-disclosure source after history eviction", () => {
   const campaign = fresh(), introduction = exchange("What's your name?", '"My name is Sovela," the woman says.');
-  campaign.apply({ expected_revision: campaign.revision, commands: [...names(campaign, [introduction]).commands] });
+  applyAuthorized(campaign, names(campaign, [introduction]));
   const person = campaign.exportSnapshot().characters.find(c => c.profile.name === "Sovela")!;
   assert.ok(person.origin_snapshot?.evidence.some(e => e.includes("My name is Sovela")));
   assert.equal(campaign.exportSnapshot().knowledge.length, 0, "created names do not use canonical identity-name edges");

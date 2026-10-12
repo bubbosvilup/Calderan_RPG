@@ -58,3 +58,7 @@ stable when wording changes; a split or merge requires retiring old chunk IDs.
 Semantic tags use snake_case, for example `resurrection`, `grief`, `ritual`,
 `secrecy`, `medicine`, `politics`. Entity types use the literal values in the schema.
 Structured references and time never belong only in tags.
+
+## Person identity and lifecycle (block 5B)
+
+A person a Narrator merely names is **provisional**: the scene-local reference (`narrated:<name|noun>` or an ephemeral participant id) is not a campaign identity and is never saved. A **persistent** campaign character id is allocated only when an explicitly authorized action materializes that same subject (today the person Actual Offer Accept), and an id is never reused or reassigned. A **retired** character keeps its id forever (history and references stay valid); a merge retires the duplicate with `merged_into` pointing at the kept id. A name is not an identity: two people may share a name, and the scanner never treats a shared name alone as evidence of a fork.

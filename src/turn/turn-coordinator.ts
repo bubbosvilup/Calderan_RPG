@@ -133,7 +133,7 @@ export class TurnCoordinator {
       try { this.recent(campaign).add({ player: player_input, narration: c.delivery_text, status: "finalized" }); } catch { /* Continuity degrades; the committed turn does not. */ }
     }
     let participantsAfter: ReturnType<SceneParticipants["retire"]> = [];
-    try { participantsAfter = this.participants(campaign).retire(plan.identity.promoted.flatMap(p => p.participant_id ? [p.participant_id] : [])); }
+    try { participantsAfter = this.participants(campaign).name(plan.identity.provisional.flatMap(p => p.participant_id && p.name ? [{ id: p.participant_id, name: p.name }] : [])); }
     catch { warnings.push("scene_participants"); }
     const now = performance.now();
     const result = { ...c.resultDraft, final_revision: committed.revision, scene_participants: { plan: scene, after: participantsAfter },
@@ -302,7 +302,7 @@ export class TurnCoordinator {
       const plan = measure("commit_preparation", () => prepareCommit({ world: this.world, prepare: proposal => campaign.prepare(proposal), prepared, commands, finalized: this.recent(campaign).finalized(), player_input,
         delivered: delivery.text, scene, base_revision, disclosure_intent: promptIntent, trade_recheck: { diagnostics: authorization.diagnostics, projected }, location_changed: origin !== arrival,
         on_skip: reason => sink?.({ kind: "identity_establishment_skipped", campaign_id: snapshot.campaign_id, base_revision, player_input, reason }) }));
-      if (observer) Object.assign(observer.record.commit, { identity_promotion_count: plan.identity.promoted.length, identity_skipped: !!plan.identity_skipped,
+      if (observer) Object.assign(observer.record.commit, { identity_provisional_count: plan.identity.provisional.length, identity_skipped: !!plan.identity_skipped,
         location_changed_naming_skip: origin !== arrival });
       if (observer) {const portrayal=inspectPackedPortrayal(this.world, projected, context, prompt, observer.record.turn_id, base_revision, player_input, delivery.text);if(portrayal)observer.record.mannerism_portrayal=portrayal;else reliability.increment("shadow_skips");}
       // A deliverable is prepared and checked before committing; publication follows the single commit.

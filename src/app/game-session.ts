@@ -45,6 +45,7 @@ import { playerVisualView, type PlayerVisualView } from "./player-visual-view.js
 import { inventoryUiView } from "./inventory-ui-view.js";
 import { deriveTradeView, tradeOfferRef, TRADE_MESSAGES, type TradeReceipt, type TradeView } from "./trade-offer-view.js";
 import { CampaignValidationError } from "../campaign/validation.js";
+import { mergeConflicts, retireConflicts } from "../campaign/character-repair.js";
 import { PendingConfirmationLog } from "./pending-confirmation-log.js";
 import { PRODUCTION_CONFIRMATION_KINDS, type ConfirmationKinds } from "./confirmation-kinds.js";
 import { CONFIRMATION_MESSAGES, deriveConfirmationView, type ConfirmationView } from "./confirmation-view.js";
@@ -118,6 +119,15 @@ export type ConfirmationReason = "unknown_confirmation" | "stale" | "busy" | "al
 export type ConfirmationOutcome =
   | { readonly ok: true; readonly status: "confirmed" | "cancelled"; readonly changed: boolean; readonly replayed?: true; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly reason: ConfirmationReason; readonly terminal_reason?: string; readonly view: SessionView };
+/**
+ * Block 5B: the result of a human operator REQUESTING an identity repair (retire / merge). A request with ANY hard conflict creates nothing and reports every
+ * conflict (fail closed). A conflict-free request creates exactly one PendingConfirmation (no campaign mutation, no revision change); the operator then
+ * confirms or cancels it through the ordinary confirmation methods.
+ */
+export interface RepairConflictReport { readonly code: string; readonly detail: string }
+export type RepairProposalOutcome =
+  | { readonly ok: true; readonly ref: string; readonly created: boolean; readonly summary?: { readonly rewrites: Readonly<Record<string, number>>; readonly dropped_duplicates: Readonly<Record<string, number>>; readonly notes: readonly string[] }; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly conflicts: readonly RepairConflictReport[]; readonly view: SessionView };
 /** `transcript_error`: the canonical save succeeded but the history append did not (retried at the next save). */
 export type SaveOutcome = { readonly ok: true; readonly saved: SavedCampaign; readonly transcript_error?: true; readonly view: SessionView } | { readonly ok: false; readonly error: AppError };
 /**
@@ -399,7 +409,7 @@ export class GameSession {
   /** The active, still-valid confirmations as the turn pipeline sees them: proposals, never completed acts. */
   #activeProposals(): readonly PendingProposal[] {
     const snapshot = this.#session.campaign.exportSnapshot();
-    return this.#confirmations.active().filter(r => { try { return this.#kinds.get(r.kind)?.invalid_reason(snapshot, r) === undefined; } catch { return false; } })
+    return this.#confirmations.active().filter(r => r.provenance.source !== "operator").filter(r => { try { return this.#kinds.get(r.kind)?.invalid_reason(snapshot, r) === undefined; } catch { return false; } })
       .map(r => ({ kind: r.kind, subject_id: r.subject_id, actor_id: r.actor_id, payload: r.payload }));
   }
   /**
@@ -479,6 +489,37 @@ export class GameSession {
     this.#confirmations.resolve(found.ref, "cancelled", "player_cancelled");
     this.#lastError = undefined; this.#autosave?.notify();
     return { ok: true, status: "cancelled", changed: true, view: this.getView() };
+  }
+  /**
+   * Block 5B: human-invoked identity repair REQUEST. `operation` + explicit ids (never a name, never prose, never a scanner score). The preflight is the same
+   * deterministic analysis that runs again at Confirm. Creates at most one PendingConfirmation (provenance `operator`); mutates nothing.
+   */
+  requestRepair(request: { readonly operation: unknown; readonly character_id: unknown; readonly target_id?: unknown; readonly expected_revision: unknown }): RepairProposalOutcome {
+    const refuse = (code: AppError["code"], message: string, conflicts: readonly RepairConflictReport[] = []): RepairProposalOutcome => ({ ok: false, error: appError(code, { message }), conflicts, view: this.getView() });
+    if (this.#status === "closed") return refuse("session_closed", "The session is closed.");
+    if (this.#status !== "idle" || this.#portraitBusy) return refuse("turn_in_progress", "Wait for the current turn or portrait generation to finish.");
+    const campaign = this.#session.campaign;
+    if (typeof request.expected_revision !== "number" || !Number.isSafeInteger(request.expected_revision) || request.expected_revision !== campaign.revision) return refuse("stale_turn", "The campaign changed since this request was prepared.");
+    const id = (v: unknown) => typeof v === "string" && /^[a-z0-9][a-z0-9_.:-]{0,119}$/.test(v) ? v : undefined;
+    const subject = id(request.character_id), target = id(request.target_id);
+    const kind = request.operation === "retire" ? "retire_character" : request.operation === "merge" ? "merge_character" : undefined;
+    if (!kind || !subject || (kind === "merge_character" && !target) || (kind === "retire_character" && request.target_id !== undefined)) return refuse("invalid_input", "Malformed repair request.");
+    this.#reconcileConfirmations();
+    const snapshot = campaign.exportSnapshot();
+    const analysis = kind === "retire_character" ? { conflicts: retireConflicts(snapshot, subject), summary: undefined } : mergeConflicts(snapshot, subject, target!);
+    const conflicts: RepairConflictReport[] = [...analysis.conflicts];
+    if (kind === "merge_character" && !snapshot.characters.some(c => c.id === target)) conflicts.push({ code: "unknown_character", detail: "target has no campaign record" });
+    const payload = kind === "retire_character" ? { reason: "operator_retired" } : { target_id: target! };
+    // Another active repair already involves either identity: one decision at a time per identity (fail closed, no silent supersede).
+    const involved = new Set([subject, ...(target ? [target] : [])]);
+    const equivalent = this.#confirmations.findActiveEquivalent(kind, subject, payload);
+    if (!equivalent) for (const r of this.#confirmations.active()) if ((r.kind === "retire_character" || r.kind === "merge_character") && (involved.has(r.subject_id) || involved.has(String(r.payload.target_id ?? "")))) conflicts.push({ code: "pending_repair_exists", detail: "another repair request already involves this identity" });
+    if (conflicts.length) return refuse("invalid_input", "That repair cannot be proposed. Nothing was created.", conflicts);
+    if (equivalent) return { ok: true, ref: equivalent.ref, created: false, ...(analysis.summary ? { summary: analysis.summary } : {}), view: this.getView() };
+    const record = this.#confirmations.create({ campaign_id: snapshot.campaign_id, kind, subject_id: subject, actor_id: "nicco", payload, provenance: { source: "operator" }, created_revision: campaign.revision });
+    if (!record) return refuse("invalid_input", "Too many requests are waiting.");
+    this.#autosave?.notify();
+    return { ok: true, ref: record.ref, created: true, ...(analysis.summary ? { summary: analysis.summary } : {}), view: this.getView() };
   }
   #confirmationRefusal(code: AppError["code"], message: string, reason: ConfirmationReason, terminal_reason?: string): ConfirmationOutcome {
     return { ok: false, error: appError(code, { message }), reason, ...(terminal_reason ? { terminal_reason } : {}), view: this.getView() };

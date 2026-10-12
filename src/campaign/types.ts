@@ -60,7 +60,13 @@ export interface CharacterOriginSnapshot {
   /** Verbatim source sentences from delivered narration, bounded. */
   evidence: string[];
 }
-export interface CampaignCharacter { id: string; origin: CampaignOrigin; profile: CharacterProfile; current: CharacterCurrentState; origin_snapshot?: CharacterOriginSnapshot }
+/**
+ * Block 5B (snapshot 7): a RETIRED character is a durable historical identity that is no longer an active world participant. It keeps its id (no
+ * reference dangles), loses its location and is `inactive`; it is excluded from every live target. Retirement is not deletion and is set only by the
+ * human-authorized retire/merge repair commands. `merged_into` names the survivor of a duplicate merge.
+ */
+export interface CharacterRetirement { revision: number; world_minute: number; reason: "operator_retired" | "duplicate_merged"; merged_into?: string }
+export interface CampaignCharacter { id: string; origin: CampaignOrigin; profile: CharacterProfile; current: CharacterCurrentState; origin_snapshot?: CharacterOriginSnapshot; retirement?: CharacterRetirement }
 export type ItemPosition =
   | { kind: "unknown" }
   | { kind: "carried"; character_id: string }
@@ -276,7 +282,7 @@ export interface PlayerCharacterProfile {
   appearance: CharacterAppearance;
 }
 export interface CampaignSnapshot extends CampaignDomains {
-  schema_version: 6; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
+  schema_version: 7; campaign_id: string; dataset_id: string; revision: number; runtime: RuntimeDomainSnapshot;
   /**
    * Item Domain V1 (snapshot 6): the campaign-owned item ID allocator, the sequence number create_item assigns next. Advanced only
    * inside the same atomic preparation that persists the item, so rejected, failed or no-op proposals never consume an ID.
@@ -337,6 +343,9 @@ export interface MannerismLearning {
 /** Commands are shared by future manual and model proposals, never raw mutable state. */
 export type CampaignCommand =
   | { kind: "register_character"; character: CampaignCharacter }
+  /** Block 5B: human-authorized identity repair (Class C, confirmed through a PendingConfirmation). Absent from every model vocabulary. */
+  | { kind: "retire_character"; character_id: string; reason: CharacterRetirement["reason"] }
+  | { kind: "merge_characters"; source_id: string; target_id: string }
   | { kind: "set_profile"; character_id: string; profile: CharacterProfile }
   | { kind: "set_condition"; character_id: string; conditions: string[]; presentation?: string; status?: NonNullable<CharacterCurrentState["status"]> }
   | { kind: "move_character"; character_id: string; location_id: string }

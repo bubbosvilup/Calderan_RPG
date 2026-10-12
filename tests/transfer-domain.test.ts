@@ -43,7 +43,7 @@ for (const [mode, owner, holder, recipient, finalOwner] of [
   assert.equal(hasItem(s, holder, ID), false); assert.equal(itemAt(s, ID, "test_room"), false);
   assert.ok(inventoryItems(s, recipient).some(i => i.id === ID)); assert.ok(!inventoryItems(s, holder).some(i => i.id === ID));
   const loaded = decodeSave(serializeSave(createSaveFile(s, f.world, "2026-10-10T12:00:00.000Z"), f.world), f.world).snapshot;
-  assert.equal(loaded.schema_version, 6); assert.deepEqual(loaded.items.find(i => i.id === ID), after);
+  assert.equal(loaded.schema_version, 7); assert.deepEqual(loaded.items.find(i => i.id === ID), after);
 });
 for (const [mode, owner, holder, recipient] of [
   ["gift", "brenna", "nicco", "maren"], ["lend", "brenna", "nicco", "maren"],

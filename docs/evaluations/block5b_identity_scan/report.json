@@ -1,0 +1,34 @@
+{
+  "scanner": "identity_fork_scanner_v1",
+  "read_only": true,
+  "saves_scanned": 2,
+  "saves_skipped": 0,
+  "total_findings": 0,
+  "reports": [
+    {
+      "source": "saves/d04-context/lifecycle/turn_fixture/save.json",
+      "mode": "raw_unvalidated",
+      "scanner": "identity_fork_scanner_v1",
+      "read_only": true,
+      "campaign_id": "turn_fixture",
+      "revision": 1,
+      "characters_considered": 0,
+      "pairs_examined": 0,
+      "findings": [],
+      "note": "Diagnostic only. Same name alone is not evidence. Confidence is not an authority. No repair was performed or proposed."
+    },
+    {
+      "source": "docs/evaluations/item-sprite-smoke-assets/turn_fixture/save.json",
+      "mode": "raw_unvalidated",
+      "scanner": "identity_fork_scanner_v1",
+      "read_only": true,
+      "campaign_id": "turn_fixture",
+      "revision": 7,
+      "characters_considered": 0,
+      "pairs_examined": 0,
+      "findings": [],
+      "note": "Diagnostic only. Same name alone is not evidence. Confidence is not an authority. No repair was performed or proposed."
+    }
+  ],
+  "skipped": []
+}

@@ -195,7 +195,7 @@ test("P17: save then load preserves membership, NPC+ promotion, the same charact
   const card = cardOf(loaded.session, "Brenna");
   assert.deepEqual([card.ref, card.character_capabilities.tier, card.household, card.npc_plus, card.character_capabilities.can_promote_to_npc_plus], [ref, "npc_plus", true, true, false]);
   const snap = (await deps.repository.loadCampaign(id)).campaign.exportSnapshot();
-  assert.equal(snap.schema_version, 6, "snapshot schema is unchanged (no rite field was added)");
+  assert.equal(snap.schema_version, 7, "snapshot schema is unchanged (no rite field was added)");
   assert.ok(!/rite/i.test(JSON.stringify(snap.premium_characters)) && !/rite/i.test(JSON.stringify(snap.households)));
 });
 test("P20: the action needs no Narrator or Controller call (the coordinator is never invoked)", async () => {

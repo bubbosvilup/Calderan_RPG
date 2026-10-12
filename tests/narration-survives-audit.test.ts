@@ -76,7 +76,7 @@ const CORPUS: readonly Case[] = [
     check: c => assert.deepEqual(c.exportSnapshot().characters.find(x => x.id === DELL)!.current.conditions, ["minor_injury"]) },
   // ---- naming
   { id: "naming", setup: () => real(MARKET), prelude: [{ input: "*approaches the slaver*", narration: "A lean slaver leans against a post by the back cages." }],
-    input: "What's your name?", narration: '"Oswin," the slaver says, spitting into the dirt.', check: (_c, r) => assert.deepEqual(r.identity?.promoted.map(p => p.name), ["Oswin"]) },
+    input: "What's your name?", narration: '"Oswin," the slaver says, spitting into the dirt.', check: (_c, r) => assert.deepEqual(r.identity?.provisional.map(p => p.name), ["Oswin"]) },
   // ---- purchase
   // Actual Offer V1: a sale is first an OFFER; the quote turn is valid narration, and the offer is recorded without paying or transferring anything.
   { id: "purchase_offer", setup: () => real(MARKET, [{ kind: "register_character", character: { id: BRENNA, origin: { kind: "created" }, profile: { name: "Brenna", age: { kind: "exact", years: 29 } }, current: { current_location: MARKET, status: "active" } } }, { kind: "set_legal_status", character_id: BRENNA, status: "enslaved", holder_id: "korvin" }]),

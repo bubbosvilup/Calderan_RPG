@@ -107,7 +107,7 @@ test("log: refs are opaque and unique; resolve is once-only; the dirty flag foll
 });
 test("save schema 6: a v5 file migrates losslessly; a v5 file already carrying the block is malformed; an older build refuses v6", () => {
   const v5 = { format: "caldrevan_campaign_save", schema_version: 5, campaign_id: "x", snapshot: {} };
-  assert.deepEqual(JSON.parse(JSON.stringify(migrateSave(v5))), { ...v5, schema_version: 6 });
+  assert.deepEqual(JSON.parse(JSON.stringify(migrateSave(v5))), { ...v5, schema_version: 7 });
   assert.throws(() => migrateSave({ ...v5, interaction_metadata: { authority: "interaction_metadata", pending_confirmations: [] } }), (e: unknown) => e instanceof CampaignSaveError && e.code === "migration_failed");
   const v6 = { ...v5, schema_version: 6 };
   assert.throws(() => migrateSave(v6, 5), (e: unknown) => e instanceof CampaignSaveError && e.code === "unsupported_version", "a build that stops at schema 5 never silently drops the block");
@@ -132,7 +132,7 @@ test("creation: a finalized no-op turn creates a pending record WITHOUT a revisi
       await reloaded.session.shutdown({ discard_unsaved: true });
     }
     const file = JSON.parse(await readFile(join(h.dir, "turn_fixture", "save.json"), "utf8")) as { schema_version: number; interaction_metadata: { authority: string; pending_confirmations: { ref: string; status: string }[] } };
-    assert.equal(file.schema_version, 6);
+    assert.equal(file.schema_version, 7);
     assert.equal(file.interaction_metadata.authority, "interaction_metadata");
     assert.deepEqual(file.interaction_metadata.pending_confirmations.map(r => [r.ref, r.status]), [[card.ref, "pending"]]);
   } finally { await h.session.shutdown({ discard_unsaved: true }); await h.cleanup(); }

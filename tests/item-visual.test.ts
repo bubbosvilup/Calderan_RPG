@@ -116,7 +116,7 @@ test("Ready asset and visual identity survive schema-6 saves and retained-save o
   const f = await fixture(); f.apply(create); const jobs = new ItemSpriteJobs(f.campaign, { reviewer, generator: new Generator(), store: f.store }); jobs.request(ID); await jobs.settled();
   const snapshot = f.campaign.exportSnapshot(), saved = createSaveFile(snapshot, f.world, "2026-10-09T12:00:00.000Z");
   const loaded = decodeSave(serializeSave(saved, f.world), f.world).snapshot;
-  assert.equal(loaded.schema_version, 6); assert.deepEqual(loaded.items, snapshot.items);
+  assert.equal(loaded.schema_version, 7); assert.deepEqual(loaded.items, snapshot.items);
   const sprite = f.item().sprite; assert.equal(sprite?.status, "ready"); if (sprite?.status !== "ready") return;
   assert.ok(await f.store.read(snapshot.campaign_id, ID, sprite.asset_ref));
   const repo = new FileCampaignRepository(f.world, f.root); await repo.saveCampaign(f.campaign);

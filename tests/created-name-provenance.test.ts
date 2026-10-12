@@ -8,6 +8,7 @@ import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context-builder.j
 import { establishNames } from "../src/turn/name-establishment.js";
 import { RecentConversation, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { applyAuthorized } from "./provisional-helper.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 
 /**
@@ -25,8 +26,7 @@ const fresh = (location = LR, extra: readonly CampaignCommand[] = []) => {
 const at = (player: string, narration: string, location = LR): RecentExchange => ({ player, narration, status: "finalized", location_id: location });
 function establish(c: CampaignState, recent: readonly RecentExchange[]) {
   const r = establishNames(recent, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision);
-  c.apply({ expected_revision: c.revision, commands: [...r.commands] });
-  return r;
+  return applyAuthorized(c, r);
 }
 const roundTrip = (c: CampaignState) => CampaignState.restore(world, decodeSave(serializeSave(createSaveFile(c.exportSnapshot(), world, "2026-10-07T12:00:00.000Z"), world), world).snapshot);
 const byName = (c: CampaignState, name: string) => c.exportSnapshot().characters.find(x => x.profile.name === name)!;
@@ -48,7 +48,7 @@ const ANSWER = at("name's nicco, i'm the keeper of the heartstone, what about yo
 test("promoted self-disclosed Mira: provenance survives RecentConversation eviction and save/reload, bounded and evidence-preserving", () => {
   const c = fresh();
   const r = establish(c, [WOMAN, ANSWER]);
-  assert.deepEqual(r.promoted.map(p => p.name), ["Mira"]);
+  assert.deepEqual(r.provisional.map(p => p.name), ["Mira"]);
   const mira = byName(c, "Mira");
   assert.equal(mira.profile.name_source, "self_disclosed");
   assert.ok(mira.origin_snapshot!.evidence.includes('Mira: "Mira."'), "existing origin evidence preserved");
@@ -76,7 +76,7 @@ test("late-named acquired woman: set_profile records self-disclosure on the same
   const before = c.exportSnapshot().characters.find(x => x.id === woman.id)!;
   const history = [at("*carries her to the sofa*", "*The woman lies on the sofa, burning with fever.*"), ANSWER];
   const r = establish(c, history);
-  assert.deepEqual([r.promoted, r.named.map(n => [n.character_id, n.name])], [[], [[woman.id, "Mira"]]]);
+  assert.deepEqual([r.provisional, r.named.map(n => [n.character_id, n.name])], [[], [[woman.id, "Mira"]]]);
   const after = c.exportSnapshot().characters.find(x => x.id === woman.id)!;
   assert.deepEqual([after.profile.name, after.profile.name_source, after.profile.sex], ["Mira", "self_disclosed", before.profile.sex]);
   assert.deepEqual(after.origin_snapshot, before.origin_snapshot, "origin snapshot stays immutable");
@@ -107,7 +107,7 @@ test("unknown provenance says nothing: Nicco's own introduction, weak names, old
   // Nicco introducing someone is not a third party (and never self-disclosure): unknown.
   const nicco = fresh();
   const r = establish(nicco, [at("*introduces her*", '"This is Sovela," Nicco says. Sovela coughs into her sleeve.')]);
-  assert.deepEqual(r.promoted.map(p => p.name), ["Sovela"]);
+  assert.deepEqual(r.provisional.map(p => p.name), ["Sovela"]);
   assert.equal(byName(nicco, "Sovela").profile.name_source, undefined);
   const niccoLine = characterLine(promptAfterEviction(nicco, [], "Sovela").prompt, "Sovela");
   assert.ok(niccoLine && !ALL.some(s => niccoLine.includes(s)), niccoLine);

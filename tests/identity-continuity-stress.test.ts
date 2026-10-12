@@ -13,6 +13,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
+import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import { collect, metadata } from "./turn-fixtures.js";
 
 /**
@@ -60,24 +61,25 @@ test("naming while Nicco moves: the person may be left behind, so nobody is prom
   assert.deepEqual(r.identity?.skipped, [{ name: "Tomas", reason: "location_changed" }]);
   assert.deepEqual([named(c, "Tomas").length, where(c, "nicco")], [0, LR], "no durable character in a possibly wrong place; the move still commits");
 });
-test("naming on a stationary turn after arrival promotes at the place where it happened", async () => {
+test("naming on a stationary turn after arrival reports the provisional person at the place where it happened (AUTH-2: nothing persisted)", async () => {
   const c = campaign(), step = harness(c);
   await step("/go calderan_slave_market", "Nicco walks to the Slave Market. A lean slaver leans by the back cages.");
   const r = await step("What's your name?", '"Oswin," the slaver says, spitting into the dirt.');
-  assert.deepEqual(r.identity?.promoted.map(p => p.name), ["Oswin"]);
-  assert.equal(where(c, named(c, "Oswin")[0]!.id), MARKET);
+  assert.deepEqual(r.identity?.provisional.map(p => p.name), ["Oswin"]);
+  assert.deepEqual(r.identity?.provisional.map(p => p.location_id), [MARKET]);
+  assert.equal(named(c, "Oswin").length, 0, "no Campaign Character from narration");
 });
 test("canonical NPC names are never promoted as narrator-created people", async () => {
   const c = campaign(MARKET), step = harness(c);
   const r = await step("What's your name?", '"Korvin," the slaver says.');
-  assert.deepEqual([r.identity?.promoted, named(c, "Korvin").length], [[], 0]);
+  assert.deepEqual([r.identity?.provisional, named(c, "Korvin").length], [[], 0]);
 });
-test("promotion evidence in quoted dialogue: an ellipsis inside speech is not a sentence break (H1 splitter fix)", async () => {
+test("provisional evidence in quoted dialogue: an ellipsis inside speech is not a sentence break (H1 splitter fix)", async () => {
   const c = campaign(MARKET), step = harness(c);
   await step("*approaches the slaver*", "A lean slaver leans against a post by the back cages.");
-  await step("What's your name?", '"Oswin," the slaver says. "Worked in the mines… till they shut. Now this."');
-  const [oswin] = named(c, "Oswin"); assert.ok(oswin);
-  const background = oswin.origin_snapshot?.established.background?.map(b => b.text) ?? [];
+  const r = await step("What's your name?", '"Oswin," the slaver says. "Worked in the mines… till they shut. Now this."');
+  const oswin = r.identity?.provisional.find(p => p.name === "Oswin"); assert.ok(oswin);
+  const background = oswin.established.background?.map(b => b.text) ?? [];
   assert.ok(background.includes("Worked in the mines… till they shut."), JSON.stringify(background));
   assert.ok(!background.includes("Worked in the mines…"), "no fragment claim cut at the ellipsis");
 });
@@ -110,7 +112,7 @@ test("unnamed purchased person names herself after a scene change: same ID, lega
 test("a present persistent person is never re-promoted when narration repeats her name", async () => {
   const M = "campaign_character_maren", c = campaign(SQUARE, [person(M, "Maren", SQUARE)]), step = harness(c);
   const r = await step("What's your name?", '"Maren," she says again.');
-  assert.deepEqual([r.identity?.promoted, named(c, "Maren").map(x => x.id)], [[], [M]]);
+  assert.deepEqual([r.identity?.provisional, named(c, "Maren").map(x => x.id)], [[], [M]]);
 });
 test("a person who stays behind and is revisited keeps one record and one location", async () => {
   const T = "campaign_character_tomas", c = campaign(SQUARE, [person(T, "Tomas", SQUARE, "male")]), step = harness(c);
@@ -122,19 +124,21 @@ test("a person who stays behind and is revisited keeps one record and one locati
 });
 
 // ------------------------------------------------------------------------------------------------ identity skip diagnostic
-test("an identity preparation failure skips promotion, still commits the turn, and is observable (result + debug sink)", async () => {
-  const c = campaign(MARKET), records: TurnDebugRecord[] = [], step = harness(c, r => records.push(r));
+test("an identity preparation failure skips the identity step, still commits the turn, and is observable (result + debug sink)", async () => {
+  const c = campaign(LR), records: TurnDebugRecord[] = [], step = harness(c, r => records.push(r));
+  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies on the sofa."], location_id: LR, trigger: "purchase_unnamed_subject",
+    promoted_revision: c.revision + 1, world_minute: c.exportSnapshot().runtime.scene.world_time.world_minute });
+  c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }] });
+  await step("*lets her rest on the sofa*", "*The tall woman lies on the sofa, her breathing shallow and feverish.*\n\nWhat do I call you.");
   const prepare = c.prepare.bind(c);
-  c.prepare = (input: unknown) => {                                     // test seam: fail only the identity re-preparation
+  c.prepare = (input: unknown) => {                                     // test seam: fail only the identity re-preparation (late naming of an existing person)
     const commands = (input as { commands: CampaignCommand[] }).commands;
-    if (commands.some(x => x.kind === "register_character" && x.character.origin_snapshot?.trigger === "name_established")) throw new Error("injected identity failure");
+    if (commands.some(x => x.kind === "set_profile")) throw new Error("injected identity failure");
     return prepare(input);
   };
-  const before = c.revision;
-  const r = await step("/wait 5", 'A lean slaver straightens. "I\'m Oswin," he says.');
-  assert.deepEqual([r.identity?.promoted, r.identity_skipped?.reason], [[], "injected identity failure"]);
-  assert.equal(c.revision, before + 1, "the rest of the turn (the wait) committed");
-  assert.equal(named(c, "Oswin").length, 0);
+  const r = await step("name's nicco, what about you?", "*Her eyes stay half-open, fixed on his face.*\n\nMira.\n\n*She says it without ceremony.*");
+  assert.deepEqual([r.identity?.provisional, r.identity_skipped?.reason], [[], "injected identity failure"]);
+  assert.equal(c.exportSnapshot().characters.find(x => x.id === woman.id)!.profile.name, undefined, "the failed naming committed nothing");
   assert.deepEqual(records.filter(x => x.kind === "identity_establishment_skipped").map(x => x.kind === "identity_establishment_skipped" ? x.reason : ""), ["injected identity failure"]);
 });
 

@@ -90,7 +90,15 @@ One position per item (`unknown`, `carried`, `equipped`, `stored(location_id)`);
 ## 8c. Pending confirmations and manumission (block 5A)
 
 - **Implemented:** a generic `PendingConfirmation` mechanism (interaction metadata in the save file, schema 6; confirmation card in the Play page; `POST /api/confirmation/confirm|cancel`). Manumission is its first and only production kind: the player's words ("I hereby free you, Maren.") create a card, nothing changes in the world until the player presses Confirm (zero provider calls, revalidated at that moment). The Narrator sees the act as a proposed action awaiting confirmation, never as a completed one, and the audit rejects prose that claims it as done. See [Architecture](ARCHITECTURE.md) (Class C versus PendingConfirmation) and [Persistence](architecture/PERSISTENCE.md).
-- **Not changed:** Actual Offer Accept and NPC+ Promote keep their own explicit actions. The FREE grammar is unchanged (bare "I free Maren." is not recognised). AUTH-2 (permanent narration-created characters) is OPEN, block 5B.
+- **Not changed:** Actual Offer Accept and NPC+ Promote keep their own explicit actions. The FREE grammar is unchanged (bare "I free Maren." is not recognised). AUTH-2 is CLOSED in block 5B (section 8d).
+
+## 8d. Character lifecycle and identity repair (block 5B)
+
+- **Implemented:** AUTH-2 closed. Narration (and a name it establishes) creates only a PROVISIONAL, scene-local person; a persistent `CampaignCharacter` is created only inside an explicitly authorized action (today: the person Actual Offer Accept, which materializes the same subject atomically with the purchase). RETIRED is a third lifecycle state (snapshot schema 7, save file schema 7: `CampaignCharacter.retirement`). Lifecycle is not an NPC tier.
+- **Product consequences (accepted):** a named narrated stranger no longer appears in the NPC drawer or in the participants list as a campaign NPC; they are remembered only while the recent-exchange window holds them and are forgotten on reload (PER-2 is separate and OPEN); they cannot be promoted to NPC+ until they are persistent.
+- **Repair tooling (operator only):** `retire_character` and `merge_character` through `PendingConfirmation` (`POST /api/repair/request`, then the ordinary confirm/cancel). Preconditions fail closed (player, canonical, dead, NPC+, household, legal state, items, funds, active offers; merge also names, species, sex, age, location, relationships, equipment slots). Retired characters are excluded from every live target.
+- **Diagnostics:** read-only identity-fork scanner (`npm run build && node .build/src/dev/scan-identity-forks.js --out <dir> <saves>`). Same name alone is not evidence; every finding says HUMAN REVIEW REQUIRED.
+- **Not changed:** Actual Offer and NPC+ Promote keep their own explicit actions; AUTH-1 stays CLOSED; no automatic duplicate repair exists.
 
 ## 9. Time and environment
 
@@ -106,7 +114,7 @@ Snapshot schema **6**; save file schema **6** (older save schemas migrate on loa
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run (uncommitted block 5A on top of `eb05734`): **3425 tests, 0 failed** (3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run (uncommitted block 5B on top of `63c4347`): **3460 tests** (3425 at block 5A, 3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 Companion movement (block 3): who MAY follow Nicco is derived per turn by `followCandidates` (`src/turn/follow-candidates.ts`: active NPC+, held person, household member, person invited by name this turn); it is never persisted and never moves anyone by itself. A candidate moves only through a completed narrated follow of that same person, or, for a held person the player names and leads ("Alright Maren, ..., let's go home"), through the deterministic escort committed in the same atomic batch as Nicco's travel. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
 

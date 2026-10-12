@@ -26,7 +26,7 @@ export function referencedCharacters(world: WorldStore, snapshot: DeepReadonly<C
     candidates.push({ id: e.id, name: e.name, names: [e.name, ...e.aliases] });
   }
   for (const c of snapshot.characters) {
-    if (c.origin.kind !== "created" || !c.profile.name || candidates.some(x => x.id === c.id)) continue;
+    if (c.origin.kind !== "created" || c.retirement || !c.profile.name || candidates.some(x => x.id === c.id)) continue;
     candidates.push({ id: c.id, name: c.profile.name, names: [c.profile.name, ...(c.profile.aliases ?? [])] });
   }
   // Phrase -> every character it could denote (full names/aliases, and distinctive single tokens). Built over ALL candidates,

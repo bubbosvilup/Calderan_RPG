@@ -66,7 +66,7 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 | 1 | PIPE-1 / CTX-2 | P1 | ~~Unaudited Narrator draft streamed to the browser~~ FIXED (block 4); CTX-2 residual: output-side leak check on the final text |
 | 2 | AUTH-1 | P1 | ~~Manumission from regex on raw input, no confirmation~~ FIXED (block 5A): the words create a PendingConfirmation, only the player's Confirm commits |
 | 3 | NARR-1 (new) | ~~P2 high~~ FIXED (block 4) | Narrator 512-token cap (was): length truncation is a lost, non-retryable turn; `finish_reason` not recorded; rate unmeasured |
-| 4 | AUTH-2 | P1 | Permanent character creation from narration, no retire or merge |
+| 4 | AUTH-2 | ~~P1~~ | ~~Permanent character creation from narration, no retire or merge~~ **FIXED (block 5B)** |
 | 5 | ARCH-1 (new) | P2 high | Optional intelligence coupled to the authoritative core (absorbs REV-1, PIPE-3, REV-3) |
 | 6 | REV-2 | ~~P2~~ FIXED (block 4) | Turn idempotency key and expected revision |
 | 7 | PIPE-2 | ~~P2~~ FIXED (block 4) | Post-commit publication can throw after the commit |
@@ -124,7 +124,7 @@ Class A low impact, no confirmation. Class B engine-verifiable, no confirmation 
 | 4 | AUTH-1 | P1 | ~~Manumission applied from regex on raw input, no confirmation~~ FIXED (block 5A) | M |
 | 5 | IMG-1 | P1 | Portrait minor gate fail-open for unknown age | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — IMG-1 (age no longer gates portraits, user decision 2026-10-12). Live certification still to do. Audit text above kept as historical.]**
 | 6 | IMG-2 | P1 | Image batches uncancellable; abort mapped to a retryable error | M |
-| 7 | AUTH-2 | P1 | Character registration/naming from narration is permanent (no retire/merge) | M |
+| 7 | AUTH-2 | ~~P1~~ | ~~Character registration/naming from narration is permanent (no retire/merge)~~ **FIXED (block 5B)** | M |
 | 8 | ID-1 | P1 | Movement divergence can fork a person into two records | M (with MOV-1) | **[Status 2026-10-12, consolidation block 3: FIXED offline — the movement divergence is closed by MOV-1/MOV-2 and a new guard: a name that already belongs to a living persistent person elsewhere never creates a second record (`persistent_identity_elsewhere`). Audit text kept as history.]**
 | 9 | ECO-1 | P2 | Gold-only settlement vs silver-denominated narrator anchors | M-L |
 | 10 | TRD-2 | P2 | Goods offers authorized on the undelivered draft | S | **[Status 2026-10-12, consolidation block 1: FIXED offline — TRD-2 (offers rechecked on delivered text). Live certification still to do. Audit text above kept as historical.]**
@@ -167,7 +167,7 @@ Per-action behaviour:
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
 | AUTH-1 | P1 | ~~`manumit` was derived from a regex over raw player input and joined the turn batch.~~ **FIXED (block 5A).** The regex now only *recognises* an interpretation; the turn creates a `PendingConfirmation` (interaction metadata, save schema 6). The legal state changes only when the player presses Confirm (`POST /api/confirmation/confirm`, ref + `expected_revision`), a commit with zero provider calls. No semantic path (Narrator, Controller, regex, audit, repair) emits `manumit` or `set_legal_status` directly. Residual by design: the FREE grammar is unchanged and does not recognise bare "I free Maren." (no 'you'). | ~~Move to an explicit UI action~~ done | M |
-| AUTH-2 | P1 | `establishNames` registers characters from delivered narration (`name-establishment.ts:42-80`). Characters are never deletable (no remove command), so a false positive is permanent and flows into households and legal state. | Add an engine-only, player-confirmed `retire_character`/merge command and a provisional-name quarantine state. | M |
+| AUTH-2 | ~~P1~~ | ~~`establishNames` registers characters from delivered narration.~~ **FIXED (block 5B).** Lifecycle PROVISIONAL / PERSISTENT / RETIRED (not an NPC tier). Narration and a narration-established name now produce only a scene-local `ProvisionalPerson`; the sole producers of a persistent created character are the person Actual Offer Accept (same subject, atomic with the purchase) and the engine's canonical materialization. `retire_character` / `merge_characters` exist as human-invoked, PendingConfirmation-gated repairs (`requestRepair`), and a read-only fork scanner finds suspicious pairs. Residual: PER-2/ID-2 (provisional people and scene participants are lost on reload), no automatic repair by design, no `materialize_character` confirmation kind yet (reserved, no real persistence need), duplicates already saved by older builds still need a human scan and merge. | ~~Add retire/merge~~ done | M |
 | AUTH-3 | P2 | Literal `"nicco"` appears 212 times in 60 non-dev files, including authority code (`item-transfer.ts:20`, `command-authorizer.ts`, `person-offers.ts`, `person-transactions.ts`), against one `activePlayerCharacterId()`. | One `playerId(snapshot)`; lint test forbidding new literals outside canon/opening. | M |
 | REV-1 | P2 | Item-sprite and portrait metadata commits, mannerism bookkeeping and reflection bump the authoritative revision between turns (`item-sprite-jobs.ts`, `game-session.ts:199`). UI clicks rendered earlier go stale; the "TRADE COMPLETED" note keys on a revision-count heuristic (`trade-notes.ts:36`). | Move derived/media state out of the revision stream, or batch it; key the completed-note on the settlement revision plus a consumed flag. | M-L |
 | REV-2 | P2 | `/api/turn` has no idempotency key or `expected_revision`; a retry after a dropped connection can run a second, different turn (`server.ts:192-215`). Streaming aborts the turn on `res.close`. | Client `turn_key` + `expected_revision`; return the stored outcome for a repeated key. | M |
@@ -315,7 +315,7 @@ Audit B domain 3. **Confirmed:** the architecture is explicit and player-authori
 
 ## 8. Persistence and schemas
 
-Audit A domain 5. Snapshot schema 6, save file schema 6. Atomic write (temp + fsync + rename + directory fsync, Windows skips directory fsync), `previous` copy, rolling checkpoint backups, lock with heartbeat, 16 MB cap, soft delete.
+Audit A domain 5. Snapshot schema 7, save file schema 7 (block 5B). Atomic write (temp + fsync + rename + directory fsync, Windows skips directory fsync), `previous` copy, rolling checkpoint backups, lock with heartbeat, 16 MB cap, soft delete.
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |

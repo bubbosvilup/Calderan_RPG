@@ -43,7 +43,7 @@ export function partnerNameConflict(i: { readonly context: TurnContext; readonly
   const canonical_name = narratorIdentityGate(i.context)?.selfDisclosureName(partner);
   const location_id = i.snapshot.runtime.scene.player_location;
   const reading = readScene([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", ...(location_id ? { location_id } : {}) }], i.context, i.world,
-    { campaign_names: new Set(i.snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
+    { campaign_names: new Set(i.snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
   // Only the actor's OWN self-introduction in this exchange: a name another person presents ("That's Brenna") is never the partner's.
   const own = reading.persons.filter(p => p.name && !p.character_id && p.name !== canonical_name
     && p.introductions.some(x => x.exchange === reading.latest) && p.introductions.filter(x => x.exchange === reading.latest).every(x => x.kind === "self"));

@@ -63,7 +63,7 @@ test("P1/P8/P9: Nicco is not an NPC+: no premium record, no promotion, no NPC+ l
   assert.doesNotMatch(JSON.stringify(profile), /NPC\+|premium|household/i);
   const before = await snapshotOf(repository, s.campaignId);
   assert.ok(!before.premium_characters.some(p => p.character_id === "nicco")); assert.ok(!before.characters.some(c => c.id === "nicco"));
-  assert.equal(before.schema_version, 6);
+  assert.equal(before.schema_version, 7);
   assert.ok(!s.getPlayUiView().household.some(g => g.members.some(m => m.name === "Nicco")), "Nicco is not a household member card");
   assert.equal((await generate(s, "avatar")).ok, true);
   const after = s.getView(); void after;
@@ -72,7 +72,7 @@ test("P1/P8/P9: Nicco is not an NPC+: no premium record, no promotion, no NPC+ l
   assert.ok(!snap.characters.some(c => c.id === "nicco"));
   assert.equal(snap.portraits?.length, 1); assert.equal(snap.portraits![0]!.character_id, "nicco");
   const raw = JSON.parse(await fs.readFile(join(root, "campaigns", s.campaignId, "save.json"), "utf8"));
-  assert.equal(raw.schema_version, 6, "save schema 6 (block 5A); inventory UI adds no field"); assert.equal(raw.snapshot.schema_version, 6);
+  assert.equal(raw.schema_version, 7, "save schema 6 (block 5A); inventory UI adds no field"); assert.equal(raw.snapshot.schema_version, 7);
 });
 
 test("P2/P3/P4: Avatar, Full Body and Gallery capabilities; generation runs through the existing batch pipeline", async () => {

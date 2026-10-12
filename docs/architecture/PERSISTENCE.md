@@ -1,6 +1,6 @@
 # Persistence (Save/Load v1; originally Phase 1J)
 
-Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-11. **Current versions: save file schema 5, snapshot schema 6** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
+Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-11. **Current versions: save file schema 7, snapshot schema 7** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
 
 > ## Save/Load v1 (current): persistent campaigns
 >
@@ -12,7 +12,7 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 >
 > ```text
 > saves/campaigns/<campaign_id>/
->   save.json              current slot (save format 5, snapshot 6)
+>   save.json              current slot (save format 7, snapshot 7)
 >   save.previous.json     the preceding successful save (rotated by every save)
 >   backups/               up to 5 rolling checkpoints r<revision>-<timestamp>.json (save JSON only: no images, no transcript)
 >   transcript.jsonl       campaign history (narrative, never canonical)
@@ -98,6 +98,10 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 ## Pending confirmations (block 5A, save file schema 6)
 
 Save file schema is **6** (snapshot schema stays 6). The envelope gains the optional top-level `interaction_metadata` (`{authority:"interaction_metadata", pending_confirmations:[...]}`), written in the same atomic rename as the snapshot and **not** part of `CampaignState`: creating, cancelling or invalidating a record never changes the semantic revision (confirming one commits a normal revision). Record: `ref` (24 hex), `kind`, `subject_id`, `actor_id`, flat bounded `payload`, `provenance` (`source`, `turn_key`, `turn_id`), `created_revision`, `status` (`pending|confirmed|cancelled|invalidated`), `terminal_reason`, `resolved_revision`. Active records are never pruned (parse ceiling 256, creation ceiling 64); only the newest 32 terminal records are kept. Migration 5 → 6 changes only the version and rejects a v5 file that already carries `interaction_metadata`. Load is tolerant: a malformed, duplicate, unknown-kind or impossible record is dropped and never makes the save unloadable; the game session reconciles active records against the loaded state (subject renamed keeps the binding because it is by ID; subject no longer enslaved invalidates). Autosave and quit-save treat unsaved pending changes as dirty.
+
+## Character lifecycle (block 5B, snapshot and save file schema 7)
+
+Snapshot and save file schema are **7**. The only new durable field is the optional `CampaignCharacter.retirement` (`{revision, world_minute, reason: "operator_retired" | "duplicate_merged", merged_into?}`); a character is RETIRED exactly when it is present. Validation: only a `created` character can carry it, `current.status` must be `inactive` with no location, `revision` cannot exceed the snapshot revision, `merged_into` is required for `duplicate_merged` and forbidden otherwise, must resolve and cannot be the character itself. Migration 6 -> 7 changes only the version (snapshot step `migrateSnapshot6to7`, chained 4 -> 5 -> 6 -> 7 for older files); a v6 snapshot that already carries `retirement` is malformed. PROVISIONAL people are **never saved** (they are not part of the snapshot, and reload never materializes one); making them durable across reload is PER-2 and a separate decision. Pending `retire_character` / `merge_character` records live in `interaction_metadata` like any other pending confirmation (provenance `operator`).
 
 ## Trade offers (Actual Offer V1)
 

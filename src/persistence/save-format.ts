@@ -5,7 +5,7 @@ import { dataSchema, freezeSnapshot, validateId } from "../campaign/validation.j
 import { requireCurrentSnapshotVersion, validateCampaignSnapshot } from "../campaign/snapshot-validation.js";
 import { CampaignSaveError, saveError } from "./errors.js";
 import { MAX_SAVE_BYTES, parseSaveJson } from "./strict-json.js";
-import { migrateSave, migrateSnapshot4to5, migrateSnapshot5to6, CURRENT_SAVE_VERSION } from "./save-migrations.js";
+import { migrateSave, migrateSnapshot4to5, migrateSnapshot5to6, migrateSnapshot6to7, CURRENT_SAVE_VERSION } from "./save-migrations.js";
 import { defaultPlayerCharacters } from "../campaign/player-character.js";
 import { assessCanonCompatibility, canonReferences, type CanonCompatibilityReport, type CanonReference } from "./canon-compatibility.js";
 import { parseCampaignSnapshot } from "../campaign/validation.js";
@@ -31,7 +31,7 @@ export interface ContinuityExchange { player: string; narration: string; locatio
 export interface SaveContinuity { authority: "non_authoritative"; revision: number; recent: ContinuityExchange[] }
 export const CONTINUITY_LIMITS = Object.freeze({ exchanges: 12, text: 8000, total: 20_000 });
 export interface CampaignSaveFile {
-  format: "caldrevan_campaign_save"; schema_version: 6;
+  format: "caldrevan_campaign_save"; schema_version: 7;
   campaign_id: string; canonical_dataset_id: string;
   metadata: SaveMetadata;
   snapshot: CampaignSnapshot;
@@ -68,7 +68,7 @@ const displayName = (value: unknown): string => {
 };
 export const SCENARIO_ID = /^[a-z][a-z0-9_]{0,40}(?:\.[a-z0-9_]{1,40}){0,4}$/;
 /** Shape first; snapshot validation has its own schema/version/reference boundary. Continuity is checked separately (tolerant). */
-const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(6, 6), campaign_id: validateSaveId,
+const envelope = object({ format: choice("caldrevan_campaign_save"), schema_version: integer(7, 7), campaign_id: validateSaveId,
   canonical_dataset_id: text, metadata: object({ saved_at: timestamp, created_at: optional(timestamp), engine_version: optional(bounded(/^[0-9A-Za-z.+_-]{1,40}$/)),
     display_name: optional(displayName), save_reason: optional(choice("create", "manual", "autosave", "quit")), scenario_id: optional(bounded(SCENARIO_ID)) }),
   snapshot: (input: unknown) => input, canon_compatibility: choice("strict", "references"), canon_references: optional(referenceList), continuity: optional((input: unknown) => input), turn_receipts: optional((input: unknown) => input), interaction_metadata: optional((input: unknown) => input) });
@@ -106,9 +106,10 @@ export function validateSaveFileWithReport(input: unknown, world: WorldStore, ex
     // Snapshot-level migration inside the current envelope (Player Character Profile V1: snapshot 4 -> 5, world-aware).
     // Item Domain V1: snapshot 5 -> 6 (item ID allocator), chained after 4 -> 5.
     const rawSnapshotVersion = (file.snapshot as { schema_version?: unknown } | undefined)?.schema_version;
-    const snapshotFrom = rawSnapshotVersion === 4 || rawSnapshotVersion === 5 ? rawSnapshotVersion : undefined;
+    const snapshotFrom = rawSnapshotVersion === 4 || rawSnapshotVersion === 5 || rawSnapshotVersion === 6 ? rawSnapshotVersion : undefined;
     if (snapshotFrom === 4) { try { file.snapshot = migrateSnapshot4to5(file.snapshot, () => defaultPlayerCharacters(world)) as unknown as CampaignSnapshot; } catch { throw new CampaignSaveError("migration_failed"); } }
-    if (snapshotFrom !== undefined) { try { file.snapshot = migrateSnapshot5to6(file.snapshot) as unknown as CampaignSnapshot; } catch { throw new CampaignSaveError("migration_failed"); } }
+    if (snapshotFrom === 4 || snapshotFrom === 5) { try { file.snapshot = migrateSnapshot5to6(file.snapshot) as unknown as CampaignSnapshot; } catch { throw new CampaignSaveError("migration_failed"); } }
+    if (snapshotFrom !== undefined) { try { file.snapshot = migrateSnapshot6to7(file.snapshot) as unknown as CampaignSnapshot; } catch { throw new CampaignSaveError("migration_failed"); } }
     requireCurrentSnapshotVersion(file.snapshot);
     const parsed = parseCampaignSnapshot(file.snapshot);
     if (parsed.campaign_id !== file.campaign_id || parsed.dataset_id !== file.canonical_dataset_id) throw new CampaignSaveError("invalid_save");
@@ -153,7 +154,7 @@ export function createSaveFile(snapshot: DeepReadonly<CampaignSnapshot>, world: 
   try { validateCampaignSnapshot(snapshot, world); } catch (error) { throw saveError(error); }
   const metadata = Object.fromEntries(Object.entries({ saved_at: savedAt, created_at: createdAt, ...extras.metadata }).filter(([, v]) => v !== undefined));
   if (extras.continuity && !parseContinuity(extras.continuity)) throw new CampaignSaveError("invalid_save");
-  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 6, campaign_id: snapshot.campaign_id, canonical_dataset_id: snapshot.dataset_id, metadata, snapshot,
+  return validateSaveFile({ format: "caldrevan_campaign_save", schema_version: 7, campaign_id: snapshot.campaign_id, canonical_dataset_id: snapshot.dataset_id, metadata, snapshot,
     canon_compatibility: "references", canon_references: canonReferences(snapshot, world), ...(extras.continuity ? { continuity: extras.continuity } : {}), ...(extras.turn_receipts ? { turn_receipts: extras.turn_receipts } : {}), ...(extras.interaction_metadata ? { interaction_metadata: extras.interaction_metadata } : {}) }, world);
 }
 /** Called only after validation; sorts object keys, preserves all array order and missing fields. */

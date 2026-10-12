@@ -62,30 +62,27 @@ test("chestnut boy (negative): talking, a wound, secret healing and a witness cr
   const co = coordinator(texts);
   for (const input of [...CHESTNUTS.map(([i]) => i), "*nods and leaves*"]) {
     const r = await run(co, c, input);
-    assert.deepEqual([r.identity?.promoted, r.identity?.named], [[], []], input);
+    assert.deepEqual([r.identity?.provisional, r.identity?.named], [[], []], input);
   }
   const after = c.exportSnapshot();
   assert.deepEqual([created(c), promoted(c)], [[], []]);
   assert.deepEqual([after.relationships, after.households, after.legal_statuses, after.transactions], [before.relationships, before.households, before.legal_statuses, before.transactions]);
   assert.ok(!after.characters.some(x => x.origin_snapshot)); // no persistent condition or origin record for the boy or the witness
 });
-test("chestnut boy (contrast): learning his name makes exactly one campaign character with only established facts", async () => {
+test("chestnut boy (contrast, AUTH-2): learning his name keeps him the SAME provisional person with only established facts; no campaign character", async () => {
   const c = campaign(), seen: GenerationRequest[] = [];
   const texts = [...CHESTNUTS.map(([, n]) => n), '"Tomas," the boy says, wiping his hands on his apron.', "Tomas grins and holds out a paper cone of chestnuts."];
   const co = coordinator(texts, seen);
   for (const [input] of CHESTNUTS) await run(co, c, input);
   const named = await run(co, c, "What's your name?");
-  assert.deepEqual(named.identity?.promoted.map(p => [p.name, p.participant_id]), [["Tomas", "scene_npc_1"]]); // the boy the player addressed (P1)
-  const [tomas] = promoted(c); assert.ok(tomas);
-  assert.equal(created(c).length, 1); // the passer-by stays ephemeral
-  const o = tomas.origin_snapshot!;
-  assert.deepEqual([tomas.profile.name, tomas.profile.sex, tomas.profile.age, tomas.profile.species, o.trigger, o.established.descriptor], ["Tomas", "male", undefined, undefined, "name_established", "boy"]);
-  assert.ok(!o.established.background && !o.established.role); // nothing invented: no history, no role
-  assert.deepEqual(Object.keys(tomas).sort(), ["current", "id", "origin", "origin_snapshot", "profile"]); // no NPC+ state
-  assert.deepEqual([members(c), c.exportSnapshot().relationships.filter(e => e.from_character_id === tomas.id || e.to_character_id === tomas.id)], [[], []]);
+  assert.deepEqual(named.identity?.provisional.map(p => [p.name, p.participant_id]), [["Tomas", "scene_npc_1"]]); // the boy the player addressed (P1)
+  assert.equal(promoted(c).length, 0); assert.equal(created(c).length, 0, "the name is not persistence authority");
+  const tomas = named.identity!.provisional[0]!;
+  assert.deepEqual([tomas.name, tomas.established.sex, tomas.established.age, tomas.established.species, tomas.established.descriptor], ["Tomas", "male", undefined, undefined, "boy"]);
+  assert.ok(!tomas.established.background && !tomas.established.role); // nothing invented: no history, no role
   await run(co, c, "Thanks, Tomas.");
   const prompt = seen.at(-1)!.messages[0]!.content;
-  assert.equal(prompt.match(/Character Tomas \(/g)?.length, 1); assert.doesNotMatch(prompt, /P1 Boy/);
+  assert.doesNotMatch(prompt, /Character Tomas \(/); assert.match(prompt, /P1 - Tomas \(Boy\)/); assert.doesNotMatch(prompt, /P2 /);
 });
 
 // ------------------------------------------------------------------------------------------------ name conservatism (§3, §4, §25)
@@ -93,23 +90,23 @@ test("name establishment is conservative: absent people, rumors, places, titles,
   const c = campaign(MARKET);
   const only = (narration: string, player = "*listens*") => names(c, [at(narration, player)]);
   // Named only in talk (absent) or in a rumor: not a person in this scene.
-  assert.deepEqual(only('"Apothecary? Two streets east. An old woman named Maren runs it," Korvin says.').promoted, []);
-  assert.deepEqual(only('Korvin shrugs. "Word is a smuggler named Dace runs the docks now."').promoted, []);
+  assert.deepEqual(only('"Apothecary? Two streets east. An old woman named Maren runs it," Korvin says.').provisional, []);
+  assert.deepEqual(only('Korvin shrugs. "Word is a smuggler named Dace runs the docks now."').provisional, []);
   // Places, titles, occupations, capitalized narration words, uncertain guesses: never names.
-  assert.deepEqual(only("Behind the Stalls, Something moves. The Guard captain nods. Heartstone looms over the square.").promoted, []);
-  assert.deepEqual(only('A porter squints at Nicco. "Maybe it\'s Garrick? I don\'t know him."').promoted, []);
+  assert.deepEqual(only("Behind the Stalls, Something moves. The Guard captain nods. Heartstone looms over the square.").provisional, []);
+  assert.deepEqual(only('A porter squints at Nicco. "Maybe it\'s Garrick? I don\'t know him."').provisional, []);
   // A canon character's name is never duplicated by a narrator-created person.
-  assert.deepEqual(only('A stout man grins. "Name\'s Korvin."').promoted, []);
-  // Self-introduction and narration-voice introduction promote; the name alone is enough.
-  assert.deepEqual(only('A tired porter sets down his crate. "My name is Hollis."').promoted.map(p => p.name), ["Hollis"]);
-  assert.deepEqual(only("A thin woman named Lysa sweeps the steps.").promoted.map(p => p.name), ["Lysa"]);
+  assert.deepEqual(only('A stout man grins. "Name\'s Korvin."').provisional, []);
+  // Self-introduction and narration-voice introduction yield a PROVISIONAL person (never persistence); the name alone is enough for that.
+  assert.deepEqual(only('A tired porter sets down his crate. "My name is Hollis."').provisional.map(p => p.name), ["Hollis"]);
+  assert.deepEqual(only("A thin woman named Lysa sweeps the steps.").provisional.map(p => p.name), ["Lysa"]);
   // Two different people given the same name in one exchange: unresolved, nobody promoted.
-  assert.deepEqual(only('"I\'m Hollis," the porter says. "I\'m Hollis too!" the boy shouts.').promoted, []);
-  // A different "Maren" while another Maren exists elsewhere: a distinct character (names are not identity).
+  assert.deepEqual(only('"I\'m Hollis," the porter says. "I\'m Hollis too!" the boy shouts.').provisional, []);
+  // A different "Maren" while another Maren exists elsewhere: a distinct (provisional) person, never an alias of the persistent one (names are not identity).
   const other = campaign(MARKET, [{ kind: "register_character", character: { id: "campaign_character_maren", origin: { kind: "created" }, profile: { name: "Maren" }, current: { current_location: "heartstone_lr", status: "active" } } }]);
   const r = names(other, [at('A girl looks up from her mending. "My name is Maren."')]);
-  other.apply({ expected_revision: other.revision, commands: r.commands as CampaignCommand[] });
-  assert.equal(other.exportSnapshot().characters.filter(x => x.profile.name === "Maren").length, 2);
+  assert.deepEqual([r.provisional.map(p => p.name), r.commands], [["Maren"], []]);
+  assert.equal(other.exportSnapshot().characters.filter(x => x.profile.name === "Maren").length, 1, "narration alone persists nobody");
 });
 
 // ------------------------------------------------------------------------------------------------ historical Maren (§19)
@@ -166,7 +163,7 @@ test("late naming: the purchased unnamed girl says her name — the SAME charact
   const legalBefore = snapshotBefore.legal_statuses.find(l => l.character_id === girl.id), originBefore = girl.origin_snapshot;
   const r = await run(co, c, "What's your name?");
   assert.deepEqual(r.identity?.named.map(n => [n.character_id, n.name]), [[girl.id, "Maren"]]);
-  assert.deepEqual(r.identity?.promoted, []);
+  assert.deepEqual(r.identity?.provisional, []);
   const after = c.exportSnapshot(), maren = after.characters.find(x => x.id === girl.id)!;
   assert.deepEqual([maren.profile.name, maren.origin_snapshot, after.legal_statuses.find(l => l.character_id === girl.id)], ["Maren", originBefore, legalBefore]); // origin still says unnamed
   assert.equal(maren.origin_snapshot!.established.name, undefined);
@@ -182,7 +179,7 @@ test("historical Maren, named first: her name promotes her before the sale; the 
   const co = coordinator(["The whittler waves Nicco toward the back of his lot. Behind the bars a thin girl named Maren lies curled on the straw, burning with fever.",
     'The whittler scratches his neck. "Three gold for Maren. No papers, no listing."']);
   const first = await run(co, c, "*looks around*");
-  assert.deepEqual(first.identity?.promoted.map(p => p.name), ["Maren"]);
+  assert.deepEqual(first.identity?.provisional.map(p => p.name), ["Maren"]);
   await run(co, c, "How much for her?");
   acceptAsPlayer(co, c);
   const all = promoted(c); assert.equal(all.length, 1);
@@ -235,11 +232,12 @@ test("anonymous sale domain: sale only, subject without legal record, no payee, 
 test("historical-transcript regressions: word fragments are not names; mentions do not donate facts; unrelated deals touch no captive", () => {
   const c = campaign(MARKET);
   // "Soft. Like it's something to be proud of." — a quote opening with a capitalized word is not a name without an acting use.
-  assert.deepEqual(names(c, [at('"You keep saying that word." She turns her head. "Soft. Like it\'s something to be proud of."\nSoft.\nShe turns her head on the pillow.')]).promoted, []);
+  assert.deepEqual(names(c, [at('"You keep saying that word." She turns her head. "Soft. Like it\'s something to be proud of."\nSoft.\nShe turns her head on the pillow.')]).provisional, []);
   // A sentence that merely mentions Maren describes someone else: Brenna's grey eyes are not Maren's.
   const r = names(c, [at("Behind the bars a thin girl named Maren lies curled on the straw, burning with fever. Brenna's grey eyes find Maren and stay there.")]);
-  const maren = (r.commands[0] as Extract<CampaignCommand, { kind: "register_character" }>).character;
-  assert.deepEqual([maren.profile.name, maren.origin_snapshot!.established.appearance, maren.origin_snapshot!.established.condition], ["Maren", ["thin"], ["feverish"]]);
+  assert.deepEqual(r.commands, []);
+  const maren = r.provisional.find(p => p.name === "Maren")!;
+  assert.deepEqual([maren.name, maren.established.appearance, maren.established.condition], ["Maren", ["thin"], ["feverish"]]);
   // A deal about goods, or "I'll pay a visit", never reaches back to a captive narrated earlier in the scene: no purchase, no note.
   const scene = [at("A girl lies chained behind the bars of the whittler's pen."), at('The smith hefts the halberd. "Fifteen, and I throw in the oil."', "15g for the halberd?")];
   for (const input of ["U got a deal, merchant.", "I'll pay a visit to the back alleys then."]) {

@@ -102,7 +102,7 @@ test("G/H: save/load round-trips IDs, owner, position and allocator; old saves m
   const old = JSON.parse(serializeSave(createSaveFile(turnFixture().campaign.exportSnapshot(), world, "2026-10-09T10:00:00.000Z"), world));
   old.snapshot.schema_version = 5; delete old.snapshot.next_item_sequence;
   const migrated = decodeSaveWithReport(JSON.stringify(old), world);
-  assert.equal(migrated.snapshot_migrated_from, 5); assert.equal(migrated.file.snapshot.schema_version, 6);
+  assert.equal(migrated.snapshot_migrated_from, 5); assert.equal(migrated.file.snapshot.schema_version, 7);
   assert.equal(migrated.file.snapshot.next_item_sequence, 1);
   assert.deepEqual(migrated.file.snapshot.items, turnFixture().campaign.exportSnapshot().items, "existing items unchanged; no items inferred");
   // A schema-5 file already carrying the allocator is malformed; a 5-file with an empty item list starts at 1.

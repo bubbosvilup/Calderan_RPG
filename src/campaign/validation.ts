@@ -111,7 +111,8 @@ const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: c
   established: object({ name: optional(text), sex: optional(text), age: optional(tagged({ exact: object({ kind: choice("exact"), years: integer(0) }), approximate: object({ kind: choice("approximate"), description: text }) })),
     species: optional(text), role: optional(text), descriptor: optional(text), appearance: optional(list(text, 24)), condition: optional(list(text, 24)), background: optional(list(claim, 12)) }),
   evidence: list(text, 12) });
-const characterRecord = object({ id, origin, profile, current, origin_snapshot: optional(originSnapshot) });
+const retirement = object({ revision: integer(1), world_minute: integer(), reason: choice("operator_retired", "duplicate_merged"), merged_into: optional(id) });
+const characterRecord = object({ id, origin, profile, current, origin_snapshot: optional(originSnapshot), retirement: optional(retirement) });
 const itemCategory = choice("weapon", "armor", "clothing", "tool", "consumable", "document", "valuable", "material", "miscellaneous");
 const sprite = tagged({ none: object({ status: choice("none") }), pending: object({ status: choice("pending") }),
   failed: object({ status: choice("failed"), error_code: text }),
@@ -229,6 +230,8 @@ const tradeOfferRecord = object({ id, direction: choice("buy", "sell"), status: 
 const variants: Record<string, Parser> = {};
 function command(kind: string, fields: Record<string, Rule>) { variants[kind] = object({ kind: choice(kind), ...fields }); }
 command("register_character", { character: characterRecord });
+command("retire_character", { character_id: id, reason: choice("operator_retired", "duplicate_merged") });
+command("merge_characters", { source_id: id, target_id: id });
 command("set_profile", { character_id: id, profile });
 command("set_condition", { character_id: id, conditions: distinct(text), presentation: optional(text), status: optional(choice("active", "inactive", "dead")) });
 command("move_character", { character_id: id, location_id: id });
@@ -280,7 +283,7 @@ command("runtime_delta", { delta: object({ expected_revision: optional(integer(0
 const proposal = object({ expected_revision: integer(0), commands: list(tagged(variants), 128) });
 /** Parse unknown input without invoking data accessors; cross-domain checks follow in preparation. */
 export function parseCampaignProposal(input: unknown): CampaignProposal { return proposal(input, "proposal") as CampaignProposal; }
-const snapshot = object({ schema_version: integer(6, 6), campaign_id: id, dataset_id: text, revision: integer(0), next_item_sequence: integer(1, 99_999_999), mannerism_learning: optional(mannerismLearning),
+const snapshot = object({ schema_version: integer(7, 7), campaign_id: id, dataset_id: text, revision: integer(0), next_item_sequence: integer(1, 99_999_999), mannerism_learning: optional(mannerismLearning),
   player_characters: list(playerProfile, 8),
   price_indices: optional(list(object({ character_id: id, percent: integer(-90, 90) }), 100000)),
   portraits: optional(list(portraitRecord, 100000)),

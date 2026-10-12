@@ -2,7 +2,7 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import { CampaignSaveError } from "./errors.js";
 import { niccoHouseholdMembers } from "../campaign/premium-characters.js";
 
-export const CURRENT_SAVE_VERSION = 6;
+export const CURRENT_SAVE_VERSION = 7;
 export type SaveMigration = (input: Readonly<Record<string, unknown>>) => unknown;
 /** A key n owns exactly n -> n+1. No implicit defaults or unknown-field removal. */
 export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.freeze({
@@ -59,6 +59,12 @@ export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.f
     if (Object.hasOwn(input, "interaction_metadata")) throw new CampaignSaveError("migration_failed");
     return { ...input, schema_version: 6 };
   },
+  /**
+   * Consolidation block 5B: envelope 6 -> 7 (the snapshot step 6 -> 7 is `migrateSnapshot6to7`, chained in save-format). Snapshot 7 adds the optional
+   * `retirement` field on a campaign character (the RETIRED lifecycle state). Version-only and lossless: nothing is added or defaulted (no existing
+   * character is retired). An older build refuses a v7 file with `unsupported_version`.
+   */
+  6: input => ({ ...input, schema_version: 7 }),
 });
 
 function version(input: unknown): number {
@@ -124,6 +130,12 @@ export function migrateSnapshot5to6(snapshot: unknown): Record<string, unknown> 
   if (!s || typeof s !== "object" || Array.isArray(s) || s.schema_version !== 5 || Object.hasOwn(s, "next_item_sequence") || !Array.isArray(s.items)) throw new CampaignSaveError("migration_failed");
   const used = (s.items as readonly unknown[]).flatMap(i => { const m = i && typeof i === "object" && typeof (i as { id?: unknown }).id === "string" ? /^campaign_item_(\d{8})$/.exec((i as { id: string }).id) : null; return m ? [Number(m[1])] : []; });
   return { ...s, schema_version: 6, next_item_sequence: Math.max(0, ...used) + 1 };
+}
+/** Consolidation block 5B: snapshot 6 -> 7 (character `retirement`). Version-only; a v6 snapshot that already carries a retirement is malformed. */
+export function migrateSnapshot6to7(snapshot: unknown): Record<string, unknown> {
+  const s = snapshot as Readonly<Record<string, unknown>> | undefined;
+  if (!s || typeof s !== "object" || Array.isArray(s) || s.schema_version !== 6 || !Array.isArray(s.characters) || (s.characters as readonly unknown[]).some(c => !!c && typeof c === "object" && Object.hasOwn(c, "retirement"))) throw new CampaignSaveError("migration_failed");
+  return { ...s, schema_version: 7 };
 }
 export function migrateSnapshot4to5(snapshot: unknown, defaults: () => readonly unknown[]): Record<string, unknown> {
   const s = snapshot as Readonly<Record<string, unknown>> | undefined;

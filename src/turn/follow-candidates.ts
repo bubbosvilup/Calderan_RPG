@@ -23,7 +23,7 @@ export type FollowCandidates = ReadonlyMap<string, readonly FollowReason[]>;
 
 export function followCandidates(snapshot: DeepReadonly<CampaignSnapshot>, people: readonly MovableCharacter[], player_input: string): FollowCandidates {
   const npcPlus = activeNpcPlus(snapshot);
-  const created = new Set(snapshot.characters.filter(c => c.origin.kind === "created" && c.current.status !== "dead").map(c => c.id));
+  const created = new Set(snapshot.characters.filter(c => c.origin.kind === "created" && c.current.status !== "dead" && !c.retirement).map(c => c.id));
   const held = new Set(snapshot.legal_statuses.filter(l => l.status === "enslaved" && l.holder_id === "nicco").map(l => l.character_id));
   const members = new Set(snapshot.households.flatMap(h => h.members.filter(m => m.status === "member").map(m => m.character_id)));
   const mine = people.filter(p => created.has(p.id));

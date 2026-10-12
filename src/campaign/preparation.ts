@@ -11,6 +11,7 @@ export function historicalMinute(value: number | undefined, context: Preparation
 export function characterForUpdate(context: PreparationContext, id: string): CampaignCharacter {
   const origin = context.refs.character(id);
   let character = context.draft.characters.find(c => c.id === id);
+  if (character?.retirement) fail("character_id", "a retired character is history only and cannot be changed");
   if (!character) {
     character = { id, origin, profile: {}, current: {} };
     context.draft.characters.push(character);

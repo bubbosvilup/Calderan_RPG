@@ -115,10 +115,12 @@ test("Narration stage: provider errors propagate, oversize drafts are context_to
 test("CommitPreparation: an identity failure keeps the final preparation as the receipt and reports the skip; it never commits", () => {
   const s = staged("I give boots to Brenna.", "Brenna accepts boots from Nicco.", [transfer]);
   const skipped: string[] = [];
-  const plan = prepareCommit({ world: s.world, prepare: () => { throw new Error("injected"); }, prepared: s.prepared, commands: s.commands, finalized: [], player_input: "Hello.",
+  // AUTH-2: the identity step no longer builds characters, so the failure is injected where the step reads the prepared state.
+  const failing = { ...s.prepared, get snapshot(): never { throw new Error("injected"); } } as unknown as typeof s.prepared;
+  const plan = prepareCommit({ world: s.world, prepare: () => { throw new Error("injected"); }, prepared: failing, commands: s.commands, finalized: [], player_input: "Hello.",
     delivered: 'A lean man straightens. "I\'m Oswin," he says.', scene: s.projection.scene, base_revision: s.base_revision, location_changed: false, on_skip: r => skipped.push(r) });
-  assert.equal(plan.receipt, s.prepared);
-  assert.deepEqual([plan.identity_skipped, skipped, plan.identity.promoted], ["injected", ["injected"], []]);
+  assert.equal(plan.receipt, failing);
+  assert.deepEqual([plan.identity_skipped, skipped, plan.identity.provisional], ["injected", ["injected"], []]);
   assert.equal(s.commits(), 0);
 });
 test("authority guard (source): stages hold no CampaignState and never commit; the coordinator has one commit right after its final checkpoint", async () => {

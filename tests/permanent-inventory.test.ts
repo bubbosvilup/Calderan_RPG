@@ -96,7 +96,7 @@ test("player, campaign NPC and NPC+ share one inventory query layer; save/load r
     assert.deepEqual(inventoryItems(loaded, character), inventoryItems(s, character)); assert.deepEqual(ownedItems(loaded, character), ownedItems(s, character));
   }
   assert.equal(Object.keys(loaded).some(k => /inventory/i.test(k)), false, "no inventory field in the save");
-  assert.equal(loaded.schema_version, 6, "derived-only pass: no schema bump");
+  assert.equal(loaded.schema_version, 7, "derived-only pass: no schema bump");
   // Invalid carrier/owner references in persisted state are rejected (no character deletion command exists).
   const bad = structuredClone(s) as any; bad.items[0].position = { kind: "carried", character_id: "campaign_character_gone" };
   assert.throws(() => CampaignState.restore(world, bad));

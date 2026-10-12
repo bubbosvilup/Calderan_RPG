@@ -115,14 +115,14 @@ test("T6: the canonical avatar stays attached to the one canonical actor after t
   assert.equal(card.name, "Korvin"); assert.equal(card.avatar_url, `${CANON_AVATAR_ROUTE}${canonAvatarToken("korvin")}`);
   assert.equal(created(r.snapshot), 0);
 });
-test("T10: a genuinely non-canonical temporary participant who gives a name is that SAME participant promoted (one person, name bound)", async () => {
+test("T10: a genuinely non-canonical temporary participant who gives a name stays temporary (AUTH-2: a name from narration creates no Campaign Character)", async () => {
   const s = scene();
   const first = await s.turn("*stops an ordinary passer-by*", "*A middle-aged woman in a patched cloak slows, wary.*");
   assert.ok(first.plan.created, "a temporary participant exists");
   const second = await s.turn("what's your name?", "*She hesitates.*\n\nI'm Erdan.");
-  assert.equal(created(second.snapshot), 1);
+  assert.equal(created(second.snapshot), 0, "a name from narration does not create a Campaign Character");
+  assert.deepEqual(second.result.identity?.provisional.map(p => p.name), ["Erdan"]);
   assert.ok(second.result.scene_participants!.after.length <= 1, "the temporary participant stays the one present person: no second stand-in appears");
-  assert.equal(second.snapshot.characters.find(c => c.origin.kind === "created")!.profile.name, "Erdan");
 });
 test("T11: an explicitly different speaker is not misbound: Korvin stays unnamed and the other speaker is a separate person", async () => {
   const s = scene();

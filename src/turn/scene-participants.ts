@@ -32,6 +32,8 @@ export type ParticipantStanding = "ordinary_local" | "foreign" | "unknown";
 export interface EphemeralSceneParticipant {
   readonly id: string; readonly ref: string; readonly role: string; readonly display_name: string;
   readonly descriptor?: string; readonly standing: ParticipantStanding;
+  /** Block 5B (AUTH-2): the name narration established for this temporary person. Naming does not make them persistent; first name wins. */
+  readonly established_name?: string;
   /** Scene location at creation plus its containment ancestry (captured, not re-derived). */
   readonly location_id: string; readonly locality: readonly string[];
   readonly created_turn: number; readonly last_addressed_turn: number; readonly departed: boolean;
@@ -191,6 +193,11 @@ export class SceneParticipants {
     if (ids.length) { this.#list = this.#list.filter(p => !ids.includes(p.id)); if (this.#focus && ids.includes(this.#focus)) this.#focus = null; }
     return this.active();
   }
+  /** Block 5B: a provisional person narration named keeps being the SAME temporary participant, now with that name (first name wins; nothing becomes persistent). */
+  name(entries: readonly { readonly id: string; readonly name: string }[]): readonly EphemeralSceneParticipant[] {
+    if (entries.length) this.#list = this.#list.map(p => { const e = entries.find(x => x.id === p.id); return e && !p.established_name ? { ...p, established_name: e.name } : p; });
+    return this.active();
+  }
   /** Apply a finalized turn: capture a conservative descriptor and a departure beat for the conversation partner. */
   commit(plan: SceneParticipantPlan, narration: string, narrated?: { readonly character_id: string; readonly location_id: string }): readonly EphemeralSceneParticipant[] {
     this.#list = plan.participants.map(p => {
@@ -219,7 +226,7 @@ export function renderSceneParticipants(plan: SceneParticipantPlan | undefined, 
   const place = (ids: readonly string[]) => context.primary.scene.location_ancestry.find(a => ids.includes(a.id) && a.id !== ids[0])?.display_name;
   const lines = plan.participants.map(p => {
     const standing = p.standing === "ordinary_local" ? `ordinary local${place(p.locality) ? ` of ${place(p.locality)}` : ""}` : p.standing === "foreign" ? "not local" : "origin unestablished";
-    return `${p.ref} - ${p.display_name}${p.id === plan.focus ? " (current conversation partner)" : ""}. Temporary; ${standing}.${p.role === "guard" ? " Affiliation unestablished (a generic guard, not by default a member of any canonical body)." : ""}${p.descriptor ? ` Established: ${p.descriptor}.` : ""}`;
+    return `${p.ref} - ${p.established_name ? `${p.established_name} (${p.display_name})` : p.display_name}${p.id === plan.focus ? " (current conversation partner)" : ""}. Temporary; ${standing}.${p.role === "guard" ? " Affiliation unestablished (a generic guard, not by default a member of any canonical body)." : ""}${p.descriptor ? ` Established: ${p.descriptor}.` : ""}`;
   });
   return `[SCENE PARTICIPANTS]\nTemporary people in this scene, not persistent characters. Keep established details; anything not listed (name, occupation, history, appearance) is unestablished and must not contradict earlier narration of the same person.\n${lines.join("\n")}`;
 }

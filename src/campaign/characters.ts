@@ -2,6 +2,8 @@ import type { CampaignCommand, CharacterCurrentState } from "./types.js";
 import type { PreparationContext } from "./preparation.js";
 import { characterForUpdate } from "./preparation.js";
 import { fail } from "./validation.js";
+import { applyMerge, applyRetirement, mergeConflicts, retireConflicts } from "./character-repair.js";
+import { worldMinute } from "./preparation.js";
 import { prepareRuntimeDelta, type RuntimeDomainSnapshot } from "../world/runtime-domain.js";
 
 function requireEmptyLocationForCanonical(current: CharacterCurrentState): void {
@@ -26,6 +28,20 @@ export function prepareCharacterCommand(context: PreparationContext, command: Ca
         if (c.current.current_location !== o.location_id) fail("origin_snapshot.location_id", "a promoted person stands where they were promoted");
       }
       draft.characters.push(c); return true;
+    }
+    // Block 5B: human-authorized identity repair. Refuses (fails the whole preparation) on any hard conflict; applied to the draft atomically.
+    case "retire_character": {
+      refs.character(command.character_id);
+      if (command.reason !== "operator_retired") fail("reason", "only an operator retirement can be requested directly");
+      const conflicts = retireConflicts(draft, command.character_id);
+      if (conflicts.length) fail("character_id", `retirement refused: ${conflicts.map(c => c.code).join(", ")}`);
+      applyRetirement(draft, command.character_id, { revision: draft.revision + 1, world_minute: worldMinute(context), reason: "operator_retired" }); return true;
+    }
+    case "merge_characters": {
+      refs.character(command.source_id); refs.character(command.target_id);
+      const analysis = mergeConflicts(draft, command.source_id, command.target_id);
+      if (analysis.conflicts.length) fail("source_id", `merge refused: ${analysis.conflicts.map(c => c.code).join(", ")}`);
+      applyMerge(draft, command.source_id, command.target_id, { revision: draft.revision + 1, world_minute: worldMinute(context) }); return true;
     }
     case "set_profile": {
       const c = characterForUpdate(context, command.character_id);

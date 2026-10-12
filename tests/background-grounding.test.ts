@@ -123,12 +123,12 @@ test("F/I. purchase promotion: a verified origin survives; an invented named pla
   const projected = buildTurnContext(world, c.exportSnapshot()).characters.find(x => x.id === ilsa.id)!.established_origin!;
   assert.equal(projected.background, undefined);
 });
-test("F2. name-establishment promotion applies the same guardrail to self-stated origins", () => {
+test("F2. a provisional person (AUTH-2: never persisted by name alone) carries the same guardrail on self-stated origins", () => {
   const promote = (line: string) => {
     const c = market(), recent = [at(`A woman in the nearest pen looks up. "My name is Ilsa," she says. "${line}"`, "What's your name?")];
     const r = establishNames(recent, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision);
-    const reg = r.commands.find(x => x.kind === "register_character") as Extract<CampaignCommand, { kind: "register_character" }>;
-    return reg.character.origin_snapshot!.established.background;
+    assert.ok(!r.commands.some(x => x.kind === "register_character"), "narration + a name never registers a character");
+    return r.provisional.find(p => p.name === "Ilsa")!.established.background;
   };
   assert.deepEqual(promote("I'm from Skardgard.")?.map(b => [b.text, b.source]), [["I'm from Skardgard.", "self"]]);
   assert.equal(promote("I was born near the Marches."), undefined);

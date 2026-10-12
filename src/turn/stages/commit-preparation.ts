@@ -96,11 +96,11 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
         }
       } catch (error) { i.on_skip(`person_offer: ${error instanceof Error ? error.message : String(error)}`); }
     }
-    return { receipt, identity: { promoted: resolved.promoted, named: resolved.named, skipped: resolved.skipped }, ...(offerDiagnostics.length ? { offers: offerDiagnostics } : {}) };
+    return { receipt, identity: { provisional: resolved.provisional, named: resolved.named, skipped: resolved.skipped }, ...(offerDiagnostics.length ? { offers: offerDiagnostics } : {}) };
   } catch (error) {
     // Unresolvable identity: do nothing rather than promote the wrong person; the turn still commits.
     const reason = error instanceof Error ? error.message : String(error);
     i.on_skip(reason);
-    return { receipt: i.prepared, identity: { promoted: [], named: [], skipped: [] }, identity_skipped: reason };
+    return { receipt: i.prepared, identity: { provisional: [], named: [], skipped: [] }, identity_skipped: reason };
   }
 }

@@ -5,7 +5,7 @@ import type { RecentExchange } from "./recent-conversation.js";
 import type { WorldStore } from "../world/world-store.js";
 import { classifyBackgroundClaim } from "./background-grounding.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
-import { buildPromotedCharacter } from "../campaign/promotion.js";
+import { materializeProvisional } from "./provisional-people.js";
 import { CAPTIVE, establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type NarrationUnit, type SceneReading } from "./narrated-captives.js";
 import { NUMBER_PHRASE_SOURCE } from "./language/numbers.js";
 import { AUCTION, pricesInText, readPrices, unsupportedCurrency, goldAmounts } from "./trade-price.js";
@@ -48,7 +48,7 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const candidates = [...present].filter(id => { const l = legal(id); return l?.status === "enslaved" && l.holder_id !== "nicco" && !!l.holder_id && present.has(l.holder_id); });
   // Narrator-created captives of the current scene (and present persistent people not yet legally held, e.g. promoted by name) compete with held persons for the one subject.
   const unheld = new Set(context.characters.filter(c => c.id !== "nicco" && !legal(c.id) && /\bcaptive\b/.test(c.established_origin?.role ?? "")).map(c => c.id));
-  const readingOptions = { campaign_names: new Set(snapshot.characters.flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true };
+  const readingOptions = { campaign_names: new Set(snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true };
   let reading: SceneReading | undefined = readScene(recent, context, options.world, { unheld, ...readingOptions });
   // A person promoted by name before the narration showed them held has no captive role; when the scene narrates a captive under the very noun the narrator attached to them, they are that captive.
   const nouns = new Set(reading.persons.filter(p => p.captive && !p.name && !p.character_id && p.noun).map(p => p.noun!));
@@ -316,9 +316,8 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   const participant = subjectPerson.character_id ? undefined : linkedParticipant(subjectPerson, s.participants);
   let subjectId = subjectPerson.character_id;
   if (!subjectId) {
-    const facts = establishedFacts(subjectPerson, seller.key, s.name, s.keepClaim);
-    const character = buildPromotedCharacter({ label, established: { ...facts.established, role: `enslaved; offered for sale by ${seller.label}` }, evidence: facts.evidence, location_id: location,
-      trigger: subjectPerson.name ? "name_established" : "purchase_unnamed_subject", promoted_revision: s.baseRevision + 1, world_minute: minute, ephemeral_ref: participant?.id ?? subjectPerson.ref });
+    const character = materializeProvisional({ person: subjectPerson, label, seller_key: seller.key, name_of: s.name, ...(s.keepClaim ? { keep_claim: s.keepClaim } : {}), role: `enslaved; offered for sale by ${seller.label}`, location_id: location,
+      trigger: subjectPerson.name ? "name_established" : "purchase_unnamed_subject", base_revision: s.baseRevision, world_minute: minute, ephemeral_ref: participant?.id ?? subjectPerson.ref });
     // One captive, one identity across a negotiation: a later offer for the same narrated person (a counteroffer) reuses the id the earlier,
     // unsettled offer already planned, so supersession never forks the subject.
     const ref = participant?.id ?? subjectPerson.ref, location_id = location;
@@ -334,8 +333,7 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   } else {
     let holder = seller.kind === "persistent" ? seller.id : undefined;
     if (seller.kind === "named") { // the ordinary name rule: a named narrator-created seller is a campaign character, never anonymous
-      const facts = establishedFacts(seller.person, undefined, s.name, s.keepClaim);
-      const character = buildPromotedCharacter({ label: seller.label, established: facts.established, evidence: facts.evidence, location_id: location, trigger: "name_established", promoted_revision: s.baseRevision + 1, world_minute: minute, ephemeral_ref: seller.person.ref });
+      const character = materializeProvisional({ person: seller.person, label: seller.label, name_of: s.name, ...(s.keepClaim ? { keep_claim: s.keepClaim } : {}), location_id: location, trigger: "name_established", base_revision: s.baseRevision, world_minute: minute, ephemeral_ref: seller.person.ref });
       s.commands.push({ kind: "register_character", character }); holder = character.id;
     }
     s.commands.push({ kind: "set_legal_status", character_id: subjectId, status: "enslaved", holder_id: holder!, note: `Held for sale by ${seller.label}: ${basis}`.slice(0, 300) },

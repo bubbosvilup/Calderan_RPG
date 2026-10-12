@@ -5,6 +5,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
+import { applyAuthorized } from "./provisional-helper.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { asksName, readScene } from "../src/turn/narrated-captives.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
@@ -31,7 +32,7 @@ const fresh = (location = LR, extra: readonly CampaignCommand[] = []) => {
 };
 const at = (player: string, narration: string, location = LR): RecentExchange => ({ player, narration, status: "finalized", location_id: location });
 const names = (c: CampaignState, recent: readonly RecentExchange[]) => establishNames(recent, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision);
-const promotedNames = (c: CampaignState, recent: readonly RecentExchange[]) => names(c, recent).promoted.map(p => p.name);
+const promotedNames = (c: CampaignState, recent: readonly RecentExchange[]) => names(c, recent).provisional.map(p => p.name);
 const created = (c: CampaignState) => c.exportSnapshot().characters.filter(x => x.origin.kind === "created");
 function view(c: CampaignState) {
   const snapshot = c.exportSnapshot();
@@ -54,34 +55,33 @@ test("reciprocal name question requires the player's own name introduction earli
 });
 
 // ------------------------------------------------------------------------------------------------ exact Mira acceptance (establishNames)
-test("exact playthrough: reciprocal question + plain RPG 'Mira.' promotes one active co-located Campaign Character despite absent Mira Thorne", () => {
+test("exact playthrough: reciprocal question + plain RPG 'Mira.' reports ONE provisional Mira (AUTH-2: no Campaign Character from narration); explicit materialization is the same person", () => {
   const c = fresh(), canonBefore = structuredClone(world.getEntity("mira_thorne"));
   assert.ok(!buildTurnContext(world, c.exportSnapshot()).characters.some(x => x.id === "mira_thorne"), "Mira Thorne is not in Heartstone LR");
   const before = c.exportSnapshot();
   const r = names(c, [WOMAN, at(RECIPROCAL, LIVE_ANSWER)]);
-  assert.deepEqual(r.promoted.map(p => p.name), ["Mira"]);
-  assert.deepEqual(r.commands.map(x => x.kind), ["register_character"]);
-  c.apply({ expected_revision: c.revision, commands: [...r.commands] });
+  assert.deepEqual(r.provisional.map(p => p.name), ["Mira"]);
+  assert.deepEqual(r.commands, [], "narration + a securely established name commits NOTHING");
+  assert.equal(created(c).length, 0);
+  assert.equal(r.provisional[0]!.ref, names(c, [WOMAN, at(RECIPROCAL, LIVE_ANSWER), at(CONFIRM, LIVE_CONFIRM)]).provisional[0]!.ref, "the same provisional identity across the interaction");
+  // What an explicitly-authorized materialization (e.g. Accept) records for that SAME person.
+  applyAuthorized(c, r);
   const after = c.exportSnapshot();
   const [mira, ...others] = created(c);
   assert.equal(others.length, 0);
-  assert.equal(mira!.id, r.promoted[0]!.character_id);
   assert.match(mira!.id, /^campaign_character_r\d+_mira$/);
   assert.deepEqual([mira!.profile.name, mira!.profile.sex, mira!.current.status, mira!.current.current_location], ["Mira", "female", "active", LR]);
   const o = mira!.origin_snapshot!;
   assert.deepEqual([o.source, o.trigger, o.location_id, o.established.name, o.established.descriptor], ["narrator_ephemeral", "name_established", LR, "Mira", "woman"]);
   assert.ok(o.evidence.some(e => e === 'Mira: "Mira."'), JSON.stringify(o.evidence)); // attributed evidence preserved
-  // Campaign Character only: no NPC+, Household, relationship, knowledge edge, legal status or canon change.
   assert.deepEqual([after.premium_characters, after.households, after.relationships, after.knowledge, after.legal_statuses], [before.premium_characters, before.households, before.relationships, before.knowledge, before.legal_statuses]);
   assert.deepEqual(Object.keys(mira!).sort(), ["current", "id", "origin", "origin_snapshot", "profile"]);
   assert.deepEqual(world.getEntity("mira_thorne"), canonBefore);
   assert.ok(!after.characters.some(x => x.id === "mira_thorne" || /Thorne/.test(x.profile.name ?? "")));
-  // In the scene: Nicco and Mira through the existing projections, no membership flag.
   const ui = view(c);
   assert.deepEqual(ui.participants.map(p => p.name).sort(), ["Mira", "Nicco"]);
-  // Second-turn confirmation: no duplicate.
   const again = names(c, [WOMAN, at(RECIPROCAL, LIVE_ANSWER), at(CONFIRM, LIVE_CONFIRM)]);
-  assert.deepEqual([again.commands, again.promoted], [[], []]);
+  assert.deepEqual([again.commands, again.provisional], [[], []]);
 });
 
 test("explicit confirmation establishes her once when the first reciprocal form was not a name question", () => {
@@ -102,20 +102,21 @@ async function run(co: TurnCoordinator, c: CampaignState, input: string): Promis
   const last = events.at(-1)!; assert.equal(last.type, "turn_completed", JSON.stringify(last));
   return (last as { result: TurnResult }).result;
 }
-test("end-to-end: the reciprocal turn commits Mira atomically; the confirmation turn does not duplicate her", async () => {
+test("end-to-end: the reciprocal turn commits NO Mira (AUTH-2); the confirmation turn reports the SAME provisional person", async () => {
   const c = fresh(), co = scripted([LIVE_ANSWER, LIVE_CONFIRM]);
   co.recent(c).add(WOMAN);
+  const revision = c.revision;
   const first = await run(co, c, RECIPROCAL);
   assert.equal(first.narration, LIVE_ANSWER);
-  assert.deepEqual(first.identity?.promoted.map(p => p.name), ["Mira"]);
-  const id = first.identity!.promoted[0]!.character_id;
-  assert.deepEqual(created(c).map(x => [x.id, x.profile.name, x.current.current_location, x.current.status]), [[id, "Mira", LR, "active"]]);
-  assert.ok(view(c).participants.some(p => p.name === "Mira"));
+  assert.deepEqual(first.identity?.provisional.map(p => p.name), ["Mira"]);
+  const ref = first.identity!.provisional[0]!.ref;
+  assert.equal(created(c).length, 0, "narration + a name are not persistence authority");
+  assert.deepEqual(view(c).participants.map(p => p.name), ["Nicco"]);
   const second = await run(co, c, CONFIRM);
-  assert.deepEqual([second.identity?.promoted ?? [], second.identity?.named ?? []], [[], []]);
-  assert.equal(created(c).length, 1);
-  assert.deepEqual(view(c).participants.map(p => p.name).sort(), ["Mira", "Nicco"]);
+  assert.deepEqual(second.identity?.provisional.map(p => p.ref), [ref], "one provisional identity, not a second record");
+  assert.equal(created(c).length, 0);
   assert.deepEqual([c.exportSnapshot().premium_characters, c.exportSnapshot().households], [[], []]);
+  assert.ok(c.revision >= revision);
 });
 
 // ------------------------------------------------------------------------------------------------ other positives
@@ -135,7 +136,7 @@ test("late naming via RPG: an acquired unnamed woman at Heartstone answering 'Mi
   const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: [], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600 });
   const c = fresh(LR, [{ kind: "register_character", character: woman }]);
   const r = names(c, [at("*carries her to the sofa*", "*The woman lies on the sofa, burning with fever.*"), at(RECIPROCAL, LIVE_ANSWER)]);
-  assert.deepEqual([r.promoted, r.named.map(n => [n.character_id, n.name])], [[], [[woman.id, "Mira"]]]);
+  assert.deepEqual([r.provisional, r.named.map(n => [n.character_id, n.name])], [[], [[woman.id, "Mira"]]]);
   assert.deepEqual(r.commands.map(x => x.kind), ["set_profile"]);
 });
 

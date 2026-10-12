@@ -20,7 +20,7 @@ export class DatasetCompatibilityError extends CampaignValidationError {
   constructor(readonly save_dataset_id: string, readonly current_dataset_id: string) { super("dataset_id", "canonical dataset mismatch"); this.name = "DatasetCompatibilityError"; }
 }
 /** NPC+ Pass 1: schema 2 added premium_characters; schema 3 adds the OFF_SCENE variant of a character location (final movement closure); schema 4 (Save/Load v1) formally adopts the image-generation-v1 portrait fields; schema 5 adds player_characters (Player Character Profile V1); schema 6 adds next_item_sequence (Item Domain V1). Older snapshots reach it only through save migration. */
-export const CURRENT_SNAPSHOT_VERSION = 6;
+export const CURRENT_SNAPSHOT_VERSION = 7;
 export function requireCurrentSnapshotVersion(input: unknown): void {
   const descriptor = input && typeof input === "object" ? Object.getOwnPropertyDescriptor(input, "schema_version") : undefined;
   if (descriptor && "value" in descriptor && Number.isSafeInteger(descriptor.value) && descriptor.value !== CURRENT_SNAPSHOT_VERSION) throw new SnapshotValidationError("unsupported_version", "schema_version");
@@ -47,6 +47,14 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
     if (c.origin.kind === "canonical" && c.current.current_location !== undefined) fail("current_location", "canonical location must live only in runtime");
     if (c.current.current_location !== undefined) refs.location(c.current.current_location);
     // Promotion Pass 1.1: origin snapshots belong to created characters, never to canon, and never postdate the snapshot.
+    // Block 5B: a retired identity is a created character kept as history only: inactive, nowhere, retired at a revision the snapshot has reached.
+    if (c.retirement) {
+      if (c.origin.kind !== "created") fail("retirement", "only created characters can be retired");
+      if (c.current.status !== "inactive" || c.current.current_location !== undefined) fail("retirement", "a retired character is inactive and has no location");
+      if (c.retirement.revision > s.revision) fail("retirement.revision", "retirement cannot postdate the snapshot");
+      if ((c.retirement.reason === "duplicate_merged") !== (c.retirement.merged_into !== undefined)) fail("retirement.merged_into", "a merge names its survivor, an operator retirement does not");
+      if (c.retirement.merged_into !== undefined) { if (c.retirement.merged_into === c.id) fail("retirement.merged_into", "cannot merge into itself"); refs.character(c.retirement.merged_into); }
+    }
     if (c.origin_snapshot) {
       if (c.origin.kind !== "created") fail("origin_snapshot", "only created characters carry a promotion origin");
       if (c.origin_snapshot.promoted_revision > s.revision) fail("origin_snapshot.promoted_revision", "promotion cannot postdate the snapshot");

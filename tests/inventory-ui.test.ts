@@ -49,5 +49,5 @@ test("Inventory UI HTTP: possession, states, safe sprite access and save roundtr
   assert.equal((await fetch(base + knife.sprite_url)).status, 404); assert.ok(!session.getPlayerInventoryView().items.some(i => i.id === knife.id));
   await store.remove("turn_fixture", knife.id, file); apply({ kind: "place_item", item_id: knife.id, position: { kind: "carried", character_id: "nicco" } });
   assert.equal((await fetch(base + knife.sprite_url)).status, 404, "missing file is a placeholder, not gameplay failure");
-  assert.equal(calls, 0); assert.equal(CampaignState.restore(world, campaign.exportSnapshot()).exportSnapshot().schema_version, 6);
+  assert.equal(calls, 0); assert.equal(CampaignState.restore(world, campaign.exportSnapshot()).exportSnapshot().schema_version, 7);
 });

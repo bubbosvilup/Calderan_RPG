@@ -167,7 +167,7 @@ test("save/load: LOCATED and OFF_SCENE persist; old saves migrate losslessly; th
   const legacy = JSON.parse(serializeSave(located, f.world));
   legacy.schema_version = 3; legacy.snapshot.schema_version = 2; delete legacy.snapshot.player_characters; delete legacy.snapshot.next_item_sequence;
   const migrated = migrateSave(legacy) as { schema_version: number; snapshot: CampaignSnapshot };
-  assert.equal(migrated.schema_version, 6); assert.equal(migrated.snapshot.schema_version, 4);
+  assert.equal(migrated.schema_version, 7); assert.equal(migrated.snapshot.schema_version, 4);
   assert.deepEqual(JSON.parse(JSON.stringify({ ...migrated.snapshot, schema_version: 0 })), { ...legacy.snapshot, schema_version: 0 }, "nothing else changed");
   assert.deepEqual(JSON.parse(JSON.stringify(validateSaveFile(legacy, f.world).snapshot.runtime)), JSON.parse(JSON.stringify(located.snapshot.runtime)), "old save loads losslessly");
   // An OFF_SCENE entry can never ride in an old-schema file.

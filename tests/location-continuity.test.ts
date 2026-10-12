@@ -50,24 +50,24 @@ function harness(c: CampaignState) {
 }
 
 // ------------------------------------------------------------------------------------------------ Regression A (§13)
-test("Maren regression: named slaver and Maren promoted at the market; purchase moves nobody; carrying her into Heartstone moves only her", async () => {
+test("Maren regression (AUTH-2): the named slaver and Maren are provisional until the explicit Accept; purchase moves nobody; carrying her into Heartstone moves only her", async () => {
   const c = campaign();
   const { step, prompt } = harness(c);
   await step("/go calderan_slave_market", "Nicco walks through West to the Slave Market.");
   await step("*approaches the slaver by the back cages*", "A lean slaver leans against a post by the back cages. Behind the bars a thin girl lies curled on the straw, burning with fever.");
   // 2–3. The slaver's name: exactly one campaign character, where he was met; not household.
   const asked = await step("What's your name?", '"Oswin," the slaver says, spitting into the dirt.');
-  assert.deepEqual(asked.identity?.promoted.map(p => p.name), ["Oswin"]);
-  const [oswin] = named(c, "Oswin"); assert.ok(oswin);
-  assert.deepEqual([where(c, oswin.id), oswin.origin_snapshot!.trigger, members(c).includes(oswin.id)], [MARKET, "name_established", false]);
-  // 4. Maren's name: exactly one campaign character, at the market.
+  assert.deepEqual(asked.identity?.provisional.map(p => p.name), ["Oswin"]);
+  assert.equal(named(c, "Oswin").length, 0, "AUTH-2: a name from narration creates no Campaign Character");
+  // 4. Maren's name: still provisional.
   await step("And the girl?", "Oswin jerks his chin at the cage. \"That one's Maren. Debt forfeiture.\" Maren does not lift her head from the straw.");
-  const [maren] = named(c, "Maren"); assert.ok(maren);
-  assert.equal(where(c, maren.id), MARKET);
+  assert.equal(named(c, "Maren").length, 0);
   // 5–6. Offer and purchase: ownership changes, location does not.
   await step("How much for Maren?", 'Oswin scratches his neck. "Three gold for Maren. No papers."');
   const accept = () => { const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands"); c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] })); };
-  accept(); // Actual Offer V1: the player's explicit accept action settles; ownership changes, location does not
+  accept(); // Actual Offer V1: the player's explicit accept action settles AND materializes the same people; ownership changes, location does not
+  const [maren] = named(c, "Maren"), [oswin] = named(c, "Oswin"); assert.ok(maren && oswin, "Accept materialized the buyer-facing people exactly once");
+  assert.deepEqual([where(c, oswin.id), oswin.origin_snapshot!.trigger, members(c).includes(oswin.id), where(c, maren.id)], [MARKET, "name_established", false, MARKET]);
   const legal = () => c.exportSnapshot().legal_statuses.find(l => l.character_id === maren.id);
   assert.deepEqual([legal()?.holder_id, legal()?.transfer?.from_holder_id, where(c, maren.id), members(c)], ["nicco", oswin.id, MARKET, []]);
   // Canonical city route, no mutation: pickup and carrying resolve through the real turn pipeline.
@@ -89,30 +89,18 @@ test("Maren regression: named slaver and Maren promoted at the market; purchase 
 });
 
 // ------------------------------------------------------------------------------------------------ Regression B (§14)
-test("chestnut boy: named and healed, Tomas stays in the square when Nicco walks back into Heartstone", async () => {
+test("chestnut boy (AUTH-2): named and healed, Tomas stays provisional: no Campaign Character, no household, no relationships", async () => {
   const c = campaign(SQUARE);
   const { step, prompt } = harness(c);
   await step("*notices a boy selling roasted chestnuts*", "A boy sells roasted chestnuts from a brazier at the edge of the square. His hand has a small burn across the knuckles.");
-  await step("*approaches the boy* Hello, I'm Nicco. What's your name?", '"Tomas," the boy says, wiping his hands on his apron.');
-  const [tomas] = named(c, "Tomas"); assert.ok(tomas);
-  assert.equal(where(c, tomas.id), SQUARE);
+  const asked = await step("*approaches the boy* Hello, I'm Nicco. What's your name?", '"Tomas," the boy says, wiping his hands on his apron.');
+  assert.deepEqual(asked.identity?.provisional.map(p => [p.name, p.location_id]), [["Tomas", SQUARE]]);
   await step("*notices the burn on Tomas's hand and quietly heals it*", "The burn on Tomas's hand closes and fades. Tomas stares at his knuckles.");
   await step("Goodbye, Tomas.", '"Bye, sir!" Tomas calls, already turning back to his chestnuts.');
   await step("*walks back into Heartstone*", "Nicco pushes through the heavy door into the living floor of the tower.");
-  assert.match(prompt(), /Tomas stays there: do not have Nicco bring or carry them/);
-  assert.deepEqual([where(c, "nicco"), where(c, tomas.id), named(c, "Tomas").length, members(c)], [LR, SQUARE, 1, []]);
+  assert.deepEqual([where(c, "nicco"), named(c, "Tomas").length, members(c)], [LR, 0, []]);
   assert.deepEqual(c.exportSnapshot().relationships, createOpeningCampaign(world, "baseline").exportSnapshot().relationships); // nothing from healing or names
-  assert.deepEqual(Object.keys(tomas).sort(), ["current", "id", "origin", "origin_snapshot", "profile"]); // no NPC+ state
-  await step("*sits by the hearth*", "The fire crackles.");
   assert.doesNotMatch(prompt(), /Character Tomas \(/);
-  await step("/go calderan_slave_market", "Nicco walks to the Slave Market alone.");
-  assert.equal(where(c, tomas.id), SQUARE);
-  // Returning via a multi-hop route surfaces Tomas in his unchanged location.
-  await step("*walks back to Heartstone Square*", "Tomas waves from his brazier.");
-  assert.equal(where(c, "nicco"), SQUARE);
-  await step("*buys a cone of chestnuts*", "Tomas scoops chestnuts into a paper cone.");
-  assert.equal(prompt().match(/Character Tomas \(/g)?.length, 1);
-  assert.equal(where(roundTrip(c), tomas.id), SQUARE);
 });
 
 // ------------------------------------------------------------------------------------------------ Negative / positive (§15)

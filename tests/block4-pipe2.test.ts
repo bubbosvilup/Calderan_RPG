@@ -36,7 +36,7 @@ test("PIPE-2: recordExchange throws after the commit -> success + exchange_histo
 });
 
 test("PIPE-2: scene-participant retirement throws after the commit -> success + scene_participants warning", async () => {
-  await coordinatorFault(({ coordinator, campaign }) => { coordinator.participants(campaign).retire = () => { throw new Error("injected: retire"); }; }, "scene_participants");
+  await coordinatorFault(({ coordinator, campaign }) => { coordinator.participants(campaign).name = () => { throw new Error("injected: name"); }; }, "scene_participants");
 });
 
 test("PIPE-2: a throwing diagnostics emitter cannot fail a committed turn", async () => {

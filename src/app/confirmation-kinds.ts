@@ -4,6 +4,7 @@ import type { WorldStore } from "../world/world-store.js";
 import type { PendingConfirmation, PendingPayload } from "../persistence/pending-confirmations.js";
 import { personLabelOf } from "./trade-offer-view.js";
 import { playerCharacterProjection } from "./player-character-view.js";
+import { mergeConflicts, retireConflicts } from "../campaign/character-repair.js";
 import { manumissionCommand, manumissionInvalidReason } from "../turn/pending-proposals.js";
 
 /**
@@ -53,4 +54,40 @@ export const MANUMISSION_KIND: ConfirmationKind = {
       body: `Nicco's words describe freeing ${label}. Nothing has changed yet. Confirming ends ${label}'s legal enslavement; household, residence and feelings are not affected.` };
   },
 };
-export const PRODUCTION_CONFIRMATION_KINDS: ConfirmationKinds = new Map([[MANUMISSION_KIND.kind, MANUMISSION_KIND]]);
+
+const repairLabel = (world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, id: string): string => {
+  const c = snapshot.characters.find(x => x.id === id);
+  return c ? personLabelOf(snapshot, playerCharacterProjection(world, snapshot), c).label : "an unknown person";
+};
+const REPAIR_REASON = (conflicts: readonly { readonly code: string }[]): string | undefined => conflicts.length ? `repair_refused_${conflicts[0]!.code}`.slice(0, 60) : undefined;
+
+/**
+ * Block 5B: a human operator retires one persistent identity (never deletion; the id stays referenceable). Class C. Created ONLY by an explicit operator
+ * invocation after a conflict-free preflight, never by a scanner, a model or the player's prose. The same `retireConflicts` analysis runs at Confirm.
+ */
+export const RETIRE_CHARACTER_KIND: ConfirmationKind = {
+  kind: "retire_character",
+  payload_valid: p => p.reason === "operator_retired",
+  invalid_reason: (snapshot, record) => REPAIR_REASON(retireConflicts(snapshot, record.subject_id)),
+  commands: (_snapshot, record) => [{ kind: "retire_character", character_id: record.subject_id, reason: "operator_retired" }],
+  card: (world, snapshot, record) => {
+    const label = repairLabel(world, snapshot, record.subject_id);
+    return { title: `Retire ${label}?`, subject_label: label, confirm_label: `Retire ${label}`, cancel_label: "Keep as is",
+      body: `Operator repair. ${label} is taken out of play: not present anywhere, not targetable, not available to the story. The record is kept (this is not a deletion) and the character cannot be reactivated here. Nothing has changed yet.` };
+  },
+};
+/** Block 5B: a human operator merges SOURCE (the duplicate) into TARGET (the identity to preserve). SOURCE is retired with `merged_into`. */
+export const MERGE_CHARACTER_KIND: ConfirmationKind = {
+  kind: "merge_character",
+  payload_valid: p => typeof p.target_id === "string" && p.target_id.length > 0 && p.target_id !== "nicco",
+  invalid_reason: (snapshot, record) => REPAIR_REASON(mergeConflicts(snapshot, record.subject_id, String(record.payload.target_id)).conflicts),
+  commands: (_snapshot, record) => [{ kind: "merge_characters", source_id: record.subject_id, target_id: String(record.payload.target_id) }],
+  card: (world, snapshot, record) => {
+    const source = repairLabel(world, snapshot, record.subject_id), target = repairLabel(world, snapshot, String(record.payload.target_id));
+    const summary = mergeConflicts(snapshot, record.subject_id, String(record.payload.target_id)).summary;
+    const moved = Object.entries(summary.rewrites).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${k}`).join(", ");
+    return { title: `Merge ${source} into ${target}?`, subject_label: `${source} → ${target}`, confirm_label: `Merge into ${target}`, cancel_label: "Keep both",
+      body: `Operator repair. SOURCE ${source} is the duplicate and is retired; TARGET ${target} is the identity that is kept.${moved ? ` References moved to the target: ${moved}.` : ""} Nothing has changed yet.` };
+  },
+};
+export const PRODUCTION_CONFIRMATION_KINDS: ConfirmationKinds = new Map([[MANUMISSION_KIND.kind, MANUMISSION_KIND], [RETIRE_CHARACTER_KIND.kind, RETIRE_CHARACTER_KIND], [MERGE_CHARACTER_KIND.kind, MERGE_CHARACTER_KIND]]);

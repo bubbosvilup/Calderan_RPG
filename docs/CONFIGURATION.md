@@ -41,4 +41,4 @@ See the topology table in [Current state](CURRENT_STATE.md#4-current-model-topol
 
 ## Saves
 
-Snapshot schema 6, save file schema 6 ([Persistence](architecture/PERSISTENCE.md)). Portraits live inside each campaign folder. Derived data is never saved.
+Snapshot schema 7, save file schema 7 ([Persistence](architecture/PERSISTENCE.md)). Portraits live inside each campaign folder. Derived data is never saved.

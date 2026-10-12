@@ -36,7 +36,7 @@ export interface TurnDiagnostics {
   provider_attempts?: { narrator?: ProviderAttemptRecord; recovery_narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
   authorization?: { duplicates_removed?: number; proposed_count: number; authorized_count: number; rejected_count: number; decisions: readonly { kind: string; authorized: boolean; reason: string; evidence_check?: string }[] };
   audit?: { issue_count: number; issue_kinds: readonly string[]; reconciliation_attempted: boolean; revision_issue_count: number; revision_issue_kinds: readonly string[]; redaction_used: boolean; delivered: string };
-  commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_promotion_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };
+  commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_provisional_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };
 }
 /** Controller model identity for diagnostics: requested primary, answering model, fallback flag, generation id, upstream provider. No content. */
 export function controllerModelDiagnostics(r: import("../llm/state-controller-provider.js").ControllerResult): Pick<NonNullable<TurnDiagnostics["controller"]>, "model" | "response_model" | "requested_models" | "model_fallback" | "generation_id" | "provider"> {

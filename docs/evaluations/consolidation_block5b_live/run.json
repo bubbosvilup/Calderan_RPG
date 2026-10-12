@@ -1,0 +1,70 @@
+{
+  "A": {
+    "verdict": {
+      "turns_ok": true,
+      "no_persistent_character_created": true,
+      "created_ids": []
+    },
+    "turns": [
+      {
+        "text": "I turn to the nearest vendor behind a stall and ask him, \"Who are you, friend? What is your name?\"",
+        "ok": true,
+        "error": null,
+        "narration": "*The man behind the stall has the look of someone who's been standing in the same spot since dawn. He's sorting through a bundle of cord, looping it into coils by feel while his eyes track the passing crowd. A wooden crate beside him holds iron fittings — clasps, chains, basic hardware. When Nicco speaks, his hands keep working for a beat before he looks up.*\n\nFriend, is it. *He sets down a coil and wipes his palms on his apron.* Marren. I sell fittings. Chains, clasps, bolts, pins — whatever a buyer needs to keep what they bought where they put it.\n\n*He gestures at the crate without ceremony, then glances past Nicco toward the pens, as though checking whether this conversation is cutting into someone else's business.*\n\nYou looking for something particular, or just finding your bearings?",
+        "provisional": null,
+        "provider_calls": 2
+      },
+      {
+        "text": "I nod and say, \"Pleased to meet you. I am Nicco. Tell me, how long have you worked this market?\"",
+        "ok": true,
+        "error": null,
+        "narration": "*Marren picks up another length of cord and starts feeding it through his fingers, measuring by arm's length before cutting it with a short blade from his belt.*\n\nNicco. Right.\n\n*He counts off a few loops without looking down.*\n\nFew years now. Long enough to know where to stand and where not to. The market was here before me and it'll be here after. I don't trouble myself with counting.\n\n*He ties off the coil and tosses it into a growing pile at the corner of the stall, then gives Nicco a look that's neither unfriendly nor particularly warm — the flat appraisal of a man deciding whether this conversation leads to a sale.*\n\nYou said your name. Didn't say what you're after.",
+        "provisional": null,
+        "provider_calls": 2
+      }
+    ]
+  },
+  "B": {
+    "verdict": {
+      "card_reached": false,
+      "no_persistent_person_before_accept": true,
+      "accept_materialized_exactly_one": false,
+      "accept_zero_provider_calls": false
+    },
+    "turns": [
+      {
+        "text": "I walk to the cages and ask Korvin which women he has for sale.",
+        "ok": true,
+        "error": null,
+        "narration": "*Nicco crosses the churned ground toward the holding pens. The short, compact man straightens from where he's been conferring with a handler, his large hands resting on his belt. Those small, mobile eyes take Nicco in head to boot — a quick, practiced assessment — and settle somewhere between wary and expectant.*\n\nWomen, is it.\n\n*He jerks his chin toward the nearest pen, where several figures sit or stand in the cramped space behind the wooden slats.*\n\nGot three in there. One's a kitchen type, been around, knows her way around a hearth. Other two are field hands, younger. Strong enough.\n\n*He scratches the side of his hooked nose with a thumbnail, studying Nicco a moment longer.*\n\nWhat kind of work are you after? Saves us both time if I know whether you need someone to cook or someone to haul.",
+        "provisional": null,
+        "provider_calls": 2
+      },
+      {
+        "text": "I want the younger one. What is your price, Korvin?",
+        "ok": true,
+        "error": null,
+        "narration": "*The man's eyes narrow a fraction — not at Nicco, but past him, toward the pen, as if matching the description to the stock. He wipes one broad palm down the front of his coat and hooks his thumbs back into his belt.*\n\nWhich one? I got two younger ones. Both field hands. One's elven — tall, wiry, good reach. Other's human, stockier, stronger back. Different prices.\n\n*He lets that sit, watching Nicco's face with the unhurried patience of someone who's run this exchange a hundred times.*\n\nThe elf, four hundred and twenty. The human, five hundred even. Either one you can look at first, long as you like. I'm not selling blind.\n\n*He shifts his weight, gravel crunching under one boot, and spits to the side.*\n\nSo. Which?",
+        "provisional": null,
+        "provider_calls": 2
+      },
+      {
+        "text": "Three hundred for her.",
+        "ok": true,
+        "error": null,
+        "narration": "*The man doesn't react right away. He looks at Nicco the way someone looks at a coin they've been handed that's been shaved — not angry, just measuring whether it's worth the bother of arguing.*\n\n*He pulls one hand from his belt and rubs the back of his neck, slow.*\n\nThree hundred. Heh.\n\n*He lets the sound trail off. His gaze drops to the pens, then comes back.*\n\nShe's strong-backed, young, good for years yet. I said five even and that's already fair. Three hundred I'd be giving her away.\n\n*He scratches at a callus on his palm, watching Nicco from under heavy brows.*\n\nFour-fifty. That's me moving. Not going lower than that — you'd be robbing me and we both know it.",
+        "provisional": null,
+        "provider_calls": 2
+      }
+    ],
+    "card_after_turn": 0,
+    "accept": {
+      "skipped": true
+    }
+  },
+  "total_provider_requests": 10,
+  "narrator_requests": 5,
+  "other_requests": 5,
+  "total_tokens": 63359,
+  "cost_usd": 0
+}

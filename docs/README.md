@@ -50,7 +50,7 @@ Labels: **NORMATIVE** (the maintained description of current behavior), **ACTIVE
 
 ## Persistence
 
-- **NORMATIVE** [Persistence](architecture/PERSISTENCE.md) (snapshot schema 6, save file schema 6)
+- **NORMATIVE** [Persistence](architecture/PERSISTENCE.md) (snapshot schema 7, save file schema 7)
 - SUPERSEDED [save_load_audit.md](save_load_audit.md), [save_load_v1_design.md](save_load_v1_design.md) (implemented)
 
 ## Testing

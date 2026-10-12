@@ -22,8 +22,8 @@ export const PENDING_ACTIVE_CREATE_LIMIT = 64;
 export const PENDING_REF = /^[0-9a-f]{24}$/;
 export type PendingStatus = "pending" | "confirmed" | "cancelled" | "invalidated";
 export interface PendingProvenance {
-  /** Where the interpretation came from: the player's words in a turn (the only production source) or a test harness. */
-  readonly source: "player_text" | "test";
+  /** Where the interpretation came from: the player's words in a turn, a human operator invoking an explicit repair (Block 5B; never a scanner or a model), or a test harness. */
+  readonly source: "player_text" | "operator" | "test";
   /** The logical turn that produced it (idempotency identity), when there was one. */
   readonly turn_key?: string;
   readonly turn_id?: string;
@@ -67,7 +67,7 @@ export function parsePendingConfirmation(input: unknown, saved_revision: number,
   if (typeof r.ref !== "string" || !PENDING_REF.test(r.ref) || typeof r.kind !== "string" || !KIND.test(r.kind) || !known_kind(r.kind)) return undefined;
   if (typeof r.subject_id !== "string" || !ID.test(r.subject_id) || typeof r.actor_id !== "string" || !ID.test(r.actor_id) || !validPayload(r.payload)) return undefined;
   const p = r.provenance;
-  if (!plainObject(p) || Object.keys(p).some(k => !["source", "turn_key", "turn_id"].includes(k)) || (p.source !== "player_text" && p.source !== "test")) return undefined;
+  if (!plainObject(p) || Object.keys(p).some(k => !["source", "turn_key", "turn_id"].includes(k)) || (p.source !== "player_text" && p.source !== "operator" && p.source !== "test")) return undefined;
   if (p.turn_key !== undefined && (typeof p.turn_key !== "string" || !TURN_KEY.test(p.turn_key))) return undefined;
   if (p.turn_id !== undefined && (typeof p.turn_id !== "string" || !p.turn_id || p.turn_id.length > 200)) return undefined;
   // A record is created at a revision the saved state has reached: it was written with that state.
