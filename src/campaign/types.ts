@@ -135,7 +135,7 @@ export interface TradeGoodsLine { name: string; description: string; visual_desc
  */
 export type TradeSubject = { kind: "goods"; lines: TradeGoodsLine[] } | { kind: "items"; item_ids: string[] } | { kind: "person"; subject_character_id: string; plan: CampaignCommand[] };
 export type TradeInvalidReason = "scene_changed" | "counterparty_gone" | "item_unavailable" | "item_not_owned" | "person_unavailable" | "offer_unavailable";
-export interface TradeSettlement { gold: number; revision: number; world_minute: number; created_item_ids?: string[]; removed_item_ids?: string[]; removed_item_names?: string[]; transaction_id?: string }
+export interface TradeSettlement { gold: number; revision: number; world_minute: number; created_item_ids?: string[]; removed_item_ids?: string[]; removed_item_names?: string[]; custody?: { kind: "character"; character_id: string } | { kind: "external" }; transaction_id?: string }
 export interface TradeOfferRecord {
   /** `trade_offer_NNNNNNNN`, allocated by the engine. */
   id: string; direction: TradeDirection; status: TradeOfferStatus; price_gold: number;

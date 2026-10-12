@@ -44,7 +44,7 @@ test("TRD-1: a SELL of an item the player both holds and owns still works end to
   const c = market([sword(NICCO)]); run(c, [sell(swordId(c))]);
   const offer = activeTradeOffer(offers(c))!; assert.equal(offer.price_gold, 5);
   run(c, [{ kind: "accept_trade_offer", offer_id: offer.id }]);
-  assert.equal(snap(c).items.some(i => i.name === "Old Rusty Sword"), false);
+  assert.equal(snap(c).items.find(i => i.name === "Old Rusty Sword")?.owner_id, "korvin", "the item is transferred, not deleted");
   assert.equal(snap(c).funds.find(f => f.character_id === NICCO)!.gold, 505);
 });
 test("TRD-1: ownership that changes between proposal and Accept makes Accept fail with item_not_owned and mutates nothing", () => {

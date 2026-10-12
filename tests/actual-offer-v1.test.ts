@@ -133,17 +133,20 @@ test("G20: gold is whole numbers only; fractions, zero and negative prices are n
 });
 
 // =========================================================================================================== goods SELL (G11-G17)
-test("G11/G13/G14/G15: SELL references an existing authoritative item; on acceptance it is removed, the gold is credited and the settlement is recorded", () => {
+test("G11/G13/G14/G15: SELL references an existing authoritative item; on acceptance it is TRANSFERRED to the buyer (same item), the gold is credited and the settlement is recorded", () => {
   const c = market([swordItem, shirtItem]); const sword = itemNamed(c, "Old Rusty Sword")!;
   propose(c, sellItems(5, sword.id));
   assert.equal(gold(c), 500); assert.ok(itemNamed(c, "Old Rusty Sword"), "creating the offer removes nothing");
   const rev = c.revision;
   accept(c);
   assert.equal(c.revision, rev + 1);
-  assert.equal(itemNamed(c, "Old Rusty Sword"), undefined, "V1 simplification: the sold item leaves campaign state");
+  const sold = itemNamed(c, "Old Rusty Sword")!;
+  assert.equal(sold.id, sword.id, "TRD-1b: the SAME item survives the sale");
+  assert.deepEqual([sold.position, sold.owner_id], [{ kind: "carried", character_id: "korvin" }, "korvin"], "it now sits with the buyer, who owns it");
   assert.equal(gold(c), 505);
   const done = offers(c).at(-1)!;
   assert.deepEqual([done.status, done.settlement?.gold, done.settlement?.removed_item_ids, done.settlement?.revision, done.resolved_revision], ["accepted", 5, [sword.id], rev + 1, rev + 1]);
+  assert.deepEqual(done.settlement?.custody, { kind: "character", character_id: "korvin" });
   assert.ok(itemNamed(c, "Linen Shirt"), "G17: unrelated inventory is untouched");
 });
 test("G12: a SELL of an item that does not exist, is not held by the player, or is referenced elsewhere is rejected; prose can never mint a sellable item", () => {
@@ -175,7 +178,7 @@ test("G16: a sold item stays absent, and an accepted offer stays accepted, after
   accept(reloaded);
   await repository.saveCampaign(reloaded);
   const again = (await repository.loadCampaign(snap(c).campaign_id)).campaign;
-  assert.equal(itemNamed(again, "Old Rusty Sword"), undefined); assert.equal(gold(again), 505);
+  assert.equal(itemNamed(again, "Old Rusty Sword")?.owner_id, "korvin"); assert.equal(gold(again), 505);
   assert.deepEqual([offers(again).length, offers(again)[0]!.status, standing(again)], [1, "accepted", undefined]);
   assert.match(reasonOf(() => accept(again, offers(again)[0]!.id)), /offer_accepted/);
   assert.equal(gold(again), 505);

@@ -1,0 +1,375 @@
+{
+  "scenario": "A",
+  "offer": {
+    "id": "trade_offer_00000001",
+    "direction": "buy",
+    "status": "active",
+    "price_gold": 3,
+    "counterparty": {
+      "kind": "character",
+      "character_id": "korvin"
+    },
+    "subject": {
+      "kind": "goods",
+      "lines": [
+        {
+          "name": "Iron dagger",
+          "description": "An iron dagger.",
+          "visual_description": "An iron dagger."
+        }
+      ]
+    },
+    "location_id": "calderan_slave_market",
+    "created_revision": 3,
+    "created_minute": 600
+  },
+  "item_before": null,
+  "pre": {
+    "offer_still_active": true,
+    "gold_unchanged": true,
+    "items_unchanged_ids": true,
+    "sell_item_still_nicco": null,
+    "delivered_claims_payment": false
+  },
+  "post": {
+    "accept_ok": true,
+    "gold_before": 500,
+    "gold_after": 497,
+    "delta": -3,
+    "revision_after": 5,
+    "offer_status": "accepted",
+    "receipt": {
+      "ref": "8783ac32b45458cf7ff4dee6",
+      "direction": "buy",
+      "kind": "goods",
+      "gold": 3,
+      "summary": "Bought Iron dagger for 3 gold"
+    },
+    "new_items": [
+      {
+        "id": "campaign_item_00000001",
+        "name": "Iron dagger",
+        "owner_id": "nicco",
+        "position": {
+          "kind": "carried",
+          "character_id": "nicco"
+        },
+        "acquisition": {
+          "acquired_at": 600,
+          "acquisition_kind": "purchase",
+          "from_character_id": "korvin"
+        }
+      }
+    ],
+    "second_accept": {
+      "ok": false,
+      "reason": "offer_accepted"
+    },
+    "gold_after_second": 497
+  },
+  "narrator_calls": 4,
+  "controller_calls": 3,
+  "transient_retries": 0,
+  "total_tokens": 38572,
+  "cost_usd": 0,
+  "log": [
+    {
+      "label": "elicit_1",
+      "input": "I ask Korvin how many gold pieces he wants for a plain iron dagger from his stock. I only pay in gold.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man sizes Nicco up without hurry, those small eyes flicking once to his hands, once to his build, then back to his face. He scratches the side of his hooked nose with a thick, scarred knuckle.*\n\nIron dagger. Plain. Nothing pretty about it.\n\n*He lets that sit for a beat, not rushing toward a number.*\n\nTwo gold and four silver's the going rate on one. You say you're paying gold only — call it three gold. I'm not splitting silver for the difference.\n\n*He watches Nicco's reaction with the practiced patience of a man who has stated prices to strangers thousands of times.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5824,
+          "completion_tokens": 132,
+          "total_tokens": 5956
+        },
+        "controller": {
+          "prompt_tokens": 6681,
+          "completion_tokens": 16,
+          "total_tokens": 6697
+        }
+      },
+      "revision": 2,
+      "gold": 500,
+      "active_offer": null,
+      "trade_card": null,
+      "proposal": {
+        "draft": "*The short man sizes Nicco up without hurry, those small eyes flicking once to his hands, once to his build, then back to his face. He scratches the side of his hooked nose with a thick, scarred knuckle.*\n\nIron dagger. Plain. Nothing pretty about it.\n\n*He lets that sit for a beat, not rushing toward a number.*\n\nTwo gold and four silver's the going rate on one. You say you're paying gold only — call it three gold. I'm not splitting silver for the difference.\n\n*He watches Nicco's reaction with the practiced patience of a man who has stated prices to strangers thousands of times.*",
+        "controller_proposal": [],
+        "authorization": []
+      },
+      "inventory": [
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    },
+    {
+      "label": "elicit_2",
+      "input": "I ask him for his firm price in gold pieces for the iron dagger.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man's mouth pulls sideways, not quite a smile. He rubs one broad thumb across the opposite palm, slow, like he's working a knot out of the skin there.*\n\nThree gold. That's firm. You get the dagger, I don't chase you for silver you haven't got on you.\n\n*He holds the look steady, waiting. No movement toward any stock or blade rack — not until the gold moves first.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [
+        "propose_trade_offer"
+      ],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5828,
+          "completion_tokens": 90,
+          "total_tokens": 5918
+        },
+        "controller": {
+          "prompt_tokens": 6592,
+          "completion_tokens": 91,
+          "total_tokens": 6683
+        }
+      },
+      "revision": 3,
+      "gold": 500,
+      "active_offer": {
+        "id": "trade_offer_00000001",
+        "direction": "buy",
+        "price": 3,
+        "subject": {
+          "kind": "goods",
+          "lines": [
+            {
+              "name": "Iron dagger",
+              "description": "An iron dagger.",
+              "visual_description": "An iron dagger."
+            }
+          ]
+        },
+        "counterparty": {
+          "kind": "character",
+          "character_id": "korvin"
+        }
+      },
+      "trade_card": {
+        "ref": "8783ac32b45458cf7ff4dee6",
+        "direction": "buy",
+        "kind": "goods",
+        "counterparty": "Unfamiliar person",
+        "price_gold": 3,
+        "lines": [
+          "Iron dagger"
+        ],
+        "affordable": true,
+        "gold": 500,
+        "summary": "Buy Iron dagger for 3 gold"
+      },
+      "proposal": {
+        "draft": "*The short man's mouth pulls sideways, not quite a smile. He rubs one broad thumb across the opposite palm, slow, like he's working a knot out of the skin there.*\n\nThree gold. That's firm. You get the dagger, I don't chase you for silver you haven't got on you.\n\n*He holds the look steady, waiting. No movement toward any stock or blade rack — not until the gold moves first.*",
+        "controller_proposal": [
+          {
+            "kind": "propose_trade_offer",
+            "direction": "buy",
+            "price_gold": 3,
+            "counterparty": {
+              "kind": "character",
+              "character_id": "korvin"
+            },
+            "subject": {
+              "kind": "goods",
+              "lines": [
+                {
+                  "name": "Iron dagger",
+                  "description": "An iron dagger.",
+                  "visual_description": "An iron dagger."
+                }
+              ]
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "propose_trade_offer",
+              "direction": "buy",
+              "price_gold": 3,
+              "counterparty": {
+                "kind": "character",
+                "character_id": "korvin"
+              },
+              "subject": {
+                "kind": "goods",
+                "lines": [
+                  {
+                    "name": "Iron dagger",
+                    "description": "An iron dagger.",
+                    "visual_description": "An iron dagger."
+                  }
+                ]
+              }
+            },
+            "authorized": true,
+            "reason": "authorized_controller_evidence",
+            "source": "evidence",
+            "grammar": {
+              "authorized": false,
+              "reason": "trade_proposals_have_no_grammar_path"
+            },
+            "evidence": {
+              "quote": "Three gold. That's firm.",
+              "verified": true,
+              "check": "concrete_gold_offer_stated"
+            }
+          }
+        ]
+      },
+      "inventory": [
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    },
+    {
+      "label": "risk",
+      "input": "*I count the gold into his palm, take the dagger from the counter and tuck it into my belt.*",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man watches Nicco's hands, those small perceptive eyes tracking the motion toward his belt. His gaze lingers there a beat — reading, measuring, the way a man does when he's sized up ten thousand strangers and still checks the next one.*\n\n*He doesn't move toward any stock. The price sits between them like a thing set on a table — three gold, firm, already spoken. His thick fingers rest on the counter edge, still. He's waiting for the gold to move first, and his face says he's content to wait.*\n\nThree gold. You know where I am.\n\n*He shifts his weight off one foot onto the other, the only movement he makes. Rain drums steady on the market square beyond the overhang, and somewhere behind him stock shifts in a crate — metal on metal, dull and quiet. His eyes stay on Nicco.*",
+      "error": null,
+      "narrator_requests": 2,
+      "narration_status": "redacted",
+      "audit": [
+        "asserts_uncommitted_purchase"
+      ],
+      "revision_issues": [
+        "asserts_uncommitted_purchase"
+      ],
+      "committed": [],
+      "rejected": [
+        "propose_trade_offer"
+      ],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6092,
+          "completion_tokens": 264,
+          "total_tokens": 6356
+        },
+        "controller": {
+          "prompt_tokens": 6829,
+          "completion_tokens": 133,
+          "total_tokens": 6962
+        }
+      },
+      "revision": 3,
+      "gold": 500,
+      "active_offer": {
+        "id": "trade_offer_00000001",
+        "direction": "buy",
+        "price": 3,
+        "subject": {
+          "kind": "goods",
+          "lines": [
+            {
+              "name": "Iron dagger",
+              "description": "An iron dagger.",
+              "visual_description": "An iron dagger."
+            }
+          ]
+        },
+        "counterparty": {
+          "kind": "character",
+          "character_id": "korvin"
+        }
+      },
+      "trade_card": {
+        "ref": "8783ac32b45458cf7ff4dee6",
+        "direction": "buy",
+        "kind": "goods",
+        "counterparty": "Unfamiliar person",
+        "price_gold": 3,
+        "lines": [
+          "Iron dagger"
+        ],
+        "affordable": true,
+        "gold": 500,
+        "summary": "Buy Iron dagger for 3 gold"
+      },
+      "proposal": {
+        "draft": "*The short man watches Nicco's hands as the coins come out. Three gold pieces pass from Nicco's palm to his, and the man's thick fingers close around them with a quick, automatic motion — the kind that has counted and received money more times than it has breathed air. He doesn't look at the coins again. They disappear into a pouch at his belt in one practiced movement.*\n\n*His other hand is already reaching beneath the counter edge, coming up with a plain iron dagger in a cheap leather sheath. He sets it on the counter between them, handle toward Nicco, and steps back half a pace — not far, just enough to make clear the transaction has its own sides.*\n\nThere. She's not pretty, but she'll stick a man same as anything.\n\n*He wipes his palm on his trouser leg and watches Nicco take the dagger. Those small perceptive eyes track it to Nicco's belt, note how he tucks it, and then the man gives a single short nod — not friendly, not hostile. Transactional. He turns back toward his stock behind the counter, already half-dismissing Nicco from his attention, though his shoulders stay angled in a way that says he hasn't forgotten the customer is there.*\n\nAnything else, or are we done?",
+        "revision": "*The short man watches Nicco's hands, those small perceptive eyes tracking the motion toward his belt. His gaze lingers there a beat — reading, measuring, the way a man does when he's sized up ten thousand strangers and still checks the next one.*\n\n*He doesn't move toward any stock. The price sits between them like a thing set on a table — three gold, firm, already spoken. His thick fingers rest on the counter edge, still. No dagger produced, no hand extended for coins. He's waiting for the gold to move first, and his face says he's content to wait.*\n\nThree gold. You know where I am.\n\n*He shifts his weight off one foot onto the other, the only movement he makes. Rain drums steady on the market square beyond the overhang, and somewhere behind him stock shifts in a crate — metal on metal, dull and quiet. His eyes stay on Nicco.*",
+        "controller_proposal": [
+          {
+            "kind": "propose_trade_offer",
+            "direction": "buy",
+            "price_gold": 3,
+            "counterparty": {
+              "kind": "character",
+              "character_id": "korvin"
+            },
+            "subject": {
+              "kind": "goods",
+              "lines": [
+                {
+                  "name": "Iron dagger",
+                  "description": "A plain iron dagger in a cheap leather sheath.",
+                  "visual_description": "A plain iron dagger with a cheap leather sheath."
+                }
+              ]
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "propose_trade_offer",
+              "direction": "buy",
+              "price_gold": 3,
+              "counterparty": {
+                "kind": "character",
+                "character_id": "korvin"
+              },
+              "subject": {
+                "kind": "goods",
+                "lines": [
+                  {
+                    "name": "Iron dagger",
+                    "description": "A plain iron dagger in a cheap leather sheath.",
+                    "visual_description": "A plain iron dagger with a cheap leather sheath."
+                  }
+                ]
+              }
+            },
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "source": "rejected",
+            "grammar": {
+              "authorized": false,
+              "reason": "trade_proposals_have_no_grammar_path"
+            },
+            "evidence": {
+              "quote": "He sets it on the counter between them, handle toward Nicco, and steps back half a pace — not far, just enough to make clear the transaction has its own sides.",
+              "verified": false,
+              "check": "price_not_in_quote"
+            },
+            "code": "price_not_in_quote",
+            "signals": [
+              "price_not_in_quote"
+            ]
+          }
+        ]
+      },
+      "inventory": [
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    }
+  ]
+}

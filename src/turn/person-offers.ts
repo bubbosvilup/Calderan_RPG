@@ -7,7 +7,8 @@ import { classifyBackgroundClaim } from "./background-grounding.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
 import { CAPTIVE, establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type NarrationUnit, type SceneReading } from "./narrated-captives.js";
-import { NUMBER_PHRASE_SOURCE, numberPhraseValue, numberWordValue } from "./language/numbers.js";
+import { NUMBER_PHRASE_SOURCE } from "./language/numbers.js";
+import { AUCTION, pricesInText, readPrices, unsupportedCurrency, goldAmounts } from "./trade-price.js";
 import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
 
 /**
@@ -27,22 +28,9 @@ export interface PersonOfferResolution {
 }
 export interface OfferOptions { readonly world: WorldStore; readonly participants?: readonly EphemeralSceneParticipant[] }
 const NUM = `(${NUMBER_PHRASE_SOURCE})`;
-/** Spoken hundreds shorthand: "two-sixty" is 260, "three fifty" 350 (a unit digit then a tens/teen compound). Only the offer reader uses it. */
-function shorthandValue(phrase: string): number | undefined {
-  const [unit, ...rest] = phrase.trim().toLowerCase().split(/[\s-]+/);
-  const hundreds = unit ? numberWordValue(unit) : undefined;
-  const tail = rest.length ? numberPhraseValue(rest.join(" ")) : undefined;
-  return hundreds !== undefined && hundreds > 0 && hundreds < 10 && tail !== undefined && tail >= 10 && tail < 100 ? hundreds * 100 + tail : undefined;
-}
-const value = (s: string) => numberPhraseValue(s) ?? shorthandValue(s);
 const DOCUMENTED = /\b(?:papers? included|with (?:the |full |clean )?papers|clean transfer|(?:his|her|the seller's|my) seal|no liens|bill of sale|deed of (?:sale|transfer)|transfer papers)\b/i;
 const UNDOCUMENTED = /\b(?:no papers|without (?:any )?papers|no listing|unlisted|unpapered|off the books|papers? (?:are )?(?:missing|lost|burned))\b/i;
 function sentences(text: string): string[] { return text.split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean); }
-/** Non-gold money in a sentence that states a person's price: no actionable offer. */
-const NON_GOLD = /\b(?:silvers?|coppers?|bronze|platinum|pennies|penny|farthings?|shillings?)\b|\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand)\s+marks?\b/i;
-/** Auction wording: bids and lots belong to a different system. */
-const AUCTION = /\b(?:auctions?|auctioneers?|bids?|bidding|bidders?|gavel|hammer price|going once|going twice)\b/i;
-
 /**
  * `recent` already ends with the CURRENT exchange (player input and delivered narration). Returns at most one offer: a person offer is made only
  * for a subject whose price the seller just stated.
@@ -90,7 +78,7 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   if (!chosen) { if (!subject && priced.length > 1) diagnostics.push({ status: "ambiguous", detail: { candidates: priced } }); return { commands, diagnostics }; }
   const sellerId = legal(chosen)!.holder_id!;
   const lines = linesFor(chosen);
-  if (lines.some(l => NON_GOLD.test(l))) { diagnostics.push({ status: "blocked", detail: { subject: chosen, reason: "unsupported_currency" } }); return { commands, diagnostics }; }
+  if (lines.some(l => unsupportedCurrency(l) || readPrices(l, { concrete: true }).unsupported)) { diagnostics.push({ status: "blocked", detail: { subject: chosen, reason: "unsupported_currency" } }); return { commands, diagnostics }; }
   const price = lines.flatMap(amountsIn).at(-1);
   if (price === undefined || price < 1) { diagnostics.push({ status: "no_offer", detail: { subject: chosen, seller: sellerId } }); return { commands, diagnostics }; }
   const papers: TransferDocumentation = UNDOCUMENTED.test(latest) ? "undocumented" : DOCUMENTED.test(latest) ? "documented" : "unestablished";
@@ -107,22 +95,8 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
  * seller actually uses while bargaining: "Three hundred for her.", "I'll go two-sixty.", "Make it two-sixty.", "Done, then. Two-sixty.".
  * A bare number sentence that the next sentence turns down ("Two hundred. You're a full third off.") repeats the buyer's figure and is no offer.
  */
-const REJECTS = /\b(?:off|too (?:low|little|cheap)|no\b|not (?:a|going|enough)|never|insult\w*|won'?t|can'?t|nowhere near|laughable)\b/i;
-const BARGAIN = `(?:(?:i'?ll|i will|we'?ll|i can|i could)\\s+(?:go|do|take|say|sell (?:her|him|them) (?:for|at)|let (?:her|him|them) go (?:for|at))|make it|let'?s say|call it|say|down to|settle (?:on|for|at)|(?:i'?d|i would) (?:take|do|settle for)|how about|lowest i'?ll go is|best i can do is)`;
-function priceMatches(sentence: string, next?: string): number[] {
-  const forms = [`\\b${NUM}\\s+gold\\b`, `["“]\\s*${NUM}\\s*(?:gold)?\\s*[.!]?\\s*["”]`, `["“]\\s*${NUM}\\s*\\.`,
-    `\\b${NUM}\\s+(?:gold\\s+)?(?:for|apiece)\\s+(?:her|him|them|that one|this one|the (?:woman|girl|man|boy|lad|lass|slave|captive))\\b`,
-    `\\b${BARGAIN}\\s+(?:to |for |at )?${NUM}\\b`,
-    `\\b${NUM}(?:'s|’s|\\s+is)\\s+(?:the |my |her |his )?(?:number|price|figure|asking(?: price)?|offer)\\b`];
-  const found = forms.flatMap(f => [...sentence.matchAll(new RegExp(f, "gi"))].map(m => value(m[1] ?? m[2] ?? m[3]!))).filter((n): n is number => n !== undefined);
-  if (found.length) return found;
-  const bare = sentence.match(new RegExp(`^\\s*${NUM}\\s*(?:gold)?\\s*[.,!]?\\s*$`, "i"));
-  const lead = sentence.match(new RegExp(`^\\s*${NUM}\\s*(?:gold)?\\s*[.!]\\s*$`, "i"));
-  const standalone = (bare ?? lead) ? value((bare ?? lead)![1]!) : undefined;
-  return standalone !== undefined && !(next && REJECTS.test(next)) ? [standalone] : [];
-}
-/** Prices a block of narration states, sentence by sentence. */
-export const pricesOf = (text: string): number[] => { const parts = sentences(text); return parts.flatMap((t, i) => priceMatches(t, parts[i + 1])); };
+/** Prices a block of narration states, sentence by sentence (shared grammar: src/turn/trade-price.ts). */
+export const pricesOf = (text: string): number[] => pricesInText(text);
 const amountsIn = pricesOf;
 /** Sentences of the latest narration that state a price and are about this person (their name, or the only held person by pronoun/noun), excluding past costs and group prices. */
 function pricedSentences(latest: string, id: string, candidates: readonly string[], named: (text: string, id: string) => boolean, input: string): string[] {
@@ -309,7 +283,7 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   ];
   const latestUnits = reading.units.filter(u => u.exchange === reading.latest);
   // Per sentence: "Five. She's a burden I paid four for." offers five; the past cost in the next sentence is not an offer.
-  const amounts = (text: string) => { const parts = sentences(text); return parts.flatMap((t, i) => NOT_AN_OFFER.test(t) ? [] : priceMatches(t, parts[i + 1])); };
+  const amounts = (text: string) => { const parts = sentences(text); return parts.flatMap((t, i) => NOT_AN_OFFER.test(t) ? [] : goldAmounts(t, { concrete: true, prev: parts[i - 1], next: parts[i + 1] })); };
   const otherCaptive = (text: string) => reading.captives.some(c => c.ref !== subjectPerson.ref && c.name && refersTo(c, text));
   const priceRequest = /\b(?:price|how much|sell)\b/i.test(s.latest?.player ?? "") || latestUnits.some(u => /\b(?:price|how much)\b/i.test(u.text) && refersTo(subjectPerson, u.text));
   const authorities = sellers.flatMap(seller => {
@@ -325,12 +299,13 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
     const aboutSubject = offerUnits.filter(forSubject);
     return aboutSubject.length ? [{ seller, offered: aboutSubject.flatMap(u => amounts(u.text)), basis: claim ? claim.text.slice(0, 200) : "sale offer in reply to a price request", offer: aboutSubject.at(-1)?.text.slice(0, 200) }] : [];
   });
+  // Money the engine does not settle (silver, marks, fractions) is a clear refusal, never a silent conversion and never an offer.
+  if (!authorities.length && latestUnits.some(u => !!u.speaker && !!readPrices(u.text, { concrete: true }).unsupported)) return block("blocked", "unsupported_currency", {});
   if (authorities.length !== 1) return block("blocked", authorities.length ? "seller_ambiguous" : "seller_authority_unestablished", { sellers: authorities.map(a => a.seller.label) });
   const { seller, offered, basis, offer } = authorities[0]!;
   // Only the seller's stated price counts: the player's own figures are a counteroffer in chat and never set a price.
   const price = offered.at(-1);
   if (price === undefined || price < 1) return block("no_offer", "no_price", { seller: seller.label });
-  if (latestUnits.some(u => NON_GOLD.test(u.text) && amounts(u.text).includes(price))) return block("blocked", "unsupported_currency", { seller: seller.label });
   // Papers and provenance: only what the seller said in the offer narration. Never assume clean papers.
   const said = latestUnits.filter(u => !!u.speaker && seller.keys.includes(u.speaker)).map(u => u.text).join(" ");
   const papers: TransferDocumentation = UNDOCUMENTED.test(said) ? "undocumented" : DOCUMENTED.test(said) ? "documented" : "unestablished";

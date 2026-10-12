@@ -7,7 +7,7 @@ import { itemHolder, transferCharacterPresent } from "../campaign/item-transfer.
 import { activePlayerCharacterId } from "../campaign/player-character.js";
 import { activeTradeOffer, isTradeCommand } from "../campaign/trade.js";
 import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
-import { NUMBER_PHRASE_SOURCE, numberPhraseValue } from "./language/numbers.js";
+import { AUCTION, fractionalPrice, readPrices, statedGold, unsupportedCurrency } from "./trade-price.js";
 import { escapeRegExp as esc, sentencesOf } from "./language/text.js";
 
 /**
@@ -17,24 +17,36 @@ import { escapeRegExp as esc, sentencesOf } from "./language/text.js";
  * Settlement is not in this module and cannot be: `accept_trade_offer` has no Controller or narration path at all.
  */
 export const isTradeProposal = (c: CampaignCommand): boolean => isTradeCommand(c);
-/** Any currency other than gold in the sentence that quotes the price: no actionable offer (clear unsupported-currency reason). */
-const NON_GOLD = /\b(?:silvers?|coppers?|bronze|platinum|crowns?|marks?|pennies|penny|farthings?|shillings?|sovereigns?|florins?|ducats?|denarii|denarius|coins? of (?:silver|copper|bronze))\b/i;
-/** Auction wording: bids, lots and hammers belong to a different (future) system and never create ordinary offers. */
-const AUCTION = /\b(?:auctions?|auctioneers?|bids?|bidding|bidders?|gavel|hammer price|lot (?:number|\d+)|going once|going twice|reserve price)\b/i;
 const HYPOTHETICAL = /\?|\b(?:if|maybe|perhaps|might|could|would|should|supposing|suppose|how much|what(?:'s| is) (?:the|your) price|name your price|haggl\w*|negotiat\w*)\b/i;
-const FRACTION = /\b(?:half|quarter|third|fraction)\b|\d\.\d|\d\/\d/i;
 const WITHDRAWAL = /\b(?:withdraws?|withdrew|refuses?|refused|no longer|not for sale|changes? (?:his|her|their) mind|changed (?:his|her|their) mind|takes? (?:it|them) back|off the table|won'?t sell|will not sell|not selling|sold (?:it|them) (?:to|already)|offer (?:is )?(?:gone|off|withdrawn)|pulls? (?:it|them) back|put[s]? (?:it|them) away)\b/i;
 const STOP = new Set(["the", "a", "an", "of", "and", "with", "for", "in", "on", "to", "pair", "set", "some", "old", "new", "small", "large", "little", "big"]);
+const normName = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ").replace(/^(?:the|a|an|some)\s+/, "");
 const squash = (s: string) => s.replace(/\s+/g, " ").trim();
 const wordsOf = (s: string) => s.toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length > 2 && !STOP.has(w));
 
-/** Whole-gold amounts the sentence states: "five gold", "5 gold", "for five", "five." (a quoted bare number). */
 const PERSON_GOODS = /\b(?:ones?|woman|women|girls?|men|man|boys?|slaves?|captives?|prisoners?|laundress|workers?|child|children|persons?|people|lass|lad|maid|servants?)\b/i;
-export function statedGold(sentence: string): number[] {
-  const out: number[] = [];
-  const re = new RegExp(`\\b(${NUMBER_PHRASE_SOURCE})\\s*(?:gold(?:\\s+(?:pieces?|coins?|crowns?))?|gp)\\b|\\bfor\\s+(${NUMBER_PHRASE_SOURCE})\\b|["“]\\s*(${NUMBER_PHRASE_SOURCE})\\s*[.!,]`, "gi");
-  for (const m of sentence.matchAll(re)) { const v = numberPhraseValue(m[1] ?? m[2] ?? m[3]!); if (v !== undefined) out.push(v); }
-  return out;
+export { statedGold };
+
+/** The player's own words say THEY are the seller ("I want to sell my sword", "how much will you pay me for it"). */
+const SELL_CUE = /\bsell(?:ing)?\b|\b(?:pay|give|offer|bid)\s+(?:me|us)\b|\bbuy\b[^.!?]{0,30}\bfrom me\b|\bwould you (?:buy|take)\b/i;
+/**
+ * The Controller sometimes encodes "a party pays Nicco for his own item" as a BUY of same-named goods. When EVERY goods line names an item Nicco holds
+ * and the player's own words say he is selling, the only coherent reading is a SELL of exactly those items: reframe it (same price, counterparty and
+ * quote) and let the ordinary validator decide. Without the player's sell cue nothing is reframed (buying a second copy of something one already holds is legitimate;
+ * the card is shown to the player before any gold moves).
+ */
+export function reframeOwnItemPurchase(command: CampaignCommand, projected: DeepReadonly<CampaignSnapshot>, playerInput: string): CampaignCommand {
+  if (command.kind !== "propose_trade_offer" || command.direction !== "buy" || command.subject.kind !== "goods" || !SELL_CUE.test(playerInput)) return command;
+  const who = activePlayerCharacterId(projected) ?? "nicco";
+  const own = projected.items.filter(i => itemHolder(i) === who && i.owner_id === who && i.name);
+  const ids: string[] = [];
+  for (const line of command.subject.lines) {
+    const n = normName(line.name);
+    const hits = n ? own.filter(i => { const o = normName(i.name!); return o === n || o.includes(n) || n.includes(o); }) : [];
+    if (hits.length !== 1 || ids.includes(hits[0]!.id)) return command;
+    ids.push(hits[0]!.id);
+  }
+  return { ...command, direction: "sell", subject: { kind: "items", item_ids: ids } };
 }
 
 export interface TradeProposalInput { readonly command: CampaignCommand; readonly quote: string | undefined }
@@ -70,11 +82,12 @@ export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], n
     if (at < 0) return no("quote_not_verbatim");
     // The containing sentence(s) decide currency and auction wording even when the quote is only the price clause.
     const sentence = sentencesOf(text).filter(s => s.includes(q) || q.includes(s) || text.indexOf(s) < at + q.length && text.indexOf(s) + s.length > at).join(" ") || q;
-    if (NON_GOLD.test(sentence) || NON_GOLD.test(q)) return no("unsupported_currency");
+    if (unsupportedCurrency(sentence) || unsupportedCurrency(q) || readPrices(q, { concrete: true }).unsupported === "currency") return no("unsupported_currency");
     if (AUCTION.test(sentence) || AUCTION.test(q) || auctionPlace) return no("auction_not_an_offer", "auction_bid_not_offer");
     if (HYPOTHETICAL.test(q)) return no("not_a_concrete_offer", "hypothetical_or_question");
-    if (FRACTION.test(q)) return no("fractional_price", "unsupported_currency");
-    const stated = statedGold(q);
+    if (fractionalPrice(q) || fractionalPrice(sentence)) return no("fractional_price", "unsupported_currency");
+    const subjectWords = command.subject.kind === "goods" ? command.subject.lines.flatMap(l => wordsOf(l.name)) : command.subject.kind === "items" ? command.subject.item_ids.flatMap(id => wordsOf(projected.items.find(i => i.id === id)?.name ?? "")) : [];
+    const stated = statedGold(q, subjectWords);
     if (!stated.includes(command.price_gold)) return no("price_not_in_quote");
     if (new Set(stated).size > 1 && !new RegExp(`\\b(?:total|altogether|for the (?:lot|pair|set|both|all))\\b`, "i").test(q)) return no("several_prices_in_quote");
     // The goods or items must be in the scene's narration around the quote, never invented by the proposal.
@@ -112,7 +125,7 @@ export function vetoSettlementThroughItems(decided: readonly AuthorizationDiagno
   return decided.map(d => {
     if (!d.authorized) return d;
     const c = d.command;
-    const hit = c.kind === "create_item" ? [...goods].some(g => key(c.name) === g || key(c.name).includes(g) || g.includes(key(c.name))) : c.kind === "transfer_item" && ids.has(c.item_id);
+    const hit = c.kind === "create_item" ? [...goods].some(g => key(c.name) === g || key(c.name).includes(g) || g.includes(key(c.name))) : (c.kind === "transfer_item" || c.kind === "place_item") && ids.has(c.item_id);
     return hit ? { ...d, authorized: false, reason: "rejected_command_not_allowed" as const, source: "rejected" as const, code: "trade_settles_through_offer", signals: [...(d.signals ?? []), "trade_settles_through_offer"] } : d;
   });
 }

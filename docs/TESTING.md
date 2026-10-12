@@ -10,7 +10,7 @@ Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `p
 | `npm run build` | compile to `.build/` | no |
 | `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
 
-Latest recorded result: **3287 tests, 0 failed** on top of `878acd3` (consolidation block 1, uncommitted until pushed; `consolidation-block1.test.ts`) — previous recorded run 3278 at `c0608a6` (see [report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
+Latest recorded result: **3313 tests, 0 failed** on top of `4b8fdc9` (consolidation block 2: `consolidation-block2.test.ts`, 26 tests; block 1 had 3287); earlier recorded run 3278 at `c0608a6` (see [report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md); the Heartstone rite tests are `explicit-npc-plus-promotion.test.ts` and `heartstone-rite.test.ts`, browser check `scripts/explicit-promotion-browser-check.mjs`). Do not hardcode counts elsewhere; historical reports keep their own.
 
 ## Layers
 

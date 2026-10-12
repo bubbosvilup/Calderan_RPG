@@ -44,6 +44,7 @@ How it was reconstructed: git history on this clone starts on 2026-10-05 (50 com
 - Colour/calendar UI polish (`66631f8`); campaign deletion (soft delete, `63af784`).
 - **P0 foreground canonical identity binding** (`d4e9e22`): objective partner identity, conflicting-name guard, live certification (both scenarios pass).
 - **Person Actual Offer end to end** (`c0608a6`): spoken price forms, stable subject across supersession, Slave NPC on Accept, same-entity rename; 3278 tests.
+- **Consolidation blocks 1 and 2** (2026-10-12; block 1 on main `4b8fdc9`, block 2 on main after live certification): IMG-1, TRD-1, TRD-2, TRD-1b, TRD-3, TRD-4, TRD-5, TRD-10 fixed offline; 3313 tests. TRD-11 and ECO-1 open.
 
 ### Current capability snapshot
 Playable persistent campaign on a local web UI with autosave; canon-grounded narration on `z-ai/glm-5.2` and a Controller on `openai/gpt-6-luna` (fallback `claude-haiku-5.5`); player-authorized trade and promotion; masked identity; derived calendar and weather; item lifecycle and Gold; player and NPC+ image workflows on Qwen-Image + Raena LoRA; 3278 offline tests (latest recorded run), zero live calls in `npm test`.

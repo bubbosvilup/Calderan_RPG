@@ -1,0 +1,380 @@
+{
+  "scenario": "B",
+  "offer": {
+    "id": "trade_offer_00000001",
+    "direction": "sell",
+    "status": "active",
+    "price_gold": 1,
+    "counterparty": {
+      "kind": "character",
+      "character_id": "korvin"
+    },
+    "subject": {
+      "kind": "items",
+      "item_ids": [
+        "campaign_item_00000001"
+      ]
+    },
+    "location_id": "calderan_slave_market",
+    "created_revision": 4,
+    "created_minute": 600
+  },
+  "item_before": {
+    "id": "campaign_item_00000001",
+    "origin": {
+      "kind": "created"
+    },
+    "name": "Old Rusty Sword",
+    "description": "A pitted blade.",
+    "visual_description": "an old rusty sword",
+    "owner_id": "nicco",
+    "position": {
+      "kind": "carried",
+      "character_id": "nicco"
+    },
+    "category": "weapon",
+    "created_revision": 3
+  },
+  "pre": {
+    "offer_still_active": true,
+    "gold_unchanged": true,
+    "items_unchanged_ids": true,
+    "sell_item_still_nicco": true,
+    "delivered_claims_payment": false
+  },
+  "post": {
+    "accept_ok": true,
+    "gold_before": 500,
+    "gold_after": 501,
+    "delta": 1,
+    "revision_after": 5,
+    "offer_status": "accepted",
+    "receipt": {
+      "ref": "70eee1eaec528ed4163646d3",
+      "direction": "sell",
+      "kind": "goods",
+      "gold": 1,
+      "summary": "Sold Old Rusty Sword for 1 gold"
+    },
+    "item": {
+      "id": "campaign_item_00000001",
+      "owner_id": "korvin",
+      "position": {
+        "kind": "carried",
+        "character_id": "korvin"
+      },
+      "acquisition": {
+        "acquired_at": 600,
+        "acquisition_kind": "purchase",
+        "from_character_id": "nicco"
+      }
+    },
+    "item_count_same": true,
+    "settlement": {
+      "gold": 1,
+      "revision": 5,
+      "world_minute": 600,
+      "removed_item_ids": [
+        "campaign_item_00000001"
+      ],
+      "removed_item_names": [
+        "Old Rusty Sword"
+      ],
+      "custody": {
+        "kind": "character",
+        "character_id": "korvin"
+      }
+    },
+    "view_inventory_has_sword": false,
+    "view_equipment_has_sword": false,
+    "second_accept": {
+      "ok": false,
+      "reason": "offer_accepted"
+    },
+    "gold_after_second": 501
+  },
+  "narrator_calls": 4,
+  "controller_calls": 3,
+  "transient_retries": 0,
+  "total_tokens": 39296,
+  "cost_usd": 0,
+  "log": [
+    {
+      "label": "elicit_1",
+      "input": "I want to SELL my old rusty sword to Korvin. I take it from my belt, show it to him and ask how many gold pieces he will pay me for it. I only deal in gold.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man's eyes drop to the blade the moment Nicco draws it. He reaches out without asking, taking the sword by the hilt and turning it so the flat catches what grey light the overcast sky allows. His thumb runs along the edge, testing nothing — just feeling the corrosion. He flips it once, checking the balance, then hands it back.*\n\nPitted half to death. Edge is gone. Tang's sound, maybe. That's about all that's sound.\n\n*He scratches the side of his hooked nose with one broad, scarred knuckle and looks up at Nicco without much interest.*\n\nI move people, not scrap. But I know a man who beats these back into something. One gold for it. That's what I'd get, less my trouble.\n\n*He waits, hands settling at his sides, the perceptive eyes reading Nicco's face for whether that number lands or whether there's more haggling coming.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5876,
+          "completion_tokens": 195,
+          "total_tokens": 6071
+        },
+        "controller": {
+          "prompt_tokens": 6841,
+          "completion_tokens": 16,
+          "total_tokens": 6857
+        }
+      },
+      "revision": 3,
+      "gold": 500,
+      "active_offer": null,
+      "trade_card": null,
+      "proposal": {
+        "draft": "*The short man's eyes drop to the blade the moment Nicco draws it. He reaches out without asking, taking the sword by the hilt and turning it so the flat catches what grey light the overcast sky allows. His thumb runs along the edge, testing nothing — just feeling the corrosion. He flips it once, checking the balance, then hands it back.*\n\nPitted half to death. Edge is gone. Tang's sound, maybe. That's about all that's sound.\n\n*He scratches the side of his hooked nose with one broad, scarred knuckle and looks up at Nicco without much interest.*\n\nI move people, not scrap. But I know a man who beats these back into something. One gold for it. That's what I'd get, less my trouble.\n\n*He waits, hands settling at his sides, the perceptive eyes reading Nicco's face for whether that number lands or whether there's more haggling coming.*",
+        "controller_proposal": [],
+        "authorization": []
+      },
+      "inventory": [
+        "Old Rusty Sword",
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    },
+    {
+      "label": "elicit_2",
+      "input": "I ask Korvin for his firm offer in gold pieces to buy my old rusty sword from me.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man's mouth flattens. He rocks back on his heels once, the large hands opening at his sides in a gesture that's almost a shrug but not quite — more like shaking off something tiresome.*\n\nI said one gold. That's firm.\n\n*He holds up a thick finger.*\n\nOne. Not one and something. The blade's barely worth the walk to the forge man. Take it or don't.\n\n*His eyes stay on Nicco, patient enough but stripped of any eagerness. He doesn't reach for the sword again. The offer's been made and he's done moving it.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [
+        "propose_trade_offer"
+      ],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5989,
+          "completion_tokens": 125,
+          "total_tokens": 6114
+        },
+        "controller": {
+          "prompt_tokens": 6750,
+          "completion_tokens": 80,
+          "total_tokens": 6830
+        }
+      },
+      "revision": 4,
+      "gold": 500,
+      "active_offer": {
+        "id": "trade_offer_00000001",
+        "direction": "sell",
+        "price": 1,
+        "subject": {
+          "kind": "items",
+          "item_ids": [
+            "campaign_item_00000001"
+          ]
+        },
+        "counterparty": {
+          "kind": "character",
+          "character_id": "korvin"
+        }
+      },
+      "trade_card": {
+        "ref": "70eee1eaec528ed4163646d3",
+        "direction": "sell",
+        "kind": "goods",
+        "counterparty": "Unfamiliar person",
+        "price_gold": 1,
+        "lines": [
+          "Old Rusty Sword"
+        ],
+        "affordable": null,
+        "gold": 500,
+        "summary": "Sell Old Rusty Sword for 1 gold"
+      },
+      "proposal": {
+        "draft": "*The short man's mouth flattens. He rocks back on his heels once, the large hands opening at his sides in a gesture that's almost a shrug but not quite — more like shaking off something tiresome.*\n\nI said one gold. That's firm.\n\n*He holds up a thick finger.*\n\nOne. Not one and something. The blade's barely worth the walk to the forge man. Take it or don't.\n\n*His eyes stay on Nicco, patient enough but stripped of any eagerness. He doesn't reach for the sword again. The offer's been made and he's done moving it.*",
+        "controller_proposal": [
+          {
+            "kind": "propose_trade_offer",
+            "direction": "sell",
+            "price_gold": 1,
+            "counterparty": {
+              "kind": "character",
+              "character_id": "korvin"
+            },
+            "subject": {
+              "kind": "items",
+              "item_ids": [
+                "campaign_item_00000001"
+              ]
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "propose_trade_offer",
+              "direction": "sell",
+              "price_gold": 1,
+              "counterparty": {
+                "kind": "character",
+                "character_id": "korvin"
+              },
+              "subject": {
+                "kind": "items",
+                "item_ids": [
+                  "campaign_item_00000001"
+                ]
+              }
+            },
+            "authorized": true,
+            "reason": "authorized_controller_evidence",
+            "source": "evidence",
+            "grammar": {
+              "authorized": false,
+              "reason": "trade_proposals_have_no_grammar_path"
+            },
+            "evidence": {
+              "quote": "I said one gold. That's firm.",
+              "verified": true,
+              "check": "concrete_gold_offer_stated"
+            }
+          }
+        ]
+      },
+      "inventory": [
+        "Old Rusty Sword",
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    },
+    {
+      "label": "risk",
+      "input": "*I hand him the sword across the counter and hold out my palm for the coins.*",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man takes the sword by the hilt when Nicco extends it, giving it one last quarter-turn in the grey light — a formality, since his mind's already made. He tucks it under his arm and reaches for a small purse inside his practical coat, working it open with thick fingers.*\n\n*He pauses, coin between thumb and forefinger, and looks up at Nicco. The purse stays where it is. He doesn't set the coin down yet.*\n\nOne gold. You're taking it, then? Say so and it's yours.\n\nThe sword stays tucked under his arm, not yet his, not yet gone from Nicco's side of things either.*",
+      "error": null,
+      "narrator_requests": 2,
+      "narration_status": "redacted",
+      "audit": [
+        "asserts_uncommitted_purchase"
+      ],
+      "revision_issues": [
+        "uncommitted_constraint"
+      ],
+      "committed": [],
+      "rejected": [
+        "propose_trade_offer"
+      ],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6286,
+          "completion_tokens": 189,
+          "total_tokens": 6475
+        },
+        "controller": {
+          "prompt_tokens": 6868,
+          "completion_tokens": 81,
+          "total_tokens": 6949
+        }
+      },
+      "revision": 4,
+      "gold": 500,
+      "active_offer": {
+        "id": "trade_offer_00000001",
+        "direction": "sell",
+        "price": 1,
+        "subject": {
+          "kind": "items",
+          "item_ids": [
+            "campaign_item_00000001"
+          ]
+        },
+        "counterparty": {
+          "kind": "character",
+          "character_id": "korvin"
+        }
+      },
+      "trade_card": {
+        "ref": "70eee1eaec528ed4163646d3",
+        "direction": "sell",
+        "kind": "goods",
+        "counterparty": "Unfamiliar person",
+        "price_gold": 1,
+        "lines": [
+          "Old Rusty Sword"
+        ],
+        "affordable": null,
+        "gold": 500,
+        "summary": "Sell Old Rusty Sword for 1 gold"
+      },
+      "proposal": {
+        "draft": "*The short man takes the sword by the hilt, gives it one more quarter-turn in the grey light — a formality, since he's already made up his mind — then tucks it under his arm. With his free hand he works a small purse from somewhere inside his practical coat, fishes out a single gold coin, and sets it in Nicco's palm. The coin is warm from his body and slightly worn at the edges.*\n\nOne gold. Done.\n\n*He drops the purse back inside his coat and shifts the rusty blade to his other hand, already half-turning to glance back toward the rows of pens and the covered area where his actual stock waits. The sword disappears somewhere behind a stack of crates and canvas without ceremony. His attention is already moving on — Nicco was a transaction, and the transaction is closed.*\n\nAnything else, or are we finished? I've got people to see to before the afternoon push.",
+        "revision": "*The short man takes the sword by the hilt when Nicco extends it, giving it one last quarter-turn in the grey light — a formality, since his mind's already made. He tucks it under his arm and reaches for a small purse inside his practical coat, working it open with thick fingers.*\n\n*He pauses, coin between thumb and forefinger, and looks up at Nicco. The purse stays where it is. He doesn't set the coin down yet.*\n\nOne gold. You're taking it, then? Say so and it's yours.\n\n*His eyes hold on Nicco's face, patient enough but wanting the word before the money leaves his hand. The sword stays tucked under his arm, not yet his, not yet gone from Nicco's side of things either.*",
+        "controller_proposal": [
+          {
+            "kind": "propose_trade_offer",
+            "direction": "sell",
+            "price_gold": 1,
+            "counterparty": {
+              "kind": "character",
+              "character_id": "korvin"
+            },
+            "subject": {
+              "kind": "items",
+              "item_ids": [
+                "campaign_item_00000001"
+              ]
+            }
+          }
+        ],
+        "authorization": [
+          {
+            "command": {
+              "kind": "propose_trade_offer",
+              "direction": "sell",
+              "price_gold": 1,
+              "counterparty": {
+                "kind": "character",
+                "character_id": "korvin"
+              },
+              "subject": {
+                "kind": "items",
+                "item_ids": [
+                  "campaign_item_00000001"
+                ]
+              }
+            },
+            "authorized": false,
+            "reason": "rejected_insufficient_confirmation",
+            "source": "rejected",
+            "grammar": {
+              "authorized": false,
+              "reason": "trade_proposals_have_no_grammar_path"
+            },
+            "evidence": {
+              "quote": "He sets it in Nicco's palm.",
+              "verified": false,
+              "check": "quote_not_verbatim"
+            },
+            "code": "quote_not_verbatim",
+            "signals": [
+              "quote_not_verbatim"
+            ]
+          }
+        ]
+      },
+      "inventory": [
+        "Old Rusty Sword",
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    }
+  ]
+}

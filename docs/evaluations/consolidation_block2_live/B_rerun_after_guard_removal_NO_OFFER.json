@@ -1,0 +1,126 @@
+{
+  "scenario": "B",
+  "result": "NO_OFFER",
+  "log": [
+    {
+      "label": "elicit_1",
+      "input": "I want to SELL my old rusty sword to Korvin. I take it from my belt, show it to him and ask how many gold pieces he will pay me for it. I only deal in gold.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man's eyes drop to the blade the moment Nicco draws it from his belt. He reaches out with one of those broad, scarred hands and takes the sword by the hilt without asking, turning it so the light catches the pitted steel. His thumb runs along the flat, testing the surface the way a man checks fruit for rot.*\n\n*He makes a sound through his nose — not quite a laugh, not quite disgust — and holds the blade out at arm's length, squinting down its edge.*\n\nYou want me to buy this.\n\n*It is not a question. He folds the sword back and offers it hilt-first toward Nicco, not handing it over so much as returning it, his grip still firm until Nicco takes hold.*\n\nI sell people. Swords aren't my trade. But even if they were — that's not a weapon. That's a piece of scrap with a handle on it. You'd get more selling it to a foundry for the metal, and the metal's not worth much. A gold piece for this? No. I'd be doing you a favor taking it off your hands for a few silver, and I don't need the favor.\n\n*He wipes his palm on his thigh and glances past Nicco toward the auction traffic, already half-moved on to something that matters more to him.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 5879,
+          "completion_tokens": 278,
+          "total_tokens": 6157
+        },
+        "controller": {
+          "prompt_tokens": 6930,
+          "completion_tokens": 16,
+          "total_tokens": 6946
+        }
+      },
+      "revision": 3,
+      "gold": 500,
+      "active_offer": null,
+      "trade_card": null,
+      "proposal": {
+        "draft": "*The short man's eyes drop to the blade the moment Nicco draws it from his belt. He reaches out with one of those broad, scarred hands and takes the sword by the hilt without asking, turning it so the light catches the pitted steel. His thumb runs along the flat, testing the surface the way a man checks fruit for rot.*\n\n*He makes a sound through his nose — not quite a laugh, not quite disgust — and holds the blade out at arm's length, squinting down its edge.*\n\nYou want me to buy this.\n\n*It is not a question. He folds the sword back and offers it hilt-first toward Nicco, not handing it over so much as returning it, his grip still firm until Nicco takes hold.*\n\nI sell people. Swords aren't my trade. But even if they were — that's not a weapon. That's a piece of scrap with a handle on it. You'd get more selling it to a foundry for the metal, and the metal's not worth much. A gold piece for this? No. I'd be doing you a favor taking it off your hands for a few silver, and I don't need the favor.\n\n*He wipes his palm on his thigh and glances past Nicco toward the auction traffic, already half-moved on to something that matters more to him.*",
+        "controller_proposal": [],
+        "authorization": []
+      },
+      "inventory": [
+        "Old Rusty Sword",
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    },
+    {
+      "label": "elicit_2",
+      "input": "I ask Korvin for his firm offer in gold pieces to buy my old rusty sword from me.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man looks at Nicco the way he might look at a post that's started talking. His jaw works sideways once, and those small eyes flick down to the sword still in Nicco's hand, then back up.*\n\nI told you. Few silver. That's what the iron's worth, maybe, to the right buyer. You want gold — whole gold, nothing else — then there's nothing here. I don't trade in scrap, and I don't pay gold for scrap. That's firm.\n\n*He rubs the back of his neck with one thick hand and turns his weight toward the pens behind him, where a couple of handlers are moving along the fence line. Not quite walking away — but the conversation, from his end, is clearly finished unless something changes.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6214,
+          "completion_tokens": 160,
+          "total_tokens": 6374
+        },
+        "controller": {
+          "prompt_tokens": 6781,
+          "completion_tokens": 16,
+          "total_tokens": 6797
+        }
+      },
+      "revision": 3,
+      "gold": 500,
+      "active_offer": null,
+      "trade_card": null,
+      "proposal": {
+        "draft": "*The short man looks at Nicco the way he might look at a post that's started talking. His jaw works sideways once, and those small eyes flick down to the sword still in Nicco's hand, then back up.*\n\nI told you. Few silver. That's what the iron's worth, maybe, to the right buyer. You want gold — whole gold, nothing else — then there's nothing here. I don't trade in scrap, and I don't pay gold for scrap. That's firm.\n\n*He rubs the back of his neck with one thick hand and turns his weight toward the pens behind him, where a couple of handlers are moving along the fence line. Not quite walking away — but the conversation, from his end, is clearly finished unless something changes.*",
+        "controller_proposal": [],
+        "authorization": []
+      },
+      "inventory": [
+        "Old Rusty Sword",
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    },
+    {
+      "label": "elicit_3",
+      "input": "I tell him I am serious about selling and ask him to name one price in whole gold pieces that he will pay me for the rusty sword.",
+      "ok": true,
+      "attempts": 1,
+      "narration": "*The short man stops his turn back toward the pens. He looks at Nicco again, and this time the expression has shed even the pretense of patience. Those small mobile eyes settle on Nicco's face and stay there, reading him the way they'd read a buyer who's about to waste his whole morning.*\n\nI heard you. You're serious. So am I. I don't pay gold for scrap iron. Not one piece, not five, not half. There's no price I'll name you in gold because there's no price I'd pay in gold. That's not negotiation — that's just what the thing is worth.\n\n*He lets that sit for a breath, then jerks his chin toward the broader market square behind Nicco.*\n\nYou want coin for that, take it to a smith or a scrap man. They'll talk silver. If they're generous. I sell people. That's what I do. This — *he gestures at the pitted blade* — is not people.\n\n*He turns his weight fully back toward the pens now, clearly done. A handler near the fence glances over, then away. The short man doesn't look back.*",
+      "error": null,
+      "narrator_requests": 1,
+      "narration_status": "draft",
+      "audit": [],
+      "revision_issues": [],
+      "committed": [],
+      "rejected": [],
+      "usage": {
+        "narrator": {
+          "prompt_tokens": 6424,
+          "completion_tokens": 241,
+          "total_tokens": 6665
+        },
+        "controller": {
+          "prompt_tokens": 6869,
+          "completion_tokens": 16,
+          "total_tokens": 6885
+        }
+      },
+      "revision": 3,
+      "gold": 500,
+      "active_offer": null,
+      "trade_card": null,
+      "proposal": {
+        "draft": "*The short man stops his turn back toward the pens. He looks at Nicco again, and this time the expression has shed even the pretense of patience. Those small mobile eyes settle on Nicco's face and stay there, reading him the way they'd read a buyer who's about to waste his whole morning.*\n\nI heard you. You're serious. So am I. I don't pay gold for scrap iron. Not one piece, not five, not half. There's no price I'll name you in gold because there's no price I'd pay in gold. That's not negotiation — that's just what the thing is worth.\n\n*He lets that sit for a breath, then jerks his chin toward the broader market square behind Nicco.*\n\nYou want coin for that, take it to a smith or a scrap man. They'll talk silver. If they're generous. I sell people. That's what I do. This — *he gestures at the pitted blade* — is not people.\n\n*He turns his weight fully back toward the pens now, clearly done. A handler near the fence glances over, then away. The short man doesn't look back.*",
+        "controller_proposal": [],
+        "authorization": []
+      },
+      "inventory": [
+        "Old Rusty Sword",
+        "Deed of Ownership — Heartstone Tower",
+        "Heartstone Household Charter"
+      ]
+    }
+  ]
+}

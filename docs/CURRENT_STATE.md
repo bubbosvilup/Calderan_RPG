@@ -100,11 +100,11 @@ Snapshot schema **6**; save file schema **5** (older save schemas migrate on loa
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run: **3287 tests, 0 failed** on top of `878acd3` (consolidation block 1: IMG-1, TRD-1, TRD-2 fixed; previously 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run: **3313 tests, 0 failed** on top of `4b8fdc9` (consolidation block 2, live-certified; 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 ## 13. Major known limitations
 
-See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals. Open trade debts: TRD-1b (SELL deletes the item instead of transferring it to the counterparty), TRD-3/TRD-4 (two disagreeing price parsers; currency filter rejects material words). Fixed 2026-10-12 (offline): IMG-1 (age never gates portraits), TRD-1 (SELL needs ownership, `item_not_owned`), TRD-2 (goods offers rechecked on the delivered text); see [debt register](MASTER_DEBT_REGISTER.md).
+See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals. Fixed 2026-10-12 (offline, live certification pending): IMG-1, TRD-1, TRD-2 (block 1); TRD-1b (SELL transfers the same item), TRD-3/TRD-4 (one price grammar), TRD-5 (offer terms digest), TRD-10 (pending-offer narration guard) (block 2). Open trade debt: TRD-11 goods ledger and ECO-1 currency model; see [debt register](MASTER_DEBT_REGISTER.md).
 
 ## 14. Next major systems
 

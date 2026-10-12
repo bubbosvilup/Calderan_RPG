@@ -92,11 +92,18 @@ const personKey = (plan: readonly DeepReadonly<CampaignCommand>[], id: string): 
   const registers = plan.find(c => c.kind === "register_character");
   return registers && registers.kind === "register_character" ? `ref:${registers.character.origin_snapshot?.ephemeral_ref ?? registers.character.id}` : `id:${id}`;
 };
-const sameOffer = (a: DeepReadonly<TradeOfferRecord>, c: Extract<CampaignCommand, { kind: "propose_trade_offer" }>): boolean => {
-  if (a.direction !== c.direction || a.price_gold !== c.price_gold || JSON.stringify(a.counterparty) !== JSON.stringify(c.counterparty) || a.subject.kind !== c.subject.kind) return false;
-  if (a.subject.kind === "person" && c.subject.kind === "person") return personKey(a.subject.plan, a.subject.subject_character_id) === personKey(c.subject.plan, c.subject.subject_character_id);
-  return JSON.stringify(a.subject) === JSON.stringify(c.subject);
-};
+/**
+ * TRD-5: the identity of an offer's TERMS, never of its prose. Direction, price, counterparty and subject identity decide whether a re-proposal
+ * is the same standing offer; descriptions, visual descriptions, categories, casing and articles are cosmetic and do not.
+ */
+const normName = (name: string): string => name.trim().toLowerCase().replace(/\s+/g, " ").replace(/^(?:the|a|an|some)\s+/, "");
+export function tradeTermsDigest(c: { readonly direction: string; readonly price_gold: number; readonly counterparty: DeepReadonly<TradeOfferRecord["counterparty"]>; readonly subject: DeepReadonly<TradeOfferRecord["subject"]> }): string {
+  const who = c.counterparty.kind === "character" ? `character:${c.counterparty.character_id}` : `label:${normName(c.counterparty.label)}`;
+  const subject = c.subject.kind === "goods" ? `goods:${c.subject.lines.map(l => normName(l.name)).sort().join("|")}`
+    : c.subject.kind === "items" ? `items:${[...c.subject.item_ids].sort().join("|")}` : `person:${personKey(c.subject.plan, c.subject.subject_character_id)}`;
+  return JSON.stringify([c.direction, c.price_gold, who, subject]);
+}
+const sameOffer = (a: DeepReadonly<TradeOfferRecord>, c: Extract<CampaignCommand, { kind: "propose_trade_offer" }>): boolean => tradeTermsDigest(a) === tradeTermsDigest(c);
 
 /** Preparation-time dispatch of the existing domain commands a settlement reuses (create_item, transfer_person, ...). */
 export type CommandDispatch = (command: CampaignCommand) => void;
@@ -178,7 +185,11 @@ export function prepareTradeCommand(context: PreparationContext, command: Campai
         record.gold = purse - offer.price_gold;
         settlement.created_item_ids = ids;
       } else if (subject.kind === "items") {
+        // TRD-1b: a sale TRANSFERS the very same item out of the seller's custody; it never destroys it. The buyer is the offer's persistent
+        // character (who then holds and owns it), or, for an anonymous counterparty, the generic external custody: position `unknown`, owner `null`
+        // (no merchant inventory and no invented character). Either way the item keeps its identity and the settlement records where it went.
         const removed: string[] = [], names: string[] = [];
+        const buyer = offer.counterparty.kind === "character" ? offer.counterparty.character_id : undefined;
         for (const id of subject.item_ids) {
           const item = draft.items.find(i => i.id === id);
           if (!item || itemHolder(item) !== who) fail(TRADE_FIELD, "offer_invalid_item_unavailable");
@@ -187,13 +198,17 @@ export function prepareTradeCommand(context: PreparationContext, command: Campai
             const c = draft.characters.find(x => x.id === who);
             if (c) c.current.empty_slots = [...new Set([...(c.current.empty_slots ?? []), item.position.slot])].sort();
           }
-          names.push((item.name ?? "Item").slice(0, 120)); draft.items = draft.items.filter(i => i.id !== id); removed.push(id);
+          names.push((item.name ?? "Item").slice(0, 120));
+          if (buyer) { item.position = { kind: "carried", character_id: buyer }; item.owner_id = buyer; item.acquisition = { acquisition_kind: "purchase", acquired_at: minute, from_character_id: who }; }
+          else { item.position = { kind: "unknown" }; item.owner_id = null; }
+          removed.push(id);
         }
         const total = purse + offer.price_gold;
         if (!Number.isSafeInteger(total) || total > 1_000_000_000) fail(TRADE_FIELD, "funds_overflow");
         const record = funds(who);
         if (record) record.gold = total; else draft.funds.push({ character_id: who, gold: total });
         settlement.removed_item_ids = removed.sort(); settlement.removed_item_names = names;
+        settlement.custody = buyer ? { kind: "character", character_id: buyer } : { kind: "external" };
       } else {
         const transfer = subject.plan.find(c => c.kind === "transfer_person");
         if (purse < offer.price_gold) fail(TRADE_FIELD, "insufficient_funds");

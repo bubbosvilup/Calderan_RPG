@@ -14,7 +14,7 @@ import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import { sentencesOf } from "../language/text.js";
 import { establishedCount, ownerEvidenced } from "../item-ownership.js";
 import { resolveItemIntent, type ItemIntent } from "../item-intent.js";
-import { authorizeTradeProposals, isTradeProposal, vetoSettlementThroughItems } from "../trade-authorization.js";
+import { authorizeTradeProposals, isTradeProposal, reframeOwnItemPurchase, vetoSettlementThroughItems } from "../trade-authorization.js";
 const itemKey = (name: string) => name.trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
 const EXACT_REPEAT_KINDS: ReadonlySet<CampaignCommand["kind"]> = new Set(["transfer_item", "place_item", "set_knowledge", "set_condition", "schedule_event", "leave_scene", "join_household", "leave_household", "add_household_rule"]);
 import type { AuthorizationDiagnostic, TurnDebugSink } from "../turn-types.js";
@@ -114,7 +114,7 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   // its offer alone, so ordinary item commands for the same goods are withdrawn.
   const isTrade = proposal.map(isTradeProposal), ordinary = proposal.filter((_, k) => !isTrade[k]);
   const ordinaryQuotes = quotes ? quotes.filter((_, k) => !isTrade[k]) : quotes;
-  const tradeDecided = authorizeTradeProposals(proposal.flatMap((command, k) => isTrade[k] ? [{ command, quote: quotes?.[k] }] : []), i.draft, i.context, i.projected, i.world);
+  const tradeDecided = authorizeTradeProposals(proposal.flatMap((command, k) => isTrade[k] ? [{ command: reframeOwnItemPurchase(command, i.projected, i.debug_base.player_input), quote: quotes?.[k] }] : []), i.draft, i.context, i.projected, i.world);
   const ordinaryDecided = authorizeWithEvidence(ordinary, ordinaryQuotes, evidenceWithDepartures, i.draft, i.context, i.projected, i.mode, i.world);
   let tradeAt = 0, ordinaryAt = 0;
   const decided = vetoSettlementThroughItems(proposal.map((_, k) => isTrade[k] ? tradeDecided[tradeAt++]! : ordinaryDecided[ordinaryAt++]!), i.projected);

@@ -372,7 +372,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const negotiation = context.social.legal.some(l => l.status === "enslaved" && !!l.holder_id && l.holder_id !== "nicco" && presentIds.has(l.holder_id))
     || context.characters.some(c => /\bcaptive\b/.test(c.established_origin?.role ?? "") && !context.social.legal.some(l => l.character_id === c.id))
     || readScene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world).captives.some(c => !c.character_id);
-  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: input.authoritative_text ?? "", trade_negotiation: negotiation, economic_reference: !!input.economic_reference }));
+  issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: `${input.authoritative_text ?? ""}\n${(prepared.trade_offers ?? []).filter(o => o.status === "active").map(o => `${o.price_gold} gold.`).join("\n")}`, trade_negotiation: negotiation, economic_reference: !!input.economic_reference }));
   issues.push(...householdIssues(input, sentences, negotiation));
   issues.push(...movementIssues(input, sentences));
   if (input.elapsed_minutes !== undefined) issues.push(...elapsedTimeIssues(sentences, input.elapsed_minutes, !!input.temporal_request, prepared.runtime.scene.world_time.world_minute));
@@ -657,6 +657,29 @@ function householdIssues(input: NarrationAuditInput, sentences: readonly string[
     if (who) issues.push({ kind: "uncommitted_household", character: who.profile.name ?? who.id, sentence, correction: `${who.profile.name ?? who.id} is NOT a household member: no voluntary membership has been established. They may be present, staying, owned or cared for, but do not call them part of the household or family.` });
   }
   const traded = prepared.transactions.some(t => t.revision === prepared.revision && prepared.revision !== (input.base_revision ?? context.primary.runtime_revision));
+  // TRD-10: ANY standing offer (goods, items or a person) is unsettled until the explicit Accept; fiction may not show it paid for or handed over.
+  const standing = (prepared.trade_offers ?? []).find(o => o.status === "active");
+  if (standing && !traded) {
+    const names = standing.subject.kind === "goods" ? standing.subject.lines.map(l => l.name) : standing.subject.kind === "items" ? standing.subject.item_ids.map(id => prepared.items.find(i => i.id === id)?.name ?? "") : [];
+    const words = [...new Set(names.flatMap(n => n.toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length > 3 && !["with", "from", "that", "this", "pair", "some"].includes(w))))];
+    const GIVE = "(?:hands?|handed|gives?|gave|slides?|slid|slips?|slipped|drops?|dropped|presses|pressed|tosses?|tossed|passes|passed|counts?|counted|pays?|paid|pockets?|pocketed|takes?|took)";
+    const PAY = new RegExp(`\\b${GIVE}\\s+(?:over\\s+)?(?:him |her |them |korvin |the \\w+ )?(?:\\w+ ){0,3}?(?:gold|coins?)\\b|\\b(?:changes?|changed) hands\\b|\\bthe (?:sale|purchase|deal|bargain) (?:is|was) (?:done|complete|made|struck|sealed)\\b|\\bnow (?:belongs|belonged) to (?:nicco|you)\\b`, "i");
+    const GOODS = words.length ? new RegExp(`\\b(?:hands?|handed|passes|passed|gives?|gave|slides?|slid|tosses?|tossed|presses|pressed)\\s+(?:you |nicco |him |her )?(?:the |a |an |it |over )?(?:\\w+ ){0,2}?(?:${words.join("|")})`, "i") : undefined;
+    // Completion wording that never names a hand-over verb: coins "land"/"disappear into a pouch", fingers "close around the coins", "the transaction is closed".
+    const DONE = [/\b(?:gold|coins?|payment|purse)\b[^.!?]{0,50}\b(?:disappears?|vanish\w*|lands?|landed|slips?|slipped|clinks?|goes into|changes? hands)\b/i,
+      /\b(?:pulls?|pulled|fishes?|fished|draws?|drew|produces?|produced|digs?)\b[^.!?]{0,40}\b(?:gold|coins?)\b/i,
+      /\b(?:drops?|dropped|places?|placed|sets?|presses|pressed|lays?|laid|slaps?|counts?|counted)\b[^.!?]{0,40}\b(?:gold|coins?)\b/i,
+      /\b(?:gold|coins?)\b[^.!?]{0,40}\b(?:palm|outstretched hand)\b/i,
+      /\bclos(?:e|es|ed|ing)\s+(?:around|over)\s+(?:the |those |his |her )?(?:\w+ )?(?:coins?|gold|payment)\b/i,
+      /\b(?:weighs?|weighed|counts?|counted|pockets?|pocketed|tucks?|tucked|pouches|accepts?|accepted)\b[^.!?]{0,40}\b(?:coins?|gold|payment)\b/i,
+      /\b(?:transaction|sale|purchase|trade|deal|bargain|exchange)\b[^.!?]{0,40}\b(?:closed|done|complete\w*|settled|finished|sealed|made|struck|concluded)\b/i,
+      /\b(?:closed|settled|sealed|struck|concluded)\b[^.!?]{0,20}\b(?:the |this )?(?:transaction|sale|deal|bargain)\b/i];
+    for (const sentence of sentences) {
+      const plain = outside(sentence);
+      if ((PAY.test(plain) || DONE.some(d => d.test(plain)) || GOODS?.test(plain)) && !DENIED.test(plain) && !issues.some(i => i.sentence === sentence))
+        issues.push({ kind: "asserts_uncommitted_purchase", sentence, correction: `The offer is only PENDING: nothing is paid and nothing has changed hands until the player accepts it. Keep the deal open; do not narrate payment or the goods being handed over.` });
+    }
+  }
   if (negotiation && !traded) {
     const PAID = /\b(?:pays?|paid|hands? over|counts? out|pockets?|takes?) (?:him |her |them |korvin |the )?(?:\w+ ){0,2}?(?:gold|coins?)\b|\b(?:changes?|changed) hands\b|\bthe (?:sale|purchase|deal) (?:is|was) (?:done|complete|made|struck)\b|\bnow (?:belongs|belonged) to nicco\b/i;
     for (const sentence of sentences) if (PAID.test(outside(sentence)) && !DENIED.test(outside(sentence)))

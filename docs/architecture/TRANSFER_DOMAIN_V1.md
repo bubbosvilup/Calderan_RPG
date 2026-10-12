@@ -155,3 +155,6 @@ The return evidence repair is deterministic-validated but has not been rerun liv
 
 ## Update: person sales via TradeOffer
 A person sale no longer settles from player prose; it is stored as a trade-offer plan and executed by `accept_trade_offer` on an explicit UI click (see [Actual Offer](ACTUAL_OFFER.md)), which then runs the usual `transfer_person` settlement.
+
+## Update: sale as transfer (Consolidation Block 2)
+An accepted SELL offer is a transfer with an explicit custody boundary: the same `CampaignItem` leaves the player (held and owned) and either becomes held and owned by the persistent counterparty (acquisition `purchase`, `from_character_id` = seller) or enters generic external custody (`position: unknown`, `owner_id: null`). It does not go through `transfer_item` (modes are narration-driven; a sale is settled only by the explicit Accept) but obeys the same invariants: no change without the holder and owner preconditions, no partial mutation. See [Actual Offer](ACTUAL_OFFER.md#6-goods-v1).
