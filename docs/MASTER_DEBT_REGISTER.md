@@ -1,6 +1,6 @@
 # Caldrevan: Master Technical Debt Register
 
-Status: Current (audit snapshot). Audited: 2026-10-12. Source of truth: the code on main `c0608a6` (detached HEAD, working tree clean at audit start).
+Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
 Companion: [Master Roadmap](MASTER_ROADMAP.md). Detailed evidence (file:line for every finding): [`evaluations/codebase_audit_2026-10-12/`](evaluations/codebase_audit_2026-10-12/) (five area audits, A to E).
 
 This document lists everything the audit found that still needs fixing, cleaning, hardening, redesigning or implementing, ranked and de-duplicated across the five area audits. It is a planning document: nothing listed here was fixed during the audit.
@@ -32,7 +32,84 @@ The five items that matter most:
 
 Structural themes: six or more independent regex readers interpret the same narration; derived or media state bumps the authoritative revision and makes UI clicks go stale; economy is gold-only while the narrator thinks in silver; the repository hygiene gained by the 2026-10-03 cleanup has been reversed (1,863 tracked files, 310 of them in an ignored directory).
 
-## 2. Priority summary (top 30)
+## 1A. Reconciliation after consolidation blocks 1 to 3 (2026-10-12)
+
+Columns: **audit finding** (original text, below), **current status**, **fix commit**, **residual debt**.
+
+| Finding | Current status | Fix commit | Residual debt |
+| --- | --- | --- | --- |
+| IMG-1 portrait minor gate | FIXED offline (age no longer gates portraits; user decision) | `4b8fdc9` (block 1) | none; no dedicated live run |
+| TRD-1 SELL ignores `owner_id` | FIXED offline (`item_not_owned`, rechecked at Accept) | `4b8fdc9` | custody/loan states (ITM-3) |
+| TRD-2 goods offers on undelivered draft | FIXED offline (rechecked on delivered text) | `4b8fdc9` | no dedicated live run |
+| TRD-1b SELL deletes the item | FIXED, live-certified (same item transferred; external custody for anonymous buyers) | `5edcd37` (block 2) | no merchant stock or wallet by design |
+| TRD-3 two price parsers | FIXED offline (one grammar `trade-price.ts`) | `5edcd37` | `grounding-audit` and audit payment regexes remain separate readers (ARCH-2) |
+| TRD-4 currency word list | FIXED offline (unit on a number or coin noun) | `5edcd37` | silver/copper recognised, settled in gold only (ECO-1) |
+| TRD-5 offer identity | FIXED offline (terms digest) | `5edcd37` | none |
+| TRD-10 payment narration guard | FIXED, live-certified (any standing offer) | `5edcd37` | production phrasing varies |
+| MOV-1 non-NPC+ companions never follow | FIXED, live-certified (derived `followCandidates`) | `31d82cd` (block 3) | none known |
+| MOV-3 follower predicate at ~8 sites | FIXED (shared by intent, authorization, audit) | `31d82cd` | remaining `activeNpcPlus` uses are authored-NPC+ location authority, departures, contracts |
+| MOV-4 audit covers NPC+ only | FIXED (audit parity); residual **P3**: an escorted person narrated as staying behind is not audited | `31d82cd` | inverse audit (state follows the player's act; the Narrator is told) |
+| MOV-2 `with <name>` ignored | CLOSED in the narrow deterministic form only (held person named and led by the player) | `31d82cd` | free people, unnamed, plural and pronoun forms unresolved by design |
+| ID-1 identity fork | FIXED for held persons and household members (`persistent_identity_elsewhere`) | `31d82cd` | look-alike detection for unnamed people not built |
+
+Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO-1** (currency).
+
+## 1B. Current top-20 (re-ranked on current code)
+
+| # | ID | Sev | Item |
+| --- | --- | --- | --- |
+| 1 | PIPE-1 / CTX-2 | P1 | Unaudited Narrator draft streamed to the browser |
+| 2 | AUTH-1 | P1 | Manumission from regex on raw input, no confirmation |
+| 3 | NARR-1 (new) | P2 high | Narrator 512-token cap: length truncation is a lost, non-retryable turn; `finish_reason` not recorded; rate unmeasured |
+| 4 | AUTH-2 | P1 | Permanent character creation from narration, no retire or merge |
+| 5 | ARCH-1 (new) | P2 high | Optional intelligence coupled to the authoritative core (absorbs REV-1, PIPE-3, REV-3) |
+| 6 | REV-2 | P2 | No turn idempotency key; prerequisite for in-turn recovery |
+| 7 | PIPE-2 | P2 | Post-commit publication can throw after the commit |
+| 8 | ARCH-2 (new) | P2 structural | Regex-per-feature interpretation architecture (absorbs PIPE-5/6/7) |
+| 9 | PER-1 | P2 | 16 MB save cap fatal; drivers include `mannerism_learning` and unpruned `trade_offers` (TRD-12) |
+| 10 | PER-2 / ID-2 | P2 | Scene participants lost on load; ephemeral ref counter restarts |
+| 11 | ECO-1 | P2 | Gold-only settlement vs silver anchors (decision) |
+| 12 | IMG-2 | P2 (was P1) | Image batches uncancellable; cost and UX, no state damage |
+| 13 | TRD-11 / TRD-12 | P2 | No goods ledger; unpruned `trade_offers` |
+| 14 | CTX-1 | P2 | Internal ids reach the Narrator; boundary-less masking |
+| 15 | TEST-1 + CI-1 | P2 | Flaky lifecycle test; no CI |
+| 16 | PIPE-9, PIPE-10, CTX-3, PIPE-4 | P2 | Context scaling: retrieval headroom, retrieval failure fails the turn, unbudgeted Controller envelope, prompt rebuilt per `getView()` |
+| 17 | NPC-1 / NPC-2 | P2 | NPC+ rejoin; behaviour-activity decision |
+| 18 | REPO-1, PER-4, PER-5 | P2 | Tracked `saves/` evidence; split migration chain; additive fields without schema bump |
+| 19 | UI-1, UI-2, UI-3, UI-15 | P2 | Keyboard reachability, Accept/Promote language, live region |
+| 20 | MOV-4 residual | P3 | Inverse audit of an escorted person narrated as staying |
+
+PIPE-5/6/7 and PIPE-8 are subsumed by ARCH-2 or remain as listed in section 9.
+
+## 1C. New architecture findings (2026-10-12)
+
+| ID | Sev | Finding | Action | Effort |
+| --- | --- | --- | --- | --- |
+| ARCH-1 | P2 high | **Optional intelligence coupled to the authoritative core.** Mannerism learning (on by default), item-sprite generation, portrait batches and, when enabled, reflection commit through the same revision stream and `GameSession` status machine: mannerism bookkeeping commits on every eligible turn and the response awaits `#postTurn`; sprites cost about 2 revisions per item; a portrait batch blocks turns (`#portraitBusy`); derived and media state sit in the snapshot (PER-3). Invariant: **disabling any optional service must not break core correctness.** It holds for every service by reading (not pinned by a test), but enabled-coupling affects latency, stale UI clicks, save size and maintenance. | Service registry with flags; remove optional work from the response path; disabled-services test matrix; side stores for media and learning journals (REV-1/PER-3). Per-service status in the review report section 8. | M then L |
+| ARCH-2 | P2 structural | **Regex-per-feature interpretation architecture approaching its scaling limit.** About 32 independent modules (about 43 detectors) own a grammar over player or narration text; movement, follow, destination, price and name vocabularies are each declared four to seven times; authorization/audit parity is by convention. Failure mode: new feature, new grammar, overlap, inconsistent facts, audit patch, non-linear regression surface (blocks 2 and 3 both showed it). No numeric limit is claimed. | Shared `NarrationFacts` extractor (strangler, movement slice first), domain policy over facts, authority classes (A/B/C), a bounded ambiguity verifier only after measurement. Not another always-on LLM. | L |
+| NARR-1 | P2 high | Narrator `NARRATOR_OUTPUT_TOKENS = 512` (`provider-config.ts:6`, no env override); any `finish_reason != stop` throws a non-retryable `invalid_provider_response` (`client.ts:127-131`, `retry.ts`); the turn fails and the player resubmits; `finish_reason` is not in `GenerationMetadata`/`TurnTrace`. No truncation rate is measured anywhere in the repository; the reported one-in-18 is an unmeasured product observation. | Instrument first (finish reason, truncated calls, output tokens p95), raise to 768, constrained-regeneration recovery once, never commit from incomplete narration. | M |
+
+### 1C.1 H1 closure checklist
+
+Open H1 items are the D-08 "H1 TODOs" (`evaluations/CALDREVAN_DEBT_REGISTER_AFTER_PASS_10.md`, root `DEBT_REGISTER.md`). No TODO/FIXME markers exist in `src/`.
+
+| Item | Verdict | Note |
+| --- | --- | --- |
+| `them` phantom handover | STILL REAL, DEFERRED | fail-closed; absorbed by NarrationFacts |
+| First-name-only condition attribution | STILL REAL, DEFERRED | fail-closed; absorbed by NarrationFacts |
+| Unnamed captive price | ALREADY FIXED (P8) | `tests/narration-survives-audit.test.ts:160` |
+| Fronted-recipient receipt | STILL REAL, DEFERRED | fail-closed; absorbed by NarrationFacts |
+| "Four H1 TODOs" in `ENGINE_FREEZE_PRE_UI.md` and the H6 audit | OBSOLETE (stale count, three remain) | historical documents untouched |
+
+Policy "no new major feature until every H1 item is fixed or explicitly deferred with rationale": **accept**; all three survivors are deferred above with a rationale and an owner.
+
+### 1C.2 Authority classification (principle, see ARCHITECTURE.md section 2c)
+
+Class A low impact, no confirmation. Class B engine-verifiable, no confirmation if the evidence is strong, safe rejection on ambiguity. Class C irreversible or high impact, explicit player confirmation (trade settlement, NPC+ promotion, manumission, large property transfer, destructive actions). Current gaps: manumission is still regex-driven (AUTH-1) and narration-created characters are permanent (AUTH-2).
+
+## 2. Priority summary (top 30): AUDIT SNAPSHOT, historical rank at `c0608a6`
+
+> **Superseded for planning by section 1B.** Items marked FIXED in this table are closed; do not read this list as the current top priority.
 
 | Rank | ID | Sev | Item | Effort |
 | --- | --- | --- | --- | --- |
@@ -254,7 +331,7 @@ Audit C domains 1 and 2. The real order (16 steps) runs: HTTP, `submitPlayerInpu
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
 | PIPE-1 | P1 | The unaudited draft streams to the browser (`on_narrator_preview` -> `server.ts:201` -> `client.js:734`). Everything the audit exists to stop is visible for the controller+audit latency. Secrecy relies on prompt rules plus a regex audit that protects only the final text. | Product decision: stop streaming drafts (neutral "thinking" state) or stream through a conservative deterministic filter against names/aliases the player has not learned. | S-M |
-| PIPE-5 | P2 | Six or more independent readers interpret the same text, each with its own grammar: Controller, authorization derived grammar, `deriveTurnEvidence`, audit, commit-prep, foreground binding, mannerism extractor, reflection. | One shared `NarrationFacts` claim extractor per text (draft, revision, delivered). | L |
+| PIPE-5 | P2 | **[Status 2026-10-12: re-counted at about 32 independent modules, about 43 detectors; now tracked as ARCH-2.]** Six or more independent readers interpret the same text, each with its own grammar: Controller, authorization derived grammar, `deriveTurnEvidence`, audit, commit-prep, foreground binding, mannerism extractor, reflection. | One shared `NarrationFacts` claim extractor per text (draft, revision, delivered). | L |
 | PIPE-6 | P2 | Commit-prep promotes people, records canonical-name knowledge, contracts and person offers from the delivered text after the audit and outside `authorizeWithEvidence` ("fourth authority lane"). | Document as a lane; emit as authorization diagnostics; consider a final audit over the batch. | M |
 | PIPE-7 | P2 | Commands are fixed from the draft; if the revision or redaction reshapes the event, state may change without prose saying so. The only repair is a hard-coded English arrival sentence (D-13). | Generalize: verify every committed command is mentioned, append a templated sentence per omission. | M |
 | PIPE-8 | P2 | Two delivery orders via `reliability_contract`; production uses the one that delivers narration before the commit (`turn-coordinator.ts:221` vs `225`). | Single post-commit mode; delete the flag. | S |
@@ -453,22 +530,34 @@ Audit D part 2. Result of comparing the normative docs with the code: topology, 
 
 Proposed taxonomy (nothing moved): `README.md` only at root; `docs/README.md`; `docs/current/` (NORMATIVE); `docs/architecture/`, `docs/world/`, `docs/authoring/`, `docs/schemas/` (ACTIVE); `docs/history/{reports,superseded,phases}/`; `docs/evidence/` (raw dirs, json, jsonl, mjs, `saves/d09-*`); `docs/media/`. Steps: relocate `saves/d09-*` and rewrite the D09 doc paths; move the 31 root reports and rewrite the links; add `docs/evidence/README.md` (never edited, never imported); add `tests/docs-links.test.ts` plus a staleness tripwire; archive the 27 MB of evidence as a release tarball if clone size matters.
 
-## 16. Decisions needed from the author
+## 16. Decisions needed from the author (canonical list, reconciled 2026-10-12)
 
-| # | Decision | Recommendation |
+One list. **D1 to D10** are the audit decisions with their current status; **D11 to D20** are the architecture decisions required (A to J of the post-consolidation review). Nothing is duplicated: where the earlier text and the new text overlap, the row below is authoritative.
+
+| # | Decision | Status / recommendation |
 | --- | --- | --- |
-| 1 | Companion movement: allow `held_by_player` / `household_member` / `invited` followers via narration (MOV-1), and approve the optional deterministic escort for held persons (MOV-2) | Do the predicate now; escort after a short product call |
-| 2 | Draft preview: keep streaming (with a deterministic leak filter) or show a neutral state (PIPE-1) | Neutral state until the filter exists |
-| 3 | Currency unit: integer silver internally or gold-only anchors (ECO-1) | Silver internally (schema 7) |
-| 4 | NPC+ who leaves: behaviour-active or inactive; rejoin via the same UI action (NPC-1/2) | Inactive plus rejoin plus badge |
-| 5 | Can a canonical NPC ever become a campaign record / NPC+ (NPC-3, ID-8) | Decide before the Property work |
-| 6 | `premium_*` rename as a schema migration (NAME-1) | Symbols now, key at the next schema bump |
-| 7 | Manumission: explicit UI action (AUTH-1) | Yes |
-| 8 | Voyage embeddings, semantic index, OpenRouter image client: keep or remove (PRV-7) | Remove the image client; park the rest in `tools/` |
-| 9 | Reference-image feature: build or remove the upload UI (IMG-10) | Remove until needed |
-| 10 | Repository cleanup depth: archive evidence (REPO-1..3) | Do REPO-1 now, the rest with the docs taxonomy |
+| D1 | Companion movement and escort | **ANSWERED.** No persisted party; derived per turn. Narrow held-person escort approved and implemented (block 3). Free-people and unnamed forms stay unresolved by design |
+| D2 | Draft preview (PIPE-1): keep streaming with a leak filter, or neutral state | OPEN. Recommend a neutral "thinking" state until a deterministic leak filter exists |
+| D3 | Currency unit (ECO-1) | OPEN. Recommend integer silver internally, display G/S (schema 7) |
+| D4 | NPC+ who leaves the household (NPC-1/2) | Direction: **inactive plus rejoin plus badge** (not yet confirmed or implemented) |
+| D5 | Can a canonical NPC become a campaign record / NPC+ (NPC-3, ID-8) | OPEN. Decide before Property |
+| D6 | `premium_*` rename (NAME-1) | **Deferred**, to be done as a clean schema migration (symbols now, key at the next schema bump) |
+| D7 | Manumission as an explicit action (AUTH-1) | Direction: **yes, Class C** (not yet implemented) |
+| D8 | Voyage embeddings, semantic index, OpenRouter image client | **Folded into D13**; remove the image client, park the rest |
+| D9 | Reference-image feature (IMG-10) | OPEN. Recommend remove the upload UI until needed |
+| D10 | Repository cleanup depth (REPO-1..3) | OPEN. Do REPO-1 now, the rest with the docs taxonomy |
+| D11 (A) | Reflection: core, shadow or remove | Recommend **SHADOW only**; delete dev copies, collapse version-stacked validators. Trade-off: forgoes a speculative feature |
+| D12 (B) | Mannerism: core, shadow or remove | Recommend **optional active**, the one adaptive system; side-store the journal and move bookkeeping off the response path. Trade-off: needs the split |
+| D13 (C) | Semantic retrieval: runtime, optional, tools or remove | Recommend **park in `tools/`**; lexical retrieval stays the production path |
+| D14 (D) | Sprite generation / QA | Recommend an **optional side service**; QA reviewer **off by default**, remove if sprites stay acceptable |
+| D15 (E) | Narrator max output | Recommend **768** now (with detection); 1024 only if p95 output exceeds about 600 tokens or truncation stays above about 1 percent |
+| D16 (F) | Truncation recovery | Recommend **constrained regeneration once**; probe continuation before adopting it |
+| D17 (G) | NarrationFacts timing | Recommend after the L1 benchmark (A8), **movement/follow slice first**, then price/offers, then names |
+| D18 (H) | Targeted verifier | **Allowed later**: bounded enum output, only on ambiguity markers, behind a flag, after the ambiguity rate is measured; never a default always-on pass |
+| D19 (I) | Action classes requiring confirmation | Classes A/B/C (section 1C.2); manumission to C; character creation needs a retire/merge path |
+| D20 (J) | Optional service state | Recommend **side stores**, not `CampaignState`; promoted mannerisms stay authoritative |
 
-## 17. Suggested fix order
+## 17. Suggested fix order (audit-time; superseded by Wave A in the Master Roadmap)
 
 1. **Wave 0, hygiene and safety (small, independent):** IMG-1, TRD-1, TRD-2, PIPE-2, REV-3, ID-2, UI-1, UI-5, TEST-1, REPO-1, CI-1, CI-2.
 2. **Wave 1, correctness core:** MOV-1 with ID-1 (one change), PIPE-1 with CTX-1/CTX-2, AUTH-1, TRD-1b, TRD-3/TRD-4 (shared price extractor with a corpus), REV-2.

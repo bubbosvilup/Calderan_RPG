@@ -1,6 +1,6 @@
 # Roadmap and known limitations
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: the code and tests on main; each row below was checked against them.
+Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: the code and tests on main; each row below was checked against them.
 
 ## Complete
 
@@ -38,7 +38,7 @@ Full Property system (generic property entity, containers and property storage, 
 
 ## Next
 
-Weather UI, then Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
+**Architecture consolidation (Wave A) comes before new product systems** (see [Master Roadmap](MASTER_ROADMAP.md)): turn delivery safety and Narrator truncation, optional-service split, authority classes, shared NarrationFacts. Weather UI may proceed in parallel; Property waits for the first Wave A steps. Then Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
 
 ## Known limitations
 

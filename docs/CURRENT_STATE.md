@@ -104,6 +104,8 @@ See [Testing](TESTING.md). Latest recorded run: **3334 tests, 0 failed** on top 
 
 Companion movement (block 3): who MAY follow Nicco is derived per turn by `followCandidates` (`src/turn/follow-candidates.ts`: active NPC+, held person, household member, person invited by name this turn); it is never persisted and never moves anyone by itself. A candidate moves only through a completed narrated follow of that same person, or, for a held person the player names and leads ("Alright Maren, ..., let's go home"), through the deterministic escort committed in the same atomic batch as Nicco's travel. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
 
+Strategic review after the consolidation blocks: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md) (open-debt ranking, ARCH-1/ARCH-2, Wave A).
+
 ## 13. Major known limitations
 
 See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals. Fixed 2026-10-12 (offline, live certification pending): IMG-1, TRD-1, TRD-2 (block 1); TRD-1b (SELL transfers the same item), TRD-3/TRD-4 (one price grammar), TRD-5 (offer terms digest), TRD-10 (pending-offer narration guard) (block 2). Open trade debt: TRD-11 goods ledger and ECO-1 currency model; see [debt register](MASTER_DEBT_REGISTER.md).

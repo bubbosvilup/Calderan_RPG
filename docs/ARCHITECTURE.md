@@ -1,6 +1,6 @@
 # Caldrevan architecture
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: the current main working tree (code first, then tests, then authored data).
+Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: the current main working tree (code first, then tests, then authored data).
 
 Caldrevan is a deterministic engine for long-running, AI-narrated roleplay. **The LLM interprets and proposes. The engine owns truth.** Nothing a model writes becomes campaign state until the engine has validated it, authorized it with evidence and committed it atomically.
 
@@ -62,6 +62,18 @@ Low-impact state (most ordinary facts, movement, item handoffs) is still inferre
 | Trade | goods offers are structured by the Controller, person offers are read from narration | Accept on the Actual Offer card | `GameSession.acceptTradeOffer` → `accept_trade_offer` → atomic settlement ([Actual Offer](architecture/ACTUAL_OFFER.md)) |
 
 A `TradeOffer` is a pending proposal; a transaction is committed state; acceptance is the boundary. Settlement stays domain-specific (goods are items, people go through the legal-transfer system). The trade card is also a human-verification surface and uses player-visible identity only (hidden names, ids and avatars never reach it). This is a documented pattern, not a code superclass.
+
+## 2c. Authority classes and the optional-service invariant
+
+**Authority classes.** Every action is classified by impact, and the class decides how it reaches state:
+
+- **Class A, low impact and reversible** (ordinary movement, scene focus, non-destructive interaction state): inferred, no confirmation.
+- **Class B, important but engine-verifiable** (name disclosure, NPC movement and follows, directly evidenced item pickup, the held-person escort): no confirmation when the evidence is strong; **safe rejection on ambiguity**.
+- **Class C, irreversible or high impact** (trade settlement, NPC+ promotion, manumission, large property transfer, any destructive action): explicit player confirmation through a ref-and-revision-guarded action (section 2b).
+
+Some current actions do not yet follow their class (manumission is still read from player text; narration-created characters are permanent): see the debt register, AUTH-1 and AUTH-2.
+
+**Optional services.** Model-facing or learning systems other than the Narrator and the Controller (reflection, mannerism learning, portrait and sprite generation, semantic retrieval) are *optional services*. Invariant: **disabling any optional service must not break core correctness**, and a disabled service means "feature absent", never "engine degraded". The target boundary is that optional services consume events and read models and write enrichment to their own store rather than the authoritative revision stream. Today several still commit through `CampaignState` (debt register, ARCH-1); the target is described in the [post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
 
 ## 3. What each model sees
 

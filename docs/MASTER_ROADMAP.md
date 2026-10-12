@@ -1,6 +1,6 @@
 # Caldrevan: Master Roadmap
 
-Status: Current (audit snapshot). Audited: 2026-10-12 on main `c0608a6`. Companion: [Master Technical Debt Register](MASTER_DEBT_REGISTER.md) (every ID below, e.g. `MOV-1`, refers to it). Day-to-day status lives in [Current state](CURRENT_STATE.md) and [Roadmap and known limitations](ROADMAP.md); this document is the long view.
+Status: Current. Audited 2026-10-12 on main `c0608a6`; reconciled the same day after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests) and the [post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md). Companion: [Master Technical Debt Register](MASTER_DEBT_REGISTER.md) (every ID below, e.g. `MOV-1`, refers to it). Day-to-day status lives in [Current state](CURRENT_STATE.md) and [Roadmap and known limitations](ROADMAP.md); this document is the long view.
 
 How it was reconstructed: git history on this clone starts on 2026-10-05 (50 commits; earlier work is squashed), so earlier eras are rebuilt from the dated reports in [`evaluations/`](evaluations/), the Phase documents in [`architecture/`](architecture/), the root pass reports and `DEBT_REGISTER.md`. Dates are the report dates; where a precise date was not available the era carries a range. The "next" order at the end is a recommendation, not a decision.
 
@@ -44,7 +44,7 @@ How it was reconstructed: git history on this clone starts on 2026-10-05 (50 com
 - Colour/calendar UI polish (`66631f8`); campaign deletion (soft delete, `63af784`).
 - **P0 foreground canonical identity binding** (`d4e9e22`): objective partner identity, conflicting-name guard, live certification (both scenarios pass).
 - **Person Actual Offer end to end** (`c0608a6`): spoken price forms, stable subject across supersession, Slave NPC on Accept, same-entity rename; 3278 tests.
-- **Consolidation blocks 1 and 2** (2026-10-12; block 1 on main `4b8fdc9`, block 2 on main after live certification): IMG-1, TRD-1, TRD-2, TRD-1b, TRD-3, TRD-4, TRD-5, TRD-10 fixed offline; 3313 tests. TRD-11 and ECO-1 open.
+- **Consolidation blocks 1 to 3** (2026-10-12): block 1 `4b8fdc9` (IMG-1, TRD-1, TRD-2); block 2 `5edcd37` (TRD-1b, TRD-3, TRD-4, TRD-5, TRD-10, live-certified); block 3 `31d82cd` (MOV-1, MOV-3, MOV-4, ID-1, MOV-2 in the narrow escort form, live-certified); 3334 tests. TRD-11 and ECO-1 open by decision.
 
 ### Current capability snapshot
 Playable persistent campaign on a local web UI with autosave; canon-grounded narration on `z-ai/glm-5.2` and a Controller on `openai/gpt-6-luna` (fallback `claude-haiku-5.5`); player-authorized trade and promotion; masked identity; derived calendar and weather; item lifecycle and Gold; player and NPC+ image workflows on Qwen-Image + Raena LoRA; 3278 offline tests (latest recorded run), zero live calls in `npm test`.
@@ -110,6 +110,26 @@ Quest engine; combat and medicine; deeper rumor propagation; world event ledger;
 Evidence/history reorganisation and the `saves/` tracking fix (REPO-1..3, DOC-16); orphan and duplicate pruning (REPO-4, REPO-5, REPO-8, REPO-9); docs link test and staleness tripwire (DOC-15); relocate canon author-only section (DOC-13); keep this register and roadmap reconciled on each milestone.
 
 ## 3. Recommended sequence
+
+**Phase order (reconciled 2026-10-12): Stabilization (done through block 3), then Architecture Consolidation (Wave A below), then product expansion.** Do not add several more semantic grammars (Property, quests, combat) before Wave A. Weather UI is presentation over an existing engine and may proceed in parallel; Property waits (see below).
+
+### Wave A: architecture consolidation
+
+| Step | Content | Depends on |
+| --- | --- | --- |
+| A1 | H1 closure (three deferred items, stale-doc fixes) | none |
+| A2 | Narrator truncation hardening: persist `finish_reason`, metrics, cap 768, constrained-regeneration recovery | A6 for the recovery part |
+| A3 | PIPE-1 neutral draft state; CTX-1/CTX-2 leak-filter plan | decision D2 |
+| A4 | Authority classes (A/B/C) policy; explicit manumission (AUTH-1); retire/merge design (AUTH-2) | decision D7 |
+| A5 | Optional-service/core split: flags, remove optional work from the response path, disabled-services test matrix; then side stores for media and learning (REV-1/PER-3) | A6 |
+| A6 | Turn idempotency (REV-2) and non-throwing publication (PIPE-2) | none |
+| A8 | Modern benchmark, L1 scripted scenarios (regression net for A9) | none |
+| A9 | Shared `NarrationFacts`: movement/follow/departure/arrival slice, then price/offers, then names | A8 |
+| A10 | Targeted ambiguity verifier (flagged, bounded) | A9 plus a measured ambiguity rate |
+
+Order: A1; then A6 with A2 and A3; then A4 and A5; then A8, A9, A10. **Next engineering block (Block 4): turn delivery safety and truncation (A6 + A2 + A3).** Property waits for A2, A4, the canonical-NPC policy and the `quantity`/`container_id` and equipment-slot prerequisites, ideally with the first NarrationFacts slice. Quests, combat, medicine, routines and rumor simulation wait for A9 and A5.
+
+### Earlier wave table (audit-time, superseded where it conflicts with Wave A)
 
 | Wave | Goal | Contents |
 | --- | --- | --- |
