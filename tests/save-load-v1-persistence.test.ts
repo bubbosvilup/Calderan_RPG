@@ -28,7 +28,7 @@ const clock = (start = Date.parse(now)) => { let t = start; return { now: () => 
 test("format 5 carries display name, scenario, save reason, engine version and bounded non-authoritative continuity", () => {
   const { world, campaign } = richCampaign(), snap = campaign.exportSnapshot();
   const file = createSaveFile(snap, world, now, now, { metadata: { display_name: "Nicco in Calderan", scenario_id: "caldrevan.slave_market.v1", save_reason: "manual", engine_version: "0.1.0" }, continuity: continuity(snap.revision) });
-  assert.equal(file.schema_version, 7); assert.equal(file.snapshot.schema_version, 7);
+  assert.equal(file.schema_version, 8); assert.equal(file.snapshot.schema_version, 7);
   assert.deepEqual(file.metadata, { saved_at: now, created_at: now, display_name: "Nicco in Calderan", scenario_id: "caldrevan.slave_market.v1", save_reason: "manual", engine_version: "0.1.0" });
   assert.ok(file.canon_references!.every(r => typeof r.kind === "string"), "format-5 references record the entity kind");
   const text = serializeSave(file, world), decoded = decodeSaveWithReport(text, world);
@@ -51,18 +51,18 @@ test("explicit 4 -> 5 migration is version-only and lossless; v4 files carrying 
   const { player_characters: _pc, next_item_sequence: _seq, ...s4 } = v5.snapshot;
   const v4 = { ...v5, schema_version: 4, snapshot: { ...s4, schema_version: 3 }, canon_references: v5.canon_references.map(({ kind: _k, ...r }: { kind: string }) => r) };
   const decoded = decodeSaveWithReport(JSON.stringify(v4), world);
-  assert.equal(decoded.migrated_from, 4); assert.equal(decoded.file.schema_version, 7);
+  assert.equal(decoded.migrated_from, 4); assert.equal(decoded.file.schema_version, 8);
   assert.deepEqual(CampaignState.restore(world, decoded.file.snapshot).exportSnapshot(), snap);
   for (const smuggle of [(f: any) => { f.metadata.display_name = "x"; }, (f: any) => { f.continuity = continuity(snap.revision); }, (f: any) => { f.snapshot.schema_version = 4; }]) {
     const f = structuredClone(v4); smuggle(f); assert.throws(() => decodeSaveWithReport(JSON.stringify(f), world), { code: "migration_failed" });
   }
-  for (const future of [{ ...v5, schema_version: 8 }, { ...v5, snapshot: { ...v5.snapshot, schema_version: 8 } }]) assert.throws(() => decodeSaveWithReport(JSON.stringify(future), world), { code: "unsupported_version" });
+  for (const future of [{ ...v5, schema_version: 9 }, { ...v5, snapshot: { ...v5.snapshot, schema_version: 9 } }]) assert.throws(() => decodeSaveWithReport(JSON.stringify(future), world), { code: "unsupported_version" });
   // On disk: loading the v4 file migrates in memory only.
   const root = await temp(), dir = join(root, snap.campaign_id); await fs.mkdir(dir, { recursive: true });
   const bytes = JSON.stringify(v4); await fs.writeFile(join(dir, "save.json"), bytes);
   const loaded = await new FileCampaignRepository(world, root).loadCampaign(snap.campaign_id);
   assert.equal(loaded.migrated_from, 4); assert.equal(await fs.readFile(join(dir, "save.json"), "utf8"), bytes, "load never rewrites the source");
-  await fs.writeFile(join(dir, "save.json"), JSON.stringify({ ...v5, schema_version: 8 }));
+  await fs.writeFile(join(dir, "save.json"), JSON.stringify({ ...v5, schema_version: 9 }));
   await assert.rejects(new FileCampaignRepository(world, root).loadCampaign(snap.campaign_id), { code: "unsupported_version" });
 });
 
@@ -195,7 +195,7 @@ test("soft delete moves the whole campaign to saves/.deleted (refused while lock
   const lock = await repository.acquireLock(id);
   await assert.rejects(repository.deleteCampaign(id), { code: "campaign_locked" }); await lock.release();
   const { moved_to } = await repository.deleteCampaign(id);
-  assert.deepEqual((await fs.readdir(join(base, ".deleted", moved_to))).sort(), ["backups", "save.json", "transcript.jsonl"]);
+  assert.deepEqual((await fs.readdir(join(base, ".deleted", moved_to))).sort(), ["backups", "optional", "save.json", "transcript.jsonl"]);
   assert.deepEqual(await repository.listSaves(), []);
 });
 
@@ -229,13 +229,10 @@ test("campaign layout: portraits live inside the campaign folder; deferred delet
   let pending = (await collectDeferredDeletions(store, id, campaign.exportSnapshot(), await repository.retainedAssetReferences(id), new Set([assetKey(a, "portrait_v3.png")]))).pending;
   assert.equal(pending.size, 1); assert.ok(await store.exists(id, a, "portrait_v3.png"));
   assert.ok(!campaign.exportSnapshot().portraits![0]!.versions.some(v => v.version_id === "portrait_v3"), "protection keeps the file, never the Gallery membership");
-  // Two autosaves rotate it out of current and previous, but the create checkpoint still references it.
+  // Block 7: gallery membership lives in the single-generation media side store (backups pin authoritative state only). The first save that persists the deletion releases the file.
   for (let i = 0; i < 2; i++) { change(campaign, { kind: "runtime_delta", delta: { time_advance_minutes: 1 } }); await repository.saveCampaign(campaign, { metadata: { save_reason: "autosave" } }); }
   pending = (await collectDeferredDeletions(store, id, campaign.exportSnapshot(), await repository.retainedAssetReferences(id), pending)).pending;
-  assert.equal(pending.size, 1, "a retained backup protects the file"); assert.ok(await store.exists(id, a, "portrait_v3.png"));
-  await fs.rm(join(root, id, "backups"), { recursive: true });
-  pending = (await collectDeferredDeletions(store, id, campaign.exportSnapshot(), await repository.retainedAssetReferences(id), pending)).pending;
-  assert.equal(pending.size, 0); assert.equal(await store.exists(id, a, "portrait_v3.png"), false);
+  assert.equal(pending.size, 0, "the media store no longer lists v3: nothing retains it"); assert.equal(await store.exists(id, a, "portrait_v3.png"), false);
   // Orphans: an unreferenced file is reported (never auto-removed); a missing referenced file is reported; temps only after an hour.
   await write("portrait_stray.png"); await fs.rm(join(root, id, "portraits", store.characterToken(id, a), "portrait_v2.png"));
   const tmp = await store.stage(id, a, Buffer.from("x"));

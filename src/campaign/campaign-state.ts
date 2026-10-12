@@ -19,11 +19,14 @@ import { validateCampaignSnapshot } from "./snapshot-validation.js";
 import { preparePremiumCommand, syncPremiumCharacters } from "./premium-characters.js";
 import { applyMannerismUserChange, parseMannerismUserChange, type MannerismUserChange } from "./mannerisms.js";
 import { applyMannerismLearning, parseMannerismLearningOperation } from "./mannerism-learning.js";
+import { corePartition } from "./optional-state.js";
 const RESTORE = Symbol("validated campaign restore");
 
 export interface PreparedCampaignChange {
   readonly expected_revision: number;
   readonly next_revision: number;
+  /** True when the change touches only optional enrichment/media: it is applied but the semantic revision does not move. */
+  readonly optional_only: boolean;
   readonly changed: boolean;
   readonly snapshot: DeepReadonly<CampaignSnapshot>;
 }
@@ -76,15 +79,20 @@ function finishPreparation(base: DeepReadonly<CampaignSnapshot>, draft: Campaign
   const comparison = structuredClone(base) as CampaignSnapshot;
   orderDomains(comparison);
   const changed = stableData(draft) !== stableData(comparison);
-  if (changed && !Number.isSafeInteger(base.revision + 1)) fail("revision", "revision overflow");
-  draft.revision = base.revision + (changed ? 1 : 0);
-  return Object.freeze({ expected_revision: base.revision, next_revision: draft.revision, changed, snapshot: changed ? validateCampaignSnapshot(draft, world) : base });
+  // Block 7: the SEMANTIC revision follows the authoritative partition only. A change confined to optional enrichment/media (reflection, mannerism
+  // learning evidence, item sprite bookkeeping, portrait gallery) is applied and persisted through its side store but never bumps the revision.
+  const authoritative = changed && stableData(corePartition(draft)) !== stableData(corePartition(comparison));
+  if (authoritative && !Number.isSafeInteger(base.revision + 1)) fail("revision", "revision overflow");
+  draft.revision = base.revision + (authoritative ? 1 : 0);
+  return Object.freeze({ expected_revision: base.revision, next_revision: draft.revision, changed, optional_only: changed && !authoritative, snapshot: changed ? validateCampaignSnapshot(draft, world) : base });
 }
 
 /** One in-memory authority. Manual APIs use validated receipts; no raw mutation, disk I/O, history replay or external callbacks. */
 export class CampaignState {
   readonly #world: WorldStore;
   #snapshot: DeepReadonly<CampaignSnapshot>;
+  /** In-memory count of committed changes of ANY kind (authoritative or optional). Never persisted; the save layer uses it to know whether side-store state is unsaved. */
+  #version = 0;
   readonly #prepared = new WeakMap<object, { base: DeepReadonly<CampaignSnapshot>; next: DeepReadonly<CampaignSnapshot> }>();
   /** Trusted engine initialization, following the existing RuntimeState startup contract. */
   constructor(world: WorldStore, campaignId: string, initialScene: SceneState, initialMana?: PlayerMana);
@@ -102,6 +110,8 @@ export class CampaignState {
     return new CampaignState(world, RESTORE, validateCampaignSnapshot(snapshot, world));
   }
   get revision(): number { return this.#snapshot.revision; }
+  /** Increases on every committed change, including optional-only ones that leave `revision` unchanged. */
+  get stateVersion(): number { return this.#version; }
   exportSnapshot(): DeepReadonly<CampaignSnapshot> { return this.#snapshot; }
   prepare(input: unknown): PreparedCampaignChange {
     const prepared = prepareCampaignChange(this.#snapshot, this.#world, input);
@@ -133,6 +143,7 @@ export class CampaignState {
     if (entry.base !== this.#snapshot) fail("commit", "stale preparation receipt");
     const changed = entry.next !== entry.base;
     this.#prepared.delete(prepared);
+    if (changed) this.#version++;
     this.#snapshot = entry.next;
     return Object.freeze({ revision: this.revision, changed });
   }

@@ -10,7 +10,7 @@ Images are **presentation only**. They never become narrative truth and never re
 
 - Hugging Face router, provider `fal-ai`, endpoint `fal-ai/qwen-image`, base `Qwen/Qwen-Image` plus the `Raelina/Raena-Qwen-Image` anime LoRA (scale 1, trigger "Anime illustration of"). Billed to `HF_TOKEN`; OpenRouter is not used for images.
 - Avatar 992 × 992, Full Body 800 × 1200.
-- Each click produces a batch of three with unique seeds. Gallery limit 64 per character. One Avatar and one Full Body are selected per character.
+- Each click produces a batch of three with unique seeds. Gallery limit 64 per character. One Avatar and one Full Body are selected per character. **Block 7:** the Gallery (versions, prompt / seed / model / cost metadata, reference) lives in the media side store `optional/media.json`; only the SELECTED avatar / full-body version ids are authoritative (`portrait_selections` in the snapshot). A batch that selects nothing, and deleting an unselected version, never move the revision; selecting a version does, once. A selection whose version is missing is kept (the portrait degrades to a placeholder, no other version is chosen). Backups pin selections, not Gallery files: once a save persists a deletion nothing retains the file.
 - Appearance fingerprint: images made from an older appearance are marked stale.
 - Age never gates portrait generation (decision 2026-10-12, IMG-1): minor, unknown or missing age generate normally; `generation_blocked` stays for non-age reasons only. The romance gate is a separate rule and is unchanged. One recovery attempt after a content refusal; no automatic provider retries otherwise.
 - Reference images are not used for generation (text-to-image has no reference input); a reference attached earlier is kept, unused.

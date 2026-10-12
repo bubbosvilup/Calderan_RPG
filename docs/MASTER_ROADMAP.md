@@ -122,7 +122,7 @@ Evidence/history reorganisation and the `saves/` tracking fix (REPO-1..3, DOC-16
 | A2 | Narrator truncation hardening: persist `finish_reason`, metrics, cap 768, constrained-regeneration recovery | A6 for the recovery part |
 | A3 | ~~PIPE-1 neutral draft state~~ DONE (block 4, D2 decided); CTX-1/CTX-2 leak-filter plan for the final text | none |
 | A4 | Authority classes (A/B/C) policy; explicit manumission (AUTH-1, DONE in block 5A via PendingConfirmation); retire/merge and lifecycle (AUTH-2, DONE in block 5B) | decision D7 |
-| A5 | Optional-service/core split. **Block 6 DONE (lifecycle only):** registry, detached post-turn work, OFF semantics, disabled-services matrix. **Block 7 (open):** side stores for media and learning bookkeeping (REV-1/PER-3, ARCH-1 phase 2) | A6 |
+| A5 | Optional-service/core split. **Block 6 DONE (lifecycle only):** registry, detached post-turn work, OFF semantics, disabled-services matrix. **Block 7 DONE:** learning / media side stores with explicit per-domain markers, save schema 8, crash-safe lazy migration; ARCH-1 closed, REV-1 optional-write component closed, PER-3 optional-state portion closed; Consolidation Gate complete. | A6 |
 | A6 | ~~Turn idempotency (REV-2) and non-throwing publication (PIPE-2)~~ DONE (block 4) | none |
 | A8 | Modern benchmark, L1 scripted scenarios (regression net for A9) | none |
 | A9 | Shared `NarrationFacts`: movement/follow/departure/arrival slice, then price/offers, then names | A8 |

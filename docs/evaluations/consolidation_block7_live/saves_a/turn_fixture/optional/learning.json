@@ -1,0 +1,160 @@
+{
+  "bound_revision": 6,
+  "campaign_id": "turn_fixture",
+  "content_sha256": "14e7eeb0e0f5e44059f2b8d84767310988c000b53ff08318ca3c7c729e3dec9e",
+  "data": {
+    "mannerism_learning": {
+      "candidates": [],
+      "journal": [
+        {
+          "available_items": [
+            {
+              "character_id": "brenna",
+              "item_id": "brenna_boots",
+              "worn": true
+            },
+            {
+              "character_id": "maren",
+              "item_id": "campaign_item_cloth_doll",
+              "worn": false
+            },
+            {
+              "character_id": "brenna",
+              "item_id": "campaign_item_plain_shirt",
+              "worn": true
+            }
+          ],
+          "character_ids": [
+            "brenna",
+            "maren"
+          ],
+          "event_id": "turn_fixture:mannerism:1",
+          "narration_hash": "ead92259112220ccbc15597c8cf54307027bec50ff13773c8da72bc585650480",
+          "narration_length": 644,
+          "revision": 6,
+          "sequence": 1
+        },
+        {
+          "available_items": [
+            {
+              "character_id": "brenna",
+              "item_id": "brenna_boots",
+              "worn": true
+            },
+            {
+              "character_id": "maren",
+              "item_id": "campaign_item_cloth_doll",
+              "worn": false
+            },
+            {
+              "character_id": "brenna",
+              "item_id": "campaign_item_plain_shirt",
+              "worn": true
+            }
+          ],
+          "character_ids": [
+            "brenna",
+            "maren"
+          ],
+          "event_id": "turn_fixture:mannerism:2",
+          "narration_hash": "6e840f306f09dcf3c75c30f3ff0d411e2f9d34bef6659fcb1b68f9e885b57a1e",
+          "narration_length": 678,
+          "revision": 6,
+          "sequence": 2
+        },
+        {
+          "available_items": [
+            {
+              "character_id": "brenna",
+              "item_id": "brenna_boots",
+              "worn": true
+            },
+            {
+              "character_id": "maren",
+              "item_id": "campaign_item_cloth_doll",
+              "worn": false
+            },
+            {
+              "character_id": "brenna",
+              "item_id": "campaign_item_plain_shirt",
+              "worn": true
+            }
+          ],
+          "character_ids": [
+            "brenna",
+            "maren"
+          ],
+          "event_id": "turn_fixture:mannerism:3",
+          "narration_hash": "2dff654f157b211185c1d1a20065dff7828edf65edcb9a446be1fc1269848c0f",
+          "narration_length": 707,
+          "revision": 6,
+          "sequence": 3
+        },
+        {
+          "available_items": [
+            {
+              "character_id": "brenna",
+              "item_id": "brenna_boots",
+              "worn": true
+            },
+            {
+              "character_id": "maren",
+              "item_id": "campaign_item_cloth_doll",
+              "worn": false
+            },
+            {
+              "character_id": "brenna",
+              "item_id": "campaign_item_plain_shirt",
+              "worn": true
+            }
+          ],
+          "character_ids": [
+            "brenna",
+            "maren"
+          ],
+          "event_id": "turn_fixture:mannerism:4",
+          "narration_hash": "37286939ae75aa3649e0dc9b1a8870d224137ecd073a42002e51441a8e4c0381",
+          "narration_length": 946,
+          "revision": 6,
+          "sequence": 4
+        },
+        {
+          "available_items": [
+            {
+              "character_id": "brenna",
+              "item_id": "brenna_boots",
+              "worn": true
+            },
+            {
+              "character_id": "maren",
+              "item_id": "campaign_item_cloth_doll",
+              "worn": false
+            },
+            {
+              "character_id": "brenna",
+              "item_id": "campaign_item_plain_shirt",
+              "worn": true
+            }
+          ],
+          "character_ids": [
+            "brenna",
+            "maren"
+          ],
+          "event_id": "turn_fixture:mannerism:5",
+          "narration_hash": "8452b1b6a940bacd4be223c7fe0eedf7315a9ca0b1cbf460f9361481957676f5",
+          "narration_length": 745,
+          "revision": 6,
+          "sequence": 5
+        }
+      ],
+      "last_turn_id": "turn_fixture:r6:t5",
+      "processed_sequence": 4,
+      "sequence": 5
+    },
+    "premium_reflections": []
+  },
+  "format": "caldrevan_optional_store",
+  "saved_at": "2026-10-12T20:52:42.377Z",
+  "store": "learning",
+  "store_version": 1
+}

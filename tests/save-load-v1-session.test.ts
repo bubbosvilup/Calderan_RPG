@@ -91,7 +91,7 @@ test("create campaign (host): stable generated ID, display name, scenario record
   assert.match(id, /^campaign_\d{8}_[0-9a-f]{6}$/); assert.deepEqual(session.campaignMeta, { display_name: "Nicco in Calderan", scenario_id: "caldrevan.slave_market.v1" });
   assert.equal(session.hasUnsavedChanges, false); assert.equal(session.getView().scene.location.id, "calderan_slave_market");
   const save = JSON.parse(await fs.readFile(join(root, "campaigns", id, "save.json"), "utf8"));
-  assert.deepEqual([save.schema_version, save.snapshot.schema_version, save.metadata.display_name, save.metadata.scenario_id, save.metadata.save_reason, save.metadata.engine_version], [7, 7, "Nicco in Calderan", "caldrevan.slave_market.v1", "create", "0.1.0"]);
+  assert.deepEqual([save.schema_version, save.snapshot.schema_version, save.metadata.display_name, save.metadata.scenario_id, save.metadata.save_reason, save.metadata.engine_version], [8, 8, "Nicco in Calderan", "caldrevan.slave_market.v1", "create", "0.1.0"]);
   assert.match(save.canonical_dataset_id, /^sha256:/);
   const listed = await host.listCampaigns();
   assert.deepEqual(listed.map(c => [c.campaign_id, c.display_name, c.status, c.location_name]), [[id, "Nicco in Calderan", "valid", world.getEntity("calderan_slave_market")!.display_name]]);
@@ -195,13 +195,13 @@ test("missing image file: load succeeds, the record stays, the report counts it;
   assert.equal(mira(s).appearance_editor!.portrait.gallery.length, 2, "gone from the live Gallery");
   const portraitDir = join(root, "campaigns", id, "portraits"), files = async () => (await fs.readdir(join(portraitDir, (await fs.readdir(portraitDir))[0]!))).sort();
   assert.equal((await files()).length, 3, "save.json (and its checkpoint) still reference it: the file is kept");
-  assert.ok((await s.save()).ok); assert.equal((await files()).length, 3, "save.previous.json and the backup still reference it");
+  assert.ok((await s.save()).ok); await s.portraitAssetReport(); assert.equal((await files()).length, 2, "block 7: gallery membership lives in the single-generation media store; once a save persists the deletion nothing retains the file");
   assert.deepEqual((await s.portraitAssetReport())!.orphans, [], "a protected file is not an orphan");
   assert.equal(mira(s).appearance_editor!.portrait.gallery.length, 2, "protection never resurrects the Gallery entry");
   // Remove the avatar file on disk, then reload: the record stays and the load is not blocked.
   await host.shutdown();
-  const loadedSave = JSON.parse(await fs.readFile(join(root, "campaigns", id, "save.json"), "utf8"));
-  const avatarAsset = loadedSave.snapshot.portraits[0].versions.find((v: { version_id: string }) => v.version_id === loadedSave.snapshot.portraits[0].avatar_version_id).asset_file;
+  const loadedSave = JSON.parse(await fs.readFile(join(root, "campaigns", id, "save.json"), "utf8")), media = JSON.parse(await fs.readFile(join(root, "campaigns", id, "optional", "media.json"), "utf8")).data;
+  const avatarAsset = media.portraits[0].versions.find((v: { version_id: string }) => v.version_id === loadedSave.snapshot.portrait_selections[0].avatar_version_id).asset_file;
   await fs.rm(join(portraitDir, (await fs.readdir(portraitDir))[0]!, avatarAsset));
   const host2 = new SessionHost(processDeps(root).deps), reloaded = await host2.loadCampaign({ campaign_id: id });
   assert.ok(reloaded.ok); assert.equal(reloaded.load_report!.missing_assets, 1); assert.ok(reloaded.load_report!.warnings.some(w => /placeholder/.test(w)));
@@ -286,7 +286,7 @@ test("graceful shutdown saves a dirty campaign (reason quit); a refused swap whi
   assert.equal(a.status, "closed"); assert.equal(host.active!.campaignId, idB);
   const savedA = JSON.parse(await fs.readFile(join(root, "campaigns", idA, "save.json"), "utf8"));
   assert.equal(savedA.metadata.save_reason, "quit", "the dirty campaign was saved before it was closed");
-  assert.equal(savedA.snapshot.portraits[0].versions.length, 3);
+  assert.equal(JSON.parse(await fs.readFile(join(root, "campaigns", idA, "optional", "media.json"), "utf8")).data.portraits[0].versions.length, 3);
   // Old session operations after the swap can never touch the new campaign.
   const stale = a.updateNpcAppearance({ ref: mira(host.active!).ref, expected_revision: rev(host.active!), patch: { build: "x" } });
   assert.ok(!stale.ok); assert.equal(stale.error.code, "session_closed");

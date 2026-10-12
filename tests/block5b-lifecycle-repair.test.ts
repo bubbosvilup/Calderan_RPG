@@ -52,7 +52,7 @@ test("L4: retirement is durable across save/load; schema 7; a v6 snapshot migrat
   const snap = f.campaign.exportSnapshot();
   assert.equal(snap.schema_version, 7);
   const file = createSaveFile(snap, f.world, "2026-10-12T00:00:00.000Z");
-  assert.equal(file.schema_version, 7);
+  assert.equal(file.schema_version, 8);
   const loaded = validateSaveFile(JSON.parse(JSON.stringify(file)), f.world);
   assert.deepEqual(loaded.snapshot.characters.find(c => c.id === A)?.retirement, snap.characters.find(c => c.id === A)?.retirement);
   assert.equal(CampaignState.restore(f.world, loaded.snapshot as CampaignSnapshot).exportSnapshot().characters.find(c => c.id === A)?.current.status, "inactive");

@@ -42,4 +42,4 @@ See the topology table in [Current state](CURRENT_STATE.md#4-current-model-topol
 
 ## Saves
 
-Snapshot schema 7, save file schema 7 ([Persistence](architecture/PERSISTENCE.md)). Portraits live inside each campaign folder. Derived data is never saved.
+Save file schema 8 with optional side stores `optional/learning.json` and `optional/media.json` ([Persistence](architecture/PERSISTENCE.md)). Portraits live inside each campaign folder. Derived data is never saved. No new environment variable: side stores need no configuration.

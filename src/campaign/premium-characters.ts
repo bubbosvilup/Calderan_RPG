@@ -61,7 +61,7 @@ export function validateReflectionNotes(characterId: string, notes: DeepReadonly
   for (const n of notes) {
     if (ids.has(n.id)) fail("premium_reflections.notes", "duplicate note id"); ids.add(n.id);
     if (n.text.length > (n.structured?400:REFLECTION_LIMITS.text) || n.label.length > REFLECTION_LIMITS.label || !n.evidence_refs.length || n.evidence_refs.length > REFLECTION_LIMITS.evidence_refs) fail("premium_reflections.notes", "unbounded note");
-    if(n.structured&&(n.structured.source_revision>=n.updated_revision||n.structured.proposal.subject_character_id!==characterId||n.structured.proposal.confidence!==n.confidence||JSON.stringify(n.structured.proposal.evidence_refs)!==JSON.stringify(n.evidence_refs)))fail('premium_reflections.structured','inconsistent provenance');
+    if(n.structured&&(n.structured.source_revision>n.updated_revision||n.structured.proposal.subject_character_id!==characterId||n.structured.proposal.confidence!==n.confidence||JSON.stringify(n.structured.proposal.evidence_refs)!==JSON.stringify(n.evidence_refs)))fail('premium_reflections.structured','inconsistent provenance');
     if (n.created_revision > n.updated_revision || n.updated_revision > revision) fail("premium_reflections.notes", "invalid revisions");
     for (const ref of n.evidence_refs) if (!ref.startsWith(`npcmem:${characterId}:`) && !new RegExp(`^npcrel:(?:${characterId}:[a-z0-9_]+|[a-z0-9_]+:${characterId})$`).test(ref)) fail("premium_reflections.evidence_refs", "evidence of another character");
   }
@@ -73,7 +73,7 @@ export function preparePremiumCommand(context: PreparationContext, command: Camp
     const { draft } = context;
     if (!draft.premium_characters.some(p => p.character_id === command.character_id && p.metadata.active_household_member)) fail("character_id", "only an active NPC+ can be reflected on");
     if (command.reflected_revision > draft.revision) fail("reflected_revision", "reflection cannot postdate its evidence");
-    validateReflectionNotes(command.character_id, command.notes, draft.revision + 1);
+    validateReflectionNotes(command.character_id, command.notes, draft.revision);
     const existing = draft.premium_reflections.find(r => r.character_id === command.character_id);
     if (existing) { existing.notes = structuredClone(command.notes); existing.last_reflected_revision = command.reflected_revision; }
     else draft.premium_reflections.push({ character_id: command.character_id, notes: structuredClone(command.notes), last_reflected_revision: command.reflected_revision });

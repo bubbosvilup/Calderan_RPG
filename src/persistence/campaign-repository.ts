@@ -4,7 +4,9 @@ import type { WorldStore } from "../world/world-store.js";
 import { CampaignState } from "../campaign/campaign-state.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { CampaignSaveError, nodeCode, saveError, type SaveErrorCode } from "./errors.js";
-import { createSaveFile, decodeSaveWithReport, serializeSave, validateSaveId, type CampaignSaveFile, type SaveContinuity, type SaveMetadata, type SaveReason } from "./save-format.js";
+import { createSaveFile, decodeSaveWithReport, peekOptionalMarkers, serializeSave, validateSaveId, type CampaignSaveFile, type OptionalStateMarkers, type SaveContinuity, type SaveMetadata, type SaveReason } from "./save-format.js";
+import { OPTIONAL_STORE_DIRECTORY, OPTIONAL_STORE_VERSIONS, contentDigest, decodeStore, encodeStore, optionalStoreFile, writeStoreFile, type StoreData } from "./optional-store.js";
+import { OPTIONAL_STORE_NAMES, extractOptionalState, type OptionalSides, type OptionalStoreName } from "../campaign/optional-state.js";
 import type { TurnReceipt, TurnReceiptBlock } from "./turn-receipts.js";
 import type { InteractionMetadataBlock } from "./pending-confirmations.js";
 import type { CanonCompatibilityReport } from "./canon-compatibility.js";
@@ -14,13 +16,15 @@ import { parseTranscript, serializeTranscriptRecords, TRANSCRIPT_LIMITS, type Tr
 
 /** `current` / `previous` slots, or one rolling checkpoint by its file name (`backup:r00000412-20261008T210411123Z.json`). */
 export type SaveSlot = "current" | "previous" | `backup:${string}`;
-export interface SavedCampaign { readonly status: "saved"; readonly campaign_id: string; readonly revision: number; readonly saved_at: string;
+export interface SavedCampaign { readonly status: "saved"; readonly campaign_id: string; readonly revision: number; /** Block 7: the campaign's in-memory state version captured with the snapshot (optional-only changes do not move `revision`). */ readonly state_version: number; readonly saved_at: string;
   /** Rolling checkpoint written by this save (file name), when one was due. */ readonly checkpoint?: string;
   /** A checkpoint was due but could not be written; the canonical save itself succeeded. */ readonly checkpoint_failed?: true;
   /** File name the corrupt current slot was moved to before this save (explicit recovery only). */ readonly quarantined?: string }
 export interface LoadedCampaign { readonly status: "loaded"; readonly slot: SaveSlot; readonly campaign: CampaignState; readonly metadata: DeepReadonly<CampaignSaveFile["metadata"]>;
   /** Save/Load v1: non-authoritative recent conversation, when present and well formed. */ readonly continuity?: DeepReadonly<SaveContinuity>;
   readonly migrated_from?: number; readonly snapshot_migrated_from?: number; readonly canon: CanonCompatibilityReport; readonly continuity_dropped: boolean;
+  /** Block 7: where the optional (learning / media) state was authoritative on disk. `legacy_snapshot`: not yet migrated, the next save migrates it. */
+  readonly optional_state_source: { readonly learning: "side_store" | "legacy_snapshot"; readonly media: "side_store" | "legacy_snapshot" };
   /** Block 4 (REV-2): the terminal turn receipts saved with this state (idempotency metadata), when present and well formed. */ readonly turn_receipts?: readonly TurnReceipt[];
   /** Block 5A (schema 6): the pending-confirmation records saved with this state (interaction metadata), when present and well formed. */ readonly interaction_metadata?: InteractionMetadataBlock }
 export interface SlotListing { readonly exists: boolean; readonly status: "valid" | SaveErrorCode; readonly revision?: number; readonly saved_at?: string; readonly canonical_dataset_id?: string;
@@ -48,6 +52,8 @@ export interface CampaignSaveRepository {
   loadCampaign(campaignId: string, slot?: SaveSlot): Promise<LoadedCampaign>;
   listSaves(): Promise<readonly SaveListing[]>;
 }
+/** Every save written by this build declares both optional side stores authoritative (block 7). */
+const MIGRATED_MARKERS: OptionalStateMarkers = Object.freeze({ learning: Object.freeze({ version: OPTIONAL_STORE_VERSIONS.learning, completed: true as const }), media: Object.freeze({ version: OPTIONAL_STORE_VERSIONS.media, completed: true as const }) });
 const activeWrites = new Set<string>();
 const pathKey = (path: string) => process.platform === "win32" ? resolve(path).toLowerCase() : resolve(path);
 function within(root: string, candidate: string): boolean { const rel = relative(root, candidate); return rel === "" || (!rel.startsWith(`..${sep}`) && rel !== ".." && !isAbsolute(rel)); }
@@ -77,6 +83,8 @@ export class FileCampaignRepository implements CampaignSaveRepository {
   readonly #heartbeat: number; readonly #stale: number; readonly #clock: () => number;
   /** Locks this repository instance holds: campaign ID → token. */
   readonly #locks = new Map<string, string>();
+  /** Block 7: content digest of each side store as last written or read by this instance (skips rewriting an unchanged store). */
+  readonly #digests = new Map<string, string>();
   constructor(world: WorldStore, root = "saves", options: RepositoryOptions = {}) {
     this.#world = world; this.#root = resolve(root); this.#fs = options.filesystem ?? nodeSaveFileSystem;
     this.#now = options.now ?? (() => new Date().toISOString());
@@ -120,14 +128,54 @@ export class FileCampaignRepository implements CampaignSaveRepository {
     if (!BACKUP.test(name)) throw new CampaignSaveError("invalid_save");
     return join(directory, "backups", name);
   }
-  private async readSlot(directory: string, id: string, slot: SaveSlot) {
+  /** `core`: the optional side stores are not read (campaign listings, the previous-slot probe of a save). `full`: every store the save's markers declare is read and verified. */
+  private async readSlot(directory: string, id: string, slot: SaveSlot, mode: "full" | "core" = "full") {
     await this.directory(slot.startsWith("backup:") ? join(directory, "backups") : directory, false); const path = this.filename(directory, slot);
     if (!await this.regularFile(path)) throw new CampaignSaveError("not_found");
-    const text = await this.#fs.read(path); return { text, decoded: decodeSaveWithReport(text, this.#world, id) };
+    const text = await this.#fs.read(path);
+    if (mode === "core") return { text, decoded: decodeSaveWithReport(text, this.#world, id, { core_only: true }) };
+    const sides = await this.#readSides(directory, id, peekOptionalMarkers(text));
+    return { text, decoded: decodeSaveWithReport(text, this.#world, id, { sides }) };
+  }
+  // ------------------------------------------------------------------ optional side stores (block 7)
+  #optionalDirectory(directory: string): string { return join(directory, OPTIONAL_STORE_DIRECTORY); }
+  #digestKey(directory: string, store: OptionalStoreName): string { return `${pathKey(directory)}|${store}`; }
+  /** Reads exactly the stores the markers declare authoritative. Marker present + store missing, corrupt, foreign or unsupported = HARD error, never a fallback. */
+  async #readSides(directory: string, id: string, markers: OptionalStateMarkers | undefined): Promise<OptionalSides> {
+    const sides: { learning?: StoreData["learning"]; media?: StoreData["media"]; learning_bound_revision?: number; media_bound_revision?: number } = {};
+    for (const store of OPTIONAL_STORE_NAMES) {
+      if (!markers?.[store]) continue;
+      try {
+        const folder = this.#optionalDirectory(directory);
+        await this.directory(folder, false);
+        const path = join(folder, optionalStoreFile(store));
+        if (!await this.regularFile(path)) throw new CampaignSaveError("optional_state_invalid");
+        const content = decodeStore(await this.#fs.read(path), store, id);
+        if (content.store_version !== markers[store]!.version) throw new CampaignSaveError("optional_state_invalid");
+        (sides as Record<string, unknown>)[store] = content.data; (sides as Record<string, unknown>)[`${store}_bound_revision`] = content.bound_revision;
+        this.#digests.set(this.#digestKey(directory, store), content.content_sha256);
+      } catch (error) {
+        const e = saveError(error);
+        throw e.code === "not_found" || e.code === "invalid_json" || e.code === "invalid_save" || e.code === "unsafe_path" ? new CampaignSaveError("optional_state_invalid") : e;
+      }
+    }
+    return sides;
+  }
+  /** Writes the side-store files (atomic each). `force`: always rewrite (the migration order writes them before the marker); otherwise unchanged stores are skipped. */
+  async #writeStores(directory: string, id: string, snapshot: Parameters<typeof extractOptionalState>[0], savedAt: string, force: boolean): Promise<void> {
+    const data = extractOptionalState(snapshot), folder = this.#optionalDirectory(directory);
+    await this.directory(folder, true);
+    for (const store of OPTIONAL_STORE_NAMES) {
+      const payload = data[store], digest = contentDigest(payload), key = this.#digestKey(directory, store);
+      if (!force && this.#digests.get(key) === digest) continue;
+      await this.directory(folder, false); await this.regularFile(join(folder, optionalStoreFile(store)));
+      await writeStoreFile(this.#fs, folder, store, encodeStore(store, id, snapshot.revision, savedAt, payload as never));
+      this.#digests.set(key, digest);
+    }
   }
   async saveCampaign(campaign: CampaignState, options: SaveCampaignOptions = {}): Promise<SavedCampaign> {
     // Capture synchronously before any filesystem await; later gameplay remains unsaved.
-    const snapshot = campaign.exportSnapshot(), id = validateSaveId(snapshot.campaign_id), directory = this.campaignPath(id), key = pathKey(directory);
+    const snapshot = campaign.exportSnapshot(), stateVersion = campaign.stateVersion, id = validateSaveId(snapshot.campaign_id), directory = this.campaignPath(id), key = pathKey(directory);
     if (activeWrites.has(key)) throw new CampaignSaveError("save_in_progress");
     activeWrites.add(key);
     const temps = new Set<string>();
@@ -140,13 +188,13 @@ export class FileCampaignRepository implements CampaignSaveRepository {
     try {
       // Validate snapshot and metadata before creating directories or touching existing saves.
       const savedAt = this.#now();
-      createSaveFile(snapshot, this.#world, savedAt, savedAt, { metadata: options.metadata ?? {}, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}), ...(options.interaction_metadata ? { interaction_metadata: options.interaction_metadata } : {}) });
+      createSaveFile(snapshot, this.#world, savedAt, savedAt, { optional_state: MIGRATED_MARKERS, metadata: options.metadata ?? {}, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}), ...(options.interaction_metadata ? { interaction_metadata: options.interaction_metadata } : {}) });
       await this.directory(directory, true);
       await this.#checkLock(directory);
       const current = this.filename(directory, "current"), previous = this.filename(directory, "previous");
       let old: Awaited<ReturnType<FileCampaignRepository["readSlot"]>> | undefined, quarantined: string | undefined;
       if (await this.regularFile(current)) {
-        try { old = await this.readSlot(directory, id, "current"); }
+        try { old = await this.readSlot(directory, id, "current", "core"); }
         catch (error) {
           const code = saveError(error).code;
           // Explicit recovery: a corrupt/unusable current is MOVED aside (evidence kept), never overwritten or deleted.
@@ -160,8 +208,14 @@ export class FileCampaignRepository implements CampaignSaveRepository {
       const previousMeta = old?.decoded.file.metadata;
       const metadata = Object.fromEntries(Object.entries({ display_name: previousMeta?.display_name, scenario_id: previousMeta?.scenario_id, engine_version: previousMeta?.engine_version, ...options.metadata })
         .filter(([, v]) => v !== undefined)) as NonNullable<SaveCampaignOptions["metadata"]>;
-      const file = createSaveFile(snapshot, this.#world, savedAt, previousMeta?.created_at ?? savedAt, { metadata, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}), ...(options.interaction_metadata ? { interaction_metadata: options.interaction_metadata } : {}) });
+      const file = createSaveFile(snapshot, this.#world, savedAt, previousMeta?.created_at ?? savedAt, { optional_state: MIGRATED_MARKERS, metadata, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}), ...(options.interaction_metadata ? { interaction_metadata: options.interaction_metadata } : {}) });
       const text = serializeSave(file, this.#world);
+      // Block 7 authority flip. Not yet migrated on disk (new campaign, schema <= 7 save, or only one store marked): MIGRATION ORDER. Write the COMPLETE side stores
+      // (atomic, fsynced), then persist the snapshot that carries the markers; the flip happens only when that atomic save succeeds, and until then the old
+      // snapshot (which still owns the optional state) stays the authority. Already migrated: snapshot first, then the stores, so a crash leaves a store that is
+      // BEHIND the snapshot (older enrichment, valid) and never ahead of it (e.g. learning progress for a promotion the snapshot does not have).
+      const migrated = !!old && !!old.decoded.file.optional_state?.learning && !!old.decoded.file.optional_state?.media;
+      if (!migrated) await this.#writeStores(directory, id, snapshot, savedAt, true);
       const nextTemp = await writeTemp(directory, text);
       if (old) {
         const backupTemp = await writeTemp(directory, old.text);
@@ -172,11 +226,12 @@ export class FileCampaignRepository implements CampaignSaveRepository {
       await this.directory(directory, false); await this.regularFile(current);
       await this.#fs.rename(nextTemp, current); temps.delete(nextTemp);
       await this.#fs.syncDirectory(directory);
+      if (migrated) await this.#writeStores(directory, id, snapshot, savedAt, false);
       // Rolling checkpoint (best effort; never fails a completed canonical save). Saves only: no image bytes, no transcript.
       let checkpoint: string | undefined, checkpointFailed = false;
       try { checkpoint = await this.#checkpoint(directory, snapshot.revision, savedAt, options.metadata?.save_reason, text, writeTemp, temps); }
       catch { checkpointFailed = true; }
-      return Object.freeze({ status: "saved", campaign_id: id, revision: snapshot.revision, saved_at: savedAt, ...(checkpoint ? { checkpoint } : {}), ...(checkpointFailed ? { checkpoint_failed: true as const } : {}),
+      return Object.freeze({ status: "saved", campaign_id: id, revision: snapshot.revision, state_version: stateVersion, saved_at: savedAt, ...(checkpoint ? { checkpoint } : {}), ...(checkpointFailed ? { checkpoint_failed: true as const } : {}),
         ...(quarantined ? { quarantined } : {}) });
     } catch (error) { throw saveError(error); }
     finally {
@@ -217,7 +272,8 @@ export class FileCampaignRepository implements CampaignSaveRepository {
       const id = validateSaveId(campaignId), { decoded } = await this.readSlot(this.campaignPath(id), id, slot), file = decoded.file;
       return Object.freeze({ status: "loaded", slot, campaign: CampaignState.restore(this.#world, file.snapshot), metadata: file.metadata, ...(file.continuity ? { continuity: file.continuity } : {}), ...(file.turn_receipts ? { turn_receipts: file.turn_receipts.receipts } : {}), ...(file.interaction_metadata ? { interaction_metadata: file.interaction_metadata } : {}),
         ...(decoded.migrated_from !== undefined ? { migrated_from: decoded.migrated_from } : {}), ...(decoded.snapshot_migrated_from !== undefined ? { snapshot_migrated_from: decoded.snapshot_migrated_from } : {}),
-        canon: decoded.canon, continuity_dropped: decoded.continuity_dropped });
+        canon: decoded.canon, continuity_dropped: decoded.continuity_dropped,
+        optional_state_source: Object.freeze({ learning: decoded.optional_state.migrated.learning ? "side_store" as const : "legacy_snapshot" as const, media: decoded.optional_state.migrated.media ? "side_store" as const : "legacy_snapshot" as const }) });
     } catch (error) { throw saveError(error); }
   }
   async listSaves(): Promise<readonly SaveListing[]> {
@@ -233,7 +289,7 @@ export class FileCampaignRepository implements CampaignSaveRepository {
           try {
             await this.directory(directory, false);
             exists = (await this.info(this.filename(directory, slot))) !== undefined;
-            const { file } = (await this.readSlot(directory, name, slot)).decoded, s = file.snapshot, meta = file.metadata;
+            const { file } = (await this.readSlot(directory, name, slot, "core")).decoded, s = file.snapshot, meta = file.metadata;
             const household = s.households.find(h => h.members.some(m => m.character_id === "nicco" && m.status === "member" && m.role === "owner"));
             return Object.freeze({ exists: true, status: "valid", revision: s.revision, saved_at: meta.saved_at, canonical_dataset_id: file.canonical_dataset_id,
               ...(meta.display_name ? { display_name: meta.display_name } : {}), ...(meta.created_at ? { created_at: meta.created_at } : {}), ...(meta.scenario_id ? { scenario_id: meta.scenario_id } : {}),
@@ -350,9 +406,23 @@ export class FileCampaignRepository implements CampaignSaveRepository {
         if (record.reference && typeof record.reference.asset_file === "string") references.add(assetKey(record.character_id, record.reference.asset_file));
       }
     };
+    // Block 7: gallery versions, references and ready sprites of a migrated campaign live in the media side store, not in the saves.
+    const collectMedia = (data: unknown) => {
+      const media = data as { item_sprites?: { item_id?: unknown; sprite?: { status?: unknown; asset_ref?: unknown } }[]; portraits?: { character_id?: unknown; versions?: { asset_file?: unknown }[]; reference?: { asset_file?: unknown } }[] };
+      for (const e of media.item_sprites ?? []) if (e?.sprite?.status === "ready") { if (typeof e.item_id === "string" && typeof e.sprite.asset_ref === "string") references.add(assetKey(e.item_id, e.sprite.asset_ref)); else complete = false; }
+      for (const r of media.portraits ?? []) {
+        if (typeof r?.character_id !== "string") { complete = false; continue; }
+        for (const v of r.versions ?? []) if (typeof v?.asset_file === "string") references.add(assetKey(r.character_id, v.asset_file)); else complete = false;
+        if (r.reference && typeof r.reference.asset_file === "string") references.add(assetKey(r.character_id, r.reference.asset_file));
+      }
+    };
     try {
       const directory = this.campaignPath(validateSaveId(campaignId));
       try { await this.directory(directory, false); } catch (error) { if (saveError(error).code === "not_found") return Object.freeze({ complete: true, references }); throw error; }
+      try {
+        const folder = this.#optionalDirectory(directory), path = join(folder, optionalStoreFile("media"));
+        if (await this.info(folder) && await this.regularFile(path)) collectMedia(decodeStore(await this.#fs.read(path), "media", validateSaveId(campaignId)).data);
+      } catch { complete = false; }
       const files = [this.filename(directory, "current"), this.filename(directory, "previous"), ...(await this.#backupNames(join(directory, "backups"))).map(n => join(directory, "backups", n))];
       for (const path of files) {
         try { if (!await this.regularFile(path)) continue; collect(parseSaveJson(await this.#fs.read(path))); }

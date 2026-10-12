@@ -103,8 +103,8 @@ export function validatePortraitRecords(snapshot: DeepReadonly<Pick<CampaignSnap
     if (!snapshot.characters.some(c => c.id === record.character_id) && !snapshot.player_characters.some(p => p.character_id === record.character_id)) fail("portraits.character_id", "portraits belong to a campaign character record or the player character");
     const ids = new Set(record.versions.map(v => v.version_id)), files = new Set(record.versions.map(v => v.asset_file));
     if (ids.size !== record.versions.length || files.size !== record.versions.length) fail("portraits.versions", "duplicate portrait version");
-    if (record.avatar_version_id !== undefined && !ids.has(record.avatar_version_id)) fail("portraits.avatar_version_id", "avatar must name a gallery version");
-    if (record.full_body_version_id !== undefined && !ids.has(record.full_body_version_id)) fail("portraits.full_body_version_id", "full body must name a gallery version");
+    // Block 7: the Gallery lives in the media side store while the explicit Avatar / Full Body SELECTION is authoritative. A selection whose gallery entry is
+    // missing (older store, lost file) is therefore kept as the player's choice and renders as degraded media; it is never dropped or silently replaced.
   }
 }
 /** Opaque URL token for one stored file (a portrait version or the reference): no ID, name or path is derivable from it. */

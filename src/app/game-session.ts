@@ -225,7 +225,7 @@ export class GameSession {
   /** Portrait Gallery V2: the character whose batch is being generated (one batch per session at a time). */
   /** Block 6: optional-service availability (runtime configuration, never campaign state), their health, and the detached post-turn work. */
   readonly #services: OptionalServiceConfig; readonly #monitor: OptionalServiceMonitor;
-  readonly #background = new Set<Promise<void>>(); readonly #optionalAbort = new AbortController(); #optionalRevisions: number[] = [];
+  readonly #background = new Set<Promise<void>>(); readonly #optionalAbort = new AbortController();
   #portraitBusy: string | undefined; #portraitDone: Promise<void> | undefined; #idleWaiters: (() => void)[] = [];
   /** REV-2: the in-flight registry (runtime memory only) and the bounded window of terminal receipts (persisted with the save). */
   readonly #running = new Map<string, { readonly fingerprint: string; readonly promise: Promise<TurnOutcome> }>();
@@ -246,7 +246,7 @@ export class GameSession {
     // Sprite QA is a separate optional service: without a reviewer the sprite flow accepts its first valid image (deterministic fallback).
     this.#itemSprites = new ItemSpriteJobs(session.campaign, { generator: deps.portrait_generator, store: deps.portrait_store, reviewer: this.#services.sprite_qa ? deps.item_sprite_reviewer : undefined,
       enabled: () => this.#services.item_sprite_generation, can_commit: () => this.#status === "idle" && !this.#suspended,
-      changed: before => { this.#noteOptionalWrite(before); this.#autosave?.notify(); }, trigger: deps.portrait_stack?.trigger });
+      changed: () => { this.#autosave?.notify(); }, trigger: deps.portrait_stack?.trigger });
     this.#mannerisms = deps.mannerism_extractor && this.#services.mannerism_learning ? new MannerismMaintenance(deps.world, deps.mannerism_extractor) : undefined;
     // The scenario opening is given to the narrator while no exchange has been finalized (fresh campaigns and never-played loads).
     const opening = init.opening_text;
@@ -346,7 +346,7 @@ export class GameSession {
   get lastError(): AppError | undefined { return this.#lastError; }
   /** Derived on demand from authoritative state; safe to call at any time, including while a turn runs (it shows committed state). */
   getView(): SessionView {
-    const view = deriveSessionView(this.#deps.world, this.#session.campaign.exportSnapshot(), { status: this.#status, last_saved_revision: this.#session.last_saved_revision, provider: this.#deps.provider_status ?? STUB_STATUS, save_status: this.saveStatus() });
+    const view = deriveSessionView(this.#deps.world, this.#session.campaign.exportSnapshot(), { status: this.#status, last_saved_revision: this.#session.last_saved_revision, unsaved_optional: this.#session.hasUnsavedChanges, provider: this.#deps.provider_status ?? STUB_STATUS, save_status: this.saveStatus() });
     let request: ReturnType<TurnCoordinator["contextRequest"]> | undefined;
     try { request = this.#coordinator.contextRequest?.(this.#session.campaign); if (request) request = this.#deps.compaction_service?.apply?.(request) ?? request; } catch { /* Existing coordinator fails closed with context_invalid/context_too_large on submission. */ }
     return { ...view, ...(request ? { context_budget: new ContextBudgetManager(this.#deps.context_policy).measure(request) } : {}),
@@ -950,25 +950,9 @@ export class GameSession {
     if (identity) this.#running.set(identity.key, { fingerprint: identity.fingerprint, promise: run });
     return run.then(outcome => this.#answered(outcome, false));
   }
-  /**
-   * Block 6, core priority. Optional services still write their legacy enrichment through the authoritative CampaignState until block 7, and each such write
-   * bumps the revision. A revision produced ONLY by optional writes must not make the client's view of the core stale, so a request is current when every
-   * revision after the one it carries is a recorded optional write. Anything else (a core commit in between) is a real conflict.
-   */
+  /** Block 7: optional enrichment and media never bump the semantic revision, so a client revision is current exactly when it equals the campaign's. */
   #revisionOk(expected: unknown): expected is number {
-    if (typeof expected !== "number" || !Number.isSafeInteger(expected) || expected < 0) return false;
-    const current = this.#session.campaign.revision;
-    if (expected === current) return true;
-    if (expected > current) return false;
-    const optional = new Set(this.#optionalRevisions);
-    for (let r = expected + 1; r <= current; r++) if (!optional.has(r)) return false;
-    return true;
-  }
-  /** Records the revisions an optional service's legacy write just produced: those after `before` (the revision observed immediately before the write). */
-  #noteOptionalWrite(before: number): void {
-    const revision = this.#session.campaign.revision;
-    for (let r = before + 1; r <= revision; r++) if (!this.#optionalRevisions.includes(r)) this.#optionalRevisions.push(r);
-    if (this.#optionalRevisions.length > 512) this.#optionalRevisions.splice(0, this.#optionalRevisions.length - 512);
+    return typeof expected === "number" && Number.isSafeInteger(expected) && expected >= 0 && expected === this.#session.campaign.revision;
   }
   /** Runtime service metadata (enabled, running, last success/error). Never campaign state: reading or recording it changes no revision. */
   getOptionalServices(): readonly OptionalServiceHealth[] { return this.#monitor.snapshot(); }
@@ -1107,13 +1091,14 @@ export class GameSession {
   }
   /**
    * Block 6: optional post-turn enrichment, OUTSIDE the correctness boundary. Launched after the turn's result was settled and the session is idle again; the
-   * caller never awaits it and the session status is never `post_turn`. Provider work runs without any lock; every legacy CampaignState write is applied only
-   * while the session is idle (core priority) and is dropped as stale otherwise. A failure is recorded as service health and goes nowhere else.
+   * caller never awaits it and the session status is never `post_turn`. Provider work runs without any lock; every write lands in the composed CampaignState view, which the
+   * persistence layer routes to the learning side store (Block 7): it never moves the semantic revision, so a client's expected_revision stays valid. Writes are
+   * applied only while the session is idle (core priority) and dropped otherwise. A failure is recorded as service health and goes nowhere else.
    */
   #launchOptional(work: { readonly turn_id: string; readonly trace: TurnTrace; readonly result: import("../turn/turn-types.js").TurnResult; readonly emit: (e: SessionEvent) => void }): void {
     const provider = this.#services.reflection ? this.#deps.reflection_provider : undefined;
     if (!provider && !this.#mannerisms) return;
-    const signal = this.#optionalAbort.signal, canCommit = () => this.#status === "idle" && !this.#suspended && !signal.aborted, mark = { before: 0 }, gate = { can_commit: () => { const ok = canCommit(); if (ok) mark.before = this.#session.campaign.revision; return ok; }, wrote: () => this.#noteOptionalWrite(mark.before) };
+    const signal = this.#optionalAbort.signal, canCommit = () => this.#status === "idle" && !this.#suspended && !signal.aborted, gate = { can_commit: canCommit };
     const task: Promise<void> = (async () => {
       await Promise.resolve();
       if (signal.aborted) return;
@@ -1131,7 +1116,7 @@ export class GameSession {
         const revisionBefore = campaign.revision;
         let runs: readonly ReflectionRun[] = [], failedHard = false;
         let thrown: unknown;
-        try { runs = await reflectAfterTurn(campaign, this.#deps.world, provider, { max_characters: 1, can_commit: gate.can_commit, wrote: gate.wrote, diagnostics_sink: record => { this.#reflectionRecord = record; } }); }
+        try { runs = await reflectAfterTurn(campaign, this.#deps.world, provider, { max_characters: 1, can_commit: gate.can_commit, diagnostics_sink: record => { this.#reflectionRecord = record; } }); }
         catch (error) { failedHard = true; thrown = error; }
         const summary = failedHard ? { status: "failed_nonblocking" as const, characters: [], revisions_added: campaign.revision - revisionBefore } : summarizeReflection(runs, this.#reflectionRecord, campaign.revision - revisionBefore);
         if (failedHard) this.#monitor.fail("reflection", thrown); else if (runs.some(r => r.status === "stale")) this.#monitor.discarded("reflection", "write_deferred_core_priority");

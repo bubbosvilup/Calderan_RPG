@@ -19,6 +19,7 @@ import type { SessionDeps } from "../src/app/game-session.js";
 type Hooks = Parameters<SessionDeps["createCoordinator"]>[0];
 import { mockController, mockNarrator } from "./turn-fixtures.js";
 import { testTrajectory } from "./production-reflection-fixtures.js";
+import { coreOf } from "./block7-fixtures.js";
 
 const narr = (text: string) => ({ async generate() { return mockNarrator(text).generate({} as never); }, async *stream() { yield* mockNarrator(text).stream({} as never); } });
 const emptyOutput = (r: MannerismExtractionRequest) => JSON.stringify({ observations: [], owned_reviewed_ids: r.owned.map(m => m.id) });
@@ -88,7 +89,7 @@ test("block 6 OFF: mannerism learning OFF makes zero extractor calls, records no
   assert.ok(lines.includes("Raises one eyebrow during a short exchange."), "promoted mannerism stays Narrator-visible");
 });
 
-test("block 6 OFF vs ON: the core turn's own commit is identical; total revision divergence after background maintenance is the known ARCH-1 phase 2 residual", async t => {
+test("block 6 / 7 OFF vs ON: the core turn's own commit AND the final semantic revision are identical (the block 6 revision-divergence caveat is gone)", async t => {
   const on = await mannerSession(t, "slow"), off = await mannerSession(t, "ok", { mannerism_learning: false });
   await drive(on, false); await drive(off, false); on.p.hold();
   const a = await on.session.submitPlayerInput("I wait quietly."), b = await off.session.submitPlayerInput("I wait quietly.");
@@ -97,7 +98,9 @@ test("block 6 OFF vs ON: the core turn's own commit is identical; total revision
   assert.deepEqual(a.trace.committed_command_kinds, b.trace.committed_command_kinds);
   on.p.release(); await on.session.optionalSettled(); await off.session.optionalSettled();
   assert.equal(core(on.campaign.exportSnapshot()), core(off.campaign.exportSnapshot()));
-  assert.ok(on.campaign.revision >= off.campaign.revision, "legacy optional writes may add revisions (Block 7 side store removes them)");
+  assert.equal(on.campaign.revision, off.campaign.revision, "block 7: optional maintenance never moves the semantic revision");
+  assert.equal(coreOf(on.campaign), coreOf(off.campaign), "identical authoritative state");
+  assert.ok(on.campaign.stateVersion > off.campaign.stateVersion, "the optional work really happened (learning state differs) without a revision");
 });
 
 async function reflSession(t: TestContext, provider: ReflectionProvider, optional?: Partial<OptionalServiceConfig>) {
@@ -120,6 +123,7 @@ test("block 6 OFF: reflection producer OFF makes zero provider calls and writes 
   const out = await on.session.submitPlayerInput("I wait.");
   assert.ok(out.ok); await on.session.optionalSettled();
   assert.equal(calls, 1); assert.equal(on.campaign.exportSnapshot().premium_reflections[0]!.notes.length, 1);
+  assert.equal(on.campaign.revision, off.campaign.revision, "block 7: a Reflection note is not a semantic revision"); assert.equal(coreOf(on.campaign), coreOf(off.campaign));
 });
 
 test("block 6 failure: a throwing reflection provider never fails the turn and is recorded as service health", async t => {

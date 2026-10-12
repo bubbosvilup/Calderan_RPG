@@ -1,6 +1,6 @@
 # Persistence (Save/Load v1; originally Phase 1J)
 
-Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-11. **Current versions: save file schema 7, snapshot schema 7** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
+Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-11. **Current versions: save file schema 8, persisted snapshot schema 8 (the in-memory composed snapshot stays schema 7-shaped)** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
 
 > ## Save/Load v1 (current): persistent campaigns
 >
@@ -98,6 +98,32 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 ## Pending confirmations (block 5A, save file schema 6)
 
 Save file schema is **6** (snapshot schema stays 6). The envelope gains the optional top-level `interaction_metadata` (`{authority:"interaction_metadata", pending_confirmations:[...]}`), written in the same atomic rename as the snapshot and **not** part of `CampaignState`: creating, cancelling or invalidating a record never changes the semantic revision (confirming one commits a normal revision). Record: `ref` (24 hex), `kind`, `subject_id`, `actor_id`, flat bounded `payload`, `provenance` (`source`, `turn_key`, `turn_id`), `created_revision`, `status` (`pending|confirmed|cancelled|invalidated`), `terminal_reason`, `resolved_revision`. Active records are never pruned (parse ceiling 256, creation ceiling 64); only the newest 32 terminal records are kept. Migration 5 → 6 changes only the version and rejects a v5 file that already carries `interaction_metadata`. Load is tolerant: a malformed, duplicate, unknown-kind or impossible record is dropped and never makes the save unloadable; the game session reconciles active records against the loaded state (subject renamed keeps the binding because it is by ID; subject no longer enslaved invalidates). Autosave and quit-save treat unsaved pending changes as dirty.
+
+## Optional side stores (block 7, save file and persisted snapshot schema 8)
+
+**Principle.** The authoritative snapshot holds gameplay truth and explicit player-authoritative selections. Optional enrichment and media bookkeeping lives in two **side stores** next to the campaign save, survives a reload, and **never drives the semantic `CampaignState` revision**.
+
+| Store (`<campaign>/optional/`) | Holds | Authority notes |
+| --- | --- | --- |
+| `learning.json` | `premium_reflections` (journal, scheduling bookkeeping, validated notes) and `mannerism_learning` (sequence, processed_sequence, journal, candidates) | Reflection notes are SOFT-PROMOTED durable enrichment: Narrator-visible even with the producer OFF, not gameplay truth. Promoted mannerisms (`premium_characters[].mannerisms`) stay in the snapshot. |
+| `media.json` | `items[].sprite` (pending / ready / failed + asset metadata) and the portrait Gallery (versions, generation history and metadata, reference) | The **selected** avatar / full-body version ids stay authoritative in the snapshot as `portrait_selections`. |
+
+**Store file.** `{format:"caldrevan_optional_store", store, store_version, campaign_id, bound_revision, saved_at, content_sha256, data}`. Each store has its OWN version (currently 1 and 1), is bound to its campaign, records the snapshot revision it was written beside, and carries a SHA-256 of its canonical data (an integrity check, not a signature). Writes are atomic: temp file (exclusive, flushed, fsynced), rename, directory fsync. A malformed, foreign (other `campaign_id`), wrong-version, truncated or digest-mismatching store is `optional_state_invalid`. An interrupted temp is never read. Services do not own files: the repository maps domain data to stores.
+
+**Marker and authority.** The save envelope carries `optional_state: {learning?: {version, completed: true}, media?: {...}}`. The marker, never the store's existence, revision, timestamp or the save version, decides authority:
+
+| State | Authority |
+| --- | --- |
+| Marker ABSENT (any save <= 7, or an interrupted migration) | the snapshot (inline optional fields); an existing store is ignored and rewritten by the next save |
+| Marker PRESENT + valid store | the side store; any stray inline copy in the snapshot is ignored |
+| Marker PRESENT + missing / corrupt / foreign / wrong-version store | **hard error** (`optional_state_invalid`); no silent fallback to the snapshot, to another slot or to a backup |
+| Marker version newer than supported | `unsupported_version` (safe failure) |
+
+**Migration protocol (v7 -> v8).** Loading never rewrites. The first save of a not-yet-migrated campaign runs in MIGRATION ORDER: (1) build the complete store state (deterministic, idempotent, no authority flip), (2) write and fsync both stores, (3) persist the schema-8 snapshot carrying the markers in the same atomic rename as always, (4) only that rename flips authority. A crash before step 3 completes leaves the marker absent: the old snapshot is still the authority and a rerun rewrites the stores (same digest, no duplicate rows). A migrated campaign saves in STEADY ORDER: snapshot first, then the changed stores (unchanged stores, by digest, are skipped), so a crash leaves a store BEHIND the snapshot, never ahead. A store newer than the loaded snapshot (an older slot or backup beside the current store) is clamped: reflection notes and mannerism evidence that postdate the snapshot are dropped.
+
+**Composed view.** In memory `CampaignSnapshot` keeps every field (schema 7 shape) so readers and validators are unchanged; the persisted snapshot is schema 8 with a migrated store's fields removed (`toPersistedSnapshot` / `fromPersistedSnapshot` in `src/campaign/optional-state.ts`). `corePartition()` is the authoritative projection: a change that leaves it equal is OPTIONAL-ONLY, applies without a revision bump (`optional_only`) and advances `CampaignState.stateVersion` (dirty tracking and autosave). A Gallery batch that selects nothing, a sprite transition, a Reflection note, a mannerism observation or journal entry never moves the revision; selecting an avatar and an actual mannerism promotion do, exactly once. Deleting a version holding a role fails; a selection whose Gallery version is missing is kept (rendering degrades, no other version is chosen).
+
+**Consequences.** Backups and the previous slot pin authoritative state only; the side stores are single-generation (current), so a deleted Gallery file is released as soon as a save persists the deletion. `expected_revision` is a strict equality with the semantic revision and is no longer disturbed by background work.
 
 ## Character lifecycle (block 5B, snapshot and save file schema 7)
 

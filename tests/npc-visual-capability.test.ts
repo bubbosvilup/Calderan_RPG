@@ -86,6 +86,6 @@ test("U21/U22: capabilities are deterministic, read-only derived state; the save
   const before = JSON.stringify(c.exportSnapshot()), a = JSON.stringify(card(c, "campaign_character_ada").character_capabilities), b = JSON.stringify(card(c, "campaign_character_ada").character_capabilities);
   assert.equal(a, b); assert.equal(JSON.stringify(c.exportSnapshot()), before, "projection does not write");
   assert.ok(!/character_capabilities|can_edit_npc_plus|character_tier/i.test(before));
-  assert.equal(c.exportSnapshot().schema_version, 7); assert.equal(createSaveFile(c.exportSnapshot(), world, "2026-10-11T00:00:00.000Z").schema_version, 7, "save schema 6 (block 5A); the snapshot schema is unchanged by this pass");
+  assert.equal(c.exportSnapshot().schema_version, 7); assert.equal(createSaveFile(c.exportSnapshot(), world, "2026-10-11T00:00:00.000Z").schema_version, 8, "save schema 6 (block 5A); the snapshot schema is unchanged by this pass");
   assert.deepEqual(characterCapabilities({ promoted: false, has_campaign_record: true, editable: true }), characterCapabilities({ promoted: false, has_campaign_record: true, editable: false }), "a non-promoted tier never edits");
 });

@@ -10,6 +10,7 @@ import { CampaignSaveError } from "../src/persistence/errors.js";
 import { decodeSave, validateSaveId } from "../src/persistence/save-format.js";
 import { MAX_SAVE_BYTES } from "../src/persistence/strict-json.js";
 import { WorldStore } from "../src/world/world-store.js";
+import { decodeSaveFile } from "./raw-save.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { change, richCampaign } from "./persistence-fixtures.js";
 import { fixtures, room } from "./fixtures.js";
@@ -44,7 +45,7 @@ test("real filesystem rich round trip, first save, session dirty tracking and un
   assert.equal(text.includes(root.replaceAll("\\", "\\\\")), false);
   time = "2026-09-27T11:00:00.000Z"; await session.save();
   assert.equal(campaign.revision, snapshot.revision);
-  const rewritten = decodeSave(await fs.readFile(current(root), "utf8"), world);
+  const rewritten = await decodeSaveFile(current(root), world);
   assert.equal(rewritten.metadata.saved_at, time); assert.equal(rewritten.metadata.created_at, "2026-09-27T10:00:00.000Z");
   assert.deepEqual(rewritten.snapshot, snapshot); assert.equal((await repository.loadCampaign("fixture_campaign", "previous")).campaign.revision, snapshot.revision);
   tick(campaign); assert.equal(session.hasUnsavedChanges, true);
@@ -61,7 +62,7 @@ test("three saves rotate exactly one previous successful snapshot", async t => {
     if (revision > 1) assert.equal((await repository.loadCampaign("fixture_campaign", "previous")).campaign.revision, revision - 1);
   }
   // Save/Load v1: rolling checkpoints live in backups/ (only due ones are written; never more than five).
-  assert.deepEqual((await fs.readdir(join(root, "fixture_campaign"))).sort(), ["backups", "save.json", "save.previous.json"]);
+  assert.deepEqual((await fs.readdir(join(root, "fixture_campaign"))).sort(), ["backups", "optional", "save.json", "save.previous.json"]);
   assert.equal((await repository.listBackups("fixture_campaign")).length, 1, "the first save checkpoints; later autosave-cadence saves within 15 minutes do not");
 });
 
@@ -110,7 +111,7 @@ test("first-save failure leaves no current, no backup and no saved revision", as
   const adapter: SaveFileSystem = { ...nodeSaveFileSystem, async rename() { throw ioFailure(); } };
   const session = new CampaignSession(campaign, new FileCampaignRepository(world, root, { filesystem: adapter }));
   await assert.rejects(session.save(), { code: "io_error" }); assert.equal(session.last_saved_revision, null);
-  assert.deepEqual(await fs.readdir(join(root, "fixture_campaign")), []);
+  assert.deepEqual((await fs.readdir(join(root, "fixture_campaign"))).filter(name => name !== "optional"), []); // block 7: side stores are written BEFORE the snapshot marker (migration order); with no snapshot they are inert
 });
 
 test("cleanup failure leaves ignored temp files and preserves current", async t => {
@@ -156,7 +157,7 @@ test("listing is read-only metadata and distinguishes missing, corrupt, version 
   const root = join(await temporary(t), "saves"), { world, campaign } = richCampaign(), repository = new FileCampaignRepository(world, root);
   assert.deepEqual(await repository.listSaves(), []); await assert.rejects(fs.stat(root), { code: "ENOENT" });
   await repository.saveCampaign(campaign); const text = await fs.readFile(current(root), "utf8");
-  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 7', '"schema_version": 8')]]) {
+  for (const [id, contents] of [["broken", "{bad"], ["future", text.replace('"campaign_id": "fixture_campaign"', '"campaign_id": "future"').replace('"schema_version": 8', '"schema_version": 9')]]) {
     await fs.mkdir(join(root, id!)); await fs.writeFile(join(root, id!, "save.json"), contents!);
   }
   await fs.mkdir(join(root, "empty")); await fs.writeFile(join(root, "empty", ".save-stale.tmp"), "{}");
@@ -199,7 +200,7 @@ test("campaign-directory junctions and hard-linked save files are rejected", asy
 test("configured root junction is rejected and files remain portable across roots/canon source paths", async t => {
   const base = await temporary(t), root = join(base, "first"), second = join(base, "second"), { world, campaign } = richCampaign();
   await new FileCampaignRepository(world, root).saveCampaign(campaign);
-  await fs.mkdir(join(second, "fixture_campaign"), { recursive: true }); await fs.copyFile(current(root), current(second));
+  await fs.mkdir(join(second, "fixture_campaign"), { recursive: true }); await fs.copyFile(current(root), current(second)); await fs.cp(join(root, "fixture_campaign", "optional"), join(second, "fixture_campaign", "optional"), { recursive: true });
   const alternate = new WorldStore(fixtures().map(s => ({ ...s, source: join(base, "alternate_canon", basename(s.source)) })));
   assert.equal(alternate.datasetId, world.datasetId);
   assert.deepEqual((await new FileCampaignRepository(alternate, second).loadCampaign("fixture_campaign")).campaign.exportSnapshot(), campaign.exportSnapshot());

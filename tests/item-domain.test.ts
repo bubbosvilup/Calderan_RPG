@@ -100,7 +100,7 @@ test("G/H: save/load round-trips IDs, owner, position and allocator; old saves m
   assert.equal(engineItems(restored).at(-1)!.id, "campaign_item_00000003");
   // H: a schema-5 snapshot (before the Item Domain) migrates: its items are kept exactly, nothing is inferred, the allocator is safe.
   const old = JSON.parse(serializeSave(createSaveFile(turnFixture().campaign.exportSnapshot(), world, "2026-10-09T10:00:00.000Z"), world));
-  old.snapshot.schema_version = 5; delete old.snapshot.next_item_sequence;
+  old.schema_version = 7; old.snapshot.schema_version = 5; delete old.snapshot.next_item_sequence;
   const migrated = decodeSaveWithReport(JSON.stringify(old), world);
   assert.equal(migrated.snapshot_migrated_from, 5); assert.equal(migrated.file.snapshot.schema_version, 7);
   assert.equal(migrated.file.snapshot.next_item_sequence, 1);

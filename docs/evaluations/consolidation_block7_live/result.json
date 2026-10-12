@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-10-12T20:52:42.422Z",
+  "wire_total": 11,
+  "verdict": {
+    "all_turns_ok": true,
+    "extractor_called": true,
+    "extraction_never_changes_revision": true,
+    "expected_revision_valid_after_background_work": true,
+    "learning_store_received_the_journal": true,
+    "snapshot_has_no_mannerism_learning": true,
+    "markers_present": true,
+    "save_ok": true
+  },
+  "turns": [
+    {
+      "n": 1,
+      "ok": true,
+      "error": null,
+      "revision_at_return": 6,
+      "revision_after_optional": 6,
+      "state_version_advanced_by_optional": false
+    },
+    {
+      "n": 2,
+      "ok": true,
+      "error": null,
+      "revision_at_return": 6,
+      "revision_after_optional": 6,
+      "state_version_advanced_by_optional": false
+    },
+    {
+      "n": 3,
+      "ok": true,
+      "error": null,
+      "revision_at_return": 6,
+      "revision_after_optional": 6,
+      "state_version_advanced_by_optional": false
+    },
+    {
+      "n": 4,
+      "ok": true,
+      "error": null,
+      "revision_at_return": 6,
+      "revision_after_optional": 6,
+      "state_version_advanced_by_optional": true
+    }
+  ],
+  "extractor_calls": [
+    {
+      "n": 9,
+      "model": "openai/gpt-6-luna",
+      "start_ms": 26342,
+      "end_ms": 26942,
+      "status": 200
+    }
+  ],
+  "runs_recorded": 5,
+  "learning_store": {
+    "bound_revision": 6,
+    "sequence": 5,
+    "processed_sequence": 4,
+    "journal": 5,
+    "candidates": 0
+  }
+}

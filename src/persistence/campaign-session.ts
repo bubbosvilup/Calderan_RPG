@@ -12,6 +12,8 @@ export interface SessionSaveOptions { readonly reason?: SaveReason; readonly con
 /** UI convenience only. Neither dirty tracking nor wall time enters campaign truth. */
 export class CampaignSession {
   #lastSavedRevision: number | null = null;
+  /** Block 7: optional-only changes (side-store state) leave the revision unchanged, so unsaved-ness also tracks the campaign's in-memory state version. */
+  #lastSavedVersion: number | null = null;
   #saving = false;
   #meta: CampaignMeta;
   /** Explicit recovery from a non-current slot while the current slot is unreadable: the next save moves the corrupt file aside. */
@@ -27,11 +29,12 @@ export class CampaignSession {
     const session = new CampaignSession(loaded.campaign, repository, { ...(meta?.display_name ? { display_name: meta.display_name } : {}), ...(meta?.scenario_id ? { scenario_id: meta.scenario_id } : {}),
       ...(options.engine_version ? { engine_version: options.engine_version } : {}) });
     session.#lastSavedRevision = loaded.canon?.revision_advanced ? loaded.canon.saved_revision : loaded.campaign.revision;
+    session.#lastSavedVersion = loaded.campaign.stateVersion;
     session.#quarantine = options.quarantine_corrupt_current === true;
     return session;
   }
   get last_saved_revision(): number | null { return this.#lastSavedRevision; }
-  get hasUnsavedChanges(): boolean { return this.campaign.revision !== this.#lastSavedRevision; }
+  get hasUnsavedChanges(): boolean { return this.campaign.revision !== this.#lastSavedRevision || (this.#lastSavedVersion !== null && this.campaign.stateVersion !== this.#lastSavedVersion); }
   get saving(): boolean { return this.#saving; }
   get meta(): CampaignMeta { return this.#meta; }
   /** Rename is presentation only: the campaign ID never changes. Written at the next save. */
@@ -43,7 +46,7 @@ export class CampaignSession {
       const metadata = { ...(this.#meta.display_name ? { display_name: this.#meta.display_name } : {}), ...(this.#meta.scenario_id ? { scenario_id: this.#meta.scenario_id } : {}),
         ...(this.#meta.engine_version ? { engine_version: this.#meta.engine_version } : {}), ...(options.reason ? { save_reason: options.reason } : {}) };
       const result = await this.repository.saveCampaign(this.campaign, { metadata, ...(options.continuity ? { continuity: options.continuity } : {}), ...(options.turn_receipts ? { turn_receipts: options.turn_receipts } : {}), ...(options.interaction_metadata ? { interaction_metadata: options.interaction_metadata } : {}), ...(this.#quarantine ? { quarantine_corrupt_current: true } : {}) });
-      this.#lastSavedRevision = result.revision; this.#quarantine = false; return result;
+      this.#lastSavedRevision = result.revision; this.#lastSavedVersion = result.state_version; this.#quarantine = false; return result;
     } finally { this.#saving = false; }
   }
 }

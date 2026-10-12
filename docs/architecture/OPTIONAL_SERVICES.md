@@ -52,15 +52,21 @@ A core turn is complete after the Narrator result, Controller, audit, commit and
 
 `OptionalServiceMonitor` keeps `{service, enabled, running, last_success_at, last_error:{at, code}}` per service. It is runtime metadata, not CampaignState: reading or recording it never changes a revision. The error code is a sanitized snake_case token; provider text never leaks.
 
-## 6. Architecture Consolidation Gate
+## 6. Architecture Consolidation Gate (historical, satisfied by block 7)
 
-**NO NEW MAJOR GAMEPLAY/DOMAIN SYSTEMS BEFORE BLOCK 7 COMPLETES.**
+**NO NEW MAJOR GAMEPLAY/DOMAIN SYSTEMS BEFORE BLOCK 7 COMPLETES.** (Block 7 completed; see section 8.)
 
 Blocked: Property, Heartstone expansion beyond the existing rite, quests, combat, new NPC subsystems, new LLM subsystems, new semantic-act grammars.
 Allowed: bug fixes, test infrastructure, documentation, UI over existing stable domains, Weather UI.
 
-## 7. Remaining coupling (Block 7)
+## 7. Storage and revision separation (Block 7, DONE)
 
-**Reflection classification.** Reflection notes are SOFT-PROMOTED DURABLE ENRICHMENT, not authoritative gameplay state. In Block 7 both the reflection journal/scheduling/pending bookkeeping and the validated persisted notes move to the learning/enrichment side store. The notes stay durable and Narrator-visible with the producer OFF, must not stay in semantic CampaignState merely because they are soft-promoted, and must not bump the semantic revision. "Soft-promoted" means trusted durable narrative enrichment, not gameplay truth. By contrast, promoted/established mannerisms and selected avatar/full-body references stay authoritative; mannerism observations/candidates/journal move.
+**Reflection classification.** Reflection notes are SOFT-PROMOTED DURABLE ENRICHMENT, not authoritative gameplay state. Both the reflection journal/scheduling/pending bookkeeping and the validated persisted notes live in the **learning** side store: durable, Narrator-visible with the producer OFF, never revision-bearing. "Soft-promoted" means trusted durable narrative enrichment, not gameplay truth. Promoted/established mannerisms and selected avatar/full-body references stay authoritative in the snapshot; mannerism observations/candidates/journal live in the learning store; item sprite bookkeeping and the portrait Gallery live in the **media** store.
 
-Legacy Mannerism, Reflection, item sprite and portrait metadata still live in the authoritative snapshot and bump the revision. **ARCH-1 phase 1 (lifecycle and response path) is fixed in block 6; phase 2 (storage and revision stream: side stores, REV-1, PER-3) is block 7.** The field-by-field migration inventory and the migration protocol are in the block 6 report, sections 14 and 15.
+**ARCH-1 is CLOSED** (phase 1 lifecycle in block 6, phase 2 storage and revision separation in block 7). Optional writes land in the composed view, are routed by the persistence layer to the side stores and never bump the semantic revision, so the block 6 optional-revision tolerance is gone and `expected_revision` is a strict equality. Storage layout, markers, precedence and the migration protocol: [Persistence](PERSISTENCE.md#optional-side-stores-block-7-save-file-and-persisted-snapshot-schema-8).
+
+**Context compaction is CORE, not optional.** It is derived and non-authoritative (it reads a `NarratorRequest` and never touches `CampaignState` or any store), but the next turn is rejected with `context_too_large` while `compaction_required`, so it is a turn-path availability concern. It stays awaited after the commit in `GameSession` (failure is an ignored warning, not a turn failure) and is deliberately outside the optional-service registry. Pinned by `tests/block7-domains.test.ts`.
+
+## 8. Architecture Consolidation Gate
+
+Block 7 passed: the gate is COMPLETE. Blocks 8-12 of the consolidation roadmap remain recommended, not started.

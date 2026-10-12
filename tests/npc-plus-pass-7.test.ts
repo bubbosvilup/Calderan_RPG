@@ -141,7 +141,7 @@ test("due normal play commits accepted reflection only after publication", async
   assert.equal(runs[0]?.accepted.length, 1); assert.equal(runs[0]?.status, "committed");
   const { revision: beforeRevision, premium_reflections: _beforeNotes, ...before } = gameplay!;
   const { revision: afterRevision, premium_reflections: afterNotes, ...after } = f.campaign.exportSnapshot();
-  assert.deepEqual(after, before); assert.equal(afterRevision, beforeRevision + 1);
+  assert.deepEqual(after, before); assert.equal(afterRevision, beforeRevision, "block 7: reflection never bumps the semantic revision");
   assert.equal(afterNotes[0]?.notes.length, 1);
 });
 

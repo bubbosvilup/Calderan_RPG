@@ -15,7 +15,7 @@ Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: th
 | Heartstone: opening documents, household rules, rite, rite = household + NPC+, recognition warmth | see [Heartstone](HEARTSTONE.md) |
 | Canon NPC avatars; player visuals and appearance editing | |
 | Item sprite generation for engine-created items | non-authoritative |
-| Persistent campaigns (manual save, autosave, recovery) | schema 7 / save 7 |
+| Persistent campaigns (manual save, autosave, recovery) | snapshot schema 8 (composed 7) / save 8, optional side stores |
 | Core / optional service split (consolidation block 6, lifecycle only): central registry, optional work detached after `turn_completed`, exact OFF semantics, disabled-services matrix; ARCH-1 phase 1 | see [report](evaluations/CONSOLIDATION_BLOCK6_CORE_OPTIONAL_SPLIT.md) and [Optional services](architecture/OPTIONAL_SERVICES.md) |
 | Character lifecycle and AUTH-2 (consolidation block 5B): provisional vs persistent vs retired, human-reviewed retire/merge, identity-fork scanner | see [report](evaluations/CONSOLIDATION_BLOCK5B_CHARACTER_LIFECYCLE.md) |
 | Explicit NPC+ / Heartstone promotion (semantic rite cleanup) | player action only; see [Heartstone](HEARTSTONE.md) |

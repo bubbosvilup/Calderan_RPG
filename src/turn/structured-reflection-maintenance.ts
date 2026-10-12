@@ -149,13 +149,12 @@ export async function reflectStructuredAfterTurn(campaign: CampaignState, world:
                 ]), ...c.snapshot.characters.flatMap(v => v.profile.name ? [[v.id, v.profile.name] as [
                         string,
                         string
-                    ]] : [])]), result = evaluateStructuredOutputE1(raw, c.context, names), accepted: Proposal[] = result.accepted.map(n => ({ kind: kinds[n.proposal.claim.type]!, label: prefixes[n.proposal.claim.type]!, text: n.text, evidence_refs: n.proposal.evidence_refs, confidence: n.proposal.confidence })), rejected = result.diagnostics.filter(d => !d.accepted).map(d => ({ reason: d.reasons.join(','), proposal: d.proposal })), notes = mergeStructuredNotes(c.existing as ReflectionNote[], result.accepted, c.catalog, source + 1, source), measured = { ...empty, attempts, attempt_details: details, accepted, rejected, parsed_proposals: raw.length, semantic_result: accepted.length ? 'accepted' as const : rejected.length ? 'semantic_rejected' as const : 'no_useful_notes' as const, provider_ms: attempts.provider_ms, ...(output.usage ? { usage: output.usage } : {}), ...(output.cost_usd !== undefined ? { cost_usd: output.cost_usd } : {}) };
+                    ]] : [])]), result = evaluateStructuredOutputE1(raw, c.context, names), accepted: Proposal[] = result.accepted.map(n => ({ kind: kinds[n.proposal.claim.type]!, label: prefixes[n.proposal.claim.type]!, text: n.text, evidence_refs: n.proposal.evidence_refs, confidence: n.proposal.confidence })), rejected = result.diagnostics.filter(d => !d.accepted).map(d => ({ reason: d.reasons.join(','), proposal: d.proposal })), notes = mergeStructuredNotes(c.existing as ReflectionNote[], result.accepted, c.catalog, source, source), measured = { ...empty, attempts, attempt_details: details, accepted, rejected, parsed_proposals: raw.length, semantic_result: accepted.length ? 'accepted' as const : rejected.length ? 'semantic_rejected' as const : 'no_useful_notes' as const, provider_ms: attempts.provider_ms, ...(output.usage ? { usage: output.usage } : {}), ...(output.cost_usd !== undefined ? { cost_usd: output.cost_usd } : {}) };
             try {
                 checkpoint();
                 if (options.can_commit && !options.can_commit())
                     throw new TurnError('stale_turn');
                 campaign.apply({ expected_revision: source, commands: [{ kind: 'record_reflection', character_id: id, notes, reflected_revision: source }] });
-                options.wrote?.();
             }
             catch (error) {
                 runs.push({ ...measured, status: campaign.revision !== source ? 'stale' : 'persistence_failed', elapsed_ms: performance.now() - begin });

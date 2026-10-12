@@ -2,7 +2,7 @@ import { freezeSnapshot } from "../campaign/validation.js";
 import { CampaignSaveError } from "./errors.js";
 import { niccoHouseholdMembers } from "../campaign/premium-characters.js";
 
-export const CURRENT_SAVE_VERSION = 7;
+export const CURRENT_SAVE_VERSION = 8;
 export type SaveMigration = (input: Readonly<Record<string, unknown>>) => unknown;
 /** A key n owns exactly n -> n+1. No implicit defaults or unknown-field removal. */
 export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.freeze({
@@ -65,6 +65,15 @@ export const SAVE_MIGRATIONS: Readonly<Record<number, SaveMigration>> = Object.f
    * character is retired). An older build refuses a v7 file with `unsupported_version`.
    */
   6: input => ({ ...input, schema_version: 7 }),
+  /**
+   * Consolidation block 7: envelope 7 -> 8 introduces the optional side stores and their explicit migration markers. Version-only and lossless: a v7 file
+   * has NO markers, so its own snapshot stays the authority of the learning and media state until the first v8 save writes the side stores and the markers
+   * (the snapshot 7 -> 8 step is the identity on a v7 shape: `fromPersistedSnapshot` with nothing migrated). A v7 file that already claims a marker is malformed.
+   */
+  7: input => {
+    if (Object.hasOwn(input, "optional_state")) throw new CampaignSaveError("migration_failed");
+    return { ...input, schema_version: 8 };
+  },
 });
 
 function version(input: unknown): number {

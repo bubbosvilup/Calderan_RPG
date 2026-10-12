@@ -88,7 +88,7 @@ export function validateExtractedMannerisms(output: string, request: MannerismEx
   return { observations, metrics };
 }
 /** Block 6: the caller's say over the legacy CampaignState writes of an optional, post-turn extraction. */
-export interface MannerismWriteGate { readonly can_commit: () => boolean; readonly wrote: () => void }
+export interface MannerismWriteGate { readonly can_commit: () => boolean }
 export interface MannerismRun { attempts?: import("../llm/retry.js").ProviderAttemptRecord; status: "queued" | "processed" | "provider_failed" | "malformed" | "stale" | "bounded_skip" | "not_needed"; metrics: MannerismMetrics; metadata?: GenerationMetadata; latency_ms?: number; sources?: number }
 const sha = (text: string) => createHash("sha256").update(text).digest("hex");
 /** One session-local bounded raw queue; only hashes/spans/candidate summaries persist. */
@@ -99,7 +99,7 @@ export class MannerismMaintenance {
    * `gate` (block 6): `can_commit` says whether a write may be applied now; `wrote` is called right after each write.  the extraction is OPTIONAL work that runs after the core turn is complete. Its provider call needs no lock, but every legacy CampaignState write is
    * applied only while the caller says the session is idle, so a running core turn is never made stale by it. When it says no, the write is dropped (status `stale`).
    */
-  async afterFinalizedTurn(campaign: CampaignState, turn_id: string, result: Pick<TurnResult, "narration" | "final_revision">, signal?: AbortSignal, gate: MannerismWriteGate = { can_commit: () => true, wrote: () => {} }): Promise<MannerismRun> {
+  async afterFinalizedTurn(campaign: CampaignState, turn_id: string, result: Pick<TurnResult, "narration" | "final_revision">, signal?: AbortSignal, gate: MannerismWriteGate = { can_commit: () => true }): Promise<MannerismRun> {
     const empty = () => ({ status: "not_needed" as const, metrics: emptyMannerismMetrics() });
     const before = campaign.exportSnapshot();
     if (signal?.aborted || before.revision !== result.final_revision || !result.narration || result.narration.length > 20000 || before.mannerism_learning?.last_turn_id === turn_id) return empty();
@@ -114,7 +114,6 @@ export class MannerismMaintenance {
     if (!gate.can_commit()) return { status: "stale", metrics: emptyMannerismMetrics() };
     campaign.maintainMannerisms({ kind: "finalized", expected_revision: before.revision, source: { turn_id, narration_hash: sha(result.narration), narration_length: result.narration.length, character_ids: eligible,
       available_items: items.map(i => ({ item_id: i.id, character_id: i.character_id, worn: i.worn })) } });
-    gate.wrote();
     const snapshot = campaign.exportSnapshot(), sequence = snapshot.mannerism_learning!.sequence;
     this.#pending.push({ sequence, narration: result.narration, characters: eligible.map(id => ({ id, name: characterView(snapshot, this.world, id).profile.name ?? id })), items });
     while (this.#pending.length > P.batch_turns) this.#pending.shift();
@@ -134,7 +133,6 @@ export class MannerismMaintenance {
     }
     if (campaign.revision !== snapshot.revision || signal?.aborted || !gate.can_commit()) return { status: "stale", metrics: emptyMannerismMetrics(), latency_ms: performance.now() - started };
     const commit = campaign.maintainMannerisms({ kind: "observations", expected_revision: snapshot.revision, through_sequence: sequence, observations: validated.observations });
-    gate.wrote();
     this.#pending.length = 0;
     const metrics = { ...commit.metrics, observations_considered: validated.metrics.observations_considered, observations_rejected_personality: validated.metrics.observations_rejected_personality + commit.metrics.observations_rejected_personality,
       observations_rejected_prerequisite: validated.metrics.observations_rejected_prerequisite + commit.metrics.observations_rejected_prerequisite, observations_rejected_evidence: validated.metrics.observations_rejected_evidence + commit.metrics.observations_rejected_evidence };

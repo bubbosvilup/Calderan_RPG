@@ -62,7 +62,7 @@ test("a stored reflection note and a character contract carrying instruction tex
   const r = await turn(f => {
     f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "establish_character_contract", character_id: "brenna", field: "voice", text: EVIL.slice(0, 150), quote: EVIL.slice(0, 200) }] });
     const rev = f.campaign.revision;
-    f.campaign.apply({ expected_revision: rev, commands: [{ kind: "record_reflection", character_id: "brenna", reflected_revision: rev, notes: [{ id: "n1", kind: "stance", label: "evil", text: EVIL.slice(0, 190), evidence_refs: ["npcmem:brenna:history:r3.0"], confidence: "high", created_revision: rev + 1, updated_revision: rev + 1 }] }] });
+    f.campaign.apply({ expected_revision: rev, commands: [{ kind: "record_reflection", character_id: "brenna", reflected_revision: rev, notes: [{ id: "n1", kind: "stance", label: "evil", text: EVIL.slice(0, 190), evidence_refs: ["npcmem:brenna:history:r3.0"], confidence: "high", created_revision: rev, updated_revision: rev }] }] });
   });
   const user = r.requests[0]!.messages.map(m => m.content).join("\n");
   // The compact Tier C line joins a contract's words with underscores (data, not prose).

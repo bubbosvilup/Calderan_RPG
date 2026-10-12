@@ -15,7 +15,7 @@ import { formatCalendarDate, isGreatIlluminationYear, isLeapYear } from "../worl
  * JSON, and contains no private canon, narrator-only facts, knowledge edges, reflection notes or evidence. A UI renders this and
  * never the CampaignSnapshot.
  */
-export type SessionStatus = "idle" | "running_turn" | "post_turn" | "compacting_context" | "closed";
+export type SessionStatus = "idle" | "running_turn" | "compacting_context" | "closed";
 export interface ProviderStatus { readonly mode: "live" | "stub"; readonly configured: boolean; readonly narrator_model?: string; readonly controller_model?: string; readonly reflection_model?: string }
 export interface ViewItem { readonly id: string; readonly name: string; readonly description?: string }
 export interface ViewEquipped extends ViewItem { readonly slot: string; readonly mode: "worn" | "held" }
@@ -60,6 +60,8 @@ export interface SessionView {
   readonly household: readonly { readonly id: string; readonly name: string; readonly members: readonly ViewHouseholdMember[]; readonly rules: readonly { readonly id: string; readonly text: string }[] }[];
 }
 export interface ViewContext { readonly status: SessionStatus; readonly last_saved_revision: number | null; readonly provider: ProviderStatus;
+  /** Block 7: optional side-store state changed without a semantic revision and is not saved yet. */
+  readonly unsaved_optional?: boolean;
   readonly save_status?: { readonly saving: boolean; readonly error?: string; readonly autosave: "off" | "on" | "stopped"; readonly transcript_error?: true } }
 
 const playerVisible = (entity: DeepReadonly<{ knowledge?: { visibility: { player: boolean } } }> | undefined) => entity?.knowledge?.visibility.player !== false;
@@ -112,7 +114,7 @@ export function deriveSessionView(world: WorldStore, snapshot: DeepReadonly<Camp
   // Ownership and ground placement never put an item here; equipped items are listed under `equipment`.
   const carried = carriedItems(snapshot, "nicco").map(i => itemName(i.id));
   return structuredClone({ session: { campaign_id: snapshot.campaign_id, revision: snapshot.revision, status: context.status, dataset_id: snapshot.dataset_id,
-      save: { state: context.last_saved_revision === snapshot.revision ? "saved" as const : "unsaved" as const, last_saved_revision: context.last_saved_revision, ...(context.save_status ?? {}) }, provider: context.provider },
+      save: { state: context.last_saved_revision === snapshot.revision && !context.unsaved_optional ? "saved" as const : "unsaved" as const, last_saved_revision: context.last_saved_revision, ...(context.save_status ?? {}) }, provider: context.provider },
     scene: { location: { id: location, name: place?.display_name ?? location, summary: place?.summary ?? "", ...(parent ? { parent_name: parent.display_name } : {}) }, exits,
       time: { world_minute: minute, day, minute_of_day, time_of_day }, environment: viewEnvironment(world, snapshot, minute, location), present },
     player: { id: "nicco" as const, name: name("nicco"), mana: { current: snapshot.runtime.mana.current, max: snapshot.runtime.mana.max }, gold, equipment: equipmentOf("nicco"), inventory: carried },

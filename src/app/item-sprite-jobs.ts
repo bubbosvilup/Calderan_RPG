@@ -15,8 +15,8 @@ export interface ItemSpriteJobDeps {
   readonly enabled?: () => boolean;
   /** Metadata commits are synchronous and allowed only between gameplay turns. */
   readonly can_commit?: () => boolean;
-  /** Called after each metadata commit with the revision that preceded it. */
-  readonly changed?: (before_revision: number) => void;
+  /** Called after each metadata commit (side-store state changed; the semantic revision did not). */
+  readonly changed?: () => void;
   readonly trigger?: string | undefined;
   /** Lazy legacy enrichment, explicitly requested only; no bulk backfill or extra creation LLM call. */
   readonly enrich?: (item: Readonly<CampaignItem>) => Promise<string>;
@@ -43,7 +43,7 @@ export class ItemSpriteJobs {
   #commit(commands: CampaignCommand[]): void {
     const before = this.campaign.revision;
     this.campaign.apply({ expected_revision: before, commands });
-    try { this.deps.changed?.(before); } catch { /* Observation is non-authoritative. */ }
+    try { this.deps.changed?.(); } catch { /* Observation is non-authoritative. */ }
   }
   /** Called on session idle and on background completion. Never mutates a running turn. */
   flush(): void {

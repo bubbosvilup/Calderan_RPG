@@ -41,7 +41,7 @@ export function build(c: Config) {
     const kinds = [["stance", 4], ["signature_pattern", 4], ["shared_motif", 4], ["emerging_role", 3], ["unresolved_tension", 3]] as const;
     for (let k = 0; k < c.n; k++) apply([(() => {
       const rev = campaign.revision;
-      const notes: ReflectionNote[] = kinds.flatMap(([kind, cap]) => Array.from({ length: cap }, (_, j) => ({ id: `r${rev + 1}_${kind}_${j + 1}`, kind, label: `${kind}_${j}`, text: "x".repeat(150), evidence_refs: [`npcmem:${id(k)}:history:r${3 + (k % 3)}.0`], confidence: "medium" as const, created_revision: rev + 1, updated_revision: rev + 1 })));
+      const notes: ReflectionNote[] = kinds.flatMap(([kind, cap]) => Array.from({ length: cap }, (_, j) => ({ id: `r${rev}_${kind}_${j + 1}`, kind, label: `${kind}_${j}`, text: "x".repeat(150), evidence_refs: [`npcmem:${id(k)}:history:r${3 + (k % 3)}.0`], confidence: "medium" as const, created_revision: rev, updated_revision: rev })));
       return { kind: "record_reflection", character_id: id(k), notes, reflected_revision: rev } as CampaignCommand;
     })()]);
   }

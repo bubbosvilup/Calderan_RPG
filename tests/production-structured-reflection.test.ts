@@ -57,7 +57,7 @@ test('accepted E1 notes persist exactly once, atomically with versioned original
     assert.equal(notes[0]!.structured!.source_revision, before.revision);
     assert.equal(notes[0]!.structured!.semantic_version, 'V2.3-CVC-E1');
     assert.match(notes[0]!.text, /Check kiln vents before lighting\./);
-    assert.equal(after.revision, before.revision + 1);
+    assert.equal(after.revision, before.revision);
     assert.deepEqual(await reflectAfterTurn(f.campaign, f.world, productionStub(() => { throw Error('must not dispatch again'); }), options()), []);
     const { revision: _r, premium_reflections: _p, ...domains } = after, { revision: _b, premium_reflections: _a, ...old } = before;
     assert.deepEqual(domains, old);
@@ -87,7 +87,7 @@ for (const tamper of ['subject','refs','confidence','future','accessor','cycle']
  if(tamper==='subject')note.structured!.proposal.subject_character_id='brenna';
  if(tamper==='refs')note.structured!.proposal.evidence_refs=[note.evidence_refs[0]!];
  if(tamper==='confidence')note.structured!.proposal.confidence='low';
- if(tamper==='future')note.structured!.source_revision=snapshot.revision;
+ if(tamper==='future')note.structured!.source_revision=snapshot.revision+1;
  if(tamper==='accessor')Object.defineProperty(note.structured!.proposal.claim,'type',{get(){executed=true;return 'environmental_shared_rule_text';}});
  if(tamper==='cycle')note.structured!.proposal.claim.loop=note.structured!.proposal.claim;
  assert.throws(()=>CampaignState.restore(f.world,snapshot));assert.equal(executed,false);

@@ -1,7 +1,7 @@
 import { DatasetCompatibilityError, SnapshotValidationError } from "../campaign/snapshot-validation.js";
 import { CampaignValidationError } from "../campaign/validation.js";
 
-export type SaveErrorCode = "not_found" | "invalid_json" | "invalid_save" | "unsupported_version" | "migration_failed" | "dataset_mismatch" | "reference_invalid" | "invalid_id" | "unsafe_path" | "save_in_progress" | "campaign_locked" | "io_error";
+export type SaveErrorCode = "not_found" | "invalid_json" | "invalid_save" | "unsupported_version" | "migration_failed" | "dataset_mismatch" | "reference_invalid" | "invalid_id" | "unsafe_path" | "save_in_progress" | "campaign_locked" | "io_error" | "optional_state_invalid";
 const recoveryHints: Record<SaveErrorCode, string> = {
   not_found: "Inspect available saves and select an existing slot.",
   invalid_json: "Inspect both slots; explicitly load a valid previous slot. Preserve the corrupt file before replacing it.",
@@ -14,6 +14,7 @@ const recoveryHints: Record<SaveErrorCode, string> = {
   unsafe_path: "Use a save directory without links, junctions or hard-linked save files, outside authored data.",
   save_in_progress: "Wait for the current explicit save to finish before saving again.",
   campaign_locked: "Another running game holds this campaign. Close it first; a lock left by a process that no longer runs is recovered automatically.",
+  optional_state_invalid: "The campaign save says its optional state (learning or media) was migrated to a side store, but that store is missing, corrupt, incomplete, for another campaign or of an unsupported version. There is no silent fallback: restore the store files from a copy, or explicitly load a previous slot or backup.",
   io_error: "Inspect disk permissions and both slots before retrying; a complete replacement may already be visible.",
 };
 export class CampaignSaveError extends Error {

@@ -110,11 +110,15 @@ Play, Nicco (player page), NPC drawer, NPC+ editor, Household, Inventory, Campai
 
 ## 11. Save and schema
 
-Snapshot schema **6**; save file schema **6** (older save schemas migrate on load, v5 → v6 changes only the version; the source file is never rewritten by a load). Campaign saves live in `saves/campaigns/<campaign_id>/` with portraits inside the campaign folder. Derived data (calendar, weather, capabilities, equipment slots, item icon metadata) is never saved. See [Persistence](architecture/PERSISTENCE.md).
+Save file schema **8**, persisted snapshot schema **8** (the composed in-memory snapshot stays schema 7-shaped). v7 → v8 is lazy and explicit: loading never rewrites; the first save moves reflection / mannerism-learning / item-sprite / portrait-Gallery state to the **side stores** `<campaign>/optional/learning.json` and `media.json` and writes per-domain markers; the marker, never store existence, decides authority (details in [Persistence](architecture/PERSISTENCE.md)). Selected avatar / full-body ids and promoted mannerisms stay authoritative. Campaign saves live in `saves/campaigns/<campaign_id>/` with portraits inside the campaign folder. Derived data (calendar, weather, capabilities, equipment slots, item icon metadata) is never saved. See [Persistence](architecture/PERSISTENCE.md).
 
 ## 11b. Core engine and optional services (block 6)
 
 The core engine (CampaignState, persistence, turn authority, identity, movement, items, trade, legal state, households, PendingConfirmation) is separate from the optional services (Reflection, Mannerism learning, portraits, item sprites, sprite QA, semantic retrieval). Optional work runs detached after `turn_completed` and never blocks, fails or alters a turn; disabling any of it leaves core behavior identical. Defaults: Mannerism, portraits and sprites ON; Reflection, sprite QA and semantic retrieval OFF. Legacy enrichment is still stored in the snapshot and bumps the revision (ARCH-1 phase 2, block 7). See [Optional services](architecture/OPTIONAL_SERVICES.md).
+
+## 11c. Optional state side stores (block 7)
+
+Optional enrichment and media bookkeeping (Reflection journal and notes, mannerism observations/candidates/journal, item sprite status, portrait Gallery history) no longer lives in the authoritative snapshot and never moves the semantic revision: a client's `expected_revision` stays valid through background work, a Gallery batch / sprite / note / mannerism observation is not a revision, selecting an avatar and an actual mannerism promotion bump it exactly once. Reflection notes remain durable and Narrator-visible with the producer OFF. **ARCH-1 is closed; the Consolidation Gate is complete.** Context compaction is CORE (derived, awaited after commit, outside the optional registry). See [Optional services](architecture/OPTIONAL_SERVICES.md).
 
 ## 12. Tests
 
