@@ -1,5 +1,5 @@
-import type { ReflectionRequest, ReflectionProvider } from '../src/turn/reflection.js';
-import { ReflectionPacing } from '../src/turn/reflection-pacing.js';
+import type { ReflectionRequest, ReflectionProvider } from '../src/turn/optional/reflection.js';
+import { ReflectionPacing } from '../src/turn/optional/reflection-pacing.js';
 /** Test-only structured provider fixtures; never a production output repair. */
 export function instantReflectionPacing() { let now = 0; const sleeps: number[] = []; return { pacing: new ReflectionPacing(() => now, async (ms) => { sleeps.push(ms); now += ms; }), sleeps }; }
 export function testTrajectory(request: ReflectionRequest, dimension = 'trust') {

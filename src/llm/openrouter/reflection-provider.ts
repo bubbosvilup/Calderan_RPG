@@ -1,6 +1,6 @@
 import { ProviderError } from '../errors.js';
 import { OpenRouterClient } from './client.js';
-import type { ReflectionProvider, ReflectionRequest } from '../../turn/reflection.js';
+import type { ReflectionProvider, ReflectionRequest } from '../../turn/optional/reflection.js';
 import { REFLECTION_SYSTEM } from '../../turn/structured/reflection-schema.js';
 /**
  * Qualified reflection maintenance configuration (2026-10-08): Claude Haiku 5.5, validated live on the unchanged prompt/strict schema.

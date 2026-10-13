@@ -1,6 +1,6 @@
 # Testing
 
-Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup C working tree on top of main 4dc4f05). Source of truth: `package.json`, `tests/`, `scripts/`.
+Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup D on main; paths under `src/turn/` are domain folders). Source of truth: `package.json`, `tests/`, `scripts/`.
 
 ## Commands
 

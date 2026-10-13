@@ -7,7 +7,7 @@ import {structuredReflectionEvidenceV22} from './reflection-v22.js';
 import {reflectionCitationContext,citationVisibilityViolations,validateStructuredClaimV23CVC,evaluateStructuredOutputV23CVC,type CitationContext,type CitationRequest} from './reflection-v23-cvc.js';
 import {citationScopedReflectionWire} from './reflection-wire-v2-cvc.js';
 import type {V23Diagnostic} from './reflection-v23.js';
-import {INSTRUCTION_LIKE} from '../../../src/turn/reflection.js';
+import {INSTRUCTION_LIKE} from '../../../src/turn/optional/reflection.js';
 
 export const E1_VERSION='V2.3-CVC-E1';
 const text={type:'string',minLength:1,maxLength:160};

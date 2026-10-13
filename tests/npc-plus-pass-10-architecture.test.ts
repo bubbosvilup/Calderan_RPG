@@ -21,7 +21,7 @@ test("dependency direction: domain layers never import the turn pipeline, persis
   }
 });
 test("reflection stays outside the turn's critical path: the coordinator and the turn stages never import it", () => {
-  for (const [f, d] of edges) if (d === "src/turn/reflection.ts") assert.ok(!f.startsWith("src/turn/stages/") && f !== "src/turn/coordinator/turn-coordinator.ts" && f !== "src/turn/context/prompt-builder.ts" && f !== "src/turn/context/context-builder.ts", `${f} imports reflection`);
+  for (const [f, d] of edges) if (d === "src/turn/optional/reflection.ts") assert.ok(!f.startsWith("src/turn/stages/") && f !== "src/turn/coordinator/turn-coordinator.ts" && f !== "src/turn/context/prompt-builder.ts" && f !== "src/turn/context/context-builder.ts", `${f} imports reflection`);
 });
 test("runTurn stays at or below 164 lines (Pass 10 recorded 164)", () => {
   const text = readFileSync("src/turn/coordinator/turn-coordinator.ts", "utf8").split("\n"), start = text.findIndex(l => /async \*runTurn\(/.test(l));
@@ -30,7 +30,7 @@ test("runTurn stays at or below 164 lines (Pass 10 recorded 164)", () => {
   assert.ok(end - start + 1 <= 164, `runTurn is ${end - start + 1} lines`);
 });
 test("the NPC+ domain modules do not depend on diagnostics or evaluation code", () => {
-  for (const [f, d] of edges) if (/^src\/(?:campaign\/premium-characters|turn\/context\/npc-plus|turn\/reflection|turn\/movement\/follow-invitation|turn\/movement\/character-movement)\.ts$/.test(f)) assert.ok(!/\/(?:dev|diagnostics)|turn-diagnostics|reflection-diagnostics/.test(d) || f === "src/turn/reflection.ts", `${f} -> ${d}`);
+  for (const [f, d] of edges) if (/^src\/(?:campaign\/premium-characters|turn\/context\/npc-plus|turn\/optional\/reflection|turn\/movement\/follow-invitation|turn\/movement\/character-movement)\.ts$/.test(f)) assert.ok(!/\/(?:dev|diagnostics)|turn-diagnostics|reflection-diagnostics/.test(d) || f === "src/turn/optional/reflection.ts", `${f} -> ${d}`);
 });
 
 test("D-21 prompt-envelope and evidence-result consumers avoid execution-module type back-edges", () => {

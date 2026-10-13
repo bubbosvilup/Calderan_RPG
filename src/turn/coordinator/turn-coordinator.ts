@@ -1,7 +1,7 @@
 import type { CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { GenerationRequest, NarratorRequest } from "../../llm/types.js";
-import { MannerismPortrayalGate } from "../mannerism-portrayal-gate.js";
+import { MannerismPortrayalGate } from "../optional/mannerism-portrayal-gate.js";
 import { mannerismEpistemicState } from "../../campaign/mannerisms.js";
 import type { ContextCompactionService } from "../context/context-compaction.js";
 import { buildTurnContext, type TurnContext } from "../context/context-builder.js";

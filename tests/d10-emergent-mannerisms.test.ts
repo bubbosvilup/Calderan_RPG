@@ -6,7 +6,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignSnapshot } from "../src/campaign/types.js";
 import { MANNERISM_LEARNING_POLICY as P, MANNERISM_TRIGGERS, requiredMannerismEvidence, type MannerismConcept } from "../src/campaign/mannerism-concepts.js";
 import { observationDefinition, type ValidatedMannerismObservation } from "../src/campaign/mannerism-learning.js";
-import { MannerismMaintenance, MANNERISM_EXTRACTOR_TASK, validateExtractedMannerisms, type MannerismExtractionRequest, type MannerismExtractor } from "../src/turn/mannerism-extraction.js";
+import { MannerismMaintenance, MANNERISM_EXTRACTOR_TASK, validateExtractedMannerisms, type MannerismExtractionRequest, type MannerismExtractor } from "../src/turn/optional/mannerism-extraction.js";
 import { mannerismView } from "../src/app/mannerism-view.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
@@ -23,7 +23,7 @@ import { createProductionDeps } from "../src/app/production.js";
 import { mannerismExtractorModel } from "../src/app/provider-config.js";
 import { readFile } from "node:fs/promises";
 import { replayCalibratedMannerisms, type CalibratedReplayFixture } from "../src/dev/mannerism-calibration-replay.js";
-import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTION_SCHEMA } from "../src/turn/mannerism-extraction.js";
+import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTION_SCHEMA } from "../src/turn/optional/mannerism-extraction.js";
 
 type Fixture = ReturnType<typeof mannerismFixture>;
 const rows = (f: Fixture, id = "brenna") => f.campaign.exportSnapshot().premium_characters.find(p => p.character_id === id)!.mannerisms!;

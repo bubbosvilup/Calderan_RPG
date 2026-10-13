@@ -6,7 +6,7 @@ import { household, play } from "./pass10-support.js";
 import { loadWorld } from "../src/world/loader.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { npcPlusFragments, packNpcPlus, npcDeepSources } from "../src/turn/context/npc-plus.js";
-import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/reflection.js";
+import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 import { invitedFollowers } from "../src/turn/movement/follow-invitation.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 

@@ -8,7 +8,7 @@ import {CampaignState} from '../.build/src/campaign/campaign-state.js';
 import {GameSession} from '../.build/src/app/game-session.js';
 import {createOpeningCampaign,OPENING_HOUSEHOLD} from '../.build/src/campaign/opening-state.js';
 import {buildTurnContext} from '../.build/src/turn/context/context-builder.js';
-import {captureProductionReflection} from '../.build/src/turn/structured-reflection-maintenance.js';
+import {captureProductionReflection} from '../.build/src/turn/optional/structured-reflection-maintenance.js';
 import {recoverNpcContext} from '../.build/src/turn/context/npc-plus.js';
 import {OpenRouterClient} from '../.build/src/llm/openrouter/client.js';
 import {exactBenchmarkCredential,benchmarkAuthentication} from '../.build/src/dev/reflection-benchmark.js';

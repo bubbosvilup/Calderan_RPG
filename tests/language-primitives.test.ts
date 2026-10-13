@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { escapeRegExp, exactNamePattern, quotedSpans, blankQuotes, sentencesOf, QUOTED_SPAN_SOURCE } from "../src/turn/language/text.js";
 import { CARDINAL_WORD_ALTERNATION, NUMBER_WORDS, TENS, numberValue, numberWordValue } from "../src/turn/language/numbers.js";
-import { sentencesOf as legacySentencesOf, blankQuotes as legacyBlankQuotes } from "../src/turn/sentences.js";
+import { existsSync } from "node:fs";
 
 /** Hardening H1: direct tests for the canonical text and number primitives (src/turn/language/). */
 
@@ -48,7 +48,8 @@ test("quote primitives are stateless (fresh RegExp per call) and the compatibili
   const text = 'A "b" c "d".';
   assert.deepEqual(quotedSpans(text), quotedSpans(text));
   assert.equal(new RegExp(QUOTED_SPAN_SOURCE).global, false);
-  assert.equal(legacyBlankQuotes, blankQuotes); assert.equal(legacySentencesOf, sentencesOf);
+  // Repository Cleanup D7 (REPO-9): the turn/sentences.ts compatibility re-export is gone; language/text.ts is the only home.
+  assert.equal(existsSync("src/turn/sentences.ts"), false);
 });
 
 // ---------------------------------------------------------------------------------------------------------------- sentences

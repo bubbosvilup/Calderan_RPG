@@ -1,5 +1,5 @@
-import { freezeSnapshot } from "../campaign/validation.js";
-import type { DeepReadonly } from "../types/readonly.js";
+import { freezeSnapshot } from "../../campaign/validation.js";
+import type { DeepReadonly } from "../../types/readonly.js";
 import type { ReflectionRun } from "./reflection.js";
 
 const MAX_CHARACTERS = 32;

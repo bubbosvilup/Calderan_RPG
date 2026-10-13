@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignSnapshot } from "../src/campaign/types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/reflection.js";
+import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 import { build, BASE } from "./pass10-headroom.js";
 import { household, play } from "./pass10-support.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";

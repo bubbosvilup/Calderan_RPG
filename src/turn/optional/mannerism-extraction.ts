@@ -1,20 +1,20 @@
 import { createHash } from "node:crypto";
-import type { CampaignState } from "../campaign/campaign-state.js";
-import type { CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import { characterView } from "../campaign/projections.js";
-import { dataSchema, validateId, freezeSnapshot } from "../campaign/validation.js";
-import { MANNERISM_ACTIONS, MANNERISM_TRIGGERS, MANNERISM_LEARNING_POLICY as P, MANNERISM_INFERENCE, supportsMannerismConcept } from "../campaign/mannerism-concepts.js";
-import { emptyMannerismMetrics, observationDefinition, type MannerismMetrics, type ValidatedMannerismObservation } from "../campaign/mannerism-learning.js";
-import { mannerismAvailable, validateMannerismDefinition } from "../campaign/mannerisms.js";
-import type { GenerationMetadata } from "../llm/types.js";
-import type { TurnResult } from "./turn-types.js";
-import { escapeRegExp } from "./language/text.js";
-import { buildTurnContext } from "./context/context-builder.js";
-import {maintenanceCall} from "../llm/reliability.js";
-import {ProviderError} from "../llm/errors.js";
-import {TurnError} from "./turn-types.js";
+import type { CampaignState } from "../../campaign/campaign-state.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { characterView } from "../../campaign/projections.js";
+import { dataSchema, validateId, freezeSnapshot } from "../../campaign/validation.js";
+import { MANNERISM_ACTIONS, MANNERISM_TRIGGERS, MANNERISM_LEARNING_POLICY as P, MANNERISM_INFERENCE, supportsMannerismConcept } from "../../campaign/mannerism-concepts.js";
+import { emptyMannerismMetrics, observationDefinition, type MannerismMetrics, type ValidatedMannerismObservation } from "../../campaign/mannerism-learning.js";
+import { mannerismAvailable, validateMannerismDefinition } from "../../campaign/mannerisms.js";
+import type { GenerationMetadata } from "../../llm/types.js";
+import type { TurnResult } from "../turn-types.js";
+import { escapeRegExp } from "../language/text.js";
+import { buildTurnContext } from "../context/context-builder.js";
+import {maintenanceCall} from "../../llm/reliability.js";
+import {ProviderError} from "../../llm/errors.js";
+import {TurnError} from "../turn-types.js";
 
 export interface MannerismExtractionTurn { sequence: number; narration: string; characters: { id: string; name: string }[]; items: { id: string; name: string; character_id: string; worn: boolean }[] }
 export interface MannerismExtractionRequest {
@@ -89,12 +89,12 @@ export function validateExtractedMannerisms(output: string, request: MannerismEx
 }
 /** Block 6: the caller's say over the legacy CampaignState writes of an optional, post-turn extraction. */
 export interface MannerismWriteGate { readonly can_commit: () => boolean }
-export interface MannerismRun { attempts?: import("../llm/retry.js").ProviderAttemptRecord; status: "queued" | "processed" | "provider_failed" | "malformed" | "stale" | "bounded_skip" | "not_needed"; metrics: MannerismMetrics; metadata?: GenerationMetadata; latency_ms?: number; sources?: number }
+export interface MannerismRun { attempts?: import("../../llm/retry.js").ProviderAttemptRecord; status: "queued" | "processed" | "provider_failed" | "malformed" | "stale" | "bounded_skip" | "not_needed"; metrics: MannerismMetrics; metadata?: GenerationMetadata; latency_ms?: number; sources?: number }
 const sha = (text: string) => createHash("sha256").update(text).digest("hex");
 /** One session-local bounded raw queue; only hashes/spans/candidate summaries persist. */
 export class MannerismMaintenance {
   readonly #pending: MannerismExtractionTurn[] = [];
-  constructor(readonly world: WorldStore, readonly provider: MannerismExtractor,readonly retry_policy?:import("../llm/retry.js").ProviderRetryPolicy) {}
+  constructor(readonly world: WorldStore, readonly provider: MannerismExtractor,readonly retry_policy?:import("../../llm/retry.js").ProviderRetryPolicy) {}
   /**
    * `gate` (block 6): `can_commit` says whether a write may be applied now; `wrote` is called right after each write.  the extraction is OPTIONAL work that runs after the core turn is complete. Its provider call needs no lock, but every legacy CampaignState write is
    * applied only while the caller says the session is idle, so a running core turn is never made stale by it. When it says no, the write is dropped (status `stale`).
@@ -123,7 +123,7 @@ export class MannerismMaintenance {
     const request = { ...frozen, ...(signal ? { signal } : {}) } as unknown as MannerismExtractionRequest;
     let validated = { observations: [] as ValidatedMannerismObservation[], metrics: emptyMannerismMetrics() }, status: MannerismRun["status"] = "processed", metadata: GenerationMetadata | undefined;
     const started = performance.now();
-    let attempts:import("../llm/retry.js").ProviderAttemptRecord|undefined;
+    let attempts:import("../../llm/retry.js").ProviderAttemptRecord|undefined;
     if (JSON.stringify(request).length > 80000) status = "bounded_skip";
     else if (turns.length) {
       let output: Awaited<ReturnType<MannerismExtractor["extract"]>>;

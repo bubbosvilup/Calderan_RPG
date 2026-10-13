@@ -4,7 +4,7 @@ import type {CampaignSnapshot} from "../../../src/campaign/types.js";
 import type {DeepReadonly} from "../../../src/types/readonly.js";
 import type {WorldStore} from "../../../src/world/world-store.js";
 import { V21_REASON_CODES, validateStructuredClaimV21, type V21Diagnostic } from "./reflection-v21.js";
-import { INSTRUCTION_LIKE } from "../../../src/turn/reflection.js";
+import { INSTRUCTION_LIKE } from "../../../src/turn/optional/reflection.js";
 export { V2_SCHEMA, V2_SYSTEM };
 export const EVIDENCE_VERSION = 2, PROVENANCE_MODEL_VERSION = 1;
 export const V22_REASON_CODES = [...V21_REASON_CODES, "invalid_statement_provenance"] as const;

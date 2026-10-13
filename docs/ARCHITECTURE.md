@@ -164,8 +164,11 @@ src/world          canon loader, validation, WorldStore, calendar, climate, weat
 src/campaign       CampaignState and domains: characters, items, inventory, households, knowledge, relationships, funds,
                    NPC+ (premium), player character, portraits, Heartstone charter and recognition, opening state
 src/retrieval      exact, lexical, semantic and hybrid search (audience-safe)
-src/turn           coordinator and stages, intent grammar, evidence and authorization, item/household evidence,
-                   SSP, prompt builder, audit, movement/follow, reflection (shadow only), compaction
+src/turn           the turn pipeline, one folder per domain (Repository Cleanup D): coordinator/, stages/, context/
+                   (TurnContext, prompt builder, compaction, SSP, retrieval policy, NPC+ context), identity/, authorization/,
+                   audit/, movement/, items/, commerce/, optional/ (Reflection, Mannerism), structured/ (Reflection
+                   schema, validation, wire), language/; the root keeps only cross-domain modules (turn-types,
+                   recent-conversation, player-intent, natural-actions, rpg-dialogue, temporal-grounding, temporal-action)
 src/turn/narration-facts  the one narration reader: movement, commerce, dialogue/speaker, identity, recipient and reference facts,
                    the scene reading; descriptive only, imports no campaign / authorization / audit code
 src/llm            OpenRouter narrator/controller/extractor/reflection/compressor providers; Hugging Face fal-ai image client

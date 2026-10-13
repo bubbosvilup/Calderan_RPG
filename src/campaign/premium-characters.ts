@@ -53,7 +53,7 @@ export function contractSet(p: DeepReadonly<PremiumCharacterState>, field: Premi
 }
 /**
  * NPC+ Pass 6: structural checks for reflection notes (campaign layer). Semantic evidence checks (handles resolve to real sources,
- * minimum evidence per kind, forbidden inferences) happen before the command is built (turn/reflection.ts); this layer guarantees the
+ * minimum evidence per kind, forbidden inferences) happen before the command is built (turn/optional/reflection.ts); this layer guarantees the
  * stored shape: unique IDs, per-kind caps, bounded text, revisions not in the future, and evidence handles OF THIS character only.
  */
 export function validateReflectionNotes(characterId: string, notes: DeepReadonly<ReflectionNote[]>, revision: number): void {

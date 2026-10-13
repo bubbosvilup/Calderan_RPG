@@ -5,7 +5,7 @@ import { onlineCoordinator, selectedModels } from "./turn-services.js";
 import { runPlayTurn } from "./play-turn.js";
 import { DiscoveryAggregate, MotifTracker, observeOrganicTurn, type OrganicTurnDiagnostics } from "./organic-discovery.js";
 import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provider.js";
-import type { ReflectionDiagnostics } from "../turn/reflection-diagnostics.js";
+import type { ReflectionDiagnostics } from "../turn/optional/reflection-diagnostics.js";
 import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { TurnResult } from "../turn/turn-types.js";
 import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";

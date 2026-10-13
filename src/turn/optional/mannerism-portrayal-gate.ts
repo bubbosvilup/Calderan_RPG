@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
-import type { CharacterMannerism, MannerismEpistemicState } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import { mannerismEpistemicState } from "../campaign/mannerisms.js";
-import { escapeRegExp } from "./language/text.js";
+import type { CharacterMannerism, MannerismEpistemicState } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import { mannerismEpistemicState } from "../../campaign/mannerisms.js";
+import { escapeRegExp } from "../language/text.js";
 
 export type PortrayalRule = "OUT_OF_TRIGGER" | "UNSUPPORTED_RECURRENCE" | "UNSUPPORTED_AWARENESS";
 export interface PackedMannerism {

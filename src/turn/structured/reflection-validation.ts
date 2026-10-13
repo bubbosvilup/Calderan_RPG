@@ -11,7 +11,7 @@
 import { isDeepStrictEqual } from 'node:util';
 import type { CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
-import { INSTRUCTION_LIKE } from "../reflection.js";
+import { INSTRUCTION_LIKE } from "../optional/reflection.js";
 import { statementProvenance, type ProvenanceEvidence, type StructuredEvidence } from "./reflection-evidence.js";
 import { CLAIM_SCHEMAS, BASE_PROPOSAL_SCHEMA, REFLECTION_SCHEMA, schemaMatches, renderReflectionClaim, exactRuleSegments, type StructuredProposal } from "./reflection-schema.js";
 

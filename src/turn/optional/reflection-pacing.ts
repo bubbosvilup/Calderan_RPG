@@ -1,4 +1,4 @@
-import type { ProviderFailureClass } from '../llm/errors.js';
+import type { ProviderFailureClass } from '../../llm/errors.js';
 /** Reflection-only serialization, pacing and cooldown. No player-turn or extractor scheduling changes. */
 export class ReflectionPacing {
     private tail: Promise<unknown> = Promise.resolve();

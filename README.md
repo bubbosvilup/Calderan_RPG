@@ -115,9 +115,17 @@ config/           economy.yaml (narrator price anchors, outside the hashed data 
 src/world/        canon loader and validation, WorldStore, calendar, climate, weather, environment, travel
 src/campaign/     CampaignState and its domains: characters, items, households, knowledge, relationships, funds,
                   trade, NPC+, player character, portraits, Heartstone
-src/turn/         TurnCoordinator and stages, evidence and authorization, domain policies, Scene State Projection,
-                  prompt builder, narration audit
-src/turn/narration-facts/  the one narration reader (movement, commerce, dialogue, identity facts; scene reading)
+src/turn/         the turn pipeline, one folder per domain (Repository Cleanup D); the root keeps only cross-domain
+                  modules (turn-types, recent-conversation, player-intent, natural-actions, rpg-dialogue, temporal-*)
+  coordinator/    TurnCoordinator, turn diagnostics, narrator ledger      stages/   intent .. result pipeline stages
+  context/        TurnContext, prompt builder, compaction, Scene State Projection, retrieval policy, NPC+ context
+  identity/       canonical casting, name establishment and reservation, provisional people, Keep track, speakers
+  authorization/  evidence and command authorization, turn/household evidence, pending proposals, contracts
+  audit/          narration, grounding and pending-confirmation audits
+  movement/ items/ commerce/   movement and follow; item intent and references; Actual Offer, trade and prices
+  optional/       Reflection and Mannerism (optional services)      structured/   the Reflection schema/validation/wire
+  language/       text, number and gate primitives
+  narration-facts/  the one narration reader (movement, commerce, dialogue, identity facts; scene reading)
 src/scene/        scene RAM and narrative-context builders
 src/retrieval/    exact, lexical, semantic and hybrid search (audience-safe)
 src/llm/          OpenRouter Narrator / Controller / extractor / reflection providers; Hugging Face image client

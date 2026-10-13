@@ -11,7 +11,7 @@ import { characterLocation } from "../src/turn/movement/character-movement.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import { ProviderError } from "../src/llm/errors.js";
-import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/reflection.js";
+import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 
 /**
  * NPC+ Pass 10 — provider fault injection on the invitation/follow turn (no network, no retry unless stated). A failed turn commits

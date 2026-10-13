@@ -8,7 +8,7 @@ import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { packNpcPlus } from "../turn/context/npc-plus.js";
-import { validateExtractedMannerisms, type MannerismExtractor, type MannerismExtractionRequest, type MannerismRun } from "../turn/mannerism-extraction.js";
+import { validateExtractedMannerisms, type MannerismExtractor, type MannerismExtractionRequest, type MannerismRun } from "../turn/optional/mannerism-extraction.js";
 import type { GenerationRequest } from "../llm/types.js";
 
 export interface CalibratedReplayFixture {

@@ -1,8 +1,8 @@
 import type { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import type { TurnEvent, TurnRequest } from "../turn/turn-types.js";
 import type { WorldStore } from "../world/world-store.js";
-import { reflectAfterTurn, type ReflectionProvider, type ReflectionRun } from "../turn/reflection.js";
-import type { ReflectionDiagnosticsSink } from "../turn/reflection-diagnostics.js";
+import { reflectAfterTurn, type ReflectionProvider, type ReflectionRun } from "../turn/optional/reflection.js";
+import type { ReflectionDiagnosticsSink } from "../turn/optional/reflection-diagnostics.js";
 
 /** Publish/drain gameplay first. Await the separate post-turn operation before accepting another CLI command. */
 export async function runPlayTurn(input: { readonly coordinator: Pick<TurnCoordinator, "runTurn">; readonly world: WorldStore;

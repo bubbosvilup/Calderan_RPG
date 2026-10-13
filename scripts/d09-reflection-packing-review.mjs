@@ -6,14 +6,14 @@ import {execFileSync} from 'node:child_process';
 import {loadWorld} from '../.build/src/world/loader.js';
 import {createOpeningCampaign,OPENING_HOUSEHOLD} from '../.build/src/campaign/opening-state.js';
 import {CampaignState} from '../.build/src/campaign/campaign-state.js';
-import {captureProductionReflection,parseProductionReflection,reflectStructuredAfterTurn} from '../.build/src/turn/structured-reflection-maintenance.js';
+import {captureProductionReflection,parseProductionReflection,reflectStructuredAfterTurn} from '../.build/src/turn/optional/structured-reflection-maintenance.js';
 import {evaluateStructuredOutputE1} from '../.build/tests/frozen/reflection/reflection-v23-cvc-e1.js';
 import {npcPlusFragments,packNpcPlus,npcDeepSources} from '../.build/src/turn/context/npc-plus.js';
 import {buildTurnContext} from '../.build/src/turn/context/context-builder.js';
 import {buildNarratorPrompt} from '../.build/src/turn/context/prompt-builder.js';
 import {estimateContextTokens} from '../.build/src/turn/context/context-budget.js';
 import {RecentConversation} from '../.build/src/turn/recent-conversation.js';
-import {ReflectionPacing} from '../.build/src/turn/reflection-pacing.js';
+import {ReflectionPacing} from '../.build/src/turn/optional/reflection-pacing.js';
 
 const dir='docs/evaluations/d09-reflection/evidence/d09-reflection-utility-review';await mkdir(dir,{recursive:true});
 const save=(p,v)=>writeFile(`${dir}/${p}`,JSON.stringify(v,null,2)+'\n');

@@ -1,11 +1,11 @@
-import type { CampaignState } from "../campaign/campaign-state.js";
-import type { CampaignSnapshot, PremiumRollup, ReflectionKind, ReflectionNote } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import { REFLECTION_LIMITS } from "../campaign/validation.js";
-import { characterView } from "../campaign/projections.js";
-import { npcDeepSources } from "./context/npc-plus.js";
-import { escapeRegExp as esc } from "./language/text.js";
+import type { CampaignState } from "../../campaign/campaign-state.js";
+import type { CampaignSnapshot, PremiumRollup, ReflectionKind, ReflectionNote } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { REFLECTION_LIMITS } from "../../campaign/validation.js";
+import { characterView } from "../../campaign/projections.js";
+import { npcDeepSources } from "../context/npc-plus.js";
+import { escapeRegExp as esc } from "../language/text.js";
 import type { ReflectionDiagnosticsSink } from "./reflection-diagnostics.js";
 
 /**
@@ -27,9 +27,9 @@ export interface ReflectionEvidence { readonly ref: string; readonly kind: Evide
   readonly episodes?: readonly { readonly id: string; readonly condition?: string }[];
   /** Pass 10: the source records only changes of place. Location moves show where someone went, never why or how they feel about it. */
   readonly movement_only?: boolean }
-export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly import('./structured/reflection-evidence.js').StructuredEvidence[];
+export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly import('../structured/reflection-evidence.js').StructuredEvidence[];
   readonly existing: readonly { readonly kind: ReflectionKind; readonly label: string; readonly text: string }[];
-  readonly wire_schema: typeof import('./structured/reflection-schema.js').REFLECTION_SCHEMA; readonly timeout_ms?: number }
+  readonly wire_schema: typeof import('../structured/reflection-schema.js').REFLECTION_SCHEMA; readonly timeout_ms?: number }
 export interface ReflectionProvider { reflect(request: ReflectionRequest): Promise<{ readonly text: string; readonly usage?: unknown; readonly model?: string;readonly provider?:string;readonly cost_usd?:number }> }
 
 /** When reflection is due: ≥3 substantive developments since the last reflection (initial registration/migration excluded), a roll-up change, or a newly established contract. Never conversation alone. */
@@ -204,7 +204,7 @@ export function mergeNotes(existing: readonly ReflectionNote[], accepted: readon
   return out;
 }
 
-export interface ReflectionRun { readonly attempts?: import("../llm/retry.js").ProviderAttemptRecord; readonly character_id: string; readonly status: "committed" | "malformed" | "provider_failed" | "stale" | "no_evidence" | "persistence_failed";
+export interface ReflectionRun { readonly attempts?: import("../../llm/retry.js").ProviderAttemptRecord; readonly character_id: string; readonly status: "committed" | "malformed" | "provider_failed" | "stale" | "no_evidence" | "persistence_failed";
   readonly logical_reflection_id?:string;readonly source_revision?:number;readonly provider?:string;readonly cost_usd?:number;readonly attempt_details?:readonly import('./reflection-pacing.js').StructuredReflectionAttempt[];readonly semantic_result?:'accepted'|'semantic_rejected'|'no_useful_notes';
   readonly accepted: readonly Proposal[]; readonly rejected: readonly { readonly reason: string; readonly proposal: unknown }[]; readonly notes: number; readonly usage?: unknown; readonly model?: string;
   readonly elapsed_ms?: number; readonly provider_ms?: number; readonly parsed_proposals?: number; readonly committed_revision?: number; readonly updated_notes?: number; readonly new_notes?: number }
@@ -213,7 +213,7 @@ export interface ReflectionRun { readonly attempts?: import("../llm/retry.js").P
  * `max_characters` due NPC+ (stable order), each as its own separate revision; a provider error, malformed output or a newer revision
  * (stale) changes nothing. Even an all-rejected run records `last_reflected_revision`, so the same evidence is not re-sent every turn.
  */
-export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../llm/retry.js").ProviderRetryPolicy;readonly pacing?:import('./reflection-pacing.js').ReflectionPacing; /** Block 6: the note write is applied only while this says the session is idle; otherwise it is dropped as stale. */ readonly can_commit?: () => boolean; /** Called right after the note write was applied. */ readonly wrote?: () => void } = {}): Promise<readonly ReflectionRun[]> {
+export async function reflectAfterTurn(campaign: CampaignState, world: WorldStore, provider: ReflectionProvider, options: { readonly max_characters?: number; readonly timeout_ms?: number; readonly diagnostics_sink?: ReflectionDiagnosticsSink; readonly retry_policy?: import("../../llm/retry.js").ProviderRetryPolicy;readonly pacing?:import('./reflection-pacing.js').ReflectionPacing; /** Block 6: the note write is applied only while this says the session is idle; otherwise it is dropped as stale. */ readonly can_commit?: () => boolean; /** Called right after the note write was applied. */ readonly wrote?: () => void } = {}): Promise<readonly ReflectionRun[]> {
   const {reflectStructuredAfterTurn}=await import('./structured-reflection-maintenance.js');
   return reflectStructuredAfterTurn(campaign,world,provider,options);
 }

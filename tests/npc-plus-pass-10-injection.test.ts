@@ -8,7 +8,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { characterLocation } from "../src/turn/movement/character-movement.js";
 import { NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/deepseek-controller.js";
-import { reflectionEvidence, validateProposals } from "../src/turn/reflection.js";
+import { reflectionEvidence, validateProposals } from "../src/turn/optional/reflection.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 

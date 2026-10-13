@@ -14,7 +14,7 @@ import type { NarratorGenerationTrace } from "./narrator-ledger.js";
 export type DiagnosticPhase = "input_intent" | "projection" | "retrieval" | "prompt_composition" | "narrator" | "reconciliation_narrator" | "controller" | "authorization" | "preparation" | "audit" | "reconciliation" | "reconciliation_audit" | "commit_preparation" | "commit" | "publication";
 export interface TurnDiagnostics {
   provider_reliability?: Readonly<Record<string,number>>;
-  mannerism_portrayal?: import("../mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
+  mannerism_portrayal?: import("../optional/mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
   context_budget?: import("../context/context-budget.js").ContextBudgetSnapshot;
   /** Block 4: the request identity (REV-2), when the caller supplied one. */
   turn_key?: string;

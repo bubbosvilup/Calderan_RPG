@@ -9,7 +9,7 @@ import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { TurnEvent } from "../turn/turn-types.js";
 import { aggregate, renderMarkdown, type EvalRecord } from "./diagnostics-aggregate.js";
-import { reflectAfterTurn } from "../turn/reflection.js";
+import { reflectAfterTurn } from "../turn/optional/reflection.js";
 import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provider.js";
 import { buildScenario, FIXTURE_SECRET, LIVE_SCENARIOS, type LiveScenario } from "./live-eval-scenarios.js";
 import { NARRATOR_OUTPUT_TOKENS, onlineCoordinator, selectedModels } from "./turn-services.js";

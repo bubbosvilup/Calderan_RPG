@@ -14,7 +14,7 @@ import { DEFAULT_MANNERISM_EXTRACTOR_MODEL } from "../src/llm/openrouter/manneri
 import { DEFAULT_REFLECTION_MODEL } from "../src/llm/openrouter/reflection-provider.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/state-controller.js";
 import { CONTROLLER_EVIDENCE_SCHEMA } from "../src/llm/controller-schema.js";
-import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTION_SCHEMA } from "../src/turn/mannerism-extraction.js";
+import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTION_SCHEMA } from "../src/turn/optional/mannerism-extraction.js";
 import { REFLECTION_SCHEMA as E1_SCHEMA, REFLECTION_SYSTEM as E1_SYSTEM } from "../src/turn/structured/reflection-schema.js";
 import { setup, collect, transfer, mockNarrator } from "./turn-fixtures.js";
 import { fakeRetry } from "./provider-failure-scripts.js";

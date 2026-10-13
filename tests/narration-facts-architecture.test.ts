@@ -64,7 +64,7 @@ const CLASSIFIED: Readonly<Record<string, string>> = {
   [join("src", "turn", "authorization", "turn-evidence.ts")]: "F: verifies Controller transfer / knowledge evidence quotes; not narration attribution",
   [join("src", "turn", "audit", "grounding-audit.ts")]: "D: 'the law says' inside a legal-procedure claim",
   [join("src", "turn", "audit", "narration-audit.ts")]: "B + D: the player's own speech act in their input; 'everyone says' as a rumor source inside a quote",
-  [join("src", "turn", "mannerism-portrayal-gate.ts")]: "D: optional Mannerism diagnostic for a named observer's habit remark; never authority",
+  [join("src", "turn", "optional", "mannerism-portrayal-gate.ts")]: "D: optional Mannerism diagnostic for a named observer's habit remark; never authority",
 };
 test("5. speaker attribution exists only in the fact layer (every other speech-verb list is classified and attributes nobody)", () => {
   const found = RUNTIME.filter(p => SPEECH_LIST.test(code(p))).sort();

@@ -8,7 +8,7 @@ import type { CharacterMannerism, CampaignSnapshot } from "../src/campaign/types
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
-import { MannerismPortrayalGate, type PackedMannerism, type PortrayalGateInput } from "../src/turn/mannerism-portrayal-gate.js";
+import { MannerismPortrayalGate, type PackedMannerism, type PortrayalGateInput } from "../src/turn/optional/mannerism-portrayal-gate.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

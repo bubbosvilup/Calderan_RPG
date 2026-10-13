@@ -3,7 +3,7 @@ import type { CampaignSnapshot, ReflectionKind, PremiumHistoryEntry } from "../.
 import type { DeepReadonly } from "../../../src/types/readonly.js";
 import type { WorldStore } from "../../../src/world/world-store.js";
 import { npcDeepSources } from "../../../src/turn/context/npc-plus.js";
-import { reflectionEvidence, INSTRUCTION_LIKE, type ReflectionEvidence, type Proposal } from "../../../src/turn/reflection.js";
+import { reflectionEvidence, INSTRUCTION_LIKE, type ReflectionEvidence, type Proposal } from "../../../src/turn/optional/reflection.js";
 
 export const EVIDENCE_VERSION = 2;
 type Payload = Record<string, unknown>;

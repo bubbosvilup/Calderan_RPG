@@ -6,7 +6,7 @@ import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js
 import type { DeepReadonly } from "../src/types/readonly.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { recoverNpcContext } from "../src/turn/context/npc-plus.js";
-import { reflectAfterTurn, reflectionDue, reflectionEvidence, validateProposals, type Proposal, type ReflectionProvider } from "../src/turn/reflection.js";
+import { reflectAfterTurn, reflectionDue, reflectionEvidence, validateProposals, type Proposal, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 
 /** NPC+ Pass 10: organic-like development sequences feed reflection correctly, and the validator rejects claims no evidence supports. */
 const HOME = "campaign_household_h";

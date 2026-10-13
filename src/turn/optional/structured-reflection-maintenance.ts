@@ -1,20 +1,20 @@
 import { createHash } from 'node:crypto';
-import type { CampaignState } from '../campaign/campaign-state.js';
-import type { ReflectionNote, ReflectionKind } from '../campaign/types.js';
-import { freezeSnapshot, REFLECTION_LIMITS } from '../campaign/validation.js';
-import type { WorldStore } from '../world/world-store.js';
-import { characterView } from '../campaign/projections.js';
+import type { CampaignState } from '../../campaign/campaign-state.js';
+import type { ReflectionNote, ReflectionKind } from '../../campaign/types.js';
+import { freezeSnapshot, REFLECTION_LIMITS } from '../../campaign/validation.js';
+import type { WorldStore } from '../../world/world-store.js';
+import { characterView } from '../../campaign/projections.js';
 import { reflectionDue, type ReflectionProvider, type ReflectionRequest, type ReflectionRun, type Proposal } from './reflection.js';
 import { emitReflectionDiagnostics } from './reflection-diagnostics.js';
 import { ReflectionPacing, reflectionPacing, type StructuredReflectionAttempt } from './reflection-pacing.js';
-import { reflectionEvidenceCatalog } from './structured/reflection-evidence.js';
-import { REFLECTION_SCHEMA, REFLECTION_SEMANTIC_VERSION, schemaMatches, type StructuredProposal } from './structured/reflection-schema.js';
-import { reflectionContext, evaluateReflectionOutput, citationVisibilityViolations, type ReflectionContext } from './structured/reflection-validation.js';
-import { reflectionWire } from './structured/reflection-wire.js';
-import { ProviderError } from '../llm/errors.js';
-import { failureClass, technicalRetryReason } from '../llm/reliability.js';
-import type { ProviderAttemptRecord } from '../llm/retry.js';
-import { TurnError } from './turn-types.js';
+import { reflectionEvidenceCatalog } from '../structured/reflection-evidence.js';
+import { REFLECTION_SCHEMA, REFLECTION_SEMANTIC_VERSION, schemaMatches, type StructuredProposal } from '../structured/reflection-schema.js';
+import { reflectionContext, evaluateReflectionOutput, citationVisibilityViolations, type ReflectionContext } from '../structured/reflection-validation.js';
+import { reflectionWire } from '../structured/reflection-wire.js';
+import { ProviderError } from '../../llm/errors.js';
+import { failureClass, technicalRetryReason } from '../../llm/reliability.js';
+import type { ProviderAttemptRecord } from '../../llm/retry.js';
+import { TurnError } from '../turn-types.js';
 /** Strict qualified envelope only; semantic rejection is intentionally outside the retry boundary. */
 export function parseProductionReflection(text: string, request: ReflectionRequest, context: ReflectionContext): readonly unknown[] {
     if (!text.trim())

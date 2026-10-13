@@ -8,7 +8,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import type { CampaignCommand, RelationshipDimension } from "../src/campaign/types.js";
-import type { ReflectionProvider } from "../src/turn/reflection.js";
+import type { ReflectionProvider } from "../src/turn/optional/reflection.js";
 import { GameSession, type SessionDeps } from "../src/app/index.js";
 import { metadata } from "./turn-fixtures.js";
 

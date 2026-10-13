@@ -1,6 +1,6 @@
 import { OpenRouterClient } from "./client.js";
 import { ProviderError } from "../errors.js";
-import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTION_SCHEMA, type MannerismExtractor, type MannerismExtractionRequest } from "../../turn/mannerism-extraction.js";
+import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTION_SCHEMA, type MannerismExtractor, type MannerismExtractionRequest } from "../../turn/optional/mannerism-extraction.js";
 /**
  * Production default (2026-10-08): GPT-6 Luna, replacing qwen/qwen3.8-flash (validated on the D-10 Pass 2B matrix; retired for
  * Alibaba shared-pool 429s). Same request contract; single model, no fallback; failure skips extraction.

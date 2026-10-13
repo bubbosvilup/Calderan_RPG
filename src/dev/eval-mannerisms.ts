@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { mannerismFixture, MANNERISM_CORPUS } from "./d10-mannerism-corpus.js";
 import { OpenRouterMannerismExtractor } from "../llm/openrouter/mannerism-extractor.js";
 import { DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
-import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTOR_PROMPT_VERSION, MANNERISM_EXTRACTION_SCHEMA, validateExtractedMannerisms, type MannerismExtractionRequest } from "../turn/mannerism-extraction.js";
+import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTOR_TASK, MANNERISM_EXTRACTOR_PROMPT_VERSION, MANNERISM_EXTRACTION_SCHEMA, validateExtractedMannerisms, type MannerismExtractionRequest } from "../turn/optional/mannerism-extraction.js";
 import { freezeSnapshot } from "../campaign/validation.js";
 
 /** Explicit paid developer command. Single frozen 25-case run; no retries or cherry-picked reruns. */
@@ -46,7 +46,7 @@ async function main() {
   }
   const manifest = { model, prompt_version: MANNERISM_EXTRACTOR_PROMPT_VERSION, system_prompt: MANNERISM_EXTRACTOR_SYSTEM, task_prompt: MANNERISM_EXTRACTOR_TASK, schema: MANNERISM_EXTRACTION_SCHEMA, prompt_sha256, schema_sha256, cases: MANNERISM_CORPUS, requests: batches.map(b => b.request), max_paid_calls: batches.length,
     corpus_sha256: createHash("sha256").update(JSON.stringify(MANNERISM_CORPUS)).digest("hex"),
-    code_sha256: createHash("sha256").update((await Promise.all(["src/turn/mannerism-extraction.ts", "src/campaign/mannerism-learning.ts", "src/campaign/mannerism-concepts.ts"].map(p => readFile(p, "utf8")))).join("\n")).digest("hex") };
+    code_sha256: createHash("sha256").update((await Promise.all(["src/turn/optional/mannerism-extraction.ts", "src/campaign/mannerism-learning.ts", "src/campaign/mannerism-concepts.ts"].map(p => readFile(p, "utf8")))).join("\n")).digest("hex") };
   await writeFile(join(directory, "frozen-manifest.json"), JSON.stringify(manifest, null, 2));
   const results: unknown[] = [], latencies: number[] = [];
   let rawProposals = 0, validatedProposals = 0, acceptedProposals = 0; const aliasFamilies: string[] = [];

@@ -8,11 +8,11 @@ import {setup,collect,transfer,metadata,mockNarrator} from "./turn-fixtures.js";
 import {fakeRetry,scriptedController,scriptedNarrator} from "./provider-failure-scripts.js";
 import {OpenRouterClient} from "../src/llm/openrouter/client.js";
 import {MiniMaxNarratorProvider} from "../src/llm/openrouter/minimax-narrator.js";
-import {reflectAfterTurn} from "../src/turn/reflection.js";
+import {reflectAfterTurn} from "../src/turn/optional/reflection.js";
 import {mannerismFixture} from "../src/dev/d10-mannerism-corpus.js";
-import {MannerismMaintenance} from "../src/turn/mannerism-extraction.js";
+import {MannerismMaintenance} from "../src/turn/optional/mannerism-extraction.js";
 import {OpenRouterStateControllerProvider} from "../src/llm/openrouter/state-controller.js";
-import {MannerismPortrayalGate} from "../src/turn/mannerism-portrayal-gate.js";
+import {MannerismPortrayalGate} from "../src/turn/optional/mannerism-portrayal-gate.js";
 import type {TurnDiagnostics} from "../src/turn/coordinator/turn-diagnostics.js";
 const input="I give boots to Brenna.",text="Brenna accepts boots from Nicco.";
 for(const category of ["malformed_envelope","finish_reason_length","empty_output","schema_invalid","parser_failure"]as const)test(`critical technical ${category}: same request, one retry, one state effect`,async()=>{

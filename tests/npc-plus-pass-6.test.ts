@@ -9,7 +9,7 @@ import type { DeepReadonly } from "../src/types/readonly.js";
 import { REFLECTION_LIMITS } from "../src/campaign/validation.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/turn/context/npc-plus.js";
-import { mergeNotes, reflectAfterTurn, reflectionDue, reflectionEvidence, validateProposals, type Proposal, type ReflectionProvider } from "../src/turn/reflection.js";
+import { mergeNotes, reflectAfterTurn, reflectionDue, reflectionEvidence, validateProposals, type Proposal, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 
