@@ -1,6 +1,6 @@
 # Caldrevan architecture
 
-Status: Current. Last reconciled: 2026-10-13 (consolidation block 11, on top of main 7345549). Source of truth: the current main working tree (code first, then tests, then authored data).
+Status: Current. Last reconciled: 2026-10-13 (consolidation block 11, on top of main 7345549; Repository Cleanups A to G moved files and renamed the materialization builder without changing behavior; boundaries re-checked by the [post-cleanup repository audit](evaluations/POST_CLEANUP_REPOSITORY_AUDIT.md) on `7e5e4ea`: 0 runtime cycles). Source of truth: the current main working tree (code first, then tests, then authored data).
 
 Caldrevan is a deterministic engine for long-running, AI-narrated roleplay. **The LLM interprets and proposes. The engine owns truth.** Nothing a model writes becomes campaign state until the engine has validated it, authorized it with evidence and committed it atomically.
 

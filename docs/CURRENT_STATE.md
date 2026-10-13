@@ -1,6 +1,6 @@
 # Caldrevan: current state
 
-Status: Current. Last reconciled: 2026-10-13 (Repository Cleanups C and D on main: Reflection structure and `src/turn` domain folders, behavior identical; Repository Cleanup E: dev tooling folders; Repository Cleanup F: tests in domain folders named by behavior; Repository Cleanup G: lifecycle vocabulary, PROVISIONAL → PERSISTENT is materialization and only Campaign NPC → NPC+ is promotion; behavior identical). Source of truth: the current main working tree.
+Status: Current. Last reconciled: 2026-10-13 (Repository Cleanups C and D on main: Reflection structure and `src/turn` domain folders, behavior identical; Repository Cleanup E: dev tooling folders; Repository Cleanup F: tests in domain folders named by behavior; Repository Cleanup G: lifecycle vocabulary, PROVISIONAL → PERSISTENT is materialization and only Campaign NPC → NPC+ is promotion; behavior identical; the [post-cleanup repository audit](evaluations/POST_CLEANUP_REPOSITORY_AUDIT.md) on `7e5e4ea` closes the repository cleanup program, verdict GREEN WITH KNOWN PRODUCT DEBT). Source of truth: the current main working tree.
 
 This is the best "where are we now?" document. Details live in the linked documents; historical results live in [evaluation reports](evaluations/), which are never rewritten.
 

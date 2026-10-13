@@ -1,6 +1,6 @@
 # Caldrevan documentation index
 
-Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup B, documentation namespace, on top of main cc9cb7c; Repository Cleanup E added the dev tooling section of Testing). Source of truth: the code on main. Authority order when documents disagree: **code, then tests, then authored data/canon, then the current documents below, then historical evidence.**
+Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup B, documentation namespace, on top of main cc9cb7c; Repository Cleanup E added the dev tooling section of Testing; Cleanups F and G and the [post-cleanup repository audit](evaluations/POST_CLEANUP_REPOSITORY_AUDIT.md) on main `7e5e4ea`, which closes the repository cleanup program). Source of truth: the code on main. Authority order when documents disagree: **code, then tests, then authored data/canon, then the current documents below, then historical evidence.**
 
 **One rule for the tree.** The repository root (`README.md`) and the documents linked from the first four sections below describe the project **as it is now**. Everything under [`evaluations/`](evaluations/) is **historical or machine evidence**: block, phase and pass reports, audits, live certifications, bakeoffs, migration notes and superseded documents. That evidence is preserved as written and never updated to match the present. Labels used below: **NORMATIVE** (the maintained description of current behavior) and **ACTIVE** (an accurate reference, possibly with clearly marked historical sections).
 

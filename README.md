@@ -173,7 +173,7 @@ Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:co
 
 ## Current Status
 
-The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 12): turn reliability, player-authorized actions, the character lifecycle with Keep track, the core / optional split, the regression benchmark and NarrationFacts. Latest offline run: 3679 tests, 0 failed; benchmark 55 scenarios, 55 pass, no known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
+The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 12): turn reliability, player-authorized actions, the character lifecycle with Keep track, the core / optional split, the regression benchmark and NarrationFacts. The repository cleanup program (Repository Cleanups A to G) is closed and certified by the [post-cleanup repository audit](docs/evaluations/POST_CLEANUP_REPOSITORY_AUDIT.md). Latest offline run: 3701 tests, 0 failed; benchmark 55 scenarios, 55 pass, no known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
 
 ## Known Product Gaps
 
