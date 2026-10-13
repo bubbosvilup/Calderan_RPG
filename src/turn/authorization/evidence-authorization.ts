@@ -1,23 +1,23 @@
-import { mentionsItem, referenceWords } from "./items/item-resolution.js";
-import { EXPLICIT_GIFT, itemHolder, transferRecipient } from "../campaign/item-transfer.js";
+import { mentionsItem, referenceWords } from "../items/item-resolution.js";
+import { EXPLICIT_GIFT, itemHolder, transferRecipient } from "../../campaign/item-transfer.js";
 import type { EvidenceCheck } from "./evidence-check.js";
 import { isDeepStrictEqual } from "node:util";
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
-import type { TurnContext } from "./context/context-builder.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { EVIDENCE_QUOTE_MAX } from "../../llm/controller-schema.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
-import type { AuthorizationDiagnostic } from "./turn-types.js";
+import type { AuthorizationDiagnostic } from "../turn-types.js";
 import { authorizeCommands, isLocationPlacement } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
-import { itemTerms } from "./items/item-reference.js";
-import { departuresFromFacts } from "./movement/movement-evidence.js";
-import { extractNarrationFacts, type NarrationFacts } from "./narration-facts/index.js";
+import { itemTerms } from "../items/item-reference.js";
+import { departuresFromFacts } from "../movement/movement-evidence.js";
+import { extractNarrationFacts, type NarrationFacts } from "../narration-facts/index.js";
 import { detectHouseholdChoices, verifyRelationshipEvidence } from "./household-evidence.js";
-import { GATES } from "./language/gates.js";
-import { blankQuotes, escapeRegExp as esc, quotedSpans, sentencesOf } from "./language/text.js";
-import { numberWordValue } from "./language/numbers.js";
+import { GATES } from "../language/gates.js";
+import { blankQuotes, escapeRegExp as esc, quotedSpans, sentencesOf } from "../language/text.js";
+import { numberWordValue } from "../language/numbers.js";
 
 /**
  * Phase 1O evidence-backed authorization. A controller evidence quote is necessary for the evidence path and never sufficient:

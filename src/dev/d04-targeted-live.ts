@@ -26,7 +26,7 @@ export const CORRECTED_PRIVACY_PROBE = {
   must_not: ["Brenna/Gerome/Nicco voice or imply prior knowledge of the private fact.", "Narrator independently discloses it as an omniscient fact or silently treats it as globally known.", "Invent new private lore or dictionary mechanics as world facts; Gerome speaks."],
 };
 const PROTECTED = ["src/turn/context/lossless-knowledge.ts", "src/turn/context/lossless-context-compaction.ts", "src/turn/context/narrator-pack.ts", "src/turn/context/context-budget.ts", "src/turn/context/context-compaction.ts", "src/turn/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/llm/openrouter/minimax-narrator.ts"];
-const FILES = [...PROTECTED, "src/turn/context/prompt-builder.ts", "src/turn/narration-audit.ts", "src/dev/d04-final-live.ts", "src/dev/d04-targeted-live.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/passive-response-audit.ts"];
+const FILES = [...PROTECTED, "src/turn/context/prompt-builder.ts", "src/turn/audit/narration-audit.ts", "src/dev/d04-final-live.ts", "src/dev/d04-targeted-live.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/passive-response-audit.ts"];
 async function fingerprints() { return Object.fromEntries(await Promise.all(FILES.map(async p => [p, sha(await readFile(p, "utf8"))]))); }
 export class TargetedPaidBudget {
   #attempts = 0;

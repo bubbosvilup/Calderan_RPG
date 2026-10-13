@@ -1,16 +1,16 @@
-import { transferRecipient } from "../campaign/item-transfer.js";
-import type { CharacterMovement } from "./movement/character-movement.js";
-import type { CampaignCommand } from "../campaign/types.js";
-import { freezeSnapshot } from "../campaign/validation.js";
-import type { TurnContext } from "./context/context-builder.js";
-import type { PlayerIntent } from "./player-intent.js";
-import { normalizeReference, type ResolvedReference } from "./items/reference-resolution.js";
+import { transferRecipient } from "../../campaign/item-transfer.js";
+import type { CharacterMovement } from "../movement/character-movement.js";
+import type { CampaignCommand } from "../../campaign/types.js";
+import { freezeSnapshot } from "../../campaign/validation.js";
+import type { TurnContext } from "../context/context-builder.js";
+import type { PlayerIntent } from "../player-intent.js";
+import { normalizeReference, type ResolvedReference } from "../items/reference-resolution.js";
 import type { PhysicalInteraction } from "./physical-interaction.js";
-import { itemTerms } from "./items/item-reference.js";
-import { departuresFromFacts, type DepartureEvidence } from "./movement/movement-evidence.js";
-import { extractNarrationFacts, type NarrationFacts } from "./narration-facts/index.js";
+import { itemTerms } from "../items/item-reference.js";
+import { departuresFromFacts, type DepartureEvidence } from "../movement/movement-evidence.js";
+import { extractNarrationFacts, type NarrationFacts } from "../narration-facts/index.js";
 import { detectHouseholdChoices, type HouseholdChoice } from "./household-evidence.js";
-import { escapeRegExp as escape } from "./language/text.js";
+import { escapeRegExp as escape } from "../language/text.js";
 
 export type ConfirmationKind = "accepted_transfer" | "equipped_item" | "heard_fact" | "was_told_fact" | "agreed_event";
 export interface NarratorConfirmation { readonly kind: ConfirmationKind; readonly command_indexes: readonly number[]; readonly collective: boolean; readonly source_sentence: string }

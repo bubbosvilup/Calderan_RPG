@@ -6,8 +6,8 @@ import type { CampaignCommand } from "../campaign/types.js";
 import type { GenerationMetadata } from "../llm/types.js";
 import type { ControllerParseDiagnostic, ProviderErrorCode } from "../llm/errors.js";
 import type { ControllerResult } from "../llm/state-controller-provider.js";
-import type { TurnEvidence } from "./turn-evidence.js";
-import type { AuditIssue } from "./narration-audit.js";
+import type { TurnEvidence } from "./authorization/turn-evidence.js";
+import type { AuditIssue } from "./audit/narration-audit.js";
 export type TurnFailure = "invalid_input" | "context_invalid" | "context_too_large" | "retrieval_failed" | "invalid_runtime_intent" | "stale_turn" | "turn_in_progress" | "cancelled" | "narrator_failed" | "narrator_truncated" | "controller_failed" | "campaign_validation_failed";
 export class TurnError extends Error { constructor(readonly code: TurnFailure, readonly provider_code?: ProviderErrorCode) { super(`Turn failed: ${code}`); } }
 /**
@@ -19,7 +19,7 @@ export type TurnProgressPhase = typeof TURN_PROGRESS_PHASES[number];
 /** `turn_key` and `expected_revision` are the request identity (REV-2): the turn layer checks the revision before any provider call. */
 export interface TurnRequest { readonly campaign: CampaignState; readonly player_input: string; readonly signal?: AbortSignal; readonly turn_key?: string; readonly expected_revision?: number;
   /** Block 5A: the ACTIVE, still-valid pending player confirmations (server-owned). They reach the Narrator as proposals, never as completed acts. */
-  readonly pending_confirmations?: readonly import("./pending-proposals.js").PendingProposal[] }
+  readonly pending_confirmations?: readonly import("./authorization/pending-proposals.js").PendingProposal[] }
 export interface AuthorizationDiagnostic { readonly command: CampaignCommand; readonly authorized: boolean;
   /** Phase 1O: which path authorized it, the grammar-only result, and the controller evidence check (diagnostic only). */
   readonly source?: "grammar" | "evidence" | "both" | "rejected"; readonly grammar?: { readonly authorized: boolean; readonly reason: string };
@@ -42,7 +42,7 @@ export interface TurnResult {
   readonly narration_reconciliation?: { readonly delivered: "draft" | "revision" | "redacted"; readonly draft: string; readonly issues: readonly AuditIssue[]; readonly revision?: string; readonly revision_issues?: readonly AuditIssue[]; readonly repaired_arrivals?: readonly string[] };
   readonly narrator: GenerationMetadata; readonly controller: GenerationMetadata;
   /** Block 5A: interpretations of the player's words that need an explicit confirmation (nothing was committed for them). Absent when the turn recognized none. */
-  readonly confirmation_proposals?: readonly import("./pending-proposals.js").PendingProposal[];
+  readonly confirmation_proposals?: readonly import("./authorization/pending-proposals.js").PendingProposal[];
   readonly context_characters: Readonly<Record<string, number>>;
   /** Phase 1P: session-local scene participants for this turn (plan) and after narration (continuity capture). Never persisted. */
   /** Person-transaction diagnostics of this turn (resolved, blocked, ambiguous, no_offer); absent when the turn had none. */
@@ -66,7 +66,7 @@ export type TurnEvent =
   | { readonly type: "controller_started" }
   | { readonly type: "state_proposed"; readonly diagnostics: readonly AuthorizationDiagnostic[] }
   /** The authoritative commit succeeded: from here the turn SUCCEEDED, whatever publication does. Carries the delivered text so a degraded publication can still answer. */
-  | { readonly type: "state_committed"; readonly revision: number; readonly changed: boolean; readonly narration: string; readonly confirmation_proposals?: readonly import("./pending-proposals.js").PendingProposal[] }
+  | { readonly type: "state_committed"; readonly revision: number; readonly changed: boolean; readonly narration: string; readonly confirmation_proposals?: readonly import("./authorization/pending-proposals.js").PendingProposal[] }
   | { readonly type: "publication_warning"; readonly step: PublicationStep }
   | { readonly type: "turn_completed"; readonly result: TurnResult }
   | { readonly type: "turn_failed"; readonly code: TurnFailure; readonly provider_code?: ProviderErrorCode; readonly narration: string; readonly incomplete: true; readonly base_revision: number; readonly final_revision: number };

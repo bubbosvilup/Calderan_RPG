@@ -1,6 +1,6 @@
 # Evidence-backed authorization and epistemic continuity
 
-Status: ACTIVE (rules); the controller model named in historical evaluation notes is no longer the default. Last reconciled: 2026-10-11. Source of truth: `src/turn/evidence-authorization.ts`, `command-authorizer.ts`, `item-evidence.ts`, `household-evidence.ts`.
+Status: ACTIVE (rules); the controller model named in historical evaluation notes is no longer the default. Last reconciled: 2026-10-11. Source of truth: `src/turn/authorization/evidence-authorization.ts`, `command-authorizer.ts`, `item-evidence.ts`, `household-evidence.ts`.
 
 Phase 1O. It answers two questions:
 - **Did X become true?** Acquisition: evidence-backed authorization.
@@ -33,7 +33,7 @@ Instruction added to `CONTROLLER_POLICY` (no examples, no reasoning requested):
 
 A legacy reply (commands without evidence) still parses but carries no evidence, so it can only use the grammar path.
 
-## 3. Deterministic verification (`src/turn/evidence-authorization.ts`, `verifyEvidence`)
+## 3. Deterministic verification (`src/turn/authorization/evidence-authorization.ts`, `verifyEvidence`)
 
 **A quote is necessary for the evidence path and never sufficient.** It is checked as follows.
 

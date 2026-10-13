@@ -89,7 +89,7 @@ test("source audit: the legacy commerce grammar is gone; trade-price.ts is the o
 });
 
 test("source audit: Actual Offer construction, trade authorization and the settlement audit all read the shared commerce facts", () => {
-  const auth = code("src/turn/commerce/trade-authorization.ts"), offers = code("src/turn/commerce/person-offers.ts"), audit = code("src/turn/narration-audit.ts"), commit = code("src/turn/stages/commit-preparation.ts"), coordinator = code("src/turn/turn-coordinator.ts");
+  const auth = code("src/turn/commerce/trade-authorization.ts"), offers = code("src/turn/commerce/person-offers.ts"), audit = code("src/turn/audit/narration-audit.ts"), commit = code("src/turn/stages/commit-preparation.ts"), coordinator = code("src/turn/turn-coordinator.ts");
   assert.match(auth, /commerce-evidence/); assert.match(offers, /commerce-evidence/); assert.match(audit, /settlementClaims/);
   assert.match(commit, /facts: i\.facts/); assert.match(coordinator, /facts: factSource/);
   assert.doesNotMatch(audit, /const (?:PAY|PAID|GOODS|DONE)\b/, "the audit owns no private payment parser");

@@ -1,6 +1,6 @@
 # Heartstone: current implemented state
 
-Status: Current. Last reconciled: 2026-10-11 (rite authority replaced by the explicit player action the same day). Source of truth: `src/campaign/heartstone-charter.ts`, `heartstone-rite.ts`, `heartstone-recognition.ts`, `opening-state.ts`, `src/app/game-session.ts` (`completeHeartstoneRite`), `src/turn/command-authorizer.ts`, `data/locations/calderan/heartstone/`, `data/world/cultures/heartstone_*.yaml`. Build report (historical, describes the superseded semantic rite detection): [HEARTSTONE_HOUSEHOLD_RITE](evaluations/HEARTSTONE_HOUSEHOLD_RITE.md). Simplification report: [EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION](evaluations/EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION.md).
+Status: Current. Last reconciled: 2026-10-11 (rite authority replaced by the explicit player action the same day). Source of truth: `src/campaign/heartstone-charter.ts`, `heartstone-rite.ts`, `heartstone-recognition.ts`, `opening-state.ts`, `src/app/game-session.ts` (`completeHeartstoneRite`), `src/turn/authorization/command-authorizer.ts`, `data/locations/calderan/heartstone/`, `data/world/cultures/heartstone_*.yaml`. Build report (historical, describes the superseded semantic rite detection): [HEARTSTONE_HOUSEHOLD_RITE](evaluations/HEARTSTONE_HOUSEHOLD_RITE.md). Simplification report: [EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION](evaluations/EXPLICIT_NPC_PLUS_PROMOTION_RITE_SIMPLIFICATION.md).
 
 ## Scope
 

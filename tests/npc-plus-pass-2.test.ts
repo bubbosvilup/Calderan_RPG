@@ -7,7 +7,7 @@ import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js
 import type { DeepReadonly } from "../src/types/readonly.js";
 import { PREMIUM_DEVELOPMENT_RETENTION } from "../src/campaign/validation.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { contractCommands } from "../src/turn/character-contracts.js";
+import { contractCommands } from "../src/turn/authorization/character-contracts.js";
 import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/turn/context/npc-plus.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

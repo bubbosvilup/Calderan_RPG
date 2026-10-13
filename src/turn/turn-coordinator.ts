@@ -17,7 +17,7 @@ import {ReliabilityMetrics,diagnosticSync} from "../llm/reliability.js";
 import type { WorldStore } from "../world/world-store.js";
 import type { NarratorPromptOptions } from "./context/prompt-builder.js";
 import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./context/retrieval-policy.js";
-import type { EvidenceMode } from "./evidence-authorization.js";
+import type { EvidenceMode } from "./authorization/evidence-authorization.js";
 import { RecentConversation } from "./recent-conversation.js";
 import { SceneParticipants, nextParticipantSeed, type SceneParticipantPlan } from "./scene-participants.js";
 import { trackablePeople, type TrackablePerson } from "./keep-track.js";

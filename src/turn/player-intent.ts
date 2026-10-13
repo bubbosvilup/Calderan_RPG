@@ -20,7 +20,7 @@ export interface PlayerIntent { readonly candidates: readonly CampaignCommand[];
   /** Person-transaction outcome of this turn (diagnostics only; never prompt content): what the resolver decided and why a purchase did not commit. */
   readonly transactions?: readonly TransactionDiagnostic[];
   /** Block 5A: proposals recognized this turn and every pending confirmation the Narrator must treat as a proposal (never a completed act). */
-  readonly confirmations?: import("./pending-proposals.js").TurnConfirmations;
+  readonly confirmations?: import("./authorization/pending-proposals.js").TurnConfirmations;
   /** Temporal Action Resolver V1: the resolved wait/sleep/nap/rest request behind this turn's time advance, if any. */
   readonly temporal?: Extract<TemporalAction, { kind: "advance" }> }
 function normalize(text: string): string { return text.trim().replace(/[.!]$/, "").replace(/^the /i, "").toLowerCase(); }

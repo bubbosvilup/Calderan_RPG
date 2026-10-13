@@ -6,11 +6,11 @@ import { join } from "node:path";
 import { GameSession } from "../src/app/game-session.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { CONTROLLER_SCHEMA } from "../src/llm/controller-schema.js";
-import { auditNarration } from "../src/turn/narration-audit.js";
+import { auditNarration } from "../src/turn/audit/narration-audit.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { pendingClaims } from "../src/turn/pending-audit.js";
+import { pendingClaims } from "../src/turn/audit/pending-audit.js";
 import { resolveTurnIntent, type IntentStageInput } from "../src/turn/stages/intent.js";
-import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
+import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { countingController, NARRATION, sessionWith, stepNarrator, type NarratorStep } from "./block4-fixtures.js";
 
@@ -366,7 +366,7 @@ test("A24: entry-point audit: the only production code that builds a `manumit` c
     const text = await readFile(file, "utf8");
     for (const kind of Object.keys(holders) as (keyof typeof holders)[]) if (new RegExp(`kind: "${kind}"`).test(text)) holders[kind].push(file.replaceAll("\\", "/"));
   }
-  assert.deepEqual(holders.manumit, ["src/turn/pending-proposals.ts"], "manumit is built only for the deterministic confirm command");
+  assert.deepEqual(holders.manumit, ["src/turn/authorization/pending-proposals.ts"], "manumit is built only for the deterministic confirm command");
   // The remaining two are the Actual Offer plan builders (settled only by the explicit Accept), never a text-to-state shortcut.
   assert.deepEqual(holders.set_legal_status, ["src/turn/commerce/person-offers.ts"]);
   assert.deepEqual(holders.transfer_person, ["src/turn/commerce/person-offers.ts"]);

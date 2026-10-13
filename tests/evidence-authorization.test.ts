@@ -10,8 +10,8 @@ import { EVIDENCE_CORPUS as BASE_CORPUS, EVIDENCE_CORPUS_EXTRA, OFFER, TELL, typ
 const EVIDENCE_CORPUS = [...BASE_CORPUS, ...EVIDENCE_CORPUS_EXTRA];
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
-import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../src/turn/evidence-authorization.js";
+import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
+import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../src/turn/authorization/evidence-authorization.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess, selectRelevantFacts } from "../src/turn/context/narrative-authority.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

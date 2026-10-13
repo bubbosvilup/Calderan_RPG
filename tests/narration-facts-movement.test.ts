@@ -188,7 +188,7 @@ test("the player's own travel plus a matching claim passes; a claim for a place 
 test("source audit: ONE location-claim extractor; authorization and audit read its facts and own no location regex", () => {
   const owners = SRC.concat(walk("src/turn/narration-facts")).filter(p => /"location_claim"/.test(readFileSync(p, "utf8")));
   assert.deepEqual(owners.map(p => p.replace(/\\/g, "/")).sort(), ["src/turn/movement/movement-evidence.ts", "src/turn/narration-facts/location-forms.ts", "src/turn/narration-facts/types.ts"]);
-  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/narration-audit.ts", "utf8"), evidence = readFileSync("src/turn/movement/movement-evidence.ts", "utf8");
+  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/audit/narration-audit.ts", "utf8"), evidence = readFileSync("src/turn/movement/movement-evidence.ts", "utf8");
   assert.match(audit, /locationClaimsFromFacts\(facts\)/); assert.match(evidence, /locationClaimsFromFacts\(facts\)/);
   assert.match(authorization, /characterMovementsFromFacts\(facts,/);
   for (const code of [authorization, audit]) assert.doesNotMatch(code.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, ""), /\(\?:inside\|within|\binside\b[^\n]{0,40}\\s\+\(\?:the/i);
@@ -254,7 +254,7 @@ test("source audit: the legacy movement/departure readers are gone and nothing o
   assert.deepEqual(hits, []);
 });
 test("source audit: authorization and audit both consume the shared facts; the coordinator extracts once and hands the same source to both", () => {
-  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/narration-audit.ts", "utf8"), coordinator = readFileSync("src/turn/turn-coordinator.ts", "utf8");
+  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/audit/narration-audit.ts", "utf8"), coordinator = readFileSync("src/turn/turn-coordinator.ts", "utf8");
   for (const [name, code] of [["authorization", authorization], ["audit", audit]] as const) {
     assert.match(code, /movement-evidence\.js/, name); assert.match(code, /narration-facts\/index\.js/, name); assert.match(code, /createFactSource/, name);
   }

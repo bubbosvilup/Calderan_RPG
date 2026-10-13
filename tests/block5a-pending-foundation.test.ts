@@ -10,7 +10,7 @@ import { PendingConfirmationLog } from "../src/app/pending-confirmation-log.js";
 import { boundTerminal, parseInteractionMetadata, PENDING_TERMINAL_LIMIT, type PendingConfirmation } from "../src/persistence/pending-confirmations.js";
 import { migrateSave } from "../src/persistence/save-migrations.js";
 import { CampaignSaveError } from "../src/persistence/errors.js";
-import type { PendingProposal } from "../src/turn/pending-proposals.js";
+import type { PendingProposal } from "../src/turn/authorization/pending-proposals.js";
 import type { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { countingController, NARRATION, sessionWith, stepNarrator, withRunTurn } from "./block4-fixtures.js";
 

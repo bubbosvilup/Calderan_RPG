@@ -11,7 +11,7 @@ import { TurnCoordinator, type TurnDebugRecord } from "../turn/turn-coordinator.
 import type { RecentContextMode } from "../turn/context/prompt-builder.js";
 import type { TurnDiagnosticsSink } from "../turn/turn-diagnostics.js";
 import type { ProviderRetryPolicy } from "../llm/retry.js";
-import type { EvidenceMode } from "../turn/evidence-authorization.js";
+import type { EvidenceMode } from "../turn/authorization/evidence-authorization.js";
 import { NARRATOR_OUTPUT_TOKENS, selectedModels } from "../app/provider-config.js";
 export { NARRATOR_OUTPUT_TOKENS, selectedModels };
 /** Evaluation-only narrator substitution. The controller model, policy and clients are never derived from these fields. */

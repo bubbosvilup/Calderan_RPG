@@ -1,9 +1,9 @@
-import type { TurnContext } from "./context/context-builder.js";
-import { actionSegments, sceneDirection } from "./natural-actions.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { actionSegments, sceneDirection } from "../natural-actions.js";
 import type { PhysicalCondition } from "./physical-interaction.js";
-import { DEPART_ACT } from "./narration-facts/index.js";
-import { GATES } from "./language/gates.js";
-import { escapeRegExp as esc } from "./language/text.js";
+import { DEPART_ACT } from "../narration-facts/index.js";
+import { GATES } from "../language/gates.js";
+import { escapeRegExp as esc } from "../language/text.js";
 
 /**
  * Runtime Continuity Repair 1: PlayerAuthoredEventEvidence. Physical/social facts the player explicitly asserts in the CURRENT

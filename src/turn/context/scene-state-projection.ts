@@ -1,5 +1,5 @@
 import { insideHeartstoneInterior } from "../../campaign/heartstone-recognition.js";
-import { proposalNarratorLine } from "../pending-proposals.js";
+import { proposalNarratorLine } from "../authorization/pending-proposals.js";
 import type { CampaignSnapshot } from "../../campaign/types.js";
 import { characterView } from "../../campaign/projections.js";
 import type { DeepReadonly } from "../../types/readonly.js";

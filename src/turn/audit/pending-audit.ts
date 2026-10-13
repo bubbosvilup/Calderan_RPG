@@ -1,5 +1,5 @@
-import { GATES } from "./language/gates.js";
-import { QUOTED_SPAN_SOURCE, exactNamePattern } from "./language/text.js";
+import { GATES } from "../language/gates.js";
+import { QUOTED_SPAN_SOURCE, exactNamePattern } from "../language/text.js";
 
 /**
  * Consolidation block 5A — the UNCOMMITTED-PENDING-CONFIRMATION guard.

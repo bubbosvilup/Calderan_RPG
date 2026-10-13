@@ -9,7 +9,7 @@ import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext } from "../context/context-builder.js";
 import { contextRelevance } from "./intent.js";
 import { establishNames, type IdentityResolution } from "../name-establishment.js";
-import { contractCommands } from "../character-contracts.js";
+import { contractCommands } from "../authorization/character-contracts.js";
 import { resolvePersonOffers } from "../commerce/person-offers.js";
 import { establishedCanonicalDisclosure } from "../canonical-name-disclosure.js";
 import { partnerNameConflict } from "../partner-identity-guard.js";

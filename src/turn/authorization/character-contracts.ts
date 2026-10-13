@@ -1,10 +1,10 @@
-import type { CampaignCommand, CampaignSnapshot, PremiumContractField } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { TurnContext } from "./context/context-builder.js";
-import { activeNpcPlus, contractSet } from "../campaign/premium-characters.js";
-import { dialogueUnits, presentPeople } from "./narration-facts/index.js";
-import { sentencesOf } from "./language/text.js";
-import { GATES } from "./language/gates.js";
+import type { CampaignCommand, CampaignSnapshot, PremiumContractField } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { activeNpcPlus, contractSet } from "../../campaign/premium-characters.js";
+import { dialogueUnits, presentPeople } from "../narration-facts/index.js";
+import { sentencesOf } from "../language/text.js";
+import { GATES } from "../language/gates.js";
 
 /**
  * NPC+ Pass 2 — explicit stable contracts. A present ACTIVE NPC+ establishes a campaign contract only by an explicit, unhedged, quoted

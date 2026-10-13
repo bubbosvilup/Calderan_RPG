@@ -1,6 +1,6 @@
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { PendingPayload } from "../types/pending-confirmation.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { PendingPayload } from "../../types/pending-confirmation.js";
 
 /**
  * Consolidation block 5A — what the TURN PIPELINE knows about a pending player confirmation.

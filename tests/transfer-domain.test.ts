@@ -8,8 +8,8 @@ import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/sa
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/state-controller.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
-import { authorizeWithEvidence } from "../src/turn/evidence-authorization.js";
+import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
+import { authorizeWithEvidence } from "../src/turn/authorization/evidence-authorization.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

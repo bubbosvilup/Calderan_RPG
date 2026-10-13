@@ -1,5 +1,5 @@
 import type { CampaignSnapshot, TransferDocumentation } from "../../campaign/types.js";
-import type { PendingProposal } from "../pending-proposals.js";
+import type { PendingProposal } from "../authorization/pending-proposals.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { TurnContext } from "../context/context-builder.js";
 import { exactNamePattern } from "../language/text.js";

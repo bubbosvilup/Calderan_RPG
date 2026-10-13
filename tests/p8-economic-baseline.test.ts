@@ -13,7 +13,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { adjustedSilver, economicRelevance, economy, formatSilver, generatePriceIndex, parseEconomy, toSilver } from "../src/economy/economy.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
-import { groundingIssues } from "../src/turn/grounding-audit.js";
+import { groundingIssues } from "../src/turn/audit/grounding-audit.js";
 import { collect, metadata, mockController, mockNarrator } from "./turn-fixtures.js";
 
 /** P8 Economic Baseline V1: one authored anchor table, selective injection, a persisted per-seller index. No price engine. */

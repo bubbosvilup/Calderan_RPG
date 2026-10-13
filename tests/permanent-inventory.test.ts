@@ -6,7 +6,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { carriedItems, carriesItem, equippedItems, equipsItem, hasItem, inventoryItems, itemAt, itemsAtLocation, ownedItems, ownsItem } from "../src/campaign/inventory.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { authorizeCommands } from "../src/turn/command-authorizer.js";
+import { authorizeCommands } from "../src/turn/authorization/command-authorizer.js";
 import { inventoryLines } from "../src/turn/items/item-projection.js";
 import { referencedCharacters } from "../src/turn/context/referenced-characters.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

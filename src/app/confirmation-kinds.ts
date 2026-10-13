@@ -5,7 +5,7 @@ import type { PendingConfirmation, PendingPayload } from "../persistence/pending
 import { personLabelOf } from "./trade-offer-view.js";
 import { playerCharacterProjection } from "./player-character-view.js";
 import { mergeConflicts, retireConflicts } from "../campaign/character-repair.js";
-import { manumissionCommand, manumissionInvalidReason } from "../turn/pending-proposals.js";
+import { manumissionCommand, manumissionInvalidReason } from "../turn/authorization/pending-proposals.js";
 
 /**
  * Consolidation block 5A — a CONFIRMATION KIND: everything the generic PendingConfirmation lifecycle needs to know about one reusable act.

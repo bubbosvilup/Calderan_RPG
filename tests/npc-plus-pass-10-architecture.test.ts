@@ -35,7 +35,7 @@ test("the NPC+ domain modules do not depend on diagnostics or evaluation code", 
 
 test("D-21 prompt-envelope and evidence-result consumers avoid execution-module type back-edges", () => {
   const all=graph();
-  assert.ok(!all.get("src/turn/household-evidence.ts")!.includes("src/turn/evidence-authorization.ts"));
+  assert.ok(!all.get("src/turn/authorization/household-evidence.ts")!.includes("src/turn/authorization/evidence-authorization.ts"));
   for(const file of ["narrator-pack", "context-budget", "context-compaction", "lossless-context-compaction"])
     assert.ok(!all.get(`src/turn/context/${file}.ts`)!.includes("src/turn/stages/narration.ts"));
 });

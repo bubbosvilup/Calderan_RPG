@@ -4,7 +4,7 @@ import { turnFixture } from "../src/dev/turn-fixture.js";
 import { RECEIPT_CORPUS } from "../src/dev/receipt-corpus.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { verifyEvidence } from "../src/turn/evidence-authorization.js";
+import { verifyEvidence } from "../src/turn/authorization/evidence-authorization.js";
 
 /** Pass C, C: the receipt verifier recognises only phrasings that establish a change of possession, and every accepted phrasing has adversarial negatives. */
 function world(carrier = "nicco") {

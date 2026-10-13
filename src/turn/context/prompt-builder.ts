@@ -12,7 +12,7 @@ import type { RecentExchange } from "../recent-conversation.js";
 import type { PlayerIntent } from "../player-intent.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess } from "./narrative-authority.js";
 import { renderSceneParticipants, type SceneParticipantPlan } from "../scene-participants.js";
-import { playerAuthoredEvents } from "../player-authored-events.js";
+import { playerAuthoredEvents } from "../authorization/player-authored-events.js";
 import { attributedSpeech } from "../attributed-speech.js";
 import { deduplicateRecovered, renderNpcPlus, withoutStatedRelationship } from "./npc-plus.js";
 import { economicBlock } from "../commerce/economic-context.js";

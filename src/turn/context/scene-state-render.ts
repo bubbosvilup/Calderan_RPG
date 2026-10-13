@@ -1,4 +1,4 @@
-import { isPhysicalCondition, type PhysicalCondition } from "../physical-interaction.js";
+import { isPhysicalCondition, type PhysicalCondition } from "../authorization/physical-interaction.js";
 import { temporalGrounding } from "../temporal-grounding.js";
 import type { FocusedItem, FocusedSceneState, Ranked } from "./scene-state-focus.js";
 import type { SceneEvent, SceneKnowledgeEntry } from "./scene-state-projection.js";

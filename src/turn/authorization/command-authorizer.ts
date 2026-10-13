@@ -1,11 +1,11 @@
-import { transferRecipient, itemHolder, transferCharacterPresent, validTransferMode } from "../campaign/item-transfer.js";
+import { transferRecipient, itemHolder, transferCharacterPresent, validTransferMode } from "../../campaign/item-transfer.js";
 import { isDeepStrictEqual } from "node:util";
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context/context-builder.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
-import type { AuthorizationDiagnostic } from "./turn-types.js";
+import type { AuthorizationDiagnostic } from "../turn-types.js";
 import { isPhysicalCondition } from "./physical-interaction.js";
 import { ruleMatchesDeclaration } from "./household-evidence.js";
 

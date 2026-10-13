@@ -8,9 +8,9 @@ import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { remainingEventMinutes } from "../src/campaign/projections.js";
 import { retrievalRequired } from "../src/turn/context/retrieval-policy.js";
-import { auditNarration } from "../src/turn/narration-audit.js";
+import { auditNarration } from "../src/turn/audit/narration-audit.js";
 import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
-import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
+import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 
 const world = await loadWorld("data");
 function market() {

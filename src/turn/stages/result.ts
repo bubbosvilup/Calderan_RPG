@@ -8,7 +8,7 @@ import { renderKnowledgeAccess, type NarrativeKnowledgeAccess } from "../context
 import { NARRATOR_SYSTEM } from "../context/prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { EphemeralSceneParticipant, SceneParticipantPlan } from "../scene-participants.js";
-import type { TurnEvidence } from "../turn-evidence.js";
+import type { TurnEvidence } from "../authorization/turn-evidence.js";
 import type { AuthorizationDiagnostic, RetrievalDiagnostic, TurnResult } from "../turn-types.js";
 import type { TurnDelivery } from "./audit.js";
 import type { CommitPlan } from "./commit-preparation.js";

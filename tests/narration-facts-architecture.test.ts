@@ -32,14 +32,14 @@ test("1. one NarrationFactSource per turn: the coordinator creates exactly one a
 });
 
 test("2. movement consumers read the shared movement facts", () => {
-  for (const p of ["src/turn/stages/authorization.ts", "src/turn/narration-audit.ts"]) { assert.ok(usesFacts(p), p); assert.match(code(p), /characterMovementsFromFacts\(facts,/, p); }
+  for (const p of ["src/turn/stages/authorization.ts", "src/turn/audit/narration-audit.ts"]) { assert.ok(usesFacts(p), p); assert.match(code(p), /characterMovementsFromFacts\(facts,/, p); }
   assert.equal(existsSync("src/turn/scene-departure.ts"), false);
 });
 
 test("3. commerce consumers read the shared commerce facts (Actual Offer construction, trade authorization, settlement audit)", () => {
-  for (const p of ["src/turn/commerce/person-offers.ts", "src/turn/narration-audit.ts", "src/turn/commerce/commerce-evidence.ts"]) assert.match(readFileSync(p, "utf8"), /narration-facts\/index\.js/, p);
+  for (const p of ["src/turn/commerce/person-offers.ts", "src/turn/audit/narration-audit.ts", "src/turn/commerce/commerce-evidence.ts"]) assert.match(readFileSync(p, "utf8"), /narration-facts\/index\.js/, p);
   assert.match(code("src/turn/commerce/person-offers.ts"), /sellerQuotes\(|sellerPrices\(|actionableQuote\(/);
-  assert.match(code("src/turn/narration-audit.ts"), /settlementClaims\(/);
+  assert.match(code("src/turn/audit/narration-audit.ts"), /settlementClaims\(/);
 });
 
 test("4. identity / name consumers read the shared identity facts and scene reading", () => {
@@ -60,10 +60,10 @@ test("4. identity / name consumers read the shared identity facts and scene read
  */
 const SPEECH_LIST = /says\??\||\|says\b|\(\?:says/;
 const CLASSIFIED: Readonly<Record<string, string>> = {
-  [join("src", "turn", "evidence-authorization.ts")]: "F: verifies the Controller's cited knowledge-communication evidence ('X tells Nicco that ...'); not narration attribution",
-  [join("src", "turn", "turn-evidence.ts")]: "F: verifies Controller transfer / knowledge evidence quotes; not narration attribution",
-  [join("src", "turn", "grounding-audit.ts")]: "D: 'the law says' inside a legal-procedure claim",
-  [join("src", "turn", "narration-audit.ts")]: "B + D: the player's own speech act in their input; 'everyone says' as a rumor source inside a quote",
+  [join("src", "turn", "authorization", "evidence-authorization.ts")]: "F: verifies the Controller's cited knowledge-communication evidence ('X tells Nicco that ...'); not narration attribution",
+  [join("src", "turn", "authorization", "turn-evidence.ts")]: "F: verifies Controller transfer / knowledge evidence quotes; not narration attribution",
+  [join("src", "turn", "audit", "grounding-audit.ts")]: "D: 'the law says' inside a legal-procedure claim",
+  [join("src", "turn", "audit", "narration-audit.ts")]: "B + D: the player's own speech act in their input; 'everyone says' as a rumor source inside a quote",
   [join("src", "turn", "mannerism-portrayal-gate.ts")]: "D: optional Mannerism diagnostic for a named observer's habit remark; never authority",
 };
 test("5. speaker attribution exists only in the fact layer (every other speech-verb list is classified and attributes nobody)", () => {
@@ -80,12 +80,12 @@ test("6. recipient attribution exists only in the fact layer; commerce consumes 
 });
 
 test("7. targeted audit consumers read the shared facts of the same source (no private dialogue projection)", () => {
-  const audit = code("src/turn/narration-audit.ts");
+  const audit = code("src/turn/audit/narration-audit.ts");
   assert.match(audit, /const source = input\.facts \?\? createFactSource\(/); assert.match(audit, /const facts = source\.of\(narration\)/);
   assert.match(audit, /attributedSpeech\(narration, context, \{ units: facts\.dialogue/);
   assert.match(audit, /source\.scene\(/); assert.match(audit, /partnerNameConflict\(\{[^}]*facts: source/);
-  assert.ok(!imports("src/turn/narration-audit.ts").some(s => /prompt-builder/.test(s)), "the audit does not read the prompt projection");
-  for (const p of ["src/turn/household-evidence.ts", "src/turn/context/prompt-builder.ts"]) assert.match(code(p), /attributedSpeech\(/, p);
+  assert.ok(!imports("src/turn/audit/narration-audit.ts").some(s => /prompt-builder/.test(s)), "the audit does not read the prompt projection");
+  for (const p of ["src/turn/authorization/household-evidence.ts", "src/turn/context/prompt-builder.ts"]) assert.match(code(p), /attributedSpeech\(/, p);
 });
 
 test("8. no banned legacy names: the duplicate readers are deleted and nothing refers to them", () => {

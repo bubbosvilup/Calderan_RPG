@@ -1,34 +1,34 @@
-import { transferRecipient } from "../campaign/item-transfer.js";
+import { transferRecipient } from "../../campaign/item-transfer.js";
 import { isDeepStrictEqual } from "node:util";
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context/context-builder.js";
-import type { TurnEvidence } from "./turn-evidence.js";
-import type { AuthorizationDiagnostic } from "./turn-types.js";
-import type { NarrativeKnowledgeAccess } from "./context/narrative-authority.js";
-import type { SceneParticipantPlan } from "./scene-participants.js";
-import { attributedSpeech } from "./attributed-speech.js";
-import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "./physical-interaction.js";
-import { verifyEvidence } from "./evidence-authorization.js";
-import { itemTerms } from "./items/item-reference.js";
-import type { GenerationRequest } from "../llm/types.js";
-import { GATES } from "./language/gates.js";
-import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf } from "./language/text.js";
-import type { RecentExchange } from "./recent-conversation.js";
-import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
-import { settlementClaims } from "./commerce/commerce-evidence.js";
-import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, locationClaimsFromFacts, presenceClaimsFromFacts } from "./movement/movement-evidence.js";
-import { createFactSource, type EntityArrivedFact, type NarrationFactSource, type NarrationFacts, participatesInScene } from "./narration-facts/index.js";
-import { movementFactScope } from "./movement/movement-scope.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context/context-builder.js";
+import type { TurnEvidence } from "../authorization/turn-evidence.js";
+import type { AuthorizationDiagnostic } from "../turn-types.js";
+import type { NarrativeKnowledgeAccess } from "../context/narrative-authority.js";
+import type { SceneParticipantPlan } from "../scene-participants.js";
+import { attributedSpeech } from "../attributed-speech.js";
+import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "../authorization/physical-interaction.js";
+import { verifyEvidence } from "../authorization/evidence-authorization.js";
+import { itemTerms } from "../items/item-reference.js";
+import type { GenerationRequest } from "../../llm/types.js";
+import { GATES } from "../language/gates.js";
+import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf } from "../language/text.js";
+import type { RecentExchange } from "../recent-conversation.js";
+import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "../authorization/player-authored-events.js";
+import { settlementClaims } from "../commerce/commerce-evidence.js";
+import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, locationClaimsFromFacts, presenceClaimsFromFacts } from "../movement/movement-evidence.js";
+import { createFactSource, type EntityArrivedFact, type NarrationFactSource, type NarrationFacts, participatesInScene } from "../narration-facts/index.js";
+import { movementFactScope } from "../movement/movement-scope.js";
 import { groundingIssues } from "./grounding-audit.js";
-import { asksName } from "./identity-request.js";
-import { partnerNameConflict } from "./partner-identity-guard.js";
-import { resolveDestination } from "./natural-actions.js";
-import { playerDestination, resolvePlayerTravel } from "./movement/player-travel.js";
-import { characterLocation, persistentCharactersAt } from "./movement/character-movement.js";
-import { followCandidates, followerIds } from "./movement/follow-candidates.js";
-import { temporalGrounding } from "./temporal-grounding.js";
+import { asksName } from "../identity-request.js";
+import { partnerNameConflict } from "../partner-identity-guard.js";
+import { resolveDestination } from "../natural-actions.js";
+import { playerDestination, resolvePlayerTravel } from "../movement/player-travel.js";
+import { characterLocation, persistentCharactersAt } from "../movement/character-movement.js";
+import { followCandidates, followerIds } from "../movement/follow-candidates.js";
+import { temporalGrounding } from "../temporal-grounding.js";
 import { pendingClaims } from "./pending-audit.js";
 
 /**
@@ -67,7 +67,7 @@ export interface NarrationAuditInput {
   /** The advance comes from the player's own wait/sleep/nap/rest request, so an exact narrated duration must match it. */
   readonly temporal_request?: boolean;
   /** Block 5A: proposals awaiting the player's explicit confirmation. Narration may not present them as completed. */
-  readonly pending?: readonly import("./pending-proposals.js").PendingProposal[];
+  readonly pending?: readonly import("../authorization/pending-proposals.js").PendingProposal[];
   /** The turn's shared NarrationFacts source (authorization read the same one). Omitted: one is built from the prepared state. */
   readonly facts?: NarrationFactSource;
   /** The state before this turn: who the engine actually moved is the difference to `prepared`. Omitted: only committed move_character commands count. */

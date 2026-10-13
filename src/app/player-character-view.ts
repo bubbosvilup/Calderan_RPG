@@ -7,7 +7,7 @@ import type { KnowledgeAccess } from "../types/entities.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { characterPublicProfile } from "../world/character-contract.js";
-import { isPhysicalCondition } from "../turn/physical-interaction.js";
+import { isPhysicalCondition } from "../turn/authorization/physical-interaction.js";
 import { escapeRegExp } from "../turn/language/text.js";
 import { isVisible } from "../retrieval/policy.js";
 import { appearanceFingerprint, composePortraitPrompt, portraitDetails, portraitPoseOptions, type PortraitKind, type PortraitPose } from "../campaign/portrait-prompt.js";

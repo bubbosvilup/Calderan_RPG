@@ -1,8 +1,8 @@
-import type { CampaignCommand, RelationshipDimension } from "../campaign/types.js";
-import type { TurnContext } from "./context/context-builder.js";
-import { attributedSpeech } from "./attributed-speech.js";
-import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
-import { GATES } from "./language/gates.js";
+import type { CampaignCommand, RelationshipDimension } from "../../campaign/types.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { attributedSpeech } from "../attributed-speech.js";
+import { blankQuotes, escapeRegExp as esc, sentencesOf } from "../language/text.js";
+import { GATES } from "../language/gates.js";
 import type { EvidenceCheck } from "./evidence-check.js";
 
 /**

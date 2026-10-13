@@ -12,8 +12,8 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { collect, mockNarrator, mockController } from "./turn-fixtures.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { authorizeWithEvidence } from "../src/turn/evidence-authorization.js";
-import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
+import { authorizeWithEvidence } from "../src/turn/authorization/evidence-authorization.js";
+import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 
 const docs = JSON.parse(await readFile("tests/fixtures/scene-continuity/fixture-world.json", "utf8"));
 const world = new WorldStore(docs);

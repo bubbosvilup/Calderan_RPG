@@ -4,14 +4,14 @@ import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js"
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import type { TurnContext } from "../context/context-builder.js";
-import { auditNarration, outcomeLines, redactNarration, revisionRequest, type AuditIssue } from "../narration-audit.js";
+import { auditNarration, outcomeLines, redactNarration, revisionRequest, type AuditIssue } from "../audit/narration-audit.js";
 import { projectKnowledgeAccess, type NarrativeKnowledgeAccess } from "../context/narrative-authority.js";
 import { relevanceSignals } from "../context/prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 import { characterView } from "../../campaign/projections.js";
 import { escapeRegExp } from "../language/text.js";
-import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
+import { deriveTurnEvidence, type TurnEvidence } from "../authorization/turn-evidence.js";
 import type { NarrationFactSource } from "../narration-facts/index.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
 import type { TurnIntent } from "./intent.js";

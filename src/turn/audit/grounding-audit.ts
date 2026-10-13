@@ -1,6 +1,6 @@
-import type { RecentExchange } from "./recent-conversation.js";
-import { GATES } from "./language/gates.js";
-import { CARDINAL_WORD_ALTERNATION, numberWordValue } from "./language/numbers.js";
+import type { RecentExchange } from "../recent-conversation.js";
+import { GATES } from "../language/gates.js";
+import { CARDINAL_WORD_ALTERNATION, numberWordValue } from "../language/numbers.js";
 
 /**
  * Runtime Continuity Repair 1: narrow grounding guards for unsupported micro-facts that survived delivery in the long-form trial.

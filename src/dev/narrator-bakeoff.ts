@@ -13,7 +13,7 @@ import { buildTurnContext, type TurnContext } from "../turn/context/context-buil
 import { playerIntent } from "../turn/player-intent.js";
 import { retrieveForTurn } from "../turn/context/retrieval-policy.js";
 import { buildNarratorPrompt, NARRATOR_SYSTEM, NARRATOR_STATE_PRECEDENCE } from "../turn/context/prompt-builder.js";
-import { authorizeCommands } from "../turn/command-authorizer.js";
+import { authorizeCommands } from "../turn/authorization/command-authorizer.js";
 import type { RecentExchange } from "../turn/recent-conversation.js";
 import type { RetrievalDiagnostic, TurnResult } from "../turn/turn-types.js";
 import { withHistoricalContext } from "./historical-context.js";
