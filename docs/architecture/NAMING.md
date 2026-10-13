@@ -1,6 +1,6 @@
 # Naming conventions
 
-Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/`. Overall status: [Current state](../CURRENT_STATE.md).
+Status: ACTIVE reference. Last reconciled: 2026-10-13 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/`. Overall status: [Current state](../CURRENT_STATE.md).
 
 Entity IDs match `^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$`: lowercase snake_case,
 no spaces, readable, globally unique across all entity types. File names are
@@ -18,6 +18,15 @@ alternative lookup names, not replacement IDs. Aliases need not be unique: searc
 must handle ambiguity. Canonical references always use IDs, not names or aliases.
 Prefer canonical names unique within their practical namespace. Ambiguous aliases
 return multiple candidates; never silently choose an arbitrary entity.
+
+**Reserved canonical handles (2026-10-13, REPO-12 decision).** Canonical character names, display names and aliases are reserved identity
+handles. A non-canonical person, provisional or persistent, never acquires an exact canonical name or alias through self-introduction or name
+disclosure; the whole name a self-introduction gives counts ("My name is Doran Hale" claims the alias "Doran Hale"). The collision fails closed
+for the name establishment only: the person keeps the same id and stays unnamed, nothing merges, the canonical character is not renamed, nothing
+is created, and nobody infers that the speaker "must really be" the canonical character. A canonical character's own name is never a
+collision. One rule (`src/world/canonical-names.ts`, applied by `src/turn/canonical-name-reservation.ts`) covers both sides of
+materialization: the provisional reading and Keep track before it, late naming of a persistent record after it (skip reason
+`canonical_name_reserved`; Keep track block `canonical_name`). A shared first name ("Mira" vs Mira Thorne) is not an exact handle.
 
 ## Location hierarchy and granularity
 

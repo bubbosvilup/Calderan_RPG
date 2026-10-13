@@ -6,8 +6,9 @@ import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { linkedParticipant, materializeProvisional, nameSourceOf } from "./provisional-people.js";
-import { readScene, type NarratedPerson } from "./narration-facts/index.js";
+import { createFactSource, nameFilter, readScene, type NarratedPerson } from "./narration-facts/index.js";
 import { asksName } from "./identity-request.js";
+import { claimsReservedHandle } from "./canonical-name-reservation.js";
 
 /**
  * Block 12 (KPG-1): [ Keep track ], the player's explicit, deterministic action that makes ONE provisional person of the current scene a persistent
@@ -94,8 +95,9 @@ export function trackablePeople(i: TrackableInput): readonly TrackablePerson[] {
   const offered = new Set((snapshot.trade_offers ?? []).filter(o => o.status === "active" && o.subject.kind === "person")
     .flatMap(o => o.subject.kind === "person" ? o.subject.plan.flatMap(c => c.kind === "register_character" && c.character.origin_snapshot?.ephemeral_ref ? [c.character.origin_snapshot.ephemeral_ref] : []) : []));
   const persistentNames = new Set(snapshot.characters.filter(c => c.id !== "nicco" && !c.retirement && c.profile.name).map(c => c.profile.name!.toLowerCase()));
-  // A canon figure's exact name (the scene reading already refuses it; this keeps the action fail-closed on its own).
-  const canon = new Set(i.world.listEntities().filter(e => e.type === "character" && e.name).map(e => e.name!.toLowerCase()));
+  // Reserved canonical names and aliases, the same rule as name establishment, over the identity facts of every narration of the scene.
+  const source = createFactSource({ movers: [], context: i.context, names_ok: nameFilter(i.world), player_input: i.recent.at(-1)?.player ?? "", asks_name: asksName });
+  const identity = i.recent.flatMap(e => e.narration ? source.of(e.narration).identity : []);
   const display = out.map(o => o.name ?? capital(o.person.label.replace(/^the\s+/i, "")));
   return out.map((o, k) => {
     const sameLabel = display.filter(d => d === display[k]).length > 1;
@@ -105,7 +107,7 @@ export function trackablePeople(i: TrackableInput): readonly TrackablePerson[] {
     const name = o.name?.toLowerCase();
     const blocked: KeepBlock | undefined = offered.has(o.ref) ? "offer_subject"
       : name && out.filter(x => x.name?.toLowerCase() === name).length > 1 ? "ambiguous_name"
-      : name && canon.has(name) ? "canonical_name"
+      : o.name && claimsReservedHandle(i.world, identity, o.name) ? "canonical_name" // a reserved canonical name or alias
       : name && persistentNames.has(name) ? "same_name_persistent" : undefined;
     return { ...o, token: keepToken(snapshot.campaign_id, o.ref, o.location_id), label, ...(blocked ? { blocked } : {}) };
   });

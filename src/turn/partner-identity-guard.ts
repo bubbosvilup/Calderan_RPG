@@ -6,6 +6,7 @@ import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
 import { boundPartner, noCompetingSpeaker } from "./canonical-name-disclosure.js";
 import { castingOptions } from "./scene-participants.js";
+import { compatible, headNoun } from "./canonical-interaction-targets.js";
 import { NAME_REQUEST, SELF_INTRODUCTION, asksName } from "./identity-request.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { narratedSpeakerPartner } from "./foreground-binding.js";
@@ -47,16 +48,24 @@ export function partnerNameConflict(i: { readonly context: TurnContext; readonly
   const source = i.facts ?? createFactSource({ movers: [], context: i.context, names_ok: nameFilter(i.world), player_input: i.player_input, asks_name: asksName });
   const reading = source.scene([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", ...(location_id ? { location_id } : {}) }], i.context, i.world,
     { campaign_names: new Set(i.snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
-  // Only the actor's OWN self-introduction in this exchange: a name another person presents ("That's Brenna") is never the partner's.
-  const own = reading.persons.filter(p => p.name && !p.character_id && p.name !== canonical_name
+  // Who the partner may be: the partner itself, or a scene-local description the partner fits ("other:man" for Korvin, never "other:woman").
+  const fits = (key: string) => key === partner || (key.startsWith("other:") && compatible(i.context, partner, headNoun(key.slice(6))));
+  // Only the actor's OWN self-introduction in this exchange: a name another person presents ("That's Brenna") is never the partner's, and
+  // neither is a narrated person whose speaker keys the partner cannot be (REPO-12).
+  const own = reading.persons.filter(p => p.name && !p.character_id && p.name !== canonical_name && p.keys.every(fits)
     && p.introductions.some(x => x.exchange === reading.latest) && p.introductions.filter(x => x.exchange === reading.latest).every(x => x.kind === "self"));
   const names = own.map(p => p.name!), evidence = own.flatMap(p => p.introductions.filter(x => x.exchange === reading.latest).map(x => x.evidence));
   const ok = nameFilter(i.world), known = new Set(i.context.characters.flatMap(c => [c.profile.name, ...(c.profile.aliases ?? [])].filter((n): n is string => !!n).flatMap(n => n.toLowerCase().split(/\s+/))));
-  // Spoken self-introductions of the delivered narration, attributed or not: noCompetingSpeaker already established that no other person is their
-  // speaker. Answering a name question, the OPENING spoken line may also be (or begin with) the bare name ("Marden. What are you after?").
+  // Spoken self-introductions of the delivered narration that may be the PARTNER's own. The fact subject is the speaker NarrationFacts
+  // attributed the line to: a line whose speaker is another present character, or a described person the partner cannot be ("The woman
+  // lifts her head. \"My name is Brenna,\" she whispers." with Korvin as the partner), is that person's self-introduction, never a rename
+  // of the partner (REPO-12). An unattributed line, a description the partner fits ("The man leans back") and an ambiguous speaker the
+  // partner may be all still count. Answering a name question, the OPENING spoken line may also be (or begin with) the bare name
+  // ("Marden. What are you after?").
   const identity = source.of(i.delivered).identity, asked = asksName(i.player_input);
+  const mayBePartner = (s: { readonly entity_id?: string; readonly candidates: readonly string[] }) => s.entity_id ? fits(s.entity_id) : !s.candidates.length || s.candidates.some(fits);
   const opening = identity.find(f => f.kind === "speaker_attribution")?.source_text;
-  const spoken = identity.flatMap(f => f.kind === "self_introduction" && f.voice === "speech"
+  const spoken = identity.flatMap(f => f.kind === "self_introduction" && f.voice === "speech" && mayBePartner(f.subject)
     && (f.form === "bare_name" || f.form === "name_first" ? asked && f.source_text === opening : true) ? [f.name] : []);
   // Another person in the narration ("A second man steps forward", a beat that hands the line to someone "beside him", a beat ending in "says:")
   // means the speech is not provably the partner's.
