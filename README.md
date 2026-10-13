@@ -139,10 +139,12 @@ Node.js 22 or later.
 
 ```text
 npm ci
+npm run clean                     # delete .build/ (cross-platform)
 npm run typecheck                 # tsc --noEmit
-npm run build                     # compile to .build/
+npm run build                     # clean, then compile to .build/ (always from empty)
 npm test                          # build, then every offline test (no live LLM or image call)
 npm run benchmark:modern          # modern regression benchmark (offline, scripted providers)
+npm run check:architecture        # read-only module cycle check over src/
 npm run play:ui                   # persistent campaigns at http://127.0.0.1:3000 (Ctrl+C saves and stops)
 npm run play:ui -- --playtest     # disposable session, never saved
 npm run inspect:scene             # offline [CURRENT SCENE] scenarios
@@ -156,7 +158,7 @@ Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:co
 
 ## Testing
 
-`npm test` compiles the project and runs the whole offline suite with faked or injected providers: unit and domain tests, matrix and replay tests, persistence and migration, UI read models, canon validation, determinism guards, and source-level architecture assertions. `npm run benchmark:modern` runs small independent end-to-end scenarios (a real `GameSession`, `TurnCoordinator` and file repository with scripted models) over movement, identity, Keep track, trade, person trade, household, persistence, authority and fail-closed behavior; a scenario marked as a known product gap fails the day it unexpectedly passes. Live certification harnesses live in `src/dev/` and spend credits; they are never run by `npm test`. Details: [Testing](docs/TESTING.md).
+`npm test` compiles the project and runs the whole offline suite with faked or injected providers: unit and domain tests, matrix and replay tests, persistence and migration, UI read models, canon validation, determinism guards, and source-level architecture assertions. `npm run benchmark:modern` runs small independent end-to-end scenarios (a real `GameSession`, `TurnCoordinator` and file repository with scripted models) over movement, identity, Keep track, trade, person trade, household, persistence, authority and fail-closed behavior; a scenario marked as a known product gap fails the day it unexpectedly passes. Live certification harnesses live in `src/dev/` and spend credits; they are never run by `npm test`. `.build/` is disposable compiled output: every build, test run and benchmark starts by deleting it, so a compiled test whose source was removed can never run; local private output goes to the gitignored `artifacts/local/`, and committed evidence lives under `docs/evaluations/`. Details: [Testing](docs/TESTING.md).
 
 ## Current Status
 

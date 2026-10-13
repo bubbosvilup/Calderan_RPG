@@ -11,7 +11,7 @@ import {captureProductionReflection} from '../.build/src/turn/structured-reflect
 import {recoverNpcContext} from '../.build/src/turn/npc-plus.js';
 import {OpenRouterClient} from '../.build/src/llm/openrouter/client.js';
 import {exactBenchmarkCredential,benchmarkAuthentication} from '../.build/src/dev/reflection-benchmark.js';
-const dir='saves/d09-final-campaign-soak';await mkdir(dir,{recursive:true});
+const dir='docs/evaluations/d09-reflection/evidence/d09-final-campaign-soak';await mkdir(dir,{recursive:true});
 const json=(file,value)=>writeFile(`${dir}/${file}`,JSON.stringify(value,null,2)+'\n');
 const hash=value=>createHash('sha256').update(typeof value==='string'?value:JSON.stringify(value)).digest('hex');
 const clean=value=>Array.isArray(value)?value.map(clean):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).filter(([k])=>!['reasoning','reasoning_details','reasoning_content'].includes(k)).map(([k,v])=>[k,clean(v)])):value;

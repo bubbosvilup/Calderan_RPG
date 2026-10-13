@@ -15,7 +15,7 @@ import {npcPlusFragments} from '../.build/src/turn/npc-plus.js';
 import {OpenRouterClient} from '../.build/src/llm/openrouter/client.js';
 import {exactBenchmarkCredential} from '../.build/src/dev/reflection-benchmark.js';
 
-const dir='saves/d09-final-relationship-ablation', iris='campaign_character_iris';
+const dir='docs/evaluations/d09-reflection/evidence/d09-final-relationship-ablation', iris='campaign_character_iris';
 await mkdir(dir,{recursive:true});
 const clean=v=>Array.isArray(v)?v.map(clean):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).filter(([k])=>!['reasoning','reasoning_details','reasoning_content'].includes(k)).map(([k,x])=>[k,clean(x)])):v;
 const sha=v=>createHash('sha256').update(typeof v==='string'||Buffer.isBuffer(v)?v:JSON.stringify(v)).digest('hex');
@@ -23,10 +23,10 @@ const save=(p,v)=>writeFile(`${dir}/${p}`,JSON.stringify(v,null,2)+'\n');
 // Exclusive guard rejects reruns even if the previous process failed.
 await writeFile(`${dir}/started.json`,JSON.stringify({timestamp:new Date().toISOString(),submitted_cap:8})+'\n',{flag:'wx'});
 const store=await EvidenceArtifactStore.open(dir,{mark_pending_on_resume:true});
-const frozenPlan=JSON.parse(await readFile('saves/d09-qualifying-reflection-eligibility/conditional-gameplay-plan.json','utf8'));
+const frozenPlan=JSON.parse(await readFile('docs/evaluations/d09-reflection/evidence/d09-qualifying-reflection-eligibility/conditional-gameplay-plan.json','utf8'));
 const prompts=frozenPlan.ordered_prompts, later=frozenPlan.later_prompt;
 const sources={};for(const p of execFileSync('git',['ls-files','src','data'],{encoding:'utf8'}).trim().split(/\r?\n/))sources[p]=sha(await readFile(p));
-await save('plan-freeze.json',{...frozenPlan,status:'AUTHORIZED LIVE RUN',target_finalized_turns:6,maximum_submitted_attempts:8,ablation_narrator_calls:2,blind_reviewer_calls:1,production_sources:sources,eligibility_plan_sha:sha(await readFile('saves/d09-qualifying-reflection-eligibility/conditional-gameplay-plan.json')),post_setup_direct_commands:false});
+await save('plan-freeze.json',{...frozenPlan,status:'AUTHORIZED LIVE RUN',target_finalized_turns:6,maximum_submitted_attempts:8,ablation_narrator_calls:2,blind_reviewer_calls:1,production_sources:sources,eligibility_plan_sha:sha(await readFile('docs/evaluations/d09-reflection/evidence/d09-qualifying-reflection-eligibility/conditional-gameplay-plan.json')),post_setup_direct_commands:false});
 process.env.OPENROUTER_API_KEY=exactBenchmarkCredential(process.env.OPENROUTER_API_KEY!==undefined?{env:process.env.OPENROUTER_API_KEY}:{fileText:await readFile('APIKEY.env','utf8')});
 const network=globalThis.fetch, ledger=[], observations=[], captures=[];
 let deps,world,campaign,coordinator,session,turn=0,phase='gameplay',input,decision,withBody,withoutBody,withText,withoutText,withSent=0,withoutSent=0,reviewSent=0;

@@ -1,22 +1,21 @@
-// Browser validation for Actual Offer V1 (dev only, offline: zero live provider calls). Needs the compiled build (.build) and a Playwright install; adjust the absolute paths below.
+// Browser validation for Actual Offer V1 (dev only, offline: zero live provider calls). Needs the compiled build (.build) and a Playwright install; paths come from scripts/lib/browser-env.mjs.
 // The REAL turn pipeline runs behind the UI with a scripted Narrator and a scripted Controller, so every offer here is created exactly as in play; settlement happens only on a browser click.
-// Screenshots land in /tmp/claude-0/browser/offer-*.png.
-import pw from "/opt/node-tools/node_modules/playwright/index.js"; const { chromium } = pw;
+// Screenshots land in artifacts/local/browser/actual-offer/ (gitignored).
+import { DATA, fromBuild, launchBrowser, shotsDir } from "./lib/browser-env.mjs";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-const B = "/home/user/Calderan_RPG/.build/src";
-const { loadWorld } = await import(`${B}/world/loader.js`);
-const { createOpeningCampaign } = await import(`${B}/campaign/opening-state.js`);
-const { learnCanonicalName } = await import(`${B}/campaign/identity-knowledge.js`);
-const { GameSession } = await import(`${B}/app/game-session.js`);
-const { FileCampaignRepository } = await import(`${B}/persistence/campaign-repository.js`);
-const { createPlaytestServer } = await import(`${B}/ui/server.js`);
-const { TurnCoordinator } = await import(`${B}/turn/turn-coordinator.js`);
-const { RetrievalService } = await import(`${B}/retrieval/retrieval-service.js`);
-const { HybridSearch } = await import(`${B}/retrieval/hybrid-search.js`);
-const world = await loadWorld("/home/user/Calderan_RPG/data");
+const { loadWorld } = await fromBuild("src/world/loader.js");
+const { createOpeningCampaign } = await fromBuild("src/campaign/opening-state.js");
+const { learnCanonicalName } = await fromBuild("src/campaign/identity-knowledge.js");
+const { GameSession } = await fromBuild("src/app/game-session.js");
+const { FileCampaignRepository } = await fromBuild("src/persistence/campaign-repository.js");
+const { createPlaytestServer } = await fromBuild("src/ui/server.js");
+const { TurnCoordinator } = await fromBuild("src/turn/turn-coordinator.js");
+const { RetrievalService } = await fromBuild("src/retrieval/retrieval-service.js");
+const { HybridSearch } = await fromBuild("src/retrieval/hybrid-search.js");
+const world = await loadWorld(DATA);
 const MARKET = "calderan_slave_market", BRENNA = "campaign_character_brenna";
 const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 1, elapsed_total_ms: 2 } };
 
@@ -42,7 +41,8 @@ const session = loaded.session;
 const server = createPlaytestServer(session); server.listen(0, "127.0.0.1"); await once(server, "listening");
 const url = `http://127.0.0.1:${server.address().port}/`;
 
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome", args: ["--no-sandbox"] });
+const SHOTS = await shotsDir("actual-offer");
+const browser = await launchBrowser();
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const results = []; const ok = (name, cond) => { results.push([cond ? "PASS" : "FAIL", name]); console.log(cond ? "PASS" : "FAIL", name); };
 let navigations = 0; page.on("framenavigated", f => { if (f === page.mainFrame()) navigations++; });
@@ -72,7 +72,7 @@ const HALBERD = price => `Korvin lifts a halberd from the weapon rack and sets i
 // ============================================================ A. BUY Halberd 15g
 await say("Korvin, how much for the halberd?", HALBERD("Fifteen"), [buy(15, "Halberd")], ["Fifteen gold for the halberd."]);
 await page.waitForSelector(".trade-card");
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-A1-buy-card.png" });
+await page.screenshot({ path: `${SHOTS}/offer-A1-buy-card.png` });
 ok("A1 a BUY card appears inline after the Narrator response", /▼ BUY/.test(await cardText()) && /Halberd/.test(await cardText()) && /15 gold/.test(await cardText()));
 ok("A2 no money moved and no item exists before the click", (await gold()) === 500 && !(await names()).includes("Halberd"));
 await say("Deal. *pays him fifteen gold*", "Korvin pockets nothing yet, tapping the counter and waiting for the coins.");
@@ -80,7 +80,7 @@ ok("A3 typing 'Deal' / '*pays*' settles nothing", (await gold()) === 500 && !(aw
 const nav0 = navigations;
 await page.click(".trade-accept");
 await page.waitForFunction(() => document.querySelector(".trade-receipt"));
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-A2-receipt.png" });
+await page.screenshot({ path: `${SHOTS}/offer-A2-receipt.png` });
 ok("A4 funds decrease by exactly 15", (await gold()) === 485);
 ok("A5 the Halberd is in the Inventory (carried, one item)", (await names()).filter(n => n === "Halberd").length === 1);
 ok("A6 no page reload", navigations === nav0 && (await card().count()) === 0 && /Bought Halberd for 15 gold/.test(await page.locator(".trade-region").innerText()));
@@ -90,7 +90,7 @@ ok("A7 the request carried only the offer ref and the revision", acceptPosts.len
 const sword = { kind: "propose_trade_offer", direction: "sell", price_gold: 5, counterparty: korvin, subject: { kind: "items", item_ids: [(await inventory()).items.find(i => i.name === "Old Rusty Sword").id] } };
 await say("*offers the old sword* Would you buy this?", `Korvin turns the Old Rusty Sword over in his hands. "Five gold for it, no more."`, [sword], ["Five gold for it, no more."]);
 await page.waitForSelector(".trade-card");
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-B1-sell-card.png" });
+await page.screenshot({ path: `${SHOTS}/offer-B1-sell-card.png` });
 ok("B1 a SELL card (▲ SELL, distinct from BUY by text and icon)", /▲ SELL/.test(await cardText()) && !/▼ BUY/.test(await cardText()) && /Old Rusty Sword/.test(await cardText()));
 ok("B2 nothing sold before the click", (await names()).includes("Old Rusty Sword") && (await gold()) === 485);
 await page.click(".trade-accept"); await page.waitForFunction(() => /Sold Old Rusty Sword/.test(document.querySelector(".trade-region")?.innerText ?? ""));
@@ -102,7 +102,7 @@ const quote = 'Korvin taps the cage. "Five." He glances at the woman behind the 
 await say("*looks at the woman in the cage* Korvin, what about her?", quote);
 await page.waitForSelector(".trade-card");
 const personCard = await cardText();
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-C1-person-card.png" });
+await page.screenshot({ path: `${SHOTS}/offer-C1-person-card.png` });
 ok("C1 a person offer shows 'Slave' with only a safe visible descriptor (Red-haired Slave)", /♟ Person/.test(personCard) && /Red-haired Slave/.test(personCard) && /5 gold/.test(personCard));
 const pageText = await page.evaluate(() => document.body.innerText + document.documentElement.innerHTML);
 ok("C2 the hidden name, ids and avatar tokens appear nowhere in the page or in any state/stream the browser received", !/Brenna/i.test(pageText) && !bodies.some(b => /Brenna/i.test(b) || /campaign_character_brenna/.test(b)) && !/canon-avatar|avatar/i.test(personCard));
@@ -111,7 +111,7 @@ const ref0 = await card().first().getAttribute("data-trade-ref");
 // ============================================================ D. legitimate name reveal re-renders the SAME offer
 await say("What is your name?", 'The woman lifts her head from the straw. "My name is Brenna," she whispers.');
 await page.waitForFunction(() => /Brenna/.test(document.querySelector(".trade-card")?.innerText ?? ""));
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-D1-revealed.png" });
+await page.screenshot({ path: `${SHOTS}/offer-D1-revealed.png` });
 const revealed = await cardText();
 ok("D1 after the reveal the same offer re-renders as Brenna", /Brenna/.test(revealed) && !/Slave/.test(revealed));
 ok("D2 same offer ref, no second card, no alias", (await card().count()) === 1 && (await card().first().getAttribute("data-trade-ref")) === ref0);
@@ -126,7 +126,7 @@ const oldRef = await card().first().getAttribute("data-trade-ref");
 ok("E1 the first quote (20 gold) is the standing offer", /20 gold/.test(await cardText()));
 await say("Fifteen.", `Korvin sighs. "Fifteen gold for the shield, final."`, [buy(15, "Shield")], ["Fifteen gold for the shield, final."]);
 await page.waitForFunction(() => /15 gold/.test(document.querySelector(".trade-card")?.innerText ?? ""));
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-E1-superseded.png" });
+await page.screenshot({ path: `${SHOTS}/offer-E1-superseded.png` });
 ok("E2 the new quote (15 gold) replaces the card; there is a single card and no Counteroffer button", (await card().count()) === 1 && !/counter/i.test(await page.locator(".trade-region").innerText()) && (await page.getByRole("button", { name: /counter/i }).count()) === 0);
 const stale = await page.evaluate(async ref => { const s = await (await fetch("/api/session")).json(); const r = await fetch("/api/trade/accept", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref, expected_revision: s.revision }) }); return { status: r.status, body: await r.json() }; }, oldRef);
 ok("E3 the old 20-gold offer is not acceptable (rejected, nothing settles)", stale.status === 422 && stale.body.ok === false && (await gold()) === 485 && !(await names()).includes("Shield"));
@@ -138,7 +138,7 @@ await page.evaluate(() => 0);
 await say("The helm?", `Korvin lifts a steel helm. "Nine hundred gold for the helm."`, [buy(900, "Steel Helm")], ["Nine hundred gold for the helm."]);
 await page.waitForSelector(".trade-card");
 ok("F1 an unaffordable BUY disables Accept and explains the purse", (await page.locator(".trade-accept").isDisabled()) && /Not enough gold/.test(await cardText()));
-await page.screenshot({ path: "/tmp/claude-0/browser/offer-F1-insufficient.png" });
+await page.screenshot({ path: `${SHOTS}/offer-F1-insufficient.png` });
 
 await browser.close(); server.close();
 const fails = results.filter(r => r[0] === "FAIL"); console.log(`\n${results.length - fails.length}/${results.length} checks passed`); process.exit(fails.length ? 1 : 0);

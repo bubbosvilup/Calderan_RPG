@@ -4,7 +4,7 @@ import { parseControllerEvidenceProposal, parseControllerProposal, normalizeCont
 // Receipt replay only: no clients, providers, credentials or network.
 const hash=x=>createHash('sha256').update(typeof x==='string'?x:JSON.stringify(x)).digest('hex');
 const schemaHash=hash(CONTROLLER_EVIDENCE_SCHEMA), rows=[];
-for(const dir of ['saves/d09-final-campaign-soak','saves/d09-final-matched-ablation','saves/d09-final-relationship-ablation']) {
+for(const dir of ['docs/evaluations/d09-reflection/evidence/d09-final-campaign-soak','docs/evaluations/d09-reflection/evidence/d09-final-matched-ablation','docs/evaluations/d09-reflection/evidence/d09-final-relationship-ablation']) {
  for(const name of readdirSync(dir).filter(n=>/^receipt-\d+\.json$/.test(n)).sort()) {
   const path=`${dir}/${name}`, receipt=JSON.parse(readFileSync(path,'utf8').replace(/^\uFEFF/,''));if(receipt.role!=='controller')continue;
   const requestPath=`${dir}/${name.replace('receipt','request')}`;

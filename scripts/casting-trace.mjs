@@ -1,13 +1,15 @@
 // Evaluation only (Canonical NPC Casting / Ephemeral Duplication audit). Deterministic, offline: real data/ world, real
 // TurnCoordinator, scripted narration, no controller commands. Records each pipeline stage per turn.
-// Usage: node scripts/casting-trace.mjs <out.json>
-import { writeFile } from 'node:fs/promises';
+// Usage: npm run build && node scripts/casting-trace.mjs [out.json]   (default artifacts/local/casting-trace.json)
+// Repaired in Repository Cleanup A: the scene reading moved from the deleted narrated-captives.ts to narration-facts (`readScene`).
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import { loadWorld } from '../.build/src/world/loader.js';
 import { createOpeningCampaign } from '../.build/src/campaign/opening-state.js';
 import { buildTurnContext } from '../.build/src/turn/context-builder.js';
 import { canonicalInteractionTargets } from '../.build/src/turn/canonical-interaction-targets.js';
 import { narratorIdentityGate } from '../.build/src/turn/narrator-identity.js';
-import { readScene } from '../.build/src/turn/narrated-captives.js';
+import { readScene } from '../.build/src/turn/narration-facts/index.js';
 import { castingOptions } from '../.build/src/turn/scene-participants.js';
 import { TurnCoordinator } from '../.build/src/turn/turn-coordinator.js';
 import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
@@ -67,7 +69,8 @@ async function run(c) {
   return { id: c.id, actor: c.actor, turns };
 }
 const out = []; for (const c of CASES) out.push(await run(c));
-await writeFile(process.argv[2], JSON.stringify(out, null, 2));
+const outFile = process.argv[2] ?? 'artifacts/local/casting-trace.json'; await mkdir(dirname(outFile), { recursive: true });
+await writeFile(outFile, JSON.stringify(out, null, 2));
 for (const c of out) {
   const t = c.turns[1];
   console.log(`${c.id} [${c.actor} eligible=${t.actor_eligible} ref=${t.actor_ref}] "${t.input}"\n   targets=${JSON.stringify(t.canonical_targets)} created=${t.plan?.created} focus=${t.plan?.focus} fg=${JSON.stringify(t.narrator_foreground)} disclosure=${t.self_disclosure_offered}\n   participants=${JSON.stringify(t.plan?.participants)} | T3 fg=${JSON.stringify(c.turns[2].narrator_foreground)} T3 targets=${JSON.stringify(c.turns[2].canonical_targets)} | promoted=${JSON.stringify(c.turns.flatMap(x => x.identity?.promoted ?? []).map(p => p.name))} persons=${JSON.stringify(c.turns[2].narrated_persons_after)}`);

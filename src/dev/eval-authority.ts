@@ -50,7 +50,7 @@ const label = flag("--label") ?? "run";
 const recentMode = flag("--recent") as RecentContextMode | undefined;
 if (args.includes("--dry-run")) { console.log(JSON.stringify({ mode, reps, label, sequences, models: selectedModels() }, null, 2)); process.exit(0); }
 if (!process.env.OPENROUTER_API_KEY?.trim()) throw new Error("OPENROUTER_API_KEY is not set");
-const dir = `.build/evaluations/phase-1n-${mode}-${label}-${new Date().toISOString().replace(/[:.]/g, "").slice(0, 15)}`;
+const dir = `artifacts/local/evaluations/phase-1n-${mode}-${label}-${new Date().toISOString().replace(/[:.]/g, "").slice(0, 15)}`;
 await mkdir(dir, { recursive: true });
 await writeFile(`${dir}/manifest.json`, JSON.stringify({ phase: "1N", mode, label, reps, recent_context: recentMode ?? "production default", models: selectedModels(), narrator_system_sha: fingerprint({ system_prompt: NARRATOR_SYSTEM, messages: [] }), sequences, created_at: new Date().toISOString(), note: "production onlineCoordinator + real RecentConversation; turn 1 of contamination sequences is scripted (no provider call)" }, null, 2) + "\n", { flag: "wx" });
 console.log(`\n=== PAID ONLINE EVALUATION (OpenRouter) ===\nPhase 1N ${mode} (${label}): ${sequences.length} sequences x ${reps}; narrator ${selectedModels().narrator}, controller ${selectedModels().controller}\nOutput: ${dir}\n`);

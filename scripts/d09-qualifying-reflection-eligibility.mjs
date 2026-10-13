@@ -21,7 +21,7 @@ import {deriveTurnEvidence} from '../.build/src/turn/turn-evidence.js';
 import {authorizeWithEvidence} from '../.build/src/turn/evidence-authorization.js';
 import {inspectEligibilityCheckpoint} from './d09-eligibility-checkpoint.mjs';
 
-const dir='saves/d09-qualifying-reflection-eligibility'; await mkdir(dir,{recursive:true});
+const dir='docs/evaluations/d09-reflection/evidence/d09-qualifying-reflection-eligibility'; await mkdir(dir,{recursive:true});
 const save=(name,value)=>writeFile(`${dir}/${name}`,JSON.stringify(value,null,2)+'\n');
 const sha=v=>createHash('sha256').update(typeof v==='string'||Buffer.isBuffer(v)?v:JSON.stringify(v)).digest('hex');
 let attemptedNetworkCalls=0;

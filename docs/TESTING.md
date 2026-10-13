@@ -1,17 +1,23 @@
 # Testing
 
-Status: Current. Last reconciled: 2026-10-13 (consolidation block 11 working tree on top of main 7345549). Source of truth: `package.json`, `tests/`, `scripts/`.
+Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup A working tree on top of main 861396c). Source of truth: `package.json`, `tests/`, `scripts/`.
 
 ## Commands
 
 | Command | What it does | Spends credits |
 | --- | --- | --- |
+| `npm run clean` | delete `.build/` and nothing else (`scripts/clean.mjs`, Node only, Windows and Linux) | no |
 | `npm run typecheck` | `tsc --noEmit` | no |
-| `npm run build` | compile to `.build/` | no |
-| `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
-| `npm run benchmark:modern` | build, then the modern regression benchmark (`tests/benchmark/run.js`) | no |
+| `npm run build` | clean, then compile to `.build/` | no |
+| `npm test` | build (so clean), then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
+| `npm run benchmark:modern` | build (so clean), then the modern regression benchmark (`tests/benchmark/run.js`) | no |
+| `npm run check:architecture` | read-only module cycle check over `src/` (`scripts/minor-debt-cycle-check.mjs`; prints the module count, source-level back-edges (type imports included) and runtime back-edges; exit 1 on a runtime import cycle) | no |
 
-Latest recorded result: **3660 tests, 0 failed** on the block 12 working tree on top of `a6d1bcd` (the known flaky `generation lifecycle (npc|player, fullbody|avatar)` family, when it fails alone, is rerun once; the final block 12 run passed 3660/3660 without a rerun). `npm run benchmark:modern`: **55 scenarios, 55 PASS, 0 KNOWN PRODUCT GAPS, 0 FAIL**.
+**Authoritative runs (Repository Cleanup A).** `npm test`, `npm run benchmark:modern` and every `npm run <tool>` that runs compiled code go through `npm run build`, which deletes `.build/` first, exactly once (there are no npm lifecycle hooks). `.build/` is disposable compiled output only, never evidence: a compiled test whose source was deleted is gone before `node --test` discovers tests (`tests/build-discipline.test.ts`). Never run two builds or test runs at the same time in one checkout. Local private output (raw provider responses, private evaluation runs, browser screenshots) goes to the gitignored `artifacts/local/`; committed evidence lives under `docs/evaluations/` (the D09 reflection evidence is in `docs/evaluations/d09-reflection/evidence/`).
+
+**Browser checks.** `scripts/*-browser-check.mjs` are offline real-browser checks. Run `npm run build` first, then `node scripts/<name>-browser-check.mjs`. Paths come from `scripts/lib/browser-env.mjs` (repository-relative); Playwright is loaded from `PLAYWRIGHT_MODULE` or the `playwright` package (`NODE_PATH` works), and `CHROMIUM_PATH` optionally names the browser. Screenshots go to `artifacts/local/browser/<check>/`.
+
+Latest recorded result: **3664 tests, 0 failed** from a clean `.build` on the Repository Cleanup A working tree on top of `861396c` (+4 = `tests/build-discipline.test.ts`; `npm run benchmark:modern` 55/55, 0 known gaps; `npm run check:architecture` 0 runtime cycles). Earlier: **3660 tests, 0 failed** on the block 12 working tree on top of `a6d1bcd` (the known flaky `generation lifecycle (npc|player, fullbody|avatar)` family, when it fails alone, is rerun once; the final block 12 run passed 3660/3660 without a rerun). `npm run benchmark:modern`: **55 scenarios, 55 PASS, 0 KNOWN PRODUCT GAPS, 0 FAIL**.
 
 ## Layers
 

@@ -10,7 +10,7 @@ import {evaluateStructuredOutputE1} from '../.build/src/turn/structured/reflecti
 import {buildTurnContext} from '../.build/src/turn/context-builder.js';
 import {playerIntent} from '../.build/src/turn/player-intent.js';
 import {estimateContextTokens} from '../.build/src/turn/context-budget.js';
-const dir='saves/d09-unique-value-matched-ablation',read=name=>readFile(`${dir}/${name}`,'utf8').then(JSON.parse),save=(name,v)=>writeFile(`${dir}/${name}`,JSON.stringify(v,null,2)+'\n'),sha=v=>createHash('sha256').update(v).digest('hex');
+const dir='docs/evaluations/d09-reflection/evidence/d09-unique-value-matched-ablation',read=name=>readFile(`${dir}/${name}`,'utf8').then(JSON.parse),save=(name,v)=>writeFile(`${dir}/${name}`,JSON.stringify(v,null,2)+'\n'),sha=v=>createHash('sha256').update(v).digest('hex');
 const runnerHash=v=>sha(typeof v==='string'||Buffer.isBuffer(v)?v:JSON.stringify(v));
 const world=await loadWorld('data'),files=await readdir(dir),turns=await Promise.all(files.filter(f=>/^turn-\d+.json$/.test(f)).sort().map(read)),requests=await Promise.all(files.filter(f=>/^request-\d+.json$/.test(f)).sort().map(read)),ledger=await read('ledger.json'),captures=await read('reflection-contexts.json'),plan=await read('plan-freeze.json');
 for(const [file,hash]of Object.entries(plan.production_sources))assert.equal(runnerHash(await readFile(file)),hash,file);

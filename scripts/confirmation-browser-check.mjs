@@ -1,16 +1,13 @@
 // Browser validation for the generic PendingConfirmation card (Block 5A): dev only, offline (mock providers, zero live calls).
-// Needs .build and a Playwright install; adjust the absolute paths. Flow: "I hereby free you, Maren." -> card (nothing changed) -> Cancel -> again -> Confirm
+// Needs .build and a Playwright install; paths come from scripts/lib/browser-env.mjs. Flow: "I hereby free you, Maren." -> card (nothing changed) -> Cancel -> again -> Confirm
 // -> reload -> replay of the original turn request -> rename of the subject re-renders the same card.
-import { createRequire } from "node:module";
+import { fromBuild, launchBrowser } from "./lib/browser-env.mjs";
 import { once } from "node:events";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-const require = createRequire("/opt/node-tools/");
-const { chromium } = require("playwright");
-const root = process.env.BUILD_ROOT ?? "/home/user/Calderan_RPG/.build";
-const { createPlaytestServer } = await import(`${root}/src/ui/server.js`);
-const { stepNarrator, countingController, sessionWith } = await import(`${root}/tests/block4-fixtures.js`);
+const { createPlaytestServer } = await fromBuild("src/ui/server.js");
+const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/block4-fixtures.js");
 
 const MAREN = "campaign_character_maren";
 const maren = { kind: "register_character", character: { id: MAREN, origin: { kind: "created" }, profile: { name: "Maren", age: { kind: "exact", years: 19 } }, current: { current_location: "test_room", status: "active" } } };
@@ -23,7 +20,7 @@ const url = `http://127.0.0.1:${server.address().port}/`;
 const legal = () => s.campaign.exportSnapshot().legal_statuses.find(l => l.character_id === MAREN);
 const calls = () => narrator.calls() + controller.calls();
 
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await launchBrowser();
 const page = await browser.newPage();
 const turnRequests = [], confirmationRequests = [];
 page.on("request", r => { if (r.url().endsWith("/api/turn")) turnRequests.push(r.postData()); if (r.url().includes("/api/confirmation/")) confirmationRequests.push({ url: new URL(r.url()).pathname, body: r.postData() }); });

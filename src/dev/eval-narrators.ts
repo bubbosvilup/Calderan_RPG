@@ -14,7 +14,7 @@ import { ADULT_PROBES, BAKEOFF_REQUEST_POLICY, NARRATOR_CANDIDATES, NARRATOR_SYS
 
 const usage = `npm run eval:narrators -- [--stage a|adult|targeted|authority|b] [--model <alias|slug>]... [--cases id,id] [--repeats n] [--dry-run] [--resume <run-dir> [--retry-infra [--max-attempts n]]] [--summarize <run-dir>]
   --stage a      narrator-only bake-off (default). No controller call, no campaign mutation.
-  --stage adult  optional provider-behavior probe (consenting adults, fictional). Raw text stays under .build only.
+  --stage adult  optional provider-behavior probe (consenting adults, fictional). Raw text stays under artifacts/local only (gitignored).
   --stage targeted  Phase 1M.1 Kimi-only equipment-precedence and knowledge-isolation checks, Phase 1M vs 1M.1 prompt on identical fixtures.
   --stage authority  Phase 1N Kimi knowledge-authority cases (narrator-only).
   --stage b      full loop Narrator -> DeepSeek -> TurnEvidence -> authorization -> CampaignState for the named finalists.
@@ -53,7 +53,7 @@ const cases = (stage === "a" ? stageACases(corpus.fixtures) : stage === "targete
 const prompts = new Map<string, Awaited<ReturnType<typeof stageARequest>> | { request: GenerationRequest; fingerprint: string }>();
 for (const c of cases) prompts.set(c.id, stage === "adult" ? adultProbeRequest(ADULT_PROBES.find(p => p.id === c.id)!) : await stageARequest(c, history));
 
-const runDir = resumeDir ?? `.build/evaluations/phase-1m-stage-${stage}-${new Date().toISOString().replace(/[:.]/g, "").slice(0, 15)}`;
+const runDir = resumeDir ?? `artifacts/local/evaluations/phase-1m-stage-${stage}-${new Date().toISOString().replace(/[:.]/g, "").slice(0, 15)}`;
 const manifest = { phase: "1M", stage, created_at: new Date().toISOString(), online_paid: !args.includes("--dry-run"), models: requested, case_ids: cases.map(c => c.id),
   cases: cases.map(c => ({ id: c.id, source_row: c.source_row ?? null, repeats: c.repeats, context_mode: c.window ? `historical_window:${c.window}` : "state_only", failure_modes: c.failure_modes, prompt_fingerprint: stage === "b" ? "per-turn (coordinator-built; see records)" : prompts.get(c.id)!.fingerprint })),
   narrator_system_sha: NARRATOR_SYSTEM_SHA, request_policy: BAKEOFF_REQUEST_POLICY, output_budget_tokens: NARRATOR_OUTPUT_TOKENS,

@@ -3,25 +3,24 @@
 //  3 a delayed optional task does not keep the turn busy      4 a failing optional task does not alter the turn
 //  5 an item is usable before its sprite completes            6 an existing sprite stays visible with the producer OFF
 //  7 optional status / failure is never shown as authoritative narration
-import pw from "/opt/node-tools/node_modules/playwright/index.js"; const { chromium } = pw;
+import { fromBuild, launchBrowser } from "./lib/browser-env.mjs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-const B = "/home/user/Calderan_RPG/.build";
-const { mannerismFixture } = await import(`${B}/src/dev/d10-mannerism-corpus.js`);
-const { GameSession } = await import(`${B}/src/app/game-session.js`);
-const { FileCampaignRepository } = await import(`${B}/src/persistence/campaign-repository.js`);
-const { createPlaytestServer } = await import(`${B}/src/ui/server.js`);
-const { TurnCoordinator } = await import(`${B}/src/turn/turn-coordinator.js`);
-const { RetrievalService } = await import(`${B}/src/retrieval/retrieval-service.js`);
-const { HybridSearch } = await import(`${B}/src/retrieval/hybrid-search.js`);
-const { PortraitAssetStore } = await import(`${B}/src/app/portrait-store.js`);
-const { resolveOptionalServices } = await import(`${B}/src/app/optional-services.js`);
+const { mannerismFixture } = await fromBuild("src/dev/d10-mannerism-corpus.js");
+const { GameSession } = await fromBuild("src/app/game-session.js");
+const { FileCampaignRepository } = await fromBuild("src/persistence/campaign-repository.js");
+const { createPlaytestServer } = await fromBuild("src/ui/server.js");
+const { TurnCoordinator } = await fromBuild("src/turn/turn-coordinator.js");
+const { RetrievalService } = await fromBuild("src/retrieval/retrieval-service.js");
+const { HybridSearch } = await fromBuild("src/retrieval/hybrid-search.js");
+const { PortraitAssetStore } = await fromBuild("src/app/portrait-store.js");
+const { resolveOptionalServices } = await fromBuild("src/app/optional-services.js");
 const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 1, elapsed_total_ms: 2 } };
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", "base64");
 const results = []; const ok = (name, cond) => { results.push(!!cond); console.log(cond ? "PASS" : "FAIL", name); };
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await launchBrowser();
 const NARRATION = "Brenna taps two fingers while waiting.";
 
 async function boot(opts = {}) {

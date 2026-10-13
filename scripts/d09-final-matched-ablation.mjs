@@ -12,7 +12,7 @@ import {captureProductionReflection} from '../.build/src/turn/structured-reflect
 import {recoverNpcContext} from '../.build/src/turn/npc-plus.js';
 import {OpenRouterClient} from '../.build/src/llm/openrouter/client.js';
 import {exactBenchmarkCredential,benchmarkAuthentication} from '../.build/src/dev/reflection-benchmark.js';
-const dir='saves/d09-final-matched-ablation';await mkdir(dir,{recursive:true});
+const dir='docs/evaluations/d09-reflection/evidence/d09-final-matched-ablation';await mkdir(dir,{recursive:true});
 try{await access(`${dir}/completed.json`);throw Error('Completed evidence run; refuse paid rerun.');}catch(e){if(e.code!=='ENOENT')throw e;}
 const json=(file,value)=>writeFile(`${dir}/${file}`,JSON.stringify(value,null,2)+'\n');
 const hash=value=>createHash('sha256').update(typeof value==='string'?value:JSON.stringify(value)).digest('hex');

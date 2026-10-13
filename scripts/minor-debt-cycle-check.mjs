@@ -50,3 +50,5 @@ result.runtime_edges_sha256=createHash('sha256').update(JSON.stringify(result.ru
 delete result.runtime_edges; // Keep exact graph fingerprint/count; avoid duplicating hundreds of unchanged edges.
 const output=process.argv[2];if(output){mkdirSync(dirname(output),{recursive:true});writeFileSync(output,JSON.stringify(result,null,2)+'\n');}
 console.log(JSON.stringify({modules:result.modules,source_back_edges:result.source_back_edges.length,source_components:result.source_components.length,runtime_back_edges:result.runtime_back_edges.length,runtime_components:result.runtime_components.length,runtime_graph_sha256:result.runtime_graph_sha256}));
+// `npm run check:architecture` gate (Repository Cleanup A): a runtime import cycle fails the check; source-level (type-only) back-edges are reported, not fatal.
+if (result.runtime_back_edges.length) process.exitCode = 1;

@@ -2,27 +2,26 @@
 //  A  a narrated person: named by narration -> NO persistent character, no card, nothing in the NPC list.
 //  B  authorized materialization: the person Actual Offer Accept materializes the SAME person once (Slave NPC, renamed on the same id after the reveal).
 //  C  human repair of a synthetic duplicate: request -> card (SOURCE/TARGET) -> no mutation before Confirm -> Confirm commits once with zero provider calls.
-import pw from "/opt/node-tools/node_modules/playwright/index.js"; const { chromium } = pw;
+import { DATA, fromBuild, launchBrowser } from "./lib/browser-env.mjs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-const B = "/home/user/Calderan_RPG/.build";
-const { loadWorld } = await import(`${B}/src/world/loader.js`);
-const { createOpeningCampaign } = await import(`${B}/src/campaign/opening-state.js`);
-const { learnCanonicalName } = await import(`${B}/src/campaign/identity-knowledge.js`);
-const { GameSession } = await import(`${B}/src/app/game-session.js`);
-const { FileCampaignRepository } = await import(`${B}/src/persistence/campaign-repository.js`);
-const { createPlaytestServer } = await import(`${B}/src/ui/server.js`);
-const { TurnCoordinator } = await import(`${B}/src/turn/turn-coordinator.js`);
-const { RetrievalService } = await import(`${B}/src/retrieval/retrieval-service.js`);
-const { HybridSearch } = await import(`${B}/src/retrieval/hybrid-search.js`);
-const { stepNarrator, countingController, sessionWith } = await import(`${B}/tests/block4-fixtures.js`);
-const world = await loadWorld("/home/user/Calderan_RPG/data");
+const { loadWorld } = await fromBuild("src/world/loader.js");
+const { createOpeningCampaign } = await fromBuild("src/campaign/opening-state.js");
+const { learnCanonicalName } = await fromBuild("src/campaign/identity-knowledge.js");
+const { GameSession } = await fromBuild("src/app/game-session.js");
+const { FileCampaignRepository } = await fromBuild("src/persistence/campaign-repository.js");
+const { createPlaytestServer } = await fromBuild("src/ui/server.js");
+const { TurnCoordinator } = await fromBuild("src/turn/turn-coordinator.js");
+const { RetrievalService } = await fromBuild("src/retrieval/retrieval-service.js");
+const { HybridSearch } = await fromBuild("src/retrieval/hybrid-search.js");
+const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/block4-fixtures.js");
+const world = await loadWorld(DATA);
 const MARKET = "calderan_slave_market";
 const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 1, elapsed_total_ms: 2 } };
 const results = []; const ok = (name, cond) => { results.push(cond); console.log(cond ? "PASS" : "FAIL", name); };
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await launchBrowser();
 
 // ============================================================ A + B  (real pipeline, scripted narrator, scripted empty controller)
 {

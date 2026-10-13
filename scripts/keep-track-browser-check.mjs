@@ -1,14 +1,13 @@
 // Browser validation for Keep track (dev only, offline: scripted Narrator and Controller, no provider call). Needs the compiled build (.build) and a
-// Playwright install; adjust the absolute paths below. Screenshots land in /tmp/claude-0/browser/keep-track/.
-import pw from "/opt/node-tools/node_modules/playwright/index.js"; const { chromium } = pw;
+// Playwright install (see scripts/lib/browser-env.mjs). Screenshots land in artifacts/local/browser/keep-track/.
+import { fromBuild, launchBrowser, shotsDir } from "./lib/browser-env.mjs";
 import { mkdir } from "node:fs/promises";
 import { once } from "node:events";
-const B = "/home/user/Calderan_RPG/.build";
-const { makeRig } = await import(`${B}/tests/benchmark/harness.js`);
-const { createPlaytestServer } = await import(`${B}/src/ui/server.js`);
-const SHOTS = "/tmp/claude-0/browser/keep-track"; await mkdir(SHOTS, { recursive: true });
+const { makeRig } = await fromBuild("tests/benchmark/harness.js");
+const { createPlaytestServer } = await fromBuild("src/ui/server.js");
+const SHOTS = await shotsDir("keep-track");
 const results = []; const ok = (name, cond) => { results.push([cond ? "PASS" : "FAIL", name]); console.log(cond ? "PASS" : "FAIL", name); };
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome", args: ["--no-sandbox"] });
+const browser = await launchBrowser();
 
 async function serve(session) {
   const server = createPlaytestServer(session); server.listen(0, "127.0.0.1"); await once(server, "listening");

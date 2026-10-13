@@ -14,7 +14,7 @@ import { capturingFetch, settle } from '../.build/src/dev/narrator-bakeoff.js';
 const stamp = process.argv[2];
 const onlyModel = process.argv[3]; // optional: restart one model's cases only (provider replacement / infrastructure)
 if (!stamp) throw new Error('usage: node scripts/narrator-bakeoff-1.mjs <stamp> [model]');
-const publicDir = `docs/evaluations/gemini-vertex-rerun-${stamp}`, privateDir = `.build/gemini-vertex-rerun-${stamp}`;
+const publicDir = `docs/evaluations/gemini-vertex-rerun-${stamp}`, privateDir = `artifacts/local/gemini-vertex-rerun-${stamp}`;
 const preflight = JSON.parse(await readFile(`${publicDir}/preflight.json`, 'utf8'));
 async function sourceHash() {
   const h = createHash('sha256');

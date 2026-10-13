@@ -3,13 +3,12 @@
 //  3 a promoted mannerism behaves unchanged                                          4 an item sprite appears after background generation without a revision change
 //  5 the portrait gallery grows without a revision change                            6 selecting an avatar changes the revision exactly once
 //  7 a reload reads the side-store state                                             8 expected_revision stays valid through background work
-import pw from "/opt/node-tools/node_modules/playwright/index.js"; const { chromium } = pw;
+import { fromBuild, launchBrowser } from "./lib/browser-env.mjs";
 import { mkdtemp, rm, readFile, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-const B = "/home/user/Calderan_RPG/.build";
-const m = async p => import(`${B}/${p}`);
+const m = fromBuild;
 const { loadWorld } = await m("src/world/loader.js");
 const { createOpeningCampaign, OPENING_HOUSEHOLD } = await m("src/campaign/opening-state.js");
 const { buildPromotedCharacter } = await m("src/campaign/promotion.js");
@@ -28,7 +27,7 @@ const LR = "heartstone_lr", NOTE = "Mira keeps a steady, wary regard for Nicco."
 const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 1, elapsed_total_ms: 2 } };
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", "base64");
 const results = []; const ok = (name, cond) => { results.push(!!cond); console.log(cond ? "PASS" : "FAIL", name); };
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await launchBrowser();
 const LATE = [
   { player: "*carries her to the sofa*", narration: "*The woman lies on the sofa, burning with fever.*", status: "finalized", location_id: LR },
   { player: "name's nicco, i'm the keeper of the heartstone, what about you?", narration: "*Her eyes stay half-open, fixed on his face.*\n\nMira.\n\n*She says it without ceremony.*", status: "finalized", location_id: LR }];

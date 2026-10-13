@@ -15,7 +15,7 @@ import {estimateContextTokens} from '../.build/src/turn/context-budget.js';
 import {RecentConversation} from '../.build/src/turn/recent-conversation.js';
 import {ReflectionPacing} from '../.build/src/turn/reflection-pacing.js';
 
-const dir='saves/d09-reflection-utility-review';await mkdir(dir,{recursive:true});
+const dir='docs/evaluations/d09-reflection/evidence/d09-reflection-utility-review';await mkdir(dir,{recursive:true});
 const save=(p,v)=>writeFile(`${dir}/${p}`,JSON.stringify(v,null,2)+'\n');
 const sha=v=>createHash('sha256').update(typeof v==='string'||Buffer.isBuffer(v)?v:JSON.stringify(v)).digest('hex');
 let networkAttempts=0;globalThis.fetch=async()=>{networkAttempts++;throw Error('Offline-only review: network disabled');};
@@ -123,8 +123,8 @@ const maintenance=await maintain(crowded.campaign,[contrastP]);assert.equal(main
 const crowdedState=crowded.campaign.exportSnapshot(),crowdedPack=packNpcPlus(world,crowdedState,new Set([id]),'Iris, what should we keep in mind as we decide what to do together?');
 assert.equal(crowdedState.premium_reflections[0].notes.length,3);assert.equal(crowdedPack.lines[0].includes(crowded.result.accepted[0].text),false);
 await save('reflection-slot-competition.json',{offline_only:true,state:crowdedState,packed:crowdedPack,notes_stored:3,full_notes_packed:2,omitted_historical_trajectory:crowded.result.accepted[0].text,reason:'High confidence contrast (kind priority 5) and self stance (4) outrank trajectory signature pattern (3); no input relevance score.'});
-const original=JSON.parse(await readFile('saves/d09-final-matched-ablation/case-11-ablation-freeze.json','utf8'));
-const originalFreeze=JSON.parse(await readFile('saves/d09-final-matched-ablation/case-11-freeze.json','utf8'));
+const original=JSON.parse(await readFile('docs/evaluations/d09-reflection/evidence/d09-final-matched-ablation/case-11-ablation-freeze.json','utf8'));
+const originalFreeze=JSON.parse(await readFile('docs/evaluations/d09-reflection/evidence/d09-final-matched-ablation/case-11-freeze.json','utf8'));
 await save('previous-matched-request-audit.json',{with_body:original.with_body,without_body:original.without_body,original_proof:original.proof,original_context:originalFreeze.narrative_context,notes:original.targets,with_tokens:estimateContextTokens(JSON.stringify(original.with_body.messages)),without_tokens:estimateContextTokens(JSON.stringify(original.without_body.messages)),same_non_message_settings:JSON.stringify({...original.with_body,messages:[]})===JSON.stringify({...original.without_body,messages:[]}),note:'Matched WITHOUT removes the entry from the already-packed WITH body. It does not repack and cannot restore raw sources previously omitted by packing.'});
 await save('history-aging-summary.json',summaries);await save('history-aging-full.json',aging);await save('token-comparison.json',tokens);await save('packing-variants.json',variants);
 const runs=[];

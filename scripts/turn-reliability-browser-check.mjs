@@ -1,13 +1,10 @@
-// Browser validation for turn reliability (PIPE-1 / REV-2 client): dev only, offline (mock providers, zero live calls). Needs .build and a Playwright install; adjust the absolute paths.
+// Browser validation for turn reliability (PIPE-1 / REV-2 client): dev only, offline (mock providers, zero live calls). Needs .build and a Playwright install; paths come from scripts/lib/browser-env.mjs.
 // Deterministic real-browser validation of PIPE-1 / REV-2 client behavior (Chromium via Playwright, mock providers, no network).
-import { createRequire } from "node:module";
+import { fromBuild, launchBrowser } from "./lib/browser-env.mjs";
 import { once } from "node:events";
-const require = createRequire("/opt/node-tools/");
-const { chromium } = require("playwright");
-const root = "/home/user/Calderan_RPG/.build";
-const { createPlaytestServer } = await import(`${root}/src/ui/server.js`);
-const { stepNarrator, countingController, sessionWith } = await import(`${root}/tests/block4-fixtures.js`);
-const { transfer } = await import(`${root}/tests/turn-fixtures.js`);
+const { createPlaytestServer } = await fromBuild("src/ui/server.js");
+const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/block4-fixtures.js");
+const { transfer } = await fromBuild("tests/turn-fixtures.js");
 
 const BAD = "Brenna accepts boots from Nicco. Gerome takes the ring from Nicco.";
 const GOOD = "Brenna accepts boots from Nicco.";
@@ -17,7 +14,7 @@ const s = sessionWith(narrator, countingController([transfer]));
 const server = createPlaytestServer(s.session); server.listen(0, "127.0.0.1"); await once(server, "listening");
 const url = `http://127.0.0.1:${server.address().port}/`;
 
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await launchBrowser();
 const page = await browser.newPage();
 const turnRequests = [];
 page.on("request", r => { if (r.url().endsWith("/api/turn")) turnRequests.push(r.postData()); });
