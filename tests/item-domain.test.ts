@@ -14,7 +14,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/state-controller.js";
 import { createSaveFile, decodeSave, decodeSaveWithReport, serializeSave } from "../src/persistence/save-format.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import { collect, metadata } from "./turn-fixtures.js";
 

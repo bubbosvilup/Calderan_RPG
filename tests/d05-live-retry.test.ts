@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { COMMAND, NARRATION, runRetryCase, verifyCase } from "../src/dev/d05-live-retry.js";
+import { COMMAND, NARRATION, runRetryCase, verifyCase } from "../src/dev/historical/d05-live-retry.js";
 
 test("D05 production transport: pre-dispatch 429, unchanged DEFAULT policy, one knowledge effect equal to single-success control", async () => {
   const result = await runRetryCase(async () => new Response(JSON.stringify({ model: "qwen/qwen3.8-flash", choices: [{ message: { content: JSON.stringify({ commands: [{ command: COMMAND, evidence_quote: NARRATION }] }) }, finish_reason: "stop" }], usage: { prompt_tokens: 10, completion_tokens: 10, total_tokens: 20, cost: 0 } })), () => "offline-key");

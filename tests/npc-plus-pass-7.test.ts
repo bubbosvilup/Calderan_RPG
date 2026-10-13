@@ -2,8 +2,8 @@ import { productionStub, testTrajectory, testContrast, testMovement, instantRefl
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { turnFixture } from "../src/dev/turn-fixture.js";
-import { runPlayTurn } from "../src/dev/play-turn.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
+import { runPlayTurn } from "../src/dev/support/play-turn.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { mockController, mockNarrator } from "./turn-fixtures.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

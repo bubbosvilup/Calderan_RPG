@@ -101,8 +101,8 @@ and the existing character JSON. The old `socialBlock`, `temporalGrounding` and 
   stored items, resources, knowledge scopes, secrecy, id leakage, focus, large scene, renderer budget, derived-only, save round trip,
   identity masking, scheduled events, developments, prompt regression, Controller unaffected, golden ideal scene
   `tests/golden/scene-state-ideal.txt`).
-- Fixtures: `src/dev/scene-state-fixtures.ts` (synthetic, public).
-- `npm run inspect:scene` prints the offline scenarios A–F; `src/dev/scene-state-live-smoke.ts` is the optional live narrator smoke.
+- Fixtures: `src/dev/support/scene-state-fixtures.ts` (synthetic, public).
+- `npm run inspect:scene` prints the offline scenarios A–F; `src/dev/live/scene-state-live-smoke.ts` is the optional live narrator smoke.
 
 ## Consolidation Pass A (prompt debt cleanup)
 

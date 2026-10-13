@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {turnFixture} from '../src/dev/turn-fixture.js';
+import {turnFixture} from '../src/dev/support/turn-fixture.js';
 import {structuredReflectionEvidenceE1,environmentalE1Context,validateStructuredClaimE1,evaluateStructuredOutputE1,citationScopedReflectionWireE1,E1_SCHEMA} from './frozen/reflection/reflection-v23-cvc-e1.js';
 import {schemaMatches} from './frozen/reflection/reflection-v2.js';
 import {validateStructuredClaimV23CVC} from './frozen/reflection/reflection-v23-cvc.js';

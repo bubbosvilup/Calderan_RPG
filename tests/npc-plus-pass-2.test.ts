@@ -14,7 +14,7 @@ import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { collect, metadata } from "./turn-fixtures.js";
 
 /** NPC+ Pass 2: deterministic development history from committed changes, and explicit-evidence stable contracts. */

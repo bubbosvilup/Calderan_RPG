@@ -4,8 +4,8 @@ import { readFile } from "node:fs/promises";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import type { CampaignSnapshot } from "../src/campaign/types.js";
-import { COVERED_BY, IMPLEMENTED_MUST_MATCH_IDS, SUBSYSTEM, compare, sealedShingles, words, SHINGLE } from "../src/dev/historical-replay-compare.js";
-import { turnState } from "../src/dev/historical-replay.js";
+import { COVERED_BY, IMPLEMENTED_MUST_MATCH_IDS, SUBSYSTEM, compare, sealedShingles, words, SHINGLE } from "../src/dev/historical/historical-replay-compare.js";
+import { turnState } from "../src/dev/historical/historical-replay.js";
 
 /** The comparator must cover every MUST_MATCH fact of the frozen oracle; drift fails here. Deterministic, no model calls. */
 const world = await loadWorld("data");

@@ -1,15 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { prepareD04BakeoffCases } from "../src/dev/d04-compaction-bakeoff.js";
+import { prepareD04BakeoffCases } from "../src/dev/historical/d04-compaction-bakeoff.js";
 import { precomputeKnowledgeGroups,losslessCandidate,expandLosslessCandidate,renderLosslessCandidate,buildKnowledgeDictionary,losslessCacheIdentity,LOSSLESS_SCHEMA_VERSION } from "../src/turn/context/lossless-knowledge.js";
 import { analyzeLosslessLayouts,LosslessContextCompactor } from "../src/turn/context/lossless-context-compaction.js";
 import { narratorPackOf,contextHash,type NarratorPack } from "../src/turn/context/narrator-pack.js";
 import { DEFAULT_COMPACTION_POLICY } from "../src/turn/context/context-compaction.js";
 import { ContextBudgetManager } from "../src/turn/context/context-budget.js";
-import { passiveResponseAudit } from "../src/dev/passive-response-audit.js";
+import { passiveResponseAudit } from "../src/dev/support/passive-response-audit.js";
 import { OpenRouterLosslessCompressor } from "../src/llm/openrouter/lossless-compressor.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
-import { createD04CrowdedContext } from "../src/dev/d04-context-baseline.js";
+import { createD04CrowdedContext } from "../src/dev/historical/d04-context-baseline.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

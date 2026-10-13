@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { play } from "./pass10-support.js";
-import { applyVariant, type VariantId } from "../src/dev/follow-choice-variants.js";
+import { applyVariant, type VariantId } from "../src/dev/historical/follow-choice-variants.js";
 /**
  * Offline prompt ablation for the invitation turn (no provider call): writes the exact prompt snapshots and the diffs between them.
  * production = Pass 10 production note; pass9_note = the previous note; away_labels and invited_first are hypothetical, NOT in production.

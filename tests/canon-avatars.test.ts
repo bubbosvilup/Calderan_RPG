@@ -14,7 +14,7 @@ import { createPlaytestServer } from "../src/ui/server.js";
 import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { PortraitAssetStore } from "../src/app/portrait-store.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { createSaveFile } from "../src/persistence/save-format.js";
 

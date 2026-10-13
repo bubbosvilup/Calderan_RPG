@@ -15,7 +15,7 @@ Key existence and production client initialization passed without exposing crede
 | Take absent Pellan's ring | Not requested | Not run | BLOCKED_AUTH |
 | Reuse existing materialized item | Not requested | Not run | BLOCKED_AUTH |
 
-The four deterministic inventory pipeline regressions pass, but do not replace live Luna evaluation. Reproducible runner: `scripts/item-inventory-live-smoke.mjs`; captured result: `docs/evaluations/ITEM_INVENTORY_LIVE_SMOKE.json`. No inventory semantic policy change was made because no repeatable live semantic issue was observed.
+The four deterministic inventory pipeline regressions pass, but do not replace live Luna evaluation. Reproducible runner: `scripts/evaluation/item-inventory-live-smoke.mjs`; captured result: `docs/evaluations/ITEM_INVENTORY_LIVE_SMOKE.json`. No inventory semantic policy change was made because no repeatable live semantic issue was observed.
 
 ## 2. Existing image-stack audit
 
@@ -111,7 +111,7 @@ HF_TOKEN existence checked without exposing its value. **2 real generations, 0 r
 | Ivory Figurine | PASS: pending -> ready; file and save persisted | Recognizable ivory figurine, isolated/full visibility/neutral background; ornate carving and clothing detail exceeds the supplied appearance. |
 | Silver Knife | PASS: pending -> ready; file and save persisted | Readable isolated knife; provider adds ornate guard/handle and a decorative border despite plain/no-ornament/no-frame instructions. Art-direction compliance PARTIAL. |
 
-Captured result: `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`. Generated campaign/assets: `docs/evaluations/item-sprite-smoke-assets/turn_fixture/`. Reproducible runner: `scripts/item-sprite-live-smoke.mjs`. The provider's embellishment is a remaining quality limitation; there was no tuning loop or third generation.
+Captured result: `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`. Generated campaign/assets: `docs/evaluations/item-sprite-smoke-assets/turn_fixture/`. Reproducible runner: `scripts/evaluation/item-sprite-live-smoke.mjs`. The provider's embellishment is a remaining quality limitation; there was no tuning loop or third generation.
 
 ## 14. Files created in this pass
 
@@ -119,8 +119,8 @@ Captured result: `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`. Generated campa
 - `src/app/item-sprite-jobs.ts`
 - `src/app/item-visual-view.ts`
 - `tests/item-visual.test.ts`
-- `scripts/item-inventory-live-smoke.mjs`
-- `scripts/item-sprite-live-smoke.mjs`
+- `scripts/evaluation/item-inventory-live-smoke.mjs`
+- `scripts/evaluation/item-sprite-live-smoke.mjs`
 - `docs/evaluations/ITEM_INVENTORY_LIVE_SMOKE.json`
 - `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`
 - `docs/evaluations/item-sprite-smoke-assets/` (two PNGs, current/previous save and retained backup)

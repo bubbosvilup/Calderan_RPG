@@ -7,14 +7,14 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { test } from "node:test";
 import { stringify } from "yaml";
-import { inspectContext } from "../src/dev/inspect-context.js";
+import { inspectContext } from "../src/dev/inspect/inspect-context.js";
 import { buildNarrativeContext, NARRATIVE_CONTEXT_LIMITS } from "../src/scene/narrative-context-builder.js";
 import { RuntimeState } from "../src/world/runtime-state.js";
 import { loadWorld } from "../src/world/loader.js";
 import { document, location } from "./fixtures.js";
 
 const execute = promisify(execFile);
-const cli = fileURLToPath(new URL("../src/dev/inspect-context.js", import.meta.url));
+const cli = fileURLToPath(new URL("../src/dev/inspect/inspect-context.js", import.meta.url));
 const ids = ["heartstone", "heartstone_cy", "heartstone_f1", "heartstone_lr", "heartstone_u1"];
 /** Public square directly outside the tower (opening location); a city location, not part of the tower. */
 const outside = "heartstone_square";

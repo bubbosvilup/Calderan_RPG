@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { scoreControllerCommands, falseProposalSeverity, latencyStats } from "../src/dev/controller-bakeoff-metrics.js";
+import { scoreControllerCommands, falseProposalSeverity, latencyStats } from "../src/dev/historical/controller-bakeoff-metrics.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 const move: CampaignCommand = { kind: "move_character", character_id: "maren", location_id: "room" };
 const rel: CampaignCommand = { kind: "adjust_relationship", from_character_id: "brenna", to_character_id: "nicco", dimension: "affection", direction: "raise" };

@@ -85,11 +85,11 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
 const APPEARANCE_KEYS = ["height_cm", "weight_kg", "build", "skin", "hair_color", "hair_texture", "hair_description", "eyes", "scars", "distinguishing_marks", "distinctive_traits", "description"];
 const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true,
   scene: { location: "Observation room", time_of_day: "Late Morning" }, household: [] };
-async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening })) {
+async function client(fetchMock: (...args: any[]) => any = async () => ({ ok: true, json: async () => opening }), globals: Record<string, unknown> = {}) {
   const nodes = new Map(["character-promote", "character-promote-button", "character-promote-confirm", "character-promote-title", "character-promote-body", "character-promote-error", "character-promote-cancel", "character-promote-confirm-button", "conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count", "character-overlay", "character-drawer", "character-close", "character-backdrop", "appearance-tab", "portrait-initial", "character-badges", "character-name", "character-role", "character-relationship", "character-state", "character-where", "character-appearance", "character-affiliations", "appearance-panel", "story-panel", "story-tab", "character-public-profile", "character-summary", "character-facts", "character-history", "character-observations", "character-boundary", "inventory-nav", "inventory-view", "inventory-back", "inventory-count", "inventory-gold", "inventory-detail-empty", "inventory-detail-body", "inventory-detail-art", "inventory-detail-name", "inventory-detail-category", "inventory-detail-description", "inventory-detail-state", "inventory-detail-owner", "equipment-figure", "equipment-note", "equip-slot-head", "equip-slot-head-body", "equip-slot-chest", "equip-slot-chest-body", "equip-slot-weapon", "equip-slot-weapon-body", "equip-slot-boots", "equip-slot-boots-body", "inventory-items", "inventory-all", "inventory-carried", "inventory-equipped", "inventory-search", "inventory-error", "play-view", "household-nav", "household-view", "household-title", "household-totals", "household-close", "household-cards", "filter-all", "filter-here", "filter-elsewhere", "member-editor", "editor-name", "editor-context", "editor-back", "editor-cancel", "editor-save", "editor-initial", "editor-appearance", "editor-image-prompt", "editor-error", "editor-identity", "editor-negative-prompt", "editor-avatar-image", "editor-avatar-status", "portrait-avatar-change", "editor-full-body-image", "editor-full-body-label", "editor-full-body-status", "portrait-full-body-clear", "portrait-status", "portrait-gallery", "portrait-gallery-count", "portrait-generate-avatar", "portrait-generate-fullbody", "portrait-avatar-pose", "portrait-fullbody-pose", "editor-fullbody-prompt", "editor-fullbody-negative-prompt", "portrait-error", "portrait-meta", "portrait-reference-remove", "character-avatar-image", "character-portrait-label", "character-portrait-actions", "character-footer-actions",
     "portrait-progress", "portrait-progress-title", "portrait-progress-stage", "portrait-progress-hint", "portrait-progress-elapsed", "player-nav", "player-nav-avatar", "player-nav-initial", "portrait-lightbox", "lightbox-backdrop", "lightbox-dialog", "lightbox-title", "lightbox-position", "lightbox-badges", "lightbox-close", "lightbox-prev", "lightbox-next", "lightbox-image", "lightbox-meta", "lightbox-avatar", "lightbox-full-body", "lightbox-delete", "lightbox-confirm", "lightbox-confirm-delete", "lightbox-confirm-cancel", "lightbox-error",
     ...APPEARANCE_KEYS.flatMap(k => [`appearance-${k}`, `appearance-${k}-note`])].map(id => [`#${id}`, new Element()]));
-  const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
+  const context: any = { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder, ...globals };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
   return { render: context.render as (data: any) => void, node: (id: string) => nodes.get(`#${id}`)!, renderRpg: context.renderRpg as (target: Element, source: string) => void };
 }
@@ -926,11 +926,36 @@ test("the main play screen shows the selected Player Avatar for Nicco through th
 
 // ---------------------------------------------------------------------------------------------- image generation lifecycle UX (player + NPC+)
 // One shared client path: both editors post to /api/portrait/generate and render the same progress block and placeholders.
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+/**
+ * TEST-1: one controlled clock for the client's `Date` and `setTimeout`. With the real clocks, the progress tick (a 1000 ms timer on
+ * Node's monotonic loop clock) can fire when `Date.now()` has advanced only 999 ms, so the stage stayed "Request sent" until the next tick.
+ * `advance` runs every due timer in order at its exact due time, then settles pending microtasks.
+ */
+function manualClock() {
+  let now = Date.now(), seq = 0;
+  const timers = new Map<number, { due: number; order: number; fn: () => void }>();
+  const RealDate = Date;
+  class ClockDate extends RealDate { constructor(...args: any[]) { if (args.length) super(...(args as [any])); else super(now); } static override now() { return now; } }
+  const setTimeoutFn = (fn: () => void, ms = 0) => { const id = ++seq; timers.set(id, { due: now + Math.max(0, ms), order: id, fn }); return { id, unref() { return this; }, ref() { return this; } }; };
+  const clearTimeoutFn = (handle: { id: number } | undefined) => { if (handle) timers.delete(handle.id); };
+  return {
+    globals: { setTimeout: setTimeoutFn, clearTimeout: clearTimeoutFn, Date: ClockDate },
+    async advance(ms: number) {
+      const target = now + ms;
+      for (;;) {
+        const next = [...timers.entries()].filter(([, t]) => t.due <= target).sort(([, a], [, b]) => a.due - b.due || a.order - b.order)[0];
+        if (!next) break;
+        timers.delete(next[0]); now = next[1].due; next[1].fn(); await tick();
+      }
+      now = target; await tick();
+    },
+  };
+}
 type Mode = "npc" | "player";
 async function lifecycleClient(mode: Mode, behaviour: { fail?: "error" | "network"; hold?: boolean } = {}) {
   const server = galleryServer(), hold: { release?: () => void } = {}, posts: { url: string; body: any }[] = [];
   let mine = behaviour;
+  const clock = manualClock();
   const playerState = () => { const s = server.state(), editor = (s.play.household[0]!.members[0] as any).appearance_editor;
     return { ...s, player_character: { name: "Nicco", narrator_summary: "A man.", identity: [], fields: [], visual: { ref: "alpha", capabilities: { ...capsFor(true), tier: "player" }, editor, avatar_url: null, full_body_url: null } } }; };
   const state = () => mode === "player" ? playerState() : server.state();
@@ -942,14 +967,14 @@ async function lifecycleClient(mode: Mode, behaviour: { fail?: "error" | "networ
     const answer = () => { const out = server.batch(3, 0, body.kind); return mode === "player" ? { ...out, ...playerState() } : out; };
     if (mine.hold) return { ok: true, json: () => new Promise(resolve => { hold.release = () => resolve(answer()); }) };
     return { ok: true, json: async () => answer() };
-  });
+  }, clock.globals);
   if (mode === "player") c.node("player-nav").handlers.get("click")!({}); else c.node("household-cards").children[0]!.children[1]!.handlers.get("click")!({});
-  return { c, posts, hold, set: (b: typeof behaviour) => { mine = b; } };
+  return { c, posts, hold, clock, set: (b: typeof behaviour) => { mine = b; } };
 }
 const placeholders = (c: Awaited<ReturnType<typeof client>>) => c.node("portrait-gallery").children.filter(e => e.className === "gallery-item gallery-pending");
 for (const mode of ["npc", "player"] as const) for (const [kind, noun, label] of [["avatar", "avatar", "Generating 3 avatars…"], ["fullbody", "full-body", "Generating 3 full body…"]] as const) {
   test(`generation lifecycle (${mode}, ${kind}): immediate progress block, placeholders, scoped disabling, completion refresh in the right bucket`, async () => {
-    const { c, posts, hold } = await lifecycleClient(mode, { hold: true });
+    const { c, posts, hold, clock } = await lifecycleClient(mode, { hold: true });
     assert.equal(c.node("portrait-progress").hidden, true, "no progress before any click");
     const done = c.node(`portrait-generate-${kind}`).handlers.get("click")!({}); await tick();
     // G1-G4: immediate, kind-specific feedback in the panel, not only on the button.
@@ -963,7 +988,7 @@ for (const mode of ["npc", "player"] as const) for (const [kind, noun, label] of
     // G13: the request is exactly the existing narrow contract.
     assert.deepEqual(Object.keys(posts[0]!.body).sort(), ["expected_revision", "kind", "pose", "ref"]); assert.equal(posts[0]!.url, "/api/portrait/generate");
     // G14: a long request keeps a live elapsed indicator.
-    await wait(1150); assert.match(c.node("portrait-progress-stage").textContent, /^Generating…$/); assert.match(c.node("portrait-progress-elapsed").textContent, /^[1-9] s$/);
+    await clock.advance(1150); assert.match(c.node("portrait-progress-stage").textContent, /^Generating…$/); assert.match(c.node("portrait-progress-elapsed").textContent, /^[1-9] s$/);
     hold.release!(); await done;
     // G5/G6/G15: loading cleared, results visible, correct kind, controls usable again.
     assert.equal(c.node("portrait-progress").hidden, true); assert.equal(placeholders(c).length, 0); assert.equal(thumbs(c).length, 3);

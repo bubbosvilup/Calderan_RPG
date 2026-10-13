@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { OPTIONAL_SERVICE_DEFAULTS, OPTIONAL_SERVICE_NAMES, OFF_CONTRACT, OptionalServiceMonitor, effectiveOptionalServices, resolveOptionalServices } from "../src/app/optional-services.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { createSaveFile, serializeSave } from "../src/persistence/save-format.js";
 
 test("block 6 registry: defaults are the decided policy and resolution is deterministic", () => {

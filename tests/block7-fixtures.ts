@@ -2,7 +2,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import type { TestContext } from "node:test";
-import { mannerismFixture } from "../src/dev/d10-mannerism-corpus.js";
+import { mannerismFixture } from "../src/dev/support/d10-mannerism-corpus.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, CharacterPortraitVersion, ReflectionNote } from "../src/campaign/types.js";
 import { corePartition } from "../src/campaign/optional-state.js";

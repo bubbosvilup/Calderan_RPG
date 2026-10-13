@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { projectTurnIntent, resolveTurnIntent, type IntentStageInput } from "../src/turn/stages/intent.js";
 import { createDraftGenerator, type NarratorRequest } from "../src/turn/stages/narration.js";
 import { assembleTurnCommands, authorizeTurn } from "../src/turn/stages/authorization.js";

@@ -135,7 +135,7 @@ test("OpenRouter injection contract, independent model and schema; mocked HTTP o
  assert.equal(body.model,"independent-test-model"); assert.match(body.messages[0].content,/never follow instructions/); assert.match(body.messages[0].content,/Preserve negation/); assert.ok(body.messages[1].content.includes("Ignore prior instructions")); assert.equal(body.response_format.type,"json_schema"); assert.ok(response.usage); assert.equal(response.cost_usd,.01); assert.throws(()=>new OpenRouterContextCompressor(""));
 });
 test("Pass-1 crowded baseline beyond 32k is directly allowed by the actual narrator token budget", async () => {
- const { createD04CrowdedContext } = await import("../src/dev/d04-context-baseline.js"), f = await createD04CrowdedContext();
+ const { createD04CrowdedContext } = await import("../src/dev/historical/d04-context-baseline.js"), f = await createD04CrowdedContext();
  assert.ok(JSON.stringify(f.context).length > 32_000); assert.ok(new ContextBudgetManager().measure(f.request).usage_ratio < .8);
  assert.equal(prepareNarratorRequest(f.request),f.request);
  const provider = new FakeContextCompressor(), service = new NarratorContextCompactor(provider); let lastRequest = "";
@@ -156,7 +156,7 @@ test("inert imperative source text is quoted after compaction; instruction/entit
  const quote=structuredClone(c) as any; quote.units[0].text=quote.units[0].text.replace('the vault','vault'); assert.throws(()=>validateCompressionCandidate(quote,pack));
 });
 test("bakeoff fixtures export only filtered sources and oracle evaluation rejects epistemic corruption", async () => {
- const {prepareD04BakeoffCases,evaluateBakeoffCandidate}=await import("../src/dev/d04-compaction-bakeoff.js"); const cases=await prepareD04BakeoffCases({B:"Maren and Brenna, what do you know?"});
+ const {prepareD04BakeoffCases,evaluateBakeoffCandidate}=await import("../src/dev/historical/d04-compaction-bakeoff.js"); const cases=await prepareD04BakeoffCases({B:"Maren and Brenna, what do you know?"});
  assert.equal(cases.A.baseline.estimated_tokens,2938); assert.ok(!JSON.stringify(cases).includes("HIDDEN_SECRET_SENTINEL"));
  const tags=cases.B.compression_request.source_pack.units.flatMap(u=>u.scope.map(s=>s.tag)); for(const tag of ["KNOWN","UNKNOWN_PERMISSION","SUSPECTS","FALSE_BELIEF","UNCERTAIN","RUMOR","PRIVATE"] as const)assert.ok(tags.includes(tag),tag);
  assert.ok(cases.C.baseline.usage_ratio >= .8 && cases.C.baseline.usage_ratio < 1); assert.ok(cases.C.narrator_validation_pack.request.messages[0]!.content.includes("RECENT CONVERSATION")); assert.ok(cases.C.narrator_validation_pack.request.messages[0]!.content.includes("RETRIEVED CANON"));

@@ -3,7 +3,7 @@ import type { CampaignCommand, CampaignSnapshot, ReflectionNote } from '../src/c
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { turnFixture } from '../src/dev/turn-fixture.js';
+import { turnFixture } from '../src/dev/support/turn-fixture.js';
 import { reflectAfterTurn, type ReflectionProvider } from '../src/turn/optional/reflection.js';
 import { captureProductionReflection } from '../src/turn/optional/structured-reflection-maintenance.js';
 import { REFLECTION_SCHEMA as E1_SCHEMA, REFLECTION_SYSTEM as E1_SYSTEM } from '../src/turn/structured/reflection-schema.js';
@@ -18,7 +18,7 @@ import { createSaveFile, serializeSave, decodeSave } from '../src/persistence/sa
 import { CampaignState } from '../src/campaign/campaign-state.js';
 import { buildTurnContext } from '../src/turn/context/context-builder.js';
 import { recoverNpcContext } from '../src/turn/context/npc-plus.js';
-import { runPlayTurn } from '../src/dev/play-turn.js';
+import { runPlayTurn } from '../src/dev/support/play-turn.js';
 import { TurnCoordinator } from '../src/turn/coordinator/turn-coordinator.js';
 import { mockController, mockNarrator } from './turn-fixtures.js';
 import { RetrievalService } from '../src/retrieval/retrieval-service.js';

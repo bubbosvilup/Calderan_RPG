@@ -4,7 +4,7 @@ import { build, measure, BASE, type Config } from "./pass10-headroom.js";
 import { loadWorld } from "../src/world/loader.js";
 import { buildTurnContext, CONTEXT_LIMITS } from "../src/turn/context/context-builder.js";
 import { NPC_PLUS_LIMITS, npcDeepSources, recoverNpcContext, deduplicateRecovered, packNpcPlus } from "../src/turn/context/npc-plus.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { household } from "./pass10-support.js";
 
 /** NPC+ Pass 10 — context/recovery integrity and the headroom boundary (offline; the table in the report is `node .build/tests/pass10-headroom.js`). */

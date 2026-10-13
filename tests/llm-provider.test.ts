@@ -2,10 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { OpenRouterClient, type TransportRequest } from "../src/llm/openrouter/client.js";
 import { MiniMaxNarratorProvider } from "../src/llm/openrouter/minimax-narrator.js";
-import { DeepSeekStateControllerProvider, CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider, CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/state-controller.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { ProviderError } from "../src/llm/errors.js";
-import { LLM_SCENARIOS } from "../src/dev/llm-scenarios.js";
+import { LLM_SCENARIOS } from "../src/dev/inspect/llm-scenarios.js";
 
 const fakeKey = "fake-key-never-real";
 async function collectEvents<T>(source: AsyncIterable<T>): Promise<T[]> { const result: T[] = []; for await (const event of source) result.push(event); return result; }
@@ -121,7 +121,7 @@ test("configurable models, bounds and roleplay context stay adapter-local", asyn
   await assert.rejects(collect(c), isCode("configuration_error"));
 });
 for (const scenario of LLM_SCENARIOS) test(`controller fixture: ${scenario.name}`, async () => {
-  const result = await new DeepSeekStateControllerProvider(client(() => Response.json(completion(JSON.stringify({ commands: scenario.expected }))), (_url, init) => {
+  const result = await new OpenRouterStateControllerProvider(client(() => Response.json(completion(JSON.stringify({ commands: scenario.expected }))), (_url, init) => {
     const payload = JSON.parse(String(init.body));
     assert.equal(payload.model, DEFAULT_CONTROLLER_MODEL); assert.equal(payload.max_tokens, 512);
     assert.equal(payload.response_format.type, "json_schema"); assert.equal(payload.response_format.json_schema.strict, true);
@@ -138,10 +138,10 @@ for (const invalid of ["not JSON", '{"commands":[],"extra":true}', '{"commands":
   JSON.stringify({ commands: Array(9).fill(LLM_SCENARIOS[1]!.expected[0]) }),
 ]) test(`strict proposal rejects ${invalid.slice(0, 60)}`, () => { assert.throws(() => parseControllerProposal(invalid), isCode("structured_output_invalid")); });
 test("controller rejects invalid commands after provider claims successful completion", async () => {
-  await assert.rejects(new DeepSeekStateControllerProvider(client(() => Response.json(completion('{"commands":[{"kind":"unknown"}]}')))).propose({ player_action: "", prior_state: "", final_narration: "" }), isCode("structured_output_invalid"));
+  await assert.rejects(new OpenRouterStateControllerProvider(client(() => Response.json(completion('{"commands":[{"kind":"unknown"}]}')))).propose({ player_action: "", prior_state: "", final_narration: "" }), isCode("structured_output_invalid"));
 });
 test("controller model and budget overrides preserve schema protocol", async () => {
-  await new DeepSeekStateControllerProvider(client(() => Response.json(completion('{"commands":[]}')), (_url, init) => {
+  await new OpenRouterStateControllerProvider(client(() => Response.json(completion('{"commands":[]}')), (_url, init) => {
     const payload = JSON.parse(String(init.body)); assert.equal(payload.model, "compatible/controller"); assert.equal(payload.max_tokens, 128);
     assert.equal(payload.reasoning.effort, "low"); assert.equal(payload.reasoning.exclude, true);
   }), { model: "compatible/controller", max_output_tokens: 128, reasoning_effort: "low" }).propose({ player_action: "greet", prior_state: "{}", final_narration: "Hello." });

@@ -44,7 +44,7 @@ follower or carrying-state system.
 `TurnResult.travel` exposes origin, final destination, ordered node IDs, per-edge
 origin/target/minutes/kind and total minutes for command, natural and carry travel.
 Natural-action diagnostics also include the route. The existing play `--debug`
-output prints this object. `node .build/src/dev/inspect-city.js` reports calibrated
+output prints this object. `node .build/src/dev/inspect/inspect-city.js` reports calibrated
 routes, graph metrics, diameter and the full POI inventory without a provider call.
 
 Save format is unchanged: final location, authoritative time, characters and legal

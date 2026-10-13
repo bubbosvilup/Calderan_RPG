@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { play } from "./pass10-support.js";
-import { classifyFollowChoice } from "../src/dev/follow-choice-classify.js";
-import { applyVariant, type VariantId } from "../src/dev/follow-choice-variants.js";
+import { classifyFollowChoice } from "../src/dev/historical/follow-choice-classify.js";
+import { applyVariant, type VariantId } from "../src/dev/historical/follow-choice-variants.js";
 
 /** NPC+ Pass 10 — the optional paid probe's pure parts: classification of real Pass 9 drafts and single-factor prompt variants. */
 const LIVE: readonly (readonly [string, string, string, boolean, string])[] = [

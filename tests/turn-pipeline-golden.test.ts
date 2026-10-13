@@ -12,7 +12,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { metadata } from "./turn-fixtures.js";
 
 /**

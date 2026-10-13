@@ -12,7 +12,7 @@ import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/coordinator/t
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
-import { DeepSeekStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/state-controller.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
@@ -34,7 +34,7 @@ function audit(c: CampaignState, input: string, narration: string) {
   return auditNarration({ narration, context, world, access: projectKnowledgeAccess(context, {}), evidence: deriveTurnEvidence(intent, narration, context), diagnostics: [], committed: [], prepared: snapshot, player_input: input }).map(i => i.kind);
 }
 const MALFORMED = '{"commands":[{"command":{"kind":"transfer_item","item_id":"campaign_item_repair_boots","owner_id":"nicco"},"evidence_quote":"Mira hands the boots to Nicco."}]}';
-const controllerReturning = (content: string) => new DeepSeekStateControllerProvider(new OpenRouterClient({ api_key: () => "test-key-not-real", fetch: (async () => Response.json({ model: "deepseek/test", choices: [{ message: { content }, finish_reason: "stop" }], usage: { prompt_tokens: 10, completion_tokens: 7, total_tokens: 17 } })) as typeof fetch }));
+const controllerReturning = (content: string) => new OpenRouterStateControllerProvider(new OpenRouterClient({ api_key: () => "test-key-not-real", fetch: (async () => Response.json({ model: "deepseek/test", choices: [{ message: { content }, finish_reason: "stop" }], usage: { prompt_tokens: 10, completion_tokens: 7, total_tokens: 17 } })) as typeof fetch }));
 
 // ------------------------------------------------------------------------------------------- 1. raw controller diagnostics
 test("1.2 controller: a strict-parse failure keeps raw output, metadata, expected schema and reason; parsing is not weakened", async () => {

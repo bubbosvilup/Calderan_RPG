@@ -1,15 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { dialogueFocused } from "../src/turn/context/prompt-builder.js";
 import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { auditNarration } from "../src/turn/audit/narration-audit.js";
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
-import { observeLosslessApply } from "../src/dev/d04-final-live.js";
+import { observeLosslessApply } from "../src/dev/historical/d04-final-live.js";
 import { LosslessContextCompactor } from "../src/turn/context/lossless-context-compaction.js";
-import { passiveResponseAudit } from "../src/dev/passive-response-audit.js";
-import { TargetedPaidBudget } from "../src/dev/d04-targeted-live.js";
+import { passiveResponseAudit } from "../src/dev/support/passive-response-audit.js";
+import { TargetedPaidBudget } from "../src/dev/historical/d04-targeted-live.js";
 const intent = { candidates: [], runtime: [] };
 function fixture() {
   const f = turnFixture(false, { brennaKnowsBridge: true });

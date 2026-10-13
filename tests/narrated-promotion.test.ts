@@ -17,7 +17,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
-import { formatCampaignStatus } from "../src/dev/campaign-status.js";
+import { formatCampaignStatus } from "../src/dev/support/campaign-status.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { collect, metadata } from "./turn-fixtures.js";
 

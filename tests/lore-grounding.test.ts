@@ -8,7 +8,7 @@ import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
 import { SceneParticipants } from "../src/turn/identity/scene-participants.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { groundingManifest, type LoreCategory } from "../src/dev/lore-grounding.js";
+import { groundingManifest, type LoreCategory } from "../src/dev/support/lore-grounding.js";
 
 const SLAVE_PEN = "*stops an ordinary passer-by* \"Excuse me, where is the slave pen?\"";
 async function turnOne() {

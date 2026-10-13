@@ -16,7 +16,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
 import type { WorldStore } from "../src/world/world-store.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { collect, metadata } from "./turn-fixtures.js";
 
 /** NPC+ Pass 1: premium character foundation, deterministic context packing, exact recovery, and authored NPC+ movability. */

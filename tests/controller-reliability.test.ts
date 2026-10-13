@@ -7,7 +7,7 @@ import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/coordinator/t
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
-import { DeepSeekStateControllerProvider } from "../src/llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider } from "../src/llm/openrouter/state-controller.js";
 import { normalizeControllerOutput, NORMALIZATION_RULE } from "../src/llm/controller-schema.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
@@ -21,7 +21,7 @@ const TRANSFER = { kind: "transfer_item", mode: "handoff", item_id: ITEM,  posit
 /** Exact live output captured in Repair 1.2 (Sister Mereth). */
 const MERETH = "{\"commands\":[{\"kind\":\"transfer_item\",\"item_id\":\"campaign_item_regression_leather_boots\",\"position\":{\"kind\":\"carried\",\"character_id\":\"nicco\"},\"evidence\":\"Nicco takes the boots from her.\",\"mode\":\"handoff\"}]}";
 const world = await loadWorld("data");
-const provider = (content: string, onFetch?: () => void) => new DeepSeekStateControllerProvider(new OpenRouterClient({ api_key: () => "test-key-not-real", fetch: (async () => { onFetch?.(); return Response.json({ choices: [{ message: { content }, finish_reason: "stop" }], usage: { prompt_tokens: 10, completion_tokens: 7, total_tokens: 17 } }); }) as typeof fetch }));
+const provider = (content: string, onFetch?: () => void) => new OpenRouterStateControllerProvider(new OpenRouterClient({ api_key: () => "test-key-not-real", fetch: (async () => { onFetch?.(); return Response.json({ choices: [{ message: { content }, finish_reason: "stop" }], usage: { prompt_tokens: 10, completion_tokens: 7, total_tokens: 17 } }); }) as typeof fetch }));
 const propose = (content: string) => provider(content).propose({ player_action: "", prior_state: "", final_narration: "" });
 function scene(npcs: readonly string[], owner = "sister_mereth", holder = owner) {
   const c = createOpeningCampaign(world, `reliability_${npcs.join("_") || "alone"}`);

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { STORED_REFLECTION_SCHEMA } from "../src/campaign/reflection-proposal-schema.js";
 import { reflectionEvidenceCatalog, statementProvenance, type StructuredEvidence } from "../src/turn/structured/reflection-evidence.js";

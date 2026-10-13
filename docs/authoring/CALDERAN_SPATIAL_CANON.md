@@ -78,7 +78,7 @@ arrival point for requests addressed to a container: Heartstone -> LR, Center ->
 Center West Road, city -> Imperial Gate, and each outer district -> its main hub.
 It does not add an edge or bypass a wall. All concrete POIs have authored access.
 YAML placement features and connections are the per-POI inventory; use
-`npm run build --silent` followed by `node .build/src/dev/inspect-city.js` to inspect
+`npm run build --silent` followed by `node .build/src/dev/inspect/inspect-city.js` to inspect
 the complete inventory, routes and metrics.
 
 ## Travel calibration

@@ -6,7 +6,7 @@ import { loadWorld } from "../../src/world/loader.js";
 import { evaluationCases } from "./cases.js";
 import { HybridSearch } from "../../src/retrieval/hybrid-search.js";
 import { SemanticIndex } from "../../src/retrieval/semantic-index.js";
-import { configuredEmbeddingProvider } from "../../src/dev/embedding-configuration.js";
+import { configuredEmbeddingProvider } from "../../src/dev/support/embedding-configuration.js";
 import { EmbeddingError, embeddingIdentity } from "../../src/retrieval/embedding-provider.js";
 
 export function evaluate(search: LexicalSearch) {

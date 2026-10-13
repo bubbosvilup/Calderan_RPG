@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {turnFixture} from "../src/dev/turn-fixture.js";
+import {turnFixture} from "../src/dev/support/turn-fixture.js";
 import {structuredReflectionEvidence} from './frozen/reflection/reflection-v2.js';
 import {validateStructuredClaimV22,statementProvenance} from './frozen/reflection/reflection-v22.js';
 function fixture(){const f=turnFixture();f.campaign.apply({expected_revision:f.campaign.revision,commands:[{kind:"create_household",id:"campaign_household_v22",name:"V22 house"},{kind:"set_membership",household_id:"campaign_household_v22",membership:{character_id:"nicco",status:"member",role:"owner"}},{kind:"join_household",household_id:"campaign_household_v22",character_id:"maren"}]});for(const [field,quote]of [["voice","I report meal counts."],["social_style","I keep meal records."]]as const)f.campaign.apply({expected_revision:f.campaign.revision,commands:[{kind:"establish_character_contract",character_id:"maren",field,text:quote,quote}]});const catalog=structuredReflectionEvidence(f.world,f.campaign.exportSnapshot(),"maren").structured,links=statementProvenance(catalog,"maren");const proposal={subject_character_id:"maren",confidence:"high",evidence_refs:links.map(l=>l.source_event_ref!),claim:{type:"self_statement_synthesis",statement_refs:links.map(l=>l.statement_ref)}};return{catalog,links,proposal,check:(p:unknown=proposal,c=catalog)=>validateStructuredClaimV22(p,c,"maren")};}

@@ -9,7 +9,7 @@ import { FileCampaignRepository } from "../src/persistence/campaign-repository.j
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { ReflectionProvider } from "../src/turn/optional/reflection.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";

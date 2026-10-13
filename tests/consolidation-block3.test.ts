@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { metadata, collect } from "./turn-fixtures.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";

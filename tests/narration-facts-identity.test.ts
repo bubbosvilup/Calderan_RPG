@@ -5,7 +5,7 @@ import { identityFacts, type IdentityScope } from "../src/turn/narration-facts/i
 import { attributedSpeech } from "../src/turn/identity/attributed-speech.js";
 import { sellerPrices } from "../src/turn/commerce/commerce-evidence.js";
 import { extractNarrationFacts } from "../src/turn/narration-facts/index.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { asksName } from "../src/turn/identity/identity-request.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { structuredReflectionEvidence, validateStructuredClaim, evaluateStructuredOutput, renderStructuredClaim, parseStructuredOutput, type StructuredProposal } from './frozen/reflection/reflection-v2.js';
 

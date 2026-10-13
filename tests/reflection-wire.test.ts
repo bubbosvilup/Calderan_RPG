@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {V2_SCHEMA} from './frozen/reflection/reflection-v23.js';
 import {reflectionWireSchema,validateReflectionWire} from './frozen/reflection/reflection-wire.js';
-import {exactBenchmarkCredential,benchmarkAuthentication,benchmarkStop,BenchmarkGate,runBenchmarkTasks} from '../src/dev/reflection-benchmark.js';
+import {exactBenchmarkCredential,benchmarkAuthentication,benchmarkStop,BenchmarkGate,runBenchmarkTasks} from '../src/dev/live/reflection-benchmark.js';
 const p={subject_character_id:'maren',evidence_refs:['r1','r2'],confidence:'high',claim:{type:'relationship_trajectory',target_character_id:'brenna',dimension:'trust',from:'none',to:'moderate',direction:'increase',transition_count:2}},wire=reflectionWireSchema('WIRE_DEEPINFRA_V1');
 const cases:[string,unknown,boolean][]=[
  ['duplicate evidence refs',{proposals:[{...p,evidence_refs:['r1','r1']}]},true],

@@ -8,9 +8,9 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { SemanticIndex } from "../src/retrieval/semantic-index.js";
 import { EmbeddingError } from "../src/retrieval/embedding-provider.js";
 import { FixtureEmbeddingProvider } from "./retrieval-eval/fixture-embedding-provider.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
-import { aggregate, parseJsonl, percentiles, renderMarkdown, type EvalRecord } from "../src/dev/diagnostics-aggregate.js";
-import { LIVE_SCENARIOS, buildScenario } from "../src/dev/live-eval-scenarios.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
+import { aggregate, parseJsonl, percentiles, renderMarkdown, type EvalRecord } from "../src/dev/inspect/diagnostics-aggregate.js";
+import { LIVE_SCENARIOS, buildScenario } from "../src/dev/historical/live-eval-scenarios.js";
 import { collect, mockController, mockNarrator, transfer } from "./turn-fixtures.js";
 import { failOnce, failTwice, fakeRetry, scriptedController, scriptedNarrator } from "./provider-failure-scripts.js";
 
@@ -58,9 +58,9 @@ test("live scenario matrix: A–T all present, unique, every fixture builds, cri
 });
 test("live harness refuses without a key (BLOCKED, exit 3, no network) and refuses an oversized plan (exit 2)", () => {
   const env = { ...process.env }; delete env.OPENROUTER_API_KEY; delete env.VOYAGE_API_KEY;
-  const blocked = spawnSync(process.execPath, [".build/src/dev/eval-live-h5.js", "--runs", "1"], { env, encoding: "utf8" });
+  const blocked = spawnSync(process.execPath, [".build/src/dev/historical/eval-live-h5.js", "--runs", "1"], { env, encoding: "utf8" });
   assert.equal(blocked.status, 3); assert.match(blocked.stderr, /BLOCKED/);
-  const refused = spawnSync(process.execPath, [".build/src/dev/eval-live-h5.js", "--dry", "--runs", "50", "--out", "/dev/null"], { env, encoding: "utf8" });
+  const refused = spawnSync(process.execPath, [".build/src/dev/historical/eval-live-h5.js", "--dry", "--runs", "50", "--out", "/dev/null"], { env, encoding: "utf8" });
   assert.equal(refused.status, 2); assert.match(refused.stderr, /REFUSED/);
 });
 test("embedding transient failure never fails a turn: lexical fallback is used and recorded", async () => {

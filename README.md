@@ -134,9 +134,10 @@ src/app/          GameSession, SessionHost, SessionView and read models, optiona
 src/economy/      reference prices and selective narrator injection
 src/ui/           local web UI server (server.ts, play.ts) and vanilla client
 src/types/        shared types
-src/dev/          developer and live-evaluation tools (never imported by production code)
+src/dev/          developer tools by purpose: support/, inspect/, benchmark/, maintenance/, live/ (spends credits),
+                  historical/ (reproduction only); never imported by production code
 tests/            offline tests; tests/benchmark/ holds the modern regression benchmark
-scripts/          browser checks and evaluation scripts (some spend credits)
+scripts/          clean and check commands; browser/ (offline browser checks), evaluation/, historical/
 docs/             documentation (start at docs/README.md)
 saves/            campaign saves (local)
 ```
@@ -163,7 +164,7 @@ npm run inspect:search            # offline retrieval inspection
 npm run inspect:save              # inspect a save file
 ```
 
-Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:controller`, `bench:llm`, `eval:*`, `benchmark:controller`, `review:playthrough`) need `OPENROUTER_API_KEY`; image generation needs `HF_TOKEN`. Keys are read from the environment only; never write them to a file. Models and every other variable: [Configuration](docs/CONFIGURATION.md).
+Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:controller`, `bench:llm`, `inspect:turn`, `benchmark:controller`, and the harnesses in `src/dev/live/`) need `OPENROUTER_API_KEY`; image generation needs `HF_TOKEN`. Keys are read from the environment only; never write them to a file. Models and every other variable: [Configuration](docs/CONFIGURATION.md).
 
 ## Testing
 

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { verifyQuote } from "../src/dev/evidence-quote.js";
+import { verifyQuote } from "../src/dev/historical/evidence-quote.js";
 
 // Phase 1N shadow experiment only: quote verification is necessary for the experimental path, never sufficient, never production.
 const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "pink_cotton",  position: { kind: "carried", character_id: "brenna" } };

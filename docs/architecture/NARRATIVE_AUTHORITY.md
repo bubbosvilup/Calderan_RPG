@@ -169,7 +169,7 @@ Historical playthrough windows remain an evaluation-only helper and are never us
 
 **Free improvisation:** gestures, tone, emotions, clothing of unnamed temporary people, transient ambience and disposable props.
 
-**Enforcement is prompt policy** (`[CANON BOUNDARIES]` in the narrator system prompt) plus a **dev/eval-only** grounding manifest (`src/dev/lore-grounding.ts`) that never blocks, edits or patches narration, canon or state. A phrase is grounded when it occurs in this turn's supplied prompt; the recent-conversation replay is excluded, so an earlier invention cannot ground itself. A phrase found elsewhere in canon is reported as "canon, not supplied", never as an invention.
+**Enforcement is prompt policy** (`[CANON BOUNDARIES]` in the narrator system prompt) plus a **dev/eval-only** grounding manifest (`src/dev/support/lore-grounding.ts`) that never blocks, edits or patches narration, canon or state. A phrase is grounded when it occurs in this turn's supplied prompt; the recent-conversation replay is excluded, so an earlier invention cannot ground itself. A phrase found elsewhere in canon is reported as "canon, not supplied", never as an invention.
 
 **No meta language:** narration must not expose rules, permissions, knowledge access, state or system reasoning.
 

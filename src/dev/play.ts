@@ -4,10 +4,10 @@ import { createOpeningCampaign } from "../campaign/opening-state.js";
 import { CampaignSession } from "../persistence/campaign-session.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { loadWorld } from "../world/loader.js";
-import { turnFixture } from "./turn-fixture.js";
-import { onlineCoordinator, selectedModels } from "./turn-services.js";
-import { formatCampaignStatus } from "./campaign-status.js";
-import { runPlayTurn } from "./play-turn.js";
+import { turnFixture } from "./support/turn-fixture.js";
+import { onlineCoordinator, selectedModels } from "./support/turn-services.js";
+import { formatCampaignStatus } from "./support/campaign-status.js";
+import { runPlayTurn } from "./support/play-turn.js";
 import { readReflectionMode } from "../app/production.js";
 import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provider.js";
 

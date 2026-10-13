@@ -12,10 +12,10 @@ import { readFileSync } from "node:fs";
  */
 const HISTORY = ["docs", "evaluations"].join("/");
 const HISTORICAL_TOOLS: readonly { file: RegExp; why: string }[] = [
-  { file: /^src\/dev\/eval-evidence\.ts$/, why: "Phase 1O evidence evaluation: re-scores the recorded Phase 1M/1N runs in the archive" },
-  { file: /^src\/dev\/shadow-evidence\.ts$/, why: "Phase 1N shadow-evidence experiment: re-scores the recorded Phase 1M runs in the archive" },
-  { file: /^scripts\/d09-[\w-]+\.mjs$/, why: "D09 reflection harnesses: run, resume and analyze the recorded D09 evidence directories" },
-  { file: /^scripts\/minor-debt-controller-audit\.mjs$/, why: "audits the controller receipts recorded in the D09 evidence" },
+  { file: /^src\/dev\/historical\/eval-evidence\.ts$/, why: "Phase 1O evidence evaluation: re-scores the recorded Phase 1M/1N runs in the archive" },
+  { file: /^src\/dev\/historical\/shadow-evidence\.ts$/, why: "Phase 1N shadow-evidence experiment: re-scores the recorded Phase 1M runs in the archive" },
+  { file: /^scripts\/historical\/d09-[\w-]+\.mjs$/, why: "D09 reflection harnesses: run, resume and analyze the recorded D09 evidence directories" },
+  { file: /^scripts\/historical\/minor-debt-controller-audit\.mjs$/, why: "audits the controller receipts recorded in the D09 evidence" },
 ];
 /** A string literal that starts with the history path, possibly relative, or a join("docs", "evaluations", ...) call. */
 const PATH_USE = new RegExp(String.raw`(["'\x60])(?:\.\.?/)*docs/evaluations|join\(\s*(["'])docs\2\s*,\s*(["'])evaluations\3`);

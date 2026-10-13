@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { buildNarratorPrompt, dialogueFocused, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";

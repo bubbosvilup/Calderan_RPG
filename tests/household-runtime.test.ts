@@ -7,7 +7,7 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { buildTurnContext, SOCIAL_LIMITS } from "../src/turn/context/context-builder.js";
 import { relationshipHeadline } from "../src/campaign/relationship-summary.js";
-import { formatCampaignStatus } from "../src/dev/campaign-status.js";
+import { formatCampaignStatus } from "../src/dev/support/campaign-status.js";
 
 /**
  * Household / Slave Trade / Relationship Runtime Pass 1: domain-level guarantees. Fixture people are campaign-created characters

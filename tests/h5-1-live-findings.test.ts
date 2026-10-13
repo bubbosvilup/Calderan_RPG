@@ -18,7 +18,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { collect, metadata } from "./turn-fixtures.js";
 

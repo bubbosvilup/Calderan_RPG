@@ -7,7 +7,7 @@ import { buildNarratorPrompt, dialogueFocused } from "../src/turn/context/prompt
 import { retrievalRequired, retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 
 /** Exact passer-by narrations from the 2026-09-29 opening smoke run (turns 1 and 2). */
 const SMOKE_T1 = "The passer-by—a thin man in a worn coat carrying a parcel under one arm—stops and blinks at Nicco, his expression flickering between confusion and wary caution. \"Slave pen?\" he repeats, glancing sidelong toward Heartstone's massive wooden entrance as if seeking escape. \"There's no such place here. Not in the city.\" He shifts his parcel, stepping back half a pace. \"The Constabulary deals with criminals. Workhouses for debtors. But nothing like—\" He shakes his head firmly. \"I don't know what you're asking for, stranger, and I'd rather not.\" With that, he hurries past, quickening his steps toward wherever he was bound.";

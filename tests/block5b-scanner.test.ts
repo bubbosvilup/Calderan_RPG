@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { renderForkReportMarkdown, scanIdentityForks } from "../src/campaign/identity-fork-scanner.js";
 import { createSaveFile, serializeSave } from "../src/persistence/save-format.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 
 /** Consolidation block 5B, phase 7: the identity-fork scanner is deterministic, multi-signal, diagnostic-only and strictly read-only. */
 const person = (id: string, name: string | undefined, location: string, extra: object = {}): CampaignCommand => ({ kind: "register_character",
@@ -71,7 +71,7 @@ test("S7: the CLI reads saves and writes only its own report (the save file is b
     const file = join(saves, "save.json"); await writeFile(file, serializeSave(createSaveFile(f.campaign.exportSnapshot(), f.world, "2026-10-12T00:00:00.000Z"), f.world));
     const before = await readFile(file, "utf8");
     // The CLI loads the real data set; the fixture world must be the canonical one for the save to validate there.
-    try { execFileSync("node", [".build/src/dev/scan-identity-forks.js", "--out", join(dir, "out"), join(dir, "saves")], { encoding: "utf8" }); } catch { /* a fixture world that differs from data/ is reported as skipped, still read-only */ }
+    try { execFileSync("node", [".build/src/dev/maintenance/scan-identity-forks.js", "--out", join(dir, "out"), join(dir, "saves")], { encoding: "utf8" }); } catch { /* a fixture world that differs from data/ is reported as skipped, still read-only */ }
     assert.equal(await readFile(file, "utf8"), before);
     assert.deepEqual((await readdir(saves)).sort(), ["save.json"]);
   } finally { await rm(dir, { recursive: true, force: true }); }

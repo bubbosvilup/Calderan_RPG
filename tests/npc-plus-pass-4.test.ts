@@ -14,7 +14,7 @@ import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 
 /** NPC+ Pass 4: absent_participant flags participation, not mention; same-turn duplicate canon is removed by source identity. */
 

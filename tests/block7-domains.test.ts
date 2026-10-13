@@ -2,7 +2,7 @@ import test, { type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import { promises as fs, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { GameSession, type SessionDeps } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";

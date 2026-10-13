@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { travelCompanions } from "../src/dev/historical-anchors.js";
+import { travelCompanions } from "../src/dev/historical/historical-anchors.js";
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { loadWorld } from "../src/world/loader.js";
-import { anchoredIds, anchorsSha256, groundedNarrator, renderAnchorBlock, travelReferents, validateAnchors, verifyAnchorEvidence, type AnchorFile } from "../src/dev/historical-anchors.js";
+import { anchoredIds, anchorsSha256, groundedNarrator, renderAnchorBlock, travelReferents, validateAnchors, verifyAnchorEvidence, type AnchorFile } from "../src/dev/historical/historical-anchors.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import { metadata } from "./turn-fixtures.js";

@@ -123,7 +123,7 @@ Totals: **8 requests, 8 Luna responses, 7/8 live PASS, 0 retries, 0 fallback, 0 
 
 - `src/campaign/item-transfer.ts`
 - `tests/transfer-domain.test.ts`
-- `scripts/transfer-domain-live-smoke.mjs`
+- `scripts/evaluation/transfer-domain-live-smoke.mjs`
 - `docs/architecture/TRANSFER_DOMAIN_V1.md`
 - `docs/evaluations/TRANSFER_DOMAIN_LIVE_SMOKE.json`
 

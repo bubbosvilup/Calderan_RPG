@@ -13,7 +13,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { GameSession, SessionHost, type SessionDeps } from "../src/app/index.js";
 import { PortraitAssetStore } from "../src/app/portrait-store.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { inventoryUiView, EQUIPMENT_SLOTS, equipmentSlotFor } from "../src/app/inventory-ui-view.js";
 import { resolveItemDetailArtwork, resolveItemIcon, resolveItemVisual, ITEM_GLYPHS, ITEM_VISUAL_KINDS } from "../src/app/item-visuals.js";
 import { createPlaytestServer } from "../src/ui/server.js";

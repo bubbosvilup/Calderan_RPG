@@ -7,7 +7,7 @@ import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/sa
 import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 import { build, BASE } from "./pass10-headroom.js";
 import { household, play } from "./pass10-support.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { loadWorld } from "../src/world/loader.js";
 
 /** NPC+ Pass 10 — save/migration/replay torture. Every tamper of premium or reflection state must fail closed at restore. */

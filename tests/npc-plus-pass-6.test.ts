@@ -11,7 +11,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/turn/context/npc-plus.js";
 import { mergeNotes, reflectAfterTurn, reflectionDue, reflectionEvidence, validateProposals, type Proposal, type ReflectionProvider } from "../src/turn/optional/reflection.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 
 /** NPC+ Pass 6: bounded evidence-cited reflection (model stubbed; every validation is deterministic). */
 const HOME = "campaign_household_h";

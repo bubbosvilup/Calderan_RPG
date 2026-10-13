@@ -1,6 +1,6 @@
 # Caldrevan documentation index
 
-Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup B, documentation namespace, on top of main cc9cb7c). Source of truth: the code on main. Authority order when documents disagree: **code, then tests, then authored data/canon, then the current documents below, then historical evidence.**
+Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup B, documentation namespace, on top of main cc9cb7c; Repository Cleanup E added the dev tooling section of Testing). Source of truth: the code on main. Authority order when documents disagree: **code, then tests, then authored data/canon, then the current documents below, then historical evidence.**
 
 **One rule for the tree.** The repository root (`README.md`) and the documents linked from the first four sections below describe the project **as it is now**. Everything under [`evaluations/`](evaluations/) is **historical or machine evidence**: block, phase and pass reports, audits, live certifications, bakeoffs, migration notes and superseded documents. That evidence is preserved as written and never updated to match the present. Labels used below: **NORMATIVE** (the maintained description of current behavior) and **ACTIVE** (an accurate reference, possibly with clearly marked historical sections).
 
@@ -37,7 +37,7 @@ Subsystem references (ACTIVE):
 
 - [Project README](../README.md): what it is, how to run it.
 - [Configuration](CONFIGURATION.md): environment variables, models, run modes.
-- [Testing](TESTING.md): commands, authoritative runs, browser checks, known flaky test.
+- [Testing](TESTING.md): commands, authoritative runs, browser checks, dev tooling (where each tool lives, live versus offline, output and archive policy).
 - Authoring: [Authoring guide](authoring/AUTHORING_GUIDE.md), [Geography](authoring/GEOGRAPHY.md), [Calderan spatial canon](authoring/CALDERAN_SPATIAL_CANON.md), templates in `authoring/templates/`.
 - Schemas: [Entity schema](schemas/ENTITY_SCHEMA.md), [Knowledge chunks](schemas/KNOWLEDGE_CHUNKS.md).
 

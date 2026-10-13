@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, ItemTransferMode } from "../src/campaign/types.js";
 import { carriesItem, equipsItem, hasItem, inventoryItems, itemAt, ownsItem } from "../src/campaign/inventory.js";

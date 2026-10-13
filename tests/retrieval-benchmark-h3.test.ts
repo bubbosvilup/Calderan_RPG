@@ -8,8 +8,8 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { SemanticIndex } from "../src/retrieval/semantic-index.js";
 import { EmbeddingError } from "../src/retrieval/embedding-provider.js";
-import { runRetrievalBenchmarkH3, RETRIEVAL_BENCHMARK_H3 } from "../src/dev/retrieval-benchmark-h3.js";
-import { runTurnRetrievalBenchmark } from "../src/dev/turn-retrieval-benchmark.js";
+import { runRetrievalBenchmarkH3, RETRIEVAL_BENCHMARK_H3 } from "../src/dev/benchmark/retrieval-benchmark-h3.js";
+import { runTurnRetrievalBenchmark } from "../src/dev/benchmark/turn-retrieval-benchmark.js";
 import { FixtureEmbeddingProvider } from "./retrieval-eval/fixture-embedding-provider.js";
 
 /** Hardening H3: offline retrieval gates on real canon with the production turn policy. No paid provider. */

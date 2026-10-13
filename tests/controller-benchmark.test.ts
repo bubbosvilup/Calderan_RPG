@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { BENCHMARK_CASES } from "../src/dev/controller-benchmark-cases.js";
-import { prepareCase, replay, scoreCell, sameCommand, percentiles, staleRevisionInvariant, liveCell, aggregate, type PreparedCase } from "../src/dev/controller-benchmark.js";
+import { BENCHMARK_CASES } from "../src/dev/benchmark/controller-benchmark-cases.js";
+import { prepareCase, replay, scoreCell, sameCommand, percentiles, staleRevisionInvariant, liveCell, aggregate, type PreparedCase } from "../src/dev/benchmark/controller-benchmark.js";
 import { DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/state-controller.js";
 
 /** Offline checks for the State Controller benchmark harness (no network; live runs use `npm run benchmark:controller`). */

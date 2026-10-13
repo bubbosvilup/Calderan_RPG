@@ -21,7 +21,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
-import { formatCampaignStatus } from "../src/dev/campaign-status.js";
+import { formatCampaignStatus } from "../src/dev/support/campaign-status.js";
 import { collect, metadata } from "./turn-fixtures.js";
 
 /** Household Pass 1: natural-language evals (deterministic resolvers and evidence) and an end-to-end turn scenario. No LLM calls. */

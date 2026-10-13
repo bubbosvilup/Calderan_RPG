@@ -9,11 +9,11 @@ import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import {
   LORE, SCENE_ELSEWHERE, SCENE_LOCATION, WEST_GATE, WEST_GATE_TEXT, alone, apply, createdPerson, fact, idealScene, itemId, knows, makeItem, promptFor,
   sceneBlock, sceneFixture, scenarios, sceneWorld,
-} from "../src/dev/scene-state-fixtures.js";
+} from "../src/dev/support/scene-state-fixtures.js";
 
 /**
  * Scene State Projection V1 (phases 41-55): the narrator-facing [CURRENT SCENE] block is DERIVED each turn from authoritative runtime
- * state. These tests use only the synthetic public fixtures in src/dev/scene-state-fixtures.ts; nothing touches data/ or the network.
+ * state. These tests use only the synthetic public fixtures in src/dev/support/scene-state-fixtures.ts; nothing touches data/ or the network.
  */
 const scene = (f: { world: ReturnType<typeof sceneWorld>; campaign: CampaignState }, input = "Brenna, are you alright?", recent = [] as Parameters<typeof promptFor>[3]) =>
   sceneBlock(promptFor(f.world, f.campaign, input, recent).text);

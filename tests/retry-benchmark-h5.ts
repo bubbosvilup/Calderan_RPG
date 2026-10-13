@@ -2,7 +2,7 @@ import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { setup, mockNarrator, mockController, collect } from "./turn-fixtures.js";
 import { scriptedController, scriptedNarrator, failOnce } from "./provider-failure-scripts.js";
 import { DEFAULT_RETRY_POLICY } from "../src/llm/retry.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 

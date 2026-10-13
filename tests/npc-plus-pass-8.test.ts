@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { metadata, mockNarrator, collect } from "./turn-fixtures.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { MotifTracker, observeOrganicTurn, type OrganicTurnDiagnostics } from "../src/dev/organic-discovery.js";
+import { MotifTracker, observeOrganicTurn, type OrganicTurnDiagnostics } from "../src/dev/historical/organic-discovery.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
 

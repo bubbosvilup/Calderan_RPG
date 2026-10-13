@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { parseCsv, extractPairs, type SourcePair } from "../src/dev/playthrough-csv.js";
-import type { CuratedLabel } from "../src/dev/playthrough-manifest.js";
+import { parseCsv, extractPairs, type SourcePair } from "../src/dev/maintenance/playthrough-csv.js";
+import type { CuratedLabel } from "../src/dev/maintenance/playthrough-manifest.js";
 import { setup, collect } from "./turn-fixtures.js";
 
 test("CSV quoted newlines, commas, escaped quotes and provenance", () => {

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { CampaignState, prepareCampaignChange } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, CampaignSnapshot, MannerismDefinition } from "../src/campaign/types.js";
 import { MANNERISM_SEEDS, reviewMannerismSeeds } from "../src/campaign/mannerism-seeds.js";

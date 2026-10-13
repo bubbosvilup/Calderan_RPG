@@ -13,10 +13,10 @@ import { resolveTurnIntent, projectTurnIntent, type IntentStageInput } from "../
 import { playerIntent } from "../src/turn/player-intent.js";
 import { ContextBudgetManager } from "../src/turn/context/context-budget.js";
 import { REQUEST_RESOURCE_CHARACTERS } from "../src/types/resource-limits.js";
-import { LARGE_DEFAULT, RICH, largeScene, richScene } from "../src/dev/scene-foundation-fixtures.js";
+import { LARGE_DEFAULT, RICH, largeScene, richScene } from "../src/dev/support/scene-foundation-fixtures.js";
 import {
   LORE, SCENE_ELSEWHERE, SCENE_LOCATION, apply, createdPerson, fact, itemId, knows, makeItem, promptFor, sceneBlock, sceneFixture, type SceneOptions,
-} from "../src/dev/scene-state-fixtures.js";
+} from "../src/dev/support/scene-state-fixtures.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 
 /**

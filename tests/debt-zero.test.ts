@@ -16,8 +16,8 @@ import { normalizeControllerOutput, parseControllerEvidenceProposal } from "../s
 import { environmentAt, resolveClimateProfileId, resolveExposure } from "../src/world/environment.js";
 import { WEATHER_LOOKBACK_BLOCKS, WEATHER_BLOCK_MINUTES, weatherAt } from "../src/world/weather.js";
 import { calendarDateAt } from "../src/world/calendar.js";
-import { inspectInventory, pickupCase, runPickupCase, SWORD, groundSword, pickUp, dropHere } from "../src/dev/item-lifecycle-inspector.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { inspectInventory, pickupCase, runPickupCase, SWORD, groundSword, pickUp, dropHere } from "../src/dev/inspect/item-lifecycle-inspector.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 
 /** Pre-Property Debt Zero: item intent binding, bounded evidence recovery, aliases, conflicts, create_item facts, weather seam and exposure. */
 type F = ReturnType<typeof turnFixture>;

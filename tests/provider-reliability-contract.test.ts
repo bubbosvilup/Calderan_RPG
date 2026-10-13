@@ -9,7 +9,7 @@ import {fakeRetry,scriptedController,scriptedNarrator} from "./provider-failure-
 import {OpenRouterClient} from "../src/llm/openrouter/client.js";
 import {MiniMaxNarratorProvider} from "../src/llm/openrouter/minimax-narrator.js";
 import {reflectAfterTurn} from "../src/turn/optional/reflection.js";
-import {mannerismFixture} from "../src/dev/d10-mannerism-corpus.js";
+import {mannerismFixture} from "../src/dev/support/d10-mannerism-corpus.js";
 import {MannerismMaintenance} from "../src/turn/optional/mannerism-extraction.js";
 import {OpenRouterStateControllerProvider} from "../src/llm/openrouter/state-controller.js";
 import {MannerismPortrayalGate} from "../src/turn/optional/mannerism-portrayal-gate.js";

@@ -19,8 +19,8 @@ import { playerRef } from "../src/app/player-visual-view.js";
 import { GameSession, type SessionDeps } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { createPlaytestServer } from "../src/ui/server.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
-import { runScenario } from "../src/dev/controller-authorization-diagnostics.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
+import { runScenario } from "../src/dev/inspect/controller-authorization-diagnostics.js";
 
 /**
  * Explicit NPC+ promotion = the Heartstone household rite completed by the PLAYER. The rite is roleplayed in fiction; the only mechanical

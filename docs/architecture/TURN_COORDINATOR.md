@@ -118,15 +118,13 @@ TurnCoordinator never imports or calls CampaignSaveRepository. CampaignSession d
 
 Source: the user-provided `thread_2026-09-16_caldrevan-dark-fantasy-isekai_nicco-wzlau.csv`, 843 message records / 421 player-assistant pairs. It is an **evaluation corpus, not canonical prose or authoritative state history**. The original file is untouched and its full contents are never sent to a model.
 
-`src/dev/playthrough-csv.ts` parses quoted commas/newlines and escaped quotes. `extract:playthrough` selects an explicitly authored manifest into `tests/playthrough/curated.json`, retaining source filename/SHA-256, original player and assistant text, category, desired durable commands, interpretation and notes. Record numbers are one-based logical CSV records including the header, not physical lines inside multiline fields.
+`src/dev/maintenance/playthrough-csv.ts` parses quoted commas/newlines and escaped quotes. `extract:playthrough` selects an explicitly authored manifest into `tests/playthrough/curated.json`, retaining source filename/SHA-256, original player and assistant text, category, desired durable commands, interpretation and notes. Record numbers are one-based logical CSV records including the header, not physical lines inside multiline fields.
 
 There are **24 curated pairs** covering dialogue, physical continuity, equipment/ownership, time/ambiguous time, knowledge/secrets, player agency, movement, household behavior, item continuity, multi-NPC scenes and a scheduled deadline. Labels were authored by Codex after reading the pairs, with unresolved references/slots/dates explicitly identified. They are marked `agent_authored_pending_human_review`; no human review is claimed. Unsupported household/profile/relationship domains deliberately remain no-ops.
 
 ```text
 npm run extract:playthrough -- "C:\path\to\historical.csv"
 npm run test:playthrough
-npm run eval:playthrough
-npm run eval:playthrough -- --count 20
 npm run inspect:turn
 ```
 
@@ -181,11 +179,11 @@ The narrator prompt now separates role, hard rules, authoritative scene/characte
 
 Evaluation now has two modes:
 
-- `npm run eval:playthrough`: original 12 state-fixture cases; `-- --count 24` expands the curated set. Historical assistant replies remain reference-only.
-- `npm run eval:playthrough -- --narrative`: seven historical cases plus Ironbound, with three preceding source exchanges (bounded to 2?4 and 16,000 characters). `withHistoricalContext` decorates only the evaluation narrator request with the explicit non-authoritative historical warning. The controller sees only the current generated turn and current structured evidence. Normal recent history never receives the injected window.
-- `npm run inspect:turn`: fresh synthetic smoke. All report filenames include Phase 1L.1 and a unique timestamp, written exclusively; the legacy entry point delegates to this additive evaluator.
+- **Deprecated (Repository Cleanup E): the former `npm run eval:playthrough`.** It is no longer an npm command; both of its modes stay in `src/dev/live/eval-hardening.ts` (shared with `inspect:turn`) for reproduction: `npm run build`, then `node .build/src/dev/live/eval-hardening.js` (original 12 state-fixture cases; `--count 24` expands the curated set; historical assistant replies remain reference-only).
+- Deprecated narrative mode, `node .build/src/dev/live/eval-hardening.js --narrative`: seven historical cases plus Ironbound, with three preceding source exchanges (bounded to 2?4 and 16,000 characters). `withHistoricalContext` decorates only the evaluation narrator request with the explicit non-authoritative historical warning. The controller sees only the current generated turn and current structured evidence. Normal recent history never receives the injected window.
+- `npm run inspect:turn` (supported live diagnostic, spends credits): fresh synthetic smoke. All report filenames include Phase 1L.1 and a unique timestamp, written exclusively; the legacy entry point delegates to this additive evaluator.
 - `npm run review:playthrough`: read-only full source/label/provenance/suitability review. Labels remain agent-authored pending human ratification.
-- `node .build/src/dev/replay-hardening.js <recorded-report>`: offline final-grammar replay of completed recorded responses/proposals plus explicit/emotional knowledge controls. These results must never be presented as fresh provider runs or included in latency statistics.
+- `node .build/src/dev/historical/replay-hardening.js <recorded-report>`: offline final-grammar replay of completed recorded responses/proposals plus explicit/emotional knowledge controls. These results must never be presented as fresh provider runs or included in latency statistics.
 
 Only record 115's evaluation fixture explicitly grounds the formerly ambiguous recipient (Brenna alone) and descriptive garment names. Player text and expected labels are unchanged. This fixture correction is disclosed in every report; it is not a canon change or evidence of unqualified apples-to-apples recall improvement.
 

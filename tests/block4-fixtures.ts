@@ -7,7 +7,7 @@ import { retryPolicy, type ProviderRetryPolicy } from "../src/llm/retry.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { GameSession, type SessionDeps } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";

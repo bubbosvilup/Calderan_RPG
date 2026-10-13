@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import type { turnFixture } from "../src/dev/turn-fixture.js";
-import { OFFER, runScenario, type DiagnosticScenario } from "../src/dev/controller-authorization-diagnostics.js";
+import type { turnFixture } from "../src/dev/support/turn-fixture.js";
+import { OFFER, runScenario, type DiagnosticScenario } from "../src/dev/inspect/controller-authorization-diagnostics.js";
 
 /** Consolidation Pass C, A: a resolved explicit player transfer binds item, recipient and mode; autonomous NPC transfers keep their evidence path. */
 type F = ReturnType<typeof turnFixture>;

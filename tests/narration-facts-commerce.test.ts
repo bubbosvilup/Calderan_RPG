@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { createFactSource, extractInputCommerceFacts, extractNarrationFacts, type CommerceFact, type NarrationFactScope } from "../src/turn/narration-facts/index.js";
 import { actionableQuote, sellerPrices, sellerQuotes, settlementClaims, unsupportedMoney, withdrawalIn } from "../src/turn/commerce/commerce-evidence.js";

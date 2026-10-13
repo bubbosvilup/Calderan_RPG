@@ -6,8 +6,8 @@ import { renderSceneStateProjection, SCENE_RENDER_LIMITS, SCENE_SECTION_SOFT_BUD
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { narratorPortrayalCurrent } from "../src/turn/context/prompt-builder.js";
 import { withoutStatedRelationship, type NpcPlusContext } from "../src/turn/context/npc-plus.js";
-import { largeScene, richScene, RICH } from "../src/dev/scene-foundation-fixtures.js";
-import { LORE, SCENE_LOCATION, apply, alone, createdPerson, itemId, makeItem, promptFor, sceneBlock, sceneFixture } from "../src/dev/scene-state-fixtures.js";
+import { largeScene, richScene, RICH } from "../src/dev/support/scene-foundation-fixtures.js";
+import { LORE, SCENE_LOCATION, apply, alone, createdPerson, itemId, makeItem, promptFor, sceneBlock, sceneFixture } from "../src/dev/support/scene-state-fixtures.js";
 
 /**
  * Consolidation Pass A: Scene Projection / prompt debt cleanup. The narrator-facing state gets smaller and less repetitive; every omission is

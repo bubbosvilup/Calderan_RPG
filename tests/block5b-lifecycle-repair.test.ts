@@ -6,7 +6,7 @@ import { characterLifecycle, retiredCharacterIds } from "../src/campaign/charact
 import { mergeConflicts, retireConflicts } from "../src/campaign/character-repair.js";
 import { createSaveFile, validateSaveFile } from "../src/persistence/save-format.js";
 import { migrateSnapshot6to7 } from "../src/persistence/save-migrations.js";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { movableCharacters } from "../src/turn/movement/character-movement.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 

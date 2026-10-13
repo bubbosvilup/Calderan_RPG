@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { ItemSpriteJobs } from "../src/app/item-sprite-jobs.js";
 import { PortraitAssetStore } from "../src/app/portrait-store.js";

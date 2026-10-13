@@ -8,8 +8,8 @@ import { entityMentions, queryIntent, retrievalQuery, retrievalRequired, retriev
 import { stem } from "../src/retrieval/lexical-index.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { runTurnRetrievalBenchmark, TURN_RETRIEVAL_CASES } from "../src/dev/turn-retrieval-benchmark.js";
-import { groundingManifest } from "../src/dev/lore-grounding.js";
+import { runTurnRetrievalBenchmark, TURN_RETRIEVAL_CASES } from "../src/dev/benchmark/turn-retrieval-benchmark.js";
+import { groundingManifest } from "../src/dev/support/lore-grounding.js";
 
 async function opening() {
   const world = await loadWorld("data"), context = buildTurnContext(world, createOpeningCampaign(world, "p1r").exportSnapshot()), service = new RetrievalService(world);

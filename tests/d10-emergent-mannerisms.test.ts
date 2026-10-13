@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mannerismFixture, MANNERISM_CORPUS } from "../src/dev/d10-mannerism-corpus.js";
+import { mannerismFixture, MANNERISM_CORPUS } from "../src/dev/support/d10-mannerism-corpus.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignSnapshot } from "../src/campaign/types.js";
 import { MANNERISM_LEARNING_POLICY as P, MANNERISM_TRIGGERS, requiredMannerismEvidence, type MannerismConcept } from "../src/campaign/mannerism-concepts.js";
@@ -22,7 +22,7 @@ import { OpenRouterMannerismExtractor } from "../src/llm/openrouter/mannerism-ex
 import { createProductionDeps } from "../src/app/production.js";
 import { mannerismExtractorModel } from "../src/app/provider-config.js";
 import { readFile } from "node:fs/promises";
-import { replayCalibratedMannerisms, type CalibratedReplayFixture } from "../src/dev/mannerism-calibration-replay.js";
+import { replayCalibratedMannerisms, type CalibratedReplayFixture } from "../src/dev/historical/mannerism-calibration-replay.js";
 import { MANNERISM_EXTRACTOR_SYSTEM, MANNERISM_EXTRACTION_SCHEMA } from "../src/turn/optional/mannerism-extraction.js";
 
 type Fixture = ReturnType<typeof mannerismFixture>;

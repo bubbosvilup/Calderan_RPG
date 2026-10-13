@@ -4,7 +4,7 @@ import { once } from "node:events";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { turnFixture } from "../src/dev/turn-fixture.js";
+import { turnFixture } from "../src/dev/support/turn-fixture.js";
 import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { PortraitAssetStore } from "../src/app/portrait-store.js";

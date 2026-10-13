@@ -7,7 +7,7 @@ import { ProviderError, type ProviderErrorCode } from "../src/llm/errors.js";
 import { DEFAULT_RETRY_POLICY, NO_RETRY_POLICY, RETRYABLE_PROVIDER_CODES, classifyProviderCode, withProviderRetry, ProviderBudget, abortableSleep } from "../src/llm/retry.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";
 import { MiniMaxNarratorProvider } from "../src/llm/openrouter/minimax-narrator.js";
-import { DeepSeekStateControllerProvider } from "../src/llm/openrouter/deepseek-controller.js";
+import { OpenRouterStateControllerProvider } from "../src/llm/openrouter/state-controller.js";
 import { setup, collect, transfer } from "./turn-fixtures.js";
 import { failOnce, failTwice, fakeRetry, scriptedController, scriptedNarrator, type Step } from "./provider-failure-scripts.js";
 
@@ -224,7 +224,7 @@ test("real OpenRouter narrator + controller adapters: 503 then 429 are recovered
   const controllerBody = JSON.stringify({ choices: [{ message: { content: JSON.stringify({ commands: [{ command: transfer, evidence_quote: CLEAN }] }) }, finish_reason: "stop" }], usage: counts });
   const controllerClient = new OpenRouterClient({ api_key: () => "k", fetch: (async () => (controllerCalls++ === 0 ? new Response("{}", { status: 429 }) : new Response(controllerBody))) as typeof fetch });
   const retry = fakeRetry(); const base = s.campaign.revision;
-  const co = new TurnCoordinator(s.world, new MiniMaxNarratorProvider(narratorClient), new DeepSeekStateControllerProvider(controllerClient), s.retrieval, { provider_retry: retry.policy });
+  const co = new TurnCoordinator(s.world, new MiniMaxNarratorProvider(narratorClient), new OpenRouterStateControllerProvider(controllerClient), s.retrieval, { provider_retry: retry.policy });
   const done = last(await collect(co.runTurn({ campaign: s.campaign, player_input: INPUT })));
   assert.equal(done.type, "turn_completed", JSON.stringify(done).slice(0, 300)); assert.equal(s.campaign.revision, base + 1);
   assert.deepEqual([narratorCalls, controllerCalls, retry.sleeps], [2, 2, [300, 300]]);
