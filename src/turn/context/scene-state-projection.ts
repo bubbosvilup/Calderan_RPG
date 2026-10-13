@@ -5,7 +5,7 @@ import { characterView } from "../../campaign/projections.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
-import { narratorIdentityGate } from "../narrator-identity.js";
+import { narratorIdentityGate } from "../identity/narrator-identity.js";
 import { temporalGrounding } from "../temporal-grounding.js";
 import { describeWeather, environmentAt } from "../../world/environment.js";
 import { formatCalendarDate } from "../../world/calendar.js";

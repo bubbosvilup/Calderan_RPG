@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context/context-builder.js";
-import { establishNames } from "../src/turn/name-establishment.js";
+import { establishNames } from "../src/turn/identity/name-establishment.js";
 import { RecentConversation, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";

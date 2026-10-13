@@ -4,7 +4,7 @@ import type { WorldStore } from "../src/world/world-store.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { resolvePersonOffers, type PersonOfferResolution } from "../src/turn/commerce/person-offers.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
-import type { EphemeralSceneParticipant } from "../src/turn/scene-participants.js";
+import type { EphemeralSceneParticipant } from "../src/turn/identity/scene-participants.js";
 
 /**
  * Actual Offer V1 test helper. A person sale is now read as a structured OFFER; the commands its stored plan will apply when the PLAYER

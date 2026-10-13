@@ -15,7 +15,7 @@ import { buildTurnContext } from "../.build/src/turn/context/context-builder.js"
 import { playerIntent } from "../.build/src/turn/player-intent.js";
 import { actionSegments, sceneDirection, resolveDestination, reachable } from "../.build/src/turn/natural-actions.js";
 import { resolveTurnIntent, projectTurnIntent } from "../.build/src/turn/stages/intent.js";
-import { SceneParticipants } from "../.build/src/turn/scene-participants.js";
+import { SceneParticipants } from "../.build/src/turn/identity/scene-participants.js";
 import { recentSceneNarration } from "../.build/src/turn/context/recent-scene-narration.js";
 import { TurnCoordinator } from "../.build/src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../.build/src/retrieval/retrieval-service.js";

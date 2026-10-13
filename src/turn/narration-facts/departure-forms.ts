@@ -2,7 +2,7 @@ import type { TurnContext } from "../context/context-builder.js";
 import { blankQuotes, escapeRegExp as esc } from "../language/text.js";
 import { GATES } from "../language/gates.js";
 import { rpgNarration } from "../rpg-dialogue.js";
-import { narratorIdentityGate } from "../narrator-identity.js";
+import { narratorIdentityGate } from "../identity/narrator-identity.js";
 import { type NarrationFrame, spanOf } from "./frame.js";
 import { firstNonCompleted, modalityOf, polarityOf } from "./modality.js";
 import type { EntityDepartedFact, EntityPresentFact, FactEntityRef, FactModality } from "./types.js";

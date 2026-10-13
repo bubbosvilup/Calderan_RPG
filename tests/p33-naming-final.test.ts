@@ -9,14 +9,14 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt, NARRATOR_OPAQUE_REFS, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { prepareNarratorRequest } from "../src/turn/context/context-budget.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
-import { canonicalNameDisclosure, establishedCanonicalDisclosure } from "../src/turn/canonical-name-disclosure.js";
-import { narratorIdentityGate, registerNarratorIdentities } from "../src/turn/narrator-identity.js";
+import { canonicalNameDisclosure, establishedCanonicalDisclosure } from "../src/turn/identity/canonical-name-disclosure.js";
+import { narratorIdentityGate, registerNarratorIdentities } from "../src/turn/identity/narrator-identity.js";
 import { projectNarratorFocus } from "../src/turn/context/narrator-focus.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { reconcileNarration } from "../src/turn/stages/audit.js";
-import type { SceneParticipantPlan } from "../src/turn/scene-participants.js";
+import type { SceneParticipantPlan } from "../src/turn/identity/scene-participants.js";
 import type { PlayerIntent } from "../src/turn/player-intent.js";
 import { mockNarrator, mockController, collect, metadata } from "./turn-fixtures.js";
 

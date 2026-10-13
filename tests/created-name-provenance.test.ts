@@ -5,7 +5,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context/context-builder.js";
-import { establishNames } from "../src/turn/name-establishment.js";
+import { establishNames } from "../src/turn/identity/name-establishment.js";
 import { RecentConversation, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { applyAuthorized } from "./provisional-helper.js";

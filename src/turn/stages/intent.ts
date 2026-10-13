@@ -12,7 +12,7 @@ import { extractRuleDeclarations } from "../authorization/household-evidence.js"
 import { invitedFollowers, leftBehindNotes } from "../movement/follow-invitation.js";
 import { followCandidates, resolveHeldEscort } from "../movement/follow-candidates.js";
 import type { RecentExchange } from "../recent-conversation.js";
-import type { SceneParticipantPlan } from "../scene-participants.js";
+import type { SceneParticipantPlan } from "../identity/scene-participants.js";
 import { tradeStateNotes } from "../commerce/trade-notes.js";
 
 /**

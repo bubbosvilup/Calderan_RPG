@@ -1,6 +1,6 @@
-import type { CampaignCharacter, CharacterOriginSnapshot, NameSource } from "../campaign/types.js";
-import { buildPromotedCharacter } from "../campaign/promotion.js";
-import { establishedFacts, type NarratedPerson } from "./narration-facts/index.js";
+import type { CampaignCharacter, CharacterOriginSnapshot, NameSource } from "../../campaign/types.js";
+import { buildPromotedCharacter } from "../../campaign/promotion.js";
+import { establishedFacts, type NarratedPerson } from "../narration-facts/index.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 
 /**
@@ -12,7 +12,7 @@ import type { EphemeralSceneParticipant } from "./scene-participants.js";
  *
  * Becoming persistent (materialization) happens only inside an action that already has explicit authority and needs a durable person. There are two:
  * the person Actual Offer Accept (src/turn/commerce/person-offers.ts plans the register command, settled atomically with the purchase) and, since Block 12, the
- * player's explicit [ Keep track ] action (src/turn/keep-track.ts, GameSession.keepTrack). Nothing else materializes: never narration, a name, a
+ * player's explicit [ Keep track ] action (src/turn/identity/keep-track.ts, GameSession.keepTrack). Nothing else materializes: never narration, a name, a
  * repeated appearance or the player's words.
  *
  * Boundary: provisional identity itself is NOT saved. A named provisional person is re-read after a reload from the restored recent exchanges (saved as

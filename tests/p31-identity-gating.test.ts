@@ -6,7 +6,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import { learnCanonicalName, identityNameFactId } from "../src/campaign/identity-knowledge.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt, NARRATOR_PLAYER_KNOWLEDGE, NARRATOR_RPG_FORMAT } from "../src/turn/context/prompt-builder.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 import { reconcileNarration } from "../src/turn/stages/audit.js";
 import { metadata } from "./turn-fixtures.js";

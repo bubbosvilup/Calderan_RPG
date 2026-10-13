@@ -264,7 +264,7 @@ See [the pass report](../evaluations/archive/NARRATOR_EPHEMERAL_CHARACTER_PROMOT
 See [the pass report](../evaluations/archive/NARRATOR_CHARACTER_PERSISTENCE_PASS_1_2.md).
 
 - **Model.** A narrator-created person follows one path: proper name established, then campaign character, then household join, then NPC+ (not implemented). There is one exception: an unnamed person the player acquires. There is no importance scoring, and no promotion from dialogue, wounds, healing, gifts, witnessing or rumors.
-- **Name establishment.** `src/turn/name-establishment.ts` runs deterministically on the **delivered** narration at finalization, after the audit and before commit. Its commands join the already-validated turn proposal. If the combined proposal fails validation, the identity changes are dropped and the turn still commits.
+- **Name establishment.** `src/turn/identity/name-establishment.ts` runs deterministically on the **delivered** narration at finalization, after the audit and before commit. Its commands join the already-validated turn proposal. If the combined proposal fails validation, the identity changes are dropped and the turn still commits.
   - It promotes a person named in this exchange who is present in the scene: acting, speaking, self-introduced, or introduced by narration's own voice. **Superseded by block 5B (AUTH-2):** narration creates at most a PROVISIONAL person; see [Architecture](../ARCHITECTURE.md) §2c.
   - It gives a name to a present *unnamed* persistent character who introduces themselves (`set_profile`). The ID, origin snapshot, legal state, household and relationships are unchanged.
   - A linked temporary scene participant is retired.

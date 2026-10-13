@@ -1,4 +1,4 @@
-import { registerNarratorIdentities } from "../narrator-identity.js";
+import { registerNarratorIdentities } from "../identity/narrator-identity.js";
 import { isIdentityNameFact } from "../../campaign/identity-knowledge.js";
 import type { CampaignSnapshot, NameSource } from "../../campaign/types.js";
 import { characterView, itemView } from "../../campaign/projections.js";

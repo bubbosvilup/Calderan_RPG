@@ -7,7 +7,7 @@ import { buildTurnContext, type TurnContext } from "../src/turn/context/context-
 import { buildNarratorPrompt, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
-import { MAX_SCENE_PARTICIPANTS, SceneParticipants, type SceneParticipantPlan } from "../src/turn/scene-participants.js";
+import { MAX_SCENE_PARTICIPANTS, SceneParticipants, type SceneParticipantPlan } from "../src/turn/identity/scene-participants.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

@@ -8,7 +8,7 @@ import type { TurnContext } from "./context/context-builder.js";
 import { entityMentions } from "./context/retrieval-policy.js";
 import { stem } from "../retrieval/lexical-index.js";
 import { tokenize } from "../retrieval/tokenizer.js";
-import { participantForNoun, type EphemeralSceneParticipant } from "./scene-participants.js";
+import { participantForNoun, type EphemeralSceneParticipant } from "./identity/scene-participants.js";
 import type { PhysicalInteraction } from "./authorization/physical-interaction.js";
 import { GATES } from "./language/gates.js";
 import { escapeRegExp } from "./language/text.js";

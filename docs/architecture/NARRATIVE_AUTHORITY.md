@@ -123,7 +123,7 @@ Historical playthrough windows remain an evaluation-only helper and are never us
 
 **Invariant:** every character who may speak or act in the scene has a narrator-facing knowledge scope. Persistent and ephemeral characters derive it differently.
 
-**Ephemeral scene participants** (`src/turn/scene-participants.ts`) are session-local people who are in the scene but are not CampaignState characters: a passer-by, a street merchant, an unnamed guard.
+**Ephemeral scene participants** (`src/turn/identity/scene-participants.ts`) are session-local people who are in the scene but are not CampaignState characters: a passer-by, a street merchant, an unnamed guard.
 - **Storage:** held by the coordinator beside `RecentConversation`. Never persisted, saved or promoted, and never a durable mutation. The controller never decides who exists.
 - **Identity:** `scene_npc_<n>` from a per-session counter that is never reused. The narrator sees `P<n> - <Role>`, never the ID.
 - **Creation:** only from resolved player input. An interaction verb plus an indefinite role phrase creates one participant (`stops an ordinary passer-by`). A definite phrase (`the guard`) addresses an existing participant, or creates one if none matches. At most one creation per turn. No name, occupation, faction or history is invented.
@@ -231,7 +231,7 @@ is established in play and verified**; WorldStore remains world truth.
 
 - **Progressive revelation.** Nothing is generated at spawn. A background fact emerges only when play asks for it, usually one fact
   per exchange; a person may answer partly, vaguely, falsely or refuse, and the rest stays unknown.
-- **When grounding applies** (`src/turn/background-grounding.ts`, `backgroundNeed`): the player's turn asks someone other than
+- **When grounding applies** (`src/turn/identity/background-grounding.ts`, `backgroundNeed`): the player's turn asks someone other than
   Nicco about origin, earlier life/occupation, how they were enslaved, or family/home, and someone is there to be asked. Looking,
   clothing or injury questions do not trigger it. The question classes are a small auditable pattern table.
 - **What the narrator receives.** A separate `[BACKGROUND GROUNDING ? <topics>]` block, built deterministically from structured canon

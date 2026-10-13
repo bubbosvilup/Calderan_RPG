@@ -11,7 +11,7 @@ import { activeTradeOffer } from "../src/campaign/trade.js";
 import { CONTROLLER_SCHEMA } from "../src/llm/controller-schema.js";
 import { authorizeCommands } from "../src/turn/authorization/command-authorizer.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { establishNames } from "../src/turn/name-establishment.js";
+import { establishNames } from "../src/turn/identity/name-establishment.js";
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
@@ -147,6 +147,6 @@ test("AUTH-2 producer audit (source): the only places that build or register a n
     if (/buildPromotedCharacter\(/.test(code)) builders.push(f);
     if (/kind: "register_character"/.test(code) && f !== "src/campaign/types.ts") registrars.push(f);
   }
-  assert.deepEqual(builders.sort(), ["src/campaign/promotion.ts", "src/turn/provisional-people.ts"]);
-  assert.deepEqual(registrars.sort(), ["src/turn/commerce/person-offers.ts", "src/turn/keep-track.ts"]);
+  assert.deepEqual(builders.sort(), ["src/campaign/promotion.ts", "src/turn/identity/provisional-people.ts"]);
+  assert.deepEqual(registrars.sort(), ["src/turn/commerce/person-offers.ts", "src/turn/identity/keep-track.ts"]);
 });

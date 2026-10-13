@@ -1,5 +1,5 @@
 import { economicTurn } from "../commerce/economic-context.js";
-import { narratorIdentityGate } from "../narrator-identity.js";
+import { narratorIdentityGate } from "../identity/narrator-identity.js";
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
@@ -8,7 +8,7 @@ import { auditNarration, outcomeLines, redactNarration, revisionRequest, type Au
 import { projectKnowledgeAccess, type NarrativeKnowledgeAccess } from "../context/narrative-authority.js";
 import { relevanceSignals } from "../context/prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
-import type { SceneParticipantPlan } from "../scene-participants.js";
+import type { SceneParticipantPlan } from "../identity/scene-participants.js";
 import { characterView } from "../../campaign/projections.js";
 import { escapeRegExp } from "../language/text.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../authorization/turn-evidence.js";

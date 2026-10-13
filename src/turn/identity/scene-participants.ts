@@ -1,12 +1,12 @@
-import { ephemeralDepartureFacts, frameOf } from "./narration-facts/index.js";
-import type { TurnContext } from "./context/context-builder.js";
-import { escapeRegExp } from "./language/text.js";
+import { ephemeralDepartureFacts, frameOf } from "../narration-facts/index.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { escapeRegExp } from "../language/text.js";
 import { canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
 import { isIdentityRequest } from "./identity-request.js";
-import { continuesTransaction } from "./commerce/transaction-acts.js";
-import type { RecentExchange } from "./recent-conversation.js";
-import type { CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
+import { continuesTransaction } from "../commerce/transaction-acts.js";
+import type { RecentExchange } from "../recent-conversation.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
 
 /**
  * Ephemeral scene participants (Phase 1P): session-local people who exist in the current scene but are not CampaignState

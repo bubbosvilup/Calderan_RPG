@@ -1,7 +1,7 @@
-import type { TurnContext } from "./context/context-builder.js";
-import { escapeRegExp } from "./language/text.js";
-import { type DialogueUnit, dialogueUnits, presentPeople } from "./narration-facts/index.js";
-import { rpgDialogue } from "./rpg-dialogue.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { escapeRegExp } from "../language/text.js";
+import { type DialogueUnit, dialogueUnits, presentPeople } from "../narration-facts/index.js";
+import { rpgDialogue } from "../rpg-dialogue.js";
 import { type SceneParticipantPlan, participantForNoun } from "./scene-participants.js";
 
 /**

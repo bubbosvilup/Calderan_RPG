@@ -10,7 +10,7 @@ import { activeTradeOffer } from "../src/campaign/trade.js";
 import { authorizeTradeProposals } from "../src/turn/commerce/trade-authorization.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { prepareCommit } from "../src/turn/stages/commit-preparation.js";
-import { SceneParticipants } from "../src/turn/scene-participants.js";
+import { SceneParticipants } from "../src/turn/identity/scene-participants.js";
 
 /** Consolidation block 1 (TRD-1 ownership on SELL, TRD-2 offers re-checked against the DELIVERED text). Offline: no provider is called. */
 const world = await loadWorld("data");

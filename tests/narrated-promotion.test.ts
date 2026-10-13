@@ -1,4 +1,4 @@
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import test from "node:test";
 import assert from "node:assert/strict";

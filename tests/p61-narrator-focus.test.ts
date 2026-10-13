@@ -5,7 +5,7 @@ import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt, NARRATOR_RPG_FORMAT, NARRATOR_PLAYER_KNOWLEDGE } from "../src/turn/context/prompt-builder.js";
 import { projectNarratorFocus } from "../src/turn/context/narrator-focus.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";

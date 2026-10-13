@@ -6,7 +6,7 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/openin
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { establishNames } from "../src/turn/name-establishment.js";
+import { establishNames } from "../src/turn/identity/name-establishment.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { deriveSessionView } from "../src/app/session-view.js";
 import { derivePlayUiView } from "../src/app/play-ui-view.js";

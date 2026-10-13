@@ -7,7 +7,7 @@ import { createDraftGenerator, type NarratorRequest } from "../src/turn/stages/n
 import { assembleTurnCommands, authorizeTurn } from "../src/turn/stages/authorization.js";
 import { createNarrationAuditor, deliverDraft, reconcileNarration } from "../src/turn/stages/audit.js";
 import { prepareCommit } from "../src/turn/stages/commit-preparation.js";
-import { SceneParticipants } from "../src/turn/scene-participants.js";
+import { SceneParticipants } from "../src/turn/identity/scene-participants.js";
 import { TurnError } from "../src/turn/turn-types.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";

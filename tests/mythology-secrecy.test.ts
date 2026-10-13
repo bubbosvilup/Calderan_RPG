@@ -8,7 +8,7 @@ import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { knowledgeGrants } from "../src/turn/context/knowledge-grants.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
-import { backgroundGrounding, classifyBackgroundClaim } from "../src/turn/background-grounding.js";
+import { backgroundGrounding, classifyBackgroundClaim } from "../src/turn/identity/background-grounding.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { LexicalSearch } from "../src/retrieval/lexical-search.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

@@ -1,11 +1,11 @@
 import type { TurnContext } from "./context-builder.js";
 import type { PlayerIntent } from "../player-intent.js";
 import type { RecentExchange } from "../recent-conversation.js";
-import type { SceneParticipantPlan } from "../scene-participants.js";
-import { INACTIVE_EXPIRY_TURNS, castingOptions } from "../scene-participants.js";
-import { narratorIdentityGate } from "../narrator-identity.js";
+import type { SceneParticipantPlan } from "../identity/scene-participants.js";
+import { INACTIVE_EXPIRY_TURNS, castingOptions } from "../identity/scene-participants.js";
+import { narratorIdentityGate } from "../identity/narrator-identity.js";
 import { playerAuthoredEvents } from "../authorization/player-authored-events.js";
-import { canonicalInteractionTargets } from "../canonical-interaction-targets.js";
+import { canonicalInteractionTargets } from "../identity/canonical-interaction-targets.js";
 import { escapeRegExp } from "../language/text.js";
 
 /** Derived narrator attention only. No roster, campaign or controller mutation. */

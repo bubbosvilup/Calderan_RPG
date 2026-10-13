@@ -3,7 +3,7 @@ import type { NarratorRequest } from "../../llm/types.js";
 import type { TurnContext } from "../context/context-builder.js";
 import { buildNarratorPrompt, type NarratorPromptOptions } from "../context/prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
-import type { SceneParticipantPlan } from "../scene-participants.js";
+import type { SceneParticipantPlan } from "../identity/scene-participants.js";
 import { TurnError } from "../turn-types.js";
 import { withProviderRetry, type ProviderAttemptRecord, type ProviderBudget, type ProviderRetryPolicy } from "../../llm/retry.js";
 import {providerRetryReason} from "../../llm/retry.js";

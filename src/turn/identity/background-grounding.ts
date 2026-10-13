@@ -1,11 +1,11 @@
-import type { WorldStore } from "../world/world-store.js";
-import type { WorldEntity as RawEntity } from "../types/entities.js";
-import type { DeepReadonly } from "../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { WorldEntity as RawEntity } from "../../types/entities.js";
+import type { DeepReadonly } from "../../types/readonly.js";
 type WorldEntity = DeepReadonly<RawEntity>;
-import type { TurnContext } from "./context/context-builder.js";
-import type { RecentExchange } from "./recent-conversation.js";
+import type { TurnContext } from "../context/context-builder.js";
+import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
-import { PERSON_NOUNS } from "./narration-facts/index.js";
+import { PERSON_NOUNS } from "../narration-facts/index.js";
 
 /**
  * Ephemeral Background Grounding V1. A person the narrator improvises (a captive, a passer-by) has no authored background; it

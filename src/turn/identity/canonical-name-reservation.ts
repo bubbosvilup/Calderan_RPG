@@ -1,6 +1,6 @@
-import type { WorldStore } from "../world/world-store.js";
-import { reservedForAnotherIdentity } from "../world/canonical-names.js";
-import type { IdentityFact } from "./narration-facts/index.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { reservedForAnotherIdentity } from "../../world/canonical-names.js";
+import type { IdentityFact } from "../narration-facts/index.js";
 
 /**
  * Reserved canonical handles, applied to a name narration established (REPO-12 policy decision, see world/canonical-names.ts). One rule for both

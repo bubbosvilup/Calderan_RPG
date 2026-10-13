@@ -24,7 +24,7 @@ handles. A non-canonical person, provisional or persistent, never acquires an ex
 disclosure; the whole name a self-introduction gives counts ("My name is Doran Hale" claims the alias "Doran Hale"). The collision fails closed
 for the name establishment only: the person keeps the same id and stays unnamed, nothing merges, the canonical character is not renamed, nothing
 is created, and nobody infers that the speaker "must really be" the canonical character. A canonical character's own name is never a
-collision. One rule (`src/world/canonical-names.ts`, applied by `src/turn/canonical-name-reservation.ts`) covers both sides of
+collision. One rule (`src/world/canonical-names.ts`, applied by `src/turn/identity/canonical-name-reservation.ts`) covers both sides of
 materialization: the provisional reading and Keep track before it, late naming of a persistent record after it (skip reason
 `canonical_name_reserved`; Keep track block `canonical_name`). A shared first name ("Mira" vs Mira Thorne) is not an exact handle.
 

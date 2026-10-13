@@ -8,15 +8,15 @@ import { authorizeTradeProposals } from "../commerce/trade-authorization.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext } from "../context/context-builder.js";
 import { contextRelevance } from "./intent.js";
-import { establishNames, type IdentityResolution } from "../name-establishment.js";
+import { establishNames, type IdentityResolution } from "../identity/name-establishment.js";
 import { contractCommands } from "../authorization/character-contracts.js";
 import { resolvePersonOffers } from "../commerce/person-offers.js";
-import { establishedCanonicalDisclosure } from "../canonical-name-disclosure.js";
-import { partnerNameConflict } from "../partner-identity-guard.js";
+import { establishedCanonicalDisclosure } from "../identity/canonical-name-disclosure.js";
+import { partnerNameConflict } from "../identity/partner-identity-guard.js";
 import { learnCanonicalName } from "../../campaign/identity-knowledge.js";
 import type { PlayerIntent, TransactionDiagnostic } from "../player-intent.js";
 import type { RecentExchange } from "../recent-conversation.js";
-import type { SceneParticipantPlan } from "../scene-participants.js";
+import type { SceneParticipantPlan } from "../identity/scene-participants.js";
 
 /**
  * Hardening H2 — CommitPreparation. The last detached step before the authoritative commit: deterministic, name-driven identity

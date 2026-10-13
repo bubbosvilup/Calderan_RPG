@@ -1,6 +1,6 @@
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import type { CampaignCharacter } from "../src/campaign/types.js";
-import type { IdentityResolution } from "../src/turn/name-establishment.js";
+import type { IdentityResolution } from "../src/turn/identity/name-establishment.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 
 /**

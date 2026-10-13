@@ -43,12 +43,12 @@ test("3. commerce consumers read the shared commerce facts (Actual Offer constru
 });
 
 test("4. identity / name consumers read the shared identity facts and scene reading", () => {
-  for (const p of ["src/turn/name-establishment.ts", "src/turn/commerce/person-offers.ts", "src/turn/partner-identity-guard.ts", "src/turn/canonical-name-disclosure.ts", "src/turn/provisional-people.ts"]) assert.ok(usesFacts(p), p);
-  assert.match(code("src/turn/name-establishment.ts"), /options\.facts \? options\.facts\.scene\(/);
+  for (const p of ["src/turn/identity/name-establishment.ts", "src/turn/commerce/person-offers.ts", "src/turn/identity/partner-identity-guard.ts", "src/turn/identity/canonical-name-disclosure.ts", "src/turn/identity/provisional-people.ts"]) assert.ok(usesFacts(p), p);
+  assert.match(code("src/turn/identity/name-establishment.ts"), /options\.facts \? options\.facts\.scene\(/);
   assert.match(code("src/turn/commerce/person-offers.ts"), /source\.scene\(/);
-  const guard = code("src/turn/partner-identity-guard.ts");
+  const guard = code("src/turn/identity/partner-identity-guard.ts");
   assert.match(guard, /source\.scene\(/); assert.match(guard, /kind === "self_introduction"/); assert.match(guard, /introduces_new/);
-  assert.match(code("src/turn/canonical-name-disclosure.ts"), /identityForms\(/);
+  assert.match(code("src/turn/identity/canonical-name-disclosure.ts"), /identityForms\(/);
   // No consumer keeps its own self-introduction grammar.
   const SELF_GRAMMAR = /I'm\|I’m\|I am\|My name|My name is\|/;
   assert.deepEqual(RUNTIME.filter(p => !p.endsWith("identity-request.ts") && SELF_GRAMMAR.test(code(p))), []);
@@ -117,8 +117,8 @@ test("11. facts do not consume policy: no fact module imports a consumer", () =>
 });
 
 test("12. player-input readers stay separate from narration readers", () => {
-  assert.ok(!imports("src/turn/identity-request.ts").some(s => /narration-facts/.test(s)), "identity-request reads the player's input only");
-  assert.match(code("src/turn/identity-request.ts"), /export function asksName\(player: string\)/);
+  assert.ok(!imports("src/turn/identity/identity-request.ts").some(s => /narration-facts/.test(s)), "identity-request reads the player's input only");
+  assert.match(code("src/turn/identity/identity-request.ts"), /export function asksName\(player: string\)/);
   // The only player-input entry of the fact layer is the commerce input reader, whose every figure is a player counter.
   assert.match(code("src/turn/narration-facts/extract.ts"), /export function extractInputCommerceFacts\(/);
   assert.match(code("src/turn/narration-facts/commerce-forms.ts"), /voice: "player_input"|"player_input"/);

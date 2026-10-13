@@ -6,7 +6,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { canonicalDepartureClaims, canonicalDepartureContradiction } from "./movement-readers.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

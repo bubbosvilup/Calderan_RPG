@@ -4,7 +4,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt, dialogueFocused } from "../src/turn/context/prompt-builder.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { remainingEventMinutes } from "../src/campaign/projections.js";
 import { retrievalRequired } from "../src/turn/context/retrieval-policy.js";

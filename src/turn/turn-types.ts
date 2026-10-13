@@ -1,5 +1,5 @@
-import type { IdentityResolution } from "./name-establishment.js";
-import type { SceneParticipantPlan, EphemeralSceneParticipant } from "./scene-participants.js";
+import type { IdentityResolution } from "./identity/name-establishment.js";
+import type { SceneParticipantPlan, EphemeralSceneParticipant } from "./identity/scene-participants.js";
 import type { NaturalActionResolution } from "./natural-actions.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
 import type { CampaignCommand } from "../campaign/types.js";

@@ -1,8 +1,8 @@
-import type { TurnContext } from "./context/context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { compatible, headNoun, surfacedCanonicalMatch, strongCanonicalMatch, traitMatches } from "./canonical-interaction-targets.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
-import { rpgNarration } from "./rpg-dialogue.js";
-import { sentencesOf } from "./language/text.js";
+import { rpgNarration } from "../rpg-dialogue.js";
+import { sentencesOf } from "../language/text.js";
 
 /**
  * Foreground canonical binding (P0 identity hotfix). Objective identity is the engine's; the label the player knows is a separate fact.

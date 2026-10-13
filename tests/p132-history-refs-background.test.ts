@@ -5,7 +5,7 @@ import { dialogueFocused, buildNarratorPrompt, BACKGROUND_PRESENCE_RULE, NARRATO
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { reconcileNarration } from "../src/turn/stages/audit.js";

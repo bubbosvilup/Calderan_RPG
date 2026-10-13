@@ -1,14 +1,14 @@
-import type { TurnContext } from "./context/context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
-import { projectNarratorFocus } from "./context/narrator-focus.js";
-import type { RecentExchange } from "./recent-conversation.js";
+import { projectNarratorFocus } from "../context/narrator-focus.js";
+import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
-import type { PlayerIntent } from "./player-intent.js";
+import type { PlayerIntent } from "../player-intent.js";
 import { INACTIVE_EXPIRY_TURNS, castingOptions } from "./scene-participants.js";
-import { rpgDialogue } from "./rpg-dialogue.js";
+import { rpgDialogue } from "../rpg-dialogue.js";
 import { narratedSpeakerPartner } from "./foreground-binding.js";
 import { compatible, headNoun, canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
-import { SPEAKER_NOUNS, SPEECH, identityForms, leadingDescriptor, participatesInScene, speechTags } from "./narration-facts/index.js";
+import { SPEAKER_NOUNS, SPEECH, identityForms, leadingDescriptor, participatesInScene, speechTags } from "../narration-facts/index.js";
 import { NAME_REQUEST, SELF_INTRODUCTION } from "./identity-request.js";
 
 /** Reuse existing address/reference/focus projection; never pick an arbitrary member of a candidate set. */

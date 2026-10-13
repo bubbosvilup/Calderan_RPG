@@ -11,7 +11,7 @@ import { applyAppearancePatch, resolvePermanentAppearance } from "../src/campaig
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
-import { establishNames } from "../src/turn/name-establishment.js";
+import { establishNames } from "../src/turn/identity/name-establishment.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

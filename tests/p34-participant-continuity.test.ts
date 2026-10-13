@@ -6,9 +6,9 @@ import { createOpeningCampaign, OPENING_LOCATION } from "../src/campaign/opening
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { identityNameFactId } from "../src/campaign/identity-knowledge.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
-import { SceneParticipants } from "../src/turn/scene-participants.js";
-import { canonicalInteractionTargets } from "../src/turn/canonical-interaction-targets.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
+import { SceneParticipants } from "../src/turn/identity/scene-participants.js";
+import { canonicalInteractionTargets } from "../src/turn/identity/canonical-interaction-targets.js";
 import { projectNarratorFocus } from "../src/turn/context/narrator-focus.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

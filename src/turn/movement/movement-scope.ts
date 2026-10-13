@@ -5,7 +5,7 @@ import type { TurnContext } from "../context/context-builder.js";
 import { type MovableCharacter, movableCharacters, npcPlusEntrants, persistentCharactersAt } from "./character-movement.js";
 import { playerDestination } from "./player-travel.js";
 import { type NarrationFactScope, type Referent, nameFilter } from "../narration-facts/index.js";
-import { asksName } from "../identity-request.js";
+import { asksName } from "../identity/identity-request.js";
 
 /**
  * Who the NarrationFacts of a turn (movement, commerce, identity) are read against: ONE set of people for authorization and audit alike (everyone in, or arriving at,

@@ -53,7 +53,7 @@ import { CONFIRMATION_MESSAGES, deriveConfirmationView, type ConfirmationView } 
 import { PENDING_REF, type PendingConfirmation } from "../persistence/pending-confirmations.js";
 import type { PendingProposal } from "../turn/authorization/pending-proposals.js";
 import { TRADE_FIELD } from "../campaign/trade.js";
-import { KEEP_MESSAGES, keepTrackCommand, keptCharacter, type KeepBlock, type TrackablePerson } from "../turn/keep-track.js";
+import { KEEP_MESSAGES, keepTrackCommand, keptCharacter, type KeepBlock, type TrackablePerson } from "../turn/identity/keep-track.js";
 import { buildTrace, emptyReflection, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**

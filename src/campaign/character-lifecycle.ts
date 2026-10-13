@@ -5,7 +5,7 @@ import type { DeepReadonly } from "../types/readonly.js";
  * Block 5B: the identity LIFECYCLE of a person. It is NOT a UI tier (NPC / NPC+ stay as they are).
  *
  *   PROVISIONAL  a person narration introduced who is not (yet) a CampaignCharacter. Temporary, never part of CampaignState, never owns anything
- *                durable (no ownership, legal state, household, trade history or NPC+). See turn/provisional-people.ts.
+ *                durable (no ownership, legal state, household, trade history or NPC+). See turn/identity/provisional-people.ts.
  *   PERSISTENT   a real CampaignCharacter: stable durable id, save/load identity, normal domain relationships.
  *   RETIRED      a persistent identity kept as history only (no longer an active participant; never a live target). Not deletion: the id stays
  *                referenceable. Set only by the human-authorized retire/merge repair commands.

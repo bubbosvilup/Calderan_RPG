@@ -1,8 +1,8 @@
-import type { CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context/context-builder.js";
-import type { RecentExchange } from "./recent-conversation.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context/context-builder.js";
+import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
 import { boundPartner, noCompetingSpeaker } from "./canonical-name-disclosure.js";
 import { castingOptions } from "./scene-participants.js";
@@ -10,7 +10,7 @@ import { compatible, headNoun } from "./canonical-interaction-targets.js";
 import { NAME_REQUEST, SELF_INTRODUCTION, asksName } from "./identity-request.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { narratedSpeakerPartner } from "./foreground-binding.js";
-import { type NarrationFactSource, createFactSource, nameFilter, speechTags } from "./narration-facts/index.js";
+import { type NarrationFactSource, createFactSource, nameFilter, speechTags } from "../narration-facts/index.js";
 
 /**
  * Post-narration identity protection (P0 identity hotfix). The Narrator is told who the current conversation partner objectively is, but

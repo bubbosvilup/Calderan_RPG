@@ -1,12 +1,12 @@
-import type { CampaignCommand, CampaignSnapshot, NameSource } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
+import type { CampaignCommand, CampaignSnapshot, NameSource } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
 import { linkedParticipant, nameSourceOf, type ProvisionalPerson } from "./provisional-people.js";
-import type { TurnContext } from "./context/context-builder.js";
-import type { RecentExchange } from "./recent-conversation.js";
+import type { TurnContext } from "../context/context-builder.js";
+import type { RecentExchange } from "../recent-conversation.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { classifyBackgroundClaim } from "./background-grounding.js";
-import { createFactSource, establishedFacts, nameFilter, readScene, type NarrationFactSource } from "./narration-facts/index.js";
+import { createFactSource, establishedFacts, nameFilter, readScene, type NarrationFactSource } from "../narration-facts/index.js";
 import { asksName } from "./identity-request.js";
 import type { PartnerNameConflict } from "./partner-identity-guard.js";
 import { claimsReservedHandle } from "./canonical-name-reservation.js";

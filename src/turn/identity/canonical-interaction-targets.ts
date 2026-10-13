@@ -1,6 +1,6 @@
-import type { TurnContext } from "./context/context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
-import { escapeRegExp } from "./language/text.js";
+import { escapeRegExp } from "../language/text.js";
 import { isIdentityRequest } from "./identity-request.js";
 
 /**

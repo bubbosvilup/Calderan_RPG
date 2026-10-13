@@ -6,7 +6,7 @@ import { TurnError } from "./turn-types.js";
 import { resolveTransferIntent, type ResolvedReference } from "./items/reference-resolution.js";
 import { resolveNaturalActions, reachable, type NaturalActionResolution } from "./natural-actions.js";
 import { playerDestination } from "./movement/player-travel.js";
-import type { EphemeralSceneParticipant } from "./scene-participants.js";
+import type { EphemeralSceneParticipant } from "./identity/scene-participants.js";
 import { MAX_TEMPORAL_ADVANCE_MINUTES, parseTemporalAction, type TemporalAction } from "./temporal-action.js";
 
 export interface TransactionDiagnostic { readonly kind: "purchase" | "manumission" | "offer"; readonly status: "resolved" | "proposed" | "blocked" | "ambiguous" | "no_offer"; readonly reason?: string; readonly seller?: string; readonly price?: number }

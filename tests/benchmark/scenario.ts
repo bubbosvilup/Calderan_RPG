@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { promises as fs } from "node:fs";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import type { TradeOfferRecord } from "../../src/campaign/types.js";
-import { establishNames } from "../../src/turn/name-establishment.js";
+import { establishNames } from "../../src/turn/identity/name-establishment.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
 import type { RecentExchange } from "../../src/turn/recent-conversation.js";
 import { makeRig, whereIs, type Rig, type RigSpec } from "./harness.js";

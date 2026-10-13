@@ -6,8 +6,8 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import { temporalGrounding } from "../src/turn/temporal-grounding.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt, NARRATOR_SYSTEM, NARRATOR_OPAQUE_REFS } from "../src/turn/context/prompt-builder.js";
-import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
-import { establishedCanonicalDisclosure } from "../src/turn/canonical-name-disclosure.js";
+import { narratorIdentityGate } from "../src/turn/identity/narrator-identity.js";
+import { establishedCanonicalDisclosure } from "../src/turn/identity/canonical-name-disclosure.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
@@ -63,7 +63,7 @@ test("P3.3 name is available only to one current partner's controlled spoken dis
 });
 test("P3.3 name establishment requires supported exact-name speech with a unique adjacent observable attribution", () => {
   const context = buildTurnContext(world, market().exportSnapshot());
-  const scene = { participants: [], addressed: [] } as unknown as import("../src/turn/scene-participants.js").SceneParticipantPlan;
+  const scene = { participants: [], addressed: [] } as unknown as import("../src/turn/identity/scene-participants.js").SceneParticipantPlan;
   assert.equal(establishedCanonicalDisclosure(context, input, recent, "*The short, compact man replies.*\n\nI'm Korvin.", scene), "korvin");
   for (const output of ["*Korvin smiles.*", "*The short, compact man replies.*\n\nI'm Henk.", "I'm Korvin.", "*The man replies.*\n\nI'm Korvin.", "*Nicco smiles.*\n\nI'm Korvin.", "*The short, compact man replies.*\n\nHe is Korvin."]) {
     assert.equal(establishedCanonicalDisclosure(context, input, recent, output, scene), undefined, output);

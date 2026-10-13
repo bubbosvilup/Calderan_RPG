@@ -5,7 +5,7 @@ import { QUERY_STOPWORDS, stem } from "../../retrieval/lexical-index.js";
 import { tokenize } from "../../retrieval/tokenizer.js";
 import type { WorldStore } from "../../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
-import { stripParticipantIntroductions } from "../scene-participants.js";
+import { stripParticipantIntroductions } from "../identity/scene-participants.js";
 import { TurnError, type RetrievalDiagnostic } from "../turn-types.js";
 
 export interface TurnRetrieval { readonly search: Pick<HybridSearch, "searchWithDiagnostics">; readonly service: Pick<RetrievalService, "get"> }

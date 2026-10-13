@@ -7,7 +7,7 @@ import type { TurnContext } from "../context/context-builder.js";
 import { renderKnowledgeAccess, type NarrativeKnowledgeAccess } from "../context/narrative-authority.js";
 import { NARRATOR_SYSTEM } from "../context/prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
-import type { EphemeralSceneParticipant, SceneParticipantPlan } from "../scene-participants.js";
+import type { EphemeralSceneParticipant, SceneParticipantPlan } from "../identity/scene-participants.js";
 import type { TurnEvidence } from "../authorization/turn-evidence.js";
 import type { AuthorizationDiagnostic, RetrievalDiagnostic, TurnResult } from "../turn-types.js";
 import type { TurnDelivery } from "./audit.js";

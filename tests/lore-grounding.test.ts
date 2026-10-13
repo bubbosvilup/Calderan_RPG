@@ -5,7 +5,7 @@ import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt, dialogueFocused, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
-import { SceneParticipants } from "../src/turn/scene-participants.js";
+import { SceneParticipants } from "../src/turn/identity/scene-participants.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { groundingManifest, type LoreCategory } from "../src/dev/lore-grounding.js";
