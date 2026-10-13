@@ -1,13 +1,14 @@
 import test from 'node:test';
 import type { CampaignCommand, CampaignSnapshot, ReflectionNote } from '../src/campaign/types.js';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { turnFixture } from '../src/dev/turn-fixture.js';
 import { reflectAfterTurn, type ReflectionProvider } from '../src/turn/reflection.js';
 import { captureProductionReflection } from '../src/turn/structured-reflection-maintenance.js';
-import { E1_SCHEMA, E1_SYSTEM, evaluateStructuredOutputE1 } from '../src/turn/structured/reflection-v23-cvc-e1.js';
-import { E1_SCHEMA as frozenSchema, E1_SYSTEM as frozenPrompt } from '../src/dev/reflection-v23-cvc-e1.js';
+import { REFLECTION_SCHEMA as E1_SCHEMA, REFLECTION_SYSTEM as E1_SYSTEM } from '../src/turn/structured/reflection-schema.js';
+import { evaluateReflectionOutput as evaluateStructuredOutputE1 } from '../src/turn/structured/reflection-validation.js';
+import { E1_SCHEMA as frozenSchema, E1_SYSTEM as frozenPrompt } from './frozen/reflection/reflection-v23-cvc-e1.js';
 import { STORED_REFLECTION_SCHEMA } from '../src/campaign/reflection-proposal-schema.js';
 import { ProviderError } from '../src/llm/errors.js';
 import { OpenRouterReflectionProvider, ReflectionProviderError, DEFAULT_REFLECTION_MODEL } from '../src/llm/openrouter/reflection-provider.js';
@@ -44,10 +45,9 @@ test('production promotion preserves frozen semantics, schema/prompt and storage
     assert.deepEqual(E1_SCHEMA, frozenSchema);
     assert.deepEqual(E1_SCHEMA, STORED_REFLECTION_SCHEMA);
     assert.equal(E1_SYSTEM, frozenPrompt);
-    for (const name of ['reflection-v2', 'reflection-v21', 'reflection-v22', 'reflection-v23', 'reflection-v23-cvc', 'reflection-v23-cvc-e1', 'reflection-wire', 'reflection-wire-v2-cvc']) {
-        const source = readFileSync(`src/dev/${name}.ts`, 'utf8').replaceAll('\r\n', '\n'), promoted = readFileSync(`src/turn/structured/${name}.ts`, 'utf8').split('\n').slice(1).join('\n').replaceAll('../../campaign/', '../campaign/').replaceAll('../../types/', '../types/').replaceAll('../../world/', '../world/').replace(/(['"])\.\.\/(reflection|npc-plus)\.js/g, '$1../turn/$2.js');
-        assert.equal(promoted, source, name);
-    }
+    // Cleanup C: production owns Reflection through four current-purpose modules instead of a copied version ladder; their exact
+    // behavioral equivalence with the frozen oracles in tests/frozen/reflection/ is proven by reflection-consolidation-equivalence.test.ts.
+    assert.deepEqual(readdirSync('src/turn/structured').sort(), ['reflection-evidence.ts', 'reflection-schema.ts', 'reflection-validation.ts', 'reflection-wire.ts']);
 });
 test('accepted E1 notes persist exactly once, atomically with versioned original typed provenance', async () => {
     const f = fixture(), before = f.campaign.exportSnapshot(), runs = await reflectAfterTurn(f.campaign, f.world, productionStub(r => [testEnvironment(r)]), options());

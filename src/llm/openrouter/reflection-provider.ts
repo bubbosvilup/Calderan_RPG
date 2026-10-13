@@ -1,7 +1,7 @@
 import { ProviderError } from '../errors.js';
 import { OpenRouterClient } from './client.js';
 import type { ReflectionProvider, ReflectionRequest } from '../../turn/reflection.js';
-import { E1_SYSTEM } from '../../turn/structured/reflection-v23-cvc-e1.js';
+import { REFLECTION_SYSTEM } from '../../turn/structured/reflection-schema.js';
 /**
  * Qualified reflection maintenance configuration (2026-10-08): Claude Haiku 5.5, validated live on the unchanged prompt/strict schema.
  * Replaces qwen/qwen3.8-flash and its Alibaba-only pin (Alibaba shared-pool 429s); GPT-6 Luna rejects this schema's string length
@@ -38,7 +38,7 @@ export class OpenRouterReflectionProvider implements ReflectionProvider {
         const client = this.injectedClient ?? new OpenRouterClient({ ...(this.config.api_key ? { api_key: this.config.api_key } : {}), fetch: async (url, init) => { const response = await (this.config.fetch ?? fetch)(url, init); if (response.status === 429)
                 retry_after_ms = retryAfter(response.headers.get('retry-after')); return response; } });
         try {
-            for await (const event of client.request({ model: DEFAULT_REFLECTION_MODEL, max_tokens: 600, messages: [{ role: 'system', content: E1_SYSTEM }, { role: 'user', content: JSON.stringify({ character: request.character, evidence: request.evidence, existing_notes: request.existing }) }], response_format: { type: 'json_schema', json_schema: { name: 'npc_reflection_v23_cvc_e1', strict: true, schema: request.wire_schema } }, provider: { require_parameters: true }, reasoning: { enabled: false, exclude: true } }, false, Math.min(20000, this.config.timeout_ms ?? 20000, request.timeout_ms ?? 20000))) {
+            for await (const event of client.request({ model: DEFAULT_REFLECTION_MODEL, max_tokens: 600, messages: [{ role: 'system', content: REFLECTION_SYSTEM }, { role: 'user', content: JSON.stringify({ character: request.character, evidence: request.evidence, existing_notes: request.existing }) }], response_format: { type: 'json_schema', json_schema: { name: 'npc_reflection_v23_cvc_e1', strict: true, schema: request.wire_schema } }, provider: { require_parameters: true }, reasoning: { enabled: false, exclude: true } }, false, Math.min(20000, this.config.timeout_ms ?? 20000, request.timeout_ms ?? 20000))) {
                 if (event.type === 'text_delta')
                     text += event.text;
                 else {

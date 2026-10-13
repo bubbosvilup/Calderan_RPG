@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import type {StructuredEvidence} from '../src/dev/reflection-v2.js';
-import {statementProvenance} from '../src/dev/reflection-v22.js';
-import {validateStructuredClaimV23} from '../src/dev/reflection-v23.js';
-import {reflectionCitationContext,validateStructuredClaimV23CVC,evaluateStructuredOutputV23CVC} from '../src/dev/reflection-v23-cvc.js';
-import {citationScopedReflectionWire} from '../src/dev/reflection-wire-v2-cvc.js';
-import {schemaMatches,V2_SCHEMA} from '../src/dev/reflection-v2.js';
+import type {StructuredEvidence} from './frozen/reflection/reflection-v2.js';
+import {statementProvenance} from './frozen/reflection/reflection-v22.js';
+import {validateStructuredClaimV23} from './frozen/reflection/reflection-v23.js';
+import {reflectionCitationContext,validateStructuredClaimV23CVC,evaluateStructuredOutputV23CVC} from './frozen/reflection/reflection-v23-cvc.js';
+import {citationScopedReflectionWire} from './frozen/reflection/reflection-wire-v2-cvc.js';
+import {schemaMatches,V2_SCHEMA} from './frozen/reflection/reflection-v2.js';
 const entry=(ref:string,type:string,revision:number,payload:Record<string,unknown>):StructuredEvidence=>({ref,evidence_version:2,evidence_type:type,subject_character_id:'maren',owner_character_id:'maren',revision,world_minute:revision,event_id:ref,payload});
 function relationship(){
  const a=entry('trust-history','relationship_change',2,{actor_id:'maren',other_id:'brenna',dimension:'trust',from:'low',to:'moderate'}),b=entry('wariness-history','relationship_change',3,{actor_id:'maren',other_id:'brenna',dimension:'wariness',from:'moderate',to:'high'}),snapshot=entry('current','relationship_snapshot',4,{target_character_id:'brenna',dimensions:{trust:'moderate',wariness:'high'}});

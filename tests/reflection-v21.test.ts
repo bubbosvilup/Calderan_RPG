@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { structuredReflectionEvidence, type StructuredProposal } from "../src/dev/reflection-v2.js";
-import { validateStructuredClaimV21 } from "../src/dev/reflection-v21.js";
+import { structuredReflectionEvidence, type StructuredProposal } from './frozen/reflection/reflection-v2.js';
+import { validateStructuredClaimV21 } from './frozen/reflection/reflection-v21.js';
 function fixture() {
  const f=turnFixture(false,{courtyard:true}), H="campaign_household_v21";
  const run=(c:CampaignCommand)=>f.campaign.apply({expected_revision:f.campaign.revision,commands:[c]});

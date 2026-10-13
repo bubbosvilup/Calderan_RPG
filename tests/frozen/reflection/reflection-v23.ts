@@ -1,9 +1,8 @@
-// Production promotion of the frozen dev candidate; import paths only differ.
 /** Evaluation-only: current relationship contrast authority; all other claims remain V2.2. */
 import {V2_SCHEMA,V2_SYSTEM,schemaMatches,renderStructuredClaim,type StructuredEvidence,type StructuredProposal} from './reflection-v2.js';
 import {validateStructuredClaimV22,V22_REASON_CODES} from './reflection-v22.js';
 import type {V21Diagnostic} from './reflection-v21.js';
-import {INSTRUCTION_LIKE} from '../reflection.js';
+import {INSTRUCTION_LIKE} from '../../../src/turn/reflection.js';
 export {V2_SCHEMA,V2_SYSTEM};
 export const EVIDENCE_VERSION=2,PROVENANCE_MODEL_VERSION=1;
 export const V23_REASON_CODES=[...V22_REASON_CODES] as const;

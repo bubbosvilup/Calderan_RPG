@@ -27,9 +27,9 @@ export interface ReflectionEvidence { readonly ref: string; readonly kind: Evide
   readonly episodes?: readonly { readonly id: string; readonly condition?: string }[];
   /** Pass 10: the source records only changes of place. Location moves show where someone went, never why or how they feel about it. */
   readonly movement_only?: boolean }
-export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly import('./structured/reflection-v2.js').StructuredEvidence[];
+export interface ReflectionRequest { readonly character: { readonly id: string; readonly name: string }; readonly evidence: readonly import('./structured/reflection-evidence.js').StructuredEvidence[];
   readonly existing: readonly { readonly kind: ReflectionKind; readonly label: string; readonly text: string }[];
-  readonly wire_schema: typeof import('./structured/reflection-v23-cvc-e1.js').E1_SCHEMA; readonly timeout_ms?: number }
+  readonly wire_schema: typeof import('./structured/reflection-schema.js').REFLECTION_SCHEMA; readonly timeout_ms?: number }
 export interface ReflectionProvider { reflect(request: ReflectionRequest): Promise<{ readonly text: string; readonly usage?: unknown; readonly model?: string;readonly provider?:string;readonly cost_usd?:number }> }
 
 /** When reflection is due: ≥3 substantive developments since the last reflection (initial registration/migration excluded), a roll-up change, or a newly established contract. Never conversation alone. */

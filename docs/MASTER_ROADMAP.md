@@ -108,7 +108,7 @@ Save size budget and non-fatal oversize (PER-1); unified migration chain with re
 Quest engine; combat and medicine; deeper rumor propagation; world event ledger; economy history; NPC routines beyond schedules; South settlements; weather physics (temperature, wind, humidity, survival effects); additional canonical avatars and authored item templates; `world`/`debug` authoring tools. These depend on T-ECON, T-ITEMS and T-IDENT foundations and should not start before the Wave 1 safety work below.
 
 ### T-REPO: repository and docs
-Evidence/history reorganisation and the `saves/` tracking fix (REPO-1 done in Cleanup A; the docs namespace, DOC-16 and most of REPO-2, done in Cleanup B; evidence and fixture decoupling, REPO-3, done in Cleanup B2; the archive weight, REPO-13, is Cleanup C); orphan and duplicate pruning (REPO-4, REPO-5, REPO-8, REPO-9); docs link check (done: `npm run check:docs`) and staleness tripwire (DOC-15); relocate canon author-only section (DOC-13); keep this register and roadmap reconciled on each milestone.
+Evidence/history reorganisation and the `saves/` tracking fix (REPO-1 done in Cleanup A; the docs namespace, DOC-16 and most of REPO-2, done in Cleanup B; evidence and fixture decoupling, REPO-3, done in Cleanup B2; the archive weight, REPO-13, is still open); orphan and duplicate pruning (REPO-4, REPO-8, REPO-9; REPO-5, the Reflection duplicates and version ladder, done in Cleanup C); docs link check (done: `npm run check:docs`) and staleness tripwire (DOC-15); relocate canon author-only section (DOC-13); keep this register and roadmap reconciled on each milestone.
 
 ## 3. Recommended sequence
 

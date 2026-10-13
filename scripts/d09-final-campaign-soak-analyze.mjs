@@ -6,7 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {loadWorld} from '../.build/src/world/loader.js';
 import {CampaignState} from '../.build/src/campaign/campaign-state.js';
 import {captureProductionReflection,parseProductionReflection} from '../.build/src/turn/structured-reflection-maintenance.js';
-import {evaluateStructuredOutputE1} from '../.build/src/turn/structured/reflection-v23-cvc-e1.js';
+import {evaluateStructuredOutputE1} from '../.build/tests/frozen/reflection/reflection-v23-cvc-e1.js';
 import {buildTurnContext} from '../.build/src/turn/context-builder.js';
 import {playerIntent} from '../.build/src/turn/player-intent.js';
 import {estimateContextTokens} from '../.build/src/turn/context-budget.js';

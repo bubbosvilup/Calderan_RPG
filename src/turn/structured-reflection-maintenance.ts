@@ -7,15 +7,16 @@ import { characterView } from '../campaign/projections.js';
 import { reflectionDue, type ReflectionProvider, type ReflectionRequest, type ReflectionRun, type Proposal } from './reflection.js';
 import { emitReflectionDiagnostics } from './reflection-diagnostics.js';
 import { ReflectionPacing, reflectionPacing, type StructuredReflectionAttempt } from './reflection-pacing.js';
-import { E1_SCHEMA, E1_VERSION, structuredReflectionEvidenceE1, environmentalE1Context, citationScopedReflectionWireE1, evaluateStructuredOutputE1, type E1Context } from './structured/reflection-v23-cvc-e1.js';
-import { schemaMatches, type StructuredProposal } from './structured/reflection-v2.js';
-import { citationVisibilityViolations } from './structured/reflection-v23-cvc.js';
+import { reflectionEvidenceCatalog } from './structured/reflection-evidence.js';
+import { REFLECTION_SCHEMA, REFLECTION_SEMANTIC_VERSION, schemaMatches, type StructuredProposal } from './structured/reflection-schema.js';
+import { reflectionContext, evaluateReflectionOutput, citationVisibilityViolations, type ReflectionContext } from './structured/reflection-validation.js';
+import { reflectionWire } from './structured/reflection-wire.js';
 import { ProviderError } from '../llm/errors.js';
 import { failureClass, technicalRetryReason } from '../llm/reliability.js';
 import type { ProviderAttemptRecord } from '../llm/retry.js';
 import { TurnError } from './turn-types.js';
 /** Strict qualified envelope only; semantic rejection is intentionally outside the retry boundary. */
-export function parseProductionReflection(text: string, request: ReflectionRequest, context: E1Context): readonly unknown[] {
+export function parseProductionReflection(text: string, request: ReflectionRequest, context: ReflectionContext): readonly unknown[] {
     if (!text.trim())
         throw new ProviderError('structured_output_invalid', undefined, undefined, 'empty_output');
     let raw: unknown;
@@ -25,7 +26,7 @@ export function parseProductionReflection(text: string, request: ReflectionReque
     catch {
         throw new ProviderError('structured_output_invalid', undefined, undefined, 'malformed_envelope');
     }
-    if (!schemaMatches(request.wire_schema, raw) || !schemaMatches(E1_SCHEMA, raw))
+    if (!schemaMatches(request.wire_schema, raw) || !schemaMatches(REFLECTION_SCHEMA, raw))
         throw new ProviderError('structured_output_invalid', undefined, undefined, 'schema_invalid');
     const proposals = (raw as {
         proposals: StructuredProposal[];
@@ -35,14 +36,14 @@ export function parseProductionReflection(text: string, request: ReflectionReque
     return proposals;
 }
 export function captureProductionReflection(campaign: CampaignState, world: WorldStore, id: string) {
-    const snapshot = campaign.exportSnapshot(), catalog = structuredReflectionEvidenceE1(world, snapshot, id).structured;
+    const snapshot = campaign.exportSnapshot(), catalog = reflectionEvidenceCatalog(world, snapshot, id).structured;
     // All current snapshots remain authority-only. Exact event metadata exposes selected quote handles.
     const evidence = catalog.filter(e => e.evidence_type !== 'relationship_snapshot' && (e.evidence_type !== 'self_statement' || !catalog.some(v => v.evidence_type === 'statement_event' && (v as {
         provenance?: {
             statement_ref: string;
         };
     }).provenance?.statement_ref === e.ref)));
-    const character = { id, name: characterView(snapshot, world, id).profile.name ?? id }, existing = snapshot.premium_reflections.find(r => r.character_id === id)?.notes ?? [], context = environmentalE1Context({ character, evidence }, catalog, snapshot), wire = citationScopedReflectionWireE1(context);
+    const character = { id, name: characterView(snapshot, world, id).profile.name ?? id }, existing = snapshot.premium_reflections.find(r => r.character_id === id)?.notes ?? [], context = reflectionContext({ character, evidence }, catalog, snapshot), wire = reflectionWire(context);
     const request = freezeSnapshot({ character, evidence, existing: existing.map(n => ({ kind: n.kind, label: n.label, text: n.text })), wire_schema: wire.schema, timeout_ms: 20000 }) as ReflectionRequest;
     return { snapshot, catalog, existing, context, wire, request };
 }
@@ -58,7 +59,7 @@ function mergeStructuredNotes(existing: readonly ReflectionNote[], accepted: rea
         return n.evidence_refs.every(r => live.has(r)) ? [structuredClone(n)] : []; const refs = n.evidence_refs.filter(r => live.has(r)); return refs.length ? [{ ...structuredClone(n), evidence_refs: refs }] : []; }), fresh = new Set<string>();
     for (const n of accepted) {
         const p = n.proposal, kind = kinds[p.claim.type]!, label = `${prefixes[p.claim.type]}_${createHash('sha256').update(JSON.stringify(p.claim)).digest('hex').slice(0, 12)}`, match = notes.find(v => v.structured && v.kind === kind && v.label === label);
-        const fields = { kind, label, text: n.text, evidence_refs: [...p.evidence_refs], confidence: p.confidence, updated_revision: revision, structured: { format_version: 1 as const, semantic_version: E1_VERSION as 'V2.3-CVC-E1', source_revision: source, proposal: { ...structuredClone(p), evidence_refs: [...p.evidence_refs] } } };
+        const fields = { kind, label, text: n.text, evidence_refs: [...p.evidence_refs], confidence: p.confidence, updated_revision: revision, structured: { format_version: 1 as const, semantic_version: REFLECTION_SEMANTIC_VERSION as 'V2.3-CVC-E1', source_revision: source, proposal: { ...structuredClone(p), evidence_refs: [...p.evidence_refs] } } };
         if (match) {
             Object.assign(match, fields);
             fresh.add(match.id);
@@ -116,7 +117,7 @@ export async function reflectStructuredAfterTurn(campaign: CampaignState, world:
                             try {
                                 const v = JSON.parse(response?.text ?? '');
                                 wire_valid = schemaMatches(c.request.wire_schema, v);
-                                canonical_valid = schemaMatches(E1_SCHEMA, v);
+                                canonical_valid = schemaMatches(REFLECTION_SCHEMA, v);
                             }
                             catch { }
                             details.push({ attempt: n, model: response?.model ?? empty.model, provider: response?.provider ?? empty.provider, failure_family: family, elapsed_ms: performance.now() - at, ...(wire_valid !== undefined ? { wire_valid } : {}), ...(canonical_valid !== undefined ? { canonical_valid } : {}), ...(response?.cost_usd !== undefined ? { cost_usd: response.cost_usd } : {}) });
@@ -149,7 +150,7 @@ export async function reflectStructuredAfterTurn(campaign: CampaignState, world:
                 ]), ...c.snapshot.characters.flatMap(v => v.profile.name ? [[v.id, v.profile.name] as [
                         string,
                         string
-                    ]] : [])]), result = evaluateStructuredOutputE1(raw, c.context, names), accepted: Proposal[] = result.accepted.map(n => ({ kind: kinds[n.proposal.claim.type]!, label: prefixes[n.proposal.claim.type]!, text: n.text, evidence_refs: n.proposal.evidence_refs, confidence: n.proposal.confidence })), rejected = result.diagnostics.filter(d => !d.accepted).map(d => ({ reason: d.reasons.join(','), proposal: d.proposal })), notes = mergeStructuredNotes(c.existing as ReflectionNote[], result.accepted, c.catalog, source, source), measured = { ...empty, attempts, attempt_details: details, accepted, rejected, parsed_proposals: raw.length, semantic_result: accepted.length ? 'accepted' as const : rejected.length ? 'semantic_rejected' as const : 'no_useful_notes' as const, provider_ms: attempts.provider_ms, ...(output.usage ? { usage: output.usage } : {}), ...(output.cost_usd !== undefined ? { cost_usd: output.cost_usd } : {}) };
+                    ]] : [])]), result = evaluateReflectionOutput(raw, c.context, names), accepted: Proposal[] = result.accepted.map(n => ({ kind: kinds[n.proposal.claim.type]!, label: prefixes[n.proposal.claim.type]!, text: n.text, evidence_refs: n.proposal.evidence_refs, confidence: n.proposal.confidence })), rejected = result.diagnostics.filter(d => !d.accepted).map(d => ({ reason: d.reasons.join(','), proposal: d.proposal })), notes = mergeStructuredNotes(c.existing as ReflectionNote[], result.accepted, c.catalog, source, source), measured = { ...empty, attempts, attempt_details: details, accepted, rejected, parsed_proposals: raw.length, semantic_result: accepted.length ? 'accepted' as const : rejected.length ? 'semantic_rejected' as const : 'no_useful_notes' as const, provider_ms: attempts.provider_ms, ...(output.usage ? { usage: output.usage } : {}), ...(output.cost_usd !== undefined ? { cost_usd: output.cost_usd } : {}) };
             try {
                 checkpoint();
                 if (options.can_commit && !options.can_commit())

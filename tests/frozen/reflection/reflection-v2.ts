@@ -1,9 +1,9 @@
 /** Evaluation candidate only. No production caller imports this module. */
-import type { CampaignSnapshot, ReflectionKind, PremiumHistoryEntry } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import { npcDeepSources } from "../turn/npc-plus.js";
-import { reflectionEvidence, INSTRUCTION_LIKE, type ReflectionEvidence, type Proposal } from "../turn/reflection.js";
+import type { CampaignSnapshot, ReflectionKind, PremiumHistoryEntry } from "../../../src/campaign/types.js";
+import type { DeepReadonly } from "../../../src/types/readonly.js";
+import type { WorldStore } from "../../../src/world/world-store.js";
+import { npcDeepSources } from "../../../src/turn/npc-plus.js";
+import { reflectionEvidence, INSTRUCTION_LIKE, type ReflectionEvidence, type Proposal } from "../../../src/turn/reflection.js";
 
 export const EVIDENCE_VERSION = 2;
 type Payload = Record<string, unknown>;

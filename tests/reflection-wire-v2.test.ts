@@ -1,8 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {requestScopedReflectionWire} from '../src/dev/reflection-wire-v2.js';
-import {schemaMatches,type StructuredEvidence} from '../src/dev/reflection-v2.js';
-import {V2_SCHEMA,validateStructuredClaimV23} from '../src/dev/reflection-v23.js';
+import {requestScopedReflectionWire} from './frozen/reflection/reflection-wire-v2.js';
+import {schemaMatches,type StructuredEvidence} from './frozen/reflection/reflection-v2.js';
+import {V2_SCHEMA,validateStructuredClaimV23} from './frozen/reflection/reflection-v23.js';
 const evidence=(ref:string,revision:number,from:string,to:string):StructuredEvidence=>({ref,revision,evidence_version:2,evidence_type:'movement',subject_character_id:'subject',owner_character_id:'subject',world_minute:revision,event_id:ref,payload:{from,to}});
 test('request enums retain exact movement endpoints, including repeated endpoints; canonical uniqueness remains local',()=>{
  const catalog=[evidence('move:1',1,'a','b'),evidence('move:2',2,'b','a')];

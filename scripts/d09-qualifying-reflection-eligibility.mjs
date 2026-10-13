@@ -8,10 +8,10 @@ import {createOpeningCampaign, OPENING_HOUSEHOLD} from '../.build/src/campaign/o
 import {buildTurnContext} from '../.build/src/turn/context-builder.js';
 import {contractCommands} from '../.build/src/turn/character-contracts.js';
 import {prepareCommit} from '../.build/src/turn/stages/commit-preparation.js';
-import {statementProvenance} from '../.build/src/turn/structured/reflection-v22.js';
+import {statementProvenance} from '../.build/tests/frozen/reflection/reflection-v22.js';
 import {captureProductionReflection, parseProductionReflection} from '../.build/src/turn/structured-reflection-maintenance.js';
-import {E1_SCHEMA, evaluateStructuredOutputE1, validateStructuredClaimE1} from '../.build/src/turn/structured/reflection-v23-cvc-e1.js';
-import {schemaMatches} from '../.build/src/turn/structured/reflection-v2.js';
+import {E1_SCHEMA, evaluateStructuredOutputE1, validateStructuredClaimE1} from '../.build/tests/frozen/reflection/reflection-v23-cvc-e1.js';
+import {schemaMatches} from '../.build/tests/frozen/reflection/reflection-v2.js';
 import {reflectionDue} from '../.build/src/turn/reflection.js';
 import {npcPlusFragments} from '../.build/src/turn/npc-plus.js';
 import {buildNarratorPrompt} from '../.build/src/turn/prompt-builder.js';

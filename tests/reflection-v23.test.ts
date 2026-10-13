@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import type {StructuredEvidence} from '../src/dev/reflection-v2.js';
-import {validateStructuredClaimV22} from '../src/dev/reflection-v22.js';
-import {validateStructuredClaimV23} from '../src/dev/reflection-v23.js';
+import type {StructuredEvidence} from './frozen/reflection/reflection-v2.js';
+import {validateStructuredClaimV22} from './frozen/reflection/reflection-v22.js';
+import {validateStructuredClaimV23} from './frozen/reflection/reflection-v23.js';
 function fixture(){
  const entry=(ref:string,type:string,revision:number,payload:Record<string,unknown>):StructuredEvidence=>({ref,evidence_version:2,evidence_type:type as StructuredEvidence['evidence_type'],subject_character_id:'maren',owner_character_id:'maren',revision,world_minute:revision,event_id:ref,payload});
  const a=entry('trust-history','relationship_change',2,{actor_id:'maren',other_id:'brenna',dimension:'trust',from:'low',to:'moderate'}),b=entry('wariness-history','relationship_change',3,{actor_id:'maren',other_id:'brenna',dimension:'wariness',from:'moderate',to:'high'}),snapshot=entry('current','relationship_snapshot',4,{target_character_id:'brenna',dimensions:{trust:'moderate',wariness:'high'}});

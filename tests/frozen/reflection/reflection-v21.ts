@@ -1,7 +1,6 @@
-// Production promotion of the frozen dev candidate; import paths only differ.
 /** Evaluation-only V2.1. V2 remains immutable; taxonomy, provider schema/prompt, renderer and factual checks are reused. */
 import { CLAIM_SCHEMAS, V2_SCHEMA, V2_SYSTEM, EVIDENCE_VERSION, REASON_CODES, schemaMatches, validateStructuredClaim as validateV2, renderStructuredClaim, type StructuredEvidence, type StructuredProposal, type ClaimDiagnostic, type CandidateNote, type Reason } from "./reflection-v2.js";
-import { INSTRUCTION_LIKE } from "../reflection.js";
+import { INSTRUCTION_LIKE } from "../../../src/turn/reflection.js";
 export { V2_SCHEMA, V2_SYSTEM, EVIDENCE_VERSION };
 export const V21_REASON_CODES = [...REASON_CODES, "contradictory_evidence", "irrelevant_evidence"] as const;
 export type EvidenceRole = "SUPPORTING" | "CORROBORATING" | "CONTEXT" | "CONTRADICTORY" | "IRRELEVANT";

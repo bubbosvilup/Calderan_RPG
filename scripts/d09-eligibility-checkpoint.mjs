@@ -1,5 +1,5 @@
 /** Evaluation-only read-only checkpoint. Never changes a campaign or dispatches a provider. */
-import {statementProvenance} from '../.build/src/turn/structured/reflection-v22.js';
+import {statementProvenance} from '../.build/tests/frozen/reflection/reflection-v22.js';
 
 export function inspectEligibilityCheckpoint(snapshot, catalog, characterId) {
   const statements=statementProvenance(catalog,characterId).map(link=>({...link,quote:catalog.find(e=>e.ref===link.statement_ref)?.payload.quote}));

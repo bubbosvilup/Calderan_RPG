@@ -7,7 +7,7 @@ import {loadWorld} from '../.build/src/world/loader.js';
 import {createOpeningCampaign,OPENING_HOUSEHOLD} from '../.build/src/campaign/opening-state.js';
 import {CampaignState} from '../.build/src/campaign/campaign-state.js';
 import {captureProductionReflection,parseProductionReflection,reflectStructuredAfterTurn} from '../.build/src/turn/structured-reflection-maintenance.js';
-import {evaluateStructuredOutputE1} from '../.build/src/turn/structured/reflection-v23-cvc-e1.js';
+import {evaluateStructuredOutputE1} from '../.build/tests/frozen/reflection/reflection-v23-cvc-e1.js';
 import {npcPlusFragments,packNpcPlus,npcDeepSources} from '../.build/src/turn/npc-plus.js';
 import {buildTurnContext} from '../.build/src/turn/context-builder.js';
 import {buildNarratorPrompt} from '../.build/src/turn/prompt-builder.js';

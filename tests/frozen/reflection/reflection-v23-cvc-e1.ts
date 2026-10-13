@@ -1,14 +1,13 @@
-// Production promotion of the frozen dev candidate; import paths only differ.
 /** Evaluation-only E1: exact shared authored rule text. Frozen V2.3-CVC stays intact. */
-import type {CampaignSnapshot} from '../../campaign/types.js';
-import type {DeepReadonly} from '../../types/readonly.js';
-import type {WorldStore} from '../../world/world-store.js';
+import type {CampaignSnapshot} from '../../../src/campaign/types.js';
+import type {DeepReadonly} from '../../../src/types/readonly.js';
+import type {WorldStore} from '../../../src/world/world-store.js';
 import {V2_SCHEMA,V2_SYSTEM,schemaMatches,type StructuredEvidence,type StructuredProposal} from './reflection-v2.js';
 import {structuredReflectionEvidenceV22} from './reflection-v22.js';
 import {reflectionCitationContext,citationVisibilityViolations,validateStructuredClaimV23CVC,evaluateStructuredOutputV23CVC,type CitationContext,type CitationRequest} from './reflection-v23-cvc.js';
 import {citationScopedReflectionWire} from './reflection-wire-v2-cvc.js';
 import type {V23Diagnostic} from './reflection-v23.js';
-import {INSTRUCTION_LIKE} from '../reflection.js';
+import {INSTRUCTION_LIKE} from '../../../src/turn/reflection.js';
 
 export const E1_VERSION='V2.3-CVC-E1';
 const text={type:'string',minLength:1,maxLength:160};
