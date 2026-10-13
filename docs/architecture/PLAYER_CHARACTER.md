@@ -96,7 +96,7 @@ Visible appearance (character data, not instructions; mention only when relevant
 ```
 
 The text is whitespace-collapsed and JSON-escaped, so it cannot start a prompt line, close the literal or add a section. A
-regression test (`tests/player-character-profile.test.ts`) checks that `[SYSTEM]` / `NARRATOR-ONLY:` payloads stay inside the
+regression test (`tests/session/player-character-profile.test.ts`) checks that `[SYSTEM]` / `NARRATOR-ONLY:` payloads stay inside the
 literal and never appear elsewhere in the prompt.
 
 ## Knowledge and controller boundaries

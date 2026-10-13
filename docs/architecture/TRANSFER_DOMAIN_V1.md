@@ -122,7 +122,7 @@ Totals: **8 requests, 8 Luna responses, 7/8 live PASS, 0 retries, 0 fallback, 0 
 ## 22. Files created for this milestone
 
 - `src/campaign/item-transfer.ts`
-- `tests/transfer-domain.test.ts`
+- `tests/items/transfer-domain.test.ts`
 - `scripts/evaluation/transfer-domain-live-smoke.mjs`
 - `docs/architecture/TRANSFER_DOMAIN_V1.md`
 - `docs/evaluations/TRANSFER_DOMAIN_LIVE_SMOKE.json`
@@ -133,7 +133,7 @@ Runtime/types/schema/policy: `src/campaign/{types,validation,items}.ts`, `src/ll
 
 Evaluation command fixtures/metrics: `src/dev/{controller-bakeoff-metrics,controller-benchmark-cases,eval-hardening,llm-scenarios,playthrough-manifest}.ts`.
 
-Test fixture/schema/ownership migrations: `tests/{campaign-state,controller-benchmark,controller-model-fallback,controller-reliability,d10-mannerisms,evidence-authorization,evidence-quote,item-visual,language-call-paths,live-regression-repair,live-regression-repair-1-1,live-regression-repair-1-2,narration-survives-audit,narrator-alternatives,narrator-bakeoff,natural-actions,provider-reliability-contract,provider-retry-h5,sprite-quality,turn-coordinator,turn-evidence-1m1,turn-failures,turn-hardening,turn-pipeline-golden,turn-pipeline-invariants,turn-stages}.test.ts`, `tests/turn-fixtures.ts`, `tests/golden/turn-pipeline.json`, `tests/playthrough/curated.json`.
+Test fixture/schema/ownership migrations: `tests/{campaign-state,controller-benchmark,controller-model-fallback,controller-reliability,d10-mannerisms,evidence-authorization,evidence-quote,item-visual,language-call-paths,live-regression-repair,live-regression-repair-1-1,live-regression-repair-1-2,narration-survives-audit,narrator-alternatives,narrator-bakeoff,natural-actions,provider-reliability-contract,provider-retry-h5,sprite-quality,turn-coordinator,turn-evidence-1m1,turn-failures,turn-hardening,turn-pipeline-golden,turn-pipeline-invariants,turn-stages}.test.ts`, `tests/support/turn-fixtures.ts`, `tests/golden/turn-pipeline.json`, `tests/playthrough/curated.json`.
 
 `docs/architecture/ITEM_DOMAIN.md` links the transfer rules and moves economy/ledger work into future scope. Prior inventory UI and sprite work was already uncommitted in the workspace; those existing changes are not newly claimed as Transfer Domain implementation. No commit was made.
 

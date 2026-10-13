@@ -5,70 +5,70 @@
    "path": "historical-replay/HISTORICAL_TURN_ANCHORS.json",
    "source": "historical_replay/HISTORICAL_TURN_ANCHORS.json",
    "sha256": "59a465393cd75be10502df3994f80163dcd25e02193fa2cd33d554df04efb915",
-   "used_by": "tests/historical-anchors.test.ts",
+   "used_by": "tests/tooling/historical-anchors.test.ts",
    "purpose": "frozen replay-only turn anchors; hash-pinned by HISTORICAL_TURN_ANCHORS.sha256 beside it"
   },
   {
    "path": "historical-replay/HISTORICAL_TURN_ANCHORS.sha256",
    "source": "historical_replay/HISTORICAL_TURN_ANCHORS.sha256",
    "sha256": "a3b00a94207b1e2e05fd1c9111424fb4b5d5d28d73ec5d60785bbb90f985497e",
-   "used_by": "tests/historical-anchors.test.ts",
+   "used_by": "tests/tooling/historical-anchors.test.ts",
    "purpose": "the frozen content hash of the anchors (content only; the file name in it is a label)"
   },
   {
    "path": "historical-replay/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md",
    "source": "HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md",
    "sha256": "c4321ed3339adf18122d49b7349519b252318bf8842d88f56f90b85e67eefb4e",
-   "used_by": "tests/historical-replay-comparator.test.ts",
+   "used_by": "tests/tooling/historical-replay-comparator.test.ts",
    "purpose": "frozen oracle oracle-v1 (its content hash equals historical_replay/ORACLE_SHA256.txt)"
   },
   {
    "path": "scene-continuity/fixture-world.json",
    "source": "p12-scene-continuity/fixture-world.json",
    "sha256": "af4efc4344c66e3735709f18cf994f275338e4a27c98f895b4d3a70b00a15069",
-   "used_by": "tests/p121-recent-scene-narration.test.ts, tests/p122-canonical-departure.test.ts, tests/player-character-view.test.ts, tests/ui-v1.test.ts",
+   "used_by": "tests/context/recent-scene-narration.test.ts, tests/movement/canonical-departure.test.ts, tests/ui/player-character-view.test.ts, tests/ui/play-client.test.ts",
    "purpose": "small authored world for scene-continuity and player-view tests"
   },
   {
    "path": "follow/follow-choice-live.jsonl",
    "source": "pass10/follow-choice-live.jsonl",
    "sha256": "4a20d4e95516d333657573c66b573beb24cd8a67c27e181b6b8c80fba014f7ea",
-   "used_by": "tests/follow-recognition-closure.test.ts, src/dev/follow-choice-e2e.ts",
+   "used_by": "tests/movement/follow-recognition.regression.test.ts, src/dev/follow-choice-e2e.ts",
    "purpose": "recorded raw Narrator drafts of the follow-choice live validation"
   },
   {
    "path": "movement/d01-live.jsonl",
    "source": "movement-follow-closure/d01-live.jsonl",
    "sha256": "25316ecf28dba25e61bf6e4c5b154b4a964a0ae6ab9f2a5524d65c430febd333",
-   "used_by": "tests/movement-follow-debt-closure.test.ts",
+   "used_by": "tests/movement/movement-follow-addressing.test.ts",
    "purpose": "recorded live narration, movement debt D01"
   },
   {
    "path": "movement/d02-d03-live.jsonl",
    "source": "movement-follow-closure/d02-d03-live.jsonl",
    "sha256": "e23d5b96e82a7f904896add35b7c71c662fb9163f068c8016469dea724fb29d3",
-   "used_by": "tests/movement-follow-debt-closure.test.ts",
+   "used_by": "tests/movement/movement-follow-addressing.test.ts",
    "purpose": "recorded live narration, movement debts D02/D03"
   },
   {
    "path": "movement/d03-label-live.jsonl",
    "source": "movement-follow-closure/d03-label-live.jsonl",
    "sha256": "a02b8286245b32b73b3eb3995c5c002fe9d6a8d8be535a06e91ecc568d3a3df3",
-   "used_by": "tests/movement-follow-debt-closure.test.ts",
+   "used_by": "tests/movement/movement-follow-addressing.test.ts",
    "purpose": "recorded live narration, movement debt D03 labels"
   },
   {
    "path": "canon/calderan-west-pass1-after.json",
    "source": "calderan-west-pass1-after.json",
    "sha256": "1173e5b154d24e0cf7b829605cf826a82c5f031dfbd7c7ec616450ca054c7cb7",
-   "used_by": "tests/west-npc-canon.test.ts",
+   "used_by": "tests/canon/west-npc-canon.test.ts",
    "purpose": "retrieval snapshot after West canon pass 1 (prior state the test compares against)"
   },
   {
    "path": "canon/calderan-west-npc-pass2a-after.json",
    "source": "calderan-west-npc-pass2a-after.json",
    "sha256": "8698ca89490055d6c36b5712bf112e26aeed4e03ccb969f6291355572255f7b2",
-   "used_by": "tests/west-everyday-canon.test.ts",
+   "used_by": "tests/canon/west-everyday-canon.test.ts",
    "purpose": "retrieval snapshot after West NPC pass 2A (prior state the test compares against)"
   }
  ]

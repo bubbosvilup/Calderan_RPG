@@ -16,7 +16,7 @@ import { RetrievalService } from "../../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../../src/retrieval/hybrid-search.js";
 import type { NarratorProvider } from "../../src/llm/narrator-provider.js";
 import { characterLocation } from "../../src/turn/movement/character-movement.js";
-import { metadata } from "../turn-fixtures.js";
+import { metadata } from "../support/turn-fixtures.js";
 
 /**
  * Modern regression benchmark harness. Every scenario builds its OWN rig: a real GameSession over a real TurnCoordinator and a real file repository in a

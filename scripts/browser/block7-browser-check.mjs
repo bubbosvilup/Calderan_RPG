@@ -21,7 +21,7 @@ const { TurnCoordinator } = await m("src/turn/coordinator/turn-coordinator.js");
 const { RetrievalService } = await m("src/retrieval/retrieval-service.js");
 const { HybridSearch } = await m("src/retrieval/hybrid-search.js");
 const { PortraitAssetStore } = await m("src/app/portrait-store.js");
-const { toLegacyFile } = await m("tests/raw-save.js");
+const { toLegacyFile } = await m("tests/support/raw-save.js");
 const world = await loadWorld("data");
 const LR = "heartstone_lr", NOTE = "Mira keeps a steady, wary regard for Nicco.", MANNERISM = "Tilts their head slightly while listening.";
 const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 1, elapsed_total_ms: 2 } };

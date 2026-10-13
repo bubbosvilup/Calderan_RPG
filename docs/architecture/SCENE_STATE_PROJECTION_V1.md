@@ -97,7 +97,7 @@ and the existing character JSON. The old `socialBlock`, `temporalGrounding` and 
 
 ## Tools and tests
 
-- `tests/scene-state-projection.test.ts` — 32 tests (25 in V1 plus item labels, four household-relevance cases, carried-item requiredness and guidance wording in V1.1) (basic scene, state incl. background NPC, ownership vs possession, equipment,
+- `tests/context/scene-state-projection.test.ts` — 32 tests (25 in V1 plus item labels, four household-relevance cases, carried-item requiredness and guidance wording in V1.1) (basic scene, state incl. background NPC, ownership vs possession, equipment,
   stored items, resources, knowledge scopes, secrecy, id leakage, focus, large scene, renderer budget, derived-only, save round trip,
   identity masking, scheduled events, developments, prompt regression, Controller unaffected, golden ideal scene
   `tests/golden/scene-state-ideal.txt`).

@@ -49,7 +49,7 @@ The Narrator receives a compact, id-free, visibility-checked context, including 
 
 > **Facts describe. Policies decide. CampaignState owns truth. The audit verifies against the same facts.**
 
-Facts carry no policy. Policies live outside the layer (`movement-evidence.ts`, `commerce-evidence.ts`, `attributed-speech.ts`, `person-offers.ts`, `name-establishment.ts`, `partner-identity-guard.ts`, `canonical-name-disclosure.ts`). Source-level tests pin the shape (`tests/narration-facts-architecture.test.ts`). Details: [NarrationFacts](docs/architecture/NARRATION_FACTS.md).
+Facts carry no policy. Policies live outside the layer (`movement-evidence.ts`, `commerce-evidence.ts`, `attributed-speech.ts`, `person-offers.ts`, `name-establishment.ts`, `partner-identity-guard.ts`, `canonical-name-disclosure.ts`). Source-level tests pin the shape (`tests/architecture/narration-facts-consumers.architecture.test.ts`). Details: [NarrationFacts](docs/architecture/NARRATION_FACTS.md).
 
 ## Authority Model
 
@@ -136,7 +136,8 @@ src/ui/           local web UI server (server.ts, play.ts) and vanilla client
 src/types/        shared types
 src/dev/          developer tools by purpose: support/, inspect/, benchmark/, maintenance/, live/ (spends credits),
                   historical/ (reproduction only); never imported by production code
-tests/            offline tests; tests/benchmark/ holds the modern regression benchmark
+tests/            offline tests in domain folders (tests/<domain>/<behavior>.test.ts); support/, fixtures/, frozen/;
+                  tests/benchmark/ holds the modern regression benchmark
 scripts/          clean and check commands; browser/ (offline browser checks), evaluation/, historical/
 docs/             documentation (start at docs/README.md)
 saves/            campaign saves (local)

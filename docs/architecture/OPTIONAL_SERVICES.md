@@ -65,7 +65,7 @@ Allowed: bug fixes, test infrastructure, documentation, UI over existing stable 
 
 **ARCH-1 is CLOSED** (phase 1 lifecycle in block 6, phase 2 storage and revision separation in block 7). Optional writes land in the composed view, are routed by the persistence layer to the side stores and never bump the semantic revision, so the block 6 optional-revision tolerance is gone and `expected_revision` is a strict equality. Storage layout, markers, precedence and the migration protocol: [Persistence](PERSISTENCE.md#optional-side-stores-block-7-save-file-and-persisted-snapshot-schema-8).
 
-**Context compaction is CORE, not optional.** It is derived and non-authoritative (it reads a `NarratorRequest` and never touches `CampaignState` or any store), but the next turn is rejected with `context_too_large` while `compaction_required`, so it is a turn-path availability concern. It stays awaited after the commit in `GameSession` (failure is an ignored warning, not a turn failure) and is deliberately outside the optional-service registry. Pinned by `tests/block7-domains.test.ts`.
+**Context compaction is CORE, not optional.** It is derived and non-authoritative (it reads a `NarratorRequest` and never touches `CampaignState` or any store), but the next turn is rejected with `context_too_large` while `compaction_required`, so it is a turn-path availability concern. It stays awaited after the commit in `GameSession` (failure is an ignored warning, not a turn failure) and is deliberately outside the optional-service registry. Pinned by `tests/optional/optional-store-domains.test.ts`.
 
 ## 8. Architecture Consolidation Gate
 

@@ -118,7 +118,7 @@ Captured result: `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`. Generated campa
 - `src/campaign/item-sprite-prompt.ts`
 - `src/app/item-sprite-jobs.ts`
 - `src/app/item-visual-view.ts`
-- `tests/item-visual.test.ts`
+- `tests/images/item-visual.test.ts`
 - `scripts/evaluation/item-inventory-live-smoke.mjs`
 - `scripts/evaluation/item-sprite-live-smoke.mjs`
 - `docs/evaluations/ITEM_INVENTORY_LIVE_SMOKE.json`
@@ -133,7 +133,7 @@ Captured result: `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`. Generated campa
 - `src/turn/items/item-projection.ts`: keep visual metadata internal.
 - `src/app/game-session.ts`: creation scheduling, idle completion, read/retry/settle seams and lifecycle handling.
 - `src/app/portrait-assets.ts`, `src/persistence/campaign-repository.ts`: protect referenced item assets.
-- `tests/item-domain.test.ts`, `tests/permanent-inventory.test.ts`, `tests/controller-model-fallback.test.ts`: valid new creation fixtures/expectations and contract hashes.
+- `tests/items/item-domain.test.ts`, `tests/items/inventory-queries.test.ts`, `tests/providers/controller-model-fallback.test.ts`: valid new creation fixtures/expectations and contract hashes.
 
 The pre-existing inventory/referenced-character files and uncommitted authorizer/coordinator/documentation changes were preserved; they are not newly implemented work in this pass. Optional session-view/characterPossessions cleanup was deferred to avoid changing existing UI semantics.
 

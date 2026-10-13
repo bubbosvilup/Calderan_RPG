@@ -7,7 +7,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const { createPlaytestServer } = await fromBuild("src/ui/server.js");
-const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/block4-fixtures.js");
+const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/support/turn-reliability-fixtures.js");
 
 const MAREN = "campaign_character_maren";
 const maren = { kind: "register_character", character: { id: MAREN, origin: { kind: "created" }, profile: { name: "Maren", age: { kind: "exact", years: 19 } }, current: { current_location: "test_room", status: "active" } } };

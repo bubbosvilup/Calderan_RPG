@@ -3,8 +3,8 @@
 import { fromBuild, launchBrowser } from "../lib/browser-env.mjs";
 import { once } from "node:events";
 const { createPlaytestServer } = await fromBuild("src/ui/server.js");
-const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/block4-fixtures.js");
-const { transfer } = await fromBuild("tests/turn-fixtures.js");
+const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/support/turn-reliability-fixtures.js");
+const { transfer } = await fromBuild("tests/support/turn-fixtures.js");
 
 const BAD = "Brenna accepts boots from Nicco. Gerome takes the ring from Nicco.";
 const GOOD = "Brenna accepts boots from Nicco.";

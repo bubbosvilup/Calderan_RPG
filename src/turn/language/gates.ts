@@ -2,7 +2,7 @@ import { COERCION, CONDITIONAL, EPISTEMIC, HABITUAL, INSTRUCTION, INTENT, MODAL,
 
 /**
  * Hardening H1: the policy table of every deterministic "not a completed / asserted act" gate. One entry per call site; each was
- * rebuilt from exactly the cue set of its pre-H1 local regex and is held to that verdict table by tests/language-gates.test.ts
+ * rebuilt from exactly the cue set of its pre-H1 local regex and is held to that verdict table by tests/language/language-gates.test.ts
  * (verbatim legacy copies). Gates differ ON PURPOSE — see the locked matrix in that test before changing any entry.
  *
  * Intended verdict changes in H1 (each locked by tests):

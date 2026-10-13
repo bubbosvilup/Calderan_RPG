@@ -6,7 +6,7 @@
  *   validateRelationshipAuthority current directional snapshot authority for contrasts (formerly V2.3)
  *   validateCitationVisibility  only refs the request made visible may be cited (formerly V2.3-CVC)
  *   validateReflectionClaim     the environmental shared-rule-text claim, else the stages above (formerly E1); the entry point
- * Behavior is pinned against the frozen oracle copies in tests/frozen/reflection/ (tests/reflection-consolidation-equivalence.test.ts).
+ * Behavior is pinned against the frozen oracle copies in tests/frozen/reflection/ (tests/reflection/reflection-oracle-equivalence.test.ts).
  */
 import { isDeepStrictEqual } from 'node:util';
 import type { CampaignSnapshot } from "../../campaign/types.js";

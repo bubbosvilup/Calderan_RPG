@@ -1,6 +1,6 @@
 # Inventory UI
 
-Status: ACTIVE (rewritten 2026-10-11; replaces the 2026-10-10 card-based Inventory UI V1 report, which described a UI that no longer exists). Source of truth: `src/app/inventory-ui-view.ts`, `item-visuals.ts`, `item-visual-view.ts`, `src/ui/server.ts`, `src/ui/client.js`, `tests/inventory-ui.test.ts`.
+Status: ACTIVE (rewritten 2026-10-11; replaces the 2026-10-10 card-based Inventory UI V1 report, which described a UI that no longer exists). Source of truth: `src/app/inventory-ui-view.ts`, `item-visuals.ts`, `item-visual-view.ts`, `src/ui/server.ts`, `src/ui/client.js`, `tests/ui/inventory-http.test.ts`.
 
 ## What the player sees
 

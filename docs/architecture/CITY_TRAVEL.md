@@ -53,8 +53,8 @@ snapshots made against the old canonical dataset require the existing explicit
 migration policy and are not silently accepted as this dataset. New saves round-trip
 after city travel and carried-character movement.
 
-Verification: `tests/city-travel.test.ts` covers route optimality and tie breaks,
+Verification: `tests/movement/city-travel.test.ts` covers route optimality and tie breaks,
 schema errors, reachability, boundary cut sets, bridge crossings, end-to-end
 historical routes, time, day recovery, failure rollback and save/load.
-`tests/location-continuity.test.ts` exercises the narrator-created seller, promotion,
+`tests/movement/location-continuity.test.ts` exercises the narrator-created seller, promotion,
 purchase, full Maren carry route and Tomas's unchanged location on a multi-hop trip.

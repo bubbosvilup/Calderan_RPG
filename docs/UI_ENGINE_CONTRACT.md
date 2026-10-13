@@ -2,7 +2,7 @@
 
 Status: ACTIVE. Last reconciled: 2026-10-13 (re-checked after consolidation block 11, which changed no UI-facing API; content last revised on main c0608a6). Source of truth: `src/app/game-session.ts`, `session-view.ts` and the read-model modules. Companion: [UI](UI.md).
 
-Read this first. The UI talks to **one object**, `GameSession` (`src/app/game-session.ts`, re-exported from `src/app/index.ts`). It must not import `TurnCoordinator`, `CampaignState`, `CampaignSnapshot`, the OpenRouter classes, the save codecs, retrieval or reflection. Everything below is verified by `tests/application-closure.test.ts`.
+Read this first. The UI talks to **one object**, `GameSession` (`src/app/game-session.ts`, re-exported from `src/app/index.ts`). It must not import `TurnCoordinator`, `CampaignState`, `CampaignSnapshot`, the OpenRouter classes, the save codecs, retrieval or reflection. Everything below is verified by `tests/session/application-smoke.integration.test.ts`.
 
 **Save/Load v1:** the Play UI uses `SessionHost` (`src/app/session-host.ts`) for persistent campaigns (section 1b). The disposable V0 mode remains behind `npm run play:ui -- --playtest`: it uses the application-owned `createUIPlaytestSession` adapter (`src/app/ui-playtest.ts`) to wrap the existing canonical opening at `calderan_slave_market`, minute 600, as disposable `ui_playtest`. This arrival override is playtest-only; it changes no authored records or normal opening. The adapter returns a `GameSession`; subsequent gameplay uses only `submitPlayerInput`. The deterministic opening is presentation text, never parsed into state. V0 forces reflection off, writes no saves, and discards the session on shutdown.
 

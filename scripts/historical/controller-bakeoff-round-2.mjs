@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { isDeepStrictEqual as equal } from 'node:util';
 import { CASES as ALL_CASES, dellId, respectLower } from './controller-bakeoff-round-2-cases.mjs';
 import { turnFixture } from '../../.build/src/dev/support/turn-fixture.js';
-import { mockNarrator, metadata, collect } from '../../.build/tests/turn-fixtures.js';
+import { mockNarrator, metadata, collect } from '../../.build/tests/support/turn-fixtures.js';
 import { TurnCoordinator } from '../../.build/src/turn/coordinator/turn-coordinator.js';
 import { RetrievalService } from '../../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../../.build/src/retrieval/hybrid-search.js';

@@ -1,6 +1,6 @@
 // `npm run clean`: removes the compiled output directory `.build` of this checkout, and nothing else. Cross-platform (Node only, no shell `rm`).
 // `npm run build` runs it first, so every build, test run and benchmark starts from an empty `.build` and a deleted source file can never leave
-// a stale compiled test behind for `node --test .build/tests/*.test.js` to discover.
+// a stale compiled test behind for `node --test ".build/tests/**/*.test.js"` to discover.
 import { rm } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";

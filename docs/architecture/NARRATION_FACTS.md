@@ -37,7 +37,7 @@ Commit preparation on the delivered text (SAME source) ──► CampaignState.p
 
 Every fact has: `kind`, `form` (which grammar matched), `span` (sentence, clause, offsets, text), `sentence`, `modality` (completed / future / conditional / negated / requested / habitual / …), `polarity`, `subject` (a `FactEntityRef`: surface, `entity_id` when resolved, `resolution` method, `candidates`), `confidence`, `ambiguity` (`none` / `unresolved` / `ambiguous`) and `provenance` (`movement` / `commerce` / `identity` extractor plus form). Identity facts also carry `source_text` and `voice` (narration or speech).
 
-Facts never carry policy: there is no `authorized`, `accepted`, `should_persist`, `importance` or `create` field anywhere (`tests/narration-facts-identity.test.ts`). An ambiguous reference keeps every candidate and has no `entity_id`; nothing collapses two candidates into one.
+Facts never carry policy: there is no `authorized`, `accepted`, `should_persist`, `importance` or `create` field anywhere (`tests/identity/identity-narration-facts.test.ts`). An ambiguous reference keeps every candidate and has no `entity_id`; nothing collapses two candidates into one.
 
 Speaker keys are a character id, `"nicco"`, or a scene-local `other:<noun>` / `other:<Name>`. An `other:` key is never persistence authority.
 
@@ -116,9 +116,9 @@ Every remaining narration or input reader is classified (block 11 sweep; archite
 
 ## 9. Invariants and tests
 
-- `tests/narration-facts-architecture.test.ts`: the twelve source-level assertions (one source per turn; movement, commerce and identity consumers read the facts; speaker and recipient attribution only in the fact layer; the audit reads the same source; banned legacy names; no seller-attribution parser in commerce; narration-facts imports no campaign, authorization, audit or persistence code; facts import no policy; player-input readers stay separate).
-- `tests/narration-facts-identity.test.ts`: speaker cases A–G, the post-hoc tag, self-introduction versus disclosure, recipient and reference resolution, same-name non-merge, and the speaker and recipient policies.
-- `tests/narration-facts-movement.test.ts`, `tests/narration-facts-commerce.test.ts`: blocks 9 and 10.
+- `tests/architecture/narration-facts-consumers.architecture.test.ts`: the twelve source-level assertions (one source per turn; movement, commerce and identity consumers read the facts; speaker and recipient attribution only in the fact layer; the audit reads the same source; banned legacy names; no seller-attribution parser in commerce; narration-facts imports no campaign, authorization, audit or persistence code; facts import no policy; player-input readers stay separate).
+- `tests/identity/identity-narration-facts.test.ts`: speaker cases A–G, the post-hoc tag, self-introduction versus disclosure, recipient and reference resolution, same-name non-merge, and the speaker and recipient policies.
+- `tests/movement/movement-narration-facts.test.ts`, `tests/commerce/commerce-narration-facts.test.ts`: blocks 9 and 10.
 - Benchmark (`npm run benchmark:modern`): M4–M11 (movement), C1–C8 (commerce), I5–I13 (identity, speaker, recipient, presence; I13 replays the real live B narrations of block 11).
 
 ## 10. Known limits

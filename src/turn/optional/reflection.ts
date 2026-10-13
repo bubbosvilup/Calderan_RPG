@@ -114,7 +114,7 @@ const KINDS = new Set(["stance", "signature_pattern", "shared_motif", "emerging_
 /** Deterministic content policy: what a reflection may never claim (romance, diagnosis, hidden motive/backstory, absolute or official status). */
 const FORBIDDEN = /\b(?:love[sd]?|loving|in love|romantic\w*|romance|attract\w*|desire[sd]?|crush|lover|intimate\w*|sexual\w*|relian\w*|rel(?:y|ies|ied|ying) on|depend\w*|reciproc\w*|trauma\w*|traumati\w*|ptsd|depress\w*|anxiety disorder|disorder|diagnos\w*|psycholog\w*|secretly|secret\w*|deep down|subconscious\w*|childhood|backstory|hidden (?:motive|agenda|past)|because of (?:her|his|their) past|completely|totally|entirely|unconditionally|forever|will always|always will|officially|legally)\b/i;
 /**
- * Pass 10 — claims no recorded evidence can support, found by an offline adversarial suite (tests/npc-plus-pass-10-reflection.test.ts):
+ * Pass 10 — claims no recorded evidence can support, found by an offline adversarial suite (tests/reflection/reflection-development-evidence.test.ts):
  * causes and motives ("because she fears…": developments record that something changed, never why), inner wants and enjoyment, learned
  * beliefs, authorship of household rules, and any inner state of Nicco (his feelings belong to the player). Counter-examples that stay valid:
  * "approaches Nicco with growing but cautious trust" (a recorded dimension), "has moved between the hall and the room several times".
