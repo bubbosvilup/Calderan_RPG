@@ -1,6 +1,6 @@
 # Core engine and optional services
 
-Status: Current. Introduced by consolidation block 6 (2026-10-12). Source of truth: `src/app/optional-services.ts`, `src/app/game-session.ts` (`#launchOptional`), `src/app/production.ts`, `src/app/item-sprite-jobs.ts`, `src/turn/mannerism-extraction.ts`, `src/turn/reflection.ts`. Report: `docs/evaluations/CONSOLIDATION_BLOCK6_CORE_OPTIONAL_SPLIT.md`.
+Status: Current. Introduced by consolidation block 6 (2026-10-12); re-checked 2026-10-13 after block 11 (no optional-service change). Source of truth: `src/app/optional-services.ts`, `src/app/game-session.ts` (`#launchOptional`), `src/app/production.ts`, `src/app/item-sprite-jobs.ts`, `src/turn/mannerism-extraction.ts`, `src/turn/reflection.ts`. Report: `docs/evaluations/CONSOLIDATION_BLOCK6_CORE_OPTIONAL_SPLIT.md`.
 
 ## 1. The boundary
 

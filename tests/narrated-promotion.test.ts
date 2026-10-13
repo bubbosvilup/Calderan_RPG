@@ -10,7 +10,7 @@ import { narratorEphemeralCharacters } from "../src/campaign/promotion.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
 import { activeTradeOffer } from "../src/campaign/trade.js";
-import { establishedFacts, readScene } from "../src/turn/narrated-captives.js";
+import { establishedFacts, readScene } from "../src/turn/narration-facts/index.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

@@ -1,6 +1,6 @@
 # Configuration and environment
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/app/production.ts`, `src/app/provider-config.ts`, `src/app/image-stack.ts`, `src/ui/play.ts`, `src/llm/openrouter/*`, `src/llm/huggingface/*`. Never put a key in the repo, a doc, a save or a log.
+Status: Current. Last reconciled: 2026-10-13 (model defaults re-checked against `provider-config.ts` / `state-controller.ts`; block 11 added no configuration). Source of truth: `src/app/production.ts`, `src/app/provider-config.ts`, `src/app/image-stack.ts`, `src/ui/play.ts`, `src/llm/openrouter/*`, `src/llm/huggingface/*`. Never put a key in the repo, a doc, a save or a log.
 
 ## Environment variables
 

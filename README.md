@@ -1,61 +1,178 @@
 # CaldrevanRPG
 
-A deterministic engine for long-running, AI-narrated roleplay set on the continent Helion. The model writes the prose and proposes changes; the engine owns the truth: world canon, who is where, who owns what, what each character knows, and every change to any of it.
+## What It Is
 
-**Status:** the engine is complete for its current scope and a local web UI plays persistent campaigns with autosave. Property, equipment mechanics, quests, combat and the weather UI are not built yet. See [Current state](docs/CURRENT_STATE.md) for the authoritative status and [Roadmap](docs/ROADMAP.md) for what is next. The full documentation index is [docs/README.md](docs/README.md).
+Caldrevan is a deterministic engine for long-running, AI-narrated roleplay. The world is the continent Helion; a campaign starts in the West, at the Calderan slave market, where the player character Nicco, an otherworlder, holds the Heartstone Tower. One language model writes the prose of each turn and a second one proposes state changes. The engine decides what is true: authored canon, who is where, who owns what, what each character knows, money, legal status, household membership, and every change to any of it.
 
-## How a turn works
+It runs locally: a small web UI (`npm run play:ui`) plays persistent campaigns with manual save and autosave.
 
-1. **Context.** Canon, campaign state and recent turns are projected into a bounded, visibility-checked context. The narrator never sees the whole database or anything the player character could not know. A derived, never-saved **Scene State Projection** turns current runtime truth (location, time, who is present and in what state, who carries and who owns what, mana and gold, knowledge scopes, relevant household and schedule) into one id-free `[CURRENT SCENE]` block, selected by deterministic relevance.
-2. **Narration.** The narrator streams prose.
-3. **Control.** A second model proposes state changes (moves, items, household, relationships, knowledge). Proposals are only proposals.
-4. **Authorization.** Each change needs evidence: the player's own words or completed events in the narration. Nothing moves, transfers or joins on a request, a plan or a hint.
-5. **Audit.** Prose that contradicts state is revised once, then redacted, so what the player reads always matches what was committed.
-6. **Commit.** One atomic, revision-guarded commit. Saves are persistent (manual plus autosave) and recoverable.
+## Core Design Rule
 
-## Where things are
+> **LLMs describe and propose; the engine owns truth.**
+
+Nothing a model writes becomes campaign state until the engine has validated it, found evidence for it and committed it atomically. Where the engine cannot be sure, it fails closed: a missed change is preferred to a false one. Prose the player reads always matches what was committed.
+
+## Runtime Architecture
+
+The order below is the one `TurnCoordinator.runTurn` (`src/turn/turn-coordinator.ts`) executes; the typed stages live in `src/turn/stages/`.
 
 ```text
-data/         authored canon (YAML): world lore, locations, characters, factions, canon NPC avatars
-src/world     canon loader, validation, WorldStore, calendar, climate, weather, environment
-src/campaign  durable state: characters, items, households, knowledge, NPC+, player character, portraits, Heartstone
-src/retrieval exact, lexical, semantic and hybrid search (audience-safe)
-src/turn      turn coordinator and stages, evidence and authorization, scene state projection, audit
-src/llm       OpenRouter providers; Hugging Face fal-ai image client
-src/persistence save format, migrations, campaign repository, recovery
-src/app       GameSession, SessionHost, read models, production wiring, autosave, sprite jobs
-src/ui        local web UI server and vanilla client
-src/economy   P8 Economic Baseline V1 reference prices (config/economy.yaml), selective narrator injection
-src/types     shared type helpers
-src/dev       developer CLI and evaluation tools (never imported by production)
-tests/        offline unit, matrix, replay and UI tests
-config/       economy.yaml (outside the hashed data/ dataset)
-scripts/      dev, browser-check and live evaluation scripts (some spend credits)
-docs/         documentation (start at docs/README.md)
+Player input
+  -> GameSession                     src/app/game-session.ts (one facade for any UI; SessionHost owns the campaign lifecycle)
+  -> TurnCoordinator                 intent, Scene State Projection, retrieval, bounded context
+  -> Narrator                        produces the CANDIDATE narration (a buffered draft, never shown before the commit)
+  -> State Controller                reads the draft and bounded state; returns a separate structured PROPOSAL (commands only)
+  -> NarrationFactSource             ONE per turn, reads only the Narrator candidate text (draft, revision, delivered), never the proposal
+  -> authorization                   combines the Controller proposal, the player's input and the narration facts:
+                                     schema validation, evidence authorization, domain policies over the facts
+  -> CampaignState.prepare           the whole candidate batch against the base revision (validation only, never a mutation)
+  -> narration audit                 reads the SAME NarrationFactSource; revise once, then redact
+  -> commit preparation              the delivered text's facts from the SAME source (name establishment, person offers)
+                                     join the batch; CampaignState.prepare again; expected_revision check
+  -> ONE atomic CampaignState.commit owns truth
+  -> derived read models (SessionView, play / player / inventory views) and the next turn's context
 ```
 
-## Run it
+A turn is one transaction. The browser sees only neutral progress words (`thinking`, `narrating`, `resolving`) and then the audited, committed narration once. Every request carries a `turn_key` and `expected_revision`: the same key never runs twice and a stale revision is rejected before any provider call. A truncated Narrator answer is never used (one bounded regeneration, otherwise the turn fails without committing). After the commit the turn has succeeded; later publication problems are warnings.
+
+The Narrator receives a compact, id-free, visibility-checked context, including the derived `[CURRENT SCENE]` block (location, date and time, weather, who is present, who carries and owns what, gold, relevant household). The Controller receives structured state with ids and no calendar or weather. Retrieval is informational only.
+
+## NarrationFacts
+
+`src/turn/narration-facts/` is the one place where the engine reads what a narration says. The turn coordinator creates a single `NarrationFactSource` per turn over the Narrator's candidate text and hands it to authorization, the audit and commit preparation. The Controller's proposal is not a fact input: authorization weighs it against these facts. The source yields:
+
+- **movement facts:** who moved, arrived, departed, followed or stayed; location claims (which never move anyone);
+- **commerce facts:** price quotes, withdrawals, and payment / transfer / settlement claims (narration can never settle a trade);
+- **dialogue and speaker facts:** every spoken line with its speaker and attribution method (explicit tag, post-hoc delivery tag, direct name, adjacent action beat, continued speaker), or ambiguous;
+- **identity facts:** self-introductions, names given for someone else, who a line is addressed to, and who a sentence can refer to (the same name is never a merge);
+- **the scene reading:** narrated people, captives, name introductions and late namings across the current scene.
+
+> **Facts describe. Policies decide. CampaignState owns truth. The audit verifies against the same facts.**
+
+Facts carry no policy. Policies live outside the layer (`movement-evidence.ts`, `commerce-evidence.ts`, `attributed-speech.ts`, `person-offers.ts`, `name-establishment.ts`, `partner-identity-guard.ts`, `canonical-name-disclosure.ts`). Source-level tests pin the shape (`tests/narration-facts-architecture.test.ts`). Details: [NarrationFacts](docs/architecture/NARRATION_FACTS.md).
+
+## Authority Model
+
+Every action has an impact class, and the class decides how it reaches state:
+
+| Class | Examples | Path |
+| --- | --- | --- |
+| A, low impact, reversible | ordinary movement, scene focus | inferred from evidence, no confirmation |
+| B, important but verifiable | name disclosure, NPC movement and follows, item pickup, escorting a held person | committed only on strong evidence; ambiguity is a safe rejection |
+| C, irreversible or high impact | trade settlement, NPC+ promotion, manumission, identity repair | explicit player confirmation through a ref- and revision-guarded action |
+
+Class C uses three explicit actions: **Accept** on the Actual Offer card, **Promote to NPC+** (the Heartstone rite), and **Confirm** on a `PendingConfirmation` card (manumission, operator-requested retire / merge). The client sends only a ref and `expected_revision`; the server loads the authoritative payload. A pending action is never world state and the Narrator sees it as "not completed". Details: [Architecture](docs/ARCHITECTURE.md).
+
+## Character Lifecycle
+
+A character is **PROVISIONAL**, **PERSISTENT** or **RETIRED**. This is an identity lifecycle, separate from the NPC tiers (canon NPC, Campaign NPC, NPC+, player character).
+
+- **Provisional:** a person the Narrator introduces or names. Scene-local, never saved, forgotten when the scene moves on or on reload.
+- **Persistent:** a record in the campaign snapshot. Created only by the person Actual Offer **Accept** (which materializes the same provisional subject atomically with the purchase) or by the engine for canonical records. Narration, a narrated name, a self-introduction, the Controller and the audit can never create one.
+- **Retired:** kept, never deleted or reactivated; reached only through a human-reviewed, confirmed repair (`retire_character`, `merge_characters`).
+
+A present unnamed persistent character who introduces themself is named in place (same id). A canonical person is never duplicated as a narrated stranger.
+
+## Persistence
+
+Campaigns live in `saves/campaigns/<campaign_id>/` (save file schema 8, persisted snapshot schema 8). A save is written with an atomic rename, carries up to 32 terminal turn receipts for idempotency, and is recoverable. Optional enrichment and media bookkeeping (Reflection notes, mannerism learning, item sprite status, the portrait Gallery) live in side stores `optional/learning.json` and `optional/media.json`; they never move the semantic revision. Derived data (calendar, weather, capabilities, equipment presentation, item icon metadata) is never saved. Details: [Persistence](docs/architecture/PERSISTENCE.md).
+
+## Optional Services
+
+Reflection, Mannerism learning, portrait generation, item sprite generation, sprite QA and semantic retrieval are optional services outside the correctness boundary (`src/app/optional-services.ts`). They run detached after the turn completes, never hold the turn lock, and never change a turn's outcome. **Disabling any of them leaves core behavior identical.** Defaults: Mannerism, portraits and sprites ON; Reflection, sprite QA and semantic retrieval OFF. Flags: `CALDREVAN_REFLECTION_MODE`, `CALDREVAN_MANNERISM_LEARNING`, `CALDREVAN_PORTRAIT_GENERATION`, `CALDREVAN_ITEM_SPRITES`, `CALDREVAN_SPRITE_QA`, `CALDREVAN_SEMANTIC_RETRIEVAL`. Details: [Optional services](docs/architecture/OPTIONAL_SERVICES.md).
+
+## Trade
+
+Trade uses **Actual Offer**: an offer is a pending proposal shown as a card; only the player's Accept settles it, atomically and at most once.
+
+- Goods BUY and SELL are proposed by the Controller; person BUY is read deterministically from the narration through NarrationFacts (the speaker of a price line must be an established seller; a price addressed to somebody other than Nicco is not an offer).
+- One active offer at a time; a new seller quote supersedes the old one; counteroffers happen in chat.
+- Settlement is whole-number gold only. SELL transfers the same item. No vendor stock, wallets, Auction House or person SELL.
+- A narrated payment or "the deal is done" never settles anything; the audit withdraws such claims.
+
+Details: [Actual Offer](docs/architecture/ACTUAL_OFFER.md).
+
+## Movement
+
+Nicco travels between authored locations; minutes elapse on the campaign clock. Another character moves only through evidence: a completed narrated movement of that same person, or the deterministic escort of a held person the player names and leads ("Alright Maren, let's go home"), committed in the same batch as Nicco's travel. Who may follow is derived per turn (active NPC+, held persons, household members, people invited by name) and never persisted. A location claim in the prose ("she is at the tower") never moves anyone; the audit flags narration that shows a person somewhere state does not.
+
+## Images
+
+Portraits and item sprites are generated through the Hugging Face router on `fal-ai` (`Qwen/Qwen-Image` with the Raena anime LoRA), billed to `HF_TOKEN`. Avatar (992 x 992) and Full Body (800 x 1200) roles, batches of three, a Gallery, an appearance fingerprint that marks older images stale, adult-only generation. Six canonical NPCs have authored avatars in `data/canonNPCAvatar/`. Images never become narrative truth and never reach the Narrator or the Controller. Details: [Image system](docs/IMAGE_SYSTEM.md).
+
+## Project Structure
+
+```text
+data/             authored canon (YAML): world, locations, characters, factions, concepts; canonNPCAvatar/
+config/           economy.yaml (narrator price anchors, outside the hashed data set)
+src/world/        canon loader and validation, WorldStore, calendar, climate, weather, environment, travel
+src/campaign/     CampaignState and its domains: characters, items, households, knowledge, relationships, funds,
+                  trade, NPC+, player character, portraits, Heartstone
+src/turn/         TurnCoordinator and stages, evidence and authorization, domain policies, Scene State Projection,
+                  prompt builder, narration audit
+src/turn/narration-facts/  the one narration reader (movement, commerce, dialogue, identity facts; scene reading)
+src/scene/        scene RAM and narrative-context builders
+src/retrieval/    exact, lexical, semantic and hybrid search (audience-safe)
+src/llm/          OpenRouter Narrator / Controller / extractor / reflection providers; Hugging Face image client
+src/persistence/  save format, migrations, campaign repository, recovery
+src/app/          GameSession, SessionHost, SessionView and read models, optional services, production wiring
+src/economy/      reference prices and selective narrator injection
+src/ui/           local web UI server (server.ts, play.ts) and vanilla client
+src/types/        shared types
+src/dev/          developer and live-evaluation tools (never imported by production code)
+tests/            offline tests; tests/benchmark/ holds the modern regression benchmark
+scripts/          browser checks and evaluation scripts (some spend credits)
+docs/             documentation (start at docs/README.md)
+saves/            campaign saves (local)
+```
+
+## Development
 
 Node.js 22 or later.
 
 ```text
 npm ci
-npm run typecheck
-npm test                  # compiles and runs everything offline; no live LLM or image calls
-npm run inspect:scene     # offline [CURRENT SCENE] scenarios
-npm run inspect:time      # offline calendar/weather matrix
-npm run play:ui           # persistent campaigns at http://127.0.0.1:3000 (Ctrl+C saves and stops)
-npm run play:ui -- --playtest   # disposable session, never saved
+npm run typecheck                 # tsc --noEmit
+npm run build                     # compile to .build/
+npm test                          # build, then every offline test (no live LLM or image call)
+npm run benchmark:modern          # modern regression benchmark (offline, scripted providers)
+npm run play:ui                   # persistent campaigns at http://127.0.0.1:3000 (Ctrl+C saves and stops)
+npm run play:ui -- --playtest     # disposable session, never saved
+npm run inspect:scene             # offline [CURRENT SCENE] scenarios
+npm run inspect:time              # offline calendar / weather matrix
+npm run inspect:context           # offline context inspection
+npm run inspect:search            # offline retrieval inspection
+npm run inspect:save              # inspect a save file
 ```
 
-API keys are read from environment variables only; never write them to a file. Live turns need `OPENROUTER_API_KEY`; image generation needs `HF_TOKEN`. Everything else is optional: see [Configuration](docs/CONFIGURATION.md).
+Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:controller`, `bench:llm`, `eval:*`, `benchmark:controller`, `review:playthrough`) need `OPENROUTER_API_KEY`; image generation needs `HF_TOKEN`. Keys are read from the environment only; never write them to a file. Models and every other variable: [Configuration](docs/CONFIGURATION.md).
 
-## Read next
+## Testing
 
-- [Documentation index](docs/README.md), [Current state](docs/CURRENT_STATE.md), [Architecture](docs/ARCHITECTURE.md), [Roadmap](docs/ROADMAP.md)
-- [UI engine contract](docs/UI_ENGINE_CONTRACT.md), [UI](docs/UI.md), [Testing](docs/TESTING.md)
-- [Authoring guide](docs/authoring/AUTHORING_GUIDE.md) and [entity schema](docs/schemas/ENTITY_SCHEMA.md)
+`npm test` compiles the project and runs the whole offline suite with faked or injected providers: unit and domain tests, matrix and replay tests, persistence and migration, UI read models, canon validation, determinism guards, and source-level architecture assertions. `npm run benchmark:modern` runs small independent end-to-end scenarios (a real `GameSession`, `TurnCoordinator` and file repository with scripted models) over movement, identity, trade, person trade, household, persistence, authority and fail-closed behavior; a scenario marked as a known product gap fails the day it unexpectedly passes. Live certification harnesses live in `src/dev/` and spend credits; they are never run by `npm test`. Details: [Testing](docs/TESTING.md).
 
-## Known limits
+## Current Status
 
-See [Roadmap: known limitations](docs/ROADMAP.md#known-limitations).
+The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 11): turn reliability, player-authorized actions, the character lifecycle, the core / optional split, the regression benchmark and NarrationFacts. Latest offline run: 3637 tests, 0 failed; benchmark 45 scenarios, 44 pass and 1 known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
+
+## Known Product Gaps
+
+- **KPG-1:** there is no player action to keep an arbitrary provisional person (an apple seller who said her name); only the person Actual Offer Accept makes one persistent. Planned direction: a UI "Keep track" action that materializes the same provisional identity through an explicit, revision-guarded action.
+- Provisional people and scene participants are forgotten on reload (PER-2).
+- Settlement is gold only; the narrator's price anchors may mention silver (ECO-1). No goods ledger (TRD-11).
+- No Property system or containers, no equipment slots or equip / unequip, no encumbrance, no Weather UI, no avatar upload.
+- Speaker attribution fails closed: a line after a plural beat, or a pronoun with two candidates of that sex, belongs to nobody.
+
+Full list: [Roadmap: known limitations](docs/ROADMAP.md#known-limitations) and the [Master Technical Debt Register](docs/MASTER_DEBT_REGISTER.md).
+
+## Roadmap
+
+The long view and its order live in the [Master Roadmap](docs/MASTER_ROADMAP.md); day-to-day status is in [Roadmap and known limitations](docs/ROADMAP.md). Next: the KPG-1 product decision, then Weather UI and the Property / Heartstone property work.
+
+## Documentation
+
+- [Documentation index](docs/README.md) (labels: normative, active, historical)
+- [Current state](docs/CURRENT_STATE.md) · [Architecture](docs/ARCHITECTURE.md) · [NarrationFacts](docs/architecture/NARRATION_FACTS.md) · [Actual Offer](docs/architecture/ACTUAL_OFFER.md) · [Persistence](docs/architecture/PERSISTENCE.md) · [Optional services](docs/architecture/OPTIONAL_SERVICES.md)
+- [UI](docs/UI.md) · [UI engine contract](docs/UI_ENGINE_CONTRACT.md) · [Image system](docs/IMAGE_SYSTEM.md) · [Heartstone](docs/HEARTSTONE.md) · [Configuration](docs/CONFIGURATION.md) · [Testing](docs/TESTING.md)
+- [Authoring guide](docs/authoring/AUTHORING_GUIDE.md) · [Entity schema](docs/schemas/ENTITY_SCHEMA.md)
+- Evaluation reports (immutable history): [docs/evaluations/](docs/evaluations/)

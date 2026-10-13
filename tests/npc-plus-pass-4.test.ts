@@ -5,7 +5,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/opening-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { participatesInScene } from "../src/turn/scene-participation.js";
+import { participatesInScene } from "../src/turn/narration-facts/index.js";
 import { deduplicateRecovered, retrievedSourceHandles } from "../src/turn/npc-plus.js";
 import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
 import { auditNarration } from "../src/turn/narration-audit.js";

@@ -258,7 +258,7 @@ export class TurnCoordinator {
       const debugSink = this.promptOptions.debug_sink;
       const sink = debugSink ? (record: TurnDebugRecord) => { try { debugSink(record); } catch { /* Optional debug emission. */ } } : undefined;
       // NarrationFacts: ONE extraction of the draft, read by authorization and by the audit below.
-      const factSource = createFactSource(movementFactScope(projected, this.world, context, [origin, arrival]));
+      const factSource = createFactSource(movementFactScope(projected, this.world, context, [origin, arrival], player_input));
       const authorization = measure("authorization", () => authorizeTurn({ controller: proposed.result, intent, draft, context, projected, movable, origin, arrival, world: this.world, facts: factSource,
         mode: this.promptOptions.evidence_authorization ?? "hybrid", sink, debug_base: { campaign_id: snapshot.campaign_id, base_revision, player_input } }));
       observer?.authorization(authorization.diagnostics, authorization.duplicates_removed);

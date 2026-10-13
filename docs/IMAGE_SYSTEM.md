@@ -1,6 +1,6 @@
 # Image system
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/app/image-stack.ts`, `src/llm/huggingface/fal-image-client.ts`, `src/app/item-sprite-jobs.ts`, `src/app/canon-avatars.ts`, `src/app/character-capabilities.ts`, `src/app/item-visuals.ts`. Superseded by this document: `docs/image_system_audit.md`, `docs/image_system_v1_gap_analysis.md`.
+Status: Current. Last reconciled: 2026-10-13 (re-checked after consolidation block 11, which did not touch images; content last revised on main c0608a6). Source of truth: `src/app/image-stack.ts`, `src/llm/huggingface/fal-image-client.ts`, `src/app/item-sprite-jobs.ts`, `src/app/canon-avatars.ts`, `src/app/character-capabilities.ts`, `src/app/item-visuals.ts`. Superseded by this document: `docs/image_system_audit.md`, `docs/image_system_v1_gap_analysis.md`.
 
 ## Principles
 

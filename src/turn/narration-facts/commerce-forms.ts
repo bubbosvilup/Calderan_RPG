@@ -1,12 +1,12 @@
 import { readPrices } from "../trade-price.js";
 import { GATES } from "../language/gates.js";
-import { QUOTED_SPAN_SOURCE, blankQuotes, escapeRegExp as esc, sentencesOf } from "../language/text.js";
+import { QUOTED_SPAN_SOURCE, blankQuotes, sentencesOf } from "../language/text.js";
 import { type NarrationFrame, spanOf } from "./frame.js";
 import { modalityOf, polarityOf } from "./modality.js";
 import { type Referent, nameRef, playerRef, refAmbiguity, unresolvedRef } from "./subjects.js";
 import { numberPhraseValue } from "../language/numbers.js";
 import { BELONGS_TO_PLAYER, COIN_HAND, COIN_MOTION, COUNTER_WORDING, DEAL_DONE, DOCUMENT, GROUP_OR_EACH, HANDOVER, HANDS_CHANGED, PAST_COST, PAY_VERB, QUOTE_NOT_ACTUAL, WITHDRAWAL, YOURS } from "./commerce-vocabulary.js";
-import type { CommerceFact, FactEntityRef, FactModality, PriceQuoteFact, QuoteRole, TextVoice } from "./types.js";
+import type { CommerceFact, DialogueUnit, FactEntityRef, FactModality, PriceQuoteFact, QuoteRole, TextVoice } from "./types.js";
 
 /**
  * COMMERCE FACTS: what a text SAYS about prices, withdrawals and finished deals. Descriptive only: a quote is not an offer, a claim is not a
@@ -18,29 +18,35 @@ import type { CommerceFact, FactEntityRef, FactModality, PriceQuoteFact, QuoteRo
  * ("Korvin names a price of 300 gold"); money changing hands is only ever a CLAIM of narration, never of speech (a seller's "I'll take
  * ninety gold" is a bargaining line, not a payment), while "she's yours" / "that's your bill of sale" / "the deal is done" count in either voice.
  */
-export interface CommerceScope { readonly people: readonly Referent[]; /** Words naming the goods a quote is about: "the halberd is fifteen" prices the halberd only when the subject is named. */ readonly subjects?: readonly string[] }
+export interface CommerceScope {
+  readonly people: readonly Referent[];
+  /** The shared dialogue units of the same text (who speaks each line). */
+  readonly units: readonly DialogueUnit[];
+  /** Words naming the goods a quote is about: "the halberd is fifteen" prices the halberd only when the subject is named. */
+  readonly subjects?: readonly string[];
+}
 
 interface Part { readonly text: string; readonly voice: TextVoice; readonly at: number; readonly index: number; readonly prev?: string; readonly next?: string; readonly speaker: FactEntityRef }
 
-const SAY = "(?:says?|said|asks?|asked|replies|replied|answers?|answered|growls?|growled|mutters?|muttered|adds?|added|snaps?|snapped|offers?|offered|states?|stated|tells?|told|continues?|continued|calls?|called)";
 /** Paragraph ranges of the narration; a paragraph is a run of lines ended by a blank line. */
 function paragraphs(narration: string): { start: number; end: number; starred: boolean }[] {
   return [...narration.matchAll(/[^\n]+(?:\n(?!\n)[^\n]*)*/g)].map(m => ({ start: m.index!, end: m.index! + m[0].length, starred: /^\s*\*/.test(m[0]) }));
 }
 
-function speakerOf(sentence: string, prose: string, previous: string | undefined, people: readonly Referent[]): FactEntityRef {
-  const names = [...new Set(people.flatMap(p => p.names).concat("Nicco"))].filter(Boolean).sort((a, b) => b.length - a.length).map(esc);
-  if (names.length) {
-    const re = new RegExp(`(?:\\b(${names.join("|")})\\s+${SAY}\\b|\\b${SAY}\\s+(${names.join("|")})\\b)`, "i");
-    const m = re.exec(prose) ?? re.exec(sentence.replace(/["“”]/g, " "));
-    const token = m?.[1] ?? m?.[2];
-    if (token) return /^nicco$/i.test(token) ? playerRef(token) : nameRef(people, token);
-    if (previous) {
-      const lead = previous.trim().match(new RegExp(`^(${names.join("|")})\\b`, "i"));
-      if (lead) return /^nicco$/i.test(lead[1]!) ? playerRef(lead[1]!) : nameRef(people, lead[1]!);
-    }
-  }
-  return unresolvedRef("");
+const normText = (s: string) => s.replace(/[*"“”]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+/**
+ * The speaker of a spoken piece of text, from the SHARED dialogue units (Block 11): commerce keeps no speaker grammar of its own. The player counts as the
+ * speaker only on real evidence (a tag naming him, a line labelled with his name, the beat right before the line); the weakest legacy reading
+ * (`recent_subject`) never turns a price into the player's counter.
+ */
+function speakerOf(text: string, units: readonly DialogueUnit[], people: readonly Referent[]): FactEntityRef {
+  const t = normText(text);
+  const u = t ? units.find(x => x.quoted && (normText(x.text) === t || normText(x.text).includes(t) || t.includes(normText(x.text)))) : undefined;
+  const key = u?.attribution?.method && u.attribution.method !== "recent_subject" ? u.speaker : undefined;
+  if (!key) return unresolvedRef("");
+  if (key === "nicco") return playerRef(u!.attribution?.surface || "Nicco");
+  const person = people.find(p => p.id === key);
+  return person ? nameRef(people, person.names[0]!) : { surface: key.replace(/^other:/, ""), entity_id: key, resolution: "descriptor", candidates: [key] };
 }
 
 /** True for every character inside a *…* pair of its paragraph (the asterisks themselves included): the narrator's own voice in the RPG format. */
@@ -50,18 +56,14 @@ function starMask(narration: string, paras: readonly { start: number; end: numbe
   return mask;
 }
 
-function partsOf(frame: NarrationFrame, people: readonly Referent[]): Part[] {
+function partsOf(frame: NarrationFrame, people: readonly Referent[], units: readonly DialogueUnit[]): Part[] {
   const paras = paragraphs(frame.narration), rpg = paras.some(p => p.starred), mask = starMask(frame.narration, paras);
   const paraAt = (at: number) => paras.findIndex(p => (frame.starts[at] ?? 0) >= p.start && (frame.starts[at] ?? 0) < p.end);
   const sameBlock = (a: number, b: number) => b >= 0 && b < frame.sentences.length && paraAt(a) === paraAt(b);
   const parts: Part[] = [];
   frame.sentences.forEach((sentence, at) => {
-    const prose = frame.prose(at).trim();
-    let previous: string | undefined;
-    for (let k = at - 1; k >= 0 && !previous; k--) { const q = paras[paraAt(k)]; if (q?.starred) previous = frame.prose(k).trim(); }
     const neighbour = (to: number) => sameBlock(at, to) ? frame.prose(to).trim() : undefined;
     const prev = neighbour(at - 1), next = neighbour(at + 1);
-    const speaker = speakerOf(sentence, prose, previous, people);
     // The sentence in runs of one voice: asterisk-wrapped runs are narration; in the RPG format the plain runs are speech.
     const from = frame.starts[at] ?? 0, runs: { text: string; narrator: boolean }[] = [];
     for (let i = from; i < from + sentence.length; ) {
@@ -70,9 +72,9 @@ function partsOf(frame: NarrationFrame, people: readonly Referent[]): Part[] {
     }
     for (const run of runs) {
       const quoted = [...run.text.matchAll(new RegExp(QUOTED_SPAN_SOURCE, "g"))].map(m => m[0].slice(1, -1).trim()).filter(Boolean);
-      for (const inner of quoted) { const subs = sentencesOf(inner); subs.forEach((sub, k) => parts.push({ text: sub, voice: "speech", at, index: parts.length, ...(subs[k - 1] ? { prev: subs[k - 1]! } : {}), ...(subs[k + 1] ? { next: subs[k + 1]! } : {}), speaker })); }
+      for (const inner of quoted) { const subs = sentencesOf(inner), speaker = speakerOf(inner, units, people); subs.forEach((sub, k) => parts.push({ text: sub, voice: "speech", at, index: parts.length, ...(subs[k - 1] ? { prev: subs[k - 1]! } : {}), ...(subs[k + 1] ? { next: subs[k + 1]! } : {}), speaker })); }
       const rest = blankQuotes(run.text).trim();
-      if (rest) parts.push({ text: rest, voice: run.narrator ? "narration" : "speech", at, index: parts.length, ...(prev ? { prev } : {}), ...(next ? { next } : {}), speaker: run.narrator ? unresolvedRef("") : speaker });
+      if (rest) parts.push({ text: rest, voice: run.narrator ? "narration" : "speech", at, index: parts.length, ...(prev ? { prev } : {}), ...(next ? { next } : {}), speaker: run.narrator ? unresolvedRef("") : speakerOf(rest, units, people) });
     }
   });
   return parts;
@@ -90,7 +92,7 @@ const withoutBargain = (text: string) => text.replace(/\b(?:i'?ll|i will|we'?ll)
 
 export function commerceFacts(frame: NarrationFrame, scope: CommerceScope): CommerceFact[] {
   const out: CommerceFact[] = [];
-  for (const part of partsOf(frame, scope.people)) {
+  for (const part of partsOf(frame, scope.people, scope.units)) {
     const text = part.text, speech = part.voice === "speech";
     // --- prices
     const reading = readPrices(text, { concrete: true, prev: part.prev, next: part.next, ...(scope.subjects ? { subjects: scope.subjects } : {}) });

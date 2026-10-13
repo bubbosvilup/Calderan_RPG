@@ -3,7 +3,6 @@ import assert from "node:assert/strict";
 import { escapeRegExp, exactNamePattern, quotedSpans, blankQuotes, sentencesOf, QUOTED_SPAN_SOURCE } from "../src/turn/language/text.js";
 import { CARDINAL_WORD_ALTERNATION, NUMBER_WORDS, TENS, numberValue, numberWordValue } from "../src/turn/language/numbers.js";
 import { sentencesOf as legacySentencesOf, blankQuotes as legacyBlankQuotes } from "../src/turn/sentences.js";
-import { numberValue as captivesNumberValue } from "../src/turn/narrated-captives.js";
 
 /** Hardening H1: direct tests for the canonical text and number primitives (src/turn/language/). */
 
@@ -80,10 +79,9 @@ test("numberWordValue: the bounded canonical table (0-19, tens, compounds below 
     assert.equal(numberWordValue(bad), undefined, bad);
   }
 });
-test("numberValue: digits are one to three only; words via the canonical table; promotion re-export is the same parser", () => {
+test("numberValue: digits are one to three only; words via the canonical table", () => {
   assert.equal(numberValue("19"), 19); assert.equal(numberValue("120"), 120); assert.equal(numberValue("1000"), undefined);
   assert.equal(numberValue("thirteen"), 13);
-  assert.equal(captivesNumberValue, numberValue);
 });
 test("CARDINAL_WORD_ALTERNATION: one..nineteen and the tens, never zero; every alternative parses to a value", () => {
   const words = CARDINAL_WORD_ALTERNATION.split("|");

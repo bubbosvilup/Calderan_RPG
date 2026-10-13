@@ -5,11 +5,11 @@ import type { RecentExchange } from "./recent-conversation.js";
 import type { WorldStore } from "../world/world-store.js";
 import { classifyBackgroundClaim } from "./background-grounding.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
-import { materializeProvisional } from "./provisional-people.js";
-import { CAPTIVE, establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type NarrationUnit, type SceneReading } from "./narrated-captives.js";
+import { linkedParticipant, materializeProvisional } from "./provisional-people.js";
+import { asksName } from "./identity-request.js";
 import { NUMBER_PHRASE_SOURCE } from "./language/numbers.js";
 import { AUCTION } from "./trade-price.js";
-import { createFactSource, type NarrationFactSource, type NarrationFacts } from "./narration-facts/index.js";
+import { CAPTIVE, createFactSource, refersTo, type NarratedPerson, type NarrationFactSource, type NarrationFacts, type NarrationUnit, type SceneReading } from "./narration-facts/index.js";
 import { actionableQuote, inSegment, sellerPrices, sellerQuotes, unsupportedMoney } from "./commerce-evidence.js";
 import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
 
@@ -20,7 +20,7 @@ import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
  * what the existing person-transaction commands will apply when the PLAYER accepts the offer in the interface. The player's own words ("deal",
  * "*pays*", a counter-price) are never read as acceptance and never set a price: only the seller's stated price counts.
  *
- * Subjects: a present persistent enslaved person held by a present seller; or a narrated captive of the current scene (narrated-captives.ts),
+ * Subjects: a present persistent enslaved person held by a present seller; or a narrated captive of the current scene (the NarrationFacts scene reading),
  * who is promoted only when the offer is accepted. Sellers: a present persistent character, a named narrated person, or an anonymous
  * narrated speaker ("the whittler"), recorded as a counterparty snapshot and never made a character.
  */
@@ -52,18 +52,19 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const latest = latestExchange?.narration ?? "";
   if (!latest || AUCTION.test(latest) && /\b(?:bids?|bidding|lot)\b/i.test(latest)) return { commands, diagnostics };
   // ONE reading of the delivered narration's prices: the shared commerce facts (a seller-voiced, current, completed quote; never the player's figure).
-  const facts = (options.facts ?? createFactSource({ movers: [], context })).of(latest);
+  const source = options.facts ?? createFactSource({ movers: [], context }), facts = source.of(latest);
   const prices: PriceReader = text => sellerPrices(facts, text);
   const unsupported = (text: string) => unsupportedMoney(facts, text) !== undefined;
   const candidates = [...present].filter(id => { const l = legal(id); return l?.status === "enslaved" && l.holder_id !== "nicco" && !!l.holder_id && present.has(l.holder_id); });
   // Narrator-created captives of the current scene (and present persistent people not yet legally held, e.g. promoted by name) compete with held persons for the one subject.
   const unheld = new Set(context.characters.filter(c => c.id !== "nicco" && !legal(c.id) && /\bcaptive\b/.test(c.established_origin?.role ?? "")).map(c => c.id));
-  const readingOptions = { campaign_names: new Set(snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true };
-  let reading: SceneReading | undefined = readScene(recent, context, options.world, { unheld, ...readingOptions });
+  const readingOptions = { campaign_names: new Set(snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true, asks_name: asksName };
+  // The ONE scene reading (NarrationFacts): who is narrated, who speaks each line (seller binding reads these speakers), who is held.
+  let reading: SceneReading | undefined = source.scene(recent, context, options.world, { unheld, ...readingOptions });
   // A person promoted by name before the narration showed them held has no captive role; when the scene narrates a captive under the very noun the narrator attached to them, they are that captive.
   const nouns = new Set(reading.persons.filter(p => p.captive && !p.name && !p.character_id && p.noun).map(p => p.noun!));
   const late = context.characters.filter(c => c.id !== "nicco" && !unheld.has(c.id) && !legal(c.id) && c.established_origin?.descriptor && nouns.has(c.established_origin.descriptor.toLowerCase())).map(c => c.id);
-  if (late.length) reading = readScene(recent, context, options.world, { unheld: new Set([...unheld, ...late]), ...readingOptions });
+  if (late.length) reading = source.scene(recent, context, options.world, { unheld: new Set([...unheld, ...late]), ...readingOptions });
   // The seller points at someone the narration only showed as part of a group ("Two women sit inside…", "Three hundred for her."): that person is the subject.
   const pointed = reading.captives.length ? undefined : pointedCaptive(reading, input, prices, facts);
   if (pointed) reading = { ...reading, persons: [...reading.persons, pointed], captives: [pointed] };

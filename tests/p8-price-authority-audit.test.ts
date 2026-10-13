@@ -6,7 +6,7 @@ import { buildTurnContext } from "../src/turn/context-builder.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
 import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
-import { readScene } from "../src/turn/narrated-captives.js";
+import { readScene } from "../src/turn/narration-facts/index.js";
 import { groundingIssues } from "../src/turn/grounding-audit.js";
 import { NARRATOR_SYSTEM } from "../src/turn/prompt-builder.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";

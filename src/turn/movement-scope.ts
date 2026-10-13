@@ -4,14 +4,15 @@ import type { WorldStore } from "../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
 import { type MovableCharacter, movableCharacters, npcPlusEntrants, persistentCharactersAt } from "./character-movement.js";
 import { playerDestination } from "./player-travel.js";
-import { type NarrationFactScope, type Referent } from "./narration-facts/index.js";
+import { type NarrationFactScope, type Referent, nameFilter } from "./narration-facts/index.js";
+import { asksName } from "./identity-request.js";
 
 /**
- * Who the movement facts of a turn are read against: ONE set of people for authorization and audit alike (everyone in, or arriving at,
+ * Who the NarrationFacts of a turn (movement, commerce, identity) are read against: ONE set of people for authorization and audit alike (everyone in, or arriving at,
  * the scenes the player is in or leaves), so a pronoun that two people could mean is ambiguous for both. This names people only; who may
  * actually move is decided by the consumers' own policy.
  */
-export function movementFactScope(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, context: TurnContext, locations: readonly string[]): NarrationFactScope {
+export function movementFactScope(snapshot: DeepReadonly<CampaignSnapshot>, world: WorldStore, context: TurnContext, locations: readonly string[], player_input?: string): NarrationFactScope {
   const people = new Map<string, Referent>();
   const add = (m: MovableCharacter) => {
     const prior = people.get(m.id);
@@ -32,5 +33,6 @@ export function movementFactScope(snapshot: DeepReadonly<CampaignSnapshot>, worl
     const exact = world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.narrator && e.knowledge.visibility.player && [e.id, e.name, e.display_name, ...e.aliases].some(n => label(n) === label(phrase)));
     return exact.length === 1 ? exact[0]!.id : undefined;
   };
-  return { movers: [...people.values()], context, absent, place };
+  // Identity facts (Block 11) read names against the same world (places are never names) and know whether the player asked a name this turn.
+  return { movers: [...people.values()], context, absent, place, names_ok: nameFilter(world), asks_name: asksName, ...(player_input !== undefined ? { player_input } : {}) };
 }

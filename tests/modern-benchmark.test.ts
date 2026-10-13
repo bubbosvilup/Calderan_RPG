@@ -20,8 +20,8 @@ for (const s of SCENARIOS) {
   });
 }
 
-test("benchmark format: 17-40 scenarios, unique ids, every category covered, all deterministic and offline", () => {
-  assert.ok(SCENARIOS.length >= 17 && SCENARIOS.length <= 40, String(SCENARIOS.length));
+test("benchmark format: 17-60 scenarios, unique ids, every category covered, all deterministic and offline", () => {
+  assert.ok(SCENARIOS.length >= 17 && SCENARIOS.length <= 60, String(SCENARIOS.length));
   assert.equal(new Set(SCENARIOS.map(s => s.id)).size, SCENARIOS.length);
   for (const c of CATEGORIES) assert.ok(SCENARIOS.some(s => s.category === c), `category ${c}`);
   assert.ok(SCENARIOS.every(s => s.mode === "deterministic"));

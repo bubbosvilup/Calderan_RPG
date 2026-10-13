@@ -5,7 +5,7 @@ type WorldEntity = DeepReadonly<RawEntity>;
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
-import { PERSON_NOUNS } from "./narrated-captives.js";
+import { PERSON_NOUNS } from "./narration-facts/index.js";
 
 /**
  * Ephemeral Background Grounding V1. A person the narrator improvises (a captive, a passer-by) has no authored background; it

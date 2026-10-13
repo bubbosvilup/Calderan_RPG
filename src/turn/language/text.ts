@@ -3,7 +3,7 @@
  *
  * Quote semantics (general case): a quoted span is straight "…" or curly “…” on one line. Text inside a quoted span is dialogue,
  * never narrator prose, so callers that read actions from narration blank or skip it. Callers with deliberately different quote
- * semantics (length-capped capture groups in narrated-captives.ts and prompt-builder.ts) keep their own patterns and say so.
+ * semantics (the length-capped QUOTE of narration-facts/dialogue-vocabulary.ts) keep their own patterns and say so.
  */
 
 /** Escape a literal string (a name, an item term) for use inside a RegExp. */

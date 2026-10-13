@@ -1,6 +1,6 @@
 # Phase 1L: Turn Coordinator & First Playable Loop
 
-Status: ACTIVE for the turn lifecycle and ordering; model names in this Phase 1L text are HISTORICAL. Current stage order and models: [Architecture](../ARCHITECTURE.md), [Current state](../CURRENT_STATE.md). Last reconciled: 2026-10-11.
+Status: ACTIVE for the turn lifecycle and ordering; model names in this Phase 1L text are HISTORICAL. Current stage order and models: [Architecture](../ARCHITECTURE.md), [Current state](../CURRENT_STATE.md). Last reconciled: 2026-10-13 (block 11: narration readers now live in `src/turn/narration-facts/`, see [NarrationFacts](NARRATION_FACTS.md)).
 
 ## Authority and lifecycle
 
@@ -248,10 +248,10 @@ See [the pass report](../evaluations/archive/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_
 
 See [the pass report](../evaluations/archive/NARRATOR_EPHEMERAL_CHARACTER_PROMOTION_PASS_1_1.md).
 
-- **Narrated captives.** `src/turn/narrated-captives.ts` reads the current scene's delivered narration and finds captives the narrator invented:
+- **Narrated captives.** The scene reading (since block 11 `src/turn/narration-facts/scene-identity.ts`, `source.scene(...)`; formerly `narrated-captives.ts`, deleted) reads the current scene's delivered narration and finds captives the narrator invented:
   - The scene is the trailing exchanges at the player's location; `RecentExchange.location_id` is now recorded, but never rendered into prompts.
   - A named captive needs its name introduced as a name. An unnamed captive is a person noun in a sentence with a captivity marker.
-  - Each quote and sentence gets a speaker or subject attribution.
+  - Each quote and sentence gets a speaker or subject attribution (since block 11 the shared `dialogueUnits` attribution of the fact layer).
 - **Purchase (superseded by Actual Offer V1: the subject and seller reading below now builds a pending person offer, settled only by the player's Accept).** `resolvePersonTransactions` may now choose such a captive as the one exact subject. The subject resolves in this order: the player's reference, then the latest price talk, then the only candidate, then the only one mentioned in the latest narration.
 - **Seller authority.** It must come from the seller's own statement: an ownership claim, or an explicit offer or price in reply to a price request. Presence or description never counts.
 - **One proposal (now the stored offer plan, executed at acceptance).** The purchase emits `register_character` (with an immutable `origin_snapshot`), then `set_legal_status` (enslaved under the seller), then the ordinary `transfer_person` sale. The coordinator prevalidates all of it before narration, and a failure anywhere drops everything. It commits in one revision.
@@ -265,10 +265,10 @@ See [the pass report](../evaluations/archive/NARRATOR_CHARACTER_PERSISTENCE_PASS
 
 - **Model.** A narrator-created person follows one path: proper name established, then campaign character, then household join, then NPC+ (not implemented). There is one exception: an unnamed person the player acquires. There is no importance scoring, and no promotion from dialogue, wounds, healing, gifts, witnessing or rumors.
 - **Name establishment.** `src/turn/name-establishment.ts` runs deterministically on the **delivered** narration at finalization, after the audit and before commit. Its commands join the already-validated turn proposal. If the combined proposal fails validation, the identity changes are dropped and the turn still commits.
-  - It promotes a person named in this exchange who is present in the scene: acting, speaking, self-introduced, or introduced by narration's own voice.
+  - It promotes a person named in this exchange who is present in the scene: acting, speaking, self-introduced, or introduced by narration's own voice. **Superseded by block 5B (AUTH-2):** narration creates at most a PROVISIONAL person; see [Architecture](../ARCHITECTURE.md) §2c.
   - It gives a name to a present *unnamed* persistent character who introduces themselves (`set_profile`). The ID, origin snapshot, legal state, household and relationships are unchanged.
   - A linked temporary scene participant is retired.
-- **Captivity attribution.** `src/turn/narrated-captives.ts` attaches captivity markers to the nearest person reference ("Korvin studies the woman in the cage" marks the woman), and resolves pronouns by established sex.
+- **Captivity attribution.** The scene reading (`narration-facts/scene-identity.ts`, `person-facts.ts`; formerly `narrated-captives.ts`) attaches captivity markers to the nearest person reference ("Korvin studies the woman in the cage" marks the woman), and resolves pronouns by established sex.
 - **Anonymous sellers.** An anonymous seller (such as "the whittler") never becomes a character. `transfer_person` takes exactly one of `from_holder_id` or `from_counterparty` (a `CounterpartySnapshot`: label, location, authority evidence).
   - The anonymous path requires a subject with no legal record.
   - It writes the post-sale legal state directly (enslaved, holder = buyer).

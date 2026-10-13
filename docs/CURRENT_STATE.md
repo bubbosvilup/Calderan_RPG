@@ -1,6 +1,6 @@
 # Caldrevan: current state
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6 plus the uncommitted consolidation block 4 working tree). Source of truth: the current main working tree.
+Status: Current. Last reconciled: 2026-10-13 (main 7345549 plus the uncommitted consolidation block 11 working tree). Source of truth: the current main working tree.
 
 This is the best "where are we now?" document. Details live in the linked documents; historical results live in [evaluation reports](evaluations/), which are never rewritten.
 
@@ -38,6 +38,7 @@ Player input → `GameSession` → `TurnCoordinator` → Narrator (draft) → St
 | Person Actual Offer end to end (spoken prices, stable subject, Slave NPC on Accept, same-entity rename; `c0608a6`) | Complete |
 | Campaign deletion (soft delete to `saves/.deleted/`, composer command `/location`) | Complete |
 | P8 Economic Baseline V1 (`config/economy.yaml`, selective narrator price anchors) | Complete (anchors only; not a settlement currency) |
+| NarrationFacts (blocks 9-11): ONE narration reader per turn (`src/turn/narration-facts/`) for movement, commerce, dialogue / speaker, identity, recipient and reference facts; authorization, Actual Offer, name establishment, the partner guard and the audit read the same facts | Complete; KPG-2 closed in block 11; see [NarrationFacts](architecture/NARRATION_FACTS.md) |
 
 ## 4. Current model topology (verified in code)
 
@@ -99,6 +100,7 @@ One position per item (`unknown`, `carried`, `equipped`, `stored(location_id)`);
 - **Repair tooling (operator only):** `retire_character` and `merge_character` through `PendingConfirmation` (`POST /api/repair/request`, then the ordinary confirm/cancel). Preconditions fail closed (player, canonical, dead, NPC+, household, legal state, items, funds, active offers; merge also names, species, sex, age, location, relationships, equipment slots). Retired characters are excluded from every live target.
 - **Diagnostics:** read-only identity-fork scanner (`npm run build && node .build/src/dev/scan-identity-forks.js --out <dir> <saves>`). Same name alone is not evidence; every finding says HUMAN REVIEW REQUIRED.
 - **Not changed:** Actual Offer and NPC+ Promote keep their own explicit actions; AUTH-1 stays CLOSED; no automatic duplicate repair exists.
+- **KPG-1 (OPEN, known product gap):** there is no generic player action to keep an arbitrary provisional person (the apple seller who said "My name is Maren."); only the person Actual Offer Accept materializes one. Future direction (not built): a UI "Keep track" action that materializes the SAME provisional identity (same scene ref, same name, same descriptor) through an explicitly authorized action, never by fuzzy matching, embeddings or narration alone.
 
 ## 9. Time and environment
 
@@ -114,7 +116,7 @@ Save file schema **8**, persisted snapshot schema **8** (the composed in-memory 
 
 ## 11b. Core engine and optional services (block 6)
 
-The core engine (CampaignState, persistence, turn authority, identity, movement, items, trade, legal state, households, PendingConfirmation) is separate from the optional services (Reflection, Mannerism learning, portraits, item sprites, sprite QA, semantic retrieval). Optional work runs detached after `turn_completed` and never blocks, fails or alters a turn; disabling any of it leaves core behavior identical. Defaults: Mannerism, portraits and sprites ON; Reflection, sprite QA and semantic retrieval OFF. Legacy enrichment is still stored in the snapshot and bumps the revision (ARCH-1 phase 2, block 7). See [Optional services](architecture/OPTIONAL_SERVICES.md).
+The core engine (CampaignState, persistence, turn authority, identity, movement, items, trade, legal state, households, PendingConfirmation) is separate from the optional services (Reflection, Mannerism learning, portraits, item sprites, sprite QA, semantic retrieval). Optional work runs detached after `turn_completed` and never blocks, fails or alters a turn; disabling any of it leaves core behavior identical. Defaults: Mannerism, portraits and sprites ON; Reflection, sprite QA and semantic retrieval OFF. Since block 7 their durable state lives in side stores and never moves the revision (section 11c). See [Optional services](architecture/OPTIONAL_SERVICES.md).
 
 ## 11c. Optional state side stores (block 7)
 
@@ -122,7 +124,7 @@ Optional enrichment and media bookkeeping (Reflection journal and notes, manneri
 
 ## 12. Tests
 
-See [Testing](TESTING.md). Latest recorded run (uncommitted block 10 on top of `9d15212`): **3599 tests, 0 failed** (3578 at block 9; benchmark 36 scenarios, 34 PASS, 2 KNOWN PRODUCT GAPS; see [Block 10](evaluations/CONSOLIDATION_BLOCK10_NARRATIONFACTS_COMMERCE.md)); earlier (block 9 on top of `45eae19`): **3578 tests, 0 failed** (3545 at block 8; +33 = NarrationFacts movement and location-claim tests and benchmark scenarios M4-M11; `npm run benchmark:modern`: 28 scenarios, 27 PASS, 1 KNOWN PRODUCT GAP, 0 FAIL, location-claim patch included, see [Block 9](evaluations/CONSOLIDATION_BLOCK9_NARRATIONFACTS_MOVEMENT.md)); earlier (block 8 on top of `56e4f0e`): **3545 tests, 0 failed** (3520 at block 7; +25 = the modern benchmark: 20 scenarios and 5 format gate tests; `npm run benchmark:modern` reports 19 PASS, 1 KNOWN PRODUCT GAP, 0 FAIL, see [Block 8](evaluations/CONSOLIDATION_BLOCK8_MODERN_BENCHMARK.md)); earlier: **3480 tests** at block 6 (3460 at block 5B, 3425 at block 5A, 3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
+See [Testing](TESTING.md). Latest recorded run (uncommitted block 11 on top of `7345549`): **3637 tests, 0 failed** (final full run; +38 = NarrationFacts identity / speaker / recipient / reference tests, the twelve source-level architecture assertions and benchmark scenarios I5-I13; `npm run benchmark:modern`: 45 scenarios, 44 PASS, 1 KNOWN PRODUCT GAP (I4, KPG-1), 0 FAIL; C8 / KPG-2 now passes; see [Block 11](evaluations/CONSOLIDATION_BLOCK11_FINAL_SEMANTIC_ARCHITECTURE.md)); earlier (uncommitted block 10 on top of `9d15212`): **3599 tests, 0 failed** (3578 at block 9; benchmark 36 scenarios, 34 PASS, 2 KNOWN PRODUCT GAPS; see [Block 10](evaluations/CONSOLIDATION_BLOCK10_NARRATIONFACTS_COMMERCE.md)); earlier (block 9 on top of `45eae19`): **3578 tests, 0 failed** (3545 at block 8; +33 = NarrationFacts movement and location-claim tests and benchmark scenarios M4-M11; `npm run benchmark:modern`: 28 scenarios, 27 PASS, 1 KNOWN PRODUCT GAP, 0 FAIL, location-claim patch included, see [Block 9](evaluations/CONSOLIDATION_BLOCK9_NARRATIONFACTS_MOVEMENT.md)); earlier (block 8 on top of `56e4f0e`): **3545 tests, 0 failed** (3520 at block 7; +25 = the modern benchmark: 20 scenarios and 5 format gate tests; `npm run benchmark:modern` reports 19 PASS, 1 KNOWN PRODUCT GAP, 0 FAIL, see [Block 8](evaluations/CONSOLIDATION_BLOCK8_MODERN_BENCHMARK.md)); earlier: **3480 tests** at block 6 (3460 at block 5B, 3425 at block 5A, 3377 at block 4); earlier: **3334 tests, 0 failed** on top of `5edcd37` (consolidation block 3, offline + one focused live run; 3313 after block 2, 3287 after block 1; 3278 at `c0608a6`) ([report](evaluations/PERSON_ACTUAL_OFFER_END_TO_END_FIX.md)) (offline; `npm test` makes no live LLM or image call). Historical reports keep their own counts.
 
 Companion movement (block 3): who MAY follow Nicco is derived per turn by `followCandidates` (`src/turn/follow-candidates.ts`: active NPC+, held person, household member, person invited by name this turn); it is never persisted and never moves anyone by itself. A candidate moves only through a completed narrated follow of that same person, or, for a held person the player names and leads ("Alright Maren, ..., let's go home"), through the deterministic escort committed in the same atomic batch as Nicco's travel. Report: [block 3](evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md).
 
@@ -130,7 +132,7 @@ Strategic review after the consolidation blocks: [Post-consolidation architectur
 
 ## 13. Major known limitations
 
-See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals. Fixed 2026-10-12 (offline, live certification pending): IMG-1, TRD-1, TRD-2 (block 1); TRD-1b (SELL transfers the same item), TRD-3/TRD-4 (one price grammar), TRD-5 (offer terms digest), TRD-10 (pending-offer narration guard) (block 2). Open trade debt: TRD-11 goods ledger and ECO-1 currency model; see [debt register](MASTER_DEBT_REGISTER.md).
+See the maintained list in [Roadmap](ROADMAP.md#known-limitations). Headlines: no Property system or containers, no authoritative equipment-slot domain or equip/unequip, no encumbrance, no avatar upload pipeline, no `headwear`/`footwear` item categories, no weather UI, no automatic NPC+ demotion, canonical avatars are served as full-size originals, KPG-1 (no generic "keep this person" action; section 8d), PER-2 (provisional and scene participants lost on reload). Fixed in consolidation blocks 1-2: IMG-1, TRD-1, TRD-2, TRD-1b (SELL transfers the same item), TRD-3/TRD-4 (one price grammar), TRD-5 (offer terms digest), TRD-10 (pending-offer narration guard). Closed in block 11: KPG-2 (unattributed plain price line). Open trade debt: TRD-11 goods ledger and ECO-1 currency model; see [debt register](MASTER_DEBT_REGISTER.md).
 
 ## 14. Next major systems
 

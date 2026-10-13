@@ -1,12 +1,13 @@
 import type { CampaignCommand, CampaignSnapshot, NameSource } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
-import { nameSourceOf, type ProvisionalPerson } from "./provisional-people.js";
+import { linkedParticipant, nameSourceOf, type ProvisionalPerson } from "./provisional-people.js";
 import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { classifyBackgroundClaim } from "./background-grounding.js";
-import { establishedFacts, linkedParticipant, readScene, type NarratedPerson } from "./narrated-captives.js";
+import { establishedFacts, readScene, type NarrationFactSource } from "./narration-facts/index.js";
+import { asksName } from "./identity-request.js";
 import type { PartnerNameConflict } from "./partner-identity-guard.js";
 
 /**
@@ -31,10 +32,12 @@ export interface IdentityResolution {
   readonly skipped: readonly { readonly name: string; readonly reason: "not_in_scene" | "duplicate_name" | "location_changed" | "canonical_partner_conflict" | "persistent_identity_elsewhere" }[];
 }
 export function establishNames(recent: readonly RecentExchange[], context: TurnContext, world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>,
-  participants: readonly EphemeralSceneParticipant[], baseRevision: number, options: { readonly location_changed?: boolean; readonly partner_conflict?: PartnerNameConflict } = {}): IdentityResolution {
+  participants: readonly EphemeralSceneParticipant[], baseRevision: number, options: { readonly location_changed?: boolean; readonly partner_conflict?: PartnerNameConflict; readonly facts?: NarrationFactSource } = {}): IdentityResolution {
   const location = context.primary.scene.player_location?.id;
   if (!location) return { commands: [], provisional: [], named: [], skipped: [] };
-  const reading = readScene(recent, context, world, { campaign_names: new Set(snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
+  const readOptions = { campaign_names: new Set(snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true, asks_name: asksName };
+  // The ONE scene reading of the turn (NarrationFacts) when the turn's source is available; the same pure reading otherwise.
+  const reading = options.facts ? options.facts.scene(recent, context, world, readOptions) : readScene(recent, context, world, readOptions);
     const nameOf = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
   const commands: CampaignCommand[] = [], provisional: ProvisionalPerson[] = [], named: IdentityResolution["named"][number][] = [], skipped: IdentityResolution["skipped"][number][] = [];
   for (const n of reading.namings.filter(x => x.exchange === reading.latest)) {

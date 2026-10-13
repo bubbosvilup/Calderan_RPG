@@ -1,6 +1,6 @@
 # Roadmap and known limitations
 
-Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: the code and tests on main; each row below was checked against them.
+Status: Current. Last reconciled: 2026-10-13 (consolidation block 11 on top of main 7345549). Source of truth: the code and tests on main; each row below was checked against them.
 
 ## Complete
 
@@ -22,6 +22,8 @@ Status: Current. Last reconciled: 2026-10-12 (main 31d82cd). Source of truth: th
 | Actual Offer V1 (goods and person trade, player-accepted) | see [Actual Offer](architecture/ACTUAL_OFFER.md) |
 | Turn reliability (consolidation block 4): PIPE-1, PIPE-2, REV-2, NARR-1; CTX-2 draft-stream leak only | see [report](evaluations/CONSOLIDATION_BLOCK4_TURN_RELIABILITY.md) |
 | Foreground canonical identity binding; person Actual Offer end to end; campaign deletion; P8 Economic Baseline V1 | see [Current state](CURRENT_STATE.md) |
+| Optional state side stores (block 7, ARCH-1 closed), modern regression benchmark (block 8, `npm run benchmark:modern`) | see [Optional services](architecture/OPTIONAL_SERVICES.md), [Testing](TESTING.md) |
+| NarrationFacts (blocks 9-11): one narration reader per turn for movement, commerce, dialogue / speaker, identity, recipient and reference facts; KPG-2 closed; Block 12 (Controller ambiguity question) judged not needed | see [NarrationFacts](architecture/NARRATION_FACTS.md) and [Block 11](evaluations/CONSOLIDATION_BLOCK11_FINAL_SEMANTIC_ARCHITECTURE.md) |
 
 
 Planning documents from the 2026-10-12 audit: [Master Technical Debt Register](MASTER_DEBT_REGISTER.md) and [Master Roadmap](MASTER_ROADMAP.md).
@@ -41,7 +43,7 @@ Full Property system (generic property entity, containers and property storage, 
 
 ## Next
 
-**Architecture consolidation (Wave A) comes before new product systems** (see [Master Roadmap](MASTER_ROADMAP.md)): turn delivery safety and Narrator truncation, optional-service split, authority classes, shared NarrationFacts. Weather UI may proceed in parallel; Property waits for the first Wave A steps. Then Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
+**Architecture consolidation (Wave A) is done** (turn delivery safety and Narrator truncation, authority classes, optional-service split, benchmark, shared NarrationFacts; see [Master Roadmap](MASTER_ROADMAP.md)). Open product decision first: KPG-1 (a "Keep track" action for a provisional person). Then Weather UI and Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
 
 ## Known limitations
 
@@ -58,6 +60,8 @@ Full Property system (generic property entity, containers and property storage, 
 - Reference images are not used for generation.
 - Weather has no temperature physics, wind, humidity or survival effects; South has no named settlements.
 - Evidence authorization is conservative: ambiguous narration may fail to commit a change (false negatives preferred).
+- KPG-1: there is no generic player action to keep an arbitrary provisional person (a named apple seller); only the person Actual Offer Accept materializes one. Provisional people are scene-local and forgotten on reload (PER-2), and cannot be promoted to NPC+.
+- Speaker attribution fails closed: a spoken line after a plural beat, or a pronoun with two present candidates of that sex, belongs to nobody (no offer, no name).
 - World and Debug navigation entries are disabled placeholders; the NPC+ Personality and Relations tabs are placeholders.
 - The `premium-characters.ts` header comment says household membership is the only promotion trigger; this is still true (the rite is `join_household`, now issued only by the player's explicit promotion action).
 - The promotion UI is a single arrow with an inline confirmation; a richer promotion screen (roles, appearance check, portrait step) is optional future polish. Certification scenarios and replay benchmarks must trigger the promotion explicitly; transcript replay alone cannot.

@@ -3,7 +3,6 @@ import { narratorIdentityGate } from "./narrator-identity.js";
 import { TEMPORAL_GROUNDING_RULE } from "./temporal-grounding.js";
 import { canonicalNameDisclosure } from "./canonical-name-disclosure.js";
 import { projectNarratorFocus } from "./narrator-focus.js";
-import { rpgDialogue } from "./rpg-dialogue.js";
 import { NAME_REQUEST, SELF_INTRODUCTION } from "./identity-request.js";
 import { surfacedCanonicals } from "./foreground-binding.js";
 import { recentSceneNarration, RECENT_SCENE_NARRATION_RULE } from "./recent-scene-narration.js";
@@ -12,9 +11,9 @@ import type { TurnContext } from "./context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { PlayerIntent } from "./player-intent.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess } from "./narrative-authority.js";
-import { participantForNoun, renderSceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
+import { renderSceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
 import { playerAuthoredEvents } from "./player-authored-events.js";
-import { escapeRegExp as escapeName } from "./language/text.js";
+import { attributedSpeech } from "./attributed-speech.js";
 import { deduplicateRecovered, renderNpcPlus, withoutStatedRelationship } from "./npc-plus.js";
 import { economicBlock } from "./economic-context.js";
 import { buildSceneStateProjection, sceneDisplayNames } from "./scene-state-projection.js";
@@ -92,92 +91,18 @@ export function hardCharacterConstraints(context: TurnContext): string[] {
 export type RecentContextMode = "full_prose" | "state_last" | "dialogue_focused";
 export interface NarratorPromptOptions { readonly recent_context?: RecentContextMode; /** Finalized source with location metadata, used only for scene-local projection. */ readonly recent_scene_source?: readonly RecentExchange[]; /** Between-turn relevance only; never replayed as a player action. */ readonly knowledge_relevance_input?: string;
   /** Ephemeral Background Grounding V1 (background-grounding.ts): rendered only on turns that ask for a background fact. */ readonly background_grounding?: string }
-const QUOTE = /"([^"\n]{1,400})"|“([^”\n]{1,400})”/g;
-const SPEECH = "says|said|asks|asked|replies|replied|adds|added|murmurs|murmured|whispers|whispered|mutters|muttered|answers|answered|continues|continued|repeats|repeated|calls|called|shouts|shouted|snaps|snapped|tells|told|insists|insisted|explains|explained";
-/** Unnamed narrator-created speakers get a neutral ephemeral label from their head noun ("The passer-by…" → Passer-by). */
-const PERSON = "passer-?by|stranger|man|woman|boy|girl|child|guard|merchant|vendor|clerk|soldier|priest|priestess|innkeeper|citizen|trader|shopkeeper|beggar|sailor|porter|watchman|traveler|traveller|elder|youth|laborer|labourer|worker|servant|official|peddler|stallholder";
-type Speaker = { readonly label: string; readonly nicco: boolean };
 /**
  * Deterministic and bounded: player turns verbatim; balanced RPG speech is retained without guessing its speaker.
- * The legacy attributed-quotation path below replays a quote only with a safely determined speaker, otherwise omits it.
- * Speakers come from an attribution clause (`"…," Maren says`, `he asks, "…"`) or the subject of the quote's own/preceding sentence
- * in the same paragraph, or an immediately preceding unambiguous NPC delivery paragraph. Unrelated intervening prose clears
- * that continuation; a mere mention (`blinks at Nicco`) never makes someone the speaker. Nicco is attributed only by an
+ * The legacy attributed-quotation path replays a quote only with a safely determined speaker, otherwise omits it. Who said a line is read by the
+ * shared NarrationFacts dialogue reader (narration-facts/dialogue-forms.ts) and accepted by the speaker policy in attributed-speech.ts: an
+ * attribution clause (`"…," Maren says`, `he asks, "…"`), the subject of the quote's own/preceding sentence in the same paragraph, or an immediately
+ * preceding unambiguous NPC delivery paragraph. A mere mention (`blinks at Nicco`) never makes someone the speaker. Nicco is attributed only by an
  * explicit clause naming him; pronouns and action beats never resolve to Nicco.
  */
 export function dialogueFocused(recent: readonly RecentExchange[], context: TurnContext, scene?: Pick<SceneParticipantPlan, "participants" | "turn">) {
-  const people = context.characters.map(c => ({ name: c.profile.name ?? c.id, nicco: c.id === "nicco" }));
-  const names = people.map(p => escapeName(p.name)).join("|") || "(?!)";
-  const subjectPattern = `(?:${names}|he|she|they|(?:the|a|an)\\s+(?:[a-z'-]+\\s+){0,2}?(?:${PERSON}))`;
-  const after = new RegExp(`^\\s*,?\\s*(?:(${subjectPattern})\\s+(?:${SPEECH})|(?:${SPEECH})\\s+(${subjectPattern}))\\b`, "i");
-  const before = new RegExp(`(${subjectPattern})\\s+(?:${SPEECH})\\b[^"“”.!?]{0,40}[,:]\\s*$`, "i");
-  /** `pronoun` marks he/she/they/his/her/their, resolved against the paragraph's last sentence subject. */
-  let exchangeTurn = 0;
-  const subjectOf = (text: string): Speaker | "pronoun" | undefined => {
-    const t = text.trimStart();
-    const person = people.find(p => new RegExp(`^${escapeName(p.name)}(?:'s|’s)?\\b`).test(t));
-    if (person) return { label: person.name, nicco: person.nicco };
-    if (/^(?:he|she|they|his|her|their)\b/i.test(t)) return "pronoun";
-    const m = t.match(new RegExp(`^(?:the|a|an)\\s+(?:[a-z'-]+\\s+){0,2}?(${PERSON})\\b`, "i"));
-    if (m) {
-      const noun = m[1]!.toLowerCase().replace(/^passer-?by$/, "passer-by");
-      // Phase 1Q: one stable label per ephemeral participant ("P1 Passer-by", never "Passer-by" then "Woman").
-      const participant = scene ? participantForNoun(noun, scene.participants, exchangeTurn) : undefined;
-      return { label: participant ? `${participant.ref} ${participant.display_name}` : noun[0]!.toUpperCase() + noun.slice(1), nicco: false };
-    }
-    return undefined;
-  };
   return recent.map((e, index) => {
-    exchangeTurn = scene ? scene.turn - (recent.length - index) : 0;
-    const legacyBeat = !e.narration.includes("*") && new RegExp(`^(?:${names}|he|she|they)\\s+(?:replies?|smiles?|shrugs?|waits?|nods?|walks?|looks?)\\b`, "i").test(e.narration.trim());
-    const rpg = legacyBeat ? undefined : rpgDialogue(e.narration);
-    if (rpg !== undefined) return { player: e.player, npc_dialogue: rpg, narrator_description: "omitted; current structured state is authoritative" };
-    const dialogue: string[] = [];
-    let continuation: Speaker | undefined;
-    for (const paragraph of e.narration.split(/\n+/)) {
-      const quotes = [...paragraph.matchAll(QUOTE)].map(m => ({ start: m.index, end: m.index + m[0].length, text: m[1] ?? m[2]! }));
-      // Only an adjacent leading quotation can inherit a known NPC's explicit delivery beat. Never carry player speech,
-      // pronoun-only beats, multi-person paragraphs, negated speech or attribution through unrelated narrative paragraphs.
-      const inherited = quotes[0]?.start === paragraph.length - paragraph.trimStart().length ? continuation : undefined;
-      continuation = undefined;
-      // Blank quoted text so punctuation inside dialogue never splits sentences.
-      let blanked = paragraph;
-      for (const q of quotes) blanked = blanked.slice(0, q.start + 1) + "x".repeat(q.end - q.start - 2) + blanked.slice(q.end - 1);
-      const bounds = new Set<number>([0]);
-      for (const m of blanked.matchAll(/[.!?…]["”')\]]*\s+/g)) bounds.add(m.index + m[0].length);
-      for (const q of quotes) if (/[.!?…]\s*$/.test(q.text) && /^\s+[A-Z]/.test(paragraph.slice(q.end)) && !after.test(paragraph.slice(q.end, q.end + 60))) bounds.add(q.end);
-      const starts = [...bounds].sort((a, b) => a - b);
-      let lastSubject: Speaker | undefined = inherited, previousSentence: Speaker | undefined = inherited;
-      const resolve = (s: Speaker | "pronoun" | undefined) => s === "pronoun" ? lastSubject : s;
-      for (const [i, start] of starts.entries()) {
-        const end = starts[i + 1] ?? paragraph.length, sentence = blanked.slice(start, end);
-        const leadsWithQuote = /^\s*["“]/.test(sentence);
-        let sentenceSubject = leadsWithQuote ? undefined : resolve(subjectOf(sentence));
-        if (sentenceSubject) lastSubject = sentenceSubject;
-        for (const q of quotes.filter(q => q.start >= start && q.start < end)) {
-          const tail = after.exec(paragraph.slice(q.end, q.end + 60)), head = before.exec(blanked.slice(start, q.start));
-          const clause = tail ? tail[1] ?? tail[2]! : head?.[1];
-          const explicit = clause === undefined ? undefined : subjectOf(clause);
-          const speaker = clause !== undefined ? resolve(explicit) : q.start > start + (sentence.length - sentence.trimStart().length) ? sentenceSubject : previousSentence;
-          if (leadsWithQuote && q.start === start + (sentence.length - sentence.trimStart().length)) { sentenceSubject = speaker; if (speaker) lastSubject = speaker; }
-          // Nicco only when a clause names him; never by pronoun, action beat or continuation.
-          const niccoNamed = !!explicit && explicit !== "pronoun" && explicit.nicco;
-          if (speaker && (!speaker.nicco || niccoNamed)) dialogue.push(`${speaker.label}: "${q.text}"`);
-        }
-        // A bounded non-person discourse beat does not change the current speaker within this paragraph. Other narrative
-        // sentences still clear attribution; a pause cannot carry knowledge across an unrelated paragraph or player turn.
-        const neutralBeat = /^(?:a|the|another)\s+(?:(?:brief|short|long|small|quiet|momentary)\s+){0,2}(?:pause|silence|beat)\s+(?:follows?|followed|passes?|passed|settles?|settled|falls?|fell|lingers?|lingered)(?:\s+(?:briefly|quietly))?[.!?]?\s*$/i.test(sentence.trim());
-        previousSentence = sentenceSubject ?? (neutralBeat ? previousSentence : undefined);
-      }
-      const leading = subjectOf(paragraph);
-      if (!quotes.length && leading && leading !== "pronoun" && !leading.nicco && people.some(p => p.name === leading.label)
-        && previousSentence?.label === leading.label
-        && new RegExp(`(?:^${escapeName(leading.label)}\\s+|[;,]\\s*(?:then\\s+)?|\\band\\s+|\\b(?:he|she|they)\\s+)(?:[a-z]+ly\\s+)*(?:${SPEECH}|recites?|recited|speaks?|spoke|speaking|responds?|responded)\\b`, "i").test(paragraph)
-        && !/\b(?:not|never|no|cannot|can't|doesn't|didn't|won't|wouldn't)\b/i.test(paragraph)
-        && !people.some(p => p.name !== leading.label && new RegExp(`\\b${escapeName(p.name)}\\b`, "i").test(paragraph))
-        && !new RegExp(`\\b(?:the|a|an)\\s+(?:[a-z'-]+\\s+){0,2}?(?:${PERSON})\\b`, "i").test(paragraph)) continuation = leading;
-    }
-    return { player: e.player, npc_dialogue: dialogue.slice(0, 12), narrator_description: "omitted; current structured state is authoritative" };
+    const speech = attributedSpeech(e.narration, context, scene ? { scene, turn: scene.turn - (recent.length - index) } : {});
+    return { player: e.player, npc_dialogue: speech.rpg ?? speech.lines.map(l => `${l.label}: "${l.text}"`).slice(0, 12), narrator_description: "omitted; current structured state is authoritative" };
   });
 }
 /**

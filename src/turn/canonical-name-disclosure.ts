@@ -3,14 +3,12 @@ import { narratorIdentityGate } from "./narrator-identity.js";
 import { projectNarratorFocus } from "./narrator-focus.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
-import { escapeRegExp } from "./language/text.js";
 import type { PlayerIntent } from "./player-intent.js";
 import { INACTIVE_EXPIRY_TURNS, castingOptions } from "./scene-participants.js";
 import { rpgDialogue } from "./rpg-dialogue.js";
 import { narratedSpeakerPartner } from "./foreground-binding.js";
 import { compatible, headNoun, canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
-import { SPEAKER_NOUNS } from "./narrated-captives.js";
-import { participatesInScene } from "./scene-participation.js";
+import { SPEAKER_NOUNS, SPEECH, identityForms, leadingDescriptor, participatesInScene, speechTags } from "./narration-facts/index.js";
 import { NAME_REQUEST, SELF_INTRODUCTION } from "./identity-request.js";
 
 /** Reuse existing address/reference/focus projection; never pick an arbitrary member of a candidate set. */
@@ -73,12 +71,17 @@ export function canonicalNameDisclosure(context: TurnContext, input: string, rec
   return name ? { internal_id: person.id, ref: identity.ref, canonical_name: name } : undefined;
 }
 
-/** Leading observable subject only, never the rest of an action or an entire multi-sentence paragraph. */
+/** Leading observable subject only (the shared descriptor reading), never the rest of an action or an entire multi-sentence paragraph. */
 function observableSubject(text: string): string | undefined {
-  const match = text.trim().match(new RegExp(`^(?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:${SPEAKER_NOUNS})\\b`, "i"));
-  if (!match || /^another\b/i.test(match[0]) || /^\s+(?:and|or)\b/i.test(text.trim().slice(match[0].length))) return undefined;
-  return match[0];
+  const d = leadingDescriptor(text);
+  if (!d || d.determiner === "another" || /^\s+(?:and|or)\b/i.test(d.rest)) return undefined;
+  return d.phrase;
 }
+/** Explicit speech tags of a sentence, by the shared speech vocabulary: capitalized names (case-sensitive) and descriptor phrases. */
+const NAME_SUBJECT = "[A-Z][a-z]+(?:\\s+[A-Z][a-z]+){0,2}";
+/** A sentence led by Nicco (or I / you) that contains a speech verb of the shared vocabulary: the player is the one talking there. */
+const NICCO_SPEAKS = new RegExp(`\\b(?:${SPEECH}|say|ask|reply|answer|speaks?|introduces?)\\b`, "i");
+const DESCRIPTOR_SUBJECT = "(?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:" + SPEAKER_NOUNS + ")";
 
 /** Conservative evidence guard for engine-only attribution. Unknown explicit people and plural/opposite pronouns fail closed. */
 export function noCompetingSpeaker(context: TurnContext, narration: readonly string[], target: string, casting: CastingOptions = {}, bound = false): boolean {
@@ -91,20 +94,18 @@ export function noCompetingSpeaker(context: TurnContext, narration: readonly str
     // A mention of another canonical person in an attribution/action block could introduce another speaker.
     if ([...explicit].some(id => id !== target)) return false;
     if (context.characters.some(c => c.id !== target && c.id !== "nicco" && participatesInScene(sentence, [c.profile.name ?? c.id, ...(c.profile.aliases ?? [])]))) return false;
-    for (const event of sentence.matchAll(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\s+(?:says|asks|replies|answers|speaks|introduces|whispers|mutters)\b/g)) {
-      if (!/^(?:He|She)$/.test(event[1]!) && !canonicalInteractionTargets(context, event[1]!, casting).has(target)) return false;
+    for (const speaker of speechTags(sentence, NAME_SUBJECT, true)) {
+      if (!/^(?:He|She)$/.test(speaker) && !canonicalInteractionTargets(context, speaker, casting).has(target)) return false;
     }
-    for (const event of sentence.matchAll(new RegExp(`\\b((?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:${SPEAKER_NOUNS}))\\s+(?:says|asks|replies|answers|speaks|introduces|whispers|mutters)\\b`, "gi"))) {
-      if (!isTarget(event[1]!)) return false;
-    }
+    for (const speaker of speechTags(sentence, DESCRIPTOR_SUBJECT)) if (!isTarget(speaker)) return false;
     const subject = observableSubject(sentence);
     if (subject) {
       if (!isTarget(subject)) return false;
-    } else if (new RegExp(`^(?:the|a|an|another|that|this)\\s+(?:[a-z][a-z',-]*\\s+){0,4}?(?:${SPEAKER_NOUNS})\\b`, "i").test(sentence.trim())) return false;
+    } else if (leadingDescriptor(sentence)) return false;
     if (/^\s*(?:they|their)\b/i.test(sentence)) return false;
     if (/^\s*(?:she|her)\b/i.test(sentence) && /\bman\b/.test(identity.observable_label)) return false;
     if (/^\s*(?:he|his)\b/i.test(sentence) && /\bwoman\b/.test(identity.observable_label)) return false;
-    if (/^\s*(?:Nicco|I|you)\b/i.test(sentence) && /\b(?:says?|asks?|replies?|answers?|speaks?|introduces?)\b/i.test(sentence)) return false;
+    if (/^\s*(?:Nicco|I|you)\b/i.test(sentence) && NICCO_SPEAKS.test(sentence)) return false;
   }
   return true;
 }
@@ -133,9 +134,11 @@ export function establishedCanonicalDisclosure(context: TurnContext, input: stri
   if (inferred) { const gate = narratorIdentityGate(context), identity = gate?.identities.get(inferred), canonical_name = gate?.selfDisclosureName(inferred);
     if (identity && !identity.player_known_name && canonical_name) capability = { internal_id: inferred, ref: identity.ref, canonical_name }; }
   if (!capability) return undefined;
-  const name = escapeRegExp(capability.canonical_name);
-  const intro = new RegExp(`^(?:["“])?(?:I'm|I’m|I am|My name is|My name's|Call me)\\s+${name}[.!]?(?:["”])?$`, "i");
-  const bareName = new RegExp(`^(?:["“])?${name}[.!]?(?:["”])?$`, "i");
+  // The canonical name given as a whole line or sentence: a standalone self-introduction of the shared identity forms ("I'm Korvin.") or the bare name.
+  const canonical = capability.canonical_name.toLowerCase(), bare = (x: string) => x.trim().replace(/^["“]|["”]$/g, "").trim();
+  const intro = { test: (x: string) => identityForms({ text: bare(x), quoted: true, exchange: 0, paragraph: 0 }, false)
+    .some(f => f.kind === "self" && f.form !== "bare_name" && f.standalone && (f.full_name ?? f.name).toLowerCase() === canonical) };
+  const bareName = { test: (x: string) => bare(x).replace(/[.!]$/, "").toLowerCase() === canonical };
   const spoken = rpgDialogue(delivered);
   if (!spoken?.length) return undefined;
   const starred = (text: string) => [...text.matchAll(/(?<!\\)\*([\s\S]*?)(?<!\\)\*/g)].map(m => m[1]!);

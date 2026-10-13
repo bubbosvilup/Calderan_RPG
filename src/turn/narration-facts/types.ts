@@ -34,7 +34,11 @@ export type SubjectResolution = "name" | "pronoun" | "antecedent" | "descriptor"
 export interface FactEntityRef {
   /** The words in the prose ("Maren", "she", "the woman"). */
   readonly surface: string;
-  /** Set only when exactly one entity fits; never guessed. */
+  /**
+   * Set only when exactly one entity fits; never guessed. A character id, or (identity facts only) a SCENE-LOCAL key of a person narration
+   * describes but the campaign does not hold: `other:<Name>` / `other:<noun>` ("other:Maren", "other:woman"). A scene-local key is a
+   * description, never a CampaignCharacter and never persistence authority.
+   */
   readonly entity_id?: string;
   readonly resolution: SubjectResolution;
   /** Every entity the surface could have meant (one when resolved, several when ambiguous, none when unresolved). */
@@ -44,7 +48,7 @@ export interface FactEntityRef {
 /** Offsets into the narration string the facts were extracted from: `narration.slice(start, end) === text`. */
 export interface FactSpan { readonly sentence_index: number; /** Clause inside the sentence (0 when the form is sentence-wide). */ readonly clause_index: number; readonly start: number; readonly end: number; readonly text: string }
 
-export interface FactProvenance { readonly extractor: "movement" | "commerce"; readonly form: string }
+export interface FactProvenance { readonly extractor: "movement" | "commerce" | "identity"; readonly form: string }
 
 /** Another place in the prose a fact leans on (for example the door wording near a destination-less exit). */
 export interface SupportingRef { readonly role: string; readonly text: string }
@@ -161,9 +165,101 @@ export interface SettlementClaimFact extends CommerceBase<"settlement_claim"> { 
 export type CommerceFact = PriceQuoteFact | UnsupportedMoneyFact | OfferWithdrawnFact | PaymentClaimFact | TransferClaimFact | SettlementClaimFact;
 export type CommerceFactKind = CommerceFact["kind"];
 
+// ------------------------------------------------------------------------------------------------ identity / dialogue (Block 11)
+/**
+ * How a spoken line was tied to its speaker. Strongest first:
+ * - explicit_dialogue_tag: a speech tag names the speaker ("Maren says", "says Korvin", "he asks" with a resolved pronoun), before, after or (post hoc)
+ *   in the next narration beat ("*He says it flat.*").
+ * - direct_name: the line is labelled with the speaker's name ("Korvin: Three hundred.").
+ * - adjacent_action_beat: the quote sits in, or right after, a sentence or narration beat whose subject is the speaker ("*Korvin leans in.* Three hundred.").
+ * - continued_speaker: the speaker of the exchange continues across a beat that names nobody else who could be speaking (every other person described
+ *   in between is excluded by the line itself: "She's plain labor" cannot be the woman's own words).
+ * - deterministic_context: an engine-held fact decides (the recorded conversation partner behind "the man"; the scene's single earlier subject of that sex).
+ * - recent_subject: legacy prose only, the most recent narrated subject (the weakest reading, kept for the scene reader's historical behaviour).
+ */
+export type SpeakerMethod = "explicit_dialogue_tag" | "direct_name" | "adjacent_action_beat" | "continued_speaker" | "deterministic_context" | "recent_subject";
+
+/** Who a spoken line is attributed to, and how. `entity_id` is the speaker (a character id or a scene-local `other:` key); absent = nobody, or several (see `ambiguity`). */
+export interface SpeakerAttribution extends FactEntityRef {
+  readonly method?: SpeakerMethod;
+  readonly ambiguity: FactAmbiguity;
+  readonly confidence: FactConfidence;
+  /** The tag that attributed the line comes AFTER it (a later narration beat: "*He says it flat.*"). */
+  readonly post_hoc?: true;
+}
+
+/**
+ * One unit of a narration as the dialogue reader splits it: a narrated sentence (its `speaker` is the sentence SUBJECT) or a spoken line (its
+ * `speaker` is the attributed SPEAKER). `speaker` is the key every scene reader binds on: a present character id, `other:<Name|noun>`, or undefined.
+ */
+export interface DialogueUnit {
+  readonly text: string;
+  /** A spoken line (a legacy quote, or a plain RPG line outside *narration*). */
+  readonly quoted: boolean;
+  /** Index of the exchange inside the scene being read (0 for a single narration). */
+  readonly exchange: number;
+  readonly speaker?: string;
+  /** Plain RPG speech outside *narration*. */
+  readonly rpg?: boolean;
+  /** Spoken lines only: how `speaker` was obtained (absent when nobody is attributed). */
+  readonly attribution?: SpeakerAttribution;
+  /** Paragraph index inside the exchange's narration (blank-line or newline separated). */
+  readonly paragraph: number;
+}
+
+interface IdentityBase<K extends string> extends NarrationFactBase<K> { readonly source_text: string; readonly voice: TextVoice }
+/** A spoken line and its speaker. The fact subject IS the speaker (unresolved when nobody, ambiguous when several). */
+export interface SpeakerAttributionFact extends IdentityBase<"speaker_attribution"> {
+  readonly form: SpeakerMethod | "unattributed";
+  readonly attribution: SpeakerAttribution;
+  readonly post_hoc?: true;
+}
+/**
+ * Somebody gives their OWN name ("My name is Maren", "I'm Lira", "Call me Tomas", or a bare "Lira."). The subject is
+ * the speaker; `name` is the name exactly as given. `standalone`: the introduction is the whole line or sentence ("I'm Korvin."), not a clause of a longer one.
+ * A self-introduction is a statement, never authority: it creates nobody and merges nobody.
+ */
+export interface SelfIntroductionFact extends IdentityBase<"self_introduction"> {
+  /** bare_name: the line is only the name ("Lira."); name_first: answering a name question, the line opens with the name as a sentence ("Maren. Why?"). */
+  readonly form: "my_name_is" | "call_me" | "i_am" | "name_is" | "bare_name" | "name_first";
+  /** The name token ("Tomas"). */
+  readonly name: string;
+  /** The whole capitalized name when longer than the token ("Tomas Reed"). */
+  readonly full_name?: string;
+  readonly standalone: boolean;
+}
+/**
+ * A name is disclosed for someone (else): "a girl named Maren", "Lysa, a young woman", "That's Brenna", "Her name is Maren", or (weak) a spoken line
+ * opening with the bare name ("Brenna. Thirty-two."). The subject is whoever discloses it (the narrator: unresolved, or a speaker); `named` is the person meant.
+ */
+export interface NameDisclosureFact extends IdentityBase<"name_disclosure"> {
+  readonly form: "named_noun" | "appositive" | "presented" | "third_person" | "weak_opening";
+  readonly name: string;
+  readonly named: FactEntityRef;
+  /** The person noun the disclosure attaches the name to ("girl"), when it states one. */
+  readonly noun?: string;
+}
+/** Somebody is addressed: "Korvin says to Nicco", "tells Brenna", or a vocative inside speech ("Brenna, take this."). The subject is the speaker; `recipient` is who is addressed. */
+export interface RecipientAttributionFact extends IdentityBase<"recipient_attribution"> {
+  readonly form: "says_to" | "addressed_verb" | "vocative";
+  readonly recipient: FactEntityRef;
+}
+/** A reference to a person in narration: a name, a third-person pronoun opening a sentence, or a descriptor ("the woman"). `subject` carries every candidate it could mean. */
+export interface ReferenceFact extends IdentityBase<"reference"> {
+  readonly form: "name" | "pronoun" | "descriptor";
+  /** "another man", "a second woman": the prose introduces somebody NEW, never one of the candidates. */
+  readonly introduces_new?: true;
+}
+export type IdentityFact = SpeakerAttributionFact | SelfIntroductionFact | NameDisclosureFact | RecipientAttributionFact | ReferenceFact;
+export type IdentityFactKind = IdentityFact["kind"];
+
 export interface NarrationFacts {
   readonly narration: string;
   readonly movement: readonly MovementFact[];
   /** Commerce facts of the narrator text (price quotes in any voice, withdrawals, payment / transfer / settlement CLAIMS). Descriptive only. */
   readonly commerce: readonly CommerceFact[];
+  /** The narration split into narrated sentences and spoken lines, each with its subject or attributed speaker (the ONE dialogue reading). */
+  readonly dialogue: readonly DialogueUnit[];
+  /** Identity facts: speakers, self-introductions, name disclosures, recipients and person references. Descriptive only: names never create or merge anyone. */
+  readonly identity: readonly IdentityFact[];
 }

@@ -25,7 +25,7 @@ test("seller ask, seller counter and player counter are told apart; only seller 
   // The player's own typed figure is a counter, always.
   const input = extractInputCommerceFacts("I'll give you ninety gold.");
   assert.deepEqual(input.filter(x => x.kind === "price_quote").map(x => x.kind === "price_quote" && [x.amount, x.quote_role, x.voice]), [[90, "player_counter", "player_input"]]);
-  assert.deepEqual(sellerPrices({ narration: "", movement: [], commerce: input }), []);
+  assert.deepEqual(sellerPrices({ narration: "", movement: [], commerce: input, dialogue: [], identity: [] }), []);
 });
 
 test("hypothetical, conditional, negated and questioned prices are described but never completed", () => {

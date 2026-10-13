@@ -1,6 +1,6 @@
 # Caldrevan: Master Technical Debt Register
 
-Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests) and block 4 turn reliability (working tree, 3377 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
+Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests) and block 4 turn reliability (working tree, 3377 tests); NarrationFacts rows reconciled 2026-10-13 after consolidation block 11 (section 1A.2; 3637 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
 Companion: [Master Roadmap](MASTER_ROADMAP.md). Detailed evidence (file:line for every finding): [`evaluations/codebase_audit_2026-10-12/`](evaluations/codebase_audit_2026-10-12/) (five area audits, A to E).
 
 This document lists everything the audit found that still needs fixing, cleaning, hardening, redesigning or implementing, ranked and de-duplicated across the five area audits. It is a planning document: nothing listed here was fixed during the audit.
@@ -59,6 +59,16 @@ Columns: **audit finding** (original text, below), **current status**, **fix com
 
 Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO-1** (currency).
 
+### 1A.2 Reconciliation after consolidation blocks 9 to 11 (NarrationFacts, 2026-10-13)
+
+| Finding | Current status | Where | Residual debt |
+| --- | --- | --- | --- |
+| ARCH-2 / PIPE-5 independent narration readers | **Narration side CONSOLIDATED.** One `NarrationFactSource` per turn feeds authorization, commit preparation and the audit: movement (block 9), commerce (block 10), dialogue / speaker, identity, recipient and reference facts plus the scene reading (block 11). `narrated-captives.ts` (543 lines) and `scene-participation.ts` deleted; commerce has no speaker parser of its own. Pinned by `tests/narration-facts-architecture.test.ts` | `src/turn/narration-facts/`, [NarrationFacts](architecture/NARRATION_FACTS.md) | F (deferred): `evidence-authorization.ts` and `turn-evidence.ts` verify the Controller's cited evidence with their own verb lists; D (domain content, by design): household JOIN / LEAVE wording, grounding, item ownership, pending audit, mannerism, the audit's content checks; B: player-input readers stay separate |
+| KPG-2 unattributed plain speech not bound to the seller | **CLOSED (block 11).** Post-hoc delivery tag and continued speaker; benchmark C8 / I5 replay the real live narrations; live block 11 A PASS on the same shape | `narration-facts/dialogue-forms.ts` | a pronoun with two candidates of that sex attributes nothing (fail closed) |
+| KPG-1 no generic action to keep a provisional person | **OPEN (product gap, user decision).** Future direction: a UI "Keep track" action that materializes the SAME provisional identity (same scene ref, name, descriptor) through an explicit, revision-guarded action; never fuzzy matching, embeddings or narration alone | benchmark I4 (`known_gap`) | PER-2: provisional people are forgotten on reload |
+| Narrated name question (found by live block 11 B) | FIXED (block 11): "I ask the apple seller what her name is" is a name question for the scene reader (`asksName`), so a bare "Maren." names the same provisional seller; benchmark I13 replays the real narrations | `identity-request.ts` | `NAME_REQUEST` (canonical-disclosure capability gate) still accepts only direct questions |
+| §6 file references (`narrated-captives.ts:…`) | the scene reading moved to `narration-facts/scene-identity.ts` (`readScene`); the rules F1 / F4 / I2 / I10 describe are unchanged | | as listed in §6 |
+
 ## 1B. Current top-20 (re-ranked on current code)
 
 | # | ID | Sev | Item |
@@ -70,7 +80,7 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 | 5 | ARCH-1 | ~~P2 high~~ CLOSED (blocks 6 + 7) | ~~Optional intelligence coupled to the authoritative core~~ Phase 1 (lifecycle / response path) fixed in block 6; phase 2 (storage and revision stream) fixed in block 7: learning / media side stores, explicit markers, save schema 8 |
 | 6 | REV-2 | ~~P2~~ FIXED (block 4) | Turn idempotency key and expected revision |
 | 7 | PIPE-2 | ~~P2~~ FIXED (block 4) | Post-commit publication can throw after the commit |
-| 8 | ARCH-2 (new) | P2 structural | Regex-per-feature interpretation architecture (absorbs PIPE-5/6/7) |
+| 8 | ARCH-2 (new) | P2 structural | Regex-per-feature interpretation architecture (absorbs PIPE-5/6/7). **Narration side consolidated in blocks 9-11** (section 1A.2); residual: the F evidence-quote verifiers and the PIPE-6/7 lanes |
 | 9 | PER-1 | P2 | 16 MB save cap fatal; drivers include `mannerism_learning` and unpruned `trade_offers` (TRD-12) |
 | 10 | PER-2 / ID-2 | P2 | Scene participants lost on load; ephemeral ref counter restarts |
 | 11 | ECO-1 | P2 | Gold-only settlement vs silver anchors (decision) |
@@ -100,10 +110,10 @@ Open H1 items are the D-08 "H1 TODOs" (`evaluations/CALDREVAN_DEBT_REGISTER_AFTE
 
 | Item | Verdict | Note |
 | --- | --- | --- |
-| `them` phantom handover | STILL REAL, DEFERRED | fail-closed; absorbed by NarrationFacts |
-| First-name-only condition attribution | STILL REAL, DEFERRED | fail-closed; absorbed by NarrationFacts |
+| `them` phantom handover | STILL REAL, DEFERRED | fail-closed; the named-item form is fixed (`tests/narration-survives-audit.test.ts`), a bare ambiguous "them" stays conservative by design; item-transfer evidence is an F reader not migrated in block 11 |
+| First-name-only condition attribution | STILL REAL, DEFERRED | fail-closed; the unique established first name resolves (`tests/narration-survives-audit.test.ts`), shared or unestablished names resolve to nobody; condition claims are a D (audit content) reader |
 | Unnamed captive price | ALREADY FIXED (P8) | `tests/narration-survives-audit.test.ts:160` |
-| Fronted-recipient receipt | STILL REAL, DEFERRED | fail-closed; absorbed by NarrationFacts |
+| Fronted-recipient receipt | STILL REAL, DEFERRED | fail-closed; closed-set lead-ins and manner adverbs are stripped (`tests/narration-survives-audit.test.ts`), hedges are not; item-transfer evidence is an F reader not migrated in block 11 |
 | "Four H1 TODOs" in `ENGINE_FREEZE_PRE_UI.md` and the H6 audit | OBSOLETE (stale count, three remain) | historical documents untouched |
 
 Policy "no new major feature until every H1 item is fixed or explicitly deferred with rationale": **accept**; all three survivors are deferred above with a rationale and an owner.
@@ -360,7 +370,7 @@ Module hotspots (what it does / why risky / cleaner boundary / urgency / effort)
 - `src/app/game-session.ts` (998 lines, 40+ methods): turn orchestration, autosave, transcript, portrait batches (a ~110-line method), trade accept, editors, rite, sprites, compaction, shutdown. Unrelated features share one mutable status machine. Cleaner: `TurnService`, `PortraitService`, `TradeService`, `AppearanceService`, `MaintenanceService` behind a thin facade with a shared operation lock. Medium; 3-5 days.
 - `TurnCoordinator.runTurn` (160-line async generator, ~14 locals, diagnostics interleaved): cleaner is a pure `runStages()` returning a typed plan with diagnostics as a decorator. Low-medium; 2-3 days.
 - `stages/authorization.ts::authorizeTurn`: parsing, dedupe, three derived-proposal generators, trade split and debug emission in one function. Cleaner: parse, dedupe, derive, decide, veto as pure functions. Medium; 2 days.
-- `narration-audit.ts` (666 lines), `narrated-captives.ts` (543), `person-offers.ts` (374): regex grammar parsing and policy decisions mixed. Cleaner: parse (claims) vs judge (policy). Medium; 4-6 days.
+- `narration-audit.ts` (666 lines), `narrated-captives.ts` (543), `person-offers.ts` (374): regex grammar parsing and policy decisions mixed. **[Status 2026-10-13: `narrated-captives.ts` deleted (block 11); its reading lives in `narration-facts/scene-identity.ts`, the policy in `person-offers.ts` / `name-establishment.ts`.]** Cleaner: parse (claims) vs judge (policy). Medium; 4-6 days.
 - `context-builder.ts::buildTurnContext` (~95 lines): see CTX-7. Medium; 2-3 days.
 - `src/ui/client.js` (1,171 lines, one file, untyped, global mutable state): UI debt.
 - Provider/style knowledge leaking into domain: `context-budget.ts` imports app provider config; views import `RAENA_IMAGE_STACK`; `campaign/portrait-prompt.ts` holds style text and `portrait-prompt-v2-anime`; structured-output dialects embedded in schemas. Low; 0.5-2 days each.

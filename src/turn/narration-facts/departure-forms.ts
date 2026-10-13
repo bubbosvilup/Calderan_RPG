@@ -6,7 +6,7 @@ import { narratorIdentityGate } from "../narrator-identity.js";
 import { type NarrationFrame, spanOf } from "./frame.js";
 import { firstNonCompleted, modalityOf, polarityOf } from "./modality.js";
 import type { EntityDepartedFact, EntityPresentFact, FactEntityRef, FactModality } from "./types.js";
-import { BROAD_EXIT, DEPART_ACT, EPHEMERAL_EXIT, DOOR_BEHIND, FOLLOWS_NICCO, STAIRS_N, STAIR_EXIT, STAIR_WORD, TRACE_ACT, TRACE_SUBJECT } from "./movement-vocabulary.js";
+import { BACK_OUT, BROAD_EXIT, DEPART_ACT, LOCAL_ENTRY, EPHEMERAL_EXIT, DOOR_BEHIND, FOLLOWS_NICCO, STAIRS_N, STAIR_EXIT, STAIR_WORD, TRACE_ACT, TRACE_SUBJECT } from "./movement-vocabulary.js";
 
 const NOT_DONE = GATES.departure_not_done;
 
@@ -101,7 +101,7 @@ export function sceneDepartureFacts(frame: NarrationFrame, context: TurnContext)
       }
       const noun = !act && !stair ? clause.match(/\b([A-Z][\w-]*)'s\s+(?:departure|exit)\b/) : null;
       if (noun) emit(people.find(p => p.terms.includes(noun[1]!))?.id, noun[1]!, "name", "exit_noun", noun[0], modalityOf(clause.slice(0, noun.index! + noun[0].length), NOT_DONE));
-      if (act) {
+      if (act && !localReturn(frame, at, act, plain.slice(0, plain.indexOf(clause)) + clause.slice(0, act.index))) {
         const modality = modalityOf(clause.slice(0, act.index + act[0].length), NOT_DONE);
         const before = clause.slice(0, act.index), named = [...before.matchAll(anyName)].at(-1), gap = named ? before.slice(named.index + named[0].length) : before;
         // Actor: the last name before the act, not possessive ("Dell's patience is gone"), with no other capitalized name or instruction frame in between.
@@ -130,6 +130,10 @@ const canonicalActorTerms = (context: TurnContext, id: string, name: string): re
   const identity = narratorIdentityGate(context)?.identities.get(id);
   return [name, id, identity?.ref, identity?.observable_label].filter((x): x is string => !!x);
 };
+/** "steps back out" right after the same beat stepped into a pen / cage / gate (this sentence or the previous one): a local return, not an exit. */
+function localReturn(frame: NarrationFrame, at: number, act: RegExpExecArray, before: string): boolean {
+  return BACK_OUT.test(act[0]) && (LOCAL_ENTRY.test(before) || (at > 0 && LOCAL_ENTRY.test(frame.prose(at - 1))));
+}
 function departureSentences(frame: NarrationFrame): readonly { source: string; plain: string; at: number }[] {
   const spans = frame.narration.includes("*") ? rpgNarration(frame.narration) : undefined;
   return frame.sentences.flatMap((source, at) => !spans || spans.some(span => span.includes(source))
@@ -162,7 +166,7 @@ export function claimDepartureFacts(frame: NarrationFrame, context: TurnContext,
     const physicalTrace = TRACE_SUBJECT.test(plain) || explicit.some(c => terms(c.id, c.profile.name ?? c.id).some(t => TRACE_SUBJECT.test(plain.slice(t.length))));
     const directAct = DEPART_ACT.exec(plain), traceAct = physicalTrace ? TRACE_ACT.exec(plain) : null;
     const act = traceAct && (!directAct || traceAct.index < directAct.index) ? traceAct : directAct;
-    if (!act) continue;
+    if (!act || localReturn(frame, at, act, plain.slice(0, act.index))) continue;
     const prefix = plain.slice(0, act.index + act[0].length);
     // Possessive traces are whitelisted; an abstract possession being "gone" is never departure.
     if (explicit.length && /^(?:'s|\u2019s)\s+/.test(tail) && !physicalTrace && !/^(?:'s|\u2019s)\s+(?:long\s+)?gone\b/i.test(tail)) continue;

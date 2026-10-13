@@ -11,7 +11,7 @@ import { playerIntent } from "../src/turn/player-intent.js";
 import { resolvePlayerCarry, characterLocation } from "../src/turn/character-movement.js";
 import { narratedDepartures } from "./movement-readers.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
-import { refersTo, readScene } from "../src/turn/narrated-captives.js";
+import { refersTo, readScene } from "../src/turn/narration-facts/index.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

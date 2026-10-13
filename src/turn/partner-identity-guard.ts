@@ -6,11 +6,10 @@ import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
 import { boundPartner, noCompetingSpeaker } from "./canonical-name-disclosure.js";
 import { castingOptions } from "./scene-participants.js";
-import { NAME_REQUEST, SELF_INTRODUCTION } from "./identity-request.js";
+import { NAME_REQUEST, SELF_INTRODUCTION, asksName } from "./identity-request.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
 import { narratedSpeakerPartner } from "./foreground-binding.js";
-import { nameFilter, readScene } from "./narrated-captives.js";
-import { asksName } from "./narrated-captives.js";
+import { type NarrationFactSource, createFactSource, nameFilter, speechTags } from "./narration-facts/index.js";
 
 /**
  * Post-narration identity protection (P0 identity hotfix). The Narrator is told who the current conversation partner objectively is, but
@@ -23,6 +22,9 @@ import { asksName } from "./narrated-captives.js";
  * when every narrated speaker attribution is consistent with that partner. A different explicit speaker ("the thin man beside him says
  * I'm Erdan"), a true new person ("A second man steps forward. I'm Erdan.") and an ambiguous addressee all fall through to the ordinary
  * rules, which may create or bind exactly one person for that name.
+ *
+ * Block 11: the names are read from the shared NarrationFacts (the scene reading and the delivered narration's `self_introduction` and
+ * `reference` facts); this guard keeps only its policy (which partner, which names conflict) and no name grammar of its own.
  */
 export interface PartnerNameConflict {
   readonly partner_id: string;
@@ -33,7 +35,7 @@ export interface PartnerNameConflict {
   readonly evidence: readonly string[];
 }
 export function partnerNameConflict(i: { readonly context: TurnContext; readonly world: WorldStore; readonly snapshot: DeepReadonly<CampaignSnapshot>; readonly finalized: readonly RecentExchange[];
-  readonly player_input: string; readonly delivered: string; readonly scene: SceneParticipantPlan }): PartnerNameConflict | undefined {
+  readonly player_input: string; readonly delivered: string; readonly scene: SceneParticipantPlan; readonly facts?: NarrationFactSource }): PartnerNameConflict | undefined {
   if (!NAME_REQUEST.test(i.player_input) && !SELF_INTRODUCTION.test(i.player_input)) return undefined;
   const last = i.finalized.filter(e => e.status === "finalized").at(-1), here = i.snapshot.runtime.scene.player_location;
   const partner = boundPartner(i.context, i.finalized, i.scene) ?? (!i.scene.focus && last?.location_id === here ? narratedSpeakerPartner(i.context, last?.narration, i.delivered) : undefined);
@@ -42,21 +44,24 @@ export function partnerNameConflict(i: { readonly context: TurnContext; readonly
   if (!noCompetingSpeaker(i.context, beats, partner, castingOptions(i.context, i.scene.participants, i.finalized), true)) return undefined;
   const canonical_name = narratorIdentityGate(i.context)?.selfDisclosureName(partner);
   const location_id = i.snapshot.runtime.scene.player_location;
-  const reading = readScene([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", ...(location_id ? { location_id } : {}) }], i.context, i.world,
+  const source = i.facts ?? createFactSource({ movers: [], context: i.context, names_ok: nameFilter(i.world), player_input: i.player_input, asks_name: asksName });
+  const reading = source.scene([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", ...(location_id ? { location_id } : {}) }], i.context, i.world,
     { campaign_names: new Set(i.snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true });
   // Only the actor's OWN self-introduction in this exchange: a name another person presents ("That's Brenna") is never the partner's.
   const own = reading.persons.filter(p => p.name && !p.character_id && p.name !== canonical_name
     && p.introductions.some(x => x.exchange === reading.latest) && p.introductions.filter(x => x.exchange === reading.latest).every(x => x.kind === "self"));
   const names = own.map(p => p.name!), evidence = own.flatMap(p => p.introductions.filter(x => x.exchange === reading.latest).map(x => x.evidence));
-  // An explicit name question answered by a line that OPENS with a personal name ("Marden. What are you after?") is the same self-introduction.
   const ok = nameFilter(i.world), known = new Set(i.context.characters.flatMap(c => [c.profile.name, ...(c.profile.aliases ?? [])].filter((n): n is string => !!n).flatMap(n => n.toLowerCase().split(/\s+/))));
-  // Speech is whatever lies outside the starred narration. noCompetingSpeaker already established that no other person is its speaker.
-  const speech = i.delivered.replace(/(?<!\\)\*[\s\S]*?(?<!\\)\*/g, "\n").split(/\n/).map(l => l.trim()).filter(Boolean).join(" ");
-  const NAME = "([A-Z][a-z]{2,})";
-  const spoken = [speech.match(new RegExp(`(?:^|["“\\s])(?:I'm|I’m|I am|My name is|My name's|Name's|Name is|Call me)\\s+${NAME}\\b`))?.[1],
-    asksName(i.player_input) ? speech.match(new RegExp(`^["“]?${NAME}[.,!]`))?.[1] : undefined];
-  // Another person attributed in the narration ("the thin man beside him says:", "A second man steps forward") means the speech is not provably the partner's.
-  const other = beats.some(b => /:\s*$|\b(?:another|second|other|companion|stranger|bystander)\s+(?:man|woman|boy|girl|youth|person|figure)\b|\b(?:beside|next to|behind)\s+(?:him|her)\s+(?:says?|speaks?|asks?|answers?|replies|interjects?|adds?|calls?)\b/i.test(b));
-  if (!other) for (const opening of spoken) if (opening && opening !== canonical_name && ok(opening) && !known.has(opening.toLowerCase()) && !names.includes(opening)) { names.push(opening); evidence.push(opening); }
+  // Spoken self-introductions of the delivered narration, attributed or not: noCompetingSpeaker already established that no other person is their
+  // speaker. Answering a name question, the OPENING spoken line may also be (or begin with) the bare name ("Marden. What are you after?").
+  const identity = source.of(i.delivered).identity, asked = asksName(i.player_input);
+  const opening = identity.find(f => f.kind === "speaker_attribution")?.source_text;
+  const spoken = identity.flatMap(f => f.kind === "self_introduction" && f.voice === "speech"
+    && (f.form === "bare_name" || f.form === "name_first" ? asked && f.source_text === opening : true) ? [f.name] : []);
+  // Another person in the narration ("A second man steps forward", a beat that hands the line to someone "beside him", a beat ending in "says:")
+  // means the speech is not provably the partner's.
+  const other = identity.some(f => f.kind === "reference" && f.introduces_new)
+    || beats.some(b => /:\s*$/.test(b) || speechTags(b, "(?:beside|next to|behind)\\s+(?:him|her)").length > 0);
+  if (!other) for (const name of spoken) if (name !== canonical_name && ok(name) && !known.has(name.toLowerCase()) && !names.includes(name)) { names.push(name); evidence.push(name); }
   return names.length ? { partner_id: partner, ...(canonical_name ? { canonical_name } : {}), names, evidence } : undefined;
 }

@@ -1,0 +1,348 @@
+{
+  "generated_at": "2026-10-13T01:20:56.928Z",
+  "wire_total": 19,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 11,
+    "undefined": 8
+  },
+  "tokens": 99995,
+  "cost_usd": 0,
+  "results": [
+    {
+      "id": "A",
+      "purpose": "KPG-2 real shape: seller beat + plain price line",
+      "verdict": "PASS",
+      "problems": [],
+      "provisional": [],
+      "created": [],
+      "revision_delta": 1,
+      "wire_calls": 4,
+      "turns": [
+        {
+          "turn": 1,
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco makes his way past the public auction area toward the private-seller rows behind it. The crowd thins a little here, the noise shifting from overlapping bid-calls to quieter, pointed conversations. A few sellers have pens or roped-off areas with people standing or sitting inside; others stand near their stock and watch the traffic with practiced patience.*\n\n*Korvin is leaning against a post beside an open pen, arms folded across his chest. His cheap practical clothing makes him look more like a warehouse worker than a slaver, and the large, scarred hands resting on his sleeves do nothing to dispel that impression. He sizes Nicco up as he approaches — a quick, unhurried scan from boots to face, the kind of look that takes in build, hands, clothing, and posture in one pass.*\n\n*He doesn't straighten up or unfold his arms. His small, perceptive eyes settle on Nicco and stay there.*\n\nLooking for something particular, or just browsing?",
+          "spoken": [
+            {
+              "text": "Looking for something particular, or just browsing?",
+              "speaker": "korvin",
+              "method": "adjacent_action_beat",
+              "ambiguity": "none",
+              "candidates": [
+                "korvin"
+              ],
+              "price": false
+            }
+          ],
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [],
+          "tokens": 12399,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin pushes off the post with one shoulder and jerks his chin toward the pen. His eyes move over the woman inside — a plain assessment, quick and habitual, like checking the fit on a harness.*\n\nThis one's a hundred gold.\n\n*He says it flat, the way someone names the weight of a sack. No flourish, no pitch. His hand drops to his side and he watches Nicco's face, waiting to see whether the number lands or bounces. The woman in the pen doesn't look up.*\n\n*The price hangs well below what the market usually asks. Korvin's gaze stays steady, unreadable, the kind of look that has heard every response to a number and come out the other side.*",
+          "spoken": [
+            {
+              "text": "This one's a hundred gold.",
+              "speaker": "korvin",
+              "method": "explicit_dialogue_tag",
+              "ambiguity": "none",
+              "candidates": [
+                "korvin"
+              ],
+              "price": true
+            }
+          ],
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [
+            {
+              "kind": "offer",
+              "status": "resolved"
+            }
+          ],
+          "revision_issues": [],
+          "card": {
+            "kind": "person",
+            "price_gold": 100
+          },
+          "offers": [
+            {
+              "status": "active",
+              "price_gold": 100,
+              "subject": "person"
+            }
+          ],
+          "gold": 500,
+          "created": [],
+          "tokens": 12452,
+          "cost_usd": 0
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "purpose": "provisional stranger: \"My name is Maren.\"",
+      "verdict": "FAIL",
+      "problems": [
+        "provisional Maren count 0: []"
+      ],
+      "provisional": [],
+      "created": [],
+      "revision_delta": 0,
+      "wire_calls": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "input": "I walk over to a young woman selling apples from a basket near the edge of the square.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*A young woman sits on a low stool near the edge of the square, a broad basket of apples balanced on her lap. She's been watching the traffic pass with the bored patience of someone who has been here since early morning. A rough cloth is spread across her knees where she's been polishing the fruit.*\n\n*As Nicco approaches, she straightens slightly and lifts one apple halfway in offering — a reflex more than a pitch.*\n\n*The apples are small, a little uneven, but clean. Behind her, a handler leads a line of captives toward the holding pens, and the auctioneer's voice cuts across the square with another price. She doesn't look back at it.*\n\nFresh this morning. Two silver for five, or one silver for two.\n\n*She sets the apple back in the basket and wipes her palm on her skirt. Her eyes move across Nicco briefly — taking in his size, his clothing, the way he carries himself — before settling back on the fruit. Her fingers sort through the basket, pushing aside the ones with soft spots.*",
+          "spoken": [
+            {
+              "text": "Fresh this morning. Two silver for five, or one silver for two.",
+              "speaker": "other:woman",
+              "method": "adjacent_action_beat",
+              "ambiguity": "none",
+              "candidates": [
+                "other:woman"
+              ],
+              "price": false
+            }
+          ],
+          "audit": [
+            "uncommitted_condition"
+          ],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [],
+          "tokens": 11849,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "input": "I ask the apple seller what her name is. She answers: \"My name is Maren.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*She doesn't pause her sorting. A soft one goes left, a firm one right.*\n\nMaren.\n\n*The word comes out plainly, without ceremony or hesitation — the way someone gives a name that doesn't matter much to give. Her thumb tests the skin of the next apple, pressing gently near the stem.*\n\nYou want the two or the five? I'm not selling onesies.\n\n*Somewhere behind her a clerk calls a number across the auction ground, and a ripple of voices follows. She tips her head a fraction toward the sound without turning around, the way someone does when they've heard the same noise a thousand times and it's become part of the weather.*",
+          "spoken": [
+            {
+              "text": "Maren.",
+              "speaker": null,
+              "method": null,
+              "ambiguity": "unresolved",
+              "candidates": [],
+              "price": false
+            },
+            {
+              "text": "You want the two or the five? I'm not selling onesies.",
+              "speaker": null,
+              "method": null,
+              "ambiguity": "unresolved",
+              "candidates": [],
+              "price": false
+            }
+          ],
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [],
+          "tokens": 11842,
+          "cost_usd": 0
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "purpose": "purchased person (seeded): \"My name is Lira.\"",
+      "verdict": "NOT REACHED",
+      "problems": [],
+      "provisional": [],
+      "created": [
+        {
+          "id": "campaign_character_live_lira",
+          "name": null
+        }
+      ],
+      "revision_delta": 0,
+      "wire_calls": 6,
+      "turns": [
+        {
+          "turn": 1,
+          "input": "I turn to the woman I just bought from Korvin, who waits beside me, and crouch in front of her.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The packed earth is loose under Nicco's boots as he lowers himself. At this height the square's noise — auction calls, wagon wheels, a handler's sharp word somewhere behind — settles into a dull wash above them both.*\n\n*The woman waits where Korvin left her beside Nicco, close enough that crouching brings her level. Her hands hang at her sides. She does not step back, but she does not look down at him either; her gaze rests somewhere past his shoulder, on the traffic moving through the gap between pens and auction crowd. Her breathing is even. Whatever she makes of a buyer crouching in the dirt in front of her, she gives nothing away — just the stillness of someone who has learned that waiting costs less than reacting.*\n\n*A few paces off, Korvin watches with his arms folded, the corners of his mouth pulled down. He says nothing, but his weight shifts onto one hip, and his eyes move between Nicco and the woman with the unhurried attention of a man who has seen buyers do strange things before and is mainly interested in whether this one is going to be a problem.*",
+          "spoken": [],
+          "audit": [
+            "uncommitted_departure"
+          ],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [
+            {
+              "kind": "offer",
+              "status": "blocked",
+              "reason": "seller_authority_unestablished"
+            }
+          ],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [
+            {
+              "id": "campaign_character_live_lira",
+              "name": null
+            }
+          ],
+          "tokens": 12728,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "input": "I ask her what her name is. She answers: \"My name is Lira.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The word comes out plain and unhurried, without defiance or eagerness — just an answer given because one was asked. Her gaze does not move from the middle distance. Close up, the dust of the pens is fine on her skin and the cheap cloth she is wearing, and there is a faint stiffness in her shoulders that eases only slightly once she has spoken.*\n\n*Korvin's weight shifts back to both feet behind them. He uncrosses one arm to scratch the back of his neck, then folds it again. His expression does not change, but something in the set of his jaw loosens — a buyer who talks to merchandise is less concerning than one who does something stranger, and at least this one seems to want the girl functioning.*",
+          "spoken": [],
+          "audit": [
+            "fabricated_prior_event"
+          ],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [
+            {
+              "id": "campaign_character_live_lira",
+              "name": null
+            }
+          ],
+          "tokens": 12757,
+          "cost_usd": 0
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "purpose": "ambiguous speaker: two sellers asked together",
+      "verdict": "NOT REACHED",
+      "problems": [],
+      "provisional": [],
+      "created": [],
+      "revision_delta": 0,
+      "wire_calls": 4,
+      "turns": [
+        {
+          "turn": 1,
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco moves through the press of bodies and wagon traffic toward the private-seller area, where the licensed traders keep their stock behind and around the public auction. The crowd thins slightly as the auction calls fade behind him.*\n\n*Korvin stands near a row of holding pens with the practiced ease of someone who has spent years on his feet in this kind of weather. Light rain has darkened the shoulders of his cheap practical coat. He watches Nicco approach without moving, those small perceptive eyes taking in the tall frame, the white hairs, the clothes — reading him the way a livestock man reads an animal at a glance. One of his large, damaged hands rests on the pen rail beside him.*\n\n*He lets Nicco close the distance before he speaks.*\n\nLooking for labor, or something particular?",
+          "spoken": [
+            {
+              "text": "Looking for labor, or something particular?",
+              "speaker": "korvin",
+              "method": "adjacent_action_beat",
+              "ambiguity": "none",
+              "candidates": [
+                "korvin"
+              ],
+              "price": false
+            }
+          ],
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "person_transactions": [],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [],
+          "tokens": 12324,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "input": "I ask Korvin and the elegant platinum-haired woman with the fan, both at once, what a strong female worker costs. They glance at each other before one of them answers with a price.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The question hangs between them. Korvin's jaw works sideways once, the way a man chews on a number before spitting it out. The woman's fan gives a single measured flick — less amusement than acknowledgment that someone has addressed them both at once, as though weighing which of them this is really for.*\n\n*Korvin speaks first, jerking his chin toward the pens behind him.*\n\nField hand, kitchen, laundry — something like that? Eight hundred and thirty, give or take. Depends on the girl, depends on the work.\n\n*He says it flat, the way he might quote a price on grain. The woman lets a beat pass, her gaze still on Nicco with unhurried attention, then adds her own figure with the slight tilt of someone offering a correction to a room.*\n\nFor something comparable from my stock, around six hundred and forty. Though of course \"strong\" covers a great deal. A girl who can haul crates all day and one who can serve a noble household without embarrassing it are not the same investment.\n\n*She opens the fan fully, a gesture that seems more habit than affectation, and waits. Korvin's fingers tap once on the rail — not impatient, just the idle rhythm of a man who has stated his price and sees no reason to embellish it.*",
+          "spoken": [
+            {
+              "text": "Field hand, kitchen, laundry — something like that? Eight hundred and thirty, give or take. Depends on the girl, depends on the work.",
+              "speaker": "korvin",
+              "method": "explicit_dialogue_tag",
+              "ambiguity": "none",
+              "candidates": [
+                "korvin"
+              ],
+              "price": false
+            },
+            {
+              "text": "For something comparable from my stock, around six hundred and forty. Though of course \"strong\" covers a great deal. A girl who can haul crates all day and one ",
+              "speaker": "other:woman",
+              "method": "adjacent_action_beat",
+              "ambiguity": "none",
+              "candidates": [
+                "other:woman"
+              ],
+              "price": false
+            }
+          ],
+          "audit": [],
+          "committed": [],
+          "rejected": [
+            "propose_trade_offer",
+            "propose_trade_offer"
+          ],
+          "person_transactions": [],
+          "revision_issues": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": [],
+          "tokens": 13644,
+          "cost_usd": 0
+        }
+      ]
+    }
+  ]
+}

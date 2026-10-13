@@ -1,9 +1,10 @@
 import type { CommerceFact, NarrationFacts, PriceQuoteFact, TransferClaimFact } from "./narration-facts/index.js";
+import { escapeRegExp as esc } from "./language/text.js";
 
 /**
  * Commerce POLICY over shared NarrationFacts. The facts say what a text states (a number, who stands behind it, a withdrawal, a claim that
  * money or a person changed hands); this module decides what that is worth: which quote is actionable, which quotes are only negotiation,
- * which claims contradict the authoritative state. Nothing here reads text, and nothing here settles anything.
+ * which claims contradict the authoritative state. Nothing here parses narration grammar (the facts did), and nothing here settles anything.
  *
  * INVARIANTS (also in docs/evaluations/CONSOLIDATION_BLOCK10_NARRATIONFACTS_COMMERCE.md)
  *  - A player counteroffer is NOT a seller offer: only a seller-voiced, current, completed quote is ever actionable.
@@ -22,10 +23,19 @@ export const inSegment = (fact: CommerceFact, segment: string | undefined): bool
 export interface SellerQuote { readonly amount: number; readonly sentence: string; readonly fact: PriceQuoteFact; readonly group: string }
 const groupOf = (f: CommerceFact) => `${f.span.sentence_index}:${f.span.clause_index}`;
 
-/** Prices a seller voice STATES as the current price, in the segment (or everywhere): completed, a current quote, never the player's own figure. */
+/**
+ * Recipient policy (Block 11): a price line explicitly addressed to somebody other than Nicco is not an offer to the player. Only the explicit forms
+ * count: a narrated "says to X" around the line (the whole line), or a vocative in the price's own sentence ("Brenna, a hundred."). An addressee
+ * that is ambiguous ("says to her" with two women present) or unresolved fails closed. The weaker "tells her" / "turns to him" beat is not used:
+ * a seller often instructs the captive in the same breath as quoting the buyer.
+ */
+const addressedElsewhere = (facts: NarrationFacts, f: PriceQuoteFact): boolean => facts.identity.some(r => r.kind === "recipient_attribution" && r.recipient.entity_id !== "nicco"
+  && (r.form === "says_to" ? inSegment(f, r.source_text) : r.form === "vocative" && inSegment(f, r.source_text) && new RegExp(`\\b${esc(r.recipient.surface)}\\b`, "i").test(f.sentence)));
+
+/** Prices a seller voice STATES as the current price TO THE PLAYER, in the segment (or everywhere): completed, a current quote, never the player's own figure. */
 export function sellerQuotes(facts: NarrationFacts, segment?: string): readonly SellerQuote[] {
   return facts.commerce.flatMap(f => f.kind === "price_quote" && f.voice !== "player_input" && f.modality === "completed" && f.quote_kind === "current"
-    && (f.quote_role === "seller_ask" || f.quote_role === "seller_counter") && inSegment(f, segment) ? [{ amount: f.amount, sentence: f.sentence, fact: f, group: groupOf(f) }] : []);
+    && (f.quote_role === "seller_ask" || f.quote_role === "seller_counter") && inSegment(f, segment) && !addressedElsewhere(facts, f) ? [{ amount: f.amount, sentence: f.sentence, fact: f, group: groupOf(f) }] : []);
 }
 /** Amounts only (the shape the person-offer reader works with). */
 export const sellerPrices = (facts: NarrationFacts, segment?: string): number[] => sellerQuotes(facts, segment).map(q => q.amount);

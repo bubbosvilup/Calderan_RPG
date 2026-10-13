@@ -1,6 +1,6 @@
 import type { CampaignCommand, RelationshipDimension } from "../campaign/types.js";
 import type { TurnContext } from "./context-builder.js";
-import { dialogueFocused } from "./prompt-builder.js";
+import { attributedSpeech } from "./attributed-speech.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
 import { GATES } from "./language/gates.js";
 import type { EvidenceCheck } from "./evidence-check.js";
@@ -22,12 +22,11 @@ const LEAVE = /\b(?:I(?:'m| am) leaving (?:the |this |your )?(?:household|family
 const NOT_A_CHOICE = GATES.household_not_a_choice;
 
 export function detectHouseholdChoices(narration: string, context: TurnContext): readonly HouseholdChoice[] {
-  const byName = new Map(context.characters.filter(c => c.id !== "nicco").map(c => [c.profile.name ?? c.id, c.id]));
   const out: HouseholdChoice[] = [];
-  for (const line of dialogueFocused([{ player: "", narration, status: "finalized" }], context)[0]?.npc_dialogue ?? []) {
-    const m = line.match(/^(.+?): "(.*)"$/s); if (!m) continue;
-    const id = byName.get(m[1]!); if (!id) continue;
-    for (const part of m[2]!.split(/(?<=[.!?])\s+/)) {
+  // Only a present character's own attributed words (the shared dialogue facts under the speaker policy of attributed-speech.ts).
+  for (const line of attributedSpeech(narration, context).lines) {
+    const id = line.speaker; if (id === "nicco" || !context.characters.some(c => c.id === id)) continue;
+    for (const part of line.text.split(/(?<=[.!?])\s+/)) {
       const choice = JOIN.test(part) ? "join" : LEAVE.test(part) ? "leave" : undefined;
       if (!choice || NOT_A_CHOICE.test(part.replace(/\bnever (?:leave|abandon)\b/gi, " "))) continue;
       if (!out.some(o => o.character_id === id && o.choice === choice)) out.push({ character_id: id, choice, source_sentence: sentencesOf(narration).find(s => s.includes(part.slice(0, 40))) ?? part });
@@ -85,8 +84,7 @@ export function verifyRelationshipEvidence(command: Extract<CampaignCommand, { k
   const lead = blankQuotes(sentence).trim();
   if (/^nicco\b/i.test(lead)) return { verified: false, check: "actor_is_nicco" };
   const fromLead = names(command.from_character_id).some(n => new RegExp(`^${esc(n)}(?:'s)?\\b`, "i").test(lead));
-  const said = (dialogueFocused([{ player: "", narration, status: "finalized" }], context)[0]?.npc_dialogue ?? [])
-    .some(line => names(command.from_character_id).some(n => line.startsWith(`${n}: "`)) && line.includes(q.replace(/^["“]|["”]$/g, "").slice(0, 30)));
+  const said = attributedSpeech(narration, context).lines.some(line => line.speaker === command.from_character_id && line.text.includes(q.replace(/^["“]|["”]$/g, "").slice(0, 30)));
   if (!fromLead && !said) return { verified: false, check: "actor_not_from_character" };
   const target = command.to_character_id === "nicco" ? ["Nicco", "him", "you"] : names(command.to_character_id);
   if (!target.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(sentence)) && !/\b(?:him|her|them|you)\b/i.test(sentence)) return { verified: false, check: "target_not_referenced" };

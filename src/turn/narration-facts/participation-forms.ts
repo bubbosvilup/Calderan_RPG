@@ -1,8 +1,11 @@
-import { GATES } from "./language/gates.js";
-import { QUOTED_SPAN_SOURCE, escapeRegExp as esc } from "./language/text.js";
+import { GATES } from "../language/gates.js";
+import { QUOTED_SPAN_SOURCE, escapeRegExp as esc } from "../language/text.js";
+import { SPEECH } from "./dialogue-vocabulary.js";
 
 /**
- * NPC+ Pass 4 — does a sentence make an ABSENT character PARTICIPATE in the current scene, or merely refer to them?
+ * PARTICIPATION (presence) facts. NPC+ Pass 4, moved into NarrationFacts in Block 11 (its speech tags now use the shared dialogue vocabulary):
+ * does a sentence make an ABSENT character PARTICIPATE in the current scene, or merely refer to them? Descriptive: whether participation of an
+ * absent person is an audit issue (absent_participant) is decided by the audit.
  *
  * Deterministic syntax over the narration (quotes blanked except for attribution). Participation is:
  *  1. the character as the SUBJECT of an act ("Brenna walks into the hall", "Korvin hands Nicco the key", "Nearby, Dell sat hunched");
@@ -23,7 +26,6 @@ const STATIVE = new Set(["is", "was", "are", "were", "has", "had", "have", "does
 const IRREGULAR = new Set(["sat", "stood", "came", "went", "said", "took", "gave", "held", "ran", "saw", "made", "got", "put", "set", "knelt", "rose", "fell", "spoke", "told", "drew",
   "threw", "caught", "brought", "led", "met", "sank", "slid", "swung", "shook", "struck", "fought", "bit", "hid", "lay", "felt", "found", "began", "grabbed", "hit", "cut", "let", "spat"]);
 const PRESENCE = /^(?:still\s+|now\s+)?(?:here|there|beside|next to|nearby|close by|behind (?:him|nicco)|at (?:the|his|her|nicco's) (?:door|side|shoulder|elbow|table|counter)|in the (?:room|hall|doorway)|with (?:him|nicco)|(?:standing|sitting|waiting|watching|leaning|kneeling|hovering)\b)/i;
-const SPEECH = "says|said|asks|asked|replies|replied|adds|added|murmurs|murmured|whispers|whispered|mutters|muttered|answers|answered|calls|called|shouts|shouted|snaps|snapped|growls|growled|grunts|grunted|laughs|laughed";
 const INTERACT = "hands?|handed|gives?|gave|passes?|passed|offers?|offered|tosses?|tossed|shows?|showed|touches?|touched|hugs?|hugged|helps?|helped|pulls?|pulled|pushes?|pushed|grabs?|grabbed|leads?|led|tells?|told|asks?|asked|thanks?|thanked|kisses?|kissed";
 const WINDOW = 6;
 /** The word immediately before the name is a preposition (the name is that preposition's object). */

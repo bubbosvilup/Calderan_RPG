@@ -1,6 +1,6 @@
 # UI ↔ engine contract
 
-Status: ACTIVE. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/app/game-session.ts`, `session-view.ts` and the read-model modules. Companion: [UI](UI.md).
+Status: ACTIVE. Last reconciled: 2026-10-13 (re-checked after consolidation block 11, which changed no UI-facing API; content last revised on main c0608a6). Source of truth: `src/app/game-session.ts`, `session-view.ts` and the read-model modules. Companion: [UI](UI.md).
 
 Read this first. The UI talks to **one object**, `GameSession` (`src/app/game-session.ts`, re-exported from `src/app/index.ts`). It must not import `TurnCoordinator`, `CampaignState`, `CampaignSnapshot`, the OpenRouter classes, the save codecs, retrieval or reflection. Everything below is verified by `tests/application-closure.test.ts`.
 

@@ -1,6 +1,6 @@
 # Persistence (Save/Load v1; originally Phase 1J)
 
-Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-11. **Current versions: save file schema 8, persisted snapshot schema 8 (the in-memory composed snapshot stays schema 7-shaped)** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
+Status: ACTIVE for the current format (the first blockquote and sections marked "current"); the Phase 1J text further down is HISTORICAL where it conflicts. Last reconciled: 2026-10-13 (block 11 changed no save or snapshot schema; provisional people are still never saved). **Current versions: save file schema 8, persisted snapshot schema 8 (the in-memory composed snapshot stays schema 7-shaped)** (`src/persistence/save-format.ts`, `src/campaign/types.ts`).
 
 > ## Save/Load v1 (current): persistent campaigns
 >

@@ -2,7 +2,7 @@ import type { CampaignCommand, CampaignSnapshot, PremiumContractField } from "..
 import type { DeepReadonly } from "../types/readonly.js";
 import type { TurnContext } from "./context-builder.js";
 import { activeNpcPlus, contractSet } from "../campaign/premium-characters.js";
-import { narrationUnits, presentPeople } from "./narrated-captives.js";
+import { dialogueUnits, presentPeople } from "./narration-facts/index.js";
 import { sentencesOf } from "./language/text.js";
 import { GATES } from "./language/gates.js";
 
@@ -31,7 +31,8 @@ export function contractCommands(narration: string, context: TurnContext, snapsh
   const active = activeNpcPlus(snapshot), present = new Set(context.characters.map(c => c.id).filter(id => active.has(id)));
   if (!present.size) return [];
   const out: Extract<CampaignCommand, { kind: "establish_character_contract" }>[] = [];
-  for (const u of narrationUnits(narration, 0, presentPeople(context))) {
+  // Policy: a contract needs a QUOTED first-person line of an active NPC+, read in the legacy (quotes-only) reading of the shared dialogue units.
+  for (const u of dialogueUnits(narration, 0, presentPeople(context))) {
     if (!u.quoted || !u.speaker || !present.has(u.speaker)) continue;
     const premium = snapshot.premium_characters.find(p => p.character_id === u.speaker)!;
     for (const sentence of sentencesOf(u.text)) {

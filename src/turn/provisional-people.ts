@@ -1,6 +1,7 @@
 import type { CampaignCharacter, CharacterOriginSnapshot, NameSource } from "../campaign/types.js";
 import { buildPromotedCharacter } from "../campaign/promotion.js";
-import { establishedFacts, type NarratedPerson } from "./narrated-captives.js";
+import { establishedFacts, type NarratedPerson } from "./narration-facts/index.js";
+import type { EphemeralSceneParticipant } from "./scene-participants.js";
 
 /**
  * Block 5B (AUTH-2): the PROVISIONAL person. Narration may introduce people and may even name them; that alone is NOT persistence authority.
@@ -65,4 +66,10 @@ export function materializeProvisional(i: MaterializeInput): CampaignCharacter {
   const facts = establishedFacts(i.person, i.seller_key, i.name_of, i.keep_claim);
   return buildPromotedCharacter({ label: i.label, established: { ...facts.established, ...(i.role ? { role: i.role } : {}) }, evidence: facts.evidence, location_id: i.location_id, trigger: i.trigger,
     promoted_revision: i.base_revision + 1, world_minute: i.world_minute, ephemeral_ref: i.ephemeral_ref, ...(i.name_source ? { name_source: i.name_source } : {}) });
+}
+
+/** The one player-introduced scene participant ("the slave", "the boy") this narrated person already was, if any (reference continuity: same person, same ref). */
+export function linkedParticipant(person: NarratedPerson, participants: readonly EphemeralSceneParticipant[]): EphemeralSceneParticipant | undefined {
+  const matches = participants.filter(p => (person.captive && p.role === "slave") || (!!person.noun && (p.display_name.toLowerCase() === person.noun || p.descriptor?.split(/\s+/).at(-1) === person.noun)));
+  return matches.length === 1 ? matches[0] : undefined;
 }

@@ -47,6 +47,12 @@ export const MOVE = "(?:walk|stalk|storm|stomp|stagger|stumbl|stride|strode|shou
 export const PLACE = "(?:inn|room|tavern|common room|building|place|bar|premises|house|hall|taproom|door|doorway|front door)";
 export const LEAVE_TAIL = `(?=\\s+(?:the\\s+)?(?:inn|room|tavern|common room|building|place|bar|premises|house|hall|taproom)\\b|\\s*(?:[.,;!—–-]|$)|\\s+(?:without|with|and|then|into|through|for good|at last|quietly|at once|for the (?:night|evening)))`;
 /** Completed exits. The actor phrase precedes the match and is resolved by the caller. */
+/**
+ * Block 11 (KPG-2, live-observed): "unlatches the gate just enough to step halfway in ... then steps back out and latches it again". Stepping
+ * into a pen, cage, stall or gate and BACK OUT is a local back-and-forth inside the scene, never leaving it.
+ */
+export const LOCAL_ENTRY = /\b(?:steps?|stepped|stepping|ducks?|ducked|leans?|leaned|climbs?|climbed)\s+(?:(?:halfway|partway|half|just|briefly)\s+)?(?:in(?:side)?\b(?!\s*to\b)|into the (?:pen|cage|stall|cell|enclosure|lean-to|tent|booth|wagon|cart|doorway|gate)\b)|\bopens? the (?:pen|cage|gate|cell)\b[^.!?]{0,40}\bin\b/i;
+export const BACK_OUT = /\bback\s+out\b/i;
 export const DEPART_ACT = new RegExp([
   `\\b${MOVE}\\s+(?:(?:his|her|their) way\\s+)?(?:[\\w']+\\s+){0,2}?(?:out(?:side)?\\b(?!\\s+(?:a|an|his|her|their|some|coins?|of|from)\\b)|out of the ${PLACE}\\b|through the (?:door|doorway)\\s+(?:and\\s+)?(?:into|out)\\b|into the (?:street|night|dark|darkness|rain|evening|cold|lane|alley)\\b|off into the\\b)`,
   // H5.1: leaving by the stairs is a completed exit from the room ("heads downstairs", "goes down the stairs").

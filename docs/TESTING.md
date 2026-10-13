@@ -1,6 +1,6 @@
 # Testing
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `package.json`, `tests/`, `scripts/`.
+Status: Current. Last reconciled: 2026-10-13 (consolidation block 11 working tree on top of main 7345549). Source of truth: `package.json`, `tests/`, `scripts/`.
 
 ## Commands
 
@@ -9,8 +9,9 @@ Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `p
 | `npm run typecheck` | `tsc --noEmit` | no |
 | `npm run build` | compile to `.build/` | no |
 | `npm test` | build, then `node --test .build/tests/*.test.js` | **no**: offline, providers are faked or injected; no live LLM or image call |
+| `npm run benchmark:modern` | build, then the modern regression benchmark (`tests/benchmark/run.js`) | no |
 
-Latest recorded result: **3480 tests, 0 failed** on the block 6 working tree on top of `8bb5445` (the known flaky `generation lifecycle (npc|player, fullbody|avatar)` family, when it fails alone, is rerun once).
+Latest recorded result: **3637 tests, 0 failed** on the block 11 working tree on top of `7345549` (the known flaky `generation lifecycle (npc|player, fullbody|avatar)` family, when it fails alone, is rerun once; the final block 11 run passed 3637/3637 without a rerun). `npm run benchmark:modern`: **45 scenarios, 44 PASS, 1 KNOWN PRODUCT GAP (I4, KPG-1), 0 FAIL**.
 
 ## Layers
 
@@ -20,6 +21,7 @@ Latest recorded result: **3480 tests, 0 failed** on the block 6 working tree on 
 4. UI and read-model tests (`ui-*.test.ts`, `inventory-ui.test.ts`, capabilities, item visuals).
 5. Canon and data validation (authored YAML, climate profiles, exposure).
 6. Determinism guards (no `Date`/`Intl`/`Math.random` in the calendar).
+7. Source-level architecture assertions (`narration-facts-architecture.test.ts`: one NarrationFactSource per turn, consumers read the shared facts, speaker / recipient attribution only in the fact layer, no fact module imports a policy or CampaignState code).
 
 ## Disabled-services matrix (block 6)
 
@@ -47,9 +49,13 @@ Browser checks are not part of `npm test`; UI behavior is covered by server/read
 ## Planned (not built)
 
 - **Narrator truncation metrics:** per-turn `finish_reason` and every Narrator attempt are now recorded in the trace (`narrator_generation`); an aggregate over a long run (rate, p95 output tokens by model) is still to be built.
+- **Disabled-services matrix:** run the scenario suite with each optional service off and assert identical core state and revisions (ARCH-1; since block 7 the final semantic revision is also identical).
+
+## Consolidation block suites (built)
+
+- **Block 11 (NarrationFacts identity / speaker / recipient / references):** `tests/narration-facts-identity.test.ts` (speaker cases A-G, the post-hoc tag, the fact contract, self-introduction versus disclosure, the narrated name question, recipient, references, same-name non-merge, the speaker and commerce recipient policies), `tests/narration-facts-architecture.test.ts` (twelve source-level assertions), benchmark I5-I13 (I13 replays the real live B narrations). Live harness `src/dev/consolidation-block11-live.ts` (spends credits, A-D, one attempt each; evidence in `docs/evaluations/consolidation_block11_live/`). Blocks 9 and 10: `tests/narration-facts-movement.test.ts`, `tests/narration-facts-commerce.test.ts`, live `src/dev/consolidation-block9-live.ts`, `src/dev/consolidation-block10-live.ts`.
 - **Block 7:** `tests/block7-store.test.ts` (store foundation: atomic rewrite, wrong campaign / version / malformed / truncated / digest, interrupted temp, independent stores, partitions, store write is not a revision), `tests/block7-migration.test.ts` (v7 loads pre-migration, markers, precedence, hard recovery, crash injection A-F through the `SaveFileSystem` seam, steady-state crash, fixture matrix A-K), `tests/block7-domains.test.ts` (Reflection OFF / ON, mannerism promotion crash idempotency, sprites, portraits, legacy-writer and compaction audits); helpers `tests/block7-fixtures.ts` and `tests/raw-save.ts` (decode a save with its side stores; rewrite a save into the exact pre-block-7 shape). ON/OFF revision equality is pinned in `tests/block6-lifecycle.test.ts`. Browser (offline, 19 checks): `scripts/block7-browser-check.mjs`; live harness `src/dev/consolidation-block7-live.ts`.
 - **Block 5B:** `tests/block5b-lifecycle-repair.test.ts` (lifecycle, schema 7, retire/merge preconditions), `tests/block5b-auth2.test.ts` (A1-A12 plus a source-level producer audit), `tests/block5b-repair-session.test.ts` (PendingConfirmation flow), `tests/block5b-scanner.test.ts`; `scripts/block5b-browser-check.mjs` (real browser, offline, 13 checks); scanner CLI `src/dev/scan-identity-forks.ts`; live harness `src/dev/consolidation-block5b-live.ts` (spends credits, two scenarios, one attempt each).
 - **Block 5A:** `tests/block5a-*.test.ts` (foundation, AUTH-1 A1–A24, UI); `scripts/confirmation-browser-check.mjs` (real browser, offline); live harness `src/dev/consolidation-block5a-live.ts` (spends credits, one scenario).
 - **Block 4 live harness:** `src/dev/consolidation-block4-live.ts` (spends credits; forces truncation on the first Narrator request only).
-- **Disabled-services matrix:** run the scenario suite with each optional service off and assert identical core state and revisions (ARCH-1; since block 7 the final semantic revision is also identical).
-- **Modern regression benchmark (block 8, Wave A8): `npm run benchmark:modern`.** 36 small independent scenarios (20 at block 8, +M4-M11 at block 9, +C1-C8 commerce at block 10; C8 is KPG-2) over the current architecture (movement, identity, trade, person trade, household/NPC+, persistence, authority, fail-closed) in `tests/benchmark/scenarios.ts`; each runs a real `GameSession` + `TurnCoordinator` + file repository in a private temp directory with scripted Narrator/Controller (no provider call). It prints total / passed / failed / known gaps, the category breakdown and the failing ids (exit code 1 only on FAIL; `-- --only M1,P1`, `-- --verbose`). A scenario marked `known_gap` states the desired behavior and reports KNOWN PRODUCT GAP, and FAILS the day it unexpectedly passes. Also run under `npm test` as `tests/modern-benchmark.test.ts` (36 scenarios + 5 format gate tests; commerce unit/source tests in `tests/narration-facts-commerce.test.ts`; live Block 10 A/B/C/D: `src/dev/consolidation-block10-live.ts`). Use it as the before/after protection of every NarrationFacts slice (blocks 9-11). Live Actual Offer trigger regressions A/B/C (paid, bounded): `src/dev/consolidation-block8-live.ts`. Report: [Block 8](evaluations/CONSOLIDATION_BLOCK8_MODERN_BENCHMARK.md).
+- **Modern regression benchmark (block 8, Wave A8): `npm run benchmark:modern`.** 45 small independent scenarios (20 at block 8, +M4-M11 at block 9, +C1-C8 commerce at block 10, +I5-I13 identity / speaker / recipient / presence at block 11; C8 replays the real KPG-2 narration and passes since block 11; I4 is KPG-1) over the current architecture (movement, identity, trade, person trade, household/NPC+, persistence, authority, fail-closed) in `tests/benchmark/scenarios.ts`; each runs a real `GameSession` + `TurnCoordinator` + file repository in a private temp directory with scripted Narrator/Controller (no provider call). It prints total / passed / failed / known gaps, the category breakdown and the failing ids (exit code 1 only on FAIL; `-- --only M1,P1`, `-- --verbose`). A scenario marked `known_gap` states the desired behavior and reports KNOWN PRODUCT GAP, and FAILS the day it unexpectedly passes. Also run under `npm test` as `tests/modern-benchmark.test.ts` (all scenarios + 5 format gate tests; commerce unit/source tests in `tests/narration-facts-commerce.test.ts`; live Block 10 A/B/C/D: `src/dev/consolidation-block10-live.ts`). Use it as the before/after protection of every NarrationFacts slice (blocks 9-11). Live Actual Offer trigger regressions A/B/C (paid, bounded): `src/dev/consolidation-block8-live.ts`. Report: [Block 8](evaluations/CONSOLIDATION_BLOCK8_MODERN_BENCHMARK.md).

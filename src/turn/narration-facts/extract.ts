@@ -7,9 +7,13 @@ import { type NarrationFrame, frameOf, spanOf } from "./frame.js";
 import { commerceFacts, inputCommerceFacts } from "./commerce-forms.js";
 import { locationClaimFacts } from "./location-forms.js";
 import { movementFormFacts } from "./movement-forms.js";
+import { type Person, candidateNames, dialogueUnits, presentPeople } from "./dialogue-forms.js";
+import { STOP } from "./dialogue-vocabulary.js";
+import { identityFacts } from "./identity-forms.js";
+import { numberValue } from "../language/numbers.js";
 import { baseFormModality, modalityOf, polarityOf } from "./modality.js";
 import { type Referent, nameRef, pronounRef, refAmbiguity, unresolvedRef } from "./subjects.js";
-import type { CommerceFact, EntityDepartedFact, EntityFollowedFact, EntityStayedFact, FactEntityRef, MovementFact, NarrationFacts } from "./types.js";
+import type { CommerceFact, DialogueUnit, EntityDepartedFact, EntityFollowedFact, EntityStayedFact, FactEntityRef, MovementFact, NarrationFacts } from "./types.js";
 
 
 
@@ -24,6 +28,23 @@ export interface NarrationFactScope {
   readonly absent?: readonly { readonly id: string; readonly name: string }[];
   /** Known concrete location for a place wording ("Heartstone", "the slave market"), or undefined. Policy-free world knowledge; the extractor never invents places. */
   readonly place?: (phrase: string) => string | undefined;
+  /** Words that can stand as a personal name (not a place, a stop word or a number). Policy-free world knowledge; default: stop words and numbers only. */
+  readonly names_ok?: (name: string) => boolean;
+  /** The player's input of this turn, and whether it asks somebody's name (identity-request.ts, injected: the fact layer reads no player intent itself). */
+  readonly player_input?: string;
+  readonly asks_name?: (player: string) => boolean;
+}
+
+/** The people the dialogue of a narration is read against: the present people (Nicco included), then movers arriving from elsewhere. */
+export function dialoguePeople(scope: NarrationFactScope): Person[] {
+  const people = presentPeople(scope.context);
+  for (const m of scope.movers) if (!people.some(p => p.id === m.id)) people.push({ id: m.id, names: m.names, ...(m.sex ? { sex: m.sex } : {}), unnamed: false });
+  return people;
+}
+const defaultNameOk = (n: string) => !STOP.has(n.toLowerCase()) && numberValue(n) === undefined;
+/** The one dialogue reading of a narration (RPG format when the text uses it). */
+export function dialogueOf(narration: string, scope: NarrationFactScope): readonly DialogueUnit[] {
+  return dialogueUnits(narration, 0, dialoguePeople(scope), candidateNames([narration], scope.names_ok ?? defaultNameOk), { rpg: true });
 }
 
 /** A person who stays WHERE THEY WERE ("Maren stays behind", "she waits here", "lingers at the door"); staying close to someone is not a place. */
@@ -101,8 +122,11 @@ export function extractNarrationFacts(narration: string, scope: NarrationFactSco
     ...arrivalContinuationFacts(frame, scope.movers, scope.context),
     ...(narration.includes("\"") || narration.includes("“") ? quotedFacts(frame, scope) : []),
   ];
-  const commerce = commerceFacts(frame, { people: commercePeople(scope) });
-  return Object.freeze({ narration, movement: Object.freeze(movement), commerce: Object.freeze(commerce) });
+  const dialogue = dialogueOf(narration, scope);
+  const commerce = commerceFacts(frame, { people: commercePeople(scope), units: dialogue });
+  const descriptors = new Map(scope.context.characters.flatMap(c => { const d = ("unnamed_label" in c && c.unnamed_label ? String(c.unnamed_label) : c.established_origin?.descriptor ?? "").toLowerCase().replace(/^(?:the|a|an)\s+/, "").split(/\s+/).at(-1); return !c.profile.name && d ? [[c.id, d] as const] : []; }));
+  const identity = identityFacts(frame, dialogue, { people: dialoguePeople(scope), asked: !!scope.player_input && !!scope.asks_name?.(scope.player_input), descriptors });
+  return Object.freeze({ narration, movement: Object.freeze(movement), commerce: Object.freeze(commerce), dialogue: Object.freeze(dialogue), identity: Object.freeze(identity) });
 }
 
 /** The people commerce text may name (the scene's movers and everyone in the context), as plain referents. */
@@ -117,5 +141,5 @@ export function extractInputCommerceFacts(input: string): readonly CommerceFact[
 }
 /** Commerce facts of a verbatim QUOTE of the delivered text, read with the goods words the quote is about ("the halberd is fifteen"). */
 export function extractQuoteCommerceFacts(quote: string, scope: NarrationFactScope, subjects: readonly string[]): readonly CommerceFact[] {
-  return Object.freeze(commerceFacts(frameOf(quote), { people: commercePeople(scope), subjects }));
+  return Object.freeze(commerceFacts(frameOf(quote), { people: commercePeople(scope), units: dialogueOf(quote, scope), subjects }));
 }

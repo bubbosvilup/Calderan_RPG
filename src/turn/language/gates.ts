@@ -44,7 +44,7 @@ export const GATES = Object.freeze({
     question: true }),
   /** household-evidence.ts — relationship evidence: hedged, pretended or attempted behaviour is not evidence. */
   relationship_hedged: cueGate({ cues: [C.if, E.maybe, E.perhaps, would, could, might, I.almost, I.nearly, I.pretendAny, I.aboutTo, I.wantsTo, I.triesTo], question: true }),
-  /** narrated-captives.ts — promotion facts: descriptive uncertainty and approximation only (negation is a fact, not a hedge). */
+  /** narration-facts/person-facts.ts — promotion facts: descriptive uncertainty and approximation only (negation is a fact, not a hedge). */
   captive_fact_hedge: cueGate({ cues: [E.maybe, E.perhaps, E.probably, E.possibly, might, E.seems, E.seemed, E.asIf, E.impossibleToTell, E.hardToTell, E.orSo, E.orLess, E.orMore, E.guess] }),
   /** narration-audit.ts — conditions/constraints narrated on someone: negated or unrealised claims are not established. */
   audit_negated: cueGate({ cues: [not, never, no, nor, without, I.almost, I.nearly, would, could, might, will, C.if], contraction: true }),
@@ -68,12 +68,12 @@ export const GATES = Object.freeze({
     I.aboutTo, I.goingTo, I.triesTo, I.tryingTo, I.startsTo, I.beginsTo, I.dreamsOf, E.imagines, E.maybe, E.perhaps, C.if, C.unless, C.whether, C.suppose,
     T.someday, T.oneDay, T.later, T.tomorrow, T.tonight, T.yesterday, T.earlier], contraction: true, future: true, question: true }),
   /**
-   * scene-participation.ts (NPC+ Pass 4) — an absent character's act in a clause is NOT current participation when it is negated,
+   * narration-facts/participation-forms.ts (NPC+ Pass 4) — an absent character's act in a clause is NOT current participation when it is negated,
    * hypothetical, imagined, remembered, attributed ("according to") or habitual-past ("used to"). Tested on the clause up to the act.
    */
   absent_reference: cueGate({ cues: [not, never, no, nor, without, cannot, I.almost, I.nearly, would, could, might, C.if, C.unless, C.wereTo, C.suppose, E.imagine, E.imagines,
     R.remember, R.recall, R.accordingTo, R.usedTo, R.thinksOf], contraction: true }),
-  /** scene-participation.ts (NPC+ Pass 4) — words right after the act that place it in an earlier time ("said yesterday", "two days ago"). */
+  /** narration-facts/participation-forms.ts (NPC+ Pass 4) — words right after the act that place it in an earlier time ("said yesterday", "two days ago"). */
   past_displacement: cueGate({ cues: [T.yesterday, T.earlier, T.ago, T.lastNight] }),
   /**
    * character-movement.ts (NPC+ Pass 9) — implicit-destination following ("Maren follows him"), tested on the whole clause. The

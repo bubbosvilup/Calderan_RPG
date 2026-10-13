@@ -8,7 +8,7 @@ import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
 import type { NarrativeKnowledgeAccess } from "./narrative-authority.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
-import { dialogueFocused } from "./prompt-builder.js";
+import { attributedSpeech } from "./attributed-speech.js";
 import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "./physical-interaction.js";
 import { verifyEvidence } from "./evidence-authorization.js";
 import { itemTerms } from "./item-reference.js";
@@ -19,11 +19,10 @@ import type { RecentExchange } from "./recent-conversation.js";
 import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
 import { settlementClaims } from "./commerce-evidence.js";
 import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, locationClaimsFromFacts, presenceClaimsFromFacts } from "./movement-evidence.js";
-import { createFactSource, type EntityArrivedFact, type NarrationFactSource, type NarrationFacts } from "./narration-facts/index.js";
+import { createFactSource, type EntityArrivedFact, type NarrationFactSource, type NarrationFacts, participatesInScene } from "./narration-facts/index.js";
 import { movementFactScope } from "./movement-scope.js";
-import { participatesInScene } from "./scene-participation.js";
 import { groundingIssues } from "./grounding-audit.js";
-import { readScene } from "./narrated-captives.js";
+import { asksName } from "./identity-request.js";
 import { partnerNameConflict } from "./partner-identity-guard.js";
 import { resolveDestination } from "./natural-actions.js";
 import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
@@ -178,7 +177,8 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const { narration, context, world, access, evidence, diagnostics, committed, prepared, scene } = input;
   const issues: AuditIssue[] = [];
   const sentences = sentencesOf(narration);
-  const facts = (input.facts ?? createFactSource(movementFactScope(prepared, world, context, [...new Set([input.origin ?? prepared.runtime.scene.player_location, prepared.runtime.scene.player_location])]))).of(narration);
+  const source = input.facts ?? createFactSource(movementFactScope(prepared, world, context, [...new Set([input.origin ?? prepared.runtime.scene.player_location, prepared.runtime.scene.player_location])], input.player_input));
+  const facts = source.of(narration);
   const sentenceWith = (fragment: string) => sentences.find(s => s.includes(fragment)) ?? fragment;
   const name = (id: string) => context.characters.find(c => c.id === id)?.profile.name ?? id;
   const itemName = (id: string) => context.items.find(i => i.id === id)?.name ?? id;
@@ -212,12 +212,12 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     }
   }
 
-  // 2. NPC factual claims about Nicco. Quotes are attributed with the same deterministic speaker grammar used for recent
-  // conversation; quotes that cannot be attributed are treated as a character's (Nicco's lines come only from the player).
-  const attributed = dialogueFocused([{ player: "", narration, status: "finalized" }], context, scene)[0]?.npc_dialogue ?? [];
-  const speakerOf = new Map<string, string>();
-  for (const line of attributed) { const m = line.match(/^(.+?): "(.*)"$/s); if (m) speakerOf.set(m[2]!, m[1]!); }
-  const people = new Map(access.characters.map(c => [c.name, c]));
+  // 2. NPC factual claims about Nicco. Quotes are attributed by the turn's shared dialogue facts under the same speaker policy as the recent
+  // conversation (attributed-speech.ts); quotes that cannot be attributed are treated as a character's (Nicco's lines come only from the player).
+  const speech = attributedSpeech(narration, context, { units: facts.dialogue, ...(scene ? { scene } : {}) });
+  const speakerOf = new Map<string, { readonly key: string; readonly label: string }>();
+  for (const line of speech.lines) speakerOf.set(line.text, { key: line.speaker, label: line.label });
+  const people = new Map(access.characters.map(c => [c.character_id, c]));
   const householdFacts = access.facts.filter(f => f.source === "player_household");
   const household = (context.player_profile?.households ?? []);
   // The household's name plus the dwelling noun its canonical location's own summary uses ("residential tower" → tower).
@@ -230,9 +230,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   const privateCanon = access.facts.filter(f => f.source === "npc_private_canon");
   for (const sentence of sentences) {
     for (const quote of quotesIn(sentence)) {
-      const label = speakerOf.get(quote) ?? speakerOf.get(quote.replace(/[,.]$/, "")) ?? [...speakerOf.entries()].find(([q]) => q.startsWith(quote.slice(0, 24)))?.[1];
-      if (label === "Nicco") continue;
-      const who = label ? people.get(label) : undefined;
+      const attributed = speakerOf.get(quote) ?? speakerOf.get(quote.replace(/[,.]$/, "")) ?? [...speakerOf.entries()].find(([q]) => q.startsWith(quote.slice(0, 24)))?.[1];
+      if (attributed?.key === "nicco") continue;
+      const who = attributed ? people.get(attributed.key) : undefined, label = who?.name ?? attributed?.label;
       const can = new Set(who?.can_use.map(u => u.ref) ?? []);
       // H3: an NPC's own private canon (canonical_private) is not a source about Nicco or anyone else.
       const rumorBasis = who?.can_use.some(u => u.basis !== "canonical_private" && /rumor|believes|suspects|public|local|canonical/.test(u.basis)) ?? false;
@@ -382,7 +382,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   // Pass 1.2: narrator-created captives of the scene (no legal record yet, ephemeral or promoted by name) are also an active trade.
   const negotiation = context.social.legal.some(l => l.status === "enslaved" && !!l.holder_id && l.holder_id !== "nicco" && presentIds.has(l.holder_id))
     || context.characters.some(c => /\bcaptive\b/.test(c.established_origin?.role ?? "") && !context.social.legal.some(l => l.character_id === c.id))
-    || readScene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world).captives.some(c => !c.character_id);
+    || source.scene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world, { asks_name: asksName }).captives.some(c => !c.character_id);
   issues.push(...groundingIssues({ sentences, player_input: input.player_input ?? "", recent: input.recent ?? [], authoritative_text: `${input.authoritative_text ?? ""}\n${(prepared.trade_offers ?? []).filter(o => o.status === "active").map(o => `${o.price_gold} gold.`).join("\n")}`, trade_negotiation: negotiation, economic_reference: !!input.economic_reference }));
   issues.push(...householdIssues(input, sentences, negotiation, facts));
   if (input.pending?.length) {
@@ -392,11 +392,11 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   }
   issues.push(...movementIssues(input, sentences, facts));
   if (input.elapsed_minutes !== undefined) issues.push(...elapsedTimeIssues(sentences, input.elapsed_minutes, !!input.temporal_request, prepared.runtime.scene.world_time.world_minute));
-  issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences)));
+  issues.push(...premiseIssues(input, sentences), ...(input.player_input === undefined ? [] : agencyIssues(input, sentences, facts)));
   // Foreground canonical identity: the bound canonical conversation partner is one fixed person. If, asked who they are, they give another
   // personal name, that is an invented replacement identity: ask for one bounded revision (the engine already refuses to create anyone for it).
   if (input.player_input !== undefined && scene && input.finalized) {
-    const conflict = partnerNameConflict({ context, world, snapshot: prepared, finalized: input.finalized, player_input: input.player_input, delivered: narration, scene });
+    const conflict = partnerNameConflict({ context, world, snapshot: prepared, finalized: input.finalized, player_input: input.player_input, delivered: narration, scene, facts: source });
     if (conflict) for (const wrong of conflict.names) issues.push({ kind: "canonical_name_conflict", sentence: sentenceWith(wrong), correction: conflict.canonical_name
       ? `This person is the established character ${conflict.canonical_name}; they are not ${wrong}. If they give a personal name it must be exactly "${conflict.canonical_name}" (or they may decline to give one). Do not invent any other personal name, alias or nickname for them.`
       : `This person has an established identity whose name is not yet theirs to give. They must not give the invented name "${wrong}" or any other personal name: have them decline, deflect or stay unnamed.` });
@@ -617,17 +617,17 @@ const PRESUPPOSE = /\b(?:i|we)(?:'ve| have)? (?:already )?(?:gave|given|handed (
  * and Nicco-led sentences in which he accepts, refuses, keeps, thanks, leaves, stays or decides something the input did not author.
  * Deterministic consequences of authored actions (an authored gift being taken, an authored return being offered) stay allowed.
  */
-function agencyIssues(input: NarrationAuditInput, sentences: readonly string[]): AuditIssue[] {
-  const { context, evidence, narration, scene } = input;
+function agencyIssues(input: NarrationAuditInput, sentences: readonly string[], facts: NarrationFacts): AuditIssue[] {
+  const { context, evidence, narration } = input;
   const said = (input.player_input ?? "").toLowerCase();
   const words = (s: string) => s.toLowerCase().replace(/[^a-z'\s]/g, " ").split(/\s+/).filter(w => w.length > 2 && !["the", "and", "you", "who", "what", "where", "they", "him", "his", "her", "she", "that", "this", "does", "did"].includes(w));
   const norm = (s: string) => words(s).join(" ");
   const issues: AuditIssue[] = [];
   // 1. Unsupplied Nicco dialogue.
   const speechAct = /\*[^*]*\b(?:asks?|asked|says?|said|tells?|told|replies|replied|answers?|answered|thanks?|thanked|calls?|shouts?|whispers?)\b[^*]*\*/i.test(input.player_input ?? "");
-  for (const line of dialogueFocused([{ player: "", narration, status: "finalized" }], context, scene)[0]?.npc_dialogue ?? []) {
-    const m = line.match(/^Nicco: "(.*)"$/s); if (!m) continue;
-    const quote = m[1]!, q = norm(quote);
+  for (const line of attributedSpeech(narration, context, { units: facts.dialogue }).lines) {
+    if (line.speaker !== "nicco") continue;
+    const quote = line.text, q = norm(quote);
     if (!q || norm(said).includes(q)) continue;
     const content = words(quote), overlap = content.filter(w => said.includes(w.replace(/'s$/, ""))).length / Math.max(1, content.length);
     if (speechAct && overlap >= 0.5) continue;

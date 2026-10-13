@@ -69,7 +69,7 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
   i = { ...i, commands, prepared };
   try {
     const context = buildTurnContext(i.world, i.prepared.snapshot, contextRelevance(i.player_input, i.finalized));
-    const partner_conflict = i.location_changed ? undefined : partnerNameConflict({ context, world: i.world, snapshot: i.prepared.snapshot, finalized: i.finalized, player_input: i.player_input, delivered: i.delivered, scene: i.scene });
+    const partner_conflict = i.location_changed ? undefined : partnerNameConflict({ context, world: i.world, snapshot: i.prepared.snapshot, finalized: i.finalized, player_input: i.player_input, delivered: i.delivered, scene: i.scene, ...(i.facts ? { facts: i.facts } : {}) });
     const resolved = establishNames([...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized", location_id: i.prepared.snapshot.runtime.scene.player_location }],
       context, i.world, i.prepared.snapshot, i.scene.participants, i.base_revision, { location_changed: i.location_changed, ...(partner_conflict ? { partner_conflict } : {}) });
     const disclosed = i.location_changed ? undefined : establishedCanonicalDisclosure(context, i.player_input, i.finalized, i.delivered, i.scene, i.disclosure_intent);
