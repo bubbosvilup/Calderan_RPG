@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { SceneParticipants } from "../src/turn/scene-participants.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

@@ -1,4 +1,4 @@
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { escapeRegExp as esc } from "../language/text.js";
 import { GATES } from "../language/gates.js";
 import { arrivalContinuationFacts, playerMovementFacts } from "./player-forms.js";

@@ -2,7 +2,7 @@ import type { NarratorRequest } from "../llm/types.js";
 import type { SpriteQualityReviewer } from "../llm/sprite-quality.js";
 import { ItemSpriteJobs } from "./item-sprite-jobs.js";
 import { inventoryVisualView } from "./item-visual-view.js";
-import { ContextBudgetManager, type ContextPolicy } from "../turn/context-budget.js";
+import { ContextBudgetManager, type ContextPolicy } from "../turn/context/context-budget.js";
 import { unavailableCompactor, type ContextCompactionService, type CompactionReason, type CompactionResult } from "./context-compaction.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
 import { createOpeningCampaign } from "../campaign/opening-state.js";

@@ -2,7 +2,7 @@
 import type { CampaignSnapshot, PremiumHistoryEntry } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
-import { npcDeepSources } from "../npc-plus.js";
+import { npcDeepSources } from "../context/npc-plus.js";
 import { reflectionEvidence, type ReflectionEvidence } from "../reflection.js";
 
 type Payload = Record<string, unknown>;

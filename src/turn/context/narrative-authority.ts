@@ -1,8 +1,8 @@
 import type { TurnContext } from "./context-builder.js";
 import { narratorFactTruth } from "./context-builder.js";
-import type { SceneParticipantPlan, EphemeralSceneParticipant } from "./scene-participants.js";
-import { TurnError } from "./turn-types.js";
-import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
+import type { SceneParticipantPlan, EphemeralSceneParticipant } from "../scene-participants.js";
+import { TurnError } from "../turn-types.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../../types/resource-limits.js";
 
 /**
  * Narrative knowledge access (Phase 1N). A derived, ephemeral, per-turn projection: which present character may voice or act

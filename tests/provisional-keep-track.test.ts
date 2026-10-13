@@ -8,7 +8,7 @@ import { makeRig, MARKET, type Rig } from "./benchmark/harness.js";
 import { createPlaytestServer } from "../src/ui/server.js";
 import { keepToken, keptCharacter, trackablePeople } from "../src/turn/keep-track.js";
 import { nextParticipantSeed, SceneParticipants, type EphemeralSceneParticipant } from "../src/turn/scene-participants.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 
 /**

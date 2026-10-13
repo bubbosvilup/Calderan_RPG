@@ -8,7 +8,7 @@ import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL } from "../llm/openrout
 import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 import type { OpenRouterClient } from "../llm/openrouter/client.js";
 import { TurnCoordinator, type TurnDebugRecord } from "../turn/turn-coordinator.js";
-import type { RecentContextMode } from "../turn/prompt-builder.js";
+import type { RecentContextMode } from "../turn/context/prompt-builder.js";
 import type { TurnDiagnosticsSink } from "../turn/turn-diagnostics.js";
 import type { ProviderRetryPolicy } from "../llm/retry.js";
 import type { EvidenceMode } from "../turn/evidence-authorization.js";

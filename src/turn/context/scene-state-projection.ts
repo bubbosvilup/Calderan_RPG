@@ -1,14 +1,14 @@
-import { insideHeartstoneInterior } from "../campaign/heartstone-recognition.js";
-import { proposalNarratorLine } from "./pending-proposals.js";
-import type { CampaignSnapshot } from "../campaign/types.js";
-import { characterView } from "../campaign/projections.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
+import { insideHeartstoneInterior } from "../../campaign/heartstone-recognition.js";
+import { proposalNarratorLine } from "../pending-proposals.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import { characterView } from "../../campaign/projections.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
-import { narratorIdentityGate } from "./narrator-identity.js";
-import { temporalGrounding } from "./temporal-grounding.js";
-import { describeWeather, environmentAt } from "../world/environment.js";
-import { formatCalendarDate } from "../world/calendar.js";
+import { narratorIdentityGate } from "../narrator-identity.js";
+import { temporalGrounding } from "../temporal-grounding.js";
+import { describeWeather, environmentAt } from "../../world/environment.js";
+import { formatCalendarDate } from "../../world/calendar.js";
 
 /**
  * Scene State Projection V1 — DERIVATION (see docs/architecture/SCENE_STATE_PROJECTION_V1.md).

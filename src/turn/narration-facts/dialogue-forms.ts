@@ -1,4 +1,4 @@
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { rpgDialogue, rpgNarration } from "../rpg-dialogue.js";
 import { escapeRegExp as esc } from "../language/text.js";
 import { DELIVERY, FIRST_OR_SECOND, HE, NAME, NEUTRAL_BEAT, PERSON_NOUNS, PLAIN_BEAT, POST_HOC_TAG, QUOTE, SHE, SPEAKER_NOUNS, SPEECH, STOP, SUBJECT_NOUNS, type Sex, nounSex } from "./dialogue-vocabulary.js";

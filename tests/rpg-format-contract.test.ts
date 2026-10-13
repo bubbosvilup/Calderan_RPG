@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { NARRATOR_RPG_FORMAT, NARRATOR_SYSTEM } from "../src/turn/prompt-builder.js";
+import { NARRATOR_RPG_FORMAT, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { collect, setup } from "./turn-fixtures.js";
 import { mockNarrator, mockController } from "./turn-fixtures.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

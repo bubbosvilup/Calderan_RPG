@@ -7,7 +7,7 @@ import { sellerPrices } from "../src/turn/commerce/commerce-evidence.js";
 import { extractNarrationFacts } from "../src/turn/narration-facts/index.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { asksName } from "../src/turn/identity-request.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 
 /**
  * Consolidation block 11 - NarrationFacts / identity, speaker, recipient and reference facts. The facts describe who speaks a line, who gives a

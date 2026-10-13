@@ -7,11 +7,11 @@ import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import { prepareD04BakeoffCases } from "./d04-compaction-bakeoff.js";
 import { createD04CrowdedContext } from "./d04-context-baseline.js";
-import { analyzeLosslessLayouts, LosslessContextCompactor } from "../turn/lossless-context-compaction.js";
-import { narratorPackOf, contextHash } from "../turn/narrator-pack.js";
-import { ContextBudgetManager } from "../turn/context-budget.js";
-import { DEFAULT_COMPACTION_POLICY } from "../turn/context-compaction.js";
-import { LOSSLESS_SCHEMA_VERSION, LOSSLESS_POLICY_VERSION } from "../turn/lossless-knowledge.js";
+import { analyzeLosslessLayouts, LosslessContextCompactor } from "../turn/context/lossless-context-compaction.js";
+import { narratorPackOf, contextHash } from "../turn/context/narrator-pack.js";
+import { ContextBudgetManager } from "../turn/context/context-budget.js";
+import { DEFAULT_COMPACTION_POLICY } from "../turn/context/context-compaction.js";
+import { LOSSLESS_SCHEMA_VERSION, LOSSLESS_POLICY_VERSION } from "../turn/context/lossless-knowledge.js";
 import { MiniMaxNarratorProvider, NARRATOR_PROVIDER_ROUTING } from "../llm/openrouter/minimax-narrator.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { ProviderError } from "../llm/errors.js";
@@ -44,7 +44,7 @@ export const D04_LIVE_PROBES = [
 ] as const;
 const FLOW_INPUT = 'I ask D04 Person 0, "What does Ledger 0 Entry 1 record about the sealed crates?"';
 const FLOW_CONSTRAINTS = { must: ["Keeper counted sealed crates against harbor ledger; D04 Person 0 answers at Heartstone square.", "Activated V2 dictionary used on actual next turn; original authority used by controller."], must_not: ["Wrong ledger/subject, invented cargo/location/action or representation syntax.", "Semantic revision/reroll; compressed narrator data as authority; compaction mutates campaign."] };
-const FILES = ["src/turn/prompt-builder.ts", "src/turn/lossless-knowledge.ts", "src/turn/lossless-context-compaction.ts", "src/turn/narrator-pack.ts", "src/turn/context-budget.ts", "src/turn/context-compaction.ts", "src/llm/openrouter/minimax-narrator.ts", "src/turn/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/d04-final-live.ts"];
+const FILES = ["src/turn/context/prompt-builder.ts", "src/turn/context/lossless-knowledge.ts", "src/turn/context/lossless-context-compaction.ts", "src/turn/context/narrator-pack.ts", "src/turn/context/context-budget.ts", "src/turn/context/context-compaction.ts", "src/llm/openrouter/minimax-narrator.ts", "src/turn/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/d04-final-live.ts"];
 async function fingerprints() { return Object.fromEntries(await Promise.all(FILES.map(async path => [path, sha(await readFile(path, "utf8"))]))); }
 
 /** Observation accepts the same annotated/unannotated requests as production apply, including revision prompts. */

@@ -1,7 +1,7 @@
-import type { CampaignCommand } from "../campaign/types.js";
-import type { PlayerIntent } from "./player-intent.js";
-import { headNoun } from "./items/item-reference.js";
-import { escapeRegExp } from "./language/text.js";
+import type { CampaignCommand } from "../../campaign/types.js";
+import type { PlayerIntent } from "../player-intent.js";
+import { headNoun } from "../items/item-reference.js";
+import { escapeRegExp } from "../language/text.js";
 import type { SceneCharacterState, SceneDevelopment, SceneEvent, SceneItem, SceneKnowledgeEntry, SceneLocation, SceneSocial, SceneStateProjection } from "./scene-state-projection.js";
 
 /**

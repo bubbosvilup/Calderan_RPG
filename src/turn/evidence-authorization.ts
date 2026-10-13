@@ -6,7 +6,7 @@ import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { authorizeCommands, isLocationPlacement } from "./command-authorizer.js";

@@ -1,7 +1,7 @@
 import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js";
 import type { DeepReadonly } from "../src/types/readonly.js";
 import type { WorldStore } from "../src/world/world-store.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { resolvePersonOffers, type PersonOfferResolution } from "../src/turn/commerce/person-offers.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import type { EphemeralSceneParticipant } from "../src/turn/scene-participants.js";

@@ -2,7 +2,7 @@ import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { reachable, resolveDestination } from "../natural-actions.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "../language/text.js";
 import { GATES } from "../language/gates.js";

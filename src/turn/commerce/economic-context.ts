@@ -1,5 +1,5 @@
 import { economicRelevance, renderEconomicReference, type EconomicRelevance } from "../../economy/economy.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 
 /**

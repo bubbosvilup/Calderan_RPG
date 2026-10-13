@@ -7,7 +7,7 @@ import { createSaveFile, decodeSave, serializeSave } from "../persistence/save-f
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { packNpcPlus } from "../turn/npc-plus.js";
+import { packNpcPlus } from "../turn/context/npc-plus.js";
 import { validateExtractedMannerisms, type MannerismExtractor, type MannerismExtractionRequest, type MannerismRun } from "../turn/mannerism-extraction.js";
 import type { GenerationRequest } from "../llm/types.js";
 

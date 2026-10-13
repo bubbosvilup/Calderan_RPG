@@ -9,9 +9,9 @@ import { createBakeoffArtifact, prepareD04BakeoffCases, evaluateBakeoffCandidate
 import { OpenRouterClient, type TransportRequest, type TransportEvent } from "../llm/openrouter/client.js";
 import { OpenRouterContextCompressor } from "../llm/openrouter/context-compressor.js";
 import { COMPRESSOR_SCHEMA, COMPRESSOR_SYSTEM, type CompressionResponse } from "../llm/context-compressor-provider.js";
-import { ContextBudgetManager } from "../turn/context-budget.js";
-import { NarratorContextCompactor, validateCompressionCandidate } from "../turn/context-compaction.js";
-import { COMPRESSION_SCHEMA_VERSION, COMPRESSION_POLICY_VERSION, contextHash, narratorPackOf, renderCandidateRequest, type KnowledgeUnit } from "../turn/narrator-pack.js";
+import { ContextBudgetManager } from "../turn/context/context-budget.js";
+import { NarratorContextCompactor, validateCompressionCandidate } from "../turn/context/context-compaction.js";
+import { COMPRESSION_SCHEMA_VERSION, COMPRESSION_POLICY_VERSION, contextHash, narratorPackOf, renderCandidateRequest, type KnowledgeUnit } from "../turn/context/narrator-pack.js";
 import type { GenerationMetadata } from "../llm/types.js";
 import { passiveResponseAudit,finishPassiveAudits } from "./passive-response-audit.js";
 

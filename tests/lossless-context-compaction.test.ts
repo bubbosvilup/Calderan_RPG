@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { prepareD04BakeoffCases } from "../src/dev/d04-compaction-bakeoff.js";
-import { precomputeKnowledgeGroups,losslessCandidate,expandLosslessCandidate,renderLosslessCandidate,buildKnowledgeDictionary,losslessCacheIdentity,LOSSLESS_SCHEMA_VERSION } from "../src/turn/lossless-knowledge.js";
-import { analyzeLosslessLayouts,LosslessContextCompactor } from "../src/turn/lossless-context-compaction.js";
-import { narratorPackOf,contextHash,type NarratorPack } from "../src/turn/narrator-pack.js";
-import { DEFAULT_COMPACTION_POLICY } from "../src/turn/context-compaction.js";
-import { ContextBudgetManager } from "../src/turn/context-budget.js";
+import { precomputeKnowledgeGroups,losslessCandidate,expandLosslessCandidate,renderLosslessCandidate,buildKnowledgeDictionary,losslessCacheIdentity,LOSSLESS_SCHEMA_VERSION } from "../src/turn/context/lossless-knowledge.js";
+import { analyzeLosslessLayouts,LosslessContextCompactor } from "../src/turn/context/lossless-context-compaction.js";
+import { narratorPackOf,contextHash,type NarratorPack } from "../src/turn/context/narrator-pack.js";
+import { DEFAULT_COMPACTION_POLICY } from "../src/turn/context/context-compaction.js";
+import { ContextBudgetManager } from "../src/turn/context/context-budget.js";
 import { passiveResponseAudit } from "../src/dev/passive-response-audit.js";
 import { OpenRouterLosslessCompressor } from "../src/llm/openrouter/lossless-compressor.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";

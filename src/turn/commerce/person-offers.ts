@@ -1,6 +1,6 @@
 import type { CampaignCommand, CampaignSnapshot, TransferDocumentation } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { classifyBackgroundClaim } from "../background-grounding.js";

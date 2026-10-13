@@ -2,7 +2,7 @@
 import type { CampaignSnapshot, ReflectionKind, PremiumHistoryEntry } from "../../../src/campaign/types.js";
 import type { DeepReadonly } from "../../../src/types/readonly.js";
 import type { WorldStore } from "../../../src/world/world-store.js";
-import { npcDeepSources } from "../../../src/turn/npc-plus.js";
+import { npcDeepSources } from "../../../src/turn/context/npc-plus.js";
 import { reflectionEvidence, INSTRUCTION_LIKE, type ReflectionEvidence, type Proposal } from "../../../src/turn/reflection.js";
 
 export const EVIDENCE_VERSION = 2;

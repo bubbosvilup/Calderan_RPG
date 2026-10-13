@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildSceneStateProjection } from "../src/turn/scene-state-projection.js";
-import { focusedSceneStateProjection } from "../src/turn/scene-state-focus.js";
-import { renderSceneStateProjection, SCENE_RENDER_LIMITS, SCENE_SECTION_SOFT_BUDGETS } from "../src/turn/scene-state-render.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { narratorPortrayalCurrent } from "../src/turn/prompt-builder.js";
-import { withoutStatedRelationship, type NpcPlusContext } from "../src/turn/npc-plus.js";
+import { buildSceneStateProjection } from "../src/turn/context/scene-state-projection.js";
+import { focusedSceneStateProjection } from "../src/turn/context/scene-state-focus.js";
+import { renderSceneStateProjection, SCENE_RENDER_LIMITS, SCENE_SECTION_SOFT_BUDGETS } from "../src/turn/context/scene-state-render.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { narratorPortrayalCurrent } from "../src/turn/context/prompt-builder.js";
+import { withoutStatedRelationship, type NpcPlusContext } from "../src/turn/context/npc-plus.js";
 import { largeScene, richScene, RICH } from "../src/dev/scene-foundation-fixtures.js";
 import { LORE, SCENE_LOCATION, apply, alone, createdPerson, itemId, makeItem, promptFor, sceneBlock, sceneFixture } from "../src/dev/scene-state-fixtures.js";
 

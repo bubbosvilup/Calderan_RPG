@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { setup, collect } from "./turn-fixtures.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { checkNarrative } from "../src/dev/narrative-checks.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { withHistoricalContext } from "../src/dev/historical-context.js";

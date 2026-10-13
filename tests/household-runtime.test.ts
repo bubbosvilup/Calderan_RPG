@@ -5,7 +5,7 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_FUNDS } from "../src/
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { buildTurnContext, SOCIAL_LIMITS } from "../src/turn/context-builder.js";
+import { buildTurnContext, SOCIAL_LIMITS } from "../src/turn/context/context-builder.js";
 import { relationshipHeadline } from "../src/campaign/relationship-summary.js";
 import { formatCampaignStatus } from "../src/dev/campaign-status.js";
 

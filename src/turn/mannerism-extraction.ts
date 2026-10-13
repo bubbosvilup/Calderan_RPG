@@ -11,7 +11,7 @@ import { mannerismAvailable, validateMannerismDefinition } from "../campaign/man
 import type { GenerationMetadata } from "../llm/types.js";
 import type { TurnResult } from "./turn-types.js";
 import { escapeRegExp } from "./language/text.js";
-import { buildTurnContext } from "./context-builder.js";
+import { buildTurnContext } from "./context/context-builder.js";
 import {maintenanceCall} from "../llm/reliability.js";
 import {ProviderError} from "../llm/errors.js";
 import {TurnError} from "./turn-types.js";

@@ -6,7 +6,7 @@ import type { SessionDeps } from "../app/game-session.js";
 import { SLAVE_MARKET_V1 } from "../app/scenarios.js";
 import type { CampaignCommand, CampaignSnapshot, TradeOfferRecord } from "../campaign/types.js";
 import { learnCanonicalName } from "../campaign/identity-knowledge.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import { establishNames } from "../turn/name-establishment.js";
 import { dialogueUnits, presentPeople } from "../turn/narration-facts/index.js";
 import type { RecentExchange } from "../turn/recent-conversation.js";

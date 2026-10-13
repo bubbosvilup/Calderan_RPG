@@ -1,9 +1,9 @@
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../src/campaign/opening-state.js";
 import type { CampaignCommand, ReflectionNote } from "../src/campaign/types.js";
-import { buildTurnContext, CONTEXT_LIMITS } from "../src/turn/context-builder.js";
-import { NPC_PLUS_LIMITS } from "../src/turn/npc-plus.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildTurnContext, CONTEXT_LIMITS } from "../src/turn/context/context-builder.js";
+import { NPC_PLUS_LIMITS } from "../src/turn/context/npc-plus.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 
 /** NPC+ Pass 10 context headroom boundary (diagnostic, no provider). `node .build/tests/pass10-headroom.js` prints the table used in the report. */
 export interface Config { n: number; history: "none" | "full" | "rollup"; reflections: boolean; facts: number; events: number; rich: boolean; itemsPer: number; knowsPer: number; rules: number }

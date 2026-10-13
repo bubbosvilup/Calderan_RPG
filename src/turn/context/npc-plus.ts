@@ -1,10 +1,10 @@
-import type { CampaignSnapshot, PremiumRollup, RelationshipDimension, RelationshipLevel } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import { characterView } from "../campaign/projections.js";
-import { activeNpcPlus } from "../campaign/premium-characters.js";
-import { mannerismAvailable, mannerismEpistemicState } from "../campaign/mannerisms.js";
-import { escapeRegExp as esc } from "./language/text.js";
+import type { CampaignSnapshot, PremiumRollup, RelationshipDimension, RelationshipLevel } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { characterView } from "../../campaign/projections.js";
+import { activeNpcPlus } from "../../campaign/premium-characters.js";
+import { mannerismAvailable, mannerismEpistemicState } from "../../campaign/mannerisms.js";
+import { escapeRegExp as esc } from "../language/text.js";
 
 /**
  * NPC+ Pass 1 — deterministic premium-character context, packed under ONE global scene budget, with an exact recovery seam.

@@ -1,8 +1,8 @@
-import { NARRATOR_OUTPUT_TOKENS } from "../app/provider-config.js";
-import type { NarratorRequest } from "../llm/types.js";
+import { NARRATOR_OUTPUT_TOKENS } from "../../app/provider-config.js";
+import type { NarratorRequest } from "../../llm/types.js";
 import type { ContextCompactionService } from "./context-compaction.js";
-import { TurnError } from "./turn-types.js";
-import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
+import { TurnError } from "../turn-types.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../../types/resource-limits.js";
 /** Operational request envelope, not a claim about any model's theoretical window. */
 export const DEFAULT_CONTEXT_POLICY = Object.freeze({ request_tokens: 16_000, output_tokens: NARRATOR_OUTPUT_TOKENS, overhead_tokens: 256, safety_tokens: 512, warning: 0.8, auto: 0.9, hard: 1 });
 export type ContextPolicy = { readonly [K in keyof typeof DEFAULT_CONTEXT_POLICY]: number };

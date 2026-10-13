@@ -6,7 +6,7 @@ import type { TurnResult } from "../turn/turn-types.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { checkNarrative } from "./narrative-checks.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 
 const path = process.argv[2];
 if (!path) throw new Error("Supply a recorded evaluation JSON; this replay makes no network requests");

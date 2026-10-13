@@ -1,6 +1,6 @@
 import { isDeepStrictEqual } from "node:util";
 import { contextHash, narratorPackOf, renderCandidateRequest, replaceKnowledgeBlock, type KnowledgeUnit, type NarratorPack } from "./narrator-pack.js";
-import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../../types/resource-limits.js";
 export const LOSSLESS_SCHEMA_VERSION = "d04-lossless-grouping-v2";
 export const LOSSLESS_POLICY_VERSION = "d04-watermarks-v2";
 export const LOSSLESS_LAYOUTS = ["expanded", "grouped", "dictionary"] as const;

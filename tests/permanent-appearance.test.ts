@@ -9,8 +9,8 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/openin
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import { applyAppearancePatch, resolvePermanentAppearance } from "../src/campaign/permanent-appearance.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

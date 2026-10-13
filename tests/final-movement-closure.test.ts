@@ -4,7 +4,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js";
 import { createSaveFile, decodeSave, serializeSave, validateSaveFile } from "../src/persistence/save-format.js";
 import { migrateSave } from "../src/persistence/save-migrations.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { characterLocation } from "../src/turn/movement/character-movement.js";
 import { household, play } from "./pass10-support.js";
 

@@ -3,11 +3,11 @@ import type { CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { ControllerResult, StateControllerProvider } from "../../llm/state-controller-provider.js";
 import type { MovableCharacter } from "../movement/character-movement.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { TurnIntent } from "./intent.js";
 import { withProviderRetry, type ProviderAttemptRecord, type ProviderBudget, type ProviderRetryPolicy } from "../../llm/retry.js";
 import {technicalRetryReason} from "../../llm/reliability.js";
-import type { ReferencedCharacter } from "../referenced-characters.js";
+import type { ReferencedCharacter } from "../context/referenced-characters.js";
 import { activeTradeOffer } from "../../campaign/trade.js";
 
 /**

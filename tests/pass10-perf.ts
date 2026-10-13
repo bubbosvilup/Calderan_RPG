@@ -5,8 +5,8 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { reflectionDue } from "../src/turn/reflection.js";
-import { packNpcPlus } from "../src/turn/npc-plus.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { packNpcPlus } from "../src/turn/context/npc-plus.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
 import { metadata } from "./turn-fixtures.js";
 

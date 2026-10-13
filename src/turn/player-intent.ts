@@ -1,7 +1,7 @@
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import { TurnError } from "./turn-types.js";
 import { resolveTransferIntent, type ResolvedReference } from "./items/reference-resolution.js";
 import { resolveNaturalActions, reachable, type NaturalActionResolution } from "./natural-actions.js";

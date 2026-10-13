@@ -1,7 +1,7 @@
-import type { WorldStore } from "../world/world-store.js";
-import type { CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import { compareIds } from "../world/provenance.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import { compareIds } from "../../world/provenance.js";
 
 /**
  * Permanent Inventory V1, absent-character grounding (Controller only). Known characters who are NOT present but are named in this

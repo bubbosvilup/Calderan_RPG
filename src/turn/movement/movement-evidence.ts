@@ -1,7 +1,7 @@
 import type { WorldStore } from "../../world/world-store.js";
 import { routeDirection } from "../../world/vertical-direction.js";
 import { findRoute } from "../../world/travel.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { type CharacterMovement, type MovableCharacter, concreteDestination, uniqueVerticalNeighbour } from "./character-movement.js";
 import type { EntityArrivedFact, EntityDepartedFact, EntityFollowedFact, EntityMovedFact, EntityMovedWithPlayerFact, EntityPresentFact, MovementFact, NarrationFacts } from "../narration-facts/index.js";
 

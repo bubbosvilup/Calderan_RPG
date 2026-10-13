@@ -85,7 +85,7 @@ The controller's `place_item` now accepts the existing `stored` position: puttin
 
 ### Absent-character grounding (controller only)
 
-`referenced_known_characters` (`src/turn/referenced-characters.ts`) lists known characters who are not present but are named in this turn's player input or narration, as `{id, name}` only.
+`referenced_known_characters` (`src/turn/context/referenced-characters.ts`) lists known characters who are not present but are named in this turn's player input or narration, as `{id, name}` only.
 - **Candidates:** authored NPCs visible to narrator and player, plus named campaign characters. Narrator-only identities never resolve.
 - **Matching:** a full name or alias, or a distinctive single name token (titles excluded). A phrase fitting more than one character maps to none.
 - **Scope:** absent from the envelope when empty, and never in narrator context.

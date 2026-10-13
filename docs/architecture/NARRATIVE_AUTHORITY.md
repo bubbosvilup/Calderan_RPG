@@ -45,7 +45,7 @@ When prose was wrong, the next narrator turn should simply follow current truth 
 
 ## 3. Narrative permission semantics (new)
 
-`NarrativeKnowledgeAccess` (`src/turn/narrative-authority.ts`) is a different concept: the engine's decision about which facts each present character **may voice or act on this turn**.
+`NarrativeKnowledgeAccess` (`src/turn/context/narrative-authority.ts`) is a different concept: the engine's decision about which facts each present character **may voice or act on this turn**.
 - `CAN USE F1 (knows)` means the character may use the fact. `believes`, `suspects` and `heard_rumor` must be voiced only as belief, suspicion or rumor.
 - `DO NOT USE F1` means the engine has not authorized this character to use the fact now. It does **not** mean the character can never know it. The character may ask, say they have not heard, or defer to someone who can use it.
 
@@ -181,7 +181,7 @@ Historical playthrough windows remain an evaluation-only helper and are never us
 - **Plural folding** (`stem`): auctions→auction, pens→pen, cities→city, applied identically to the index and the query. There is no derivational stemming: slave ≠ slavery, mage ≠ magic.
 - **Query-side stopwords:** function words and conversational filler never score. If a query is only stopwords, all its tokens are used.
 
-**Turn policy (`src/turn/retrieval-policy.ts`):**
+**Turn policy (`src/turn/context/retrieval-policy.ts`):**
 - **Query cleaning:** participant introductions ("stops an ordinary passer-by") and roleplay asterisks are removed from the query.
 - **Intent:** route > schedule > history > location > lore. Questions about the listener stay unclassified. Intent triggers retrieval and adds a generic `[QUESTION FOCUS]` line. It never supplies an answer.
 - **Entity mentions:**

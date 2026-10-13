@@ -4,7 +4,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import { REFLECTION_LIMITS } from "../campaign/validation.js";
 import { characterView } from "../campaign/projections.js";
-import { npcDeepSources } from "./npc-plus.js";
+import { npcDeepSources } from "./context/npc-plus.js";
 import { escapeRegExp as esc } from "./language/text.js";
 import type { ReflectionDiagnosticsSink } from "./reflection-diagnostics.js";
 

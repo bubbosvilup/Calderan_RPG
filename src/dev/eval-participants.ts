@@ -5,12 +5,12 @@ import { OpenRouterClient } from "../llm/openrouter/client.js";
 import type { GenerationRequest } from "../llm/types.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
 import type { TurnEvent } from "../turn/turn-types.js";
-import { NARRATOR_SYSTEM } from "../turn/prompt-builder.js";
+import { NARRATOR_SYSTEM } from "../turn/context/prompt-builder.js";
 import { onlineCoordinator, selectedModels } from "./turn-services.js";
 import { capturingFetch, fingerprint, settle, usageOf } from "./narrator-bakeoff.js";
 import { checkEphemeralAuthority } from "./narrative-checks.js";
 import { groundingManifest } from "./lore-grounding.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 
 /**
  * Phase 1P paid live checks (Kimi narrator + DeepSeek controller, production coordinator, canonical opening). PAID unless --dry-run.

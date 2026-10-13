@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import type { NarratorRequest } from "../llm/types.js";
+import type { NarratorRequest } from "../../llm/types.js";
 import type { NarrativeKnowledgeAccess } from "./narrative-authority.js";
-import { freezeSnapshot } from "../campaign/validation.js";
+import { freezeSnapshot } from "../../campaign/validation.js";
 
 export const COMPRESSION_SCHEMA_VERSION = "d04-extractive-v1";
 export const COMPRESSION_POLICY_VERSION = "d04-watermarks-v1";

@@ -7,7 +7,7 @@ import type { CampaignCommand, TradeOfferRecord } from "../src/campaign/types.js
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { activeTradeOffer, tradeTermsDigest } from "../src/campaign/trade.js";
 import { authorizeTradeProposals, reframeOwnItemPurchase } from "../src/turn/commerce/trade-authorization.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { AUCTION, readPrices, type PriceContext } from "../src/turn/commerce/trade-price.js";
 // The single low-level numeric helper is all that remains of the price grammar; these are test-side conveniences over it.
 const goldAmounts = (sentence: string, ctx?: PriceContext): number[] => readPrices(sentence, ctx).statements.map(x => x.amount);

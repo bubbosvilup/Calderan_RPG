@@ -1,8 +1,8 @@
-import { type CompactionPolicy } from "../turn/context-compaction.js";
-import { LosslessContextCompactor } from "../turn/lossless-context-compaction.js";
-import { ContextBudgetManager } from "../turn/context-budget.js";
+import { type CompactionPolicy } from "../turn/context/context-compaction.js";
+import { LosslessContextCompactor } from "../turn/context/lossless-context-compaction.js";
+import { ContextBudgetManager } from "../turn/context/context-budget.js";
 import { OpenRouterLosslessCompressor } from "../llm/openrouter/lossless-compressor.js";
-import { DEFAULT_CONTEXT_POLICY, type ContextPolicy } from "../turn/context-budget.js";
+import { DEFAULT_CONTEXT_POLICY, type ContextPolicy } from "../turn/context/context-budget.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { OpenRouterSpriteQualityReviewer } from "../llm/openrouter/sprite-quality-reviewer.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";

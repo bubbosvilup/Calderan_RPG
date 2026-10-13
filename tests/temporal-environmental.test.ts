@@ -11,8 +11,8 @@ import { WEATHER_BLOCK_MINUTES, baseWeatherWeights, blockWeights, climateSeasonO
 import { describeWeather, environmentAt, resolveClimateProfileId } from "../src/world/environment.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { deriveSessionView } from "../src/app/session-view.js";
 

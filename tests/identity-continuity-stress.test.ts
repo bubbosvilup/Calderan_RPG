@@ -5,7 +5,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../src/campaign/opening-state.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { narratedDepartures, narratedMovements } from "./movement-readers.js";
 import { movableCharacters, resolvePlayerCarry } from "../src/turn/movement/character-movement.js";
 import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/turn-coordinator.js";

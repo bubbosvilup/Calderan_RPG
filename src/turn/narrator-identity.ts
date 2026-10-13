@@ -1,9 +1,9 @@
 import type { WorldStore } from "../world/world-store.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import { escapeRegExp } from "./language/text.js";
-import type { NarrativeKnowledgeAccess } from "./narrative-authority.js";
+import type { NarrativeKnowledgeAccess } from "./context/narrative-authority.js";
 
 export interface NarratorIdentity {
   readonly internal_id: string;

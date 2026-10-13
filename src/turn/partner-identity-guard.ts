@@ -1,7 +1,7 @@
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
 import { boundPartner, noCompetingSpeaker } from "./canonical-name-disclosure.js";

@@ -6,14 +6,14 @@ import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { OFFER as GARMENT_OFFER } from "../src/dev/evidence-corpus.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import { authorizeWithEvidence, verifyEvidence } from "../src/turn/evidence-authorization.js";
 import { narratedDepartures } from "./movement-readers.js";
 import { groundingIssues } from "../src/turn/grounding-audit.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 

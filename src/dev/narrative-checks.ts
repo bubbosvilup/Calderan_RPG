@@ -1,5 +1,5 @@
-import type { TurnContext } from "../turn/context-builder.js";
-import { hardCharacterConstraints } from "../turn/prompt-builder.js";
+import type { TurnContext } from "../turn/context/context-builder.js";
+import { hardCharacterConstraints } from "../turn/context/prompt-builder.js";
 export interface NarrativeFinding { category: string; excerpt: string }
 /** Development diagnostics for closed evaluation fixtures. Never authorizes or rewrites prose. */
 export function checkNarrative(text: string, input: string, context: TurnContext, retrievedIds: readonly string[] = [], closedFixture = false): NarrativeFinding[] {

@@ -85,7 +85,7 @@ test("7. targeted audit consumers read the shared facts of the same source (no p
   assert.match(audit, /attributedSpeech\(narration, context, \{ units: facts\.dialogue/);
   assert.match(audit, /source\.scene\(/); assert.match(audit, /partnerNameConflict\(\{[^}]*facts: source/);
   assert.ok(!imports("src/turn/narration-audit.ts").some(s => /prompt-builder/.test(s)), "the audit does not read the prompt projection");
-  for (const p of ["src/turn/household-evidence.ts", "src/turn/prompt-builder.ts"]) assert.match(code(p), /attributedSpeech\(/, p);
+  for (const p of ["src/turn/household-evidence.ts", "src/turn/context/prompt-builder.ts"]) assert.match(code(p), /attributedSpeech\(/, p);
 });
 
 test("8. no banned legacy names: the duplicate readers are deleted and nothing refers to them", () => {

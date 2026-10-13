@@ -6,9 +6,9 @@ import { LexicalSearch } from "../src/retrieval/lexical-search.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { deriveSemanticDocuments } from "../src/retrieval/semantic-documents.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { retrieveForTurn } from "../src/turn/retrieval-policy.js";
-import { ordinaryAwareness } from "../src/turn/narrative-authority.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
+import { ordinaryAwareness } from "../src/turn/context/narrative-authority.js";
 
 const world = await loadWorld("data"), service = new RetrievalService(world), lexical = new LexicalSearch(service);
 const context = buildTurnContext(world, createOpeningCampaign(world,"west_canon").exportSnapshot());

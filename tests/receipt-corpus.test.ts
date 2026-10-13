@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { RECEIPT_CORPUS } from "../src/dev/receipt-corpus.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { verifyEvidence } from "../src/turn/evidence-authorization.js";
 

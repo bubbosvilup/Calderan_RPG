@@ -34,7 +34,7 @@ export async function play(narration: string, input = "I go down to the main hal
   return { f, events, result: done && done.type === "turn_completed" ? done.result as TurnResult : undefined, snapshot, where, moved, prompt, requests, system: requests[0]?.system_prompt ?? "" };
 }
 
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { movableCharacters } from "../src/turn/movement/character-movement.js";
 import { narratedMovements } from "./movement-readers.js";
 import { activeNpcPlus } from "../src/campaign/premium-characters.js";

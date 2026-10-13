@@ -4,11 +4,11 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/opening-state.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext, CONTEXT_LIMITS } from "../src/turn/context-builder.js";
-import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/narrative-authority.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildTurnContext, CONTEXT_LIMITS } from "../src/turn/context/context-builder.js";
+import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { retrieveForTurn } from "../src/turn/retrieval-policy.js";
+import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 

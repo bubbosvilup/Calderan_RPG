@@ -8,7 +8,7 @@ import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/sa
 import { isNpcPlus } from "../src/campaign/premium-characters.js";
 import { HEARTSTONE_HOUSEHOLD_RULES, HEARTSTONE_CANONICAL_OATH, HEARTSTONE_DEED_ITEM, HEARTSTONE_CHARTER_ITEM, openingOathText } from "../src/campaign/heartstone-charter.js";
 import { recognizedByHeartstone, stoneFeel, insideHeartstoneInterior } from "../src/campaign/heartstone-recognition.js";
-import { HEARTSTONE_STONE_LINE } from "../src/turn/scene-state-render.js";
+import { HEARTSTONE_STONE_LINE } from "../src/turn/context/scene-state-render.js";
 import { heartstoneRiteCommands } from "../src/campaign/heartstone-rite.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

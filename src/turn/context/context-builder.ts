@@ -1,20 +1,20 @@
-import { registerNarratorIdentities } from "./narrator-identity.js";
-import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
-import type { CampaignSnapshot, NameSource } from "../campaign/types.js";
-import { characterView, itemView } from "../campaign/projections.js";
-import { itemsAt } from "./items/item-projection.js";
-import { narratorAppearance, resolvePermanentAppearance } from "../campaign/permanent-appearance.js";
-import { buildNarrativeContext } from "../scene/narrative-context-builder.js";
-import { RuntimeState } from "../world/runtime-state.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import { TurnError } from "./turn-types.js";
+import { registerNarratorIdentities } from "../narrator-identity.js";
+import { isIdentityNameFact } from "../../campaign/identity-knowledge.js";
+import type { CampaignSnapshot, NameSource } from "../../campaign/types.js";
+import { characterView, itemView } from "../../campaign/projections.js";
+import { itemsAt } from "../items/item-projection.js";
+import { narratorAppearance, resolvePermanentAppearance } from "../../campaign/permanent-appearance.js";
+import { buildNarrativeContext } from "../../scene/narrative-context-builder.js";
+import { RuntimeState } from "../../world/runtime-state.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import { TurnError } from "../turn-types.js";
 import { NPC_PLUS_LIMITS, packNpcPlus } from "./npc-plus.js";
-import { describeDimensions, relationshipHeadline } from "../campaign/relationship-summary.js";
+import { describeDimensions, relationshipHeadline } from "../../campaign/relationship-summary.js";
 import { knowledgeGrants } from "./knowledge-grants.js";
-import { activePlayerCharacterId, derivePlayerCharacterContext } from "../campaign/player-character.js";
-import { REQUEST_RESOURCE_CHARACTERS } from "../types/resource-limits.js";
-import { economy, generatePriceIndex } from "../economy/economy.js";
+import { activePlayerCharacterId, derivePlayerCharacterContext } from "../../campaign/player-character.js";
+import { REQUEST_RESOURCE_CHARACTERS } from "../../types/resource-limits.js";
+import { economy, generatePriceIndex } from "../../economy/economy.js";
 import { registerSceneExtras } from "./scene-state-projection.js";
 
 /**

@@ -93,7 +93,7 @@ test("A15: no path is built from display names or request text; unknown, path-li
   assert.doesNotMatch(source, /`[^`]*\$\{[^}]*name[^}]*\}[^`]*_avatar/i, "no template path from a name");
 });
 test("no avatar path or metadata reaches narrator context, scene projection, retrieval or lore", async () => {
-  for (const file of ["src/turn/context-builder.ts", "src/turn/scene-state-projection.ts", "src/turn/scene-state-render.ts", "src/turn/prompt-builder.ts", "src/retrieval/retrieval-service.ts"]) assert.doesNotMatch(await readFile(file, "utf8"), /canon-avatars|canonNPCAvatar|CANON_AVATAR/, file);
+  for (const file of ["src/turn/context/context-builder.ts", "src/turn/context/scene-state-projection.ts", "src/turn/context/scene-state-render.ts", "src/turn/context/prompt-builder.ts", "src/retrieval/retrieval-service.ts"]) assert.doesNotMatch(await readFile(file, "utf8"), /canon-avatars|canonNPCAvatar|CANON_AVATAR/, file);
   assert.deepEqual(Object.keys(CANON_AVATAR_FILES).sort(), MAPPING.map(m => m[1]).sort());
 });
 

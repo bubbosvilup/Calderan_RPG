@@ -5,7 +5,7 @@ import type { CampaignState } from "../src/campaign/campaign-state.js";
 import { CampaignState as State } from "../src/campaign/campaign-state.js";
 import { parseCampaignProposal } from "../src/campaign/validation.js";
 import { ENGINE_ITEM_ID, formatItemId } from "../src/campaign/items.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { authorizeCommands } from "../src/turn/command-authorizer.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { inventoryLines, narratorItemView } from "../src/turn/items/item-projection.js";

@@ -1,4 +1,4 @@
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import { actionSegments, sceneDirection } from "./natural-actions.js";
 import type { PhysicalCondition } from "./physical-interaction.js";
 import { DEPART_ACT } from "./narration-facts/index.js";

@@ -8,10 +8,10 @@ import {createOpeningCampaign,OPENING_HOUSEHOLD} from '../.build/src/campaign/op
 import {CampaignState} from '../.build/src/campaign/campaign-state.js';
 import {captureProductionReflection,parseProductionReflection,reflectStructuredAfterTurn} from '../.build/src/turn/structured-reflection-maintenance.js';
 import {evaluateStructuredOutputE1} from '../.build/tests/frozen/reflection/reflection-v23-cvc-e1.js';
-import {npcPlusFragments,packNpcPlus,npcDeepSources} from '../.build/src/turn/npc-plus.js';
-import {buildTurnContext} from '../.build/src/turn/context-builder.js';
-import {buildNarratorPrompt} from '../.build/src/turn/prompt-builder.js';
-import {estimateContextTokens} from '../.build/src/turn/context-budget.js';
+import {npcPlusFragments,packNpcPlus,npcDeepSources} from '../.build/src/turn/context/npc-plus.js';
+import {buildTurnContext} from '../.build/src/turn/context/context-builder.js';
+import {buildNarratorPrompt} from '../.build/src/turn/context/prompt-builder.js';
+import {estimateContextTokens} from '../.build/src/turn/context/context-budget.js';
 import {RecentConversation} from '../.build/src/turn/recent-conversation.js';
 import {ReflectionPacing} from '../.build/src/turn/reflection-pacing.js';
 

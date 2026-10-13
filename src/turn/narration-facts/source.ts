@@ -1,5 +1,5 @@
 import type { WorldStore } from "../../world/world-store.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import { type NarrationFactScope, extractInputCommerceFacts, extractNarrationFacts, extractQuoteCommerceFacts } from "./extract.js";
 import { type ReadOptions, type SceneReading, readScene } from "./scene-identity.js";

@@ -6,7 +6,7 @@ import type { AuthorizationDiagnostic } from "../turn-types.js";
 import type { NarrationFactSource } from "../narration-facts/index.js";
 import { authorizeTradeProposals } from "../commerce/trade-authorization.js";
 import type { WorldStore } from "../../world/world-store.js";
-import { buildTurnContext } from "../context-builder.js";
+import { buildTurnContext } from "../context/context-builder.js";
 import { contextRelevance } from "./intent.js";
 import { establishNames, type IdentityResolution } from "../name-establishment.js";
 import { contractCommands } from "../character-contracts.js";

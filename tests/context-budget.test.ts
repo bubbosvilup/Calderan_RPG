@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ContextBudgetManager, DEFAULT_CONTEXT_POLICY, serializeContextBaseline } from "../src/turn/context-budget.js";
+import { ContextBudgetManager, DEFAULT_CONTEXT_POLICY, serializeContextBaseline } from "../src/turn/context/context-budget.js";
 import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { setup } from "./turn-fixtures.js";

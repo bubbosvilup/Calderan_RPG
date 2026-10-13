@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import type { CampaignCharacter, CampaignCommand, CampaignSnapshot, NameSource } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { linkedParticipant, materializeProvisional, nameSourceOf } from "./provisional-people.js";

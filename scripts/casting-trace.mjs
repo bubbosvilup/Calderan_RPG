@@ -6,7 +6,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { loadWorld } from '../.build/src/world/loader.js';
 import { createOpeningCampaign } from '../.build/src/campaign/opening-state.js';
-import { buildTurnContext } from '../.build/src/turn/context-builder.js';
+import { buildTurnContext } from '../.build/src/turn/context/context-builder.js';
 import { canonicalInteractionTargets } from '../.build/src/turn/canonical-interaction-targets.js';
 import { narratorIdentityGate } from '../.build/src/turn/narrator-identity.js';
 import { readScene } from '../.build/src/turn/narration-facts/index.js';

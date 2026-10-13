@@ -3,7 +3,7 @@ import type { CampaignState } from "../campaign/campaign-state.js";
 import { inventoryItems } from "../campaign/inventory.js";
 import { deriveSessionView } from "../app/session-view.js";
 import { inventoryVisualView } from "../app/item-visual-view.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import { turnFixture } from "./turn-fixture.js";
 import { renderRun, runScenario, type DiagnosticScenario, type ScenarioRun } from "./controller-authorization-diagnostics.js";
 

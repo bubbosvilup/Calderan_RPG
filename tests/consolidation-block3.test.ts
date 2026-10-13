@@ -143,7 +143,7 @@ test("M16: the escort resolver needs Nicco's resolved travel; without a runtime 
   const f = turnFixture();
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [create("campaign_character_t", "Tessa", "female"), hold("campaign_character_t")] });
   const snap = f.campaign.exportSnapshot();
-  const ctx = (await import("../src/turn/context-builder.js")).buildTurnContext(f.world, snap, { input: "", recent_text: "" });
+  const ctx = (await import("../src/turn/context/context-builder.js")).buildTurnContext(f.world, snap, { input: "", recent_text: "" });
   assert.deepEqual(resolveHeldEscort("Tessa, come with me.", snap, ctx, f.world, []).runtime, []);
   const out = resolveHeldEscort("Tessa, come with me.", snap, ctx, f.world, [{ kind: "runtime_delta", delta: { player_location: "test_hall" } }]);
   assert.deepEqual(out.runtime, [{ kind: "move_character", character_id: "campaign_character_t", location_id: "test_hall" }]);

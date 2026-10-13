@@ -10,7 +10,7 @@ import { FileCampaignRepository } from "../src/persistence/campaign-repository.j
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { packNpcPlus } from "../src/turn/npc-plus.js";
+import { packNpcPlus } from "../src/turn/context/npc-plus.js";
 import type { MannerismExtractor, MannerismExtractionRequest } from "../src/turn/mannerism-extraction.js";
 import type { ReflectionProvider } from "../src/turn/reflection.js";
 import type { CampaignCommand } from "../src/campaign/types.js";

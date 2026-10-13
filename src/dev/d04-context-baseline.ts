@@ -4,10 +4,10 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { loadWorld } from "../world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../campaign/opening-state.js";
 import type { CampaignCommand } from "../campaign/types.js";
-import { buildTurnContext } from "../turn/context-builder.js";
-import { buildNarratorPrompt, relevanceSignals } from "../turn/prompt-builder.js";
-import { ContextBudgetManager, estimateContextTokens, serializeContextBaseline } from "../turn/context-budget.js";
-import { projectKnowledgeAccess, renderKnowledgeAccess } from "../turn/narrative-authority.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
+import { buildNarratorPrompt, relevanceSignals } from "../turn/context/prompt-builder.js";
+import { ContextBudgetManager, estimateContextTokens, serializeContextBaseline } from "../turn/context/context-budget.js";
+import { projectKnowledgeAccess, renderKnowledgeAccess } from "../turn/context/narrative-authority.js";
 export async function createD04CrowdedContext(options: { statement?: (index: number) => string } = {}) {
 const world = await loadWorld("data"), c = createOpeningCampaign(world, "d04_baseline");
 const commands: CampaignCommand[] = [];

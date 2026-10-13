@@ -6,7 +6,7 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../s
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { narratorEphemeralCharacters } from "../src/campaign/promotion.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { movableCharacters, resolvePlayerCarry } from "../src/turn/movement/character-movement.js";
 import { narratedMovements } from "./movement-readers.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

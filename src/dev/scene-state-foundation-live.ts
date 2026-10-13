@@ -6,11 +6,11 @@ import { NARRATOR_OUTPUT_TOKENS, selectedModels } from "../app/provider-config.j
 import { controllerFallbackModels } from "../app/production.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { retrieveForTurn } from "../turn/retrieval-policy.js";
-import { buildTurnContext } from "../turn/context-builder.js";
-import { buildNarratorPrompt } from "../turn/prompt-builder.js";
+import { retrieveForTurn } from "../turn/context/retrieval-policy.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
+import { buildNarratorPrompt } from "../turn/context/prompt-builder.js";
 import { playerIntent } from "../turn/player-intent.js";
-import { prepareNarratorRequest } from "../turn/context-budget.js";
+import { prepareNarratorRequest } from "../turn/context/context-budget.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { largeScene, richScene } from "./scene-foundation-fixtures.js";
 import { apply, itemId, makeItem, promptFor, sceneBlock, sceneFixture, SCENE_ELSEWHERE } from "./scene-state-fixtures.js";

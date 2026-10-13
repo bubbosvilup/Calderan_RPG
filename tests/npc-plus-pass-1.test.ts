@@ -5,10 +5,10 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../s
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js";
 import type { DeepReadonly } from "../src/types/readonly.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { NPC_PLUS_LIMITS, npcDeepSources, npcPlusFragments, packNpcPlus, recoverNpcContext } from "../src/turn/npc-plus.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { NPC_PLUS_LIMITS, npcDeepSources, npcPlusFragments, packNpcPlus, recoverNpcContext } from "../src/turn/context/npc-plus.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

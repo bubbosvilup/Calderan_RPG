@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { knowledgeGrants } from "../src/turn/knowledge-grants.js";
+import { knowledgeGrants } from "../src/turn/context/knowledge-grants.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { LexicalSearch } from "../src/retrieval/lexical-search.js";
 

@@ -2,14 +2,14 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt, dialogueFocused } from "../src/turn/prompt-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt, dialogueFocused } from "../src/turn/context/prompt-builder.js";
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { remainingEventMinutes } from "../src/campaign/projections.js";
-import { retrievalRequired } from "../src/turn/retrieval-policy.js";
+import { retrievalRequired } from "../src/turn/context/retrieval-policy.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 
 const world = await loadWorld("data");

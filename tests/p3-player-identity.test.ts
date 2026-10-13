@@ -3,9 +3,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt, NARRATOR_PLAYER_KNOWLEDGE, NARRATOR_RPG_FORMAT } from "../src/turn/prompt-builder.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt, NARRATOR_PLAYER_KNOWLEDGE, NARRATOR_RPG_FORMAT } from "../src/turn/context/prompt-builder.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 

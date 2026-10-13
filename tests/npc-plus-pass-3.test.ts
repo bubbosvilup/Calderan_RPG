@@ -7,9 +7,9 @@ import type { CampaignCommand, CampaignSnapshot, PremiumHistoryEntry, PremiumRol
 import type { DeepReadonly } from "../src/types/readonly.js";
 import { PREMIUM_DEVELOPMENT_RETENTION, PREMIUM_ROLLUP_LIMITS } from "../src/campaign/validation.js";
 import { foldDevelopment } from "../src/campaign/premium-characters.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/turn/npc-plus.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/turn/context/npc-plus.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { verifyRelationshipEvidence } from "../src/turn/household-evidence.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

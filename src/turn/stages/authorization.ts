@@ -9,7 +9,7 @@ import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFa
 import { characterLocation, doorDestinationFromPlaces, npcPlusEntrants, uniqueVerticalNeighbour, type MovableCharacter } from "../movement/character-movement.js";
 import { createFactSource, type NarrationFactSource } from "../narration-facts/index.js";
 import { movementFactScope } from "../movement/movement-scope.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../evidence-authorization.js";
 import { deriveTurnEvidence, type TurnEvidence } from "../turn-evidence.js";
 import { activeNpcPlus } from "../../campaign/premium-characters.js";

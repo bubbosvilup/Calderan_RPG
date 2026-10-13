@@ -1,5 +1,5 @@
 import { COMPRESSOR_SYSTEM, type ContextCompressorProvider, type CompressionRequest, type CompressionCandidate, type CompressionResponse } from "../src/llm/context-compressor-provider.js";
-import { COMPRESSION_SCHEMA_VERSION } from "../src/turn/narrator-pack.js";
+import { COMPRESSION_SCHEMA_VERSION } from "../src/turn/context/narrator-pack.js";
 export function exactCandidate(request: CompressionRequest): CompressionCandidate {
  return { version: COMPRESSION_SCHEMA_VERSION, source_hash: request.source_hash, context_identity: request.context_identity,
   units: request.source_pack.units.map(u => ({ ...structuredClone(u), text: u.text.replace(/\bthe\b\s*/g, "").replace(/\s+/g, " ").trim() || u.text })) };

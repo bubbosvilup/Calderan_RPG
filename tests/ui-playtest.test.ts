@@ -13,7 +13,7 @@ import { createProductionDeps } from "../src/app/index.js";
 import { createUIPlaytestSession, UI_PLAYTEST_OPENING } from "../src/app/ui-playtest.js";
 import { createPlaytestServer } from "../src/ui/server.js";
 import { mockNarrator, mockController } from "./turn-fixtures.js";
-import { NARRATOR_RPG_FORMAT } from "../src/turn/prompt-builder.js";
+import { NARRATOR_RPG_FORMAT } from "../src/turn/context/prompt-builder.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
 import { NarratorAlternatives, ALTERNATE_NARRATOR_MODELS } from "../src/app/narrator-alternatives.js";
 import { NARRATOR_OUTPUT_TOKENS } from "../src/app/provider-config.js";

@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { prepareD04BakeoffCases, evaluateBakeoffCandidate } from "../src/dev/d04-compaction-bakeoff.js";
 import { legalExtractiveCandidate, optimisticLowerBound, requestBreakdown, verifyBakeoffCache } from "../src/dev/d04-compressor-benchmark.js";
-import { ContextBudgetManager } from "../src/turn/context-budget.js";
-import { renderCandidateRequest } from "../src/turn/narrator-pack.js";
+import { ContextBudgetManager } from "../src/turn/context/context-budget.js";
+import { renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 const cases = prepareD04BakeoffCases();
 test("bakeoff records valid but insufficient output without calling it a semantic failure", async () => {
   const {A}=await cases, candidate=legalExtractiveCandidate(A);

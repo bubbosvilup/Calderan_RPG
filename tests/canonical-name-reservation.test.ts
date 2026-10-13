@@ -6,7 +6,7 @@ import { identityNameFactId, learnCanonicalName } from "../src/campaign/identity
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { trackablePeople } from "../src/turn/keep-track.js";
 import { canonicalHandleOwners, reservedForAnotherIdentity } from "../src/world/canonical-names.js";
 import type { EphemeralSceneParticipant } from "../src/turn/scene-participants.js";

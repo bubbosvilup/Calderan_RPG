@@ -3,8 +3,8 @@ import { WorldStore } from "../world/world-store.js";
 import { CampaignState } from "../campaign/campaign-state.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import type { WorldEntity } from "../types/entities.js";
-import { buildTurnContext } from "../turn/context-builder.js";
-import { buildNarratorPrompt } from "../turn/prompt-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
+import { buildNarratorPrompt } from "../turn/context/prompt-builder.js";
 import { playerIntent } from "../turn/player-intent.js";
 import type { RecentExchange } from "../turn/recent-conversation.js";
 

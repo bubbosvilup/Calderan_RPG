@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { WorldStore } from "../src/world/world-store.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { canonicalDepartureClaims, canonicalDepartureContradiction } from "./movement-readers.js";
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

@@ -1,7 +1,7 @@
 import type { WorldStore } from "../world/world-store.js";
 import { createOpeningCampaign } from "../campaign/opening-state.js";
-import { buildTurnContext } from "../turn/context-builder.js";
-import { rankForTurn, retrieveForTurn } from "../turn/retrieval-policy.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
+import { rankForTurn, retrieveForTurn } from "../turn/context/retrieval-policy.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 

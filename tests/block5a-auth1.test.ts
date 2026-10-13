@@ -7,11 +7,11 @@ import { GameSession } from "../src/app/game-session.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { CONTROLLER_SCHEMA } from "../src/llm/controller-schema.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { pendingClaims } from "../src/turn/pending-audit.js";
 import { resolveTurnIntent, type IntentStageInput } from "../src/turn/stages/intent.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { countingController, NARRATION, sessionWith, stepNarrator, type NarratorStep } from "./block4-fixtures.js";
 
 /**

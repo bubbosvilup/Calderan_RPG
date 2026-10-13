@@ -5,7 +5,7 @@ import { turnFixture } from "./turn-fixture.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import { movableCharacters } from "../turn/movement/character-movement.js";
 import { characterMovementsFromFacts } from "../turn/movement/movement-evidence.js";
 import { extractNarrationFacts } from "../turn/narration-facts/index.js";

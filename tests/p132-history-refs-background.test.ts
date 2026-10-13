@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { rpgDialogue } from "../src/turn/rpg-dialogue.js";
-import { dialogueFocused, buildNarratorPrompt, BACKGROUND_PRESENCE_RULE, NARRATOR_RPG_FORMAT } from "../src/turn/prompt-builder.js";
+import { dialogueFocused, buildNarratorPrompt, BACKGROUND_PRESENCE_RULE, NARRATOR_RPG_FORMAT } from "../src/turn/context/prompt-builder.js";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
-import { narratorPackOf, renderCandidateRequest } from "../src/turn/narrator-pack.js";
+import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { reconcileNarration } from "../src/turn/stages/audit.js";
 import { metadata } from "./turn-fixtures.js";

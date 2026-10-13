@@ -1,7 +1,7 @@
 import { withHistoricalContext } from "./historical-context.js";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { isDeepStrictEqual } from "node:util";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import { checkNarrative } from "./narrative-checks.js";
 import type { GenerationRequest } from "../llm/types.js";
 import { turnFixture } from "./turn-fixture.js";

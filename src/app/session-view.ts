@@ -32,7 +32,7 @@ export interface ViewHouseholdMember {
   readonly household_member: true; readonly npc_plus: boolean;
 }
 export interface SessionView {
-  readonly context_budget?: import("../turn/context-budget.js").ContextBudgetSnapshot;
+  readonly context_budget?: import("../turn/context/context-budget.js").ContextBudgetSnapshot;
   readonly context_compaction?: { readonly status: "idle" | "compacting"; readonly trigger?: import("./context-compaction.js").CompactionReason; readonly last_result?: import("./context-compaction.js").CompactionResult };
   readonly session: { readonly campaign_id: string; readonly revision: number; readonly status: SessionStatus; readonly save: { readonly state: "unsaved" | "saved"; readonly last_saved_revision: number | null;
     /** Save/Load v1 compact status: a save in flight, the last save failure (cleared by a successful save), autosave mode, history append failure. */

@@ -2,13 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import { readScene } from "../src/turn/narration-facts/index.js";
 import { groundingIssues } from "../src/turn/grounding-audit.js";
-import { NARRATOR_SYSTEM } from "../src/turn/prompt-builder.js";
+import { NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 
 const world = await loadWorld("data");

@@ -1,6 +1,6 @@
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import { narratorIdentityGate } from "./narrator-identity.js";
-import { projectNarratorFocus } from "./narrator-focus.js";
+import { projectNarratorFocus } from "./context/narrator-focus.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { SceneParticipantPlan } from "./scene-participants.js";
 import type { PlayerIntent } from "./player-intent.js";

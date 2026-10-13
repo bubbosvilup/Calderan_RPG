@@ -1,7 +1,7 @@
 import type { NarratorProvider, NarratorResult } from "../../llm/narrator-provider.js";
 import type { NarratorRequest } from "../../llm/types.js";
-import type { TurnContext } from "../context-builder.js";
-import { buildNarratorPrompt, type NarratorPromptOptions } from "../prompt-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { buildNarratorPrompt, type NarratorPromptOptions } from "../context/prompt-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
 import { TurnError } from "../turn-types.js";

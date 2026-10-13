@@ -7,7 +7,7 @@ import { metadata, collect } from "./turn-fixtures.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { characterLocation, movableCharacters } from "../src/turn/movement/character-movement.js";
 import { characterMovementsFromFacts, departuresFromFacts } from "../src/turn/movement/movement-evidence.js";
 import { createFactSource, extractNarrationFacts, type NarrationFactScope, type Referent } from "../src/turn/narration-facts/index.js";

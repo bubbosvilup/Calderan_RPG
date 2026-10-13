@@ -4,7 +4,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { applyAuthorized } from "./provisional-helper.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { asksName } from "../src/turn/identity-request.js";

@@ -26,13 +26,13 @@ test).
 
 ## Pipeline (three stages, three modules)
 
-1. `src/turn/scene-state-projection.ts` — **derive** `SceneStateProjection` from `TurnContext`. `registerSceneExtras` (called by
+1. `src/turn/context/scene-state-projection.ts` — **derive** `SceneStateProjection` from `TurnContext`. `registerSceneExtras` (called by
    `buildTurnContext`) stores what the context does not carry — names of absent item owners / event participants and validated
    recent NPC+ developments — in a WeakMap beside the context, exactly like the narrator identity gate, so the Controller envelope is
    unchanged.
-2. `src/turn/scene-state-focus.ts` — **focus**: ranks and caps entries using signals already computed (Narrator Focus
+2. `src/turn/context/scene-state-focus.ts` — **focus**: ranks and caps entries using signals already computed (Narrator Focus
    foreground/background, player intent item/fact/event ids, input and recent text). It adds no authority.
-3. `src/turn/scene-state-render.ts` — **render** to text with a size budget (`max_chars` 6000). Whole entries are dropped, lowest
+3. `src/turn/context/scene-state-render.ts` — **render** to text with a size budget (`max_chars` 6000). Whole entries are dropped, lowest
    priority first; `required` entries never are.
 
 ## Source-of-truth map

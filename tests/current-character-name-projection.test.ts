@@ -5,7 +5,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/opening-state.js";
 import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { deriveSessionView } from "../src/app/session-view.js";

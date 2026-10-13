@@ -9,8 +9,8 @@ import { observationDefinition, type ValidatedMannerismObservation } from "../sr
 import { MannerismMaintenance, MANNERISM_EXTRACTOR_TASK, validateExtractedMannerisms, type MannerismExtractionRequest, type MannerismExtractor } from "../src/turn/mannerism-extraction.js";
 import { mannerismView } from "../src/app/mannerism-view.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { packNpcPlus } from "../src/turn/npc-plus.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { packNpcPlus } from "../src/turn/context/npc-plus.js";
 import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";

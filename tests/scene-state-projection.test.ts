@@ -2,9 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { CampaignState } from "../src/campaign/campaign-state.js";
-import { buildSceneStateProjection } from "../src/turn/scene-state-projection.js";
-import { focusedSceneStateProjection, SCENE_FOCUS_LIMITS } from "../src/turn/scene-state-focus.js";
-import { renderSceneStateProjection, SCENE_BLOCK_HEADER } from "../src/turn/scene-state-render.js";
+import { buildSceneStateProjection } from "../src/turn/context/scene-state-projection.js";
+import { focusedSceneStateProjection, SCENE_FOCUS_LIMITS } from "../src/turn/context/scene-state-focus.js";
+import { renderSceneStateProjection, SCENE_BLOCK_HEADER } from "../src/turn/context/scene-state-render.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import {
   LORE, SCENE_ELSEWHERE, SCENE_LOCATION, WEST_GATE, WEST_GATE_TEXT, alone, apply, createdPerson, fact, idealScene, itemId, knows, makeItem, promptFor,

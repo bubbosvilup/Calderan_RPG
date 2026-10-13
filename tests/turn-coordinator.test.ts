@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { RecentConversation } from "../src/turn/recent-conversation.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";

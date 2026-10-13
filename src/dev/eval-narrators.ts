@@ -4,7 +4,7 @@ import { OpenRouterClient } from "../llm/openrouter/client.js";
 import type { GenerationRequest } from "../llm/types.js";
 import type { NarratorResult } from "../llm/narrator-provider.js";
 import { ProviderError } from "../llm/errors.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import type { TurnEvent } from "../turn/turn-types.js";
 import { checkBakeoff, type NarrativeFinding } from "./narrative-checks.js";
 import { turnFixture } from "./turn-fixture.js";

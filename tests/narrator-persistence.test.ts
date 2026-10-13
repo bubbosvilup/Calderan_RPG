@@ -5,7 +5,7 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../s
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { narratorEphemeralCharacters } from "../src/campaign/promotion.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
 import { activeTradeOffer } from "../src/campaign/trade.js";
 import { establishNames } from "../src/turn/name-establishment.js";
@@ -16,7 +16,7 @@ import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnResult } from "../src/turn/turn-types.js";
 import { formatCampaignStatus } from "../src/dev/campaign-status.js";
-import { NARRATOR_SYSTEM } from "../src/turn/prompt-builder.js";
+import { NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { collect, metadata } from "./turn-fixtures.js";
 

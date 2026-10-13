@@ -4,12 +4,12 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
 import { prepareD04BakeoffCases, type createBakeoffArtifact } from "./d04-compaction-bakeoff.js";
-import { analyzeLosslessLayouts } from "../turn/lossless-context-compaction.js";
-import { LOSSLESS_SCHEMA_VERSION,LOSSLESS_POLICY_VERSION,precomputeKnowledgeGroups,expandLosslessCandidate } from "../turn/lossless-knowledge.js";
+import { analyzeLosslessLayouts } from "../turn/context/lossless-context-compaction.js";
+import { LOSSLESS_SCHEMA_VERSION,LOSSLESS_POLICY_VERSION,precomputeKnowledgeGroups,expandLosslessCandidate } from "../turn/context/lossless-knowledge.js";
 import { LOSSLESS_COMPRESSOR_SYSTEM,LOSSLESS_COMPRESSOR_SCHEMA,losslessProviderRequest } from "../llm/lossless-compressor-provider.js";
 import { requestBreakdown } from "./d04-compressor-benchmark.js";
-import { narratorPackOf } from "../turn/narrator-pack.js";
-import { ContextBudgetManager } from "../turn/context-budget.js";
+import { narratorPackOf } from "../turn/context/narrator-pack.js";
+import { ContextBudgetManager } from "../turn/context/context-budget.js";
 const sha=(value:string)=>createHash("sha256").update(value).digest("hex");
 export async function prepareLosslessFixtures() {
   const live=await prepareD04BakeoffCases(),out=resolve("saves/d04-context/bakeoff-v2");await mkdir(out,{recursive:true});

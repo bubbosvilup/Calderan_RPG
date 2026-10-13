@@ -8,7 +8,7 @@ import { FileCampaignRepository } from "../src/persistence/campaign-repository.j
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { packNpcPlus } from "../src/turn/npc-plus.js";
+import { packNpcPlus } from "../src/turn/context/npc-plus.js";
 import type { ReflectionProvider } from "../src/turn/reflection.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { resolveOptionalServices, type OptionalServiceConfig } from "../src/app/optional-services.js";
@@ -157,7 +157,7 @@ test("block 7 audit: no production writer persists optional state into the snaps
 });
 
 test("block 7 compaction decision: context compaction is CORE (turn-path-required, derived, non-authoritative): it reads a request and never writes campaign or side-store state", () => {
-  const compaction = source("src/turn/context-compaction.ts");
+  const compaction = source("src/turn/context/context-compaction.ts");
   assert.ok(!/campaign-state|persistence|optional-store|\.apply\(\{|expected_revision/.test(compaction.replace(/^\s*\/\/.*$/gm, "")), "compaction has no path to CampaignState or to any store");
   const session = source("src/app/game-session.ts"), body = session.slice(session.indexOf("async #compact("), session.indexOf("async #compact(") + 1600);
   assert.ok(!/campaign\.(apply|commit|maintain)|#session\.campaign\.apply/.test(body), "GameSession#compact writes nothing authoritative");

@@ -9,7 +9,7 @@ import { appearanceFingerprint, AVATAR_POSES, buildPortraitPrompt, composePortra
   PORTRAIT_PROMPT_VERSION, portraitDetails, type PortraitKind } from "../src/campaign/portrait-prompt.js";
 import { RAENA_IMAGE_STACK } from "../src/app/image-stack.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { playerCharacterProjection } from "../src/app/player-character-view.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";

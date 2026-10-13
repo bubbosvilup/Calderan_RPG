@@ -1,8 +1,8 @@
-import type { WorldStore } from "../world/world-store.js";
-import type { WorldEntity as RawEntity } from "../types/entities.js";
-import type { DeepReadonly } from "../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { WorldEntity as RawEntity } from "../../types/entities.js";
+import type { DeepReadonly } from "../../types/readonly.js";
 type WorldEntity = DeepReadonly<RawEntity>;
-import { compareIds } from "../world/provenance.js";
+import { compareIds } from "../../world/provenance.js";
 
 /**
  * Hardening H3 — authored canonical knowledge grants (`known_by`), indexed once per immutable WorldStore.

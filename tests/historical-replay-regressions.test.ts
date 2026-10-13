@@ -5,7 +5,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import { NUMBER_PHRASE_SOURCE, numberPhraseValue } from "../src/turn/language/numbers.js";

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { parseTemporalAction } from "../src/turn/temporal-action.js";
 import { daypartStart, temporalGrounding } from "../src/turn/temporal-grounding.js";

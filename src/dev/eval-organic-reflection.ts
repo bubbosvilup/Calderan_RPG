@@ -7,7 +7,7 @@ import { OpenRouterReflectionProvider } from "../llm/openrouter/reflection-provi
 import { reflectionEvidence, type ReflectionProvider } from "../turn/reflection.js";
 import type { ReflectionDiagnostics } from "../turn/reflection-diagnostics.js";
 import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";

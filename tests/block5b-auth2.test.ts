@@ -10,7 +10,7 @@ import { buildPromotedCharacter } from "../src/campaign/promotion.js";
 import { activeTradeOffer } from "../src/campaign/trade.js";
 import { CONTROLLER_SCHEMA } from "../src/llm/controller-schema.js";
 import { authorizeCommands } from "../src/turn/command-authorizer.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";

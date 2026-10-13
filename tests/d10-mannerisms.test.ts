@@ -6,9 +6,9 @@ import type { CampaignCommand, CampaignSnapshot, MannerismDefinition } from "../
 import { MANNERISM_SEEDS, reviewMannerismSeeds } from "../src/campaign/mannerism-seeds.js";
 import { assignInitialMannerism, mannerismOwners, validateMannerismDefinition } from "../src/campaign/mannerisms.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { npcPlusFragments, packNpcPlus, MANNERISM_NARRATOR_RULE } from "../src/turn/npc-plus.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { npcPlusFragments, packNpcPlus, MANNERISM_NARRATOR_RULE } from "../src/turn/context/npc-plus.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { setup, mockNarrator, mockController, collect, transfer } from "./turn-fixtures.js";

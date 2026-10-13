@@ -7,7 +7,7 @@ import { carriesItem, equipsItem, hasItem, inventoryItems, itemAt, ownsItem } fr
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/state-controller.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import { authorizeWithEvidence } from "../src/turn/evidence-authorization.js";
 import { playerIntent } from "../src/turn/player-intent.js";

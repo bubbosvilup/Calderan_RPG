@@ -1,5 +1,5 @@
 import type { WorldStore } from "../../world/world-store.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { NaturalAction, NaturalActionResolution } from "../natural-actions.js";
 import { reachable } from "./travel-resolution.js";
 import { blankQuotes, sentencesOf } from "../language/text.js";

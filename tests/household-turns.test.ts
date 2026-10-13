@@ -6,7 +6,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/opening-state.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { resolveManumission } from "../src/turn/commerce/person-transactions.js";
 import { resolvePersonOffers } from "../src/turn/commerce/person-offers.js";
 import { activeTradeOffer } from "../src/campaign/trade.js";

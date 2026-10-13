@@ -2,7 +2,7 @@ import type { PreparedCampaignChange } from "../../campaign/campaign-state.js";
 import type { CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
-import { buildTurnContext, type TurnContext } from "../context-builder.js";
+import { buildTurnContext, type TurnContext } from "../context/context-builder.js";
 import { playerIntent, type PlayerIntent } from "../player-intent.js";
 import { resolveManumission } from "../commerce/person-transactions.js";
 import { manumissionCommand, manumissionInvalidReason, type PendingProposal } from "../pending-proposals.js";

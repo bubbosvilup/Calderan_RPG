@@ -1,13 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { turnFixture } from "../src/dev/turn-fixture.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { dialogueFocused } from "../src/turn/prompt-builder.js";
-import { projectKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { dialogueFocused } from "../src/turn/context/prompt-builder.js";
+import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { auditNarration } from "../src/turn/narration-audit.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 import { observeLosslessApply } from "../src/dev/d04-final-live.js";
-import { LosslessContextCompactor } from "../src/turn/lossless-context-compaction.js";
+import { LosslessContextCompactor } from "../src/turn/context/lossless-context-compaction.js";
 import { passiveResponseAudit } from "../src/dev/passive-response-audit.js";
 import { TargetedPaidBudget } from "../src/dev/d04-targeted-live.js";
 const intent = { candidates: [], runtime: [] };

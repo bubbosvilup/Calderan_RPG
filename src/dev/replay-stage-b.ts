@@ -3,7 +3,7 @@ import { turnFixture } from "./turn-fixture.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import type { TurnEvent } from "../turn/turn-types.js";
 import { diagnoseStageB } from "./narrator-bakeoff.js";

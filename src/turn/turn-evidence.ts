@@ -2,7 +2,7 @@ import { transferRecipient } from "../campaign/item-transfer.js";
 import type { CharacterMovement } from "./movement/character-movement.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import { freezeSnapshot } from "../campaign/validation.js";
-import type { TurnContext } from "./context-builder.js";
+import type { TurnContext } from "./context/context-builder.js";
 import type { PlayerIntent } from "./player-intent.js";
 import { normalizeReference, type ResolvedReference } from "./items/reference-resolution.js";
 import type { PhysicalInteraction } from "./physical-interaction.js";

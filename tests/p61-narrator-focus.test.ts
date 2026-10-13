@@ -2,13 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { buildNarratorPrompt, NARRATOR_RPG_FORMAT, NARRATOR_PLAYER_KNOWLEDGE } from "../src/turn/prompt-builder.js";
-import { projectNarratorFocus } from "../src/turn/narrator-focus.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { buildNarratorPrompt, NARRATOR_RPG_FORMAT, NARRATOR_PLAYER_KNOWLEDGE } from "../src/turn/context/prompt-builder.js";
+import { projectNarratorFocus } from "../src/turn/context/narrator-focus.js";
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { narratorPackOf, renderCandidateRequest } from "../src/turn/narrator-pack.js";
+import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
 import type { PlayerIntent } from "../src/turn/player-intent.js";
 

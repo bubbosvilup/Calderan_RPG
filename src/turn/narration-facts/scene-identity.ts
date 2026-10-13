@@ -1,5 +1,5 @@
 import type { WorldStore } from "../../world/world-store.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import { numberValue } from "../language/numbers.js";
 import { escapeRegExp as esc } from "../language/text.js";

@@ -1,4 +1,4 @@
-import type { KnowledgeSourcePack, KnowledgeUnit } from "../turn/narrator-pack.js";
+import type { KnowledgeSourcePack, KnowledgeUnit } from "../turn/context/narrator-pack.js";
 import type { Usage } from "./types.js";
 export type CompressionReason = "auto" | "manual";
 export interface CompressionRequest {

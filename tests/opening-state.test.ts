@@ -4,8 +4,8 @@ import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { createOpeningCampaign, OPENING_FACTS, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../src/campaign/opening-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
-import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/narrative-authority.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
+import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 
 test("canon defines Nicco as the single player and connects the square outside Heartstone both ways", async () => {
   const world = await loadWorld("data"), nicco = world.getEntity("nicco");

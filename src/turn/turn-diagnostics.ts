@@ -1,12 +1,12 @@
 import { freezeSnapshot } from "../campaign/validation.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { GenerationMetadata } from "../llm/types.js";
-import type { TurnContext } from "./context-builder.js";
-import { CONTEXT_LIMITS, contextSerializedCharacters } from "./context-builder.js";
-import { deduplicateRecovered, type NpcPlusDiagnostics } from "./npc-plus.js";
-import type { retrieveForTurn } from "./retrieval-policy.js";
+import type { TurnContext } from "./context/context-builder.js";
+import { CONTEXT_LIMITS, contextSerializedCharacters } from "./context/context-builder.js";
+import { deduplicateRecovered, type NpcPlusDiagnostics } from "./context/npc-plus.js";
+import type { retrieveForTurn } from "./context/retrieval-policy.js";
 type RetrievalOutcome = Awaited<ReturnType<typeof retrieveForTurn>>;
-import { RETRIEVAL_LIMITS } from "./retrieval-policy.js";
+import { RETRIEVAL_LIMITS } from "./context/retrieval-policy.js";
 import type { ProviderAttemptRecord } from "../llm/retry.js";
 import type { AuthorizationDiagnostic, PublicationStep, TurnFailure } from "./turn-types.js";
 import type { NarratorGenerationTrace } from "./narrator-ledger.js";
@@ -15,7 +15,7 @@ export type DiagnosticPhase = "input_intent" | "projection" | "retrieval" | "pro
 export interface TurnDiagnostics {
   provider_reliability?: Readonly<Record<string,number>>;
   mannerism_portrayal?: import("./mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
-  context_budget?: import("./context-budget.js").ContextBudgetSnapshot;
+  context_budget?: import("./context/context-budget.js").ContextBudgetSnapshot;
   /** Block 4: the request identity (REV-2), when the caller supplied one. */
   turn_key?: string;
   /** Block 4 (NARR-1): every logical Narrator generation and physical provider attempt of this turn, with finish reasons, tokens, model, provider/route and the truncation-recovery result. */

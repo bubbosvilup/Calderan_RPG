@@ -1,5 +1,5 @@
-import { rpgNarration } from "./rpg-dialogue.js";
-import type { RecentExchange } from "./recent-conversation.js";
+import { rpgNarration } from "../rpg-dialogue.js";
+import type { RecentExchange } from "../recent-conversation.js";
 
 export const RECENT_SCENE_NARRATION_TURNS = 2;
 export const RECENT_SCENE_NARRATION_CHARACTERS = 2_000;

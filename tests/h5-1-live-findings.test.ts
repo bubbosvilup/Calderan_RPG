@@ -6,7 +6,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand, CampaignSnapshot } from "../src/campaign/types.js";
 import type { DeepReadonly } from "../src/types/readonly.js";
 import type { WorldStore } from "../src/world/world-store.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { resolvePlayerCarry, characterLocation } from "../src/turn/movement/character-movement.js";
 import { narratedDepartures } from "./movement-readers.js";

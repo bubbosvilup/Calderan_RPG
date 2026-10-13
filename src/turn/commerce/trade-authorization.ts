@@ -1,7 +1,7 @@
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
-import type { TurnContext } from "../context-builder.js";
+import type { TurnContext } from "../context/context-builder.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
 import { itemHolder, transferCharacterPresent } from "../../campaign/item-transfer.js";
 import { activePlayerCharacterId } from "../../campaign/player-character.js";

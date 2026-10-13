@@ -4,7 +4,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { WorldStore } from "../src/world/world-store.js";
 import { findRoute, travelDestination } from "../src/world/travel.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
-import { buildTurnContext } from "../src/turn/context-builder.js";
+import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";

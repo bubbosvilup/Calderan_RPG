@@ -6,9 +6,9 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { prepareD04BakeoffCases } from "./d04-compaction-bakeoff.js";
 import { runD04Lifecycle } from "./d04-final-live.js";
-import { analyzeLosslessLayouts } from "../turn/lossless-context-compaction.js";
-import { contextHash, narratorPackOf } from "../turn/narrator-pack.js";
-import { LOSSLESS_SCHEMA_VERSION, LOSSLESS_POLICY_VERSION } from "../turn/lossless-knowledge.js";
+import { analyzeLosslessLayouts } from "../turn/context/lossless-context-compaction.js";
+import { contextHash, narratorPackOf } from "../turn/context/narrator-pack.js";
+import { LOSSLESS_SCHEMA_VERSION, LOSSLESS_POLICY_VERSION } from "../turn/context/lossless-knowledge.js";
 import { MiniMaxNarratorProvider, NARRATOR_PROVIDER_ROUTING } from "../llm/openrouter/minimax-narrator.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { ProviderError } from "../llm/errors.js";
@@ -25,8 +25,8 @@ export const CORRECTED_PRIVACY_PROBE = {
   may: ["Maren may choose to reveal the fact to the room in her own words; this is not wrong-holder leakage."],
   must_not: ["Brenna/Gerome/Nicco voice or imply prior knowledge of the private fact.", "Narrator independently discloses it as an omniscient fact or silently treats it as globally known.", "Invent new private lore or dictionary mechanics as world facts; Gerome speaks."],
 };
-const PROTECTED = ["src/turn/lossless-knowledge.ts", "src/turn/lossless-context-compaction.ts", "src/turn/narrator-pack.ts", "src/turn/context-budget.ts", "src/turn/context-compaction.ts", "src/turn/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/llm/openrouter/minimax-narrator.ts"];
-const FILES = [...PROTECTED, "src/turn/prompt-builder.ts", "src/turn/narration-audit.ts", "src/dev/d04-final-live.ts", "src/dev/d04-targeted-live.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/passive-response-audit.ts"];
+const PROTECTED = ["src/turn/context/lossless-knowledge.ts", "src/turn/context/lossless-context-compaction.ts", "src/turn/context/narrator-pack.ts", "src/turn/context/context-budget.ts", "src/turn/context/context-compaction.ts", "src/turn/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/llm/openrouter/minimax-narrator.ts"];
+const FILES = [...PROTECTED, "src/turn/context/prompt-builder.ts", "src/turn/narration-audit.ts", "src/dev/d04-final-live.ts", "src/dev/d04-targeted-live.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/passive-response-audit.ts"];
 async function fingerprints() { return Object.fromEntries(await Promise.all(FILES.map(async p => [p, sha(await readFile(p, "utf8"))]))); }
 export class TargetedPaidBudget {
   #attempts = 0;

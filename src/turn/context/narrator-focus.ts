@@ -1,12 +1,12 @@
 import type { TurnContext } from "./context-builder.js";
-import type { PlayerIntent } from "./player-intent.js";
-import type { RecentExchange } from "./recent-conversation.js";
-import type { SceneParticipantPlan } from "./scene-participants.js";
-import { INACTIVE_EXPIRY_TURNS, castingOptions } from "./scene-participants.js";
-import { narratorIdentityGate } from "./narrator-identity.js";
-import { playerAuthoredEvents } from "./player-authored-events.js";
-import { canonicalInteractionTargets } from "./canonical-interaction-targets.js";
-import { escapeRegExp } from "./language/text.js";
+import type { PlayerIntent } from "../player-intent.js";
+import type { RecentExchange } from "../recent-conversation.js";
+import type { SceneParticipantPlan } from "../scene-participants.js";
+import { INACTIVE_EXPIRY_TURNS, castingOptions } from "../scene-participants.js";
+import { narratorIdentityGate } from "../narrator-identity.js";
+import { playerAuthoredEvents } from "../player-authored-events.js";
+import { canonicalInteractionTargets } from "../canonical-interaction-targets.js";
+import { escapeRegExp } from "../language/text.js";
 
 /** Derived narrator attention only. No roster, campaign or controller mutation. */
 export function projectNarratorFocus(context: TurnContext, input: string, recent: readonly RecentExchange[], intent: PlayerIntent, participants?: SceneParticipantPlan) {

@@ -3,7 +3,7 @@ import { applyAuthorized } from "./provisional-helper.js";
 import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
-import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context-builder.js";
+import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context/context-builder.js";
 import { establishNames } from "../src/turn/name-establishment.js";
 import { RecentConversation, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { playerIntent } from "../src/turn/player-intent.js";
@@ -12,7 +12,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { deriveSessionView } from "../src/app/session-view.js";
 import { derivePlayUiView } from "../src/app/play-ui-view.js";
-import { buildNarratorPrompt } from "../src/turn/prompt-builder.js";
+import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { mockNarrator, mockController, collect } from "./turn-fixtures.js";
 
 // Audit characterization, not a replay of the live transcript. The identity cases below were converted to acceptance expectations

@@ -5,7 +5,7 @@ import { CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/s
 import { CONTROLLER_SCHEMA } from "../llm/controller-schema.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import { parseCampaignProposal } from "../campaign/validation.js";
-import { buildTurnContext } from "../turn/context-builder.js";
+import { buildTurnContext } from "../turn/context/context-builder.js";
 import { playerIntent } from "../turn/player-intent.js";
 import { deriveTurnEvidence } from "../turn/turn-evidence.js";
 import { authorizeCommands } from "../turn/command-authorizer.js";

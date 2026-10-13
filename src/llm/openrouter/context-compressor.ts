@@ -1,7 +1,7 @@
 import { ProviderError } from "../errors.js";
 import { OpenRouterClient } from "./client.js";
 import { COMPRESSOR_SCHEMA, COMPRESSOR_SYSTEM, type ContextCompressorProvider, type CompressionRequest, type CompressionResponse } from "../context-compressor-provider.js";
-import { COMPRESSION_SCHEMA_VERSION } from "../../turn/narrator-pack.js";
+import { COMPRESSION_SCHEMA_VERSION } from "../../turn/context/narrator-pack.js";
 /** No default or fallback model. Uses the existing authenticated, bounded HTTP transport. */
 export class OpenRouterContextCompressor implements ContextCompressorProvider {
   constructor(readonly model_id: string, private readonly client = new OpenRouterClient()) { if (!model_id.trim()) throw new ProviderError("configuration_error"); }

@@ -4,7 +4,7 @@ import { mkdir, writeFile, readdir, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { loadWorld } from '../.build/src/world/loader.js';
 import { createOpeningCampaign } from '../.build/src/campaign/opening-state.js';
-import { buildTurnContext } from '../.build/src/turn/context-builder.js';
+import { buildTurnContext } from '../.build/src/turn/context/context-builder.js';
 import { OpenRouterClient } from '../.build/src/llm/openrouter/client.js';
 import { onlineCoordinator, selectedModels } from '../.build/src/dev/turn-services.js';
 import { capturingFetch, settle } from '../.build/src/dev/narrator-bakeoff.js';

@@ -1,4 +1,4 @@
-import type { TurnContext } from "../src/turn/context-builder.js";
+import type { TurnContext } from "../src/turn/context/context-builder.js";
 import type { WorldStore } from "../src/world/world-store.js";
 import type { CharacterMovement, MovableCharacter } from "../src/turn/movement/character-movement.js";
 import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, presenceClaimsFromFacts, type MovementWhere } from "../src/turn/movement/movement-evidence.js";
