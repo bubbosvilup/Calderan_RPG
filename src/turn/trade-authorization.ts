@@ -7,7 +7,9 @@ import { itemHolder, transferCharacterPresent } from "../campaign/item-transfer.
 import { activePlayerCharacterId } from "../campaign/player-character.js";
 import { activeTradeOffer, isTradeCommand } from "../campaign/trade.js";
 import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
-import { AUCTION, fractionalPrice, readPrices, statedGold, unsupportedCurrency } from "./trade-price.js";
+import { AUCTION } from "./trade-price.js";
+import { createFactSource, type NarrationFactSource } from "./narration-facts/index.js";
+import { inSegment, unsupportedMoney, withdrawalIn } from "./commerce-evidence.js";
 import { escapeRegExp as esc, sentencesOf } from "./language/text.js";
 
 /**
@@ -17,15 +19,12 @@ import { escapeRegExp as esc, sentencesOf } from "./language/text.js";
  * Settlement is not in this module and cannot be: `accept_trade_offer` has no Controller or narration path at all.
  */
 export const isTradeProposal = (c: CampaignCommand): boolean => isTradeCommand(c);
-const HYPOTHETICAL = /\?|\b(?:if|maybe|perhaps|might|could|would|should|supposing|suppose|how much|what(?:'s| is) (?:the|your) price|name your price|haggl\w*|negotiat\w*)\b/i;
-const WITHDRAWAL = /\b(?:withdraws?|withdrew|refuses?|refused|no longer|not for sale|changes? (?:his|her|their) mind|changed (?:his|her|their) mind|takes? (?:it|them) back|off the table|won'?t sell|will not sell|not selling|sold (?:it|them) (?:to|already)|offer (?:is )?(?:gone|off|withdrawn)|pulls? (?:it|them) back|put[s]? (?:it|them) away)\b/i;
 const STOP = new Set(["the", "a", "an", "of", "and", "with", "for", "in", "on", "to", "pair", "set", "some", "old", "new", "small", "large", "little", "big"]);
 const normName = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ").replace(/^(?:the|a|an|some)\s+/, "");
 const squash = (s: string) => s.replace(/\s+/g, " ").trim();
 const wordsOf = (s: string) => s.toLowerCase().split(/[^a-z0-9']+/).filter(w => w.length > 2 && !STOP.has(w));
 
 const PERSON_GOODS = /\b(?:ones?|woman|women|girls?|men|man|boys?|slaves?|captives?|prisoners?|laundress|workers?|child|children|persons?|people|lass|lad|maid|servants?)\b/i;
-export { statedGold };
 
 /** The player's own words say THEY are the seller ("I want to sell my sword", "how much will you pay me for it"). */
 const SELL_CUE = /\bsell(?:ing)?\b|\b(?:pay|give|offer|bid)\s+(?:me|us)\b|\bbuy\b[^.!?]{0,30}\bfrom me\b|\bwould you (?:buy|take)\b/i;
@@ -54,8 +53,10 @@ export interface TradeProposalInput { readonly command: CampaignCommand; readonl
  * Decides every trade proposal of one turn. `proposed` carries the Controller's commands with their evidence quotes (same order as the proposal).
  * Returns one diagnostic per input.
  */
-export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], narration: string, context: TurnContext, projected: DeepReadonly<CampaignSnapshot>, world: WorldStore | undefined): AuthorizationDiagnostic[] {
+export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], narration: string, context: TurnContext, projected: DeepReadonly<CampaignSnapshot>, world: WorldStore | undefined, factSource?: NarrationFactSource): AuthorizationDiagnostic[] {
   const text = squash(narration), who = activePlayerCharacterId(projected) ?? "nicco";
+  // The SAME commerce facts every other consumer of this text reads (the coordinator hands its source; direct callers get one built from the context).
+  const source = factSource ?? createFactSource({ movers: [], context }), draftFacts = source.of(narration);
   const location = projected.runtime.scene.player_location;
   const place = world?.getEntity(location);
   const auctionPlace = !!place && /\bauction/i.test(`${place.name} ${place.display_name}`);
@@ -70,7 +71,7 @@ export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], n
       if (!quote) return no("no_quote");
       const q = squash(quote), at = text.indexOf(q);
       if (q.length < 8 || q.length > EVIDENCE_QUOTE_MAX || at < 0) return no("quote_not_verbatim");
-      if (!WITHDRAWAL.test(q)) return no("withdrawal_not_stated");
+      if (!withdrawalIn(draftFacts, q)) return no("withdrawal_not_stated");
       return decide(command, quote, true, "withdrawal_stated");
     }
     if (command.kind !== "propose_trade_offer") return no("trade_kind_not_allowed", "trade_kind_not_allowed");
@@ -82,12 +83,17 @@ export function authorizeTradeProposals(inputs: readonly TradeProposalInput[], n
     if (at < 0) return no("quote_not_verbatim");
     // The containing sentence(s) decide currency and auction wording even when the quote is only the price clause.
     const sentence = sentencesOf(text).filter(s => s.includes(q) || q.includes(s) || text.indexOf(s) < at + q.length && text.indexOf(s) + s.length > at).join(" ") || q;
-    if (unsupportedCurrency(sentence) || unsupportedCurrency(q) || readPrices(q, { concrete: true }).unsupported === "currency") return no("unsupported_currency");
+    const money = unsupportedMoney(draftFacts, sentence) ?? unsupportedMoney(draftFacts, q);
+    if (money === "currency" || source.quote(q, []).some(f => f.kind === "unsupported_money" && f.form === "currency")) return no("unsupported_currency");
     if (AUCTION.test(sentence) || AUCTION.test(q) || auctionPlace) return no("auction_not_an_offer", "auction_bid_not_offer");
-    if (HYPOTHETICAL.test(q)) return no("not_a_concrete_offer", "hypothetical_or_question");
-    if (fractionalPrice(q) || fractionalPrice(sentence)) return no("fractional_price", "unsupported_currency");
     const subjectWords = command.subject.kind === "goods" ? command.subject.lines.flatMap(l => wordsOf(l.name)) : command.subject.kind === "items" ? command.subject.item_ids.flatMap(id => wordsOf(projected.items.find(i => i.id === id)?.name ?? "")) : [];
-    const stated = statedGold(q, subjectWords);
+    const quoteFacts = source.quote(q, subjectWords), quoted = quoteFacts.filter(f => f.kind === "price_quote");
+    // A quote that states its price only as a question, condition, refusal or supposition is not a concrete offer.
+    if (quoted.length && !quoted.some(f => f.modality === "completed") || /\?/.test(q)) return no("not_a_concrete_offer", "hypothetical_or_question");
+    if (money === "fraction" || quoteFacts.some(f => f.kind === "unsupported_money" && f.form === "fraction")) return no("fractional_price", "unsupported_currency");
+    // The player's own figure is a counteroffer, never the seller's price: a quote the narration attributes to Nicco cannot back an offer.
+    if (draftFacts.commerce.some(f => f.kind === "price_quote" && f.quote_role === "player_counter" && inSegment(f, q))) return no("player_counter_not_offer", "player_counter_not_offer");
+    const stated = quoted.flatMap(f => f.kind === "price_quote" && f.modality === "completed" && f.quote_kind === "current" ? [f.amount] : []);
     if (!stated.includes(command.price_gold)) return no("price_not_in_quote");
     if (new Set(stated).size > 1 && !new RegExp(`\\b(?:total|altogether|for the (?:lot|pair|set|both|all))\\b`, "i").test(q)) return no("several_prices_in_quote");
     // The goods or items must be in the scene's narration around the quote, never invented by the proposal.

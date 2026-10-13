@@ -6,3 +6,4 @@ export { stairDirection } from "./departure-forms.js";
 export { DEPART_ACT, FOLLOWS_NICCO, STAIR_WORD } from "./movement-vocabulary.js";
 export { ephemeralDepartureFacts } from "./departure-forms.js";
 export { frameOf } from "./frame.js";
+export { extractInputCommerceFacts } from "./extract.js";

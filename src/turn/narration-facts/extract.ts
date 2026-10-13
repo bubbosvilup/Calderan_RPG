@@ -4,11 +4,12 @@ import { GATES } from "../language/gates.js";
 import { arrivalContinuationFacts, playerMovementFacts } from "./player-forms.js";
 import { claimDepartureFacts, presenceClaimFacts, sceneDepartureFacts } from "./departure-forms.js";
 import { type NarrationFrame, frameOf, spanOf } from "./frame.js";
+import { commerceFacts, inputCommerceFacts } from "./commerce-forms.js";
 import { locationClaimFacts } from "./location-forms.js";
 import { movementFormFacts } from "./movement-forms.js";
 import { baseFormModality, modalityOf, polarityOf } from "./modality.js";
 import { type Referent, nameRef, pronounRef, refAmbiguity, unresolvedRef } from "./subjects.js";
-import type { EntityDepartedFact, EntityFollowedFact, EntityStayedFact, FactEntityRef, MovementFact, NarrationFacts } from "./types.js";
+import type { CommerceFact, EntityDepartedFact, EntityFollowedFact, EntityStayedFact, FactEntityRef, MovementFact, NarrationFacts } from "./types.js";
 
 
 
@@ -100,5 +101,21 @@ export function extractNarrationFacts(narration: string, scope: NarrationFactSco
     ...arrivalContinuationFacts(frame, scope.movers, scope.context),
     ...(narration.includes("\"") || narration.includes("“") ? quotedFacts(frame, scope) : []),
   ];
-  return Object.freeze({ narration, movement: Object.freeze(movement) });
+  const commerce = commerceFacts(frame, { people: commercePeople(scope) });
+  return Object.freeze({ narration, movement: Object.freeze(movement), commerce: Object.freeze(commerce) });
+}
+
+/** The people commerce text may name (the scene's movers and everyone in the context), as plain referents. */
+function commercePeople(scope: NarrationFactScope): Referent[] {
+  const pool: Referent[] = [...scope.movers];
+  for (const c of scope.context.characters) if (c.id !== "nicco" && !pool.some(p => p.id === c.id)) pool.push({ id: c.id, names: [c.profile.name ?? c.id, ...(c.profile.aliases ?? [])] });
+  return pool;
+}
+/** Commerce facts of the PLAYER's own input: every figure is a player counter. */
+export function extractInputCommerceFacts(input: string): readonly CommerceFact[] {
+  return Object.freeze(inputCommerceFacts(frameOf(input)));
+}
+/** Commerce facts of a verbatim QUOTE of the delivered text, read with the goods words the quote is about ("the halberd is fifteen"). */
+export function extractQuoteCommerceFacts(quote: string, scope: NarrationFactScope, subjects: readonly string[]): readonly CommerceFact[] {
+  return Object.freeze(commerceFacts(frameOf(quote), { people: commercePeople(scope), subjects }));
 }

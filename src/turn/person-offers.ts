@@ -8,7 +8,9 @@ import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { materializeProvisional } from "./provisional-people.js";
 import { CAPTIVE, establishedFacts, linkedParticipant, readScene, refersTo, type NarratedPerson, type NarrationUnit, type SceneReading } from "./narrated-captives.js";
 import { NUMBER_PHRASE_SOURCE } from "./language/numbers.js";
-import { AUCTION, pricesInText, readPrices, unsupportedCurrency, goldAmounts } from "./trade-price.js";
+import { AUCTION } from "./trade-price.js";
+import { createFactSource, type NarrationFactSource, type NarrationFacts } from "./narration-facts/index.js";
+import { actionableQuote, inSegment, sellerPrices, sellerQuotes, unsupportedMoney } from "./commerce-evidence.js";
 import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
 
 /**
@@ -26,7 +28,11 @@ export interface PersonOfferResolution {
   readonly commands: readonly CampaignCommand[];
   readonly diagnostics: readonly { readonly status: "offered" | "blocked" | "ambiguous" | "no_offer"; readonly detail: Readonly<Record<string, unknown>> }[];
 }
-export interface OfferOptions { readonly world: WorldStore; readonly participants?: readonly EphemeralSceneParticipant[] }
+export interface OfferOptions { readonly world: WorldStore; readonly participants?: readonly EphemeralSceneParticipant[];
+  /** The turn's shared NarrationFacts source (the audit and authorization read the same one). Omitted: one is built here from the context. */
+  readonly facts?: NarrationFactSource }
+/** What a seller-voiced text STATES as the current price, read from the shared commerce facts of the delivered narration. */
+type PriceReader = (text: string) => number[];
 const NUM = `(${NUMBER_PHRASE_SOURCE})`;
 const DOCUMENTED = /\b(?:papers? included|with (?:the |full |clean )?papers|clean transfer|(?:his|her|the seller's|my) seal|no liens|bill of sale|deed of (?:sale|transfer)|transfer papers)\b/i;
 const UNDOCUMENTED = /\b(?:no papers|without (?:any )?papers|no listing|unlisted|unpapered|off the books|papers? (?:are )?(?:missing|lost|burned))\b/i;
@@ -45,6 +51,10 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const latestExchange = latestOf(recent);
   const latest = latestExchange?.narration ?? "";
   if (!latest || AUCTION.test(latest) && /\b(?:bids?|bidding|lot)\b/i.test(latest)) return { commands, diagnostics };
+  // ONE reading of the delivered narration's prices: the shared commerce facts (a seller-voiced, current, completed quote; never the player's figure).
+  const facts = (options.facts ?? createFactSource({ movers: [], context })).of(latest);
+  const prices: PriceReader = text => sellerPrices(facts, text);
+  const unsupported = (text: string) => unsupportedMoney(facts, text) !== undefined;
   const candidates = [...present].filter(id => { const l = legal(id); return l?.status === "enslaved" && l.holder_id !== "nicco" && !!l.holder_id && present.has(l.holder_id); });
   // Narrator-created captives of the current scene (and present persistent people not yet legally held, e.g. promoted by name) compete with held persons for the one subject.
   const unheld = new Set(context.characters.filter(c => c.id !== "nicco" && !legal(c.id) && /\bcaptive\b/.test(c.established_origin?.role ?? "")).map(c => c.id));
@@ -55,31 +65,33 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const late = context.characters.filter(c => c.id !== "nicco" && !unheld.has(c.id) && !legal(c.id) && c.established_origin?.descriptor && nouns.has(c.established_origin.descriptor.toLowerCase())).map(c => c.id);
   if (late.length) reading = readScene(recent, context, options.world, { unheld: new Set([...unheld, ...late]), ...readingOptions });
   // The seller points at someone the narration only showed as part of a group ("Two women sit inside…", "Three hundred for her."): that person is the subject.
-  const pointed = reading.captives.length ? undefined : pointedCaptive(reading, input);
+  const pointed = reading.captives.length ? undefined : pointedCaptive(reading, input, prices, facts);
   if (pointed) reading = { ...reading, persons: [...reading.persons, pointed], captives: [pointed] };
   const target = resolveTarget(input, candidates, reading, named, latestExchange);
-  if (target?.kind === "narrated") { offerNarrated(target.person, reading, { input, context, snapshot, baseRevision, participants: options.participants ?? [], latest: latestExchange, commands, diagnostics, name, txId,
+  if (target?.kind === "narrated") { offerNarrated(target.person, reading, { input, context, snapshot, baseRevision, participants: options.participants ?? [], latest: latestExchange, commands, diagnostics, name, txId, facts, prices, unsupported,
     keepClaim: (text: string) => classifyBackgroundClaim(text, options.world).status !== "unverified" }); return { commands, diagnostics }; }
   if (target?.kind === "ambiguous" || target?.kind === "changed") { diagnostics.push({ status: target.kind === "changed" ? "blocked" : "ambiguous", detail: { candidates: target.labels, ...(target.kind === "changed" ? { reason: "subject_changed" } : {}) } }); return { commands, diagnostics }; }
   if (!candidates.length) return { commands, diagnostics };
   // Persistent path: a held person whom the seller's latest narration prices. The subject is the resolved target, else the scene's single held person.
   const PRICE_WORDS = new RegExp(`\\b(?:price|how much|sell|for sale|asking|costs?|worth|buy|take (?:her|him|them))\\b|["“]\\s*${NUM}\\s+gold\\b|["“]\\s*${NUM}\\s*[.!](?!\\w)`, "i");
   const talk = PRICE_WORDS.test(latest) || PRICE_WORDS.test(input) || PRICE_WORDS.test(latestExchange?.player ?? "");
-  const own = (id: string) => pricedSentences(latest, id, candidates, named, input);
+  const own = (id: string) => pricedSentences(latest, id, candidates, named, input, prices);
   // Without a sentence naming the person, a quote still prices the one held person when the exchange is price talk ("Sixty gold. She's sound.").
   // ...but only when the exchange is about a person at all: a goods price ("Fifty gold for the crown") never prices the held person.
   const PERSON = /\b(?:woman|girl|man|boy|lass|lad|child|slave|captive|prisoner|worker|elf|beastfolk|she|her|him|them)\b/i;
   const beats = sentences(latest);
-  const aboutAPerson = (id: string) => named(input, id) || beats.some((t, i) => amountsIn(t).length && !NOT_AN_OFFER.test(t) && [beats[i - 1], t, beats[i + 1]].some(x => !!x && (named(x, id) || PERSON.test(x))));
-  const linesFor = (id: string) => own(id).length ? own(id) : talk && aboutAPerson(id) ? beats.filter(t => !NOT_AN_OFFER.test(t) && amountsIn(t).length) : [];
+  const aboutAPerson = (id: string) => named(input, id) || beats.some((t, i) => prices(t).length && [beats[i - 1], t, beats[i + 1]].some(x => !!x && (named(x, id) || PERSON.test(x))));
+  const linesFor = (id: string) => own(id).length ? own(id) : talk && aboutAPerson(id) ? beats.filter(t => prices(t).length) : [];
   const subject = target?.kind === "persistent" ? target.id : candidates.length === 1 ? candidates[0] : undefined;
   const priced = candidates.filter(id => own(id).length);
   const chosen = subject ? (linesFor(subject).length ? subject : undefined) : priced.length === 1 ? priced[0] : undefined;
   if (!chosen) { if (!subject && priced.length > 1) diagnostics.push({ status: "ambiguous", detail: { candidates: priced } }); return { commands, diagnostics }; }
   const sellerId = legal(chosen)!.holder_id!;
   const lines = linesFor(chosen);
-  if (lines.some(l => unsupportedCurrency(l) || readPrices(l, { concrete: true }).unsupported)) { diagnostics.push({ status: "blocked", detail: { subject: chosen, reason: "unsupported_currency" } }); return { commands, diagnostics }; }
-  const price = lines.flatMap(amountsIn).at(-1);
+  if (lines.some(l => unsupported(l))) { diagnostics.push({ status: "blocked", detail: { subject: chosen, reason: "unsupported_currency" } }); return { commands, diagnostics }; }
+  const quote = actionableQuote(lines.flatMap(l => sellerQuotes(facts, l)));
+  if (quote.kind === "ambiguous") { diagnostics.push({ status: "ambiguous", detail: { subject: chosen, seller: sellerId, reason: "several_prices", amounts: quote.amounts } }); return { commands, diagnostics }; }
+  const price = quote.kind === "quote" ? quote.quote.amount : undefined;
   if (price === undefined || price < 1) { diagnostics.push({ status: "no_offer", detail: { subject: chosen, seller: sellerId } }); return { commands, diagnostics }; }
   const papers: TransferDocumentation = UNDOCUMENTED.test(latest) ? "undocumented" : DOCUMENTED.test(latest) ? "documented" : "unestablished";
   const said = sentences(latest.replace(/["“”]/g, ""));
@@ -96,13 +108,11 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
  * A bare number sentence that the next sentence turns down ("Two hundred. You're a full third off.") repeats the buyer's figure and is no offer.
  */
 /** Prices a block of narration states, sentence by sentence (shared grammar: src/turn/trade-price.ts). */
-export const pricesOf = (text: string): number[] => pricesInText(text);
-const amountsIn = pricesOf;
 /** Sentences of the latest narration that state a price and are about this person (their name, or the only held person by pronoun/noun), excluding past costs and group prices. */
-function pricedSentences(latest: string, id: string, candidates: readonly string[], named: (text: string, id: string) => boolean, input: string): string[] {
+function pricedSentences(latest: string, id: string, candidates: readonly string[], named: (text: string, id: string) => boolean, input: string, prices: PriceReader): string[] {
   const only = candidates.length === 1;
   const request = /\b(?:price|how much|sell|buy)\b/i.test(input) && named(input, id);
-  return sentences(latest).filter(t => !NOT_AN_OFFER.test(t) && amountsIn(t).length && (named(t, id) || (only && /\b(?:she|her|he|him|them|the (?:girl|woman|man|boy|lass|lad|slave|captive))\b/i.test(t)) || request));
+  return sentences(latest).filter(t => prices(t).length && (named(t, id) || (only && /\b(?:she|her|he|him|them|the (?:girl|woman|man|boy|lass|lad|slave|captive))\b/i.test(t)) || request));
 }
 
 /**
@@ -113,8 +123,8 @@ function pricedSentences(latest: string, id: string, candidates: readonly string
  */
 const PERSON_ONE = /\b(?:the|that|this) [a-z-]+(?: [a-z-]+)? one\b|\bgot (?:one|another)\b|\bone right here\b|\b(?:young|younger|old|older|other) one\b/i;
 const PERSON_FACTS = /\b(?:twenty|thirty|forty|fifteen|sixteen|seventeen|eighteen|nineteen)[- a-z]*\b|\b\d{2}\b|\bcan read\b|\bhealthy\b|\bsturdy\b|\bknows (?:her|his) work\b|\bdebt[- ]settlement\b|\bno marks\b|\bgood health\b|\bfollow orders\b|\bdoes(?:n't| not) (?:give|cause) trouble\b|\bstrong back\b|\btrade skills\b|\bhaul(?:ing)?\b|\bsound working\b/i;
-function pointedCaptive(reading: SceneReading, input: string): NarratedPerson | undefined {
-  const priced = reading.units.filter(u => u.exchange === reading.latest && u.quoted && !!u.speaker && !u.speaker.startsWith("other:") && pricesOf(u.text).length && !NOT_AN_OFFER.test(u.text));
+function pointedCaptive(reading: SceneReading, input: string, prices: PriceReader, facts: NarrationFacts): NarratedPerson | undefined {
+  const priced = reading.units.filter(u => u.exchange === reading.latest && u.quoted && !!u.speaker && !u.speaker.startsWith("other:") && prices(u.text).length && !facts.commerce.some(f => f.kind === "price_quote" && f.quote_kind !== "current" && inSegment(f, u.text)));
   const refs = priced.map(u => u.text.match(/\b(?:for|to take|take) (her|him)\b|\b(she|he)(?:'s| is)\b|\b(her|him)\b/i)).filter((m): m is RegExpMatchArray => !!m);
   const sexes = new Set(refs.map(m => /^(?:her|she)$/i.test((m[1] ?? m[2] ?? m[3])!) ? "woman" : "man"));
   // The player's own purchase/price request names the sex ("Sell her to me"); it beats a narration pronoun ("he's" is usually the seller).
@@ -236,8 +246,6 @@ function aliasOf(c: NarratedPerson, input: string, persistent: readonly string[]
   return tied.length === 1 ? { kind: "persistent", id: tied[0]! } : { kind: "ambiguous", labels: [c.label, ...compatible] };
 }
 
-/** Past costs and group prices are not an offer for one person. */
-const NOT_AN_OFFER = new RegExp(`\\b(?:paid|cost me|charged me|was for)\\s+${NUM}|\\bfor (?:the lot|both|all|them all|the (?:two|three|four|five) of them)\\b|\\beach\\b`, "i");
 /** Seller authority over a narrated person: ownership, or an explicit offer of that person for sale. Mere presence or description never counts. */
 const AUTHORITY = new RegExp([
   `\\b(?:she|he|they)(?:'s|’s| is| are)\\s+(?:yours|mine)\\b`, `\\byours for\\b`, `\\btake (?:her|him|them)(?: off my hands| for)\\b`, `\\bi own (?:her|him|them|this one)\\b`,
@@ -251,6 +259,8 @@ interface PurchaseScope {
   readonly name: (id: string) => string; readonly txId: (subject: string) => string;
   /** Background Grounding V1: rejects unverified named background claims before they become durable. */
   readonly keepClaim?: (text: string) => boolean;
+  /** The shared commerce facts of the delivered narration and the readers built on them. */
+  readonly facts: NarrationFacts; readonly prices: PriceReader; readonly unsupported: (text: string) => boolean;
 }
 /**
  * A seller is (a) a present persistent character, (b) a narrator-created person with an established proper name (promoted by the
@@ -283,7 +293,7 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   ];
   const latestUnits = reading.units.filter(u => u.exchange === reading.latest);
   // Per sentence: "Five. She's a burden I paid four for." offers five; the past cost in the next sentence is not an offer.
-  const amounts = (text: string) => { const parts = sentences(text); return parts.flatMap((t, i) => NOT_AN_OFFER.test(t) ? [] : goldAmounts(t, { concrete: true, prev: parts[i - 1], next: parts[i + 1] })); };
+  const amounts = (text: string) => s.prices(text);
   const otherCaptive = (text: string) => reading.captives.some(c => c.ref !== subjectPerson.ref && c.name && refersTo(c, text));
   const priceRequest = /\b(?:price|how much|sell)\b/i.test(s.latest?.player ?? "") || latestUnits.some(u => /\b(?:price|how much)\b/i.test(u.text) && refersTo(subjectPerson, u.text));
   const authorities = sellers.flatMap(seller => {
@@ -297,14 +307,16 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
     // An offer exists only for a price the seller stated ABOUT this person (or in reply to a price request for them): an unrelated price (goods) is never theirs.
     const forSubject = (u: { speaker?: string; text: string }) => by(u) && (priceRequest || refersTo(subjectPerson, u.text) || (onlyCaptive && /\b(?:she|her|he|him|them)\b/i.test(u.text)) || /\b(?:either one|whichever|any one of them|any of them|either of them)\b/i.test(u.text));
     const aboutSubject = offerUnits.filter(forSubject);
-    return aboutSubject.length ? [{ seller, offered: aboutSubject.flatMap(u => amounts(u.text)), basis: claim ? claim.text.slice(0, 200) : "sale offer in reply to a price request", offer: aboutSubject.at(-1)?.text.slice(0, 200) }] : [];
+    return aboutSubject.length ? [{ seller, offered: aboutSubject.flatMap(u => sellerQuotes(s.facts, u.text)), basis: claim ? claim.text.slice(0, 200) : "sale offer in reply to a price request", offer: aboutSubject.at(-1)?.text.slice(0, 200) }] : [];
   });
   // Money the engine does not settle (silver, marks, fractions) is a clear refusal, never a silent conversion and never an offer.
-  if (!authorities.length && latestUnits.some(u => !!u.speaker && !!readPrices(u.text, { concrete: true }).unsupported)) return block("blocked", "unsupported_currency", {});
+  if (!authorities.length && latestUnits.some(u => !!u.speaker && s.unsupported(u.text))) return block("blocked", "unsupported_currency", {});
   if (authorities.length !== 1) return block("blocked", authorities.length ? "seller_ambiguous" : "seller_authority_unestablished", { sellers: authorities.map(a => a.seller.label) });
   const { seller, offered, basis, offer } = authorities[0]!;
   // Only the seller's stated price counts: the player's own figures are a counteroffer in chat and never set a price.
-  const price = offered.at(-1);
+  const quote = actionableQuote(offered);
+  if (quote.kind === "ambiguous") return block("blocked", "several_prices", { seller: seller.label, amounts: quote.amounts });
+  const price = quote.kind === "quote" ? quote.quote.amount : undefined;
   if (price === undefined || price < 1) return block("no_offer", "no_price", { seller: seller.label });
   // Papers and provenance: only what the seller said in the offer narration. Never assume clean papers.
   const said = latestUnits.filter(u => !!u.speaker && seller.keys.includes(u.speaker)).map(u => u.text).join(" ");

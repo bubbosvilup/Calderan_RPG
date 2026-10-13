@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-10-12T23:54:20.830Z",
+  "wire_total": 5,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 3,
+    "undefined": 2
+  },
+  "tokens": 25048,
+  "cost_usd": 0,
+  "accept_completed_in": null,
+  "results": [
+    {
+      "id": "A",
+      "purpose": "one provisional person, seller says 100",
+      "verdict": "NOT REACHED",
+      "problems": [],
+      "wire_calls": 5,
+      "subjects": 0,
+      "turns": [
+        {
+          "turn": 1,
+          "numeric": "setup (no number)",
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco makes his way past the public auction, where a clerk is reading terms to a buyer while the sold woman stands between them with her wrists bound. Beyond the rope line that separates the public auction from the private sellers' area, the crowd thins. Here the transactions are quieter — arrangements made between individuals rather than called from a block.*\n\n*Korvin is standing beside an open-fronted shelter where several people sit on a low bench behind him. He's talking to a man in a carter's apron, flipping through a short stack of papers. When Nicco approaches, Korvin finishes what he's saying to the carter, tucks the papers against his chest, and looks over with those small quick eyes — a measuring pass from Nicco's hands to his boots and back up.*\n\n*He doesn't greet Nicco. He jerks his chin slightly, an acknowledgment that amounts to: go ahead, talk.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [
+            "invented_procedure"
+          ],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12369,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "numeric": "seller 100",
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin's brows draw together, not in offense but in the kind of flat recalculation a man does when a number comes out wrong. He tucks the papers under one arm and turns his head toward the bench, then back to Nicco.*\n\nOne woman. Just the one.\n\n*He lets that sit for a second, reading Nicco's face the way he'd read livestock — condition, intent, whether there's more behind the request than what's being said. His tongue works across his lower teeth.*\n\nWhat do you need her for? House, field, bed? Because that changes what I show you. I've got five sitting there right now and they're not the same animal.\n\n*He doesn't wait long before stepping toward the bench, positioning himself so Nicco can see past him. The five on the bench watch the exchange without expression. A couple of them track Korvin's movement; the others look at the ground, at the gravel, at nothing.*\n\n*He gestures with one of those scarred, broad-knuckled hands — not at any individual yet, but at the bench as a whole, a held breath before he commits to showing anything specific.*\n\nTell me what you're after and I'll point you at the right one. Otherwise I'm guessing, and I don't like guessing.",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12679,
+          "cost_usd": 0
+        }
+      ]
+    }
+  ]
+}

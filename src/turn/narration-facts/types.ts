@@ -44,7 +44,7 @@ export interface FactEntityRef {
 /** Offsets into the narration string the facts were extracted from: `narration.slice(start, end) === text`. */
 export interface FactSpan { readonly sentence_index: number; /** Clause inside the sentence (0 when the form is sentence-wide). */ readonly clause_index: number; readonly start: number; readonly end: number; readonly text: string }
 
-export interface FactProvenance { readonly extractor: "movement"; readonly form: string }
+export interface FactProvenance { readonly extractor: "movement" | "commerce"; readonly form: string }
 
 /** Another place in the prose a fact leans on (for example the door wording near a destination-less exit). */
 export interface SupportingRef { readonly role: string; readonly text: string }
@@ -128,7 +128,42 @@ export interface EntityMovedWithPlayerFact extends NarrationFactBase<"entity_mov
 export type MovementFact = EntityMovedFact | EntityArrivedFact | EntityPresentFact | EntityDepartedFact | EntityFollowedFact | EntityStayedFact | EntityMovedWithPlayerFact;
 export type MovementFactKind = MovementFact["kind"];
 
+// ------------------------------------------------------------------------------------------------ commerce (Block 10)
+/** Every commerce fact remembers the exact piece of text (one sentence of one voice) it was read from, so a consumer can tie it to its own unit of text. */
+interface CommerceBase<K extends string> extends NarrationFactBase<K> { readonly source_text: string }
+/** Who is voicing the text: narrator prose, a character's speech (quoted, or a plain line of the RPG format), or the player's own input. */
+export type TextVoice = "narration" | "speech" | "player_input";
+/**
+ * Who stands behind a stated price. seller_ask / seller_counter: a non-player voice states what it wants (a counter when the wording itself
+ * bargains: "I'll go two-sixty", "make it", "last word"). player_counter: the player's own figure. ambiguous_quote: a number the
+ * text states but no voice can be put behind.
+ */
+export type QuoteRole = "seller_ask" | "seller_counter" | "player_counter" | "ambiguous_quote";
+/** What the number is: the current price, a past cost ("I paid four for her"), or a group / per-head price ("for the lot", "each"). */
+export type QuoteKind = "current" | "past_cost" | "group_or_each";
+
+/** A gold amount the text states as a price (never settlement). The fact subject is the SPEAKER when the text names or implies one. */
+export interface PriceQuoteFact extends CommerceBase<"price_quote"> {
+  readonly form: "gold_unit" | "for_price" | "bargain" | "addressed" | "price_noun" | "subject_is" | "quoted_bare" | "bare_sentence" | "past_cost";
+  readonly amount: number; readonly currency: "gold";
+  readonly quote_role: QuoteRole; readonly quote_kind: QuoteKind; readonly voice: TextVoice;
+}
+/** The text states money the engine does not settle (a non-gold currency, a fraction): no amount is reported. */
+export interface UnsupportedMoneyFact extends CommerceBase<"unsupported_money"> { readonly form: "currency" | "fraction"; readonly voice: TextVoice }
+/** A standing offer is taken back ("not for sale", "I changed my mind"). */
+export interface OfferWithdrawnFact extends CommerceBase<"offer_withdrawn"> { readonly form: "withdrawal"; readonly voice: TextVoice }
+/** The prose asserts that money changed hands. */
+export interface PaymentClaimFact extends CommerceBase<"payment_claim"> { readonly form: "pay_verb" | "coin_motion" | "hands_changed"; readonly voice: TextVoice }
+/** The prose asserts that goods or a person changed owner or holder, or that the papers are done. `object_phrase` is the words after a hand-over verb. */
+export interface TransferClaimFact extends CommerceBase<"transfer_claim"> { readonly form: "goods_handover" | "belongs_to_player" | "yours" | "document"; readonly object_phrase?: string; readonly voice: TextVoice }
+/** The prose asserts that the deal or sale itself is finished. */
+export interface SettlementClaimFact extends CommerceBase<"settlement_claim"> { readonly form: "deal_done"; readonly voice: TextVoice }
+export type CommerceFact = PriceQuoteFact | UnsupportedMoneyFact | OfferWithdrawnFact | PaymentClaimFact | TransferClaimFact | SettlementClaimFact;
+export type CommerceFactKind = CommerceFact["kind"];
+
 export interface NarrationFacts {
   readonly narration: string;
   readonly movement: readonly MovementFact[];
+  /** Commerce facts of the narrator text (price quotes in any voice, withdrawals, payment / transfer / settlement CLAIMS). Descriptive only. */
+  readonly commerce: readonly CommerceFact[];
 }

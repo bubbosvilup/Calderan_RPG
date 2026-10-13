@@ -3,6 +3,7 @@ import { isDeepStrictEqual } from "node:util";
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { AuthorizationDiagnostic } from "../turn-types.js";
+import type { NarrationFactSource } from "../narration-facts/index.js";
 import { authorizeTradeProposals } from "../trade-authorization.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext } from "../context-builder.js";
@@ -36,7 +37,7 @@ export interface CommitPlan {
 }
 export function prepareCommit(i: { readonly world: WorldStore; readonly prepare: (proposal: unknown) => PreparedCampaignChange; readonly prepared: PreparedCampaignChange;
   readonly commands: readonly CampaignCommand[]; readonly finalized: readonly RecentExchange[]; readonly player_input: string; readonly delivered: string;
-  readonly scene: SceneParticipantPlan; readonly base_revision: number;
+  readonly scene: SceneParticipantPlan; readonly base_revision: number; readonly facts?: NarrationFactSource;
   readonly disclosure_intent?: PlayerIntent;
   /** TRD-2: the authorization diagnostics and pre-turn snapshot, so goods/item offers are re-checked against the DELIVERED text. */
   readonly trade_recheck?: { readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly projected: DeepReadonly<CampaignSnapshot> };
@@ -55,7 +56,7 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
     if (inputs.length) {
       try {
         const context = buildTurnContext(i.world, recheck.projected, contextRelevance(i.player_input, i.finalized));
-        const decided = authorizeTradeProposals(inputs, i.delivered, context, recheck.projected, i.world);
+        const decided = authorizeTradeProposals(inputs, i.delivered, context, recheck.projected, i.world, i.facts);
         const dropped = new Set(inputs.filter((_, k) => !decided[k]!.authorized).map((x): CampaignCommand => x.command));
         if (dropped.size) {
           offerDiagnostics.push(...decided.filter(d => !d.authorized).map((): TransactionDiagnostic => ({ kind: "offer", status: "blocked", reason: "quote_not_in_delivered_text" })));
@@ -88,7 +89,7 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
       try {
         const after = buildTurnContext(i.world, receipt.snapshot, contextRelevance(i.player_input, i.finalized));
         const exchanges = [...i.finalized, { player: i.player_input, narration: i.delivered, status: "finalized" as const, location_id: receipt.snapshot.runtime.scene.player_location }];
-        const offers = resolvePersonOffers(i.player_input, after, receipt.snapshot, exchanges, i.base_revision, { world: i.world, participants: i.scene.participants });
+        const offers = resolvePersonOffers(i.player_input, after, receipt.snapshot, exchanges, i.base_revision, { world: i.world, participants: i.scene.participants, ...(i.facts ? { facts: i.facts } : {}) });
         offerDiagnostics.push(...offers.diagnostics.map((d): TransactionDiagnostic => ({ kind: "offer", status: d.status === "offered" ? "resolved" : d.status,
           ...(typeof d.detail.reason === "string" ? { reason: d.detail.reason } : {}), ...(typeof d.detail.price === "number" ? { price: d.detail.price } : {}) })));
         if (offers.commands.length) {

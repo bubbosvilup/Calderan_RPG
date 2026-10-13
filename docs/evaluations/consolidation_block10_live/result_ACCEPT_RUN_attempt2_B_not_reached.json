@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-10-12T23:55:00.332Z",
+  "wire_total": 9,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 5,
+    "undefined": 4
+  },
+  "tokens": 49129,
+  "cost_usd": 0,
+  "accept_completed_in": null,
+  "results": [
+    {
+      "id": "B",
+      "purpose": "seller 100, player 90, seller 95",
+      "verdict": "NOT REACHED",
+      "problems": [],
+      "wire_calls": 9,
+      "subjects": 0,
+      "turns": [
+        {
+          "turn": 1,
+          "numeric": "setup (no number)",
+          "input": "goes to Korvin, among the private licensed sellers",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco moves through the market traffic toward the private-seller area beyond the main auction, where individual licensed traders operate with their own stock. The crowd thins slightly here, the noise of the auction block fading to a steadier hum of direct negotiation. Korvin stands near a row of holding pens, talking to a handler who carries a ledger. He is short and compact, dressed in cheap practical clothing that makes him look more like a warehouse worker than a slaver. His large, damaged hands gesture briefly at the ledger before he notices Nicco approaching and lets the handler go.*\n\n*Korvin's small, perceptive eyes take in Nicco's appearance with a quick, practiced sweep. He doesn't straighten up or put on any show of welcome. He just waits, one thumb hooked into his belt, the other hand closing the ledger and setting it on a crate beside him.*\n\nLooking for something specific, or just browsing?",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12369,
+          "cost_usd": 0
+        },
+        {
+          "turn": 2,
+          "numeric": "seller 100",
+          "input": "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin turns toward the pens and walks along the row without hurrying, his boot heels firm on the packed earth. He stops at one where a woman sits on the ground with her back to the slats, draws a key, and unlatches the gate just enough to step halfway in. He looks her over the way he'd look over a draft animal — hands, teeth, build — then steps back out and latches it again. He doesn't make anything of it.*\n\nThis one's a hundred gold.\n\n*He says it flat, the way he might quote a price on grain. His thumb hooks back into his belt. The woman in the pen hasn't moved; she sits with her knees drawn up, watching the ground between her feet. Korvin's attention is already back on Nicco, those small eyes reading him with the same quick, practiced sweep he'd given at first approach — sizing up what kind of buyer he's dealing with, what he might want beyond the question he asked.*\n\nShe's young, healthy, no skills worth bragging about. Field hands and scullery work, that's her. Hundred gold's fair for what she is.\n\n*He waits. No pressure in it, no warmth either — just a man who's stated his price and wants to know if the customer bites or haggles.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [
+            "leave_scene"
+          ],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12682,
+          "cost_usd": 0
+        },
+        {
+          "turn": 3,
+          "numeric": "player 90",
+          "input": "I answer: \"Ninety.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Korvin's thumb taps once against his belt. He doesn't look offended and he doesn't look eager. His gaze stays on Nicco's face for a beat, then drops to take in the man's build one more time — not the clothes, the hands, the way he stands. Reading what kind of buyer haggles ten gold off a field hand.*\n\nNinety-five.\n\n*He says it without drama, the same flat tone as before. His boot shifts on the gravel.*\n\nShe's healthy. No marks, no sickness. I'm not giving her away.\n\n*Behind him in the pen, the woman hasn't changed position. Her eyes stay on the ground. Korvin's attention doesn't waver from Nicco; whatever he's calculating, he's doing it behind that unremarkable face and those small, careful eyes.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 11578,
+          "cost_usd": 0
+        },
+        {
+          "turn": 4,
+          "numeric": "seller 95",
+          "input": "I hold at ninety. Korvin sighs and says: \"Ninety-five. That's my last word on her.\"",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The fog sits low over the square, thinning where the foot traffic has churned the packed earth into dark ruts. Around the private seller's stalls the morning crowd is still thin — a few handlers moving between carts, a clerk with a board under his arm picking his way toward the auction area. The woman in the pen hasn't moved. Her knees stay drawn up, her eyes on the ground between her feet, as though the number being settled over her head is weather rather than a price.*\n\n*Nicco holds at ninety. After a moment the seller lets out a breath through his nose — not theatrical, just the sound of a man who's found his floor and isn't going lower. His hand drops from his belt and hangs loose at his side. Those small, perceptive eyes stay on Nicco's face, reading whether ninety-five closes the deal or the buyer turns and walks. He doesn't fill the silence. The gravel shifts once under his boot, and he waits.*",
+          "narration_mentions_completed_payment_or_ownership": false,
+          "audit": [
+            "absent_participant"
+          ],
+          "committed": [],
+          "rejected": [],
+          "card": null,
+          "offers": [],
+          "gold": 500,
+          "created": 0,
+          "transactions": 0,
+          "tokens": 12500,
+          "cost_usd": 0
+        }
+      ]
+    }
+  ]
+}

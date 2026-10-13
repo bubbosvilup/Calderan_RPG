@@ -8,7 +8,13 @@ import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { activeTradeOffer, tradeTermsDigest } from "../src/campaign/trade.js";
 import { authorizeTradeProposals, reframeOwnItemPurchase } from "../src/turn/trade-authorization.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { AUCTION, fractionalPrice, goldAmounts, pricesInText, readPrices, statedGold, unsupportedCurrency } from "../src/turn/trade-price.js";
+import { AUCTION, readPrices, type PriceContext } from "../src/turn/trade-price.js";
+// The single low-level numeric helper is all that remains of the price grammar; these are test-side conveniences over it.
+const goldAmounts = (sentence: string, ctx?: PriceContext): number[] => readPrices(sentence, ctx).statements.map(x => x.amount);
+const statedGold = (quote: string, subjects?: readonly string[]): number[] => goldAmounts(quote, { concrete: true, ...(subjects ? { subjects } : {}) });
+const pricesInText = (text: string): number[] => { const parts = text.split(/(?<=[.!?])\s+|\n+/).map(x => x.trim()).filter(Boolean); return parts.flatMap((t, i) => goldAmounts(t, { concrete: true, prev: parts[i - 1], next: parts[i + 1] })); };
+const unsupportedCurrency = (text: string): boolean => readPrices(text).unsupported === "currency";
+const fractionalPrice = (text: string): boolean => readPrices(text).unsupported === "fraction";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

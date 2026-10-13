@@ -33,6 +33,13 @@ const PURCHASE: Scenario["steps"] = [
   { do: "turn", ...F.SELLERS_ROW }, { do: "turn", ...F.KORVIN_NAME_REVEAL }, { do: "turn", ...F.OFFER_300 }, { do: "turn", ...F.HAGGLE }, { do: "turn", ...F.LOWBALL },
 ];
 
+// Block 10 (commerce facts): the real Korvin shapes with other prices. The pen / women text is the live OFFER_300 narration; only the closing price lines change.
+const KORVIN_KNOWN: Scenario["steps"] = [{ do: "turn", ...F.SELLERS_ROW }, { do: "turn", ...F.KORVIN_NAME_REVEAL } ];
+const withPrice = (tail: string): string => F.OFFER_300.narration.replace(/Three hundred for her\..*$/s, tail);
+const quiet = "*Korvin says nothing. He watches the rain run off the canvas, arms folded, and lets the silence work for him.*";
+const askFor = (tail: string) => ({ do: "turn" as const, player: F.OFFER_300.player, narration: withPrice(tail) });
+
+
 export const SCENARIOS: readonly Scenario[] = [
   // ============================================================================================ MOVEMENT
   { id: "M1", category: "movement", mode: "deterministic", purpose: "The player moves alone: an unrelated free NPC does not follow and the move is one atomic revision.",
@@ -196,4 +203,51 @@ export const SCENARIOS: readonly Scenario[] = [
       { do: "turn", player: "Price?", label: "a malformed proposal (zero price) fails the turn closed", narration: "Korvin shrugs. \"Name a number.\"", controller: [buyGoods(0, "Halberd")], fails: true,
         expect: { offers_active: [], revision_delta: 0 } }],
     expect: { offers_active: [], card: null, gold: 500, inventory: [], transactions: 0, revision_delta: 0 } },
+  // ============================================================================================ COMMERCE FACTS (Block 10)
+  { id: "C1", category: "person_trade", mode: "deterministic", purpose: "A direct seller quote about a person becomes ONE Actual Offer at that price; the quote alone pays nothing and creates nobody.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, { ...askFor("A hundred for her. She's not trouble. That's the price."), expect: { offers_active: ["buy:person:100"], card: { kind: "person", price_gold: 100 }, gold: 500, created: [], transactions: 0 } }],
+    expect: { offers_by_status: { active: 1 }, offer_subjects: 1 } },
+  { id: "C2", category: "person_trade", mode: "deterministic", purpose: "100 (seller) -> 90 (player counter) -> 95 (seller counter): only the latest seller quote, 95, is active; the player's 90 never became an offer; 100 is superseded; the subject is the same person.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, askFor("A hundred for her. That's the price."),
+      { do: "turn", player: "I'll give you ninety.", narration: quiet, expect: { offers_active: ["buy:person:100"], offers_by_status: { active: 1 } } },
+      { do: "turn", player: "Ninety, and she walks with me today.", narration: "*Korvin rubs his jaw and lets out a long breath through his nose.*\n\nNinety-five for her. Final.", expect: { offers_active: ["buy:person:95"], card: { kind: "person", price_gold: 95 } } }],
+    expect: { offers_active: ["buy:person:95"], offers_by_status: { superseded: 1, active: 1 }, offer_subjects: 1, gold: 500, created: [], transactions: 0 } },
+  { id: "C3", category: "person_trade", mode: "deterministic", purpose: "400 -> 250 -> 275: the same chain at other numbers; only 275 stays active and 400 is superseded.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, askFor("Four hundred for her. That's the price."),
+      { do: "turn", player: "I'll go two-fifty.", narration: quiet },
+      { do: "turn", player: "Two-fifty, my last word.", narration: "*Korvin scratches the grime on his forearm and exhales.*\n\nTwo-seventy-five for her.", expect: { offers_active: ["buy:person:275"] } }],
+    expect: { offers_active: ["buy:person:275"], offers_by_status: { superseded: 1, active: 1 }, offer_subjects: 1, gold: 500 } },
+  { id: "C4", category: "authority", mode: "deterministic", purpose: "The real premature-settlement narration (coins taken, bill of sale, 'She's yours') while an offer stands: no gold moves, no legal transfer, nobody is materialized, the claims are flagged and withdrawn.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, askFor("A hundred for her. That's the price."),
+      { do: "turn", player: "Fine, a hundred.", narration: "*Korvin takes the coins, counts them into his palm and folds a sheet of paper across the table.*\n\nThat's your bill of sale. Keep it. She's yours.", expect: { offers_active: ["buy:person:100"], gold: 500, created: [], transactions: 0, held_by_player: 0, audit_kinds: ["asserts_uncommitted_purchase", "asserts_uncommitted_transfer"], delivered_contains: { "She's yours": false } } }],
+    expect: { offers_active: ["buy:person:100"], gold: 500, created: [], transactions: 0, held_by_player: 0 } },
+  { id: "C5", category: "person_trade", mode: "deterministic", purpose: "A player numeric counteroffer alone (the seller quotes nothing) is negotiation evidence only: it creates no offer and replaces nothing.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, askFor("A hundred for her. That's the price."),
+      { do: "turn", player: "I'll give you ninety.", narration: quiet }],
+    expect: { offers_active: ["buy:person:100"], offers_by_status: { active: 1 }, gold: 500, created: [] } },
+  { id: "C6", category: "fail_closed", mode: "deterministic", purpose: "An ambiguous subject + price (two women, two different prices in one statement; an age and a tenure beside the ask) fabricates NO offer.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, askFor("The young one is two hundred, the broad one a hundred. Take your pick."),
+      { do: "turn", player: "How much for the strong one?", narration: "*Korvin glances at the pen.*\n\nShe's twenty, worked five years, asking nothing but a roof. Hmm.", expect: { offers_active: [] } }],
+    expect: { offers_active: [], card: null, gold: 500, created: [], transactions: 0 } },
+
+  { id: "C7", category: "person_trade", mode: "deterministic", purpose: "Identity continuity through the whole chain: 100 -> counter -> 95 -> explicit Accept -> the later name binds to the SAME persistent character (one character, one transaction, no second offer subject).",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, askFor("A hundred for her. That's the price."),
+      { do: "turn", player: "I'll give you ninety.", narration: quiet },
+      { do: "turn", player: "Ninety, and she walks with me today.", narration: "*Korvin rubs his jaw and lets out a long breath through his nose.*\n\nNinety-five for her. Final.", expect: { offers_active: ["buy:person:95"] } },
+      { do: "accept", expect: { gold: 405, created: ["(unnamed)"], created_are_offer_subjects: true, transactions: 1, held_by_player: 1, offers_active: [] } },
+      { do: "turn", ...F.ASK_NAME_1 }, { do: "turn", ...F.ASK_NAME_2 }],
+    expect: { created: ["Maren"], created_are_offer_subjects: true, offer_subjects: 1, transactions: 1, held_by_player: 1, provisional_names: [], gold: 405 } },
+  { id: "C8", category: "person_trade", mode: "deterministic", purpose: "KNOWN PRODUCT GAP KPG-2 (replay of the REAL live narration of Block 10 live B): the seller's quote arrives as an UNATTRIBUTED plain paragraph after a starred Korvin beat ('This one's a hundred gold.'); the DESIRED behavior is the person Actual Offer, today seller binding fails closed (seller_authority_unestablished).",
+    known_gap: "Speaker attribution of unattributed plain speech after a starred narration beat is not done by the scene reader (narrated-captives.ts): the price is read correctly by the commerce facts, but the seller is not bound. Identity/speaker binding is Block 11.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, { do: "turn", player: "I tell Korvin I want to see exactly one woman from his stock, only one, and ask his price. Korvin looks over one woman in the pens and says plainly: \"This one is 100 gold.\"", narration: "*Korvin turns toward the pens and walks along the row without hurrying, his boot heels firm on the packed earth. He stops at one where a woman sits on the ground with her back to the slats, draws a key, and unlatches the gate just enough to step halfway in. He looks her over the way he'd look over a draft animal \u2014 hands, teeth, build \u2014 then steps back out and latches it again. He doesn't make anything of it.*\n\nThis one's a hundred gold.\n\n*He says it flat, the way he might quote a price on grain. His thumb hooks back into his belt. The woman in the pen hasn't moved; she sits with her knees drawn up, watching the ground between her feet. Korvin's attention is already back on Nicco, those small eyes reading him with the same quick, practiced sweep he'd given at first approach \u2014 sizing up what kind of buyer he's dealing with, what he might want beyond the question he asked.*\n\nShe's young, healthy, no skills worth bragging about. Field hands and scullery work, that's her. Hundred gold's fair for what she is.\n\n*He waits. No pressure in it, no warmth either \u2014 just a man who's stated his price and wants to know if the customer bites or haggles.*",
+      expect: { offers_active: ["buy:person:100"], card: { kind: "person", price_gold: 100 }, gold: 500, created: [], transactions: 0 } }],
+    expect: { offers_active: ["buy:person:100"], offer_subjects: 1 } },
 ];

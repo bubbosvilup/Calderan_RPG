@@ -38,24 +38,22 @@ const CURRENCY_WORD = "(?:silvers?|coppers?|bronze|platinum|crowns?|marks?|penni
 const COIN_NOUN = "(?:pieces?|coins?|bits?)";
 /** A currency is a unit on a number ("ten silver", "5 copper pieces", "three marks") or a coin ("a silver coin", "coins of silver"). */
 const CURRENCY = new RegExp(`\\b${NUM}\\s+${CURRENCY_WORD}|\\b(?:silver|copper|bronze|platinum)\\s+${COIN_NOUN}\\b|\\b${COIN_NOUN} of (?:silver|copper|bronze|platinum)\\b`, "i");
-export const unsupportedCurrency = (text: string): boolean => CURRENCY.test(text);
 const FRACTION = /\b(?:half|quarter|third|fraction)\b[^.!?]{0,24}\b(?:gold|gp)\b|\b(?:gold|gp)\b[^.!?]{0,12}\b(?:half|quarter)\b|\b\d+\.\d+\s*(?:gold|gp|g)\b|\b\d+\/\d+\s*(?:gold|gp)\b/i;
-export const fractionalPrice = (text: string): boolean => FRACTION.test(text);
 /** Auction wording: bids, lots and hammers belong to a different (future) system and never create ordinary offers. */
 export const AUCTION = /\b(?:auctions?|auctioneers?|bids?|bidding|bidders?|gavel|hammer price|lot (?:number|\d+)|going once|going twice|reserve price|high bid|increments?)\b/i;
 
 const REJECTS = /\b(?:off|too (?:low|little|cheap)|no\b|not (?:a|going|enough)|never|insult\w*|won'?t|can'?t|nowhere near|laughable)\b/i;
 /** A number that is an age, a duration or a count, not money. Checked around an otherwise bare number. */
 const NOT_MONEY = /\b(?:years?|old|aged?|born|winters?|summers?|minutes?|hours?|days?|nights?|weeks?|months?|seconds?|moments?|paces?|steps?|miles?)\b/i;
-const BARGAIN = `(?:(?:i'?ll|i will|we'?ll|i can|i could)\\s+(?:go|do|take|say|sell (?:her|him|them) (?:for|at)|let (?:her|him|them) go (?:for|at))|make it|let'?s say|call it|say|down to|settle (?:on|for|at)|(?:i'?d|i would) (?:take|do|settle for)|how about|lowest i'?ll go is|best i can do is)`;
+const BARGAIN = `(?:(?:i'?ll|i will|we'?ll|i can|i could)\\s+(?:go|do|take|say|sell (?:her|him|them) (?:for|at)|let (?:her|him|them) go (?:for|at))|make it|let'?s say|call it|say|down to|settle (?:on|for|at)|(?:i'?d|i would) (?:take|do|settle for)|asking(?: price)?(?: is)?|the price is|how about|lowest i'?ll go is|best i can do is)`;
 /** What may follow a scoped number: the end of the clause, or a word that continues a price ("fifteen for the halberd"), never a counted noun ("ten minutes", "three swords"). */
 const PRICE_END = "(?=\\s*(?:[.,;:!?\"”')]|$)|\\s+(?:gold|gp|for|each|apiece|and|or|but|if|then|only|flat|final|even|the|it|her|him|them|that|this|as|said|please)\\b)";
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** The prices one sentence states (with the evidence span of each), or the unsupported-money verdict. */
 export function readPrices(sentence: string, ctx: PriceContext = {}): PriceReading {
-  if (unsupportedCurrency(sentence)) return { statements: [], unsupported: "currency" };
-  if (fractionalPrice(sentence)) return { statements: [], unsupported: "fraction" };
+  if (CURRENCY.test(sentence)) return { statements: [], unsupported: "currency" };
+  if (FRACTION.test(sentence)) return { statements: [], unsupported: "fraction" };
   const out: PriceStatement[] = [];
   const take = (form: PriceForm, re: RegExp) => { for (const m of sentence.matchAll(re)) { const raw = m[1] ?? m[2] ?? m[3]; const v = raw === undefined ? undefined : priceValue(raw); if (v !== undefined) out.push({ amount: v, currency: "gold", span: m[0].trim(), form }); } };
   // Always a price: a number attached to gold. "300 gold", "300g", "three hundred gold pieces", "15 gp".
@@ -81,12 +79,4 @@ export function readPrices(sentence: string, ctx: PriceContext = {}): PriceReadi
 function dedupe(list: PriceStatement[]): PriceStatement[] {
   const seen = new Set<number>();
   return list.filter(s => { const k = s.amount; if (seen.has(k)) return false; seen.add(k); return true; });
-}
-export const goldAmounts = (sentence: string, ctx?: PriceContext): number[] => readPrices(sentence, ctx).statements.map(s => s.amount);
-/** Whole-gold amounts a verified offer quote states. */
-export const statedGold = (quote: string, subjects?: readonly string[]): number[] => goldAmounts(quote, { concrete: true, ...(subjects ? { subjects } : {}) });
-/** Prices a block of narration states, sentence by sentence (the seller's speech of one concrete offer). */
-export function pricesInText(text: string, subjects?: readonly string[]): number[] {
-  const parts = text.split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean);
-  return parts.flatMap((t, i) => goldAmounts(t, { concrete: true, prev: parts[i - 1], next: parts[i + 1], ...(subjects ? { subjects } : {}) }));
 }
