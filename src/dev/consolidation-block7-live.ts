@@ -33,7 +33,7 @@ globalThis.fetch = (async (input: Parameters<typeof fetch>[0], init?: Parameters
 }) as typeof fetch;
 
 async function main(): Promise<void> {
-  const outDir = join("docs", "evaluations", "consolidation_block7_live"); await mkdir(outDir, { recursive: true });
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block7_live"); await mkdir(outDir, { recursive: true });
   const saves = join(outDir, "saves_a"), f = mannerismFixture(), service = new RetrievalService(f.world), status = readProviderStatus();
   const narrator = new MiniMaxNarratorProvider(undefined, { model: status.narrator_model!, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true });
   const controller = new OpenRouterStateControllerProvider(undefined, { model: status.controller_model!, fallback_models: controllerFallbackModels() });

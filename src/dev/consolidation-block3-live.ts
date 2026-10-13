@@ -16,7 +16,7 @@ import type { CampaignSnapshot } from "../campaign/types.js";
 const TRANSIENT = new Set(["network_error", "timeout", "rate_limited", "provider_unavailable"]);
 const ID = "campaign_character_block3_maren";
 async function main(): Promise<void> {
-  const outDir = join("docs", "evaluations", "consolidation_block3_live"), saveDir = join("saves", "consolidation_block3_live");
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block3_live"), saveDir = join("saves", "consolidation_block3_live");
   await mkdir(outDir, { recursive: true }); await mkdir(saveDir, { recursive: true });
   const requests: unknown[] = [];
   const base = await createProductionDeps({ save_dir: saveDir, persistent_campaigns: true, reflection_mode: "off", prepared_narrator_observer: (r: unknown) => { requests.push(r); } });

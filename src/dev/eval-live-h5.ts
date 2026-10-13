@@ -20,7 +20,7 @@ import { NARRATOR_OUTPUT_TOKENS, onlineCoordinator, selectedModels } from "./tur
  *
  *   node .build/src/dev/eval-live-h5.js --runs 5 [--scenarios A_conversation,E_handover] [--no-retry] [--semantic] [--dry]
  *        [--max-turns 120] [--max-tokens 600000] [--price-narrator-in … --price-narrator-out … --price-controller-in … --price-controller-out …] [--budget-usd 3]
- *        [--out docs/evaluations/h5-live/<label>.jsonl]
+ *        [--out artifacts/local/evaluations/h5-live/<label>.jsonl]
  *
  * Output: one JSONL header line (reproducibility: date, models, routing, reasoning, token caps, retry policy), then one line per turn:
  * { scenario_id, run, turn_index, diagnostics, checks }. No prompts, no full narration (only a ≤400-character excerpt of a FLAGGED turn
@@ -31,7 +31,7 @@ const flag = (name: string) => { const i = args.indexOf(name); return i < 0 ? un
 const has = (name: string) => args.includes(name);
 const dry = has("--dry"), runs = Number(flag("--runs") ?? 5), semantic = has("--semantic"), noRetry = has("--no-retry"), reflect = has("--reflect");
 const label = flag("--label") ?? (dry ? "dry" : "live");
-const out = flag("--out") ?? `docs/evaluations/h5-live/${label}-${new Date().toISOString().replace(/[:.]/g, "-")}.jsonl`;
+const out = flag("--out") ?? `artifacts/local/evaluations/h5-live/${label}-${new Date().toISOString().replace(/[:.]/g, "-")}.jsonl`;
 const maxTurns = Number(flag("--max-turns") ?? 120), maxTokens = Number(flag("--max-tokens") ?? 600_000), budgetUsd = flag("--budget-usd") === undefined ? undefined : Number(flag("--budget-usd"));
 const num = (name: string) => { const v = flag(name); return v === undefined ? undefined : Number(v); };
 const prices = { narrator_input: num("--price-narrator-in"), narrator_output: num("--price-narrator-out"), controller_input: num("--price-controller-in"), controller_output: num("--price-controller-out") };

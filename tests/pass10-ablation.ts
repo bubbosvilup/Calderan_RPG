@@ -1,11 +1,12 @@
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { play } from "./pass10-support.js";
 import { applyVariant, type VariantId } from "../src/dev/follow-choice-variants.js";
 /**
  * Offline prompt ablation for the invitation turn (no provider call): writes the exact prompt snapshots and the diffs between them.
  * production = Pass 10 production note; pass9_note = the previous note; away_labels and invited_first are hypothetical, NOT in production.
  */
-const out = process.argv[2] ?? "docs/evaluations/pass10";
+const out = process.argv[2] ?? "artifacts/local/evaluations/pass10";
+mkdirSync(out, { recursive: true });
 const r = await play("Nicco goes down the stairs into the main hall.", "I go down to the main hall. Maren, come with me.");
 const ctx = { from: "Observation room", to: "Main hall", who: "Maren" };
 const ids: VariantId[] = ["pass9_note", "production", "away_labels", "invited_first"];

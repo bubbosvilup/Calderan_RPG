@@ -148,7 +148,7 @@ test("Opening scene, ordinary knowledge and private criminal boundaries remain u
 });
 
 test("Pass 1 and Pass 2A query primary targets remain stable with seven new merchants",async()=>{
- const prior=JSON.parse(await readFile("docs/evaluations/calderan-west-npc-pass2a-after.json","utf8")) as {queries:{query:string;player:string[];narrator:string[]}[];west_pass1:{query:string;player:string[];narrator:string[]}[]};
+ const prior=JSON.parse(await readFile("tests/fixtures/canon/calderan-west-npc-pass2a-after.json","utf8")) as {queries:{query:string;player:string[];narrator:string[]}[];west_pass1:{query:string;player:string[];narrator:string[]}[]};
  for(const row of [...prior.queries,...prior.west_pass1])for(const audience of ["player","narrator"] as const){
   const first=search.search({query:row.query},audience).candidates[0];
   assert.equal(first?.kind==="chunk"?first.chunk_id:first?.entity_id,row[audience][0],`${audience}: ${row.query}`);

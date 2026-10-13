@@ -24,7 +24,7 @@ const SCENARIOS = {
 async function main(): Promise<void> {
   const key = (process.argv[2] ?? "").toUpperCase() as keyof typeof SCENARIOS;
   const plan = SCENARIOS[key]; if (!plan) throw new Error("usage: consolidation-block2-live <A|B>");
-  const outDir = join("docs", "evaluations", "consolidation_block2_live"), saveDir = join("saves", "consolidation_block2_live", key);
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block2_live"), saveDir = join("saves", "consolidation_block2_live", key);
   await mkdir(outDir, { recursive: true }); await mkdir(saveDir, { recursive: true });
   const requests: unknown[] = [];
   const base = await createProductionDeps({ save_dir: saveDir, persistent_campaigns: true, reflection_mode: "off", prepared_narrator_observer: (r: unknown) => { requests.push(r); } });

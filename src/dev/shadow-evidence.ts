@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { isDeepStrictEqual } from "node:util";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
@@ -131,6 +131,7 @@ const summary = { items: rows.length, by_truth: { yes: rows.filter(r => r.truth 
   grammar: score("grammar_outcome"), shadow_strict: score("strict_outcome"), shadow_quoted_tell: score("quoted_tell_outcome"),
   extra_proposals_blocked: rows.reduce((n, r) => n + r.extra_proposals_blocked.length, 0), shadow_errors: rows.filter(r => r.error).length,
   cost_usd: Math.round(rows.reduce((n, r) => n + (r.usage.provider_reported_cost_usd ?? 0), 0) * 1e6) / 1e6 };
-const out = `docs/evaluations/phase-1n-shadow-evidence-${Date.now()}.json`;
+const out = `artifacts/local/evaluations/phase-1n-shadow-evidence-${Date.now()}.json`;
+await mkdir("artifacts/local/evaluations", { recursive: true });
 await writeFile(out, JSON.stringify({ purpose: "Phase 1N shadow controller-evidence experiment. Nothing committed; production TurnEvidence authoritative. Truth labels are agent-authored.", instruction: SHADOW_INSTRUCTION, summary, rows }, null, 2) + "\n", { flag: "wx" });
 console.log(JSON.stringify({ output: out, summary }, null, 2));

@@ -56,7 +56,7 @@ async function scenario(label: string, mannerism: boolean, outDir: string) {
   return { label, mannerism, extractor_model: extractorModel, turns, extractor_calls: wire.filter(w => w.model === extractorModel).map(w => ({ ...w })), health, extractor_called_before_settle: extractorCalls.length, runs_recorded: runs.length };
 }
 async function main(): Promise<void> {
-  const outDir = join("docs", "evaluations", "consolidation_block6_live"); await mkdir(outDir, { recursive: true });
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block6_live"); await mkdir(outDir, { recursive: true });
   const A = await scenario("a_mannerism_on", true, outDir);
   const markB = wire.length;
   const B = await scenario("b_mannerism_off", false, outDir);

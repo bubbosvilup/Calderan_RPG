@@ -10,14 +10,14 @@ import type { GenerationRequest } from "../src/llm/types.js";
 import { metadata } from "./turn-fixtures.js";
 
 /** Historical turn anchors are replay-only scenario constraints: premise, never outcome, never state. Deterministic, no model calls. */
-const PATH = "docs/evaluations/historical_replay/HISTORICAL_TURN_ANCHORS.json";
+const PATH = "tests/fixtures/historical-replay/HISTORICAL_TURN_ANCHORS.json";
 const text = await readFile(PATH, "utf8");
 const file = JSON.parse(text) as AnchorFile;
 const world = await loadWorld("data");
 
 test("anchors: the frozen artifact is valid and unchanged since it was frozen", async () => {
   assert.deepEqual(validateAnchors(file), []);
-  const frozen = (await readFile("docs/evaluations/historical_replay/HISTORICAL_TURN_ANCHORS.sha256", "utf8")).trim().split(/\s+/)[0];
+  const frozen = (await readFile("tests/fixtures/historical-replay/HISTORICAL_TURN_ANCHORS.sha256", "utf8")).trim().split(/\s+/)[0];
   assert.equal(anchorsSha256(text), frozen, "anchors are frozen; changing them requires a new frozen hash and a logged reason");
 });
 test("anchors: they carry no state and no outcome (schema rejects funds, household, NPC+, commands, completed transactions)", () => {

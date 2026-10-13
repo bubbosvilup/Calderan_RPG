@@ -17,7 +17,7 @@ import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { collect, mockNarrator, mockController } from "./turn-fixtures.js";
 
-const world = new WorldStore(JSON.parse(await readFile("docs/evaluations/p12-scene-continuity/fixture-world.json", "utf8")));
+const world = new WorldStore(JSON.parse(await readFile("tests/fixtures/scene-continuity/fixture-world.json", "utf8")));
 function fixture(known = true) {
   const campaign = new CampaignState(world, "p121", { player_location: "audit_room", world_time: { world_minute: 600 } });
   if (known) campaign.apply({ expected_revision: campaign.revision, commands: [...learnCanonicalName(world, campaign.exportSnapshot(), "korvin")] });

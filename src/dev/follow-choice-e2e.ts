@@ -15,7 +15,7 @@ import type { TurnResult } from "../turn/turn-types.js";
  * verbatim quote. Also runs the regression sentences. Usage: node .build/src/dev/follow-choice-e2e.js <ids-json> <out.json>
  */
 const [idsFile, outFile] = process.argv.slice(2);
-const live = readFileSync("docs/evaluations/pass10/follow-choice-live.jsonl", "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l) as { variant: string; invitation: number; sample: number; invitation_text: string; output: string });
+const live = readFileSync("tests/fixtures/follow/follow-choice-live.jsonl", "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l) as { variant: string; invitation: number; sample: number; invitation_text: string; output: string });
 const picks = JSON.parse(readFileSync(idsFile!, "utf8")) as { variant: string; invitation: number; sample: number; follower: string; quote: string }[];
 const meta = { model: "replay", usage: {}, latency: { request_started_at: "", headers_ms: 0, time_to_first_token_ms: 0, completed_at: "", elapsed_total_ms: 0 } };
 async function replay(input: string, draft: string, commands: readonly CampaignCommand[], evidence: readonly string[]) {

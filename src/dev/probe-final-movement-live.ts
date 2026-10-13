@@ -20,13 +20,13 @@ import type { TurnEvent } from "../turn/turn-types.js";
  * the production pipeline on the household fixture; each scenario is one or more turns on one campaign. One JSONL row per turn: delivered
  * text, audit issues, authorization decisions, and the authoritative location of every household member (LOCATED place or OFF_SCENE).
  *
- *   OPENROUTER_API_KEY=... node .build/src/dev/probe-final-movement-live.js --samples 2 --out docs/evaluations/final-movement-closure/live.jsonl [--live]
+ *   OPENROUTER_API_KEY=... node .build/src/dev/probe-final-movement-live.js --samples 2 --out artifacts/local/evaluations/final-movement-closure/live.jsonl [--live]
  *
  * Prices come from OpenRouter's public models API. The key is read only from the environment and never written anywhere.
  */
 const args = process.argv.slice(2), flag = (n: string) => { const i = args.indexOf(n); return i < 0 ? undefined : args[i + 1]; };
 const live = args.includes("--live"), samples = Number(flag("--samples") ?? 2), only = flag("--scenario");
-const out = flag("--out") ?? "docs/evaluations/final-movement-closure/live.jsonl", budgetEur = Number(flag("--budget-eur") ?? 3), eurPerUsd = Number(flag("--eur-per-usd") ?? 0.95);
+const out = flag("--out") ?? "artifacts/local/evaluations/final-movement-closure/live.jsonl", budgetEur = Number(flag("--budget-eur") ?? 3), eurPerUsd = Number(flag("--eur-per-usd") ?? 0.95);
 
 const TO_HALL: CampaignCommand = { kind: "runtime_delta", delta: { player_location: "test_hall", time_advance_minutes: 1 } };
 const AWAY: CampaignCommand = { kind: "runtime_delta", delta: { character_movements: [{ character_id: "maren", off_scene: true }] } };

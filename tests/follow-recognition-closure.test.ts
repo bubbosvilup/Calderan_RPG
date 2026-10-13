@@ -18,7 +18,7 @@ import type { TurnResult } from "../src/turn/turn-types.js";
  * down", "appears at the bottom of the stair") are covered, plus the audit's pronoun-arrival consistency check.
  */
 type Row = { variant: string; invitation: number; sample: number; invitation_text: string; output: string };
-const LIVE = readFileSync("docs/evaluations/pass10/follow-choice-live.jsonl", "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l) as Row);
+const LIVE = readFileSync("tests/fixtures/follow/follow-choice-live.jsonl", "utf8").split("\n").filter(Boolean).map(l => JSON.parse(l) as Row);
 const draft = (invitation: number, sample: number) => LIVE.find(r => r.variant === "production" && r.invitation === invitation && r.sample === sample)!;
 const MISSED = [[0, 0], [2, 0], [2, 1], [0, 2], [0, 3], [0, 4], [2, 4]] as const;
 

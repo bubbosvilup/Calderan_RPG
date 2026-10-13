@@ -15,7 +15,7 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import { authorizeWithEvidence } from "../src/turn/evidence-authorization.js";
 import { deriveTurnEvidence } from "../src/turn/turn-evidence.js";
 
-const docs = JSON.parse(await readFile("docs/evaluations/p12-scene-continuity/fixture-world.json", "utf8"));
+const docs = JSON.parse(await readFile("tests/fixtures/scene-continuity/fixture-world.json", "utf8"));
 const world = new WorldStore(docs);
 function fixture(draft: string, commands: readonly CampaignCommand[] = [], known = true) {
   const campaign = new CampaignState(world, "p122", { player_location: "audit_room", world_time: { world_minute: 600 } });

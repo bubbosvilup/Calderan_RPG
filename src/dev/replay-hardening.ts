@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { turnFixture } from "./turn-fixture.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import type { CampaignCommand } from "../campaign/types.js";
@@ -27,6 +27,7 @@ for (const fixture of fixtures) {
   for await (const event of coordinator.runTurn({ campaign, player_input: fixture.input })) events.push(event);
   records.push({ ...fixture, outcome: events.at(-1), qualitative_findings: checkNarrative(fixture.narration, fixture.input, context, fixture.retrieval_ids, true), committed_state: { revision: campaign.revision, items: campaign.exportSnapshot().items, knowledge: campaign.exportSnapshot().knowledge.filter(k => k.fact_id !== "campaign_fact_private_secret") } });
 }
-const output = `docs/evaluations/phase-1l1-replay-${Date.now()}.json`;
+const output = `artifacts/local/evaluations/phase-1l1-replay-${Date.now()}.json`;
+await mkdir("artifacts/local/evaluations", { recursive: true });
 await writeFile(output, JSON.stringify({ online_paid: false, source_report: path, purpose: "Final deterministic grammar replay of recorded live text/proposals; not a new provider evaluation or latency sample", records }, null, 2) + "\n", { flag: "wx" });
 console.log(JSON.stringify({ output, records: records.map(r => ({ id: r.id, outcome: r.outcome?.type, authorized: r.outcome?.type === "turn_completed" ? r.outcome.result.authorized_commands.length : null })) }));

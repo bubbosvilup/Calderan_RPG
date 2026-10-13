@@ -11,8 +11,8 @@ import { validateImageBytes } from '../.build/src/llm/image-generator.js';
 import { exactBenchmarkCredential, benchmarkAuthentication } from '../.build/src/dev/reflection-benchmark.js';
 
 // Explicit evaluation only. Never scans or modifies real campaigns. Hard total budget includes comparison.
-const root = 'docs/evaluations/item-sprite-quality-assets';
-const reportPath = 'docs/evaluations/ITEM_SPRITE_QUALITY_SMOKE.json';
+const root = 'artifacts/local/evaluations/item-sprite-quality-assets';
+const reportPath = 'artifacts/local/evaluations/ITEM_SPRITE_QUALITY_SMOKE.json';
 if (await readFile(reportPath, 'utf8').then(() => true, () => false)) throw Error('existing_smoke_report_do_not_repeat_paid_calls');
 const report = { image_calls: 0, qa_calls: 0, fallback: false, image_provider: RAENA_IMAGE_STACK.provider,
   image_model: RAENA_IMAGE_STACK.base_model, style: RAENA_IMAGE_STACK.style_id, qa_provider: 'OpenRouter', qa_model: SPRITE_QA_MODEL,

@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { exactBenchmarkCredential, benchmarkAuthentication } from '../.build/src/dev/reflection-benchmark.js';
 import { OpenRouterClient } from '../.build/src/llm/openrouter/client.js';
 import { OpenRouterStateControllerProvider } from '../.build/src/llm/openrouter/state-controller.js';
@@ -48,5 +48,6 @@ try {
   }
 } catch(e) { report.authentication = report.authentication === 'passed' ? 'passed' : 'failed'; report.error = e.code ?? (e.message?.startsWith('Benchmark authentication')?e.message:'preflight_failed'); }
 if(report.authentication==='failed' && !report.cases.length) report.cases=['put down','pick back up','absent owner','existing reuse'].map(name=>({name,proposal:null,engine:'not run',semantic:'not evaluated',structural:'not evaluated',fallback:false,grade:'BLOCKED_AUTH'}));
-await writeFile('docs/evaluations/ITEM_INVENTORY_LIVE_SMOKE.json',JSON.stringify(report,null,2)+'\n');
+await mkdir('artifacts/local/evaluations',{recursive:true});
+await writeFile('artifacts/local/evaluations/ITEM_INVENTORY_LIVE_SMOKE.json',JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));

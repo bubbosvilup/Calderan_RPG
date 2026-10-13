@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { isDeepStrictEqual } from "node:util";
 import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
@@ -93,7 +93,8 @@ const summary = { items: rows.length, truth: { yes: rows.filter(r => r.truth ===
   controller_ms: { median: q(rows.flatMap(r => r.controller_ms ?? []), 0.5), p75: q(rows.flatMap(r => r.controller_ms ?? []), 0.75) },
   controller_tokens: { prompt: rows.reduce((n, r) => n + (r.usage.prompt_tokens ?? 0), 0), completion: rows.reduce((n, r) => n + (r.usage.completion_tokens ?? 0), 0), completion_median: q(rows.flatMap(r => r.usage.completion_tokens ?? []), 0.5) },
   cost_usd: Math.round(rows.reduce((n, r) => n + (r.usage.provider_reported_cost_usd ?? 0), 0) * 1e6) / 1e6 };
-const out = `docs/evaluations/phase-1o-evidence-eval-${Date.now()}.json`;
+const out = `artifacts/local/evaluations/phase-1o-evidence-eval-${Date.now()}.json`;
+await mkdir("artifacts/local/evaluations", { recursive: true });
 await writeFile(out, JSON.stringify({ purpose: "Phase 1O: grammar-only vs hybrid evidence authorization with the real DeepSeek controller on scripted narration. Truth labels agent-authored, pending human review.", summary, rows }, null, 2) + "\n", { flag: "wx" });
 console.log(JSON.stringify({ output: out, summary }, null, 2));
 

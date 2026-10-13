@@ -50,4 +50,4 @@ Start at the [evaluations index](evaluations/README.md). It describes the collec
 - **Phase 1 architecture records**: [`evaluations/phases/`](evaluations/phases/).
 - **Superseded documents** (the old root debt register, pre-UI capability snapshots, the pre-implementation image and save/load audits): [`evaluations/superseded/`](evaluations/superseded/).
 - **The 2026-10-12 full codebase audit** behind the debt register: [`evaluations/codebase_audit_2026-10-12/`](evaluations/codebase_audit_2026-10-12/).
-- **Machine evidence** (traces, recorded live runs, fixtures, frozen requests): the run directories under `evaluations/`. Some tests and tools still read them; see [Testing](TESTING.md).
+- **Machine evidence** (traces, recorded live runs, frozen requests): the run directories under `evaluations/`. No test or active tool reads them; executable fixtures live in `tests/fixtures/` (see [Testing](TESTING.md)).

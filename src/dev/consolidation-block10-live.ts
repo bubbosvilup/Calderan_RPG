@@ -53,7 +53,7 @@ const COMPLETION = /\b(?:(?:Nicco|he|you) (?:pays|paid|counts out)|counts? out (
 async function main(): Promise<void> {
   const acceptRun0 = process.env.ACCEPT_RUN === "1";
   const want = process.argv.slice(2).map(s => s.toUpperCase()), plans = PLANS.filter(p => !want.length || want.includes(p.id));
-  const outDir = join("docs", "evaluations", "consolidation_block10_live"); await mkdir(outDir, { recursive: true });
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block10_live"); await mkdir(outDir, { recursive: true });
   const results: Record<string, unknown>[] = []; let tokens = 0, cost = 0, acceptedOnce: string | undefined;
   for (const plan of plans) {
     const saveDir = await mkdtemp(join(tmpdir(), `caldrevan-block10-live-${plan.id.toLowerCase()}-`));

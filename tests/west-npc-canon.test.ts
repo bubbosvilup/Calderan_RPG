@@ -55,7 +55,7 @@ for(const [query,id] of [["Korvin","korvin"],["Mistress Elara","mistress_elara"]
 });
 
 test("Pass 1 targeted retrieval primary targets and shopping recovery survive NPC competition",async()=>{
- const prior=JSON.parse(await readFile("docs/evaluations/calderan-west-pass1-after.json","utf8")) as {queries:{query:string;narrator:string[];player:string[]}[]};
+ const prior=JSON.parse(await readFile("tests/fixtures/canon/calderan-west-pass1-after.json","utf8")) as {queries:{query:string;narrator:string[];player:string[]}[]};
  for(const row of prior.queries)for(const audience of ["player","narrator"] as const){
   const actual=search.search({query:row.query},audience).candidates;
   assert.equal(actual[0]?.entity_id,row[audience][0],`${audience}: ${row.query}`);

@@ -13,7 +13,7 @@ const rotation = ['sister_mereth','mira_thorne'];
 const returnInput = "Thanks *he said to them, after which he decides to give them back the boots*\nYou'll need them more than me";
 const itemId = 'campaign_item_regression_leather_boots';
 const stamp = process.argv[2] ?? new Date().toISOString().replace(/[:.]/g, '-');
-const publicDir = `docs/evaluations/controller-reliability-1-${stamp}`;
+const publicDir = `artifacts/local/evaluations/controller-reliability-1-${stamp}`;
 const privateDir = `artifacts/local/controller-reliability-1-${stamp}`;
 await mkdir(publicDir, {recursive:true});
 await mkdir(privateDir, {recursive:true});

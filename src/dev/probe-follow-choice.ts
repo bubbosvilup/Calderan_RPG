@@ -21,7 +21,7 @@ import type { CampaignCommand } from "../campaign/types.js";
  * NPC+ Pass 10 — OPTIONAL narrator-only follow-choice probe. NOT run in Pass 10 (no API key in the authoring environment).
  *
  *   node .build/src/dev/probe-follow-choice.js [--variants production,pass9_note] [--samples 3] [--invitations 0,1,2]
- *        [--live --price-in <usd per M> --price-out <usd per M> --eur-per-usd <x> --budget-eur 1.0] [--out docs/evaluations/pass10/probe.jsonl]
+ *        [--live --price-in <usd per M> --price-out <usd per M> --eur-per-usd <x> --budget-eur 1.0] [--out artifacts/local/evaluations/pass10/probe.jsonl]
  *
  * Default is a DRY plan: it prints the exact number of calls and a conservative cost bound and calls nothing. A live run needs
  * OPENROUTER_API_KEY, explicit prices, and a budget of at most EUR 1.50; it refuses when the pessimistic bound (every call at the
@@ -71,7 +71,7 @@ if (!live) process.exit(0);
 if (!process.env.OPENROUTER_API_KEY?.trim() || !(priceIn > 0) || !(priceOut > 0) || !(eurPerUsd > 0)) { console.error("BLOCKED: live needs OPENROUTER_API_KEY, --price-in, --price-out and --eur-per-usd (no reliable cost accounting otherwise: no paid call is made)"); process.exit(3); }
 if (pessimisticUsd * eurPerUsd > budgetEur) { console.error(`REFUSED: pessimistic bound EUR ${(pessimisticUsd * eurPerUsd).toFixed(3)} exceeds the budget`); process.exit(2); }
 const narrator = new MiniMaxNarratorProvider(new OpenRouterClient(), { model: selectedModels().narrator, max_output_tokens: NARRATOR_OUTPUT_TOKENS, disable_reasoning: true });
-const out = flag("--out") ?? "docs/evaluations/pass10/probe-follow-choice.jsonl"; mkdirSync(dirname(out), { recursive: true });
+const out = flag("--out") ?? "artifacts/local/evaluations/pass10/probe-follow-choice.jsonl"; mkdirSync(dirname(out), { recursive: true });
 let spentUsd = 0; const tally: Record<string, Record<FollowChoice, number>> = {}; const rows: string[] = [];
 for (const p of plan) {
   if (spentUsd * eurPerUsd >= budgetEur) { console.error("STOPPED: budget reached"); break; }

@@ -1,0 +1,143 @@
+[
+  {
+    "source": "p12/audit_room.yaml",
+    "document": {
+      "schema_version": 1,
+      "entity": {
+        "id": "audit_room",
+        "name": "Front hall",
+        "display_name": "Front hall",
+        "parent": null,
+        "aliases": [],
+        "summary": "A front hall with a front door, a table, a bench and a hearth.",
+        "tags": [],
+        "search_context": "",
+        "content": "A front hall with a front door, a table, a bench and a hearth.",
+        "knowledge": {
+          "visibility": {
+            "narrator": true,
+            "player": true
+          },
+          "known_by": []
+        },
+        "type": "location",
+        "features": [
+          {
+            "name": "Front door",
+            "description": "A heavy front door."
+          },
+          {
+            "name": "Table",
+            "description": "A wooden table."
+          },
+          {
+            "name": "Hearth",
+            "description": "A stone hearth."
+          }
+        ],
+        "connections": [
+          {
+            "target": "audit_path",
+            "description": "Outside through the front door",
+            "minutes": 1
+          }
+        ]
+      },
+      "chunks": []
+    }
+  },
+  {
+    "source": "p12/audit_path.yaml",
+    "document": {
+      "schema_version": 1,
+      "entity": {
+        "id": "audit_path",
+        "name": "Path",
+        "display_name": "Path",
+        "parent": null,
+        "aliases": [],
+        "summary": "The path outside the hall.",
+        "tags": [],
+        "search_context": "",
+        "content": "The path outside the hall.",
+        "knowledge": {
+          "visibility": {
+            "narrator": true,
+            "player": true
+          },
+          "known_by": []
+        },
+        "type": "location",
+        "features": [],
+        "connections": [
+          {
+            "target": "audit_room",
+            "description": "Through the front door",
+            "minutes": 1
+          }
+        ]
+      },
+      "chunks": []
+    }
+  },
+  {
+    "source": "p12/nicco.yaml",
+    "document": {
+      "schema_version": 1,
+      "entity": {
+        "id": "nicco",
+        "name": "Nicco",
+        "display_name": "Nicco",
+        "parent": null,
+        "aliases": [],
+        "summary": "The player character.",
+        "tags": [],
+        "search_context": "",
+        "content": "The player character.",
+        "knowledge": {
+          "visibility": {
+            "narrator": true,
+            "player": true
+          },
+          "known_by": []
+        },
+        "type": "character",
+        "role": "player",
+        "location": null,
+        "traits": [],
+        "relationships": []
+      },
+      "chunks": []
+    }
+  },
+  {
+    "source": "p12/korvin.yaml",
+    "document": {
+      "schema_version": 1,
+      "entity": {
+        "id": "korvin",
+        "name": "Korvin",
+        "display_name": "Korvin",
+        "parent": null,
+        "aliases": [],
+        "summary": "A compact man.",
+        "tags": [],
+        "search_context": "",
+        "content": "A compact man.",
+        "knowledge": {
+          "visibility": {
+            "narrator": true,
+            "player": true
+          },
+          "known_by": []
+        },
+        "type": "character",
+        "role": "npc",
+        "location": "audit_room",
+        "traits": [],
+        "relationships": []
+      },
+      "chunks": []
+    }
+  }
+]

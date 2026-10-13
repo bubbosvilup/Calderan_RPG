@@ -103,7 +103,7 @@ test("D-13: several committed movers are each represented; unrelated movement pr
 const PREFIX = "Nicco goes down the stairs. ";
 const grammar = grammarProbe({ members: ["maren"] }), women = grammarProbe({ members: ["brenna", "maren"] }), household3 = grammarProbe({ members: ["brenna", "maren", "gerome"] });
 type Row = { output: string };
-const live = (file: string) => readFileSync(`docs/evaluations/movement-follow-closure/${file}`, "utf8").split("\n").filter(Boolean).map(l => (JSON.parse(l) as Row).output);
+const live = (file: string) => readFileSync(`tests/fixtures/movement/${file}`, "utf8").split("\n").filter(Boolean).map(l => (JSON.parse(l) as Row).output);
 
 test("D-12 live-derived: eight production drafts that were real follows and were not recognised are recognised now", () => {
   const [d01, , label] = [live("d01-live.jsonl"), live("d02-d03-live.jsonl"), live("d03-label-live.jsonl")];

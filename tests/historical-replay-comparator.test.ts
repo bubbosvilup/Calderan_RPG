@@ -9,7 +9,7 @@ import { turnState } from "../src/dev/historical-replay.js";
 
 /** The comparator must cover every MUST_MATCH fact of the frozen oracle; drift fails here. Deterministic, no model calls. */
 const world = await loadWorld("data");
-const ORACLE = await readFile("docs/evaluations/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md", "utf8");
+const ORACLE = await readFile("tests/fixtures/historical-replay/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md", "utf8");
 const declared = (() => {
   const m = /## Checkpoints for the comparator \(MUST_MATCH count: (\d+)\)\s+([A-Z0-9, -]+)\./.exec(ORACLE)!;
   return { count: Number(m[1]), ids: m[2]!.split(",").map(s => s.trim()).filter(Boolean) };

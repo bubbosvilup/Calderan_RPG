@@ -201,7 +201,7 @@ test("Heartstone header changes only on final committed result, never progress o
   assert.equal(c.node("daypart").textContent, "Early Afternoon");
 });
 
-const documents = JSON.parse(await readFile("docs/evaluations/p12-scene-continuity/fixture-world.json", "utf8"));
+const documents = JSON.parse(await readFile("tests/fixtures/scene-continuity/fixture-world.json", "utf8"));
 const world = new WorldStore(documents);
 function fixture(narrator: NarratorProvider, known = true) {
   const campaign = new CampaignState(world, "ui_v1", { player_location: "audit_room", world_time: { world_minute: 600 } });

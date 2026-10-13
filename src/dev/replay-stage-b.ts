@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { turnFixture } from "./turn-fixture.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
@@ -31,7 +31,8 @@ for (const r of source.records.filter(r => r.controller_proposal)) {
   records.push({ key: r.key, alias: r.alias, case_id: r.case_id, before: r.per_expected.map(p => p.diagnosis), after: diagnosis.per_expected.map(p => p.diagnosis + ("authorizer_reason" in p ? `:${p.authorizer_reason}` : "")),
     true_positive: diagnosis.true_positive, false_positive_durable: diagnosis.false_positive_durable, turn_evidence: result?.turn_evidence ?? null, revision: campaign.revision });
 }
-const output = `docs/evaluations/phase-1m1-grammar-replay-${Date.now()}.json`;
+const output = `artifacts/local/evaluations/phase-1m1-grammar-replay-${Date.now()}.json`;
+await mkdir("artifacts/local/evaluations", { recursive: true });
 await writeFile(output, JSON.stringify({ online_paid: false, source_report: path, purpose: "Recorded Phase 1M Stage B narration and DeepSeek proposals replayed through the Phase 1M.1 TurnEvidence grammar; not a new provider sample", records }, null, 2) + "\n", { flag: "wx" });
 const sum = (alias: string, k: "before" | "after") => records.filter(r => r.alias === alias).flatMap(r => r[k]).filter(d => d.startsWith("true_positive")).length;
 console.log(JSON.stringify({ output, tp_before_after: Object.fromEntries(["kimi", "qwen", "minimax"].map(a => [a, [sum(a, "before"), sum(a, "after")]])), false_positive_durable: records.reduce((n, r) => n + r.false_positive_durable.length, 0) }));

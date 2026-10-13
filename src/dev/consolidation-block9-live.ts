@@ -29,7 +29,7 @@ const PLANS = [
 
 async function main(): Promise<void> {
   const want = process.argv.slice(2).map(s => s.toUpperCase()), plans = PLANS.filter(p => !want.length || want.includes(p.id));
-  const outDir = join("docs", "evaluations", "consolidation_block9_live"); await mkdir(outDir, { recursive: true });
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block9_live"); await mkdir(outDir, { recursive: true });
   const results: unknown[] = [];
   for (const plan of plans) {
     const saveDir = await mkdtemp(join(tmpdir(), `caldrevan-block9-live-${plan.id.toLowerCase()}-`));

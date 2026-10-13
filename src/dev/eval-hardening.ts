@@ -71,8 +71,8 @@ const summary = { state_metrics_applicable: !narrative, qualitative_findings: re
   median_ttft_ms: median(successes.flatMap(r => r.latency.narrator_ttft_ms === null ? [] : [r.latency.narrator_ttft_ms])),
   median_narrator_ms: median(successes.map(r => r.latency.narrator_total_ms)), median_controller_tail_ms: median(successes.map(r => r.latency.controller_tail_ms)), median_turn_ms: median(successes.map(r => r.latency.coordinator_total_ms)),
   measured_successful_request_tokens: successes.reduce((n, r) => ({ prompt: n.prompt + (r.narrator.usage.prompt_tokens ?? 0) + (r.controller.usage.prompt_tokens ?? 0), completion: n.completion + (r.narrator.usage.completion_tokens ?? 0) + (r.controller.usage.completion_tokens ?? 0) }), { prompt: 0, completion: 0 }) };
-await mkdir("docs/evaluations", { recursive: true });
-const output = `docs/evaluations/phase-1l1-${smoke ? "smoke" : narrative ? "narrative" : `state-${count}`}-${Date.now()}.json`;
+await mkdir("artifacts/local/evaluations", { recursive: true });
+const output = `artifacts/local/evaluations/phase-1l1-${smoke ? "smoke" : narrative ? "narrative" : `state-${count}`}-${Date.now()}.json`;
 await writeFile(output, JSON.stringify({ ...banner, completed_at: new Date().toISOString(), summary, records }, null, 2) + "\n", { flag: "wx" });
 console.log(JSON.stringify({ output, summary }));
 if (summary.failed_turns || fp) process.exitCode = 1;

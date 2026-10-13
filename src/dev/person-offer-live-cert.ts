@@ -13,7 +13,7 @@ import type { CampaignSnapshot } from "../campaign/types.js";
  * Usage: NODE_USE_ENV_PROXY=1 node .build/src/dev/person-offer-live-cert.js
  */
 const TRANSIENT = new Set(["network_error", "timeout", "rate_limited", "provider_unavailable"]);
-const outDir = join("docs", "evaluations", "person_offer_live"), saveDir = join("saves", "person_offer_live");
+const outDir = join("artifacts", "local", "evaluations", "person_offer_live"), saveDir = join("saves", "person_offer_live");
 async function main(): Promise<void> {
   await mkdir(outDir, { recursive: true }); await mkdir(saveDir, { recursive: true });
   const requests: unknown[] = [];

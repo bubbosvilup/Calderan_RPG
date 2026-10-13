@@ -35,7 +35,7 @@ globalThis.fetch = (async (input: Parameters<typeof fetch>[0], init?: Parameters
 }) as typeof fetch;
 
 async function main(): Promise<void> {
-  const outDir = join("docs", "evaluations", "consolidation_block4_live"), saveDir = join("saves", "consolidation_block4_live");
+  const outDir = join("artifacts", "local", "evaluations", "consolidation_block4_live"), saveDir = join("saves", "consolidation_block4_live");
   await mkdir(outDir, { recursive: true }); await mkdir(saveDir, { recursive: true });
   const base = await createProductionDeps({ save_dir: saveDir, persistent_campaigns: true, reflection_mode: "off" });
   const { portrait_generator: _pg, item_sprite_reviewer: _sr, autosave: _as, ...rest } = base; void _pg; void _sr; void _as;

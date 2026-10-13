@@ -86,7 +86,7 @@ const SESSIONS = [
   ] },
 ] as const;
 const dry = process.argv.includes("--dry"), outIndex = process.argv.indexOf("--out");
-const out = outIndex >= 0 ? process.argv[outIndex + 1]! : `docs/evaluations/h5-live/npcplus7${dry ? "-dry" : ""}.jsonl`;
+const out = outIndex >= 0 ? process.argv[outIndex + 1]! : `artifacts/local/evaluations/h5-live/npcplus7${dry ? "-dry" : ""}.jsonl`;
 const reviewOut = out.replace(/\.jsonl$/, ".review.json"), summaryOut = out.replace(/\.jsonl$/, ".summary.json");
 if (!dry && !process.env.OPENROUTER_API_KEY?.trim()) throw new Error("OPENROUTER_API_KEY missing; no paid calls made");
 const models = selectedModels();

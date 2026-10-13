@@ -17,13 +17,13 @@ import type { TurnEvent } from "../turn/turn-types.js";
  * one revision, redaction, authorization, commit) runs on a clean household; the controller is a stub that proposes nothing, so every
  * move is derived from the narration by the engine. One JSONL row per call: draft, revision, delivered text, issues and final locations.
  *
- *   node .build/src/dev/probe-movement-closure-live.js --scenario d07 --samples 3 --out docs/evaluations/movement-follow-closure/d07-live.jsonl [--live]
+ *   node .build/src/dev/probe-movement-closure-live.js --scenario d07 --samples 3 --out artifacts/local/evaluations/movement-follow-closure/d07-live.jsonl [--live]
  *
  * Hard cap EUR 15 across the closure pass; this probe stops a batch at --budget-eur (default 0.50). Prices come from OpenRouter's public models API.
  */
 const args = process.argv.slice(2), flag = (n: string) => { const i = args.indexOf(n); return i < 0 ? undefined : args[i + 1]; };
 const live = args.includes("--live"), samples = Number(flag("--samples") ?? 2), scenario = flag("--scenario") ?? "d07";
-const out = flag("--out") ?? `docs/evaluations/movement-follow-closure/${scenario}-live.jsonl`, budgetEur = Number(flag("--budget-eur") ?? 0.5), eurPerUsd = Number(flag("--eur-per-usd") ?? 0.95);
+const out = flag("--out") ?? `artifacts/local/evaluations/movement-follow-closure/${scenario}-live.jsonl`, budgetEur = Number(flag("--budget-eur") ?? 0.5), eurPerUsd = Number(flag("--eur-per-usd") ?? 0.95);
 
 interface Case { readonly label: string; readonly input: string; readonly members: readonly string[]; readonly setup?: readonly CampaignCommand[]; readonly follow?: string }
 const HOME = ["brenna", "maren", "gerome"];

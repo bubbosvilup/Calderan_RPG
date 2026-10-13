@@ -1,4 +1,4 @@
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { turnFixture } from '../.build/src/dev/turn-fixture.js';
 import { ItemSpriteJobs } from '../.build/src/app/item-sprite-jobs.js';
 import { FalImageClient } from '../.build/src/llm/huggingface/fal-image-client.js';
@@ -8,7 +8,7 @@ import { FileCampaignRepository } from '../.build/src/persistence/campaign-repos
 const report={credential_exists:!!process.env.HF_TOKEN?.trim(),calls:0,retries:0,provider:RAENA_IMAGE_STACK.provider,model:RAENA_IMAGE_STACK.base_model,style:RAENA_IMAGE_STACK.style_id,items:[]};
 if(report.credential_exists){
   const {world,campaign}=turnFixture();
-  const root='docs/evaluations/item-sprite-smoke-assets',store=new PortraitAssetStore(root,{layout:'campaign'}),repository=new FileCampaignRepository(world,root);
+  const root='artifacts/local/evaluations/item-sprite-smoke-assets',store=new PortraitAssetStore(root,{layout:'campaign'}),repository=new FileCampaignRepository(world,root);
   const client=new FalImageClient(RAENA_IMAGE_STACK,{api_key:()=>process.env.HF_TOKEN});
   const generator={identity:client.identity,async generate(request){report.calls++;return client.generate(request);}};
   const jobs=new ItemSpriteJobs(campaign,{generator,store});
@@ -26,5 +26,6 @@ if(report.credential_exists){
     if(final.sprite?.status==='failed')break;
   }
 }
-await writeFile('docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json',JSON.stringify(report,null,2)+'\n');
+await mkdir('artifacts/local/evaluations',{recursive:true});
+await writeFile('artifacts/local/evaluations/ITEM_SPRITE_LIVE_SMOKE.json',JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));

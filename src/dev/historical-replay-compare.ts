@@ -7,7 +7,7 @@ import type { WorldStore } from "../world/world-store.js";
 
 /**
  * Comparator for the Historical Campaign Replay (evaluation only). Evaluates the frozen oracle checks
- * (docs/evaluations/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md, `oracle-v1`) against the replay's final snapshot and, per turn, against the
+ * (`oracle-v1`; tests read the byte-identical copy tests/fixtures/historical-replay/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md, the historical original is docs/evaluations/HISTORICAL_CAMPAIGN_EXPECTED_FINAL_STATUS.md) against the replay's final snapshot and, per turn, against the
  * compact state recorded in turns.jsonl so that the FIRST causal divergence is the earliest turn at which a check whose historical
  * deadline has passed is violated. Later failures that follow from an earlier one are reported as BLOCKED_BY_EARLIER_DIVERGENCE.
  *
@@ -151,7 +151,7 @@ export function sealedShingles(world: WorldStore): Set<string> {
 
 async function main(): Promise<void> {
   const ix = process.argv.indexOf("--iter"); const iter = Number(ix >= 0 ? process.argv[ix + 1] : "1"), tag = String(iter).padStart(2, "0");
-  const dir = join("docs", "evaluations", "historical_replay", `iteration_${tag}`), saves = join("saves", "historical_replay", `iteration_${tag}`);
+  const dir = join("artifacts", "local", "evaluations", "historical_replay", `iteration_${tag}`), saves = join("saves", "historical_replay", `iteration_${tag}`);
   const turns = (await readFile(join(dir, "turns.jsonl"), "utf8")).trim().split("\n").map(l => JSON.parse(l) as { turn: number; ok: boolean; location: string; state: Compact; error: { code: string } | null });
   const snap = JSON.parse(await readFile(join(saves, "final_snapshot.json"), "utf8")) as CampaignSnapshot;
   const narration = await readFile(join(saves, "narration.jsonl"), "utf8").then(t => t.trim().split("\n").filter(Boolean).map(l => { const r = JSON.parse(l) as { turn: number; narration: string | null }; return { turn: r.turn, text: r.narration ?? "" }; }), () => undefined);

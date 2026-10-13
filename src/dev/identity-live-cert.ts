@@ -22,7 +22,7 @@ const TRANSIENT = new Set(["network_error", "timeout", "rate_limited", "provider
 async function main(): Promise<void> {
   const name = process.argv[2] ?? ""; const messages = SCENARIOS[name];
   if (!messages) throw new Error("usage: identity-live-cert <korvin|bartholomew>");
-  const outDir = join("docs", "evaluations", "foreground_identity_live", name), saveDir = join("saves", "identity_live", name);
+  const outDir = join("artifacts", "local", "evaluations", "foreground_identity_live", name), saveDir = join("saves", "identity_live", name);
   await mkdir(outDir, { recursive: true }); await mkdir(saveDir, { recursive: true });
   const requests: unknown[] = [];
   const base = await createProductionDeps({ save_dir: saveDir, persistent_campaigns: true, reflection_mode: "off", prepared_narrator_observer: (r: unknown) => { requests.push(r); } });

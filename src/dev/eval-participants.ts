@@ -65,7 +65,7 @@ for (const seq of SEQUENCES) {
   }
   out.sequences.push({ id: seq.id, turns });
 }
-await mkdir("docs/evaluations", { recursive: true });
-const file = `docs/evaluations/phase-${out.phase.toLowerCase()}-live-${new Date().toISOString().replace(/[:.]/g, "").slice(0, 15)}.json`;
+await mkdir("artifacts/local/evaluations", { recursive: true });
+const file = `artifacts/local/evaluations/phase-${out.phase.toLowerCase()}-live-${new Date().toISOString().replace(/[:.]/g, "").slice(0, 15)}.json`;
 await writeFile(file, JSON.stringify(out, null, 2) + "\n", { flag: "wx" });
 console.log(JSON.stringify({ output: file }));

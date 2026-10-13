@@ -1,4 +1,4 @@
-import { readFile, writeFile, access } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { isDeepStrictEqual } from 'node:util';
 import { exactBenchmarkCredential, benchmarkAuthentication } from '../.build/src/dev/reflection-benchmark.js';
 import { OpenRouterClient } from '../.build/src/llm/openrouter/client.js';
@@ -12,7 +12,8 @@ import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../.build/src/retrieval/hybrid-search.js';
 
 // Deliberate one-shot evaluation: never overwrite a paid run inadvertently.
-const output = 'docs/evaluations/TRANSFER_DOMAIN_LIVE_SMOKE.json';
+const output = 'artifacts/local/evaluations/TRANSFER_DOMAIN_LIVE_SMOKE.json';
+await mkdir('artifacts/local/evaluations', { recursive: true });
 let exists = false; try { await access(output); exists = true; } catch {}
 if (exists) throw new Error('A live report already exists; do not retry this evaluation.');
 const report = { timestamp: new Date().toISOString(), authentication: 'not_attempted', calls: 0, retries: 0, image_calls: 0, cases: [] };

@@ -28,7 +28,7 @@ import type { CampaignCommand } from "../campaign/types.js";
  * resumed batches (read back from the JSONL). New calls stop at EUR 0.30 (exploration stop) and never exceed --budget-eur (hard cap).
  */
 const args = process.argv.slice(2), flag = (n: string) => { const i = args.indexOf(n); return i < 0 ? undefined : args[i + 1]; };
-const out = flag("--out") ?? "docs/evaluations/pass10/follow-choice-live.jsonl";
+const out = flag("--out") ?? "artifacts/local/evaluations/pass10/follow-choice-live.jsonl";
 const live = args.includes("--live"), samples = Number(flag("--samples") ?? 3), start = Number(flag("--sample-start") ?? 0);
 const budgetEur = Number(flag("--budget-eur") ?? 0.35), softStopEur = 0.30, eurPerUsd = Number(flag("--eur-per-usd") ?? 0.95);
 type Variant = "production" | "pass9_note" | "away_labels" | "invited_label";

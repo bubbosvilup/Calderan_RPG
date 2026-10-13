@@ -44,7 +44,7 @@ const PLANS: readonly Plan[] = [
 
 async function main(): Promise<void> {
   const want = process.argv.slice(2).map(s => s.toUpperCase()), plans = PLANS.filter(p => !want.length || want.includes(p.id));
-  const outDir = join("docs", "evaluations", "keep_track_live"); await mkdir(outDir, { recursive: true });
+  const outDir = join("artifacts", "local", "evaluations", "keep_track_live"); await mkdir(outDir, { recursive: true });
   const results: Record<string, unknown>[] = []; let tokens = 0, cost = 0;
   for (const plan of plans) {
     const saveDir = await mkdtemp(join(tmpdir(), `caldrevan-keep-track-live-${plan.id.toLowerCase()}-`));

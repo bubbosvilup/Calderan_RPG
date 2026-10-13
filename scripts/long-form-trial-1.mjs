@@ -10,7 +10,7 @@ import { onlineCoordinator, selectedModels } from '../.build/src/dev/turn-servic
 import { capturingFetch, settle } from '../.build/src/dev/narrator-bakeoff.js';
 
 const stamp = process.argv[2];
-const dir = `docs/evaluations/long-form-narrator-trial-1-${stamp}`;
+const dir = `artifacts/local/evaluations/long-form-narrator-trial-1-${stamp}`;
 const script = JSON.parse(await readFile(`${dir}/player-script.json`, 'utf8'));
 const CONFIGS = [
   { id: 'glm-5.2', model: 'z-ai/glm-5.2', tag: 'z-ai/fp8', provider_name: 'Z.AI', reasoning: { enabled: false } },

@@ -154,7 +154,7 @@ const SESSIONS = [
 ] as const;
 const NPCS = ["brenna", "maren", "gerome"] as const;
 const dry = process.argv.includes("--dry"), outIndex = process.argv.indexOf("--out");
-const out = outIndex >= 0 ? process.argv[outIndex + 1]! : `docs/evaluations/h5-live/npcplus8${dry ? "-dry" : ""}.jsonl`;
+const out = outIndex >= 0 ? process.argv[outIndex + 1]! : `artifacts/local/evaluations/h5-live/npcplus8${dry ? "-dry" : ""}.jsonl`;
 const reviewOut = out.replace(/\.jsonl$/, ".review.jsonl"), summaryOut = out.replace(/\.jsonl$/, ".summary.json");
 // Optional replay dump (base/final snapshots + observed TurnResult fields) for offline re-observation; keep it in scratch, not the repo.
 const replayIndex = process.argv.indexOf("--replay-out"), replayOut = replayIndex >= 0 ? process.argv[replayIndex + 1] : undefined;

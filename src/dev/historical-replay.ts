@@ -68,7 +68,7 @@ async function main(): Promise<void> {
   const messages = arg("messages"); if (!messages) throw new Error("--messages <file> is required");
   const from = Number(arg("from") ?? "1"), to = Number(arg("to") ?? "421"), resume = process.argv.includes("--resume");
   const turns = parseHistoricalMessages(await readFile(messages, "utf8")).filter(t => t.turn >= from && t.turn <= to);
-  const outDir = join("docs", "evaluations", "historical_replay", `iteration_${tag}`), saveDir = join("saves", "historical_replay", `iteration_${tag}`);
+  const outDir = join("artifacts", "local", "evaluations", "historical_replay", `iteration_${tag}`), saveDir = join("saves", "historical_replay", `iteration_${tag}`);
   await mkdir(outDir, { recursive: true }); await mkdir(saveDir, { recursive: true });
   const dump = process.argv.includes("--dump-prompts");
   const prompts: unknown[] = [];

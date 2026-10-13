@@ -9,7 +9,7 @@ import { playerCharacterProjection } from "../src/app/player-character-view.js";
 import { derivePlayUiView } from "../src/app/play-ui-view.js";
 import { deriveSessionView } from "../src/app/session-view.js";
 
-const documents = JSON.parse(await readFile("docs/evaluations/p12-scene-continuity/fixture-world.json", "utf8"));
+const documents = JSON.parse(await readFile("tests/fixtures/scene-continuity/fixture-world.json", "utf8"));
 const policy = (player = true, known_by: string[] = []) => ({ visibility: { player, narrator: true }, known_by });
 function fixture(options: { privateOwner?: boolean; unknownName?: boolean; privateRelationship?: boolean } = {}) {
   const docs = structuredClone(documents);
