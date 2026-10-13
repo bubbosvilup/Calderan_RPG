@@ -17,7 +17,7 @@ import { actionSegments, sceneDirection, resolveDestination, reachable } from ".
 import { resolveTurnIntent, projectTurnIntent } from "../.build/src/turn/stages/intent.js";
 import { SceneParticipants } from "../.build/src/turn/scene-participants.js";
 import { recentSceneNarration } from "../.build/src/turn/context/recent-scene-narration.js";
-import { TurnCoordinator } from "../.build/src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../.build/src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../.build/src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../.build/src/retrieval/hybrid-search.js";
 import { GameSession } from "../.build/src/app/game-session.js";

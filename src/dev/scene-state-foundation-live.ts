@@ -11,7 +11,7 @@ import { buildTurnContext } from "../turn/context/context-builder.js";
 import { buildNarratorPrompt } from "../turn/context/prompt-builder.js";
 import { playerIntent } from "../turn/player-intent.js";
 import { prepareNarratorRequest } from "../turn/context/context-budget.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { largeScene, richScene } from "./scene-foundation-fixtures.js";
 import { apply, itemId, makeItem, promptFor, sceneBlock, sceneFixture, SCENE_ELSEWHERE } from "./scene-state-fixtures.js";
 import type { RecentExchange } from "../turn/recent-conversation.js";

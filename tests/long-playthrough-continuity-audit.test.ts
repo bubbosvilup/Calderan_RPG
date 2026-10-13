@@ -7,7 +7,7 @@ import { buildTurnContext, NAME_PROVENANCE } from "../src/turn/context/context-b
 import { establishNames } from "../src/turn/name-establishment.js";
 import { RecentConversation, type RecentExchange } from "../src/turn/recent-conversation.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { deriveSessionView } from "../src/app/session-view.js";

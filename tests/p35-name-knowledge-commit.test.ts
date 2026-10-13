@@ -14,7 +14,7 @@ import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { prepareNarratorRequest } from "../src/turn/context/context-budget.js";
 import { prepareCommit } from "../src/turn/stages/commit-preparation.js";
 import { rpgDialogue } from "../src/turn/rpg-dialogue.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { CampaignCommand } from "../src/campaign/types.js";

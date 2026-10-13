@@ -21,7 +21,7 @@ const RUNTIME = walk("src").filter(p => !p.includes("narration-facts/") && !p.st
 const usesFacts = (p: string) => imports(p).some(s => /narration-facts\/index\.js$/.test(s));
 
 test("1. one NarrationFactSource per turn: the coordinator creates exactly one and hands it to authorization, audit and commit preparation", () => {
-  const coordinator = code("src/turn/turn-coordinator.ts");
+  const coordinator = code("src/turn/coordinator/turn-coordinator.ts");
   assert.equal((coordinator.match(/createFactSource\(/g) ?? []).length, 1);
   assert.match(coordinator, /authorizeTurn\(\{[^\n]*facts: factSource/);
   assert.match(coordinator, /createNarrationAuditor\(\{ facts: factSource/);

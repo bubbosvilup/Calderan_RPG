@@ -3,7 +3,7 @@ import { dirname } from "node:path";
 import { turnFixture } from "./turn-fixture.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { buildTurnContext } from "../turn/context/context-builder.js";
 import { movableCharacters } from "../turn/movement/character-movement.js";
 import { characterMovementsFromFacts } from "../turn/movement/movement-evidence.js";

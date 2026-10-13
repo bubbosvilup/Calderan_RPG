@@ -18,7 +18,7 @@ import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/sa
 import { FileCampaignRepository, assetKey } from "../src/persistence/campaign-repository.js";
 import { liveAssetReferences, assessPortraitAssets } from "../src/app/portrait-assets.js";
 import { GameSession } from "../src/app/game-session.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { mockNarrator, metadata } from "./turn-fixtures.js";

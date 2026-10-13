@@ -12,7 +12,7 @@ import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narr
 import { canonicalNameDisclosure, establishedCanonicalDisclosure } from "../src/turn/canonical-name-disclosure.js";
 import { narratorIdentityGate, registerNarratorIdentities } from "../src/turn/narrator-identity.js";
 import { projectNarratorFocus } from "../src/turn/context/narrator-focus.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { reconcileNarration } from "../src/turn/stages/audit.js";

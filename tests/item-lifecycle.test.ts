@@ -9,7 +9,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { deriveSessionView } from "../src/app/session-view.js";
-import { diagnoseMutation } from "../src/turn/mutation-diagnostics.js";
+import { diagnoseMutation } from "../src/turn/coordinator/mutation-diagnostics.js";
 import { inspectInventory, inspectItem, pickupCase, runPickupCase, SWORD, groundSword, pickUp, dropHere, PICKUP_CASES } from "../src/dev/item-lifecycle-inspector.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { StateControllerProvider } from "../src/llm/state-controller-provider.js";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";
 import { TRUNCATION_RECOVERY_NOTICE } from "../src/turn/stages/narration.js";
 import { collect, metadata } from "./turn-fixtures.js";

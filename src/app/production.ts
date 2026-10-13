@@ -16,7 +16,7 @@ import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { resolveOptionalServices, type OptionalServiceConfig } from "./optional-services.js";
 import { SemanticIndex } from "../retrieval/semantic-index.js";
 import type { EmbeddingProvider } from "../retrieval/embedding-provider.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { NARRATOR_OUTPUT_TOKENS, selectedModels, contextCompressorModel, mannerismExtractorModel } from "./provider-config.js";
 import { DEFAULT_CONTROLLER_FALLBACK_MODELS } from "../llm/openrouter/state-controller.js";
 import type { SessionDeps, SessionHooks } from "./game-session.js";
@@ -26,7 +26,7 @@ import { readFile } from "node:fs/promises";
 import { FalImageClient } from "../llm/huggingface/fal-image-client.js";
 import { RAENA_IMAGE_STACK } from "./image-stack.js";
 import { PortraitAssetStore } from "./portrait-store.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import { observePreparedNarrator } from "./narrator-alternatives.js";
 

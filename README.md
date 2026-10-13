@@ -14,7 +14,7 @@ Nothing a model writes becomes campaign state until the engine has validated it,
 
 ## Runtime Architecture
 
-The order below is the one `TurnCoordinator.runTurn` (`src/turn/turn-coordinator.ts`) executes; the typed stages live in `src/turn/stages/`.
+The order below is the one `TurnCoordinator.runTurn` (`src/turn/coordinator/turn-coordinator.ts`) executes; the typed stages live in `src/turn/stages/`.
 
 ```text
 Player input

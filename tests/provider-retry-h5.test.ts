@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";
 import { ProviderError, type ProviderErrorCode } from "../src/llm/errors.js";
 import { DEFAULT_RETRY_POLICY, NO_RETRY_POLICY, RETRYABLE_PROVIDER_CODES, classifyProviderCode, withProviderRetry, ProviderBudget, abortableSleep } from "../src/llm/retry.js";

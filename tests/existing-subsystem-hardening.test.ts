@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { turnFixture } from "../src/dev/turn-fixture.js";
 import { runScenario, type DiagnosticScenario } from "../src/dev/controller-authorization-diagnostics.js";
-import { conflictingCommands } from "../src/turn/mutation-diagnostics.js";
+import { conflictingCommands } from "../src/turn/coordinator/mutation-diagnostics.js";
 import { CONDITION_TERMS } from "../src/turn/authorization/physical-interaction.js";
 import { CONTROLLER_POLICY } from "../src/llm/openrouter/state-controller.js";
 import { apply, itemId, makeItem, promptFor, sceneBlock, sceneFixture, SCENE_ELSEWHERE } from "../src/dev/scene-state-fixtures.js";

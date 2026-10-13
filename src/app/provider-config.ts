@@ -4,7 +4,7 @@ import { DEFAULT_MANNERISM_EXTRACTOR_MODEL } from "../llm/openrouter/mannerism-e
 
 /** Production provider settings, single source for both the application and the dev harnesses (which re-export them). */
 export const NARRATOR_OUTPUT_TOKENS = 768;
-export { NARRATOR_RECOVERY_OUTPUT_TOKENS } from "../turn/narrator-ledger.js";
+export { NARRATOR_RECOVERY_OUTPUT_TOKENS } from "../turn/coordinator/narrator-ledger.js";
 export const selectedModels = () => ({ narrator: process.env.OPENROUTER_NARRATOR_MODEL ?? DEFAULT_NARRATOR_MODEL, controller: process.env.OPENROUTER_CONTROLLER_MODEL ?? DEFAULT_CONTROLLER_MODEL });
 /** Observation extraction is independently configured; never inherits the controller setting. */
 export const mannerismExtractorModel = (env: Readonly<Record<string, string | undefined>> = process.env) => env.MANNERISM_EXTRACTOR_MODEL?.trim() || DEFAULT_MANNERISM_EXTRACTOR_MODEL;

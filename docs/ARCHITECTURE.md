@@ -25,7 +25,7 @@ Player input
   ↓
 GameSession                       src/app/game-session.ts  (one facade for any UI; SessionHost owns campaign lifecycle)
   ↓
-TurnCoordinator                   src/turn/turn-coordinator.ts  (orchestrates typed stages in src/turn/stages/)
+TurnCoordinator                   src/turn/coordinator/turn-coordinator.ts  (orchestrates typed stages in src/turn/stages/)
   ↓ intent + projection → retrieval → context
 Narrator (buffered draft, never shown) src/llm/openrouter/minimax-narrator.ts  (provider class name is historical)
   ↓

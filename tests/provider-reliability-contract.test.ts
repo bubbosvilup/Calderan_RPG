@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {ProviderError,type ProviderFailureClass} from "../src/llm/errors.js";
 import {failureClass,technicalRetryReason,invalidStructured,maintenanceCall,diagnosticCall,ReliabilityMetrics} from "../src/llm/reliability.js";
-import {TurnCoordinator} from "../src/turn/turn-coordinator.js";
+import {TurnCoordinator} from "../src/turn/coordinator/turn-coordinator.js";
 import {TurnError,type TurnEvent} from "../src/turn/turn-types.js";
 import {setup,collect,transfer,metadata,mockNarrator} from "./turn-fixtures.js";
 import {fakeRetry,scriptedController,scriptedNarrator} from "./provider-failure-scripts.js";
@@ -13,7 +13,7 @@ import {mannerismFixture} from "../src/dev/d10-mannerism-corpus.js";
 import {MannerismMaintenance} from "../src/turn/mannerism-extraction.js";
 import {OpenRouterStateControllerProvider} from "../src/llm/openrouter/state-controller.js";
 import {MannerismPortrayalGate} from "../src/turn/mannerism-portrayal-gate.js";
-import type {TurnDiagnostics} from "../src/turn/turn-diagnostics.js";
+import type {TurnDiagnostics} from "../src/turn/coordinator/turn-diagnostics.js";
 const input="I give boots to Brenna.",text="Brenna accepts boots from Nicco.";
 for(const category of ["malformed_envelope","finish_reason_length","empty_output","schema_invalid","parser_failure"]as const)test(`critical technical ${category}: same request, one retry, one state effect`,async()=>{
  const f=setup(),retry=fakeRetry(),requests:string[]=[];let n=0;

@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { turnFixture } from "./turn-fixture.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { buildTurnContext } from "../turn/context/context-builder.js";

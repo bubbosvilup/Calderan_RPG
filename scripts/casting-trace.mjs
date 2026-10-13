@@ -11,7 +11,7 @@ import { canonicalInteractionTargets } from '../.build/src/turn/canonical-intera
 import { narratorIdentityGate } from '../.build/src/turn/narrator-identity.js';
 import { readScene } from '../.build/src/turn/narration-facts/index.js';
 import { castingOptions } from '../.build/src/turn/scene-participants.js';
-import { TurnCoordinator } from '../.build/src/turn/turn-coordinator.js';
+import { TurnCoordinator } from '../.build/src/turn/coordinator/turn-coordinator.js';
 import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../.build/src/retrieval/hybrid-search.js';
 

@@ -15,7 +15,7 @@ const statedGold = (quote: string, subjects?: readonly string[]): number[] => go
 const pricesInText = (text: string): number[] => { const parts = text.split(/(?<=[.!?])\s+|\n+/).map(x => x.trim()).filter(Boolean); return parts.flatMap((t, i) => goldAmounts(t, { concrete: true, prev: parts[i - 1], next: parts[i + 1] })); };
 const unsupportedCurrency = (text: string): boolean => readPrices(text).unsupported === "currency";
 const fractionalPrice = (text: string): boolean => readPrices(text).unsupported === "fraction";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";

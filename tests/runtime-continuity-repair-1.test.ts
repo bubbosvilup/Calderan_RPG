@@ -14,7 +14,7 @@ import { authorizeCommands } from "../src/turn/authorization/command-authorizer.
 import { narratedDepartures } from "./movement-readers.js";
 import { playerAuthoredEvents } from "../src/turn/authorization/player-authored-events.js";
 import { RecentConversation, RECENT_CONVERSATION_TURNS, type RecentExchange } from "../src/turn/recent-conversation.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";

@@ -9,7 +9,7 @@ import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/sa
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
 import { MannerismPortrayalGate, type PackedMannerism, type PortrayalGateInput } from "../src/turn/mannerism-portrayal-gate.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { mockNarrator, mockController, collect } from "./turn-fixtures.js";
@@ -92,7 +92,7 @@ test("D26 malformed/no-finding paths never throw or mutate inputs", () => {
 });
 test("D26 production lifecycle logs final deliverable, no repair/provider calls/authority effects", async () => {
   const f = rig(); f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "set_condition", character_id: "maren", conditions: [], presentation: "Nicco's statement is factually correct; no mistaken detail." }] });
-  const service = new RetrievalService(f.world); let narratorCalls = 0; let diagnostics: import("../src/types/readonly.js").DeepReadonly<import("../src/turn/turn-diagnostics.js").TurnDiagnostics> | undefined;
+  const service = new RetrievalService(f.world); let narratorCalls = 0; let diagnostics: import("../src/types/readonly.js").DeepReadonly<import("../src/turn/coordinator/turn-diagnostics.js").TurnDiagnostics> | undefined;
   const text = 'Maren levels her head. "It is closed," she agrees.';
   const coordinator = new TurnCoordinator(f.world, mockNarrator(text, () => narratorCalls++), mockController([]), { service, search: new HybridSearch(service) }, { diagnostics_sink: d => { diagnostics = d; } });
   const before = f.campaign.exportSnapshot(); const events = await collect(coordinator.runTurn({ campaign: f.campaign, player_input: 'Maren, hello.' }));

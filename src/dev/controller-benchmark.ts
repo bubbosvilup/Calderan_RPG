@@ -23,7 +23,7 @@ import { createOpeningCampaign } from "../campaign/opening-state.js";
 import { learnCanonicalName } from "../campaign/identity-knowledge.js";
 import { loadWorld } from "../world/loader.js";
 import type { WorldStore } from "../world/world-store.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import type { TurnEvent, TurnResult } from "../turn/turn-types.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";

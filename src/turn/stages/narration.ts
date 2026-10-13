@@ -9,7 +9,7 @@ import { withProviderRetry, type ProviderAttemptRecord, type ProviderBudget, typ
 import {providerRetryReason} from "../../llm/retry.js";
 import { technicalRetryReason } from "../../llm/reliability.js";
 import { ProviderError } from "../../llm/errors.js";
-import { NarratorLedger, type NarratorGeneration } from "../narrator-ledger.js";
+import { NarratorLedger, type NarratorGeneration } from "../coordinator/narrator-ledger.js";
 import type { TurnIntent } from "./intent.js";
 
 /**

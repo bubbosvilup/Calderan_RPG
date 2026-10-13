@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { turnFixture } from "./turn-fixture.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { characterLocation } from "../turn/movement/character-movement.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import type { GenerationRequest } from "../llm/types.js";

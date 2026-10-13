@@ -10,7 +10,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { contractCommands } from "../src/turn/authorization/character-contracts.js";
 import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/turn/context/npc-plus.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";

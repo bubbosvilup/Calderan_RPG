@@ -8,7 +8,7 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { buildNarratorPrompt } from "../src/turn/context/prompt-builder.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { adjustedSilver, economicRelevance, economy, formatSilver, generatePriceIndex, parseEconomy, toSilver } from "../src/economy/economy.js";

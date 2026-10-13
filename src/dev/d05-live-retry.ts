@@ -12,9 +12,9 @@ import { DEFAULT_RETRY_POLICY } from "../llm/retry.js";
 import { selectedModels } from "../app/provider-config.js";
 import type { ControllerResult, StateControllerProvider } from "../llm/state-controller-provider.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import type { TurnEvent } from "../turn/turn-types.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 export const INPUT = '/tell campaign_fact_bridge_closed to brenna';
@@ -80,7 +80,7 @@ async function main() {
   assert.deepEqual(selectedModels(), { narrator: "z-ai/glm-5.2", controller: "qwen/qwen3.8-flash" });
   const out = resolve("saves/d05-retry"); await mkdir(out, { recursive: true });
   const write = (name: string, value: unknown) => writeFile(resolve(out, name), JSON.stringify(value, null, 2) + "\n", "utf8");
-  const protectedFiles = ["src/llm/retry.ts", "src/llm/openrouter/client.ts", "src/llm/openrouter/state-controller.ts", "src/turn/turn-coordinator.ts", "src/turn/stages/controller.ts"];
+  const protectedFiles = ["src/llm/retry.ts", "src/llm/openrouter/client.ts", "src/llm/openrouter/state-controller.ts", "src/turn/coordinator/turn-coordinator.ts", "src/turn/stages/controller.ts"];
   const freeze = { input: INPUT, narration: NARRATION, expected_command: COMMAND, before: turnFixture().campaign.exportSnapshot(), retry_policy: DEFAULT_RETRY_POLICY,
     production_controller: "qwen/qwen3.8-flash", production_narrator: "z-ai/glm-5.2", sources: Object.fromEntries(await Promise.all(protectedFiles.map(async p => [p, await readFile(p, "utf8")]))), expected: { revision_delta: 1, edges_added: 1, commits: 1, duplicate_effects: 0 } };
   const marker = await open(resolve(out, "paid-started.json"), "wx"); await marker.writeFile(JSON.stringify({ at: new Date().toISOString() })); await marker.close();

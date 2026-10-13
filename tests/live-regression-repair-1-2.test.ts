@@ -8,7 +8,7 @@ import { playerIntent } from "../src/turn/player-intent.js";
 import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { auditNarration } from "../src/turn/audit/narration-audit.js";
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
-import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";

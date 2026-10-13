@@ -1,4 +1,4 @@
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { setup, mockNarrator, mockController, collect } from "./turn-fixtures.js";
 import { scriptedController, scriptedNarrator, failOnce } from "./provider-failure-scripts.js";
 import { DEFAULT_RETRY_POLICY } from "../src/llm/retry.js";

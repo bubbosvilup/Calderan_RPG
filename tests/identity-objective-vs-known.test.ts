@@ -15,7 +15,7 @@ import { canonicalNameDisclosure, establishedCanonicalDisclosure } from "../src/
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { projectNarratorFocus } from "../src/turn/context/narrator-focus.js";
 import { prepareCommit } from "../src/turn/stages/commit-preparation.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { playerCharacterProjection } from "../src/app/player-character-view.js";

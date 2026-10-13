@@ -10,7 +10,7 @@ import type { AddressInfo } from "node:net";
 import { loadWorld } from "../src/world/loader.js";
 import type { WorldStore } from "../src/world/world-store.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";

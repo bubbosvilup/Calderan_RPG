@@ -12,7 +12,7 @@ import { rpgNarration } from "../src/turn/rpg-dialogue.js";
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
 import { losslessCandidate, renderLosslessCandidate } from "../src/turn/context/lossless-knowledge.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { collect, mockNarrator, mockController } from "./turn-fixtures.js";

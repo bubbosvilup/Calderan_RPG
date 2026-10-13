@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { runPlayTurn } from "../src/dev/play-turn.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { mockController, mockNarrator } from "./turn-fixtures.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
@@ -72,7 +72,7 @@ test("not due makes no provider call; failed/cancelled gameplay does not even ch
 });
 
 test("normal CLI source uses the tested post-turn path and runTurn stays at its 164-line baseline", async () => {
-  const cli = await readFile("src/dev/play.ts", "utf8"), coordinator = await readFile("src/turn/turn-coordinator.ts", "utf8");
+  const cli = await readFile("src/dev/play.ts", "utf8"), coordinator = await readFile("src/turn/coordinator/turn-coordinator.ts", "utf8");
   assert.match(cli, /await runPlayTurn\(/); assert.match(cli, /new OpenRouterReflectionProvider\(/);
   assert.doesNotMatch(coordinator, /reflectAfterTurn|runPlayTurn|ReflectionProvider/);
   const body = coordinator.slice(coordinator.indexOf("  async *runTurn("), coordinator.lastIndexOf("\n  }") + 4);

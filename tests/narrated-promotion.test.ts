@@ -12,7 +12,7 @@ import { asPlan, readOffer } from "./offer-fixtures.js";
 import { activeTradeOffer } from "../src/campaign/trade.js";
 import { establishedFacts, readScene } from "../src/turn/narration-facts/index.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { GenerationRequest } from "../src/llm/types.js";

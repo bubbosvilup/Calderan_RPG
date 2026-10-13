@@ -1,4 +1,4 @@
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 
 /**
  * Hardening H5 — offline aggregation of H4 TurnDiagnostics. Pure and local: no telemetry, no network, no prompt or narration text

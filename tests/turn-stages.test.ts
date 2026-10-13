@@ -130,7 +130,7 @@ test("authority guard (source): stages hold no CampaignState and never commit; t
     assert.ok(!/import[^;]*\bCampaignState\b/.test(code), `${file} imports CampaignState`);
     assert.ok(!/\.commit\(/.test(code), `${file} commits`);
   }
-  const coordinator = (await readFile("src/turn/turn-coordinator.ts", "utf8")).split("\n").map(l => l.trim());
+  const coordinator = (await readFile("src/turn/coordinator/turn-coordinator.ts", "utf8")).split("\n").map(l => l.trim());
   const commits = coordinator.flatMap((l, i) => /\bcampaign\.commit\(/.test(l) ? [i] : []);
   assert.equal(commits.length, 1, "exactly one authoritative commit");
   assert.equal(coordinator[commits[0]! - 1], "checkpoint();", "the final checkpoint immediately precedes the commit (no await, callback or yield between)");

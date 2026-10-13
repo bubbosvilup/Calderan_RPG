@@ -1,21 +1,21 @@
-import { freezeSnapshot } from "../campaign/validation.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { GenerationMetadata } from "../llm/types.js";
-import type { TurnContext } from "./context/context-builder.js";
-import { CONTEXT_LIMITS, contextSerializedCharacters } from "./context/context-builder.js";
-import { deduplicateRecovered, type NpcPlusDiagnostics } from "./context/npc-plus.js";
-import type { retrieveForTurn } from "./context/retrieval-policy.js";
+import { freezeSnapshot } from "../../campaign/validation.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { GenerationMetadata } from "../../llm/types.js";
+import type { TurnContext } from "../context/context-builder.js";
+import { CONTEXT_LIMITS, contextSerializedCharacters } from "../context/context-builder.js";
+import { deduplicateRecovered, type NpcPlusDiagnostics } from "../context/npc-plus.js";
+import type { retrieveForTurn } from "../context/retrieval-policy.js";
 type RetrievalOutcome = Awaited<ReturnType<typeof retrieveForTurn>>;
-import { RETRIEVAL_LIMITS } from "./context/retrieval-policy.js";
-import type { ProviderAttemptRecord } from "../llm/retry.js";
-import type { AuthorizationDiagnostic, PublicationStep, TurnFailure } from "./turn-types.js";
+import { RETRIEVAL_LIMITS } from "../context/retrieval-policy.js";
+import type { ProviderAttemptRecord } from "../../llm/retry.js";
+import type { AuthorizationDiagnostic, PublicationStep, TurnFailure } from "../turn-types.js";
 import type { NarratorGenerationTrace } from "./narrator-ledger.js";
 
 export type DiagnosticPhase = "input_intent" | "projection" | "retrieval" | "prompt_composition" | "narrator" | "reconciliation_narrator" | "controller" | "authorization" | "preparation" | "audit" | "reconciliation" | "reconciliation_audit" | "commit_preparation" | "commit" | "publication";
 export interface TurnDiagnostics {
   provider_reliability?: Readonly<Record<string,number>>;
-  mannerism_portrayal?: import("./mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
-  context_budget?: import("./context/context-budget.js").ContextBudgetSnapshot;
+  mannerism_portrayal?: import("../mannerism-portrayal-gate.js").PortrayalGateDiagnostics;
+  context_budget?: import("../context/context-budget.js").ContextBudgetSnapshot;
   /** Block 4: the request identity (REV-2), when the caller supplied one. */
   turn_key?: string;
   /** Block 4 (NARR-1): every logical Narrator generation and physical provider attempt of this turn, with finish reasons, tokens, model, provider/route and the truncation-recovery result. */
@@ -39,7 +39,7 @@ export interface TurnDiagnostics {
   commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_provisional_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };
 }
 /** Controller model identity for diagnostics: requested primary, answering model, fallback flag, generation id, upstream provider. No content. */
-export function controllerModelDiagnostics(r: import("../llm/state-controller-provider.js").ControllerResult): Pick<NonNullable<TurnDiagnostics["controller"]>, "model" | "response_model" | "requested_models" | "model_fallback" | "generation_id" | "provider"> {
+export function controllerModelDiagnostics(r: import("../../llm/state-controller-provider.js").ControllerResult): Pick<NonNullable<TurnDiagnostics["controller"]>, "model" | "response_model" | "requested_models" | "model_fallback" | "generation_id" | "provider"> {
   return { model: r.model, ...(r.response_model ? { response_model: r.response_model } : {}), ...(r.requested_models ? { requested_models: [...r.requested_models] } : {}),
     ...(r.model_fallback === undefined ? {} : { model_fallback: r.model_fallback }), ...(r.generation_id ? { generation_id: r.generation_id } : {}), ...(r.provider ? { provider: r.provider } : {}) };
 }

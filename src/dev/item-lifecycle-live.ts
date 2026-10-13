@@ -6,9 +6,9 @@ import { NARRATOR_OUTPUT_TOKENS, selectedModels } from "../app/provider-config.j
 import { controllerFallbackModels } from "../app/production.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
-import { diagnoseMutation } from "../turn/mutation-diagnostics.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
+import { diagnoseMutation } from "../turn/coordinator/mutation-diagnostics.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { TurnDebugRecord, TurnEvent } from "../turn/turn-types.js";
 import { apply, makeItem, sceneFixture, SCENE_ELSEWHERE, SCENE_LOCATION } from "./scene-state-fixtures.js";
 import { inspectInventory, inspectItem } from "./item-lifecycle-inspector.js";

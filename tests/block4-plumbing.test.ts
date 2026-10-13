@@ -5,7 +5,7 @@ import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_OUTPUT_TOKENS } from "../src/
 import { NARRATOR_OUTPUT_TOKENS, NARRATOR_RECOVERY_OUTPUT_TOKENS } from "../src/app/provider-config.js";
 import { ProviderError } from "../src/llm/errors.js";
 import type { NarratorStreamEvent } from "../src/llm/narrator-provider.js";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import { TURN_PROGRESS_PHASES } from "../src/turn/turn-types.js";
 import { collect } from "./turn-fixtures.js";
 import { NARRATION, coordinatorWith, countingController, stepNarrator } from "./block4-fixtures.js";

@@ -10,7 +10,7 @@ import { HEARTSTONE_HOUSEHOLD_RULES, HEARTSTONE_CANONICAL_OATH, HEARTSTONE_DEED_
 import { recognizedByHeartstone, stoneFeel, insideHeartstoneInterior } from "../src/campaign/heartstone-recognition.js";
 import { HEARTSTONE_STONE_LINE } from "../src/turn/context/scene-state-render.js";
 import { heartstoneRiteCommands } from "../src/campaign/heartstone-rite.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { GenerationRequest } from "../src/llm/types.js";

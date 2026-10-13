@@ -2,12 +2,12 @@ import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { OpenRouterStateControllerProvider } from "../llm/openrouter/state-controller.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
-import { diagnoseMutation, type MutationDiagnostic } from "../turn/mutation-diagnostics.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
+import { diagnoseMutation, type MutationDiagnostic } from "../turn/coordinator/mutation-diagnostics.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
 import type { StateControllerProvider } from "../llm/state-controller-provider.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { TurnDebugRecord, TurnEvent, TurnResult } from "../turn/turn-types.js";
 import { turnFixture } from "./turn-fixture.js";
 

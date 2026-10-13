@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { SemanticIndex } from "../src/retrieval/semantic-index.js";

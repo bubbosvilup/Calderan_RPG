@@ -1,4 +1,4 @@
-import type { TurnCoordinator } from "../turn/turn-coordinator.js";
+import type { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import type { TurnEvent, TurnRequest } from "../turn/turn-types.js";
 import type { WorldStore } from "../world/world-store.js";
 import { reflectAfterTurn, type ReflectionProvider, type ReflectionRun } from "../turn/reflection.js";

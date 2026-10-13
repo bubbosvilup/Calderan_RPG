@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { GameSession, type SessionDeps } from "../app/game-session.js";
 import { mannerismFixture } from "./d10-mannerism-corpus.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { OpenRouterClient } from "../llm/openrouter/client.js";

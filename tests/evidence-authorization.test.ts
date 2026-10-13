@@ -13,7 +13,7 @@ import { playerIntent } from "../src/turn/player-intent.js";
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../src/turn/authorization/evidence-authorization.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess, selectRelevantFacts } from "../src/turn/context/narrative-authority.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { collect, metadata } from "./turn-fixtures.js";

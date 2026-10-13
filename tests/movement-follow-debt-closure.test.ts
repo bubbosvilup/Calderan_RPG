@@ -4,7 +4,7 @@ import { invitedFollowers } from "../src/turn/movement/follow-invitation.js";
 import { household, play, grammarProbe } from "./pass10-support.js";
 import { readFileSync } from "node:fs";
 import { collect } from "./turn-fixtures.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { scriptedController, scriptedNarrator } from "./provider-failure-scripts.js";

@@ -10,7 +10,7 @@ import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.
 import { verifyEvidence } from "../src/turn/authorization/evidence-authorization.js";
 import { auditNarration } from "../src/turn/audit/narration-audit.js";
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { CampaignCommand } from "../src/campaign/types.js";

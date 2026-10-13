@@ -4,7 +4,7 @@ Status: ACTIVE for the turn lifecycle and ordering; model names in this Phase 1L
 
 ## Authority and lifecycle
 
-`src/turn/turn-coordinator.ts` is the sole new layer spanning the turn. It accepts `{ campaign, player_input, signal? }`; a CampaignSession caller passes `session.campaign`. Models remain providers, without world, retrieval, save repository or mutable campaign access.
+`src/turn/coordinator/turn-coordinator.ts` is the sole new layer spanning the turn. It accepts `{ campaign, player_input, signal? }`; a CampaignSession caller passes `session.campaign`. Models remain providers, without world, retrieval, save repository or mutable campaign access.
 
 The normal event sequence is:
 

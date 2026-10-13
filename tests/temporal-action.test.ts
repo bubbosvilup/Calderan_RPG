@@ -6,7 +6,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { parseTemporalAction } from "../src/turn/temporal-action.js";
 import { daypartStart, temporalGrounding } from "../src/turn/temporal-grounding.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { deriveSessionView } from "../src/app/session-view.js";

@@ -7,7 +7,7 @@ import { parseCampaignProposal } from "../src/campaign/validation.js";
 import { ENGINE_ITEM_ID, formatItemId } from "../src/campaign/items.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { authorizeCommands } from "../src/turn/authorization/command-authorizer.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { inventoryLines, narratorItemView } from "../src/turn/items/item-projection.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

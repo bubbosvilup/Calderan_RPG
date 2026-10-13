@@ -5,8 +5,8 @@ import { DEFAULT_RETRY_POLICY, NO_RETRY_POLICY, type ProviderRetryPolicy } from 
 import { NARRATOR_PROVIDER_ROUTING } from "../llm/openrouter/minimax-narrator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { TurnEvent } from "../turn/turn-types.js";
 import { aggregate, renderMarkdown, type EvalRecord } from "./diagnostics-aggregate.js";
 import { reflectAfterTurn } from "../turn/reflection.js";

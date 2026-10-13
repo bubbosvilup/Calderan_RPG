@@ -15,7 +15,7 @@ import { authorizeWithEvidence } from "../src/turn/authorization/evidence-author
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";

@@ -5,7 +5,7 @@ import { OpenRouterClient } from "../src/llm/openrouter/client.js";
 import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL, MINIMAX_NARRATOR_MODEL, KIMI_NARRATOR_MODEL, GEMINI_NARRATOR_MODEL, NARRATOR_PROVIDER_ROUTING } from "../src/llm/openrouter/minimax-narrator.js";
 import { CONTROLLER_POLICY, DEFAULT_CONTROLLER_MODEL } from "../src/llm/openrouter/deepseek-controller.js";
 import { NARRATOR_SYSTEM, NARRATOR_STATE_PRECEDENCE } from "../src/turn/context/prompt-builder.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";

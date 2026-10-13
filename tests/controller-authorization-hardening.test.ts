@@ -5,7 +5,7 @@ import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../src/campaign/openin
 import { ProviderError } from "../src/llm/errors.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
-import { diagnoseMutation } from "../src/turn/mutation-diagnostics.js";
+import { diagnoseMutation } from "../src/turn/coordinator/mutation-diagnostics.js";
 import { E2E1_CASES, OFFER, handoffSword, renderRun, runScenario, type DiagnosticScenario } from "../src/dev/controller-authorization-diagnostics.js";
 import { metadata } from "./turn-fixtures.js";
 

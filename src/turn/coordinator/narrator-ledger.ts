@@ -1,5 +1,5 @@
-import { ProviderError } from "../llm/errors.js";
-import type { FinishReason, GenerationMetadata } from "../llm/types.js";
+import { ProviderError } from "../../llm/errors.js";
+import type { FinishReason, GenerationMetadata } from "../../llm/types.js";
 
 /**
  * Consolidation block 4 (NARR-1) — the Narrator call ledger of ONE logical player turn.

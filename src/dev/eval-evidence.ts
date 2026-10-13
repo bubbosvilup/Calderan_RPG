@@ -4,7 +4,7 @@ import { OpenRouterClient } from "../llm/openrouter/client.js";
 import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL } from "../llm/openrouter/state-controller.js";
 import type { NarratorProvider } from "../llm/narrator-provider.js";
 import type { AuthorizationDiagnostic, TurnEvent } from "../turn/turn-types.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { turnFixture } from "./turn-fixture.js";

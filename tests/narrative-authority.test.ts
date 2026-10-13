@@ -4,7 +4,7 @@ import { turnFixture } from "../src/dev/turn-fixture.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { projectKnowledgeAccess, renderKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { buildNarratorPrompt, dialogueFocused, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";

@@ -10,7 +10,7 @@ import { establishNames } from "../src/turn/name-establishment.js";
 import { asksName } from "../src/turn/identity-request.js";
 import { readScene } from "../src/turn/narration-facts/index.js";
 import type { RecentExchange } from "../src/turn/recent-conversation.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { deriveSessionView } from "../src/app/session-view.js";

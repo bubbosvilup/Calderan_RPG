@@ -1,9 +1,9 @@
-import type { CampaignCommand } from "../campaign/types.js";
+import type { CampaignCommand } from "../../campaign/types.js";
 import { isDeepStrictEqual } from "node:util";
-import { transferRecipient } from "../campaign/item-transfer.js";
-import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "./authorization/physical-interaction.js";
+import { transferRecipient } from "../../campaign/item-transfer.js";
+import { CONDITION_TERMS, PHYSICAL_CONDITIONS } from "../authorization/physical-interaction.js";
 import type { TurnDiagnostics } from "./turn-diagnostics.js";
-import type { AuthorizationDiagnostic, TurnDebugRecord, TurnEvent, TurnResult } from "./turn-types.js";
+import type { AuthorizationDiagnostic, TurnDebugRecord, TurnEvent, TurnResult } from "../turn-types.js";
 
 /**
  * Consolidation Pass B: a DERIVED, diagnostics-only reading of one finished turn that answers "why did (or didn't) this durable

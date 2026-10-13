@@ -4,7 +4,7 @@ import type { CampaignCommand } from "../src/campaign/types.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 export const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 2, completed_at: "2026-01-01T00:00:01Z", elapsed_total_ms: 3 } };
 export const transfer: CampaignCommand = { kind: "transfer_item", mode: "handoff", item_id: "boots",  position: { kind: "carried", character_id: "brenna" } };

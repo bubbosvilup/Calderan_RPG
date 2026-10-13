@@ -12,10 +12,10 @@ import { NPC_PLUS_LIMITS, npcPlusFragments, recoverNpcContext } from "../src/tur
 import { projectKnowledgeAccess } from "../src/turn/context/narrative-authority.js";
 import { verifyRelationshipEvidence } from "../src/turn/authorization/household-evidence.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { collect, metadata } from "./turn-fixtures.js";
 

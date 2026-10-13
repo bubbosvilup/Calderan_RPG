@@ -5,7 +5,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { checkNarrative } from "../src/dev/narrative-checks.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { withHistoricalContext } from "../src/dev/historical-context.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { mockNarrator, metadata } from "./turn-fixtures.js";
 const garments: CampaignCommand[] = ["pink_cotton", "pink_fluffy", "pink_shorts"].map(item_id => ({ kind: "transfer_item", mode: "handoff", item_id,  position: { kind: "carried", character_id: "brenna" } }));
 const input = "I give Brenna the two pink shirts and the shorts.";

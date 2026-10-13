@@ -17,7 +17,7 @@ import { recentSceneNarration } from "../src/turn/context/recent-scene-narration
 import type { GenerationRequest } from "../src/llm/types.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { playerDestination } from "../src/turn/movement/player-travel.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { GameSession } from "../src/app/game-session.js";

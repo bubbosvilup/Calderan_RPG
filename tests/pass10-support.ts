@@ -1,6 +1,6 @@
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { metadata, collect } from "./turn-fixtures.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { characterLocation } from "../src/turn/movement/character-movement.js";

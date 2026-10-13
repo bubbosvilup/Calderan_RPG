@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { loadWorld } from '../.build/src/world/loader.js';
 import { createOpeningCampaign } from '../.build/src/campaign/opening-state.js';
 import { learnCanonicalName } from '../.build/src/campaign/identity-knowledge.js';
-import { TurnCoordinator } from '../.build/src/turn/turn-coordinator.js';
+import { TurnCoordinator } from '../.build/src/turn/coordinator/turn-coordinator.js';
 import { DEFAULT_CONTEXT_POLICY } from '../.build/src/turn/context/context-budget.js';
 import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../.build/src/retrieval/hybrid-search.js';

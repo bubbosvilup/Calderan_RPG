@@ -7,7 +7,7 @@ import { isDeepStrictEqual as equal } from 'node:util';
 import { CASES as ALL_CASES, dellId, respectLower } from './controller-bakeoff-round-2-cases.mjs';
 import { turnFixture } from '../.build/src/dev/turn-fixture.js';
 import { mockNarrator, metadata, collect } from '../.build/tests/turn-fixtures.js';
-import { TurnCoordinator } from '../.build/src/turn/turn-coordinator.js';
+import { TurnCoordinator } from '../.build/src/turn/coordinator/turn-coordinator.js';
 import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../.build/src/retrieval/hybrid-search.js';
 import { OpenRouterStateControllerProvider, DEFAULT_CONTROLLER_MODEL, CONTROLLER_POLICY } from '../.build/src/llm/openrouter/state-controller.js';

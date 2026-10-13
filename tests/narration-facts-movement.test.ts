@@ -4,7 +4,7 @@ import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { metadata, collect } from "./turn-fixtures.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
@@ -254,7 +254,7 @@ test("source audit: the legacy movement/departure readers are gone and nothing o
   assert.deepEqual(hits, []);
 });
 test("source audit: authorization and audit both consume the shared facts; the coordinator extracts once and hands the same source to both", () => {
-  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/audit/narration-audit.ts", "utf8"), coordinator = readFileSync("src/turn/turn-coordinator.ts", "utf8");
+  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/audit/narration-audit.ts", "utf8"), coordinator = readFileSync("src/turn/coordinator/turn-coordinator.ts", "utf8");
   for (const [name, code] of [["authorization", authorization], ["audit", audit]] as const) {
     assert.match(code, /movement-evidence\.js/, name); assert.match(code, /narration-facts\/index\.js/, name); assert.match(code, /createFactSource/, name);
   }

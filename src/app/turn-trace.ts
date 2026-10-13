@@ -2,8 +2,8 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { ProviderAttemptRecord } from "../llm/retry.js";
 import type { ReflectionRun } from "../turn/reflection.js";
 import type { ReflectionDiagnostics } from "../turn/reflection-diagnostics.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
-import type { NarratorGenerationTrace } from "../turn/narrator-ledger.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
+import type { NarratorGenerationTrace } from "../turn/coordinator/narrator-ledger.js";
 import type { TurnEvent, TurnResult } from "../turn/turn-types.js";
 import type { AppError } from "./app-errors.js";
 

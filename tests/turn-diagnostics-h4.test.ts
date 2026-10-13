@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import type { DeepReadonly } from "../src/types/readonly.js";
 import { setup, collect, mockNarrator, mockController, transfer } from "./turn-fixtures.js";
 import { ProviderError } from "../src/llm/errors.js";

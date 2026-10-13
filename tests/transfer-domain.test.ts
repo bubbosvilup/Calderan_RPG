@@ -11,7 +11,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { deriveTurnEvidence } from "../src/turn/authorization/turn-evidence.js";
 import { authorizeWithEvidence } from "../src/turn/authorization/evidence-authorization.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { metadata, mockNarrator } from "./turn-fixtures.js";

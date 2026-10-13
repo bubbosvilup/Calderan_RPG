@@ -9,7 +9,7 @@ import { LexicalSearch } from "../src/retrieval/lexical-search.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { backgroundGrounding } from "../src/turn/background-grounding.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import { collect, metadata } from "./turn-fixtures.js";
 

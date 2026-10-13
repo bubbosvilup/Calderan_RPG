@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import { identityNameFactId, learnCanonicalName } from "../src/campaign/identity-knowledge.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import type { CampaignCommand } from "../src/campaign/types.js";

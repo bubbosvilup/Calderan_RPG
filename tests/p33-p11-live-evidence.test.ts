@@ -9,7 +9,7 @@ import { buildNarratorPrompt, NARRATOR_SYSTEM, NARRATOR_OPAQUE_REFS } from "../s
 import { narratorIdentityGate } from "../src/turn/narrator-identity.js";
 import { establishedCanonicalDisclosure } from "../src/turn/canonical-name-disclosure.js";
 import { narratorPackOf, renderCandidateRequest } from "../src/turn/context/narrator-pack.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { mockNarrator, mockController, collect } from "./turn-fixtures.js";

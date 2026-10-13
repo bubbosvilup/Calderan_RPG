@@ -5,7 +5,7 @@ import { OpenRouterStateControllerProvider } from '../.build/src/llm/openrouter/
 import { readProviderStatus, controllerFallbackModels } from '../.build/src/app/production.js';
 import { WorldStore } from '../.build/src/world/world-store.js';
 import { CampaignState } from '../.build/src/campaign/campaign-state.js';
-import { TurnCoordinator } from '../.build/src/turn/turn-coordinator.js';
+import { TurnCoordinator } from '../.build/src/turn/coordinator/turn-coordinator.js';
 import { RetrievalService } from '../.build/src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../.build/src/retrieval/hybrid-search.js';
 const report = { authentication: 'not_attempted', calls: 0, retries: 0, cases: [] };

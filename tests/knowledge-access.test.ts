@@ -18,7 +18,7 @@ import { retrieveForTurn } from "../src/turn/context/retrieval-policy.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { SemanticIndex } from "../src/retrieval/semantic-index.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { FixtureEmbeddingProvider } from "./retrieval-eval/fixture-embedding-provider.js";
 import { base, character, document } from "./fixtures.js";
 import { collect, metadata } from "./turn-fixtures.js";

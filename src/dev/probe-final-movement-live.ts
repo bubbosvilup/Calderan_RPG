@@ -5,7 +5,7 @@ import { CampaignState } from "../campaign/campaign-state.js";
 import { createSaveFile, decodeSave, serializeSave } from "../persistence/save-format.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { MiniMaxNarratorProvider } from "../llm/openrouter/minimax-narrator.js";
 import { OpenRouterStateControllerProvider } from "../llm/openrouter/state-controller.js";
 import { narratorConfig, selectedModels } from "./turn-services.js";

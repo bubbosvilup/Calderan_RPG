@@ -11,7 +11,7 @@ import { boundTerminal, parseInteractionMetadata, PENDING_TERMINAL_LIMIT, type P
 import { migrateSave } from "../src/persistence/save-migrations.js";
 import { CampaignSaveError } from "../src/persistence/errors.js";
 import type { PendingProposal } from "../src/turn/authorization/pending-proposals.js";
-import type { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import type { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { countingController, NARRATION, sessionWith, stepNarrator, withRunTurn } from "./block4-fixtures.js";
 
 /**

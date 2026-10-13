@@ -9,7 +9,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { authorizeCommands } from "../src/turn/authorization/command-authorizer.js";
 import { inventoryLines } from "../src/turn/items/item-projection.js";
 import { referencedCharacters } from "../src/turn/context/referenced-characters.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { parseControllerProposal } from "../src/llm/controller-schema.js";

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { CampaignState } from "../src/campaign/campaign-state.js";
 import { campaignId } from "../src/campaign/identity.js";
 import type { CampaignCommand } from "../src/campaign/types.js";

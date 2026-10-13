@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createPlaytestServer } from "../src/ui/server.js";
 import { once } from "node:events";
-import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../src/turn/coordinator/turn-diagnostics.js";
 import type { TurnEvent } from "../src/turn/turn-types.js";
 import { collect } from "./turn-fixtures.js";
 import { NARRATION, coordinatorWith, countingController, sessionWith, stepNarrator, transfer, withRunTurn } from "./block4-fixtures.js";

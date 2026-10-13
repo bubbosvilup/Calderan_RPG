@@ -8,7 +8,7 @@ import { WorldStore } from "../src/world/world-store.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { ReflectionProvider } from "../src/turn/reflection.js";

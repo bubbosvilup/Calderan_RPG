@@ -11,7 +11,7 @@ import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { setup, mockNarrator, mockController, collect } from "./turn-fixtures.js";
 const OUTPUT_AND_RESERVE = DEFAULT_CONTEXT_POLICY.output_tokens + 256 + 512; // narrator output cap + overhead + safety (was the literal 1280 at the 512 cap)
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { FakeContextCompressor, exactCandidate } from "./context-compressor-fake.js";
 import { OpenRouterContextCompressor } from "../src/llm/openrouter/context-compressor.js";
 import { OpenRouterClient } from "../src/llm/openrouter/client.js";

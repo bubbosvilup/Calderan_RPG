@@ -18,13 +18,13 @@ import { ProviderError } from "../llm/errors.js";
 import type { NarratorProvider, NarratorResult } from "../llm/narrator-provider.js";
 import type { GenerationRequest } from "../llm/types.js";
 import type { NarratorRequest } from "../turn/stages/narration.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { GameSession, type SessionEvent } from "../app/game-session.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { passiveResponseAudit, finishPassiveAudits } from "./passive-response-audit.js";
-import type { TurnDiagnostics } from "../turn/turn-diagnostics.js";
+import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { DeepReadonly } from "../types/readonly.js";
 
 const OUT = resolve("saves/d04-context/final-live"), MODEL = "z-ai/glm-5.2";
@@ -44,7 +44,7 @@ export const D04_LIVE_PROBES = [
 ] as const;
 const FLOW_INPUT = 'I ask D04 Person 0, "What does Ledger 0 Entry 1 record about the sealed crates?"';
 const FLOW_CONSTRAINTS = { must: ["Keeper counted sealed crates against harbor ledger; D04 Person 0 answers at Heartstone square.", "Activated V2 dictionary used on actual next turn; original authority used by controller."], must_not: ["Wrong ledger/subject, invented cargo/location/action or representation syntax.", "Semantic revision/reroll; compressed narrator data as authority; compaction mutates campaign."] };
-const FILES = ["src/turn/context/prompt-builder.ts", "src/turn/context/lossless-knowledge.ts", "src/turn/context/lossless-context-compaction.ts", "src/turn/context/narrator-pack.ts", "src/turn/context/context-budget.ts", "src/turn/context/context-compaction.ts", "src/llm/openrouter/minimax-narrator.ts", "src/turn/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/d04-final-live.ts"];
+const FILES = ["src/turn/context/prompt-builder.ts", "src/turn/context/lossless-knowledge.ts", "src/turn/context/lossless-context-compaction.ts", "src/turn/context/narrator-pack.ts", "src/turn/context/context-budget.ts", "src/turn/context/context-compaction.ts", "src/llm/openrouter/minimax-narrator.ts", "src/turn/coordinator/turn-coordinator.ts", "src/app/game-session.ts", "src/app/production.ts", "src/dev/d04-compaction-bakeoff.ts", "src/dev/d04-final-live.ts"];
 async function fingerprints() { return Object.fromEntries(await Promise.all(FILES.map(async path => [path, sha(await readFile(path, "utf8"))]))); }
 
 /** Observation accepts the same annotated/unannotated requests as production apply, including revision prompts. */

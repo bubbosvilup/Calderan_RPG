@@ -1,4 +1,4 @@
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { setup, mockNarrator, mockController, collect } from "./turn-fixtures.js";
 async function sample(enabled: boolean, count: number): Promise<number> {
   let total = 0;

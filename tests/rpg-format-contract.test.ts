@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { NARRATOR_RPG_FORMAT, NARRATOR_SYSTEM } from "../src/turn/context/prompt-builder.js";
 import { collect, setup } from "./turn-fixtures.js";
 import { mockNarrator, mockController } from "./turn-fixtures.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 
 test("shared narrator contract persists exactly once across ordinary non-UI turns without rewriting output", async () => {
   const fixture = setup();
@@ -28,7 +28,8 @@ test("shared narrator contract persists exactly once across ordinary non-UI turn
 
 test("RPG contract leaves provider, model, route, sampling and wire adapter source bytes unchanged", async () => {
   const expected: Record<string, string> = {
-    "src/app/provider-config.ts": "ff7233cf7bd5440bb91040f4ef405fda359895d399f43a7aff305c90db69ef0d",
+    // Re-baselined by Repository Cleanup D5: the narrator-ledger re-export path moved to turn/coordinator/ (import path only; provider settings unchanged).
+    "src/app/provider-config.ts": "a77570eb971d7a6c6b43f3c84ee993522200a9992f0f1796f72b2dd647b74b8b",
     "src/llm/openrouter/minimax-narrator.ts": "ceaa8f634a43cac9e411465d23a1781fab7ec3c86bc747ec50da28f87a8bc75c",
     // Re-baselined by Consolidation block 4 (narrator cap 768, recovery cap, finish_reason/metadata plumbing, accept_truncated; model, route, reasoning and wire shape unchanged).
     // Earlier: Controller Reliability Pass 2 (OpenRouter `models` fallback serialization + safe error/response-model diagnostics; narrator wire unchanged).

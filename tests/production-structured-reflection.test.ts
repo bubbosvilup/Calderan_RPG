@@ -19,7 +19,7 @@ import { CampaignState } from '../src/campaign/campaign-state.js';
 import { buildTurnContext } from '../src/turn/context/context-builder.js';
 import { recoverNpcContext } from '../src/turn/context/npc-plus.js';
 import { runPlayTurn } from '../src/dev/play-turn.js';
-import { TurnCoordinator } from '../src/turn/turn-coordinator.js';
+import { TurnCoordinator } from '../src/turn/coordinator/turn-coordinator.js';
 import { mockController, mockNarrator } from './turn-fixtures.js';
 import { RetrievalService } from '../src/retrieval/retrieval-service.js';
 import { HybridSearch } from '../src/retrieval/hybrid-search.js';

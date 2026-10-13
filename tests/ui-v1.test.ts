@@ -11,7 +11,7 @@ import { GameSession } from "../src/app/game-session.js";
 import { FileCampaignRepository } from "../src/persistence/campaign-repository.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { createPlaytestServer } from "../src/ui/server.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
 import { mockController, mockNarrator, metadata, collect } from "./turn-fixtures.js";

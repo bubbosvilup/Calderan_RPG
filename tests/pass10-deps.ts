@@ -42,6 +42,6 @@ if (process.argv[1]?.endsWith("pass10-deps.js")) {
     if ((layer(f) === "world" || layer(f) === "scene" || layer(f) === "retrieval") && layer(d) === "turn") console.log("VIOLATION lower->turn", f, d);
     if (layer(f) === "llm" && (layer(d) === "turn" || layer(d) === "campaign")) console.log("NOTE llm->", f, d);
   }
-  const co = g.get("src/turn/turn-coordinator.ts") ?? []; console.log("coordinator imports reflection:", co.some(d => d.endsWith("turn/reflection.ts")));
+  const co = g.get("src/turn/coordinator/turn-coordinator.ts") ?? []; console.log("coordinator imports reflection:", co.some(d => d.endsWith("turn/reflection.ts")));
   const reflectImporters = [...g].filter(([, ds]) => ds.includes("src/turn/reflection.ts")).map(([f]) => f); console.log("importers of reflection.ts:", reflectImporters.join(", "));
 }

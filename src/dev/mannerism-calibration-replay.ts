@@ -4,7 +4,7 @@ import { CampaignState } from "../campaign/campaign-state.js";
 import { GameSession } from "../app/game-session.js";
 import { FileCampaignRepository } from "../persistence/campaign-repository.js";
 import { createSaveFile, decodeSave, serializeSave } from "../persistence/save-format.js";
-import { TurnCoordinator } from "../turn/turn-coordinator.js";
+import { TurnCoordinator } from "../turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { packNpcPlus } from "../turn/context/npc-plus.js";

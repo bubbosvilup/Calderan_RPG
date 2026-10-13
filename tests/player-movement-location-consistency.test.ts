@@ -8,7 +8,7 @@ import { buildTurnContext } from "../src/turn/context/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
 import { resolveDestination, reachable } from "../src/turn/natural-actions.js";
 import { entityMentions } from "../src/turn/context/retrieval-policy.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { GameSession } from "../src/app/game-session.js";

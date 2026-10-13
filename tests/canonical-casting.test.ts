@@ -4,7 +4,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { createOpeningCampaign } from "../src/campaign/opening-state.js";
 import type { CampaignState } from "../src/campaign/campaign-state.js";
 import { buildTurnContext } from "../src/turn/context/context-builder.js";
-import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
+import { TurnCoordinator } from "../src/turn/coordinator/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { STRONG_TRAITS, strongCanonicalMatch, traitMatches } from "../src/turn/canonical-interaction-targets.js";
