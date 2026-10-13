@@ -1,5 +1,5 @@
-import { EXPLICIT_GIFT } from "../campaign/item-transfer.js";
-import type { TurnContext } from "./context-builder.js";
+import { EXPLICIT_GIFT } from "../../campaign/item-transfer.js";
+import type { TurnContext } from "../context-builder.js";
 export interface ResolvedReference { readonly phrase: string; readonly ids: readonly string[]; readonly basis: "exact" | "unique_present_recipient" | "bounded_item_description" }
 export const normalizeReference = (s: string): string => s.toLowerCase().replace(/[_*]/g, " ").replace(/[.!]$/, "").replace(/^the\s+/, "").replace(/\s+/g, " ").trim();
 export function resolveRecipient(phrase: string, context: TurnContext): ResolvedReference | undefined {

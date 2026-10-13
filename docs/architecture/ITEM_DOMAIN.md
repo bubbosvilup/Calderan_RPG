@@ -71,7 +71,7 @@ The queries live in `src/campaign/inventory.ts`, which is domain level, for ques
 - **`ownsItem`:** `owner_id` is the character. Unknown or `null` owners belong to nobody.
 - **`itemAt`:** stored at exactly that location.
 
-`inventoryLines` (in `src/turn/item-projection.ts`) is the human-readable projection, e.g. "Ivory figurine (owned by Brenna)" or "Iron sword [equipped]". It never contains IDs and is not injected into narrator turns by itself.
+`inventoryLines` (in `src/turn/items/item-projection.ts`) is the human-readable projection, e.g. "Ivory figurine (owned by Brenna)" or "Iron sword [equipped]". It never contains IDs and is not injected into narrator turns by itself.
 
 ### Item identity continuity
 
@@ -112,7 +112,7 @@ The only authoritative placement fact is `CampaignItem.position` (`unknown | car
 
 Everything below is deterministic and derived per turn; nothing here is persisted and the save schema is unchanged.
 
-**Explicit item intent** (`src/turn/item-intent.ts`). The player's own words are read clause by clause (markdown stars removed, a leading "I"/"Nicco"/"he" and light adverbs dropped).
+**Explicit item intent** (`src/turn/items/item-intent.ts`). The player's own words are read clause by clause (markdown stars removed, a leading "I"/"Nicco"/"he" and light adverbs dropped).
 `pickup := (pick up | pick <obj> up | take | grab | lift | retrieve | snatch | pocket | scoop | collect | gather) <obj>`;
 `drop := (put | set | lay | place) <obj> down | ... down <obj> | (drop | discard | toss) <obj> | leave <obj> here | (put | set | lay | place) <obj> on the floor`;
 `<obj>` is a noun phrase or the pronoun it/them (resolved only when exactly one candidate exists). "take <obj> from <person>" is a transfer and is ignored here.
@@ -124,7 +124,7 @@ An intent NEVER mutates state and never proves success: narration decides the ou
 
 **Bounded evidence recovery** (`recoverPlacementReceipt`). When a `place_item` fails only for a missing, weak, unrelated or negated Controller quote, the CURRENT narrator draft (nothing else) is scanned with the same receipt verifier. Recovery needs exactly one completed act and a draft with no contradiction (failed attempt, refusal, another actor taking the item, reversal, the item falling away or being destroyed). Diagnostics carry `evidence.source: controller_quote | recovered_narrator_receipt`, the original quote/check and the signal `recovered_narrator_receipt`.
 
-**Aliases** (`src/turn/item-resolution.ts`): exact normalized name, significant name tokens, authored category word, then the small validated category registry in `item-reference.ts` (footwear, clothing, weapon/blade, jewelry). No LLM. "satchel" never becomes "bag" without category data. Same-name items resolve only by authoritative qualifiers (a distinguishing name word, owner possessive "Brenna's" / "my", held); otherwise `ambiguous_item` and no mutation.
+**Aliases** (`src/turn/items/item-resolution.ts`): exact normalized name, significant name tokens, authored category word, then the small validated category registry in `item-reference.ts` (footwear, clothing, weapon/blade, jewelry). No LLM. "satchel" never becomes "bag" without category data. Same-name items resolve only by authoritative qualifiers (a distinguishing name word, owner possessive "Brenna's" / "my", held); otherwise `ambiguous_item` and no mutation.
 
 **Conflicts.** After authorization and before commit, authorized `place_item`/`transfer_item` commands on ONE item must agree on its end position (and transfer mode). Identical effects collapse (the later is `duplicate_command_deduped`); anything else rejects EVERY command on that item with `conflicting_item_mutations` (no revision). Unrelated authorized commands in the same batch are unaffected.
 

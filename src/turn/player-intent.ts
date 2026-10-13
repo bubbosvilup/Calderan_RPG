@@ -3,7 +3,7 @@ import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
 import type { TurnContext } from "./context-builder.js";
 import { TurnError } from "./turn-types.js";
-import { resolveTransferIntent, type ResolvedReference } from "./reference-resolution.js";
+import { resolveTransferIntent, type ResolvedReference } from "./items/reference-resolution.js";
 import { resolveNaturalActions, reachable, type NaturalActionResolution } from "./natural-actions.js";
 import { playerDestination } from "./player-travel.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { dialogueUnits, frameOf, identityForms, type IdentityFact, type Person } from "../src/turn/narration-facts/index.js";
 import { identityFacts, type IdentityScope } from "../src/turn/narration-facts/identity-forms.js";
 import { attributedSpeech } from "../src/turn/attributed-speech.js";
-import { sellerPrices } from "../src/turn/commerce-evidence.js";
+import { sellerPrices } from "../src/turn/commerce/commerce-evidence.js";
 import { extractNarrationFacts } from "../src/turn/narration-facts/index.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
 import { asksName } from "../src/turn/identity-request.js";

@@ -1,16 +1,16 @@
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
-import type { AuthorizationDiagnostic } from "./turn-types.js";
-import { itemHolder, transferCharacterPresent } from "../campaign/item-transfer.js";
-import { activePlayerCharacterId } from "../campaign/player-character.js";
-import { activeTradeOffer, isTradeCommand } from "../campaign/trade.js";
-import { EVIDENCE_QUOTE_MAX } from "../llm/controller-schema.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context-builder.js";
+import type { AuthorizationDiagnostic } from "../turn-types.js";
+import { itemHolder, transferCharacterPresent } from "../../campaign/item-transfer.js";
+import { activePlayerCharacterId } from "../../campaign/player-character.js";
+import { activeTradeOffer, isTradeCommand } from "../../campaign/trade.js";
+import { EVIDENCE_QUOTE_MAX } from "../../llm/controller-schema.js";
 import { AUCTION } from "./trade-price.js";
-import { createFactSource, type NarrationFactSource } from "./narration-facts/index.js";
+import { createFactSource, type NarrationFactSource } from "../narration-facts/index.js";
 import { inSegment, unsupportedMoney, withdrawalIn } from "./commerce-evidence.js";
-import { escapeRegExp as esc, sentencesOf } from "./language/text.js";
+import { escapeRegExp as esc, sentencesOf } from "../language/text.js";
 
 /**
  * Actual Offer V1: authorization of the Controller's trade proposals (propose and withdraw). The Controller proposes; this decides, on

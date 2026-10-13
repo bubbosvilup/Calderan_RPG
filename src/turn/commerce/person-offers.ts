@@ -1,17 +1,17 @@
-import type { CampaignCommand, CampaignSnapshot, TransferDocumentation } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { TurnContext } from "./context-builder.js";
-import type { RecentExchange } from "./recent-conversation.js";
-import type { WorldStore } from "../world/world-store.js";
-import { classifyBackgroundClaim } from "./background-grounding.js";
-import type { EphemeralSceneParticipant } from "./scene-participants.js";
-import { linkedParticipant, materializeProvisional } from "./provisional-people.js";
-import { asksName } from "./identity-request.js";
-import { NUMBER_PHRASE_SOURCE } from "./language/numbers.js";
+import type { CampaignCommand, CampaignSnapshot, TransferDocumentation } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { TurnContext } from "../context-builder.js";
+import type { RecentExchange } from "../recent-conversation.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { classifyBackgroundClaim } from "../background-grounding.js";
+import type { EphemeralSceneParticipant } from "../scene-participants.js";
+import { linkedParticipant, materializeProvisional } from "../provisional-people.js";
+import { asksName } from "../identity-request.js";
+import { NUMBER_PHRASE_SOURCE } from "../language/numbers.js";
 import { AUCTION } from "./trade-price.js";
-import { CAPTIVE, createFactSource, refersTo, type NarratedPerson, type NarrationFactSource, type NarrationFacts, type NarrationUnit, type SceneReading } from "./narration-facts/index.js";
+import { CAPTIVE, createFactSource, refersTo, type NarratedPerson, type NarrationFactSource, type NarrationFacts, type NarrationUnit, type SceneReading } from "../narration-facts/index.js";
 import { actionableQuote, inSegment, sellerPrices, sellerQuotes, unsupportedMoney } from "./commerce-evidence.js";
-import { escapeRegExp as esc, exactNamePattern } from "./language/text.js";
+import { escapeRegExp as esc, exactNamePattern } from "../language/text.js";
 
 /**
  * Actual Offer V1: deterministic READING of a person offer from delivered narration. This module never settles anything and never changes
@@ -108,7 +108,7 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
  * seller actually uses while bargaining: "Three hundred for her.", "I'll go two-sixty.", "Make it two-sixty.", "Done, then. Two-sixty.".
  * A bare number sentence that the next sentence turns down ("Two hundred. You're a full third off.") repeats the buyer's figure and is no offer.
  */
-/** Prices a block of narration states, sentence by sentence (shared grammar: src/turn/trade-price.ts). */
+/** Prices a block of narration states, sentence by sentence (shared grammar: src/turn/commerce/trade-price.ts). */
 /** Sentences of the latest narration that state a price and are about this person (their name, or the only held person by pronoun/noun), excluding past costs and group prices. */
 function pricedSentences(latest: string, id: string, candidates: readonly string[], named: (text: string, id: string) => boolean, input: string, prices: PriceReader): string[] {
   const only = candidates.length === 1;

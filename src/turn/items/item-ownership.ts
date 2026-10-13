@@ -1,6 +1,6 @@
-import type { CampaignCommand } from "../campaign/types.js";
-import { escapeRegExp as esc } from "./language/text.js";
-import { sentencesOf } from "./language/text.js";
+import type { CampaignCommand } from "../../campaign/types.js";
+import { escapeRegExp as esc } from "../language/text.js";
+import { sentencesOf } from "../language/text.js";
 import { referenceWords } from "./item-resolution.js";
 
 /**

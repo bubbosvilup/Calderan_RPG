@@ -1,13 +1,13 @@
-import type { CampaignSnapshot, TransferDocumentation } from "../campaign/types.js";
-import type { PendingProposal } from "./pending-proposals.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { TurnContext } from "./context-builder.js";
-import { exactNamePattern } from "./language/text.js";
+import type { CampaignSnapshot, TransferDocumentation } from "../../campaign/types.js";
+import type { PendingProposal } from "../pending-proposals.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { TurnContext } from "../context-builder.js";
+import { exactNamePattern } from "../language/text.js";
 
 /**
  * Household Pass 1: deterministic resolution of the player-authored act of freeing a person (manumission).
  *
- * Purchases are NOT resolved here any more. Actual Offer V1: a person sale is an explicit trade offer (turn/person-offers.ts reads the
+ * Purchases are NOT resolved here any more. Actual Offer V1: a person sale is an explicit trade offer (turn/commerce/person-offers.ts reads the
  * seller's stated price from delivered narration; the player accepts it in the interface). Neither the player's prose ("deal", "*pays*")
  * nor this module settles a purchase.
  *

@@ -130,7 +130,7 @@ Captured result: `docs/evaluations/ITEM_SPRITE_LIVE_SMOKE.json`. Generated campa
 
 - `src/campaign/types.ts`, `validation.ts`, `items.ts`, `snapshot-validation.ts`: descriptions and compatible visual metadata/invariants.
 - `src/llm/controller-schema.ts`, `src/llm/openrouter/state-controller.ts`: strict proposal field and concise policy.
-- `src/turn/item-projection.ts`: keep visual metadata internal.
+- `src/turn/items/item-projection.ts`: keep visual metadata internal.
 - `src/app/game-session.ts`: creation scheduling, idle completion, read/retry/settle seams and lifecycle handling.
 - `src/app/portrait-assets.ts`, `src/persistence/campaign-repository.ts`: protect referenced item assets.
 - `tests/item-domain.test.ts`, `tests/permanent-inventory.test.ts`, `tests/controller-model-fallback.test.ts`: valid new creation fixtures/expectations and contract hashes.

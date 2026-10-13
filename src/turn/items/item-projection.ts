@@ -1,8 +1,8 @@
-import type { CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import { ENGINE_ITEM_ID } from "../campaign/items.js";
-import { inventoryItems, itemsAtLocation } from "../campaign/inventory.js";
-import type { WorldStore } from "../world/world-store.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import { ENGINE_ITEM_ID } from "../../campaign/items.js";
+import { inventoryItems, itemsAtLocation } from "../../campaign/inventory.js";
+import type { WorldStore } from "../../world/world-store.js";
 
 /**
  * Item Domain V1 projection seams (see docs/architecture/ITEM_DOMAIN.md).

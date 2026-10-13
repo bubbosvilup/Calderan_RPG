@@ -1,4 +1,4 @@
-import { escapeRegExp as esc } from "./language/text.js";
+import { escapeRegExp as esc } from "../language/text.js";
 /**
  * Repair 1.1: bounded item references for evidence. An item is referenced by the head noun of its own name, or by a category
  * word ("footwear" for boots) when that category is derived from the item's own name/description AND no other item in the

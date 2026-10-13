@@ -4,7 +4,7 @@ import type { DeepReadonly } from "../../types/readonly.js";
 import type { WorldStore } from "../../world/world-store.js";
 import { buildTurnContext, type TurnContext } from "../context-builder.js";
 import { playerIntent, type PlayerIntent } from "../player-intent.js";
-import { resolveManumission } from "../person-transactions.js";
+import { resolveManumission } from "../commerce/person-transactions.js";
 import { manumissionCommand, manumissionInvalidReason, type PendingProposal } from "../pending-proposals.js";
 import { pendingEquivalenceKey } from "../../types/pending-confirmation.js";
 import { characterLocation, movableCharacters, resolvePlayerCarry, type MovableCharacter } from "../character-movement.js";
@@ -13,7 +13,7 @@ import { invitedFollowers, leftBehindNotes } from "../follow-invitation.js";
 import { followCandidates, resolveHeldEscort } from "../follow-candidates.js";
 import type { RecentExchange } from "../recent-conversation.js";
 import type { SceneParticipantPlan } from "../scene-participants.js";
-import { tradeStateNotes } from "../trade-notes.js";
+import { tradeStateNotes } from "../commerce/trade-notes.js";
 
 /**
  * Hardening H2 — IntentResolutionStage. Everything the PLAYER authors this turn, resolved deterministically before any provider call.

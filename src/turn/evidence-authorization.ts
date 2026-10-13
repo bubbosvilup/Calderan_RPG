@@ -1,4 +1,4 @@
-import { mentionsItem, referenceWords } from "./item-resolution.js";
+import { mentionsItem, referenceWords } from "./items/item-resolution.js";
 import { EXPLICIT_GIFT, itemHolder, transferRecipient } from "../campaign/item-transfer.js";
 import type { EvidenceCheck } from "./evidence-check.js";
 import { isDeepStrictEqual } from "node:util";
@@ -11,7 +11,7 @@ import type { TurnEvidence } from "./turn-evidence.js";
 import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { authorizeCommands, isLocationPlacement } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
-import { itemTerms } from "./item-reference.js";
+import { itemTerms } from "./items/item-reference.js";
 import { departuresFromFacts } from "./movement-evidence.js";
 import { extractNarrationFacts, type NarrationFacts } from "./narration-facts/index.js";
 import { detectHouseholdChoices, verifyRelationshipEvidence } from "./household-evidence.js";

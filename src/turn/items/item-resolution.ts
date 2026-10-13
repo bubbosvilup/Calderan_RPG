@@ -1,4 +1,4 @@
-import { escapeRegExp as esc } from "./language/text.js";
+import { escapeRegExp as esc } from "../language/text.js";
 import { itemCategories } from "./item-reference.js";
 
 /**

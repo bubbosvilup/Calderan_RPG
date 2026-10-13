@@ -6,7 +6,7 @@ import { campaignId } from "./identity.js";
  * Promotion Pass 1.1: the generic promotion primitive. A narrator-invented (ephemeral) person becomes a MINIMUM DURABLE created
  * character: stable ID, established identity only, current location, active status, and an immutable origin snapshot. It is not
  * personality generation: nothing unestablished (history, family, traits, fears, skills, relationships, household role) is added.
- * Only the purchase trigger is production-wired (turn/person-transactions.ts); other triggers are reserved in the type only.
+ * Only the purchase trigger is production-wired (turn/commerce/person-transactions.ts); other triggers are reserved in the type only.
  */
 export interface PromotionInput {
   readonly label: string;

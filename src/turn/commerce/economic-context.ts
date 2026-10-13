@@ -1,6 +1,6 @@
-import { economicRelevance, renderEconomicReference, type EconomicRelevance } from "../economy/economy.js";
-import type { TurnContext } from "./context-builder.js";
-import type { RecentExchange } from "./recent-conversation.js";
+import { economicRelevance, renderEconomicReference, type EconomicRelevance } from "../../economy/economy.js";
+import type { TurnContext } from "../context-builder.js";
+import type { RecentExchange } from "../recent-conversation.js";
 
 /**
  * P8 selective economic context. The SAME decision feeds the narrator prompt and the grounding audit, so a turn that received

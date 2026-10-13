@@ -1,5 +1,5 @@
-import type { CampaignCommand } from "../campaign/types.js";
-import type { TurnContext } from "./context-builder.js";
+import type { CampaignCommand } from "../../campaign/types.js";
+import type { TurnContext } from "../context-builder.js";
 import { resolveItemPhrase, type RefItem, type ResolveEnv } from "./item-resolution.js";
 
 /**

@@ -1,4 +1,4 @@
-import { readPrices } from "../trade-price.js";
+import { readPrices } from "../commerce/trade-price.js";
 import { GATES } from "../language/gates.js";
 import { QUOTED_SPAN_SOURCE, blankQuotes, sentencesOf } from "../language/text.js";
 import { type NarrationFrame, spanOf } from "./frame.js";

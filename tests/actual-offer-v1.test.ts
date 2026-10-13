@@ -19,7 +19,7 @@ import { createPlaytestServer } from "../src/ui/server.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { authorizeTradeProposals } from "../src/turn/trade-authorization.js";
+import { authorizeTradeProposals } from "../src/turn/commerce/trade-authorization.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import type { NarratorProvider } from "../src/llm/narrator-provider.js";
 import type { GenerationRequest } from "../src/llm/types.js";

@@ -188,7 +188,7 @@ test("movement follow-up (block 3, MOV-1): after Accept and the name, \"let's go
 
 test("price forms: bargaining sentences read as offers; a repeated buyer figure or an acceptance echo is not a new offer", async () => {
   const { extractNarrationFacts } = await import("../src/turn/narration-facts/index.js");
-  const { sellerPrices } = await import("../src/turn/commerce-evidence.js");
+  const { sellerPrices } = await import("../src/turn/commerce/commerce-evidence.js");
   const pricesOf = (text: string) => sellerPrices(extractNarrationFacts(text, { movers: [], context: { characters: [] } as never }));
   assert.deepEqual(pricesOf("Three hundred for her."), [300]);
   assert.deepEqual(pricesOf("\"I'll go two-sixty.\""), [260]);

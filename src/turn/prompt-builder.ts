@@ -15,7 +15,7 @@ import { renderSceneParticipants, type SceneParticipantPlan } from "./scene-part
 import { playerAuthoredEvents } from "./player-authored-events.js";
 import { attributedSpeech } from "./attributed-speech.js";
 import { deduplicateRecovered, renderNpcPlus, withoutStatedRelationship } from "./npc-plus.js";
-import { economicBlock } from "./economic-context.js";
+import { economicBlock } from "./commerce/economic-context.js";
 import { buildSceneStateProjection, sceneDisplayNames } from "./scene-state-projection.js";
 import { focusedSceneStateProjection, intentSceneSignals } from "./scene-state-focus.js";
 import { renderSceneStateProjection } from "./scene-state-render.js";

@@ -7,7 +7,7 @@ import { CampaignValidationError } from "../src/campaign/validation.js";
 import type { CampaignCommand, TradeOfferRecord } from "../src/campaign/types.js";
 import { learnCanonicalName } from "../src/campaign/identity-knowledge.js";
 import { activeTradeOffer } from "../src/campaign/trade.js";
-import { authorizeTradeProposals } from "../src/turn/trade-authorization.js";
+import { authorizeTradeProposals } from "../src/turn/commerce/trade-authorization.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { prepareCommit } from "../src/turn/stages/commit-preparation.js";
 import { SceneParticipants } from "../src/turn/scene-participants.js";

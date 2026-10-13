@@ -368,6 +368,6 @@ test("A24: entry-point audit: the only production code that builds a `manumit` c
   }
   assert.deepEqual(holders.manumit, ["src/turn/pending-proposals.ts"], "manumit is built only for the deterministic confirm command");
   // The remaining two are the Actual Offer plan builders (settled only by the explicit Accept), never a text-to-state shortcut.
-  assert.deepEqual(holders.set_legal_status, ["src/turn/person-offers.ts"]);
-  assert.deepEqual(holders.transfer_person, ["src/turn/person-offers.ts"]);
+  assert.deepEqual(holders.set_legal_status, ["src/turn/commerce/person-offers.ts"]);
+  assert.deepEqual(holders.transfer_person, ["src/turn/commerce/person-offers.ts"]);
 });

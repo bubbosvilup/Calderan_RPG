@@ -12,7 +12,7 @@ import { ItemSpriteJobs } from "../src/app/item-sprite-jobs.js";
 import { PortraitAssetStore } from "../src/app/portrait-store.js";
 import { ITEM_SPRITE_NEGATIVE_PROMPT, itemSpritePrompt } from "../src/campaign/item-sprite-prompt.js";
 import { itemVisualView, inventoryVisualView } from "../src/app/item-visual-view.js";
-import { narratorItemView } from "../src/turn/item-projection.js";
+import { narratorItemView } from "../src/turn/items/item-projection.js";
 import { ImageGenerationError, type PortraitImageGenerator, type ImageGenerationRequest } from "../src/llm/image-generator.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 import { FileCampaignRepository, assetKey } from "../src/persistence/campaign-repository.js";

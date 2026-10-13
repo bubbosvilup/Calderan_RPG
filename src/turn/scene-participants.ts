@@ -3,7 +3,7 @@ import type { TurnContext } from "./context-builder.js";
 import { escapeRegExp } from "./language/text.js";
 import { canonicalInteractionTargets, type CastingOptions } from "./canonical-interaction-targets.js";
 import { isIdentityRequest } from "./identity-request.js";
-import { continuesTransaction } from "./transaction-acts.js";
+import { continuesTransaction } from "./commerce/transaction-acts.js";
 import type { RecentExchange } from "./recent-conversation.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";

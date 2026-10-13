@@ -1,4 +1,4 @@
-import { NUMBER_PHRASE_SOURCE, numberPhraseValue, numberWordValue } from "./language/numbers.js";
+import { NUMBER_PHRASE_SOURCE, numberPhraseValue, numberWordValue } from "../language/numbers.js";
 
 /**
  * Actual Offer: THE price grammar (TRD-3/TRD-4). One reader for goods authorization and person offers, so the two can never disagree about what

@@ -11,7 +11,7 @@ import type { EphemeralSceneParticipant } from "./scene-participants.js";
  * interaction resolves to the SAME ref and never to a second record.
  *
  * Becoming persistent (materialization) happens only inside an action that already has explicit authority and needs a durable person. There are two:
- * the person Actual Offer Accept (src/turn/person-offers.ts plans the register command, settled atomically with the purchase) and, since Block 12, the
+ * the person Actual Offer Accept (src/turn/commerce/person-offers.ts plans the register command, settled atomically with the purchase) and, since Block 12, the
  * player's explicit [ Keep track ] action (src/turn/keep-track.ts, GameSession.keepTrack). Nothing else materializes: never narration, a name, a
  * repeated appearance or the player's words.
  *

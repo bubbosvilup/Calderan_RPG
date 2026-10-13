@@ -1,8 +1,8 @@
-import type { CampaignSnapshot, TradeCounterparty, TradeOfferRecord } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import { activeTradeOffer } from "../campaign/trade.js";
-import { activePlayerCharacterId } from "../campaign/player-character.js";
+import type { CampaignSnapshot, TradeCounterparty, TradeOfferRecord } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { activeTradeOffer } from "../../campaign/trade.js";
+import { activePlayerCharacterId } from "../../campaign/player-character.js";
 
 /**
  * Actual Offer V1: what the NARRATOR is told about the trade state. A pending offer is only an offer; a completed one is a fact. These are

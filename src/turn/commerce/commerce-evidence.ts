@@ -1,5 +1,5 @@
-import type { CommerceFact, NarrationFacts, PriceQuoteFact, TransferClaimFact } from "./narration-facts/index.js";
-import { escapeRegExp as esc } from "./language/text.js";
+import type { CommerceFact, NarrationFacts, PriceQuoteFact, TransferClaimFact } from "../narration-facts/index.js";
+import { escapeRegExp as esc } from "../language/text.js";
 
 /**
  * Commerce POLICY over shared NarrationFacts. The facts say what a text states (a number, who stands behind it, a withdrawal, a claim that

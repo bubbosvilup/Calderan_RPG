@@ -37,15 +37,15 @@ test("2. movement consumers read the shared movement facts", () => {
 });
 
 test("3. commerce consumers read the shared commerce facts (Actual Offer construction, trade authorization, settlement audit)", () => {
-  for (const p of ["src/turn/person-offers.ts", "src/turn/narration-audit.ts", "src/turn/commerce-evidence.ts"]) assert.match(readFileSync(p, "utf8"), /narration-facts\/index\.js/, p);
-  assert.match(code("src/turn/person-offers.ts"), /sellerQuotes\(|sellerPrices\(|actionableQuote\(/);
+  for (const p of ["src/turn/commerce/person-offers.ts", "src/turn/narration-audit.ts", "src/turn/commerce/commerce-evidence.ts"]) assert.match(readFileSync(p, "utf8"), /narration-facts\/index\.js/, p);
+  assert.match(code("src/turn/commerce/person-offers.ts"), /sellerQuotes\(|sellerPrices\(|actionableQuote\(/);
   assert.match(code("src/turn/narration-audit.ts"), /settlementClaims\(/);
 });
 
 test("4. identity / name consumers read the shared identity facts and scene reading", () => {
-  for (const p of ["src/turn/name-establishment.ts", "src/turn/person-offers.ts", "src/turn/partner-identity-guard.ts", "src/turn/canonical-name-disclosure.ts", "src/turn/provisional-people.ts"]) assert.ok(usesFacts(p), p);
+  for (const p of ["src/turn/name-establishment.ts", "src/turn/commerce/person-offers.ts", "src/turn/partner-identity-guard.ts", "src/turn/canonical-name-disclosure.ts", "src/turn/provisional-people.ts"]) assert.ok(usesFacts(p), p);
   assert.match(code("src/turn/name-establishment.ts"), /options\.facts \? options\.facts\.scene\(/);
-  assert.match(code("src/turn/person-offers.ts"), /source\.scene\(/);
+  assert.match(code("src/turn/commerce/person-offers.ts"), /source\.scene\(/);
   const guard = code("src/turn/partner-identity-guard.ts");
   assert.match(guard, /source\.scene\(/); assert.match(guard, /kind === "self_introduction"/); assert.match(guard, /introduces_new/);
   assert.match(code("src/turn/canonical-name-disclosure.ts"), /identityForms\(/);
@@ -75,7 +75,7 @@ test("5. speaker attribution exists only in the fact layer (every other speech-v
 
 test("6. recipient attribution exists only in the fact layer; commerce consumes it as a fact", () => {
   assert.match(code("src/turn/narration-facts/identity-forms.ts"), /kind: "recipient_attribution"/);
-  assert.deepEqual(RUNTIME.filter(p => /recipient_attribution/.test(code(p))), [join("src", "turn", "commerce-evidence.ts")]);
+  assert.deepEqual(RUNTIME.filter(p => /recipient_attribution/.test(code(p))), [join("src", "turn", "commerce", "commerce-evidence.ts")]);
   assert.deepEqual(RUNTIME.filter(p => /\b(?:SAYS_TO|ADDRESSED|VOCATIVE_HEAD|VOCATIVE_TAIL)\b/.test(code(p))), []);
 });
 
@@ -100,7 +100,7 @@ test("9. commerce has no seller-attribution parser of its own: the speaker of a 
   assert.ok(!/\bconst SAY\b/.test(forms)); assert.ok(!SPEECH_LIST.test(forms));
   assert.match(forms, /function speakerOf\(text: string, units: readonly DialogueUnit\[\]/);
   assert.match(forms, /method !== "recent_subject"|method === "recent_subject"/);
-  assert.ok(!SPEECH_LIST.test(code("src/turn/commerce-evidence.ts")));
+  assert.ok(!SPEECH_LIST.test(code("src/turn/commerce/commerce-evidence.ts")));
 });
 
 test("10. narration-facts imports no CampaignState mutation, authorization, audit or persistence code", () => {

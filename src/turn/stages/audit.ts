@@ -1,4 +1,4 @@
-import { economicTurn } from "../economic-context.js";
+import { economicTurn } from "../commerce/economic-context.js";
 import { narratorIdentityGate } from "../narrator-identity.js";
 import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";

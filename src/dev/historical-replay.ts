@@ -5,7 +5,7 @@ import type { SessionDeps } from "../app/game-session.js";
 import { SLAVE_MARKET_V1 } from "../app/scenarios.js";
 import type { CampaignSnapshot } from "../campaign/types.js";
 import type { CampaignState } from "../campaign/campaign-state.js";
-import { isTransactionAct } from "../turn/transaction-acts.js";
+import { isTransactionAct } from "../turn/commerce/transaction-acts.js";
 import { anchoredIds, groundedNarrator, renderAnchorBlock, travelCompanions, travelReferents, validateAnchors, type AnchorFile } from "./historical-anchors.js";
 
 /**

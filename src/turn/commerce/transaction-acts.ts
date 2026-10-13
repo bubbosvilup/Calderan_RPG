@@ -1,4 +1,4 @@
-import { GATES } from "./language/gates.js";
+import { GATES } from "../language/gates.js";
 
 /** The player's own acceptance or payment act in a person trade ("deal", "pays up", "I'll take her"). Shared by purchase resolution and partner continuity. */
 export const ACCEPT = /\b(?:done|deal|agreed|sold|i'?ll take (?:her|him|them)|i take (?:her|him|them)|i'?ll buy (?:her|him|them)|pays?(?!\s+(?:(?:him|her|them)\s+)?(?:a\s+)?(?:visit|attention|respects?|heed|mind|back|homage|tribute)\b)(?:\s+(?:up|him|her|them|the \w+))?|paid|hands? over the (?:gold|coins?)|gives? (?:him|her|them) the (?:gold|coins?)|counts? out the (?:gold|coins?))\b/i;

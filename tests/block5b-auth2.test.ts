@@ -148,5 +148,5 @@ test("AUTH-2 producer audit (source): the only places that build or register a n
     if (/kind: "register_character"/.test(code) && f !== "src/campaign/types.ts") registrars.push(f);
   }
   assert.deepEqual(builders.sort(), ["src/campaign/promotion.ts", "src/turn/provisional-people.ts"]);
-  assert.deepEqual(registrars.sort(), ["src/turn/keep-track.ts", "src/turn/person-offers.ts"]);
+  assert.deepEqual(registrars.sort(), ["src/turn/commerce/person-offers.ts", "src/turn/keep-track.ts"]);
 });

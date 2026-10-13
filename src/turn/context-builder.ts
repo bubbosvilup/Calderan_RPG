@@ -2,7 +2,7 @@ import { registerNarratorIdentities } from "./narrator-identity.js";
 import { isIdentityNameFact } from "../campaign/identity-knowledge.js";
 import type { CampaignSnapshot, NameSource } from "../campaign/types.js";
 import { characterView, itemView } from "../campaign/projections.js";
-import { itemsAt } from "./item-projection.js";
+import { itemsAt } from "./items/item-projection.js";
 import { narratorAppearance, resolvePermanentAppearance } from "../campaign/permanent-appearance.js";
 import { buildNarrativeContext } from "../scene/narrative-context-builder.js";
 import { RuntimeState } from "../world/runtime-state.js";
