@@ -41,7 +41,7 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
   readonly disclosure_intent?: PlayerIntent;
   /** TRD-2: the authorization diagnostics and pre-turn snapshot, so goods/item offers are re-checked against the DELIVERED text. */
   readonly trade_recheck?: { readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly projected: DeepReadonly<CampaignSnapshot> };
-  /** Hardening H1: a turn in which Nicco changed location never promotes a newly named person (`location_changed`). */
+  /** Hardening H1: a turn in which Nicco changed location never materializes a newly named person (`location_changed`). */
   readonly location_changed: boolean;
   readonly on_skip: (reason: string) => void }): CommitPlan {
   const offerDiagnostics: TransactionDiagnostic[] = [];
@@ -83,7 +83,7 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
     const contracts = contractCommands(i.delivered, context, i.prepared.snapshot);
     if (contracts.length) try { receipt = i.prepare({ expected_revision: i.base_revision, commands: [...batch, ...contracts] }); applied = [...batch, ...contracts]; } catch (error) { i.on_skip(`contracts: ${error instanceof Error ? error.message : String(error)}`); }
     // Actual Offer V1: a person offer is READ from the delivered narration (the seller's stated price for one resolvable person). It only records an
-    // offer: nothing is paid, promoted or transferred until the player accepts it. Skipped when the turn already carries a goods offer; a plan that
+    // offer: nothing is paid, materialized or transferred until the player accepts it. Skipped when the turn already carries a goods offer; a plan that
     // cannot be prepared is dropped observably, never the turn.
     if (!applied.some(c => c.kind === "propose_trade_offer")) {
       try {
@@ -99,7 +99,7 @@ export function prepareCommit(i: { readonly world: WorldStore; readonly prepare:
     }
     return { receipt, identity: { provisional: resolved.provisional, named: resolved.named, skipped: resolved.skipped }, ...(offerDiagnostics.length ? { offers: offerDiagnostics } : {}) };
   } catch (error) {
-    // Unresolvable identity: do nothing rather than promote the wrong person; the turn still commits.
+    // Unresolvable identity: do nothing rather than materialize the wrong person; the turn still commits.
     const reason = error instanceof Error ? error.message : String(error);
     i.on_skip(reason);
     return { receipt: i.prepared, identity: { provisional: [], named: [], skipped: [] }, identity_skipped: reason };

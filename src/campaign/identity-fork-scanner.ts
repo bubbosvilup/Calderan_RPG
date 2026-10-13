@@ -25,7 +25,7 @@ export interface ForkFinding {
   readonly automatic_repair: false;
   readonly confidence: ForkConfidence;
   readonly score: number;
-  /** The record created LATER (higher promotion revision, else later in the snapshot) is listed as the suspected duplicate; a human decides the direction. */
+  /** The record created LATER (higher materialization revision, else later in the snapshot) is listed as the suspected duplicate; a human decides the direction. */
   readonly suspected_duplicate: ForkCandidate;
   readonly suspected_original: ForkCandidate;
   readonly signals: readonly ForkSignal[];
@@ -76,9 +76,9 @@ export function scanIdentityForks(snapshot: Snap, canonicalNames: ReadonlySet<st
     const sim = overlap(tokens(x), tokens(y));
     if (sim >= 0.5 && tokens(x).size >= 2 && tokens(y).size >= 2) corroboration.push({ kind: "descriptor", detail: `description overlap ${Math.round(sim * 100)}%` });
     const rx = x.origin_snapshot?.ephemeral_ref, ry = y.origin_snapshot?.ephemeral_ref, lx = lc(x.origin_snapshot?.label), ly = lc(y.origin_snapshot?.label);
-    if ((rx && rx === ry) || (lx && lx === ly)) corroboration.push({ kind: "origin_provenance", detail: rx && rx === ry ? "same narrated origin reference" : `same promotion label "${x.origin_snapshot?.label}"` });
+    if ((rx && rx === ry) || (lx && lx === ly)) corroboration.push({ kind: "origin_provenance", detail: rx && rx === ry ? "same narrated origin reference" : `same materialization label "${x.origin_snapshot?.label}"` });
     const px = x.origin_snapshot?.promoted_revision, py = y.origin_snapshot?.promoted_revision;
-    if (px !== undefined && py !== undefined && Math.abs(px - py) <= 3 && x.id !== y.id) corroboration.push({ kind: "promotion_proximity", detail: `promoted within ${Math.abs(px - py)} revision(s) of each other` });
+    if (px !== undefined && py !== undefined && Math.abs(px - py) <= 3 && x.id !== y.id) corroboration.push({ kind: "promotion_proximity", detail: `materialized within ${Math.abs(px - py)} revision(s) of each other` });
     const kx = legalKey(snapshot, x.id), ky = legalKey(snapshot, y.id);
     if (kx !== ky && (kx !== "none" || ky !== "none") && corroboration.some(s => s.kind === "same_location")) corroboration.push({ kind: "legal_context", detail: "same place, but only one of them carries a legal status (typical of a bought person recorded twice)" });
     if (nx && canonicalNames.has(nx)) corroboration.push({ kind: "canonical_name", detail: "the name belongs to an authored canonical character" });

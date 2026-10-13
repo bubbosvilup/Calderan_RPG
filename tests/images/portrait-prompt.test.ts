@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { loadWorld } from "../../src/world/loader.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../../src/campaign/opening-state.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { applyAppearancePatch, resolvePermanentAppearance, type ResolvedPermanentAppearance } from "../../src/campaign/permanent-appearance.js";
 import { appearanceFingerprint, AVATAR_POSES, buildPortraitPrompt, composePortraitPrompt, FULLBODY_POSES, isPortraitPose, PORTRAIT_NEGATIVE_PROMPT, PORTRAIT_POSE_TEXT, PORTRAIT_PROMPT_LIMITS,
   PORTRAIT_PROMPT_VERSION, portraitDetails, type PortraitKind } from "../../src/campaign/portrait-prompt.js";
@@ -32,7 +32,7 @@ function miraCampaign() {
   const c = createOpeningCampaign(world, `portrait_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
   const minute = c.exportSnapshot().runtime.scene.world_time.world_minute;
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", species: "human", descriptor: "woman", appearance: ["tall and gaunt, with sunken cheeks", "copper hair matted against her neck"], condition: ["feverish"] },
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", species: "human", descriptor: "woman", appearance: ["tall and gaunt, with sunken cheeks", "copper hair matted against her neck"], condition: ["feverish"] },
     evidence: ["The woman lies in the cage."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: c.revision + 1, world_minute: minute });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }, { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: woman.id }] });
   const late = [
@@ -84,7 +84,7 @@ test("Mira: full prompt from saved values + baseline prose, in fixed order; no n
 test("minimal created NPC+: valid prompt with only established identity; nothing invented", () => {
   const c = createOpeningCampaign(world, `portrait_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
-  const lina = buildPromotedCharacter({ label: "Lina", established: { name: "Lina", sex: "female" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: c.exportSnapshot().runtime.scene.world_time.world_minute });
+  const lina = buildMaterializedCharacter({ label: "Lina", established: { name: "Lina", sex: "female" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: c.exportSnapshot().runtime.scene.world_time.world_minute });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: lina }, { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: lina.id }] });
   const prompt = editorPrompt(c, lina.id)!.prompt;
   assert.ok(prompt.includes("Subject: one female.")); for (const part of FIXED) assert.ok(prompt.includes(part), part);
@@ -115,7 +115,7 @@ test("managed canonical NPC+: public baseline + campaign override; private canon
 
 test("unmanaged readers get no prompt; profile appearance never leaks to them through a preview", () => {
   const c = new CampaignState(world, `portrait_${++serial}`, { player_location: LR, world_time: { world_minute: 600 } });
-  const lina = buildPromotedCharacter({ label: "Lina", established: { name: "Lina" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: 600 });
+  const lina = buildMaterializedCharacter({ label: "Lina", established: { name: "Lina" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: 600 });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: { ...lina, profile: { ...lina.profile, appearance: { build: "UNPROVEN_BUILD" } } } }] });
   const card = playerCharacterProjection(world, c.exportSnapshot()).project(lina.id)!;
   assert.equal(card.appearance_editor, null); assert.doesNotMatch(JSON.stringify(card), /UNPROVEN_BUILD|Portrait|reference image/);

@@ -40,7 +40,7 @@ export interface NarratedPerson {
   readonly captive: boolean;
   /** Acts or speaks in the scene, self-introduced, or introduced by narration's own voice. */
   readonly present: boolean;
-  /** Set for a present persistent character (e.g. promoted by name earlier) whose legal status is not established yet. */
+  /** Set for a present persistent character (e.g. materialized under a name earlier) whose legal status is not established yet. */
   readonly character_id?: string;
   readonly introductions: readonly NameIntroduction[];
   /** Speaker keys that denote this person. */
@@ -92,7 +92,7 @@ export interface SceneReading {
   readonly namings: readonly LateNaming[]; readonly people: readonly Person[]; readonly latest: number; readonly exchanges: readonly RecentExchange[];
 }
 export interface ReadOptions {
-  /** Present persistent characters promoted while narrated as captives whose legal status is still unestablished (purchasable). */
+  /** Present persistent characters materialized while narrated as captives whose legal status is still unestablished (purchasable). */
   readonly unheld?: ReadonlySet<string>;
   /** Names of existing campaign characters anywhere (weak quote-opening names matching them are ignored). */
   readonly campaign_names?: ReadonlySet<string>;
@@ -237,14 +237,14 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
       captive: units.some(u => keys.some(k => held.get(u)!.includes(k))) || about.some(u => { const h = held.get(u)!; return (!!noun && h.includes(`noun:${noun}`) && mention(name).test(u.text)) || (!!bound && h.includes(`noun:${bound}`)); }),
       present, introductions: mine, keys });
   }
-  // Present persistent characters with no legal record yet, narrated as captives (e.g. promoted by name before any sale).
+  // Present persistent characters with no legal record yet, narrated as captives (e.g. materialized under a name before any sale).
   for (const p of people) {
     if (!options.unheld?.has(p.id)) continue;
-    // The person noun narration attached to them when they were promoted ("woman"): later descriptions ("the big woman") are the same person.
+    // The person noun narration attached to them when they were materialized ("woman"): later descriptions ("the big woman") are the same person.
     const dn = context.characters.find(c => c.id === p.id)?.established_origin?.descriptor?.toLowerCase();
     const descriptor = dn && new RegExp(`^(?:${PERSON_NOUNS})$`).test(dn) && !persons.some(x => x.keys.includes(`other:${dn}`)) ? dn : undefined;
     const about = units.filter(u => u.speaker === p.id || p.names.some(n => mention(n).test(u.text)) || (!!descriptor && (u.speaker === `other:${descriptor}` || nounPhrase(descriptor).test(u.text))));
-    // `unheld` is already restricted by the caller to people promoted while narrated as captives: no new marker is required.
+    // `unheld` is already restricted by the caller to people materialized while narrated as captives: no new marker is required.
     persons.push({ ref: p.id, name: p.names[0]!, label: p.names[0]!, units: about, in_latest: about.some(u => u.exchange === latest), captive: true, present: true, character_id: p.id, introductions: [], keys: [p.id, ...(descriptor ? [`other:${descriptor}`] : [])] });
   }
   // Unnamed captives: "a/the <adjectives> <person noun>" in a sentence with a captivity marker. Used for ambiguity and descriptions.

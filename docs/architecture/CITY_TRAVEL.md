@@ -56,5 +56,5 @@ after city travel and carried-character movement.
 Verification: `tests/movement/city-travel.test.ts` covers route optimality and tie breaks,
 schema errors, reachability, boundary cut sets, bridge crossings, end-to-end
 historical routes, time, day recovery, failure rollback and save/load.
-`tests/movement/location-continuity.test.ts` exercises the narrator-created seller, promotion,
+`tests/movement/location-continuity.test.ts` exercises the narrator-created seller, materialization,
 purchase, full Maren carry route and Tomas's unchanged location on a multi-hop trip.

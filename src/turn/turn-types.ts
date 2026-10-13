@@ -48,7 +48,7 @@ export interface TurnResult {
   /** Person-transaction diagnostics of this turn (resolved, blocked, ambiguous, no_offer); absent when the turn had none. */
   readonly person_transactions?: readonly import("./player-intent.js").TransactionDiagnostic[];
   readonly scene_participants?: { readonly plan: SceneParticipantPlan; readonly after: readonly EphemeralSceneParticipant[] };
-  /** Persistence Pass 1.2: characters promoted because a proper name was established, and late namings, committed with this turn. */
+  /** Name establishment of this turn (Persistence Pass 1.2; AUTH-2): provisional named people, late namings of present persistent characters, skips. A name alone materializes nobody. */
   readonly identity?: Omit<IdentityResolution, "commands">;
   /** Hardening H1: identity establishment was skipped because its preparation failed (the turn still committed). Diagnostic only. */
   readonly identity_skipped?: { readonly reason: string };

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../../src/world/loader.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import { buildTurnContext, NAME_PROVENANCE } from "../../src/turn/context/context-builder.js";
 import { establishNames } from "../../src/turn/identity/name-establishment.js";
@@ -44,8 +44,8 @@ const ALL = Object.values(NAME_PROVENANCE);
 const WOMAN = at("*lets her rest on the sofa*", "*The tall woman lies on the sofa, her breathing shallow and feverish.*\n\nWhat do I call you.");
 const ANSWER = at("name's nicco, i'm the keeper of the heartstone, what about you?", "*Her eyes stay half-open, fixed on his face. Her fingers press flat against the cushion, then relax.*\n\nMira.\n\n*She says it without ceremony.*");
 
-// ------------------------------------------------------------------------------------------------ A: promoted self-disclosure
-test("promoted self-disclosed Mira: provenance survives RecentConversation eviction and save/reload, bounded and evidence-preserving", () => {
+// ------------------------------------------------------------------------------------------------ A: materialized self-disclosure
+test("materialized self-disclosed Mira: provenance survives RecentConversation eviction and save/reload, bounded and evidence-preserving", () => {
   const c = fresh();
   const r = establish(c, [WOMAN, ANSWER]);
   assert.deepEqual(r.provisional.map(p => p.name), ["Mira"]);
@@ -71,7 +71,7 @@ test("promoted self-disclosed Mira: provenance survives RecentConversation evict
 
 // ------------------------------------------------------------------------------------------------ B: late naming
 test("late-named acquired woman: set_profile records self-disclosure on the same record; survives eviction and reload", () => {
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies in the cage."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600 });
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies in the cage."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600 });
   const c = fresh(LR, [{ kind: "register_character", character: woman }]);
   const before = c.exportSnapshot().characters.find(x => x.id === woman.id)!;
   const history = [at("*carries her to the sofa*", "*The woman lies on the sofa, burning with fever.*"), ANSWER];
@@ -118,14 +118,14 @@ test("unknown provenance says nothing: Nicco's own introduction, weak names, old
   const weakLine = characterLine(promptAfterEviction(weak, [], "Lysa").prompt, "Lysa");
   assert.ok(weakLine && !ALL.some(s => weakLine.includes(s)), weakLine);
   // An old save/fixture record without the field, even with self-disclosure-looking evidence, stays unknown (not inferred).
-  const old = buildPromotedCharacter({ label: "Mira", established: { name: "Mira", sex: "female", descriptor: "woman" }, evidence: ['Mira: "Mira."', 'Mira: "My name is Mira."'], location_id: LR, trigger: "name_established", promoted_revision: 1, world_minute: 600 });
+  const old = buildMaterializedCharacter({ label: "Mira", established: { name: "Mira", sex: "female", descriptor: "woman" }, evidence: ['Mira: "Mira."', 'Mira: "My name is Mira."'], location_id: LR, trigger: "name_established", promoted_revision: 1, world_minute: 600 });
   assert.equal(old.profile.name_source, undefined);
   const legacy = roundTrip(fresh(LR, [{ kind: "register_character", character: old }]));
   const { context, prompt } = promptAfterEviction(legacy, [], "Mira");
   assert.equal(context.characters.find(x => x.id === old.id)!.established_origin!.name_provenance, undefined);
   assert.ok(characterLine(prompt, "Mira") && !ALL.some(s => prompt.includes(s)));
   // A name_source without a name (unnamed record) says nothing either.
-  const unnamed = buildPromotedCharacter({ label: "the girl", established: { descriptor: "girl" }, evidence: [], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600, name_source: "self_disclosed" });
+  const unnamed = buildMaterializedCharacter({ label: "the girl", established: { descriptor: "girl" }, evidence: [], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600, name_source: "self_disclosed" });
   assert.equal(unnamed.profile.name_source, undefined);
 });
 
@@ -144,7 +144,7 @@ test("player naming and masked canonical identities carry no created-name proven
 });
 
 test("validation rejects an unknown name_source; the narrator addition is one bounded sentence with no IDs or private material", () => {
-  const bad = buildPromotedCharacter({ label: "Mira", established: { name: "Mira" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: 1, world_minute: 600 });
+  const bad = buildMaterializedCharacter({ label: "Mira", established: { name: "Mira" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: 1, world_minute: 600 });
   const c = fresh();
   assert.throws(() => c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: { ...bad, profile: { ...bad.profile, name_source: "player_assigned" as never } } }] }));
   for (const s of ALL) { assert.ok(s.length <= 90, s); assert.doesNotMatch(s, /_|campaign_character|\d/); }

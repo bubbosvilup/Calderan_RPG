@@ -16,12 +16,12 @@ import { escapeRegExp as esc, exactNamePattern } from "../language/text.js";
 /**
  * Actual Offer V1: deterministic READING of a person offer from delivered narration. This module never settles anything and never changes
  * funds, ownership or legal status. When the seller's delivered narration states a price for one resolvable person, it yields a
- * `propose_trade_offer` command whose stored plan (promotion of a narrated captive, the seller as legal holder, the sale itself) is exactly
+ * `propose_trade_offer` command whose stored plan (materialization of a narrated captive, the seller as legal holder, the sale itself) is exactly
  * what the existing person-transaction commands will apply when the PLAYER accepts the offer in the interface. The player's own words ("deal",
  * "*pays*", a counter-price) are never read as acceptance and never set a price: only the seller's stated price counts.
  *
  * Subjects: a present persistent enslaved person held by a present seller; or a narrated captive of the current scene (the NarrationFacts scene reading),
- * who is promoted only when the offer is accepted. Sellers: a present persistent character, a named narrated person, or an anonymous
+ * who is materialized only when the offer is accepted. Sellers: a present persistent character, a named narrated person, or an anonymous
  * narrated speaker ("the whittler"), recorded as a counterparty snapshot and never made a character.
  */
 export interface PersonOfferResolution {
@@ -56,12 +56,12 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const prices: PriceReader = text => sellerPrices(facts, text);
   const unsupported = (text: string) => unsupportedMoney(facts, text) !== undefined;
   const candidates = [...present].filter(id => { const l = legal(id); return l?.status === "enslaved" && l.holder_id !== "nicco" && !!l.holder_id && present.has(l.holder_id); });
-  // Narrator-created captives of the current scene (and present persistent people not yet legally held, e.g. promoted by name) compete with held persons for the one subject.
+  // Narrator-created captives of the current scene (and present persistent people not yet legally held, e.g. materialized under a name) compete with held persons for the one subject.
   const unheld = new Set(context.characters.filter(c => c.id !== "nicco" && !legal(c.id) && /\bcaptive\b/.test(c.established_origin?.role ?? "")).map(c => c.id));
   const readingOptions = { campaign_names: new Set(snapshot.characters.filter(c => !c.retirement).flatMap(c => c.profile.name ? [c.profile.name.toLowerCase()] : [])), rpg_speech: true, asks_name: asksName };
   // The ONE scene reading (NarrationFacts): who is narrated, who speaks each line (seller binding reads these speakers), who is held.
   let reading: SceneReading | undefined = source.scene(recent, context, options.world, { unheld, ...readingOptions });
-  // A person promoted by name before the narration showed them held has no captive role; when the scene narrates a captive under the very noun the narrator attached to them, they are that captive.
+  // A person materialized under a name before the narration showed them held has no captive role; when the scene narrates a captive under the very noun the narrator attached to them, they are that captive.
   const nouns = new Set(reading.persons.filter(p => p.captive && !p.name && !p.character_id && p.noun).map(p => p.noun!));
   const late = context.characters.filter(c => c.id !== "nicco" && !unheld.has(c.id) && !legal(c.id) && c.established_origin?.descriptor && nouns.has(c.established_origin.descriptor.toLowerCase())).map(c => c.id);
   if (late.length) reading = source.scene(recent, context, options.world, { unheld: new Set([...unheld, ...late]), ...readingOptions });
@@ -119,7 +119,7 @@ function pricedSentences(latest: string, id: string, candidates: readonly string
 /**
  * A person the seller prices by pointing, not by naming: the seller's latest speech states a price "for her/him" (or "that one"), the recent scene
  * narration shows held people (a captivity marker, or a group of captives) and no singular described captive exists. The subject is then the one
- * person of that sex the narration described after the introduction ("The other is broader…", "She sits…"). Nothing here settles or promotes anybody:
+ * person of that sex the narration described after the introduction ("The other is broader…", "She sits…"). Nothing here settles or materializes anybody:
  * the offer stores the plan and the player's Accept applies it.
  */
 const PERSON_ONE = /\b(?:the|that|this) [a-z-]+(?: [a-z-]+)? one\b|\bgot (?:one|another)\b|\bone right here\b|\b(?:young|younger|old|older|other) one\b/i;
@@ -146,7 +146,7 @@ function pointedCaptive(reading: SceneReading, input: string, prices: PriceReade
     if (w !== m) sexes.add(w ? "woman" : "man");
   }
   // The player's own request is a purchase/price request for a person ("Sell her to me, price?", "how much for the woman"): the seller's reply price is for her.
-  // ...but only for an anonymous person: a narrated NAMED person (already promoted, e.g. Maren) is never re-pointed at.
+  // ...but only for an anonymous person: a narrated NAMED person (already materialized, e.g. Maren) is never re-pointed at.
   if (!sexes.size && priced.length && !reading.persons.some(p => !!p.name && (p.captive || !!p.character_id))) {
     const ask = input;
     if (/\b(?:sell|buy|price|how much|cost|take|want)\b/i.test(ask)) {
@@ -264,13 +264,13 @@ interface PurchaseScope {
   readonly facts: NarrationFacts; readonly prices: PriceReader; readonly unsupported: (text: string) => boolean;
 }
 /**
- * A seller is (a) a present persistent character, (b) a narrator-created person with an established proper name (promoted by the
+ * A seller is (a) a present persistent character, (b) a narrator-created person with an established proper name (materialized by the
  * ordinary name rule inside the same proposal), or (c) an ANONYMOUS narrator-created speaker ("the whittler"). An anonymous seller is
  * never made a character: the sale records a counterparty snapshot as transaction provenance instead (Pass 1.2).
  */
 type Seller = { readonly key: string; readonly keys: readonly string[]; readonly label: string } & ({ readonly kind: "persistent"; readonly id: string } | { readonly kind: "named"; readonly person: NarratedPerson } | { readonly kind: "anonymous" });
 /**
- * Offer for a narrated captive as ONE stored plan. When the subject is not yet a campaign character it is promoted (minimum durable
+ * Offer for a narrated captive as ONE stored plan. When the subject is not yet a campaign character it is materialized (minimum durable
  * character, established facts and an origin snapshot only): by name when a proper name is established, otherwise under the unnamed
  * acquisition exception. A persistent or named seller becomes the legal holder first and then sells; an anonymous seller sells
  * directly, preserved only as provenance. NOTHING is applied here: the plan is stored inside the offer and applied atomically only when the
@@ -325,7 +325,7 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   const saidSentences = sentences(said);
   const provenance = (saidSentences.find(t => /\b(?:chain|forfeit\w*|liens?|seal|listing)\b/i.test(t)) ?? saidSentences.find(t => /\bpapers?\b/i.test(t)))?.slice(0, 200);
   const minute = snapshot.runtime.scene.world_time.world_minute;
-  // Subject: already persistent (e.g. promoted by name on an earlier turn), or promoted now.
+  // Subject: already persistent (e.g. materialized under a name on an earlier turn), or materialized now.
   const participant = subjectPerson.character_id ? undefined : linkedParticipant(subjectPerson, s.participants);
   let subjectId = subjectPerson.character_id;
   if (!subjectId) {

@@ -86,7 +86,7 @@ A `TradeOffer` is a pending proposal; a transaction is committed state; acceptan
 
 Three states are kept apart everywhere (state, prompt, UI, audit): *current world state* (CampaignState, authoritative), *proposed action awaiting confirmation* (interaction metadata, never world state, rendered to the Narrator as "NOT completed"), and *completed action* (a committed transaction). Creating, cancelling or invalidating a pending record never changes the semantic revision; Confirm commits through `prepare/commit` like any other change and revalidates at that moment (subject still enslaved, held by the actor, present). The Narrator-draft audit rejects prose that claims a pending act as done (`uncommitted_pending_confirmation`).
 
-**Character lifecycle (block 5B, AUTH-2 CLOSED; Keep track block 12).** A character is PROVISIONAL, PERSISTENT or RETIRED. This is an *identity lifecycle*, **not an NPC tier** (tiers are Canon / Campaign NPC / NPC+, see [Heartstone](HEARTSTONE.md)).
+**Character lifecycle (block 5B, AUTH-2 CLOSED; Keep track block 12).** A character is PROVISIONAL, PERSISTENT or RETIRED. This is an *identity lifecycle*, **not an NPC tier** (tiers are Canon / Campaign NPC / NPC+, see [Heartstone](HEARTSTONE.md)). Vocabulary (Repository Cleanup G): PROVISIONAL → PERSISTENT is **materialization** (`src/campaign/materialization.ts`, `buildMaterializedCharacter`); Campaign NPC → NPC+ is **promotion** (the Heartstone rite) and only that. The serialized origin fields keep their historical names (`origin_snapshot.promoted_revision`, `promoted_world_minute`): they record when the person was materialized.
 
 | State | Where it lives | How it is entered | How it ends |
 | --- | --- | --- | --- |

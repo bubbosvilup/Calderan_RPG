@@ -124,7 +124,7 @@ Historical playthrough windows remain an evaluation-only helper and are never us
 **Invariant:** every character who may speak or act in the scene has a narrator-facing knowledge scope. Persistent and ephemeral characters derive it differently.
 
 **Ephemeral scene participants** (`src/turn/identity/scene-participants.ts`) are session-local people who are in the scene but are not CampaignState characters: a passer-by, a street merchant, an unnamed guard.
-- **Storage:** held by the coordinator beside `RecentConversation`. Never persisted, saved or promoted, and never a durable mutation. The controller never decides who exists.
+- **Storage:** held by the coordinator beside `RecentConversation`. Never persisted, saved or materialized, and never a durable mutation. The controller never decides who exists.
 - **Identity:** `scene_npc_<n>` from a per-session counter that is never reused. The narrator sees `P<n> - <Role>`, never the ID.
 - **Creation:** only from resolved player input. An interaction verb plus an indefinite role phrase creates one participant (`stops an ordinary passer-by`). A definite phrase (`the guard`) addresses an existing participant, or creates one if none matches. At most one creation per turn. No name, occupation, faction or history is invented.
 - **Addressing:** a definite reference to the role or the established descriptor noun. Or, when no other participant is referenced and no persistent character is named, direct speech or second person continues the current conversation partner. A vague departure beat does not silently replace the partner with a new person.
@@ -158,7 +158,7 @@ Historical playthrough windows remain an evaluation-only helper and are never us
 
 **Player retrieval de-duplication:** when `[NICCO / PLAYER PROFILE]` is present, Nicco's own entity record is dropped from retrieval candidates. Chunks, which carry query-specific canon, are kept.
 
-**Out of scope:** overhearing, belief revision, promotion of participants to CampaignState, player knowledge acquisition from what NPCs tell him, and NPC-private long-term recall.
+**Out of scope:** overhearing, belief revision, materialization of participants into CampaignState, player knowledge acquisition from what NPCs tell him, and NPC-private long-term recall.
 
 ## 7. Canon boundaries (Phase 1Q)
 
@@ -216,7 +216,7 @@ Historical playthrough windows remain an evaluation-only helper and are never us
   - The uncommitted receipt's detached snapshot is the projected state that the narrator, controller, TurnEvidence and authorization see.
   - Durable state changes only at finalization, when runtime and authorized commands are prepared together from the base revision and committed once.
   - A failed or cancelled turn commits nothing, and the revision advances at most once.
-- **Durable interaction with temporary participants:** unsupported for now (option C). An offer to a temporary participant is recorded as `unsupported_durable_recipient`, and the narrator is told they may decline, hesitate or leave it unresolved but must not take it. Promotion (option A) is the recommended future mechanism; see the Phase 1S review.
+- **Durable interaction with temporary participants:** unsupported for now (option C). An offer to a temporary participant is recorded as `unsupported_durable_recipient`, and the narrator is told they may decline, hesitate or leave it unresolved but must not take it. Materialization (option A, called "promotion" in the Phase 1S review) is the recommended mechanism; the player's explicit Keep track (block 12) now provides it.
 - **Participants:**
   - interaction verbs carry explicit morphology (stop/stops/stopped/stopping, …);
   - player-authored NPC-subject setups ("a guard stops him") create participants;
@@ -241,10 +241,10 @@ is established in play and verified**; WorldStore remains world truth.
   possibilities never assumed for an individual. It assigns nothing to anyone. Ordinary turns carry no block and are unchanged.
 - **Narrator creativity.** Individual life details, unnamed villages, farms, households and jobs remain the narrator's to invent.
   Named cities, regions, nations, cultures and factions must come from canon or stay vague.
-- **Guardrail and persistence.** Background sentences extracted at promotion (`establishedFacts`) are checked by
+- **Guardrail and persistence.** Background sentences extracted at materialization (`establishedFacts`) are checked by
   `classifyBackgroundClaim`: proper-name-like places/cultures/factions in place position are resolved against WorldStore names and
   aliases. VERIFIED (all resolve) and GENERIC (no named place) claims may persist; UNVERIFIED claims (e.g. "the Marches") are not
-  established facts and never enter the durable background or the narrator-facing projection. Verbatim promotion evidence remains raw
+  established facts and never enter the durable background or the narrator-facing projection. Verbatim materialization evidence remains raw
   provenance. No WorldStore entity is ever created from narration.
 - **Authority.** Established background always wins; grounding lists it first and the narrator must not offer alternatives.
 

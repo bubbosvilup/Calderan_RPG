@@ -104,7 +104,7 @@ function scripted(narrations: readonly string[], seen: GenerationRequest[]): Nar
   let i = 0;
   return { async generate() { throw new Error("unused"); }, async *stream(request) { seen.push(request); const text = narrations[Math.min(i++, narrations.length - 1)]!; yield { type: "text_delta", text }; yield { type: "completed", result: { text, ...metadata } }; } };
 }
-test("5-turn coordinator continuity: same participant, stable descriptor, correct replay speaker, no promotion or durable mutation", async () => {
+test("5-turn coordinator continuity: same participant, stable descriptor, correct replay speaker, no materialization or durable mutation", async () => {
   const { world, campaign } = await opening(), service = new RetrievalService(world), seen: GenerationRequest[] = [];
   const narrations = [
     "The passer-by, a middle-aged woman carrying a cloth-wrapped bundle, slows. \"The slave market? West District,\" she says.",
@@ -127,7 +127,7 @@ test("5-turn coordinator continuity: same participant, stable descriptor, correc
     if (i > 0) { assert.match(prompt, /Established: middle-aged woman/); assert.match(prompt, /"P1 Passer-by: \\"/); assert.ok(!prompt.includes("Nicco: \\\""), `turn ${i + 1}`); }
   }
   const snapshot = JSON.stringify(campaign.exportSnapshot());
-  assert.equal(campaign.exportSnapshot().characters.length, 0, "never promoted to CampaignState"); assert.ok(!snapshot.includes("scene_npc"));
+  assert.equal(campaign.exportSnapshot().characters.length, 0, "never materialized into CampaignState"); assert.ok(!snapshot.includes("scene_npc"));
 });
 test("a failed turn discards its participant plan", async () => {
   const { world, campaign } = await opening(), service = new RetrievalService(world);

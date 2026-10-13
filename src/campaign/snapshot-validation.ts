@@ -56,8 +56,8 @@ function validateReferences(s: CampaignSnapshot, world: WorldStore): void {
       if (c.retirement.merged_into !== undefined) { if (c.retirement.merged_into === c.id) fail("retirement.merged_into", "cannot merge into itself"); refs.character(c.retirement.merged_into); }
     }
     if (c.origin_snapshot) {
-      if (c.origin.kind !== "created") fail("origin_snapshot", "only created characters carry a promotion origin");
-      if (c.origin_snapshot.promoted_revision > s.revision) fail("origin_snapshot.promoted_revision", "promotion cannot postdate the snapshot");
+      if (c.origin.kind !== "created") fail("origin_snapshot", "only created characters carry a materialization origin");
+      if (c.origin_snapshot.promoted_revision > s.revision) fail("origin_snapshot.promoted_revision", "materialization cannot postdate the snapshot");
       refs.location(c.origin_snapshot.location_id);
     }
   }

@@ -44,7 +44,7 @@ export const GATES = Object.freeze({
     question: true }),
   /** household-evidence.ts — relationship evidence: hedged, pretended or attempted behaviour is not evidence. */
   relationship_hedged: cueGate({ cues: [C.if, E.maybe, E.perhaps, would, could, might, I.almost, I.nearly, I.pretendAny, I.aboutTo, I.wantsTo, I.triesTo], question: true }),
-  /** narration-facts/person-facts.ts — promotion facts: descriptive uncertainty and approximation only (negation is a fact, not a hedge). */
+  /** narration-facts/person-facts.ts — materialization facts: descriptive uncertainty and approximation only (negation is a fact, not a hedge). */
   captive_fact_hedge: cueGate({ cues: [E.maybe, E.perhaps, E.probably, E.possibly, might, E.seems, E.seemed, E.asIf, E.impossibleToTell, E.hardToTell, E.orSo, E.orLess, E.orMore, E.guess] }),
   /** narration-audit.ts — conditions/constraints narrated on someone: negated or unrealised claims are not established. */
   audit_negated: cueGate({ cues: [not, never, no, nor, without, I.almost, I.nearly, would, could, might, will, C.if], contraction: true }),

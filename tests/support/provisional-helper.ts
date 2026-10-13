@@ -1,4 +1,4 @@
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import type { CampaignCharacter } from "../../src/campaign/types.js";
 import type { IdentityResolution } from "../../src/turn/identity/name-establishment.js";
 import type { CampaignState } from "../../src/campaign/campaign-state.js";
@@ -11,7 +11,7 @@ import type { CampaignState } from "../../src/campaign/campaign-state.js";
 export function materializedFrom(c: CampaignState, resolution: Pick<IdentityResolution, "provisional">): CampaignCharacter[] {
   const snapshot = c.exportSnapshot();
   const named = new Set(snapshot.characters.flatMap(x => x.profile.name ? [x.profile.name.toLowerCase()] : []));
-  return resolution.provisional.filter(p => !p.name || !named.has(p.name.toLowerCase())).map(p => buildPromotedCharacter({ label: p.name ?? p.label, established: { ...p.established, ...(p.captive ? { role: "held captive (narrated)" } : {}) }, evidence: p.evidence,
+  return resolution.provisional.filter(p => !p.name || !named.has(p.name.toLowerCase())).map(p => buildMaterializedCharacter({ label: p.name ?? p.label, established: { ...p.established, ...(p.captive ? { role: "held captive (narrated)" } : {}) }, evidence: p.evidence,
     location_id: p.location_id, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: snapshot.runtime.scene.world_time.world_minute, ephemeral_ref: p.ref,
     ...(p.name_source ? { name_source: p.name_source } : {}) }));
 }

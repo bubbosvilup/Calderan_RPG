@@ -17,15 +17,15 @@ export function prepareCharacterCommand(context: PreparationContext, command: Ca
       if (c.origin.kind === "canonical") requireEmptyLocationForCanonical(c.current);
       if (c.current.current_location !== undefined) refs.location(c.current.current_location);
       if (c.current.empty_slots) c.current.empty_slots.sort();
-      // Promotion Pass 1.1: an origin snapshot is written once, at registration, for a created character promoted in this very
+      // Promotion Pass 1.1: an origin snapshot is written once, at registration, for a created character materialized in this very
       // revision where it stands. It cannot be backdated, relocated or attached to canon.
       const o = c.origin_snapshot;
       if (o) {
-        if (c.origin.kind !== "created") fail("origin_snapshot", "only created characters carry a promotion origin");
-        if (o.promoted_revision !== draft.revision + 1) fail("origin_snapshot.promoted_revision", "promotion must be recorded at the revision it commits");
-        if (o.promoted_world_minute !== context.draft.runtime.scene.world_time.world_minute) fail("origin_snapshot.promoted_world_minute", "promotion time must be the current world minute");
+        if (c.origin.kind !== "created") fail("origin_snapshot", "only created characters carry a materialization origin");
+        if (o.promoted_revision !== draft.revision + 1) fail("origin_snapshot.promoted_revision", "materialization must be recorded at the revision it commits");
+        if (o.promoted_world_minute !== context.draft.runtime.scene.world_time.world_minute) fail("origin_snapshot.promoted_world_minute", "materialization time must be the current world minute");
         refs.location(o.location_id);
-        if (c.current.current_location !== o.location_id) fail("origin_snapshot.location_id", "a promoted person stands where they were promoted");
+        if (c.current.current_location !== o.location_id) fail("origin_snapshot.location_id", "a materialized person stands where they were materialized");
       }
       draft.characters.push(c); return true;
     }

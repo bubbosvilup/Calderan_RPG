@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { loadWorld } from "../../src/world/loader.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../../src/campaign/opening-state.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
 import { establishNames } from "../../src/turn/identity/name-establishment.js";
@@ -20,7 +20,7 @@ let serial = 0, minuteNow = 600;
 const at = (player: string, narration: string): RecentExchange => ({ player, narration, status: "finalized", location_id: LR });
 const LATE = [at("*carries her to the sofa*", "*The woman lies on the sofa, burning with fever.*"),
   at("name's nicco, i'm the keeper of the heartstone, what about you?", "*Her eyes stay half-open, fixed on his face. Her fingers press flat against the cushion, then relax.*\n\nMira.\n\n*She says it without ceremony.*")];
-const acquired = (revision: number) => buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies in the cage."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: revision, world_minute: minuteNow });
+const acquired = (revision: number) => buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies in the cage."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: revision, world_minute: minuteNow });
 function home(extra: (revision: number) => CampaignCommand[] = () => []) {
   const c = createOpeningCampaign(world, `name_projection_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
@@ -69,10 +69,10 @@ test("late-named acquired woman: every player-facing projection shows Mira; same
   assert.equal(knownCreatedName(record), "Mira");
 });
 
-test("promotion-time names, unnamed descriptors and unproven profile names keep their behavior", () => {
+test("materialization-time names, unnamed descriptors and unproven profile names keep their behavior", () => {
   let named!: ReturnType<typeof acquired>, unnamed!: ReturnType<typeof acquired>, unproven!: ReturnType<typeof acquired>;
   const c = home(rev => {
-    named = buildPromotedCharacter({ label: "Mira", established: { name: "Mira", sex: "female", descriptor: "woman" }, evidence: ['Mira: "Mira."'], location_id: LR, trigger: "name_established", promoted_revision: rev, world_minute: minuteNow });
+    named = buildMaterializedCharacter({ label: "Mira", established: { name: "Mira", sex: "female", descriptor: "woman" }, evidence: ['Mira: "Mira."'], location_id: LR, trigger: "name_established", promoted_revision: rev, world_minute: minuteNow });
     unnamed = acquired(rev);
     unproven = { ...acquired(rev), id: "campaign_character_unproven", profile: { name: "UNPROVEN_NAME" } };
     return [named, unnamed, unproven].map(character => ({ kind: "register_character" as const, character }));
@@ -84,10 +84,10 @@ test("promotion-time names, unnamed descriptors and unproven profile names keep 
   assert.doesNotMatch(JSON.stringify(play(c)), /UNPROVEN_NAME/);
 });
 
-test("old saves: no name_source still loads; a promotion-time name shows, an unproven late profile name is not inferred", () => {
+test("old saves: no name_source still loads; a materialization-time name shows, an unproven late profile name is not inferred", () => {
   let old!: ReturnType<typeof acquired>, legacyLate!: ReturnType<typeof acquired>;
   const c = roundTrip(home(rev => {
-    old = buildPromotedCharacter({ label: "Sovela", established: { name: "Sovela" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: rev, world_minute: minuteNow });
+    old = buildMaterializedCharacter({ label: "Sovela", established: { name: "Sovela" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: rev, world_minute: minuteNow });
     legacyLate = { ...acquired(rev), profile: { name: "Mira", sex: "female" } }; // late-named before name provenance existed
     return [old, legacyLate].map(character => ({ kind: "register_character" as const, character }));
   }));

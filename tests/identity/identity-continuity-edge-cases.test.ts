@@ -13,7 +13,7 @@ import { RetrievalService } from "../../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../../src/retrieval/hybrid-search.js";
 import type { TurnResult } from "../../src/turn/turn-types.js";
 import { createSaveFile, decodeSave, serializeSave } from "../../src/persistence/save-format.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { collect, metadata } from "../support/turn-fixtures.js";
 
 /**
@@ -44,7 +44,7 @@ function harness(c: CampaignState, sink?: (r: TurnDebugRecord) => void) {
     assert.equal(last.type, "turn_completed", `${input}: ${JSON.stringify(last).slice(0, 300)}`);
     return (last as { result: TurnResult }).result;
   };
-  /** Actual Offer V1: the player's explicit accept action on the standing offer, as GameSession performs it (settle, then the promoted scene participant retires). */
+  /** Actual Offer V1: the player's explicit accept action on the standing offer, as GameSession performs it (settle, then the materialized scene participant retires). */
   const accept = () => {
     const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands");
     c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
@@ -55,7 +55,7 @@ function harness(c: CampaignState, sink?: (r: TurnDebugRecord) => void) {
 }
 
 // ------------------------------------------------------------------------------------------------ naming vs movement
-test("naming while Nicco moves: the person may be left behind, so nobody is promoted anywhere (H1 location_changed)", async () => {
+test("naming while Nicco moves: the person may be left behind, so nobody is materialized anywhere (H1 location_changed)", async () => {
   const c = campaign(), step = harness(c);
   const r = await step("*walks into Heartstone*", 'As Nicco reaches the door, the chestnut boy calls after him, "I\'m Tomas, sir!" Nicco steps inside.');
   assert.deepEqual(r.identity?.skipped, [{ name: "Tomas", reason: "location_changed" }]);
@@ -69,7 +69,7 @@ test("naming on a stationary turn after arrival reports the provisional person a
   assert.deepEqual(r.identity?.provisional.map(p => p.location_id), [MARKET]);
   assert.equal(named(c, "Oswin").length, 0, "no Campaign Character from narration");
 });
-test("canonical NPC names are never promoted as narrator-created people", async () => {
+test("canonical NPC names are never materialized as narrator-created people", async () => {
   const c = campaign(MARKET), step = harness(c);
   const r = await step("What's your name?", '"Korvin," the slaver says.');
   assert.deepEqual([r.identity?.provisional, named(c, "Korvin").length], [[], 0]);
@@ -92,7 +92,7 @@ test("unnamed purchased person names herself after a scene change: same ID, lega
   await step("How much for the girl?", 'The slaver shrugs. "Three gold for the girl. No papers."');
   const offer = step.accept();
   const id = offer.subject.kind === "person" ? offer.subject.subject_character_id : undefined;
-  assert.ok(id, "purchase promoted the unnamed girl");
+  assert.ok(id, "purchase materialized the unnamed girl");
   assert.equal(c.exportSnapshot().characters.find(x => x.id === id)!.profile.name, undefined);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: id }] }); // fixture state, not inferred
   await step("/go heartstone_lr", "Nicco walks home alone.");                              // scene change; she stays (no follow)
@@ -109,7 +109,7 @@ test("unnamed purchased person names herself after a scene change: same ID, lega
   };
   check(c); check(roundTrip(c));
 });
-test("a present persistent person is never re-promoted when narration repeats her name", async () => {
+test("a present persistent person is never re-materialized when narration repeats her name", async () => {
   const M = "campaign_character_maren", c = campaign(SQUARE, [person(M, "Maren", SQUARE)]), step = harness(c);
   const r = await step("What's your name?", '"Maren," she says again.');
   assert.deepEqual([r.identity?.provisional, named(c, "Maren").map(x => x.id)], [[], [M]]);
@@ -126,7 +126,7 @@ test("a person who stays behind and is revisited keeps one record and one locati
 // ------------------------------------------------------------------------------------------------ identity skip diagnostic
 test("an identity preparation failure skips the identity step, still commits the turn, and is observable (result + debug sink)", async () => {
   const c = campaign(LR), records: TurnDebugRecord[] = [], step = harness(c, r => records.push(r));
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies on the sofa."], location_id: LR, trigger: "purchase_unnamed_subject",
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies on the sofa."], location_id: LR, trigger: "purchase_unnamed_subject",
     promoted_revision: c.revision + 1, world_minute: c.exportSnapshot().runtime.scene.world_time.world_minute });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }] });
   await step("*lets her rest on the sofa*", "*The tall woman lies on the sofa, her breathing shallow and feverish.*\n\nWhat do I call you.");

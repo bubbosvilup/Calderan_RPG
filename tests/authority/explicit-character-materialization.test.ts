@@ -5,8 +5,8 @@ import { loadWorld } from "../../src/world/loader.js";
 import { createOpeningCampaign } from "../../src/campaign/opening-state.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
-import { narratorEphemeralCharacters } from "../../src/campaign/promotion.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { narratorEphemeralCharacters } from "../../src/campaign/materialization.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { activeTradeOffer } from "../../src/campaign/trade.js";
 import { CONTROLLER_SCHEMA } from "../../src/llm/controller-schema.js";
 import { authorizeCommands } from "../../src/turn/authorization/command-authorizer.js";
@@ -61,7 +61,7 @@ test("A3: repeated narration about the same person reuses ONE provisional identi
   assert.equal(createdCount(c), 0);
 });
 test("A4: an existing persistent person is reused: late naming sets the name on the SAME record, no second record", () => {
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies on the sofa."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 3, world_minute: 600 });
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: ["The woman lies on the sofa."], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 3, world_minute: 600 });
   const c = createOpeningCampaign(world, `auth2_a4_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR, time_advance_minutes: 0 } }] });
   const minute = c.exportSnapshot().runtime.scene.world_time.world_minute;
@@ -127,7 +127,7 @@ test("A11: save/load never turns a provisional person into a persistent one (not
   assert.ok(!again.exportSnapshot().characters.some(x => x.profile.name === "Hollis"));
 });
 test("A12: legacy persistent characters created by the old name-driven rule stay valid and keep working", () => {
-  const legacy = buildPromotedCharacter({ label: "Mira", established: { name: "Mira", sex: "female", descriptor: "woman" }, evidence: ['Mira: "Mira."'], location_id: LR, trigger: "name_established", promoted_revision: 2, world_minute: 600, name_source: "self_disclosed" });
+  const legacy = buildMaterializedCharacter({ label: "Mira", established: { name: "Mira", sex: "female", descriptor: "woman" }, evidence: ['Mira: "Mira."'], location_id: LR, trigger: "name_established", promoted_revision: 2, world_minute: 600, name_source: "self_disclosed" });
   const c = createOpeningCampaign(world, `auth2_a12_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
   const minute = c.exportSnapshot().runtime.scene.world_time.world_minute;
@@ -144,9 +144,9 @@ test("AUTH-2 producer audit (source): the only places that build or register a n
   for (const f of files) {
     if (f.startsWith("src/dev/")) continue;
     const code = (await readFile(f, "utf8")).replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
-    if (/buildPromotedCharacter\(/.test(code)) builders.push(f);
+    if (/buildMaterializedCharacter\(/.test(code)) builders.push(f);
     if (/kind: "register_character"/.test(code) && f !== "src/campaign/types.ts") registrars.push(f);
   }
-  assert.deepEqual(builders.sort(), ["src/campaign/promotion.ts", "src/turn/identity/provisional-people.ts"]);
+  assert.deepEqual(builders.sort(), ["src/campaign/materialization.ts", "src/turn/identity/provisional-people.ts"]);
   assert.deepEqual(registrars.sort(), ["src/turn/commerce/person-offers.ts", "src/turn/identity/keep-track.ts"]);
 });

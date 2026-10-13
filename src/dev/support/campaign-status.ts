@@ -3,7 +3,7 @@ import type { CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import { characterView } from "../../campaign/projections.js";
 import { describeDimensions, relationshipHeadline } from "../../campaign/relationship-summary.js";
-import { narratorEphemeralCharacters } from "../../campaign/promotion.js";
+import { narratorEphemeralCharacters } from "../../campaign/materialization.js";
 
 /**
  * Household Pass 1 deterministic status, derived only from committed campaign state (never from prose). The player view shows
@@ -35,10 +35,10 @@ export function formatCampaignStatus(snapshot: DeepReadonly<CampaignSnapshot>, w
     for (const e of edges) lines.push(`  ${name(e.from_character_id)} → ${name(e.to_character_id)}: ${relationshipHeadline(e)}${view === "debug" ? ` (${describeDimensions(e)})` : ""}`);
   }
   // Promotion Pass 1.1 (debug only): who became persistent from narration, when, and exactly what was established at that moment.
-  const promoted = view === "debug" ? narratorEphemeralCharacters(snapshot) : [];
-  if (promoted.length) {
+  const materialized = view === "debug" ? narratorEphemeralCharacters(snapshot) : [];
+  if (materialized.length) {
     lines.push("Promoted characters:");
-    for (const c of promoted) {
+    for (const c of materialized) {
       const o = c.origin_snapshot!, e = o.established, l = snapshot.legal_statuses.find(x => x.character_id === c.id);
       const household = snapshot.households.filter(h => h.members.some(m => m.character_id === c.id && m.status === "member")).map(h => h.name ?? h.id);
       const age = e.age ? (e.age.kind === "exact" ? `${e.age.years}` : e.age.description) : undefined;

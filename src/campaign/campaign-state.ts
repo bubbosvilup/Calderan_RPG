@@ -65,7 +65,7 @@ export function prepareCampaignChange(base: DeepReadonly<CampaignSnapshot>, worl
     else if (!prepareCharacterCommand(context, command) && !prepareItemCommand(context, command) && !prepareSocialCommand(context, command) && !prepareAgendaCommand(context, command) && !prepareLegalCommand(context, command) && !preparePremiumCommand(context, command) && !preparePortraitCommand(context, command) && !preparePlayerCharacterCommand(context, command) && !prepareTradeCommand(context, command, apply)) fail("command", "unsupported command");
   };
   for (const command of proposal.commands) {
-    // A settlement plan holds only promotion, legal status and transfer commands; trade commands never nest.
+    // A settlement plan holds only materialization, legal status and transfer commands; trade commands never nest.
     apply(command);
   }
   // Actual Offer V1: an active offer that this change made unsettleable (scene change, item gone, person gone) is invalidated in the same revision.

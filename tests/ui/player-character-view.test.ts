@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { WorldStore } from "../../src/world/world-store.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import { learnCanonicalName } from "../../src/campaign/identity-knowledge.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { playerCharacterProjection } from "../../src/app/player-character-view.js";
 import { derivePlayUiView } from "../../src/app/play-ui-view.js";
 import { deriveSessionView } from "../../src/app/session-view.js";
@@ -87,7 +87,7 @@ test("name discovery alone never unlocks history, biography or another character
 });
 test("campaign appearance and sourced history use established origin, never unproven profile overrides", () => {
   const f = fixture();
-  const created = buildPromotedCharacter({ label: "Lina", trigger: "name_established", location_id: "audit_room", promoted_revision: f.campaign.revision + 1, world_minute: 600,
+  const created = buildMaterializedCharacter({ label: "Lina", trigger: "name_established", location_id: "audit_room", promoted_revision: f.campaign.revision + 1, world_minute: 600,
     established: { name: "Lina", appearance: ["A linen cap and an old scar."], role: "Porter", condition: ["bruised"], background: [{ text: "She says she worked at the harbor.", source: "self" }] }, evidence: ["Lina introduced herself."] });
   created.profile.appearance = { description: "UNPROVEN_PROFILE_APPEARANCE" };
   f.campaign.apply({ expected_revision: f.campaign.revision, commands: [{ kind: "register_character", character: created }] });

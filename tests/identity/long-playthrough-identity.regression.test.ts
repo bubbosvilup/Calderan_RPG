@@ -31,7 +31,7 @@ function view(campaign: CampaignState) {
   return derivePlayUiView(world, snapshot, deriveSessionView(world, snapshot, { status: "idle", last_saved_revision: null, provider: { mode: "stub", configured: true } }));
 }
 
-test("audit (fixed): non-colliding quoted self-name answers the reciprocal introduction and promotes a durable scene member once", () => {
+test("audit (fixed): non-colliding quoted self-name answers the reciprocal introduction and, once authorized, materializes a durable scene member once", () => {
   const campaign = fresh(), first = exchange(input1, '"Sovela." the woman says.');
   const resolution = names(campaign, [first]);
   assert.equal(resolution.provisional[0]?.name, "Sovela");
@@ -58,7 +58,7 @@ test("audit (fixed): an absent canonical Mira Thorne no longer blocks a distinct
   }
 });
 
-for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name} self-answer promotes on the reciprocal turn; confirmation does not duplicate`, () => {
+for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name} self-answer materializes once, after authorization, on the reciprocal turn; confirmation does not duplicate`, () => {
   const campaign = fresh(), first = exchange(input1, `*The woman looks at Nicco.*\n${name}.`), second = exchange(`so your name is ${name}?`, `*The woman nods.*\n${name}.`);
   const resolution = names(campaign, [first]);
   assert.deepEqual(resolution.provisional.map(p => p.name), [name]);
@@ -69,7 +69,7 @@ for (const name of ["Mira", "Sovela"]) test(`audit (fixed): unquoted RPG ${name}
   assert.ok(history.forPrompt().some(e => e.narration.includes(`${name}.`)));
 });
 
-test("audit (fixed): promotion keeps attributed evidence and narrator context keeps the self-disclosure source after history eviction", () => {
+test("audit (fixed): materialization keeps attributed evidence and narrator context keeps the self-disclosure source after history eviction", () => {
   const campaign = fresh(), introduction = exchange("What's your name?", '"My name is Sovela," the woman says.');
   applyAuthorized(campaign, names(campaign, [introduction]));
   const person = campaign.exportSnapshot().characters.find(c => c.profile.name === "Sovela")!;

@@ -7,7 +7,7 @@ import { RetrievalService } from "../../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../../src/retrieval/hybrid-search.js";
 import type { GenerationRequest } from "../../src/llm/types.js";
 import type { TurnResult } from "../../src/turn/turn-types.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { activeTradeOffer } from "../../src/campaign/trade.js";
 import { collect, metadata } from "../support/turn-fixtures.js";
 
@@ -222,11 +222,11 @@ test("seller continuity: 'That's Brenna.' in the exchange that describes the one
   assert.equal(after.transactions.filter(t => t.kind === "sale").length, 1);
 });
 
-test("seller continuity: a woman promoted by name BEFORE she was narrated as held (no captive role) is still the captive the seller later prices as 'the woman' — no unnamed duplicate", async () => {
+test("seller continuity: a woman materialized under a name BEFORE she was narrated as held (no captive role) is still the captive the seller later prices as 'the woman' — no unnamed duplicate", async () => {
   const s = scene();
   await s.turn("*looks around the market*", SELLER_SCENE);
   await s.turn(INTRO_INPUT, INTRO);
-  const brenna = buildPromotedCharacter({ label: "Brenna", established: { name: "Brenna", sex: "female", descriptor: "woman" }, evidence: ['Someone: "Brenna. Thirty-two."'], location_id: MARKET, trigger: "name_established", promoted_revision: s.campaign.revision + 1, world_minute: s.campaign.exportSnapshot().runtime.scene.world_time.world_minute });
+  const brenna = buildMaterializedCharacter({ label: "Brenna", established: { name: "Brenna", sex: "female", descriptor: "woman" }, evidence: ['Someone: "Brenna. Thirty-two."'], location_id: MARKET, trigger: "name_established", promoted_revision: s.campaign.revision + 1, world_minute: s.campaign.exportSnapshot().runtime.scene.world_time.world_minute });
   s.campaign.apply({ expected_revision: s.campaign.revision, commands: [{ kind: "register_character", character: brenna }] });
   await s.turn("let's see the northener.", "*The short man leads Nicco to a pen where a woman sits chained to a wooden post, skin flushed with fever.*\n\nShe's tougher than she looks right now.");
   await s.turn("name your price Korvin", "*The short man glances back at the pen, at the chained woman slumped against the post.*\n\nFive gold. Clean transfer, no liens on her. Papers are yours.");

@@ -71,7 +71,7 @@ export function tradeOfferInvalidReason(s: DeepReadonly<CampaignSnapshot>, offer
     const registers = subject.plan.find(c => c.kind === "register_character");
     const existing = s.characters.find(c => c.id === subject.subject_character_id);
     if (registers && registers.kind === "register_character") {
-      // The narrated person was promoted by another path since the offer was made (same ephemeral reference): this offer is stale.
+      // The narrated person was materialized by another path since the offer was made (same ephemeral reference): this offer is stale.
       const ref = registers.character.origin_snapshot?.ephemeral_ref;
       if (existing || (ref !== undefined && s.characters.some(c => c.origin_snapshot?.ephemeral_ref === ref))) return "person_unavailable";
     } else {
@@ -212,7 +212,7 @@ export function prepareTradeCommand(context: PreparationContext, command: Campai
       } else {
         const transfer = subject.plan.find(c => c.kind === "transfer_person");
         if (purse < offer.price_gold) fail(TRADE_FIELD, "insufficient_funds");
-        // A narrated captive is promoted by the settlement itself: the promotion is stamped with the revision and minute it actually commits at.
+        // A narrated captive is materialized by the settlement itself: the materialization is stamped with the revision and minute it actually commits at.
         for (const stored of subject.plan) {
           const step = structuredClone(stored) as CampaignCommand;
           if (step.kind === "register_character" && step.character.origin_snapshot) step.character.origin_snapshot = { ...step.character.origin_snapshot, promoted_revision: nextRevision, promoted_world_minute: minute };

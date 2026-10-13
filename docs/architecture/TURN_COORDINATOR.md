@@ -233,7 +233,7 @@ See [the repair report](../evaluations/archive/RUNTIME_CONTINUITY_REPAIR_1.md).
 
 See [the pass report](../evaluations/archive/HOUSEHOLD_SLAVE_TRADE_RELATIONSHIP_RUNTIME_PASS_1.md).
 
-- **Person trades (Actual Offer V1)** no longer settle from player prose. A person sale is read from the delivered narration (`src/turn/commerce/person-offers.ts`) as a *TradeOffer* whose settlement plan (`register_character` / `set_legal_status` / `transfer_person`) is stored, not executed. It settles only when the player clicks Accept (`GameSession.acceptTradeOffer`), which re-stamps the promotion and commits atomically. Typing "deal" or narrated payment never settles; narrated payment is reconciled as `asserts_uncommitted_purchase`. `src/turn/commerce/person-transactions.ts` keeps only identity, seller binding and legal-transfer helpers. See [ACTUAL_OFFER_V1](../evaluations/ACTUAL_OFFER_V1.md).
+- **Person trades (Actual Offer V1)** no longer settle from player prose. A person sale is read from the delivered narration (`src/turn/commerce/person-offers.ts`) as a *TradeOffer* whose settlement plan (`register_character` / `set_legal_status` / `transfer_person`) is stored, not executed. It settles only when the player clicks Accept (`GameSession.acceptTradeOffer`), which re-stamps the materialization and commits atomically. Typing "deal" or narrated payment never settles; narrated payment is reconciled as `asserts_uncommitted_purchase`. `src/turn/commerce/person-transactions.ts` keeps only identity, seller binding and legal-transfer helpers. See [ACTUAL_OFFER_V1](../evaluations/ACTUAL_OFFER_V1.md).
 - **Household membership, household rules and relationship steps** are controller proposals, each confirmed by its own evidence:
   - a join or departure needs the chooser's own voiced words (`src/turn/authorization/household-evidence.ts`);
   - a rule needs the player's explicit rule declaration;
@@ -253,8 +253,8 @@ See [the pass report](../evaluations/archive/NARRATOR_EPHEMERAL_CHARACTER_PROMOT
 - **Purchase (superseded by Actual Offer V1: the subject and seller reading below now builds a pending person offer, settled only by the player's Accept).** `resolvePersonTransactions` may now choose such a captive as the one exact subject. The subject resolves in this order: the player's reference, then the latest price talk, then the only candidate, then the only one mentioned in the latest narration.
 - **Seller authority.** It must come from the seller's own statement: an ownership claim, or an explicit offer or price in reply to a price request. Presence or description never counts.
 - **One proposal (now the stored offer plan, executed at acceptance).** The purchase emits `register_character` (with an immutable `origin_snapshot`), then `set_legal_status` (enslaved under the seller), then the ordinary `transfer_person` sale. The coordinator prevalidates all of it before narration, and a failure anywhere drops everything. It commits in one revision.
-- **After promotion.** The projected context already shows the persistent character, and a linked temporary scene participant is retired, so nobody appears twice.
-- **Promotion primitive.** `src/campaign/promotion.ts` holds the generic primitive: established facts only, collision-safe revision-scoped IDs, and the query hook `narratorEphemeralCharacters`. Only person trade settlement is production-wired (via accepted person offers).
+- **After materialization.** The projected context already shows the persistent character, and a linked temporary scene participant is retired, so nobody appears twice.
+- **Materialization primitive** (PROVISIONAL → PERSISTENT; not NPC+ promotion). `src/campaign/materialization.ts` holds the generic primitive: established facts only, collision-safe revision-scoped IDs, and the query hook `narratorEphemeralCharacters`. Production callers go through `materializeProvisional`: the player's Keep track and accepted person offers.
 
 
 ## Narrator Character Persistence Pass 1.2
@@ -263,7 +263,7 @@ See [the pass report](../evaluations/archive/NARRATOR_CHARACTER_PERSISTENCE_PASS
 
 - **Model.** A narrator-created person follows one path: proper name established, then campaign character, then household join, then NPC+ (not implemented). There is one exception: an unnamed person the player acquires. There is no importance scoring, and no promotion from dialogue, wounds, healing, gifts, witnessing or rumors.
 - **Name establishment.** `src/turn/identity/name-establishment.ts` runs deterministically on the **delivered** narration at finalization, after the audit and before commit. Its commands join the already-validated turn proposal. If the combined proposal fails validation, the identity changes are dropped and the turn still commits.
-  - It promotes a person named in this exchange who is present in the scene: acting, speaking, self-introduced, or introduced by narration's own voice. **Superseded by block 5B (AUTH-2):** narration creates at most a PROVISIONAL person; see [Architecture](../ARCHITECTURE.md) §2c.
+  - It materialized a person named in this exchange who is present in the scene: acting, speaking, self-introduced, or introduced by narration's own voice. **Superseded by block 5B (AUTH-2):** narration creates at most a PROVISIONAL person; see [Architecture](../ARCHITECTURE.md) §2c.
   - It gives a name to a present *unnamed* persistent character who introduces themselves (`set_profile`). The ID, origin snapshot, legal state, household and relationships are unchanged.
   - A linked temporary scene participant is retired.
 - **Captivity attribution.** The scene reading (`narration-facts/scene-identity.ts`, `person-facts.ts`; formerly `narrated-captives.ts`) attaches captivity markers to the nearest person reference ("Korvin studies the woman in the cage" marks the woman), and resolves pronouns by established sex.
@@ -272,7 +272,7 @@ See [the pass report](../evaluations/archive/NARRATOR_CHARACTER_PERSISTENCE_PASS
   - It writes the post-sale legal state directly (enslaved, holder = buyer).
   - Payment leaves the tracked economy (no payee).
   - The ledger keeps the snapshot as provenance.
-- **Named sellers.** A named narrator-created seller is promoted by the ordinary name rule inside the purchase proposal.
+- **Named sellers.** A named narrator-created seller is materialized by the ordinary name rule inside the purchase proposal.
 
 
 ## Campaign Character Location Continuity Pass 1.3

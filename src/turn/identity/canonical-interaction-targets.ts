@@ -104,7 +104,7 @@ function narratedMention(narration: string, head: string): string | undefined {
 export interface CastingOptions {
   /** Latest finalized narration of the current scene: the person a definite reference ("the seller") points back to. */
   readonly narration?: string;
-  /** Head nouns already owned by an established temporary participant or promoted person: never re-cast as canonical. */
+  /** Head nouns already owned by an established temporary participant or materialized person: never re-cast as canonical. */
   readonly owned?: ReadonlySet<string>;
   /** The whole player turn is a direct identity request even when `text` is only one clause of it (see exclusiveCanonicalMatch). */
   readonly identity_request?: boolean;

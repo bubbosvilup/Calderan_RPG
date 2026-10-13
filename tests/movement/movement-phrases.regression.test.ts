@@ -25,7 +25,7 @@ import { collect, metadata } from "../support/turn-fixtures.js";
 /**
  * Hardening H5.1 — the two live-confirmed engine defects from H5 (docs/evaluations/CALDREVAN_HARDENING_H5_LIVE_EVAL.md):
  *  A. common natural movement / departure / carry phrasing was narrated as movement while runtime state did not move (0/119);
- *  B. a narrated captive was promoted and bought during a purchase while the scene already held the intended persistent captive.
+ *  B. a narrated captive was materialized and bought during a purchase while the scene already held the intended persistent captive.
  * Movement phrases are the exact H5 scenario inputs; the purchase narration is the exact recovered H5 soak-run text (truncated at
  * the recorder's 400-character excerpt bound; the one completion is marked).
  */

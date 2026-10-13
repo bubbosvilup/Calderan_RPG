@@ -98,15 +98,15 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   const home = (id: string) => { const e = world.getEntity(id); return e?.type === "character" && (e.base_location ?? e.location) ? [e.base_location ?? e.location!, ...world.getAncestors((e.base_location ?? e.location)!).map(a => a.id)] : []; };
   // Repair 1: a pronoun from authored sex only (never inferred from a name), used to disambiguate "he"/"she" in evidence.
   const pronoun = (id: string) => { const e = world.getEntity(id); return e?.type === "character" && e.sex === "male" ? { pronoun: "he" as const } : e?.type === "character" && e.sex === "female" ? { pronoun: "she" as const } : {}; };
-  // Promotion Pass 1.1: a promoted person keeps their established identity without the old transcript: an unnamed one is shown by
-  // the promotion label ("the girl"; never an invented name), and established background travels with its source.
+  // Promotion Pass 1.1: a materialized person keeps their established identity without the old transcript: an unnamed one is shown by
+  // the materialization label ("the girl"; never an invented name), and established background travels with its source.
   // Name provenance (created characters): one fixed sentence from profile.name_source, so how the name was learned outlives the
   // recent transcript. Unknown provenance says nothing.
-  const promoted = (id: string) => { const record = snapshot.characters.find(c => c.id === id), o = record?.origin_snapshot, source = record?.profile.name ? record.profile.name_source : undefined;
+  const materializedOrigin = (id: string) => { const record = snapshot.characters.find(c => c.id === id), o = record?.origin_snapshot, source = record?.profile.name ? record.profile.name_source : undefined;
     return o ? { label: o.label, ...(source ? { name_provenance: NAME_PROVENANCE[source] } : {}), ...(o.established.role ? { role: o.established.role } : {}), ...(o.established.descriptor ? { descriptor: o.established.descriptor } : {}),
     ...(o.established.background?.length ? { background: o.established.background.map(b => `${b.text} (${b.by ? `stated by ${b.by}` : b.source === "seller" ? "stated by the seller" : b.source === "self" ? "stated by them" : b.source === "narration" ? "narrated" : "stated by someone present"})`) } : {}) } : undefined; };
   const labelled = (id: string) => {
-    const full = characterView(snapshot, world, id), o = promoted(id);
+    const full = characterView(snapshot, world, id), o = materializedOrigin(id);
     const { name_source: _source, ...profile } = full.profile, view = { ...full, profile }; // narrated once, via name_provenance
     return o && !view.profile.name ? { ...view, profile: { ...view.profile, name: o.label }, unnamed_label: true as const } : view;
   };
@@ -117,7 +117,7 @@ export function buildTurnContext(world: WorldStore, snapshot: DeepReadonly<Campa
   // effective description), not from separate raw profile and authored blocks. Without campaign values nothing changes.
   const permanent = (id: string) => snapshot.characters.find(c => c.id === id)?.profile.appearance
     ? { permanent_appearance: narratorAppearance(resolvePermanentAppearance(world, snapshot, id, { canonical: true, overrides: true })) } : {};
-  const characters = present.map(id => ({ ...labelled(id), established_origin: promoted(id), ...permanent(id), locality: home(id), ...pronoun(id),
+  const characters = present.map(id => ({ ...labelled(id), established_origin: materializedOrigin(id), ...permanent(id), locality: home(id), ...pronoun(id),
     canonical_awareness: [...(grants.public.get(id) ?? [])],
   }));
   // Hardening H3: restricted (narrator-only) canon a PRESENT character is authored to know. Narrator access for that character

@@ -10,7 +10,7 @@ import type { DeepReadonly } from "../../types/readonly.js";
 
 /**
  * Ephemeral scene participants (Phase 1P): session-local people who exist in the current scene but are not CampaignState
- * characters (a passer-by, a street merchant, an unnamed guard). They are never persisted, never promoted automatically and
+ * characters (a passer-by, a street merchant, an unnamed guard). They are never persisted, never materialized automatically and
  * never create durable mutations; they exist so every character who may speak has a narrator-facing knowledge scope and a
  * minimal continuity record. Creation comes only from the resolved player input (deterministic), never from the controller.
  *
@@ -109,7 +109,7 @@ export function participantForNoun(noun: string, participants: readonly Ephemera
 
 /**
  * Casting inputs for canonical reference resolution: the latest finalized narration of this scene (what a definite reference points
- * back to) and the head nouns already owned by an established temporary participant or promoted person (never re-cast as canonical).
+ * back to) and the head nouns already owned by an established temporary participant or materialized person (never re-cast as canonical).
  */
 export function castingOptions(context: TurnContext, participants: readonly EphemeralSceneParticipant[], recent: readonly RecentExchange[]): CastingOptions {
   const location = context.primary.scene.player_location?.id;

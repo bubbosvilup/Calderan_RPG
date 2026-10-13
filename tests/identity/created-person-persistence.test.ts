@@ -4,7 +4,7 @@ import { loadWorld } from "../../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD, OPENING_LOCATION } from "../../src/campaign/opening-state.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
-import { narratorEphemeralCharacters } from "../../src/campaign/promotion.js";
+import { narratorEphemeralCharacters } from "../../src/campaign/materialization.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
 import { asPlan, readOffer } from "../support/offer-fixtures.js";
 import { activeTradeOffer } from "../../src/campaign/trade.js";
@@ -28,7 +28,7 @@ const world = await loadWorld("data");
 const MARKET = "calderan_slave_market";
 let serial = 0;
 const created = (c: CampaignState) => c.exportSnapshot().characters.filter(x => x.origin.kind === "created");
-const promoted = (c: CampaignState) => narratorEphemeralCharacters(c.exportSnapshot());
+const materialized = (c: CampaignState) => narratorEphemeralCharacters(c.exportSnapshot());
 const gold = (c: CampaignState) => c.exportSnapshot().funds.find(f => f.character_id === "nicco")!.gold;
 const members = (c: CampaignState) => c.exportSnapshot().households.find(h => h.id === OPENING_HOUSEHOLD)!.members.filter(m => m.status === "member" && m.role !== "owner").map(m => m.character_id);
 const roundTrip = (c: CampaignState) => CampaignState.restore(world, decodeSave(serializeSave(createSaveFile(c.exportSnapshot(), world, "2026-10-01T12:00:00.000Z"), world), world).snapshot);
@@ -65,7 +65,7 @@ test("chestnut boy (negative): talking, a wound, secret healing and a witness cr
     assert.deepEqual([r.identity?.provisional, r.identity?.named], [[], []], input);
   }
   const after = c.exportSnapshot();
-  assert.deepEqual([created(c), promoted(c)], [[], []]);
+  assert.deepEqual([created(c), materialized(c)], [[], []]);
   assert.deepEqual([after.relationships, after.households, after.legal_statuses, after.transactions], [before.relationships, before.households, before.legal_statuses, before.transactions]);
   assert.ok(!after.characters.some(x => x.origin_snapshot)); // no persistent condition or origin record for the boy or the witness
 });
@@ -76,7 +76,7 @@ test("chestnut boy (contrast, AUTH-2): learning his name keeps him the SAME prov
   for (const [input] of CHESTNUTS) await run(co, c, input);
   const named = await run(co, c, "What's your name?");
   assert.deepEqual(named.identity?.provisional.map(p => [p.name, p.participant_id]), [["Tomas", "scene_npc_1"]]); // the boy the player addressed (P1)
-  assert.equal(promoted(c).length, 0); assert.equal(created(c).length, 0, "the name is not persistence authority");
+  assert.equal(materialized(c).length, 0); assert.equal(created(c).length, 0, "the name is not persistence authority");
   const tomas = named.identity!.provisional[0]!;
   assert.deepEqual([tomas.name, tomas.established.sex, tomas.established.age, tomas.established.species, tomas.established.descriptor], ["Tomas", "male", undefined, undefined, "boy"]);
   assert.ok(!tomas.established.background && !tomas.established.role); // nothing invented: no history, no role
@@ -100,7 +100,7 @@ test("name establishment is conservative: absent people, rumors, places, titles,
   // Self-introduction and narration-voice introduction yield a PROVISIONAL person (never persistence); the name alone is enough for that.
   assert.deepEqual(only('A tired porter sets down his crate. "My name is Hollis."').provisional.map(p => p.name), ["Hollis"]);
   assert.deepEqual(only("A thin woman named Lysa sweeps the steps.").provisional.map(p => p.name), ["Lysa"]);
-  // Two different people given the same name in one exchange: unresolved, nobody promoted.
+  // Two different people given the same name in one exchange: unresolved, nobody materialized.
   assert.deepEqual(only('"I\'m Hollis," the porter says. "I\'m Hollis too!" the boy shouts.').provisional, []);
   // A different "Maren" while another Maren exists elsewhere: a distinct (provisional) person, never an alias of the persistent one (names are not identity).
   const other = campaign(MARKET, [{ kind: "register_character", character: { id: "campaign_character_maren", origin: { kind: "created" }, profile: { name: "Maren" }, current: { current_location: "heartstone_lr", status: "active" } } }]);
@@ -129,7 +129,7 @@ test("historical Maren: an unnamed girl bought from an ANONYMOUS whittler — on
   c.apply({ expected_revision: c.revision, commands: r.commands as CampaignCommand[] });
   const s = c.exportSnapshot();
   assert.equal(s.characters.length, charactersBefore + 1);
-  const [girl] = promoted(c); assert.ok(girl);
+  const [girl] = materialized(c); assert.ok(girl);
   assert.deepEqual([girl.profile.name, girl.origin_snapshot!.label, girl.origin_snapshot!.trigger], [undefined, "the girl", "purchase_unnamed_subject"]);
   assert.ok(!s.characters.some(x => /whittler/i.test(`${x.profile.name ?? ""} ${x.origin_snapshot?.label ?? ""}`)));
   const legal = s.legal_statuses.find(l => l.character_id === girl.id)!;
@@ -147,7 +147,7 @@ test("historical Maren: an unnamed girl bought from an ANONYMOUS whittler — on
   assert.doesNotMatch(debug, /Promoted characters:[\s\S]*whittler \(campaign_character/);
 });
 
-/** Actual Offer V1: the player's explicit accept action on the standing offer, as GameSession does it (settlement, then the promoted scene participant retires). */
+/** Actual Offer V1: the player's explicit accept action on the standing offer, as GameSession does it (settlement, then the materialized scene participant retires). */
 function acceptAsPlayer(co: TurnCoordinator, c: CampaignState) {
   const offer = activeTradeOffer(c.exportSnapshot().trade_offers); assert.ok(offer, "an offer stands");
   c.commit(c.prepare({ expected_revision: c.revision, commands: [{ kind: "accept_trade_offer", offer_id: offer.id }] }));
@@ -158,7 +158,7 @@ test("late naming: the purchased unnamed girl says her name — the SAME charact
   const co = coordinator([WHITTLER[0]!.narration, WHITTLER[1]!.narration, 'The girl lifts her head from the straw. "My name is Maren."', "Maren closes her eyes."], seen);
   await run(co, c, "*looks around*"); await run(co, c, "How much for the girl?");
   acceptAsPlayer(co, c);
-  const [girl] = promoted(c); assert.ok(girl);
+  const [girl] = materialized(c); assert.ok(girl);
   const snapshotBefore = c.exportSnapshot();
   const legalBefore = snapshotBefore.legal_statuses.find(l => l.character_id === girl.id), originBefore = girl.origin_snapshot;
   const r = await run(co, c, "What's your name?");
@@ -167,14 +167,14 @@ test("late naming: the purchased unnamed girl says her name — the SAME charact
   const after = c.exportSnapshot(), maren = after.characters.find(x => x.id === girl.id)!;
   assert.deepEqual([maren.profile.name, maren.origin_snapshot, after.legal_statuses.find(l => l.character_id === girl.id)], ["Maren", originBefore, legalBefore]); // origin still says unnamed
   assert.equal(maren.origin_snapshot!.established.name, undefined);
-  assert.deepEqual([promoted(c).length, members(c), after.relationships, after.transactions], [1, ["campaign_character_brenna"], snapshotBefore.relationships, snapshotBefore.transactions]);
+  assert.deepEqual([materialized(c).length, members(c), after.relationships, after.transactions], [1, ["campaign_character_brenna"], snapshotBefore.relationships, snapshotBefore.transactions]);
   await run(co, c, "Rest, Maren.");
   const prompt = seen.at(-1)!.messages[0]!.content;
   assert.equal(prompt.match(/Character Maren \(/g)?.length, 1); assert.doesNotMatch(prompt, /Character the girl/);
   assert.deepEqual(roundTrip(c).exportSnapshot().characters.find(x => x.id === girl.id)!.profile.name, "Maren");
 });
 
-test("historical Maren, named first: her name promotes her before the sale; the anonymous whittler sells her; no duplicate", async () => {
+test("historical Maren, named first: the sale materializes her under her established name; the anonymous whittler sells her; no duplicate", async () => {
   const c = homeWithBrenna();
   const co = coordinator(["The whittler waves Nicco toward the back of his lot. Behind the bars a thin girl named Maren lies curled on the straw, burning with fever.",
     'The whittler scratches his neck. "Three gold for Maren. No papers, no listing."']);
@@ -182,7 +182,7 @@ test("historical Maren, named first: her name promotes her before the sale; the 
   assert.deepEqual(first.identity?.provisional.map(p => p.name), ["Maren"]);
   await run(co, c, "How much for her?");
   acceptAsPlayer(co, c);
-  const all = promoted(c); assert.equal(all.length, 1);
+  const all = materialized(c); assert.equal(all.length, 1);
   const s = c.exportSnapshot(), legal = s.legal_statuses.find(l => l.character_id === all[0]!.id)!;
   assert.deepEqual([all[0]!.profile.name, all[0]!.origin_snapshot!.trigger, legal.holder_id, legal.transfer!.documentation, s.transactions[0]!.from_counterparty?.label, gold(c), members(c)],
     ["Maren", "name_established", "nicco", "undocumented", "the whittler", 451, ["campaign_character_brenna"]]);
@@ -195,7 +195,7 @@ test("a named narrator-created seller becomes a campaign character by the ordina
   const r = asPlan(readOffer(world, c.exportSnapshot(), "Done. *pays him*", scene, c.revision));
   assert.deepEqual([r.commands.map(x => x.kind), r.diagnostics[0]!.detail.seller_kind], [["register_character", "register_character", "set_legal_status", "transfer_person"], "named"]);
   c.apply({ expected_revision: c.revision, commands: r.commands as CampaignCommand[] });
-  const oswin = promoted(c).find(x => x.profile.name === "Oswin")!;
+  const oswin = materialized(c).find(x => x.profile.name === "Oswin")!;
   assert.deepEqual([oswin.origin_snapshot!.trigger, oswin.profile.sex, c.exportSnapshot().transactions[0]!.from_holder_id, c.exportSnapshot().transactions[0]!.from_counterparty], ["name_established", "male", oswin.id, undefined]);
   assert.equal(c.exportSnapshot().legal_statuses.find(l => l.character_id === oswin.id), undefined); // the seller is not a captive
 });

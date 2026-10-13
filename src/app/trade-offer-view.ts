@@ -59,7 +59,7 @@ export function personLabelOf(snapshot: DeepReadonly<CampaignSnapshot>, characte
   const name = projected ? (projected.name_known ? projected.name : undefined) : record ? knownCreatedName(record) : undefined;
   if (name) return { label: characters.text(name), name_known: true };
   const o = record?.origin_snapshot?.established;
-  // Descriptor sources are limited to what delivered narration established about the person (the promotion origin); canon appearance is never read.
+  // Descriptor sources are limited to what delivered narration established about the person (the materialization origin); canon appearance is never read.
   return { label: slaveLabel(visibleDescriptor([o?.descriptor, record?.origin_snapshot?.label, ...(o?.appearance ?? [])])), name_known: false };
 }
 

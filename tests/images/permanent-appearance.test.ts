@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { loadWorld } from "../../src/world/loader.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../../src/campaign/opening-state.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { applyAppearancePatch, resolvePermanentAppearance } from "../../src/campaign/permanent-appearance.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
@@ -49,9 +49,9 @@ test("canonical baseline prose + profile override, field by field; clearing rest
   assert.deepEqual(resolvePermanentAppearance(world, c.exportSnapshot(), "mira_thorne", { canonical: true }).values, {});
 });
 
-test("created origin evidence + profile override; the promotion-time copy is baseline, not an override; conditions excluded", () => {
+test("created origin evidence + profile override; the materialization-time copy is baseline, not an override; conditions excluded", () => {
   const c = new CampaignState(world, `appearance_${++serial}`, { player_location: LR, world_time: { world_minute: 600 } });
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman", appearance: ["tall", "copper-brown hair"], condition: ["feverish"] }, evidence: [], location_id: LR,
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman", appearance: ["tall", "copper-brown hair"], condition: ["feverish"] }, evidence: [], location_id: LR,
     trigger: "purchase_unnamed_subject", promoted_revision: c.revision + 1, world_minute: 600 });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }] });
   assert.equal(woman.profile.appearance?.description, "tall; copper-brown hair");
@@ -86,9 +86,9 @@ async function miraSession() {
   const c = createOpeningCampaign(world, id);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
   const minute = c.exportSnapshot().runtime.scene.world_time.world_minute;
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman", appearance: ["tall and gaunt"], condition: ["feverish"] }, evidence: ["The woman lies in the cage."],
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman", appearance: ["tall and gaunt"], condition: ["feverish"] }, evidence: ["The woman lies in the cage."],
     location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: c.revision + 1, world_minute: minute });
-  const plain = buildPromotedCharacter({ label: "Sovela", established: { name: "Sovela" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: minute });
+  const plain = buildMaterializedCharacter({ label: "Sovela", established: { name: "Sovela" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: minute });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }, { kind: "register_character", character: plain }, { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: woman.id }] });
   const named = establishNames(LATE, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision);
   c.apply({ expected_revision: c.revision, commands: [...named.commands] as CampaignCommand[] });
@@ -108,7 +108,7 @@ test("Mira: open shows resolved appearance with nothing stored; a narrow save ch
   assert.ok(before, "header says Mira (late-named), not the woman");
   assert.deepEqual([before.name_known, before.appearance_editor_eligible, before.npc_plus], [true, true, true]);
   const editor = before.appearance_editor!;
-  assert.ok(editor.fields.every(f => f.override === null), "nothing is stored as an override yet (the promotion copy is inherited)");
+  assert.ok(editor.fields.every(f => f.override === null), "nothing is stored as an override yet (the materialization copy is inherited)");
   assert.equal(editor.fields.find(f => f.key === "description")!.inherited, "tall and gaunt");
   assert.ok(editor.identity.some(i => i.label === "Sex" && i.value === "female"));
   assert.doesNotMatch(JSON.stringify(editor), /name_source|self_disclosed|campaign_character|origin|private|feverish|purchase/);
@@ -206,7 +206,7 @@ test("eligibility follows management: an unmanaged or inactive NPC+ and an unman
   const c = createOpeningCampaign(world, `appearance_${++serial}`);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
   const minute = c.exportSnapshot().runtime.scene.world_time.world_minute;
-  const woman = buildPromotedCharacter({ label: "Lysa", established: { name: "Lysa" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: minute });
+  const woman = buildMaterializedCharacter({ label: "Lysa", established: { name: "Lysa" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: minute });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }, { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: woman.id }] });
   const card = () => playerCharacterProjection(world, c.exportSnapshot()).project(woman.id)!;
   assert.equal(card().appearance_editor_eligible, true);
@@ -219,7 +219,7 @@ test("eligibility follows management: an unmanaged or inactive NPC+ and an unman
 
 test("unmanaged readers never see profile appearance values; old saves without appearance still resolve and display", () => {
   const c = new CampaignState(world, `appearance_${++serial}`, { player_location: LR, world_time: { world_minute: 600 } });
-  const lina = buildPromotedCharacter({ label: "Lina", established: { name: "Lina", appearance: ["a long braid"] }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: 600 });
+  const lina = buildMaterializedCharacter({ label: "Lina", established: { name: "Lina", appearance: ["a long braid"] }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: 600 });
   const old = { id: "campaign_character_old", origin: { kind: "created" as const }, profile: { name: "Old" }, current: { current_location: LR, status: "active" as const } };
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: { ...lina, profile: { ...lina.profile, appearance: { ...lina.profile.appearance, build: "UNPROVEN_BUILD" } } } }, { kind: "register_character", character: old }] });
   const projection = playerCharacterProjection(world, c.exportSnapshot());

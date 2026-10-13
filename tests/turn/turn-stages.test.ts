@@ -135,7 +135,7 @@ test("authority guard (source): stages hold no CampaignState and never commit; t
   assert.equal(commits.length, 1, "exactly one authoritative commit");
   assert.equal(coordinator[commits[0]! - 1], "checkpoint();", "the final checkpoint immediately precedes the commit (no await, callback or yield between)");
 });
-test("CommitPreparation: location_changed suppresses new promotions (semantics unchanged by the stage extraction)", () => {
+test("CommitPreparation: location_changed suppresses new materializations (semantics unchanged by the stage extraction)", () => {
   const s = staged("Hello.", "Brenna nods.", []);
   const plan = prepareCommit({ world: s.world, prepare: p => s.campaign.prepare(p), prepared: s.prepared, commands: s.commands, finalized: [], player_input: "Hello.",
     delivered: 'A lean man straightens. "I\'m Oswin," he says.', scene: s.projection.scene, base_revision: s.base_revision, location_changed: true, on_skip: () => {} });

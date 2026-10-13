@@ -208,7 +208,7 @@ const mannerismCandidate = object({ id, character_id: id, canonical_key: id, tex
 const mannerismLearning = object({ sequence: integer(1), processed_sequence: integer(0), last_turn_id: text,
   journal: list(object({ sequence: integer(1), revision: integer(0), event_id: text, narration_hash: text, narration_length: integer(1, 20000), character_ids: distinct(id),
     available_items: list(object({ character_id: id, item_id: id, worn: boolean }), 256) }), 16), candidates: list(mannerismCandidate, 800000) });
-// Actual Offer V1: trade offers. The person plan is the deterministic settlement command list (promotion, legal status, transfer), parsed with the very
+// Actual Offer V1: trade offers. The person plan is the deterministic settlement command list (materialization, legal status, transfer), parsed with the very
 // same command schemas and restricted to those kinds, so an offer can never carry an arbitrary command.
 const shortText: Parser = (input, path) => { if (typeof input !== "string" || !input.trim() || input.length > 160) fail(path, "expected nonempty text, at most 160 characters"); return input; };
 const tradeCounterparty = tagged({ character: object({ kind: choice("character"), character_id: id }), anonymous: object({ kind: choice("anonymous"), label: shortText }) });
@@ -216,7 +216,7 @@ const goodsLine = object({ name: shortText, description: text, visual_descriptio
 export const PERSON_PLAN_KINDS: readonly string[] = ["register_character", "set_legal_status", "transfer_person"];
 const personPlan: Parser = (input, path) => {
   const plan = list((value, field) => tagged(variants)(value, field), 8)(input, path) as { kind: string }[];
-  if (!plan.length || plan.some(c => !PERSON_PLAN_KINDS.includes(c.kind))) fail(path, "a person plan holds only promotion, legal status and transfer commands");
+  if (!plan.length || plan.some(c => !PERSON_PLAN_KINDS.includes(c.kind))) fail(path, "a person plan holds only materialization, legal status and transfer commands");
   return plan;
 };
 const tradeSubject = tagged({ goods: object({ kind: choice("goods"), lines: list(goodsLine, 8) }), items: object({ kind: choice("items"), item_ids: distinct(id) }),

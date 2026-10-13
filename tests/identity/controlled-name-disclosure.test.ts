@@ -87,7 +87,7 @@ test("canonical disclosure commits name-only knowledge, survives reload, and con
   const snapshot = campaign.exportSnapshot();
   assert.ok(snapshot.knowledge.some(edge => edge.character_id === "nicco" && edge.fact_id === identityNameFactId("korvin") && edge.status === "knows"));
   assert.equal(snapshot.runtime.scene.world_time.world_minute, 600);
-  assert.equal(snapshot.characters.filter(character => character.profile.name === "Korvin").length, 0, "no duplicate/promoted replacement NPC");
+  assert.equal(snapshot.characters.filter(character => character.profile.name === "Korvin").length, 0, "no duplicate/materialized replacement NPC");
   assert.ok(!snapshot.knowledge.some(edge => edge.fact_id === identityNameFactId("bartolomhew")));
   const restored = CampaignState.restore(world, JSON.parse(JSON.stringify(snapshot)));
   const known = narratorIdentityGate(buildTurnContext(world, restored.exportSnapshot()))!.identities.get("korvin")!;

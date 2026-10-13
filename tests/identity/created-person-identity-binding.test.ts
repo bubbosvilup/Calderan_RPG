@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { loadWorld } from "../../src/world/loader.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
 import { applyAuthorized } from "../support/provisional-helper.js";
@@ -33,7 +33,7 @@ const fresh = (location = LR, extra: readonly CampaignCommand[] = []) => {
 };
 const at = (player: string, narration: string, location = LR): RecentExchange => ({ player, narration, status: "finalized", location_id: location });
 const names = (c: CampaignState, recent: readonly RecentExchange[]) => establishNames(recent, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision);
-const promotedNames = (c: CampaignState, recent: readonly RecentExchange[]) => names(c, recent).provisional.map(p => p.name);
+const provisionalNames = (c: CampaignState, recent: readonly RecentExchange[]) => names(c, recent).provisional.map(p => p.name);
 const created = (c: CampaignState) => c.exportSnapshot().characters.filter(x => x.origin.kind === "created");
 function view(c: CampaignState) {
   const snapshot = c.exportSnapshot();
@@ -88,8 +88,8 @@ test("exact playthrough: reciprocal question + plain RPG 'Mira.' reports ONE pro
 test("explicit confirmation establishes her once when the first reciprocal form was not a name question", () => {
   const c = fresh();
   const first = at("I'm tired. What about you?", LIVE_ANSWER);
-  assert.deepEqual(promotedNames(c, [WOMAN, first]), []);
-  assert.deepEqual(promotedNames(c, [WOMAN, first, at(CONFIRM, LIVE_CONFIRM)]), ["Mira"]);
+  assert.deepEqual(provisionalNames(c, [WOMAN, first]), []);
+  assert.deepEqual(provisionalNames(c, [WOMAN, first, at(CONFIRM, LIVE_CONFIRM)]), ["Mira"]);
 });
 
 // ------------------------------------------------------------------------------------------------ end-to-end coordinator turns
@@ -123,18 +123,18 @@ test("end-to-end: the reciprocal turn commits NO Mira (AUTH-2); the confirmation
 // ------------------------------------------------------------------------------------------------ other positives
 test("RPG and legacy self-introductions under supported name questions", () => {
   const c = fresh();
-  assert.deepEqual(promotedNames(c, [at("What's your name?", "*The woman looks up from the cot.*\nSovela.")]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("Who are you?", "*The woman looks up.*\n\nSovela!\n\n*She coughs.*")]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("Name's Nicco. And you?", "*The woman pushes up on one elbow.*\nSovela.")]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("Hello.", "*The woman pushes up on one elbow.*\nMy name is Sovela.")]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("Hello.", "*The woman shrugs.*\nCall me Sovela.")]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("Hello.", '"My name is Sovela," the woman says.')]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("Hello.", 'The woman shrugs. "Call me Sovela."')]), ["Sovela"]);
-  assert.deepEqual(promotedNames(c, [at("What's your name?", '"Sovela." the woman says.')]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("What's your name?", "*The woman looks up from the cot.*\nSovela.")]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("Who are you?", "*The woman looks up.*\n\nSovela!\n\n*She coughs.*")]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("Name's Nicco. And you?", "*The woman pushes up on one elbow.*\nSovela.")]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("Hello.", "*The woman pushes up on one elbow.*\nMy name is Sovela.")]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("Hello.", "*The woman shrugs.*\nCall me Sovela.")]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("Hello.", '"My name is Sovela," the woman says.')]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("Hello.", 'The woman shrugs. "Call me Sovela."')]), ["Sovela"]);
+  assert.deepEqual(provisionalNames(c, [at("What's your name?", '"Sovela." the woman says.')]), ["Sovela"]);
 });
 
 test("late naming via RPG: an acquired unnamed woman at Heartstone answering 'Mira.' names the SAME record", () => {
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: [], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600 });
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", descriptor: "woman" }, evidence: [], location_id: LR, trigger: "purchase_unnamed_subject", promoted_revision: 1, world_minute: 600 });
   const c = fresh(LR, [{ kind: "register_character", character: woman }]);
   const r = names(c, [at("*carries her to the sofa*", "*The woman lies on the sofa, burning with fever.*"), at(RECIPROCAL, LIVE_ANSWER)]);
   assert.deepEqual([r.provisional, r.named.map(n => [n.character_id, n.name])], [[], [[woman.id, "Mira"]]]);

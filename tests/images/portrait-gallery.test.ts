@@ -7,7 +7,7 @@ import { once } from "node:events";
 import type { AddressInfo } from "node:net";
 import { loadWorld } from "../../src/world/loader.js";
 import { createOpeningCampaign, OPENING_HOUSEHOLD } from "../../src/campaign/opening-state.js";
-import { buildPromotedCharacter } from "../../src/campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../src/campaign/materialization.js";
 import { appearanceFingerprint, PORTRAIT_NEGATIVE_PROMPT, PORTRAIT_POSE_TEXT, PORTRAIT_PROMPT_VERSION } from "../../src/campaign/portrait-prompt.js";
 import { portraitItemToken, MAX_PORTRAIT_VERSIONS } from "../../src/campaign/portraits.js";
 import { parseCampaignSnapshot } from "../../src/campaign/validation.js";
@@ -84,9 +84,9 @@ async function miraSession(options: Options = {}) {
   let c = createOpeningCampaign(world, id);
   c.apply({ expected_revision: c.revision, commands: [{ kind: "runtime_delta", delta: { player_location: LR } }] });
   const minute = c.exportSnapshot().runtime.scene.world_time.world_minute;
-  const woman = buildPromotedCharacter({ label: "the woman", established: { sex: "female", species: "human", descriptor: "woman", appearance: ["tall and gaunt"], condition: ["feverish"] }, evidence: [], location_id: LR,
+  const woman = buildMaterializedCharacter({ label: "the woman", established: { sex: "female", species: "human", descriptor: "woman", appearance: ["tall and gaunt"], condition: ["feverish"] }, evidence: [], location_id: LR,
     trigger: "purchase_unnamed_subject", promoted_revision: c.revision + 1, world_minute: minute });
-  const plain = buildPromotedCharacter({ label: "Sovela", established: { name: "Sovela" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: minute });
+  const plain = buildMaterializedCharacter({ label: "Sovela", established: { name: "Sovela" }, evidence: [], location_id: LR, trigger: "name_established", promoted_revision: c.revision + 1, world_minute: minute });
   c.apply({ expected_revision: c.revision, commands: [{ kind: "register_character", character: woman }, { kind: "register_character", character: plain }, { kind: "join_household", household_id: OPENING_HOUSEHOLD, character_id: woman.id }] });
   c.apply({ expected_revision: c.revision, commands: [...establishNames(LATE, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision).commands] as CampaignCommand[] });
   options.seed?.(c, woman.id);

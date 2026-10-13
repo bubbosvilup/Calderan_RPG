@@ -103,7 +103,7 @@ export interface ProjectedTurn {
   readonly movable: readonly MovableCharacter[];
   /** The intent as the narrator sees it (plus a left-behind note when Nicco leaves people behind). */
   readonly prompt_intent: TurnIntent;
-  /** Scene participants for this turn, with a just-promoted participant retired so nobody appears twice. */
+  /** Scene participants for this turn, with a just-materialized participant retired so nobody appears twice. */
   readonly scene: SceneParticipantPlan;
 }
 

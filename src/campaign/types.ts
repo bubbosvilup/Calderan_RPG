@@ -48,9 +48,9 @@ export interface CharacterOriginSnapshot {
    */
   trigger: "name_established" | "purchase_unnamed_subject" | "player_kept" | "recruitment" | "custody" | "rescue";
   promoted_revision: number; promoted_world_minute: number; location_id: string;
-  /** How play referred to the person at promotion: an established name, or a description ("the girl") when no name was given. */
+  /** How play referred to the person at materialization: an established name, or a description ("the girl") when no name was given. */
   label: string;
-  /** The session-local scene reference the person had before promotion (a narrated name key or a scene participant ID). */
+  /** The session-local scene reference the person had before materialization (a narrated name key or a scene participant ID). */
   ephemeral_ref?: string;
   established: {
     name?: string; sex?: string; age?: CharacterProfile["age"]; species?: string; role?: string;
@@ -137,7 +137,7 @@ export type TradeCounterparty = { kind: "character"; character_id: string } | { 
 export interface TradeGoodsLine { name: string; description: string; visual_description: string; category?: ItemCategory }
 /**
  * `goods`: BUY lines the engine materializes as separate items on settlement. `items`: SELL, existing authoritative item IDs only. `person`: a person
- * trade; `plan` is the exact deterministic command list (promotion, legal status, transfer_person) computed when the offer was made and re-prepared
+ * trade; `plan` is the exact deterministic command list (materialization, legal status, transfer_person) computed when the offer was made and re-prepared
  * atomically at acceptance, so the existing person-transaction settlement stays the single settlement path.
  */
 export type TradeSubject = { kind: "goods"; lines: TradeGoodsLine[] } | { kind: "items"; item_ids: string[] } | { kind: "person"; subject_character_id: string; plan: CampaignCommand[] };

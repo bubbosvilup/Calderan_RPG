@@ -65,7 +65,7 @@ Class C uses four explicit actions: **Accept** on the Actual Offer card, **Promo
 
 ## Character Lifecycle
 
-A character is **PROVISIONAL**, **PERSISTENT** or **RETIRED**. This is an identity lifecycle, separate from the NPC tiers (canon NPC, Campaign NPC, NPC+, player character).
+A character is **PROVISIONAL**, **PERSISTENT** or **RETIRED**. This is an identity lifecycle, separate from the NPC tiers (canon NPC, Campaign NPC, NPC+, player character). Entering PERSISTENT from PROVISIONAL is called **materialization**; **promotion** means only Campaign NPC → NPC+ (the Heartstone rite).
 
 - **Provisional:** a person the Narrator introduces or names. Scene-local and never saved as a character. A named one is read again from the restored recent exchanges after a reload; a temporary scene participant is not.
 - **Persistent:** a record in the campaign snapshot, entered from Provisional only by an explicit act:

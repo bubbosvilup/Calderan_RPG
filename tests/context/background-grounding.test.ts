@@ -4,7 +4,7 @@ import { loadWorld } from "../../src/world/loader.js";
 import { createOpeningCampaign } from "../../src/campaign/opening-state.js";
 import type { CampaignState } from "../../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
-import { narratorEphemeralCharacters } from "../../src/campaign/promotion.js";
+import { narratorEphemeralCharacters } from "../../src/campaign/materialization.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
 import { asPlan, readOffer } from "../support/offer-fixtures.js";
 import { establishNames } from "../../src/turn/identity/name-establishment.js";
@@ -109,7 +109,7 @@ const buy = (recent: readonly RecentExchange[]) => {
   c.apply({ expected_revision: c.revision, commands: r.commands as CampaignCommand[] });
   return { c, ilsa: narratorEphemeralCharacters(c.exportSnapshot()).find(x => x.profile.name === "Ilsa")! };
 };
-test("F/I. purchase promotion: a verified origin survives; an invented named place is not frozen; other facts unchanged; nothing added", () => {
+test("F/I. purchase materialization: a verified origin survives; an invented named place is not frozen; other facts unchanged; nothing added", () => {
   const verified = buy([intro("Came to me from Davenport, was a net mender on the docks"), OFFER]).ilsa.origin_snapshot!;
   assert.deepEqual(verified.established.background!.map(b => [b.source, b.by]), [["seller", "Korvin"]]); assert.match(verified.established.background![0]!.text, /Came to me from Davenport, was a net mender on the docks/);
   const { c, ilsa } = buy([intro("Came to me from the Marches, was a net mender"), OFFER]);
@@ -117,22 +117,22 @@ test("F/I. purchase promotion: a verified origin survives; an invented named pla
   assert.equal(o.established.background, undefined);
   assert.deepEqual([o.established.name, o.established.age, o.established.sex], ["Ilsa", { kind: "exact", years: 24 }, "female"]); // appearance/age/etc. unchanged
   assert.ok(o.established.appearance?.includes("grey eyes"));
-  // Unknown stays unknown: no origin, occupation, family or reason is invented at promotion.
+  // Unknown stays unknown: no origin, occupation, family or reason is invented at materialization.
   assert.deepEqual(Object.keys(o.established).sort(), ["age", "appearance", "descriptor", "name", "role", "sex"].filter(k => k in o.established).sort());
   // Raw provenance may quote the sentence, but the narrator-facing projection carries no Marches background.
   const projected = buildTurnContext(world, c.exportSnapshot()).characters.find(x => x.id === ilsa.id)!.established_origin!;
   assert.equal(projected.background, undefined);
 });
 test("F2. a provisional person (AUTH-2: never persisted by name alone) carries the same guardrail on self-stated origins", () => {
-  const promote = (line: string) => {
+  const provisionalBackground = (line: string) => {
     const c = market(), recent = [at(`A woman in the nearest pen looks up. "My name is Ilsa," she says. "${line}"`, "What's your name?")];
     const r = establishNames(recent, buildTurnContext(world, c.exportSnapshot()), world, c.exportSnapshot(), [], c.revision);
     assert.ok(!r.commands.some(x => x.kind === "register_character"), "narration + a name never registers a character");
     return r.provisional.find(p => p.name === "Ilsa")!.established.background;
   };
-  assert.deepEqual(promote("I'm from Skardgard.")?.map(b => [b.text, b.source]), [["I'm from Skardgard.", "self"]]);
-  assert.equal(promote("I was born near the Marches."), undefined);
-  assert.deepEqual(promote("I grew up on a farm south of here.")?.map(b => b.text), ["I grew up on a farm south of here."]); // generic is kept
+  assert.deepEqual(provisionalBackground("I'm from Skardgard.")?.map(b => [b.text, b.source]), [["I'm from Skardgard.", "self"]]);
+  assert.equal(provisionalBackground("I was born near the Marches."), undefined);
+  assert.deepEqual(provisionalBackground("I grew up on a farm south of here.")?.map(b => b.text), ["I grew up on a farm south of here."]); // generic is kept
 });
 test("H. an already established origin is authoritative in the block; candidate lore never replaces it", () => {
   const { c, ilsa } = buy([intro("Came to me from Davenport, was a net mender on the docks"), OFFER]);

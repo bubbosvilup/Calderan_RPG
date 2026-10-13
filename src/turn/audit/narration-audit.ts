@@ -379,7 +379,7 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
     if (left.has(d.character_id) || relocated.has(d.character_id) || (created && authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id))) continue;
     issues.push({ kind: "uncommitted_departure", character: name(d.character_id), sentence: d.source_sentence, correction: `${name(d.character_id)} has NOT left: they are still here in the scene. They may head for the door, be told to leave or threaten to, but do not narrate them gone.` });
   }
-  // Pass 1.2: narrator-created captives of the scene (no legal record yet, ephemeral or promoted by name) are also an active trade.
+  // Pass 1.2: narrator-created captives of the scene (no legal record yet, ephemeral or materialized under a name) are also an active trade.
   const negotiation = context.social.legal.some(l => l.status === "enslaved" && !!l.holder_id && l.holder_id !== "nicco" && presentIds.has(l.holder_id))
     || context.characters.some(c => /\bcaptive\b/.test(c.established_origin?.role ?? "") && !context.social.legal.some(l => l.character_id === c.id))
     || source.scene([...(input.recent ?? []), { player: input.player_input ?? "", narration, status: "finalized" }], context, input.world, { asks_name: asksName }).captives.some(c => !c.character_id);

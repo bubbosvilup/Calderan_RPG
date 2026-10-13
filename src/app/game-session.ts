@@ -576,7 +576,7 @@ export class GameSession {
       return reject("campaign_validation_failed", (reason && TRADE_MESSAGES[reason]) || TRADE_MESSAGES.default!, reason ?? "trade_failed");
     }
     const after = campaign.exportSnapshot(), view = deriveTradeView(this.#deps.world, after);
-    // A narrated captive promoted by this settlement leaves the temporary participant registry, so nobody appears twice.
+    // A narrated captive materialized by this settlement leaves the temporary participant registry, so nobody appears twice.
     const subject = offer.subject;
     if (subject.kind === "person") this.#coordinator.retireParticipants?.(campaign, subject.plan.flatMap(c => c.kind === "register_character" && c.character.origin_snapshot?.ephemeral_ref?.startsWith("scene_npc_") ? [c.character.origin_snapshot.ephemeral_ref] : []));
     for (const item of after.items) if (!before.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id);

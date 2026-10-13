@@ -7,7 +7,7 @@ import type { CampaignSnapshot, CharacterAppearance } from "./types.js";
  * Permanent Appearance V1: one read-only contract for what a character permanently looks like, shared by the narrator context, the
  * player character projection, the Household appearance editor and (later) a deterministic portrait prompt builder.
  *
- *   baseline prose (canonical authored appearance, promotion-origin observations) — immutable evidence, never parsed
+ *   baseline prose (canonical authored appearance, materialization-origin observations) — immutable evidence, never parsed
  *   + CharacterProfile.appearance — the one editable campaign layer, field by field
  *   = ResolvedPermanentAppearance
  *
@@ -48,7 +48,7 @@ export function appearanceValues(a: DeepReadonly<CharacterAppearance> | undefine
 
 /**
  * Resolve a character's permanent appearance. `canonical`: include the authored canonical prose (callers decide public access).
- * `overrides`: include campaign profile values (callers decide whether they are known to the reader). Promotion copied the origin
+ * `overrides`: include campaign profile values (callers decide whether they are known to the reader). Materialization copied the origin
  * observations into the profile description ("; "-joined); that copy is the origin baseline, not a campaign override.
  */
 export function resolvePermanentAppearance(world: WorldStore, snapshot: DeepReadonly<CampaignSnapshot>, characterId: string,
@@ -76,7 +76,7 @@ export function resolvePermanentAppearance(world: WorldStore, snapshot: DeepRead
   freeze(result);
   return result;
 }
-/** The campaign override values of a record (the promotion-time copy of origin observations is not an override). */
+/** The campaign override values of a record (the materialization-time copy of origin observations is not an override). */
 function overridesOf(record: DeepReadonly<CampaignSnapshot["characters"][number]> | undefined): Partial<Record<PermanentAppearanceField, Value>> {
   const values = appearanceValues(record?.profile.appearance);
   const copied = record?.origin_snapshot?.established.appearance?.join("; ");

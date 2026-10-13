@@ -51,7 +51,7 @@ export interface PlayerCharacterView {
 
 /**
  * The name Nicco knows a CREATED character by now, or undefined. Current over historical: the profile name wins when play established
- * it — it equals the promotion-time established name, or name establishment wrote it with its provenance (late naming of an unnamed
+ * it — it equals the materialization-time established name, or name establishment wrote it with its provenance (late naming of an unnamed
  * acquired person). Any other profile name on an origin-bearing record is unproven and the origin's established name stands. A record
  * without an origin snapshot keeps the pre-existing rule (its profile name). Origin snapshots are never rewritten for display.
  */

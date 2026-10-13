@@ -1,5 +1,5 @@
 import type { CampaignCharacter, CharacterOriginSnapshot, NameSource } from "../../campaign/types.js";
-import { buildPromotedCharacter } from "../../campaign/promotion.js";
+import { buildMaterializedCharacter } from "../../campaign/materialization.js";
 import { establishedFacts, type NarratedPerson } from "../narration-facts/index.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 
@@ -73,7 +73,7 @@ export interface MaterializeInput {
 export function materializeProvisional(i: MaterializeInput): CampaignCharacter {
   const facts = establishedFacts(i.person, i.seller_key, i.name_of, i.keep_claim);
   const { condition: _condition, background: _background, ...identity } = facts.established;
-  return buildPromotedCharacter({ label: i.label, established: { ...(i.identity_only ? identity : facts.established), ...(i.role ? { role: i.role } : {}) }, evidence: facts.evidence, location_id: i.location_id, trigger: i.trigger,
+  return buildMaterializedCharacter({ label: i.label, established: { ...(i.identity_only ? identity : facts.established), ...(i.role ? { role: i.role } : {}) }, evidence: facts.evidence, location_id: i.location_id, trigger: i.trigger,
     promoted_revision: i.base_revision + 1, world_minute: i.world_minute, ephemeral_ref: i.ephemeral_ref, ...(i.name_source ? { name_source: i.name_source } : {}) });
 }
 

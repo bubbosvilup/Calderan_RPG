@@ -78,7 +78,7 @@ export class TurnCoordinator {
   /** H5: transient provider retry. Omitted → DEFAULT_RETRY_POLICY (one retry); false → none. */ readonly reliability_contract?:boolean; readonly context_policy?: ContextPolicy; readonly context_compaction?: ContextCompactionService; readonly provider_retry?: ProviderRetryPolicy | false } = {}) {}
   recent(campaign: CampaignState): RecentConversation { let recent = this.#recent.get(campaign); if (!recent) { recent = new RecentConversation(); this.#recent.set(campaign, recent); } return recent; }
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
-  /** Actual Offer V1: a narrated captive promoted outside a turn (by accepting an offer) leaves the temporary registry. */
+  /** Actual Offer V1: a narrated captive materialized outside a turn (by accepting an offer) leaves the temporary registry. */
   retireParticipants(campaign: CampaignState, ids: readonly string[]): void { this.participants(campaign).retire(ids); }
   participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(nextParticipantSeed(campaign.exportSnapshot())); this.#participants.set(campaign, p); } return p; }
   /** Block 12 (KPG-1): the provisional people of the current scene the player may Keep track of (read-only; the scene reading plus this session's participants). */
