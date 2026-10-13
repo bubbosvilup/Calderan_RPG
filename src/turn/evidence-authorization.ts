@@ -12,7 +12,7 @@ import type { AuthorizationDiagnostic } from "./turn-types.js";
 import { authorizeCommands, isLocationPlacement } from "./command-authorizer.js";
 import { CONDITION_TERMS, isPhysicalCondition, type PhysicalCondition } from "./physical-interaction.js";
 import { itemTerms } from "./items/item-reference.js";
-import { departuresFromFacts } from "./movement-evidence.js";
+import { departuresFromFacts } from "./movement/movement-evidence.js";
 import { extractNarrationFacts, type NarrationFacts } from "./narration-facts/index.js";
 import { detectHouseholdChoices, verifyRelationshipEvidence } from "./household-evidence.js";
 import { GATES } from "./language/gates.js";

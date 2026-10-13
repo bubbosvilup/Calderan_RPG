@@ -7,7 +7,7 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { scriptedController, scriptedNarrator, type Step } from "./provider-failure-scripts.js";
-import { characterLocation } from "../src/turn/character-movement.js";
+import { characterLocation } from "../src/turn/movement/character-movement.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { TurnDiagnostics } from "../src/turn/turn-diagnostics.js";
 import { ProviderError } from "../src/llm/errors.js";

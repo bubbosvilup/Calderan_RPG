@@ -1,7 +1,7 @@
 import type { TurnContext } from "../src/turn/context-builder.js";
 import type { WorldStore } from "../src/world/world-store.js";
-import type { CharacterMovement, MovableCharacter } from "../src/turn/character-movement.js";
-import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, presenceClaimsFromFacts, type MovementWhere } from "../src/turn/movement-evidence.js";
+import type { CharacterMovement, MovableCharacter } from "../src/turn/movement/character-movement.js";
+import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, presenceClaimsFromFacts, type MovementWhere } from "../src/turn/movement/movement-evidence.js";
 import { extractNarrationFacts } from "../src/turn/narration-facts/index.js";
 
 /**

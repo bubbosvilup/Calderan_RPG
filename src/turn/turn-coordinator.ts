@@ -35,7 +35,7 @@ import { assembleTurnResult } from "./stages/result.js";
 import { TurnError, type PublicationStep, type TurnDebugRecord, type TurnEvent, type TurnFailure, type TurnRequest } from "./turn-types.js";
 import { TurnDiagnosticObserver, controllerModelDiagnostics, type DiagnosticPhase, type TurnDiagnosticsSink } from "./turn-diagnostics.js";
 import { createFactSource } from "./narration-facts/index.js";
-import { movementFactScope } from "./movement-scope.js";
+import { movementFactScope } from "./movement/movement-scope.js";
 export type { TurnDebugRecord } from "./turn-types.js";
 
 /**

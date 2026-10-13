@@ -7,7 +7,7 @@ import { CampaignState } from "../src/campaign/campaign-state.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { narratedDepartures, narratedMovements } from "./movement-readers.js";
-import { movableCharacters, resolvePlayerCarry } from "../src/turn/character-movement.js";
+import { movableCharacters, resolvePlayerCarry } from "../src/turn/movement/character-movement.js";
 import { TurnCoordinator, type TurnDebugRecord } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";

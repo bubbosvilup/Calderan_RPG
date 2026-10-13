@@ -7,7 +7,7 @@ import { loadWorld } from "../src/world/loader.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { npcPlusFragments, packNpcPlus, npcDeepSources } from "../src/turn/npc-plus.js";
 import { reflectAfterTurn, reflectionEvidence, type ReflectionProvider } from "../src/turn/reflection.js";
-import { invitedFollowers } from "../src/turn/follow-invitation.js";
+import { invitedFollowers } from "../src/turn/movement/follow-invitation.js";
 import { createSaveFile, decodeSave, serializeSave } from "../src/persistence/save-format.js";
 
 /** NPC+ Pass 10 — determinism: identical inputs yield byte-identical outputs across runs, rebuilds and round trips. */

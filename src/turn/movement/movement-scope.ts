@@ -1,11 +1,11 @@
-import type { CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
+import type { CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context-builder.js";
 import { type MovableCharacter, movableCharacters, npcPlusEntrants, persistentCharactersAt } from "./character-movement.js";
 import { playerDestination } from "./player-travel.js";
-import { type NarrationFactScope, type Referent, nameFilter } from "./narration-facts/index.js";
-import { asksName } from "./identity-request.js";
+import { type NarrationFactScope, type Referent, nameFilter } from "../narration-facts/index.js";
+import { asksName } from "../identity-request.js";
 
 /**
  * Who the NarrationFacts of a turn (movement, commerce, identity) are read against: ONE set of people for authorization and audit alike (everyone in, or arriving at,

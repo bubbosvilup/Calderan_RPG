@@ -18,16 +18,16 @@ import { QUOTED_SPAN_SOURCE, escapeRegExp as esc, exactNamePattern, sentencesOf 
 import type { RecentExchange } from "./recent-conversation.js";
 import { authoredOn, playerAuthoredEvents, SEVERE_TERMS, type PlayerAuthoredEvent, type SevereOutcome } from "./player-authored-events.js";
 import { settlementClaims } from "./commerce/commerce-evidence.js";
-import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, locationClaimsFromFacts, presenceClaimsFromFacts } from "./movement-evidence.js";
+import { characterMovementsFromFacts, departureClaimsFromFacts, departuresFromFacts, locationClaimsFromFacts, presenceClaimsFromFacts } from "./movement/movement-evidence.js";
 import { createFactSource, type EntityArrivedFact, type NarrationFactSource, type NarrationFacts, participatesInScene } from "./narration-facts/index.js";
-import { movementFactScope } from "./movement-scope.js";
+import { movementFactScope } from "./movement/movement-scope.js";
 import { groundingIssues } from "./grounding-audit.js";
 import { asksName } from "./identity-request.js";
 import { partnerNameConflict } from "./partner-identity-guard.js";
 import { resolveDestination } from "./natural-actions.js";
-import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
-import { characterLocation, persistentCharactersAt } from "./character-movement.js";
-import { followCandidates, followerIds } from "./follow-candidates.js";
+import { playerDestination, resolvePlayerTravel } from "./movement/player-travel.js";
+import { characterLocation, persistentCharactersAt } from "./movement/character-movement.js";
+import { followCandidates, followerIds } from "./movement/follow-candidates.js";
 import { temporalGrounding } from "./temporal-grounding.js";
 import { pendingClaims } from "./pending-audit.js";
 

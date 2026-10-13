@@ -8,7 +8,7 @@ import type { DeepReadonly } from "../src/types/readonly.js";
 import type { WorldStore } from "../src/world/world-store.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 import { playerIntent } from "../src/turn/player-intent.js";
-import { resolvePlayerCarry, characterLocation } from "../src/turn/character-movement.js";
+import { resolvePlayerCarry, characterLocation } from "../src/turn/movement/character-movement.js";
 import { narratedDepartures } from "./movement-readers.js";
 import { asPlan, readOffer } from "./offer-fixtures.js";
 import { refersTo, readScene } from "../src/turn/narration-facts/index.js";

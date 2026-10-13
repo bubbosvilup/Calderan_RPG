@@ -3,7 +3,7 @@ import { turnFixture } from "./turn-fixture.js";
 import { RetrievalService } from "../retrieval/retrieval-service.js";
 import { HybridSearch } from "../retrieval/hybrid-search.js";
 import { TurnCoordinator } from "../turn/turn-coordinator.js";
-import { characterLocation } from "../turn/character-movement.js";
+import { characterLocation } from "../turn/movement/character-movement.js";
 import type { CampaignCommand } from "../campaign/types.js";
 import type { GenerationRequest } from "../llm/types.js";
 import type { TurnResult } from "../turn/turn-types.js";

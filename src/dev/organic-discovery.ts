@@ -9,8 +9,8 @@ import { contractCommands } from "../turn/character-contracts.js";
 import { dialogueFocused } from "../turn/prompt-builder.js";
 import { blankQuotes, escapeRegExp as esc, quotedSpans, sentencesOf } from "../turn/language/text.js";
 import type { AuthorizationDiagnostic, TurnResult } from "../turn/turn-types.js";
-import { characterLocation } from "../turn/character-movement.js";
-import { invitedFollowers } from "../turn/follow-invitation.js";
+import { characterLocation } from "../turn/movement/character-movement.js";
+import { invitedFollowers } from "../turn/movement/follow-invitation.js";
 
 /**
  * NPC+ Pass 8 — organic development discovery. EVALUATION ONLY: never imported by gameplay, never called from runTurn, never mutates

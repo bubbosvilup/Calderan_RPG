@@ -6,7 +6,7 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { scriptedController, scriptedNarrator } from "./provider-failure-scripts.js";
-import { characterLocation } from "../src/turn/character-movement.js";
+import { characterLocation } from "../src/turn/movement/character-movement.js";
 
 /**
  * NPC+ Pass 10 — revision/reconciliation x follow. Authorization reads the DRAFT; the audit may then ask for one revision for an

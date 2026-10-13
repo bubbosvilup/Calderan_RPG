@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { invitedFollowers } from "../src/turn/follow-invitation.js";
+import { invitedFollowers } from "../src/turn/movement/follow-invitation.js";
 import { GATES } from "../src/turn/language/gates.js";
 
 /** NPC+ Pass 10 — generated natural-English probes around the shared gates that decide follow / invitation / absent reference. */

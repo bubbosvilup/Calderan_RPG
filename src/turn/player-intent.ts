@@ -5,7 +5,7 @@ import type { TurnContext } from "./context-builder.js";
 import { TurnError } from "./turn-types.js";
 import { resolveTransferIntent, type ResolvedReference } from "./items/reference-resolution.js";
 import { resolveNaturalActions, reachable, type NaturalActionResolution } from "./natural-actions.js";
-import { playerDestination } from "./player-travel.js";
+import { playerDestination } from "./movement/player-travel.js";
 import type { EphemeralSceneParticipant } from "./scene-participants.js";
 import { MAX_TEMPORAL_ADVANCE_MINUTES, parseTemporalAction, type TemporalAction } from "./temporal-action.js";
 

@@ -1,9 +1,9 @@
-import type { WorldStore } from "../world/world-store.js";
-import { routeDirection } from "../world/vertical-direction.js";
-import { findRoute } from "../world/travel.js";
-import type { TurnContext } from "./context-builder.js";
+import type { WorldStore } from "../../world/world-store.js";
+import { routeDirection } from "../../world/vertical-direction.js";
+import { findRoute } from "../../world/travel.js";
+import type { TurnContext } from "../context-builder.js";
 import { type CharacterMovement, type MovableCharacter, concreteDestination, uniqueVerticalNeighbour } from "./character-movement.js";
-import type { EntityArrivedFact, EntityDepartedFact, EntityFollowedFact, EntityMovedFact, EntityMovedWithPlayerFact, EntityPresentFact, MovementFact, NarrationFacts } from "./narration-facts/index.js";
+import type { EntityArrivedFact, EntityDepartedFact, EntityFollowedFact, EntityMovedFact, EntityMovedWithPlayerFact, EntityPresentFact, MovementFact, NarrationFacts } from "../narration-facts/index.js";
 
 /**
  * Movement POLICY over shared NarrationFacts. The facts say what the prose asserts; this module decides what that is worth as

@@ -1,5 +1,5 @@
-import { GATES } from "./language/gates.js";
-import { escapeRegExp as esc } from "./language/text.js";
+import { GATES } from "../language/gates.js";
+import { escapeRegExp as esc } from "../language/text.js";
 import type { MovableCharacter } from "./character-movement.js";
 
 /**

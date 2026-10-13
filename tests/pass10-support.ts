@@ -3,7 +3,7 @@ import { metadata, collect } from "./turn-fixtures.js";
 import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
-import { characterLocation } from "../src/turn/character-movement.js";
+import { characterLocation } from "../src/turn/movement/character-movement.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { GenerationRequest } from "../src/llm/types.js";
 import type { TurnEvent, TurnResult } from "../src/turn/turn-types.js";
@@ -35,7 +35,7 @@ export async function play(narration: string, input = "I go down to the main hal
 }
 
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { movableCharacters } from "../src/turn/character-movement.js";
+import { movableCharacters } from "../src/turn/movement/character-movement.js";
 import { narratedMovements } from "./movement-readers.js";
 import { activeNpcPlus } from "../src/campaign/premium-characters.js";
 export interface GrammarSetting { members?: readonly string[]; niccoMoves?: boolean; marenAtHall?: boolean }

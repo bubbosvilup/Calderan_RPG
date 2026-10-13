@@ -7,7 +7,7 @@ import { mergeConflicts, retireConflicts } from "../src/campaign/character-repai
 import { createSaveFile, validateSaveFile } from "../src/persistence/save-format.js";
 import { migrateSnapshot6to7 } from "../src/persistence/save-migrations.js";
 import { turnFixture } from "../src/dev/turn-fixture.js";
-import { movableCharacters } from "../src/turn/character-movement.js";
+import { movableCharacters } from "../src/turn/movement/character-movement.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
 
 /** Consolidation block 5B, phases 1/5/6 (campaign level): lifecycle states, schema 7, retire and merge preconditions and atomic application. */

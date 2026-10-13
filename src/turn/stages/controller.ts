@@ -2,7 +2,7 @@ import {ProviderError} from "../../llm/errors.js";
 import type { CampaignSnapshot } from "../../campaign/types.js";
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { ControllerResult, StateControllerProvider } from "../../llm/state-controller-provider.js";
-import type { MovableCharacter } from "../character-movement.js";
+import type { MovableCharacter } from "../movement/character-movement.js";
 import type { TurnContext } from "../context-builder.js";
 import type { TurnIntent } from "./intent.js";
 import { withProviderRetry, type ProviderAttemptRecord, type ProviderBudget, type ProviderRetryPolicy } from "../../llm/retry.js";

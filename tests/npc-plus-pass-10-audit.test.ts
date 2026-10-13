@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { play } from "./pass10-support.js";
 import { participatesInScene } from "../src/turn/narration-facts/index.js";
-import { leftBehindNotes, invitedFollowers } from "../src/turn/follow-invitation.js";
+import { leftBehindNotes, invitedFollowers } from "../src/turn/movement/follow-invitation.js";
 
 const issuesOf = async (narration: string, input = "I go down to the main hall.") => (await play(narration, input)).result?.narration_reconciliation?.issues.map(i => i.kind) ?? [];
 

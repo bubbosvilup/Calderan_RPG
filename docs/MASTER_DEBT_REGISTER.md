@@ -171,7 +171,7 @@ Class A low impact, no confirmation. Class B engine-verifiable, no confirmation 
 
 | Rank | ID | Sev | Item | Effort |
 | --- | --- | --- | --- | --- |
-| 1 | MOV-1 | P1 | Non-NPC+ companions never follow (known bug); also feeds ID-1 | M | **[Status 2026-10-12, consolidation block 3: FIXED offline — MOV-1 (implicit narrated follow for held persons, household members and named invitees; the known "let's go home" bug); the predicate `followCandidates` in `src/turn/follow-candidates.ts`. Live certification: see docs/evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md. Audit text kept as history.]**
+| 1 | MOV-1 | P1 | Non-NPC+ companions never follow (known bug); also feeds ID-1 | M | **[Status 2026-10-12, consolidation block 3: FIXED offline — MOV-1 (implicit narrated follow for held persons, household members and named invitees; the known "let's go home" bug); the predicate `followCandidates` in `src/turn/movement/follow-candidates.ts`. Live certification: see docs/evaluations/CONSOLIDATION_BLOCK3_COMPANION_MOVEMENT.md. Audit text kept as history.]**
 | 2 | PIPE-1 | P1 | Unaudited draft streamed to the player | S-M |
 | 3 | TRD-1 | P1 | SELL ignores `owner_id` and deletes the item | S-M |
 | 4 | AUTH-1 | P1 | ~~Manumission applied from regex on raw input, no confirmation~~ FIXED (block 5A) | M |

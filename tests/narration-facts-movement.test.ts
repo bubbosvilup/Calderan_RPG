@@ -8,8 +8,8 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { buildTurnContext } from "../src/turn/context-builder.js";
-import { characterLocation, movableCharacters } from "../src/turn/character-movement.js";
-import { characterMovementsFromFacts, departuresFromFacts } from "../src/turn/movement-evidence.js";
+import { characterLocation, movableCharacters } from "../src/turn/movement/character-movement.js";
+import { characterMovementsFromFacts, departuresFromFacts } from "../src/turn/movement/movement-evidence.js";
 import { createFactSource, extractNarrationFacts, type NarrationFactScope, type Referent } from "../src/turn/narration-facts/index.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 import type { GenerationRequest } from "../src/llm/types.js";
@@ -187,8 +187,8 @@ test("the player's own travel plus a matching claim passes; a claim for a place 
 });
 test("source audit: ONE location-claim extractor; authorization and audit read its facts and own no location regex", () => {
   const owners = SRC.concat(walk("src/turn/narration-facts")).filter(p => /"location_claim"/.test(readFileSync(p, "utf8")));
-  assert.deepEqual(owners.map(p => p.replace(/\\/g, "/")).sort(), ["src/turn/movement-evidence.ts", "src/turn/narration-facts/location-forms.ts", "src/turn/narration-facts/types.ts"]);
-  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/narration-audit.ts", "utf8"), evidence = readFileSync("src/turn/movement-evidence.ts", "utf8");
+  assert.deepEqual(owners.map(p => p.replace(/\\/g, "/")).sort(), ["src/turn/movement/movement-evidence.ts", "src/turn/narration-facts/location-forms.ts", "src/turn/narration-facts/types.ts"]);
+  const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/narration-audit.ts", "utf8"), evidence = readFileSync("src/turn/movement/movement-evidence.ts", "utf8");
   assert.match(audit, /locationClaimsFromFacts\(facts\)/); assert.match(evidence, /locationClaimsFromFacts\(facts\)/);
   assert.match(authorization, /characterMovementsFromFacts\(facts,/);
   for (const code of [authorization, audit]) assert.doesNotMatch(code.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, ""), /\(\?:inside\|within|\binside\b[^\n]{0,40}\\s\+\(\?:the/i);

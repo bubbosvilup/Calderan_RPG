@@ -1,6 +1,6 @@
 import { EXPLICIT_GIFT } from "../campaign/item-transfer.js";
-import { reachable } from "./travel-resolution.js";
-import { resolvePlayerTravel } from "./player-travel.js";
+import { reachable } from "./movement/travel-resolution.js";
+import { resolvePlayerTravel } from "./movement/player-travel.js";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import type { DeepReadonly } from "../types/readonly.js";
 import type { WorldStore } from "../world/world-store.js";
@@ -123,7 +123,7 @@ export function resolveDestination(phrase: string, context: TurnContext, world: 
   const found = locations.filter(l => heads(l).includes(head) && (!city || l.id === city || world.getAncestors(l.id).some(a => a.id === city)));
   return found.length === 1 ? found[0]!.id : undefined;
 }
-export { reachable } from "./travel-resolution.js";
+export { reachable } from "./movement/travel-resolution.js";
 const display = (id: string, world: WorldStore) => world.getEntity(id)?.display_name ?? id;
 /**
  * One movement clause → its outcome through the shared destination and route rules (no teleport): resolved (one runtime delta with

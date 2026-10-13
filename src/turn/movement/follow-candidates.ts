@@ -1,10 +1,10 @@
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
-import { activeNpcPlus } from "../campaign/premium-characters.js";
-import { GATES } from "./language/gates.js";
-import { escapeRegExp as esc } from "./language/text.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context-builder.js";
+import { activeNpcPlus } from "../../campaign/premium-characters.js";
+import { GATES } from "../language/gates.js";
+import { escapeRegExp as esc } from "../language/text.js";
 import { invitedFollowers } from "./follow-invitation.js";
 import { persistentCharactersAt, type MovableCharacter } from "./character-movement.js";
 

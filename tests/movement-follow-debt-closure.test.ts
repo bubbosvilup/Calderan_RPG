@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { invitedFollowers } from "../src/turn/follow-invitation.js";
+import { invitedFollowers } from "../src/turn/movement/follow-invitation.js";
 import { household, play, grammarProbe } from "./pass10-support.js";
 import { readFileSync } from "node:fs";
 import { collect } from "./turn-fixtures.js";
@@ -8,7 +8,7 @@ import { TurnCoordinator } from "../src/turn/turn-coordinator.js";
 import { RetrievalService } from "../src/retrieval/retrieval-service.js";
 import { HybridSearch } from "../src/retrieval/hybrid-search.js";
 import { scriptedController, scriptedNarrator } from "./provider-failure-scripts.js";
-import { characterLocation } from "../src/turn/character-movement.js";
+import { characterLocation } from "../src/turn/movement/character-movement.js";
 import type { CampaignCommand } from "../src/campaign/types.js";
 
 /** Movement/follow debt closure: D-13, D-14, D-15 (deterministic, through the real turn pipeline unless noted). */

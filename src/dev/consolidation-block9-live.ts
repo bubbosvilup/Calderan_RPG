@@ -6,9 +6,9 @@ import type { SessionDeps } from "../app/game-session.js";
 import { SLAVE_MARKET_V1 } from "../app/scenarios.js";
 import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
 import { learnCanonicalName } from "../campaign/identity-knowledge.js";
-import { characterLocation } from "../turn/character-movement.js";
+import { characterLocation } from "../turn/movement/character-movement.js";
 import { buildTurnContext } from "../turn/context-builder.js";
-import { movementFactScope } from "../turn/movement-scope.js";
+import { movementFactScope } from "../turn/movement/movement-scope.js";
 import { createFactSource } from "../turn/narration-facts/index.js";
 
 /**

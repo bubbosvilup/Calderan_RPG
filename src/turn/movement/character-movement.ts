@@ -1,15 +1,15 @@
 import { playerDestination, resolvePlayerTravel } from "./player-travel.js";
-import type { CampaignCommand, CampaignSnapshot } from "../campaign/types.js";
-import type { DeepReadonly } from "../types/readonly.js";
-import type { WorldStore } from "../world/world-store.js";
-import type { TurnContext } from "./context-builder.js";
-import { reachable, resolveDestination } from "./natural-actions.js";
-import { blankQuotes, escapeRegExp as esc, sentencesOf } from "./language/text.js";
-import { GATES } from "./language/gates.js";
-import { activeNpcPlus } from "../campaign/premium-characters.js";
-import { edgeDirection, routeDirection } from "../world/vertical-direction.js";
-import { findRoute } from "../world/travel.js";
-import { CARRY, HELD, TO } from "./narration-facts/movement-vocabulary.js";
+import type { CampaignCommand, CampaignSnapshot } from "../../campaign/types.js";
+import type { DeepReadonly } from "../../types/readonly.js";
+import type { WorldStore } from "../../world/world-store.js";
+import type { TurnContext } from "../context-builder.js";
+import { reachable, resolveDestination } from "../natural-actions.js";
+import { blankQuotes, escapeRegExp as esc, sentencesOf } from "../language/text.js";
+import { GATES } from "../language/gates.js";
+import { activeNpcPlus } from "../../campaign/premium-characters.js";
+import { edgeDirection, routeDirection } from "../../world/vertical-direction.js";
+import { findRoute } from "../../world/travel.js";
+import { CARRY, HELD, TO } from "../narration-facts/movement-vocabulary.js";
 
 /**
  * Location Continuity Pass 1.3. A campaign (created) character's location changes only when the current turn clearly establishes
