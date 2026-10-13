@@ -1,0 +1,1242 @@
+{
+ "head": "ed7e85f",
+ "audited_tree": "7e5e4ea",
+ "date": "2026-10-13",
+ "verdict": "GREEN WITH KNOWN PRODUCT DEBT",
+ "tests": {
+  "files": 227,
+  "cases": 3701,
+  "pass": 3701,
+  "fail": 0,
+  "skipped": 0,
+  "domain_folders": 21,
+  "structural_guards": 6,
+  "before_cleanup": {
+   "commit": "861396c",
+   "files": 218,
+   "cases": 3660
+  }
+ },
+ "benchmark": {
+  "scenarios": 55,
+  "pass": 55,
+  "fail": 0,
+  "known_product_gaps": 0,
+  "categories": {
+   "movement": 11,
+   "identity": 7,
+   "keep_track": 10,
+   "trade": 3,
+   "person_trade": 10,
+   "household": 2,
+   "persistence": 2,
+   "authority": 3,
+   "fail_closed": 7
+  }
+ },
+ "architecture": {
+  "modules": 359,
+  "source_back_edges": 28,
+  "source_components": 6,
+  "runtime_back_edges": 0,
+  "runtime_graph_sha256": "07b6fe3992f0bffb863b775f4e27373ea384db35711f9b67dca7d56400503ed1",
+  "largest_type_only_component": 43,
+  "prod_imports_dev_tests_scripts": 0,
+  "campaign_persistence_to_turn": 0
+ },
+ "docs": {
+  "current_files": 44,
+  "current_links": 361,
+  "broken_current": 0,
+  "historical_broken_all": 339
+ },
+ "persistence": {
+  "save_schema": 8,
+  "snapshot_schema": 7,
+  "src_persistence_lines_changed_since_861396c": 0
+ },
+ "browser_checks": {
+  "total": 8,
+  "exit_0": 8,
+  "asserting": 6,
+  "report_only": [
+   "confirmation-browser-check.mjs",
+   "turn-reliability-browser-check.mjs"
+  ]
+ },
+ "src_turn": {
+  "files": 115,
+  "root_modules": 7,
+  "domain_folders": 13,
+  "root_modules_before": 80
+ },
+ "src_dev": {
+  "files": 95,
+  "root_files": 1,
+  "purpose_folders": {
+   "benchmark": 4,
+   "historical": 50,
+   "inspect": 13,
+   "live": 9,
+   "maintenance": 5,
+   "support": 13
+  },
+  "root_files_before": 104
+ },
+ "scripts": {
+  "files": 49,
+  "root_tools": 3,
+  "folders": {
+   "browser": 8,
+   "evaluation": 5,
+   "historical": 32,
+   "lib": 1
+  },
+  "root_before": 45
+ },
+ "test_taxonomy": {
+  "folders": {
+   "architecture": 6,
+   "authority": 19,
+   "canon": 18,
+   "commerce": 12,
+   "context": 18,
+   "identity": 24,
+   "images": 11,
+   "items": 5,
+   "language": 3,
+   "movement": 19,
+   "npc-plus": 6,
+   "optional": 9,
+   "persistence": 5,
+   "providers": 7,
+   "reflection": 15,
+   "retrieval": 6,
+   "session": 4,
+   "tooling": 15,
+   "turn": 9,
+   "ui": 7,
+   "world": 9
+  },
+  "suffixes": {
+   "architecture": 6,
+   "integration": 3,
+   "regression": 15
+  },
+  "tests_at_root": 0,
+  "milestone_named": 0
+ },
+ "repository": {
+  "tracked_files": 2039,
+  "root_entries": 14,
+  "root_markdown": 1,
+  "npm_scripts": 24,
+  "tracked_saves": 0,
+  "before": {
+   "tracked_files": 2009,
+   "root_entries": 46,
+   "root_markdown": 32,
+   "npm_scripts": 27,
+   "tracked_saves": 310
+  }
+ },
+ "register_verdicts": {
+  "confirmed_open": 130,
+  "partial": 9,
+  "needs_human_decision": 7,
+  "closed_by_cleanup_still_listed": 6,
+  "obsolete": 3,
+  "duplicate": 15,
+  "total": 170
+ },
+ "open_debt": [
+  {
+   "id": "AUD-1",
+   "group": "Product correctness",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "MOV-5",
+   "group": "Product correctness",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "H1 residuals: `them` handover, shared first name, fronted-recipient receipt",
+   "group": "Product correctness",
+   "severity": "P3, deferred",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "KPG-2 residual",
+   "group": "Product correctness",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "MOV-2 residual",
+   "group": "Product correctness",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "AUTH-1 residual",
+   "group": "Product correctness",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "AUTH-2 residual",
+   "group": "Product correctness",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "ID-8 / NPC-3 / F8",
+   "group": "Authority / identity",
+   "severity": "P2, decision D5",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "AUTH-5",
+   "group": "Authority / identity",
+   "severity": "P2",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "AUTH-4",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ID-3 / I7",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ID-6 / I8",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ID-7 / I3",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "ID-5 / I14",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "AUTH-3",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "REV-4",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "AUTH-7",
+   "group": "Authority / identity",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "F5 / I2",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "I4",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "F6",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "F2",
+   "group": "Authority / identity",
+   "severity": "P3, PARTIAL",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "F4 / I10",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "ID-1 residual",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "NAME_REQUEST mismatch",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "I5",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "addressed_verb residual",
+   "group": "Authority / identity",
+   "severity": "P3, deferred",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "CTX-1",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PIPE-10",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PIPE-9",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PIPE-4",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE"
+  },
+  {
+   "id": "CTX-4",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "CTX-3",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "CTX-2 residual",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "AUD-2",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PIPE-6",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PIPE-7",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ARCH-2 residual: F evidence readers",
+   "group": "Pipeline / context",
+   "severity": "P2, deferred",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-2",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PRV-1",
+   "group": "Pipeline / context",
+   "severity": "P2, PARTIAL",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PRV-2",
+   "group": "Pipeline / context",
+   "severity": "P2",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PRV-3",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "REV-1 residual",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-3",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PRV-4",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PRV-5",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PRV-6",
+   "group": "Pipeline / context",
+   "severity": "P3, PARTIAL",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PRV-8",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PRV-7",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PIPE-11",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PIPE-12",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "CTX-5",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "CTX-6",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "CTX-7",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "NARR-1 residual",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "VOC-1",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "ARCH-3",
+   "group": "Pipeline / context",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PER-1",
+   "group": "Persistence",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TRD-12",
+   "group": "Persistence",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "F7 / I12",
+   "group": "Persistence",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "I1 / ID-4",
+   "group": "Persistence",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "PER-4",
+   "group": "Persistence",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "AUTH-8",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "AUTH-6",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PER-5",
+   "group": "Persistence",
+   "severity": "P3, PARTIAL",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PER-9",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "NAME-1",
+   "group": "Persistence",
+   "severity": "P3, decision D6",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PER-6",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PER-3",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "I6 / ID-9",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-12",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PER-7",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "PER-8",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "PER-2B",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "REV-2 residual",
+   "group": "Persistence",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "TRD-6",
+   "group": "Items / economy",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TRD-8",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "TRD-13",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "ITM-3",
+   "group": "Items / economy",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ITM-1 / UI-21",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ITM-6",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ITM-2",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "ITM-4",
+   "group": "Items / economy",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ITM-5",
+   "group": "Items / economy",
+   "severity": "P2",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "ECO-1",
+   "group": "Items / economy",
+   "severity": "P2",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "TRD-11",
+   "group": "Items / economy",
+   "severity": "P2",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "ECO-4",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "ECO-2",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TRD-7",
+   "group": "Items / economy",
+   "severity": "P2, partial",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TRD-14",
+   "group": "Items / economy",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TRD-9",
+   "group": "Items / economy",
+   "severity": "P2, deferred semantic",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "NPC-7",
+   "group": "NPC lifecycle / simulation",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "NPC-6",
+   "group": "NPC lifecycle / simulation",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "NPC-1 / NPC-2",
+   "group": "NPC lifecycle / simulation",
+   "severity": "P2",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "NPC-4",
+   "group": "NPC lifecycle / simulation",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "NPC-5",
+   "group": "NPC lifecycle / simulation",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-1",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-2",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-17",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-5",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-15",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-3",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-24",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-6 / REV-3",
+   "group": "UI / UX",
+   "severity": "P3, partial",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-22",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-4",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-7",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-8",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-20",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-9",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-10",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-14",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-11",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-28",
+   "group": "UI / UX",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-23",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-25",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-26",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-27",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-16",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "UI-18",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-19",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-12",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-13",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-29",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "UI-31",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-4",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-9",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "IMG-6",
+   "group": "UI / UX",
+   "severity": "P3, partial",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-7",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-5 / REPO-7",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-8",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "IMG-11",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "IMG-10",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "MOV-6",
+   "group": "UI / UX",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "CI-1",
+   "group": "Testing / CI",
+   "severity": "P2",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TEST-5",
+   "group": "Testing / CI",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "TEST-8",
+   "group": "Testing / CI",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "TEST-6",
+   "group": "Testing / CI",
+   "severity": "P2, partial",
+   "safety": "SAFE"
+  },
+  {
+   "id": "TEST-2",
+   "group": "Testing / CI",
+   "severity": "P3",
+   "safety": "SAFE"
+  },
+  {
+   "id": "TEST-7",
+   "group": "Testing / CI",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "TEST-4",
+   "group": "Testing / CI",
+   "severity": "P3, partial",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "REPO-14",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "DOC-12",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3, partial",
+   "safety": "SAFE"
+  },
+  {
+   "id": "REPO-8",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "DOC-15 residual",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3",
+   "safety": "SAFE WITH STOP CONDITIONS"
+  },
+  {
+   "id": "REPO-2 residual",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "DOC-13",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  },
+  {
+   "id": "REPO-13",
+   "group": "Repository / archive (low priority)",
+   "severity": "P3",
+   "safety": "HUMAN DECISION REQUIRED"
+  }
+ ],
+ "new_debt_rows": [
+  "AUD-1",
+  "AUD-2",
+  "VOC-1",
+  "REPO-14",
+  "ARCH-3"
+ ],
+ "closed_cleanup_debt": [
+  {
+   "cleanup": "A",
+   "commit": "845d778",
+   "closed": [
+    "CI-2",
+    "UI-30",
+    "REPO-1"
+   ]
+  },
+  {
+   "cleanup": "REPO-12 fix",
+   "commit": "cc9cb7c",
+   "closed": [
+    "REPO-12"
+   ]
+  },
+  {
+   "cleanup": "B",
+   "commit": "feba138",
+   "closed": [
+    "REPO-11",
+    "DOC-14",
+    "DOC-16"
+   ],
+   "partly": [
+    "REPO-2",
+    "DOC-15"
+   ]
+  },
+  {
+   "cleanup": "B2",
+   "commit": "4dc4f05",
+   "closed": [
+    "REPO-3"
+   ]
+  },
+  {
+   "cleanup": "C",
+   "commit": "057ee3b",
+   "closed": [
+    "REPO-5"
+   ],
+   "partly": [
+    "TEST-4"
+   ]
+  },
+  {
+   "cleanup": "D",
+   "commits": [
+    "f49a5c9",
+    "c785b9a",
+    "a0ee7a0",
+    "2a0e242",
+    "bd4981c",
+    "47e254b",
+    "26c2be5"
+   ],
+   "closed": [],
+   "partly": [
+    "REPO-9"
+   ]
+  },
+  {
+   "cleanup": "E",
+   "commit": "d94cde9",
+   "closed": [
+    "REPO-4",
+    "REPO-6",
+    "REPO-9",
+    "TEST-1",
+    "CI-3"
+   ],
+   "partly": [
+    "REPO-10",
+    "TEST-4"
+   ]
+  },
+  {
+   "cleanup": "F",
+   "commit": "9d27f81",
+   "closed": [
+    "TEST-3",
+    "REPO-10"
+   ]
+  },
+  {
+   "cleanup": "G",
+   "commit": "7e5e4ea",
+   "closed": [
+    "lifecycle vocabulary residual"
+   ]
+  }
+ ],
+ "repository_cleanup_program": "CLOSED",
+ "recommended_next_blocks": [
+  {
+   "block": "B1",
+   "name": "Reserved names and Narrator id masking",
+   "debt": [
+    "AUD-1",
+    "CTX-1"
+   ],
+   "decision": false,
+   "risk": "low"
+  },
+  {
+   "block": "B2",
+   "name": "Test trust and the fast CI gate",
+   "debt": [
+    "TEST-8",
+    "TEST-9",
+    "REPO-14",
+    "CI-1"
+   ],
+   "decision": "C1/C2 for the workflow only",
+   "risk": "low"
+  },
+  {
+   "block": "B3",
+   "name": "UI trust and keyboard",
+   "debt": [
+    "transcript window desync",
+    "UI-1",
+    "UI-5",
+    "UI-15",
+    "UI-23",
+    "UI-24"
+   ],
+   "decision": false,
+   "risk": "low-medium"
+  },
+  {
+   "block": "B4",
+   "name": "Persistence durability, save-compatible",
+   "debt": [
+    "PER-1",
+    "ID-4",
+    "F7",
+    "AUTH-8",
+    "PER-4"
+   ],
+   "decision": "C6 for fixtures only",
+   "risk": "medium"
+  },
+  {
+   "block": "B5",
+   "name": "Pipeline lanes declared and observed",
+   "debt": [
+    "PIPE-6",
+    "AUD-2"
+   ],
+   "decision": false,
+   "risk": "medium"
+  },
+  {
+   "block": "B6",
+   "name": "Canonical NPC policy and NPC+ exits",
+   "debt": [
+    "AUTH-5",
+    "ID-8",
+    "NPC-1",
+    "NPC-4"
+   ],
+   "decision": "D5, D4, demotion",
+   "risk": "medium"
+  },
+  {
+   "block": "B7",
+   "name": "Item identity and equipment foundation",
+   "debt": [
+    "ITM-1",
+    "ITM-2",
+    "ITM-6",
+    "ITM-4"
+   ],
+   "decision": "ITM-2 meaning, container shape, owner kinds, D6",
+   "risk": "high"
+  },
+  {
+   "block": "B8",
+   "name": "Containers and Property / Heartstone storage",
+   "debt": [
+    "ITM-5",
+    "ITM-3"
+   ],
+   "decision": "property ownership model, D5",
+   "risk": "high"
+  },
+  {
+   "block": "W",
+   "name": "Weather UI",
+   "debt": [],
+   "decision": "Q3 (light)",
+   "risk": "low"
+  }
+ ],
+ "live_calls": 0,
+ "image_calls": 0
+}
