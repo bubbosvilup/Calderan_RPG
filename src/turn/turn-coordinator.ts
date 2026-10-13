@@ -19,7 +19,8 @@ import type { NarratorPromptOptions } from "./prompt-builder.js";
 import { retrieveForTurn, RETRIEVAL_LIMITS, type TurnRetrieval } from "./retrieval-policy.js";
 import type { EvidenceMode } from "./evidence-authorization.js";
 import { RecentConversation } from "./recent-conversation.js";
-import { SceneParticipants, type SceneParticipantPlan } from "./scene-participants.js";
+import { SceneParticipants, nextParticipantSeed, type SceneParticipantPlan } from "./scene-participants.js";
+import { trackablePeople, type TrackablePerson } from "./keep-track.js";
 import { narratedForegroundCanonical, narratedSpeakerPartner } from "./foreground-binding.js";
 import { backgroundGroundingOption } from "./background-grounding.js";
 import { projectTurnIntent, resolveTurnIntent, type IntentStageInput } from "./stages/intent.js";
@@ -79,7 +80,12 @@ export class TurnCoordinator {
   /** Session-local ephemeral scene participants (Phase 1P); never persisted or saved. */
   /** Actual Offer V1: a narrated captive promoted outside a turn (by accepting an offer) leaves the temporary registry. */
   retireParticipants(campaign: CampaignState, ids: readonly string[]): void { this.participants(campaign).retire(ids); }
-  participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(); this.#participants.set(campaign, p); } return p; }
+  participants(campaign: CampaignState): SceneParticipants { let p = this.#participants.get(campaign); if (!p) { p = new SceneParticipants(nextParticipantSeed(campaign.exportSnapshot())); this.#participants.set(campaign, p); } return p; }
+  /** Block 12 (KPG-1): the provisional people of the current scene the player may Keep track of (read-only; the scene reading plus this session's participants). */
+  trackablePeople(campaign: CampaignState): readonly TrackablePerson[] {
+    const snapshot = campaign.exportSnapshot();
+    return trackablePeople({ recent: this.recent(campaign).finalized(), context: buildTurnContext(this.world, snapshot), world: this.world, snapshot, participants: this.participants(campaign).active() });
+  }
   /** Explicit application correction only; no campaign history or state is rewritten. */
   resetSceneContinuity(campaign: CampaignState): void {
     this.#recent.set(campaign, new RecentConversation());

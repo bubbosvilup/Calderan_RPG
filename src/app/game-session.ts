@@ -53,6 +53,7 @@ import { CONFIRMATION_MESSAGES, deriveConfirmationView, type ConfirmationView } 
 import { PENDING_REF, type PendingConfirmation } from "../persistence/pending-confirmations.js";
 import type { PendingProposal } from "../turn/pending-proposals.js";
 import { TRADE_FIELD } from "../campaign/trade.js";
+import { KEEP_MESSAGES, keepTrackCommand, keptCharacter, type KeepBlock, type TrackablePerson } from "../turn/keep-track.js";
 import { buildTrace, emptyReflection, exportTrace, summarizeReflection, turnIdOf, type DebugExport, type TurnTrace } from "./turn-trace.js";
 
 /**
@@ -66,7 +67,7 @@ export interface SessionHooks {
 export interface SessionDeps {
   readonly world: WorldStore; readonly repository: CampaignSaveRepository;
   /** Receives the session's diagnostics hook so per-turn diagnostics can be captured; a stub coordinator may ignore it. */
-  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent" | "retireParticipants">>;
+  readonly createCoordinator: (hooks: SessionHooks) => Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent" | "retireParticipants" | "trackablePeople">>;
   readonly context_policy?: ContextPolicy;
   readonly compaction_service?: ContextCompactionService;
   readonly reflection_provider?: ReflectionProvider | undefined;
@@ -207,6 +208,14 @@ export type RiteOutcome = { readonly ok: true; readonly changed: true; readonly 
  */
 export type TradeAcceptOutcome = { readonly ok: true; readonly changed: true; readonly receipt: TradeReceipt | null; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly reason?: string; readonly view: SessionView };
+/**
+ * Block 12 (KPG-1): the player-facing list of provisional people in the current scene. `token` is opaque (never a ref, id or name the client could forge);
+ * `reason` explains a person shown but not keepable. Provisional people are not characters: they have no card and never enter the character drawer.
+ */
+export interface ProvisionalPeopleView { readonly people: readonly { readonly token: string; readonly label: string; readonly held: boolean; readonly keepable: boolean; readonly reason?: string }[] }
+/** Block 12 (KPG-1): Keep track. `already` = this person was already persistent (idempotent replay, no revision); `reason` is a player-safe code. */
+export type KeepTrackOutcome = { readonly ok: true; readonly changed: boolean; readonly already?: true; readonly label: string; readonly view: SessionView }
+  | { readonly ok: false; readonly error: AppError; readonly reason?: KeepBlock | "unknown_person" | "stale" | "rejected"; readonly view: SessionView };
 /** Permanent Appearance V1 editor save. `field` names the rejected patch field, when one was. */
 export type AppearanceOutcome = { readonly ok: true; readonly changed: boolean; readonly view: SessionView }
   | { readonly ok: false; readonly error: AppError; readonly field?: string; readonly view: SessionView };
@@ -218,7 +227,7 @@ const STUB_STATUS: ProviderStatus = { mode: "stub", configured: true };
 export class GameSession {
   readonly #itemSprites: ItemSpriteJobs;
   readonly #mannerisms: MannerismMaintenance | undefined;
-  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent" | "retireParticipants">>;
+  readonly #deps: SessionDeps; readonly #session: CampaignSession; readonly #coordinator: Pick<TurnCoordinator, "runTurn"> & Partial<Pick<TurnCoordinator, "contextRequest" | "resetSceneContinuity" | "recent" | "retireParticipants" | "trackablePeople">>;
   readonly #traces: TurnTrace[] = []; #sequence = 0; #status: SessionStatus = "idle"; #abort: AbortController | undefined; #inflight: Promise<unknown> | undefined;
   #compactionReason: CompactionReason | undefined; #compactionResult: CompactionResult | undefined;
   #diagnostics: DeepReadonly<TurnDiagnostics> | undefined; #reflectionRecord: DeepReadonly<ReflectionDiagnostics> | undefined; #lastError: AppError | undefined;
@@ -573,6 +582,41 @@ export class GameSession {
     for (const item of after.items) if (!before.has(item.id) && item.created_revision !== undefined) this.#itemSprites.request(item.id);
     this.#lastError = undefined; this.#autosave?.notify(); this.#itemSprites.flush();
     return { ok: true, changed: true, receipt: view.receipt, view: this.getView() };
+  }
+
+  /** Block 12 (KPG-1): read-only list of the provisional people the player may keep. Never dirties the campaign; an unavailable reading lists nobody. */
+  getProvisionalPeopleView(): ProvisionalPeopleView {
+    return { people: this.#trackable().map(p => ({ token: p.token, label: p.label, held: p.captive, keepable: !p.blocked, ...(p.blocked ? { reason: KEEP_MESSAGES[p.blocked] } : {}) })) };
+  }
+  #trackable(): readonly TrackablePerson[] { try { return this.#coordinator.trackablePeople?.(this.#session.campaign) ?? []; } catch { return []; } }
+  /**
+   * Block 12 (KPG-1), [ Keep track ]: the player's explicit, deterministic decision to keep ONE provisional person of the current scene as a persistent
+   * ordinary campaign character, the SAME identity the scene showed. The browser sends only the opaque token and the revision it rendered. The engine
+   * recomputes the scene's provisional people, resolves the token, refuses any fail-closed case and commits ONE `register_character` in ONE revision. No
+   * Narrator, Controller or model is involved, and no household, NPC+, legal, ownership, relationship or inventory state changes. A token whose person is
+   * already persistent (kept, or bought through an Actual Offer) answers `already` with no revision; any refusal changes nothing.
+   */
+  keepTrack(request: { readonly token: unknown; readonly expected_revision: unknown }): KeepTrackOutcome {
+    const reject = (code: AppError["code"], reason: NonNullable<Extract<KeepTrackOutcome, { ok: false }>["reason"]>): KeepTrackOutcome => ({ ok: false, error: appError(code, { message: KEEP_MESSAGES[reason] }), reason, view: this.getView() });
+    if (this.#status === "closed") return { ok: false, error: appError("session_closed", { message: "The session is closed." }), view: this.getView() };
+    if (this.#status !== "idle") return { ok: false, error: appError("turn_in_progress", { message: "Wait for the current turn to finish." }), view: this.getView() };
+    if (typeof request.token !== "string" || !/^[0-9a-f]{24}$/.test(request.token)) return reject("invalid_input", "unknown_person");
+    const campaign = this.#session.campaign, snapshot = campaign.exportSnapshot();
+    // Idempotent: the same person always resolves to the same one character, and a second press never creates a second one or a second revision.
+    const kept = keptCharacter(snapshot, request.token);
+    if (kept) return { ok: true, changed: false, already: true, label: snapshot.characters.find(c => c.id === kept)?.profile.name ?? snapshot.characters.find(c => c.id === kept)?.origin_snapshot?.label ?? "", view: this.getView() };
+    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn", "stale");
+    const person = this.#trackable().find(p => p.token === request.token);
+    if (!person) return reject("invalid_input", "unknown_person");
+    if (person.blocked) return reject("invalid_input", person.blocked);
+    const nameOf = (id: string) => snapshot.characters.find(c => c.id === id)?.profile.name ?? this.#deps.world.getEntity(id)?.name ?? id;
+    const { command } = keepTrackCommand(person, snapshot, nameOf);
+    try { campaign.commit(campaign.prepare({ expected_revision: campaign.revision, commands: [command] })); }
+    catch { return reject("campaign_validation_failed", "rejected"); }
+    // The kept participant leaves the temporary registry: the scene now shows one persistent person, never the same person twice.
+    if (person.participant_id) this.#coordinator.retireParticipants?.(campaign, [person.participant_id]);
+    this.#lastError = undefined; this.#autosave?.notify();
+    return { ok: true, changed: true, label: person.label, view: this.getView() };
   }
 
   /**

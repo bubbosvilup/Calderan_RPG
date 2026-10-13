@@ -915,6 +915,44 @@ async function actOnConfirmation(action, ref) {
     confirmBusy = false; confirmError = "The request failed. Check the connection and try again."; load();
   }
 }
+// Block 12 (KPG-1): temporary (provisional) people of the scene. They are not characters: no card, no drawer. [ Keep track ] sends only the opaque
+// token and the revision this page rendered; on success the person becomes an ordinary character and appears above with a card like anyone else.
+let keepBusy = false, keepError = "", keepErrorToken = "";
+function renderProvisional(data) {
+  const region = ui("provisional-people");
+  if (!region) return;
+  const people = data.provisional?.people ?? [], children = [];
+  if (people.length) { const heading = document.createElement("h3"); heading.className = "provisional-heading"; heading.textContent = "Temporary"; children.push(heading); }
+  const idle = data.status === undefined ? ready : data.status === "idle";
+  for (const person of people) {
+    const row = document.createElement("div"); row.className = "provisional-person"; row.dataset.keepToken = person.token;
+    const detail = document.createElement("span"), name = document.createElement("strong"), note = document.createElement("small");
+    name.textContent = person.label; note.textContent = person.keepable ? (person.held ? "Temporary · held" : "Temporary · not kept") : person.reason ?? "Cannot be kept";
+    detail.append(name, note);
+    const keep = document.createElement("button"); keep.type = "button"; keep.className = "keep-track"; keep.textContent = "Keep track";
+    keep.setAttribute("aria-label", `Keep track of ${person.label}`); keep.disabled = keepBusy || !person.keepable || !idle;
+    keep.addEventListener("click", () => keepTrack(person.token));
+    row.append(detail, keep);
+    if (keepError && keepErrorToken === person.token) { const problem = document.createElement("p"); problem.className = "keep-error"; problem.setAttribute("role", "alert"); problem.textContent = keepError; row.append(problem); }
+    children.push(row);
+  }
+  region.replaceChildren(...children);
+  region.hidden = !children.length;
+}
+async function keepTrack(token) {
+  if (keepBusy) return;
+  keepBusy = true; keepError = ""; keepErrorToken = token;
+  for (const button of document.querySelectorAll(".keep-track")) button.disabled = true;
+  try {
+    const response = await fetch("/api/people/keep", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token, expected_revision: currentRevision }) });
+    const data = await response.json();
+    keepBusy = false;
+    if (!data?.ok) keepError = data?.error?.message ?? "That person could not be kept. Nothing changed.";
+    if (data?.messages) render(data); else load();
+  } catch {
+    keepBusy = false; keepError = "The request failed. Check the connection and try again."; load();
+  }
+}
 function showError(text) {
   error.textContent = text;
   error.hidden = !text;
@@ -987,6 +1025,7 @@ function render(data) {
   }
   renderTrade(data);
   renderConfirmations(data);
+  renderProvisional(data);
   follow(wasNear);
   shown = data.messages.length;
   ready = data.status === "idle";

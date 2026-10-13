@@ -106,7 +106,7 @@ const portraitRecord: Parser = (input, path) => {
   const { character_id, full_body_version_id, versions, reference } = record;
   return { character_id, ...(avatar !== undefined ? { avatar_version_id: avatar } : {}), ...(full_body_version_id !== undefined ? { full_body_version_id } : {}), versions, ...(reference !== undefined ? { reference } : {}) };
 };
-const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: choice("name_established", "purchase_unnamed_subject", "recruitment", "custody", "rescue"),
+const originSnapshot = object({ source: choice("narrator_ephemeral"), trigger: choice("name_established", "purchase_unnamed_subject", "player_kept", "recruitment", "custody", "rescue"),
   promoted_revision: integer(1), promoted_world_minute: integer(), location_id: id, label: text, ephemeral_ref: optional(text),
   established: object({ name: optional(text), sex: optional(text), age: optional(tagged({ exact: object({ kind: choice("exact"), years: integer(0) }), approximate: object({ kind: choice("approximate"), description: text }) })),
     species: optional(text), role: optional(text), descriptor: optional(text), appearance: optional(list(text, 24)), condition: optional(list(text, 24)), background: optional(list(claim, 12)) }),

@@ -136,7 +136,7 @@ test("A12: legacy persistent characters created by the old name-driven rule stay
   assert.equal(loaded.exportSnapshot().characters.find(x => x.id === legacy.id)?.profile.name, "Mira");
   assert.ok(buildTurnContext(world, loaded.exportSnapshot()).characters.some(x => x.id === legacy.id), "still a present, targetable person");
 });
-test("AUTH-2 producer audit (source): the only places that build or register a narrated person are the provisional materializer (person offers) and the engine's own preparation", async () => {
+test("AUTH-2 producer audit (source): the only places that build or register a narrated person are the provisional materializer (person offers, Keep track since block 12) and the engine's own preparation", async () => {
   const files: string[] = [];
   const walk = async (dir: string) => { for (const e of await readdir(dir, { withFileTypes: true })) { const p = `${dir}/${e.name}`; if (e.isDirectory()) await walk(p); else if (p.endsWith(".ts")) files.push(p); } };
   await walk("src");
@@ -148,5 +148,5 @@ test("AUTH-2 producer audit (source): the only places that build or register a n
     if (/kind: "register_character"/.test(code) && f !== "src/campaign/types.ts") registrars.push(f);
   }
   assert.deepEqual(builders.sort(), ["src/campaign/promotion.ts", "src/turn/provisional-people.ts"]);
-  assert.deepEqual(registrars.sort(), ["src/turn/person-offers.ts"]);
+  assert.deepEqual(registrars.sort(), ["src/turn/keep-track.ts", "src/turn/person-offers.ts"]);
 });

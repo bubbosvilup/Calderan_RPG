@@ -43,7 +43,7 @@ Full Property system (generic property entity, containers and property storage, 
 
 ## Next
 
-**Architecture consolidation (Wave A) is done** (turn delivery safety and Narrator truncation, authority classes, optional-service split, benchmark, shared NarrationFacts; see [Master Roadmap](MASTER_ROADMAP.md)). Open product decision first: KPG-1 (a "Keep track" action for a provisional person). Then Weather UI and Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
+**Architecture consolidation (Wave A) is done** (turn delivery safety and Narrator truncation, authority classes, optional-service split, benchmark, shared NarrationFacts; see [Master Roadmap](MASTER_ROADMAP.md)). Block 12 closed KPG-1 with the explicit Keep track action. Next: Weather UI and Property/Heartstone property work, then the systems above as prioritized by the author. Later, if needed: merchant/vendor capabilities on top of Actual Offer, an Auction House engine (a different lot/bid model), multi-currency, a richer promotion UI, equipment, full commerce/stock simulation, and a scripted-action-log certification benchmark ([Testing](TESTING.md)).
 
 ## Known limitations
 
@@ -60,7 +60,7 @@ Full Property system (generic property entity, containers and property storage, 
 - Reference images are not used for generation.
 - Weather has no temperature physics, wind, humidity or survival effects; South has no named settlements.
 - Evidence authorization is conservative: ambiguous narration may fail to commit a change (false negatives preferred).
-- KPG-1: there is no generic player action to keep an arbitrary provisional person (a named apple seller); only the person Actual Offer Accept materializes one. Provisional people are scene-local and forgotten on reload (PER-2), and cannot be promoted to NPC+.
+- A provisional person persists only through the player's explicit Keep track (or the person Actual Offer Accept). An unkept, unnamed scene participant ("the guard") is forgotten on reload (PER-2B); a named one is re-read from the restored recent exchanges while they stay in that window. A provisional person cannot be promoted to NPC+ until kept.
 - Speaker attribution fails closed: a spoken line after a plural beat, or a pronoun with two present candidates of that sex, belongs to nobody (no offer, no name).
 - World and Debug navigation entries are disabled placeholders; the NPC+ Personality and Relations tabs are placeholders.
 - The `premium-characters.ts` header comment says household membership is the only promotion trigger; this is still true (the rite is `join_household`, now issued only by the player's explicit promotion action).

@@ -1,6 +1,6 @@
 # Caldrevan: Master Technical Debt Register
 
-Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests) and block 4 turn reliability (working tree, 3377 tests); NarrationFacts rows reconciled 2026-10-13 after consolidation block 11 (section 1A.2; 3637 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
+Status: Current. Audited 2026-10-12 on main `c0608a6`; **reconciled 2026-10-12 after consolidation blocks 1 to 3 (main `31d82cd`, 3334 tests) and block 4 turn reliability (working tree, 3377 tests); NarrationFacts rows reconciled 2026-10-13 after consolidation block 11 (section 1A.2; 3637 tests); every open item re-verified against the code 2026-10-13 in consolidation block 12 (section 1A.3 and the [Current residual debt](#current-residual-debt) list; 3660 tests)**. Original audit text is kept as history; use sections 1A and 1B for current status and ranking, and section 16 for the one canonical decision list. Strategy report: [Post-consolidation architecture review](evaluations/POST_CONSOLIDATION_ARCHITECTURE_REVIEW.md).
 Companion: [Master Roadmap](MASTER_ROADMAP.md). Detailed evidence (file:line for every finding): [`evaluations/codebase_audit_2026-10-12/`](evaluations/codebase_audit_2026-10-12/) (five area audits, A to E).
 
 This document lists everything the audit found that still needs fixing, cleaning, hardening, redesigning or implementing, ranked and de-duplicated across the five area audits. It is a planning document: nothing listed here was fixed during the audit.
@@ -48,7 +48,7 @@ Columns: **audit finding** (original text, below), **current status**, **fix com
 | TRD-10 payment narration guard | FIXED, live-certified (any standing offer) | `5edcd37` | production phrasing varies |
 | MOV-1 non-NPC+ companions never follow | FIXED, live-certified (derived `followCandidates`) | `31d82cd` (block 3) | none known |
 | MOV-3 follower predicate at ~8 sites | FIXED (shared by intent, authorization, audit) | `31d82cd` | remaining `activeNpcPlus` uses are authored-NPC+ location authority, departures, contracts |
-| MOV-4 audit covers NPC+ only | FIXED (audit parity); residual **P3**: an escorted person narrated as staying behind is not audited | `31d82cd` | inverse audit (state follows the player's act; the Narrator is told) |
+| MOV-4 audit covers NPC+ only | FIXED (audit parity); the residual (an escorted person narrated as staying behind) is **CLOSED** too: block 9 `9d15212` added the inverse audit `contradicts_committed_movement` (`narration-audit.ts:540-552`) | `31d82cd` | inverse audit (state follows the player's act; the Narrator is told) |
 | MOV-2 `with <name>` ignored | CLOSED in the narrow deterministic form only (held person named and led by the player) | `31d82cd` | free people, unnamed, plural and pronoun forms unresolved by design |
 | ID-1 identity fork | FIXED for held persons and household members (`persistent_identity_elsewhere`) | `31d82cd` | look-alike detection for unnamed people not built |
 | PIPE-1 unaudited draft streamed | FIXED, live-certified (the browser receives status words only; the audited, committed narration arrives once, as one block) | block 4 (uncommitted at writing) | none for the stream; see CTX-2 |
@@ -65,9 +65,52 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 | --- | --- | --- | --- |
 | ARCH-2 / PIPE-5 independent narration readers | **Narration side CONSOLIDATED.** One `NarrationFactSource` per turn feeds authorization, commit preparation and the audit: movement (block 9), commerce (block 10), dialogue / speaker, identity, recipient and reference facts plus the scene reading (block 11). `narrated-captives.ts` (543 lines) and `scene-participation.ts` deleted; commerce has no speaker parser of its own. Pinned by `tests/narration-facts-architecture.test.ts` | `src/turn/narration-facts/`, [NarrationFacts](architecture/NARRATION_FACTS.md) | F (deferred): `evidence-authorization.ts` and `turn-evidence.ts` verify the Controller's cited evidence with their own verb lists; D (domain content, by design): household JOIN / LEAVE wording, grounding, item ownership, pending audit, mannerism, the audit's content checks; B: player-input readers stay separate |
 | KPG-2 unattributed plain speech not bound to the seller | **CLOSED (block 11).** Post-hoc delivery tag and continued speaker; benchmark C8 / I5 replay the real live narrations; live block 11 A PASS on the same shape | `narration-facts/dialogue-forms.ts` | a pronoun with two candidates of that sex attributes nothing (fail closed) |
-| KPG-1 no generic action to keep a provisional person | **OPEN (product gap, user decision).** Future direction: a UI "Keep track" action that materializes the SAME provisional identity (same scene ref, name, descriptor) through an explicit, revision-guarded action; never fuzzy matching, embeddings or narration alone | benchmark I4 (`known_gap`) | PER-2: provisional people are forgotten on reload |
+| KPG-1 no generic action to keep a provisional person | **CLOSED (block 12).** The player's explicit **Keep track** (opaque token + `expected_revision`) materializes the SAME provisional identity as one ordinary campaign NPC (trigger `player_kept`); no fuzzy match, no merge by name, no model call; benchmark I4 passes, K1-K10 | `src/turn/keep-track.ts`, `GameSession.keepTrack` | PER-2B (unkept unnamed participants are not saved) |
 | Narrated name question (found by live block 11 B) | FIXED (block 11): "I ask the apple seller what her name is" is a name question for the scene reader (`asksName`), so a bare "Maren." names the same provisional seller; benchmark I13 replays the real narrations | `identity-request.ts` | `NAME_REQUEST` (canonical-disclosure capability gate) still accepts only direct questions |
 | §6 file references (`narrated-captives.ts:…`) | the scene reading moved to `narration-facts/scene-identity.ts` (`readScene`); the rules F1 / F4 / I2 / I10 describe are unchanged | | as listed in §6 |
+
+### 1A.3 Reconciliation after consolidation block 12 (2026-10-13)
+
+Every open item in this register was re-checked against the code (static read of `a6d1bcd` plus the block 12 tree): 165 items, 148 still exist, 12 partial, 4 already fixed, 1 not verifiable statically (TEST-8, test timing). Corrections applied in place:
+
+| Finding | Change |
+| --- | --- |
+| KPG-1 | **CLOSED (block 12)**: Keep track |
+| PER-2 | split: **PER-2A CLOSED (block 12)**, **PER-2B OPEN** (accepted, P3) |
+| ID-2 (alias I11) | **CLOSED (block 12)**: participant counter seeded from the snapshot |
+| MOV-4 residual, I16 | **CLOSED** by block 9 `9d15212` (inverse audit `contradicts_committed_movement`); the register still listed them as open |
+| PIPE-8 | **CLOSED** by block 4 `eb05734` (one post-commit delivery order) |
+| ECO-3 | **CLOSED**: the rejection test predates the audit (`7820d5a`) |
+| AUTH-5 vs ID-8 / NPC-3 / F8 | `characterForUpdate` is an implicit canonical-origin producer, so "no production producer" was untrue; ID-8 raised to P2 |
+| §1C.2 | no longer calls AUTH-2 open |
+| §8 header | current schema is 8 (persisted), not 7 |
+| PRV-1 | the 512-token premise is audit-time; the cap is 768 with a 1024 recovery |
+| UI-15 | per-token streaming no longer exists; residual is the pending bubble in the live region (P3) |
+| UI-30 | tooling, not performance |
+| DOC-12 | correct path `docs/architecture/ACTUAL_OFFER.md`; the doc contradicts itself |
+| Stale counts | `"nicco"` literals 240 in 77 files (was 212 / 60); files mentioning "premium" 379 (was 241); orphan `src/dev` files 32 (was 23); tracked files 2,003 (was 1,863) |
+| Partial | REV-3 and UI-6 (only the auto-selected first avatar still bumps the revision), TRD-7 (one shared auction regex; venue name and the "bid" verb remain), ID-1 residual, F2, PER-5, PRV-1, PRV-6, IMG-6, UI-15, TEST-6, DOC-12 |
+
+Duplicates (one item, several IDs; the residual table below uses one of them): ID-8 = NPC-3 = F8 = D5; ID-4 = I1; ID-3 = I7; ID-5 = I14; ID-6 = I8; ID-7 = I3; F4 = I10; F5 = I2; F7 = I12; ID-9 = I6; NPC-1 / NPC-2 = D4; REV-3 = UI-6; ITM-1 = UI-21; TRD-11 = DOC-12 (related ECO-4); TRD-12 drives PER-1; IMG-5 = REPO-7; REPO-10 = TEST-3; PRV-7 = REPO-9 = IMG-10; REPO-5 = TEST-4; REPO-2 / REPO-3 = DOC-16; UI-30 overlaps REPO-6; NAME-1 overlaps PER-6. The F evidence readers, PIPE-6, PIPE-7 and the H1 residuals are all ARCH-2 residuals.
+
+## Current residual debt
+
+The one current list (block 12). Severity is the current one; IDs point to the rows below for detail. Closed items are not repeated here.
+
+**Closed recently (for orientation):** KPG-1, PER-2A, ID-2 (block 12); KPG-2, narrated name question (block 11); ARCH-1 (blocks 6-7); ARCH-2 narration side (blocks 9-11); AUTH-1 (5A); AUTH-2 (5B); REV-1 optional part, PER-3 optional part (7); PIPE-1, PIPE-2, PIPE-8, REV-2, NARR-1 (4); MOV-4 and residual, I16 (3, 9); ECO-3; IMG-1, TRD-1, TRD-1b, TRD-2, TRD-3/4, TRD-5, TRD-10 (1-2).
+
+| Category | P2 | P3 |
+| --- | --- | --- |
+| PRODUCT GAP | ID-8 / NPC-3 (canon NPC records and NPC+: decision D5, implicit path via AUTH-5); NPC-1 / NPC-2 (NPC+ rejoin; behaviour outside the household, D4); ITM-3 (owner vs carrier); ITM-4 (stable item key, quantity); ITM-5 (stacks, weight, containers) | ITM-1 (fake equipment slots); ITM-6 (bought gear cannot be equipped); TRD-14 (offers never expire); NPC-4; NPC-5; IMG-10 (reference images); AUTH-2 residual (repair is manual only) |
+| TECHNICAL DEBT | AUTH-5 (`characterForUpdate` implicit record); CI-1 (no CI, lint, coverage); TEST-1 (flaky lifecycle test); TEST-6 (coverage gaps, partial); REPO-1 (tracked evidence under ignored `saves/`) | AUTH-3 (`"nicco"` literals); AUTH-4; AUTH-7; REV-4; TRD-13; MOV-5; NPC-6; NPC-7; NAME-1 (`premium_*` naming, D6); PRV-4; PRV-6; PRV-7; PRV-8; IMG-7; IMG-8; IMG-9; IMG-11; I7 / ID-3; UI-30; REPO-2 to REPO-11; CI-2; CI-3; TEST-2 to TEST-5; TEST-7; TEST-8 (not verifiable statically); DOC-12; DOC-13; DOC-15; DOC-16; `buildPromotedCharacter` names the PROVISIONAL → PERSISTENT materialization builder with the word "promote" (vocabulary: materialization, not promotion; rename with the repository cleanup) |
+| PERSISTENCE | PER-1 (16 MB cap stops autosave); PER-4 (two migration mechanisms); TRD-12 (`trade_offers` never pruned, PER-1 driver); F7 (counteroffer can fork the planned identity); I1 / ID-4 (no uniqueness on `ephemeral_ref`; Keep track's idempotency checks it for its own token only) | PER-2B (unkept unnamed scene participants are not saved, accepted); PER-3 (derived state persisted); PER-5 (additive fields without schema bump, partial; `player_kept` is one); PER-6; PER-7; PER-8; PER-9; ITM-2; AUTH-6; AUTH-8; I6 / ID-9 (participant focus not saved); IMG-12; REV-2 residual (old idempotency keys fall off, by design) |
+| ECONOMY | ECO-1 (gold-only settlement vs silver anchors, D3); TRD-11 (no goods ledger, blocked on ECO-1); TRD-6 (goods name and category matching too loose); TRD-7 (auction exclusion heuristic, partial) | ECO-2; ECO-4; TRD-8 |
+| CONTEXT | CTX-1 (internal ids reach the Narrator; id masking has no boundary); CTX-2 residual (no deterministic output-side leak check for unlearned names); CTX-3 (unbudgeted Controller envelope); CTX-4 (follow-ups without a named entity retrieve nothing); PIPE-9 (no retrieval headroom) | CTX-5; CTX-6; CTX-7; I3 / ID-7; I8 / ID-6; PIPE-11; REV-1 residual (trade note keyed on a revision count) |
+| PIPELINE | ARCH-2 residual: PIPE-6 (commit preparation is an authority lane outside `authorizeWithEvidence`), PIPE-7 (commands fixed from the draft, prose may omit committed state); PIPE-4 (prompt rebuilt per view); PIPE-10 (optional retrieval failure fails the turn); PRV-1 (Narrator single point of failure, partial); PRV-2; IMG-2 (image batches uncancellable) | PIPE-12; PRV-3; PRV-5; IMG-3; IMG-6; REV-3 (bootstrap-avatar batch, partial); NARR-1 residual (truncation after one recovery is a lost turn) |
+| UI | UI-1 (keyboard reachability); UI-2 (irreversible Accept looks ordinary); UI-4 (polling, DOM growth); UI-5 (`/location` message and candidates); UI-17 (unknown identity by client string match); UI-22 (receipts drift, vanish on reload); UI-28 (mobile layout) | MOV-6; I14 / ID-5; IMG-4; IMG-5; UI-3; UI-6; UI-7 to UI-16; UI-18 to UI-21; UI-23 to UI-27; UI-29 |
+| DEFERRED SEMANTIC | F readers: `evidence-authorization.ts`, `turn-evidence.ts` verify the Controller's cited evidence with their own verb lists (ARCH-2 residual); TRD-9 (two same-sex captives by pronoun) | `NAME_REQUEST` mismatch (the canonical-disclosure gate and the scene reader's `asksName` disagree both ways, `identity-request.ts:6` vs `:17-36`); `addressed_verb` residual ("tells her" recipient facts extracted at `identity-forms.ts:179` but unused by the commerce policy, deliberate); KPG-2 residual (a pronoun with two same-sex candidates attributes nothing, by design); H1 residuals (`them` handover, shared first-name condition, fronted-recipient receipt; all fail closed); MOV-2 residual; ID-1 residual (no turn-time look-alike detection for unnamed people; the fork scanner is offline); F2; F4; F5; F6; I2; I4; I5; AUTH-1 residual ("I free Maren." not recognised, by design) |
+
+Severity changes proposed by the block 12 audit and applied: AUTH-3, AUTH-4, TRD-8, ITM-1, ITM-2, F2, F4, F5, NAME-1, PER-3, PER-5, PER-6, PER-7, PRV-3, IMG-3 to IMG-7, UI-3, UI-6, UI-15, REPO-2, CTX-5, REV-3 lowered to P3; ID-8 raised to P2. Row text below keeps the audit-time severity where it was not edited; this table wins.
 
 ## 1B. Current top-20 (re-ranked on current code)
 
@@ -81,8 +124,8 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 | 6 | REV-2 | ~~P2~~ FIXED (block 4) | Turn idempotency key and expected revision |
 | 7 | PIPE-2 | ~~P2~~ FIXED (block 4) | Post-commit publication can throw after the commit |
 | 8 | ARCH-2 (new) | P2 structural | Regex-per-feature interpretation architecture (absorbs PIPE-5/6/7). **Narration side consolidated in blocks 9-11** (section 1A.2); residual: the F evidence-quote verifiers and the PIPE-6/7 lanes |
-| 9 | PER-1 | P2 | 16 MB save cap fatal; drivers include `mannerism_learning` and unpruned `trade_offers` (TRD-12) |
-| 10 | PER-2 / ID-2 | P2 | Scene participants lost on load; ephemeral ref counter restarts |
+| 9 | PER-1 | P2 | 16 MB save cap fatal; the `mannerism_learning` driver moved to the side store (block 7), unpruned `trade_offers` (TRD-12) remains |
+| 10 | ~~PER-2 / ID-2~~ | P2 | **PER-2A and ID-2 CLOSED (block 12)**: Keep track persists the person the player chooses; the participant counter is seeded from the snapshot. PER-2B OPEN (accepted): unkept unnamed participants are not saved |
 | 11 | ECO-1 | P2 | Gold-only settlement vs silver anchors (decision) |
 | 12 | IMG-2 | P2 (was P1) | Image batches uncancellable; cost and UX, no state damage |
 | 13 | TRD-11 / TRD-12 | P2 | No goods ledger; unpruned `trade_offers` |
@@ -91,10 +134,10 @@ Still open by decision: **TRD-11** (goods ledger, needs the ECO-1 schema), **ECO
 | 16 | PIPE-9, PIPE-10, CTX-3, PIPE-4 | P2 | Context scaling: retrieval headroom, retrieval failure fails the turn, unbudgeted Controller envelope, prompt rebuilt per `getView()` |
 | 17 | NPC-1 / NPC-2 | P2 | NPC+ rejoin; behaviour-activity decision |
 | 18 | REPO-1, PER-4, PER-5 | P2 | Tracked `saves/` evidence; split migration chain; additive fields without schema bump |
-| 19 | UI-1, UI-2, UI-3, UI-15 | P2 | Keyboard reachability, Accept/Promote language, live region |
-| 20 | MOV-4 residual | P3 | Inverse audit of an escorted person narrated as staying |
+| 19 | UI-1, UI-2, UI-3, UI-15 | P2 | Keyboard reachability, Accept/Promote language, live region (UI-3, UI-15 now P3) |
+| 20 | AUTH-5 / ID-8 (re-ranked block 12) | P2 | `characterForUpdate` implicitly creates a canonical-origin record (rite eligibility before decision D5). ~~MOV-4 residual~~ CLOSED (block 9) |
 
-PIPE-5/6/7 and PIPE-8 are subsumed by ARCH-2 or remain as listed in section 9.
+PIPE-5/6/7 are subsumed by ARCH-2 or remain as listed in section 9; PIPE-8 is CLOSED (block 4).
 
 ## 1C. New architecture findings (2026-10-12)
 
@@ -120,7 +163,7 @@ Policy "no new major feature until every H1 item is fixed or explicitly deferred
 
 ### 1C.2 Authority classification (principle, see ARCHITECTURE.md section 2c)
 
-Class A low impact, no confirmation. Class B engine-verifiable, no confirmation if the evidence is strong, safe rejection on ambiguity. Class C irreversible or high impact, explicit player confirmation (trade settlement, NPC+ promotion, manumission, large property transfer, destructive actions). Manumission now follows Class C through a PendingConfirmation (AUTH-1 closed, block 5A). Remaining gap: narration-created characters are permanent (AUTH-2, OPEN, block 5B).
+Class A low impact, no confirmation. Class B engine-verifiable, no confirmation if the evidence is strong, safe rejection on ambiguity. Class C irreversible or high impact, explicit player confirmation (trade settlement, NPC+ promotion, manumission, large property transfer, destructive actions). Manumission now follows Class C through a PendingConfirmation (AUTH-1 closed, block 5A). AUTH-2 is CLOSED (block 5B): narration never creates a persistent character. Keeping a provisional person is Class C as well, through the direct Keep track action (block 12).
 
 ## 2. Priority summary (top 30): AUDIT SNAPSHOT, historical rank at `c0608a6`
 
@@ -146,8 +189,8 @@ Class A low impact, no confirmation. Class B engine-verifiable, no confirmation 
 | 16 | PIPE-3 | ~~P2~~ | ~~Post-turn maintenance delays the response~~ FIXED (block 6: detached after `turn_completed`); the revision-bump half is REV-1 / block 7 | M |
 | 17 | CTX-1 | P2 | Internal IDs reach the Narrator; masking regex has no boundaries | S-M |
 | 18 | PIPE-4 | P2 | `getView()` rebuilds the full narrator prompt on every call | S-M |
-| 19 | PER-2 | P2 | Narrated captives (scene participants) lost on load | M |
-| 20 | ID-2 | P2 | Ephemeral `scene_npc_<n>` counter restarts on load; false `person_unavailable` | S |
+| 19 | PER-2 | P2 | Narrated captives (scene participants) lost on load (**split in block 12: PER-2A CLOSED, PER-2B OPEN**) | M |
+| 20 | ID-2 | P2 | Ephemeral `scene_npc_<n>` counter restarts on load; false `person_unavailable` (**CLOSED, block 12**) | S |
 | 21 | NPC-1/2 | P2 | NPC+ who left the household cannot rejoin; behaviour-activity undecided | S + decision |
 | 22 | UI-1 | P2 | Drawer Tab trap makes Promote/Edit/Generate unreachable by keyboard | S |
 | 23 | UI-2/3 | P2 | Accept and Promote look like ordinary buttons; Accept has no confirm | S |
@@ -177,8 +220,8 @@ Per-action behaviour:
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
 | AUTH-1 | P1 | ~~`manumit` was derived from a regex over raw player input and joined the turn batch.~~ **FIXED (block 5A).** The regex now only *recognises* an interpretation; the turn creates a `PendingConfirmation` (interaction metadata, save schema 6). The legal state changes only when the player presses Confirm (`POST /api/confirmation/confirm`, ref + `expected_revision`), a commit with zero provider calls. No semantic path (Narrator, Controller, regex, audit, repair) emits `manumit` or `set_legal_status` directly. Residual by design: the FREE grammar is unchanged and does not recognise bare "I free Maren." (no 'you'). | ~~Move to an explicit UI action~~ done | M |
-| AUTH-2 | ~~P1~~ | ~~`establishNames` registers characters from delivered narration.~~ **FIXED (block 5B).** Lifecycle PROVISIONAL / PERSISTENT / RETIRED (not an NPC tier). Narration and a narration-established name now produce only a scene-local `ProvisionalPerson`; the sole producers of a persistent created character are the person Actual Offer Accept (same subject, atomic with the purchase) and the engine's canonical materialization. `retire_character` / `merge_characters` exist as human-invoked, PendingConfirmation-gated repairs (`requestRepair`), and a read-only fork scanner finds suspicious pairs. Residual: PER-2/ID-2 (provisional people and scene participants are lost on reload), no automatic repair by design, no `materialize_character` confirmation kind yet (reserved, no real persistence need), duplicates already saved by older builds still need a human scan and merge. | ~~Add retire/merge~~ done | M |
-| AUTH-3 | P2 | Literal `"nicco"` appears 212 times in 60 non-dev files, including authority code (`item-transfer.ts:20`, `command-authorizer.ts`, `person-offers.ts`, `person-transactions.ts`), against one `activePlayerCharacterId()`. | One `playerId(snapshot)`; lint test forbidding new literals outside canon/opening. | M |
+| AUTH-2 | ~~P1~~ | ~~`establishNames` registers characters from delivered narration.~~ **FIXED (block 5B).** Lifecycle PROVISIONAL / PERSISTENT / RETIRED (not an NPC tier). Narration and a narration-established name now produce only a scene-local `ProvisionalPerson`; the sole producers of a persistent created character are the person Actual Offer Accept (same subject, atomic with the purchase) and the engine's canonical materialization. `retire_character` / `merge_characters` exist as human-invoked, PendingConfirmation-gated repairs (`requestRepair`), and a read-only fork scanner finds suspicious pairs. Residual: PER-2B (unkept unnamed scene participants are lost on reload; PER-2A and ID-2 closed in block 12, which also added the third producer, the player's Keep track), no automatic repair by design, no `materialize_character` confirmation kind yet (reserved, no real persistence need), duplicates already saved by older builds still need a human scan and merge. | ~~Add retire/merge~~ done | M |
+| AUTH-3 | P3 (was P2) | Literal `"nicco"` appears 240 times in 77 non-dev files (212 / 60 at the audit), including authority code (`item-transfer.ts:20`, `command-authorizer.ts`, `person-offers.ts`, `person-transactions.ts`), against one `activePlayerCharacterId()`. | One `playerId(snapshot)`; lint test forbidding new literals outside canon/opening. | M |
 | REV-1 | ~~P2~~ optional-write component FIXED (block 7) | ~~Item-sprite and portrait metadata commits, mannerism bookkeeping and reflection bump the authoritative revision between turns.~~ They now land in the side stores and never move the semantic revision. REMAINING (not optional-state): the "TRADE COMPLETED" note keys on a revision-count heuristic (`trade-notes.ts:36`). | Key the completed-note on the settlement revision plus a consumed flag. | S |
 | REV-2 | P2 | `/api/turn` has no idempotency key or `expected_revision`; a retry after a dropped connection can run a second, different turn (`server.ts:192-215`). Streaming aborts the turn on `res.close`. | Client `turn_key` + `expected_revision`; return the stored outcome for a repeated key. | M |
 | REV-3 | P2 | Turns are not blocked during a portrait batch (`game-session.ts:733-736` checks status but not `#portraitBusy`); the batch commits with the current revision, so an in-flight turn can fail `stale_turn` after spending LLM calls. | Block turns during batches, or re-check idle+revision immediately before the portrait commit. | S |
@@ -213,7 +256,7 @@ Audit A domains 3 and 4. Behaviour verified: one active offer; supersession; wit
 | TRD-14 | P3 | Offers never expire in world time. | `expires_minute` once vendors exist. | S |
 | ECO-1 | P2 | Settlement is integer gold, minimum 1 gold, but the narrator's anchors (`config/economy.yaml`) are in silver (bread 1 silver, room 5 silver). Everyday purchases can never become offers. | Decide: funds in integer silver internally (display G/S, schema 7) or gold-only anchors. Silver internally is the lower-risk migration. | M-L |
 | ECO-2 | P3 | `tradePrice` is any integer 1 to 1,000,000; no check against anchors. Funds range differs (1e9). | Anchor sanity band diagnostics. | S |
-| ECO-3 | P3 | `set_funds` is absent from the Controller schema (correct) but has no regression test. | Add the rejection test. | S |
+| ECO-3 | ~~P3~~ | ~~`set_funds` is absent from the Controller schema (correct) but has no regression test.~~ **CLOSED (verified block 12):** the rejection test already exists (`tests/controller-authorization-hardening.test.ts:304-306`, commit `7820d5a`). | done | S |
 | ECO-4 | P3 | No funds ledger of causes (only trade deltas). | `funds_ledger` when rewards/upkeep arrive. | M |
 | ITM-1 | P2 | Equipment UI has four fake slots mapped by category; Head and Boots can never fill (no `headwear`/`footwear` categories); domain slots are free-form strings (`inventory-ui-view.ts:12-19`, `validation.ts:76`). | Canonical slot enum in the domain, validate in `place`, render from `position.slot`. | M |
 | ITM-2 | P2 | `empty_slots` is persisted although derived, mutated in three places, and silently skipped for the player (no character record) (`items.ts:18-25`, `trade.ts:183-186`). | Compute, do not persist. | S |
@@ -271,7 +314,7 @@ Audit B domain 1. Five layers: canonical identity, campaign identity (`campaign_
 | F5 | Canonical NPC re-cast as a created person is guarded by regex bearer checks; residual risk. | P2 |
 | F6 | A name introduced on a turn where Nicco changes location is skipped (`location_changed`); the later naming has no linked participant. | P3 |
 | F7 | A counteroffer reuses the planned id only if `ephemeral_ref` matches; a changed ref makes a second planned identity and breaks supersession (`person-offers.ts:349-355`, `trade.ts:90-97`). Verify. | P2 |
-| F8 | No production code creates canonical-origin campaign records; authored-NPC+ branches are test-only. | P3 |
+| F8 | No *deliberate* production code creates canonical-origin campaign records (AUTH-5 creates one implicitly, see ID-8); authored-NPC+ branches are test-only. | P3 |
 
 ### 6.2 Identity invariant checklist
 
@@ -292,18 +335,18 @@ Audit B domain 1. Five layers: canonical identity, campaign identity (`campaign_
 | I13 | Canonical avatar bound to canonical id, never to name or request text. | `player-character-view.ts` | OK. |
 | I14 | UI never receives hidden canonical names. | `ui/server.ts:37-48`, `text()` | `SessionView` still carries unmasked canonical names (`session-view.ts:96,104`); only server field selection hides them. |
 | I15 | Identity facts live in one store. | `identity-knowledge.ts:4` | OK. |
-| I16 | Person presence in state matches the person depicted in narration. | audit `absent_participant`, movement audit | NPC+-only for follows (MOV-4). |
+| I16 | Person presence in state matches the person depicted in narration. | audit `absent_participant`, movement audit, inverse audit `contradicts_committed_movement` | none (follow parity block 3 `31d82cd`, inverse audit block 9 `9d15212`) |
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
 | ID-1 | P1 | Unrecorded follow can fork a person (F1). | Fix MOV-1; flag a strong self-introduction at a scene when an unplaced/unnamed campaign person with a matching description exists elsewhere. | M |
-| ID-2 | P2 | Ephemeral ref counter resets on load, collides with stored refs. | Namespace the ref or seed `#next` from the snapshot; reload test. | S |
+| ID-2 | ~~P2~~ | ~~Ephemeral ref counter resets on load, collides with stored refs.~~ **CLOSED (block 12):** `nextParticipantSeed(snapshot)` seeds `#next` from the highest `scene_npc_<n>` in character provenance and offer plans; reload test in `tests/provisional-keep-track.test.ts`. | done | S |
 | ID-3 | P2 | The "Slave" provisional label is built in 3-4 places. | One `provisionalPersonLabel()` / `PersonIdentity` read-model module consumed by sidebar, card, offer view and narrator context. | M |
 | ID-4 | P2 | No snapshot invariant on `ephemeral_ref` uniqueness or duplicate unnamed twins at one location. | Warn-level load-time check (save-compatible) plus a dev diagnostic. | S |
 | ID-5 | P3 | `SessionView` carries unmasked canonical names. | Carry `display_name` only. | S |
 | ID-6 | P3 | Narrator and UI use different proven-name rules. | Route both through `knownCreatedName` (move to `campaign/`). | S |
 | ID-7 | P3 | Masking leak coverage for surname-only or first-name-only mentions. | Leak test over canon retrieval chunks. | S |
-| ID-8 | P3 | Canonical campaign-record producer absent; authored-NPC+ branches test-only. | Decide: remove or add a deliberate producer. | decision |
+| ID-8 | **P2** (raised, block 12) | No *deliberate* canonical campaign-record producer, but AUTH-5 is an implicit one: `characterForUpdate` creates a canonical-origin record when a canonical id is changed (e.g. `set_condition` on a present canonical NPC), which would make that NPC rite-eligible (static reading, not reproduced). Authored-NPC+ branches remain test-only. Duplicates NPC-3, F8, decision D5. | Decide D5; then either forbid the implicit record or make it deliberate. | decision |
 | ID-9 | P3 | Participant plan not persisted while the partner id is. | Document or rebuild focus on load. | S |
 
 Identity logic is scattered: "Slave" label (4 places), name-known (6 functions), masking (3 independent substitution engines), partner resolution (6 modules), person creation (3 modules each re-implementing dedupe), name-request regexes (4 places), "is present" (3 definitions). Consolidation candidate: a single `PersonIdentity` read model.
@@ -316,7 +359,7 @@ Audit B domain 3. **Confirmed:** the architecture is explicit and player-authori
 | --- | --- | --- | --- | --- |
 | NPC-1 | P2 | A promoted NPC+ who left cannot rejoin: the UI refuses `already_npc_plus` and narration is rejected. The domain supports rejoin (`premium-characters.ts:193-196`) but no production path reaches it. | Allow the same UI action as "welcome back" when premium exists and membership is not `member`. | S |
 | NPC-2 | P2 (decision) | Behaviour-activity of a promoted NPC+ outside the household. Current: tier and editor stay, behaviour (prompt pack, reflections, mannerisms, follow authority, contracts, scene developments, stone recognition) is off because `activeNpcPlus` is membership-gated. | Recommended default: keep inactive, expose rejoin (NPC-1), show an "inactive NPC+" badge. If active is chosen, introduce `isActiveForBehaviour` and migrate ~20 sites in one pass. | decision + M |
-| NPC-3 | P2 | No production producer of canonical-origin campaign records; authored NPC+ branches (`npcPlusEntrants`, `authoredNpcPlus`) are test-only. | Product decision: can a canon NPC be promoted? | decision |
+| NPC-3 | P2 | No deliberate production producer of canonical-origin campaign records (AUTH-5 is an implicit one, see ID-8); authored NPC+ branches (`npcPlusEntrants`, `authoredNpcPlus`) are test-only. | Product decision: can a canon NPC be promoted? | decision |
 | NPC-4 | P3 | `leave_household` for Nicco's household stays evidence-based; a narrated "I leave" demotes behaviour without a player action. | Document, or require confirmation. | S |
 | NPC-5 | P3 | The rite does not check legal status, consent or relationship (an enslaved person can be promoted). By design. | Note in canon docs. | S |
 | NPC-6 | P3 | `completeHeartstoneRite` swallows all commit exceptions into `campaign_validation_failed` (`game-session.ts:356`). | Log through the sink. | S |
@@ -325,12 +368,15 @@ Audit B domain 3. **Confirmed:** the architecture is explicit and player-authori
 
 ## 8. Persistence and schemas
 
+(Current schema: persisted snapshot and save file **8**, in-memory snapshot 7-shaped, since block 7; text below that says 7 is audit-time.)
+
 Audit A domain 5. Snapshot schema 7, save file schema 7 (block 5B). Atomic write (temp + fsync + rename + directory fsync, Windows skips directory fsync), `previous` copy, rolling checkpoint backups, lock with heartbeat, 16 MB cap, soft delete.
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
 | PER-1 | P2 | The 16 MB serialized cap throws `invalid_save`, which is in `FATAL_SAVE`; autosave stops permanently and the player keeps playing an unsaveable campaign. Drivers: `mannerism_learning.candidates` (schema allows 800,000), `transactions`, unpruned `trade_offers`, pretty-printed JSON. | Warn at 50%, compact JSON, prune derived evidence and closed offers, make "too big" non-fatal with a visible banner. | M |
-| PER-2 | P2 | `SceneParticipants` (narrated captives) are lost on every load; a described-but-unpriced captive loses identity, and a new offer after reload re-promotes under a different ref (duplicate person risk, ties to ID-2/F7). | Persist a compact participant registry or rebuild deterministically from `continuity`. | M |
+| PER-2A | ~~P2~~ | ~~A provisional person the player wants to keep is lost on reload.~~ **CLOSED (block 12):** Keep track materializes them as the same persistent id (PERSIST-A..F); ID-2 closed with it. | done | M |
+| PER-2B | P3 | An unkept, unnamed scene participant ("the guard") is session-local and lost on reload; a named provisional person is re-read only while the restored recent exchanges show them. Accepted: the snapshot remembers only people the player kept or a domain act materialized. | Revisit only if play shows a need; never persist unkept participants silently. | M |
 | PER-3 | P2 (optional-state portion FIXED, block 7) | ~~mannerism journal/candidates, sprite and portrait metadata, reflection journal~~ moved to side stores. STILL persisted in the authoritative snapshot (separate, unchanged): `active_household_member`, `empty_slots`, `price_indices`, premium history diffs. Safe (validated) but inflates saves. | Split the remaining derived state with a recompute path. | M |
 | PER-4 | P2 | Migration logic split across two mechanisms (table `SAVE_MIGRATIONS` plus hard-coded snapshot 4->5->6 steps in `save-format.ts:102-106`); no ordered chain; no fixture matrix; migrated loads do not mark the session dirty. | One chain keyed by snapshot version; real older-schema fixtures per version; mark migrated sessions dirty once. | M |
 | PER-5 | P2 | Additive optional fields (`price_indices`, `portraits`, `trade_offers`, `mannerism_learning`, ...) were added without a schema bump; the parser rejects unknown fields, so an older build reports `invalid_save` rather than `unsupported_version` and may quarantine a good newer save. | Bump on persisted-field additions or add a minimum-engine-version and map unknown-field failures to `unsupported_version`. | S-M |
@@ -349,7 +395,7 @@ Audit C domains 1 and 2. The real order (16 steps) runs: HTTP, `submitPlayerInpu
 | PIPE-5 | P2 | **[Status 2026-10-12: re-counted at about 32 independent modules, about 43 detectors; now tracked as ARCH-2.]** Six or more independent readers interpret the same text, each with its own grammar: Controller, authorization derived grammar, `deriveTurnEvidence`, audit, commit-prep, foreground binding, mannerism extractor, reflection. | One shared `NarrationFacts` claim extractor per text (draft, revision, delivered). | L |
 | PIPE-6 | P2 | Commit-prep promotes people, records canonical-name knowledge, contracts and person offers from the delivered text after the audit and outside `authorizeWithEvidence` ("fourth authority lane"). | Document as a lane; emit as authorization diagnostics; consider a final audit over the batch. | M |
 | PIPE-7 | P2 | Commands are fixed from the draft; if the revision or redaction reshapes the event, state may change without prose saying so. The only repair is a hard-coded English arrival sentence (D-13). | Generalize: verify every committed command is mentioned, append a templated sentence per omission. | M |
-| PIPE-8 | P2 | Two delivery orders via `reliability_contract`; production uses the one that delivers narration before the commit (`turn-coordinator.ts:221` vs `225`). | Single post-commit mode; delete the flag. | S |
+| PIPE-8 | ~~P2~~ | **CLOSED (block 4 `eb05734`, verified block 12):** one post-commit delivery order; `reliability_contract` now drives only retry and diagnostics. Original text: ~~Two delivery orders via `reliability_contract`; production uses the one that delivers narration before the commit (`turn-coordinator.ts:221` vs `225`). | Single post-commit mode; delete the flag. | S |
 | PIPE-3 | ~~P2~~ FIXED (block 6; block 7 removed the last revision-bump half) | ~~Post-turn work commits after `turn_completed` and delays the HTTP result.~~ Detached after the core turn completes; since block 7 its writes also never move the revision. | Done. | M |
 | PIPE-4 | P2 | `getView()` rebuilds a full narrator prompt on every call (about 43 call sites; `server.state()` calls it twice); a turn triggers 6-10 context builds. | Cache the budget by revision and input; build once. | S-M |
 | PIPE-9 | P2 | The budget indicator excludes retrieval (up to 10,000 chars); auto-compaction at 0.9 can read "fine" while the real request breaches and throws `context_too_large`. `#lastInput` is set before the Narrator call. | Reserve retrieval headroom (about 3k tokens). | S |
@@ -381,7 +427,7 @@ Audit C domain 3. Topology verified in code (docs match): Narrator `z-ai/glm-5.2
 
 | ID | Sev | Finding | Action | Effort |
 | --- | --- | --- | --- | --- |
-| PRV-1 | P2 | Narrator is a single point of failure with no parameter guarantee (no `require_parameters`; if the pinned endpoint ignores `reasoning.enabled:false`, hidden reasoning consumes 512 tokens, `finish_reason: length`, non-retryable `invalid_provider_response`). An outage fails every turn. | Count `finish_reason_length` per model; consider `require_parameters`; offer a user-triggered "retry with backup narrator". | M |
+| PRV-1 | P2 | Narrator is a single point of failure with no parameter guarantee (no `require_parameters`; if the pinned endpoint ignores `reasoning.enabled:false`, hidden reasoning consumes the output budget (512 at the audit; since block 4 768 with one 1024-token recovery, NARR-1), `finish_reason: length`, non-retryable `invalid_provider_response`). An outage fails every turn. | Count `finish_reason_length` per model; consider `require_parameters`; offer a user-triggered "retry with backup narrator". | M |
 | PRV-2 | P2 | Controller fallback shares one 20 s window; production runs non-strict (`strict_output` unset), accepting "normalized" malformed output. | Telemetry on `normalization_used`/`model_fallback`; move to strict once low; longer timeout for fallback. | S-M |
 | PRV-3 | P2 | `Retry-After` and `limit_source` are captured but ignored by backoff. | Honour `Retry-After` within the remaining budget. | S |
 | PRV-4 | P3 | `OPENROUTER_REFLECTION_MODEL` is decorative: the adapter rejects any other model and the throw is swallowed (`game-session.ts:826-828`); setting it silently disables reflection. | Remove the variable or fail loudly at startup; make qualification a config table. | S |
@@ -431,7 +477,7 @@ Audit D part 1 (static review; see section 0). 50 findings; the actionable ones:
 | UI-12 | POLISH | P3 | Dead CSS: `.top-bar nav button:last-child` matches nothing; bare `article{grid-template-columns:100px ...}` hits every article. |
 | UI-13 | CONSISTENCY | P3 | Three CSS dialects in `style.css`; undefined variables (`--panel`, `--danger`); hard-coded hex colours that should be tokens. |
 | UI-14 | POLISH | P3 | Player `*action*` and speech look alike; apply the narration/dialogue colours inside `.player`. |
-| UI-15 | ACCESSIBILITY | P2 | `#conversation` is `role="log" aria-live` and streaming does `replaceChildren` per token, so screen readers announce partial text. Draft bubble outside the live region. |
+| UI-15 | ACCESSIBILITY | P3 (was P2) | Token streaming was removed in block 4; the residual is the pending "Thinking / Narrating" bubble inside `#conversation` (`role="log" aria-live`), which screen readers announce. Move it outside the live region. |
 | UI-16 | USABILITY | P3 | "Regenerate with..." spends credits, appears under every narrator message, is undocumented, shows a raw `failure_code`. Gate behind a Debug toggle. |
 | UI-17 | CONSISTENCY | P2 | Unknown identity decided by client string compares in three places and a server-fabricated "Unfamiliar household member" label in a dead legacy `household` payload; the category string can be "Met this campaign · name unknown" and miss the exact-match. Expose one boolean and a server-built `initial`; delete the legacy field. |
 | UI-18 | CONSISTENCY | P3 | Player editor heading upper-cased, NPC headings not. |
@@ -446,7 +492,7 @@ Audit D part 1 (static review; see section 0). 50 findings; the actionable ones:
 | UI-27 | USABILITY | P3 | The composer hint says "/ for commands" but only `/location` exists. |
 | UI-28 | RESPONSIVE | P2 | At <=720px two scroll contexts and a soft-keyboard problem (`.story{height:75dvh}`); the 390px header wraps to >=90px; `.campaign-screen` overlaps the header (`inset:58px`); the editor stacks 15 fields and four prompt textareas. Bottom tab bar, "Scene" bottom sheet, prompts in `<details>`. (static) |
 | UI-29 | CONSISTENCY | P3 | Logic duplicated in client JS instead of consuming facades: `dayLabel(minute)` vs server `date_text`; `NUMBER_RANGES` duplicating server validation; portrait eligibility text; raw status enum text; Accept enablement recomputed. Server should expose `date_text`, field ranges, `delete_blocked_reason`, `status_label`, `accept_blocked_reason`. |
-| UI-30 | PERFORMANCE | P3 | Browser check scripts hard-code `/home/user/Calderan_RPG/.build`, `/opt/node-tools/...`, `/tmp/claude-0/browser/`; Playwright is not a devDependency. Parameterise. |
+| UI-30 | TOOLING | P3 | Browser check scripts hard-code `/home/user/Calderan_RPG/.build`, `/opt/node-tools/...`, `/tmp/claude-0/browser/`; Playwright is not a devDependency. Parameterise. |
 
 Answers to the audit questions: *Is it obvious which actions mutate authoritative state?* No (UI-2, UI-3). *Are ACCEPT and Promote distinguishable?* Only by location and wording. *Does the sidebar scale to 20+ characters?* Not designed for it (UI-7, UI-8). *Is unknown identity consistent?* Structurally masked server-side, string-matched client-side (UI-17). *Are loading states truthful?* The turn states are ("Draft", "Revising"); image progress is a timer (IMG-4). *Are errors actionable?* Accept errors yes; `/location` and developer copy no (UI-5, UI-24). *Mobile?* Usable but cramped (UI-28). Positive findings to preserve: opaque refs and revision guard on every mutation, no price/subject on the wire for trade, tier capabilities omit controls, text+icon (not colour alone) for BUY/SELL, honest generation timeout copy, CSP and loopback host check. No obsolete server route was found: every route has a caller.
 
@@ -537,7 +583,7 @@ Audit D part 2. Result of comparing the normative docs with the code: topology, 
 | DOC-9 | `/assets/items/` template tier documented as existing but is a stub | **Fixed** |
 | DOC-10 | ROADMAP and CURRENT_STATE rows for identity binding, person offer, deletion, P8 | **Fixed** |
 | DOC-11 | docs/README evaluation list and root-report list | **Fixed** (links to this register and roadmap added) |
-| DOC-12 | `ACTUAL_OFFER.md` §6 claims goods trades "record the transaction" | **Open** (see TRD-11) |
+| DOC-12 | `docs/architecture/ACTUAL_OFFER.md` lines 31 and 49 say a goods BUY records a transaction; its Ledger section (line 80) says none exists | **Open** (doc contradicts itself; the code writes no goods transaction, TRD-11) |
 | DOC-13 | `CANON_OVERVIEW.md` §10 author-only spoilers inside an indexed normative doc | **Open** (a move; needs a decision) |
 | DOC-14 | Root `DEBT_REGISTER.md` stale | **Banner added** |
 | DOC-15 | No freshness check: three commits left the set stale in one day | **Open**: link-check and staleness tripwire test |

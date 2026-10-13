@@ -10,11 +10,14 @@ import type { EphemeralSceneParticipant } from "./scene-participants.js";
  * stable `ref` (`narrated:<name|noun>`, or the linked ephemeral scene participant's id), so the SAME person referred to again in the same
  * interaction resolves to the SAME ref and never to a second record.
  *
- * Becoming persistent (materialization) happens only inside an action that already has explicit authority and needs a durable person; today that is
- * the person Actual Offer Accept (src/turn/person-offers.ts plans the register command, settled atomically with the purchase). Nothing else materializes.
+ * Becoming persistent (materialization) happens only inside an action that already has explicit authority and needs a durable person. There are two:
+ * the person Actual Offer Accept (src/turn/person-offers.ts plans the register command, settled atomically with the purchase) and, since Block 12, the
+ * player's explicit [ Keep track ] action (src/turn/keep-track.ts, GameSession.keepTrack). Nothing else materializes: never narration, a name, a
+ * repeated appearance or the player's words.
  *
- * Boundary (PER-2 stays separate): provisional identity is NOT saved. After a reload, or once the person leaves the recent-exchange window, they
- * are simply absent: no CampaignCharacter is created, no duplicate can appear, and a later narration may introduce them again.
+ * Boundary: provisional identity itself is NOT saved. A named provisional person is re-read after a reload from the restored recent exchanges (saved as
+ * non-authoritative continuity); the session's scene participant registry is not restored (PER-2B). Once the person leaves the recent-exchange window
+ * they are simply absent: no CampaignCharacter is created, no duplicate can appear, and a later narration may introduce them again.
  */
 export interface ProvisionalPerson {
   readonly ref: string;
@@ -55,16 +58,22 @@ export interface MaterializeInput {
   readonly world_minute: number;
   readonly ephemeral_ref: string;
   readonly name_source?: NameSource;
+  /**
+   * Block 12 (Keep track): copy only the IDENTITY facts narration established (name, sex, age, species, appearance, descriptor, role). Condition and
+   * background claims are dropped: they are not domain-authoritative state, and only an act with its own authority over them may record them.
+   */
+  readonly identity_only?: boolean;
 }
 /**
  * THE single builder of the minimum durable character from a provisional person (materialization). It preserves the SAME logical person: the
  * established name, the facts narration established (never invented), where they stand, the ephemeral ref as provenance, and the evidence. It
  * adds no personality, relationship or household role. It is only ever called by an action that already carries explicit authority
- * (today: the person Actual Offer plan, settled by the player's Accept); the result is a COMMAND payload, not a state change.
+ * (the person Actual Offer plan, settled by the player's Accept, and the player's Keep track); the result is a COMMAND payload, not a state change.
  */
 export function materializeProvisional(i: MaterializeInput): CampaignCharacter {
   const facts = establishedFacts(i.person, i.seller_key, i.name_of, i.keep_claim);
-  return buildPromotedCharacter({ label: i.label, established: { ...facts.established, ...(i.role ? { role: i.role } : {}) }, evidence: facts.evidence, location_id: i.location_id, trigger: i.trigger,
+  const { condition: _condition, background: _background, ...identity } = facts.established;
+  return buildPromotedCharacter({ label: i.label, established: { ...(i.identity_only ? identity : facts.established), ...(i.role ? { role: i.role } : {}) }, evidence: facts.evidence, location_id: i.location_id, trigger: i.trigger,
     promoted_revision: i.base_revision + 1, world_minute: i.world_minute, ephemeral_ref: i.ephemeral_ref, ...(i.name_source ? { name_source: i.name_source } : {}) });
 }
 

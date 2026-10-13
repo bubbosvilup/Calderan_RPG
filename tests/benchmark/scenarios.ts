@@ -37,6 +37,9 @@ const PURCHASE: Scenario["steps"] = [
 const KORVIN_KNOWN: Scenario["steps"] = [{ do: "turn", ...F.SELLERS_ROW }, { do: "turn", ...F.KORVIN_NAME_REVEAL } ];
 const withPrice = (tail: string): string => F.OFFER_300.narration.replace(/Three hundred for her\..*$/s, tail);
 const quiet = "*Korvin says nothing. He watches the rain run off the canvas, arms folded, and lets the silence work for him.*";
+// Block 12: a named captive in Korvin's pen, and Korvin's price for her.
+const LYSA_PEN = { player: "I look at the pen.", narration: "*Korvin gestures at the pen. A young woman sits chained among the captives, red hair matted.*\n\n\"That one is Lysa,\" Korvin says. \"Strong back, eats little.\"" };
+const LYSA_OFFER = { player: "How much for Lysa?", narration: "*Korvin rubs his chin.*\n\nLysa? Two hundred for her. That is the price." };
 const askFor = (tail: string) => ({ do: "turn" as const, player: F.OFFER_300.player, narration: withPrice(tail) });
 
 
@@ -104,11 +107,61 @@ export const SCENARIOS: readonly Scenario[] = [
     initial: { world: "market", commands: [{ kind: "register_character", character: { id: "campaign_character_brenna", origin: { kind: "created" }, profile: { name: "Brenna", age: { kind: "exact", years: 29 } }, current: { current_location: "calderan_slave_market", status: "active" } } }] },
     steps: [ask("I look at the cages.", "*Brenna coughs behind the bars, feverish. Korvin leans on the cage and glances at Nicco.*\n\n\"Brenna,\" Korvin says. \"Quiet now.\""), ask("hello Brenna", "*Brenna lifts her head.*\n\n\"My name is Brenna,\" she rasps.")],
     expect: { created: ["Brenna"], provisional_names: [], identity_commands: 0, revision_delta: 0 } },
-  { id: "I4", category: "identity", mode: "deterministic", purpose: "KNOWN PRODUCT GAP: after several friendly turns, the player has NO generic deterministic action to keep an arbitrary provisional person (Hollis) as a persistent character; words alone must not, and nothing else does.",
-    known_gap: "No player-facing action promotes an arbitrary ProvisionalPerson to a CampaignCharacter outside domain-authorized acts (person Actual Offer Accept). Narration, names and player words are not persistence authority (AUTH-2).",
+  { id: "I4", category: "identity", mode: "deterministic", purpose: "Block 12 (KPG-1 closed): after several friendly turns the player's words alone still keep nobody; the explicit [ Keep track ] action then materializes the SAME provisional person (Hollis) as one ordinary persistent character.",
     initial: { world: "market" },
-    steps: [{ do: "turn", ...hollis(1) }, { do: "turn", ...hollis(2) }, ask("Hollis, I would like to keep you around. Remember you as one of mine.", "*Hollis tips his cap.*\n\n\"My name is Hollis. Always at your service, friend.\"")],
-    expect: { created: ["Hollis"] } },
+    steps: [{ do: "turn", ...hollis(1) }, { do: "turn", ...hollis(2) },
+      { ...ask("Hollis, I would like to keep you around. Remember you as one of mine.", "*Hollis tips his cap.*\n\n\"My name is Hollis. Always at your service, friend.\""), expect: { created: [], revision_delta: 0, trackable: ["Hollis"] } },
+      { do: "keep", who: "Hollis" }],
+    expect: { created: ["Hollis"], kept: ["Hollis"], keep_result: "kept", revision_delta: 1, npc_plus: [], household: [] } },
+
+  // ============================================================================================ KEEP TRACK (Block 12, KPG-1)
+  { id: "K1", category: "keep_track", mode: "deterministic", purpose: "Narration, a self-introduced name, repeated appearances and the player's own words persist nobody: the person stays provisional (offered for Keep track, never created).",
+    initial: { world: "market" },
+    steps: [{ do: "turn", ...hollis(1) }, { do: "turn", ...hollis(2) }, ask("Hollis, remember me. I want you to stay one of mine for good.", "*Hollis grins.*\n\n\"My name is Hollis. I'll remember you, friend.\"")],
+    expect: { created: [], revision_delta: 0, identity_commands: 0, trackable: ["Hollis"], provisional_refs: ["narrated:hollis"] } },
+  { id: "K2", category: "keep_track", mode: "deterministic", purpose: "Keep track materializes the SAME provisional person as ONE ordinary campaign character in ONE revision with zero provider calls (no household, NPC+, legal, ownership or transaction); a second press answers `already`; the person narrated again binds to that character.",
+    initial: { world: "market" },
+    steps: [{ do: "turn", ...hollis(1) }, { do: "keep", who: "Hollis", expect: { keep_result: "kept", revision_delta: 1, created: ["Hollis"], kept: ["Hollis"], trackable: [], calls: { narrator: 1, controller: 1 }, npc_plus: [], household: [], held_by_player: 0, transactions: 0, inventory: [] } },
+      { do: "keep", who: "Hollis", again: true, expect: { keep_result: "already", revision_delta: 1, created: ["Hollis"] } }, { do: "turn", ...hollis(2) }],
+    expect: { created: ["Hollis"], provisional_names: [], identity_commands: 0, trackable: [], revision_delta: 1 } },
+  { id: "K3", category: "keep_track", mode: "deterministic", purpose: "A kept person survives save/reload as the same one character; the restored continuity reads him as that persistent person, never a new provisional one.",
+    initial: { world: "market" },
+    steps: [{ do: "turn", ...hollis(1) }, { do: "keep", who: "Hollis" }, { do: "save_reload", expect: { created: ["Hollis"], kept: ["Hollis"], trackable: [] } }, { do: "turn", ...hollis(2) }],
+    expect: { created: ["Hollis"], kept: ["Hollis"], trackable: [], provisional_names: [], revision_delta: 1, at: { campaign_character_r3_hollis: "calderan_slave_market" } } },
+  { id: "K4", category: "keep_track", mode: "deterministic", purpose: "An untracked provisional person stays transient across save/reload: nothing is created; he is still only provisional (re-read from the restored recent exchanges, PER-2A).",
+    initial: { world: "market" },
+    steps: [{ do: "turn", ...hollis(1) }, { do: "save_reload" }, { do: "turn", ...hollis(2) }],
+    expect: { created: [], revision_delta: 0, trackable: ["Hollis"], provisional_refs: ["narrated:hollis"] } },
+  { id: "K5", category: "keep_track", mode: "deterministic", purpose: "Two temporary people with the same label are distinguishable and stay distinct: keeping the second guard makes exactly that one persistent; the other stays temporary.",
+    initial: { world: "market" },
+    steps: [ask("I approach a guard.", "*The guard looks Nicco over, hand on his spear.*\n\n\"Keep moving,\" he says."), ask("I approach another guard.", "*The second guard shrugs at Nicco and says nothing.*"),
+      { do: "check", expect: { trackable: ["Guard (1)", "Guard (2)"], scene_participants: 2 } }, { do: "keep", who: "Guard (2)" }],
+    expect: { keep_result: "kept", created: ["(unnamed)"], kept: ["(unnamed)"], trackable: ["Guard"], scene_participants: 1, revision_delta: 1 } },
+  { id: "K6", category: "keep_track", mode: "deterministic", purpose: "Fail closed: a stale revision, a token nobody issued, and the token of a person the player left behind (location correction) are all refused and create nothing.",
+    initial: { world: "market" },
+    steps: [{ do: "turn", ...hollis(1) }, { do: "keep", who: "Hollis", stale: true, expect: { keep_result: "stale", revision_delta: 0, trackable: ["Hollis"] } },
+      { do: "keep", forged: true, expect: { keep_result: "unknown_person", revision_delta: 0 } }, { do: "move", to: "heartstone_lr" }, { do: "keep", who: "Hollis", again: true, fresh: true }],
+    expect: { keep_result: "unknown_person", created: [], trackable: [] } },
+  { id: "K7", category: "keep_track", mode: "deterministic", purpose: "Actual Offer case B: a captive kept BEFORE any offer stays legally unestablished; the later offer binds to that SAME id and Accept only pays and transfers (one character, one legal record).",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, { do: "turn", ...LYSA_PEN }, { do: "keep", who: "Lysa", expect: { kept: ["Lysa"], held_by_player: 0, legal: { campaign_character_r3_lysa: "none" } } },
+      { do: "turn", ...LYSA_OFFER, expect: { offers_active: ["buy:person:200"], created_are_offer_subjects: true } }, { do: "accept" }],
+    expect: { created: ["Lysa"], kept: ["Lysa"], created_are_offer_subjects: true, held_by_player: 1, transactions: 1, gold: 300, legal: { campaign_character_r3_lysa: "enslaved:nicco" } } },
+  { id: "K8", category: "keep_track", mode: "deterministic", purpose: "Actual Offer cases A and C: while the offer is open its subject cannot be kept (Accept already keeps them); Accept materializes her exactly as before; the earlier Keep token then answers `already` with no revision.",
+    initial: { world: "market" },
+    steps: [...KORVIN_KNOWN, { do: "turn", ...LYSA_PEN }, { do: "check", expect: { trackable: ["Lysa"] } }, { do: "keep", who: "Lysa", stale: true },
+      { do: "turn", ...LYSA_OFFER, expect: { trackable: ["Lysa !offer_subject"] } }, { do: "keep", who: "Lysa", again: true, fresh: true, expect: { keep_result: "offer_subject", created: [] } },
+      { do: "accept", expect: { created: ["Lysa"], revision_delta: 2 } }, { do: "keep", who: "Lysa", again: true, fresh: true }],
+    expect: { keep_result: "already", created: ["Lysa"], kept: [], held_by_player: 1, revision_delta: 2 } },
+  { id: "K9", category: "keep_track", mode: "deterministic", purpose: "Keep track then the explicit Heartstone rite: the SAME id becomes NPC+ and a household member, and stays that id through save/reload.",
+    initial: { world: "market", commands: [{ kind: "runtime_delta", delta: { player_location: "heartstone_lr" } }] },
+    steps: [ask("I look around the hall.", "*A courier waits by the hearth, rain on her cloak.*\n\n\"My name is Tamsin,\" she says. \"I carry letters for the Keeper.\""), { do: "keep", who: "Tamsin", expect: { kept: ["Tamsin"], npc_plus: [], household: [] } },
+      { do: "promote_npc_plus", character_id: "Tamsin" }, { do: "save_reload" }],
+    expect: { created: ["Tamsin"], kept: ["Tamsin"], npc_plus: ["campaign_character_r4_tamsin"], household: ["campaign_character_r4_tamsin"], revision_delta: 2 } },
+  { id: "K10", category: "keep_track", mode: "deterministic", purpose: "Never a merge by name: a persistent Hollis already exists elsewhere, so the provisional Hollis is shown but cannot be kept, and the player's words naming him change nothing.",
+    initial: { world: "market", commands: [create("campaign_character_hollis", "Hollis", "male", "heartstone_lr")] },
+    steps: [{ do: "turn", ...hollis(1), expect: { trackable: ["Hollis !same_name_persistent"] } }, ask("Keep track of Hollis.", "*Hollis shrugs.*\n\n\"My name is Hollis, like I said.\""), { do: "keep", who: "Hollis" }],
+    expect: { keep_result: "same_name_persistent", created: ["Hollis"], revision_delta: 0, at: { campaign_character_hollis: "heartstone_lr" } } },
 
   // ============================================================================================ TRADE (goods)
   { id: "T1", category: "trade", mode: "deterministic", purpose: "A direct goods offer from the seller becomes an Actual Offer; nothing is paid or transferred until the player's explicit Accept, which then settles atomically.",

@@ -194,7 +194,9 @@ export function readScene(recent: readonly RecentExchange[], context: TurnContex
   const persons: NarratedPerson[] = [], namings: LateNaming[] = [];
   for (const name of [...new Set(intros.map(i => i.name))]) {
     const mine = intros.filter(i => i.name === name);
-    const selfSpeakers = [...new Set(mine.filter(i => i.kind === "self" && i.speaker).map(i => i.speaker!))];
+    // Block 12: narration that already calls the speaker by the very name they introduce ("*Hollis tips his cap.* "My name is Hollis."") is that same
+    // person speaking, not a second claimant beside the porter who introduced himself earlier.
+    const selfSpeakers = [...new Set(mine.filter(i => i.kind === "self" && i.speaker && i.speaker !== `other:${name}`).map(i => i.speaker!))];
     // A present persistent character with no name introducing themselves: late naming of that same character. Checked first: names are not
     // unique, so another Maren elsewhere (or even here) does not stop the girl from being Maren. An unattributed bare-name answer to a direct name
     // question ("Lira.") names the scene's one present unnamed persistent person.

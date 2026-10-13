@@ -5,6 +5,8 @@ import { canonicalInteractionTargets, type CastingOptions } from "./canonical-in
 import { isIdentityRequest } from "./identity-request.js";
 import { continuesTransaction } from "./transaction-acts.js";
 import type { RecentExchange } from "./recent-conversation.js";
+import type { CampaignSnapshot } from "../campaign/types.js";
+import type { DeepReadonly } from "../types/readonly.js";
 
 /**
  * Ephemeral scene participants (Phase 1P): session-local people who exist in the current scene but are not CampaignState
@@ -117,10 +119,24 @@ export function castingOptions(context: TurnContext, participants: readonly Ephe
   return { ...(latest && (!latest.location_id || latest.location_id === location) ? { narration: latest.narration } : {}), owned };
 }
 
+/**
+ * ID-2 (Block 12): the first participant number a NEW registry may use for this campaign. Participant ids are session-local, but they leave the session as
+ * provenance (`origin_snapshot.ephemeral_ref` of a kept or purchased person, a person offer's planned character). Restarting at 1 after a load would hand a
+ * different person the id an earlier one recorded (a kept person's token, the person-offer `person_unavailable` check). The seed is derived from the
+ * authoritative snapshot only; nothing is added to the save.
+ */
+export function nextParticipantSeed(snapshot: DeepReadonly<CampaignSnapshot>): number {
+  const refs = [...snapshot.characters.map(c => c.origin_snapshot?.ephemeral_ref), ...(snapshot.trade_offers ?? []).flatMap(o => o.subject.kind === "person"
+    ? o.subject.plan.map(c => c.kind === "register_character" ? c.character.origin_snapshot?.ephemeral_ref : undefined) : [])];
+  return 1 + Math.max(0, ...refs.map(r => /^scene_npc_(\d+)$/.exec(r ?? "")?.[1]).filter((n): n is string => !!n).map(Number));
+}
+
 /** Session-local registry, one per campaign session (held by the coordinator beside RecentConversation). */
 export class SceneParticipants {
   #list: EphemeralSceneParticipant[] = [];
-  #next = 1;
+  #next: number;
+  /** ID-2 (Block 12): `next` continues past every `scene_npc_<n>` the campaign already recorded (see `nextParticipantSeed`), so a fresh registry after a load never reuses one. */
+  constructor(next = 1) { this.#next = Math.max(1, Math.floor(next)); }
   #turn = 0;
   #focus: string | null = null;
   #focusLocation: string | null = null;

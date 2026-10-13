@@ -41,11 +41,12 @@ export interface EstablishedClaim { text: string; source: "narration" | "seller"
 export interface CharacterOriginSnapshot {
   source: "narrator_ephemeral";
   /**
-   * Why the person became durable (Pass 1.2 model). Production-wired: `name_established` (a proper name was securely established)
-   * and `purchase_unnamed_subject` (the one functional exception: an unnamed person the player acquired). `recruitment`, `custody`
-   * and `rescue` are reserved for future explicit systems only. There are deliberately no importance or soft-signal triggers.
+   * Why the person became durable (Pass 1.2 model). Production-wired: `name_established` and `purchase_unnamed_subject` (a person
+   * materialized by the person Actual Offer Accept, named or not) and `player_kept` (Block 12: the player's explicit Keep track action).
+   * `recruitment`, `custody` and `rescue` are reserved for future explicit systems only. There are deliberately no importance or
+   * soft-signal triggers.
    */
-  trigger: "name_established" | "purchase_unnamed_subject" | "recruitment" | "custody" | "rescue";
+  trigger: "name_established" | "purchase_unnamed_subject" | "player_kept" | "recruitment" | "custody" | "rescue";
   promoted_revision: number; promoted_world_minute: number; location_id: string;
   /** How play referred to the person at promotion: an established name, or a description ("the girl") when no name was given. */
   label: string;

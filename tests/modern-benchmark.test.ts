@@ -45,10 +45,16 @@ test("gate: a failure names the scenario id and prints expected vs actual", asyn
   assert.match(stepWrong.failures.join("\n"), /T1-step step 2 \(turn\): offers_active\n\s+expected \["buy:goods:99"\]\n\s+actual\s+\["buy:goods:15"\]/);
 });
 test("gate: a known product gap reports KNOWN PRODUCT GAP, and FAILS the day it unexpectedly passes (the benchmark never bends to go green)", async () => {
-  const gap = SCENARIOS.find(s => s.known_gap)!;
-  assert.equal(byId.get(gap.id)!.verdict, "KNOWN PRODUCT GAP");
-  const closed = await runScenario({ ...gap, id: "gap-closed", expect: { revision_delta: 0 } });
+  // Block 12 closed the last real gap (KPG-1, I4), so the gate is pinned on a synthetic gap: a scenario declaring a behavior the run does not show.
+  const base = SCENARIOS.find(s => s.id === "I1")!;
+  const open = await runScenario({ ...base, id: "gap-open", known_gap: "synthetic gap", expect: { created: ["Hollis"] } });
+  assert.equal(open.verdict, "KNOWN PRODUCT GAP");
+  const closed = await runScenario({ ...base, id: "gap-closed", known_gap: "synthetic gap", expect: { revision_delta: 0 } });
   assert.equal(closed.verdict, "FAIL"); assert.match(closed.failures.join("\n"), /now PASSES/);
+});
+test("Block 12: the benchmark has no known product gap left (KPG-1 closed by Keep track; no replacement gap is manufactured)", () => {
+  assert.deepEqual(SCENARIOS.filter(s => s.known_gap).map(s => s.id), []);
+  assert.equal(first.known_gaps, 0);
 });
 test("gate: fixture setup does not leak between scenarios (each run has its own campaign and directory; repeated runs give identical observations)", async () => {
   const a = await runScenario(SCENARIOS.find(s => s.id === "P1")!), b = await runScenario(SCENARIOS.find(s => s.id === "P1")!);

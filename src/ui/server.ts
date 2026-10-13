@@ -49,6 +49,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       inventory: session.getPlayerInventoryView(),
       trade: session.getTradeView(),
       confirmations: session.getConfirmationView(),
+      provisional: session.getProvisionalPeopleView(),
       household: play.household.map(h => ({ members: h.members.map(m => ({ name: m.name_known ? m.name : "Unfamiliar household member", presence: m.presence, ...(m.known_location ? { location: m.known_location } : {}) })) })) };
   };
   return createServer(async (req, res) => {
@@ -109,7 +110,7 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         if (!file) { json(404, { error: "Not found." }); return; }
         res.writeHead(200, { "Content-Type": file.media_type, "Content-Length": String(file.bytes.length) }); res.end(file.bytes); return;
       }
-      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/player-character" || req.url === "/api/npc-plus/promote" || req.url === "/api/trade/accept" || req.url === "/api/confirmation/confirm" || req.url === "/api/confirmation/cancel" || req.url === "/api/repair/request" || PORTRAIT_ROUTES.has(req.url ?? "") || CAMPAIGN_ROUTES.has(req.url ?? ""))) {
+      if (req.method === "POST" && (req.url === "/api/turn" || req.url === "/api/alternative" || req.url === "/api/location" || req.url === "/api/appearance" || req.url === "/api/player-character" || req.url === "/api/npc-plus/promote" || req.url === "/api/people/keep" || req.url === "/api/trade/accept" || req.url === "/api/confirmation/confirm" || req.url === "/api/confirmation/cancel" || req.url === "/api/repair/request" || PORTRAIT_ROUTES.has(req.url ?? "") || CAMPAIGN_ROUTES.has(req.url ?? ""))) {
         if (req.headers["content-type"] !== "application/json") { json(415, { error: "Expected JSON." }); return; }
         // A reference upload carries one base64 image (at most 4 MB decoded); every other request stays small.
         const limit = req.url === "/api/portrait/reference" ? 6_000_000 : 24000;
@@ -190,6 +191,12 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
           // Block 5B: a HUMAN operator's explicit identity repair request (retire / merge) by explicit ids. It only creates a PendingConfirmation (or reports conflicts);
           // the existing confirm/cancel routes decide. Never reachable from the Narrator, the Controller or a scanner.
           const outcome = session.requestRepair({ operation: fields.operation, character_id: fields.character_id, target_id: fields.target_id, expected_revision: fields.expected_revision });
+          const { view: _view, ...result } = outcome;
+          json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
+        }
+        if (req.url === "/api/people/keep") {
+          // Block 12 (KPG-1) Keep track: the browser sends only the opaque person token and the revision it rendered; the engine recomputes and decides.
+          const outcome = session.keepTrack({ token: fields.token, expected_revision: fields.expected_revision });
           const { view: _view, ...result } = outcome;
           json(outcome.ok ? 200 : outcome.error.code === "stale_turn" || outcome.error.code === "turn_in_progress" ? 409 : 422, { ...result, ...state() }); return;
         }

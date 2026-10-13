@@ -95,11 +95,12 @@ Name rules the reading keeps: a self-introduction counts only in an attributed l
 | `attributed-speech.ts` | dialogue units | the speaker policy of the recent-conversation projection, the audit's NPC-claim and player-agency checks and the household / relationship evidence: legacy prose only, strict methods only, never an unknown `other:Name`, Nicco only by an explicit tag that names him. RPG plain speech is never a named speaker's words there |
 | `person-offers.ts` | commerce facts, scene reading | the person Actual Offer (subject, seller authority, price) |
 | `name-establishment.ts` | scene reading | provisional people (scene-local, never saved) and late naming of a present unnamed persistent character (same id) |
+| `keep-track.ts` (block 12) | scene reading, scene participants | the provisional people the sidebar lists for **Keep track** and the one identity the action materializes (exact ref, no fuzzy match) |
 | `partner-identity-guard.ts` | scene reading, `self_introduction` and `reference` facts | a bound canonical partner who introduces themself under another name is a conflict (`canonical_name_conflict`) |
 | `canonical-name-disclosure.ts` | shared speech tags, descriptors, identity forms | whether the canonical partner gave their own canonical name |
 | `narration-audit.ts` | the same source (`of`, `scene`) | contradictions with committed state, absent participants, unrecorded settlements |
 
-Names and narration are never persistence authority: a narrated name creates at most a PROVISIONAL person (see [Architecture](../ARCHITECTURE.md) and KPG-1 in the [debt register](../MASTER_DEBT_REGISTER.md)).
+Names and narration are never persistence authority: a narrated name creates at most a PROVISIONAL person; only the player's explicit Keep track or the person Actual Offer Accept makes that same person persistent (see [Architecture](../ARCHITECTURE.md), section 2c). A speaker tag that is the self-introducer's own name ("*Hollis tips his cap.* \"My name is Hollis.\"") is the same person, not a second claimant (block 12).
 
 ## 8. Readers that stay outside the fact layer
 
@@ -122,7 +123,7 @@ Every remaining narration or input reader is classified (block 11 sweep; archite
 
 ## 10. Known limits
 
-- KPG-1 stays open: there is no player action to keep an arbitrary provisional person; a provisional person is lost on reload (PER-2) and cannot be promoted to NPC+.
+- A provisional person persists only through Keep track or Accept (KPG-1 closed in block 12). An unkept, unnamed scene participant is not saved (PER-2B); a provisional person cannot be promoted to NPC+ until kept.
 - A pronoun that opens an exchange with two candidate people of that sex attributes nothing (fail closed); the line is then nobody's.
 - `addressed_verb` recipients ("tells her") are described but not used by the commerce policy: a seller often instructs the captive in the same breath as quoting the buyer.
 - The F readers above still carry their own verb lists.

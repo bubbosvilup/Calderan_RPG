@@ -1,0 +1,228 @@
+{
+  "generated_at": "2026-10-13T12:58:03.178Z",
+  "wire_total": 11,
+  "wire_by_model": {
+    "z-ai/glm-5.2": 6,
+    "undefined": 5
+  },
+  "tokens": 59680,
+  "cost_usd": 0,
+  "results": [
+    {
+      "id": "A",
+      "purpose": "Maren-like stranger: named provisional, then Keep track",
+      "verdict": "PASS",
+      "problems": [],
+      "created": [
+        {
+          "id": "campaign_character_r3_maren",
+          "name": "Maren",
+          "trigger": "player_kept",
+          "ref": "narrated:maren",
+          "location": "calderan_slave_market"
+        }
+      ],
+      "revision_delta": 1,
+      "wire_calls": 7,
+      "steps": [
+        {
+          "step": 1,
+          "input": "I walk over to a young woman selling apples from a basket near the edge of the square.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*A woman sits on a low stool near the edge of the square, a broad basket of apples balanced on her lap. Rain has darkened the shawl across her shoulders. She is not young — forty or past it, weathered hands, hair tied back under a cloth. A few apples have rolled to the edge of the basket and sit there precariously with the traffic vibrations.*\n\n*She watches Nicco approach without straightening up. One hand rests on the rim of the basket, the other holds a half-eaten apple. She glances at him, then at the basket, then back.*\n\nFresh this morning. Two silver apiece, three for five.\n\n*She takes another bite, chews slowly, and says nothing more. Behind her the auction voice carries another price across the square, and a pair of handlers steer a chained group toward the pens. The rain has left a fine sheen on the apples' skins.*",
+          "audit": [],
+          "committed": [],
+          "provisional": [],
+          "created": [],
+          "tokens": 11794,
+          "cost_usd": 0
+        },
+        {
+          "step": 2,
+          "input": "I ask the apple seller what her name is.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*She finishes chewing, swallows, and wipes her mouth with the back of her wrist. The hand on the basket rim shifts, fingers curling over the edge.*\n\nMaren.\n\n*She says it without particular warmth or reluctance, the way someone gives a piece of information that costs nothing and buys nothing. Her eyes move past Nicco briefly toward the handlers crossing the square with their chained line, then back.*\n\nYou buying, or just asking?",
+          "audit": [],
+          "committed": [],
+          "provisional": [
+            "Maren"
+          ],
+          "created": [],
+          "tokens": 11757,
+          "cost_usd": 0
+        },
+        {
+          "step": 3,
+          "keep": "named",
+          "offered": [
+            {
+              "label": "Maren",
+              "keepable": true,
+              "held": false
+            }
+          ],
+          "chosen": "Maren"
+        },
+        {
+          "step": 3,
+          "keep_outcome": {
+            "ok": true,
+            "changed": true
+          },
+          "replay": {
+            "already": true
+          },
+          "revision_delta": 1,
+          "provider_calls": 0,
+          "created": [
+            {
+              "id": "campaign_character_r3_maren",
+              "name": "Maren",
+              "trigger": "player_kept",
+              "ref": "narrated:maren",
+              "location": "calderan_slave_market"
+            }
+          ]
+        },
+        {
+          "step": 4,
+          "input": "I buy nothing yet, but I tell her I will come back tomorrow and ask how long she has sold apples here.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Maren looks at him a moment, the half-eaten apple still in her hand. Her thumb moves absently along the fruit's skin where the rain has left it slick.*\n\nTomorrow, then.\n\n*She takes another bite, chews, and seems to consider the question. Her gaze drifts past him toward the auction square, where a clerk's voice carries across the packed earth.*\n\nA while. Long enough.\n\n*She swallows and taps the basket rim once with her knuckle, as if that answers the rest. The fingers settle back over the edge, and she does not elaborate. A bead of rain runs down an apple near her thumb; she wipes it away with her sleeve without looking at it.*",
+          "audit": [
+            "uncommitted_condition"
+          ],
+          "committed": [],
+          "provisional": [],
+          "created": [
+            {
+              "id": "campaign_character_r3_maren",
+              "name": "Maren",
+              "trigger": "player_kept",
+              "ref": "narrated:maren",
+              "location": "calderan_slave_market"
+            }
+          ],
+          "tokens": 12897,
+          "cost_usd": 0
+        },
+        {
+          "reload_participants": [
+            "Unfamiliar person",
+            "Maren",
+            "Unfamiliar person",
+            "Unfamiliar person"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "purpose": "unnamed stranger: Keep track before any name, then the name binds in place",
+      "verdict": "PASS",
+      "problems": [],
+      "created": [
+        {
+          "id": "campaign_character_r3_laborer",
+          "name": "Aldren",
+          "trigger": "player_kept",
+          "ref": "scene_npc_1",
+          "location": "calderan_slave_market"
+        }
+      ],
+      "revision_delta": 2,
+      "wire_calls": 4,
+      "steps": [
+        {
+          "step": 1,
+          "input": "I stop a porter hauling crates past the pens and ask him where the water trough is.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*Nicco steps into the path of a man hauling a stack of crates strapped across both shoulders. The porter stops, shifting the weight with a grunt, and looks up with small quick eyes that take in Nicco's face and clothing in a single sweep.*\n\nWater trough?\n\n*He jerks his chin northward, past the far end of the holding pens.*\n\nThere's one along the edge there, by the teamsters' picket. See where the draft mules are standing?\n\n*He waits just long enough for Nicco to look, then adjusts the strap cutting into his shoulder and moves on, the crates swaying as he goes.*",
+          "audit": [],
+          "committed": [],
+          "provisional": [
+            "Laborer"
+          ],
+          "created": [],
+          "tokens": 11535,
+          "cost_usd": 0
+        },
+        {
+          "step": 2,
+          "keep": "single",
+          "offered": [
+            {
+              "label": "Laborer",
+              "keepable": true,
+              "held": false
+            }
+          ],
+          "chosen": "Laborer"
+        },
+        {
+          "step": 2,
+          "keep_outcome": {
+            "ok": true,
+            "changed": true
+          },
+          "replay": {
+            "already": true
+          },
+          "revision_delta": 1,
+          "provider_calls": 0,
+          "created": [
+            {
+              "id": "campaign_character_r3_laborer",
+              "name": null,
+              "trigger": "player_kept",
+              "ref": "scene_npc_1",
+              "location": "calderan_slave_market"
+            }
+          ]
+        },
+        {
+          "step": 3,
+          "input": "I thank the porter and ask him what his name is.",
+          "ok": true,
+          "attempts": 1,
+          "error": null,
+          "narration": "*The porter pauses mid-step, one hand readjusting the strap. He glances back over his shoulder as though checking whether Nicco is speaking to someone else, then lets out a short breath through his nose.*\n\nAldren.\n\n*He says it the way a man gives his name when it costs him nothing and means less — flat, already moving again. The crates sway as he shifts his weight forward.*\n\nGood luck with the water.\n\n*He doesn't wait for a reply. A few steps and the crowd closes around him, just another laborer hauling freight through the morning churn of the square. Rain has left the packed earth soft underfoot, and the mules he mentioned stand steaming faintly in the cool air, their breath visible near the picket line at the market's edge.*",
+          "audit": [],
+          "committed": [],
+          "provisional": [],
+          "created": [
+            {
+              "id": "campaign_character_r3_laborer",
+              "name": "Aldren",
+              "trigger": "player_kept",
+              "ref": "scene_npc_1",
+              "location": "calderan_slave_market"
+            }
+          ],
+          "tokens": 11697,
+          "cost_usd": 0
+        },
+        {
+          "late_name": "Aldren",
+          "same_id": true
+        },
+        {
+          "reload_participants": [
+            "Unfamiliar person",
+            "Aldren",
+            "Unfamiliar person",
+            "Unfamiliar person"
+          ]
+        }
+      ]
+    }
+  ]
+}

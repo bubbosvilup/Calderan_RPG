@@ -20,8 +20,8 @@ import { makeRig, whereIs, type Rig, type RigSpec } from "./harness.js";
  * Every scenario builds its OWN rig (real GameSession + TurnCoordinator + file repository in a private temp directory): nothing leaks between scenarios.
  * `revision_delta` is always relative to the revision at the START of the scenario.
  */
-export type Category = "movement" | "identity" | "trade" | "person_trade" | "household" | "persistence" | "authority" | "fail_closed";
-export const CATEGORIES: readonly Category[] = ["movement", "identity", "trade", "person_trade", "household", "persistence", "authority", "fail_closed"];
+export type Category = "movement" | "identity" | "keep_track" | "trade" | "person_trade" | "household" | "persistence" | "authority" | "fail_closed";
+export const CATEGORIES: readonly Category[] = ["movement", "identity", "keep_track", "trade", "person_trade", "household", "persistence", "authority", "fail_closed"];
 
 /** Every observable a scenario can assert on. A scenario names only the ones it cares about. */
 export interface Observables {
@@ -43,6 +43,12 @@ export interface Observables {
   identity_commands: number;
   /** Ephemeral scene participants the player's input introduced (never saved). */
   scene_participants: number;
+  /** Block 12: the Keep track list as the player sees it: "<label>" when keepable, "<label> !<reason>" when shown but refused. */
+  trackable: string[];
+  /** Block 12: display names of the characters the player kept (origin snapshot trigger `player_kept`), sorted. */
+  kept: string[];
+  /** Block 12: the last Keep track outcome: "kept", "already", or the refusal reason. */
+  keep_result: string;
   /** Active offers as "<direction>:<subject kind>:<price>". Direction is the player's: buy = the player buys. */
   offers_active: string[];
   /** Count of offers per status. */
@@ -85,6 +91,14 @@ export type OptionalWrite = "reflection" | "mannerism" | "portrait";
 export type Step = (
   /** A player input with the Narrator text it is paired with and the Controller proposals for that turn. `fails` = the turn is refused (default: it succeeds). */
   | { do: "turn"; player: string; narration: string; controller?: readonly CampaignCommand[]; evidence?: readonly string[]; fails?: boolean; key?: string; stale_revision?: boolean }
+  /**
+   * Block 12: the player presses [ Keep track ] on the provisional person labelled `who` (the token is remembered per label). `again`: the token pressed
+   * earlier for that label, re-sent with the revision the page had then (a double press or a stale page), or with the current one when `fresh`.
+   * `forged`: a well-formed token nobody issued.
+   */
+  | { do: "keep"; who?: string; again?: boolean; fresh?: boolean; forged?: boolean; stale?: boolean }
+  /** The administrative location correction (resets scene continuity, like the UI's manual correction). */
+  | { do: "move"; to: string }
   /** The player presses Accept on the Actual Offer card (`stale`: with an out-of-date revision, which must be refused and change nothing). */
   | { do: "accept"; stale?: boolean; fails?: boolean }
   /** The player presses Confirm / Cancel on the first PendingConfirmation card. */
@@ -127,6 +141,7 @@ const offersOf = (rig: Rig): readonly TradeOfferRecord[] => (rig.campaign.export
 const subjectOf = (o: TradeOfferRecord) => o.subject.kind === "person" ? o.subject.subject_character_id : undefined;
 
 const baseline = new WeakMap<Rig, ReadonlySet<string>>();
+const keepResult = new WeakMap<Rig, string>();
 const readIdentity = (rig: Rig, recent: readonly RecentExchange[]) => { const snap = rig.campaign.exportSnapshot(); return establishNames(recent, buildTurnContext(rig.world, snap), rig.world, snap, [], rig.campaign.revision); };
 
 /** Reads ONLY the observables named in `want`. `start` is the revision at scenario start. */
@@ -145,6 +160,9 @@ export async function observe(rig: Rig, want: Expect, start: number, recent: rea
       case "provisional_names": out[key] = readIdentity(rig, recent).provisional.flatMap(p => p.name ? [p.name] : []).sort(); break;
       case "identity_commands": out[key] = readIdentity(rig, recent).commands.length; break;
       case "scene_participants": out[key] = rig.coordinator.participants(rig.campaign).active().length; break;
+      case "trackable": out[key] = rig.coordinator.trackablePeople(rig.campaign).map(p => p.blocked ? `${p.label} !${p.blocked}` : p.label); break;
+      case "kept": out[key] = snap.characters.filter(c => c.origin_snapshot?.trigger === "player_kept").map(c => c.profile.name ?? "(unnamed)").sort(); break;
+      case "keep_result": out[key] = keepResult.get(rig) ?? "none"; break;
       case "offers_active": out[key] = offers.filter(o => o.status === "active").map(o => `${o.direction}:${o.subject.kind}:${o.price_gold}`); break;
       case "offers_by_status": { const m: Record<string, number> = {}; for (const o of offers) m[o.status] = (m[o.status] ?? 0) + 1; out[key] = m; break; }
       case "card": { const c = rig.session.getTradeView().offer; out[key] = c ? { kind: c.kind, price_gold: c.price_gold } : null; break; }
@@ -210,6 +228,7 @@ export async function runScenario(scenario: Scenario): Promise<ScenarioResult> {
     baseline.set(rig, new Set(rig.campaign.exportSnapshot().items.map(i => i.id)));
     let n = 0;
     const recent: RecentExchange[] = [];
+    const keepTokens = new Map<string, { token: string; revision: number }>();
     for (const step of scenario.steps) {
       n++;
       const tag = `${scenario.id} step ${n} (${step.label ?? step.do})`;
@@ -247,6 +266,21 @@ export async function runScenario(scenario: Scenario): Promise<ScenarioResult> {
           if (!ref) { if (!step.fails) failures.push(`${tag}: no promotion card for ${step.character_id}`); ok = false; break; }
           const r = rig.session.completeHeartstoneRite({ ref, expected_revision: rig.session.getView().session.revision });
           ok = r.ok; if (ok === !!step.fails) failures.push(`${tag}: rite ${ok ? "succeeded but should have been refused" : "was refused"}`);
+          break;
+        }
+        case "keep": {
+          const people = rig.coordinator.trackablePeople(rig.campaign), pressed = keepTokens.get(step.who ?? "");
+          const token = step.forged ? "0123456789abcdef01234567" : step.again ? pressed?.token : people.find(p => p.label === step.who)?.token;
+          if (!token) { failures.push(`${tag}: no Keep track entry for ${step.who}`); ok = false; break; }
+          const revision = step.again && !step.fresh ? pressed!.revision : rig.session.getView().session.revision - (step.stale ? 1 : 0);
+          if (!step.again && !step.forged) keepTokens.set(step.who ?? "", { token, revision });
+          const r = rig.session.keepTrack({ token, expected_revision: revision });
+          keepResult.set(rig, r.ok ? (r.already ? "already" : "kept") : (r.reason ?? r.error.code));
+          break;
+        }
+        case "move": {
+          const r = rig.session.overridePlayerLocation({ target: step.to, expected_revision: rig.session.getView().session.revision });
+          ok = r.ok; if (!ok) failures.push(`${tag}: location correction refused`);
           break;
         }
         case "check": break;

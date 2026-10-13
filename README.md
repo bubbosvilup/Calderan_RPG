@@ -59,16 +59,23 @@ Every action has an impact class, and the class decides how it reaches state:
 | --- | --- | --- |
 | A, low impact, reversible | ordinary movement, scene focus | inferred from evidence, no confirmation |
 | B, important but verifiable | name disclosure, NPC movement and follows, item pickup, escorting a held person | committed only on strong evidence; ambiguity is a safe rejection |
-| C, irreversible or high impact | trade settlement, NPC+ promotion, manumission, identity repair | explicit player confirmation through a ref- and revision-guarded action |
+| C, irreversible or high impact | trade settlement, NPC+ promotion, manumission, identity repair, keeping a provisional person | explicit player action through a ref- and revision-guarded entry point |
 
-Class C uses three explicit actions: **Accept** on the Actual Offer card, **Promote to NPC+** (the Heartstone rite), and **Confirm** on a `PendingConfirmation` card (manumission, operator-requested retire / merge). The client sends only a ref and `expected_revision`; the server loads the authoritative payload. A pending action is never world state and the Narrator sees it as "not completed". Details: [Architecture](docs/ARCHITECTURE.md).
+Class C uses four explicit actions: **Accept** on the Actual Offer card, **Promote to NPC+** (the Heartstone rite), **Keep track** on a temporary person in the scene, and **Confirm** on a `PendingConfirmation` card (manumission, operator-requested retire / merge). The client sends only an opaque ref (a token for Keep track) and `expected_revision`; the server loads the authoritative payload. A pending action is never world state and the Narrator sees it as "not completed". Details: [Architecture](docs/ARCHITECTURE.md).
 
 ## Character Lifecycle
 
 A character is **PROVISIONAL**, **PERSISTENT** or **RETIRED**. This is an identity lifecycle, separate from the NPC tiers (canon NPC, Campaign NPC, NPC+, player character).
 
-- **Provisional:** a person the Narrator introduces or names. Scene-local, never saved, forgotten when the scene moves on or on reload.
-- **Persistent:** a record in the campaign snapshot. Created only by the person Actual Offer **Accept** (which materializes the same provisional subject atomically with the purchase) or by the engine for canonical records. Narration, a narrated name, a self-introduction, the Controller and the audit can never create one.
+- **Provisional:** a person the Narrator introduces or names. Scene-local and never saved as a character. A named one is read again from the restored recent exchanges after a reload; a temporary scene participant is not.
+- **Persistent:** a record in the campaign snapshot, entered from Provisional only by an explicit act:
+
+```text
+PROVISIONAL --[ Keep track ]------------------------------> PERSISTENT (ordinary Campaign NPC)
+PROVISIONAL --[ Accept a person Actual Offer ]------------> PERSISTENT (with the purchase, in the same revision)
+```
+
+  **Keep track** is the player's own action on one exactly identified temporary person in the scene sidebar: the browser sends an opaque token and `expected_revision`, the server recomputes the scene and commits one `register_character` (or answers `already`). It keeps the same person (established name, sex, age, appearance, the scene ref as provenance) and nothing else: no household, NPC+, legal status, ownership, relationship or inventory. It refuses the subject of an open offer, two temporary people sharing a name, and a name a persistent or canon character already has (names are never merged). Accept remains the domain-authorized path. Separately, the engine records campaign state for a canonical character a turn changes (an implicit canonical-origin record, AUTH-5 in the debt register); that is never a narrated stranger. Narration, a narrated name, a self-introduction, repeated appearances, the player's typed words, the Controller and the audit can never create a persistent character. A kept person can later become NPC+ through the Heartstone rite.
 - **Retired:** kept, never deleted or reactivated; reached only through a human-reviewed, confirmed repair (`retire_character`, `merge_characters`).
 
 A present unnamed persistent character who introduces themself is named in place (same id). A canonical person is never duplicated as a narrated stranger.
@@ -149,16 +156,17 @@ Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:co
 
 ## Testing
 
-`npm test` compiles the project and runs the whole offline suite with faked or injected providers: unit and domain tests, matrix and replay tests, persistence and migration, UI read models, canon validation, determinism guards, and source-level architecture assertions. `npm run benchmark:modern` runs small independent end-to-end scenarios (a real `GameSession`, `TurnCoordinator` and file repository with scripted models) over movement, identity, trade, person trade, household, persistence, authority and fail-closed behavior; a scenario marked as a known product gap fails the day it unexpectedly passes. Live certification harnesses live in `src/dev/` and spend credits; they are never run by `npm test`. Details: [Testing](docs/TESTING.md).
+`npm test` compiles the project and runs the whole offline suite with faked or injected providers: unit and domain tests, matrix and replay tests, persistence and migration, UI read models, canon validation, determinism guards, and source-level architecture assertions. `npm run benchmark:modern` runs small independent end-to-end scenarios (a real `GameSession`, `TurnCoordinator` and file repository with scripted models) over movement, identity, Keep track, trade, person trade, household, persistence, authority and fail-closed behavior; a scenario marked as a known product gap fails the day it unexpectedly passes. Live certification harnesses live in `src/dev/` and spend credits; they are never run by `npm test`. Details: [Testing](docs/TESTING.md).
 
 ## Current Status
 
-The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 11): turn reliability, player-authorized actions, the character lifecycle, the core / optional split, the regression benchmark and NarrationFacts. Latest offline run: 3637 tests, 0 failed; benchmark 45 scenarios, 44 pass and 1 known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
+The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 12): turn reliability, player-authorized actions, the character lifecycle with Keep track, the core / optional split, the regression benchmark and NarrationFacts. Latest offline run: 3660 tests, 0 failed; benchmark 55 scenarios, 55 pass, no known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
 
 ## Known Product Gaps
 
-- **KPG-1:** there is no player action to keep an arbitrary provisional person (an apple seller who said her name); only the person Actual Offer Accept makes one persistent. Planned direction: a UI "Keep track" action that materializes the same provisional identity through an explicit, revision-guarded action.
-- Provisional people and scene participants are forgotten on reload (PER-2).
+The benchmark currently records no known product gap. Known limitations:
+
+- Temporary scene participants (an unnamed "guard" the player addressed) are forgotten on reload unless kept; named provisional people are re-read from the restored recent exchanges (PER-2B).
 - Settlement is gold only; the narrator's price anchors may mention silver (ECO-1). No goods ledger (TRD-11).
 - No Property system or containers, no equipment slots or equip / unequip, no encumbrance, no Weather UI, no avatar upload.
 - Speaker attribution fails closed: a line after a plural beat, or a pronoun with two candidates of that sex, belongs to nobody.
@@ -167,7 +175,7 @@ Full list: [Roadmap: known limitations](docs/ROADMAP.md#known-limitations) and t
 
 ## Roadmap
 
-The long view and its order live in the [Master Roadmap](docs/MASTER_ROADMAP.md); day-to-day status is in [Roadmap and known limitations](docs/ROADMAP.md). Next: the KPG-1 product decision, then Weather UI and the Property / Heartstone property work.
+The long view and its order live in the [Master Roadmap](docs/MASTER_ROADMAP.md); day-to-day status is in [Roadmap and known limitations](docs/ROADMAP.md). Next: Weather UI, then the Property / Heartstone property work.
 
 ## Documentation
 

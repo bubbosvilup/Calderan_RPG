@@ -621,3 +621,31 @@ img[data-missing]{visibility:hidden}
 .confirm-accept:disabled, .confirm-cancel:disabled { cursor: not-allowed; opacity: .6; }
 .confirm-error { margin: .4rem 0 0; font-size: .85rem; color: var(--danger, #e07a7a); }
 .confirm-notice { margin: 0; font-size: .85rem; opacity: .8; font-style: italic; }
+.provisional-people{display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:19px}
+.provisional-heading{font-size:12px;
+  font-weight:normal;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--cyan);
+  margin:0}
+.provisional-person{display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px}
+.provisional-person strong{font-size:15px;
+  font-weight:normal}
+.provisional-person small{display:block;
+  color:var(--cyan);
+  font-size:12px;
+  margin-top:4px}
+.keep-track{flex-shrink:0;
+  font-size:13px;
+  padding:4px 10px}
+.keep-error{flex-basis:100%;
+  margin:0;
+  font-size:12px;
+  color:var(--pink)}
