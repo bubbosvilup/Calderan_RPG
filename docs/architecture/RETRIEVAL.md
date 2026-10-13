@@ -8,9 +8,9 @@ bounded recent conversation/scene continuity, and selected retrieved passages.
 Phase 1C implements only the [primary NarrativeContext](NARRATIVE_CONTEXT.md)
 projection. Future model context must use this visibility-checked boundary rather
 than pass raw Scene RAM to an LLM. Phase 1F implements deterministic retrieval;
-see [Retrieval Foundation](RETRIEVAL_FOUNDATION.md) for actual APIs, limits, and
+see [Retrieval Foundation](../evaluations/phases/RETRIEVAL_FOUNDATION.md) for actual APIs, limits, and
 contracts. Phase 1G adds [weighted lexical search](LEXICAL_SEARCH.md) and a
-[measured quality evaluation](LEXICAL_SEARCH_EVALUATION.md). Phase 1H adds
+[measured quality evaluation](../evaluations/reports/LEXICAL_SEARCH_EVALUATION.md). Phase 1H adds
 [semantic indexing and hybrid fusion](SEMANTIC_SEARCH.md); real semantic quality
 evaluation is pending a production adapter. Model integration and BM25 remain future work.
 
@@ -114,7 +114,7 @@ The normal target is zero retrieval calls when primary context suffices. A lore-
 turn usually needs one small search and zero or one exact `world_get` fetch; two
 searches are a ceiling for unusual cases, not a default multi-call loop. Exact fetch
 must enforce the same audience policy and source provenance as search. See the
-[checkpoint audit](PHASE_1E_2_AUDIT.md) for historical gaps and phase prerequisites;
+[checkpoint audit](../evaluations/phases/PHASE_1E_2_AUDIT.md) for historical gaps and phase prerequisites;
 Phase 1F closes its deterministic retrieval API gaps.
 
 Later tool calling through OpenRouter may support follow-up searches guided by

@@ -137,7 +137,7 @@ UI V1 uses `members[].display_name` for player-facing labels: unknown canonical 
 
 **Inventory screen:** `session.getPlayerInventoryView()` (HTTP `GET /api/inventory`) returns the derived Inventory/Equipment read model: items (carried or equipped), counts, authoritative `gold` (`null` = not tracked), item `visual` metadata, and a read-only four-slot equipment projection mapped by item category only. It is display-only and never saved; see [Inventory UI](architecture/INVENTORY_UI_V1.md).
 
-Supported now: Nicco's carried and stored-owned items, Nicco's equipped items by free-form slot (`slot`, `mode: worn|held`), and each household member's equipped items. Not in the view: items merely carried by household members, quantities, weight, durability, containers, shops. See `ENGINE_CAPABILITIES_PRE_UI.md`. Do not promise more.
+Supported now: Nicco's carried and stored-owned items, Nicco's equipped items by free-form slot (`slot`, `mode: worn|held`), and each household member's equipped items. Not in the view: items merely carried by household members, quantities, weight, durability, containers, shops. See [Engine capabilities before UI](evaluations/superseded/ENGINE_CAPABILITIES_PRE_UI.md) (superseded snapshot). Do not promise more.
 
 ## 9. Debug inspector
 

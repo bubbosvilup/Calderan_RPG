@@ -2,11 +2,11 @@
 
 Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/world`. Overall status: [Current state](../CURRENT_STATE.md).
 
-The [accepted decisions](PHASE_1_DECISIONS.md) distinguish authoritative scene
+The [accepted decisions](../evaluations/phases/PHASE_1_DECISIONS.md) distinguish authoritative scene
 state from computed context. Contracts: [scene.ts](../../src/types/scene.ts).
 The Phase 1A runtime foundation (document no longer in the repository) implements derivation and
 safe movement/time primitives. Phase 1B implements the validated, atomic
-[Scene Delta Engine](SCENE_DELTA_ENGINE.md) described below.
+[Scene Delta Engine](../evaluations/phases/SCENE_DELTA_ENGINE.md) described below.
 
 The minimal authoritative `SceneState` is:
 

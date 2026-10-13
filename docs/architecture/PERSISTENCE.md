@@ -5,8 +5,8 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 > ## Save/Load v1 (current): persistent campaigns
 >
 > This section supersedes the Phase 1J "no autosave" policy and the V2/V4 format notes below wherever they conflict. Everything else
-> (strict JSON, validation, path safety, two-slot rotation, explicit recovery) still holds. Design: `docs/save_load_v1_design.md`;
-> audit: `docs/save_load_audit.md`.
+> (strict JSON, validation, path safety, two-slot rotation, explicit recovery) still holds. Design: [save/load v1 design](../evaluations/superseded/save_load_v1_design.md);
+> audit: [save/load audit](../evaluations/superseded/save_load_audit.md) (both historical).
 >
 > **Campaign root.** The Play UI stores real campaigns under `saves/campaigns/<campaign_id>/`:
 >

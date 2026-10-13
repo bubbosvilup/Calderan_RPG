@@ -57,7 +57,7 @@ and secrets. Do not create empty template chunks or mechanically slice prose by 
 Use `chunks: []` when content plus features already represent the supplied facts.
 The five currently authored Heartstone records need no chunks.
 Phase 1E's 22 compact world-lore/institution records also need no chunks; see the
-[canon inventory and boundaries](../architecture/PHASE_1E.md). Use existing
+[canon inventory and boundaries](../evaluations/phases/PHASE_1E.md). Use existing
 `related_entities` for genuine conceptual links and same-type `parent` for actual
 organizational hierarchy. Keep local guild branches in their national records
 until independent identity is needed. Do not populate primary scene context with

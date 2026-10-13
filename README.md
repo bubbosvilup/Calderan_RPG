@@ -145,6 +145,7 @@ npm run build                     # clean, then compile to .build/ (always from 
 npm test                          # build, then every offline test (no live LLM or image call)
 npm run benchmark:modern          # modern regression benchmark (offline, scripted providers)
 npm run check:architecture        # read-only module cycle check over src/
+npm run check:docs                # read-only link check of the current documentation
 npm run play:ui                   # persistent campaigns at http://127.0.0.1:3000 (Ctrl+C saves and stops)
 npm run play:ui -- --playtest     # disposable session, never saved
 npm run inspect:scene             # offline [CURRENT SCENE] scenarios
@@ -162,7 +163,7 @@ Live play and the live tools (`play`, `play:ui`, `inspect:narrator`, `inspect:co
 
 ## Current Status
 
-The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 12): turn reliability, player-authorized actions, the character lifecycle with Keep track, the core / optional split, the regression benchmark and NarrationFacts. Latest offline run: 3660 tests, 0 failed; benchmark 55 scenarios, 55 pass, no known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
+The engine is complete for its current scope and the architecture consolidation is finished (consolidation blocks 1 to 12): turn reliability, player-authorized actions, the character lifecycle with Keep track, the core / optional split, the regression benchmark and NarrationFacts. Latest offline run: 3679 tests, 0 failed; benchmark 55 scenarios, 55 pass, no known product gap. Property, equipment mechanics, quests, combat and the Weather UI are not built. Authoritative status: [Current state](docs/CURRENT_STATE.md).
 
 ## Known Product Gaps
 
@@ -181,8 +182,8 @@ The long view and its order live in the [Master Roadmap](docs/MASTER_ROADMAP.md)
 
 ## Documentation
 
-- [Documentation index](docs/README.md) (labels: normative, active, historical)
+- [Documentation index](docs/README.md): current architecture, status and guides, separated from historical evidence
 - [Current state](docs/CURRENT_STATE.md) · [Architecture](docs/ARCHITECTURE.md) · [NarrationFacts](docs/architecture/NARRATION_FACTS.md) · [Actual Offer](docs/architecture/ACTUAL_OFFER.md) · [Persistence](docs/architecture/PERSISTENCE.md) · [Optional services](docs/architecture/OPTIONAL_SERVICES.md)
 - [UI](docs/UI.md) · [UI engine contract](docs/UI_ENGINE_CONTRACT.md) · [Image system](docs/IMAGE_SYSTEM.md) · [Heartstone](docs/HEARTSTONE.md) · [Configuration](docs/CONFIGURATION.md) · [Testing](docs/TESTING.md)
 - [Authoring guide](docs/authoring/AUTHORING_GUIDE.md) · [Entity schema](docs/schemas/ENTITY_SCHEMA.md)
-- Evaluation reports (immutable history): [docs/evaluations/](docs/evaluations/)
+- Historical evidence (block and milestone reports, audits, live runs; never updated to match the present): [docs/evaluations/](docs/evaluations/README.md)

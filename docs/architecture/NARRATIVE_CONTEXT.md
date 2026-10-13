@@ -160,5 +160,5 @@ persona injection, persistence, frontend, or other gameplay mutations.
 
 Phase 1D instead establishes the [canon authoring foundation](../authoring/AUTHORING_GUIDE.md)
 and a development context inspector. The previously suggested turn coordinator is
-not implemented. [Phase 1E](PHASE_1E.md) adds compact world lore and runtime player
+not implemented. [Phase 1E](../evaluations/phases/PHASE_1E.md) adds compact world lore and runtime player
 mana without changing the secondary-lore exclusion or introducing retrieval.

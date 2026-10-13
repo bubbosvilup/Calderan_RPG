@@ -157,7 +157,7 @@ answer or new canonical fact by this subsystem.
 
 Expectations live in `tests/retrieval-eval/cases.ts`, separate from canon.
 `npm run eval:retrieval` prints metrics and per-query results; adding `-- --markdown`
-prints the report table. The checked-in [quality report](LEXICAL_SEARCH_EVALUATION.md)
+prints the report table. The checked-in [quality report](../evaluations/reports/LEXICAL_SEARCH_EVALUATION.md)
 lists every query, expected IDs, actual top five, outcome, and failure reason.
 
 44 cases: 34 single-target, six multi-answer, four negative diagnostics.

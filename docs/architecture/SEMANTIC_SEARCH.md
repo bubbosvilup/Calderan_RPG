@@ -37,7 +37,7 @@ reports unavailable; failures cannot count lexical fallback as semantic quality.
 The historical `--markdown` option remains lexical-only. Normal tests use fake
 keys and injected transports, requiring neither credentials nor network.
 
-See [Phase 1H.1 real evaluation](SEMANTIC_SEARCH_EVALUATION.md) for measured
+See [Phase 1H.1 real evaluation](../evaluations/reports/SEMANTIC_SEARCH_EVALUATION.md) for measured
 metrics, threshold observations, representative queries, usage and the decision.
 No dependency, canon, narrator, runtime or persistence changes were introduced.
 

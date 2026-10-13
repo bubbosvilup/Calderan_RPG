@@ -103,7 +103,7 @@ A character may voice or act on only the facts listed CAN USE for them (…). DO
 - A wrong fact spoken *inside NPC dialogue* is retained and can be repeated. The knowledge projection is the intended counterweight, and it is only partly effective.
 - Narrator-only descriptions beyond the two-exchange current-visit replay are not supplied; structured state covers durable objects.
 
-P12.1 (2026-10-06) adds a separate `[RECENT SCENE NARRATION]` block: original complete starred narration from the last two finalized exchanges in the contiguous current-location visit, limited to 2,000 characters after identity masking. A different/missing location stops replay, including on later return. NPC speech and player actions stay in dialogue history. Current structured state overrides this continuity prose; no new memory or mutation authority. The block is fixed context under knowledge compaction. [Implementation and limits](../../P12_1_BOUNDED_RECENT_SCENE_NARRATION.md).
+P12.1 (2026-10-06) adds a separate `[RECENT SCENE NARRATION]` block: original complete starred narration from the last two finalized exchanges in the contiguous current-location visit, limited to 2,000 characters after identity masking. A different/missing location stops replay, including on later return. NPC speech and player actions stay in dialogue history. Current structured state overrides this continuity prose; no new memory or mutation authority. The block is fixed context under knowledge compaction. [Implementation and limits](../evaluations/reports/P12_1_BOUNDED_RECENT_SCENE_NARRATION.md).
 
 Historical playthrough windows remain an evaluation-only helper and are never used in production turns.
 
