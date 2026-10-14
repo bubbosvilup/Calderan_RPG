@@ -1,5 +1,6 @@
 import { useIsMutating } from "@tanstack/react-query";
-import { Link, Navigate, useNavigate, useParams } from "react-router";
+import { useRef } from "react";
+import { Link, Navigate, Outlet, useLocation, useNavigate, useParams } from "react-router";
 import { loadCampaign } from "../../api/campaigns";
 import { mutationKeys } from "../../api/queryKeys";
 import { isActiveSession, isHostMode, isNoCampaign } from "../../api/session";
@@ -8,16 +9,20 @@ import { Button } from "../../components/Button/Button";
 import { ErrorState } from "../../components/ErrorState/ErrorState";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { CampaignLayout } from "../../layouts/CampaignLayout";
+import type { PlaySessionContext } from "../../state/playSession";
 import { errorMessage, useServerAction, useSessionQuery } from "../../state/serverState";
-import { PlayScreen } from "./PlayScreen";
 
 /**
- * `/play` (the disposable playtest session) and `/play/:campaignId` (a persistent campaign). The server holds one active session; this
- * route only checks that the URL names it, and otherwise offers to open the named campaign (an explicit click, never an implicit load).
+ * The route layout of an open session: `/play` (the disposable playtest session) and `/play/:campaignId` (a persistent campaign), with
+ * the play screen, Inventory and the player character page as its children. The server holds one active session; this layout only checks
+ * that the URL names it (otherwise it offers to open the named campaign: an explicit click, never an implicit load) and then hands the
+ * authoritative session to whichever page the URL selects. The session query lives here, so moving between pages never refetches or resets it.
  */
 export function PlayRoute() {
   const { campaignId } = useParams();
   const turnInFlight = useIsMutating({ mutationKey: mutationKeys.turn }) > 0;
+  const draftRef = useRef("");
+  const { pathname } = useLocation();
   const query = useSessionQuery({ pollWhileBusy: !turnInFlight });
   if (query.isPending) return <CampaignLayout><Spinner label="Opening the story…" /></CampaignLayout>;
   if (!query.data) {
@@ -29,14 +34,16 @@ export function PlayRoute() {
   }
   const data = query.data;
   if (!isHostMode(data)) {
-    if (campaignId) return <Navigate to="/play" replace />;
-    return isActiveSession(data) ? <PlayScreen session={data} connectionLost={query.isRefetchError} /> : <CampaignLayout><ErrorState title="No session" message="The game server has no session to show." /></CampaignLayout>;
+    // The playtest session has no campaign id: keep the page, drop the campaign segment.
+    if (campaignId) return <Navigate to={pathname.replace(/^\/play\/[^/]+/, "/play")} replace />;
+    return isActiveSession(data) ? <Outlet context={{ session: data, connectionLost: query.isRefetchError, draftRef } satisfies PlaySessionContext} /> : <CampaignLayout><ErrorState title="No session" message="The game server has no session to show." /></CampaignLayout>;
   }
   if (isNoCampaign(data)) return campaignId ? <CampaignNotOpen campaignId={campaignId} /> : <Navigate to="/" replace />;
   if (!isActiveSession(data) || !data.campaign) return <Navigate to="/" replace />;
-  if (!campaignId) return <Navigate to={`/play/${encodeURIComponent(data.campaign.id)}`} replace />;
+  // `/play/inventory` and the like name a page of the open campaign: keep the page, add the campaign.
+  if (!campaignId) return <Navigate to={`/play/${encodeURIComponent(data.campaign.id)}${pathname.replace(/^\/play/, "").replace(/\/$/, "")}`} replace />;
   if (data.campaign.id !== campaignId) return <CampaignNotOpen campaignId={campaignId} openName={data.campaign.display_name} openId={data.campaign.id} />;
-  return <PlayScreen session={data} connectionLost={query.isRefetchError} />;
+  return <Outlet context={{ session: data, connectionLost: query.isRefetchError, draftRef } satisfies PlaySessionContext} />;
 }
 
 /** The URL names a campaign that is not the one open on the server (a bookmark, a restart, another tab switched campaigns). */

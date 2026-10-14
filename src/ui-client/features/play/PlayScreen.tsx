@@ -1,8 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, type MutableRefObject } from "react";
 import { Link, useLocation } from "react-router";
 import type { ActiveSessionPayload } from "../../api/types";
 import { Alert } from "../../components/Alert/Alert";
 import { PlayLayout } from "../../layouts/PlayLayout";
+import { inventoryPath, playerCharacterPath } from "../../lib/paths";
 import { useRequestInFlight } from "../../state/serverState";
 import { CharacterDrawer } from "../characters/CharacterDrawer";
 import { CharacterSidebar, findCharacterCard } from "../characters/CharacterSidebar";
@@ -24,7 +25,12 @@ const WAIT_FOR_REQUEST = "Available when the current request finishes.";
  * open character drawer, the pending exchange, dismissed notices). Whether an action may be taken right now is the server's `status`
  * plus "this page already has a request in flight" (one at a time, like the server); eligibility of each action is a read-model flag.
  */
-export function PlayScreen({ session, connectionLost }: { readonly session: ActiveSessionPayload; readonly connectionLost: boolean }) {
+export function PlayScreen({ session, connectionLost, draftRef }: {
+  readonly session: ActiveSessionPayload;
+  readonly connectionLost: boolean;
+  /** Holds the composer draft for the play route, so the text survives a visit to Inventory or the character page. Optional. */
+  readonly draftRef?: MutableRefObject<string>;
+}) {
   const turn = useTurn();
   const requestInFlight = useRequestInFlight();
   const location = useLocation();
@@ -65,7 +71,7 @@ export function PlayScreen({ session, connectionLost }: { readonly session: Acti
         header={header}
         left={(
           <div className={styles.stack}>
-            <PlayerSummary player={session.player_character} gold={session.play.gold} />
+            <PlayerSummary player={session.player_character} gold={session.play.gold} characterHref={playerCharacterPath(session)} inventoryHref={inventoryPath(session)} />
             <SceneSummary scene={session.scene} />
           </div>
         )}
@@ -86,7 +92,7 @@ export function PlayScreen({ session, connectionLost }: { readonly session: Acti
             </Transcript>
             <div className={styles.composerArea}>
               {turn.notice ? <Alert tone={turn.notice.tone} onDismiss={turn.dismissNotice} className={styles.turnNotice}>{turn.notice.text}</Alert> : null}
-              <Composer playerName={playerName} locked={closed || serverBusy || requestInFlight} busy={turn.running} statusText={statusText} onSubmit={turn.submit} />
+              <Composer playerName={playerName} {...(draftRef ? { initialDraft: draftRef.current, onDraftChange: (text: string) => { draftRef.current = text; } } : {})} locked={closed || serverBusy || requestInFlight} busy={turn.running} statusText={statusText} onSubmit={turn.submit} />
             </div>
           </>
         )}

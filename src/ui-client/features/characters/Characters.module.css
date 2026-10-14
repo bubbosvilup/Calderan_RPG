@@ -43,6 +43,8 @@
 
 .row {
   display: flex;
+  color: inherit;
+  text-decoration: none;
   align-items: center;
   gap: var(--spacing-3);
   width: 100%;

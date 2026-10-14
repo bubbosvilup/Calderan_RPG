@@ -81,6 +81,11 @@ a {
   color: var(--color-accent);
 }
 
+/* A modal dialog is open (useDialogFocus): the page behind does not scroll. */
+html[data-scroll-locked] {
+  overflow: hidden;
+}
+
 /* Visually hidden but announced (status regions, labels that the layout makes obvious). */
 .sr-only {
   position: absolute;

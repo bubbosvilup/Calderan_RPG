@@ -10,7 +10,7 @@ export const isActiveSession = (payload: SessionPayload | null | undefined): pay
 export const isHostMode = (payload: SessionPayload): boolean => "campaign" in payload;
 export const isNoCampaign = (payload: SessionPayload): payload is NoCampaignPayload => payload.campaign === null;
 
-const STATE_KEYS = ["campaign", "messages", "status", "configured", "revision", "scene", "play", "player_character", "trade", "confirmations", "provisional"] as const;
+const STATE_KEYS = ["campaign", "messages", "status", "configured", "revision", "scene", "play", "player_character", "inventory", "trade", "confirmations", "provisional"] as const;
 
 /**
  * Every mutation response carries the fresh authoritative session state next to its own outcome fields. This extracts it, or returns null

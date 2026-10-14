@@ -10,7 +10,7 @@ import type { CampaignListEntry } from "../../src/app/session-host.js";
 import type { AppError } from "../../src/app/app-errors.js";
 import { FileCampaignRepository } from "../../src/persistence/campaign-repository.js";
 import { createPlaytestServer } from "../../src/ui/server.js";
-import type { AppErrorDto, CampaignListEntryDto, ConfirmationViewDto, PlayerCharacterDto, PlayViewDto, ProvisionalPeopleDto, SessionStatus, TradeViewDto } from "../../src/ui-client/api/types.js";
+import type { AppErrorDto, CampaignListEntryDto, ConfirmationViewDto, InventoryDto, PlayerCharacterDto, PlayViewDto, ProvisionalPeopleDto, SessionStatus, TradeViewDto } from "../../src/ui-client/api/types.js";
 
 /**
  * The React client declares its own DTOs (src/ui-client/api/types.ts) instead of importing server modules. This pins them to the server:
@@ -28,6 +28,7 @@ test("React client DTOs: the server read models are assignable to them (compile-
   assignable<ConfirmationViewDto>(session.getConfirmationView());
   assignable<ProvisionalPeopleDto>(session.getProvisionalPeopleView());
   assignable<PlayerCharacterDto | null>(session.getPlayerProfileView());
+  assignable<InventoryDto>(session.getPlayerInventoryView());
   assignable<SessionStatus>(session.status);
   assignable<AppErrorDto>({} as AppError);
   assignable<CampaignListEntryDto>({} as CampaignListEntry);
@@ -47,5 +48,18 @@ test("React client DTOs: the server read models are assignable to them (compile-
   for (const key of ["offer", "notice", "receipt"]) assert.ok(key in state.trade, `trade.${key}`);
   assert.ok(Array.isArray(state.confirmations.cards) && Array.isArray(state.confirmations.recent) && Array.isArray(state.provisional.people));
   assert.ok(state.player_character === null || (typeof state.player_character.name === "string" && "visual" in state.player_character));
+  // UI-2: the profile form, the Gallery and the Inventory read exactly these fields.
+  const player = state.player_character;
+  assert.ok(Array.isArray(player.identity) && player.identity.every((l: any) => typeof l.key === "string" && typeof l.label === "string" && (l.value === null || typeof l.value === "string")));
+  assert.equal(typeof player.visual.ref, "string"); assert.match(player.visual.ref, /^[0-9a-f]{24}$/);
+  assert.ok(Array.isArray(player.visual.editor.fields) && player.visual.editor.fields.every((f: any) => typeof f.key === "string" && ["body", "hair", "face", "description"].includes(f.group) && ["number", "text", "lines"].includes(f.kind) && (f.override === null || typeof f.override === "string")));
+  const portrait = player.visual.editor.portrait;
+  assert.ok(Array.isArray(portrait.gallery) && typeof portrait.gallery_limit === "number" && typeof portrait.batch_size === "number" && typeof portrait.can_generate_batch === "boolean");
+  assert.ok(portrait.generation_blocked === null || typeof portrait.generation_blocked === "string");
+  assert.ok(Array.isArray(portrait.poses.avatar) && Array.isArray(portrait.poses.fullbody));
+  const inventory = state.inventory;
+  assert.ok(Array.isArray(inventory.items) && typeof inventory.counts.total === "number" && (inventory.gold === null || typeof inventory.gold === "number"));
+  assert.ok(Array.isArray(inventory.equipment.slots) && typeof inventory.equipment.silhouette_url === "string");
+  assert.ok(inventory.items.every((i: any) => typeof i.id === "string" && typeof i.name === "string" && typeof i.state_label === "string" && typeof i.position.kind === "string" && typeof i.visual.icon.url === "string" && typeof i.visual.detail.url === "string"));
   assert.equal("campaign" in state, false, "the disposable playtest payload carries no campaign key (the client's mode switch)");
 });

@@ -40,7 +40,7 @@ test("React UI serving: /app serves the built entry (SPA fallback) and hashed as
   await writeFile(join(dist, "secret.txt"), "OUTSIDE_ASSETS");
   const port = await serve(t, dist);
 
-  for (const path of ["/app", "/app/", "/app/play", "/app/play/campaign_20261014_abc123?x=1"]) {
+  for (const path of ["/app", "/app/", "/app/play", "/app/play/campaign_20261014_abc123?x=1", "/app/play/inventory", "/app/play/campaign_20261014_abc123/inventory", "/app/play/campaign_20261014_abc123/character/player"]) {
     const page = await get(port, path);
     assert.equal(page.status, 200, path); assert.match(page.type, /^text\/html/); assert.match(page.body, /REACT_ENTRY/, path);
     assert.match(page.csp, /default-src 'self'/, "the same CSP covers the React entry"); assert.equal(page.cache, "no-store");

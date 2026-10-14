@@ -14,6 +14,8 @@ import { sourceFiles, toPosixPath } from "../support/source-paths.js";
  *   4. no runtime import cycle exists inside the client;
  *   5. raw colors live only in the design tokens;
  *   6. no browser storage holds state, and the stack stays as decided (no Redux, Zustand, Tailwind, Three.js, desktop shells or component suites).
+ * UI-2 adds: no clickable non-button elements, one dialog focus implementation shared by Drawer and Modal, image URLs only from the read model, and no
+ * item-slot or category rules in the inventory and character features.
  * Game rules belong to the engine: components render capability flags from the read model (`can_promote_to_npc_plus`, `keepable`, `affordable`).
  */
 const ROOT = "src/ui-client";
@@ -87,4 +89,34 @@ test("react client: no browser storage, and the stack stays as decided", () => {
   const banned = /^(?:redux|@reduxjs\/.*|react-redux|zustand|tailwindcss|@tailwindcss\/.*|three|@react-three\/.*|electron|@tauri-apps\/.*|@mui\/.*|antd|@chakra-ui\/.*|@mantine\/.*)$/;
   assert.deepEqual(deps.filter(d => banned.test(d)), []);
   for (const required of ["react", "react-dom", "react-router", "@tanstack/react-query", "vite"]) assert.ok(deps.includes(required), required);
+});
+
+const withoutComments = (file: string) => readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+
+test("react client: no clickable non-button elements (controls are buttons, links and form fields)", () => {
+  const offenders = app.filter(f => f.endsWith(".tsx")).filter(f => /<(?:div|span|li|p|section|article|img|header|footer|aside|main|figure)\b[^>]*\bonClick=/.test(withoutComments(f)));
+  assert.deepEqual(offenders, []);
+});
+
+test("react client: one dialog focus implementation, shared by Drawer and Modal", () => {
+  const trapping = app.filter(f => /key\s*===\s*["']Tab["']/.test(withoutComments(f)));
+  assert.deepEqual(trapping, [`${ROOT}/hooks/useDialogFocus.ts`]);
+  for (const dialog of ["components/Drawer/Drawer.tsx", "components/Modal/Modal.tsx"]) assert.match(readFileSync(`${ROOT}/${dialog}`, "utf8"), /useDialogFocus/, dialog);
+});
+
+test("react client: image URLs come from the read model, never assembled in the client", () => {
+  const assembled = /["'`]\/api\/(?:portrait\/asset|inventory\/sprite|item-glyph|canon-avatar)/;
+  assert.deepEqual(app.filter(f => assembled.test(withoutComments(f))), []);
+});
+
+test("react client: inventory and character features carry no item-slot or category rules", () => {
+  const features = app.filter(f => /\/features\/(?:inventory|character)\//.test(f));
+  assert.ok(features.length >= 8);
+  // Slot and category knowledge (weapon/armor/headwear/footwear -> head/chest/weapon/boots) lives in the engine's Inventory read model.
+  for (const file of features) assert.doesNotMatch(withoutComments(file), /["'`](?:weapon|armor|headwear|footwear|consumable|valuable)["'`]|equipmentSlotFor|SLOT_BY_CATEGORY|EQUIPMENT_SLOTS/, file);
+});
+
+test("react client: the player is never an NPC+ in the client (no premium or NPC+ record is required for the player page)", () => {
+  const files = app.filter(f => /\/features\/character\//.test(f));
+  for (const file of files) assert.doesNotMatch(withoutComments(file), /premium_characters|npc_plus|npcPlus|NPC\+/, file);
 });

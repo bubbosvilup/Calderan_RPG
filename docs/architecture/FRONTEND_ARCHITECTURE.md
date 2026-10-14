@@ -1,6 +1,6 @@
 # Frontend architecture (React client)
 
-Status: ACTIVE (UI-1). Last reconciled: 2026-10-14. Source of truth: `src/ui-client/`, the `/app` serving in `src/ui/server.ts`, and the read models in `src/app/`. Companions: [UI](../UI.md) (implemented controls), [UI engine contract](../UI_ENGINE_CONTRACT.md) (the HTTP and session contract), [UI migration roadmap](../roadmap/UI_MIGRATION_ROADMAP.md), [legacy UI baseline](../evaluations/LEGACY_UI_DECOMPOSITION_BASELINE.md).
+Status: ACTIVE (UI-2). Last reconciled: 2026-10-14. Source of truth: `src/ui-client/`, the `/app` serving in `src/ui/server.ts`, and the read models in `src/app/`. Companions: [UI](../UI.md) (implemented controls), [UI engine contract](../UI_ENGINE_CONTRACT.md) (the HTTP and session contract), [UI migration roadmap](../roadmap/UI_MIGRATION_ROADMAP.md), [legacy UI baseline](../evaluations/LEGACY_UI_DECOMPOSITION_BASELINE.md).
 
 The React client in `src/ui-client/` is the permanent Caldrevan frontend. It replaces the legacy vanilla client (`src/ui/index.html`, `client.js`, `style.css`) screen by screen; both run side by side until the legacy UI is removed (UI-9).
 
@@ -14,7 +14,7 @@ The React client in `src/ui-client/` is the permanent Caldrevan frontend. It rep
 | Server state | TanStack Query 5 | one `QueryClient` |
 | Styling | CSS Modules + global design tokens (`styles/tokens.css`) | no Tailwind, no component suite |
 | Component tests | Vitest + Testing Library + jsdom | `npm run ui:test` |
-| Browser checks | Playwright, offline, real turn pipeline | `scripts/browser/react-play-browser-check.mjs` |
+| Browser checks | Playwright, offline, real turn pipeline and a fake image generator | `scripts/browser/react-play-browser-check.mjs`, `react-ui2-browser-check.mjs` |
 
 Deliberately absent: Redux, Zustand (no shared client state exists that the query cache and component state do not cover), Tailwind, component libraries, Three.js / React Three Fiber, Electron / Tauri. An architecture test fails if one of them appears in `package.json`.
 
@@ -56,8 +56,10 @@ src/ui-client/
     trade/                       TradeRegion, ActualOfferCard
     confirmations/               ConfirmationCard (the one pattern), PendingConfirmations
     characters/                  CharacterSidebar, CharacterDrawer, PromoteControl
+    inventory/                   InventoryPage (All / Carried / Equipped), item cards, item detail, read-only equipment panel
+    character/                   PlayerCharacterPage, AppearanceForm (+ pure appearanceForm.ts), GenerationControls, PortraitGallery, PortraitLightbox, usePortraitActions
     player/, scene/, save/, campaigns/
-  components/                    shared primitives with a current use: Button, Alert, Avatar, Badge, Drawer, ErrorState/EmptyState, Image, Spinner, Tabs
+  components/                    shared primitives with a current use: Button, Alert, Avatar, Badge, Drawer, ErrorState/EmptyState, Image, Modal, Spinner, Tabs
   layouts/                       PlayLayout (responsive 3/2/1 columns), CampaignLayout
   hooks/                         useDialogFocus, useMediaQuery, announcer
   lib/cx.ts                      class-name join
@@ -84,7 +86,7 @@ Rules: no barrel files; a component moves to `components/` only when a second fe
 
 ## 6. Routing
 
-Served under `/app/` (Vite `base`, router `basename`): `/` campaign selection (the disposable playtest server forwards to `/play`), `/play` the playtest session, `/play/:campaignId` a persistent campaign. A URL naming a campaign that is not the open one shows an explicit "Open this campaign" action; navigation never loads a campaign implicitly. The play route is lazily loaded (its own chunk). Later screens get a route only when they exist and are page-like (character sheet, property, world, journal, settings); features that are panels or drawers get none (section 11).
+Served under `/app/` (Vite `base`, router `basename`): `/` campaign selection (the disposable playtest server forwards to `/play`), `/play` the playtest session, `/play/:campaignId` a persistent campaign, and (UI-2) under each of them the page routes `inventory` and `character/player` (`/play/inventory`, `/play/character/player`, `/play/:campaignId/inventory`, `/play/:campaignId/character/player`). `PlayRoute` is the layout of that tree: it owns the session and the URL-versus-open-campaign rule once and hands the pages an `Outlet` context (`session`, `connectionLost`, and a ref holding the composer draft, so a draft survives a visit to another page without re-rendering the story on each keystroke). Page links come from the route's own base, so the playtest tree never links into a campaign tree. A URL naming a campaign that is not the open one shows an explicit "Open this campaign" action; navigation never loads a campaign implicitly. The play route is lazily loaded (its own chunk). Later screens get a route only when they exist and are page-like (character sheet, property, world, journal, settings); features that are panels or drawers get none (section 11).
 
 ## 7. Styling
 
@@ -96,7 +98,8 @@ Design tokens in `styles/tokens.css`: palette steps, then semantic tokens compon
 - URLs always come from the read model (opaque token routes such as `/api/portrait/asset/<token>`); the client never builds an image path.
 - The Vite build never inlines assets as `data:` URIs (`assetsInlineLimit: 0`): the server's CSP (`default-src 'self'`) would block them.
 - Background art: `PlayLayout` has a decorative backdrop layer driven by `--play-backdrop-image` (none today).
-- Not built yet, and the seam for them: galleries (a grid of `Image`; virtualize when galleries exceed a few hundred items), responsive `srcset` once the server serves sizes.
+- **Gallery and Lightbox (UI-2).** `PortraitGallery` is a grid of `Image` thumbnails (lazy, ratio-reserving, role chips from the read model); `PortraitLightbox` shows one image large on the shared `Modal`, with previous / next (wrapping, also ArrowLeft / ArrowRight), Set as Avatar, Set as Full Body, and Delete behind an in-dialog confirmation. Which images exist, which holds a role, whether a role can be given (`can_be_avatar`, `can_be_full_body`) and whether generation is blocked (`generation_blocked`, `held_for_other`) are all read-model flags; a server refusal (for example deleting the image that holds the Avatar) is shown in the server's own sentence. Requests send only the opaque `ref` / item token and `expected_revision`; the gallery is whatever the last server response said, never a local list. The generation call shows elapsed time and gives up after six minutes with copy that says the image may still arrive.
+- Not built yet, and the seam for it: virtualizing galleries beyond a few hundred items, responsive `srcset` once the server serves sizes.
 
 ## 9. Future 3D seam
 
@@ -111,17 +114,22 @@ No 3D code or dependency exists. A future `features/scene3d/` module stays isola
 
 ## 11. Module presentation
 
-A feature chooses how it opens; the frame provides the containers: **route** (page-like, linkable: future character sheet, property), **drawer** (contextual details over the play screen: character details now; inventory, gallery later), **side panel** (always-on context: overview, people), **modal** (short blocking decisions; not used yet, it will share `useDialogFocus`), **full-screen workspace** (future map, 3D viewer). Not everything is a modal and not everything is a route.
+A feature chooses how it opens; the frame provides the containers: **route** (page-like, linkable: the Inventory and the player character page now; property later), **drawer** (contextual details over the play screen: character details), **side panel** (always-on context: overview, people), **modal** (`components/Modal`: short blocking decisions and focused views such as the portrait Lightbox; shares `useDialogFocus` with the Drawer), **full-screen workspace** (future map, 3D viewer). Not everything is a modal and not everything is a route.
+
+**Modal contract and nesting policy.** `<Modal open onClose title actions size dismissOnBackdrop returnFocus onKeyDown>` renders a labelled `role=dialog` `aria-modal` section in a portal with a close button, a title, content and an optional action row. Focus, Escape, Tab wrapping, the inert background and scroll locking are all `useDialogFocus` (one implementation for Drawer, Modal and Lightbox): the app root is `inert`; a dialog opened over another makes the earlier one `inert` too, and only the newest answers Escape (the listener is on the document, so Escape still works when the focused control became disabled after a click); the page scroll lock is reference-counted; closing returns focus to the opener, or to a fallback when the opener is gone. The backdrop is a click target only (`aria-hidden`, `tabindex=-1`) and can be made non-dismissing for dialogs that guard work. A dialog may open another one (the Lightbox's delete confirmation is inline instead, to keep one surface).
+
+**Inventory authority boundary.** The Inventory page renders `play.inventory` / the item view from the session read model: what is carried, what is equipped and where, gold, and the player-safe owner phrase. The client holds the filter and the selected item only; it never decides ownership, equipability or visibility, and has no equip, drop or use controls (the legacy UI has none either). Equipment is a read-only slot list.
 
 ## 12. Accessibility baseline
 
-Real buttons and links only (no clickable `div`s; the drawer backdrop is a `tabindex=-1` button). Landmarks: `banner`, `main`, two `complementary` panels, a skip link to `#main-content`. The transcript is a `log` (committed messages only); one polite announcer reports a new offer or confirmation once; status lines are `role=status`; errors are `role=alert`. Dialogs (`useDialogFocus`) make the app root `inert`, move focus in, wrap Tab, close on Escape and return focus to the opener (or the composer when the opener is gone). Tabs follow the WAI-ARIA pattern (roving tabindex, Arrow/Home/End). Disabled controls carry their reason through `aria-describedby`. Focus returns to the composer after a turn and after an inline action removed the clicked control. Reduced motion is honored.
+Real buttons and links only (no clickable `div`s; the drawer backdrop is a `tabindex=-1` button). Landmarks: `banner`, `main`, two `complementary` panels, a skip link to `#main-content`. The transcript is a `log` (committed messages only); one polite announcer reports a new offer or confirmation once; status lines are `role=status`; errors are `role=alert`. Dialogs (`useDialogFocus`: Drawer, Modal, Lightbox) make the app root and any earlier dialog `inert`, move focus in, wrap Tab, close on Escape (newest only) and return focus to the opener (or the composer when the opener is gone). The Lightbox is operable by keyboard alone (arrows, Escape, Tab) and its image has text alternatives; the filter buttons are `aria-pressed` toggles in a labelled group; the appearance form uses real labels, announces unsaved changes in a `role=status` and names the refused field. Tabs follow the WAI-ARIA pattern (roving tabindex, Arrow/Home/End). Disabled controls carry their reason through `aria-describedby`. Focus returns to the composer after a turn and after an inline action removed the clicked control. Reduced motion is honored.
 
 ## 13. Testing strategy
 
 - **Engine and read models:** `npm test` (authoritative for game logic), including the React-specific server tests: `tests/ui/react-client-serving.test.ts` (`/app` serving, SPA fallback, traversal, missing build), `tests/ui/react-client-contract.test.ts` (DTO contract) and `tests/architecture/react-client-boundaries.architecture.test.ts` (imports, `fetch` ownership, no HTML injection, no import cycles, tokens-only colors, no browser storage, stack).
 - **Components:** `npm run ui:test` (Vitest, jsdom): rendering from DTOs, masking, buttons and their disabled reasons, stale and error states, keyboard interactions (composer, confirmation, drawer, tabs), the turn stream and same-key retry.
-- **Browser:** `scripts/browser/react-play-browser-check.mjs` drives the built app in Chromium against the real turn pipeline with scripted providers (boot, transcript, turn, pending state, single submission, offers, settlement and gold, person masking and materialization, stale revision recovery, drawer keyboard, confirmation by keyboard, responsive widths, no console errors or unhandled rejections).
+- **Browser:** `scripts/browser/react-play-browser-check.mjs` drives the built app in Chromium against the real turn pipeline with scripted providers (boot, transcript, turn, pending state, single submission, offers, settlement and gold, person masking and materialization, stale revision recovery, drawer keyboard, confirmation by keyboard, responsive widths, no console errors or unhandled rejections), and `scripts/browser/react-ui2-browser-check.mjs` (22 checks on a persistent campaign with a scripted fake image generator: Inventory from the play screen and its filters by mouse and keyboard, equipped and foreign-owned items, the character page, the appearance form's single-field save, scripted generation with its busy state, the Gallery, the Lightbox by keyboard with focus return and a trapped Tab, Avatar and Full Body selection and clearing, the server's refusal to delete a role holder, deep link and reload, draft preservation, no overflow at 1440 / 1024 / 390 px including the Lightbox, zero requests to other hosts).
+- **CI (UI-2):** `.github/workflows/fast.yml` runs, on Linux and Windows with Node 22: `npm ci`, `typecheck`, `check:architecture`, `check:docs`, `check:scripts`, `ui:typecheck`, `ui:test`, `npm test` (the only run of the heavy suite; it builds `.build`), the modern benchmark on that same build, `ui:build`, a CI-owned Chromium install (`npx playwright install chromium`, plus `--with-deps` on Linux) and `npm run check:browser`, which runs all eleven browser checks one at a time. Screenshots upload only when a job fails. The workflow was written to run the same commands as the local equivalents in [Testing](../TESTING.md); the Windows leg could not be exercised from the Linux development sandbox.
 
 ## 14. Anti-patterns
 

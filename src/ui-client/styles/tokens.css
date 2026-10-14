@@ -103,6 +103,9 @@
   --layout-right-width: 20rem;
   --layout-story-max-width: 46rem;
   --layout-drawer-width: 26rem;
+  --layout-modal-width: 32rem;
+  --layout-modal-wide-width: 60rem;
+  --layout-page-max-width: 72rem;
 
   /* images: aspect ratios shared by every image surface (avatars, portraits, full body, scene art) */
   --ratio-avatar: 1 / 1;
@@ -122,6 +125,7 @@
 
   --z-sticky: 10;
   --z-drawer: 40;
+  --z-modal: 45;
   --z-toast: 50;
 }
 

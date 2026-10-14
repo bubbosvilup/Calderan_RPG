@@ -78,11 +78,94 @@ export interface PlayViewDto {
   readonly gold: number | null;
 }
 
+/** Appearance editor field (a stored campaign value or none). Keys are the engine's closed set; the client renders whatever the server lists. */
+export interface AppearanceFieldDto {
+  readonly key: string;
+  readonly label: string;
+  readonly group: "body" | "hair" | "face" | "description";
+  /** `number`: a whole number (unit shown); `lines`: one item per line; `text`: one line. */
+  readonly kind: "number" | "text" | "lines";
+  readonly unit?: "cm" | "kg";
+  /** The SAVED value ("" lines joined by newline), or null when nothing is saved. */
+  readonly override: string | null;
+}
+
+/** One Gallery image. `token` is the only handle sent back (never a path, version id or asset token); `url` is a same-origin display route. */
+export interface PortraitGalleryItemDto {
+  readonly token: string;
+  readonly url: string;
+  readonly is_avatar: boolean;
+  readonly is_full_body: boolean;
+  readonly stale: boolean;
+  readonly generated_at: string;
+  readonly model_label: string;
+  readonly reference_used: boolean;
+  /** `legacy` = generated before kinds existed: viewable, keeps any role it holds, cannot receive a new one. */
+  readonly kind: "avatar" | "fullbody" | "legacy";
+  readonly pose_label: string | null;
+  /** Whether the engine lets this image take the role now (kind rule); a role it already holds shows through is_avatar / is_full_body. */
+  readonly can_be_avatar: boolean;
+  readonly can_be_full_body: boolean;
+}
+export type PortraitKindDto = "avatar" | "fullbody";
+export interface PortraitRoleDto { readonly url: string; readonly stale: boolean }
+export interface PortraitEditorDto {
+  readonly avatar: PortraitRoleDto | null;
+  readonly full_body: PortraitRoleDto | null;
+  readonly gallery: readonly PortraitGalleryItemDto[];
+  readonly gallery_limit: number;
+  readonly batch_size: number;
+  /** False when fewer than `batch_size` slots remain or generation is blocked. */
+  readonly can_generate_batch: boolean;
+  /** Why generation is unavailable for this character, else null. */
+  readonly generation_blocked: string | null;
+  /** The curated pose choices per kind: ids are what the client sends back. */
+  readonly poses: Readonly<Record<PortraitKindDto, readonly { readonly id: string; readonly label: string }[]>>;
+}
+
+/** The player's visual state: the shared portrait pipeline in player mode. `ref` is the opaque handle the portrait routes accept. */
+export interface PlayerVisualDto {
+  readonly ref: string;
+  readonly avatar_url: string | null;
+  readonly full_body_url: string | null;
+  readonly editor: {
+    readonly fields: readonly AppearanceFieldDto[];
+    /** What the narrator sees of the player (prompts and previews are not declared here and are never rendered). */
+    readonly portrait: PortraitEditorDto;
+  };
+}
+
 export interface PlayerCharacterDto {
   readonly name: string;
   readonly role_label: string;
   readonly narrator_summary: string;
-  readonly visual: { readonly avatar_url: string | null } | null;
+  /** Identity lines the player may edit (sex, species, apparent age); `value` is the saved text or null. */
+  readonly identity: readonly { readonly key: string; readonly label: string; readonly value: string | null }[];
+  readonly visual: PlayerVisualDto | null;
+}
+
+/** An inventory item as the Inventory read model describes it. `id` is a React key only: it is never displayed or sent. */
+export interface InventoryItemDto {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly category_label: string;
+  readonly position: { readonly kind: string; readonly slot?: string; readonly mode?: string };
+  /** The server's wording of the item's state ("Carried", "Equipped · weapon · held"). */
+  readonly state_label: string;
+  readonly equipped: boolean;
+  /** Nicco carries it but it belongs to someone else (the owner is never named). */
+  readonly held_for_other: boolean;
+  readonly sprite_status: "none" | "pending" | "failed" | "ready";
+  readonly visual: { readonly kind: string; readonly icon: { readonly url: string }; readonly detail: { readonly url: string } };
+}
+export interface EquipmentSlotDto { readonly id: string; readonly label: string; readonly item_ids: readonly string[]; readonly conflict: boolean }
+export interface InventoryDto {
+  /** Authoritative current funds, or null when no purse is tracked. */
+  readonly gold: number | null;
+  readonly counts: { readonly total: number; readonly carried: number; readonly equipped: number };
+  readonly items: readonly InventoryItemDto[];
+  readonly equipment: { readonly slots: readonly EquipmentSlotDto[]; readonly unclassified_equipped: readonly string[]; readonly full_body_url: string | null; readonly silhouette_url: string };
 }
 
 export interface TradeCardDto {
@@ -143,6 +226,7 @@ export interface ActiveSessionPayload {
   readonly scene: SceneSummaryDto;
   readonly play: PlayViewDto;
   readonly player_character: PlayerCharacterDto | null;
+  readonly inventory: InventoryDto;
   readonly trade: TradeViewDto;
   readonly confirmations: ConfirmationViewDto;
   readonly provisional: ProvisionalPeopleDto;

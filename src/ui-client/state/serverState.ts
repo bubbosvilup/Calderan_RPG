@@ -3,7 +3,7 @@ import { useIsMutating, useMutation, useQuery, useQueryClient, type QueryClient 
 import { ApiError } from "../api/client";
 import { mutationKeys, queryKeys } from "../api/queryKeys";
 import { fetchSession, isActiveSession, stateFromError } from "../api/session";
-import type { SessionPayload } from "../api/types";
+import type { SessionPayload, SessionStatus } from "../api/types";
 
 /**
  * Server state. The session payload in the TanStack cache is the ONLY copy of authoritative data in the browser (funds, characters,
@@ -73,3 +73,15 @@ export function useRequestInFlight(): boolean {
 
 /** A player-safe message for any thrown value (ApiError carries one; anything else gets generic copy, never its own text). */
 export const errorMessage = (error: unknown, fallback = "That did not work. Nothing changed."): string => (error instanceof ApiError ? error.message : fallback);
+
+const WAIT_FOR_NARRATOR = "Available when the narrator finishes.";
+const WAIT_FOR_REQUEST = "Available when the current request finishes.";
+
+/**
+ * Why a state-changing control is unavailable right now, or null: the server is busy (a turn, compaction), the session ended, or this page
+ * already has a request in flight (one at a time, like the server). The reason is shown next to the control, not only as a disabled look.
+ */
+export function useActionBlockedReason(status: SessionStatus): string | null {
+  const requestInFlight = useRequestInFlight();
+  return status === "closed" ? "The session has ended." : status !== "idle" ? WAIT_FOR_NARRATOR : requestInFlight ? WAIT_FOR_REQUEST : null;
+}

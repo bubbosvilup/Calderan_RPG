@@ -21,6 +21,7 @@
     "check:architecture": "node scripts/minor-debt-cycle-check.mjs",
     "check:docs": "node scripts/check-doc-links.mjs",
     "check:scripts": "node scripts/check-scripts.mjs",
+    "check:browser": "node scripts/browser/run-browser-checks.mjs",
     "test": "npm run build && node --test \".build/tests/**/*.test.js\"",
     "inspect:time": "npm run build --silent && node .build/src/dev/inspect/inspect-time.js",
     "inspect:scene": "npm run build --silent && node .build/src/dev/inspect/inspect-scene-state.js",

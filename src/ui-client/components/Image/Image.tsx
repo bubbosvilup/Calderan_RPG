@@ -1,16 +1,17 @@
-import { useState, type ReactNode } from "react";
+import { useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cx } from "../../lib/cx";
 import styles from "./Image.module.css";
 
-export type ImageRatio = "avatar" | "portrait" | "fullBody" | "scene";
+/** `avatar`/`portrait`/`fullBody`/`scene` reserve a box from a token ratio; `fill` takes the height of its container (the lightbox, item detail). */
+export type ImageRatio = "avatar" | "portrait" | "fullBody" | "scene" | "fill";
 
 /**
  * The one image primitive for every artwork surface (avatars, portraits, full body, items, scene art). It reserves its box from a ratio
  * token before the file arrives (no layout shift), loads lazily and decodes asynchronously unless `priority` is set, shows a placeholder
  * while loading and the given `fallback` when there is no URL or the file is missing. URLs always come from the server's read model;
- * this component never builds a path.
+ * this component never builds a path. With `onOpen` the whole image is one real button (keyboard and pointer) whose name is `openLabel`.
  */
-export function Image({ src, alt, ratio = "avatar", fit = "cover", fallback, priority = false, className }: {
+export function Image({ src, alt, ratio = "avatar", fit = "cover", fallback, priority = false, className, onOpen, openLabel, openProps }: {
   readonly src: string | null | undefined;
   /** "" for decorative images (the name is next to it). */
   readonly alt: string;
@@ -19,9 +20,16 @@ export function Image({ src, alt, ratio = "avatar", fit = "cover", fallback, pri
   readonly fallback: ReactNode;
   readonly priority?: boolean;
   readonly className?: string | undefined;
+  /** Makes the image a button that opens a larger view. Requires `openLabel`. */
+  readonly onOpen?: () => void;
+  readonly openLabel?: string;
+  /** Extra attributes for the button (`aria-haspopup`, a `data-` hook...). */
+  readonly openProps?: ButtonHTMLAttributes<HTMLButtonElement>;
 }) {
   // Keyed by URL: a new URL restarts the loading state without an effect.
-  return <ImageFrame key={src ?? ""} src={src} alt={alt} ratio={ratio} fit={fit} fallback={fallback} priority={priority} className={className} />;
+  const frame = <ImageFrame key={src ?? ""} src={src} alt={alt} ratio={ratio} fit={fit} fallback={fallback} priority={priority} className={onOpen ? undefined : className} />;
+  if (!onOpen) return frame;
+  return <button type="button" className={cx(styles.open, className)} aria-label={openLabel ?? alt} onClick={onOpen} {...openProps}>{frame}</button>;
 }
 
 function ImageFrame({ src, alt, ratio, fit, fallback, priority, className }: {

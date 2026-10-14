@@ -1,5 +1,6 @@
-# FAST PR gate (block B2; user decision 2026-10-14: GitHub Actions, Linux and Windows, Node 22).
-# Offline only: no secrets, no provider calls, no browser job. Browser checks and live certifications stay manual.
+# FAST PR gate (block B2; user decision 2026-10-14: GitHub Actions, Linux and Windows, Node 22; UI-2 added the frontend and browser steps).
+# Offline only: no secrets, no provider calls, no image calls. The browser checks run against a Chromium that THIS job installs (never a
+# local CHROMIUM_PATH); live certifications stay manual. The heavy backend suite runs exactly once per OS (`npm test`).
 name: fast
 
 on:
@@ -22,9 +23,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
-    env:
-      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    timeout-minutes: 45
     steps:
       # Byte-identical checkouts on Windows: golden traces, fixtures and data are compared exactly.
       - run: git config --global core.autocrlf false
@@ -33,10 +32,36 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # Dependencies never download a browser here: the Chromium step below installs the one the checks use.
       - run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       - run: npm run typecheck
       - run: npm run check:architecture
       - run: npm run check:docs
       - run: npm run check:scripts
+      # React frontend (src/ui-client): strict typecheck and component tests (Vitest + jsdom), then the production build the play server serves at /app/.
+      - run: npm run ui:typecheck
+      - run: npm run ui:test
       # npm test builds .build first; the architecture guards inside it read `git ls-files` (the checkout is a work tree).
       - run: npm test
+      # The 55-scenario modern benchmark reuses the .build that `npm test` just produced (no second build, no second heavy suite).
+      - run: node .build/tests/benchmark/run.js
+      - run: npm run ui:build
+      # Browser checks: Playwright's Chromium, installed here. Linux also needs the system libraries (--with-deps).
+      - name: Install Chromium (Linux)
+        if: runner.os == 'Linux'
+        run: npx playwright install --with-deps chromium
+      - name: Install Chromium (Windows)
+        if: runner.os == 'Windows'
+        run: npx playwright install chromium
+      # All eleven checks (nine legacy-UI, two React), one at a time, offline with scripted providers and a fake image generator.
+      - run: npm run check:browser
+      - name: Upload browser screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-screenshots-${{ matrix.os }}
+          path: artifacts/local/browser
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
-import { createMemoryRouter, RouterProvider, type RouteObject } from "react-router";
+import { createMemoryRouter, MemoryRouter, RouterProvider, type RouteObject } from "react-router";
 import { AppProviders } from "../app/providers";
 import { queryKeys } from "../api/queryKeys";
 import type { SessionPayload } from "../api/types";
@@ -15,7 +15,7 @@ export const testClient = (session?: SessionPayload) => {
 /** Renders a component with the app providers (a test QueryClient, optionally pre-seeded with a session payload); `rerender` keeps them. */
 export function renderWithProviders(ui: ReactElement, options: { readonly session?: SessionPayload; readonly client?: QueryClient } = {}) {
   const client = options.client ?? testClient(options.session);
-  return { client, ...render(ui, { wrapper: ({ children }: { readonly children: ReactNode }) => <AppProviders client={client}>{children}</AppProviders> }) };
+  return { client, ...render(ui, { wrapper: ({ children }: { readonly children: ReactNode }) => <MemoryRouter><AppProviders client={client}>{children}</AppProviders></MemoryRouter> }) };
 }
 
 /** Renders routes in a memory router at `path`, with the app providers. */

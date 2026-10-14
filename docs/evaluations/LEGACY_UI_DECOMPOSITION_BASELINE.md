@@ -70,10 +70,10 @@ API = endpoint(s); Server = what the server owns; Local = presentation state the
 | Save indicator + manual save | `renderSaveStatus`, save button | `GET /api/save-status`, `POST /api/save` | save state | none | no | **UI-1 done** | none |
 | Save banners (too large / size warning) | `renderSaveStatus` | save-status | save state | none | no | UI-4 (indicator states done; banners pending) | none |
 | Provider not configured notice | `render` status text | session `configured` | provider status | none | no | **UI-1 done** | none |
-| Inventory screen (grid, filters, detail, equipment figure) | `renderInventory`, `renderEquipment` | `GET /api/inventory`, sprite routes | possession, visuals | filter, search, selection | no | UI-2 | none |
-| Player character page (appearance editor) | `openPlayer`, `renderEditor` | `POST /api/player-character` | profile | unsaved form edits | no | UI-2 | none |
+| Inventory screen (grid, filters, detail, equipment figure) | `renderInventory`, `renderEquipment` | `GET /api/inventory`, sprite routes | possession, visuals | filter, search, selection | no | **UI-2 done** (filters All/Carried/Equipped, detail, read-only equipment list; no search, no sprite polling, no figure) | none |
+| Player character page (appearance editor) | `openPlayer`, `renderEditor` | `POST /api/player-character` | profile | unsaved form edits | no | **UI-2 done** | none |
 | NPC+ appearance editor | `openEditor`, `saveEditor` | `POST /api/appearance` | appearance | unsaved form edits | no | UI-3 | none |
-| Portrait generation, gallery, lightbox, roles, delete | `portraitRequest`, `renderGallery`, lightbox | `POST /api/portrait/*` | portraits | progress, lightbox index | no | UI-2 (gallery), UI-3 (NPC+ management) | none |
+| Portrait generation, gallery, lightbox, roles, delete | `portraitRequest`, `renderGallery`, lightbox | `POST /api/portrait/*` | portraits | progress, lightbox index | no | **UI-2 done** (player gallery, lightbox, roles, delete, generation); UI-3 (NPC+ management) | none |
 | Household screen (filters, large cards) | `renderHousehold` | session | household | filter | no | UI-3 | none |
 | Narrator alternatives (comparison) | `render` select | `POST /api/alternative` | comparison results | select state | no | UI-4 (developer aid) | none |
 | Optional service diagnostics | (no UI; endpoint only) | `GET /api/optional-services` | service health | none | no | UI-4 | none |

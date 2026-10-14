@@ -10,7 +10,7 @@ export const MAX_INPUT = 4000;
  * only when the submit handler reports it was taken, so a refused turn keeps the text for a resend. When the page unlocks after a turn,
  * focus returns to the input if it was there.
  */
-export function Composer({ playerName, locked, busy, statusText, onSubmit }: {
+export function Composer({ playerName, locked, busy, statusText, onSubmit, initialDraft = "", onDraftChange }: {
   readonly playerName: string;
   /** No input is accepted (a turn or another action is running, or the session is closed). */
   readonly locked: boolean;
@@ -19,8 +19,13 @@ export function Composer({ playerName, locked, busy, statusText, onSubmit }: {
   readonly statusText: string;
   /** Resolves true when the text was taken (clear the draft), false to keep it. */
   readonly onSubmit: (text: string) => Promise<boolean>;
+  /** A draft a parent kept from an earlier visit to this screen (the composer owns the text while mounted). */
+  readonly initialDraft?: string;
+  /** Reports every change so a parent that outlives this screen can keep the text (a ref, not state: typing must not re-render the page). */
+  readonly onDraftChange?: (draft: string) => void;
 }) {
-  const [draft, setDraft] = useState("");
+  const [draft, setOwnDraft] = useState(initialDraft);
+  const setDraft = (text: string) => { setOwnDraft(text); onDraftChange?.(text); };
   const inputRef = useRef<HTMLTextAreaElement>(null), submitting = useRef(false), hadFocus = useRef(false);
   const inputId = useId(), hintId = useId(), statusId = useId();
   useEffect(() => {

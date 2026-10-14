@@ -26,7 +26,7 @@ function DrawerPanel({ onClose, title, eyebrow, side = "right", children, footer
   const ref = useRef<HTMLElement>(null), titleId = useId();
   useDialogFocus(ref, onClose, returnFocus);
   return (
-    <div className={styles.overlay}>
+    <div className={styles.overlay} data-dialog-layer>
       <button type="button" tabIndex={-1} className={styles.backdrop} aria-label={`Close ${title}`} onClick={onClose} />
       <section ref={ref} className={cx(styles.panel, side === "left" ? styles.left : styles.right)} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
         <header className={styles.header}>

@@ -1,0 +1,27 @@
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+
+.link,
+.active {
+  padding: var(--spacing-1) var(--spacing-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-soft);
+  text-decoration: none;
+}
+
+.link:hover {
+  background: var(--color-surface-hover);
+}
+
+.active {
+  border-color: var(--color-accent-strong);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+

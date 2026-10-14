@@ -1,10 +1,12 @@
 import { useId, useState } from "react";
+import { Link } from "react-router";
 import { keepTrack } from "../../api/characters";
 import type { ActiveSessionPayload, CharacterCardDto, ParticipantDto, ProvisionalPersonDto } from "../../api/types";
 import { Avatar } from "../../components/Avatar/Avatar";
 import { Button } from "../../components/Button/Button";
 import { EmptyState } from "../../components/ErrorState/ErrorState";
 import { cx } from "../../lib/cx";
+import { playerCharacterPath } from "../../lib/paths";
 import { errorMessage, useSessionAction } from "../../state/serverState";
 import styles from "./Characters.module.css";
 
@@ -33,7 +35,7 @@ export function CharacterSidebar({ session, onOpenCharacter, blockedReason, onSe
         </div>
         <ul className={styles.list}>
           {participants.map(person => (
-            <li key={person.ref}><ParticipantRow person={person} playerAvatar={playerAvatar} onOpen={onOpenCharacter} /></li>
+            <li key={person.ref}><ParticipantRow person={person} playerAvatar={playerAvatar} playerHref={playerCharacterPath(session)} onOpen={onOpenCharacter} /></li>
           ))}
         </ul>
         <TemporaryPeople people={session.provisional.people} blockedReason={blockedReason} {...(onSettled ? { onSettled } : {})} />
@@ -53,12 +55,23 @@ export function CharacterSidebar({ session, onOpenCharacter, blockedReason, onSe
   );
 }
 
-function ParticipantRow({ person, playerAvatar, onOpen }: { readonly person: ParticipantDto; readonly playerAvatar: string | null; readonly onOpen: (ref: string) => void }) {
+function ParticipantRow({ person, playerAvatar, playerHref, onOpen }: {
+  readonly person: ParticipantDto; readonly playerAvatar: string | null; readonly playerHref: string; readonly onOpen: (ref: string) => void;
+}) {
   if (person.card) return <CardRow card={person.card} detail={person.category} onOpen={onOpen} />;
-  // The player's own entry (and any entry without a card) is information, not a control.
+  // The player's own entry is a link to the player character page (a page, not a drawer: it holds the appearance editor and the Gallery).
+  if (person.ref === "player") {
+    return (
+      <Link to={playerHref} className={cx(styles.row, styles.interactive)} aria-label={`${person.name}: open the character page`}>
+        <Avatar url={playerAvatar} name={person.name} nameKnown={person.name_known !== false} />
+        <span className={styles.who}><strong className={styles.name}>{person.name}</strong><small className={styles.detail}>{person.category}</small></span>
+      </Link>
+    );
+  }
+  // Any other entry without a card is information, not a control.
   return (
     <div className={styles.row}>
-      <Avatar url={person.ref === "player" ? playerAvatar : null} name={person.name} nameKnown={person.name_known !== false} />
+      <Avatar url={null} name={person.name} nameKnown={person.name_known !== false} />
       <span className={styles.who}><strong className={styles.name}>{person.name}</strong><small className={styles.detail}>{person.category}</small></span>
     </div>
   );

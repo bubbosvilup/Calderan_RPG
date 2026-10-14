@@ -58,3 +58,9 @@
 .untracked {
   color: var(--color-text-muted);
 }
+
+.links {
+  display: flex;
+  gap: var(--spacing-4);
+  font-size: var(--font-size-sm);
+}
