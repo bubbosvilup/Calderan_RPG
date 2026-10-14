@@ -39,7 +39,7 @@ function byClause(facts: NarrationFacts): ClauseFact[][] {
  * Completed movements of movable characters narrated this turn (at most one per character, first wins). `followers`: active NPC+ and
  * other follow candidates eligible for implicit-destination following, only when the player moved.
  */
-export function characterMovementsFromFacts(facts: NarrationFacts, movable: readonly MovableCharacter[], where: MovementWhere, context: TurnContext, world: WorldStore, followers: ReadonlySet<string> = new Set()): CharacterMovement[] {
+export function characterMovementsFromFacts(facts: NarrationFacts, movable: readonly MovableCharacter[], where: MovementWhere, context: TurnContext, world: WorldStore, followers: ReadonlySet<string> = new Set(), claimants: ReadonlySet<string> = followers): CharacterMovement[] {
   if (!movable.length) return [];
   const ids = new Set(movable.map(m => m.id)), entrants = new Set(movable.filter(m => m.entrant).map(m => m.id)), localIds = new Set(movable.filter(m => !m.entrant).map(m => m.id));
   const placeOf = (id: string) => where.locate ? where.locate(id) : where.origin;
@@ -71,10 +71,11 @@ export function characterMovementsFromFacts(facts: NarrationFacts, movable: read
       out.push({ character_id: follower, location_id: where.arrival, source_sentence: clause.find(f => f.subject.entity_id === follower)?.sentence ?? clause[0]!.sentence });
   }
   // A completed LOCATION CLAIM supports an eligible follower only: someone the engine's own follow policy already lets move with the player
-  // (`followers`), placed by the prose at the player's arrival. The claim is evidence for that authority, never the authority itself.
-  if (!where.hypothetical && where.origin !== where.arrival && followers.size)
+  // and whom the player's own words led this turn (`claimants`), placed by the prose at the player's arrival. The claim is evidence for that
+  // authority, never the authority itself: a held or household person nobody led is not moved by "Maren is at Heartstone."
+  if (!where.hypothetical && where.origin !== where.arrival && claimants.size)
     for (const c of locationClaimsFromFacts(facts))
-      if (followers.has(c.character_id) && localIds.has(c.character_id) && (c.location_id === where.arrival || world.getAncestors(where.arrival).some(a => a.id === c.location_id))
+      if (followers.has(c.character_id) && claimants.has(c.character_id) && localIds.has(c.character_id) && (c.location_id === where.arrival || world.getAncestors(where.arrival).some(a => a.id === c.location_id))
         && !context.characters.some(x => x.id === c.character_id) && !out.some(o => o.character_id === c.character_id))
         out.push({ character_id: c.character_id, location_id: where.arrival, source_sentence: c.source_sentence });
   return out;

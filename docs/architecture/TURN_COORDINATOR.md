@@ -29,7 +29,7 @@ Authority lanes (`src/turn/authorization/authority-lanes.ts`; the lane of every 
 
 | Lane | Stage | Reads | Kinds |
 | --- | --- | --- | --- |
-| `player_runtime` | intent | player input | `runtime_delta`, `move_character` (carry, held-person escort) |
+| `player_runtime` | intent | player input | `runtime_delta`, `move_character` (carry, held-person escort: named, or unnamed when the one held person is the only other person present) |
 | `preferred_authorization` | authorization | draft | the Controller vocabulary (`src/llm/controller-schema.ts`) and derived proposals, decided by the grammar and a verified quote |
 | `trade` | authorization | draft (goods offers re-checked on the delivered text) | `propose_trade_offer` (goods, items), `withdraw_trade_offer` |
 | `late_naming` | commit preparation | delivered | `set_profile` |

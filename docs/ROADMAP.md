@@ -47,7 +47,7 @@ Full Property system (generic property entity, containers and property storage, 
 
 ## Known limitations
 
-- Companion movement (block 3): who may follow is derived per turn (NPC+, held persons, household members, people invited by name); a held person moves with Nicco only when the player names and leads them; nobody else follows unless narration completes the follow. An escorted person narrated as staying behind is not audited.
+- Companion movement (block 3, fix 2026-10-14): who may follow is derived per turn (NPC+, held persons, household members, people invited by name); a held person moves with Nicco only when the player leads them by name, or unnamed when that person is the only other one present; nobody else follows unless narration completes the follow of that named person. Not resolved (fail closed): a pronoun-only or plural narrated follow of a free person, an unnamed lead with anyone else present, a purchased authored NPC (only Campaign people follow), travel phrased "going to <place>" or with no destination ("Follow me."). See [companion movement fix](evaluations/COMPANION_GROUP_MOVEMENT_FIX.md).
 
 - Actual Offer V1: whole-number gold only; no vendor inventory, Auction House or person SELL; sold goods leave the tracked scope; person offers are read from narration, not Controller-proposed; legacy internal `premium` naming remains (`premium_characters[]`; product term is NPC+).
 

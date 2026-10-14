@@ -54,10 +54,12 @@ const sentencesOfInput = (input: string) => input.replace(/[*"“”]/g, " ").sp
  * (B) The narrow deterministic escort. Nicco's own movement to another place resolved this turn (`natural` carries the runtime_delta), and the
  * player's sentence NAMES a person Nicco legally holds who stands here with him and LEADS them along ("Alright Maren, I just purchased you,
  * let's go home."). The person moves with him in the SAME atomic batch (the `move_character` is bound to his resolved arrival), exactly like a
- * physical carry. No pronoun guessing, no unnamed "come with me", no plural, nobody who is not held, nobody who is not here, no refusal or stay
- * wording, and no semantics for consent: this is the player's own act, not an NPC decision.
+ * physical carry. Several held people named and led in the same words move together. An unnamed lead ("Come with me, we're going home.") moves
+ * the held person only when nobody else could be meant: she is the one held person here and nobody else is present (`bystanders` counts the
+ * temporary scene participants). No pronoun guessing, nobody who is not held, nobody who is not here, no refusal or stay wording, and no
+ * semantics for consent: this is the player's own act, not an NPC decision.
  */
-export function resolveHeldEscort(input: string, snapshot: DeepReadonly<CampaignSnapshot>, context: TurnContext, world: WorldStore, natural: readonly CampaignCommand[], already: readonly string[] = []):
+export function resolveHeldEscort(input: string, snapshot: DeepReadonly<CampaignSnapshot>, context: TurnContext, world: WorldStore, natural: readonly CampaignCommand[], already: readonly string[] = [], bystanders = 0):
   { readonly runtime: readonly CampaignCommand[]; readonly notes: readonly string[]; readonly escorted: readonly string[] } {
   const none = { runtime: [], notes: [], escorted: [] };
   const here = snapshot.runtime.scene.player_location;
@@ -81,6 +83,10 @@ export function resolveHeldEscort(input: string, snapshot: DeepReadonly<Campaign
     if (!sentences.some((s, k) => named(s) && leads(k))) continue;
     led.push(p);
   }
+  // Unnamed lead ("Come with me, we're going home.", "Let's head back to Heartstone."): only when the addressee cannot be anyone else. Exactly one held
+  // person stands here, and nobody else is present (no other persistent character in the scene, no temporary participant); no stay or refusal wording.
+  const alone = candidates.length === 1 && bystanders === 0 && !context.characters.some(c => c.id !== "nicco" && c.id !== candidates[0]!.id && !already.includes(c.id));
+  if (!led.length && alone && sentences.some(s => LEAD.test(s)) && !sentences.some(s => STAY.test(s) || GATES.invitation_not_offered.test(s))) led.push(candidates[0]!);
   if (!led.length) return none;
   const to = world.getEntity(moved.delta.player_location!)?.display_name ?? moved.delta.player_location!;
   return {

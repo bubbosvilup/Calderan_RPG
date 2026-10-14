@@ -58,6 +58,8 @@ export interface NarrationAuditInput {
   readonly authoritative_text?: string;
   /** H5.1: where Nicco was before this turn (defaults to the prepared location: no movement this turn). */
   readonly origin?: string;
+  /** People the player's own act moved with Nicco this turn (carry, held-person escort): runtime commands, not in `committed`. */
+  readonly companions?: readonly string[];
   /** Resolved before projection; companion presence may differ in the arrival context. */
   readonly player_travel_frame?: boolean;
   /** P8: the narrator received economic anchors this turn (same decision as the prompt). */
@@ -373,7 +375,9 @@ export function auditNarration(input: NarrationAuditInput): readonly AuditIssue[
   for (const id of left) if (context.characters.some(c => c.id === id && c.origin.kind === "canonical")) {
     for (const sentence of presenceClaimsFromFacts(facts, id)) issues.push({ kind: "absent_participant", character: name(id), sentence, correction: `${name(id)} has left this scene. Do not invent a return or continued indoor presence.` });
   }
-  const relocated = new Set(committed.flatMap(c => c.kind === "move_character" && c.location_id !== prepared.runtime.scene.player_location ? [c.character_id] : []));
+  // A committed move elsewhere, or a companion who travelled with Nicco this turn (moved to his arrival): narrating them leaving the place he left is true.
+  const travelled = (input.origin ?? prepared.runtime.scene.player_location) !== prepared.runtime.scene.player_location;
+  const relocated = new Set([...committed.flatMap(c => c.kind === "move_character" && (travelled || c.location_id !== prepared.runtime.scene.player_location) ? [c.character_id] : []), ...(travelled ? input.companions ?? [] : [])]);
   for (const d of [...departuresFromFacts(facts, context, "persistent", { every: true, broad: true, stairs: (input.origin ?? prepared.runtime.scene.player_location) === prepared.runtime.scene.player_location }), ...departureClaimsFromFacts(facts, undefined, presentIds)]) {
     const created = context.characters.find(c => c.id === d.character_id)?.origin.kind === "created";
     if (left.has(d.character_id) || relocated.has(d.character_id) || (created && authored.some(e => !e.negated && e.action_class === "departure" && e.actor_id === d.character_id))) continue;

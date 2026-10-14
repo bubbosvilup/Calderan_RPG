@@ -61,7 +61,7 @@ test("M3: \"Tessa, stay here.\" or a refusal to bring her never escorts", async 
     assert.equal(r.where("campaign_character_t"), "test_room", input);
   }
 });
-test("M4: an unnamed \"come with me\" never escorts by pronoun guessing, even with one held person present", async () => {
+test("M4: an unnamed \"come with me\" never escorts by pronoun guessing while other people are present (here, the room's authored NPCs)", async () => {
   const r = await play(NEUTRAL, `Come with me. ${GO}`, { setup: [create("campaign_character_t", "Tessa", "female"), hold("campaign_character_t")] });
   assert.equal(r.where("campaign_character_t"), "test_room");
 });

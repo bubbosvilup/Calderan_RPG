@@ -63,7 +63,8 @@ export function resolveTurnIntent(i: IntentStageInput): ResolvedIntent {
   const carried = resolvePlayerCarry(i.player_input, i.snapshot, base_context, i.world, spoken.runtime);
   const carry = carried.runtime.length && !prevalidates(i, [...spoken.runtime, ...carried.runtime]) ? { runtime: [], notes: [] } : carried;
   // Consolidation block 3: a person Nicco legally holds, named and led along by the player's own words, moves with him in the same atomic batch.
-  const escorted = resolveHeldEscort(i.player_input, i.snapshot, base_context, i.world, spoken.runtime, carry.runtime.flatMap(c => c.kind === "move_character" ? [c.character_id] : []));
+  const escorted = resolveHeldEscort(i.player_input, i.snapshot, base_context, i.world, spoken.runtime, carry.runtime.flatMap(c => c.kind === "move_character" ? [c.character_id] : []),
+    base_plan.participants.filter(p => !p.departed).length);
   const escort = escorted.runtime.length && !prevalidates(i, [...spoken.runtime, ...carry.runtime, ...escorted.runtime]) ? { runtime: [], notes: [] } : escorted;
   const natural = [...spoken.runtime, ...carry.runtime, ...escort.runtime];
   // Household Pass 1 / AUTH-1: the player-authored act of freeing a person is only RECOGNIZED here, as a proposal. It is validated at creation against the

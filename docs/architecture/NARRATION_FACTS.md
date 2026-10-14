@@ -90,7 +90,7 @@ Name rules the reading keeps: a self-introduction counts only in an attributed l
 
 | Consumer | Reads | Decides |
 | --- | --- | --- |
-| `movement-evidence.ts` | movement facts | who moved, followed or stayed; escort; location claims never move anyone |
+| `movement-evidence.ts` | movement facts | who moved, followed or stayed; escort; a location claim never moves anyone by itself (it supports only a follow candidate the player invited by name this turn, placed at Nicco's arrival) |
 | `commerce-evidence.ts` | commerce facts + recipient facts | the actionable seller quote (latest, unambiguous, completed, current); **a price explicitly addressed to somebody other than Nicco, or to an ambiguous "her", is not an offer to the player** (`says_to` for the whole line, `vocative` in the price's own sentence); settlement claims are only claims |
 | `attributed-speech.ts` | dialogue units | the speaker policy of the recent-conversation projection, the audit's NPC-claim and player-agency checks and the household / relationship evidence: legacy prose only, strict methods only, never an unknown `other:Name`, Nicco only by an explicit tag that names him. RPG plain speech is never a named speaker's words there |
 | `person-offers.ts` | commerce facts, scene reading | the person Actual Offer (subject, seller authority, price) |

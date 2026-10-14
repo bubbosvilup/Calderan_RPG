@@ -14,7 +14,8 @@ import { authorizeWithEvidence, verifyEvidence, type EvidenceMode } from "../aut
 import { deriveTurnEvidence, type TurnEvidence } from "../authorization/turn-evidence.js";
 import { activeNpcPlus } from "../../campaign/premium-characters.js";
 import { followCandidates, followerIds } from "../movement/follow-candidates.js";
-import { sentencesOf } from "../language/text.js";
+import { invitedFollowers } from "../movement/follow-invitation.js";
+import { escapeRegExp, sentencesOf } from "../language/text.js";
 import { establishedCount, ownerEvidenced } from "../items/item-ownership.js";
 import { resolveItemIntent, type ItemIntent } from "../items/item-intent.js";
 import { laneCommands, type LaneCommand } from "../authorization/authority-lanes.js";
@@ -67,7 +68,11 @@ export function authorizeTurn(i: { readonly controller: ControllerResult; readon
   const controllerProposal = keep.map(k => parsed[k]!), duplicates_removed = parsed.length - keep.length;
   const kept = new Set(keep), quotes = duplicates_removed ? i.controller.evidence?.filter((_, k) => kept.has(k)) : i.controller.evidence;
   const facts = (i.facts ?? createFactSource(movementFactScope(i.projected, i.world, i.context, [i.origin, i.arrival]))).of(i.draft);
-  const grammarMoves = characterMovementsFromFacts(facts, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, followerIds(followCandidates(i.projected, i.movable, i.debug_base.player_input)));
+  const candidates = followCandidates(i.projected, i.movable, i.debug_base.player_input);
+  // Who the player's own words invited along BY NAME this turn: the only candidates a location claim at Nicco's arrival may support.
+  const input = i.debug_base.player_input, eligible = i.movable.filter(m => candidates.has(m.id) && characterLocation(i.projected, i.world, m.id) === i.origin);
+  const invited = new Set(invitedFollowers(input, eligible).filter(id => eligible.find(m => m.id === id)!.names.some(n => new RegExp(`\\b${escapeRegExp(n)}\\b`, "i").test(input))));
+  const grammarMoves = characterMovementsFromFacts(facts, [...i.movable, ...npcPlusEntrants(i.projected, i.world, [i.origin, i.arrival])], { origin: i.origin, arrival: i.arrival, locate: id => characterLocation(i.projected, i.world, id) }, i.context, i.world, followerIds(candidates), invited);
   // Final movement closure: a completed stair exit that states its direction ("crosses to the stairs and descends", "her footsteps fading as she
   // climbed") of an active NPC+ with Nicco, while Nicco stays, goes to the ONE structured neighbour in that direction. No unique neighbour: no
   // movement (the audit withdraws the claim). Same evidence path as any other narrated movement.

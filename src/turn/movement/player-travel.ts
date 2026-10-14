@@ -2,7 +2,7 @@ import type { WorldStore } from "../../world/world-store.js";
 import type { TurnContext } from "../context/context-builder.js";
 import type { NaturalAction, NaturalActionResolution } from "../natural-actions.js";
 import { reachable } from "./travel-resolution.js";
-import { blankQuotes, sentencesOf } from "../language/text.js";
+import { blankQuotes, escapeRegExp as esc, sentencesOf } from "../language/text.js";
 import { GATES } from "../language/gates.js";
 
 /** Player-only reference: never installed as a global/NPC alias. */
@@ -36,14 +36,17 @@ export function resolvePlayerTravel(input: string, here: string, context: TurnCo
     const found = context.characters.filter(c => c.id !== "nicco" && c.current.current_location === here && [c.profile.name, ...(c.profile.aliases ?? [])].some(n => n && locationLabel(n) === locationLabel(actor)));
     return found.length === 1 ? "Nicco " : whole.replace(/\s+and\s+/i, " & ");
   });
+  // "ok Maren lets go home": a leading interjection and/or the name of someone present, with no comma, before a player-inclusive subject.
+  const present = context.characters.filter(c => c.id !== "nicco").flatMap(c => [c.profile.name, ...(c.profile.aliases ?? [])]).filter((n): n is string => !!n);
+  const vocative = new RegExp(`^(?:(?:ok|okay|alright|all right|right|well|so|now|come on|hey)\\s+)*(?:(?:${present.map(esc).join("|") || "(?!)"})\\s+)?(?=(?:let['’]?s|let us|we['’]?re|we are|we)\\s)`, "i");
   const segments = [...protectedText.matchAll(/\*([^*]+)\*/g)].map(m => ({ text: m[1]!, action: true }));
   segments.push({ text: protectedText.replace(/\*[^*]*\*/g, " "), action: false });
   for (const segment of segments) for (const sentence of sentencesOf(segment.text)) {
     if (GATES.player_movement_not_done.test(sentence) || /\?|\b(?:tell|tells|told|ask|asks|asked|order|orders|ordered)\b/i.test(sentence)) continue;
     let continuing = segment.action;
     for (const [index, raw] of sentence.split(/;|,\s*(?:and then\s+|and\s+|then\s+)?|\s+(?:and then|then|and|when|before|after)\s+/i).entries()) {
-      let clause = raw.trim().replace(/[.!]+$/, "");
-      const subject = clause.match(/^(?:i|nicco|we|let['’]?s|let us|they both|he)\s+/i);
+      let clause = raw.trim().replace(/[.!]+$/, "").replace(vocative, "");
+      const subject = clause.match(/^(?:i['’]?m|i am|we['’]?re|we are|i|nicco|we|let['’]?s|let us|they both|he)\s+/i);
       if (subject) { continuing = /^(?:i|let)/i.test(subject[0]); clause = clause.slice(subject[0].length); }
       else if ((!continuing && index > 0) || !continuing && !new RegExp(`^${VERB}\\b`, "i").test(clause)) { continuing = false; continue; }
       clause = clause.replace(/^(?:then|also|quietly|slowly|just|finally)\s+/i, "");
