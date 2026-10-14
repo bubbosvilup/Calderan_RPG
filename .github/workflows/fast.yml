@@ -1,0 +1,42 @@
+# FAST PR gate (block B2; user decision 2026-10-14: GitHub Actions, Linux and Windows, Node 22).
+# Offline only: no secrets, no provider calls, no browser job. Browser checks and live certifications stay manual.
+name: fast
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fast-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fast:
+    name: fast (${{ matrix.os }}, Node 22)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      # Byte-identical checkouts on Windows: golden traces, fixtures and data are compared exactly.
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run check:architecture
+      - run: npm run check:docs
+      - run: npm run check:scripts
+      # npm test builds .build first; the architecture guards inside it read `git ls-files` (the checkout is a work tree).
+      - run: npm test
