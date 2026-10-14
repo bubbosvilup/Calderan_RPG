@@ -2,7 +2,7 @@ import type { CampaignCommand, CampaignSnapshot, PremiumContractField } from "..
 import type { DeepReadonly } from "../../types/readonly.js";
 import type { TurnContext } from "../context/context-builder.js";
 import { activeNpcPlus, contractSet } from "../../campaign/premium-characters.js";
-import { dialogueUnits, presentPeople } from "../narration-facts/index.js";
+import { dialogueUnits, presentPeople, type DialogueUnit } from "../narration-facts/index.js";
 import { sentencesOf } from "../language/text.js";
 import { GATES } from "../language/gates.js";
 
@@ -26,13 +26,14 @@ const PATTERNS: readonly (readonly [PremiumContractField, RegExp, (m: RegExpMatc
     m => `${m[1]!.toLowerCase() === "trust" ? "distrusts" : "dislikes"} ${m[2]!.toLowerCase()}`],
   ["personality", /^I(?:'ve|\s+have)\s+always\s+been\s+([a-z]+(?:,?\s+(?:and\s+)?[a-z]+)?)$/i, m => m[1]!.toLowerCase().replace(/,?\s+and\s+|,\s*/g, ", ")],
 ];
-/** Contract commands for this turn's delivered narration (one per set-once field and character; no already-established field). */
-export function contractCommands(narration: string, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>): readonly CampaignCommand[] {
+/** Contract commands for this turn's delivered narration (one per set-once field and character; no already-established field). `units`: the
+ * turn's shared dialogue reading of the same narration (NarrationFacts); without it the narration is read here against the context's people. */
+export function contractCommands(narration: string, context: TurnContext, snapshot: DeepReadonly<CampaignSnapshot>, units?: readonly DialogueUnit[]): readonly CampaignCommand[] {
   const active = activeNpcPlus(snapshot), present = new Set(context.characters.map(c => c.id).filter(id => active.has(id)));
   if (!present.size) return [];
   const out: Extract<CampaignCommand, { kind: "establish_character_contract" }>[] = [];
   // Policy: a contract needs a QUOTED first-person line of an active NPC+, read in the legacy (quotes-only) reading of the shared dialogue units.
-  for (const u of dialogueUnits(narration, 0, presentPeople(context))) {
+  for (const u of units ?? dialogueUnits(narration, 0, presentPeople(context))) {
     if (!u.quoted || !u.speaker || !present.has(u.speaker)) continue;
     const premium = snapshot.premium_characters.find(p => p.character_id === u.speaker)!;
     for (const sentence of sentencesOf(u.text)) {

@@ -24,6 +24,7 @@ import type { TranscriptEntry, TranscriptRecord, TranscriptRole } from "../persi
 import { AutosaveScheduler, type AutosaveOptions, type AutosaveState } from "./autosave.js";
 import { assessPortraitAssets, collectDeferredDeletions, type PortraitAssetReport } from "./portrait-assets.js";
 import { scenarioById } from "./scenarios.js";
+import { identityLoadWarnings, type IdentityLoadWarning } from "../campaign/identity-load-diagnostics.js";
 import { activePlayerCharacter } from "../campaign/player-character.js";
 import { applyPlayerProfilePatch, playerProfileView, type PlayerProfileView } from "./player-profile-view.js";
 import { CampaignSession } from "../persistence/campaign-session.js";
@@ -152,9 +153,12 @@ export interface LoadReport {
   /** Explicit recovery source when the current slot was not used. */
   readonly recovered_from?: "previous" | "backup";
   readonly warnings: readonly string[];
+  /** Block B4 (P4): warn-level identity diagnostics of the loaded state (read-only; nothing was repaired). Empty when nothing looks wrong. */
+  readonly identity_diagnostics: readonly IdentityLoadWarning[];
 }
 /** Compact, player-facing save status (view.session.save adds it). */
-export interface SaveStatus { readonly saving: boolean; readonly error?: AppError["code"]; readonly autosave: "off" | "on" | "stopped"; readonly transcript_error?: true }
+export interface SaveStatus { readonly saving: boolean; readonly error?: AppError["code"]; readonly autosave: "off" | "on" | "stopped"; readonly transcript_error?: true;
+  /** Block B4 (PER-1): the last successful save passed the warning threshold below the save size limit. */ readonly size_warning?: true }
 interface SessionInit { readonly opening_text?: string; readonly transcript?: { readonly entries: readonly TranscriptEntry[]; readonly next_index: number; readonly rollback_to?: number }; readonly turn_receipts?: readonly TurnReceipt[]; readonly pending_confirmations?: readonly PendingConfirmation[] }
 const FATAL_SAVE = new Set(["invalid_json", "invalid_save", "unsupported_version", "migration_failed", "dataset_mismatch", "reference_invalid", "unsafe_path", "campaign_locked", "invalid_id", "session_closed"]);
 type HistoryRepository = CampaignSaveRepository & Partial<Pick<FileCampaignRepository, "appendTranscript" | "readTranscript" | "retainedAssetReferences">>;
@@ -171,8 +175,8 @@ export type PortraitOutcome = { readonly ok: true; readonly changed: boolean; re
   | { readonly ok: false; readonly error: AppError; readonly view: SessionView };
 /**
  * Portrait batch outcome. `cost_usd` is the sum of costs derived from what the provider actually returned for the successful images
- * (reported cost, or billable units Ã— the configured unit price; absent when nothing was returned; never estimated). `failed` includes
- * `refused` (content refusals that survived their one reseed). `provider_calls` â‰¤ 2 Ã— requested. Provider bodies are never included.
+ * (reported cost, or billable units × the configured unit price; absent when nothing was returned; never estimated). `failed` includes
+ * `refused` (content refusals that survived their one reseed). `provider_calls` ≤ 2 × requested. Provider bodies are never included.
  */
 export type PortraitBatchOutcome = { readonly ok: true; readonly changed: true; readonly kind: PortraitKind; readonly requested: number; readonly succeeded: number; readonly failed: number;
     readonly refused: number; readonly provider_calls: number; readonly avatar_auto_selected: boolean; readonly message: string; readonly cost_usd?: number; readonly view: SessionView }
@@ -248,7 +252,7 @@ export class GameSession {
   readonly #openingText: string | undefined;
   readonly #autosave: AutosaveScheduler | undefined;
   #transcript: TranscriptEntry[] = []; #pendingTranscript: TranscriptRecord[] = []; #nextTranscript = 0; #rollbackTo: number | undefined; #transcriptError = false;
-  #saveError: AppError["code"] | undefined; #pendingDeletions = new Set<string>(); #suspended = false;
+  #saveError: AppError["code"] | undefined; #sizeWarning = false; #pendingDeletions = new Set<string>(); #suspended = false;
   private constructor(deps: SessionDeps, session: CampaignSession, init: SessionInit = {}) {
     this.#deps = deps; this.#session = session; this.#openingText = init.opening_text;
     this.#services = effectiveOptionalServices(deps); this.#monitor = new OptionalServiceMonitor(this.#services);
@@ -271,7 +275,8 @@ export class GameSession {
       // Canonical changes, or delivered exchanges whose continuity/history is not on disk yet (a dialogue-only turn commits no state).
       dirty: () => this.#session.hasUnsavedChanges || this.#historyPending() || this.#receipts.pending || this.#confirmations.unsaved,
       ready: () => this.#status === "idle" && !this.#portraitBusy && !this.#session.saving && !this.#suspended,
-      save: async () => { const r = await this.#saveNow("autosave"); return r.ok ? { ok: true } : { ok: false, fatal: FATAL_SAVE.has(r.error.code) }; },
+      // Block B4 (PER-1): an oversized save is not fatal (autosave keeps running) and not retried on a timer (the same state is still too large): the next mutation tries again.
+      save: async () => { const r = await this.#saveNow("autosave"); return r.ok ? { ok: true } : { ok: false, fatal: FATAL_SAVE.has(r.error.code), ...(r.error.code === "save_too_large" ? { retry: false as const } : {}) }; },
     }) : undefined;
   }
   /** New campaign, unsaved (CLI/tests). With a scenario ID it starts from that scenario; otherwise from the canonical opening. */
@@ -337,7 +342,7 @@ export class GameSession {
     const load_report: LoadReport = Object.freeze({ campaign_id: id, slot, ...(loaded.migrated_from !== undefined ? { migrated_from: loaded.migrated_from } : {}), canon, continuity,
       transcript: read ? (read.status === "ok" ? "available" as const : read.status) : "disabled" as const, transcript_invalid_lines: read?.invalid_lines ?? 0,
       missing_assets: assets?.missing.length ?? 0, orphan_assets: assets?.orphans.length ?? 0, temporary_participants_reset: true as const, ...(recovered ? { recovered_from: recovered } : {}),
-      warnings: Object.freeze(warnings) });
+      warnings: Object.freeze(warnings), identity_diagnostics: identityLoadWarnings(loaded.campaign.exportSnapshot()) });
     // Reconciliation is an authoritative change: the session starts dirty and autosave picks it up.
     session.#itemSprites.resumeInterrupted();
     session.#reconcileConfirmations();
@@ -376,7 +381,7 @@ export class GameSession {
     if (this.#status === "closed") return reject("session_closed");
     if (this.#status !== "idle") return reject("turn_in_progress");
     const campaign = this.#session.campaign;
-    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn");
+    if (!this.#revisionOk(request.expected_revision)) return reject("stale_turn", "The campaign changed since this page was shown. Nothing was moved; try the correction again."); // UI-5: no turn ran
     if (typeof request.target !== "string" || !request.target.trim() || request.target.length > 200) return reject("invalid_input");
     const label = request.target.trim().toLowerCase();
     const matches = this.#deps.world.getEntitiesByType("location").filter(e => e.knowledge?.visibility.player && e.knowledge.visibility.narrator
@@ -390,7 +395,7 @@ export class GameSession {
       campaign.commit(receipt);
       this.#coordinator.resetSceneContinuity(campaign);
       this.#lastError = undefined; this.#autosave?.notify();
-      return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} â†’ ${target.display_name} (${target.id}). Time unchanged.`, view: this.getView() };
+      return { ok: true, changed: receipt.changed, confirmation: `Manual location correction: ${before.scene.location.name} → ${target.display_name}. Time unchanged.`, view: this.getView() };
     } catch { return reject("campaign_validation_failed"); }
   }
 
@@ -693,15 +698,15 @@ export class GameSession {
 
   /**
    * Image generation v1 (Portrait Gallery V2 batches). One explicit player action = one batch of exactly PORTRAIT_BATCH_SIZE (3)
-   * independent images of ONE kind (avatar 992Ã—992 bust-up, or fullbody 800Ã—1200 head-to-feet) and ONE curated pose, run concurrently.
+   * independent images of ONE kind (avatar 992×992 bust-up, or fullbody 800×1200 head-to-feet) and ONE curated pose, run concurrently.
    * The browser supplies only the opaque ref, the revision it saw, the kind and a pose id; prompt, sizes, seeds, model and paths are
    * server-side. Each slot gets its own explicit seed (distinct within the batch, recorded for traceability) and at most ONE recovery:
    * a content refusal is retried once with a NEW seed and the modest-wording reinforcement (same character, kind and pose); a 429,
    * 5xx, timeout or network failure is retried once with the SAME seed after a short wait; auth, credits, invalid request and malformed
    * output are not retried. So a batch makes at most 6 provider calls. Sequence: validate (revision, eligibility, adult, lock, kind/pose,
-   * 3 free Gallery slots) â†’ 3 slots (allSettled) â†’ stage each success â†’ wait for any turn to finish â†’ re-check eligibility and that
-   * the appearance is unchanged â†’ finalize the successful files â†’ ONE metadata commit carrying every successful version (plus, on the
-   * first AVATAR batch while no Avatar exists, one uniformly random Avatar among this batch's successes) â†’ expose. Partial success keeps
+   * 3 free Gallery slots) → 3 slots (allSettled) → stage each success → wait for any turn to finish → re-check eligibility and that
+   * the appearance is unchanged → finalize the successful files → ONE metadata commit carrying every successful version (plus, on the
+   * first AVATAR batch while no Avatar exists, one uniformly random Avatar among this batch's successes) → expose. Partial success keeps
    * the successes; 0 successes changes nothing. Full Body is never selected here. A failed commit removes every finalized file of the
    * batch. The stored reference image is NOT sent (v1 text-to-image has no reference input). Images never change appearance.
    */
@@ -788,7 +793,7 @@ export class GameSession {
       const created_at = new Date().toISOString();
       const versions: CharacterPortraitVersion[] = staged.map(({ slot: { image, seed, prompt }, ext }) => {
         const version_id = `portrait_${randomBytes(6).toString("hex")}`;
-        // Cost only from what the provider returned: its reported cost, else its billable units Ã— the configured unit price.
+        // Cost only from what the provider returned: its reported cost, else its billable units × the configured unit price.
         const cost = image.cost_usd ?? (image.billable_units !== undefined ? Math.round(image.billable_units * stack.price_usd_per_billable_unit * 1e6) / 1e6 : undefined);
         return { version_id, prompt_version: PORTRAIT_PROMPT_VERSION, prompt_fingerprint: fingerprint, model: image.model, created_at, media_type: image.media_type, asset_file: `${version_id}.${ext}`,
           ...(cost !== undefined ? { cost_usd: cost } : {}), kind, pose, prompt, seed, ...(image.provider_seed !== undefined ? { provider_seed: image.provider_seed } : {}), provider: image.provider,
@@ -877,8 +882,8 @@ export class GameSession {
     return this.#commitPortrait(target.campaign, { kind: "set_portrait_full_body", character_id: target.id, version_id: target.version.version_id }, "The Full Body image could not be changed.");
   }
   /**
-   * Portrait Gallery V2: delete one unassigned Gallery image; an image holding the Avatar or Full Body role is refused. Order: validate â†’
-   * commit the metadata removal â†’ deferred file deletion (Save/Load v1): the file is removed only once no retained state (live campaign,
+   * Portrait Gallery V2: delete one unassigned Gallery image; an image holding the Avatar or Full Body role is refused. Order: validate →
+   * commit the metadata removal → deferred file deletion (Save/Load v1): the file is removed only once no retained state (live campaign,
    * save.json, save.previous.json, kept backups) references it, so recovering an older save never finds a missing file. A file that
    * cannot be removed stays as a detectable orphan (logged); the delete still succeeds.
    */
@@ -1200,13 +1205,13 @@ export class GameSession {
       if (err.code !== "save_in_progress") this.#saveError = err.code;
       return { ok: false, error: err };
     }
-    this.#saveError = undefined; this.#receipts.saved(receipts.token); this.#confirmations.saved(interaction.token);
+    this.#saveError = undefined; this.#sizeWarning = saved.size_warning === true; this.#receipts.saved(receipts.token); this.#confirmations.saved(interaction.token);
     // Canonical save is complete; history and file cleanup can only report, never undo it.
     const transcriptOk = await this.#flushTranscript(saved.revision);
     await this.#collectDeletions();
     return { ok: true, saved, ...(transcriptOk ? {} : { transcript_error: true as const }), view: this.getView() };
   }
-  /** Bounded, non-authoritative recent conversation for the save (â‰¤ 12 finalized exchanges; oversized ones and the oldest are dropped). */
+  /** Bounded, non-authoritative recent conversation for the save (≤ 12 finalized exchanges; oversized ones and the oldest are dropped). */
   exportContinuity(): SaveContinuity | undefined {
     const recent = this.#coordinator.recent?.(this.#session.campaign);
     if (!recent) return undefined;
@@ -1251,8 +1256,9 @@ export class GameSession {
     } catch { /* Kept pending; retried after the next save. */ }
   }
   /** Save/Load v1 history for the UI: the visible transcript (rollbacks applied), oldest first, bounded. */
-  getTranscript(): readonly { readonly role: TranscriptRole; readonly text: string; readonly turn_id?: string }[] {
-    return this.#transcript.slice(-500).map(e => ({ role: e.role, text: e.text, ...(e.turn_id ? { turn_id: e.turn_id } : {}) }));
+  getTranscript(): readonly { readonly i: number; readonly role: TranscriptRole; readonly text: string; readonly turn_id?: string }[] {
+    // `i` is the entry's stable, monotonically increasing index (B3): the client's render cursor survives the 500-entry window.
+    return this.#transcript.slice(-500).map(e => ({ i: e.i, role: e.role, text: e.text, ...(e.turn_id ? { turn_id: e.turn_id } : {}) }));
   }
   get campaignId(): string { return this.#session.campaign.exportSnapshot().campaign_id; }
   get campaignMeta(): { readonly display_name?: string; readonly scenario_id?: string } { const { display_name, scenario_id } = this.#session.meta; return { ...(display_name ? { display_name } : {}), ...(scenario_id ? { scenario_id } : {}) }; }
@@ -1281,7 +1287,8 @@ export class GameSession {
   }
   saveStatus(): SaveStatus {
     const state = this.#autosave?.state;
-    return { saving: this.#session.saving, ...(this.#saveError ? { error: this.#saveError } : {}), autosave: !this.#autosave ? "off" : state === "stopped" ? "stopped" : "on", ...(this.#transcriptError ? { transcript_error: true as const } : {}) };
+    return { saving: this.#session.saving, ...(this.#saveError ? { error: this.#saveError } : {}), autosave: !this.#autosave ? "off" : state === "stopped" ? "stopped" : "on", ...(this.#transcriptError ? { transcript_error: true as const } : {}),
+      ...(this.#sizeWarning ? { size_warning: true as const } : {}) };
   }
   get autosaveState(): AutosaveState | "off" { return this.#autosave?.state ?? "off"; }
   /** Settles when no autosave is in flight (host coordination and tests). */

@@ -11,6 +11,10 @@ const latest = document.querySelector("#latest");
 let submitting = false;
 let ready = false;
 let shown = 0;
+// B3: the last rendered message position. Messages carry a stable `seq`; a count breaks once the server's bounded window is full.
+let lastSeq = -1;
+/** The messages not rendered yet: after the cursor when the server sends positions, else after the count (older payloads). */
+const unseen = messages => messages.some(m => typeof m.seq === "number") ? messages.filter(m => typeof m.seq === "number" && m.seq > lastSeq) : messages.slice(shown);
 let poll;
 const comparisonViews = new Map();
 let pending;
@@ -102,6 +106,7 @@ function renderInventory() {
   for (const filter of ["all", "carried", "equipped"]) ui(`inventory-${filter}`)?.setAttribute("aria-pressed", String(inventoryFilter === filter));
   renderEquipment(inventoryData);
   const items = all.filter(i => (inventoryFilter === "all" || i.position.kind === inventoryFilter) && `${i.name} ${i.description ?? ""} ${i.category ?? ""}`.toLowerCase().includes(inventoryQuery));
+  const focusedItem = document.activeElement?.closest?.("#inventory-items") ? document.activeElement.getAttribute?.("data-item") : undefined;
   container.replaceChildren();
   if (!items.length) {
     const empty = document.createElement("p"); empty.className = "inventory-empty";
@@ -110,13 +115,16 @@ function renderInventory() {
   }
   for (const item of items) {
     const cell = document.createElement("button"); cell.className = `inventory-cell${item.equipped ? " is-equipped" : ""}${item.id === selectedItemId ? " is-selected" : ""}`;
-    cell.setAttribute("type", "button"); cell.setAttribute("role", "listitem"); cell.setAttribute("data-item", item.id); cell.setAttribute("title", item.name);
+    cell.setAttribute("type", "button"); cell.setAttribute("data-item", item.id); cell.setAttribute("title", item.name);
     cell.setAttribute("aria-pressed", String(item.id === selectedItemId)); cell.setAttribute("aria-label", `${item.name}, ${item.state_label}`);
     cell.append(itemImage(item, resolveItemIcon(item), "cell-icon"));
     if (item.equipped) { const mark = document.createElement("span"); mark.className = "cell-equipped"; mark.setAttribute("aria-hidden", "true"); mark.textContent = "E"; cell.append(mark); }
     if (item.sprite_status === "pending") { const pending = document.createElement("span"); pending.className = "cell-pending"; pending.setAttribute("title", "Illustration on its way"); cell.append(pending); }
     cell.addEventListener("click", () => selectItem(item.id));
-    container.append(cell);
+    // B3: the list item wraps the button, so the cell keeps its button semantics inside the list.
+    const slot = document.createElement("div"); slot.className = "inventory-slot"; slot.setAttribute("role", "listitem"); slot.append(cell);
+    container.append(slot);
+    if (focusedItem === item.id) cell.focus();
   }
   if (selectedItemId && !all.some(i => i.id === selectedItemId)) selectedItemId = undefined;
   renderDetail(all.find(i => i.id === selectedItemId));
@@ -667,6 +675,7 @@ ui("character-promote-confirm-button")?.addEventListener("click", async () => {
     const data = await response.json();
     promoting = false;
     if (data?.ok) promotingRef = undefined;
+    restoreFocus(data?.ok ? ui("character-drawer") : ui("character-promote-confirm-button"));
     if (data?.messages) render(data);
     if (!data?.ok) {
       for (const id of ["character-promote-cancel", "character-promote-confirm-button"]) ui(id).disabled = false;
@@ -683,7 +692,14 @@ ui("character-backdrop")?.addEventListener("click", closeCharacter);
 ui("character-drawer")?.addEventListener("keydown", event => {
   if (event.key === "Escape") { event.preventDefault(); closeCharacter(); }
   if (event.key === "Tab") {
-    event.preventDefault(); const controls = [ui("character-close"), ui("appearance-tab"), ui("story-tab")].filter(Boolean);
+    // B3 (UI-1): the cycle is every enabled, rendered control of the drawer in document order (Promote and its confirmation, Edit NPC+,
+    // Generate, the tabs). Without a layout (a DOM stand-in) it falls back to the drawer's known controls.
+    const drawerEl = ui("character-drawer"), shown = el => !!el && !el.hidden && !el.disabled;
+    const rendered = drawerEl?.querySelectorAll ? [...drawerEl.querySelectorAll("button, a[href], input, select, textarea, [tabindex]:not([tabindex='-1'])")].filter(el => !el.disabled && el.getClientRects().length > 0) : undefined;
+    const promote = ui("character-promote"), confirmRow = ui("character-promote-confirm");
+    const controls = rendered ?? [ui("character-close"), ...(shown(promote) ? [ui("character-promote-button"), ...(confirmRow && !confirmRow.hidden ? [ui("character-promote-cancel"), ui("character-promote-confirm-button")] : [])] : []),
+      ui("appearance-tab"), ui("story-tab")].filter(shown);
+    event.preventDefault(); if (!controls.length) return;
     const at = controls.indexOf(event.target); controls[(at + (event.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
   }
 });
@@ -806,9 +822,20 @@ function renderScene(data) {
 // text and icon, not by colour alone; a person offer carries its own marker. The browser holds only the opaque offer ref; accepting sends the ref and the
 // revision it rendered, nothing else. Names arrive already masked by the server.
 let tradeBusy = false, tradeError = "", tradeErrorRef = "", tradeReceipts = [];
+// B3 (UI-15, N5): one polite announcer (#announcer). An offer, a confirmation card and a save failure are announced ONCE when they first
+// appear; the regions re-rendered on every poll are not live, and the pending bubble stays out of the conversation log until its prose arrives.
+const announced = new Set();
+function announce(key, text) {
+  if (announced.has(key)) return; announced.add(key);
+  const el = ui("announcer"); if (el) el.textContent = text;
+}
+/** After an explicit action re-renders the screen, focus lands on a sensible live element instead of the removed button. */
+function restoreFocus(target) {
+  if (target && !target.disabled && !target.hidden) target.focus?.(); else if (!input.disabled) input.focus();
+}
 function tradeRegion() {
   let region = ui("trade-region");
-  if (!region) { region = document.createElement("div"); region.id = "trade-region"; region.className = "trade-region"; }
+  if (!region) { region = document.createElement("div"); region.id = "trade-region"; region.className = "trade-region"; region.setAttribute("aria-live", "off"); }
   return region;
 }
 function renderTrade(data) {
@@ -841,6 +868,11 @@ function renderTrade(data) {
     foot.append(accept);
     if (offer.gold !== null) { const purse = document.createElement("span"); purse.className = "trade-purse"; purse.textContent = blocked ? `Not enough gold (you have ${offer.gold}).` : `You have ${offer.gold} gold.`; foot.append(purse); }
     const problem = document.createElement("p"); problem.className = "trade-error"; problem.setAttribute("role", "alert"); const showProblem = !!tradeError && tradeErrorRef === offer.ref; problem.hidden = !showProblem; problem.textContent = showProblem ? tradeError : "";
+    // UI-23: a disabled Accept says why.
+    const turnRunning = !blocked && accept.disabled, reason = document.createElement("span"); reason.className = "trade-reason"; reason.id = `trade-reason-${offer.ref}`;
+    reason.textContent = turnRunning ? "Available when the narrator finishes." : ""; reason.hidden = !turnRunning; foot.append(reason);
+    if (turnRunning) accept.setAttribute("aria-describedby", reason.id);
+    announce(`offer:${offer.ref}`, `Actual offer: ${offer.summary}`);
     accept.addEventListener("click", () => acceptTrade(offer.ref));
     card.append(head, who, list, foot, problem); children.push(card);
   }
@@ -860,6 +892,7 @@ async function acceptTrade(ref) {
     if (!data?.ok) tradeError = data?.error?.message ?? "The trade was not completed.";
     else if (data.receipt && !tradeReceipts.some(r => r.ref === data.receipt.ref)) tradeReceipts.push(data.receipt);
     if (data?.messages) render(data); else renderTrade({ trade: undefined });
+    restoreFocus(data?.ok ? input : document.querySelector?.(".trade-accept"));
   } catch {
     tradeBusy = false; tradeError = "The request failed. Check the connection and try again."; load();
   }
@@ -871,7 +904,7 @@ let confirmBusy = false, confirmError = "", confirmErrorRef = "";
 const shownConfirmations = new Set(), dismissedConfirmations = new Set();
 function confirmationRegion() {
   let region = ui("confirmation-region");
-  if (!region) { region = document.createElement("div"); region.id = "confirmation-region"; region.className = "confirm-region"; region.setAttribute("aria-live", "polite"); }
+  if (!region) { region = document.createElement("div"); region.id = "confirmation-region"; region.className = "confirm-region"; region.setAttribute("aria-live", "off"); }
   return region;
 }
 function renderConfirmations(data) {
@@ -892,8 +925,12 @@ function renderConfirmations(data) {
     const blocked = confirmBusy || !(data.status === undefined ? ready : data.status === "idle");
     const confirm = document.createElement("button"); confirm.type = "button"; confirm.className = "confirm-accept"; confirm.textContent = item.confirm_label; confirm.setAttribute("aria-label", `Confirm: ${item.confirm_label}`); confirm.disabled = blocked;
     const cancel = document.createElement("button"); cancel.type = "button"; cancel.className = "confirm-cancel"; cancel.textContent = item.cancel_label; cancel.setAttribute("aria-label", `Cancel: ${item.title} ${item.cancel_label}`); cancel.disabled = blocked;
+    announce(`confirm:${item.ref}`, `Needs your confirmation: ${item.title}`);
     confirm.addEventListener("click", () => actOnConfirmation("confirm", item.ref)); cancel.addEventListener("click", () => actOnConfirmation("cancel", item.ref));
     foot.append(confirm, cancel);
+    // UI-23: disabled while a turn runs, and says why.
+    if (blocked && !confirmBusy) { const why = document.createElement("span"); why.className = "confirm-reason"; why.id = `confirm-reason-${item.ref}`; why.textContent = "Available when the narrator finishes."; foot.append(why);
+      confirm.setAttribute("aria-describedby", why.id); cancel.setAttribute("aria-describedby", why.id); }
     const problem = document.createElement("p"); problem.className = "confirm-error"; problem.setAttribute("role", "alert"); const show = !!confirmError && confirmErrorRef === item.ref; problem.hidden = !show; problem.textContent = show ? confirmError : "";
     card.append(head, body, foot, problem); children.push(card);
   }
@@ -911,6 +948,7 @@ async function actOnConfirmation(action, ref) {
     confirmBusy = false;
     if (!data?.ok) confirmError = data?.error?.message ?? "That could not be completed. Nothing changed.";
     if (data?.messages) render(data); else renderConfirmations({ confirmations: undefined });
+    restoreFocus(data?.ok ? input : document.querySelector?.(".confirm-accept"));
   } catch {
     confirmBusy = false; confirmError = "The request failed. Check the connection and try again."; load();
   }
@@ -949,6 +987,7 @@ async function keepTrack(token) {
     keepBusy = false;
     if (!data?.ok) keepError = data?.error?.message ?? "That person could not be kept. Nothing changed.";
     if (data?.messages) render(data); else load();
+    restoreFocus(data?.ok ? input : document.querySelector?.(".keep-track:not([disabled])"));
   } catch {
     keepBusy = false; keepError = "The request failed. Check the connection and try again."; load();
   }
@@ -971,13 +1010,13 @@ function render(data) {
   if ("player_character" in data) playerProfile = data.player_character ?? null;
   const wasNear = nearBottom();
   renderScene(data);
-  for (const message of data.messages.slice(shown)) {
+  for (const message of unseen(data.messages)) {
     const existing = pending && (message.role === "player" ? pending.player : pending.narrator);
     const { article, label, text } = existing ?? bubble(message.role, message.text);
     if (existing) {
       renderRpg(text, message.text); article.className = message.role;
       label.textContent = message.role === "player" ? "Nicco" : "Narrator";
-      article.setAttribute("aria-busy", "false");
+      article.setAttribute("aria-busy", "false"); article.setAttribute("aria-hidden", "false");
     }
     if (message.role === "narrator" && message.comparison_available) {
       const select = document.createElement("select");
@@ -1027,7 +1066,7 @@ function render(data) {
   renderConfirmations(data);
   renderProvisional(data);
   follow(wasNear);
-  shown = data.messages.length;
+  shown = data.messages.length; lastSeq = data.messages.reduce((max, m) => typeof m.seq === "number" && m.seq > max ? m.seq : max, lastSeq);
   ready = data.status === "idle";
   input.disabled = send.disabled = submitting || !ready;
   renderPlayer();
@@ -1055,7 +1094,7 @@ async function load() {
     ready = false;
     input.disabled = send.disabled = true;
     status.textContent = "Disconnected.";
-    showError("Cannot reach the playtest. Check that npm run play:ui is running, then reload.");
+    showError("Cannot reach the game server. Check that it is running, then reload.");
   }
 }
 form.addEventListener("submit", async event => {
@@ -1076,7 +1115,7 @@ form.addEventListener("submit", async event => {
       submitting = false;
       if (Array.isArray(data.messages)) render(data);
       if (data.ok) { input.value = ""; status.textContent = data.confirmation; }
-      else showError(data.error?.message ?? "Location correction failed.");
+      else showError(`${data.error?.message ?? "Location correction failed."}${Array.isArray(data.candidates) && data.candidates.length ? ` Candidates: ${data.candidates.join(", ")}.` : ""}`); // UI-5
     } catch {
       submitting = false;
       showError("Location correction response interrupted. Checking committed state.");
@@ -1088,7 +1127,7 @@ form.addEventListener("submit", async event => {
   const wasNear = nearBottom();
   pending = { player: bubble("player", text), narrator: bubble("narrator pending", "") };
   pending.narrator.text.textContent = PHASE_LABELS.thinking;
-  pending.narrator.article.setAttribute("aria-busy", "true");
+  pending.narrator.article.setAttribute("aria-busy", "true"); pending.narrator.article.setAttribute("aria-hidden", "true");
   follow(wasNear);
   try {
     // One key per submission: a connection that drops after the server accepted the turn is answered from the same turn, never run twice.
@@ -1156,17 +1195,27 @@ async function readStream(response) {
 // ------------------------------------------------------------------ Save/Load v1: campaigns, save control, load report
 // The server owns campaign truth; the browser only shows the list, sends a chosen campaign ID / slot / name, and renders the result.
 let campaignMode = false, activeCampaign, saveRequest = false, savePoll;
-const SAVE_LABELS = { saving: "Saving…", failed: "Save failed", unsaved: "Unsaved changes", saved: "Saved" };
+let lastSaveKey = "";
+const SAVE_LABELS = { saving: "Saving…", failed: "Save failed", too_large: "Save too large", unsaved: "Unsaved changes", saved: "Saved" };
+// B4 (PER-1): an oversized campaign is not a damaged one; the banner says what happened and what is safe.
+const SAVE_BANNERS = {
+  too_large: "This campaign is now too large to save (over the 16 MB limit). Nothing was overwritten: your last save is intact, but progress since then is only in this session.",
+  warning: "This campaign is close to the 16 MB save limit. It still saves normally.",
+};
 function resetConversation() {
-  ui("conversation")?.replaceChildren(); shown = 0; pending = undefined; comparisonViews.clear(); tradeReceipts = []; tradeError = ""; tradeErrorRef = ""; confirmError = ""; confirmErrorRef = ""; shownConfirmations.clear(); dismissedConfirmations.clear();
+  ui("conversation")?.replaceChildren(); shown = 0; lastSeq = -1; pending = undefined; comparisonViews.clear(); tradeReceipts = []; tradeError = ""; tradeErrorRef = ""; confirmError = ""; confirmErrorRef = ""; shownConfirmations.clear(); dismissedConfirmations.clear(); announced.clear();
 }
 function renderSaveStatus(save) {
   const el = ui("save-status"), button = ui("save-button");
   if (!el || !button) return;
-  const key = saveRequest || save?.saving ? "saving" : save?.error ? "failed" : save?.state === "saved" ? "saved" : "unsaved";
+  const key = saveRequest || save?.saving ? "saving" : save?.error === "save_too_large" ? "too_large" : save?.error ? "failed" : save?.state === "saved" ? "saved" : "unsaved";
   el.hidden = !campaignMode || !activeCampaign; el.textContent = save ? SAVE_LABELS[key] : "";
   el.className = `save-status save-${key}`;
-  el.setAttribute("title", key === "failed" ? "The last save failed. Your progress is still in this session; press Save to retry." : save?.autosave === "stopped" ? "Autosave is paused until the campaign is saved." : "");
+  if (key === "failed" && lastSaveKey !== "failed") { const a = ui("announcer"); if (a) a.textContent = "Save failed. Your progress is still in this session; press Save to retry."; }
+  lastSaveKey = key;
+  el.setAttribute("title", key === "failed" ? "The last save failed. Your progress is still in this session; press Save to retry." : key === "too_large" ? SAVE_BANNERS.too_large : save?.autosave === "stopped" ? "Autosave is paused until the campaign is saved." : "");
+  const banner = ui("save-banner"), message = !campaignMode || !activeCampaign ? "" : key === "too_large" ? SAVE_BANNERS.too_large : save?.size_warning && key !== "failed" ? SAVE_BANNERS.warning : "";
+  if (banner && banner.textContent !== message) { banner.textContent = message; banner.hidden = !message; }
   button.disabled = !activeCampaign || saveRequest;
 }
 function renderCampaign(data) {

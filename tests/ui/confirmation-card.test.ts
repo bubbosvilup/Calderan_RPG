@@ -49,7 +49,7 @@ async function client(fetchMock: (url: string, options?: any) => any) {
     fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
   runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
   const region = () => node("#conversation").byClass("confirm-region")[0];
-  return { render: context.render as (data: any) => void, region, text: () => region()?.textContent ?? "", conversation: node("#conversation") };
+  return { render: context.render as (data: any) => void, region, text: () => region()?.textContent ?? "", conversation: node("#conversation"), node };
 }
 const get = (data: unknown) => async () => ({ ok: true, json: async () => data });
 
@@ -64,7 +64,12 @@ test("a confirmation card sits inline after the newest response with a meaningfu
   assert.match(cancel.getAttribute("aria-label")!, /^Cancel: Free Maren\? Keep as is$/);
   assert.equal(c.region()!.byClass("confirm-card")[0]!.getAttribute("role"), "group");
   assert.match(c.region()!.byClass("confirm-card")[0]!.getAttribute("aria-label")!, /Confirmation needed: Free Maren\?/);
-  assert.equal(c.region()!.getAttribute("aria-live"), "polite");
+  // B3 (UI-15): the re-rendered region is not live; the card is announced once through the page announcer.
+  assert.equal(c.region()!.getAttribute("aria-live"), "off");
+  const announcer = c.node("#announcer");
+  assert.equal(announcer.textContent, "Needs your confirmation: Free Maren?");
+  announcer.textContent = ""; c.render({ ...opening, confirmations: { cards: [card()], recent: [] } });
+  assert.equal(announcer.textContent, "", "a re-render of the same card is not announced again");
   c.render({ ...opening, confirmations: { cards: [], recent: [] } });
   assert.equal(c.region(), undefined, "no card, no region");
 });

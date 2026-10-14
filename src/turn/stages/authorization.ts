@@ -17,6 +17,7 @@ import { followCandidates, followerIds } from "../movement/follow-candidates.js"
 import { sentencesOf } from "../language/text.js";
 import { establishedCount, ownerEvidenced } from "../items/item-ownership.js";
 import { resolveItemIntent, type ItemIntent } from "../items/item-intent.js";
+import { laneCommands, type LaneCommand } from "../authorization/authority-lanes.js";
 import { authorizeTradeProposals, isTradeProposal, reframeOwnItemPurchase, vetoSettlementThroughItems } from "../commerce/trade-authorization.js";
 const itemKey = (name: string) => name.trim().toLowerCase().replace(/^(?:the|a|an)\s+/, "");
 const EXACT_REPEAT_KINDS: ReadonlySet<CampaignCommand["kind"]> = new Set(["transfer_item", "place_item", "set_knowledge", "set_condition", "schedule_event", "leave_scene", "join_household", "leave_household", "add_household_rule"]);
@@ -149,19 +150,22 @@ export interface TurnCommands {
   readonly authorized: readonly CampaignCommand[];
   /** The whole candidate batch for final preparation: player runtime effects first, then authorized commands. */
   readonly commands: readonly CampaignCommand[];
+  /** Block B5 (PIPE-6): the same batch, each command with the lane that produced it (`commands` is exactly `lanes.map(l => l.command)`). */
+  readonly lanes: readonly LaneCommand[];
 }
 /** Sync, pure. Failure mapping: still `controller_failed` in the coordinator (pre-H2 order). */
 export function assembleTurnCommands(i: { readonly diagnostics: readonly AuthorizationDiagnostic[]; readonly intent: TurnIntent; readonly projected: DeepReadonly<CampaignSnapshot> }): TurnCommands {
   // Inbound gifts record their provenance deterministically (the controller vocabulary has no acquisition field).
   const minute = i.projected.runtime.scene.world_time.world_minute;
-  const authorized = i.diagnostics.filter(d => d.authorized).map(d => {
-    const c = d.command;
-    if (c.kind !== "transfer_item" || c.mode !== "gift" || transferRecipient(c) !== "nicco" || c.acquisition) return c;
+  const decided = i.diagnostics.filter(d => d.authorized).map((d): LaneCommand => {
+    const c = d.command, lane = isTradeProposal(c) ? "trade" : "preferred_authorization", evidence = d.evidence?.quote ? { evidence: d.evidence.quote } : {};
+    if (c.kind !== "transfer_item" || c.mode !== "gift" || transferRecipient(c) !== "nicco" || c.acquisition) return { lane, command: c, ...evidence };
     const item = i.projected.items.find(it => it.id === c.item_id);
     const from = item && (item.position.kind === "carried" || item.position.kind === "equipped") ? item.position.character_id : undefined;
-    return from ? { ...c, acquisition: { acquisition_kind: "gift" as const, from_character_id: from, acquired_at: minute } } : c;
+    return { lane, command: from ? { ...c, acquisition: { acquisition_kind: "gift" as const, from_character_id: from, acquired_at: minute } } : c, ...evidence };
   });
-  return { authorized, commands: [...i.intent.runtime, ...authorized] };
+  const lanes = [...laneCommands("player_runtime", i.intent.runtime), ...decided];
+  return { authorized: decided.map(l => l.command), commands: lanes.map(l => l.command), lanes };
 }
 
 /**

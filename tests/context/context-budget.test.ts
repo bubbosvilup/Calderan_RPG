@@ -4,6 +4,12 @@ import { ContextBudgetManager, DEFAULT_CONTEXT_POLICY, serializeContextBaseline 
 import { GameSession } from "../../src/app/game-session.js";
 import { FileCampaignRepository } from "../../src/persistence/campaign-repository.js";
 import { setup } from "../support/turn-fixtures.js";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+// B2: the saves these tests write live in a temporary directory, never in the repository's saves/ folder.
+const SAVES = await mkdtemp(join(tmpdir(), "context-budget-"));
+test.after(() => rm(SAVES, { recursive: true, force: true }));
 const request = (n: number) => ({ system_prompt: "", messages: [{ role: "user" as const, content: "x".repeat(n) }] });
 const policy = { ...DEFAULT_CONTEXT_POLICY, request_tokens: 1000, output_tokens: 0, overhead_tokens: 0, safety_tokens: 0 };
 test("accounting deterministic, low, warning, below/at auto, hard, invalid configuration", () => {
@@ -20,7 +26,7 @@ test("accounting deterministic, low, warning, below/at auto, hard, invalid confi
 });
 test("manual lifecycle blocks overlap and turns, failure retains authority and derived request", async () => {
   const f = setup(); let release!: () => void; const gate = new Promise<void>(r => release = r);
-  const s = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, "saves/d04-context/test"), createCoordinator: () => f.coordinator,
+  const s = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, join(SAVES, "test")), createCoordinator: () => f.coordinator,
     compaction_service: { async compact({ reason }) { assert.equal(reason, "manual"); await gate; throw new Error("failure"); } } }, f.campaign);
   const before = f.campaign.exportSnapshot(), active = f.coordinator.contextRequest(f.campaign);
   const run = s.requestContextCompaction({ reason: "manual" });
@@ -32,7 +38,7 @@ test("manual lifecycle blocks overlap and turns, failure retains authority and d
   assert.deepEqual(f.campaign.exportSnapshot(), before); assert.deepEqual(f.coordinator.contextRequest(f.campaign), active);
 });
 test("auto preflight starts maintenance before accepting input; unavailable never fakes compression", async () => {
-  const f = setup(); const s = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, "saves/d04-context/test"), createCoordinator: () => f.coordinator,
+  const f = setup(); const s = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, join(SAVES, "test")), createCoordinator: () => f.coordinator,
     context_policy: { ...DEFAULT_CONTEXT_POLICY, request_tokens: new ContextBudgetManager().measure(f.coordinator.contextRequest(f.campaign)).fixed_instructions_tokens + 1280 + 1000 } }, f.campaign);
   assert.ok(s.getView().context_budget?.compaction_required);
   const statuses: string[] = []; const before = f.campaign.exportSnapshot();
@@ -50,7 +56,7 @@ test("baseline contains exactly filtered narrator request and policy, no source 
 });
 test("post-turn auto maintenance is emitted before ready; save/load excludes transient compaction", async () => {
   const f = setup(); let crowded = false;
-  const s = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, "saves/d04-context/lifecycle"), context_policy: policy,
+  const s = GameSession.fromCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, join(SAVES, "lifecycle")), context_policy: policy,
     createCoordinator: () => ({ contextRequest: () => request(crowded ? 3800 : 100), async *runTurn(req) { for await (const e of f.coordinator.runTurn(req)) { if(e.type === "turn_completed") crowded = true; yield e; } } }) }, f.campaign);
   const statuses: string[] = [];
   const outcome = await s.submitPlayerInput("I smile.", { onEvent: e => { if(e.type === "status_changed") statuses.push(e.status); } });
@@ -58,6 +64,6 @@ test("post-turn auto maintenance is emitted before ready; save/load excludes tra
   assert.equal(s.getView().context_compaction?.last_result?.reason, "auto");
   const saved = await s.save(); assert.ok(saved.ok);
   assert.ok(!JSON.stringify(saved.saved).includes("context_compaction"));
-  const loaded = await GameSession.loadCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, "saves/d04-context/lifecycle"), createCoordinator: () => f.coordinator }, f.campaign.exportSnapshot().campaign_id);
+  const loaded = await GameSession.loadCampaign({ world: f.world, repository: new FileCampaignRepository(f.world, join(SAVES, "lifecycle")), createCoordinator: () => f.coordinator }, f.campaign.exportSnapshot().campaign_id);
   assert.ok(loaded.ok); assert.equal(loaded.session.status, "idle"); assert.equal(loaded.session.getView().context_compaction?.last_result, undefined);
 });

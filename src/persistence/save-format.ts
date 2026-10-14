@@ -225,7 +225,8 @@ function persistedFile(file: DeepReadonly<CampaignSaveFile>): Record<string, unk
 export function serializeSave(file: DeepReadonly<CampaignSaveFile>, world: WorldStore): string {
   const valid = validateSaveFile(persistedFile(file), world, undefined, { sides: sidesOf(file.snapshot) });
   const json = JSON.stringify(persistedFile(valid), (_key, value: unknown) => value && typeof value === "object" && !Array.isArray(value)
-    ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : value, 2) + "\n";
-  if (Buffer.byteLength(json, "utf8") > MAX_SAVE_BYTES) throw new CampaignSaveError("invalid_save");
+    ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : value) + "\n";
+  // Block B4: compact JSON (P2; strict-json reads compact and pretty alike). Oversize is its own code (PER-1: nothing was written, not corruption).
+  if (Buffer.byteLength(json, "utf8") > MAX_SAVE_BYTES) throw new CampaignSaveError("save_too_large");
   return json;
 }

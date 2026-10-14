@@ -7,6 +7,7 @@ import { classifyBackgroundClaim } from "../identity/background-grounding.js";
 import type { EphemeralSceneParticipant } from "../identity/scene-participants.js";
 import { linkedParticipant, materializeProvisional } from "../identity/provisional-people.js";
 import { asksName } from "../identity/identity-request.js";
+import { NOTHING_WITHHELD, maskDeep, mergeWithheld, reservedClaims, type WithheldNames } from "../identity/canonical-name-reservation.js";
 import { NUMBER_PHRASE_SOURCE } from "../language/numbers.js";
 import { AUCTION } from "./trade-price.js";
 import { CAPTIVE, createFactSource, refersTo, type NarratedPerson, type NarrationFactSource, type NarrationFacts, type NarrationUnit, type SceneReading } from "../narration-facts/index.js";
@@ -55,6 +56,9 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const source = options.facts ?? createFactSource({ movers: [], context }), facts = source.of(latest);
   const prices: PriceReader = text => sellerPrices(facts, text);
   const unsupported = (text: string) => unsupportedMoney(facts, text) !== undefined;
+  // AUD-1 (decision 2026-10-14): the reserved canonical handles each narrated person claimed, from the identity facts of the scene's narrations.
+  const identity = recent.flatMap(e => e.narration ? source.of(e.narration).identity : []);
+  const withheld = (p: NarratedPerson) => p.character_id ? NOTHING_WITHHELD : reservedClaims(options.world, identity, p);
   const candidates = [...present].filter(id => { const l = legal(id); return l?.status === "enslaved" && l.holder_id !== "nicco" && !!l.holder_id && present.has(l.holder_id); });
   // Narrator-created captives of the current scene (and present persistent people not yet legally held, e.g. materialized under a name) compete with held persons for the one subject.
   const unheld = new Set(context.characters.filter(c => c.id !== "nicco" && !legal(c.id) && /\bcaptive\b/.test(c.established_origin?.role ?? "")).map(c => c.id));
@@ -69,7 +73,7 @@ export function resolvePersonOffers(input: string, context: TurnContext, snapsho
   const pointed = reading.captives.length ? undefined : pointedCaptive(reading, input, prices, facts);
   if (pointed) reading = { ...reading, persons: [...reading.persons, pointed], captives: [pointed] };
   const target = resolveTarget(input, candidates, reading, named, latestExchange);
-  if (target?.kind === "narrated") { offerNarrated(target.person, reading, { input, context, snapshot, baseRevision, participants: options.participants ?? [], latest: latestExchange, commands, diagnostics, name, txId, facts, prices, unsupported,
+  if (target?.kind === "narrated") { offerNarrated(target.person, reading, { input, context, snapshot, baseRevision, participants: options.participants ?? [], latest: latestExchange, commands, diagnostics, name, txId, facts, prices, unsupported, withheld,
     keepClaim: (text: string) => classifyBackgroundClaim(text, options.world).status !== "unverified" }); return { commands, diagnostics }; }
   if (target?.kind === "ambiguous" || target?.kind === "changed") { diagnostics.push({ status: target.kind === "changed" ? "blocked" : "ambiguous", detail: { candidates: target.labels, ...(target.kind === "changed" ? { reason: "subject_changed" } : {}) } }); return { commands, diagnostics }; }
   if (!candidates.length) return { commands, diagnostics };
@@ -262,7 +266,11 @@ interface PurchaseScope {
   readonly keepClaim?: (text: string) => boolean;
   /** The shared commerce facts of the delivered narration and the readers built on them. */
   readonly facts: NarrationFacts; readonly prices: PriceReader; readonly unsupported: (text: string) => boolean;
+  /** The reserved canonical handles narration claimed for a narrated person (AUD-1): the offer stands, the handles are never recorded. */
+  readonly withheld: (person: NarratedPerson) => WithheldNames;
 }
+/** The narration's description of a person whose established name is withheld ("the woman"), else their ordinary label. */
+const described = (p: NarratedPerson, w: WithheldNames, fallback: string) => p.name && w.names.includes(p.name) ? (p.noun ? `the ${p.noun}` : fallback) : p.label;
 /**
  * A seller is (a) a present persistent character, (b) a narrator-created person with an established proper name (materialized by the
  * ordinary name rule inside the same proposal), or (c) an ANONYMOUS narrator-created speaker ("the whittler"). An anonymous seller is
@@ -278,7 +286,11 @@ type Seller = { readonly key: string; readonly keys: readonly string[]; readonly
  */
 function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: PurchaseScope): void {
   const { context, snapshot, diagnostics } = s;
-  const label = subjectPerson.label;
+  // A captive who claims another identity's canonical name or alias is still offered, but materialized under the narration's description (AUD-1).
+  const subjectHandles = s.withheld(subjectPerson);
+  const label = described(subjectPerson, subjectHandles, "the captive");
+  const { name: _name, ...nameless } = subjectPerson;
+  const subject: NarratedPerson = subjectHandles.handles.length ? { ...nameless, ...(subjectPerson.name && !subjectHandles.names.includes(subjectPerson.name) ? { name: subjectPerson.name } : {}), label, introductions: [] } : subjectPerson;
   const block = (status: "blocked" | "no_offer", reason: string, detail: Record<string, unknown> = {}) => {
     diagnostics.push({ status, detail: { subject_ref: subjectPerson.ref, label, reason, ...detail } }); return undefined;
   };
@@ -287,9 +299,16 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   const enslaved = new Set(snapshot.legal_statuses.filter(l => l.status === "enslaved").map(l => l.character_id));
   const personKeys = new Set(reading.persons.flatMap(p => p.keys));
   const anonymousKeys = [...new Set(reading.units.map(u => u.speaker).filter((k): k is string => !!k && /^other:[a-z-]+$/.test(k) && !personKeys.has(k)))];
+  const sellerHandles = new Map<string, WithheldNames>();
   const sellers: Seller[] = [
     ...context.characters.map(c => c.id).filter(id => id !== "nicco" && !enslaved.has(id) && id !== subjectPerson.character_id).map(id => ({ kind: "persistent" as const, id, key: id, keys: [id], label: s.name(id) })),
-    ...reading.persons.filter(p => p.name && p.present && !p.captive && !p.character_id && p.ref !== subjectPerson.ref).map(p => ({ kind: "named" as const, person: p, key: p.keys[0]!, keys: p.keys, label: p.label })),
+    // A named seller whose name is a reserved canonical handle sells as an anonymous counterparty under the narration's description (AUD-1).
+    ...reading.persons.filter(p => p.name && p.present && !p.captive && !p.character_id && p.ref !== subjectPerson.ref).map((p): Seller => {
+      const handles = s.withheld(p);
+      if (handles.handles.length) sellerHandles.set(p.keys[0]!, handles);
+      if (!handles.names.length) return { kind: "named" as const, person: p, key: p.keys[0]!, keys: p.keys, label: p.label };
+      return { kind: "anonymous" as const, key: p.keys[0]!, keys: p.keys, label: described(p, handles, "the seller") };
+    }),
     ...anonymousKeys.filter(k => !subjectPerson.keys.includes(k)).map(k => ({ kind: "anonymous" as const, key: k, keys: [k], label: `the ${k.slice(6)}` })),
   ];
   const latestUnits = reading.units.filter(u => u.exchange === reading.latest);
@@ -313,7 +332,10 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   // Money the engine does not settle (silver, marks, fractions) is a clear refusal, never a silent conversion and never an offer.
   if (!authorities.length && latestUnits.some(u => !!u.speaker && s.unsupported(u.text))) return block("blocked", "unsupported_currency", {});
   if (authorities.length !== 1) return block("blocked", authorities.length ? "seller_ambiguous" : "seller_authority_unestablished", { sellers: authorities.map(a => a.seller.label) });
-  const { seller, offered, basis, offer } = authorities[0]!;
+  const { seller, offered, basis: saidBasis, offer: saidOffer } = authorities[0]!;
+  // Every handle withheld from this offer, masked out of each recorded string (plan, counterparty, evidence, notes, diagnostics).
+  const handles = mergeWithheld(subjectHandles, sellerHandles.get(seller.key) ?? NOTHING_WITHHELD);
+  const basis = maskDeep(saidBasis, handles), offer = maskDeep(saidOffer, handles);
   // Only the seller's stated price counts: the player's own figures are a counteroffer in chat and never set a price.
   const quote = actionableQuote(offered);
   if (quote.kind === "ambiguous") return block("blocked", "several_prices", { seller: seller.label, amounts: quote.amounts });
@@ -329,15 +351,15 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
   const participant = subjectPerson.character_id ? undefined : linkedParticipant(subjectPerson, s.participants);
   let subjectId = subjectPerson.character_id;
   if (!subjectId) {
-    const character = materializeProvisional({ person: subjectPerson, label, seller_key: seller.key, name_of: s.name, ...(s.keepClaim ? { keep_claim: s.keepClaim } : {}), role: `enslaved; offered for sale by ${seller.label}`, location_id: location,
-      trigger: subjectPerson.name ? "name_established" : "purchase_unnamed_subject", base_revision: s.baseRevision, world_minute: minute, ephemeral_ref: participant?.id ?? subjectPerson.ref });
+    const character = materializeProvisional({ person: subject, label, seller_key: seller.key, name_of: s.name, ...(s.keepClaim ? { keep_claim: s.keepClaim } : {}), role: `enslaved; offered for sale by ${seller.label}`, location_id: location,
+      trigger: subject.name ? "name_established" : "purchase_unnamed_subject", base_revision: s.baseRevision, world_minute: minute, ephemeral_ref: participant?.id ?? subjectPerson.ref });
     // One captive, one identity across a negotiation: a later offer for the same narrated person (a counteroffer) reuses the id the earlier,
     // unsettled offer already planned, so supersession never forks the subject.
     const ref = participant?.id ?? subjectPerson.ref, location_id = location;
     const prior = (snapshot.trade_offers ?? []).filter(o => o.status !== "accepted" && o.location_id === location_id && o.subject.kind === "person")
       .flatMap(o => o.subject.kind === "person" ? o.subject.plan : []).find(c => c.kind === "register_character" && c.character.origin_snapshot?.ephemeral_ref === ref);
     const planned = prior?.kind === "register_character" && !snapshot.characters.some(c => c.id === prior.character.id) ? { ...character, id: prior.character.id } : character;
-    s.commands.push({ kind: "register_character", character: planned });
+    s.commands.push({ kind: "register_character", character: maskDeep(planned, handles) });
     subjectId = planned.id;
   }
   const sale = { kind: "transfer_person" as const, transaction_id: s.txId(subjectId), transaction_kind: "sale" as const, character_id: subjectId, to_holder_id: "nicco", documentation: papers, ...(provenance ? { note: provenance } : {}) };
@@ -353,8 +375,8 @@ function offerNarrated(subjectPerson: NarratedPerson, reading: SceneReading, s: 
       { ...sale, from_holder_id: holder!, payment: { payer_id: "nicco", payee_id: holder!, gold: price } });
   }
   const own = (c: CampaignCommand) => c;
-  const plan = s.commands.splice(0).map(own);
+  const plan = s.commands.splice(0).map(c => maskDeep(own(c), handles));
   const counterparty = seller.kind === "persistent" ? { kind: "character" as const, character_id: seller.id } : { kind: "anonymous" as const, label: seller.label.slice(0, 160) };
   s.commands.push({ kind: "propose_trade_offer", direction: "buy", price_gold: price, counterparty, subject: { kind: "person", subject_character_id: subjectId, plan }, evidence: (offer ?? basis).slice(0, 160) });
-  diagnostics.push({ status: "offered", detail: { subject: subjectId, subject_ref: subjectPerson.ref, promoted_on_acceptance: !subjectPerson.character_id, seller: seller.label, seller_kind: seller.kind, seller_basis: basis, price, papers, ...(participant ? { scene_participant: participant.id } : {}) } });
+  diagnostics.push({ status: "offered", detail: { subject: subjectId, subject_ref: subjectPerson.ref, promoted_on_acceptance: !subjectPerson.character_id, seller: seller.label, seller_kind: seller.kind, seller_basis: basis, price, papers, ...(participant ? { scene_participant: participant.id } : {}), ...(handles.handles.length ? { name_withheld: "canonical_name_reserved" } : {}) } });
 }

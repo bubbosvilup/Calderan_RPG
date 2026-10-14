@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { CampaignSaveError, nodeCode } from "./errors.js";
 import type { SaveFileSystem } from "./filesystem.js";
-import { parseSaveJson } from "./strict-json.js";
+import { MAX_SAVE_BYTES, parseSaveJson } from "./strict-json.js";
 import type { LearningStateData, MediaStateData, OptionalStoreName } from "../campaign/optional-state.js";
 
 /**
@@ -37,7 +37,10 @@ export const contentDigest = (data: unknown): string => createHash("sha256").upd
 
 export function encodeStore<N extends OptionalStoreName>(store: N, campaignId: string, boundRevision: number, savedAt: string, data: StoreData[N]): string {
   const content: StoreFileContent<N> = { format: OPTIONAL_STORE_FORMAT, store, store_version: OPTIONAL_STORE_VERSIONS[store], campaign_id: campaignId, bound_revision: boundRevision, saved_at: savedAt, content_sha256: contentDigest(data), data };
-  return canonicalJson(content, 2) + "\n";
+  // Block B4: compact JSON (P2; the reader accepts both forms), and the read cap enforced on write too (N1): a store the reader would refuse is never written.
+  const text = canonicalJson(content) + "\n";
+  if (Buffer.byteLength(text, "utf8") > MAX_SAVE_BYTES) throw new CampaignSaveError("save_too_large");
+  return text;
 }
 const invalid = (): never => { throw new CampaignSaveError("optional_state_invalid"); };
 const isObject = (v: unknown): v is Record<string, unknown> => !!v && typeof v === "object" && !Array.isArray(v);

@@ -35,8 +35,10 @@ export interface TurnDiagnostics {
   /** H5: attempts per logical provider call (draft narrator, reconciliation narrator, controller). Counts, reasons and timing only. */
   provider_attempts?: { narrator?: ProviderAttemptRecord; recovery_narrator?: ProviderAttemptRecord; revision_narrator?: ProviderAttemptRecord; controller?: ProviderAttemptRecord };
   authorization?: { duplicates_removed?: number; proposed_count: number; authorized_count: number; rejected_count: number; decisions: readonly { kind: string; authorized: boolean; reason: string; evidence_check?: string }[] };
-  audit?: { issue_count: number; issue_kinds: readonly string[]; reconciliation_attempted: boolean; revision_issue_count: number; revision_issue_kinds: readonly string[]; redaction_used: boolean; delivered: string };
-  commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; identity_provisional_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };
+  audit?: { issue_count: number; issue_kinds: readonly string[]; reconciliation_attempted: boolean; revision_issue_count: number; revision_issue_kinds: readonly string[]; redaction_used: boolean; delivered: string;
+    /** B1 (log only): internal ref shapes found in the delivered prose (NPC<n>, P<n>, scene keys, raw ids). Never redacted. */
+    leaked_refs?: readonly import("../audit/leaked-refs.js").LeakedRef[] };
+  commit: { attempted: boolean; succeeded: boolean; prepare_changed?: boolean; command_count?: number; command_kinds?: readonly string[]; /** Block B5: the lane of each committed command (same order as command_kinds once commit preparation ran). */ lanes?: readonly string[]; identity_provisional_count?: number; identity_skipped?: boolean; location_changed_naming_skip?: boolean };
 }
 /** Controller model identity for diagnostics: requested primary, answering model, fallback flag, generation id, upstream provider. No content. */
 export function controllerModelDiagnostics(r: import("../../llm/state-controller-provider.js").ControllerResult): Pick<NonNullable<TurnDiagnostics["controller"]>, "model" | "response_model" | "requested_models" | "model_fallback" | "generation_id" | "provider"> {

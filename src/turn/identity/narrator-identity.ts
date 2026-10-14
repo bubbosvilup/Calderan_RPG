@@ -43,9 +43,10 @@ export function registerNarratorIdentities(context: object, world: WorldStore, s
   const names = [...substitutions.keys()].sort((a, b) => b.length - a.length);
   const nameLookup = new Map([...substitutions].map(([name, label]) => [name.toLowerCase(), label]));
   const pattern = names.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${names.map(escapeRegExp).join("|")})(?![\\p{L}\\p{N}])`, "giu") : undefined;
-  // Also cover embedded name-derived handles/fact IDs. This map never enters narrator serialization.
+  // Also cover embedded name-derived handles/fact IDs ("fact_dren_debt"): an id is matched between non-alphanumeric boundaries, so "_" and "-"
+  // delimit it but an ordinary word that contains it never does ("dren" inside "children", CTX-1). This map never enters narrator serialization.
   const ids = [...idSubstitutions.keys()].sort((a, b) => b.length - a.length);
-  const idPattern = ids.length ? new RegExp(ids.map(escapeRegExp).join("|"), "g") : undefined;
+  const idPattern = ids.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${ids.map(escapeRegExp).join("|")})(?![\\p{L}\\p{N}])`, "gu") : undefined;
   const mask = (text: string) => {
     const opaque = idPattern ? text.replace(idPattern, match => idSubstitutions.get(match)!) : text;
     return pattern ? opaque.replace(pattern, match => nameLookup.get(match.toLowerCase())!) : opaque;

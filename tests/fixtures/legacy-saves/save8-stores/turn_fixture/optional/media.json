@@ -1,0 +1,13 @@
+{
+  "bound_revision": 6,
+  "campaign_id": "turn_fixture",
+  "content_sha256": "c87625fa14f7b5f25b5ca1cdcfa1c2e992e15b3970c83bf84ac8f7f0441cb5a4",
+  "data": {
+    "item_sprites": [],
+    "portraits": []
+  },
+  "format": "caldrevan_optional_store",
+  "saved_at": "2026-10-12T20:52:42.377Z",
+  "store": "media",
+  "store_version": 1
+}

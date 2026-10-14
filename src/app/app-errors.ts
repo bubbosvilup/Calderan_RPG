@@ -37,13 +37,13 @@ const MESSAGES: Record<AppErrorCode, string> = {
   unsupported_version: "The save was written by a different engine version.", migration_failed: "The save could not be upgraded.",
   dataset_mismatch: "The save belongs to a different version of the world data and was not loaded.", reference_invalid: "The save refers to world data that no longer exists.",
   invalid_id: "That campaign name is not allowed.", unsafe_path: "The save location is not safe to use.", save_in_progress: "A save is already running.",
-  optional_state_invalid: "This campaign's enrichment store (learning or media) is missing or damaged. Restore it from a copy, or load a previous save or backup.", io_error: "The save could not be read or written.", campaign_locked: "Another running game has this campaign open.",
+  optional_state_invalid: "This campaign's enrichment store (learning or media) is missing or damaged. Restore it from a copy, or load a previous save or backup.", io_error: "The save could not be read or written.", save_too_large: "The campaign is too large to save (over the 16 MB save limit). Nothing was overwritten: your last save is intact, but progress since then is only in this session.", campaign_locked: "Another running game has this campaign open.",
   portrait_generation_failed: "The portrait could not be generated. Nothing was saved and the current portrait is unchanged.",
   session_closed: "The session is closed.", unsaved_changes: "There are unsaved changes.", internal_error: "Something went wrong inside the game. The campaign was not changed by this action.",
 };
 /** Errors a user can only fix by changing configuration or input are not worth an automatic retry. */
 const NEVER_RETRY = new Set<AppErrorCode>(["invalid_input", "turn_key_conflict", "context_too_large", "context_invalid", "invalid_runtime_intent", "campaign_validation_failed", "session_closed", "unsaved_changes",
-  "not_found", "invalid_json", "invalid_save", "unsupported_version", "migration_failed", "dataset_mismatch", "reference_invalid", "invalid_id", "unsafe_path"]);
+  "not_found", "invalid_json", "invalid_save", "unsupported_version", "migration_failed", "dataset_mismatch", "reference_invalid", "invalid_id", "unsafe_path", "save_too_large"]);
 export function appError(code: AppErrorCode, extra: { provider_code?: ProviderErrorCode | undefined; turn_state_changed?: boolean | undefined; message?: string | undefined } = {}): AppError {
   const provider = extra.provider_code;
   const retryable = !NEVER_RETRY.has(code) && !(provider && (provider === "configuration_error" || provider === "authentication_error"));

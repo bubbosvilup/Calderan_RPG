@@ -90,7 +90,7 @@ test("I6/I7/I9/I10: a truthful introduction establishes the canonical name on th
   assert.equal(canonicalNameDisclosure(context, WEAK_ENGAGE, recent.forPrompt(), focus.foreground, intent, scene)?.internal_id, "korvin");
   assert.equal(establishedCanonicalDisclosure(context, WEAK_ENGAGE, recent.finalized(), P35_LIVE_INTRODUCTION, scene, intent), "korvin");
   const revision = campaign.revision, prepared = campaign.prepare({ expected_revision: revision, commands: [] });
-  const plan = prepareCommit({ world, prepare: proposal => campaign.prepare(proposal), prepared, commands: [], finalized: recent.finalized(), player_input: WEAK_ENGAGE, delivered: P35_LIVE_INTRODUCTION, scene,
+  const plan = prepareCommit({ world, prepare: proposal => campaign.prepare(proposal), prepared, lanes: [], finalized: recent.finalized(), player_input: WEAK_ENGAGE, delivered: P35_LIVE_INTRODUCTION, scene,
     base_revision: revision, disclosure_intent: intent, location_changed: false, on_skip(reason) { assert.fail(reason); } });
   assert.equal(identityOf(campaign, "korvin").player_known_name, null, "nothing is learned before the commit");
   campaign.commit(plan.receipt);

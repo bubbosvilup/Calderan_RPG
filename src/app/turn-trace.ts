@@ -6,6 +6,7 @@ import type { TurnDiagnostics } from "../turn/coordinator/turn-diagnostics.js";
 import type { NarratorGenerationTrace } from "../turn/coordinator/narrator-ledger.js";
 import type { TurnEvent, TurnResult } from "../turn/turn-types.js";
 import type { AppError } from "./app-errors.js";
+import type { AuthorityLane } from "../turn/authorization/authority-lanes.js";
 
 /**
  * Per-turn playtest record. NOT campaign state: it is never saved with the campaign, lives in a bounded in-memory ring of the
@@ -20,7 +21,10 @@ export interface TurnTrace {
   readonly narration_status?: "draft" | "revision" | "redacted";
   readonly delivered_narration?: string;
   readonly audit_issue_kinds: readonly string[]; readonly revision_issue_kinds: readonly string[];
+  /** Block B5: the kinds of the commands the turn COMMITTED (the committed receipt's list, after commit preparation and the TRD-2 drop). */
   readonly committed_command_kinds: readonly string[]; readonly rejected_command_kinds: readonly string[];
+  /** Block B5 (PIPE-6): the lane that produced each committed command, in commit order (absent when the turn produced no result). */
+  readonly committed_lanes?: readonly { readonly lane: AuthorityLane; readonly kind: string }[];
   readonly movement?: { readonly location_before: string; readonly location_after: string; readonly minutes_elapsed: number; readonly characters_moved: readonly string[] };
   /** Person-transaction outcome (kind/status/reason only): why a purchase did or did not commit. */
   readonly person_transactions?: readonly { readonly kind: string; readonly status: string; readonly reason?: string }[];
@@ -68,7 +72,8 @@ export function buildTrace(i: TraceInput): TurnTrace {
     ...(r ? { narration_status: r.narration_reconciliation?.delivered ?? "draft" as const, delivered_narration: r.narration } : {}),
     audit_issue_kinds: [...new Set(r?.narration_reconciliation?.issues.map(x => x.kind) ?? d?.audit?.issue_kinds ?? [])],
     revision_issue_kinds: [...new Set(r?.narration_reconciliation?.revision_issues?.map(x => x.kind) ?? d?.audit?.revision_issue_kinds ?? [])],
-    committed_command_kinds: r ? r.authorized_commands.map(c => c.kind) : [], rejected_command_kinds: rejected,
+    committed_command_kinds: r ? r.committed.map(c => c.command.kind) : [], rejected_command_kinds: rejected,
+    ...(r ? { committed_lanes: r.committed.map(c => ({ lane: c.lane, kind: c.command.kind })) } : {}),
     ...(i.movement ? { movement: i.movement } : {}),
     ...(r?.person_transactions?.length ? { person_transactions: r.person_transactions.map(t => ({ kind: t.kind, status: t.status, ...(t.reason ? { reason: t.reason } : {}) })) } : {}),
     retrieval_ids: [...(r?.retrieval.ids ?? d?.retrieval?.ids ?? [])], ...(retrievalMode ? { retrieval_mode: retrievalMode } : {}),

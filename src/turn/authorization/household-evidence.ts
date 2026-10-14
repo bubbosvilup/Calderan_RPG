@@ -4,6 +4,7 @@ import { attributedSpeech } from "../identity/attributed-speech.js";
 import { blankQuotes, escapeRegExp as esc, sentencesOf } from "../language/text.js";
 import { GATES } from "../language/gates.js";
 import type { EvidenceCheck } from "./evidence-check.js";
+import type { DialogueUnit } from "../narration-facts/index.js";
 
 /**
  * Household Pass 1 evidence grammar.
@@ -21,10 +22,11 @@ const JOIN = /\b(?:(?:decide[sd]?|chose|choose[sn]?|wants?|wish(?:es|ed)?|swears
 const LEAVE = /\b(?:I(?:'m| am) leaving (?:the |this |your )?(?:household|family)|I (?:no longer|don't) want to be (?:a )?(?:member|part) of (?:the |this |your )?(?:household|family)|I renounce (?:my place|the household|this family))/i;
 const NOT_A_CHOICE = GATES.household_not_a_choice;
 
-export function detectHouseholdChoices(narration: string, context: TurnContext): readonly HouseholdChoice[] {
+/** `units`: the turn's shared dialogue reading of the same narration (NarrationFacts); without it attributedSpeech reads the narration itself. */
+export function detectHouseholdChoices(narration: string, context: TurnContext, units?: readonly DialogueUnit[]): readonly HouseholdChoice[] {
   const out: HouseholdChoice[] = [];
   // Only a present character's own attributed words (the shared dialogue facts under the speaker policy of attributed-speech.ts).
-  for (const line of attributedSpeech(narration, context).lines) {
+  for (const line of attributedSpeech(narration, context, units ? { units } : {}).lines) {
     const id = line.speaker; if (id === "nicco" || !context.characters.some(c => c.id === id)) continue;
     for (const part of line.text.split(/(?<=[.!?])\s+/)) {
       const choice = JOIN.test(part) ? "join" : LEAVE.test(part) ? "leave" : undefined;
@@ -70,7 +72,7 @@ const FAMILIES: Readonly<Record<RelationshipDimension, { readonly raise?: RegExp
 const HEDGED = GATES.relationship_hedged;
 
 /** Relationship evidence: the quote's sentence is the feeling character's own act or speech, matching the dimension and direction. */
-export function verifyRelationshipEvidence(command: Extract<CampaignCommand, { kind: "adjust_relationship" }>, quote: string | undefined, narration: string, context: TurnContext): EvidenceCheck {
+export function verifyRelationshipEvidence(command: Extract<CampaignCommand, { kind: "adjust_relationship" }>, quote: string | undefined, narration: string, context: TurnContext, units?: readonly DialogueUnit[]): EvidenceCheck {
   if (!quote || quote.trim().length < 8) return { verified: false, check: "no_quote" };
   const flat = narration.replace(/\s+/g, " "), q = quote.trim().replace(/\s+/g, " ");
   if (!flat.includes(q)) return { verified: false, check: "quote_not_verbatim" };
@@ -84,7 +86,7 @@ export function verifyRelationshipEvidence(command: Extract<CampaignCommand, { k
   const lead = blankQuotes(sentence).trim();
   if (/^nicco\b/i.test(lead)) return { verified: false, check: "actor_is_nicco" };
   const fromLead = names(command.from_character_id).some(n => new RegExp(`^${esc(n)}(?:'s)?\\b`, "i").test(lead));
-  const said = attributedSpeech(narration, context).lines.some(line => line.speaker === command.from_character_id && line.text.includes(q.replace(/^["“]|["”]$/g, "").slice(0, 30)));
+  const said = attributedSpeech(narration, context, units ? { units } : {}).lines.some(line => line.speaker === command.from_character_id && line.text.includes(q.replace(/^["“]|["”]$/g, "").slice(0, 30)));
   if (!fromLead && !said) return { verified: false, check: "actor_not_from_character" };
   const target = command.to_character_id === "nicco" ? ["Nicco", "him", "you"] : names(command.to_character_id);
   if (!target.some(n => new RegExp(`\\b${esc(n)}\\b`, "i").test(sentence)) && !/\b(?:him|her|them|you)\b/i.test(sentence)) return { verified: false, check: "target_not_referenced" };

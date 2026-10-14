@@ -47,4 +47,14 @@ const result = {
 await page.reload(); await page.waitForSelector("#input");
 result.after_reload_occurrences = (await page.evaluate(() => document.body.innerText)).split("Brenna accepts boots from Nicco.").length - 1;
 console.log(JSON.stringify(result, null, 1));
+// B2 (TEST-9): the report is asserted; a wrong outcome exits non-zero.
+const checks = [
+  ["the draft prose is never visible, before, during or after the turn", !result.baseline_has_ring_phrase && !result.draft_marker_ever_visible && result.final_has_no_draft],
+  ["mid-turn: neutral status words only, no narration", result.mid_turn_has_no_narration && result.mid_turn_status_words.length > 0 && result.mid_turn_status_words.every(w => /^(?:Thinking…|Narrating…|Resolving…)$/.test(w))],
+  ["the final prose appears exactly once, also after a reload", result.final_prose_occurrences === 1 && result.after_reload_occurrences === 1],
+  ["one turn request carrying text, turn_key and expected_revision", result.turn_requests === 1 && result.request_body_keys.join(",") === "expected_revision,text,turn_key"],
+  ["one commit", result.revision_after === 2],
+];
+for (const [name, ok] of checks) console.log(`${ok ? "PASS" : "FAIL"} ${name}`);
+const failed = checks.filter(c => !c[1]).length; console.log(`${checks.length - failed}/${checks.length} checks passed`); process.exitCode = failed ? 1 : 0;
 await browser.close(); await s.session.shutdown({ discard_unsaved: true }); server.closeAllConnections(); server.close();

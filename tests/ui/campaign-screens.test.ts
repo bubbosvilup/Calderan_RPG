@@ -24,7 +24,7 @@ class Element {
 }
 const IDS = ["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest", "day", "location-id", "gold", "present-count", "scene-participants", "household-count",
   "household-nav", "play-view", "household-view", "member-editor", "household-cards", "household-title", "campaign-screen", "campaign-list", "campaign-error", "campaign-new", "campaign-name", "campaign-scenario",
-  "campaign-scenario-description", "campaign-create", "campaigns-nav", "save-button", "save-status", "load-report", "load-report-text", "load-report-dismiss", "portrait-lightbox"];
+  "campaign-scenario-description", "campaign-create", "campaigns-nav", "save-button", "save-status", "save-banner", "load-report", "load-report-text", "load-report-dismiss", "portrait-lightbox"];
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const scene = (id: string, name: string, save: Record<string, unknown>, messages: unknown[] = [{ role: "narrator", text: `*Opening of ${name}.*` }]) =>
   ({ messages, status: "idle", configured: true, revision: 3, campaign: { id, display_name: name, save }, scene: { location: "Market", location_id: "calderan_slave_market", time_of_day: "Late Morning" }, play: { participants: [], household: [] }, household: [] });
@@ -91,6 +91,23 @@ test("Save is immediate and shows Saving… then the server's state; failures sa
   await c.node("save-button").handlers.get("click")!({});
   assert.equal(c.node("save-status").textContent, "Save failed"); assert.match(c.node("save-status").getAttribute("title")!, /still in this session/);
   assert.equal(c.node("error").hidden, false); assert.equal(c.node("save-button").disabled, false, "retry stays possible");
+});
+
+test("B4 (PER-1): an oversized save says Save too large with a banner that the last save is intact; a near-limit save warns; a normal save clears both", async () => {
+  let saveReply: any;
+  const c = await client({ "/api/session": () => scene("campaign_a", "First run", { state: "unsaved", last_saved_revision: 2, autosave: "on" }), "/api/save": () => saveReply });
+  assert.equal(c.node("save-banner").textContent, "", "no banner for an ordinary unsaved campaign");
+  saveReply = { ok: false, error: { message: "The campaign is too large to save." }, ...scene("campaign_a", "First run", { state: "unsaved", last_saved_revision: 2, error: "save_too_large", autosave: "on" }) };
+  await c.node("save-button").handlers.get("click")!({});
+  assert.equal(c.node("save-status").textContent, "Save too large");
+  assert.equal(c.node("save-banner").hidden, false); assert.match(c.node("save-banner").textContent, /too large to save.*last save is intact/);
+  assert.doesNotMatch(c.node("save-banner").textContent, /retry|damaged|corrupt/i);
+  saveReply = { ok: true, ...scene("campaign_a", "First run", { state: "saved", last_saved_revision: 3, autosave: "on", size_warning: true }) };
+  await c.node("save-button").handlers.get("click")!({});
+  assert.equal(c.node("save-status").textContent, "Saved"); assert.equal(c.node("save-banner").hidden, false); assert.match(c.node("save-banner").textContent, /close to the 16 MB save limit/);
+  saveReply = { ok: true, ...scene("campaign_a", "First run", { state: "saved", last_saved_revision: 4, autosave: "on" }) };
+  await c.node("save-button").handlers.get("click")!({});
+  assert.equal(c.node("save-banner").hidden, true); assert.equal(c.node("save-banner").textContent, "");
 });
 
 test("disposable playtest payloads (no campaign field) keep the original UI: no start screen, no save control", async () => {

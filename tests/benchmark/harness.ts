@@ -43,6 +43,8 @@ export interface Rig {
 export interface TurnOptions { readonly turn_key?: string; readonly expected_revision?: number; /** Verbatim quotes the Controller cites as evidence for its proposals. */ readonly evidence?: readonly string[] }
 export interface RigSpec { readonly world: WorldKind; readonly commands?: readonly CampaignCommand[]; readonly gold?: number }
 
+/** Observers handed every rig's coordinator when the rig is built (block B5 reader parity); empty for the benchmark itself. */
+export const COORDINATOR_TAPS: ((coordinator: TurnCoordinator, world: WorldStore) => void)[] = [];
 export async function makeRig(spec: RigSpec, id: string): Promise<Rig> {
   let world: WorldStore, campaign: CampaignState;
   if (spec.world === "fixture") ({ world, campaign } = turnFixture());
@@ -64,6 +66,7 @@ export async function makeRig(spec: RigSpec, id: string): Promise<Rig> {
   const narrator: NarratorProvider = { async generate() { throw new Error("unused"); }, async *stream() { count.narrator++; yield { type: "text_delta", text: narration }; yield { type: "completed", result: { text: narration, ...metadata } }; } };
   const service = new RetrievalService(world);
   const coordinator = new TurnCoordinator(world, narrator, { async propose() { count.controller++; return { commands: [...proposals], ...(evidence.length ? { evidence: [...evidence] } : {}), ...metadata }; } }, { service, search: new HybridSearch(service) }, { provider_retry: false });
+  for (const tap of COORDINATOR_TAPS) tap(coordinator, world);
   const deps: SessionDeps = { world, repository, createCoordinator: () => coordinator };
   let session = GameSession.fromCampaign(deps, campaign);
   if (spec.gold !== undefined) campaign.apply({ expected_revision: campaign.revision, commands: [{ kind: "set_funds", character_id: "nicco", gold: spec.gold }] });

@@ -1,6 +1,6 @@
 # Narrative authority
 
-Status: ACTIVE reference. Last reconciled: 2026-10-11 (labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/turn/`. Overall status: [Current state](../CURRENT_STATE.md).
+Status: ACTIVE reference. Last reconciled: 2026-10-14 (block B5: the authority lanes in section 1; labelled; where it disagrees with the code, the code and [Current state](../CURRENT_STATE.md) win). Source of truth: `src/turn/`. Overall status: [Current state](../CURRENT_STATE.md).
 
 Phase 1N. This document defines who owns truth when a narrator turn is built, and how the narrator is told which character may use which fact. Everything described here is **deterministic**, **derived per turn from the captured snapshot**, and **not persisted**.
 
@@ -19,7 +19,13 @@ Phase 1N. This document defines who owns truth when a narrator turn is built, an
 Authority flows one way: **CampaignState → narration**. Narration never patches state:
 - An NPC narrated as knowing an unauthorized fact does not get a knowledge edge.
 - An NPC narrated barefoot is not unequipped.
-- Durable changes happen only through the existing firewall: controller proposal (with evidence quote) → TurnEvidence grammar and verified controller evidence → deterministic authorization → `prepare`/`commit`.
+- Durable changes of a turn happen only in its ONE commit, and every command of that commit comes from a declared authority lane (block B5, `src/turn/authorization/authority-lanes.ts`; `TurnResult.committed` records the lane of each command):
+  - **player_runtime**: the player's own act (travel, time, mana, carry, held-person escort), resolved from the input and prevalidated before any provider call;
+  - **preferred_authorization**: Controller proposals (with evidence quote) and derived proposals → TurnEvidence grammar and verified Controller evidence → deterministic authorization;
+  - **trade**: goods and item offers and withdrawals on their own evidence path; a goods offer whose quote is gone from the delivered text is dropped (TRD-2);
+  - four commit-preparation lanes that read the DELIVERED text deterministically and bypass the Controller by design: **late_naming** (a present unnamed persistent character's own self-introduction names that record), **name_knowledge** (Nicco learns a canonical name under the disclosure gate), **character_contract** (an active NPC+'s quoted first-person self-description becomes a set-once contract) and **person_offer** (a seller's stated price for one person becomes an offer card; nothing settles before the player's Accept).
+
+  Outside a turn, only the player's explicit actions (Accept, Keep track, confirmations, the Heartstone rite, the editors) change state, each with its own opaque ref and expected revision. Narration alone never patches state in any lane.
 
 ### Conversation/state conflict taxonomy
 

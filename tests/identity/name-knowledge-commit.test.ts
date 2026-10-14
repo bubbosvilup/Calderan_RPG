@@ -39,7 +39,7 @@ function commitDelivered(f: ReturnType<typeof fixture>, delivered: string) {
   const revision = f.campaign.revision;
   const prepared = f.campaign.prepare({ expected_revision: revision, commands: [] });
   const plan = prepareCommit({ world, prepare(proposal) { batches.push((proposal as { commands: CampaignCommand[] }).commands); return f.campaign.prepare(proposal); },
-    prepared, commands: [], finalized: f.recent.finalized(), player_input: INPUT, delivered, scene: f.scene,
+    prepared, lanes: [], finalized: f.recent.finalized(), player_input: INPUT, delivered, scene: f.scene,
     base_revision: revision, disclosure_intent: intent, location_changed: false, on_skip(reason) { assert.fail(reason); } });
   // Preparing name knowledge is still detached: nothing has been published or learned yet.
   assert.equal(narratorIdentityGate(buildTurnContext(world, f.campaign.exportSnapshot()))!.identities.get("korvin")!.player_known_name, null);

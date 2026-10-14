@@ -27,6 +27,9 @@ is created, and nobody infers that the speaker "must really be" the canonical ch
 collision. One rule (`src/world/canonical-names.ts`, applied by `src/turn/identity/canonical-name-reservation.ts`) covers both sides of
 materialization: the provisional reading and Keep track before it, late naming of a persistent record after it (skip reason
 `canonical_name_reserved`; Keep track block `canonical_name`). A shared first name ("Mira" vs Mira Thorne) is not an exact handle.
+The person Actual Offer is the third lane (AUD-1, B1, user decision of 2026-10-14): the offer is never blocked, but a captive or named seller who
+claims a reserved handle is materialized under the narration's description ("the woman"), the claim and the withheld name are recorded as
+`[name withheld]`, and a named seller whose name is withheld sells as an anonymous counterparty ([Actual Offer](ACTUAL_OFFER.md) section 7).
 
 ## Location hierarchy and granularity
 

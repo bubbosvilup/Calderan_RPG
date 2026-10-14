@@ -73,7 +73,7 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
   const url = `http://127.0.0.1:${address.port}`;
   const get = async () => (await fetch(`${url}/api/session`)).json();
   const post = async (text: string, origin = url) => fetch(`${url}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: turnJson(text, (await get()).revision) });
-  const opening = await get(); assert.deepEqual(opening.messages, [{ role: "narrator", text: UI_PLAYTEST_OPENING }]);
+  const opening = await get(); assert.deepEqual(opening.messages, [{ role: "narrator", text: UI_PLAYTEST_OPENING, seq: 0 }]);
   assert.equal((await fetch(url)).status, 200);
   const before = session.getView();
   assert.equal((await post(" ")).status, 400);
@@ -84,7 +84,7 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
   assert.equal(calls, 1);
   assert.equal((await get()).messages.length, 1, "no draft/player turn is presented as finalized");
   release(); const completed = await (await first).json(); assert.equal(completed.ok, true);
-  assert.deepEqual(completed.messages.slice(1), [{ role: "player", text: "I look at the auction." }, { role: "narrator", text: story }]);
+  assert.deepEqual(completed.messages.slice(1), [{ role: "player", text: "I look at the auction.", seq: 1 }, { role: "narrator", text: story, seq: 2 }]);
   const after = session.getView(); assert.deepEqual(after.scene, before.scene);
   const failedResponse = await post("I look at the auction."); assert.equal(failedResponse.status, 422);
   const failed = await failedResponse.json(); assert.equal(failed.ok, false);

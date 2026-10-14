@@ -92,7 +92,7 @@ test("hard recovery: marker present + missing / corrupt / foreign / wrong-versio
   await l.repository.saveCampaign((await l.repository.loadCampaign(l.id)).campaign);
   await l.repository.saveCampaign((await l.repository.loadCampaign(l.id)).campaign); // a previous slot exists too
   const learning = join(l.dir, "optional", "learning.json"), media = join(l.dir, "optional", "media.json"), original = await fs.readFile(learning, "utf8");
-  const breakers: [string, string | null][] = [["corrupt", original.slice(0, 50)], ["missing", null], ["foreign", original.replace(/"campaign_id": "[^"]*"/, '"campaign_id": "another"')],
+  const breakers: [string, string | null][] = [["corrupt", original.slice(0, 50)], ["missing", null], ["foreign", original.replace(/"campaign_id": ?"[^"]*"/, '"campaign_id":"another"')],
     ["wrong version", canonicalJson({ ...JSON.parse(original), store_version: 7 })], ["tampered", original.replace("maren", "marex")]];
   for (const [name, content] of breakers) {
     if (content === null) await fs.rm(learning); else await fs.writeFile(learning, content);

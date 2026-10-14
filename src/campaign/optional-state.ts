@@ -106,7 +106,14 @@ export function fromPersistedSnapshot(persisted: unknown, migrated: OptionalStat
   if (migrated.media) {
     const media = options.core_only ? { item_sprites: [], portraits: [] } as MediaStateData : sides.media ?? { item_sprites: [], portraits: [] };
     const sprites = new Map(media.item_sprites.map(entry => [entry.item_id, entry.sprite]));
-    for (const item of draft.items ?? []) { delete item.sprite; const sprite = typeof item.id === "string" ? sprites.get(item.id) : undefined; if (sprite) item.sprite = clone(sprite); }
+    // Block B4 (N3): the media store is clamped to the slot. A ready sprite drawn from a visual identity this snapshot's item does not have (an older slot
+    // loaded beside a newer store, before the item was enriched or after it was re-described) is dropped instead of failing validation; the item shows no
+    // sprite and can be drawn again. Gallery versions are kept: they are never tied to a revision, and dropping them would orphan paid image files.
+    for (const item of draft.items ?? []) {
+      delete item.sprite;
+      const sprite = typeof item.id === "string" ? sprites.get(item.id) : undefined;
+      if (sprite && (sprite.status !== "ready" || sprite.generated_from_visual_description === item.visual_description)) item.sprite = clone(sprite);
+    }
     const known = new Set([...((draft as unknown as { characters?: { id: string }[] }).characters ?? []).map(c => c.id), ...((draft as unknown as { player_characters?: { character_id: string }[] }).player_characters ?? []).map(p => p.character_id)]);
     const chosen = new Map(selections.map(s => [s.character_id, s]));
     const records: CharacterPortraitRecord[] = [];

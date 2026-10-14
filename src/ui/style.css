@@ -561,7 +561,8 @@ dd{margin-bottom:8px}
 .campaign-new input,.campaign-new select{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--base);color:var(--text)}
 #campaign-create{justify-self:start;margin-top:6px}
 .save-status{font-size:12px;color:var(--muted);align-self:center;white-space:nowrap}
-.save-status.save-unsaved{color:var(--cyan)}.save-status.save-failed{color:var(--pink)}
+.save-status.save-unsaved{color:var(--cyan)}.save-status.save-failed{color:var(--pink)}.save-status.save-too_large{color:var(--pink)}
+.save-banner{margin:6px 0;padding:8px 12px;border:1px solid var(--pink);border-radius:6px;font-size:13px}
 .load-report{position:fixed;left:50%;transform:translateX(-50%);top:74px;z-index:40;display:flex;gap:12px;align-items:center;max-width:min(720px,calc(100vw - 32px));padding:10px 14px;border:1px solid var(--cyan);border-radius:10px;background:var(--raised)}
 .load-report p{margin:0;font-size:13px}
 img[data-missing]{visibility:hidden}
@@ -649,3 +650,6 @@ img[data-missing]{visibility:hidden}
   margin:0;
   font-size:12px;
   color:var(--pink)}
+/* B3: the list item wraps the inventory button without changing the grid layout. */
+.inventory-slot{display:contents}
+.trade-reason,.confirm-reason{font-size:.8rem;opacity:.85}

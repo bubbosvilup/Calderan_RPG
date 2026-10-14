@@ -260,13 +260,14 @@ export function deriveTurnEvidence(intent: PlayerIntent, narration: string, cont
     });
     for (const c of confirmations) for (const i of c.command_indexes) confirmed.add(i);
   }
-  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context, facts), ...householdOf(intent, narration, context) }) as TurnEvidence;
+  return freezeSnapshot({ player_intents: structuredClone(intent.candidates), runtime_intents: structuredClone(intent.runtime), narrator_confirmations: confirmations, narrator_refusals: refusals, resolved_references: intent.resolved_references ?? [], ambiguous_reference: intent.ambiguous_reference ?? false, ...(intent.natural?.physical?.length ? { physical_interactions: structuredClone(intent.natural.physical) } : {}), ...departuresOf(narration, context, facts), ...householdOf(intent, narration, context, facts) }) as TurnEvidence;
 }
 function departuresOf(narration: string, context: TurnContext, facts?: NarrationFacts): { departures?: DepartureEvidence[] } {
   const found = departuresFromFacts(facts ?? extractNarrationFacts(narration, { movers: [], context }), context).map(d => ({ character_id: d.character_id, source_sentence: d.source_sentence }));
   return found.length ? { departures: structuredClone(found) } : {};
 }
-function householdOf(intent: PlayerIntent, narration: string, context: TurnContext): { household_choices?: HouseholdChoice[]; rule_declarations?: string[] } {
-  const choices = detectHouseholdChoices(narration, context), rules = intent.rule_declarations ?? [];
+function householdOf(intent: PlayerIntent, narration: string, context: TurnContext, facts?: NarrationFacts): { household_choices?: HouseholdChoice[]; rule_declarations?: string[] } {
+  // Block B5 (AUD-2): the turn's shared dialogue reading of this narration when the turn's facts are at hand (parity proven by tests/turn/reader-parity.test.ts).
+  const choices = detectHouseholdChoices(narration, context, facts?.dialogue), rules = intent.rule_declarations ?? [];
   return { ...(choices.length ? { household_choices: structuredClone([...choices]) } : {}), ...(rules.length ? { rule_declarations: [...rules] } : {}) };
 }

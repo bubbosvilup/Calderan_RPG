@@ -27,7 +27,7 @@ export function assembleTurnResult(i: { readonly world: WorldStore; readonly bas
   readonly intent: TurnIntent; readonly narrator_end: number; readonly start: number }): TurnResult {
   const { delivery, narration, controller } = i, text = delivery.text;
   return { narration: text, base_revision: i.base_revision, final_revision: i.final_revision,
-    controller_proposal: i.proposal, authorized_commands: i.commands, authorization: i.diagnostics, retrieval: i.retrieval.diagnostics, turn_evidence: i.turn_evidence,
+    controller_proposal: i.proposal, authorized_commands: i.commands, committed: i.commit_plan.committed, authorization: i.diagnostics, retrieval: i.retrieval.diagnostics, turn_evidence: i.turn_evidence,
     narration_reconciliation: { delivered: delivery.delivered, draft: delivery.draft, issues: delivery.issues, ...(delivery.revision !== undefined ? { revision: delivery.revision, revision_issues: delivery.revision_issues } : {}), ...(delivery.repaired_arrivals ? { repaired_arrivals: delivery.repaired_arrivals } : {}) },
     narrator: { model: narration.model, usage: narration.usage, latency: narration.latency }, controller: { model: controller.model, usage: controller.usage, latency: controller.latency },
     // knowledge_access measures the projection the audit used (pre-H2 recomputed it with identical arguments).

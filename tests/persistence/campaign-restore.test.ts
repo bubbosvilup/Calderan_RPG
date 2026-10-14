@@ -79,7 +79,8 @@ test("wall metadata differs while authoritative snapshots and deterministic seri
   assert.equal(serializeSave(first, world), serializeSave(first, world));
   const reversed = Object.fromEntries(Object.entries(first).reverse());
   assert.equal(serializeSave(validateSaveFile(reversed, world), world), serializeSave(first, world));
-  assert.ok(serializeSave(first, world).endsWith("\n")); assert.ok(serializeSave(first, world).includes('\n  "campaign_id"'));
+  // Block B4 (P2): compact JSON, one line plus the final newline (it was pretty-printed before).
+  assert.ok(serializeSave(first, world).endsWith("}\n")); assert.ok(serializeSave(first, world).startsWith('{"campaign_id":')); assert.equal(serializeSave(first, world).slice(0, -1).includes("\n"), false);
   assert.equal(campaign.exportSnapshot(), s);
 });
 

@@ -1,0 +1,477 @@
+{
+  "campaign_id": "turn_fixture",
+  "canon_compatibility": "references",
+  "canon_references": [
+    {
+      "fingerprint": "sha256:5bab50694d5e36bf271dac86486a187d1acf14ff29c4fdaa4879260a02aee502",
+      "id": "boots",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:0034f8c93ab9e4196b20252e6bd39eca297d246399763e314870e62e33ba7de0",
+      "id": "brenna",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:540ecb08f0db4c3e5015bebb05354681c2618bcf6cb69d70be98d68db72579bc",
+      "id": "brenna_boots",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:c2afaba5fb528f2b8c0d5d28dcd68f22282d0d6617469b5ef3b1719c2236153b",
+      "id": "gerome",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:3128c2b347964ed3ffa95ffce04c64c13baf4ff96592aebbf71b2d4350191e51",
+      "id": "maren",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:2e67a34c8bd5bb3f83dd819b98040808be86b52c9f6d569e3bd946babbd0fc1a",
+      "id": "nicco",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:ba4c067c056ea0c8eb333b793870150e0bdf2fc62b2e0a36da92dd018541f776",
+      "id": "pink_cotton",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:09ec948e97c957de26bcb0564168f7d3ff4eeae0d09bbba9f37dec088c528059",
+      "id": "pink_fluffy",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:1a89da252dd3997c64947c8fc27250f0724359d3319e267338ef3302540f1f43",
+      "id": "pink_shorts",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:c82bcf59ca5a17cbf714a045a2e80b268232ddcdfd01f4d6a97ece2d2039d912",
+      "id": "remote_npc",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:b4539eb29d5ff87134ba92392f043c56f84c142b5140c27224cd2345bf6dfad3",
+      "id": "ring",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:eb26e5c08332d864a9f26a243b7907afe7ef91ba7bd5dd23c674fff6c7d30842",
+      "id": "test_remote",
+      "kind": "location"
+    },
+    {
+      "fingerprint": "sha256:7860a7635aeff31c18100053e595845ec400829123f9e232802faa2c6c26be3d",
+      "id": "test_room",
+      "kind": "location"
+    }
+  ],
+  "canonical_dataset_id": "sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f",
+  "continuity": {
+    "authority": "non_authoritative",
+    "recent": [
+      {
+        "conversation_partner_id": "brenna",
+        "location_id": "test_room",
+        "narration": "*Brenna is already seated, her grey eyes tracking Nicco as he speaks. She doesn't shift to make room so much as adjust her weight, one hand resting on the edge of the narrow bed beside her. The room is still and dim, the arched window letting in what little the deep hours offer.*\n\nThe kiln.\n\n*She repeats it like she's placing the word somewhere, not asking a question. Her gaze moves to the window briefly, then back.*\n\nHow long does that take?\n\n*One eyebrow lifts, just slightly, and stays there as she watches him. Gerome's bulk is a quiet shape near the stairs; Maren somewhere beyond the foot of the bed. Neither stirs into the exchange.*",
+        "player": "Brenna, sit with me a moment. I am waiting for the kiln to cool."
+      },
+      {
+        "location_id": "test_room",
+        "narration": "*Brenna holds the look for a moment after she asks, then lets it settle. Her hand stays where it is on the bed's edge, fingers slightly curled. The room keeps its quiet — just the faint draft through the arched window and the low sound of breathing from more than one set of lungs in the close space.*\n\n*Maren tilts her head, barely, the cloth doll resting against her knee. She doesn't speak. Her attention drifts between the two of them without settling, the way someone watches a conversation they're measuring but not joining.*\n\n*Outside, nothing. The deep hours press their particular silence against the walls, the kind where a distant footstep would carry and none does.*",
+        "player": "I wait quietly, watching Brenna and Maren."
+      },
+      {
+        "conversation_partner_id": "brenna",
+        "location_id": "test_room",
+        "narration": "*Brenna's gaze had been resting somewhere past Nicco's shoulder. The question brings it back to him, and she holds it there. Her thumb moves once along the bed's edge, a slow drag across the wood grain, then stills.*\n\nI'm thinking it's strange, sitting still like this.\n\n*She pauses. The draft from the window shifts her hair barely, and she doesn't brush it back.*\n\nI don't remember the last time I did that. Just waited for something.\n\n*Her eyes move to the window again — not looking through it, exactly, but measuring the dark against the frame. Then back to him. The eyebrow settles. Her mouth works for a half-second like there's more, and she lets it go instead, fingers uncurling on the bed's edge.*",
+        "player": "Brenna, what are you thinking while we wait?"
+      },
+      {
+        "conversation_partner_id": "brenna",
+        "location_id": "test_room",
+        "narration": "*The quiet stretches. Brenna doesn't fill it, and doesn't seem to need to. Her breathing is even, her weight settled where she sits, and after a while her eyes lose their particular focus and go half-lidded — not sleeping, but somewhere closer to resting than watching. The draft from the window finds the gap between the frame and the stone again, a thin steady thread of cool air that moves nothing visible but carries the smell of autumn and cold stone.*\n\n*Maren's head drifts forward once, catches itself, and settles again against the wall behind her. The doll slides a fraction down her knee. She pulls it back without opening her eyes.*\n\n*Brenna's hand rests open on the bed's edge now, palm up, fingers loose. Whatever thought she'd weighed and set aside stays set aside. The room holds its three breaths and the dark outside holds its nothing, and the kiln cools somewhere below them at whatever pace kilns cool, unhurried by any of it.*",
+        "player": "I keep waiting beside Brenna."
+      },
+      {
+        "location_id": "test_room",
+        "narration": "*The dark beyond the arched window doesn't change. Minutes pass the way minutes pass at this hour — without edges, without any sound to mark them. The draft keeps its thin path along the stone. Somewhere below, the kiln does what kilns do.*\n\n*Brenna's fingers curl once, slowly, against the bed's edge — not reaching for anything, just a small motion that says she's still awake in there. Her breathing hasn't changed. Maren's chin dips again, lower this time, and stays down. The doll rests where her hands hold it, forgotten and held at the same time.*\n\n*Gerome stands as he has stood, unchanged by the hour the way only stone is unchanged by it. The room holds its quiet and the three of them in it, and nothing asks anything of any of them.*",
+        "player": "I wait a little longer."
+      }
+    ],
+    "revision": 6
+  },
+  "format": "caldrevan_campaign_save",
+  "metadata": {
+    "created_at": "2026-10-12T20:52:42.377Z",
+    "save_reason": "manual",
+    "saved_at": "2026-10-12T20:52:42.377Z"
+  },
+  "optional_state": {
+    "learning": {
+      "completed": true,
+      "version": 1
+    },
+    "media": {
+      "completed": true,
+      "version": 1
+    }
+  },
+  "schema_version": 8,
+  "snapshot": {
+    "campaign_id": "turn_fixture",
+    "characters": [
+      {
+        "current": {
+          "conditions": [
+            "recovering"
+          ],
+          "presentation": "Seated and alert"
+        },
+        "id": "brenna",
+        "origin": {
+          "canonical_entity_id": "brenna",
+          "kind": "canonical"
+        },
+        "profile": {
+          "appearance": {
+            "build": "muscular",
+            "eyes": "grey",
+            "hair": {
+              "color": "dark"
+            },
+            "height_cm": 193,
+            "scars": [
+              {
+                "description": "Old wrist scars"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "dataset_id": "sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f",
+    "facts": [
+      {
+        "content": {
+          "kind": "campaign",
+          "statement": "The eastern bridge is closed.",
+          "truth": "true"
+        },
+        "id": "campaign_fact_bridge_closed"
+      },
+      {
+        "content": {
+          "entity_id": "brenna",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_brenna"
+      },
+      {
+        "content": {
+          "entity_id": "gerome",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_gerome"
+      },
+      {
+        "content": {
+          "entity_id": "maren",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_maren"
+      },
+      {
+        "content": {
+          "entity_id": "remote_npc",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_remote_npc"
+      },
+      {
+        "content": {
+          "kind": "campaign",
+          "statement": "HIDDEN_SECRET_SENTINEL",
+          "truth": "true"
+        },
+        "id": "campaign_fact_private_secret"
+      }
+    ],
+    "funds": [],
+    "goals": [],
+    "households": [
+      {
+        "id": "campaign_household_d10",
+        "members": [
+          {
+            "character_id": "brenna",
+            "joined_at": 100,
+            "status": "member"
+          },
+          {
+            "character_id": "maren",
+            "joined_at": 100,
+            "status": "member"
+          },
+          {
+            "character_id": "nicco",
+            "joined_at": 100,
+            "role": "owner",
+            "status": "member"
+          }
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "boots",
+        "name": "boots",
+        "origin": {
+          "canonical_entity_id": "boots",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "brenna_boots",
+        "name": "Brenna's worn boots",
+        "origin": {
+          "canonical_entity_id": "brenna_boots",
+          "kind": "canonical"
+        },
+        "owner_id": "brenna",
+        "position": {
+          "character_id": "brenna",
+          "kind": "equipped",
+          "mode": "worn",
+          "slot": "feet"
+        }
+      },
+      {
+        "id": "campaign_item_cloth_doll",
+        "name": "cloth doll",
+        "origin": {
+          "kind": "created"
+        },
+        "owner_id": "maren",
+        "position": {
+          "character_id": "maren",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "campaign_item_plain_shirt",
+        "name": "plain shirt",
+        "origin": {
+          "kind": "created"
+        },
+        "owner_id": "brenna",
+        "position": {
+          "character_id": "brenna",
+          "kind": "equipped",
+          "mode": "worn",
+          "slot": "body"
+        }
+      },
+      {
+        "id": "pink_cotton",
+        "name": "pink_cotton",
+        "origin": {
+          "canonical_entity_id": "pink_cotton",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "pink_fluffy",
+        "name": "pink_fluffy",
+        "origin": {
+          "canonical_entity_id": "pink_fluffy",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "pink_shorts",
+        "name": "pink_shorts",
+        "origin": {
+          "canonical_entity_id": "pink_shorts",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "ring",
+        "name": "ring",
+        "origin": {
+          "canonical_entity_id": "ring",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      }
+    ],
+    "knowledge": [
+      {
+        "character_id": "maren",
+        "fact_id": "campaign_fact_private_secret",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_bridge_closed",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_brenna",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_gerome",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_maren",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_remote_npc",
+        "status": "knows"
+      }
+    ],
+    "legal_statuses": [],
+    "next_item_sequence": 1,
+    "player_characters": [
+      {
+        "appearance": {},
+        "character_id": "nicco"
+      }
+    ],
+    "premium_characters": [
+      {
+        "character_id": "brenna",
+        "dynamic": {
+          "recent_developments": [
+            {
+              "household_id": "campaign_household_d10",
+              "kind": "joined_household",
+              "revision": 2,
+              "world_minute": 100
+            }
+          ]
+        },
+        "mannerisms": [
+          {
+            "canonical_key": "brow_raise_during_exchange",
+            "created_revision": 5,
+            "epistemic_state": "emergent",
+            "id": "mannerism_r5_n0",
+            "known_by_character_ids": [],
+            "source": "user",
+            "text": "Raises one eyebrow during a short exchange.",
+            "user_edited": false
+          }
+        ],
+        "metadata": {
+          "active_household_member": true,
+          "created_revision": 2,
+          "initial_mannerism": "seeded",
+          "last_updated_revision": 5
+        },
+        "stable": {}
+      },
+      {
+        "character_id": "maren",
+        "dynamic": {
+          "recent_developments": [
+            {
+              "household_id": "campaign_household_d10",
+              "kind": "joined_household",
+              "revision": 2,
+              "world_minute": 100
+            }
+          ]
+        },
+        "mannerisms": [
+          {
+            "canonical_key": "head_tilt_while_listening",
+            "created_revision": 6,
+            "epistemic_state": "emergent",
+            "id": "mannerism_r6_n1",
+            "known_by_character_ids": [],
+            "source": "user",
+            "text": "Tilts their head slightly while listening.",
+            "user_edited": false
+          }
+        ],
+        "metadata": {
+          "active_household_member": true,
+          "created_revision": 2,
+          "initial_mannerism": "seeded",
+          "last_updated_revision": 6
+        },
+        "stable": {}
+      }
+    ],
+    "relationships": [],
+    "revision": 6,
+    "runtime": {
+      "mana": {
+        "current": 100,
+        "max": 100
+      },
+      "npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "remote_npc",
+          "current_location": "test_remote"
+        }
+      ],
+      "scene": {
+        "player_location": "test_room",
+        "world_time": {
+          "world_minute": 100
+        }
+      }
+    },
+    "scheduled_events": [],
+    "schema_version": 8,
+    "transactions": []
+  }
+}

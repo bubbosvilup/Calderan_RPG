@@ -1,6 +1,43 @@
 # Phase 1L: Turn Coordinator & First Playable Loop
 
-Status: ACTIVE for the turn lifecycle and ordering; model names in this Phase 1L text are HISTORICAL. Current stage order and models: [Architecture](../ARCHITECTURE.md), [Current state](../CURRENT_STATE.md). Last reconciled: 2026-10-13 (block 11: narration readers now live in `src/turn/narration-facts/`, see [NarrationFacts](NARRATION_FACTS.md)).
+Status: ACTIVE for the turn lifecycle and ordering; model names in this Phase 1L text are HISTORICAL. Current stage order and models: [Architecture](../ARCHITECTURE.md), [Current state](../CURRENT_STATE.md). Last reconciled: 2026-10-14 (block B5: current turn order and authority lanes, below); 2026-10-13 (block 11: narration readers now live in `src/turn/narration-facts/`, see [NarrationFacts](NARRATION_FACTS.md)).
+
+## Current turn order and authority lanes (block B5, 2026-10-14)
+
+This section is the code's actual order (`src/turn/coordinator/turn-coordinator.ts`); it supersedes the Phase 1L event sequence just below and the flow in "Live NPC Regression Repair 1". There is no `narration_delta` event: the delivered text is published once, after the commit.
+
+```text
+turn_started → turn_progress(thinking)
+  → intent: the player runtime lane is resolved and prevalidated (prepare, never committed)
+  → projection: prepare(runtime) is the projected snapshot narration, the Controller and authorization see
+  → retrieval → prompt → turn_progress(narrating) → Narrator DRAFT (buffered; at most one regeneration on length)
+controller_started → turn_progress(resolving)
+  → Controller proposal on the raw draft
+  → ONE NarrationFacts source for the turn; authorization: derived proposals, the trade lane, the preferred path, post-decision filters
+state_proposed (frozen authorization diagnostics)
+  → assembly: runtime commands, then authorized ones, each with its lane
+  → final preparation of the whole batch from the captured base revision
+  → audit of the draft → (issues) one revision and its re-audit → or deterministic redaction; D-13 arrival sentences
+  → commit preparation on the DELIVERED text: TRD-2 goods-offer re-check, late naming, name knowledge, NPC+ contracts, person offers
+    (each re-prepares the whole batch; a failing addition is dropped observably, never the turn)
+  → result assembled before the commit (TurnResult.committed = the committed receipt's command list, with lanes)
+  → checkpoint(); campaign.commit(receipt)   (the turn's only mutation)
+state_committed → narration_completed (the delivered text, once) → publication_warning* → turn_completed
+```
+
+Authority lanes (`src/turn/authorization/authority-lanes.ts`; the lane of every committed command is in `TurnResult.committed` and in the trace's `committed_lanes`, and `committed_command_kinds` is that list's kinds):
+
+| Lane | Stage | Reads | Kinds |
+| --- | --- | --- | --- |
+| `player_runtime` | intent | player input | `runtime_delta`, `move_character` (carry, held-person escort) |
+| `preferred_authorization` | authorization | draft | the Controller vocabulary (`src/llm/controller-schema.ts`) and derived proposals, decided by the grammar and a verified quote |
+| `trade` | authorization | draft (goods offers re-checked on the delivered text) | `propose_trade_offer` (goods, items), `withdraw_trade_offer` |
+| `late_naming` | commit preparation | delivered | `set_profile` |
+| `name_knowledge` | commit preparation | delivered | `create_fact`, `set_knowledge` (Nicco) |
+| `character_contract` | commit preparation | delivered | `establish_character_contract` |
+| `person_offer` | commit preparation | delivered | `propose_trade_offer` (person) |
+
+The four commit-preparation lanes bypass `authorizeWithEvidence` by design (no Controller quote) and run after the audit, which therefore never sees their commands (register PIPE-6, open part). Late naming and the household and relationship speech readings read the turn's shared NarrationFacts; NPC+ contracts keep their own quoted-line reading (AUD-2 parity, [report](../evaluations/PIPELINE_LANES_OBSERVED.md)).
 
 ## Authority and lifecycle
 
@@ -74,7 +111,7 @@ Measured historical sample: 10/12 turns made no retrieval call; records 47 and 1
 
 ## Restricted authorization
 
-The controller still exposes only `place_item`, `transfer_item`, `schedule_event`, `set_knowledge`. Its result is independently reparsed locally even for injected mock providers. Trust, profile changes and other command kinds fail the restricted schema. Existing Phase 1I validation remains the final authority over identities, slots, dates, references and batch invariants.
+(Phase 1L, historical: the current Controller vocabulary is much larger, see `src/llm/controller-schema.ts` and the lane table above.) The Phase 1L controller exposed only `place_item`, `transfer_item`, `schedule_event`, `set_knowledge`. Its result is independently reparsed locally even for injected mock providers. Trust, profile changes and other command kinds fail the restricted schema. Existing Phase 1I validation remains the final authority over identities, slots, dates, references and batch invariants.
 
 The authorizer deliberately accepts a narrow subset of language, rather than claiming to understand arbitrary narrative semantics. It requires a command to match explicit deterministic intent, references to relevant known state, and a complete affirmative unquoted confirmation sentence. Negation, uncertainty, refusal or contradictory wording rejects the proposed change. Diagnostics distinguish insufficient evidence, invalid references and forbidden commands. Rejections normally yield a successful no-op turn.
 
@@ -203,12 +240,12 @@ input → natural actions / participant plan → projected context → retrieval
           ├─ no issue: deliver the draft
           ├─ issues: ONE revision call (original prompt + draft + authoritative outcome + specific problems) → re-audit
           └─ still failing: deterministic redaction of flagged sentences + plain outcome statement
-      → narration_delta (single, final text) → narration_completed → commit → state_committed → turn_completed
+      → commit preparation on the delivered text → commit → state_committed → narration_completed (single, final text) → turn_completed
 ```
 
-Event order: `turn_started, controller_started, state_proposed, narration_delta, narration_completed, state_committed, turn_completed`.
+Event order (current; corrected in block B5): `turn_started, turn_progress, controller_started, turn_progress, state_proposed, state_committed, narration_completed, turn_completed` (plus `publication_warning` between them when a post-commit step fails). There is no `narration_delta` event.
 
-Invariant: delivered narration never asserts a durable change that authorization rejected or the controller did not propose. Acceptance resolution is controller-mediated: the controller proposes from the draft, authorization decides, and a bounded reconciliation step forces the delivered text to match. Narration is released after preparation and before commit, so abandoning the iterator still commits nothing. A turn that fails after the draft exposes no narration (`turn_failed.narration` is only what was delivered). `TurnResult.narration_reconciliation` records the draft, the issues, any revision and which text was delivered. The reconciliation step never changes state.
+Invariant: delivered narration never asserts a durable change that authorization rejected or the controller did not propose. Acceptance resolution is controller-mediated: the controller proposes from the draft, authorization decides, and a bounded reconciliation step forces the delivered text to match. Narration is published only after the commit (corrected in block B5: no text is released before it), so abandoning the iterator before the commit commits nothing and shows nothing. The other direction (delivered prose that omits committed state) is not guaranteed by this invariant (register PIPE-7). A turn that fails after the draft exposes no narration (`turn_failed.narration` is only what was delivered). `TurnResult.narration_reconciliation` records the draft, the issues, any revision and which text was delivered. The reconciliation step never changes state.
 
 Audit checks (`src/turn/audit/narration-audit.ts`), all bounded and structured:
 

@@ -52,7 +52,9 @@ test("inventory client shows a safe icon grid, filters possession, searches, sel
   assert.equal(c.node("inventory-items").children.length, 3);
   assert.equal(c.node("inventory-count").textContent, "3 items · 2 carried · 1 equipped"); assert.equal(c.node("inventory-gold").textContent, "12");
   assert.doesNotMatch(c.node("inventory-items").textContent, /<script>/, "descriptions are detail-only, not grid text");
-  const cell = (i: number) => c.node("inventory-items").children[i]!;
+  // B3: each grid entry is a listitem wrapping the button (button semantics inside the list).
+  const slot = (i: number) => c.node("inventory-items").children[i]!, cell = (i: number) => slot(i).children[0]!;
+  assert.equal(slot(0).attributes.get("role"), "listitem"); assert.equal(cell(0).attributes.get("role"), undefined); assert.equal(cell(0).attributes.get("type"), "button");
   assert.equal(cell(0).children[0]!.attributes.get("src"), "/api/inventory/sprite/first/one", "a ready sprite is the specific item visual");
   assert.equal(cell(1).children[0]!.attributes.get("src"), "/api/item-glyph/document", "no sprite: the category fallback icon");
   const image = cell(0).children[0]!; image.handlers.get("error")!({}); assert.equal(image.attributes.get("src"), "/api/item-glyph/weapon", "a broken image falls back to the category glyph");
@@ -60,7 +62,7 @@ test("inventory client shows a safe icon grid, filters possession, searches, sel
   cell(0).handlers.get("click")!({}); assert.equal(c.node("inventory-detail-body").hidden, false);
   assert.equal(c.node("inventory-detail-name").textContent, "Silver Knife"); assert.match(c.node("inventory-detail-description").textContent, /<script>/, "untrusted prose stays inert text");
   c.node("inventory-nav").handlers.get("click")!({}); await tick(); assert.equal(c.node("inventory-view").hidden, false);
-  c.node("inventory-equipped").handlers.get("click")!({}); assert.equal(c.node("inventory-items").children.length, 1); assert.equal(c.node("inventory-items").children[0]!.attributes.get("data-item"), "three");
+  c.node("inventory-equipped").handlers.get("click")!({}); assert.equal(c.node("inventory-items").children.length, 1); assert.equal(c.node("inventory-items").children[0]!.children[0]!.attributes.get("data-item"), "three");
   assert.match(c.node("equip-slot-boots-body").children[0]!.attributes.get("aria-label")!, /Boots/);
   c.node("inventory-search").handlers.get("input")!({ target: { value: "no match" } }); assert.match(c.node("inventory-items").textContent, /No items match/);
   c.render({ ...opening, inventory: gridView("second", []) });
@@ -74,7 +76,7 @@ test("inventory refresh updates pending art and rejects stale campaign responses
   const c = await client(async (url: string) => ({ ok: true, json: async () => url === "/api/inventory" ? new Promise(r => { resolve = r; }) : { ...opening, inventory: response } }));
   c.node("inventory-nav").handlers.get("click")!({}); await tick();
   resolve(gridView("first", [{ ...pending, sprite_status: "ready", sprite_url: "/api/inventory/sprite/first/one", visual: visual("weapon", "/api/inventory/sprite/first/one") }])); await tick();
-  assert.equal(c.node("inventory-items").children[0]!.children[0]!.attributes.get("src"), "/api/inventory/sprite/first/one");
+  assert.equal(c.node("inventory-items").children[0]!.children[0]!.children[0]!.attributes.get("src"), "/api/inventory/sprite/first/one");
   c.node("inventory-nav").handlers.get("click")!({}); await tick();
   c.render({ ...opening, inventory: gridView("second", []) });
   resolve(gridView("first", response.items)); await tick();

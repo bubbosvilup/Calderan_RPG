@@ -29,11 +29,11 @@ function staged(input: string, draft: string, proposal: readonly CampaignCommand
   const resolved = resolveTurnIntent(intentInput), projection = projectTurnIntent(intentInput, resolved);
   const authorization = authorizeTurn({ controller: { commands: [...proposal], ...metadata }, intent: resolved.intent, draft, context: projection.context, projected: projection.projected,
     movable: projection.movable, origin: projection.origin, arrival: projection.arrival, world, mode: "hybrid", sink: undefined, debug_base: { campaign_id: snapshot.campaign_id, base_revision, player_input: input } });
-  const { authorized, commands } = assembleTurnCommands({ diagnostics: authorization.diagnostics, intent: resolved.intent, projected: projection.projected });
+  const { authorized, commands, lanes } = assembleTurnCommands({ diagnostics: authorization.diagnostics, intent: resolved.intent, projected: projection.projected });
   const prepared = campaign.prepare({ expected_revision: base_revision, commands });
   const auditor = createNarrationAuditor({ base_revision, context: projection.context, world, retrieved: { records: [], unknown: false }, player_input: input, recent: [], intent: resolved.intent,
     scene: projection.scene, turn_evidence: authorization.turn_evidence, diagnostics: authorization.diagnostics, authorized, prepared: prepared.snapshot });
-  return { world, campaign, snapshot, base_revision, resolved, projection, authorization, authorized, commands, prepared, auditor, commits: () => commits, participants };
+  return { world, campaign, snapshot, base_revision, resolved, projection, authorization, authorized, commands, lanes, prepared, auditor, commits: () => commits, participants };
 }
 function narratorOf(texts: readonly string[]): NarratorProvider {
   let i = 0;
@@ -117,7 +117,7 @@ test("CommitPreparation: an identity failure keeps the final preparation as the 
   const skipped: string[] = [];
   // AUTH-2: the identity step no longer builds characters, so the failure is injected where the step reads the prepared state.
   const failing = { ...s.prepared, get snapshot(): never { throw new Error("injected"); } } as unknown as typeof s.prepared;
-  const plan = prepareCommit({ world: s.world, prepare: () => { throw new Error("injected"); }, prepared: failing, commands: s.commands, finalized: [], player_input: "Hello.",
+  const plan = prepareCommit({ world: s.world, prepare: () => { throw new Error("injected"); }, prepared: failing, lanes: s.lanes, finalized: [], player_input: "Hello.",
     delivered: 'A lean man straightens. "I\'m Oswin," he says.', scene: s.projection.scene, base_revision: s.base_revision, location_changed: false, on_skip: r => skipped.push(r) });
   assert.equal(plan.receipt, failing);
   assert.deepEqual([plan.identity_skipped, skipped, plan.identity.provisional], ["injected", ["injected"], []]);
@@ -137,7 +137,7 @@ test("authority guard (source): stages hold no CampaignState and never commit; t
 });
 test("CommitPreparation: location_changed suppresses new materializations (semantics unchanged by the stage extraction)", () => {
   const s = staged("Hello.", "Brenna nods.", []);
-  const plan = prepareCommit({ world: s.world, prepare: p => s.campaign.prepare(p), prepared: s.prepared, commands: s.commands, finalized: [], player_input: "Hello.",
+  const plan = prepareCommit({ world: s.world, prepare: p => s.campaign.prepare(p), prepared: s.prepared, lanes: s.lanes, finalized: [], player_input: "Hello.",
     delivered: 'A lean man straightens. "I\'m Oswin," he says.', scene: s.projection.scene, base_revision: s.base_revision, location_changed: true, on_skip: () => {} });
   assert.deepEqual(plan.identity.skipped, [{ name: "Oswin", reason: "location_changed" }]);
   assert.equal(plan.receipt, s.prepared);

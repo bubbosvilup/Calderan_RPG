@@ -229,10 +229,15 @@ test("campaign layout: portraits live inside the campaign folder; deferred delet
   let pending = (await collectDeferredDeletions(store, id, campaign.exportSnapshot(), await repository.retainedAssetReferences(id), new Set([assetKey(a, "portrait_v3.png")]))).pending;
   assert.equal(pending.size, 1); assert.ok(await store.exists(id, a, "portrait_v3.png"));
   assert.ok(!campaign.exportSnapshot().portraits![0]!.versions.some(v => v.version_id === "portrait_v3"), "protection keeps the file, never the Gallery membership");
-  // Block 7: gallery membership lives in the single-generation media side store (backups pin authoritative state only). The first save that persists the deletion releases the file.
+  // Block 7: gallery membership lives in the media side store. Block B4 (N2): each checkpoint keeps a copy of that store, so the "create" checkpoint still
+  // retains v3 after saves that persist the deletion; the file is released once that checkpoint rotates out.
   for (let i = 0; i < 2; i++) { change(campaign, { kind: "runtime_delta", delta: { time_advance_minutes: 1 } }); await repository.saveCampaign(campaign, { metadata: { save_reason: "autosave" } }); }
   pending = (await collectDeferredDeletions(store, id, campaign.exportSnapshot(), await repository.retainedAssetReferences(id), pending)).pending;
-  assert.equal(pending.size, 0, "the media store no longer lists v3: nothing retains it"); assert.equal(await store.exists(id, a, "portrait_v3.png"), false);
+  assert.equal(pending.size, 1, "the checkpoint's media copy still lists v3"); assert.ok(await store.exists(id, a, "portrait_v3.png"));
+  change(campaign, { kind: "runtime_delta", delta: { time_advance_minutes: 1 } });
+  await new FileCampaignRepository(world, root, { now: () => now, max_backups: 1 }).saveCampaign(campaign, { metadata: { save_reason: "manual" } });
+  pending = (await collectDeferredDeletions(store, id, campaign.exportSnapshot(), await repository.retainedAssetReferences(id), pending)).pending;
+  assert.equal(pending.size, 0, "the old checkpoint rotated out: nothing retains v3"); assert.equal(await store.exists(id, a, "portrait_v3.png"), false);
   // Orphans: an unreferenced file is reported (never auto-removed); a missing referenced file is reported; temps only after an hour.
   await write("portrait_stray.png"); await fs.rm(join(root, id, "portraits", store.characterToken(id, a), "portrait_v2.png"));
   const tmp = await store.stage(id, a, Buffer.from("x"));

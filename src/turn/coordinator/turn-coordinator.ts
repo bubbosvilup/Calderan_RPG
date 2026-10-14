@@ -35,6 +35,7 @@ import { assembleTurnResult } from "../stages/result.js";
 import { TurnError, type PublicationStep, type TurnDebugRecord, type TurnEvent, type TurnFailure, type TurnRequest } from "../turn-types.js";
 import { TurnDiagnosticObserver, controllerModelDiagnostics, type DiagnosticPhase, type TurnDiagnosticsSink } from "./turn-diagnostics.js";
 import { createFactSource } from "../narration-facts/index.js";
+import { leakedRefDiagnostic } from "../audit/leaked-refs.js";
 import { movementFactScope } from "../movement/movement-scope.js";
 export type { TurnDebugRecord } from "../turn-types.js";
 
@@ -272,7 +273,7 @@ export class TurnCoordinator {
       // Freeze before exposing events: consumers cannot edit commands between authorization and commit.
       yield freezeSnapshot({ type: "state_proposed" as const, diagnostics: structuredClone(authorization.diagnostics) }) as TurnEvent;
       checkpoint();
-      const { authorized, commands } = assembleTurnCommands({ diagnostics: authorization.diagnostics, intent, projected });
+      const { authorized, commands, lanes } = assembleTurnCommands({ diagnostics: authorization.diagnostics, intent, projected });
 
       // Final preparation: the WHOLE candidate batch, validated against the captured base revision. A receipt, not a commit.
       stage = "campaign_validation_failed";
@@ -306,13 +307,13 @@ export class TurnCoordinator {
         stage = "campaign_validation_failed";
       }
 
-      if (observer?.record.audit) Object.assign(observer.record.audit, { revision_issue_count: delivery.revision_issues.length,
+      if (observer?.record.audit) Object.assign(observer.record.audit, { revision_issue_count: delivery.revision_issues.length, ...leakedRefDiagnostic(delivery.text, context, this.world),
         revision_issue_kinds: delivery.revision_issues.map(i => i.kind), redaction_used: delivery.delivered === "redacted", delivered: delivery.delivered });
       // CommitPreparation: name-driven identity on the DELIVERED narration joins the batch, or is skipped observably (H1).
-      const plan = measure("commit_preparation", () => prepareCommit({ world: this.world, prepare: proposal => campaign.prepare(proposal), prepared, commands, finalized: this.recent(campaign).finalized(), player_input,
+      const plan = measure("commit_preparation", () => prepareCommit({ world: this.world, prepare: proposal => campaign.prepare(proposal), prepared, lanes, finalized: this.recent(campaign).finalized(), player_input,
         delivered: delivery.text, scene, base_revision, facts: factSource, disclosure_intent: promptIntent, trade_recheck: { diagnostics: authorization.diagnostics, projected }, location_changed: origin !== arrival,
         on_skip: reason => sink?.({ kind: "identity_establishment_skipped", campaign_id: snapshot.campaign_id, base_revision, player_input, reason }) }));
-      if (observer) Object.assign(observer.record.commit, { identity_provisional_count: plan.identity.provisional.length, identity_skipped: !!plan.identity_skipped,
+      if (observer) Object.assign(observer.record.commit, { command_count: plan.committed.length, command_kinds: plan.committed.map(c => c.command.kind), lanes: plan.committed.map(c => c.lane), identity_provisional_count: plan.identity.provisional.length, identity_skipped: !!plan.identity_skipped,
         location_changed_naming_skip: origin !== arrival });
       if (observer) {const portrayal=inspectPackedPortrayal(this.world, projected, context, prompt, observer.record.turn_id, base_revision, player_input, delivery.text);if(portrayal)observer.record.mannerism_portrayal=portrayal;else reliability.increment("shadow_skips");}
       // A deliverable is prepared and checked before committing; publication follows the single commit.

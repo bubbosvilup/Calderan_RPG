@@ -25,7 +25,7 @@
   <section id="conversation" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></section>
   <button id="latest" type="button" hidden>Jump to latest &darr;</button>
   <footer class="composer-area">
-   <p id="status" role="status">Starting&hellip;</p><p id="error" role="alert" hidden></p>
+   <p id="status" role="status">Starting&hellip;</p><p id="announcer" class="sr-only" role="status" aria-live="polite"></p><p id="error" role="alert" hidden></p><p id="save-banner" class="save-banner" role="alert" hidden></p>
    <form id="composer"><span class="command-mark" aria-hidden="true">/</span><label class="sr-only" for="input">What Nicco does or says</label><textarea id="input" rows="2" maxlength="4000" placeholder="What does Nicco say or do?" disabled></textarea><button id="send" type="submit" disabled>Send</button></form>
    <small>Enter to send &middot; Shift+Enter for a new line &middot; / for commands</small>
   </footer>

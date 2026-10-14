@@ -35,7 +35,11 @@ export interface RetrievalDiagnostic { readonly operations: number; readonly mod
 export interface TurnResult {
   readonly travel?: import("../world/travel.js").TravelRoute | undefined;
   readonly narration: string; readonly base_revision: number; readonly final_revision: number;
+  /** The final preparation's batch BEFORE commit preparation: player runtime commands and authorized decisions (the authorization stage's output). */
   readonly controller_proposal: readonly CampaignCommand[]; readonly authorized_commands: readonly CampaignCommand[];
+  /** Block B5 (PIPE-6): what the turn committed: exactly the command list of the committed receipt (after commit preparation and the TRD-2 drop), each
+   * command with the lane that produced it. `authorization` stays the authorization stage's per-proposal decisions. */
+  readonly committed: readonly import("./authorization/authority-lanes.js").LaneCommand[];
   readonly authorization: readonly AuthorizationDiagnostic[]; readonly retrieval: RetrievalDiagnostic;
   readonly turn_evidence: TurnEvidence;
   /** Repair 1: only audited text is delivered as authoritative narration. `delivered` excludes visual-only draft previews. */

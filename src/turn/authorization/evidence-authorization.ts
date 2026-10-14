@@ -287,10 +287,10 @@ export function verifyEvidence(command: CampaignCommand, quote: string | undefin
     }
     return { verified: true, check: "materialized_object_named" };
   }
-  if (command.kind === "adjust_relationship") return verifyRelationshipEvidence(command, quote, rawNarration, context);
+  if (command.kind === "adjust_relationship") return verifyRelationshipEvidence(command, quote, rawNarration, context, facts?.dialogue);
   if (command.kind === "join_household" || command.kind === "leave_household") {
     const choice = command.kind === "join_household" ? "join" : "leave";
-    const found = detectHouseholdChoices(rawNarration, context).find(c => c.character_id === command.character_id && c.choice === choice);
+    const found = detectHouseholdChoices(rawNarration, context, facts?.dialogue).find(c => c.character_id === command.character_id && c.choice === choice);
     return found && found.source_sentence.replace(/\s+/g, " ").includes(q) ? { verified: true, check: `household_${choice}_voiced` } : { verified: false, check: "no_voiced_household_choice" };
   }
   if (command.kind === "leave_scene") {

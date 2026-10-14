@@ -1,0 +1,340 @@
+{
+  "campaign_id": "turn_fixture",
+  "canon_compatibility": "references",
+  "canon_references": [
+    {
+      "fingerprint": "sha256:5bab50694d5e36bf271dac86486a187d1acf14ff29c4fdaa4879260a02aee502",
+      "id": "boots",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:0034f8c93ab9e4196b20252e6bd39eca297d246399763e314870e62e33ba7de0",
+      "id": "brenna",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:540ecb08f0db4c3e5015bebb05354681c2618bcf6cb69d70be98d68db72579bc",
+      "id": "brenna_boots",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:c2afaba5fb528f2b8c0d5d28dcd68f22282d0d6617469b5ef3b1719c2236153b",
+      "id": "gerome",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:3128c2b347964ed3ffa95ffce04c64c13baf4ff96592aebbf71b2d4350191e51",
+      "id": "maren",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:2e67a34c8bd5bb3f83dd819b98040808be86b52c9f6d569e3bd946babbd0fc1a",
+      "id": "nicco",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:ba4c067c056ea0c8eb333b793870150e0bdf2fc62b2e0a36da92dd018541f776",
+      "id": "pink_cotton",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:09ec948e97c957de26bcb0564168f7d3ff4eeae0d09bbba9f37dec088c528059",
+      "id": "pink_fluffy",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:1a89da252dd3997c64947c8fc27250f0724359d3319e267338ef3302540f1f43",
+      "id": "pink_shorts",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:c82bcf59ca5a17cbf714a045a2e80b268232ddcdfd01f4d6a97ece2d2039d912",
+      "id": "remote_npc",
+      "kind": "character"
+    },
+    {
+      "fingerprint": "sha256:b4539eb29d5ff87134ba92392f043c56f84c142b5140c27224cd2345bf6dfad3",
+      "id": "ring",
+      "kind": "item"
+    },
+    {
+      "fingerprint": "sha256:eb26e5c08332d864a9f26a243b7907afe7ef91ba7bd5dd23c674fff6c7d30842",
+      "id": "test_remote",
+      "kind": "location"
+    },
+    {
+      "fingerprint": "sha256:7860a7635aeff31c18100053e595845ec400829123f9e232802faa2c6c26be3d",
+      "id": "test_room",
+      "kind": "location"
+    }
+  ],
+  "canonical_dataset_id": "sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f",
+  "format": "caldrevan_campaign_save",
+  "metadata": {
+    "created_at": "2026-10-09T21:12:18.268Z",
+    "saved_at": "2026-10-09T21:12:18.268Z"
+  },
+  "schema_version": 5,
+  "snapshot": {
+    "campaign_id": "turn_fixture",
+    "characters": [
+      {
+        "current": {
+          "conditions": [
+            "recovering"
+          ],
+          "presentation": "Seated and alert"
+        },
+        "id": "brenna",
+        "origin": {
+          "canonical_entity_id": "brenna",
+          "kind": "canonical"
+        },
+        "profile": {
+          "appearance": {
+            "build": "muscular",
+            "eyes": "grey",
+            "hair": {
+              "color": "dark"
+            },
+            "height_cm": 193,
+            "scars": [
+              {
+                "description": "Old wrist scars"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "dataset_id": "sha256:fe4bc97e8a39fd8dbbc2892afb5443a58b699c3c07321b57c0348363015ad82f",
+    "facts": [
+      {
+        "content": {
+          "kind": "campaign",
+          "statement": "The eastern bridge is closed.",
+          "truth": "true"
+        },
+        "id": "campaign_fact_bridge_closed"
+      },
+      {
+        "content": {
+          "entity_id": "brenna",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_brenna"
+      },
+      {
+        "content": {
+          "entity_id": "gerome",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_gerome"
+      },
+      {
+        "content": {
+          "entity_id": "maren",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_maren"
+      },
+      {
+        "content": {
+          "entity_id": "remote_npc",
+          "kind": "canonical"
+        },
+        "id": "campaign_fact_identity_name_remote_npc"
+      },
+      {
+        "content": {
+          "kind": "campaign",
+          "statement": "HIDDEN_SECRET_SENTINEL",
+          "truth": "true"
+        },
+        "id": "campaign_fact_private_secret"
+      }
+    ],
+    "funds": [],
+    "goals": [],
+    "households": [],
+    "items": [
+      {
+        "id": "boots",
+        "name": "boots",
+        "origin": {
+          "canonical_entity_id": "boots",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "brenna_boots",
+        "name": "Brenna's worn boots",
+        "origin": {
+          "canonical_entity_id": "brenna_boots",
+          "kind": "canonical"
+        },
+        "owner_id": "brenna",
+        "position": {
+          "character_id": "brenna",
+          "kind": "equipped",
+          "mode": "worn",
+          "slot": "feet"
+        }
+      },
+      {
+        "category": "valuable",
+        "created_revision": 2,
+        "description": "A ivory figurine.",
+        "id": "campaign_item_00000001",
+        "name": "Ivory Figurine",
+        "origin": {
+          "kind": "created"
+        },
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        },
+        "sprite": {
+          "asset_ref": "portrait_item_c0131a811cc9d6b6.png",
+          "generated_from_visual_description": "Small hand-sized ivory figurine depicting a kneeling woman, aged cream-coloured ivory, fine carved facial details, slightly worn rectangular base, no paint.",
+          "status": "ready"
+        },
+        "visual_description": "Small hand-sized ivory figurine depicting a kneeling woman, aged cream-coloured ivory, fine carved facial details, slightly worn rectangular base, no paint."
+      },
+      {
+        "id": "pink_cotton",
+        "name": "pink_cotton",
+        "origin": {
+          "canonical_entity_id": "pink_cotton",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "pink_fluffy",
+        "name": "pink_fluffy",
+        "origin": {
+          "canonical_entity_id": "pink_fluffy",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "pink_shorts",
+        "name": "pink_shorts",
+        "origin": {
+          "canonical_entity_id": "pink_shorts",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      },
+      {
+        "id": "ring",
+        "name": "ring",
+        "origin": {
+          "canonical_entity_id": "ring",
+          "kind": "canonical"
+        },
+        "owner_id": "nicco",
+        "position": {
+          "character_id": "nicco",
+          "kind": "carried"
+        }
+      }
+    ],
+    "knowledge": [
+      {
+        "character_id": "maren",
+        "fact_id": "campaign_fact_private_secret",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_bridge_closed",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_brenna",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_gerome",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_maren",
+        "status": "knows"
+      },
+      {
+        "character_id": "nicco",
+        "fact_id": "campaign_fact_identity_name_remote_npc",
+        "status": "knows"
+      }
+    ],
+    "legal_statuses": [],
+    "next_item_sequence": 2,
+    "player_characters": [
+      {
+        "appearance": {},
+        "character_id": "nicco"
+      }
+    ],
+    "premium_characters": [],
+    "premium_reflections": [],
+    "relationships": [],
+    "revision": 4,
+    "runtime": {
+      "mana": {
+        "current": 100,
+        "max": 100
+      },
+      "npc_locations": [
+        {
+          "character_id": "brenna",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "gerome",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "maren",
+          "current_location": "test_room"
+        },
+        {
+          "character_id": "remote_npc",
+          "current_location": "test_remote"
+        }
+      ],
+      "scene": {
+        "player_location": "test_room",
+        "world_time": {
+          "world_minute": 100
+        }
+      }
+    },
+    "scheduled_events": [],
+    "schema_version": 6,
+    "transactions": []
+  }
+}

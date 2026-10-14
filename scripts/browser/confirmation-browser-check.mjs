@@ -66,4 +66,19 @@ out.replay.provider_calls = calls() - callsBeforeReplay; out.replay.cards_after 
 
 out.requests = confirmationRequests.map(r => ({ url: r.url, keys: Object.keys(JSON.parse(r.body)).sort() }));
 console.log(JSON.stringify(out, null, 1));
+// B2 (TEST-9): the report is asserted; a wrong outcome exits non-zero.
+const keys = r => r.keys.join(",") === "expected_revision,ref";
+const checks = [
+  ["the words only propose: still enslaved, no revision, no manumission", out.legal_after_words === "enslaved" && out.revision_unchanged && out.manumission_records === 0],
+  ["the card names the act and says nothing changed", /Free Maren\?/.test(out.card_text) && /Nothing has changed yet/.test(out.card_text)],
+  ["both buttons carry accessible labels", out.buttons.length === 2 && out.buttons[0][1] === "Confirm: Free Maren" && /^Cancel: /.test(out.buttons[1][1] ?? "")],
+  ["cancel: card gone, still enslaved, no revision, no provider call", out.after_cancel.legal === "enslaved" && out.after_cancel.revision_unchanged && out.after_cancel.cards === 0 && out.after_cancel.calls === out.narrator_calls_after_turn],
+  ["a rename keeps the same card and re-renders its title", out.rename.same_ref && out.rename.title === "Free Maren Vale?"],
+  ["confirm frees exactly once with zero provider calls and a notice", out.after_confirm.legal === "free" && out.after_confirm.holder_cleared && out.after_confirm.manumission_records === 1 && out.after_confirm.provider_calls_during_confirm === 0 && /Confirmed/.test(out.after_confirm.notice)],
+  ["reload: no card, still free", out.after_reload.cards === 0 && out.after_reload.legal === "free"],
+  ["replay of the original turn: replayed, zero provider calls, no card, no second manumission", out.replay.status === 200 && out.replay.replayed && out.replay.provider_calls === 0 && out.replay.cards_after === 0 && out.replay.manumission_records === 1],
+  ["cancel and confirm send only ref and expected_revision", out.requests.length === 2 && out.requests[0].url === "/api/confirmation/cancel" && out.requests[1].url === "/api/confirmation/confirm" && out.requests.every(keys)],
+];
+for (const [name, ok] of checks) console.log(`${ok ? "PASS" : "FAIL"} ${name}`);
+const failed = checks.filter(c => !c[1]).length; console.log(`${checks.length - failed}/${checks.length} checks passed`); process.exitCode = failed ? 1 : 0;
 await browser.close(); await s.session.shutdown({ discard_unsaved: true }); server.closeAllConnections(); server.close(); await rm(dir, { recursive: true, force: true });

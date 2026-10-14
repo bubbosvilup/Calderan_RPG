@@ -72,7 +72,7 @@ function deliver(delivered: string) {
   assert.equal((prepared.snapshot.trade_offers ?? []).length, 1);
   const participants = new SceneParticipants();
   const skipped: string[] = [];
-  const plan = prepareCommit({ world, prepare: p => c.prepare(p), prepared, commands: [buy], finalized: [], player_input: "Price?", delivered, scene: participants.plan("Price?", context),
+  const plan = prepareCommit({ world, prepare: p => c.prepare(p), prepared, lanes: [{ lane: "trade", command: buy }], finalized: [], player_input: "Price?", delivered, scene: participants.plan("Price?", context),
     base_revision: revision, location_changed: false, trade_recheck: { diagnostics, projected }, on_skip: r => skipped.push(r) });
   assert.deepEqual(skipped, []);
   return plan;
@@ -98,7 +98,7 @@ test("TRD-2: subject modified in the delivered text: no card", () => {
 test("TRD-2: without a recheck input prepareCommit keeps its previous behaviour (offers untouched)", () => {
   const c = market(), projected = snap(c), context = buildTurnContext(world, projected), revision = c.revision;
   const prepared = c.prepare({ expected_revision: revision, commands: [buy] });
-  const plan = prepareCommit({ world, prepare: p => c.prepare(p), prepared, commands: [buy], finalized: [], player_input: "Price?", delivered: "Nothing was said.", scene: new SceneParticipants().plan("Price?", context),
+  const plan = prepareCommit({ world, prepare: p => c.prepare(p), prepared, lanes: [{ lane: "trade", command: buy }], finalized: [], player_input: "Price?", delivered: "Nothing was said.", scene: new SceneParticipants().plan("Price?", context),
     base_revision: revision, location_changed: false, on_skip: () => {} });
   assert.equal((plan.receipt.snapshot.trade_offers ?? []).length, 1);
 });

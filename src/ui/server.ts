@@ -13,7 +13,8 @@ import { ALTERNATE_NARRATOR_MODELS, type NarratorAlternatives } from "../app/nar
 const PORTRAIT_ROUTES = new Set(["/api/portrait/generate", "/api/portrait/avatar", "/api/portrait/full-body", "/api/portrait/delete", "/api/portrait/reference"]);
 /** Save/Load v1 campaign lifecycle (host mode only). */
 const CAMPAIGN_ROUTES = new Set(["/api/campaigns/create", "/api/campaigns/load", "/api/campaigns/close", "/api/campaigns/delete", "/api/save"]);
-interface Message { readonly comparison_id?: string; readonly role: "player" | "narrator" | "system"; readonly text: string }
+/** `seq` (B3): a stable, increasing position per message, the client's render cursor (the count of a bounded window is not one). */
+interface Message { readonly comparison_id?: string; readonly role: "player" | "narrator" | "system"; readonly text: string; readonly seq?: number }
 const assets = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
   ["/client.js", ["client.js", "text/javascript; charset=utf-8"]],
@@ -33,8 +34,8 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
   const legacyMessages: Message[] = [{ role: "narrator", text: UI_PLAYTEST_OPENING }];
   const comparable = new Set<string>();
   const current = (): GameSession | undefined => fixed ?? host?.active;
-  const messages = (session: GameSession): readonly Message[] => fixed ? legacyMessages
-    : session.getTranscript().map(m => ({ role: m.role, text: m.text, ...(m.role === "narrator" && m.turn_id && comparable.has(m.turn_id) ? { comparison_id: m.turn_id } : {}) }));
+  const messages = (session: GameSession): readonly Message[] => fixed ? legacyMessages.map((m, seq) => ({ ...m, seq }))
+    : session.getTranscript().map(m => ({ role: m.role, text: m.text, seq: m.i, ...(m.role === "narrator" && m.turn_id && comparable.has(m.turn_id) ? { comparison_id: m.turn_id } : {}) }));
   const state = () => {
     const session = current();
     if (!session) return { campaign: null, messages: [], status: "idle", configured: true };
@@ -136,7 +137,9 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
             : req.url === "/api/campaigns/load" ? await host.loadCampaign({ campaign_id: fields.campaign_id, slot: fields.slot })
             : req.url === "/api/campaigns/delete" ? await host.deleteCampaign({ campaign_id: fields.campaign_id }) : await host.closeCampaign();
           if (outcome.ok) comparable.clear();
-          json(outcome.ok ? 200 : outcome.error.code === "turn_in_progress" || outcome.error.code === "campaign_locked" ? 409 : 422, { ...outcome, ...state() }); return;
+          // B4 (P4): the identity diagnostics name internal records; the browser gets only their count.
+          const report = outcome.ok && outcome.load_report ? (({ identity_diagnostics, ...rest }) => ({ ...rest, identity_warnings: identity_diagnostics.length }))(outcome.load_report) : undefined;
+          json(outcome.ok ? 200 : outcome.error.code === "turn_in_progress" || outcome.error.code === "campaign_locked" ? 409 : 422, { ...outcome, ...(report ? { load_report: report } : {}), ...state() }); return;
         }
         const session = current();
         if (!session) { json(409, { ok: false, error: { message: "No campaign is open." }, ...state() }); return; }

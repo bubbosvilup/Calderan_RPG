@@ -12,7 +12,8 @@
  */
 export interface AutosaveTimers { setTimeout(fn: () => void, ms: number): unknown; clearTimeout(handle: unknown): void; now(): number }
 export interface AutosaveOptions { readonly debounce_ms?: number; readonly max_wait_ms?: number; readonly retry_ms?: readonly number[]; readonly timers?: AutosaveTimers }
-export type AutosaveResult = { readonly ok: true } | { readonly ok: false; readonly fatal: boolean };
+/** `retry: false`: a non-fatal failure that a timed retry cannot fix (B4: the save is too large); autosave waits for the next mutation instead. */
+export type AutosaveResult = { readonly ok: true } | { readonly ok: false; readonly fatal: boolean; readonly retry?: false };
 export type AutosaveState = "idle" | "scheduled" | "waiting" | "saving" | "retrying" | "failed" | "stopped";
 const realTimers: AutosaveTimers = { setTimeout: (fn, ms) => setTimeout(fn, ms), clearTimeout: handle => clearTimeout(handle as ReturnType<typeof setTimeout>), now: () => Date.now() };
 
@@ -62,6 +63,7 @@ export class AutosaveScheduler {
         return;
       }
       if (result.fatal) { this.#state = "stopped"; return; }
+      if (result.retry === false) { this.#state = "failed"; return; }
       this.#failures++;
       if (this.#failures > this.#retry.length) { this.#state = "failed"; return; }
       this.#state = "retrying"; this.#arm(this.#retry[this.#failures - 1]!);

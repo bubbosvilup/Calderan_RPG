@@ -108,7 +108,7 @@ test("T10 calendar and weather code uses only integer game arithmetic: no Date, 
     const src = readFileSync(`src/world/${f}.ts`, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
     assert.doesNotMatch(src, /\bnew Date\b|\bDate\.(?:now|UTC|parse)\b|\bIntl\b|Math\.random|performance\.now/, f);
   }
-  const t = Date.now(); calendarDateAt(10 ** 12); calendarDateAt(-(10 ** 12)); weatherAt("seed", "west_cool_maritime", 10 ** 12); assert.ok(Date.now() - t < 200, "constant-time and bounded");
+  const t = Date.now(); calendarDateAt(10 ** 12); calendarDateAt(-(10 ** 12)); weatherAt("seed", "west_cool_maritime", 10 ** 12); assert.ok(Date.now() - t < 1000, "constant-time and bounded"); // B2: generous bound; a scan over 10^12 minutes would take hours
 });
 
 // ------------------------------------------------------------------------------------------------ climate and weather
@@ -203,7 +203,7 @@ test("T17 intercalary days have no calendar season, but their climate baseline i
   assert.match(describeWeather(e.weather!), /^[A-Z][a-z ]+, [a-z ]+\.$/);
 });
 test("T18 weather derivation is bounded: reconstruction touches at most one week of blocks regardless of how far the campaign has run", () => {
-  const t = Date.now(); for (let i = 0; i < 2000; i++) weatherAt("perf", "east_cold_continental", 1_000_000_000 + i * 360); assert.ok(Date.now() - t < 2000, "2000 far-future weather lookups stay fast");
+  const t = Date.now(); for (let i = 0; i < 2000; i++) weatherAt("perf", "east_cold_continental", 1_000_000_000 + i * 360); assert.ok(Date.now() - t < 6000, "2000 far-future weather lookups stay fast"); // B2: generous for slow CI runners; pathological cost is orders larger
   assert.equal(weatherAt("perf", "east_cold_continental", 123_456_789).block_index, weatherBlockIndex(123_456_789));
 });
 

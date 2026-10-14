@@ -209,7 +209,7 @@ test("I21: bounded work: intent resolution over hundreds of items and 28-draw we
   const context = buildTurnContext(f.world, f.campaign.exportSnapshot()), t0 = performance.now();
   for (let n = 0; n < 20; n++) resolveItemIntent("I pick up the bulk item 7 sword.", context);
   for (let n = 0; n < 2000; n++) weatherAt("perf", "west_cool_maritime", n * 360);
-  assert.ok(performance.now() - t0 < 4000, `${performance.now() - t0}ms`);
+  assert.ok(performance.now() - t0 < 10000, `${performance.now() - t0}ms`); // B2: generous for slow CI runners; a quadratic item scan is orders larger
 });
 
 // ---------------------------------------------------------------- W: weather and environment

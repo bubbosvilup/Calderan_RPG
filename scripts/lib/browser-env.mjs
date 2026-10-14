@@ -1,6 +1,7 @@
 // Shared, portable environment for the offline browser checks (scripts/*-browser-check.mjs). Every path is derived from this file's location,
 // so a check runs from any checkout on Windows or Linux. Run `npm run build` first (the checks import the compiled `.build`).
-//   PLAYWRIGHT_MODULE  optional: path (or bare specifier) of the Playwright package to load; default "playwright" (a local or global install)
+//   PLAYWRIGHT_MODULE  optional: path (or bare specifier) of the Playwright package to load; default "playwright", the pinned devDependency
+//                      (`npm install` never downloads browsers for it: run `npx playwright install chromium` once, or set CHROMIUM_PATH)
 //   CHROMIUM_PATH      optional: Chromium executable; default: Playwright's own managed browser
 // Screenshots and other local output go to the gitignored `artifacts/local/browser/<check>/`.
 import { mkdir } from "node:fs/promises";

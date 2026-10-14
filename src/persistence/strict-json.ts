@@ -1,5 +1,7 @@
 import { CampaignSaveError } from "./errors.js";
 export const MAX_SAVE_BYTES = 16 * 1024 * 1024;
+/** Block B4 (PER-1): a save or side store above this size still saves, but the UI warns that the campaign is approaching MAX_SAVE_BYTES. */
+export const SAVE_WARNING_BYTES = 12 * 1024 * 1024;
 
 /** Small strict JSON reader: rejects duplicate decoded keys and excessive nesting. */
 export function parseSaveJson(text: string): unknown {

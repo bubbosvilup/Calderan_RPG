@@ -12,9 +12,10 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 >
 > ```text
 > saves/campaigns/<campaign_id>/
->   save.json              current slot (save format 7, snapshot 7)
+>   save.json              current slot (save format 8; snapshot 7 in memory, persisted in its schema 8 shape)
 >   save.previous.json     the preceding successful save (rotated by every save)
->   backups/               up to 5 rolling checkpoints r<revision>-<timestamp>.json (save JSON only: no images, no transcript)
+>   backups/               up to 5 rolling checkpoints r<revision>-<timestamp>.json, each with its own copy of the side stores
+>                          r<revision>-<timestamp>.learning.json / .media.json (block B4; no images, no transcript)
 >   transcript.jsonl       campaign history (narrative, never canonical)
 >   portraits/<character token>/portrait_… | reference_…   image files (bytes never in JSON)
 >   .lock                  writer lock {pid, token}; a dead holder's lock is recovered
@@ -80,13 +81,17 @@ Status: ACTIVE for the current format (the first blockquote and sections marked 
 > Save is immediate. Graceful shutdown (Ctrl+C, campaign switch) saves a dirty campaign with reason `quit` first.
 >
 > **Backups and recovery.** Every save rotates current → previous as before. A checkpoint is written for `create`/`manual`/`quit`
-> saves and at most every 15 minutes of autosaves; 5 are kept. A corrupt or unreadable current slot is never overwritten: loading
+> saves and at most every 15 minutes of autosaves; 5 are kept. Since block B4 a checkpoint is written with a copy of each side store
+> (copies first, then the checkpoint file, so a checkpoint never exists without its copies; rotation removes the copies with it and any
+> stray copy of a checkpoint that never completed). Loading a checkpoint uses its own copies, so one damaged side store no longer blocks
+> every recovery point; a checkpoint written before B4 has no copies and loads with the campaign's store, as before; a copy that is present
+> but unreadable is `optional_state_invalid`, never skipped. A corrupt or unreadable current slot is never overwritten: loading
 > fails; the start screen offers *Load previous save* / *Load latest backup*; the first save of that explicitly recovered session
 > moves the corrupt file aside as `save.corrupt-<timestamp>.json` (kept) and writes a fresh current. The load report records the source.
 >
 > **Image assets.** Saves reference portrait files by bare file name (`asset_file`) per character; the path is rebuilt from the
 > campaign root, the campaign ID and a per-character hash. Deleting a Gallery image commits metadata only; the file is removed once
-> no retained state (live campaign, `save.json`, `save.previous.json`, any kept backup) references it — protection keeps the file,
+> no retained state (live campaign, `save.json`, `save.previous.json`, any kept backup, the media store and, since B4, each kept checkpoint's media copy) references it — protection keeps the file,
 > never the Gallery entry. Orphans (files no retained state references) are detected and reported, never removed automatically;
 > the explicit cleanup (`removePortraitOrphans({confirm:true})`) stays inside the campaign's portrait tree. A missing image file
 > never blocks a load: the record stays, the load report counts it and the UI shows a placeholder.
@@ -119,11 +124,11 @@ Save file schema is **6** (snapshot schema stays 6). The envelope gains the opti
 | Marker PRESENT + missing / corrupt / foreign / wrong-version store | **hard error** (`optional_state_invalid`); no silent fallback to the snapshot, to another slot or to a backup |
 | Marker version newer than supported | `unsupported_version` (safe failure) |
 
-**Migration protocol (v7 -> v8).** Loading never rewrites. The first save of a not-yet-migrated campaign runs in MIGRATION ORDER: (1) build the complete store state (deterministic, idempotent, no authority flip), (2) write and fsync both stores, (3) persist the schema-8 snapshot carrying the markers in the same atomic rename as always, (4) only that rename flips authority. A crash before step 3 completes leaves the marker absent: the old snapshot is still the authority and a rerun rewrites the stores (same digest, no duplicate rows). A migrated campaign saves in STEADY ORDER: snapshot first, then the changed stores (unchanged stores, by digest, are skipped), so a crash leaves a store BEHIND the snapshot, never ahead. A store newer than the loaded snapshot (an older slot or backup beside the current store) is clamped: reflection notes and mannerism evidence that postdate the snapshot are dropped.
+**Migration protocol (v7 -> v8).** Loading never rewrites. The first save of a not-yet-migrated campaign runs in MIGRATION ORDER: (1) build the complete store state (deterministic, idempotent, no authority flip), (2) write and fsync both stores, (3) persist the schema-8 snapshot carrying the markers in the same atomic rename as always, (4) only that rename flips authority. A crash before step 3 completes leaves the marker absent: the old snapshot is still the authority and a rerun rewrites the stores (same digest, no duplicate rows). A migrated campaign saves in STEADY ORDER: snapshot first, then the changed stores (unchanged stores, by digest, are skipped), so a crash leaves a store BEHIND the snapshot, never ahead. A store newer than the loaded snapshot (an older slot or backup beside the current store) is clamped: reflection notes and mannerism evidence that postdate the snapshot are dropped, and (block B4, N3) a ready item sprite whose `generated_from_visual_description` is not the slot's item `visual_description` is dropped instead of failing validation (the item can be drawn again). Gallery versions are not clamped: they carry no revision, and dropping them would orphan image files.
 
 **Composed view.** In memory `CampaignSnapshot` keeps every field (schema 7 shape) so readers and validators are unchanged; the persisted snapshot is schema 8 with a migrated store's fields removed (`toPersistedSnapshot` / `fromPersistedSnapshot` in `src/campaign/optional-state.ts`). `corePartition()` is the authoritative projection: a change that leaves it equal is OPTIONAL-ONLY, applies without a revision bump (`optional_only`) and advances `CampaignState.stateVersion` (dirty tracking and autosave). A Gallery batch that selects nothing, a sprite transition, a Reflection note, a mannerism observation or journal entry never moves the revision; selecting an avatar and an actual mannerism promotion do, exactly once. Deleting a version holding a role fails; a selection whose Gallery version is missing is kept (rendering degrades, no other version is chosen).
 
-**Consequences.** Backups and the previous slot pin authoritative state only; the side stores are single-generation (current), so a deleted Gallery file is released as soon as a save persists the deletion. `expected_revision` is a strict equality with the semantic revision and is no longer disturbed by background work.
+**Consequences.** The previous slot pins authoritative state only and reads the campaign's (current) stores. A checkpoint pins its own store copies (block B4), so a deleted Gallery file is released once a save persists the deletion AND every kept checkpoint whose media copy still lists it has rotated out. `expected_revision` is a strict equality with the semantic revision and is no longer disturbed by background work.
 
 ## Character lifecycle (block 5B, snapshot and save file schema 7)
 
@@ -225,7 +230,11 @@ included. Saves are independent of repository installation paths. User-authored
 descriptive strings are preserved; the serializer does not infer or inject
 machine/provider metadata.
 
-JSON is UTF-8, two-space indented, with sorted object keys and a trailing newline.
+JSON is UTF-8, compact (one line; block B4, it was two-space indented before and the reader accepts both), with sorted object keys and a trailing newline.
+The save file and each side store are capped at 16 MiB (`MAX_SAVE_BYTES`) on write as on read. A save that would exceed it fails with
+`save_too_large` before anything is written (the stores are encoded before any file is touched); it is not `invalid_save`, autosave keeps
+running without a timed retry (the next mutation tries again), and quit reports the size, not damage. A save above `SAVE_WARNING_BYTES`
+(12 MiB) still saves and reports `size_warning`; the Play UI then shows a banner. Measurements: [PERSISTENCE_DURABILITY](../evaluations/PERSISTENCE_DURABILITY.md).
 Array order is preserved, including meaningful alias/description ordering. Engine
 snapshots already keep map-like records deterministically ordered. Loading does
 not depend on JSON object property order. Restored map-like array order alone
@@ -399,7 +408,11 @@ multi-process writers and network-filesystem guarantees are outside this phase.
 Public errors contain a stable code and safe message, not raw Node errors or
 stack traces: `not_found`, `invalid_json`, `invalid_save`, `unsupported_version`,
 `migration_failed`, `dataset_mismatch`, `reference_invalid`, `invalid_id`, `unsafe_path`,
-`save_in_progress`, `io_error`. The inspector prints safe messages/metadata only.
+`save_in_progress`, `io_error`, `optional_state_invalid`, `campaign_locked`, `save_too_large` (B4). The inspector prints safe messages/metadata only.
+
+Block B4 (P4): every load also computes warn-level identity diagnostics (`LoadReport.identity_diagnostics`, `src/campaign/identity-load-diagnostics.ts`):
+duplicate narrated refs (key `ephemeral_ref` plus materialization location) and unnamed twins, a counteroffer whose planned subject changed, and an
+accepted person offer whose transaction is missing. They are read-only (no repair, no revision) and the browser receives only their count.
 
 ## J-L. Original Phase 1J verification and scope (historical)
 

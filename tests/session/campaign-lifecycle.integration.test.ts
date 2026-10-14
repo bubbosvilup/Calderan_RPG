@@ -195,7 +195,11 @@ test("missing image file: load succeeds, the record stays, the report counts it;
   assert.equal(mira(s).appearance_editor!.portrait.gallery.length, 2, "gone from the live Gallery");
   const portraitDir = join(root, "campaigns", id, "portraits"), files = async () => (await fs.readdir(join(portraitDir, (await fs.readdir(portraitDir))[0]!))).sort();
   assert.equal((await files()).length, 3, "save.json (and its checkpoint) still reference it: the file is kept");
-  assert.ok((await s.save()).ok); await s.portraitAssetReport(); assert.equal((await files()).length, 2, "block 7: gallery membership lives in the single-generation media store; once a save persists the deletion nothing retains the file");
+  assert.ok((await s.save()).ok); await s.portraitAssetReport(); assert.equal((await files()).length, 3, "B4 (N2): the earlier checkpoints keep a copy of the media store that still lists it");
+  // Rotate those checkpoints out (keep only the newest, written after the deletion): then nothing retains the file.
+  const backupDir = join(root, "campaigns", id, "backups"), checkpoints = (await fs.readdir(backupDir)).filter(n => /^r\d+-\d{8}T\d{9}Z\.json$/.test(n)).sort();
+  for (const old of checkpoints.slice(0, -1)) for (const f of [old, old.replace(".json", ".learning.json"), old.replace(".json", ".media.json")]) await fs.rm(join(backupDir, f), { force: true });
+  assert.ok((await s.save()).ok); await s.portraitAssetReport(); assert.equal((await files()).length, 2, "block 7: gallery membership lives in the media store; once no retained save or store copy lists it, the file is released");
   assert.deepEqual((await s.portraitAssetReport())!.orphans, [], "a protected file is not an orphan");
   assert.equal(mira(s).appearance_editor!.portrait.gallery.length, 2, "protection never resurrects the Gallery entry");
   // Remove the avatar file on disk, then reload: the record stays and the load is not blocked.

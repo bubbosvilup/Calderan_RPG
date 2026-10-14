@@ -70,6 +70,48 @@
    "sha256": "8698ca89490055d6c36b5712bf112e26aeed4e03ccb969f6291355572255f7b2",
    "used_by": "tests/canon/west-everyday-canon.test.ts",
    "purpose": "retrieval snapshot after West NPC pass 2A (prior state the test compares against)"
+  },
+  {
+   "path": "legacy-saves/save5-snapshot6/turn_fixture/save.json",
+   "source": "item-sprite-smoke-assets/turn_fixture/save.json",
+   "sha256": "034c010cbb8ed2d6df176986090daa60f85e855011976daf57df5627c2c598ac",
+   "used_by": "tests/persistence/legacy-save-fixtures.test.ts",
+   "purpose": "real save written by the 2026-10-09 item sprite smoke run: envelope 5 / snapshot 6, revision 7, two ready sprites, no side stores (user decision 3 of 2026-10-14, block B4 P5)"
+  },
+  {
+   "path": "legacy-saves/save5-snapshot6/turn_fixture/save.previous.json",
+   "source": "item-sprite-smoke-assets/turn_fixture/save.previous.json",
+   "sha256": "e6f41bf5c0e0bb7190e522b0c114fa8b6bf89920953d5d27ca5ffa4e231e00e8",
+   "used_by": "tests/persistence/legacy-save-fixtures.test.ts",
+   "purpose": "the previous slot of the same run (revision 4) (user decision 3 of 2026-10-14, block B4 P5)"
+  },
+  {
+   "path": "legacy-saves/save5-snapshot6/turn_fixture/backups/r00000004-20261009T211218268Z.json",
+   "source": "item-sprite-smoke-assets/turn_fixture/backups/r00000004-20261009T211218268Z.json",
+   "sha256": "e6f41bf5c0e0bb7190e522b0c114fa8b6bf89920953d5d27ca5ffa4e231e00e8",
+   "used_by": "tests/persistence/legacy-save-fixtures.test.ts",
+   "purpose": "the rolling checkpoint of the same run (revision 4, no store copies) (user decision 3 of 2026-10-14, block B4 P5)"
+  },
+  {
+   "path": "legacy-saves/save8-stores/turn_fixture/save.json",
+   "source": "consolidation_block7_live/saves_a/turn_fixture/save.json",
+   "sha256": "4a70a4e8d7c2fc68ca5903288bcb9bec6f2f2989002f21d58d44cb9bf21d21e0",
+   "used_by": "tests/persistence/legacy-save-fixtures.test.ts",
+   "purpose": "real save written by the consolidation block 7 live run (2026-10-12): envelope 8, revision 6, both optional-state markers, two NPC+ (user decision 3 of 2026-10-14, block B4 P5)"
+  },
+  {
+   "path": "legacy-saves/save8-stores/turn_fixture/optional/learning.json",
+   "source": "consolidation_block7_live/saves_a/turn_fixture/optional/learning.json",
+   "sha256": "5f5abbcb084c33592d8ec593f55da727d69a9065ad30d583939de82316d0c9f8",
+   "used_by": "tests/persistence/legacy-save-fixtures.test.ts",
+   "purpose": "its learning side store (store version 1) (user decision 3 of 2026-10-14, block B4 P5)"
+  },
+  {
+   "path": "legacy-saves/save8-stores/turn_fixture/optional/media.json",
+   "source": "consolidation_block7_live/saves_a/turn_fixture/optional/media.json",
+   "sha256": "e6e5b1d6d0daee343483d3c052f154f1691c7052426d7edc0f7ce8cbec45f6af",
+   "used_by": "tests/persistence/legacy-save-fixtures.test.ts",
+   "purpose": "its media side store (store version 1) (user decision 3 of 2026-10-14, block B4 P5)"
   }
  ]
 }
