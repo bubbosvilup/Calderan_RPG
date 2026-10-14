@@ -24,6 +24,7 @@ server.on("error", () => { console.error(`Cannot start UI on port ${port}. Stop 
 server.listen(port, "127.0.0.1", () => {
   console.log(playtest ? `Caldrevan playtest: http://127.0.0.1:${port} — Ctrl+C to stop. Disposable campaign; no saves.`
     : `Caldrevan: http://127.0.0.1:${port} — Ctrl+C saves and stops. Campaigns are stored in saves/campaigns/.`);
+  console.log(`New React UI (migration preview): http://127.0.0.1:${port}/app/ — build it first with npm run ui:build. The legacy UI stays at /.`);
   if (!deps.provider_status?.configured) console.log("Set OPENROUTER_API_KEY before launching to play. The opening needs no API key.");
   console.log(imageStackStatus().message);
 });

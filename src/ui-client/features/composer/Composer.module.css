@@ -1,0 +1,47 @@
+.composer {
+  display: grid;
+  gap: var(--spacing-2);
+  max-width: calc(var(--layout-story-max-width) + 2 * var(--spacing-4));
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+}
+
+.status {
+  min-height: 1.25rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-2);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: 3.25rem;
+  max-height: 12rem;
+  resize: vertical;
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-sunken);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input[aria-disabled="true"] {
+  opacity: 0.65;
+}
+
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}

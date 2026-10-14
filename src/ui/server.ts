@@ -1,7 +1,7 @@
 import { createServer, type ServerResponse } from "node:http";
 import { readFile } from "node:fs/promises";
 import { ITEM_GLYPHS, isItemGlyphName } from "../app/item-visuals.js";
-import { resolve } from "node:path";
+import { extname, resolve } from "node:path";
 import { GameSession, SessionHost } from "../app/index.js";
 import { CANON_AVATAR_DIR, readCanonAvatar } from "../app/canon-avatars.js";
 import { UI_PLAYTEST_OPENING } from "../app/ui-playtest.js";
@@ -20,6 +20,15 @@ const assets = new Map([
   ["/client.js", ["client.js", "text/javascript; charset=utf-8"]],
   ["/style.css", ["style.css", "text/css; charset=utf-8"]],
 ]);
+/**
+ * React frontend (UI-1): the Vite production build (`npm run ui:build` -> dist/ui-client/) under /app/. Hashed files are served from its
+ * assets/ folder by a closed name pattern and extension list (no path is joined from anything else); every other /app path is the
+ * single-page entry, so client routes such as /app/play/<id> survive a reload. The legacy UI stays at /.
+ */
+const REACT_BASE = "/app";
+const REACT_ASSET = /^\/app\/assets\/([A-Za-z0-9_-][A-Za-z0-9_.-]{0,127})$/;
+const REACT_TYPES: Readonly<Record<string, string>> = { ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png",
+  ".webp": "image/webp", ".jpg": "image/jpeg", ".avif": "image/avif", ".woff2": "font/woff2" };
 
 /**
  * Transport only: all game operations go through the application facade.
@@ -27,8 +36,9 @@ const assets = new Map([
  *   - Given a SessionHost (Save/Load v1 persistent campaigns): the host's active session (or none: start screen), the session-owned
  *     transcript, and the campaign create/load/close/save routes.
  */
-export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR, options: { readonly log?: (line: string) => void } = {}) {
+export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR, options: { readonly log?: (line: string) => void; readonly reactDir?: string } = {}) {
   const log = options.log ?? (() => undefined);
+  const reactDir = options.reactDir ?? resolve("dist/ui-client");
   const host = target instanceof SessionHost ? target : undefined;
   const fixed = target instanceof GameSession ? target : undefined;
   const legacyMessages: Message[] = [{ role: "narrator", text: UI_PLAYTEST_OPENING }];
@@ -268,6 +278,8 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       }
       const asset = req.method === "GET" ? assets.get(req.url ?? "") : undefined;
       if (asset) { reply(res, 200, asset[1]!, await readFile(resolve(assetDir, asset[0]!))); return; }
+      const path = (req.url ?? "").split("?")[0]!;
+      if (req.method === "GET" && (path === REACT_BASE || path.startsWith(`${REACT_BASE}/`))) { await serveReact(res, reactDir, path); return; }
       json(404, { error: "Not found." });
     } catch {
       console.error("Playtest request failed.");
@@ -275,6 +287,21 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
       else res.end();
     }
   });
+}
+
+async function serveReact(res: ServerResponse, dir: string, path: string) {
+  const name = REACT_ASSET.exec(path)?.[1];
+  if (path.startsWith(`${REACT_BASE}/assets/`)) {
+    const type = name && !name.includes("..") ? REACT_TYPES[extname(name)] : undefined;
+    const bytes = type ? await readFile(resolve(dir, "assets", name!)).catch(() => undefined) : undefined;
+    if (!bytes) { reply(res, 404, "application/json; charset=utf-8", JSON.stringify({ error: "Not found." })); return; }
+    // Content-hashed file names: a changed file always has a new name.
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    reply(res, 200, type!, bytes); return;
+  }
+  const page = await readFile(resolve(dir, "index.html")).catch(() => undefined);
+  if (!page) { reply(res, 404, "text/plain; charset=utf-8", "The React UI is not built. Run `npm run ui:build`, then reload; the legacy UI is at /."); return; }
+  reply(res, 200, "text/html; charset=utf-8", page);
 }
 
 function reply(res: ServerResponse, code: number, type: string, body: string | Buffer) {

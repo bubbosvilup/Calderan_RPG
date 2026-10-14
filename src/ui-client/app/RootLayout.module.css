@@ -1,0 +1,15 @@
+.skip {
+  position: absolute;
+  left: var(--spacing-2);
+  top: var(--spacing-2);
+  z-index: var(--z-toast);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  transform: translateY(-200%);
+}
+
+.skip:focus {
+  transform: none;
+}

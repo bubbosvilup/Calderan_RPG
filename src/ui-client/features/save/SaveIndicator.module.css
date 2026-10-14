@@ -1,0 +1,21 @@
+.save {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--font-size-xs);
+}
+
+.saved {
+  color: var(--color-text-muted);
+}
+
+.unsaved,
+.saving {
+  color: var(--color-text-soft);
+}
+
+.failed,
+.tooLarge {
+  color: var(--color-danger);
+  font-weight: 600;
+}

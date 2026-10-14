@@ -12,6 +12,7 @@ Status: Current. Last reconciled: 2026-10-13 (Repository Cleanup B, documentatio
 | How is narration read (movement, commerce, speaker, identity facts)? | **NORMATIVE** [NarrationFacts](architecture/NARRATION_FACTS.md) |
 | How is persistence (save files, schema, side stores) documented? | **NORMATIVE** [Persistence](architecture/PERSISTENCE.md) (current format first; older sections marked historical) |
 | What does the player/UI contract look like? | **NORMATIVE** [UI](UI.md), [UI engine contract](UI_ENGINE_CONTRACT.md) |
+| How is the React frontend built, and how does it replace the legacy UI? | ACTIVE [Frontend architecture](architecture/FRONTEND_ARCHITECTURE.md), [UI migration roadmap](roadmap/UI_MIGRATION_ROADMAP.md) |
 | How do trades and person offers work? | **NORMATIVE** [Actual Offer](architecture/ACTUAL_OFFER.md) |
 | What is core and what is optional? | **NORMATIVE** [Optional services](architecture/OPTIONAL_SERVICES.md) |
 | How are names, ids and reserved canonical names handled? | ACTIVE [Naming](architecture/NAMING.md) |

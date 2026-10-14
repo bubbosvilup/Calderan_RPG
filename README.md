@@ -4,7 +4,7 @@
 
 Caldrevan is a deterministic engine for long-running, AI-narrated roleplay. The world is the continent Helion; a campaign starts in the West, at the Calderan slave market, where the player character Nicco, an otherworlder, holds the Heartstone Tower. One language model writes the prose of each turn and a second one proposes state changes. The engine decides what is true: authored canon, who is where, who owns what, what each character knows, money, legal status, household membership, and every change to any of it.
 
-It runs locally: a small web UI (`npm run play:ui`) plays persistent campaigns with manual save and autosave.
+It runs locally: a small web UI (`npm run play:ui`) plays persistent campaigns with manual save and autosave. A new React frontend is replacing that UI in phases: it is served by the same server at `/app/` after `npm run ui:build`, while the legacy UI stays at `/` ([Frontend architecture](docs/architecture/FRONTEND_ARCHITECTURE.md), [UI migration roadmap](docs/roadmap/UI_MIGRATION_ROADMAP.md)).
 
 ## Core Design Rule
 
@@ -158,6 +158,10 @@ npm run check:architecture        # read-only module cycle check over src/
 npm run check:docs                # read-only link check of the current documentation
 npm run play:ui                   # persistent campaigns at http://127.0.0.1:3000 (Ctrl+C saves and stops)
 npm run play:ui -- --playtest     # disposable session, never saved
+npm run ui:build                  # build the React frontend to dist/ui-client/ (then served at http://127.0.0.1:3000/app/)
+npm run ui:dev                    # React dev server at http://127.0.0.1:5173/app/, proxying /api to a running play:ui
+npm run ui:typecheck              # typecheck the React frontend
+npm run ui:test                   # React component tests (Vitest, jsdom; offline)
 npm run inspect:scene             # offline [CURRENT SCENE] scenarios
 npm run inspect:time              # offline calendar / weather matrix
 npm run inspect:context           # offline context inspection
@@ -194,6 +198,6 @@ The long view and its order live in the [Master Roadmap](docs/MASTER_ROADMAP.md)
 
 - [Documentation index](docs/README.md): current architecture, status and guides, separated from historical evidence
 - [Current state](docs/CURRENT_STATE.md) · [Architecture](docs/ARCHITECTURE.md) · [NarrationFacts](docs/architecture/NARRATION_FACTS.md) · [Actual Offer](docs/architecture/ACTUAL_OFFER.md) · [Persistence](docs/architecture/PERSISTENCE.md) · [Optional services](docs/architecture/OPTIONAL_SERVICES.md)
-- [UI](docs/UI.md) · [UI engine contract](docs/UI_ENGINE_CONTRACT.md) · [Image system](docs/IMAGE_SYSTEM.md) · [Heartstone](docs/HEARTSTONE.md) · [Configuration](docs/CONFIGURATION.md) · [Testing](docs/TESTING.md)
+- [UI](docs/UI.md) · [UI engine contract](docs/UI_ENGINE_CONTRACT.md) · [Frontend architecture](docs/architecture/FRONTEND_ARCHITECTURE.md) · [Image system](docs/IMAGE_SYSTEM.md) · [Heartstone](docs/HEARTSTONE.md) · [Configuration](docs/CONFIGURATION.md) · [Testing](docs/TESTING.md)
 - [Authoring guide](docs/authoring/AUTHORING_GUIDE.md) · [Entity schema](docs/schemas/ENTITY_SCHEMA.md)
 - Historical evidence (block and milestone reports, audits, live runs; never updated to match the present): [docs/evaluations/](docs/evaluations/README.md)

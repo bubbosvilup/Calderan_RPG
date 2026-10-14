@@ -1,6 +1,10 @@
 # UI (implemented controls only)
 
-Status: Current. Last reconciled: 2026-10-12 (main c0608a6). Source of truth: `src/ui/index.html`, `client.js`, `server.ts`, and the read models in `src/app/`. Contract: [UI engine contract](UI_ENGINE_CONTRACT.md). The UI is a local vanilla web client (`npm run play:ui`); it reads read models and is never a gameplay authority.
+Status: Current. Last reconciled: 2026-10-14 (React UI-1 added; legacy sections unchanged since main c0608a6). Source of truth: `src/ui/index.html`, `client.js`, `server.ts` (legacy), `src/ui-client/` (React), and the read models in `src/app/`. Contract: [UI engine contract](UI_ENGINE_CONTRACT.md). The UI is a local vanilla web client (`npm run play:ui`); it reads read models and is never a gameplay authority.
+
+## Two clients during the migration
+
+The **legacy UI** described below is served at `/` and remains the complete one. The **React UI** (`src/ui-client/`, built with `npm run ui:build`) is served by the same server at `/app/` and is replacing it in phases ([Frontend architecture](architecture/FRONTEND_ARCHITECTURE.md), [UI migration roadmap](roadmap/UI_MIGRATION_ROADMAP.md)). Phase UI-1 covers: campaign selection, load and create (`/app/`), the play screen (`/app/play`, `/app/play/<campaign id>`) with transcript, composer (including `/location`), progress words, player summary and gold, scene summary, scene participants, temporary people with Keep track, the household list, the character drawer (Appearance, Story & knowledge) with NPC+ promotion, the Actual Offer card, pending confirmation cards, the save indicator and Save, and stale-revision recovery. Both clients use the same HTTP API and the same rules below; the React UI never shows internal ids (including the location id). Not yet in the React UI: Inventory, the Nicco page and NPC+ editors, portraits and the gallery, the Household screen, campaign delete, save banners and narrator alternatives.
 
 ## Navigation
 

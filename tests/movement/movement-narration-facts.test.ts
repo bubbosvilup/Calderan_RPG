@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, existsSync } from "node:fs";
+import { sourceFiles } from "../support/source-paths.js";
 import { turnFixture } from "../../src/dev/support/turn-fixture.js";
 import { metadata, collect } from "../support/turn-fixtures.js";
 import { TurnCoordinator } from "../../src/turn/coordinator/turn-coordinator.js";
@@ -187,7 +187,7 @@ test("the player's own travel plus a matching claim passes; a claim for a place 
 });
 test("source audit: ONE location-claim extractor; authorization and audit read its facts and own no location regex", () => {
   const owners = SRC.concat(walk("src/turn/narration-facts")).filter(p => /"location_claim"/.test(readFileSync(p, "utf8")));
-  assert.deepEqual(owners.map(p => p.replace(/\\/g, "/")).sort(), ["src/turn/movement/movement-evidence.ts", "src/turn/narration-facts/location-forms.ts", "src/turn/narration-facts/types.ts"]);
+  assert.deepEqual([...owners].sort(), ["src/turn/movement/movement-evidence.ts", "src/turn/narration-facts/location-forms.ts", "src/turn/narration-facts/types.ts"]);
   const authorization = readFileSync("src/turn/stages/authorization.ts", "utf8"), audit = readFileSync("src/turn/audit/narration-audit.ts", "utf8"), evidence = readFileSync("src/turn/movement/movement-evidence.ts", "utf8");
   assert.match(audit, /locationClaimsFromFacts\(facts\)/); assert.match(evidence, /locationClaimsFromFacts\(facts\)/);
   assert.match(authorization, /characterMovementsFromFacts\(facts,/);
@@ -245,7 +245,8 @@ test("two women, a bare pronoun: nobody moves (ambiguity fails closed) and the a
 });
 
 // ------------------------------------------------------------------------------------------------ source audit: no movement grammar outside narration-facts
-function walk(dir: string): string[] { return readdirSync(dir).flatMap(n => { const p = join(dir, n); return statSync(p).isDirectory() ? walk(p) : p.endsWith(".ts") ? [p] : []; }); }
+/** POSIX paths on every platform (tests/support/source-paths.ts), so the `narration-facts/` filter and the expected lists match on Windows too. */
+const walk = (dir: string) => sourceFiles(dir);
 const SRC = walk("src").filter(p => !p.includes("narration-facts/"));
 test("source audit: the legacy movement/departure readers are gone and nothing outside narration-facts owns a narration movement regex", () => {
   assert.equal(existsSync("src/turn/scene-departure.ts"), false);

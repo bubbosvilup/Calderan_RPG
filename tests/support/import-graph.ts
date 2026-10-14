@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, dirname, resolve, relative } from "node:path";
+import { toPosixPath } from "./source-paths.js";
 /** Static import graph of src/ (type-only imports included: they still couple modules). Used by the architecture test and the report. */
 export function graph(root = "src", runtimeOnly = false): Map<string, string[]> {
   const files: string[] = [];
@@ -8,8 +9,8 @@ export function graph(root = "src", runtimeOnly = false): Map<string, string[]> 
   const g = new Map<string, string[]>();
   for (const f of files) {
     const text = readFileSync(f, "utf8");
-    const deps = [...text.matchAll(/(?:^|\n)\s*(?:import|export)\s+(type\s+)?(?:[^'"\n]*?\s+from\s+)?["'](\.[^"']+)["']/g)].filter(m => !(runtimeOnly && m[1])).map(m => relative(".", resolve(dirname(f), m[2]!.replace(/\.js$/, ".ts"))).replaceAll("\\", "/"));
-    g.set(f.replaceAll("\\", "/"), [...new Set(deps)].filter(d => d.endsWith(".ts")));
+    const deps = [...text.matchAll(/(?:^|\n)\s*(?:import|export)\s+(type\s+)?(?:[^'"\n]*?\s+from\s+)?["'](\.[^"']+)["']/g)].filter(m => !(runtimeOnly && m[1])).map(m => toPosixPath(relative(".", resolve(dirname(f), m[2]!.replace(/\.js$/, ".ts")))));
+    g.set(toPosixPath(f), [...new Set(deps)].filter(d => d.endsWith(".ts")));
   }
   return g;
 }

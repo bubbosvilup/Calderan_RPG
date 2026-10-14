@@ -13,6 +13,7 @@ import { resolveTurnIntent, type IntentStageInput } from "../../src/turn/stages/
 import { deriveTurnEvidence } from "../../src/turn/authorization/turn-evidence.js";
 import { projectKnowledgeAccess } from "../../src/turn/context/narrative-authority.js";
 import { countingController, NARRATION, sessionWith, stepNarrator, type NarratorStep } from "../support/turn-reliability-fixtures.js";
+import { sourceFiles } from "../support/source-paths.js";
 
 /**
  * Consolidation block 5A, AUTH-1: the player's words "I free <person>" PROPOSE a manumission; only the explicit Confirm in the interface commits it.
@@ -358,13 +359,12 @@ test("A23: concurrent submissions of the same turn_key run once and create one p
   } finally { await h.session.shutdown({ discard_unsaved: true }); await rm(dir, { recursive: true, force: true }); }
 });
 test("A24: entry-point audit: the only production code that builds a `manumit` command is the confirm-time builder; legal-status mutation by text has no other path", async () => {
-  const { readdir } = await import("node:fs/promises");
-  const walk = async (dir: string): Promise<string[]> => (await Promise.all((await readdir(dir, { withFileTypes: true })).map(e => e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]))).flat();
-  const files = (await walk("src")).filter(f => f.endsWith(".ts") && !f.startsWith(join("src", "campaign")) && !f.startsWith(join("src", "dev")));
+  // POSIX paths on every platform (tests/support/source-paths.ts).
+  const files = sourceFiles("src").filter(f => !f.startsWith("src/campaign") && !f.startsWith("src/dev"));
   const holders = { manumit: [] as string[], set_legal_status: [] as string[], transfer_person: [] as string[] };
   for (const file of files) {
     const text = await readFile(file, "utf8");
-    for (const kind of Object.keys(holders) as (keyof typeof holders)[]) if (new RegExp(`kind: "${kind}"`).test(text)) holders[kind].push(file.replaceAll("\\", "/"));
+    for (const kind of Object.keys(holders) as (keyof typeof holders)[]) if (new RegExp(`kind: "${kind}"`).test(text)) holders[kind].push(file);
   }
   assert.deepEqual(holders.manumit, ["src/turn/authorization/pending-proposals.ts"], "manumit is built only for the deterministic confirm command");
   // The remaining two are the Actual Offer plan builders (settled only by the explicit Accept), never a text-to-state shortcut.

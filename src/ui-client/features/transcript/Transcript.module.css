@@ -1,0 +1,122 @@
+.wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--radius-sm);
+}
+
+.column {
+  display: grid;
+  gap: var(--spacing-4);
+  max-width: var(--layout-story-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-6) var(--spacing-4) var(--spacing-8);
+}
+
+.log {
+  display: grid;
+  gap: var(--spacing-5);
+}
+
+.message {
+  display: grid;
+  gap: var(--spacing-1);
+  /* Off-screen messages skip layout and paint; the intrinsic size keeps the scrollbar stable. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 6rem;
+}
+
+.speaker {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-caps);
+  color: var(--color-text-muted);
+}
+
+.text {
+  font-family: var(--font-story);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-story);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.narration {
+  color: var(--color-narration);
+  font-style: italic;
+}
+
+.dialogue {
+  color: var(--color-dialogue);
+}
+
+.player {
+  justify-self: end;
+  max-width: 85%;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
+  background: var(--color-player-bubble);
+}
+
+.player .text {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+}
+
+.system .text {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.pending {
+  display: grid;
+  gap: var(--spacing-5);
+}
+
+.sending {
+  opacity: 0.75;
+}
+
+.working .phase {
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-sm);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.jump {
+  position: absolute;
+  bottom: var(--spacing-3);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-2) var(--spacing-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-md);
+  font-size: var(--font-size-sm);
+  z-index: var(--z-sticky);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .working .phase {
+    animation: none;
+  }
+}

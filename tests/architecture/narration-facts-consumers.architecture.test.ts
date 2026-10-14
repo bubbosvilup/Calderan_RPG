@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { sourceFiles } from "../support/source-paths.js";
 
 /**
  * Consolidation block 11 - the final semantic architecture, asserted at source level:
@@ -12,12 +12,13 @@ import { join } from "node:path";
  * FACTS DESCRIBE. POLICIES DECIDE. CAMPAIGNSTATE OWNS TRUTH. AUDIT VERIFIES AGAINST THE SAME FACTS.
  * Each test is one of the twelve architecture assertions of docs/evaluations/CONSOLIDATION_BLOCK11_FINAL_SEMANTIC_ARCHITECTURE.md §11.
  */
-function walk(dir: string): string[] { return readdirSync(dir).flatMap(n => { const p = join(dir, n); return statSync(p).isDirectory() ? walk(p) : p.endsWith(".ts") ? [p] : []; }); }
+/** POSIX paths on every platform (tests/support/source-paths.ts), so the path filters and expected lists below match on Windows too. */
+const walk = (dir: string) => sourceFiles(dir);
 const code = (p: string) => readFileSync(p, "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
 const imports = (p: string) => [...readFileSync(p, "utf8").matchAll(/^import[^;]*?from "([^"]+)"/gm)].map(m => m[1]!);
 const FACTS = walk("src/turn/narration-facts");
 /** Runtime sources outside the fact layer. src/dev holds offline tools and live probes, not runtime readers. */
-const RUNTIME = walk("src").filter(p => !p.includes("narration-facts/") && !p.startsWith(join("src", "dev")));
+const RUNTIME = walk("src").filter(p => !p.includes("narration-facts/") && !p.startsWith("src/dev"));
 const usesFacts = (p: string) => imports(p).some(s => /narration-facts\/index\.js$/.test(s));
 
 test("1. one NarrationFactSource per turn: the coordinator creates exactly one and hands it to authorization, audit and commit preparation", () => {
@@ -60,11 +61,11 @@ test("4. identity / name consumers read the shared identity facts and scene read
  */
 const SPEECH_LIST = /says\??\||\|says\b|\(\?:says/;
 const CLASSIFIED: Readonly<Record<string, string>> = {
-  [join("src", "turn", "authorization", "evidence-authorization.ts")]: "F: verifies the Controller's cited knowledge-communication evidence ('X tells Nicco that ...'); not narration attribution",
-  [join("src", "turn", "authorization", "turn-evidence.ts")]: "F: verifies Controller transfer / knowledge evidence quotes; not narration attribution",
-  [join("src", "turn", "audit", "grounding-audit.ts")]: "D: 'the law says' inside a legal-procedure claim",
-  [join("src", "turn", "audit", "narration-audit.ts")]: "B + D: the player's own speech act in their input; 'everyone says' as a rumor source inside a quote",
-  [join("src", "turn", "optional", "mannerism-portrayal-gate.ts")]: "D: optional Mannerism diagnostic for a named observer's habit remark; never authority",
+  "src/turn/authorization/evidence-authorization.ts": "F: verifies the Controller's cited knowledge-communication evidence ('X tells Nicco that ...'); not narration attribution",
+  "src/turn/authorization/turn-evidence.ts": "F: verifies Controller transfer / knowledge evidence quotes; not narration attribution",
+  "src/turn/audit/grounding-audit.ts": "D: 'the law says' inside a legal-procedure claim",
+  "src/turn/audit/narration-audit.ts": "B + D: the player's own speech act in their input; 'everyone says' as a rumor source inside a quote",
+  "src/turn/optional/mannerism-portrayal-gate.ts": "D: optional Mannerism diagnostic for a named observer's habit remark; never authority",
 };
 test("5. speaker attribution exists only in the fact layer (every other speech-verb list is classified and attributes nobody)", () => {
   const found = RUNTIME.filter(p => SPEECH_LIST.test(code(p))).sort();
@@ -75,7 +76,7 @@ test("5. speaker attribution exists only in the fact layer (every other speech-v
 
 test("6. recipient attribution exists only in the fact layer; commerce consumes it as a fact", () => {
   assert.match(code("src/turn/narration-facts/identity-forms.ts"), /kind: "recipient_attribution"/);
-  assert.deepEqual(RUNTIME.filter(p => /recipient_attribution/.test(code(p))), [join("src", "turn", "commerce", "commerce-evidence.ts")]);
+  assert.deepEqual(RUNTIME.filter(p => /recipient_attribution/.test(code(p))), ["src/turn/commerce/commerce-evidence.ts"]);
   assert.deepEqual(RUNTIME.filter(p => /\b(?:SAYS_TO|ADDRESSED|VOCATIVE_HEAD|VOCATIVE_TAIL)\b/.test(code(p))), []);
 });
 

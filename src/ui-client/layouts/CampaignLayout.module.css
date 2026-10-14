@@ -1,0 +1,43 @@
+.shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: var(--layout-header-height) 1fr;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.brand {
+  font-family: var(--font-story);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.main {
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-4);
+  display: grid;
+  gap: var(--spacing-6);
+  align-content: start;
+}
+
+.main h1 {
+  font-family: var(--font-story);
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-3);
+}
+
+.main p {
+  color: var(--color-text-soft);
+  margin-bottom: var(--spacing-3);
+}

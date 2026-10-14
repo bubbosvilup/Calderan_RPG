@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync } from "node:fs";
+import { sourceFiles } from "../support/source-paths.js";
 import { turnFixture } from "../../src/dev/support/turn-fixture.js";
 import { buildTurnContext } from "../../src/turn/context/context-builder.js";
 import { createFactSource, extractInputCommerceFacts, extractNarrationFacts, type CommerceFact, type NarrationFactScope } from "../../src/turn/narration-facts/index.js";
@@ -78,14 +78,15 @@ test("ownership promised on a condition, a denied claim and a negotiation line a
 });
 
 // ------------------------------------------------------------------------------------------------ single source (source-level)
-const walk = (dir: string): string[] => readdirSync(dir).flatMap(n => { const p = join(dir, n); return statSync(p).isDirectory() ? walk(p) : p.endsWith(".ts") ? [p] : []; });
+/** POSIX paths on every platform (tests/support/source-paths.ts). */
+const walk = (dir: string) => sourceFiles(dir);
 const SRC = walk("src");
 const code = (p: string) => readFileSync(p, "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
 test("source audit: the legacy commerce grammar is gone; trade-price.ts is the one low-level numeric helper", () => {
   const banned = /\b(?:statedGold|pricesInText|goldAmounts|fractionalPrice|unsupportedCurrency|NOT_AN_OFFER|amountsIn|pricesOf)\b|const HYPOTHETICAL = \/\\\?/;
   assert.deepEqual(SRC.filter(p => banned.test(code(p))), []);
   const readers = SRC.filter(p => /readPrices\(/.test(code(p)) && !p.endsWith("trade-price.ts"));
-  assert.deepEqual(readers.map(p => p.replace(/\\/g, "/")), ["src/turn/narration-facts/commerce-forms.ts"], "ONE commerce extractor reads prices");
+  assert.deepEqual(readers, ["src/turn/narration-facts/commerce-forms.ts"], "ONE commerce extractor reads prices");
 });
 
 test("source audit: Actual Offer construction, trade authorization and the settlement audit all read the shared commerce facts", () => {

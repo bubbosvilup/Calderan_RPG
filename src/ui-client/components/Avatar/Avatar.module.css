@@ -1,0 +1,33 @@
+.avatar {
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-strong);
+}
+
+.sm {
+  width: 2rem;
+}
+
+.md {
+  width: 2.5rem;
+}
+
+.lg {
+  width: 4rem;
+}
+
+.initial {
+  font-family: var(--font-story);
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
+
+.sm .initial {
+  font-size: var(--font-size-sm);
+}
+
+.lg .initial {
+  font-size: var(--font-size-xl);
+}

@@ -1,0 +1,78 @@
+.frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  background: var(--image-placeholder);
+}
+
+.avatar {
+  aspect-ratio: var(--ratio-avatar);
+}
+
+.portrait {
+  aspect-ratio: var(--ratio-portrait);
+}
+
+.fullBody {
+  aspect-ratio: var(--ratio-full-body);
+}
+
+.scene {
+  aspect-ratio: var(--ratio-scene);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.contain {
+  object-fit: contain;
+  object-position: center;
+}
+
+/* While loading, the image is transparent above the placeholder; it fades in once decoded. */
+.frame[data-state="loading"] .image {
+  opacity: 0;
+}
+
+.frame[data-state="loaded"] .image {
+  opacity: 1;
+  transition: opacity var(--duration-medium) var(--ease-standard);
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, var(--image-placeholder) 30%, var(--image-placeholder-highlight) 50%, var(--image-placeholder) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .placeholder {
+    animation: none;
+  }
+}

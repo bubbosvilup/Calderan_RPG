@@ -5,6 +5,8 @@ import { once } from "node:events";
 const { createPlaytestServer } = await fromBuild("src/ui/server.js");
 const { stepNarrator, countingController, sessionWith } = await fromBuild("tests/support/turn-reliability-fixtures.js");
 const { transfer } = await fromBuild("tests/support/turn-fixtures.js");
+// The legacy client's closed #status vocabulary, pinned to src/ui/client.js by tests/ui/legacy-turn-status.test.ts.
+const { isLegacyPendingStatus, isLegacyPhaseStatus } = await fromBuild("tests/support/legacy-turn-status.js");
 
 const BAD = "Brenna accepts boots from Nicco. Gerome takes the ring from Nicco.";
 const GOOD = "Brenna accepts boots from Nicco.";
@@ -50,7 +52,10 @@ console.log(JSON.stringify(result, null, 1));
 // B2 (TEST-9): the report is asserted; a wrong outcome exits non-zero.
 const checks = [
   ["the draft prose is never visible, before, during or after the turn", !result.baseline_has_ring_phrase && !result.draft_marker_ever_visible && result.final_has_no_draft],
-  ["mid-turn: neutral status words only, no narration", result.mid_turn_has_no_narration && result.mid_turn_status_words.length > 0 && result.mid_turn_status_words.every(w => /^(?:Thinking…|Narrating…|Resolving…)$/.test(w))],
+  // Mid-turn the client may show its submit-time word ("Generating…") or a server phase word; nothing else. At least one phase word must
+  // appear, so the check still fails when progress events never reach the page.
+  ["mid-turn: neutral status words only (closed legacy vocabulary, at least one progress phase), no narration", result.mid_turn_has_no_narration && result.mid_turn_status_words.length > 0
+    && result.mid_turn_status_words.every(isLegacyPendingStatus) && result.mid_turn_status_words.some(isLegacyPhaseStatus)],
   ["the final prose appears exactly once, also after a reload", result.final_prose_occurrences === 1 && result.after_reload_occurrences === 1],
   ["one turn request carrying text, turn_key and expected_revision", result.turn_requests === 1 && result.request_body_keys.join(",") === "expected_revision,text,turn_key"],
   ["one commit", result.revision_after === 2],

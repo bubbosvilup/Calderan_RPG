@@ -1,0 +1,104 @@
+.region {
+  display: grid;
+  gap: var(--spacing-3);
+}
+
+.card {
+  display: grid;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-border-strong);
+  border-left-width: 4px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.buy {
+  border-left-color: var(--color-trade-buy);
+}
+
+.sell {
+  border-left-color: var(--color-trade-sell);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--spacing-3);
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-caps);
+  color: var(--color-text-muted);
+}
+
+.direction {
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.04em;
+}
+
+.buy .direction {
+  color: var(--color-trade-buy);
+}
+
+.sell .direction {
+  color: var(--color-trade-sell);
+}
+
+.person {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-soft);
+}
+
+.price {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.party {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-soft);
+}
+
+.lines {
+  display: grid;
+  gap: var(--spacing-1);
+  padding-left: var(--spacing-4);
+  list-style: disc;
+  font-family: var(--font-story);
+  font-size: var(--font-size-md);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-1);
+}
+
+.purse,
+.reason {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.receipt {
+  font-size: var(--font-size-sm);
+  color: var(--color-success);
+}
+
+.notice {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.error {
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+}

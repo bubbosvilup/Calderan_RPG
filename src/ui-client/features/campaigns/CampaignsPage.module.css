@@ -1,0 +1,79 @@
+.section {
+  display: grid;
+  gap: var(--spacing-3);
+}
+
+.heading {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-caps);
+  color: var(--color-text-muted);
+}
+
+.list {
+  display: grid;
+  gap: var(--spacing-2);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.info {
+  display: grid;
+  gap: var(--spacing-1);
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-story);
+  font-size: var(--font-size-lg);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.form {
+  display: grid;
+  gap: var(--spacing-2);
+  padding: var(--spacing-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.form label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-soft);
+  margin-top: var(--spacing-2);
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-sunken);
+}
+
+.problem {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}

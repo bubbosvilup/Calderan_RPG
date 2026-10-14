@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize } from "node:path";
 import ts from "typescript";
+import { toPosixPath } from "../support/source-paths.js";
 
 /**
  * Dev tooling boundaries (Repository Cleanup E). Parsed with the TypeScript AST and resolved as paths, not grepped:
@@ -30,7 +31,7 @@ function imports(file: string): string[] {
   const out: string[] = [];
   const add = (spec: string) => {
     if (!spec.startsWith(".")) return;
-    let target = normalize(join(dirname(file), spec)).replaceAll("\\", "/");
+    let target = toPosixPath(normalize(join(dirname(file), spec)));
     if (target.startsWith(".build/")) target = target.slice(".build/".length);
     out.push(target.endsWith(".js") && existsSync(target.slice(0, -3) + ".ts") ? target.slice(0, -3) + ".ts" : target);
   };
@@ -39,7 +40,7 @@ function imports(file: string): string[] {
     if (ts.isCallExpression(n) && n.expression.kind === ts.SyntaxKind.ImportKeyword && n.arguments[0] && ts.isStringLiteralLike(n.arguments[0])) add(n.arguments[0].text);
     // scripts/lib/browser-env.mjs `fromBuild("src/...js")` imports a compiled module by its path under .build/.
     if (ts.isCallExpression(n) && n.expression.getText() === "fromBuild" && n.arguments[0] && ts.isStringLiteralLike(n.arguments[0])) {
-      const target = normalize(n.arguments[0].text).replaceAll("\\", "/");
+      const target = toPosixPath(normalize(n.arguments[0].text));
       out.push(target.endsWith(".js") && existsSync(target.slice(0, -3) + ".ts") ? target.slice(0, -3) + ".ts" : target);
     }
     ts.forEachChild(n, visit);

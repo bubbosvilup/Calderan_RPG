@@ -1,0 +1,133 @@
+/*
+ * Caldrevan design tokens. The ONLY place raw colors, font stacks and shadow recipes live (an architecture test enforces this for the
+ * CSS Modules). Components read semantic tokens, never palette steps, so a later thematic skin (district themes, illustrated backgrounds)
+ * re-points these variables under a [data-theme] selector without touching component CSS.
+ */
+:root {
+  /* palette: cool slate stone, parchment text, brass accent */
+  --palette-stone-950: #0e1014;
+  --palette-stone-900: #14171d;
+  --palette-stone-850: #1a1e25;
+  --palette-stone-800: #20252e;
+  --palette-stone-700: #2c323d;
+  --palette-stone-600: #3b4350;
+  --palette-stone-400: #8a93a3;
+  --palette-parchment-100: #efe7d6;
+  --palette-parchment-300: #cfc5b0;
+  --palette-brass-300: #e3c27a;
+  --palette-brass-500: #c79a45;
+  --palette-brass-700: #7d5f27;
+  --palette-sky-300: #9cc3e8;
+  --palette-moss-300: #9fcf9a;
+  --palette-ember-300: #f0a07a;
+  --palette-ember-500: #d9643a;
+  --palette-amber-300: #f2c66d;
+
+  /* semantic surfaces */
+  --color-bg: var(--palette-stone-950);
+  --color-surface: var(--palette-stone-900);
+  --color-surface-raised: var(--palette-stone-850);
+  --color-surface-sunken: #0b0d10;
+  --color-surface-hover: var(--palette-stone-800);
+  --color-border: var(--palette-stone-700);
+  --color-border-strong: var(--palette-stone-600);
+  --color-overlay: rgb(5 6 8 / 0.66);
+
+  /* semantic text */
+  --color-text: var(--palette-parchment-100);
+  --color-text-muted: var(--palette-stone-400);
+  --color-text-soft: var(--palette-parchment-300);
+  --color-text-on-accent: var(--palette-stone-950);
+
+  /* accent and states */
+  --color-accent: var(--palette-brass-300);
+  --color-accent-strong: var(--palette-brass-500);
+  --color-accent-subtle: rgb(227 194 122 / 0.12);
+  --color-focus: var(--palette-sky-300);
+  --color-gold: var(--palette-brass-300);
+  --color-success: var(--palette-moss-300);
+  --color-warning: var(--palette-amber-300);
+  --color-danger: var(--palette-ember-300);
+  --color-danger-strong: var(--palette-ember-500);
+  --color-danger-subtle: rgb(217 100 58 / 0.14);
+  --color-warning-subtle: rgb(242 198 109 / 0.12);
+  --color-info-subtle: rgb(156 195 232 / 0.1);
+
+  /* story text: narration (starred actions) and dialogue */
+  --color-narration: var(--palette-sky-300);
+  --color-dialogue: var(--palette-parchment-100);
+  --color-player-bubble: var(--palette-stone-850);
+
+  /* trade direction (text and icon carry the meaning; color only reinforces it) */
+  --color-trade-buy: var(--palette-moss-300);
+  --color-trade-sell: var(--palette-amber-300);
+
+  /* typography */
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-story: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --line-height-tight: 1.25;
+  --line-height-body: 1.55;
+  --line-height-story: 1.7;
+  --letter-spacing-caps: 0.09em;
+
+  /* spacing (4px grid) */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+
+  /* shape and depth */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 6px 18px rgb(0 0 0 / 0.35);
+  --shadow-lg: 0 18px 48px rgb(0 0 0 / 0.5);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-focus);
+
+  /* layout */
+  --layout-header-height: 3.5rem;
+  --layout-left-width: 17.5rem;
+  --layout-right-width: 20rem;
+  --layout-story-max-width: 46rem;
+  --layout-drawer-width: 26rem;
+
+  /* images: aspect ratios shared by every image surface (avatars, portraits, full body, scene art) */
+  --ratio-avatar: 1 / 1;
+  --ratio-portrait: 3 / 4;
+  --ratio-full-body: 1 / 2;
+  --ratio-scene: 16 / 9;
+  --image-placeholder: var(--palette-stone-800);
+  --image-placeholder-highlight: var(--palette-stone-700);
+
+  /* background art seam: a later illustrated scene sets this to url(...) on the play layout */
+  --play-backdrop-image: none;
+
+  /* motion */
+  --duration-fast: 120ms;
+  --duration-medium: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --z-sticky: 10;
+  --z-drawer: 40;
+  --z-toast: 50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-medium: 0ms;
+  }
+}
