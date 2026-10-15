@@ -120,3 +120,13 @@ test("react client: the player is never an NPC+ in the client (no premium or NPC
   const files = app.filter(f => /\/features\/character\//.test(f));
   for (const file of files) assert.doesNotMatch(withoutComments(file), /premium_characters|npc_plus|npcPlus|NPC\+/, file);
 });
+
+test("React client: no two modules in a folder share a base name apart from case (Windows and macOS resolve `./Name` to either)", () => {
+  const seen = new Map<string, string>();
+  for (const file of sourceFiles("src/ui-client").map(toPosixPath).filter(f => /\.(ts|tsx)$/.test(f) && !/\.test\./.test(f))) {
+    const key = file.replace(/\.(ts|tsx)$/, "").toLowerCase();
+    const earlier = seen.get(key);
+    assert.ok(!earlier || earlier === file.replace(/\.(ts|tsx)$/, ""), `${file} collides with ${earlier} on a case-insensitive file system`);
+    seen.set(key, file.replace(/\.(ts|tsx)$/, ""));
+  }
+});

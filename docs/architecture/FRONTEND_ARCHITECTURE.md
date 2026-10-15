@@ -57,7 +57,7 @@ src/ui-client/
     confirmations/               ConfirmationCard (the one pattern), PendingConfirmations
     characters/                  CharacterSidebar, CharacterDrawer, PromoteControl
     inventory/                   InventoryPage (All / Carried / Equipped), item cards, item detail, read-only equipment panel
-    character/                   PlayerCharacterPage, AppearanceForm (+ pure appearanceForm.ts), GenerationControls, PortraitGallery, PortraitLightbox, usePortraitActions
+    character/                   PlayerCharacterPage, AppearanceForm (+ pure appearanceFields.ts), GenerationControls, PortraitGallery, PortraitLightbox, usePortraitActions
     player/, scene/, save/, campaigns/
   components/                    shared primitives with a current use: Button, Alert, Avatar, Badge, Drawer, ErrorState/EmptyState, Image, Modal, Spinner, Tabs
   layouts/                       PlayLayout (responsive 3/2/1 columns), CampaignLayout

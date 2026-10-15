@@ -4,7 +4,7 @@ import { Alert } from "../../components/Alert/Alert";
 import { Badge } from "../../components/Badge/Badge";
 import { Button } from "../../components/Button/Button";
 import { errorMessage, useSessionAction } from "../../state/serverState";
-import { GROUPS, profilePatch, type FormField } from "./appearanceForm";
+import { GROUPS, profilePatch, type FormField } from "./appearanceFields";
 import styles from "./Character.module.css";
 
 /**

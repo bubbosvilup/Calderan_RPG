@@ -9,7 +9,7 @@ import { Image } from "../../components/Image/Image";
 import { playPath } from "../../lib/paths";
 import { useActionBlockedReason } from "../../state/serverState";
 import { AppearanceForm } from "./AppearanceForm";
-import { formFields } from "./appearanceForm";
+import { formFields } from "./appearanceFields";
 import { GenerationControls } from "./GenerationControls";
 import { PortraitGallery } from "./PortraitGallery";
 import { PortraitLightbox } from "./PortraitLightbox";
