@@ -46,5 +46,6 @@ export default defineConfig({
     include: ["**/*.test.{ts,tsx}"],
     setupFiles: ["./test/setup.ts"],
     restoreMocks: true,
+    testTimeout: 20000,
   },
 });
