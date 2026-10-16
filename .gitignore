@@ -30,3 +30,4 @@ Thumbs.db
 
 # robaccia
 .tmp-*.log
+artifacts/ci/

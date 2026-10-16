@@ -44,7 +44,9 @@ jobs:
       - run: npm run ui:typecheck
       - run: npm run ui:test
       # npm test builds .build first; the architecture guards inside it read `git ls-files` (the checkout is a work tree).
-      - run: npm test
+      # `test:ci` is `npm test` plus a failure-only diagnostic (file, test, first error, first stack location) printed at the end of the log and
+      # uploaded as artifacts/ci/test-failures.txt when the job fails. Same tests, same assertions, same exit code.
+      - run: npm run test:ci
       # The 55-scenario modern benchmark reuses the .build that `npm test` just produced (no second build, no second heavy suite).
       - run: node .build/tests/benchmark/run.js
       - run: npm run ui:build
@@ -57,11 +59,13 @@ jobs:
         run: npx playwright install chromium
       # All eleven checks (nine legacy-UI, two React), one at a time, offline with scripted providers and a fake image generator.
       - run: npm run check:browser
-      - name: Upload browser screenshots on failure
+      - name: Upload failure diagnostics and browser screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: browser-screenshots-${{ matrix.os }}
-          path: artifacts/local/browser
+          name: failure-diagnostics-${{ matrix.os }}
+          path: |
+            artifacts/local/browser
+            artifacts/ci
           if-no-files-found: ignore
           retention-days: 7
