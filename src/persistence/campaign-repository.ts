@@ -108,18 +108,27 @@ export class FileCampaignRepository implements CampaignSaveRepository {
   private async info(path: string): Promise<SaveFileInfo | undefined> {
     try { return await this.#fs.info(path); } catch (error) { if (nodeCode(error) === "ENOENT") return undefined; throw error; }
   }
-  /** Reject pre-existing links/junctions in every directory component, including configured root. */
+  /**
+   * Reject pre-existing links/junctions in every directory component, including configured root.
+   * Identity, not spelling: each component must be a real directory (never a link or junction) whose canonical location is a DIRECT CHILD of the
+   * canonical directory already verified. The caller's spelling of a component may differ from its canonical spelling (Windows 8.3 short names such
+   * as `RUNNER~1`, case) while naming the same directory; a component that resolves anywhere else is refused. Traversal continues from the
+   * canonical path, so nothing below a verified directory is judged by how the caller wrote the ancestors.
+   */
   private async directory(path: string, create: boolean): Promise<void> {
-    const root = parse(path).root; let current = root;
+    const root = parse(path).root; let canonical = root;
     for (const segment of path.slice(root.length).split(sep).filter(Boolean)) {
-      current = join(current, segment); let info = await this.info(current);
+      const current = join(canonical, segment); let info = await this.info(current);
       if (!info && create) {
         try { await this.#fs.mkdir(current); await this.#fs.syncDirectory(dirname(current)); }
         catch (error) { if (nodeCode(error) !== "EEXIST") throw error; }
         info = await this.info(current);
       }
       if (!info) throw new CampaignSaveError("not_found");
-      if (info.kind !== "directory" || pathKey(await this.#fs.realpath(current)) !== pathKey(current)) throw new CampaignSaveError("unsafe_path");
+      if (info.kind !== "directory") throw new CampaignSaveError("unsafe_path");
+      const real = await this.#fs.realpath(current);
+      if (pathKey(dirname(real)) !== pathKey(canonical)) throw new CampaignSaveError("unsafe_path");
+      canonical = real;
     }
   }
   private async regularFile(path: string): Promise<SaveFileInfo | undefined> {
