@@ -1,5 +1,9 @@
 import { afterEach, expect } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
+
+// The first render of a file is cold (module graph, jsdom, router); on a loaded Windows runner it can exceed the 1s default of findBy*/waitFor.
+// This is a time budget for async queries only; every assertion is unchanged.
+configure({ asyncUtilTimeout: 5000 });
 
 // Vitest runs without globals, so Testing Library's automatic cleanup is registered here.
 afterEach(() => cleanup());
