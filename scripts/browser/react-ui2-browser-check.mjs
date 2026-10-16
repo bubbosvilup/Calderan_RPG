@@ -31,6 +31,25 @@ const cleanups = [];
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", "base64");
 const metadata = { model: "offline-mock", usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 }, latency: { request_started_at: "2026-01-01T00:00:00Z", headers_ms: 1, time_to_first_token_ms: 1, elapsed_total_ms: 2 } };
 
+const openPages = [];
+// A timeout or crash must leave evidence, not just a stack: for every open page print its URL, visible text, captured problems and requests,
+// and save a screenshot (uploaded by CI on failure). The check still fails; nothing is retried or relaxed.
+process.on("uncaughtException", async error => {
+  console.log(`CRASH ${error?.message?.split("\n")[0] ?? error}`);
+  let index = 0;
+  for (const entry of openPages) {
+    index++;
+    try {
+      console.log(`  page ${index}: ${entry.page.url()}`);
+      console.log(`  text: ${(await entry.page.locator("body").innerText({ timeout: 3000 })).replace(/\s+/g, " ").slice(0, 600)}`);
+      console.log(`  problems: ${JSON.stringify(entry.problems.slice(0, 12))}`);
+      console.log(`  last posts: ${JSON.stringify(entry.requests.slice(-4).map(r => r.path))}`);
+      await entry.page.screenshot({ path: `${SHOTS}/crash-page-${index}.png`, timeout: 5000 });
+    } catch (inner) { console.log(`  (page ${index} unavailable: ${String(inner?.message ?? inner).split("\n")[0]})`); }
+  }
+  process.exit(1);
+});
+
 /** One page with console-error, page-error and request capture; `foreign` collects any request that leaves this server's origin. */
 async function openPage(url, viewport = { width: 1440, height: 900 }) {
   const page = await browser.newPage({ viewport });
@@ -39,6 +58,7 @@ async function openPage(url, viewport = { width: 1440, height: 900 }) {
   page.on("pageerror", e => problems.push(`pageerror: ${e.message}`));
   page.on("response", r => { if (r.status() >= 400) problems.push(`http ${r.status()}: ${new URL(r.url()).pathname}`); });
   page.on("request", r => { if (new URL(r.url()).origin !== origin) foreign.push(r.url()); if (r.method() === "POST") requests.push({ path: new URL(r.url()).pathname, body: r.postData() ?? "" }); });
+  openPages.push({ page, problems, requests });
   await page.goto(url);
   return { page, problems, requests, foreign };
 }
