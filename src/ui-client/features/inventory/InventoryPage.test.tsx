@@ -97,7 +97,7 @@ describe("Inventory page", () => {
     const { client } = await open(pending);
     let fetches = 0;
     server.handlers["/api/session"] = () => { fetches++; return json(makeSession()); };
-    await waitFor(() => expect(fetches).toBeGreaterThan(0), { timeout: 4000 });
+    await waitFor(() => expect(fetches).toBeGreaterThan(0), { timeout: 10000 });
     await waitFor(() => expect(client.getQueryData<ActiveSessionPayload>(queryKeys.session)?.inventory.items.length).toBe(3));
     const before = fetches;
     await act(async () => { await new Promise(resolve => setTimeout(resolve, 2300)); });

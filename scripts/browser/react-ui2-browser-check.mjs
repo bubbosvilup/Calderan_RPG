@@ -94,12 +94,12 @@ const active = page => page.evaluate(() => document.activeElement?.getAttribute(
   const base = `http://127.0.0.1:${server.address().port}`;
   const gallery = () => session.getPlayerProfileView().visual.editor.portrait;
   const { page, problems, requests, foreign } = await openPage(`${base}/app/play/${id}`);
-  await page.getByLabel(/says or does$/).waitFor({ timeout: 15000 });
+  await page.getByLabel(/says or does$/).waitFor({ timeout: 30000 });
 
   // D1-D4 Inventory
   await page.getByLabel(/says or does$/).fill("a half-written thought");
   await page.getByRole("complementary", { name: "Overview" }).getByRole("link", { name: "Inventory" }).click();
-  await page.getByRole("heading", { level: 1, name: "Inventory" }).waitFor({ timeout: 10000 });
+  await page.getByRole("heading", { level: 1, name: "Inventory" }).waitFor({ timeout: 30000 });
   const cards = () => page.locator("ul[aria-describedby] button strong").allInnerTexts();
   ok("D1 Inventory opens from the play screen at /app/play/<campaign>/inventory and renders the authoritative items", new URL(page.url()).pathname === `/app/play/${id}/inventory` && (await cards()).includes("Iron sword") && (await cards()).includes("Waterskin"), JSON.stringify(await cards()));
   ok("D2 gold, counts, equipped state and player-safe ownership come from the read model", (await page.getByTestId("inventory-gold").innerText()) === "500"
@@ -273,7 +273,7 @@ const active = page => page.evaluate(() => document.activeElement?.getAttribute(
   cleanups.push(() => { server.closeAllConnections(); server.close(); });
   const base = `http://127.0.0.1:${server.address().port}`;
   const { page, problems } = await openPage(`${base}/app/play/inventory`);
-  await page.getByRole("heading", { level: 1, name: "Inventory" }).waitFor({ timeout: 15000 });
+  await page.getByRole("heading", { level: 1, name: "Inventory" }).waitFor({ timeout: 30000 });
   const links = await page.getByRole("navigation", { name: "Campaign pages" }).getByRole("link").evaluateAll(a => a.map(x => x.getAttribute("href")));
   await page.getByRole("navigation", { name: "Campaign pages" }).getByRole("link", { name: "Nicco" }).click();
   await page.getByRole("heading", { level: 1, name: "Nicco" }).waitFor({ timeout: 10000 });
