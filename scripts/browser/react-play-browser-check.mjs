@@ -175,8 +175,9 @@ const noOverflow = page => page.evaluate(() => document.documentElement.scrollWi
   ok("A20 no horizontal overflow at 1440/1024/390; 3, 2 and 1 columns; side panels open as drawers on small screens",
     !layout[1440].overflow && !layout[1024].overflow && !layout[390].overflow && layout[1440].asides === 2 && layout[1024].asides === 1 && layout[390].asides === 0 && peopleDrawer, JSON.stringify(layout));
   ok("A21 no console errors and no uncaught errors or unhandled rejections", problems.length === 0, problems.join(" | "));
-  const legacy = await (await fetch(`${base}/`)).text();
-  ok("A22 the legacy UI is still served at /", /client\.js/.test(legacy));
+  const root = await fetch(`${base}/`, { redirect: "manual" });
+  ok("A22 the root URL forwards to the React app (there is no second UI)", root.status === 302 && root.headers.get("location") === "/app/");
+  ok("A23 the retired legacy assets are gone", (await fetch(`${base}/client.js`)).status === 404 && (await fetch(`${base}/style.css`)).status === 404);
   await page.close();
   await session.shutdown({ discard_unsaved: true });
 }

@@ -1,16 +1,21 @@
 .nav {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--spacing-1);
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .link,
 .active {
+  flex-shrink: 0;
   padding: var(--spacing-1) var(--spacing-3);
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   font-size: var(--font-size-sm);
   font-weight: 600;
+  white-space: nowrap;
   color: var(--color-text-soft);
   text-decoration: none;
 }
@@ -25,3 +30,11 @@
   color: var(--color-accent);
 }
 
+/* On a narrow header the navigation takes its own row, so every page stays one tap away. */
+@media (max-width: 639px) {
+  .nav {
+    order: 10;
+    flex: 1 0 100%;
+    padding-bottom: var(--spacing-2);
+  }
+}

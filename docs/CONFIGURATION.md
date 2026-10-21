@@ -38,6 +38,7 @@ See the topology table in [Current state](CURRENT_STATE.md#4-current-model-topol
 | `npm run play:ui` | Local web UI on `127.0.0.1:3000`. Default: **persistent campaigns** under `saves/campaigns/<campaign_id>/`, start screen, manual Save, autosave, save on Ctrl+C. |
 | `npm run play:ui -- --port=4000` | Different port. |
 | `npm run play:ui -- --playtest` | Disposable `ui_playtest` session under `saves/ui_playtest/`; never saved, discarded on shutdown. |
+| `Caldrevan.cmd` (Windows) | One-click launcher: starts `node .build/src/ui/play.js --port=3000 --control-stdin` and opens the game. See [Launcher](LAUNCHER.md); keys stay in the environment (`setx`). |
 | `npm run play` | Terminal dev harness. |
 
 ## Saves

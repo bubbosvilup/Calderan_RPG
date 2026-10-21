@@ -175,7 +175,7 @@ src/llm            OpenRouter narrator/controller/extractor/reflection/compresso
 src/persistence    save format, migrations, campaign repository, recovery
 src/app            GameSession, SessionHost, SessionView, read models (play, player, inventory, item visuals, canon avatars,
                    character capabilities), production wiring, autosave, item sprite jobs
-src/ui             local playtest server (server.ts) and the vanilla client (index.html, client.js, style.css)
+src/ui             local playtest server (server.ts, play.ts); it serves the React build at /app/ (the client is src/ui-client/)
 src/dev            developer CLIs and evaluation tools (never imported by production)
 tests/             offline unit, domain, matrix, replay, UI and save/load tests
 ```

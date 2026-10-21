@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { CharacterCardDto } from "../../api/types";
 import { Avatar } from "../../components/Avatar/Avatar";
 import { Badge } from "../../components/Badge/Badge";
@@ -12,21 +13,23 @@ const factStatus = (status: string) => (status === "knows" ? "Known" : status.re
  * Details of one character, limited to what the player character knows (the read model is already scoped). Personality and relations tabs
  * are later phases. The drawer closes itself when the character leaves the read model.
  */
-export function CharacterDrawer({ card, playerName, onClose, blockedReason, returnFocus }: {
+export function CharacterDrawer({ card, playerName, onClose, blockedReason, returnFocus, editHref = null }: {
   readonly card: CharacterCardDto | null;
   readonly playerName: string;
   readonly onClose: () => void;
   readonly blockedReason: string | null;
   readonly returnFocus?: () => HTMLElement | null;
+  /** The NPC+ editor page, offered only when the engine's capability says this character is editable now. */
+  readonly editHref?: string | null;
 }) {
   return (
     <Drawer open={!!card} onClose={onClose} title={card?.name ?? ""} eyebrow="Character" footer={`Showing only what ${playerName} knows`} {...(returnFocus ? { returnFocus } : {})}>
-      {card ? <CharacterDetails card={card} playerName={playerName} blockedReason={blockedReason} /> : null}
+      {card ? <CharacterDetails card={card} playerName={playerName} blockedReason={blockedReason} editHref={editHref} /> : null}
     </Drawer>
   );
 }
 
-function CharacterDetails({ card, playerName, blockedReason }: { readonly card: CharacterCardDto; readonly playerName: string; readonly blockedReason: string | null }) {
+function CharacterDetails({ card, playerName, blockedReason, editHref }: { readonly card: CharacterCardDto; readonly playerName: string; readonly blockedReason: string | null; readonly editHref: string | null }) {
   return (
     <div className={styles.details}>
       <div className={styles.overview}>
@@ -40,6 +43,8 @@ function CharacterDetails({ card, playerName, blockedReason }: { readonly card: 
         </div>
       </div>
       <PromoteControl card={card} blockedReason={blockedReason} />
+      {editHref ? <Link to={editHref} className={styles.editLink}>Edit appearance and portraits</Link>
+        : card.npc_plus && card.character_capabilities.edit_unavailable_reason ? <p className={styles.muted}>{card.character_capabilities.edit_unavailable_reason}</p> : null}
       <dl className={styles.facts}>
         <dt>Known role</dt><dd>{card.role}</dd>
         <dt>With {playerName}</dt><dd>{card.relationship}</dd>

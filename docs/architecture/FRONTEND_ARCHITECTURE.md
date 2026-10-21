@@ -2,7 +2,7 @@
 
 Status: ACTIVE (UI-2). Last reconciled: 2026-10-14. Source of truth: `src/ui-client/`, the `/app` serving in `src/ui/server.ts`, and the read models in `src/app/`. Companions: [UI](../UI.md) (implemented controls), [UI engine contract](../UI_ENGINE_CONTRACT.md) (the HTTP and session contract), [UI migration roadmap](../roadmap/UI_MIGRATION_ROADMAP.md), [legacy UI baseline](../evaluations/LEGACY_UI_DECOMPOSITION_BASELINE.md).
 
-The React client in `src/ui-client/` is the permanent Caldrevan frontend. It replaces the legacy vanilla client (`src/ui/index.html`, `client.js`, `style.css`) screen by screen; both run side by side until the legacy UI is removed (UI-9).
+The React client in `src/ui-client/` is the permanent Caldrevan frontend. It replaced the legacy vanilla client, which was removed in UI-3 (2026-10-18) after its behaviours were ported and verified; there is one UI.
 
 ## 1. Stack
 
@@ -107,8 +107,7 @@ No 3D code or dependency exists. A future `features/scene3d/` module stays isola
 
 ## 10. Migration and coexistence
 
-- The legacy UI stays at `/` (`src/ui/index.html`, `client.js`, `style.css`), unchanged; its browser checks and tests are unchanged.
-- The React UI is served by the same play server at `/app/` from `dist/ui-client/` (`npm run ui:build`). The switch is the route: no environment flag, no hidden selection. Without a build, `/app` answers 404 with the build instruction and the legacy UI keeps working.
+- The React UI is served by the same play server at `/app/` from `dist/ui-client/` (`npm run ui:build`); `GET /` answers a 302 to `/app/`. Without a build, `/app` answers 404 with the build instruction. There is no flag and no second UI; the legacy client files and their tests were removed in UI-3 (their coverage moved to Vitest tests and the `react-*` browser checks, see the UI-3 report).
 - Development: `npm run play:ui` (the backend, port 3000), then `npm run ui:dev` (Vite on `http://127.0.0.1:5173/app/`, proxying `/api` to the backend; `CALDREVAN_API_ORIGIN` overrides the target). The proxy rewrites the `Origin` header only for the Vite page's own origin so the server's same-origin POST check passes; any other origin is forwarded unchanged and refused.
 - Secrets: the bundle has no API base or keys (all calls are relative); `envPrefix` is `CALDREVAN_PUBLIC_`, so no other environment variable can reach client code.
 

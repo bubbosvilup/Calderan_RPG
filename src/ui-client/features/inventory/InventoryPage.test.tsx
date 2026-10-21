@@ -111,4 +111,23 @@ describe("Inventory page", () => {
     expect(within(nav).getByRole("link", { name: "Play" }).getAttribute("href")).toBe("/play/campaign_test");
     expect(within(nav).getByRole("link", { name: "Nicco" }).getAttribute("href")).toBe("/play/campaign_test/character/player");
   });
+  it("is read-only: selecting and filtering never call the server, nothing is draggable, and no editing control exists", async () => {
+    await open(makeSession());
+    const requestsBefore = server.requests.length;
+    await userEvent.click(screen.getByRole("button", { name: "Iron dagger, carried" }));
+    await userEvent.click(screen.getByRole("button", { name: /Equipped/ }));
+    expect(server.requests.length).toBe(requestsBefore);
+    expect(document.querySelector("[draggable='true'], [ondrop]")).toBeNull();
+    expect(screen.queryByRole("button", { name: /^(equip|unequip|drop|use|discard|sell)\b/i })).toBeNull();
+  });
+
+  it("shows gold exactly as the read model reports it, and 'not tracked' (never an invented 0) when there is no purse", async () => {
+    await open(makeSession({ inventory: makeInventory({ gold: 37 }) }));
+    expect(screen.getByTestId("inventory-gold").textContent).toBe("37");
+  });
+
+  it("an untracked purse is 'Not tracked', never an invented 0", async () => {
+    await open(makeSession({ inventory: makeInventory({ gold: null }) }));
+    expect(screen.getByTestId("inventory-gold").textContent).toBe("Not tracked");
+  });
 });

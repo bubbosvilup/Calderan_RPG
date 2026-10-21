@@ -1,13 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { runInNewContext } from "node:vm";
 import { ALTERNATE_NARRATOR_MODELS, NarratorAlternatives, observePreparedNarrator } from "../../src/app/narrator-alternatives.js";
 import { MiniMaxNarratorProvider, DEFAULT_NARRATOR_MODEL, NARRATOR_PROVIDER_ROUTING } from "../../src/llm/openrouter/minimax-narrator.js";
 import { OpenRouterClient } from "../../src/llm/openrouter/client.js";
 import { NARRATOR_OUTPUT_TOKENS } from "../../src/app/provider-config.js";
 import type { GenerationRequest } from "../../src/llm/types.js";
 import { mockNarrator } from "../support/turn-fixtures.js";
+import { sourceFiles } from "../support/source-paths.js";
 
 test("comparison allowlist contains exactly the six explicit models", () => {
   assert.deepEqual(ALTERNATE_NARRATOR_MODELS, [
@@ -111,51 +111,8 @@ test("actual adapter preserves prompt/budget/reasoning; only model and routing d
   }
   assert.equal(bodies.length, 7);
   for (const header of headers) assert.equal(header.get("Authorization"), "Bearer SERVER_ONLY_KEY");
-  const browser = await readFile("src/ui/client.js", "utf8");
-  assert.ok(!/process\.env|system_prompt|Authorization|openrouter\.ai/.test(browser));
-});
-
-test("browser controls only finalized eligible narrator messages, stacks safe alternatives and replaces same model", async () => {
-  class Element {
-    private text = ""; className = ""; value = ""; hidden = false; disabled = false; scrollTop = 0; scrollHeight = 42; clientHeight = 42;
-    get textContent(): string { return this.text + this.children.map(c => c.textContent).join(""); }
-    set textContent(value: string) { this.text = value; this.children = []; }
-    children: Element[] = []; handlers = new Map<string, (event: any) => any>();
-    append(...elements: Element[]) { this.children.push(...elements); }
-    replaceChildren(...elements: Element[]) { this.text = ""; this.children = elements; }
-    setAttribute(_name: string, _value: string) {}
-    addEventListener(name: string, handler: (event: any) => any) { this.handlers.set(name, handler); }
-    focus() {}
+  // The browser bundle's sources hold no key, prompt or provider address; comparisons go through the local server route only.
+  for (const file of sourceFiles("src/ui-client", f => /\.(ts|tsx)$/.test(f) && !/\.test\.|vite\.config|node_modules/.test(f))) {
+    assert.ok(!/process\.env|system_prompt|Authorization|openrouter\.ai/.test(await readFile(file, "utf8")), file);
   }
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest"].map(id => [`#${id}`, new Element()]));
-  const results: any[] = [];
-  let fail = false, calls = 0;
-  const data = { messages: [{ role: "narrator", text: "Opening" }, { role: "player", text: "Action" }, { role: "narrator", text: "Original", comparison_id: "turn-1", comparison_available: true, alternatives: [] }], status: "idle", configured: true, alternate_models: ALTERNATE_NARRATOR_MODELS };
-  runInNewContext(await readFile("src/ui/client.js", "utf8"), {
-    document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, setTimeout, clearTimeout,
-    fetch: async (url: string, options?: { body: string }) => {
-      if (!options) return { ok: true, json: async () => data };
-      assert.equal(url, "/api/alternative"); calls++;
-      const body = JSON.parse(options.body); assert.equal(body.message_id, "turn-1");
-      if (fail) return { ok: false, json: async () => ({ ok: false, error: "PRIVATE" }) };
-      const result = { label: ALTERNATE_NARRATOR_MODELS.find(model => model.id === body.model)!.label, model: body.model, text: `<script>alternative ${calls}</script>` };
-      const index = results.findIndex(existing => existing.model === body.model);
-      if (index < 0) results.push(result); else results[index] = result;
-      return { ok: true, json: async () => ({ ok: true, alternatives: results }) };
-    },
-  });
-  await new Promise(resolve => setImmediate(resolve));
-  const articles = nodes.get("#conversation")!.children;
-  assert.equal(articles[0]!.children.length, 2); assert.equal(articles[1]!.children.length, 2);
-  const [label, original, select, feedback, alternatives] = articles[2]!.children;
-  assert.equal(label!.textContent, "Narrator"); assert.equal(select!.children.length, 7);
-  assert.deepEqual(select!.children.slice(1).map(option => option.value), ALTERNATE_NARRATOR_MODELS.map(model => model.id));
-  const choose = async (index: number) => { select!.value = ALTERNATE_NARRATOR_MODELS[index]!.id; const pending = select!.handlers.get("change")!({}); assert.equal(select!.disabled, true); assert.match(feedback!.textContent, /Generating/); await pending; assert.equal(select!.disabled, false); assert.equal(select!.value, ""); };
-  await choose(5); await choose(0); await choose(5);
-  assert.equal(alternatives!.children.length, 2);
-  assert.equal(alternatives!.children[0]!.children[0]!.textContent, "Alternative · GLM 5.3 Flash");
-  assert.equal(alternatives!.children[0]!.children[1]!.textContent, "Comparison only · Does not change the story");
-  assert.equal(alternatives!.children[0]!.children[2]!.textContent, "<script>alternative 3</script>");
-  fail = true; await choose(5); assert.match(feedback!.textContent, /failed/); assert.ok(!feedback!.textContent.includes("PRIVATE")); assert.equal(alternatives!.children.length, 2);
-  fail = false; await choose(5); assert.equal(calls, 5); assert.equal(original!.textContent, "Original"); assert.equal(articles.length, 3);
 });

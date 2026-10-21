@@ -3,14 +3,16 @@ import { Link, useLocation } from "react-router";
 import type { ActiveSessionPayload } from "../../api/types";
 import { Alert } from "../../components/Alert/Alert";
 import { PlayLayout } from "../../layouts/PlayLayout";
-import { inventoryPath, playerCharacterPath } from "../../lib/paths";
+import { inventoryPath, npcCharacterPath, playerCharacterPath } from "../../lib/paths";
 import { useRequestInFlight } from "../../state/serverState";
 import { CharacterDrawer } from "../characters/CharacterDrawer";
 import { CharacterSidebar, findCharacterCard } from "../characters/CharacterSidebar";
 import { Composer } from "../composer/Composer";
 import { PendingConfirmations } from "../confirmations/PendingConfirmations";
 import { PlayerSummary } from "../player/PlayerSummary";
+import { SaveBanner } from "../save/SaveBanner";
 import { SaveIndicator } from "../save/SaveIndicator";
+import { SessionNav } from "../session/SessionNav";
 import { SceneSummary } from "../scene/SceneSummary";
 import { TradeRegion } from "../trade/TradeRegion";
 import { PHASE_LABELS, Transcript } from "../transcript/Transcript";
@@ -60,6 +62,7 @@ export function PlayScreen({ session, connectionLost, draftRef }: {
     <>
       <Link to="/" className={styles.brand}><span aria-hidden="true">◊ </span>Caldrevan</Link>
       {session.campaign ? <span className={styles.campaign} title={session.campaign.display_name}>{session.campaign.display_name}</span> : <span className={styles.campaign}>Playtest session</span>}
+      <SessionNav session={session} />
       <span className={styles.spacer} />
       {session.campaign ? <SaveIndicator campaignId={session.campaign.id} initial={session.campaign.save} onError={setSaveError} /> : null}
     </>
@@ -84,9 +87,10 @@ export function PlayScreen({ session, connectionLost, draftRef }: {
               {connectionLost ? <Alert tone="error">The connection to the game server was lost. Retrying; what you see may be out of date.</Alert> : null}
               {!session.configured ? <Alert tone="warning">The narrator provider is not configured. Set OPENROUTER_API_KEY and restart the game server to play.</Alert> : null}
               {loadWarnings.length ? <Alert tone="warning" title="Loaded with notes" onDismiss={() => setLoadWarnings([])}>{loadWarnings.join(" ")}</Alert> : null}
+              {session.campaign ? <SaveBanner campaignId={session.campaign.id} initial={session.campaign.save} /> : null}
               {saveError ? <Alert tone="error" onDismiss={() => setSaveError(null)}>{saveError}</Alert> : null}
             </div>
-            <Transcript messages={session.messages} playerName={playerName} pending={turn.pending} contentVersion={`${session.revision}:${session.trade.offer?.ref ?? ""}:${session.confirmations.cards.length}`}>
+            <Transcript messages={session.messages} playerName={playerName} pending={turn.pending} {...(session.alternate_models ? { alternateModels: session.alternate_models } : {})} contentVersion={`${session.revision}:${session.trade.offer?.ref ?? ""}:${session.confirmations.cards.length}`}>
               <TradeRegion trade={session.trade} blockedReason={blockedReason} onSettled={restoreFocus} />
               <PendingConfirmations view={session.confirmations} blockedReason={blockedReason} onSettled={restoreFocus} />
             </Transcript>
@@ -97,7 +101,7 @@ export function PlayScreen({ session, connectionLost, draftRef }: {
           </>
         )}
       />
-      <CharacterDrawer card={selectedCard} playerName={playerName} blockedReason={blockedReason} onClose={() => setSelectedRef(null)} returnFocus={focusComposer} />
+      <CharacterDrawer card={selectedCard} playerName={playerName} blockedReason={blockedReason} onClose={() => setSelectedRef(null)} returnFocus={focusComposer} editHref={selectedCard?.character_capabilities.can_edit_npc_plus ? npcCharacterPath(session, selectedCard.ref) : null} />
     </>
   );
 }

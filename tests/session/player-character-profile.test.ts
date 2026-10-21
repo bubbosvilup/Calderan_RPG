@@ -5,7 +5,6 @@ import { mkdtemp, rm, cp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-import { runInNewContext } from "node:vm";
 import type { AddressInfo } from "node:net";
 import { loadWorld } from "../../src/world/loader.js";
 import type { WorldStore } from "../../src/world/world-store.js";
@@ -345,83 +344,4 @@ test("Nicco's authored background prose stays private canon: never in narrator, 
   assert.deepEqual(leaks(promptText(second.narratorRequests.at(-1)!)), []);
   assert.equal(narratorVisible(second.narratorRequests.at(-1)!), profile.narrator_summary);
   await host2.shutdown();
-});
-
-// ------------------------------------------------------------------------------------------------ browser client (vm harness)
-class Element {
-  private text = "";
-  className = ""; value = ""; hidden = false; disabled = false; focused = false;
-  scrollTop = 0; scrollHeight = 100; clientHeight = 100;
-  parent?: Element; children: Element[] = [];
-  attributes = new Map<string, string>(); handlers = new Map<string, (event: any) => any>();
-  get textContent(): string { return this.text + this.children.map(c => c.textContent).join(""); }
-  set textContent(value: string) { this.text = value; this.children = []; }
-  append(...children: Element[]) { children.forEach(c => { c.parent = this; }); this.children.push(...children); }
-  replaceChildren(...children: Element[]) { this.text = ""; this.children = []; this.append(...children); }
-  remove() { if (this.parent) this.parent.children = this.parent.children.filter(c => c !== this); }
-  setAttribute(name: string, value: string) { this.attributes.set(name, value); }
-  removeAttribute(name: string) { this.attributes.delete(name); }
-  addEventListener(name: string, handler: (event: any) => any) { this.handlers.set(name, handler); }
-  focus() { this.focused = true; }
-}
-async function client(fetchMock: (url: string, options?: any) => any) {
-  const nodes = new Map<string, Element>();
-  const node = (id: string) => { if (!nodes.has(id)) nodes.set(id, new Element()); return nodes.get(id)!; };
-  const context: any = { document: { querySelector: (id: string) => node(id.slice(1)), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
-  runInNewContext(await fs.readFile("src/ui/client.js", "utf8"), context); await tick(); await tick();
-  return { node, click: (id: string) => node(id).handlers.get("click")!({}) };
-}
-const playerView = (s: GameSession) => s.getPlayerProfileView();
-test("client: NICCO / Player Character page (shared editor in player mode), fields fill from the committed profile, Save posts only changes, Cancel discards", async () => {
-  const root = await temp(), { s, host } = await created(root);
-  const state = (session: GameSession) => ({ messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true, revision: rev(session),
-    scene: { location: "Market", time_of_day: "Morning" }, household: [], player_character: playerView(session) });
-  const posts: { url: string; body: any }[] = [];
-  const c = await client(async (url: string, options?: any) => {
-    if (!options) return { ok: true, json: async () => state(s) };
-    const body = JSON.parse(options.body); posts.push({ url, body });
-    const outcome = s.updatePlayerProfile(body); const { view: _v, ...result } = outcome;
-    return { ok: outcome.ok, json: async () => ({ ...result, ...state(s) }) };
-  });
-  assert.equal(c.node("player-nav").disabled, false);
-  c.click("player-nav");
-  assert.equal(c.node("member-editor").hidden, false); assert.equal(c.node("play-view").hidden, true);
-  assert.equal(c.node("player-nav").attributes.get("aria-pressed"), "true");
-  assert.equal(c.node("editor-name").textContent, "NICCO"); assert.equal(c.node("editor-context").textContent, "Player Character");
-  assert.equal(c.node("editor-back").textContent, "\u2039 Back to Play");
-  assert.equal(c.node("editor-appearance").textContent, playerView(s)!.narrator_summary, "the preview is the server projection");
-  assert.equal(c.node("editor-player-identity").hidden, false, "player identity is editable on this page");
-  assert.doesNotMatch(c.node("editor-context").textContent, /NPC\+|Household/);
-  assert.equal(c.node("appearance-distinctive_traits").value, nicco.traits!.join("\n"), "the form is filled from the committed profile");
-  assert.equal(c.node("editor-save").disabled, true, "nothing to save yet");
-  // Change -> Cancel: nothing is sent, nothing changes.
-  c.node("appearance-eyes").value = "zircon-blue left eye"; c.node("appearance-eyes").handlers.get("input")!({});
-  assert.equal(c.node("editor-save").disabled, false);
-  c.click("editor-cancel");
-  assert.equal(posts.length, 0); assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
-  // Reopen -> change -> Save: only the changed keys are posted with the revision the editor opened with.
-  const r0 = rev(s);
-  c.click("player-nav");
-  assert.equal(c.node("appearance-eyes").value, "", "unsaved edits were discarded");
-  c.node("appearance-eyes").value = "zircon-blue left eye"; c.node("appearance-eyes").handlers.get("input")!({});
-  c.node("appearance-height_cm").value = "abc"; c.node("appearance-height_cm").handlers.get("input")!({});
-  assert.equal(c.node("editor-save").disabled, true, "an invalid number blocks saving");
-  c.node("appearance-height_cm").value = ""; c.node("appearance-height_cm").handlers.get("input")!({});
-  await c.click("editor-save"); await tick();
-  assert.deepEqual(posts, [{ url: "/api/player-character", body: { expected_revision: r0, patch: { eyes: "zircon-blue left eye" } } }]);
-  assert.equal(rev(s), r0 + 1);
-  assert.match(c.node("editor-appearance").textContent, /eyes zircon-blue left eye/);
-  assert.equal(c.node("editor-save").disabled, true, "saved: nothing pending");
-  // An identity edit uses the same endpoint.
-  c.node("appearance-species").value = "Half-elf"; c.node("appearance-species").handlers.get("input")!({});
-  await c.click("editor-save"); await tick();
-  assert.deepEqual(posts[1]!.body.patch, { species: "Half-elf" });
-  // A refused save keeps the form and shows the server's message.
-  c.node("appearance-description").value = "x".repeat(1001); c.node("appearance-description").handlers.get("input")!({});
-  await c.click("editor-save"); await tick();
-  assert.equal(c.node("editor-error").hidden, false); assert.match(c.node("editor-error").textContent, /1000 characters/);
-  assert.equal(c.node("member-editor").hidden, false);
-  c.click("editor-back"); assert.equal(c.node("play-view").hidden, false); assert.equal(c.node("member-editor").hidden, true);
-  assert.equal(c.node("player-nav").attributes.get("aria-pressed"), "false");
-  await host.shutdown();
 });

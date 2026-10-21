@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
-import { refusedField, saveProfile } from "../../api/player";
+import { refusedField, type ProfilePatch } from "../../api/player";
+import type { SessionPayload } from "../../api/types";
 import { Alert } from "../../components/Alert/Alert";
 import { Badge } from "../../components/Badge/Badge";
 import { Button } from "../../components/Button/Button";
@@ -12,11 +13,17 @@ import styles from "./Character.module.css";
  * saved: no copy of server state is kept. Unsaved changes are announced and Save is explicit; nothing is optimistic, and after a save the
  * drafts are dropped so the form shows exactly what the server returned. A refusal keeps the drafts and names the field the server pointed at.
  */
-export function AppearanceForm({ fields, blockedReason }: { readonly fields: readonly FormField[]; readonly blockedReason: string | null }) {
+export function AppearanceForm({ fields, blockedReason, save: saveRequest, label = "Profile and appearance" }: {
+  readonly fields: readonly FormField[];
+  readonly blockedReason: string | null;
+  /** The one request that stores a patch (the player's profile or an NPC+'s appearance); it carries the revision the page rendered. */
+  readonly save: (patch: ProfilePatch, revision: number) => Promise<{ readonly state: SessionPayload | null }>;
+  readonly label?: string;
+}) {
   const [edits, setEdits] = useState<Readonly<Record<string, string>>>({});
   const [failure, setFailure] = useState<{ readonly message: string; readonly field: string | null } | null>(null);
   const formId = useId();
-  const save = useSessionAction("profile", (patch: Parameters<typeof saveProfile>[0]["patch"], revision) => saveProfile({ patch, expectedRevision: revision }));
+  const save = useSessionAction("profile", (patch: ProfilePatch, revision) => saveRequest(patch, revision));
   const { patch, invalid } = profilePatch(fields, edits);
   const changes = Object.keys(patch).length;
   const dirty = changes > 0 || invalid.length > 0;
@@ -31,7 +38,7 @@ export function AppearanceForm({ fields, blockedReason }: { readonly fields: rea
   };
   const disabledReason = save.isPending ? "Saving…" : blockedReason;
   return (
-    <form className={styles.form} aria-label="Profile and appearance" onSubmit={event => { event.preventDefault(); onSave(); }}>
+    <form className={styles.form} aria-label={label} onSubmit={event => { event.preventDefault(); onSave(); }}>
       {GROUPS.map(group => {
         const members = fields.filter(field => field.group === group.id);
         if (!members.length) return null;
@@ -41,7 +48,7 @@ export function AppearanceForm({ fields, blockedReason }: { readonly fields: rea
             {members.map(field => {
               const id = `${formId}-${field.key}`, noteId = `${id}-note`;
               const bad = invalid.includes(field.key) ? "Enter a whole number." : failure?.field === field.key ? failure.message : null;
-              const common = { id, value: value(field), "aria-invalid": bad ? true : undefined, "aria-describedby": bad || field.stored !== null ? noteId : undefined, className: styles.input,
+              const common = { id, value: value(field), "aria-invalid": bad ? true : undefined, "aria-describedby": bad || field.stored !== null || field.inherited ? noteId : undefined, className: styles.input,
                 onChange: (event: { readonly target: { readonly value: string } }) => setEdits(current => ({ ...current, [field.key]: event.target.value })) };
               return (
                 <div key={field.key} className={styles.field}>
@@ -50,7 +57,8 @@ export function AppearanceForm({ fields, blockedReason }: { readonly fields: rea
                     ? <textarea {...common} rows={field.kind === "lines" ? 3 : 4} />
                     : <input {...common} type="text" inputMode={field.kind === "number" ? "numeric" : "text"} autoComplete="off" />}
                   {bad ? <small id={noteId} className={styles.fieldError} role="alert">{bad}</small>
-                    : field.stored !== null ? <small id={noteId} className={styles.hint}>Saved value. Empty it to clear.</small> : null}
+                    : field.stored !== null ? <small id={noteId} className={styles.hint}>Saved value. Empty it to clear.</small>
+                    : field.inherited ? <small id={noteId} className={styles.hint}>Reference only, not saved: {field.inherited}</small> : null}
                 </div>
               );
             })}

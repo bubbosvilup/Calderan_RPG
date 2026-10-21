@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="launcher-token" content="__TOKEN__">
+<title>Caldrevan Launcher</title>
+<style nonce="__NONCE__">
+  :root { --bg: #f6f4ef; --fg: #1d1b18; --muted: #5d5850; --card: #fff; --line: #cfc8bb; --accent: #7a3b12; --on-accent: #fff; --ok: #1d6b34; --bad: #a3231a; --warn: #8a5a00; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #17150f; --fg: #efeae0; --muted: #b3ab9c; --card: #221f17; --line: #4a4436; --accent: #e0a060; --on-accent: #1d1206; --ok: #6fd58b; --bad: #ff8a7d; --warn: #f0c060; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }
+  main { max-width: 38rem; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 1.5rem; margin: 0 0 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .pill { font-weight: 700; padding: 2px 12px; border-radius: 999px; border: 2px solid currentColor; }
+  .pill[data-state="ready"] { color: var(--ok); } .pill[data-state="error"] { color: var(--bad); } .pill[data-state="starting"], .pill[data-state="stopping"] { color: var(--warn); } .pill[data-state="stopped"] { color: var(--muted); }
+  #message { margin: 12px 0 0; overflow-wrap: anywhere; } #fix { margin: 8px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  button, a.button { font: inherit; font-weight: 600; min-height: 44px; padding: 8px 18px; border-radius: 8px; border: 2px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+  button.primary, a.button.primary { background: var(--accent); color: var(--on-accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  :focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  #logs { margin-top: 16px; } #logs pre { margin: 8px 0; padding: 12px; max-height: 20rem; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font: 13px/1.4 ui-monospace, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .row.tight { margin-top: 0; }
+  .muted { color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Caldrevan Launcher</h1>
+  <section class="card" aria-labelledby="statusLabel">
+    <div class="status"><span id="statusLabel" class="muted">Status</span><span id="pill" class="pill" data-state="stopped">Connecting</span></div>
+    <p id="message" role="status" aria-live="polite">Connecting to the launcher...</p>
+    <p id="fix" hidden></p>
+    <div class="row">
+      <button id="play" class="primary" type="button">PLAY</button>
+      <button id="stop" type="button" disabled>STOP</button>
+      <a id="open" class="button" href="#" target="_blank" rel="noopener" hidden>OPEN GAME</a>
+      <button id="toggleLogs" type="button" aria-expanded="false" aria-controls="logs">Show Logs</button>
+      <button id="exit" type="button">Exit</button>
+    </div>
+    <div id="logs" hidden>
+      <pre id="logText" tabindex="0" aria-label="Launcher and game log"></pre>
+      <div class="row tight"><button id="copy" type="button">Copy</button></div>
+      <p class="muted">Log file: <span id="logFile"></span></p>
+    </div>
+  </section>
+  <p class="muted">Your campaigns are saved by the game in the saves folder; this launcher never touches them. STOP and Exit let the game save first.</p>
+</main>
+<script nonce="__NONCE__">
+"use strict";
+const token = document.querySelector('meta[name="launcher-token"]').content;
+const $ = id => document.getElementById(id);
+let gone = false, logsOpen = false;
+async function api(path, method) {
+  const res = await fetch(path, { method: method || "GET", headers: { "X-Launcher-Token": token, ...(method === "POST" ? { "Content-Type": "application/json" } : {}) }, body: method === "POST" ? "{}" : undefined, cache: "no-store" });
+  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "HTTP " + res.status);
+  return res.json();
+}
+function render(s) {
+  $("pill").textContent = s.label; $("pill").dataset.state = s.state;
+  $("message").textContent = s.error ? s.error.title + ". " + s.error.detail : s.message;
+  $("fix").hidden = !(s.error && s.error.fix); $("fix").textContent = s.error && s.error.fix ? "What to do: " + s.error.fix : "";
+  $("play").disabled = s.state !== "stopped" && s.state !== "error";
+  $("stop").disabled = s.state === "stopped" || s.state === "stopping";
+  $("open").hidden = s.state !== "ready"; if (s.url) $("open").href = s.url;
+  $("logFile").textContent = s.logFile || "";
+}
+async function refresh() {
+  if (gone) return;
+  try { render(await api("/api/status")); if (logsOpen) { const l = await api("/api/logs?lines=200"); const box = $("logText"), atEnd = box.scrollTop + box.clientHeight >= box.scrollHeight - 8; box.textContent = l.lines.join("\n"); if (atEnd) box.scrollTop = box.scrollHeight; } }
+  catch (e) { $("pill").textContent = "Offline"; $("pill").dataset.state = "error"; $("message").textContent = "The launcher is not reachable (" + e.message + "). It may have been closed; double-click Caldrevan.cmd again."; $("play").disabled = true; $("stop").disabled = true; }
+}
+async function act(path) { try { render(await api(path, "POST")); } catch (e) { $("message").textContent = e.message; } refresh(); }
+$("play").addEventListener("click", () => act("/api/play"));
+$("stop").addEventListener("click", () => act("/api/stop"));
+$("exit").addEventListener("click", async () => {
+  try { await api("/api/exit", "POST"); } catch (e) { /* closing */ }
+  gone = true; $("pill").textContent = "Closed"; $("pill").dataset.state = "stopped"; $("message").textContent = "The launcher has closed and the game was stopped. You can close this tab.";
+  for (const id of ["play", "stop", "exit"]) $(id).disabled = true; $("open").hidden = true;
+});
+$("toggleLogs").addEventListener("click", () => { logsOpen = !logsOpen; $("logs").hidden = !logsOpen; $("toggleLogs").setAttribute("aria-expanded", String(logsOpen)); $("toggleLogs").textContent = logsOpen ? "Hide Logs" : "Show Logs"; refresh(); });
+$("copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("logText").textContent); $("copy").textContent = "Copied"; } catch (e) { $("logText").focus(); const r = document.createRange(); r.selectNodeContents($("logText")); getSelection().removeAllRanges(); getSelection().addRange(r); $("copy").textContent = "Selected: press Ctrl+C"; } setTimeout(() => { $("copy").textContent = "Copy"; }, 2500); });
+refresh(); setInterval(refresh, 1000);
+</script>
+</body>
+</html>

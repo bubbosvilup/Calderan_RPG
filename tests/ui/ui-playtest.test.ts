@@ -3,7 +3,6 @@ import { turnJson, nextTurnKey, revisionOf } from "../support/turn-http.js";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { once } from "node:events";
-import { runInNewContext } from "node:vm";
 import { loadWorld } from "../../src/world/loader.js";
 import { FileCampaignRepository } from "../../src/persistence/campaign-repository.js";
 import { TurnCoordinator } from "../../src/turn/coordinator/turn-coordinator.js";
@@ -74,7 +73,7 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
   const get = async () => (await fetch(`${url}/api/session`)).json();
   const post = async (text: string, origin = url) => fetch(`${url}/api/turn`, { method: "POST", headers: { "Content-Type": "application/json", Origin: origin }, body: turnJson(text, (await get()).revision) });
   const opening = await get(); assert.deepEqual(opening.messages, [{ role: "narrator", text: UI_PLAYTEST_OPENING, seq: 0 }]);
-  assert.equal((await fetch(url)).status, 200);
+  const root = await fetch(url, { redirect: "manual" }); assert.equal(root.status, 302); assert.equal(root.headers.get("location"), "/app/", "the React UI is the only game UI: / redirects to it");
   const before = session.getView();
   assert.equal((await post(" ")).status, 400);
   assert.equal((await post("I look at the auction.", "https://untrusted.example")).status, 403);
@@ -94,57 +93,6 @@ test("HTTP UI uses real GameSession turns: opening, input, busy rejection, final
   assert.deepEqual(session.getView().scene, after.scene);
   assert.equal(session.status, "idle");
   assert.equal((await (await post("I look at the auction.")).json()).ok, true, "failed session can continue");
-});
-
-test("browser composer submits once, handles Enter/Shift+Enter, preserves failures and renders final text safely", async () => {
-  class Element {
-    private text = ""; className = ""; value = ""; hidden = false; disabled = false; scrollTop = 0; scrollHeight = 42; clientHeight = 42;
-    parent?: Element;
-    get textContent(): string { return this.text + this.children.map(c => c.textContent).join(""); }
-    set textContent(value: string) { this.text = value; this.children = []; }
-    children: Element[] = []; handlers = new Map<string, (event: any) => any>();
-    append(...children: Element[]) { children.forEach(c => { c.parent = this; }); this.children.push(...children); }
-    replaceChildren(...children: Element[]) { this.text = ""; this.children = []; this.append(...children); }
-    remove() { if (this.parent) this.parent.children = this.parent.children.filter(c => c !== this); }
-    setAttribute() {}
-    addEventListener(name: string, handler: (event: any) => any) { this.handlers.set(name, handler); }
-    focus() {}
-    requestSubmit() { return this.handlers.get("submit")!({ preventDefault() {} }); }
-  }
-  const nodes = new Map(["conversation", "composer", "input", "send", "status", "error", "location", "daypart", "household-members", "latest"].map(id => [`#${id}`, new Element()]));
-  const node = (id: string) => nodes.get(`#${id}`)!;
-  const opening = { messages: [{ role: "narrator", text: UI_PLAYTEST_OPENING }], status: "idle", configured: true };
-  let resolvePost!: (value: unknown) => void, requestBody = "", submits = 0;
-  const fetchMock = async (_url: string, options?: { body: string }) => {
-    if (!options) return { ok: true, json: async () => opening };
-    submits++; requestBody = options.body;
-    return new Promise(resolve => { resolvePost = resolve; });
-  };
-  runInNewContext(await readFile("src/ui/client.js", "utf8"), { document: { querySelector: (id: string) => nodes.get(id), createElement: () => new Element() }, fetch: fetchMock, setTimeout, clearTimeout });
-  await new Promise(resolve => setImmediate(resolve));
-  assert.equal(node("conversation").children[0]!.children[1]!.textContent, UI_PLAYTEST_OPENING.replaceAll("*", ""));
-  node("input").value = "  "; await node("composer").requestSubmit(); assert.equal(submits, 0);
-  let prevented = false;
-  node("input").handlers.get("keydown")!({ key: "Enter", shiftKey: true, preventDefault() { prevented = true; } });
-  assert.equal(prevented, false); assert.equal(submits, 0);
-  node("input").value = "I look around.";
-  node("input").handlers.get("keydown")!({ key: "Enter", shiftKey: false, preventDefault() { prevented = true; } });
-  assert.equal(prevented, true); assert.equal(submits, 1); assert.equal(node("input").disabled, true);
-  assert.equal(node("status").textContent, "Generating…"); // generic status until the first progress event; never draft prose
-  await node("composer").requestSubmit(); assert.equal(submits, 1);
-  const sent = JSON.parse(requestBody); assert.equal(sent.text, "I look around."); assert.match(sent.turn_key, /^[0-9a-f-]{16,}$/);
-  resolvePost({ json: async () => ({ ok: true, ...opening, messages: [...opening.messages, { role: "player", text: "I look around." }, { role: "narrator", text: "<script>plain story text</script>" }] }) });
-  await new Promise(resolve => setImmediate(resolve));
-  assert.equal(node("input").value, ""); assert.equal(node("input").disabled, false);
-  assert.equal(node("conversation").children[2]!.children[1]!.textContent, "<script>plain story text</script>");
-  assert.equal(node("conversation").scrollTop, 42);
-  node("input").value = "Try again.";
-  const failed = node("composer").requestSubmit();
-  resolvePost({ json: async () => ({ ok: false, ...opening, messages: [ ...opening.messages, { role: "player", text: "I look around." }, { role: "narrator", text: "<script>plain story text</script>" } ], error: { message: "Provider unavailable.", turn_state_changed: false } }) });
-  await failed;
-  assert.equal(node("input").value, "Try again."); assert.equal(node("input").disabled, false);
-  assert.match(node("error").textContent, /Turn failed\. Your message was not applied\./);
-  assert.equal(node("conversation").children.length, 3);
 });
 
 test("UI modules do not import engine internals, providers, saves or mutate campaign truth", async () => {

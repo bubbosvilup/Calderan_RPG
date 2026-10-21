@@ -37,6 +37,7 @@ Subsystem references (ACTIVE):
 ## 3. Guides: how to work on it
 
 - [Project README](../README.md): what it is, how to run it.
+- [One-click launcher](LAUNCHER.md): `Caldrevan.cmd` and `setup.cmd` (Windows): start, stop and log the game without npm commands.
 - [Configuration](CONFIGURATION.md): environment variables, models, run modes.
 - [Testing](TESTING.md): commands, authoritative runs, browser checks, dev tooling (where each tool lives, live versus offline, output and archive policy).
 - Authoring: [Authoring guide](authoring/AUTHORING_GUIDE.md), [Geography](authoring/GEOGRAPHY.md), [Calderan spatial canon](authoring/CALDERAN_SPATIAL_CANON.md), templates in `authoring/templates/`.

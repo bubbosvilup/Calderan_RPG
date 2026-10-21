@@ -15,15 +15,10 @@ const PORTRAIT_ROUTES = new Set(["/api/portrait/generate", "/api/portrait/avatar
 const CAMPAIGN_ROUTES = new Set(["/api/campaigns/create", "/api/campaigns/load", "/api/campaigns/close", "/api/campaigns/delete", "/api/save"]);
 /** `seq` (B3): a stable, increasing position per message, the client's render cursor (the count of a bounded window is not one). */
 interface Message { readonly comparison_id?: string; readonly role: "player" | "narrator" | "system"; readonly text: string; readonly seq?: number }
-const assets = new Map([
-  ["/", ["index.html", "text/html; charset=utf-8"]],
-  ["/client.js", ["client.js", "text/javascript; charset=utf-8"]],
-  ["/style.css", ["style.css", "text/css; charset=utf-8"]],
-]);
 /**
  * React frontend (UI-1): the Vite production build (`npm run ui:build` -> dist/ui-client/) under /app/. Hashed files are served from its
  * assets/ folder by a closed name pattern and extension list (no path is joined from anything else); every other /app path is the
- * single-page entry, so client routes such as /app/play/<id> survive a reload. The legacy UI stays at /.
+ * single-page entry, so client routes such as /app/play/<id> survive a reload. This is the only game UI: `/` redirects to it.
  */
 const REACT_BASE = "/app";
 const REACT_ASSET = /^\/app\/assets\/([A-Za-z0-9_-][A-Za-z0-9_.-]{0,127})$/;
@@ -36,7 +31,7 @@ const REACT_TYPES: Readonly<Record<string, string>> = { ".js": "text/javascript;
  *   - Given a SessionHost (Save/Load v1 persistent campaigns): the host's active session (or none: start screen), the session-owned
  *     transcript, and the campaign create/load/close/save routes.
  */
-export function createPlaytestServer(target: GameSession | SessionHost, assetDir = resolve("src/ui"), comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR, options: { readonly log?: (line: string) => void; readonly reactDir?: string } = {}) {
+export function createPlaytestServer(target: GameSession | SessionHost, _retiredAssetDir: undefined = undefined, comparisons?: NarratorAlternatives, canonAvatarDir = CANON_AVATAR_DIR, options: { readonly log?: (line: string) => void; readonly reactDir?: string } = {}) {
   const log = options.log ?? (() => undefined);
   const reactDir = options.reactDir ?? resolve("dist/ui-client");
   const host = target instanceof SessionHost ? target : undefined;
@@ -276,9 +271,8 @@ export function createPlaytestServer(target: GameSession | SessionHost, assetDir
         }
         return;
       }
-      const asset = req.method === "GET" ? assets.get(req.url ?? "") : undefined;
-      if (asset) { reply(res, 200, asset[1]!, await readFile(resolve(assetDir, asset[0]!))); return; }
       const path = (req.url ?? "").split("?")[0]!;
+      if (req.method === "GET" && path === "/") { res.writeHead(302, { Location: `${REACT_BASE}/` }); res.end(); return; }
       if (req.method === "GET" && (path === REACT_BASE || path.startsWith(`${REACT_BASE}/`))) { await serveReact(res, reactDir, path); return; }
       json(404, { error: "Not found." });
     } catch {
@@ -300,7 +294,7 @@ async function serveReact(res: ServerResponse, dir: string, path: string) {
     reply(res, 200, type!, bytes); return;
   }
   const page = await readFile(resolve(dir, "index.html")).catch(() => undefined);
-  if (!page) { reply(res, 404, "text/plain; charset=utf-8", "The React UI is not built. Run `npm run ui:build`, then reload; the legacy UI is at /."); return; }
+  if (!page) { reply(res, 404, "text/plain; charset=utf-8", "The React UI is not built. Run `npm run ui:build`, then reload."); return; }
   reply(res, 200, "text/html; charset=utf-8", page);
 }
 

@@ -11,11 +11,11 @@ import { FileCampaignRepository } from "../../src/persistence/campaign-repositor
 import { createPlaytestServer } from "../../src/ui/server.js";
 
 /** Raw GET (no URL normalization), so traversal-shaped paths reach the server exactly as written. */
-function get(port: number, path: string): Promise<{ status: number; type: string; cache: string; csp: string; body: string }> {
+function get(port: number, path: string): Promise<{ status: number; location: string; type: string; cache: string; csp: string; body: string }> {
   return new Promise((resolve, reject) => {
     const req = request({ host: "127.0.0.1", port, path, method: "GET", headers: { host: `127.0.0.1:${port}` } }, res => {
       let body = ""; res.setEncoding("utf8"); res.on("data", chunk => { body += chunk; });
-      res.on("end", () => resolve({ status: res.statusCode ?? 0, type: String(res.headers["content-type"] ?? ""), cache: String(res.headers["cache-control"] ?? ""), csp: String(res.headers["content-security-policy"] ?? ""), body }));
+      res.on("end", () => resolve({ status: res.statusCode ?? 0, location: String(res.headers.location ?? ""), type: String(res.headers["content-type"] ?? ""), cache: String(res.headers["cache-control"] ?? ""), csp: String(res.headers["content-security-policy"] ?? ""), body }));
     });
     req.on("error", reject); req.end();
   });
@@ -31,7 +31,7 @@ async function serve(t: test.TestContext, reactDir: string) {
   return address.port;
 }
 
-test("React UI serving: /app serves the built entry (SPA fallback) and hashed assets; the legacy UI stays at /", async t => {
+test("React UI serving: /app serves the built entry (SPA fallback) and hashed assets; the root forwards to it", async t => {
   const dist = await mkdtemp(join(tmpdir(), "caldrevan-react-dist-")); t.after(() => rm(dist, { recursive: true, force: true }));
   await mkdir(join(dist, "assets"));
   await writeFile(join(dist, "index.html"), "<!doctype html><title>REACT_ENTRY</title>");
@@ -54,14 +54,14 @@ test("React UI serving: /app serves the built entry (SPA fallback) and hashed as
     const res = await get(port, path);
     assert.equal(res.status, 404, path); assert.doesNotMatch(res.body, /OUTSIDE_ASSETS|REACT_BUNDLE/, path);
   }
-  const legacy = await get(port, "/");
-  assert.equal(legacy.status, 200); assert.match(legacy.body, /client\.js/); assert.doesNotMatch(legacy.body, /REACT_ENTRY/);
+  const root = await get(port, "/");
+  assert.equal(root.status, 302, "the root is not a second UI"); assert.equal(root.location, "/app/");
+  assert.equal((await get(port, "/client.js")).status, 404); assert.equal((await get(port, "/style.css")).status, 404);
 });
 
 test("React UI serving: without a build, /app explains how to build it instead of failing", async t => {
   const empty = await mkdtemp(join(tmpdir(), "caldrevan-react-empty-")); t.after(() => rm(empty, { recursive: true, force: true }));
   const port = await serve(t, empty);
   const res = await get(port, "/app/play");
-  assert.equal(res.status, 404); assert.match(res.body, /npm run ui:build/); assert.match(res.body, /legacy UI is at \//);
-  assert.equal((await get(port, "/")).status, 200, "the legacy UI is unaffected");
+  assert.equal(res.status, 404); assert.match(res.body, /npm run ui:build/); assert.doesNotMatch(res.body, /legacy/i);
 });

@@ -4,7 +4,6 @@ import * as fs from "node:fs/promises";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { runInNewContext } from "node:vm";
 import { loadWorld } from "../../src/world/loader.js";
 import { CampaignState } from "../../src/campaign/campaign-state.js";
 import { TurnCoordinator } from "../../src/turn/coordinator/turn-coordinator.js";
@@ -22,6 +21,7 @@ import type { ControllerRequest } from "../../src/llm/state-controller-provider.
 import type { GeneratedImage, ImageGenerationRequest, PortraitImageGenerator } from "../../src/llm/image-generator.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import { metadata } from "../support/turn-fixtures.js";
+import { sourceFiles } from "../support/source-paths.js";
 
 /** Player Character visuals (Nicco shares the NPC+ portrait pipeline without being an NPC+) and the Inventory / Equipment UI foundation. */
 const world = await loadWorld("data");
@@ -196,10 +196,12 @@ test("I9/E6/E7: visual metadata is not in the save schema or any LLM context; th
   const f = inventoryCampaign(); f.create("Iron Sword", "weapon", equippedAt("main_hand"));
   const snapshotJson = JSON.stringify(f.campaign.exportSnapshot());
   assert.doesNotMatch(snapshotJson, /item-glyph|icon_url|detail_url|equipment|paper|slot_label/);
-  const client = await fs.readFile("src/ui/client.js", "utf8"), html = await fs.readFile("src/ui/index.html", "utf8"), start = client.indexOf("let inventoryData"), end = client.indexOf("async function refreshInventory");
-  const inventoryCode = client.slice(start, end);
-  assert.doesNotMatch(inventoryCode, /dragstart|drop|draggable|method: "POST"|localStorage/); assert.doesNotMatch(html, /draggable|ondrop/);
-  assert.equal([...inventoryCode.matchAll(/fetch\(/g)].length, 0, "selecting never calls the server");
+  // The React inventory page is read-only: no drag/drop, no mutating request, no browser storage, and selecting never calls the server
+  // (behaviour pinned in src/ui-client/features/inventory/InventoryPage.test.tsx; this is the source-level guard).
+  const pageFiles = sourceFiles("src/ui-client/features/inventory", p => /\.tsx?$/.test(p) && !/\.test\./.test(p));
+  assert.ok(pageFiles.length >= 4);
+  const inventoryCode = (await Promise.all(pageFiles.map(file => fs.readFile(file, "utf8")))).join("\n");
+  assert.doesNotMatch(inventoryCode, /dragstart|onDrop|draggable|method: "POST"|localStorage|fetch\(|useMutation|useSessionAction/);
   for (const file of ["src/app/inventory-ui-view.ts", "src/app/item-visuals.ts"]) { const imports = (await fs.readFile(file, "utf8")).split("\n").filter(l => l.startsWith("import")).join("\n"); assert.doesNotMatch(imports, /llm|turn\/|retrieval|prompt|context/i, `${file} imports nothing from the LLM/context layers`); }
 });
 
@@ -211,8 +213,12 @@ test("M1-M5: gold is the authoritative purse, follows state, survives save/load 
   f.apply({ kind: "set_funds", character_id: "nicco", gold: 12 }); assert.equal(gold(), 12, "a state change propagates to the next view");
   const restored = CampaignState.restore(f.world, f.campaign.exportSnapshot());
   assert.equal(inventoryUiView(f.world, restored.exportSnapshot()).gold, 12);
-  const client = await fs.readFile("src/ui/client.js", "utf8");
-  assert.match(client, /inventoryData\?\.gold/); assert.doesNotMatch(client, /gold\s*[+-]=|parseInt\(.*gold|localStorage/);
+  // The page shows the read model's purse and never computes one (arithmetic on gold would be a client-side rule).
+  for (const file of ["src/ui-client/features/inventory/InventoryPage.tsx", "src/ui-client/features/player/PlayerSummary.tsx"]) {
+    const source = await fs.readFile(file, "utf8");
+    assert.doesNotMatch(source, /gold\s*[+-]=|gold\s*[-+*/]\s*\w|parseInt\(.*gold|localStorage/, file);
+  }
+  assert.match(await fs.readFile("src/ui-client/features/inventory/InventoryPage.tsx", "utf8"), /inventory\.gold/);
   const noPurse = inventoryUiView(world, CampaignState.restore(f.world, { ...f.campaign.exportSnapshot(), funds: [] }).exportSnapshot());
   assert.equal(noPurse.gold, null, "no tracked purse is 'not tracked', never an invented 0");
 });

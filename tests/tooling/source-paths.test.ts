@@ -43,6 +43,6 @@ test("sourceFiles: repository-relative POSIX paths, sorted, readable, filtered b
   assert.ok(files.includes("src/turn/narration-facts/location-forms.ts"));
   assert.ok(files.every(f => f.startsWith("src/turn/narration-facts/") && !f.includes("\\") && f.endsWith(".ts") && existsSync(f)));
   assert.deepEqual(files, [...files].sort());
-  const everything = sourceFiles("src/ui", () => true);
-  assert.ok(everything.includes("src/ui/client.js") && everything.includes("src/ui/style.css"), "a custom predicate keeps non-.ts files");
+  const everything = sourceFiles("src/ui-client/styles", () => true);
+  assert.deepEqual(everything, ["src/ui-client/styles/global.css", "src/ui-client/styles/tokens.css"], "a custom predicate keeps non-.ts files");
 });

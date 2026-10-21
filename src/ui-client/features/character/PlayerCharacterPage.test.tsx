@@ -116,6 +116,15 @@ describe("Player character page", () => {
     expect((screen.getByLabelText(/^Height/) as HTMLInputElement).value).toBe("178");
   });
 
+  it("an identity edit (species) uses the same endpoint and sends only that key", async () => {
+    await open(makeSession());
+    server.handlers["/api/player-character"] = () => json({ ok: true, changed: true, ...makeSession({ revision: 8 }) });
+    await userEvent.type(screen.getByLabelText("Species"), "Half-elf");
+    await userEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    await waitFor(() => expect(server.requests.some(r => r.url === "/api/player-character")).toBe(true));
+    expect(server.requests.find(r => r.url === "/api/player-character")!.body).toEqual({ expected_revision: 7, patch: { species: "Half-elf" } });
+  });
+
   it("UI2-6 renders the Gallery: a thumbnail per image with alt text, roles, kind, count and the batch controls", async () => {
     await open(withGallery());
     const section = screen.getByRole("region", { name: "Gallery" });

@@ -4,7 +4,7 @@
 
 Caldrevan is a deterministic engine for long-running, AI-narrated roleplay. The world is the continent Helion; a campaign starts in the West, at the Calderan slave market, where the player character Nicco, an otherworlder, holds the Heartstone Tower. One language model writes the prose of each turn and a second one proposes state changes. The engine decides what is true: authored canon, who is where, who owns what, what each character knows, money, legal status, household membership, and every change to any of it.
 
-It runs locally: a small web UI (`npm run play:ui`) plays persistent campaigns with manual save and autosave. A new React frontend is replacing that UI in phases: it is served by the same server at `/app/` after `npm run ui:build`, while the legacy UI stays at `/` ([Frontend architecture](docs/architecture/FRONTEND_ARCHITECTURE.md), [UI migration roadmap](docs/roadmap/UI_MIGRATION_ROADMAP.md)).
+It runs locally: a small web UI (`npm run play:ui`) plays persistent campaigns with manual save and autosave. The UI is a React frontend served by the same server at `/app/` (`/` forwards there) after `npm run ui:build`; on Windows, double-click `Caldrevan.cmd` ([Launcher](docs/LAUNCHER.md)) ([Frontend architecture](docs/architecture/FRONTEND_ARCHITECTURE.md), [UI migration roadmap](docs/roadmap/UI_MIGRATION_ROADMAP.md)).
 
 ## Core Design Rule
 
@@ -132,7 +132,7 @@ src/llm/          OpenRouter Narrator / Controller / extractor / reflection prov
 src/persistence/  save format, migrations, campaign repository, recovery
 src/app/          GameSession, SessionHost, SessionView and read models, optional services, production wiring
 src/economy/      reference prices and selective narrator injection
-src/ui/           local web UI server (server.ts, play.ts) and vanilla client
+src/ui/           local web UI server (server.ts, play.ts); the client is src/ui-client/
 src/types/        shared types
 src/dev/          developer tools by purpose: support/, inspect/, benchmark/, maintenance/, live/ (spends credits),
                   historical/ (reproduction only); never imported by production code
@@ -156,6 +156,7 @@ npm test                          # build, then every offline test (no live LLM 
 npm run benchmark:modern          # modern regression benchmark (offline, scripted providers)
 npm run check:architecture        # read-only module cycle check over src/
 npm run check:docs                # read-only link check of the current documentation
+Caldrevan.cmd                     # Windows: double-click launcher (run setup.cmd once first; docs/LAUNCHER.md)
 npm run play:ui                   # persistent campaigns at http://127.0.0.1:3000 (Ctrl+C saves and stops)
 npm run play:ui -- --playtest     # disposable session, never saved
 npm run ui:build                  # build the React frontend to dist/ui-client/ (then served at http://127.0.0.1:3000/app/)

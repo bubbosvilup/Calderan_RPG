@@ -2,8 +2,6 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import type { AddressInfo } from "node:net";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { makeRig, MARKET, type Rig } from "../benchmark/harness.js";
 import { createPlaytestServer } from "../../src/ui/server.js";
 import { keepToken, keptCharacter, trackablePeople } from "../../src/turn/identity/keep-track.js";
@@ -205,10 +203,4 @@ test("POST /api/people/keep: the browser sends only token and revision; the stat
   assert.equal(hollis!.profile.name, "Hollis"); assert.equal(hollis!.current.current_location, MARKET);
   const again = await post({ token, expected_revision: before.revision });
   assert.equal(again.status, 200); assert.equal(again.data.already, true); assert.equal(again.data.revision, before.revision + 1);
-});
-
-test("the client sends only the opaque token and the rendered revision to /api/people/keep", async () => {
-  const client = await readFile(join("src", "ui", "client.js"), "utf8");
-  assert.match(client, /fetch\("\/api\/people\/keep", \{ method: "POST", headers: \{ "Content-Type": "application\/json" \}, body: JSON\.stringify\(\{ token, expected_revision: currentRevision \}\) \}\)/);
-  assert.doesNotMatch(client.slice(client.indexOf("function renderProvisional"), client.indexOf("function showError")), /openCharacter/, "temporary people never open the character drawer");
 });

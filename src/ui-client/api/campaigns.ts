@@ -22,3 +22,13 @@ export async function loadCampaign(request: { readonly campaignId: string; reado
   const body = await requestJson<unknown>("/campaigns/load", { method: "POST", body: { campaign_id: request.campaignId, slot: request.slot } });
   return { state: sessionStateFrom(body), warnings: loadWarnings(body) };
 }
+
+/** Saves a dirty campaign and returns to the campaign list (the server closes its active session). */
+export async function closeCampaign() {
+  return { state: sessionStateFrom(await requestJson<unknown>("/campaigns/close", { method: "POST", body: {} })) };
+}
+
+/** Deletes a campaign and all its saves. The server refuses the open campaign (close it first) and one open elsewhere. */
+export async function deleteCampaign(request: { readonly campaignId: string }) {
+  return { state: sessionStateFrom(await requestJson<unknown>("/campaigns/delete", { method: "POST", body: { campaign_id: request.campaignId } })) };
+}

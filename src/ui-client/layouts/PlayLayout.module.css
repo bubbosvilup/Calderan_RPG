@@ -1,7 +1,7 @@
 .shell {
   position: relative;
   display: grid;
-  grid-template-rows: var(--layout-header-height) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   height: 100dvh;
   overflow: hidden;
 }
@@ -23,8 +23,10 @@
   z-index: 1;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--spacing-3);
   padding: 0 var(--spacing-4);
+  min-height: var(--layout-header-height);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
   min-width: 0;

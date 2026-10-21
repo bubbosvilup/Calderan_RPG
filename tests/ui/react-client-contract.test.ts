@@ -10,7 +10,7 @@ import type { CampaignListEntry } from "../../src/app/session-host.js";
 import type { AppError } from "../../src/app/app-errors.js";
 import { FileCampaignRepository } from "../../src/persistence/campaign-repository.js";
 import { createPlaytestServer } from "../../src/ui/server.js";
-import type { AppErrorDto, CampaignListEntryDto, ConfirmationViewDto, InventoryDto, PlayerCharacterDto, PlayViewDto, ProvisionalPeopleDto, SessionStatus, TradeViewDto } from "../../src/ui-client/api/types.js";
+import type { AppErrorDto, CampaignListEntryDto, CharacterCapabilitiesDto, ConfirmationViewDto, InventoryDto, OptionalServicesDto, PlayerCharacterDto, PlayViewDto, ProvisionalPeopleDto, SessionStatus, TradeViewDto } from "../../src/ui-client/api/types.js";
 
 /**
  * The React client declares its own DTOs (src/ui-client/api/types.ts) instead of importing server modules. This pins them to the server:
@@ -61,5 +61,19 @@ test("React client DTOs: the server read models are assignable to them (compile-
   assert.ok(Array.isArray(inventory.items) && typeof inventory.counts.total === "number" && (inventory.gold === null || typeof inventory.gold === "number"));
   assert.ok(Array.isArray(inventory.equipment.slots) && typeof inventory.equipment.silhouette_url === "string");
   assert.ok(inventory.items.every((i: any) => typeof i.id === "string" && typeof i.name === "string" && typeof i.state_label === "string" && typeof i.position.kind === "string" && typeof i.visual.icon.url === "string" && typeof i.visual.detail.url === "string"));
+  // UI-3: every participant card carries the engine's capability flags (the Household page and the NPC+ editor never derive eligibility).
+  const cards = state.play.participants.map((p: any) => p.card).filter(Boolean);
+  for (const card of cards) {
+    const capabilities: CharacterCapabilitiesDto = card.character_capabilities;
+    assert.ok(typeof capabilities.tier === "string" && typeof capabilities.can_promote_to_npc_plus === "boolean" && typeof capabilities.can_edit_npc_plus === "boolean", `capabilities of ${card.name}`);
+    assert.ok(capabilities.promotion_unavailable_reason === null || typeof capabilities.promotion_unavailable_reason === "string");
+    assert.ok(capabilities.edit_unavailable_reason === null || typeof capabilities.edit_unavailable_reason === "string");
+    assert.equal(typeof card.appearance_editor_eligible, "boolean");
+    assert.ok(card.appearance_editor === null || Array.isArray(card.appearance_editor.fields));
+  }
+  assert.ok(state.alternate_models === undefined || (Array.isArray(state.alternate_models) && state.alternate_models.every((m: any) => typeof m.id === "string" && typeof m.label === "string")));
+  assert.ok(state.messages.every((m: any) => m.comparison_id === undefined || typeof m.comparison_id === "string"));
+  const services = await (await fetch(`http://127.0.0.1:${address.port}/api/optional-services`)).json() as OptionalServicesDto;
+  assert.ok(Array.isArray(services.services) && services.services.every(s => typeof s.service === "string" && typeof s.enabled === "boolean" && typeof s.running === "number"));
   assert.equal("campaign" in state, false, "the disposable playtest payload carries no campaign key (the client's mode switch)");
 });

@@ -156,3 +156,9 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
 }
+
+.editLink {
+  display: inline-block;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}

@@ -1,6 +1,10 @@
-import type { ActiveSessionPayload, CharacterCardDto, InventoryDto, InventoryItemDto, PlayerCharacterDto, PortraitEditorDto, PortraitGalleryItemDto, TradeCardDto } from "../api/types";
+import type { ActiveSessionPayload, CharacterCapabilitiesDto, CharacterCardDto, InventoryDto, InventoryItemDto, NpcEditorDto, PlayerCharacterDto, PortraitEditorDto, PortraitGalleryItemDto, TradeCardDto } from "../api/types";
 
 /** Read-model fixtures shaped like the server's payloads (the server contract test pins the real shapes to these DTOs). */
+export function makeCapabilities(overrides: Partial<CharacterCapabilitiesDto> = {}): CharacterCapabilitiesDto {
+  return { tier: "world_canon", can_promote_to_npc_plus: false, promotion_unavailable_reason: null, can_edit_npc_plus: false, edit_unavailable_reason: null, ...overrides };
+}
+
 export function makeCard(overrides: Partial<CharacterCardDto> = {}): CharacterCardDto {
   return {
     ref: "c0ffee0000000000000000aa",
@@ -9,7 +13,9 @@ export function makeCard(overrides: Partial<CharacterCardDto> = {}): CharacterCa
     category: "Canonical NPC",
     household: false,
     npc_plus: false,
-    character_capabilities: { tier: "world_canon", can_promote_to_npc_plus: false, promotion_unavailable_reason: null },
+    character_capabilities: makeCapabilities(),
+    appearance_editor_eligible: false,
+    appearance_editor: null,
     avatar_url: null,
     presence: "present",
     role: "Slave trader",
@@ -119,4 +125,25 @@ export function makePlayerCharacter(overrides: Partial<PlayerCharacterDto> = {},
     },
     ...overrides,
   };
+}
+
+/** An editable NPC+ card: the engine's capability flag, its appearance editor and its portrait state, exactly as the read model carries them. */
+export function makeNpcPlus(overrides: Partial<CharacterCardDto> = {}, portrait: PortraitEditorDto = makePortrait(), editor: Partial<NpcEditorDto> = {}): CharacterCardDto {
+  return makeCard({
+    ref: "feed00000000000000000bb", name: "Maren", category: "Household · NPC+", household: true, npc_plus: true, role: "Healer", relationship: "Trusted", presence: "present", known_location: "Slave market",
+    character_capabilities: makeCapabilities({ tier: "npc_plus", can_edit_npc_plus: true }),
+    appearance_editor_eligible: true,
+    appearance_editor: {
+      identity: [{ label: "Species", value: "human" }, { label: "Sex", value: "female" }],
+      fields: [
+        { key: "height_cm", label: "Height", group: "body", kind: "number", unit: "cm", override: "165", inherited: null },
+        { key: "hair_color", label: "Hair color", group: "hair", kind: "text", override: null, inherited: null },
+        { key: "scars", label: "Scars", group: "face", kind: "lines", override: null, inherited: null },
+        { key: "description", label: "Description", group: "description", kind: "text", override: null, inherited: "A slim woman with ash-grey hair." },
+      ],
+      portrait,
+      ...editor,
+    },
+    ...overrides,
+  });
 }

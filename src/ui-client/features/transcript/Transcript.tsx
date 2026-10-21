@@ -1,10 +1,12 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import type { TranscriptMessage, TurnPhase } from "../../api/types";
+import type { AlternateModelDto, TranscriptMessage, TurnPhase } from "../../api/types";
 import { EmptyState } from "../../components/ErrorState/ErrorState";
 import { cx } from "../../lib/cx";
 import { MessageItem } from "./MessageItem";
 import { useStickToBottom } from "./useStickToBottom";
 import styles from "./Transcript.module.css";
+
+const NO_MODELS: readonly AlternateModelDto[] = [];
 
 /** The player's own submission while the turn runs: presentation only, replaced by the committed messages when the result arrives. */
 export interface PendingTurn { readonly text: string; readonly phase: TurnPhase }
@@ -18,12 +20,14 @@ export const PHASE_LABELS: Readonly<Record<TurnPhase, string>> = { thinking: "Th
  * memoized and off-screen items skip layout and paint (content-visibility) — the seam for virtualization if histories outgrow the
  * server's 500-message window.
  */
-export function Transcript({ messages, playerName, pending, contentVersion, children }: {
+export function Transcript({ messages, playerName, pending, contentVersion, alternateModels = NO_MODELS, children }: {
   readonly messages: readonly TranscriptMessage[];
   readonly playerName: string;
   readonly pending: PendingTurn | null;
   /** Changes whenever content below the log changes (cards appear, revision moves), so the view keeps following. */
   readonly contentVersion: string;
+  /** Models offered for narrator comparison (a stable array: messages are memoized on it). */
+  readonly alternateModels?: readonly AlternateModelDto[];
   readonly children?: ReactNode;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -36,7 +40,7 @@ export function Transcript({ messages, playerName, pending, contentVersion, chil
       <div ref={scrollRef} className={styles.scroll} onScroll={onScroll} role="region" aria-label="Story" tabIndex={0}>
         <div className={styles.column}>
           <section className={styles.log} role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions">
-            {messages.length ? messages.map((message, index) => <MessageItem key={message.seq ?? `i${index}`} message={message} playerName={playerName} />)
+            {messages.length ? messages.map((message, index) => <MessageItem key={message.seq ?? `i${index}`} message={message} playerName={playerName} models={alternateModels} />)
               : <EmptyState>The story has not started yet.</EmptyState>}
           </section>
           {pending ? (

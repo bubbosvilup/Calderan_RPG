@@ -277,7 +277,7 @@ const active = page => page.evaluate(() => document.activeElement?.getAttribute(
   const links = await page.getByRole("navigation", { name: "Campaign pages" }).getByRole("link").evaluateAll(a => a.map(x => x.getAttribute("href")));
   await page.getByRole("navigation", { name: "Campaign pages" }).getByRole("link", { name: "Nicco" }).click();
   await page.getByRole("heading", { level: 1, name: "Nicco" }).waitFor({ timeout: 10000 });
-  ok("E1 the playtest session serves Inventory and the character page under /app/play/... with links that stay inside /play", JSON.stringify(links) === '["/app/play","/app/play/inventory","/app/play/character/player"]' && new URL(page.url()).pathname === "/app/play/character/player", JSON.stringify(links));
+  ok("E1 the playtest session serves Inventory and the character page under /app/play/... with links that stay inside /play", JSON.stringify(links) === '["/app/play","/app/play/household","/app/play/inventory","/app/play/character/player","/app/play/settings"]' && new URL(page.url()).pathname === "/app/play/character/player", JSON.stringify(links));
   ok("E2 no console errors and no uncaught errors", problems.length === 0, problems.join(" | "));
   await page.close();
   await session.shutdown({ discard_unsaved: true });

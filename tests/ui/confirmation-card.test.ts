@@ -2,117 +2,18 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import type { AddressInfo } from "node:net";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { runInNewContext } from "node:vm";
 import { createPlaytestServer } from "../../src/ui/server.js";
 import type { CampaignCommand } from "../../src/campaign/types.js";
 import { countingController, sessionWith, stepNarrator } from "../support/turn-reliability-fixtures.js";
 
 /**
- * Consolidation block 5A, phase 3: the generic confirmation card. The client renders only the masked projection it is given (an opaque ref, display
- * strings) and its Confirm / Cancel requests carry ONLY that ref and the revision it rendered. Offline: a minimal DOM stand-in and a real local server.
+ * Consolidation block 5A, phase 3: the generic confirmation card, server side. The page renders only the masked projection it is given (an opaque
+ * ref, display strings) and its Confirm / Cancel requests carry ONLY that ref and the revision it rendered; the React side is pinned in
+ * src/ui-client/features/confirmations/PendingConfirmations.test.tsx. Here: a real local server and the routes.
  */
-class Element {
-  private text = "";
-  id = ""; className = ""; value = ""; hidden = false; disabled = false; type = ""; scrollTop = 0; scrollHeight = 100; clientHeight = 100;
-  parent?: Element; children: Element[] = []; dataset: Record<string, string> = {};
-  attributes = new Map<string, string>(); handlers = new Map<string, (event: any) => any>();
-  get textContent(): string { return this.text + this.children.map(c => c.textContent).join(""); }
-  set textContent(value: string) { this.text = value; this.children = []; }
-  append(...children: Element[]) { children.forEach(c => { c.parent = this; }); this.children.push(...children); }
-  replaceChildren(...children: Element[]) { this.text = ""; this.children = []; this.append(...children); }
-  remove() { if (this.parent) this.parent.children = this.parent.children.filter(c => c !== this); }
-  setAttribute(name: string, value: string) { this.attributes.set(name, value); }
-  getAttribute(name: string) { return this.attributes.get(name); }
-  addEventListener(name: string, handler: (event: any) => any) { this.handlers.set(name, handler); }
-  focus() {}
-  requestSubmit() { return this.handlers.get("submit")?.({ preventDefault() {} }); }
-  classList = { add() {}, remove() {}, toggle() {}, contains: () => false };
-  all(): Element[] { return [this, ...this.children.flatMap(c => c.all())]; }
-  byClass(name: string): Element[] { return this.all().filter(e => e.className.split(/\s+/).includes(name)); }
-}
-const tick = () => new Promise(resolve => setImmediate(resolve));
-const REF = "b".repeat(24);
-const opening = { messages: [{ role: "narrator", text: "*An ordinary morning.*" }], status: "idle", configured: true, revision: 7, scene: { location: "Slave Market", time_of_day: "Late Morning" }, household: [] };
-const card = (extra: Record<string, unknown> = {}) => ({ ref: REF, kind: "manumission", created_revision: 7, title: "Free Maren?", subject_label: "Maren", confirm_label: "Free Maren", cancel_label: "Keep as is",
-  body: "Nicco's words describe freeing Maren. Nothing has changed yet.", ...extra });
-async function client(fetchMock: (url: string, options?: any) => any) {
-  const nodes = new Map<string, Element>();
-  const node = (selector: string): Element => {
-    if (selector === "#confirmation-region") return nodes.get("#conversation")?.all().find(e => e.id === "confirmation-region") as Element;
-    if (selector === "#trade-region") return nodes.get("#conversation")?.all().find(e => e.id === "trade-region") as Element;
-    let e = nodes.get(selector); if (!e) { e = new Element(); e.id = selector.replace(/^#/, ""); nodes.set(selector, e); } return e;
-  };
-  const context: any = { document: { querySelector: node, querySelectorAll: (selector: string) => selector.startsWith(".") ? node("#conversation").byClass(selector.slice(1)) : [], createElement: () => new Element() },
-    fetch: fetchMock, setTimeout, clearTimeout, TextDecoder };
-  runInNewContext(await readFile("src/ui/client.js", "utf8"), context); await tick();
-  const region = () => node("#conversation").byClass("confirm-region")[0];
-  return { render: context.render as (data: any) => void, region, text: () => region()?.textContent ?? "", conversation: node("#conversation"), node };
-}
-const get = (data: unknown) => async () => ({ ok: true, json: async () => data });
-
-test("a confirmation card sits inline after the newest response with a meaningful question, body and two verbs; it vanishes when there is nothing to confirm", async () => {
-  const c = await client(get(opening));
-  c.render({ ...opening, confirmations: { cards: [card()], recent: [] } });
-  assert.equal(c.conversation.children.at(-1), c.region());
-  assert.match(c.text(), /NEEDS YOUR CONFIRMATION/); assert.match(c.text(), /Free Maren\?/); assert.match(c.text(), /Nothing has changed yet/);
-  const confirm = c.region()!.byClass("confirm-accept")[0]!, cancel = c.region()!.byClass("confirm-cancel")[0]!;
-  assert.equal(confirm.textContent, "Free Maren"); assert.equal(cancel.textContent, "Keep as is");
-  assert.equal(confirm.getAttribute("aria-label"), "Confirm: Free Maren");
-  assert.match(cancel.getAttribute("aria-label")!, /^Cancel: Free Maren\? Keep as is$/);
-  assert.equal(c.region()!.byClass("confirm-card")[0]!.getAttribute("role"), "group");
-  assert.match(c.region()!.byClass("confirm-card")[0]!.getAttribute("aria-label")!, /Confirmation needed: Free Maren\?/);
-  // B3 (UI-15): the re-rendered region is not live; the card is announced once through the page announcer.
-  assert.equal(c.region()!.getAttribute("aria-live"), "off");
-  const announcer = c.node("#announcer");
-  assert.equal(announcer.textContent, "Needs your confirmation: Free Maren?");
-  announcer.textContent = ""; c.render({ ...opening, confirmations: { cards: [card()], recent: [] } });
-  assert.equal(announcer.textContent, "", "a re-render of the same card is not announced again");
-  c.render({ ...opening, confirmations: { cards: [], recent: [] } });
-  assert.equal(c.region(), undefined, "no card, no region");
-});
-test("Confirm and Cancel post ONLY the opaque ref and the rendered revision; the browser cannot send a name, an ID, a payload or an amount", async () => {
-  const calls: { url: string; body: any }[] = [];
-  const c = await client(async (url: string, options?: any) => {
-    if (options?.method === "POST") { calls.push({ url, body: JSON.parse(options.body) }); return { ok: true, json: async () => ({ ...opening, revision: 8, ok: true, confirmations: { cards: [], recent: [{ ref: REF, status: "confirmed", subject_label: "Maren", text: "Confirmed." }] } }) }; }
-    return { ok: true, json: async () => opening };
-  });
-  c.render({ ...opening, confirmations: { cards: [card()], recent: [] } });
-  c.region()!.byClass("confirm-accept")[0]!.handlers.get("click")!({}); await tick(); await tick();
-  assert.equal(calls.length, 1); assert.equal(calls[0]!.url, "/api/confirmation/confirm");
-  assert.deepEqual(calls[0]!.body, { ref: REF, expected_revision: 7 });
-  assert.deepEqual(Object.keys(calls[0]!.body).sort(), ["expected_revision", "ref"]);
-  c.render({ ...opening, confirmations: { cards: [card()], recent: [] } });
-  c.region()!.byClass("confirm-cancel")[0]!.handlers.get("click")!({}); await tick(); await tick();
-  assert.equal(calls[1]!.url, "/api/confirmation/cancel"); assert.deepEqual(calls[1]!.body, { ref: REF, expected_revision: 7 });
-});
-test("a stale or invalidated request shows its safe reason inline and leaves the card (the server answers with the refreshed state); an outcome notice replaces a vanished card", async () => {
-  const stale = { ...opening, revision: 9, ok: false, error: { code: "stale_turn", message: "The campaign changed since this card was shown. Review the story and try again." }, confirmations: { cards: [card()], recent: [] } };
-  const c = await client(async (_url: string, options?: any) => ({ ok: options?.method !== "POST", json: async () => options?.method === "POST" ? stale : opening }));
-  c.render({ ...opening, confirmations: { cards: [card()], recent: [] } });
-  c.region()!.byClass("confirm-accept")[0]!.handlers.get("click")!({}); await tick(); await tick();
-  assert.match(c.text(), /campaign changed since this card was shown/);
-  assert.equal(c.region()!.byClass("confirm-card").length, 1);
-  assert.equal(c.region()!.byClass("confirm-error")[0]!.hidden, false);
-  c.render({ ...opening, confirmations: { cards: [], recent: [{ ref: REF, status: "invalidated", subject_label: "Maren", text: "No longer applicable: the person's legal status has changed." }] } });
-  assert.match(c.text(), /Maren: No longer applicable/);
-  assert.equal(c.region()!.byClass("confirm-card").length, 0);
-  // A reload (a page that never showed that card) does not resurface old history.
-  const fresh = await client(get(opening));
-  fresh.render({ ...opening, confirmations: { cards: [], recent: [{ ref: REF, status: "confirmed", subject_label: "Maren", text: "Confirmed." }] } });
-  assert.equal(fresh.region(), undefined);
-});
-test("buttons are disabled while a turn runs and the card is built with textContent only (no HTML injection from a label)", async () => {
-  const c = await client(get(opening));
-  c.render({ ...opening, status: "running_turn", confirmations: { cards: [card({ title: "<img src=x onerror=alert(1)>?" })], recent: [] } });
-  assert.equal(c.region()!.byClass("confirm-accept")[0]!.disabled, true); assert.equal(c.region()!.byClass("confirm-cancel")[0]!.disabled, true);
-  assert.match(c.text(), /<img src=x onerror=alert\(1\)>\?/, "shown as text");
-  const source = await readFile("src/ui/client.js", "utf8"), block = source.slice(source.indexOf("function renderConfirmations"), source.indexOf("async function actOnConfirmation"));
-  assert.doesNotMatch(block, /innerHTML|insertAdjacentHTML|outerHTML/);
-});
-
 // ------------------------------------------------------------------------------------------------ the real server routes
 const BRENNA = "brenna";
 async function liveServer(t: { after: (fn: () => unknown) => void }) {

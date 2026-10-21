@@ -13,3 +13,12 @@ export async function promoteToNpcPlus(request: { readonly ref: string; readonly
 export async function keepTrack(request: { readonly token: string; readonly expectedRevision: number }) {
   return { state: sessionStateFrom(await requestJson<unknown>("/people/keep", { method: "POST", body: { token: request.token, expected_revision: request.expectedRevision } })) };
 }
+
+/**
+ * Saves the permanent appearance of an editable NPC+ (`POST /api/appearance`). Same patch contract as the player's profile: only changed
+ * fields, `null` clears a saved value; the engine bounds and validates, and a refusal names the offending field.
+ */
+export async function saveNpcAppearance(request: { readonly ref: string; readonly patch: Readonly<Record<string, string | number | readonly string[] | null>>; readonly expectedRevision: number }) {
+  const body = await requestJson<Record<string, unknown>>("/appearance", { method: "POST", body: { ref: request.ref, expected_revision: request.expectedRevision, patch: request.patch } });
+  return { state: sessionStateFrom(body), changed: body.changed === true };
+}

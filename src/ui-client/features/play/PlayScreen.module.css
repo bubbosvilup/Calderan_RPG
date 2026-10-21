@@ -9,6 +9,8 @@
 }
 
 .campaign {
+  /* On a narrow header the campaign name gives way first so the page navigation keeps its room. */
+  flex-shrink: 50;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

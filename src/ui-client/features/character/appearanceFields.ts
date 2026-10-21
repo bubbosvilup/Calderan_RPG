@@ -1,4 +1,4 @@
-import type { AppearanceFieldDto, PlayerCharacterDto } from "../../api/types";
+import type { AppearanceFieldDto, NpcAppearanceFieldDto, PlayerCharacterDto } from "../../api/types";
 import type { ProfilePatch } from "../../api/player";
 
 /** One editable line of the profile form: an identity line or an appearance field, with the value the server has SAVED for it. */
@@ -10,6 +10,8 @@ export interface FormField {
   readonly unit?: "cm" | "kg" | undefined;
   /** The saved text (list items joined by newlines), or null when nothing is saved. */
   readonly stored: string | null;
+  /** What applies when nothing is saved (an NPC+ field's baseline). Shown as reference text, never presented as a saved value. */
+  readonly inherited?: string | null | undefined;
 }
 
 export const GROUPS: readonly { readonly id: FormField["group"]; readonly title: string }[] = [
@@ -19,6 +21,11 @@ export const GROUPS: readonly { readonly id: FormField["group"]; readonly title:
   { id: "face", title: "Face" },
   { id: "description", title: "Description" },
 ];
+
+/** The editor fields of an NPC+ (no identity lines: those are read-only text). */
+export function npcFormFields(fields: readonly NpcAppearanceFieldDto[]): readonly FormField[] {
+  return fields.map((field): FormField => ({ key: field.key, label: field.label, group: field.group, kind: field.kind, unit: field.unit, stored: field.override, inherited: field.inherited }));
+}
 
 export function formFields(identity: PlayerCharacterDto["identity"], fields: readonly AppearanceFieldDto[]): readonly FormField[] {
   return [

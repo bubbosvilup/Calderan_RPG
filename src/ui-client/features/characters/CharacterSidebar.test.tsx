@@ -3,11 +3,11 @@ import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CharacterSidebar } from "./CharacterSidebar";
 import { CharacterDrawer } from "./CharacterDrawer";
-import { makeCard, makeSession } from "../../test/fixtures";
+import { makeCapabilities, makeCard, makeSession } from "../../test/fixtures";
 import { renderWithProviders } from "../../test/render";
 
 const unknown = makeCard({ ref: "f00d0000000000000000000b", name: "Red-haired woman", name_known: false, category: "Met this campaign · name unknown",
-  character_capabilities: { tier: "campaign_npc", can_promote_to_npc_plus: false, promotion_unavailable_reason: "Not at the Heartstone." } });
+  character_capabilities: makeCapabilities({ tier: "campaign_npc", promotion_unavailable_reason: "Not at the Heartstone." }) });
 
 describe("CharacterSidebar", () => {
   it("lists the player as a link to the character page and other people as buttons, with player-safe names and no internal refs", async () => {
@@ -32,7 +32,7 @@ describe("CharacterSidebar", () => {
 
 describe("CharacterDrawer", () => {
   it("renders Promote only from the capability flag, and its first click only opens the confirmation", async () => {
-    const eligible = makeCard({ name: "Maren", character_capabilities: { tier: "campaign_npc", can_promote_to_npc_plus: true, promotion_unavailable_reason: null } });
+    const eligible = makeCard({ name: "Maren", character_capabilities: makeCapabilities({ tier: "campaign_npc", can_promote_to_npc_plus: true }) });
     const { rerender } = renderWithProviders(<CharacterDrawer card={unknown} playerName="Nicco" onClose={() => undefined} blockedReason={null} />);
     expect(screen.queryByRole("button", { name: /Promote/ })).toBeNull();
     rerender(<CharacterDrawer card={eligible} playerName="Nicco" onClose={() => undefined} blockedReason={null} />);

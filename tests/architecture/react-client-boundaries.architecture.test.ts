@@ -116,8 +116,8 @@ test("react client: inventory and character features carry no item-slot or categ
   for (const file of features) assert.doesNotMatch(withoutComments(file), /["'`](?:weapon|armor|headwear|footwear|consumable|valuable)["'`]|equipmentSlotFor|SLOT_BY_CATEGORY|EQUIPMENT_SLOTS/, file);
 });
 
-test("react client: the player is never an NPC+ in the client (no premium or NPC+ record is required for the player page)", () => {
-  const files = app.filter(f => /\/features\/character\//.test(f));
+test("react client: the player is never an NPC+ in the client (no premium or NPC+ record is required for the player page; only the NPC+ editor names the tier)", () => {
+  const files = app.filter(f => /\/features\/character\//.test(f) && !/\/NpcCharacter(Page|Route)\.tsx$/.test(f));
   for (const file of files) assert.doesNotMatch(withoutComments(file), /premium_characters|npc_plus|npcPlus|NPC\+/, file);
 });
 

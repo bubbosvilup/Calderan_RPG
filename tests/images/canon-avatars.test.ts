@@ -14,6 +14,7 @@ import { createPlaytestServer } from "../../src/ui/server.js";
 import { GameSession } from "../../src/app/game-session.js";
 import { FileCampaignRepository } from "../../src/persistence/campaign-repository.js";
 import { PortraitAssetStore } from "../../src/app/portrait-store.js";
+import { sourceFiles } from "../support/source-paths.js";
 import { turnFixture } from "../../src/dev/support/turn-fixture.js";
 import { learnCanonicalName } from "../../src/campaign/identity-knowledge.js";
 import { createSaveFile } from "../../src/persistence/save-format.js";
@@ -42,12 +43,13 @@ for (const [label, id, file] of MAPPING) test(`${label}: ${id} resolves its auth
   assert.deepEqual(await readCanonAvatar(canonAvatarToken(id)!, dir), PNG);
   assert.ok(!card(learn(campaign(), id), id, dir).avatar_url!.includes(id), "the URL never carries the authored id");
 });
-test("A7/A8/A16: drawer and round portrait read the one card.avatar_url (a single source image per character)", async () => {
-  const client = await readFile("src/ui/client.js", "utf8");
-  assert.match(client, /showImage\(ui\("character-avatar-image"\), card\.avatar_url\)/, "drawer");
-  assert.match(client, /person\.card\?\.avatar_url;[\s\S]{0,200}setAttribute\("src", avatarUrl\)/, "scene round portrait (a non-player entry reads its card.avatar_url)");
-  assert.match(client, /member\.card\?\.avatar_url[\s\S]{0,200}setAttribute\("src", member\.card\.avatar_url\)/, "household round portrait");
-  assert.doesNotMatch(client, /canonNPCAvatar|_avatar\.png|canon-avatar/, "the client derives no path of its own");
+test("A7/A8/A16: the React UI reads the one card.avatar_url for the drawer, the scene row and the household row, and derives no path of its own", async () => {
+  // Behaviour (one URL in the scene row and the drawer, placeholder otherwise): src/ui-client/features/characters/CharacterPeople.test.tsx.
+  const files = sourceFiles("src/ui-client", f => /\.tsx?$/.test(f) && !/\.test\.|node_modules/.test(f));
+  const code = new Map(await Promise.all(files.map(async f => [f, await readFile(f, "utf8")] as const)));
+  assert.match(code.get("src/ui-client/features/characters/CharacterDrawer.tsx")!, /<Avatar url=\{card\.avatar_url\}/, "drawer");
+  assert.match(code.get("src/ui-client/features/characters/CharacterSidebar.tsx")!, /<Avatar url=\{card\.avatar_url\}/, "scene and household rows");
+  for (const [file, source] of code) assert.doesNotMatch(source, /canonNPCAvatar|_avatar\.png|canon-avatar/, `${file} derives no avatar path`);
 });
 test("A9: a character without an authored avatar, or with a missing asset file, keeps the passive placeholder", async t => {
   const dir = await assets(t), c = campaign();

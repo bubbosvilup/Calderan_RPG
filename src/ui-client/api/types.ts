@@ -12,11 +12,19 @@
 /** Server session status. Anything other than "idle" means actions wait. */
 export type SessionStatus = "idle" | "running_turn" | "compacting_context" | "closed";
 
+/** A comparison-only narration by another model (the narrator-alternatives developer aid). It never changes the story. */
+export interface NarratorAlternativeDto { readonly model: string; readonly label: string; readonly text: string }
+export interface AlternateModelDto { readonly id: string; readonly label: string }
+
 export interface TranscriptMessage {
   readonly role: "player" | "narrator" | "system";
   readonly text: string;
   /** Stable, increasing position of the message (the render key). */
   readonly seq?: number;
+  /** Narrator messages of a turn this server captured for comparison. The id is only sent back to ask for an alternative. */
+  readonly comparison_id?: string;
+  readonly comparison_available?: boolean;
+  readonly alternatives?: readonly NarratorAlternativeDto[];
 }
 
 export interface SceneSummaryDto {
@@ -30,6 +38,22 @@ export interface CharacterCapabilitiesDto {
   readonly tier: "world_canon" | "campaign_npc" | "npc_plus" | "player";
   readonly can_promote_to_npc_plus: boolean;
   readonly promotion_unavailable_reason: string | null;
+  /** The engine lets the player edit this character's appearance and portraits (an active NPC+). The client never derives it from tier or household. */
+  readonly can_edit_npc_plus: boolean;
+  /** Why an NPC+ cannot be edited right now (inactive, dead); null when editable or when the tier never has editing. */
+  readonly edit_unavailable_reason: string | null;
+}
+
+/** An NPC+ editor field: the SAVED value plus the text that applies without one (reference only, never presented as saved). */
+export interface NpcAppearanceFieldDto extends AppearanceFieldDto { readonly inherited: string | null }
+/**
+ * The NPC+ appearance and portrait editor, present on a card only when the engine says the character is editable. The server's image prompt
+ * previews are deliberately not declared: the client neither renders nor sends prompts.
+ */
+export interface NpcEditorDto {
+  readonly identity: readonly { readonly label: string; readonly value: string }[];
+  readonly fields: readonly NpcAppearanceFieldDto[];
+  readonly portrait: PortraitEditorDto;
 }
 
 /** The player-safe character card: names arrive already masked by the server's knowledge-aware projection. */
@@ -42,6 +66,9 @@ export interface CharacterCardDto {
   readonly household: boolean;
   readonly npc_plus: boolean;
   readonly character_capabilities: CharacterCapabilitiesDto;
+  /** Whether the engine exposes an appearance editor for this character; `appearance_editor` is non-null exactly then. */
+  readonly appearance_editor_eligible: boolean;
+  readonly appearance_editor: NpcEditorDto | null;
   readonly avatar_url: string | null;
   readonly presence: "present" | "away";
   readonly role: string;
@@ -230,6 +257,8 @@ export interface ActiveSessionPayload {
   readonly trade: TradeViewDto;
   readonly confirmations: ConfirmationViewDto;
   readonly provisional: ProvisionalPeopleDto;
+  /** Models offered for narrator comparison (present when the server captures comparisons). */
+  readonly alternate_models?: readonly AlternateModelDto[];
 }
 
 export type SessionPayload = NoCampaignPayload | ActiveSessionPayload;
@@ -260,6 +289,16 @@ export interface ScenarioDto { readonly id: string; readonly label: string; read
 export interface CampaignListDto { readonly campaigns: readonly CampaignListEntryDto[]; readonly scenarios: readonly ScenarioDto[]; readonly active_campaign_id: string | null }
 
 export interface SaveStatusDto { readonly campaign: { readonly id: string; readonly save: SaveStateDto } | null }
+
+/** One optional service's runtime health (`GET /api/optional-services`): diagnostics only, never campaign state. */
+export interface OptionalServiceDto {
+  readonly service: "reflection" | "mannerism_learning" | "portrait_generation" | "item_sprite_generation" | "sprite_qa" | "semantic_retrieval";
+  readonly enabled: boolean;
+  readonly running: number;
+  readonly last_success_at?: string;
+  readonly last_error?: { readonly at: string; readonly code: string };
+}
+export interface OptionalServicesDto { readonly services: readonly OptionalServiceDto[] }
 
 /** NDJSON progress phases of a running turn (status words only; never narrator prose). */
 export type TurnPhase = "thinking" | "narrating" | "resolving";

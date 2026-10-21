@@ -8,6 +8,7 @@ export const queryKeys = {
   session: ["session"] as const,
   campaigns: ["campaigns"] as const,
   saveStatus: ["save-status"] as const,
+  optionalServices: ["optional-services"] as const,
 };
 
 /** Mutation keys: `turn` (the composer) and `action` (every other state-changing click) let the UI lock actions while one is in flight. */

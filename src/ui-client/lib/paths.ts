@@ -11,3 +11,7 @@ const base = (session: SessionRef) => (session.campaign ? `/play/${encodeURIComp
 export const playPath = (session: SessionRef) => base(session);
 export const inventoryPath = (session: SessionRef) => `${base(session)}/inventory`;
 export const playerCharacterPath = (session: SessionRef) => `${base(session)}/character/player`;
+export const householdPath = (session: SessionRef) => `${base(session)}/household`;
+export const settingsPath = (session: SessionRef) => `${base(session)}/settings`;
+/** The NPC+ editor page. `ref` is the opaque character handle (a hash), the only identifier the read model gives the browser. */
+export const npcCharacterPath = (session: SessionRef, ref: string) => `${base(session)}/characters/${encodeURIComponent(ref)}`;
