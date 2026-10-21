@@ -1,2 +1,5 @@
 # Windows batch files must keep CRLF line endings or cmd.exe can mis-parse labels (Caldrevan.cmd, setup.cmd).
 *.cmd text eol=crlf
+
+# Shell scripts must keep LF line endings (a CR breaks the shebang line).
+*.sh text eol=lf

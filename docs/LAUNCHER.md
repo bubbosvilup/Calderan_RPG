@@ -1,6 +1,6 @@
-# One-click launcher (Windows first)
+# One-click launcher (Windows and Linux)
 
-Status: Current. Last reconciled: 2026-10-18 (first version; the Linux-tested core and the Windows-only parts are separated under [Unverified on Windows](#unverified-on-windows)). Source of truth: `Caldrevan.cmd`, `setup.cmd`, `scripts/launcher/` (`core.mjs`, `server.mjs`, `main.mjs`, `page.html`), `src/ui/play.ts` (the stop contract), `tests/tooling/launcher-*.test.ts`. Never put a key in the repo, a doc, a save or a log.
+Status: Current. Last reconciled: 2026-10-21 (Linux and macOS entry points added; the Linux-tested core and the Windows-only parts are separated under [Unverified on Windows](#unverified-on-windows)). Source of truth: `Caldrevan.cmd`, `setup.cmd` (Windows), `caldrevan.sh`, `setup.sh` (Linux and macOS), `scripts/launcher/` (`core.mjs`, `server.mjs`, `main.mjs`, `page.html`), `src/ui/play.ts` (the stop contract), `tests/tooling/launcher-*.test.ts`. Never put a key in the repo, a doc, a save or a log.
 
 ## What it is
 
@@ -8,7 +8,18 @@ Double-click `Caldrevan.cmd`. A small local page, the **Caldrevan Launcher**, op
 
 The launcher never reads, writes, moves or deletes anything under `saves/`, never writes a configuration file or a key, never installs or updates anything, and never runs Vite or `npm run build` when you press PLAY.
 
-## First launch
+## Linux and macOS
+
+Same launcher, same page, same safe stop; only the entry scripts differ. In a terminal, in the Caldrevan folder:
+
+```text
+./setup.sh        # first time, and after updating the code: npm ci, npm run build, npm run ui:build
+./caldrevan.sh    # opens the launcher page (PLAY / STOP / OPEN GAME / logs / Exit) and prints its address
+```
+
+`caldrevan.sh` works from any folder and through a symlink, checks for Node, runs `node scripts/launcher/main.mjs --detach` and returns to your prompt; the launcher keeps running in the background and `Exit` on its page closes it. If your desktop has no default browser (SSH, a bare server), open the address it printed. The browser is opened with `xdg-open` (`open` on macOS). The scripts are executable in git (`chmod +x`) and keep LF line endings (`.gitattributes`). Optional menu entry: `./caldrevan.sh --print-desktop-entry > ~/.local/share/applications/caldrevan.desktop` (you create the file; the script never writes outside the checkout). Stopping uses the same `stop` line on the game's stdin, then SIGTERM, then SIGKILL after 20 s, only for the process the launcher started. Everything below applies unchanged; read `.cmd` as `.sh` and `Task Manager` as `kill`/`ps`.
+
+## First launch (Windows)
 
 1. Install **Node.js 22 LTS** or newer from <https://nodejs.org> (the required version is read from `engines.node` in `package.json`).
 2. Double-click **`setup.cmd`**. It runs `npm ci`, `npm run build` and `npm run ui:build` with visible output, stops at the first failure with a readable message, and ends with "Press any key". Run it again after you update the code.
@@ -88,7 +99,7 @@ Another program running as you on the same computer can still read the page and 
 
 | Symptom | Fix |
 | --- | --- |
-| "Node.js was not found" window | Install Node.js 22 LTS, reopen, or run setup.cmd. |
+| "Node.js was not found" window or message | Install Node.js 22 LTS, reopen, or run setup.cmd (`./setup.sh` on Linux). |
 | Error "Setup is incomplete" | Double-click `setup.cmd` (or run `npm ci && npm run build && npm run ui:build`). |
 | Error "Port 3000 is in use" | Close the other game (a terminal running `npm run play:ui`, or a leftover process in Task Manager), or set `CALDREVAN_GAME_PORT`. |
 | Error "did not become ready" / "stopped while starting" | Press Show Logs: the game's own message is there. Then press PLAY again. |
@@ -106,5 +117,7 @@ Another program running as you on the same computer can still read the page and 
 - A brief console window flashes while `Caldrevan.cmd` hands over to the hidden launcher.
 
 ## Unverified on Windows
+
+On Linux the whole path was run for real (`./caldrevan.sh`, PLAY, game ready on `/app/`, STOP, Exit, no leftover process) and is covered by `tests/tooling/launcher-shell.test.ts`, including a symlink in another folder and a path with a space and an accent.
 
 Developed and tested on Linux with a stub game; the following exist only as small isolated functions or files and have **not** been run on Windows: `Caldrevan.cmd` and `setup.cmd` (their text is asserted by tests only), the hidden detached start (`spawn` with `detached` and `windowsHide` in `main.mjs`), `taskkill /pid <pid> /T /F` (`forceKill` in `core.mjs`; the argument array is asserted), opening the browser with `rundll32 url.dll,FileProtocolHandler` (`openInBrowser`), the `stop` line and stdin-close path on a Windows pipe, and the port probe next to a wildcard listener. The first Windows run (the fast CI job does not exercise the launcher) is its proof.

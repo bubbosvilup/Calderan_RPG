@@ -1,5 +1,5 @@
 // Caldrevan launcher entry point: `node scripts/launcher/main.mjs [--detach] [--no-open] [--port=3199] [--game-port=3000]`.
-// Caldrevan.cmd runs it with --detach: that process finds or starts the (hidden) launcher, opens its page, and exits. Plain ESM, no dependencies,
+// Caldrevan.cmd and caldrevan.sh run it with --detach: that process finds or starts the (hidden) launcher, opens its page, and exits. Plain ESM, no dependencies,
 // no build needed. Environment: CALDREVAN_LAUNCHER_PORT, CALDREVAN_GAME_PORT (the flags win).
 import { spawn } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
@@ -28,6 +28,7 @@ if (args.includes("--detach")) {
     for (let i = 0; i < 40 && !target; i++) { await new Promise(r => setTimeout(r, 250)); target = await findRunningLauncher(logDir); }
   }
   if (!target) die(`The launcher did not start. To see why, run in this folder:  node scripts/launcher/main.mjs\nLog: ${join(logDir, "launcher.log")}`);
+  console.log(`Caldrevan Launcher: ${target}`);
   if (!args.includes("--no-open")) openInBrowser(target);
   process.exit(0);
 }
